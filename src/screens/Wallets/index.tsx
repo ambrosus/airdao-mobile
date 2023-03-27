@@ -1,10 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 
 export const WalletsScreen = () => {
   return (
-    <View>
-      <Text>WalletsScreen</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>WalletsScreen</Text>
+      </View>
+    </SafeAreaView>
   );
 };

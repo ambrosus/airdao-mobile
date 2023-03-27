@@ -4,6 +4,7 @@ import ListsStack from './Tabs/ListsStack';
 import SettingsStack from './Tabs/SettingsStack';
 import ExploreStack from './Tabs/ExploreStack';
 import WalletsStack from './Tabs/WalletsStack';
+import TabBar from '@navigation/components/TabBar';
 
 export type TabsParamsList = {
   Wallets: undefined;
@@ -17,7 +18,12 @@ const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
 export const TabsNavigator = () => {
   return (
-    <BottomTabs.Navigator screenOptions={{ headerShown: false }}>
+    <BottomTabs.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+      tabBar={(props) => <TabBar {...props} />}
+    >
       <BottomTabs.Screen
         name="Wallets"
         component={WalletsStack}
