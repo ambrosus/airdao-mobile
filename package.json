@@ -8,8 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint 'src/**/*.{js,ts,tsx}'",
-    "precommit": "npm run lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "expo": "~48.0.9",
@@ -44,9 +44,11 @@
     }
   },
   "lint-staged": {
-    "*.{ts, tsx, js, jsx}": [
-      "prettier --write",
-      "eslint --fix"
+    "*.{js,ts,tsx}": [
+      "eslint --quiet --cache --fix"
+    ],
+    "*.{json,js,ts,jsx,tsx,html}": [
+      "prettier --write"
     ]
   }
 }
