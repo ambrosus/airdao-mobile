@@ -10,3 +10,10 @@ export type InputProps = TextInputProps &
   RNTextInputProps & {
     type?: ButtonType;
   };
+
+export type InputRef = {
+  /**
+   * focuses on input
+   */
+  focus: () => void;
+};

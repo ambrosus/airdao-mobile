@@ -1,8 +1,4 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useImperativeHandle
-} from 'react';
+import React, { useCallback, useImperativeHandle } from 'react';
 import { Pressable, useWindowDimensions, View } from 'react-native';
 import {
   PanGestureHandler,
@@ -26,10 +22,7 @@ import {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export const BottomSheet = React.forwardRef<
-  BottomSheetRef,
-  PropsWithChildren<BottomSheetProps>
->(
+export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
     {
       height,

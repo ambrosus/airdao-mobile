@@ -1,19 +1,19 @@
 import React from 'react';
 import { NumberInput } from './Input.number';
 import { TextInput } from './Input.text';
-import { InputProps } from './Input.types';
+import { InputProps, InputRef } from './Input.types';
 
-export function Input(props: InputProps): JSX.Element {
+export const Input = React.forwardRef<InputRef, InputProps>((props, ref) => {
   const { type, ...restProps } = props;
 
   switch (type) {
     case 'number':
-      return <NumberInput {...restProps} />;
+      return <NumberInput ref={ref} {...restProps} />;
     case 'text': {
-      return <TextInput {...restProps} />;
+      return <TextInput ref={ref} {...restProps} />;
     }
     default: {
-      return <TextInput {...restProps} />;
+      return <TextInput ref={ref} {...restProps} />;
     }
   }
-}
+});
