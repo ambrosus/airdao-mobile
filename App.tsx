@@ -1,13 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+import { StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Text } from './src/components/base';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-                <Text>hello world</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider style={{ flex: 1 }}>
+      <GestureHandlerRootView style={styles.container}>
+        <Text heading>Hello World!</Text>
+        <StatusBar style="auto" />
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
 
