@@ -9,7 +9,10 @@ export type ExploresParamsList = {
 const Stack = createNativeStackNavigator<ExploresParamsList>();
 export const ExploreStack = () => {
   return (
-    <Stack.Navigator initialRouteName="ExploreScreen">
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="ExploreScreen"
+    >
       <Stack.Screen name="ExploreScreen" component={ExploreScreen} />
     </Stack.Navigator>
   );

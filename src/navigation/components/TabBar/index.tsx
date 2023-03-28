@@ -9,6 +9,7 @@ import { ListsActiveIcon } from '@components/svg/BottomTabIcons/ListsActiveIcon'
 import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsInactiveIcon';
 import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiveIcon';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
 const tabs = {
@@ -31,8 +32,9 @@ const tabs = {
 };
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const bottomSafeArea = useSafeAreaInsets().bottom - 15;
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label: LabelType =
