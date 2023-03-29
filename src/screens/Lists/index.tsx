@@ -1,32 +1,24 @@
 import React from 'react';
-import { SafeAreaView, View, StyleSheet, Pressable, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ListsOfWallets } from './components/ListsOfWallets';
 import { Spacer } from '@components/atoms/Spacer';
 import { COLORS } from '../../constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
+import { AddIcon } from '@components/svg/AddIcon';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FloatButton } from '@components/FloatButton';
 
 export const ListsScreen = () => {
   return (
     <>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }}>
         <ListsScreenHeader />
         <Spacer value={32} />
         <View style={styles.lineStyle} />
         <ListsOfWallets />
       </SafeAreaView>
-      <Pressable style={styles.buttonStyle}>
-        <Text
-          style={{
-            justifyContent: 'center',
-            fontFamily: 'Inter_500Medium',
-            fontSize: 16,
-            paddingVertical: 16,
-            color: COLORS.white
-          }}
-        >
-          Create new list
-        </Text>
-      </Pressable>
+      <FloatButton title="Create new list" icon={<AddIcon />} />
     </>
   );
 };
@@ -36,13 +28,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderBottomColor: COLORS.darkGrey,
     opacity: 0.1
-  },
-  buttonStyle: {
-    position: 'absolute',
-    alignSelf: 'center',
-    bottom: 100,
-    backgroundColor: COLORS.grey,
-    borderRadius: 24,
-    paddingHorizontal: 120
   }
 });
