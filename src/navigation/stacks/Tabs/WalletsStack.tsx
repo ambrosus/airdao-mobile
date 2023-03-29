@@ -9,11 +9,12 @@ export type WalletsParamsList = {
 const Stack = createNativeStackNavigator<WalletsParamsList>();
 export const WalletsStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="WalletsScreen"
-    >
-      <Stack.Screen name="WalletsScreen" component={WalletsScreen} />
+    <Stack.Navigator initialRouteName="WalletsScreen">
+      <Stack.Screen
+        name="WalletsScreen"
+        component={WalletsScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
