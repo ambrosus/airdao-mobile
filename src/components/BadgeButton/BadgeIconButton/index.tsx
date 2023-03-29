@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 type Props = {
   icon: JSX.Element;
@@ -7,9 +7,9 @@ type Props = {
 export const BadgeButton: FC<Props> = (props) => {
   const { icon } = props;
   return (
-    <View style={styles.buttonBackgroundStyle}>
+    <TouchableOpacity style={styles.buttonBackgroundStyle}>
       <View style={styles.buttonStyle}>{icon}</View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

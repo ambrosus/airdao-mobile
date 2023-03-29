@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '../../../../../../constants/colors';
+import { OptionsButtonIcon } from '@components/svg/OptionsButtonIcon';
 
 type Props = {
   item: {
@@ -14,32 +15,17 @@ export const ListItem: FC<Props> = ({ item }) => {
     <>
       <View style={styles.itemContainer}>
         <View style={styles.itemContainerTitle}>
-          <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 17 }}>
-            {item.title}
-          </Text>
+          <Text style={styles.itemTitle}>{item.title}</Text>
         </View>
         <View style={styles.itemContainerSubtitlePrice}>
-          <Text
-            style={{
-              fontFamily: 'Inter_400Regular',
-              fontSize: 16
-            }}
-          >
-            {item.subtitle}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'Inter_500Medium',
-              fontSize: 12,
-              color: COLORS.lightGrey
-            }}
-          >
-            {item.price}
-          </Text>
+          <Text style={styles.itemSubtitle}>{item.subtitle}</Text>
+          <Text style={styles.itemPrice}>{item.price}</Text>
         </View>
       </View>
       <View style={styles.itemContainerButtonStyles}>
-        <Text>button</Text>
+        <Pressable>
+          <OptionsButtonIcon />
+        </Pressable>
       </View>
     </>
   );
@@ -64,5 +50,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingRight: 29,
     marginTop: -50
+  },
+  itemTitle: { fontFamily: 'Inter_600SemiBold', fontSize: 17 },
+  itemSubtitle: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16
+  },
+  itemPrice: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 12,
+    color: COLORS.lightGrey
   }
 });

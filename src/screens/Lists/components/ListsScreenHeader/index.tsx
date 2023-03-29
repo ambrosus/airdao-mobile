@@ -5,7 +5,7 @@ import { BadgeButton } from '@components/BadgeButton/BadgeIconButton';
 import { FilterButtonIcon } from '@components/svg/FilterButton';
 import { SettingsButtonIcon } from '@components/svg/SettingsButtonIcon';
 import { COLORS } from '../../../../constants/colors';
-import { ListBottomStats } from '@screens/Lists/components/ListsScreenHeader/components/ListBottomStats';
+import { ArrowIcon } from '@components/svg/ArrowIcon';
 
 export const ListsScreenHeader = () => {
   return (
@@ -18,8 +18,29 @@ export const ListsScreenHeader = () => {
       </View>
       <Spacer value={9} />
       <Text style={styles.headerTextStyle}>Total list balance</Text>
+      <Spacer value={15} />
       <Text style={styles.balanceHeaderStyle}>$3,900.90</Text>
-      <ListBottomStats price="20,000 AMB" progress="3.46%" time="24HR" />
+      <View style={styles.bottomStatsContainer}>
+        <View style={styles.priceStyle}>
+          <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 12 }}>
+            20,000 AMB
+          </Text>
+        </View>
+        <ArrowIcon />
+        <View style={styles.progressStyle}>
+          <Text
+            style={{
+              fontFamily: 'Inter_500Medium',
+              fontSize: 12,
+              color: COLORS.lightGrey
+            }}
+          >
+            4%
+          </Text>
+        </View>
+
+        <Text>24HR</Text>
+      </View>
     </View>
   );
 };
@@ -40,11 +61,21 @@ const styles = StyleSheet.create({
     opacity: 1
   },
   balanceHeaderStyle: {
-    paddingTop: 24,
     paddingBottom: 12,
     fontFamily: 'Mersad_600SemiBold',
     fontSize: 36,
     color: COLORS.black
   },
-  container: { paddingTop: 5, paddingLeft: 16 }
+  container: { paddingTop: 5, paddingLeft: 16 },
+  bottomStatsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  priceStyle: {
+    paddingRight: 14
+  },
+  progressStyle: {
+    paddingLeft: 7,
+    paddingRight: 4
+  }
 });

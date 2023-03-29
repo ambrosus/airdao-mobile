@@ -1,7 +1,7 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 
-export const OptionsButton = () => {
+export const OptionsButtonIcon = () => {
   return (
     <Svg width="4" height="16" viewBox="0 0 4 16" fill="none">
       <Path
