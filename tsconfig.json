@@ -11,18 +11,11 @@
     "jsx": "react",
     "allowJs": true,
     "paths": {
-      "@navigation/*": [
-        "./src/navigation/*"
-      ],
-      "@appTypes/*": [
-        "./src/appTypes/*"
-      ],
-      "@screens/*": [
-        "./src/screens/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
+      "@navigation/*": ["./src/navigation/*"],
+      "@appTypes/*": ["./src/appTypes/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"]
     }
-}
+  }
 }
