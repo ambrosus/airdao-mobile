@@ -4500,6 +4500,7 @@ hermes-profile-transformer@^0.0.6:
     source-map "^0.7.3"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 hoist-non-react-statics@^3.3.0:
   version "3.3.2"
 <<<<<<< HEAD
@@ -4507,12 +4508,20 @@ hoist-non-react-statics@^3.3.0:
 =======
   resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
 >>>>>>> 5050d32 (added Portfolio Balance Info)
+=======
+hoist-non-react-statics@^3.3.0:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
+>>>>>>> 2843e2a (remove package-lock.json)
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
   dependencies:
     react-is "^16.7.0"
 
+<<<<<<< HEAD
 =======
 >>>>>>> 3ad1f1d (added flatlist)
+=======
+>>>>>>> 2843e2a (remove package-lock.json)
 hosted-git-info@^3.0.2:
   version "3.0.8"
   resolved "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-3.0.8.tgz"
@@ -6840,6 +6849,7 @@ react-native-codegen@^0.71.5:
     nullthrows "^1.1.1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 react-native-gesture-handler@~2.9.0:
   version "2.9.0"
 <<<<<<< HEAD
@@ -6847,6 +6857,11 @@ react-native-gesture-handler@~2.9.0:
 =======
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz"
 >>>>>>> 5050d32 (added Portfolio Balance Info)
+=======
+react-native-gesture-handler@~2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
+>>>>>>> 2843e2a (remove package-lock.json)
   integrity sha512-a0BcH3Qb1tgVqUutc6d3VuWQkI1AM3+fJx8dkxzZs9t06qA27QgURYFoklpabuWpsUTzuKRpxleykp25E8m7tg==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
@@ -6855,8 +6870,11 @@ react-native-gesture-handler@~2.9.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+<<<<<<< HEAD
 =======
 >>>>>>> 3ad1f1d (added flatlist)
+=======
+>>>>>>> 2843e2a (remove package-lock.json)
 react-native-gradle-plugin@^0.71.16:
   version "0.71.16"
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.16.tgz"
