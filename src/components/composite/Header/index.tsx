@@ -13,6 +13,7 @@ export function Header(props: HeaderProps): JSX.Element {
     contentRight,
     title,
     titlePosition,
+    style = {},
     onBackPress
   } = props;
   const navigation = useNavigation();
@@ -59,7 +60,7 @@ export function Header(props: HeaderProps): JSX.Element {
     <Row
       justifyContent="space-between"
       alignItems="center"
-      style={styles.container}
+      style={{ ...styles.container, ...style }}
     >
       <Row style={styles.left} alignItems="center">
         {renderContentLeft()}
