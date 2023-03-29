@@ -19,6 +19,7 @@ import {
   BottomSheetAnimationDuration,
   BottomSheetBorderRadius
 } from './BottomSheet.constants';
+import { Portal } from '@gorhom/portal';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -75,13 +76,13 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         context.startHeight = top.value;
       },
       onActive: (event, context) => {
-        //Prevent modal to go up more than it should
+        // Prevent modal to go up more than it should
         if (context.startHeight + event.translationY > screen.height - height) {
           top.value = context.startHeight + event.translationY;
         }
       },
       onEnd: () => {
-        //Determine if modal should close or go back to its original height
+        // Determine if modal should close or go back to its original height
         if (top.value > screen.height - height / 2) {
           top.value = updateTop(screen.height);
         } else {
@@ -95,42 +96,44 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     }));
 
     const backdropAnimatedStyle = useAnimatedStyle(() => ({
-      //Less opaque if top value is larger, vice verca
+      // Less opaque if top value is larger, vice verca
       opacity: interpolate(
         top.value,
         [screen.height - height, screen.height],
         [0.5, 0]
       ),
-      //don't show backdrop component if modal is not present, as it cancels any touch events
+      // don't show backdrop component if modal is not present, as it cancels any touch events
       top: isVisible.value ? 0 : screen.height
     }));
 
     return (
-      <View style={styles.fullScreen}>
-        <AnimatedPressable
-          onPressIn={dismiss}
-          style={[
-            styles.backdrop,
-            { backgroundColor: backdropColor },
-            backdropAnimatedStyle
-          ]}
-        />
-        <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View
+      <Portal>
+        <View style={styles.fullScreen}>
+          <AnimatedPressable
+            onPressIn={dismiss}
             style={[
-              styles.container,
-              {
-                height: height,
-                borderTopLeftRadius: borderRadius,
-                borderTopRightRadius: borderRadius
-              },
-              containerAnimatedStyle
+              styles.backdrop,
+              { backgroundColor: backdropColor },
+              backdropAnimatedStyle
             ]}
-          >
-            {children}
-          </Animated.View>
-        </PanGestureHandler>
-      </View>
+          />
+          <PanGestureHandler onGestureEvent={gestureHandler}>
+            <Animated.View
+              style={[
+                styles.container,
+                {
+                  height: height,
+                  borderTopLeftRadius: borderRadius,
+                  borderTopRightRadius: borderRadius
+                },
+                containerAnimatedStyle
+              ]}
+            >
+              {children}
+            </Animated.View>
+          </PanGestureHandler>
+        </View>
+      </Portal>
     );
   }
 );
