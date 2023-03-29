@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ViewStyle } from 'react-native';
 
-export type ButtonType = 'base' | 'bordered';
+export type ButtonType = 'base' | 'bordered' | 'circular';
 
 export interface BaseButtonProps {
   style?: ViewStyle;
@@ -15,6 +15,14 @@ export interface BorderedButtonProps extends BaseButtonProps {
   borderColor?: string;
 }
 
-export type ButtonProps = (BaseButtonProps | BorderedButtonProps) & {
+export interface CircularButtonProps extends BaseButtonProps {
+  borderRadius?: number;
+}
+
+export type ButtonProps = (
+  | BaseButtonProps
+  | BorderedButtonProps
+  | CircularButtonProps
+) & {
   type?: ButtonType;
 };
