@@ -1,44 +1,56 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Spacer } from '@components/atoms/Spacer';
-import { BadgeButton } from '@components/BadgeButton/BadgeIconButton';
+import { Spacer } from '@components/base/Spacer';
 import { FilterButtonIcon } from '@components/svg/FilterButton';
 import { SettingsButtonIcon } from '@components/svg/SettingsButtonIcon';
 import { COLORS } from '../../../../constants/colors';
 import { ArrowIcon } from '@components/svg/ArrowIcon';
+import { Button } from '@components/base';
 
 export const ListsScreenHeader = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.settingsButton}>
-          <BadgeButton icon={<FilterButtonIcon />} />
-        </View>
-        <BadgeButton icon={<SettingsButtonIcon />} />
+    <View style={styles.headerContainer}>
+      <View style={styles.badgeButtonsContainer}>
+        <Button
+          style={{ ...styles.badgeButtonContainer, ...styles.settingsButton }}
+          type="base"
+        >
+          <View style={styles.badgeButtonIcon}>
+            <FilterButtonIcon />
+          </View>
+        </Button>
+        <Button style={styles.badgeButtonContainer} type="base">
+          <View style={styles.badgeButtonIcon}>
+            <SettingsButtonIcon />
+          </View>
+        </Button>
       </View>
       <Spacer value={9} />
-      <Text style={styles.headerTextStyle}>Total list balance</Text>
+      <Text style={styles.balanceSubtitle}>Total list balance</Text>
       <Spacer value={15} />
-      <Text style={styles.balanceHeaderStyle}>$3,900.90</Text>
-      <View style={styles.bottomStatsContainer}>
-        <View style={styles.priceStyle}>
-          <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 12 }}>
-            20,000 AMB
-          </Text>
-        </View>
+      <Text style={styles.balanceCount}>$3,900.90</Text>
+      <View style={styles.balanceStats}>
+        <Text
+          style={[
+            styles.balanceTokens,
+            { fontFamily: 'Inter_500Medium', fontSize: 12 }
+          ]}
+        >
+          20,000 AMB
+        </Text>
         <ArrowIcon />
-        <View style={styles.progressStyle}>
-          <Text
-            style={{
+        <Text
+          style={[
+            styles.progressInfo,
+            {
               fontFamily: 'Inter_500Medium',
               fontSize: 12,
               color: COLORS.lightGrey
-            }}
-          >
-            4%
-          </Text>
-        </View>
-
+            }
+          ]}
+        >
+          4%
+        </Text>
         <Text>24HR</Text>
       </View>
     </View>
@@ -46,36 +58,48 @@ export const ListsScreenHeader = () => {
 };
 
 const styles = StyleSheet.create({
-  buttonsContainer: {
+  headerContainer: { paddingTop: 5, paddingLeft: 16 },
+  badgeButtonsContainer: {
     flexDirection: 'row',
     paddingRight: 17,
     justifyContent: 'flex-end'
   },
   settingsButton: {
-    paddingRight: 16
+    marginRight: 16
   },
-  headerTextStyle: {
+  balanceSubtitle: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
     color: COLORS.lightGrey,
     opacity: 1
   },
-  balanceHeaderStyle: {
+  balanceCount: {
     paddingBottom: 12,
     fontFamily: 'Mersad_600SemiBold',
     fontSize: 36,
     color: COLORS.black
   },
-  container: { paddingTop: 5, paddingLeft: 16 },
-  bottomStatsContainer: {
+  balanceStats: {
     flexDirection: 'row',
     alignItems: 'center'
   },
-  priceStyle: {
+  balanceTokens: {
     paddingRight: 14
   },
-  progressStyle: {
+  progressInfo: {
     paddingLeft: 7,
     paddingRight: 4
+  },
+  badgeButtonContainer: {
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: ' rgba(47, 43, 67, 0.05)'
+  },
+  badgeButtonIcon: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
