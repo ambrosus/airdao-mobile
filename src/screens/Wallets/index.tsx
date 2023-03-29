@@ -1,19 +1,20 @@
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Text } from '@components/base';
+import { ScrollView } from 'react-native';
+import { PortfolioBalance } from './components';
+import { styles } from './styles';
 
 export const WalletsScreen = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text style={styles.headerText}>WalletsScreen</Text>
-      </View>
-    </SafeAreaView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="light" backgroundColor="#222222" />
+      <PortfolioBalance
+        USDBalance={3900}
+        AMBBalance={1}
+        balanceLast24HourChange={3.46}
+        AMBPriceLast24HourChange={0}
+        AMBPrice={0.01306}
+      />
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  headerText: {
-    fontFamily: 'Mersad_600SemiBold'
-  }
-});
