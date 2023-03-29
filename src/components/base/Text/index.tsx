@@ -1,5 +1,9 @@
 import React from 'react';
-import { Text as RNText, TextStyle as RNTextStyle } from 'react-native';
+import {
+  Text as RNText,
+  TextStyle as RNTextStyle,
+  TextStyle
+} from 'react-native';
 import {
   DEFAULT_FONT_SIZE,
   fontSizeMapping,
@@ -12,6 +16,7 @@ export function Text(props: TextProps): JSX.Element {
     color = '#000000',
     fontSize,
     fontWeight = 'normal',
+    fontFamily = 'Inter_500Medium',
     ...restProps
   } = props;
 
@@ -30,10 +35,29 @@ export function Text(props: TextProps): JSX.Element {
     return fontWeightMapping[fontWeight];
   };
 
-  const styles = {
+  const fixMisplacement = () => {
+    switch (fontFamily) {
+      case 'Inter_500Medium':
+      case 'Inter_600SemiBold':
+      case 'Inter_700Bold':
+        break;
+      case 'Mersad_600SemiBold': {
+        return {
+          lineHeight: getFontSize() * 1.4, // a workaround to avoid incorrect placement of Text components when used with custom fonts
+          height: getFontSize()
+        };
+      }
+      default:
+        break;
+    }
+  };
+
+  const styles: TextStyle = {
+    fontFamily,
     color,
     fontSize: getFontSize(),
-    fontWeight: getFontWeight()
+    fontWeight: getFontWeight(),
+    ...fixMisplacement()
   };
 
   return <RNText style={styles} {...restProps} />;

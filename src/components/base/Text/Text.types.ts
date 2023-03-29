@@ -5,6 +5,11 @@ export enum FontSizeKey {
   title = 'title',
   heading = 'heading'
 }
+export type FontFamily =
+  | 'Inter_500Medium'
+  | 'Inter_600SemiBold'
+  | 'Inter_700Bold'
+  | 'Mersad_600SemiBold';
 
 export type FontWeight =
   | 'normal'
@@ -30,4 +35,5 @@ export type TextProps = FontSizeProps & {
   fontSize?: number;
   children?: ReactNode;
   fontWeight?: FontWeight;
+  fontFamily?: FontFamily;
 };
