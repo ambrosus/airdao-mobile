@@ -91,6 +91,42 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             </Text>
           </Row>
         </Row>
+        <View
+          style={[
+            styles.chart,
+            { height: verticalScale(110), backgroundColor: 'red' }
+          ]}
+        >
+          <Text color="#FFFFFF">Chart</Text>
+        </View>
+        <Button
+          type="bordered"
+          borderRadius={scale(15)}
+          style={styles.stats}
+          borderColor="rgba(255, 255, 255, 0.1)"
+          onPress={navigateToStats}
+        >
+          <Row flex={1} alignItems="center" justifyContent="space-between">
+            <Row alignItems="center">
+              <Text subtitle fontSize={15} color={COLORS.white}>
+                AMB PRICE: ${AMBPrice}
+              </Text>
+              <Text color={COLORS.lightGrey}>
+                {'  ' +
+                  (AMBPriceLast24HourChange > 0
+                    ? '+'
+                    : AMBPriceLast24HourChange < 0
+                    ? '-'
+                    : '')}
+                {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
+              </Text>
+            </Row>
+            <Row alignItems="center">
+              <Text color={COLORS.white}>See Stats {'  '}</Text>
+              <RightArrowIcon />
+            </Row>
+          </Row>
+        </Button>
       </View>
     </View>
   );
@@ -122,5 +158,15 @@ const styles = StyleSheet.create({
   },
   balanceLast24HourChange: {
     marginLeft: scale(14)
+  },
+  chart: {
+    marginTop: verticalScale(8)
+  },
+  stats: {
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    marginTop: verticalScale(20),
+    borderRadius: moderateScale(15),
+    backgroundColor: 'rgba(255, 255, 255, 0.05)'
   }
 });
