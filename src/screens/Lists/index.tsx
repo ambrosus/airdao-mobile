@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { ListsOfWallets } from './components/ListsOfWallets';
-import { Spacer } from '@components/atoms/Spacer';
+import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '../../constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { AddIcon } from '@components/svg/AddIcon';
@@ -22,7 +22,7 @@ export const ListsScreen = () => {
       <SafeAreaView style={{ flex: 1 }}>
         <ListsScreenHeader />
         <Spacer value={32} />
-        <View style={styles.lineStyle} />
+        <View style={styles.separateLine} />
         <ListsOfWallets />
       </SafeAreaView>
       <FloatButton
@@ -38,7 +38,7 @@ export const ListsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  lineStyle: {
+  separateLine: {
     borderBottomWidth: 3,
     borderBottomColor: COLORS.darkGrey,
     opacity: 0.1
