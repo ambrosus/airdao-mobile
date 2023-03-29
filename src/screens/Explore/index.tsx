@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 
 export const ExploreScreen = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>ExploreScreen</Text>
-    </View>
+    </SafeAreaView>
   );
 };

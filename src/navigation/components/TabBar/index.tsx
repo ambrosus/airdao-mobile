@@ -9,6 +9,8 @@ import { ListsActiveIcon } from '@components/svg/BottomTabIcons/ListsActiveIcon'
 import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsInactiveIcon';
 import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiveIcon';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { COLORS } from '../../../constants/colors';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
 const tabs = {
@@ -31,8 +33,9 @@ const tabs = {
 };
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const bottomSafeArea = useSafeAreaInsets().bottom - 15;
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label: LabelType =
@@ -66,13 +69,13 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           >
             {icon}
             <Text
-              style={{
-                color: isFocused ? '#222222' : '#2f2b43',
-                paddingTop: 2,
-                fontSize: 12,
-                opacity: isFocused ? 1 : 0.7,
-                lineHeight: 16
-              }}
+              style={[
+                styles.labelStyle,
+                {
+                  color: isFocused ? '#222222' : '#2f2b43',
+                  opacity: isFocused ? 1 : 0.7
+                }
+              ]}
             >
               {label}
             </Text>
@@ -88,13 +91,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
-    backgroundColor: 'rgba(249, 249, 249, 0.94)',
+    backgroundColor: COLORS.white,
     paddingVertical: 8,
-    alignItems: 'center',
-    textAlign: 'center',
     opacity: 2,
     borderTopWidth: 0.25,
-    borderTopColor: 'rgba(0, 0, 0, 0.2)\n'
+    borderTopColor: COLORS.silver
   },
   mainItemContainer: {
     flex: 1,
@@ -102,8 +103,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     borderRadius: 1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: COLORS.white,
     opacity: 0.94
+  },
+  labelStyle: {
+    paddingTop: 2,
+    fontSize: 12,
+    lineHeight: 16
   }
 });
 
