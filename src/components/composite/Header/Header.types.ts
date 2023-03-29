@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { ViewStyle } from 'react-native';
 
 export interface HeaderProps {
   backIconVisible?: boolean;
@@ -7,4 +8,5 @@ export interface HeaderProps {
   titlePosition?: 'left' | 'center';
   contentLeft?: ReactNode;
   contentRight?: ReactNode;
+  style?: ViewStyle;
 }
