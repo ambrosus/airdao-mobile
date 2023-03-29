@@ -16,6 +16,7 @@ export function Row(props: RowProps): JSX.Element {
     alignItems,
     justifyContent,
     flex,
+    flexDirection: 'row',
     width
   };
   return <View style={styles}>{children}</View>;
