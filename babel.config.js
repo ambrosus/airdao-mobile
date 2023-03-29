@@ -23,6 +23,12 @@ module.exports = function (api) {
           },
           extensions: ['.ts', '.tsx']
         }
+      ],
+      [
+        'react-native-reanimated/plugin',
+        {
+          relativeSourceLocation: true
+        }
       ]
     ]
   };
