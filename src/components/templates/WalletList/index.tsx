@@ -1,5 +1,5 @@
 import React, { useReducer, useRef } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
 import { NumberUtils } from '../../../utils/number';
 import { scale, verticalScale } from '../../../utils/scaling';
@@ -8,6 +8,8 @@ import {
   RotationAnimationRef
 } from '@components/animations';
 import { WalletItem, Wallet } from '../WalletItem';
+import { ChevronDownIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 
 interface WalletListProps {
   title: string;
@@ -50,11 +52,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           onPress={onTogglePress}
         >
           <RotationAnimation ref={rotationAnimation}>
-            <Image
-              resizeMode="contain"
-              source={require('../../../assets/icons/chevron-down.png')}
-              style={styles.chevronIcon}
-            />
+            <ChevronDownIcon color={COLORS.black} />
           </RotationAnimation>
         </Button>
       </Row>

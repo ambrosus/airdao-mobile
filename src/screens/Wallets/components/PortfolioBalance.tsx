@@ -70,18 +70,14 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
                 type="circular"
                 style={styles.balanceAction}
               >
-                {balanceVisible ? (
-                  <EyeInvisibleIcon size={scale(10)} />
-                ) : (
-                  <EyeVisibleIcon size={scale(10)} />
-                )}
+                {balanceVisible ? <EyeInvisibleIcon /> : <EyeVisibleIcon />}
               </Button>
               <Button
                 onPress={onShareBalancePress}
                 type="circular"
                 style={styles.balanceAction}
               >
-                <ShareIcon size={scale(13)} />
+                <ShareIcon />
               </Button>
             </Row>
           )}
@@ -91,7 +87,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             {NumberUtils.formatNumber(AMBBalance)} AMB
           </Text>
           <Row alignItems="center" style={styles.balanceLast24HourChange}>
-            <TrendIcon color={COLORS.lightGrey} size={12} />
+            <TrendIcon color={COLORS.lightGrey} />
             <Text color={COLORS.lightGrey}>
               {'  '}
               {NumberUtils.formatNumber(balanceLast24HourChange)}%
