@@ -6,6 +6,7 @@ import { WalletHeader } from './Header';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
+  EyeInvisibleIcon,
   EyeVisibleIcon,
   RightArrowIcon,
   ShareIcon,
@@ -51,15 +52,17 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           My Wallet Value
         </Text>
         <Row alignItems="center" style={styles.balance}>
-          <Text color={COLORS.white} heading fontFamily="Mersad_600SemiBold">
-            $
-            {balanceVisible
-              ? NumberUtils.formatNumber(USDBalance)
-              : NumberUtils.formatNumber(USDBalance)
-                  .split('')
-                  .map((ch) => (ch === '.' ? ch : '*'))
-                  .join('')}
-          </Text>
+          <Row flex={1}>
+            <Text color={COLORS.white} heading fontFamily="Mersad_600SemiBold">
+              $
+              {balanceVisible
+                ? NumberUtils.formatNumber(USDBalance)
+                : NumberUtils.formatNumber(USDBalance)
+                    .split('')
+                    .map((ch) => (ch === '.' ? ch : '*'))
+                    .join('')}
+            </Text>
+          </Row>
           {USDBalance > 0 && (
             <Row alignItems="center" flex={1}>
               <Button
@@ -67,7 +70,11 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
                 type="circular"
                 style={styles.balanceAction}
               >
-                <EyeVisibleIcon size={scale(10)} />
+                {balanceVisible ? (
+                  <EyeInvisibleIcon size={scale(10)} />
+                ) : (
+                  <EyeVisibleIcon size={scale(10)} />
+                )}
               </Button>
               <Button
                 onPress={onShareBalancePress}
