@@ -4,7 +4,7 @@ export const COLORS = {
   darkGrey: '#2f2b43',
   lightGrey: '#828282',
   grey: '#646464',
-  silver: '#C0C0C0',
   whiteGrey: '#2f2b430d',
-  dark: '#222222'
+  dark: '#222222',
+  silver: '#C0C0C0'
 };
