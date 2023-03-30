@@ -13,7 +13,6 @@ import { COLORS } from '../../../../constants/colors';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 
 type Props = {
   listName: string;
@@ -22,13 +21,12 @@ type Props = {
 };
 export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
-    const keyboardHeight = useKeyboardHeight();
     const { listName, handleListNameChange } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     return (
       <>
-        <BottomSheet height={400 + keyboardHeight} ref={localRef}>
+        <BottomSheet height={400} ref={localRef}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>

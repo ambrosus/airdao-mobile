@@ -3,7 +3,7 @@ import { ViewStyle } from 'react-native';
 
 export interface BottomSheetProps {
   backdropColor?: string;
-  height: number;
+  height?: ViewStyle['height'];
   borderRadius?: ViewStyle['borderRadius'];
   children?: ReactNode;
 }
