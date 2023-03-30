@@ -3,7 +3,6 @@ import { TrendIcon } from '@components/svg/icons';
 import React from 'react';
 import { View } from 'react-native';
 import { NumberUtils } from '../../../utils/number';
-import { scale } from '../../../utils/scaling';
 
 export interface Wallet {
   title: string;
@@ -32,10 +31,8 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
           {NumberUtils.formatNumber(item.price, 0)} {item.currency}
         </Text>
         <Row alignItems="center">
-          <View style={{ marginRight: scale(1), top: scale(3) }}>
-            <TrendIcon color="#2f2b4399" />
-          </View>
-          <Text color="#2f2b4399">{item.last24HourChange}%</Text>
+          <TrendIcon color="#2f2b4399" />
+          <Text color="#2f2b4399"> {item.last24HourChange}%</Text>
         </Row>
       </Row>
     </View>
