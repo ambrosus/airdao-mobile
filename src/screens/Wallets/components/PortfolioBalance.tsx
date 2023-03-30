@@ -142,8 +142,7 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(20)
   },
   content: {
-    paddingHorizontal: '5%',
-    marginTop: verticalScale(20)
+    paddingHorizontal: '5%'
   },
   balance: {
     marginTop: verticalScale(12)
