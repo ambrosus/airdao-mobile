@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,7 +13,8 @@ import {
   TrendIcon
 } from '@components/svg/icons';
 import { NumberUtils } from '../../../utils/number';
-import { BezierChart, Point } from '@components/templates';
+import { BezierChart, Point, SharePortfolio } from '@components/templates';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -37,10 +38,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     true
   );
 
+  const shareBottomSheet = useRef<BottomSheetRef>(null);
+
   const chartData: Point[] = [];
 
   const onShareBalancePress = () => {
     // TODO
+    shareBottomSheet.current?.show();
   };
 
   const navigateToStats = () => {
@@ -129,6 +133,15 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           </Row>
         </Button>
       </View>
+      <SharePortfolio
+        ref={shareBottomSheet}
+        balance={20000}
+        currency="AMB"
+        currencyPosition="right"
+        last24HourChange={3.46}
+        title="My portfolio performance"
+        bottomSheetTitle="Share Portfolio Performance"
+      />
     </View>
   );
 }
