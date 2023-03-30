@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { FilterButtonIcon } from '@components/svg/FilterButton';
 import { SettingsButtonIcon } from '@components/svg/SettingsButtonIcon';
 import { COLORS } from '../../../../constants/colors';
 import { ArrowIcon } from '@components/svg/ArrowIcon';
-import { Button } from '@components/base';
+import { Button, Text } from '@components/base';
 
 export const ListsScreenHeader = () => {
   return (
