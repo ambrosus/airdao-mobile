@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   Text as RNText,
   TextStyle as RNTextStyle,
   TextStyle
@@ -37,19 +38,21 @@ export function Text(props: TextProps): JSX.Element {
   };
 
   const fixMisplacement = () => {
-    switch (fontFamily) {
-      case 'Inter_500Medium':
-      case 'Inter_600SemiBold':
-      case 'Inter_700Bold':
-        break;
-      case 'Mersad_600SemiBold': {
-        return {
-          lineHeight: getFontSize() * 1.4, // a workaround to avoid incorrect placement of Text components when used with custom fonts
-          height: getFontSize()
-        };
+    if (Platform.OS === 'ios') {
+      switch (fontFamily) {
+        case 'Inter_500Medium':
+        case 'Inter_600SemiBold':
+        case 'Inter_700Bold':
+          break;
+        case 'Mersad_600SemiBold': {
+          return {
+            lineHeight: getFontSize() * 1.4, // a workaround to avoid incorrect placement of Text components when used with custom fonts
+            height: getFontSize()
+          };
+        }
+        default:
+          break;
       }
-      default:
-        break;
     }
   };
 
