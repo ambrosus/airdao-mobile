@@ -4,6 +4,7 @@ export * from './ChevronRight';
 export * from './ChevronDown';
 export * from './EyeVisible';
 export * from './EyeInvisible';
+export * from './Logo';
 export * from './Notification';
 export * from './RightArrow';
 export * from './Scanner';
