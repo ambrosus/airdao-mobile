@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WalletHeader } from './Header';
@@ -141,7 +141,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: '50%',
+    minHeight: Dimensions.get('window').height * 0.5,
     backgroundColor: '#222222',
     borderBottomLeftRadius: scale(28),
     borderBottomRightRadius: scale(28),
