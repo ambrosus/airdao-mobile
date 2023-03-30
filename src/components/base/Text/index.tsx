@@ -13,6 +13,7 @@ import { FontSizeKey, TextProps } from './Text.types';
 
 export function Text(props: TextProps): JSX.Element {
   const {
+    style: propsStyle,
     color = '#000000',
     fontSize,
     fontWeight = 'normal',
@@ -60,5 +61,5 @@ export function Text(props: TextProps): JSX.Element {
     ...fixMisplacement()
   };
 
-  return <RNText style={styles} {...restProps} />;
+  return <RNText style={[styles, propsStyle]} {...restProps} />;
 }

@@ -1,16 +1,17 @@
-import React, { useCallback, useRef } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { ListsOfWallets } from './components/ListsOfWallets';
-import { Spacer } from '@components/atoms/Spacer';
+import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '../../constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { AddIcon } from '@components/svg/AddIcon';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FloatButton } from '@components/base/FloatButton';
-import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { BottomSheetCreateNewList } from '@screens/Lists/components/BottomSheetCreateNewList';
 
 export const ListsScreen = () => {
+  const [listName, setListName] = useState<string>('');
   const bottomRef = useRef<BottomSheetRef>(null);
 
   const handleOnCreateNewList = useCallback(() => {
@@ -22,7 +23,7 @@ export const ListsScreen = () => {
       <SafeAreaView style={{ flex: 1 }}>
         <ListsScreenHeader />
         <Spacer value={32} />
-        <View style={styles.lineStyle} />
+        <View style={styles.separateLine} />
         <ListsOfWallets />
       </SafeAreaView>
       <FloatButton
@@ -30,15 +31,17 @@ export const ListsScreen = () => {
         icon={<AddIcon />}
         onPress={handleOnCreateNewList}
       />
-      <BottomSheet height={400} ref={bottomRef}>
-        <Text>12312312312312</Text>
-      </BottomSheet>
+      <BottomSheetCreateNewList
+        ref={bottomRef}
+        listName={listName}
+        handleListNameChange={setListName}
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  lineStyle: {
+  separateLine: {
     borderBottomWidth: 3,
     borderBottomColor: COLORS.darkGrey,
     opacity: 0.1

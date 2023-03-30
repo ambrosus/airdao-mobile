@@ -1,8 +1,9 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { COLORS } from '../../../constants/colors';
+import { Text } from '@components/base';
 
 type Props = {
   title: string;

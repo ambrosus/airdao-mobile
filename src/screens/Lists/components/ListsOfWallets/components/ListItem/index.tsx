@@ -1,64 +1,62 @@
 import React, { FC } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { COLORS } from '../../../../../../constants/colors';
 import { OptionsButtonIcon } from '@components/svg/OptionsButtonIcon';
+import { Spacer } from '@components/base/Spacer';
+import { Text } from '@components/base';
 
 type Props = {
   item: {
-    price: string;
+    tokens: string;
     title: string;
-    subtitle: string;
+    wallets: string;
   };
 };
 export const ListItem: FC<Props> = ({ item }) => {
   return (
-    <>
-      <View style={styles.itemContainer}>
-        <View style={styles.itemContainerTitle}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-        </View>
-        <View style={styles.itemContainerSubtitlePrice}>
-          <Text style={styles.itemSubtitle}>{item.subtitle}</Text>
-          <Text style={styles.itemPrice}>{item.price}</Text>
+    <View style={styles.container}>
+      <View style={styles.itemInfo}>
+        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Spacer value={4} />
+        <View style={styles.itemSubInfo}>
+          <Text style={styles.walletsCount}>{item.wallets}</Text>
+          <Text style={styles.tokensCount}>{item.tokens}</Text>
         </View>
       </View>
-      <View style={styles.itemContainerButtonStyles}>
-        <Pressable>
-          <OptionsButtonIcon />
-        </Pressable>
-      </View>
-    </>
+      <Pressable>
+        <OptionsButtonIcon />
+      </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  itemContainer: {
+  container: {
+    paddingTop: 32,
     paddingLeft: 19,
-    paddingVertical: 35,
-    paddingRight: 180
-  },
-  itemContainerTitle: {
-    justifyContent: 'flex-start',
-    paddingBottom: 4
-  },
-  itemContainerSubtitlePrice: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'space-between'
-  },
-  itemContainerButtonStyles: {
-    alignItems: 'flex-end',
     paddingRight: 29,
-    marginTop: -50
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  itemTitle: { fontFamily: 'Inter_600SemiBold', fontSize: 17 },
-  itemSubtitle: {
+  itemInfo: {},
+  itemSubInfo: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  itemTitle: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 17
+  },
+  walletsCount: {
+    paddingRight: 14,
     fontFamily: 'Inter_400Regular',
     fontSize: 16
   },
-  itemPrice: {
+  tokensCount: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
-    color: COLORS.lightGrey
+    color: COLORS.lightGrey,
+    paddingTop: 2
   }
 });

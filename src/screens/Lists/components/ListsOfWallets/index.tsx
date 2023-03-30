@@ -5,43 +5,63 @@ import { ListItem } from '@screens/Lists/components/ListsOfWallets/components/Li
 const mockedData = [
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   },
   {
     title: 'Whales',
-    subtitle: '5 wallets',
-    price: '$2,000 (2,000 AMB)'
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
+  },
+  {
+    title: 'Whales',
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
+  },
+  {
+    title: 'Whales',
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
+  },
+  {
+    title: 'Whales',
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
+  },
+  {
+    title: 'Whales',
+    wallets: '5 wallets',
+    tokens: '$2,000 (2,000 AMB)'
   }
 ];
 
