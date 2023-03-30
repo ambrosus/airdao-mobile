@@ -4,7 +4,7 @@ import { InputProps, InputRef } from './Input.types';
 
 export const TextInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
-    const { value, style = {}, onChangeValue } = props;
+    const { value, style = {}, onChangeValue, ...restProps } = props;
     const styles = [style, { color: '#000000' }];
     const rnInputRef = useRef<RNTextInput>(null);
 
@@ -26,6 +26,7 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
         value={value}
         onChangeText={onChangeValue}
         style={styles}
+        {...restProps}
       />
     );
   }

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { StyleProp, TextStyle } from 'react-native';
 export enum FontSizeKey {
   subtext = 'subtext',
   subtitle = 'subtitle',
@@ -31,6 +32,7 @@ type FontSizeProps = {
 };
 
 export type TextProps = FontSizeProps & {
+  style?: StyleProp<TextStyle>;
   color?: string;
   fontSize?: number;
   children?: ReactNode;

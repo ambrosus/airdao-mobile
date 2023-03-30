@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, StyleSheet, Text } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { WalletsInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { WalletsActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
@@ -11,6 +11,7 @@ import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiv
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../../constants/colors';
+import { Text } from '@components/base';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
 const tabs = {

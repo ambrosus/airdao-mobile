@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { COLORS } from '../../../../../../constants/colors';
 import { OptionsButtonIcon } from '@components/svg/OptionsButtonIcon';
 import { Spacer } from '@components/base/Spacer';
+import { Text } from '@components/base';
 
 type Props = {
   item: {
