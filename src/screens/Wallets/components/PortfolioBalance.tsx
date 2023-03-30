@@ -13,6 +13,7 @@ import {
   TrendIcon
 } from '@components/svg/icons';
 import { NumberUtils } from '../../../utils/number';
+import { BezierChart, Point } from '@components/templates';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -35,6 +36,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     (visible) => !visible,
     true
   );
+
+  const chartData: Point[] = [];
 
   const onShareBalancePress = () => {
     // TODO
@@ -94,13 +97,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             </Text>
           </Row>
         </Row>
-        <View
-          style={[
-            styles.chart,
-            { height: verticalScale(110), backgroundColor: 'red' }
-          ]}
-        >
-          <Text color="#FFFFFF">Chart</Text>
+        <View style={styles.chart}>
+          <BezierChart height={verticalScale(200)} data={chartData} />
         </View>
         <Button
           type="bordered"
