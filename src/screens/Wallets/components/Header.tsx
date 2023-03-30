@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Header } from '@components/composite';
 import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale } from '../../../utils/scaling';
+import { scale, verticalScale } from '../../../utils/scaling';
 import { Button, Text } from '@components/base';
 
 export function WalletHeader(): JSX.Element {
@@ -52,10 +52,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: COLORS.white,
     right: 0,
-    top: -2,
-    borderRadius: scale(6),
-    width: scale(12),
-    height: scale(12),
+    top: -verticalScale(4),
+    borderRadius: scale(7),
+    width: scale(14),
+    height: scale(14),
     justifyContent: 'center',
     alignItems: 'center'
   }
