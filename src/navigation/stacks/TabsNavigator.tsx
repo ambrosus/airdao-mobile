@@ -5,14 +5,7 @@ import SettingsStack from './Tabs/SettingsStack';
 import ExploreStack from './Tabs/ExploreStack';
 import WalletsStack from './Tabs/WalletsStack';
 import TabBar from '@navigation/components/TabBar';
-
-export type TabsParamsList = {
-  Wallets: undefined;
-  Explore: undefined;
-  Lists: undefined;
-  Settings: undefined;
-  Tabs: { screen: string };
-};
+import { TabsParamsList } from '@appTypes/navigation/tabs';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 

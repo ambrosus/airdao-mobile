@@ -14,7 +14,10 @@ export const WalletsScreen = () => {
   const { data } = useAMBPrice();
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         <StatusBar style="light" backgroundColor="#222222" />
         <PortfolioBalance
           USDBalance={3900}

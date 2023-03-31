@@ -15,6 +15,8 @@ import {
 import { NumberUtils } from '@utils/number';
 import { BezierChart, Point, SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes/navigation';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -32,6 +34,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     AMBPriceLast24HourChange,
     AMBPrice
   } = props;
+  const navigation = useNavigation<WalletsNavigationProp>();
   const safeAreaInsets = useSafeAreaInsets();
   const [balanceVisible, toggleBalanceVisibility] = useReducer(
     (visible) => !visible,
@@ -49,6 +52,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 
   const navigateToStats = () => {
     // TODO
+    navigation.navigate('AMBMarketScreen');
   };
 
   return (
@@ -102,7 +106,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           </Row>
         </Row>
         <View style={styles.chart}>
-          <BezierChart height={verticalScale(200)} data={chartData} />
+          <BezierChart
+            height={verticalScale(200)}
+            data={chartData}
+            axisLabelColor="#ffffff66"
+            strokeColor="#ffffff66"
+            axisColor="#222222"
+          />
         </View>
         <Button
           type="bordered"

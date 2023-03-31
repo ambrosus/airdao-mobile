@@ -1,3 +1,4 @@
+import { COLORS } from '@constants/colors';
 import React from 'react';
 import {
   VictoryChart,
@@ -13,32 +14,39 @@ export interface Point {
 interface BezierChartProps {
   height?: number;
   data: Point[];
+  strokeColor?: string;
+  axisLabelColor?: string;
+  axisColor?: string;
 }
 
 export function BezierChart(props: BezierChartProps): JSX.Element {
-  const { height } = props;
+  const {
+    height,
+    strokeColor = COLORS.black,
+    axisLabelColor = COLORS.black,
+    axisColor = COLORS.black
+  } = props;
   return (
     <VictoryChart theme={VictoryTheme.material} height={height}>
       <VictoryAxis
         dependentAxis={false}
         style={{
-          axis: { stroke: '#222222' },
+          axis: { stroke: axisColor },
           grid: {
-            stroke: '#222222', //CHANGE COLOR OF X-AXIS GRID LINES
-            strokeDasharray: '7'
+            stroke: 'transparent' //CHANGE COLOR OF X-AXIS GRID LINES
           },
           ticks: {
-            fill: '#222222'
+            stroke: 'transparent'
           },
           tickLabels: {
-            fill: '#ffffff66' //CHANGE COLOR OF X-AXIS LABELS
+            fill: axisLabelColor //CHANGE COLOR OF X-AXIS LABELS
           }
         }}
       />
       <VictoryLine
         interpolation="natural"
         style={{
-          data: { stroke: '#ffffff66' }
+          data: { stroke: strokeColor }
         }}
         data={[
           { x: 1, y: 2 },
