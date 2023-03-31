@@ -1,43 +1,61 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Row, Text } from '@components/base';
-import { COLORS } from '../../../../constants/colors';
-import { CurrencyIcon } from '@components/svg/CurrencyIcon';
-import { LanguageIcon } from '@components/svg/LanguageIcon';
-import { NotificationIcon } from '@components/svg/NotificationIcon';
+import { Button, Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { RightArrowIcon } from '@components/svg/RightArrowIcon';
+import { DarkNotificationIcon } from '@components/svg/icons/DarkNotification';
+import { CurrencyIcon } from '@components/svg/icons/Currency';
+import { LanguageIcon } from '@components/svg/icons/Language';
 
 export const SettingsBlock = () => {
   return (
     <View style={styles.container}>
-      <Row style={styles.optionContainer} justifyContent="space-between">
+      <Row
+        style={styles.optionContainer}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Row style={styles.infoTextContainer}>
           <CurrencyIcon />
           <Text style={styles.optionInfoText}>Base currency</Text>
         </Row>
-        <Row style={styles.infoTextContainer} alignItems="center">
-          <Text style={styles.optionButtonText}>US Dollars</Text>
-          <RightArrowIcon />
-        </Row>
+        <Button type="base">
+          <Row style={styles.infoTextContainer} alignItems="center">
+            <Text style={styles.optionButtonText}>US Dollars</Text>
+            <RightArrowIcon />
+          </Row>
+        </Button>
       </Row>
-      <Row style={styles.optionContainer} justifyContent="space-between">
+      <Row
+        style={styles.optionContainer}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Row style={styles.infoTextContainer}>
           <LanguageIcon />
           <Text style={styles.optionInfoText}>Language</Text>
         </Row>
-        <Row style={styles.infoTextContainer} alignItems="center">
-          <Text style={styles.optionButtonText}>English</Text>
-          <RightArrowIcon />
-        </Row>
+        <Button type="base">
+          <Row style={styles.infoTextContainer} alignItems="center">
+            <Text style={styles.optionButtonText}>English</Text>
+            <RightArrowIcon />
+          </Row>
+        </Button>
       </Row>
-      <Row style={styles.optionContainer} justifyContent="space-between">
+      <Row
+        style={styles.optionContainer}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Row style={styles.infoTextContainer}>
-          <NotificationIcon />
+          <DarkNotificationIcon />
           <Text style={styles.optionInfoText}>Notification settings</Text>
         </Row>
-        <Row style={styles.infoTextContainer} alignItems="center">
-          <RightArrowIcon />
-        </Row>
+        <Button type="base">
+          <Row style={styles.infoTextContainer} alignItems="center">
+            <RightArrowIcon />
+          </Row>
+        </Button>
       </Row>
     </View>
   );

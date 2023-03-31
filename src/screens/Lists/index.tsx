@@ -2,13 +2,14 @@ import React, { useCallback, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ListsOfWallets } from './components/ListsOfWallets';
 import { Spacer } from '@components/base/Spacer';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
-import { AddIcon } from '@components/svg/AddIcon';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { BottomSheetCreateNewList } from '@screens/Lists/components/BottomSheetCreateNewList';
+import { StatusBar } from 'expo-status-bar';
+import { AddIcon } from '@components/svg/icons/AddIcon';
 
 export const ListsScreen = () => {
   const [listName, setListName] = useState<string>('');
@@ -20,6 +21,7 @@ export const ListsScreen = () => {
 
   return (
     <>
+      <StatusBar style="light" backgroundColor="#222222" />
       <SafeAreaView style={{ flex: 1 }}>
         <ListsScreenHeader />
         <Spacer value={32} />

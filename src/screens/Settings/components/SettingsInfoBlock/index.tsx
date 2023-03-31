@@ -1,26 +1,32 @@
-import { Row, Text } from '@components/base';
+import { Button, Row, Text } from '@components/base';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { COLORS } from '../../../../constants/colors';
-import { AirDAOIcon } from '@components/svg/AirDAOIcon';
-import { HelpIcon } from '@components/svg/HelpIcon';
-import { AppStoreIcon } from '@components/svg/AppStoreIcon';
+import { COLORS } from '@constants/colors';
+import { LogoSVG } from '@components/svg/icons';
+import { HelpIcon } from '@components/svg/icons/Help';
+import { AppStoreIcon } from '@components/svg/icons/AppStore';
 
 export const SettingsInfoBlock = () => {
   return (
     <View style={styles.container}>
-      <Row style={styles.infoContainer}>
-        <AirDAOIcon />
-        <Text style={styles.infoTextContainer}>About AirDAO</Text>
-      </Row>
-      <Row style={styles.infoContainer}>
-        <HelpIcon />
-        <Text style={styles.infoTextContainer}>Help center</Text>
-      </Row>
-      <Row style={styles.infoContainer}>
-        <AppStoreIcon />
-        <Text style={styles.infoTextContainer}>Rate us on the App Store</Text>
-      </Row>
+      <Button type="base">
+        <Row style={styles.infoContainer}>
+          <LogoSVG />
+          <Text style={styles.infoTextContainer}>About AirDAO</Text>
+        </Row>
+      </Button>
+      <Button type="base">
+        <Row style={styles.infoContainer}>
+          <HelpIcon />
+          <Text style={styles.infoTextContainer}>Help center</Text>
+        </Row>
+      </Button>
+      <Button type="base">
+        <Row style={styles.infoContainer}>
+          <AppStoreIcon />
+          <Text style={styles.infoTextContainer}>Rate us on the App Store</Text>
+        </Row>
+      </Button>
     </View>
   );
 };
@@ -29,7 +35,6 @@ const styles = StyleSheet.create({
     paddingTop: 35
   },
   infoContainer: {
-    flexDirection: 'row',
     paddingBottom: 35
   },
   infoTextContainer: {

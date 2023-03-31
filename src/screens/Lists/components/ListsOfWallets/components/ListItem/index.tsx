@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { COLORS } from '../../../../../../constants/colors';
-import { OptionsButtonIcon } from '@components/svg/OptionsButtonIcon';
+import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { Text } from '@components/base';
+import { OptionsIcon } from '@components/svg/icons/Options';
 
 type Props = {
   item: {
@@ -24,7 +24,7 @@ export const ListItem: FC<Props> = ({ item }) => {
         </View>
       </View>
       <Pressable>
-        <OptionsButtonIcon />
+        <OptionsIcon />
       </Pressable>
     </View>
   );

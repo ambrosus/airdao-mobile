@@ -5,7 +5,7 @@ import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { KeyboardDismissingView } from '@components/base';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '@constants/colors';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   ({ height, borderRadius = BottomSheetBorderRadius, children }, ref) => {

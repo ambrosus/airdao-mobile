@@ -1,27 +1,43 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
-import { FilterButtonIcon } from '@components/svg/FilterButton';
-import { SettingsButtonIcon } from '@components/svg/SettingsButtonIcon';
-import { COLORS } from '../../../../constants/colors';
-import { ArrowIcon } from '@components/svg/ArrowIcon';
+import { COLORS } from '@constants/colors';
 import { Button, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { BottomSheetFilters } from '@screens/Lists/components/BottomSheetFilters';
+import { BottomSheetListSettings } from '@screens/Lists/components/BottomSheetListSettings';
+import { FilterIcon } from '@components/svg/icons/Filter';
+import { SettingsIcon } from '@components/svg/icons/Settings';
+import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 
 export const ListsScreenHeader = () => {
+  const filterRef = useRef<BottomSheetRef>(null);
+  const handleOpenFilter = useCallback(() => {
+    filterRef.current?.show();
+  }, []);
+  const settingsRef = useRef<BottomSheetRef>(null);
+  const handleOpenSettings = useCallback(() => {
+    settingsRef.current?.show();
+  }, []);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.badgeButtonsContainer}>
         <Button
+          onPress={handleOpenFilter}
           style={{ ...styles.badgeButtonContainer, ...styles.settingsButton }}
           type="base"
         >
           <View style={styles.badgeButtonIcon}>
-            <FilterButtonIcon />
+            <FilterIcon />
           </View>
         </Button>
-        <Button style={styles.badgeButtonContainer} type="base">
+        <Button
+          onPress={handleOpenSettings}
+          style={styles.badgeButtonContainer}
+          type="base"
+        >
           <View style={styles.badgeButtonIcon}>
-            <SettingsButtonIcon />
+            <SettingsIcon />
           </View>
         </Button>
       </View>
@@ -38,7 +54,7 @@ export const ListsScreenHeader = () => {
         >
           20,000 AMB
         </Text>
-        <ArrowIcon />
+        <ProgressArrowIcon />
         <Text
           style={[
             styles.progressInfo,
@@ -53,6 +69,8 @@ export const ListsScreenHeader = () => {
         </Text>
         <Text>24HR</Text>
       </View>
+      <BottomSheetFilters ref={filterRef} />
+      <BottomSheetListSettings ref={settingsRef} />
     </View>
   );
 };
