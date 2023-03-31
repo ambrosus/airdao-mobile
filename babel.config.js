@@ -19,7 +19,8 @@ module.exports = function (api) {
             '@appTypes': './src/appTypes',
             '@contexts': './src/contexts',
             '@hooks': './src/hooks',
-            '@api': './src/api'
+            '@api': './src/api',
+            '@models': './src/models'
           },
           extensions: ['.ts', '.tsx']
         }

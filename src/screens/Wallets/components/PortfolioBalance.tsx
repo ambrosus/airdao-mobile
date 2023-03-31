@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,7 +13,8 @@ import {
   TrendIcon
 } from '@components/svg/icons';
 import { NumberUtils } from '../../../utils/number';
-import { BezierChart, Point } from '@components/templates';
+import { BezierChart, Point, SharePortfolio } from '@components/templates';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -37,10 +38,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     true
   );
 
+  const shareBottomSheet = useRef<BottomSheetRef>(null);
+
   const chartData: Point[] = [];
 
   const onShareBalancePress = () => {
     // TODO
+    shareBottomSheet.current?.show();
   };
 
   const navigateToStats = () => {
@@ -109,26 +113,38 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
         >
           <Row flex={1} alignItems="center" justifyContent="space-between">
             <Row alignItems="center">
-              <Text subtitle fontSize={15} color={COLORS.white}>
+              <Text
+                subtitle
+                fontSize={13}
+                fontWeight="600"
+                color={COLORS.white}
+              >
                 AMB PRICE: ${AMBPrice}
               </Text>
-              <Text color={COLORS.lightGrey}>
-                {'  ' +
-                  (AMBPriceLast24HourChange > 0
-                    ? '+'
-                    : AMBPriceLast24HourChange < 0
-                    ? '-'
-                    : '')}
+              <Text fontSize={12} fontWeight="500" color={COLORS.lightGrey}>
+                {'  ' + (AMBPriceLast24HourChange > 0 ? '+' : '')}
                 {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
               </Text>
             </Row>
             <Row alignItems="center">
-              <Text color={COLORS.white}>See Stats {'  '}</Text>
+              <Text fontSize={14} fontWeight="500" color={COLORS.white}>
+                {' '}
+                See Stats {'  '}
+              </Text>
               <RightArrowIcon />
             </Row>
           </Row>
         </Button>
       </View>
+      <SharePortfolio
+        ref={shareBottomSheet}
+        balance={20000}
+        currency="AMB"
+        currencyPosition="right"
+        last24HourChange={3.46}
+        title="My portfolio performance"
+        bottomSheetTitle="Share Portfolio Performance"
+      />
     </View>
   );
 }
