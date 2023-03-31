@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { FilterButtonIcon } from '@components/svg/FilterButton';
 import { SettingsButtonIcon } from '@components/svg/SettingsButtonIcon';
-import { COLORS } from '../../../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { ArrowIcon } from '@components/svg/ArrowIcon';
 import { Button, Text } from '@components/base';
 

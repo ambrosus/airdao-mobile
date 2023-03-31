@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Row, Text } from '@components/base';
-import { COLORS } from '../../../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { CurrencyIcon } from '@components/svg/CurrencyIcon';
 import { LanguageIcon } from '@components/svg/LanguageIcon';
 import { NotificationIcon } from '@components/svg/NotificationIcon';

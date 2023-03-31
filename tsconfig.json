@@ -19,6 +19,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@models/*": ["./src/models/*"],
       "@api/*": ["./src/api/*"],
+      "@utils/*": ["./src/utils/*"],
       "@*": ["./src/*"]
     }
   }

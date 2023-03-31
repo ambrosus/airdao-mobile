@@ -9,7 +9,7 @@ import { StyleSheet, View } from 'react-native';
 import { BottomSheetSwiperIcon } from '@components/svg/BottomSheetSwiperIcon';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
-import { COLORS } from '../../../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';

@@ -2,7 +2,7 @@ import { Row, Text } from '@components/base';
 import { TrendIcon } from '@components/svg/icons';
 import React from 'react';
 import { View } from 'react-native';
-import { NumberUtils } from '../../../utils/number';
+import { NumberUtils } from '@utils/number';
 
 export interface Wallet {
   title: string;

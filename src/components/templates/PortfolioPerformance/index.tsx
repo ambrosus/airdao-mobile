@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { Row, Spacer, Text } from '@components/base';
 import { LogoBigSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '../../../utils/number';
-import { verticalScale } from '../../../utils/scaling';
+import { NumberUtils } from '@utils/number';
+import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {

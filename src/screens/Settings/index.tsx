@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 
 export const SettingsScreen = () => {

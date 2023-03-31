@@ -1,7 +1,7 @@
 import { Row, Text } from '@components/base';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { COLORS } from '../../../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { AirDAOIcon } from '@components/svg/AirDAOIcon';
 import { HelpIcon } from '@components/svg/HelpIcon';
 import { AppStoreIcon } from '@components/svg/AppStoreIcon';

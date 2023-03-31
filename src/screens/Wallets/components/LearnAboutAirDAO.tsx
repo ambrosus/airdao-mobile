@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { ChevronRightIcon, LogoSVG } from '@components/svg/icons';
 

@@ -1,6 +1,6 @@
 import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WalletHeader } from './Header';
 import { Button, Row, Text } from '@components/base';
@@ -12,7 +12,7 @@ import {
   ShareIcon,
   TrendIcon
 } from '@components/svg/icons';
-import { NumberUtils } from '../../../utils/number';
+import { NumberUtils } from '@utils/number';
 import { BezierChart, Point, SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 

@@ -17,7 +17,7 @@ import {
   PlusIcon,
   TwitterIcon
 } from '@components/svg/icons';
-import { verticalScale } from '../../../utils/scaling';
+import { verticalScale } from '@utils/scaling';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
