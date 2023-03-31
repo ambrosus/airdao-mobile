@@ -113,21 +113,24 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
         >
           <Row flex={1} alignItems="center" justifyContent="space-between">
             <Row alignItems="center">
-              <Text subtitle fontSize={15} color={COLORS.white}>
+              <Text
+                subtitle
+                fontSize={13}
+                fontWeight="600"
+                color={COLORS.white}
+              >
                 AMB PRICE: ${AMBPrice}
               </Text>
-              <Text color={COLORS.lightGrey}>
-                {'  ' +
-                  (AMBPriceLast24HourChange > 0
-                    ? '+'
-                    : AMBPriceLast24HourChange < 0
-                    ? '-'
-                    : '')}
+              <Text fontSize={12} fontWeight="500" color={COLORS.lightGrey}>
+                {'  ' + (AMBPriceLast24HourChange > 0 ? '+' : '')}
                 {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
               </Text>
             </Row>
             <Row alignItems="center">
-              <Text color={COLORS.white}>See Stats {'  '}</Text>
+              <Text fontSize={14} fontWeight="500" color={COLORS.white}>
+                {' '}
+                See Stats {'  '}
+              </Text>
               <RightArrowIcon />
             </Row>
           </Row>
