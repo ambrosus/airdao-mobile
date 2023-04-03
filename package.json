@@ -12,7 +12,6 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
