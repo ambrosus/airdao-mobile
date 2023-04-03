@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
-import { BottomSheetSwiperIcon } from '@components/svg/BottomSheetSwiperIcon';
 import { BottomSheet } from '@components/composite';
 import {
   BottomSheetProps,
@@ -10,6 +9,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RightArrowIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
+import { BottomSheetSwiperIcon } from '@components/svg/icons/BottomSheetSwiper';
 
 interface Platform {
   title: string;
