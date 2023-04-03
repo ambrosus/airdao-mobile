@@ -3,6 +3,7 @@ export * from './Back';
 export * from './ChevronRight';
 export * from './ChevronDown';
 export * from './Clipboard';
+export * from './DownArrow';
 export * from './EyeVisible';
 export * from './EyeInvisible';
 export * from './Logo';

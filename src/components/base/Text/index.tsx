@@ -17,7 +17,9 @@ export function Text(props: TextProps): JSX.Element {
     style: propsStyle,
     color = '#000000',
     fontSize,
+    opacity = 1,
     fontWeight = 'normal',
+    align = 'auto',
     fontFamily = 'Inter_500Medium',
     ...restProps
   } = props;
@@ -59,6 +61,8 @@ export function Text(props: TextProps): JSX.Element {
   const styles: TextStyle = {
     fontFamily,
     color,
+    textAlign: align,
+    opacity,
     fontSize: getFontSize(),
     fontWeight: getFontWeight(),
     ...fixMisplacement()

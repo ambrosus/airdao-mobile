@@ -36,7 +36,9 @@ export type TextProps = FontSizeProps & {
   style?: StyleProp<TextStyle>;
   color?: string;
   fontSize?: number;
+  opacity?: number;
   children?: ReactNode;
   fontWeight?: FontWeight;
   fontFamily?: FontFamily;
+  align?: TextStyle['textAlign'];
 };
