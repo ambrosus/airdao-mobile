@@ -13,5 +13,6 @@ export * from './PlusIcon';
 export * from './RightArrow';
 export * from './Scanner';
 export * from './Share';
+export * from './Trade';
 export * from './Trend';
 export * from './Twitter';

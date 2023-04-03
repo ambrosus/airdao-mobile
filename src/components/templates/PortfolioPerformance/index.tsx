@@ -4,23 +4,29 @@ import dayjs from 'dayjs';
 import { Row, Spacer, Text } from '@components/base';
 import { LogoBigSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {
-  balance: number;
+  balance: string;
   currency: string;
   currencyPosition: 'left' | 'right';
   last24HourChange: number;
   title: string;
+  timestamp: Date;
 }
 
 export function PortfolioPerformance(
   props: PortfolioPerformanceProps
 ): JSX.Element {
-  const { balance, currency, currencyPosition, last24HourChange, title } =
-    props;
+  const {
+    balance,
+    currency,
+    currencyPosition,
+    last24HourChange,
+    title,
+    timestamp
+  } = props;
 
   return (
     <View style={styles.container}>
@@ -32,7 +38,7 @@ export function PortfolioPerformance(
           <View style={styles.balance}>
             <Text heading fontFamily="Mersad_600SemiBold" color={COLORS.white}>
               {currencyPosition === 'left' ? currency : ''}
-              {NumberUtils.formatNumber(balance, 0)}
+              {balance}
               {currencyPosition === 'right' ? ' ' + currency : ''}
             </Text>
           </View>
@@ -50,11 +56,11 @@ export function PortfolioPerformance(
               Time Stamp{' '}
             </Text>
             <Text subtext color="#FFFFFF">
-              {dayjs().format('YYYY-mm-DD')}
+              {dayjs(timestamp).format('YYYY-mm-DD')}
             </Text>
             <Text subtext color="#FFFFFF">
               {' '}
-              {dayjs().format('hh:mm A')}
+              {dayjs(timestamp).format('hh:mm A')}
             </Text>
           </Row>
         </View>

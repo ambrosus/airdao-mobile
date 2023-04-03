@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { CircularLogo, Header, PercentChange } from '@components/composite';
-import { ShareIcon } from '@components/svg/icons';
-import { BezierChart } from '@components/templates';
+import {
+  BottomSheetRef,
+  CircularLogo,
+  Header,
+  PercentChange
+} from '@components/composite';
+import { ShareIcon, TradeIcon } from '@components/svg/icons';
+import { BezierChart, SharePortfolio } from '@components/templates';
+import { FloatButton } from '@components/FloatButton';
+import { BottomSheetTrade } from './components';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
 import { styles } from './styles';
-import { FloatButton } from '@components/FloatButton';
-import { AddIcon } from '@components/svg/AddIcon';
 
 export function AMBMarket(): JSX.Element {
   const { data, loading, error } = useAMBPrice();
 
+  const tradeBottomSheet = useRef<BottomSheetRef>(null);
+  const shareBottomSheet = useRef<BottomSheetRef>(null);
+
   const onSharePress = () => {
     // TODO
+    if (!data) return;
+    shareBottomSheet.current?.show();
   };
 
   const renderErrorView = () => {
@@ -26,6 +36,7 @@ export function AMBMarket(): JSX.Element {
 
   const onTradePress = () => {
     // TODO
+    tradeBottomSheet.current?.show();
   };
 
   return (
@@ -198,9 +209,20 @@ export function AMBMarket(): JSX.Element {
         )}
       </ScrollView>
       <FloatButton
-        title="Create new list"
-        icon={<AddIcon />}
+        title="Trade AMB"
+        icon={<TradeIcon />}
         onPress={onTradePress}
+      />
+      <BottomSheetTrade ref={tradeBottomSheet} />
+      <SharePortfolio
+        ref={shareBottomSheet}
+        title="AMB Price"
+        bottomSheetTitle="Share AMB Price"
+        balance={(data?.priceUSD || 0).toString()}
+        currency={'$'}
+        currencyPosition={'left'}
+        last24HourChange={data?.percentChange24H || 0}
+        timestamp={data?.timestamp || new Date()}
       />
     </SafeAreaView>
   );

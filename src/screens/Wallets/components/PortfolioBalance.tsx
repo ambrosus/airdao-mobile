@@ -148,12 +148,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
       </View>
       <SharePortfolio
         ref={shareBottomSheet}
-        balance={20000}
+        balance={NumberUtils.formatNumber(20000, 0)}
         currency="AMB"
         currencyPosition="right"
         last24HourChange={3.46}
         title="My portfolio performance"
         bottomSheetTitle="Share Portfolio Performance"
+        timestamp={new Date()}
       />
     </View>
   );
