@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { View } from 'react-native';
-import { BottomSheetSwiperIcon } from '@components/svg/BottomSheetSwiperIcon';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -10,14 +9,15 @@ import {
   PortfolioPerformance,
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
-import { styles } from './styles';
 import {
+  BottomSheetSwiperIcon,
   ClipboardIcon,
   MessagesIcon,
   PlusIcon,
   TwitterIcon
 } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
+import { styles } from './styles';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
