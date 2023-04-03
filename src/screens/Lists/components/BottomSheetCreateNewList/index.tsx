@@ -6,13 +6,13 @@ import React, {
   SetStateAction
 } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BottomSheetSwiperIcon } from '@components/svg/BottomSheetSwiperIcon';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
+import { BottomSheetSwiperIcon } from '@components/svg/icons/BottomSheetSwiper';
 
 type Props = {
   listName: string;
@@ -78,7 +78,13 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
             style={styles.bottomSheetCancelButton}
             onPress={() => localRef.current?.dismiss()}
           >
-            <Text>Cancel</Text>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.black}
+              fontSize={16}
+            >
+              Cancel
+            </Text>
           </Button>
         </BottomSheet>
       </>
@@ -114,7 +120,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   bottomSheetCancelButton: {
-    backgroundColor: '#ffffff',
     marginHorizontal: 18,
     paddingVertical: 16,
     alignItems: 'center'

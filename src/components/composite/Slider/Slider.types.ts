@@ -10,4 +10,6 @@ export interface SliderProps {
   knobColor?: string;
   style?: ViewStyle;
   onEndDrag?: (value: number) => unknown;
+  onEndDrag2?: (value: number) => unknown;
+  isSecondPointVisible?: boolean;
 }

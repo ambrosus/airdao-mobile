@@ -1,9 +1,11 @@
 import React from 'react';
+import { IconProps } from '@components/svg/icons/Icon.types';
 import { Rect, Svg } from 'react-native-svg';
 
-export const BottomSheetSwiperIcon = () => {
+export function BottomSheetSwiperIcon(props: IconProps) {
+  const { width = 75, height = 7 } = props;
   return (
-    <Svg width="75" height="7" viewBox="0 0 75 7" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 75 7" fill="none">
       <Rect
         x="0.96875"
         width="74"
@@ -14,4 +16,4 @@ export const BottomSheetSwiperIcon = () => {
       />
     </Svg>
   );
-};
+}

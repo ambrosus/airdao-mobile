@@ -16,6 +16,7 @@ import {
   SliderKnobColor,
   SliderKnobSize
 } from './Slider.constants';
+import { COLORS } from '@constants/colors';
 Animated.addWhitelistedNativeProps({ text: true });
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -30,11 +31,13 @@ export function Slider(props: SliderProps): JSX.Element {
     fillColor = SliderFillColor,
     emptyColor = SliderEmptyColor,
     knobColor = SliderKnobColor,
-    onEndDrag = () => null
+    onEndDrag = () => null,
+    onEndDrag2 = () => null,
+    isSecondPointVisible = false
   } = props;
-  const knobX = useSharedValue(0);
+  const knobX = useSharedValue(115);
+  const knobX2 = useSharedValue(240);
   const stepValue = (maxValue - minValue) / width;
-
   const knobStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -45,8 +48,22 @@ export function Slider(props: SliderProps): JSX.Element {
     };
   });
 
+  const knobStyle2 = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: knobX2.value - knobSize / 2 },
+        { translateY: -knobSize / 2 + 1 }
+      ],
+      position: 'absolute'
+    };
+  });
+
   const currentValue = useDerivedValue(() =>
     Math.floor(knobX.value * stepValue)
+  );
+
+  const currentValue2 = useDerivedValue(() =>
+    Math.floor(knobX2.value * stepValue)
   );
 
   const animatedProps = useAnimatedProps(() => {
@@ -55,16 +72,41 @@ export function Slider(props: SliderProps): JSX.Element {
     } as any;
   });
 
+  const animatedProps2 = useAnimatedProps(() => {
+    return {
+      text: currentValue2.value.toString()
+    } as any;
+  });
+
   const filledStyle = useAnimatedStyle(
-    () => ({ width: knobX.value, backgroundColor: fillColor, height: 2 }),
-    [knobX.value]
+    () =>
+      isSecondPointVisible
+        ? {
+            left: knobX.value,
+            width: knobX2.value - knobX.value,
+            height: 4,
+            position: 'absolute',
+            backgroundColor: fillColor
+          }
+        : { width: knobX.value, backgroundColor: fillColor, height: 4 },
+    [knobX.value, knobX2.value]
   );
 
   const animatedMinValueStyle = useAnimatedStyle(() => ({
+    paddingTop: 6,
+    marginLeft: -32,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 12,
+    color: COLORS.lightGrey,
     opacity: currentValue.value === minValue ? 0 : 1
   }));
 
   const animatedMaxValueStyle = useAnimatedStyle(() => ({
+    paddingTop: 6,
+    marginRight: -32,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 12,
+    color: COLORS.lightGrey,
     opacity: currentValue.value === maxValue ? 0 : 1
   }));
 
@@ -73,6 +115,7 @@ export function Slider(props: SliderProps): JSX.Element {
       ctx.offsetX = knobX.value;
     },
     onActive: (event, ctx) => {
+      if (knobX.value + knobSize + 10 >= knobX2.value) return;
       let nextX = ctx.offsetX + event.translationX;
       if (nextX < 0) nextX = 0;
       else if (nextX > width) nextX = width;
@@ -84,14 +127,27 @@ export function Slider(props: SliderProps): JSX.Element {
     }
   });
 
+  const onGestureEvent2 = useAnimatedGestureHandler({
+    onStart: (_, ctx) => {
+      ctx.offsetX = knobX2.value;
+    },
+    onActive: (event, ctx) => {
+      if (knobX2.value <= knobX.value + knobSize) return;
+      let nextX = ctx.offsetX + event.translationX;
+      if (nextX < 0) nextX = 0;
+      else if (nextX > width) nextX = width;
+
+      knobX2.value = nextX;
+    },
+    onEnd: () => {
+      runOnJS(onEndDrag2)(currentValue2.value);
+    }
+  });
+
   return (
     <View style={[style, { width }]}>
       <View style={[styles.line, { backgroundColor: emptyColor }]}>
         <Animated.View style={filledStyle}></Animated.View>
-      </View>
-      <View style={styles.minMax}>
-        <Animated.Text style={animatedMinValueStyle}>{minValue}</Animated.Text>
-        <Animated.Text style={animatedMaxValueStyle}>{maxValue}</Animated.Text>
       </View>
       <PanGestureHandler {...{ onGestureEvent }}>
         <Animated.View style={knobStyle}>
@@ -115,6 +171,36 @@ export function Slider(props: SliderProps): JSX.Element {
           />
         </Animated.View>
       </PanGestureHandler>
+      {isSecondPointVisible && (
+        <>
+          <View style={styles.minMax}>
+            <Animated.Text style={animatedMinValueStyle}>MIN</Animated.Text>
+            <Animated.Text style={animatedMaxValueStyle}>MAX</Animated.Text>
+          </View>
+          <PanGestureHandler {...{ onGestureEvent: onGestureEvent2 }}>
+            <Animated.View style={knobStyle2}>
+              <Animated.View
+                style={[
+                  styles.knob,
+                  {
+                    backgroundColor: knobColor,
+                    width: knobSize,
+                    height: knobSize,
+                    borderRadius: knobSize / 2
+                  }
+                ]}
+              />
+              <AnimatedTextInput
+                underlineColorAndroid="transparent"
+                editable={false}
+                value={currentValue2.value.toString()}
+                style={styles.currentValue}
+                {...{ animatedProps: animatedProps2 }}
+              />
+            </Animated.View>
+          </PanGestureHandler>
+        </>
+      )}
     </View>
   );
 }
@@ -141,6 +227,6 @@ const styles = StyleSheet.create({
   currentValue: {
     color: '#000000',
     alignSelf: 'center',
-    marginTop: 2
+    marginTop: 11
   }
 });

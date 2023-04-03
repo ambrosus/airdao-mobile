@@ -1,9 +1,11 @@
-import React, { FC } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { FC, useCallback, useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { OptionsButtonIcon } from '@components/svg/OptionsButtonIcon';
 import { Spacer } from '@components/base/Spacer';
-import { Text } from '@components/base';
+import { Button, Text } from '@components/base';
+import { OptionsIcon } from '@components/svg/icons/Options';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { BottomSheetListAction } from '@screens/Lists/components/ListsOfWallets/components/ListItem/components/BottomSheetListAction';
 
 type Props = {
   item: {
@@ -12,7 +14,13 @@ type Props = {
     wallets: string;
   };
 };
+
 export const ListItem: FC<Props> = ({ item }) => {
+  const listActionRef = useRef<BottomSheetRef>(null);
+
+  const handleOpenListAction = useCallback(() => {
+    listActionRef.current?.show();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>
@@ -23,9 +31,10 @@ export const ListItem: FC<Props> = ({ item }) => {
           <Text style={styles.tokensCount}>{item.tokens}</Text>
         </View>
       </View>
-      <Pressable>
-        <OptionsButtonIcon />
-      </Pressable>
+      <Button type="base" onPress={handleOpenListAction}>
+        <OptionsIcon />
+      </Button>
+      <BottomSheetListAction ref={listActionRef} />
     </View>
   );
 };
