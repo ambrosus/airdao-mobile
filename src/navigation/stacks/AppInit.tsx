@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { TabsParamsList } from '@navigation/stacks/TabsNavigator';
+import { TabsParamsList } from '@appTypes';
 
 // here we will check if user has token
 const AppInitialization = () => {
