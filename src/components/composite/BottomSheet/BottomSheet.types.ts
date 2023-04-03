@@ -6,6 +6,7 @@ export interface BottomSheetProps {
   height?: ViewStyle['height'];
   borderRadius?: ViewStyle['borderRadius'];
   children?: ReactNode;
+  isNestedSheet?: boolean;
 }
 
 export type BottomSheetRef = {

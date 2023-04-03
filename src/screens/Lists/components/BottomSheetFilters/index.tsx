@@ -1,12 +1,11 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { Button, Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheet } from '@components/composite';
+import { BottomSheet, Slider } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
-import { MultiRangeSlider } from '@screens/Lists/components/BottomSheetFilters/components/MultiSlider';
 import { CloseIcon } from '@components/svg/icons/Close';
 
 type Props = {
@@ -21,7 +20,9 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
         <View style={styles.container}>
           <Row justifyContent="space-between" alignItems="center">
             <Button type="base" onPress={() => localRef.current?.dismiss()}>
-              <CloseIcon />
+              <View style={{ width: 38 }}>
+                <CloseIcon />
+              </View>
             </Button>
             <Text
               style={{
@@ -60,10 +61,14 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
             Filter the list to show wallets with a balance above or below a
             certain amount.
           </Text>
-          <MultiRangeSlider />
-          <View style={styles.sliderTextContainer}>
-            <Text style={styles.sliderText}>MIN</Text>
-            <Text style={styles.sliderText}>MAX</Text>
+          <Spacer value={24} />
+          <View style={styles.slider}>
+            <Slider
+              width={320}
+              minValue={0}
+              maxValue={100}
+              isSecondPointVisible={true}
+            />
           </View>
           <Spacer value={40} />
           <View style={styles.separator} />
@@ -83,10 +88,14 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
           >
             Filter to show lists within a certain amount of wallets
           </Text>
-          <MultiRangeSlider />
-          <View style={styles.sliderTextContainer}>
-            <Text style={styles.sliderText}>MIN</Text>
-            <Text style={styles.sliderText}>MAX</Text>
+          <Spacer value={24} />
+          <View style={styles.slider}>
+            <Slider
+              width={320}
+              minValue={0}
+              maxValue={100}
+              isSecondPointVisible={true}
+            />
           </View>
         </View>
       </BottomSheet>
@@ -97,8 +106,7 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    paddingLeft: 17,
-    marginRight: 23
+    paddingHorizontal: 20
   },
   separator: {
     height: 1,
@@ -115,5 +123,8 @@ const styles = StyleSheet.create({
     marginTop: -40,
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  slider: {
+    alignItems: 'center'
   }
 });

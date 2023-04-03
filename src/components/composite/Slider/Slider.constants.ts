@@ -1,4 +1,6 @@
-export const SliderFillColor = '#000000';
-export const SliderKnobColor = '#FFFFFF';
-export const SliderEmptyColor = '#DDDDDD';
+import { COLORS } from '@constants/colors';
+
+export const SliderFillColor = COLORS.grey;
+export const SliderKnobColor = COLORS.white;
+export const SliderEmptyColor = COLORS.silver;
 export const SliderKnobSize = 24;

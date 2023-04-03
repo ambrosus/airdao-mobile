@@ -15,7 +15,6 @@ import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { InfoIcon } from '@components/svg/icons/Info';
-import { MultiRangeSlider } from '@screens/Lists/components/BottomSheetFilters/components/MultiSlider';
 import { RightArrowIcon } from '@components/svg/RightArrowIcon';
 import { BottomSheetSelectList } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList';
 
@@ -25,19 +24,26 @@ type Props = {
 export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isTransactionAlertsEnabled, setIsTransactionAlertsEnabled] =
+      useState(false);
+    const [isPercentChangeEnabled, setIsPercentChangeEnabled] = useState(false);
     const listSettingsRef = useRef<BottomSheetRef>(null);
     const handleOpenListSettings = useCallback(() => {
       listSettingsRef.current?.show();
     }, []);
-    const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+    const toggleTransactionAlertsSwitch = () =>
+      setIsTransactionAlertsEnabled((previousState) => !previousState);
+    const togglePercentChangeSwitch = () =>
+      setIsPercentChangeEnabled((previousState) => !previousState);
     return (
       <>
         <BottomSheet height={800} ref={localRef}>
           <View style={styles.container}>
             <Row justifyContent="space-between" alignItems="center">
               <Button type="base" onPress={() => localRef.current?.dismiss()}>
-                <CloseIcon />
+                <View style={{ width: 38 }}>
+                  <CloseIcon />
+                </View>
               </Button>
               <Text
                 fontFamily="Inter_600SemiBold"
@@ -81,13 +87,13 @@ export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
               >
                 Transaction alerts
               </Text>
-              <Button>
+              <Button type="base">
                 <Switch
                   trackColor={{ false: COLORS.silver, true: COLORS.lightGrey }}
-                  thumbColor={isEnabled ? 'white' : 'white'}
+                  thumbColor="white"
                   ios_backgroundColor={COLORS.silver}
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
+                  onValueChange={toggleTransactionAlertsSwitch}
+                  value={isTransactionAlertsEnabled}
                 />
               </Button>
             </Row>
@@ -103,10 +109,14 @@ export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
               </Text>
               <InfoIcon />
             </Row>
-            <MultiRangeSlider />
-            <View style={styles.sliderTextContainer}>
-              <Text style={styles.sliderText}>MIN</Text>
-              <Text style={styles.sliderText}>MAX</Text>
+            <Spacer value={24} />
+            <View style={styles.slider}>
+              <Slider
+                width={320}
+                minValue={0}
+                maxValue={100}
+                isSecondPointVisible={true}
+              />
             </View>
             <Spacer value={45} />
             <View style={styles.separator} />
@@ -123,19 +133,24 @@ export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
                 </Text>
                 <InfoIcon />
               </Row>
-              <Button>
+              <Button type="base">
                 <Switch
                   trackColor={{ false: COLORS.silver, true: COLORS.lightGrey }}
-                  thumbColor={isEnabled ? 'white' : 'white'}
+                  thumbColor={isPercentChangeEnabled ? 'white' : 'white'}
                   ios_backgroundColor={COLORS.silver}
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
+                  onValueChange={togglePercentChangeSwitch}
+                  value={isPercentChangeEnabled}
                 />
               </Button>
             </Row>
             <Spacer value={24} />
-            <View style={styles.singleMarkerSlider}>
-              <Slider width={320} minValue={0} maxValue={100} />
+            <View style={styles.slider}>
+              <Slider
+                width={320}
+                minValue={0}
+                maxValue={100}
+                isSecondPointVisible={false}
+              />
             </View>
             <Spacer value={45} />
             <View style={styles.separator} />
@@ -182,8 +197,7 @@ export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    paddingLeft: 17,
-    marginRight: 20
+    paddingHorizontal: 20
   },
   sliderText: {
     fontFamily: 'Inter_500Medium',
@@ -204,7 +218,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     paddingRight: 12
   },
-  singleMarkerSlider: {
+  slider: {
     alignItems: 'center'
   }
 });

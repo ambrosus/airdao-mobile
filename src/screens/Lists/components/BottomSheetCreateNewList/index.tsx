@@ -78,7 +78,13 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
             style={styles.bottomSheetCancelButton}
             onPress={() => localRef.current?.dismiss()}
           >
-            <Text>Cancel</Text>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.black}
+              fontSize={16}
+            >
+              Cancel
+            </Text>
           </Button>
         </BottomSheet>
       </>
