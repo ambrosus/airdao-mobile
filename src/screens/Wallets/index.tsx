@@ -8,18 +8,23 @@ import {
   Watchlists
 } from './components';
 import { styles } from './styles';
+import { useAMBPrice } from '@hooks/query';
 
 export const WalletsScreen = () => {
+  const { data } = useAMBPrice();
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         <StatusBar style="light" backgroundColor="#222222" />
         <PortfolioBalance
           USDBalance={3900}
           AMBBalance={1}
           balanceLast24HourChange={3.46}
-          AMBPriceLast24HourChange={0}
-          AMBPrice={0.01306}
+          AMBPriceLast24HourChange={data?.percentChange24H || NaN}
+          AMBPrice={data?.priceUSD || NaN}
         />
         <View style={styles.content}>
           <Wallets />

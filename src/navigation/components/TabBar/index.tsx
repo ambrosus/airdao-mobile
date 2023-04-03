@@ -10,7 +10,7 @@ import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsIna
 import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiveIcon';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';

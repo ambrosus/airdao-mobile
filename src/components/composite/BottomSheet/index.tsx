@@ -68,3 +68,5 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     );
   }
 );
+
+export * from './BottomSheet.types';

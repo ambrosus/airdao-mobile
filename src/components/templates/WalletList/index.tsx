@@ -1,8 +1,8 @@
 import React, { useReducer, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
-import { NumberUtils } from '../../../utils/number';
-import { scale, verticalScale } from '../../../utils/scaling';
+import { NumberUtils } from '@utils/number';
+import { scale, verticalScale } from '@utils/scaling';
 import {
   RotationAnimation,
   RotationAnimationRef
@@ -65,11 +65,11 @@ export function WalletList(props: WalletListProps): JSX.Element {
 
 const styles = StyleSheet.create({
   toggleBtn: {
-    borderRadius: 24,
+    borderRadius: scale(36),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
-    padding: 12
+    padding: scale(12)
   },
   chevronIcon: {
     width: scale(12),

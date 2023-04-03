@@ -6,8 +6,8 @@ export const DEFAULT_FONT_SIZE = 16;
 export const fontSizeMapping: { [key in FontSizeKey]: number } = {
   subtext: 12,
   subtitle: 24,
-  title: 28,
-  heading: 32
+  title: 20,
+  heading: 26
 };
 
 export const fontWeightMapping: {

@@ -7,6 +7,7 @@ export type RootStackParamsList = {
   AppInit: undefined;
   Tabs: undefined;
 };
+
 export const RootStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamsList>();
   return (

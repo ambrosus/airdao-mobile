@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Header } from '@components/composite';
 import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '../../../utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { Button, Text } from '@components/base';
 
 export function WalletHeader(): JSX.Element {

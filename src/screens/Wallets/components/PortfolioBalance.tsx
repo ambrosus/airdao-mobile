@@ -1,6 +1,6 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { moderateScale, scale, verticalScale } from '../../../utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WalletHeader } from './Header';
 import { Button, Row, Text } from '@components/base';
@@ -12,8 +12,11 @@ import {
   ShareIcon,
   TrendIcon
 } from '@components/svg/icons';
-import { NumberUtils } from '../../../utils/number';
-import { BezierChart, Point } from '@components/templates';
+import { NumberUtils } from '@utils/number';
+import { BezierChart, Point, SharePortfolio } from '@components/templates';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes/navigation';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -31,20 +34,25 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     AMBPriceLast24HourChange,
     AMBPrice
   } = props;
+  const navigation = useNavigation<WalletsNavigationProp>();
   const safeAreaInsets = useSafeAreaInsets();
   const [balanceVisible, toggleBalanceVisibility] = useReducer(
     (visible) => !visible,
     true
   );
 
+  const shareBottomSheet = useRef<BottomSheetRef>(null);
+
   const chartData: Point[] = [];
 
   const onShareBalancePress = () => {
     // TODO
+    shareBottomSheet.current?.show();
   };
 
   const navigateToStats = () => {
     // TODO
+    navigation.navigate('AMBMarketScreen');
   };
 
   return (
@@ -98,7 +106,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           </Row>
         </Row>
         <View style={styles.chart}>
-          <BezierChart height={verticalScale(200)} data={chartData} />
+          <BezierChart
+            height={verticalScale(200)}
+            data={chartData}
+            axisLabelColor="#ffffff66"
+            strokeColor="#ffffff66"
+            axisColor="#222222"
+          />
         </View>
         <Button
           type="bordered"
@@ -109,26 +123,39 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
         >
           <Row flex={1} alignItems="center" justifyContent="space-between">
             <Row alignItems="center">
-              <Text subtitle fontSize={15} color={COLORS.white}>
+              <Text
+                subtitle
+                fontSize={13}
+                fontWeight="600"
+                color={COLORS.white}
+              >
                 AMB PRICE: ${AMBPrice}
               </Text>
-              <Text color={COLORS.lightGrey}>
-                {'  ' +
-                  (AMBPriceLast24HourChange > 0
-                    ? '+'
-                    : AMBPriceLast24HourChange < 0
-                    ? '-'
-                    : '')}
+              <Text fontSize={12} fontWeight="500" color={COLORS.lightGrey}>
+                {'  ' + (AMBPriceLast24HourChange > 0 ? '+' : '')}
                 {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
               </Text>
             </Row>
             <Row alignItems="center">
-              <Text color={COLORS.white}>See Stats {'  '}</Text>
+              <Text fontSize={14} fontWeight="500" color={COLORS.white}>
+                {' '}
+                See Stats {'  '}
+              </Text>
               <RightArrowIcon />
             </Row>
           </Row>
         </Button>
       </View>
+      <SharePortfolio
+        ref={shareBottomSheet}
+        balance={NumberUtils.formatNumber(20000, 0)}
+        currency="AMB"
+        currencyPosition="right"
+        last24HourChange={3.46}
+        title="My portfolio performance"
+        bottomSheetTitle="Share Portfolio Performance"
+        timestamp={new Date()}
+      />
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { shadow } from '../../../constants/shadow';
-import { verticalScale } from '../../../utils/scaling';
+import { shadow } from '@constants/shadow';
+import { scale, verticalScale } from '@utils/scaling';
 
 const leftPadding = '5%';
 const rightPadding = '5%';
@@ -29,6 +29,6 @@ export const styles = StyleSheet.create({
     right: rightPadding
   },
   titleOnLeft: {
-    marginLeft: '5%' // TODO
+    marginLeft: scale(20)
   }
 });
