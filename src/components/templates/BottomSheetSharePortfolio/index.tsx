@@ -9,15 +9,15 @@ import {
   PortfolioPerformance,
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
-import { styles } from './styles';
 import {
+  BottomSheetSwiperIcon,
   ClipboardIcon,
   MessagesIcon,
   PlusIcon,
   TwitterIcon
 } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
-import { BottomSheetSwiperIcon } from '@components/svg/icons/BottomSheetSwiper';
+import { styles } from './styles';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;

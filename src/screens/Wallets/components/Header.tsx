@@ -5,8 +5,11 @@ import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { Button, Text } from '@components/base';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes/navigation';
 
 export function WalletHeader(): JSX.Element {
+  const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
 
   const oepnScanner = () => {
@@ -15,6 +18,7 @@ export function WalletHeader(): JSX.Element {
 
   const navigateToNotifications = () => {
     // TODO
+    navigation.navigate('Notifications');
   };
 
   const renderContentRight = () => {

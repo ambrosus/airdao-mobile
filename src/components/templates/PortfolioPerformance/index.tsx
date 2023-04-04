@@ -68,7 +68,7 @@ export function PortfolioPerformance(
           <View style={styles.logoEllipseOuter}>
             <View style={styles.logoEllipseMiddle}>
               <View style={styles.logoEllipseInner}>
-                <LogoBigSVG width={29} height={36} />
+                <LogoBigSVG />
               </View>
             </View>
           </View>

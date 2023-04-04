@@ -3,9 +3,17 @@ import { IconProps } from '@components/svg/icons/Icon.types';
 import { Path, Svg } from 'react-native-svg';
 
 export function ProgressArrowIcon(props: IconProps) {
-  const { width = 13, height = 9 } = props;
+  const { scale = 1 } = props;
+  const width = 13,
+    height = 9;
   return (
-    <Svg width={width} height={height} viewBox="0 0 13 9" fill="none">
+    <Svg
+      width={width}
+      height={height}
+      fill="none"
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ transform: [{ scale }] }}
+    >
       <Path
         d="M6.49602 0.5L11.544 0.501789L11.6303 0.516763L11.6926 0.537792L11.7513 0.566735L11.8131 0.608922L11.8706 0.662669L11.9113 0.71334L11.946 0.77081L11.9783 0.848801L11.9898 0.891914L12.0011 0.978317L12.0015 6C12.0015 6.27614 11.7777 6.5 11.5015 6.5C11.2561 6.5 11.0519 6.32312 11.0096 6.08988L11.0015 6L11.001 2.207L5.85782 7.35347C5.68439 7.52698 5.41516 7.54642 5.22027 7.41168L5.151 7.35392L3.50037 5.70674L0.853553 8.35355C0.658291 8.54882 0.341709 8.54882 0.146447 8.35355C-0.0271197 8.17999 -0.046405 7.91056 0.0885911 7.71569L0.146447 7.64645L3.14645 4.64645C3.31988 4.47301 3.58907 4.45361 3.78393 4.58833L3.85318 4.64608L5.50374 6.29318L10.293 1.5H6.49602C6.25056 1.5 6.04642 1.32312 6.00408 1.08988L5.99602 1C5.99602 0.723858 6.21988 0.5 6.49602 0.5Z"
         fill="background: rgba(47, 43, 67, 0.6)"

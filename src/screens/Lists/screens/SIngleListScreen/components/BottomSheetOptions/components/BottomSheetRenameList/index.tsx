@@ -9,8 +9,8 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Input, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { BottomSheetSwiperIcon } from '@components/svg/icons/BottomSheetSwiper';
 import { StyleSheet, View } from 'react-native';
+import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
   listNameInput: string;

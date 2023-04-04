@@ -12,7 +12,7 @@ export function Header(props: HeaderProps): JSX.Element {
     contentLeft,
     contentRight,
     title,
-    titlePosition,
+    titlePosition = 'center',
     style = {},
     onBackPress
   } = props;

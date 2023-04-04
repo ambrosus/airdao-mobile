@@ -3,10 +3,10 @@ import { BottomSheet } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { BottomSheetSwiperIcon } from '@components/svg/icons/BottomSheetSwiper';
 import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
+import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

@@ -6,6 +6,7 @@ import { TabsParamsList } from './tabs';
 export type WalletsParamsList = {
   WalletsScreen: undefined;
   AMBMarketScreen: undefined;
+  Notifications: undefined;
 };
 
 export type WalletsNavigationProp = CompositeNavigationProp<

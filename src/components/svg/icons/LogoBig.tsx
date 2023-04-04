@@ -3,13 +3,16 @@ import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export function LogoBigSVG(props: IconProps) {
-  const { width = 29, height = 36, color = '#646464' } = props;
+  const { scale = 1, color = '#646464' } = props;
+  const width = 29,
+    height = 36;
   return (
     <Svg
       width={width}
       height={height}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
+      style={{ transform: [{ scale }] }}
     >
       <Path
         fillRule="evenodd"

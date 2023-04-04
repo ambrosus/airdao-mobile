@@ -3,13 +3,16 @@ import Svg, { G, Path, Defs, ClipPath } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export function ClipboardIcon(props: IconProps) {
-  const { width = 20, height = 21, color = '#646464' } = props;
+  const { scale = 1, color = '#646464' } = props;
+  const width = 20,
+    height = 21;
   return (
     <Svg
       width={width}
       height={height}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
+      style={{ transform: [{ scale }] }}
     >
       <G clipPath="url(#prefix__clip0_917_2466)">
         <Path

@@ -22,4 +22,8 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
   return formattedString + strAmount.substring(startingIdx + 1);
 };
 
-export const NumberUtils = { formatNumber };
+const addSignToNumber = (num: number): string => {
+  return (num > 0 ? '+' : '-') + num;
+};
+
+export const NumberUtils = { formatNumber, addSignToNumber };

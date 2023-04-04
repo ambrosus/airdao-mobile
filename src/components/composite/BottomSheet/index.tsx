@@ -10,7 +10,6 @@ import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { KeyboardDismissingView } from '@components/base';
-import { COLORS } from '@constants/colors';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -39,7 +38,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         <KeyboardDismissingView
           style={{
             height,
-            backgroundColor: COLORS.white,
+            backgroundColor: '#FFFFFF',
             borderTopLeftRadius: borderRadius,
             borderTopRightRadius: borderRadius
           }}
