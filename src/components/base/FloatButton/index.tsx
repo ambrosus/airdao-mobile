@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
 
@@ -9,16 +8,23 @@ type Props = {
   title: string;
   icon: JSX.Element;
   onPress: () => void;
+  bottomPadding?: number;
 };
-export const FloatButton = ({ title, icon, onPress }: Props) => {
+
+const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
+
+export const FloatButton = ({ title, icon, onPress, bottomPadding }: Props) => {
   const bottomSafeArea = useSafeAreaInsets().bottom || 34;
-  const bottomTabBarHeight = useBottomTabBarHeight();
+  const bottomTabBarHeight =
+    bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
   return (
     <Pressable
       onPress={onPress}
       style={[
         styles.buttonStyle,
-        { bottom: bottomTabBarHeight + bottomSafeArea }
+        {
+          bottom: bottomTabBarHeight + bottomSafeArea
+        }
       ]}
     >
       {icon}
