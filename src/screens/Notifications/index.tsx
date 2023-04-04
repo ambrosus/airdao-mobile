@@ -1,24 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  SafeAreaView,
   SectionList,
   SectionListData,
   SectionListRenderItemInfo,
   View
 } from 'react-native';
 import dayjs from 'dayjs';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BottomSheetNotificationSettings } from '@components/templates';
+import { BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { NotificationsHeader as Header, NotificationBox } from './components';
+import {
+  BottomSheetFilter,
+  NotificationsHeader as Header,
+  NotificationBox
+} from './components';
 import {
   Notification,
   NotificationType,
   NotificationWithPriceChange
 } from '@models/Notification';
 import { scale, verticalScale } from '@utils/scaling';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { styles } from './styles';
+import { NotificationFilter } from '@appTypes/notification';
 
 interface NotificationSection {
   title: string;
@@ -29,6 +35,17 @@ interface NotificationSection {
 const DAY_FORMAT = 'DD MMMM YYYY';
 
 export const Notifications = (): JSX.Element => {
+  const [filter, setFilter] = useState<NotificationFilter>({
+    selectedDate: null,
+    priceAlerts: true,
+    walletUpdates: true,
+    transactionAlerts: true,
+    marketUpdates: true
+  });
+
+  const filterModal = useRef<BottomSheetRef>(null);
+  const settingsModal = useRef<BottomSheetRef>(null);
+
   const notifications: Notification[] = [
     {
       _id: '1',
@@ -97,6 +114,15 @@ export const Notifications = (): JSX.Element => {
     return sections;
   }, [notifications]);
 
+  const showFilterModal = () => {
+    filterModal.current?.show();
+  };
+
+  const showSettingsModal = () => {
+    // TODO
+    settingsModal.current?.show();
+  };
+
   const renderNotification = (
     args: SectionListRenderItemInfo<Notification>
   ) => {
@@ -145,7 +171,10 @@ export const Notifications = (): JSX.Element => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header
+        onFilterPress={showFilterModal}
+        onSettingsPress={showSettingsModal}
+      />
       <SectionList<Notification, NotificationSection>
         keyExtractor={(item) => item._id}
         sections={sectionizedNotificaitons}
@@ -157,6 +186,12 @@ export const Notifications = (): JSX.Element => {
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
       />
+      <BottomSheetFilter
+        ref={filterModal}
+        filter={filter}
+        onSubmit={setFilter}
+      />
+      <BottomSheetNotificationSettings ref={settingsModal} />
     </SafeAreaView>
   );
 };

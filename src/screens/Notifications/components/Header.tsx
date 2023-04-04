@@ -3,15 +3,24 @@ import { Button, Row, Spacer } from '@components/base';
 import { Header } from '@components/composite';
 import { FilterIcon, SettingsIcon } from '@components/svg/icons';
 
-export const NotificationsHeader = (): JSX.Element => {
+interface NotificationsHeaderProps {
+  onFilterPress: () => unknown;
+  onSettingsPress: () => unknown;
+}
+
+export const NotificationsHeader = (
+  props: NotificationsHeaderProps
+): JSX.Element => {
+  const { onFilterPress = () => null, onSettingsPress = () => null } = props;
+
   const renderContentRight = () => {
     return (
       <Row alignItems="center">
-        <Button>
+        <Button onPress={onFilterPress}>
           <FilterIcon />
         </Button>
         <Spacer value={38} horizontal />
-        <Button>
+        <Button onPress={onSettingsPress}>
           <SettingsIcon />
         </Button>
       </Row>

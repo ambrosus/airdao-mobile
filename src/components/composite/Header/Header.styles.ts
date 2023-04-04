@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
   },
   left: {
     position: 'absolute',
+    zIndex: 1000,
     left: leftPadding
   },
   center: {
@@ -25,6 +26,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   right: {
+    zIndex: 1000,
     position: 'absolute',
     right: rightPadding
   },
