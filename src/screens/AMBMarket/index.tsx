@@ -10,13 +10,13 @@ import {
 } from '@components/composite';
 import { ShareIcon, TradeIcon } from '@components/svg/icons';
 import { BezierChart, SharePortfolio } from '@components/templates';
-import { FloatButton } from '@components/FloatButton';
 import { BottomSheetTrade } from './components';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
 import { styles } from './styles';
+import { FloatButton } from '@components/base/FloatButton';
 
 export function AMBMarket(): JSX.Element {
   const { data, loading, error } = useAMBPrice();
