@@ -9,7 +9,7 @@ import { BackIcon } from '@components/svg/icons';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { FloatButton } from '@components/base/FloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { BottomSheetAddNewWallet } from '@screens/Lists/screens/SIngleListScreen/components/BottomSheetAddNewWallet';
+import { BottomSheetOptions } from '@screens/Lists/screens/SIngleListScreen/components/BottomSheetOptions';
 import { BottomSheetRef } from '@components/composite';
 
 export const SingleListScreen = () => {
@@ -19,12 +19,12 @@ export const SingleListScreen = () => {
     }
   } = useRoute<RouteProp<RootStackParamsList, 'SingleListScreen'>>();
 
-  const addNewWalletRef = useRef<BottomSheetRef>(null);
+  const optionsRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation();
 
-  const handleOnCreateNewWallet = useCallback(() => {
-    addNewWalletRef.current?.show();
+  const handleOnOptions = useCallback(() => {
+    optionsRef.current?.show();
   }, []);
 
   const customHeader = useMemo(() => {
@@ -45,12 +45,16 @@ export const SingleListScreen = () => {
             </View>
           </View>
         </View>
-        <Button type="base" style={{ alignItems: 'flex-end', height: '100%' }}>
+        <Button
+          onPress={handleOnOptions}
+          type="base"
+          style={styles.optionsButton}
+        >
           <OptionsIcon />
         </Button>
       </View>
     );
-  }, [navigation.goBack, title, tokens, wallets]);
+  }, [handleOnOptions, navigation.goBack, title, tokens, wallets]);
 
   return (
     <SafeAreaView style={{ flex: 1, marginHorizontal: 17 }}>
@@ -100,10 +104,13 @@ export const SingleListScreen = () => {
       <FloatButton
         title="Add Wallet"
         icon={<AddIcon />}
-        onPress={handleOnCreateNewWallet}
         bottomPadding={0}
+        onPress={() => {
+          // tslint:disable-next-line:no-console
+          console.info('123');
+        }}
       />
-      <BottomSheetAddNewWallet ref={addNewWalletRef} />
+      <BottomSheetOptions ref={optionsRef} />
     </SafeAreaView>
   );
 };
@@ -141,5 +148,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.lightGrey,
     paddingTop: 2
-  }
+  },
+  optionsButton: { alignItems: 'center', height: '100%', width: 35 }
 });
