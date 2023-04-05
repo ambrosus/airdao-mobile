@@ -6,7 +6,8 @@ import {
   BottomSheetRef,
   CircularLogo,
   Header,
-  PercentChange
+  PercentChange,
+  PopUpInfo
 } from '@components/composite';
 import { ShareIcon, TradeIcon } from '@components/svg/icons';
 import { BezierChart, SharePortfolio } from '@components/templates';
@@ -16,10 +17,13 @@ import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
 import { styles } from './styles';
+import { AMBMarketItemsInfo } from './AMBMarket.constants';
+import { PopUpPlacement } from '@components/composite/PopUpInfo/PopUpInfo.types';
 import { FloatButton } from '@components/base/FloatButton';
 
 export function AMBMarket(): JSX.Element {
   const { data, loading, error } = useAMBPrice();
+  const marketCap = (data?.circulatingSupply || 0) * (data?.priceUSD || 0);
 
   const tradeBottomSheet = useRef<BottomSheetRef>(null);
   const shareBottomSheet = useRef<BottomSheetRef>(null);
@@ -92,16 +96,16 @@ export function AMBMarket(): JSX.Element {
                   {/* Market Cap */}
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Market Cap
+                      Market Cap{'  '}
                     </Text>
+                    <PopUpInfo
+                      body={AMBMarketItemsInfo.marketCap.body}
+                      title={AMBMarketItemsInfo.marketCap.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
-                    $
-                    {NumberUtils.formatNumber(
-                      data.circulatingSupply * data.priceUSD,
-                      0
-                    )}
+                    ${NumberUtils.formatNumber(marketCap, 0)}
                   </Text>
                   <Spacer value={verticalScale(6)} />
                   <PercentChange
@@ -112,8 +116,13 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(52)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      24hr Volume
+                      24hr Volume{'  '}
                     </Text>
+                    <PopUpInfo
+                      placement={PopUpPlacement.BOTTOM}
+                      body={AMBMarketItemsInfo.volume24H.body}
+                      title={AMBMarketItemsInfo.volume24H.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
@@ -128,8 +137,13 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(57)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Circulating Supply
+                      Circulating Supply{'  '}
                     </Text>
+                    <PopUpInfo
+                      placement={PopUpPlacement.BOTTOM}
+                      body={AMBMarketItemsInfo.circulatingSupply.body}
+                      title={AMBMarketItemsInfo.circulatingSupply.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
@@ -145,8 +159,12 @@ export function AMBMarket(): JSX.Element {
                   {/* Diluted Cap */}
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Fully Diluted Market Cap
+                      Fully Diluted Market Cap{'  '}
                     </Text>
+                    <PopUpInfo
+                      body={AMBMarketItemsInfo.fullyDilutedMarketCap.body}
+                      title={AMBMarketItemsInfo.fullyDilutedMarketCap.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
@@ -161,8 +179,13 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(38.49)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      CEX Volume
+                      CEX Volume{'  '}
                     </Text>
+                    <PopUpInfo
+                      placement={PopUpPlacement.BOTTOM}
+                      body={AMBMarketItemsInfo.cexVol.body}
+                      title={AMBMarketItemsInfo.cexVol.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
@@ -173,8 +196,13 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(12)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      DEX Volume
+                      DEX Volume{'  '}
                     </Text>
+                    <PopUpInfo
+                      placement={PopUpPlacement.BOTTOM}
+                      body={AMBMarketItemsInfo.dexVol.body}
+                      title={AMBMarketItemsInfo.dexVol.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">- -</Text>
@@ -183,8 +211,12 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(31.35)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Max Suppy
+                      Max Suppy{'  '}
                     </Text>
+                    <PopUpInfo
+                      body={AMBMarketItemsInfo.maxSupply.body}
+                      title={AMBMarketItemsInfo.maxSupply.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
@@ -195,8 +227,12 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(12)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Total Suppy
+                      Total Suppy{'  '}
                     </Text>
+                    <PopUpInfo
+                      body={AMBMarketItemsInfo.totalSupply.body}
+                      title={AMBMarketItemsInfo.totalSupply.title}
+                    />
                   </Row>
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">
