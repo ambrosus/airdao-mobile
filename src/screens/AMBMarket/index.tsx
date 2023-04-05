@@ -17,9 +17,9 @@ import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
-import { styles } from './styles';
 import { AMBMarketItemsInfo } from './AMBMarket.constants';
 import { PopUpPlacement } from '@components/composite/PopUpInfo/PopUpInfo.types';
+import { styles } from './styles';
 
 export function AMBMarket(): JSX.Element {
   const { data, loading, error } = useAMBPrice();
