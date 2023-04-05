@@ -1,9 +1,10 @@
-import { Row, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import React from 'react';
 import { View } from 'react-native';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
+import { verticalScale } from '@utils/scaling';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
@@ -25,6 +26,7 @@ export const ExplorerWalletItem = (
           {NumberUtils.formatNumber(ambBalance, 0)} AMB
         </Text>
       </Row>
+      <Spacer value={verticalScale(5)} />
       <Row alignItems="center" justifyContent="space-between">
         <Text fontSize={12} color="#646464">
           Holding{' '}
