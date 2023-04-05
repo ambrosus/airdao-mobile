@@ -1,11 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { Button, Spacer, Text } from '@components/base';
+import { FlatList, View } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
+import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -69,20 +70,22 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
     };
     return (
       <BottomSheet height={852} ref={localRef}>
-        <View style={styles.container}>
-          <Row justifyContent="space-between" alignItems="center">
-            <Button type="base" onPress={() => localRef.current?.dismiss()}>
-              <View style={{ width: 38 }}>
-                <CloseIcon />
-              </View>
-            </Button>
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={15}
-              color={COLORS.black}
+        <Header
+          title="Select base currency"
+          titlePosition="center"
+          style={styles.header}
+          backIconVisible={false}
+          contentLeft={
+            <Button
+              type="base"
+              onPress={() => {
+                localRef.current?.dismiss();
+              }}
             >
-              Select base currency
-            </Text>
+              <CloseIcon />
+            </Button>
+          }
+          contentRight={
             <Button
               type="base"
               onPress={() => {
@@ -98,9 +101,9 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
                 Save
               </Text>
             </Button>
-          </Row>
-          <Spacer value={40} />
-        </View>
+          }
+        />
+        <Spacer value={40} />
         <View>
           <FlatList
             contentContainerStyle={{
@@ -123,10 +126,3 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    paddingHorizontal: 20
-  }
-});

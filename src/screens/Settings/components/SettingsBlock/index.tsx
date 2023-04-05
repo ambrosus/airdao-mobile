@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { RightArrowIcon } from '@components/svg/RightArrowIcon';
 import { DarkNotificationIcon } from '@components/svg/icons/DarkNotification';
 import { CurrencyIcon } from '@components/svg/icons/Currency';
@@ -15,13 +14,21 @@ import {
   BottomSheetSelectLanguage,
   Language
 } from '@screens/Settings/components/SettingsBlock/modals/BottomSheetSelectLanguage';
+import { BottomSheetNotificationSettings } from '@components/templates';
+import { styles } from '@screens/Settings/components/SettingsBlock/style';
 export const SettingsBlock = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('English');
   const [selectedCurrency, setSelectedCurrency] =
     useState<Currency>('US Dollars (USD)');
 
+  const notificationSettingsRef = useRef<BottomSheetRef>(null);
   const selectBaseCurrencyRef = useRef<BottomSheetRef>(null);
   const selectLanguageRef = useRef<BottomSheetRef>(null);
+
+  const handleOnOpenNotificationSettings = useCallback(() => {
+    notificationSettingsRef.current?.show();
+  }, []);
+
   const handleOnSelectBaseCurrency = useCallback(() => {
     selectBaseCurrencyRef.current?.show();
   }, []);
@@ -40,53 +47,54 @@ export const SettingsBlock = () => {
 
   return (
     <View style={styles.container}>
-      <Row
-        style={styles.optionContainer}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Row style={styles.infoTextContainer}>
-          <CurrencyIcon />
-          <Text style={styles.optionInfoText}>Base currency</Text>
-        </Row>
-        <Button onPress={handleOnSelectBaseCurrency} type="base">
+      <Button onPress={handleOnSelectBaseCurrency} type="base">
+        <Row
+          style={styles.optionContainer}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Row style={styles.infoTextContainer}>
+            <CurrencyIcon />
+            <Text style={styles.optionInfoText}>Base currency</Text>
+          </Row>
           <Row style={styles.infoTextContainer} alignItems="center">
             <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
             <RightArrowIcon />
           </Row>
-        </Button>
-      </Row>
-      <Row
-        style={styles.optionContainer}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Row style={styles.infoTextContainer}>
-          <LanguageIcon />
-          <Text style={styles.optionInfoText}>Language</Text>
         </Row>
-        <Button onPress={handleOnOpenLanguageModal} type="base">
+      </Button>
+      <Button onPress={handleOnOpenLanguageModal} type="base">
+        <Row
+          style={styles.optionContainer}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Row style={styles.infoTextContainer}>
+            <LanguageIcon />
+            <Text style={styles.optionInfoText}>Language</Text>
+          </Row>
           <Row style={styles.infoTextContainer} alignItems="center">
             <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
             <RightArrowIcon />
           </Row>
-        </Button>
-      </Row>
-      <Row
-        style={styles.optionContainer}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Row style={styles.infoTextContainer}>
-          <DarkNotificationIcon />
-          <Text style={styles.optionInfoText}>Notification settings</Text>
         </Row>
-        <Button style={styles.notificationsButton} type="base">
+      </Button>
+      <Button onPress={handleOnOpenNotificationSettings} type="base">
+        <Row
+          style={styles.optionContainer}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Row style={styles.infoTextContainer}>
+            <DarkNotificationIcon />
+            <Text style={styles.optionInfoText}>Notification settings</Text>
+          </Row>
           <Row style={styles.infoTextContainer} alignItems="center">
             <RightArrowIcon />
           </Row>
-        </Button>
-      </Row>
+        </Row>
+      </Button>
+      <BottomSheetNotificationSettings ref={notificationSettingsRef} />
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}
         handleCurrencySave={handleCurrencySave}
@@ -100,30 +108,3 @@ export const SettingsBlock = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50
-  },
-  optionContainer: {
-    paddingBottom: 35,
-    flexDirection: 'row'
-  },
-  optionInfoText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    color: COLORS.black,
-    paddingLeft: 12
-  },
-  optionButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 13,
-    color: COLORS.lightGrey,
-    paddingRight: 12
-  },
-  infoTextContainer: { flexDirection: 'row' },
-  notificationsButton: {
-    width: 45,
-    alignItems: 'flex-end'
-  }
-});

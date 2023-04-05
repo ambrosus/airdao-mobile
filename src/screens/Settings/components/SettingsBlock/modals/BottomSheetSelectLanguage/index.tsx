@@ -1,11 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
+import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -67,20 +68,22 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
 
     return (
       <BottomSheet ref={localRef} height={852}>
-        <View style={styles.container}>
-          <Row justifyContent="space-between" alignItems="center">
-            <Button type="base" onPress={() => localRef.current?.dismiss()}>
-              <View style={{ width: 38 }}>
-                <CloseIcon />
-              </View>
-            </Button>
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={15}
-              color={COLORS.black}
+        <Header
+          title="Select language"
+          titlePosition="center"
+          backIconVisible={false}
+          style={styles.header}
+          contentLeft={
+            <Button
+              type="base"
+              onPress={() => {
+                localRef.current?.dismiss();
+              }}
             >
-              Select language
-            </Text>
+              <CloseIcon />
+            </Button>
+          }
+          contentRight={
             <Button
               type="base"
               onPress={() => {
@@ -96,9 +99,9 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
                 Save
               </Text>
             </Button>
-          </Row>
-          <Spacer value={40} />
-        </View>
+          }
+        />
+        <Spacer value={40} />
         <View>
           <FlatList
             contentContainerStyle={{
@@ -121,10 +124,3 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    paddingHorizontal: 20
-  }
-});

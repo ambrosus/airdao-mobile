@@ -5,6 +5,7 @@ import { Button, Row, Text } from '@components/base';
 import { HeaderProps } from './Header.types';
 import { styles } from './Header.styles';
 import { useNavigation } from '@react-navigation/native';
+import { COLORS } from '@constants/colors';
 
 export function Header(props: HeaderProps): JSX.Element {
   const {
@@ -28,7 +29,16 @@ export function Header(props: HeaderProps): JSX.Element {
 
   const renderTitle = () => {
     if (typeof title === 'string') {
-      return <Text title>{title}</Text>;
+      return (
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={15}
+          color={COLORS.black}
+          title
+        >
+          {title}
+        </Text>
+      );
     }
   };
 

@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { BottomSheet, Slider } from '@components/composite';
+import { BottomSheet, Header, Slider } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Row, Text } from '@components/base';
@@ -38,6 +38,27 @@ export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheet height={800} ref={localRef}>
+          <Header
+            title="List settings"
+            titlePosition="center"
+            backIconVisible={false}
+            contentLeft={
+              <Button type="base" onPress={() => localRef.current?.dismiss()}>
+                <CloseIcon />
+              </Button>
+            }
+            contentRight={
+              <Button type="base" onPress={() => localRef.current?.dismiss()}>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.lightGrey}
+                  fontSize={16}
+                >
+                  Save
+                </Text>
+              </Button>
+            }
+          />
           <View style={styles.container}>
             <Row justifyContent="space-between" alignItems="center">
               <Button type="base" onPress={() => localRef.current?.dismiss()}>
