@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  ForwardedRef,
-  forwardRef,
-  RefObject,
-  SetStateAction
-} from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
@@ -15,13 +9,13 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
-  listName: string;
-  handleListNameChange: Dispatch<SetStateAction<string>>;
   ref: RefObject<BottomSheetRef>;
+  handleOnCreateList: (value: string) => void;
 };
 export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
-    const { listName, handleListNameChange } = props;
+    const { handleOnCreateList } = props;
+    const [listName, setListName] = useState<string>('');
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     return (
@@ -52,7 +46,7 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
           </View>
           <Input
             value={listName}
-            onChangeValue={handleListNameChange}
+            onChangeValue={(value) => setListName(value)}
             type="text"
             placeholder="Enter list name"
             placeholderTextColor="black"
@@ -60,9 +54,12 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
           />
           <Spacer value={32} />
           <Button
-            disabled={!!listName.length}
+            disabled={!listName.length}
             type="base"
             style={styles.bottomSheetCreateButton}
+            onPress={() => {
+              handleOnCreateList(listName);
+            }}
           >
             <Text
               fontFamily="Inter_500Medium"

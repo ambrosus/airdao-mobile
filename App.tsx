@@ -4,6 +4,7 @@ import Navigation from '@navigation/NavigationContainer';
 import { useAppInit } from '@hooks/useAppInit';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ListsContextProvider } from '@contexts/ListsContext';
 
 const queryClient = new QueryClient();
 
@@ -17,9 +18,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider style={{ flex: 1 }}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Navigation />
-        </GestureHandlerRootView>
+        <ListsContextProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Navigation />
+          </GestureHandlerRootView>
+        </ListsContextProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

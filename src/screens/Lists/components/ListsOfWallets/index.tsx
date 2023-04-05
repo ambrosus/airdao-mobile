@@ -3,9 +3,10 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ListItem } from '@screens/Lists/components/ListsOfWallets/components/ListItem';
 
 export type WalletGroup = {
+  id: string;
   title: string;
-  wallets: string;
-  tokens: string;
+  addresses: number;
+  tokens: number;
   listOfWallets: ListOfWallets[];
 };
 
@@ -16,176 +17,17 @@ export type ListOfWallets = {
   progress: string;
 };
 
-const mockedData: WalletGroup[] = [
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  },
-  {
-    title: 'Whales',
-    wallets: '5 wallets',
-    tokens: '$2,000 (2,000 AMB)',
-    listOfWallets: [
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      },
-      {
-        wallet: 'Wallet 01',
-        price: '$45,000',
-        token: '20 AMB',
-        progress: '3.46%'
-      }
-    ]
-  }
-];
-
-export const ListsOfWallets = () => {
+type Props = {
+  listsOfWallets: WalletGroup[];
+};
+export const ListsOfWallets = ({ listsOfWallets }: Props) => {
   return (
     <View style={styles.walletsContainer}>
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150
         }}
-        data={mockedData}
+        data={listsOfWallets}
         renderItem={({ item, index }) => {
           return <ListItem key={index} item={item} />;
         }}

@@ -10,16 +10,20 @@ import { useNavigation } from '@react-navigation/native';
 import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
+import { useLists } from '@contexts/ListsContext';
 
 type Props = {
   item: WalletGroup;
 };
 
 export const ListItem: FC<Props> = ({ item }) => {
+  const { handleOnDelete } = useLists((v) => v);
+
   const listActionRef = useRef<BottomSheetRef>(null);
   const handleOpenListAction = useCallback(() => {
     listActionRef.current?.show();
   }, []);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
   const navigateToLists = () => {
@@ -34,7 +38,9 @@ export const ListItem: FC<Props> = ({ item }) => {
           <Text style={styles.itemTitle}>{item.title}</Text>
           <Spacer value={4} />
           <View style={styles.itemSubInfo}>
-            <Text style={styles.walletsCount}>{item.wallets}</Text>
+            <Text style={styles.walletsCount}>
+              {item.addresses + ' addresses'}
+            </Text>
             <Text style={styles.tokensCount}>{item.tokens}</Text>
           </View>
         </View>
@@ -45,7 +51,11 @@ export const ListItem: FC<Props> = ({ item }) => {
         >
           <OptionsIcon />
         </Button>
-        <BottomSheetListAction ref={listActionRef} />
+        <BottomSheetListAction
+          item={item}
+          ref={listActionRef}
+          handleOnDeleteItem={handleOnDelete}
+        />
       </View>
     </Button>
   );

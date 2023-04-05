@@ -7,13 +7,16 @@ import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
+import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
+  handleOnDeleteItem: (listId: string) => void;
+  item: WalletGroup;
 };
 
 export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
-  (props, ref) => {
+  ({ handleOnDeleteItem, item }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
       <BottomSheet height={375} ref={localRef}>
@@ -48,7 +51,10 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
         <Button
           type="base"
           style={styles.bottomSheetButton}
-          onPress={() => localRef.current?.dismiss()}
+          onPress={() => {
+            handleOnDeleteItem(item.id);
+            localRef.current?.dismiss();
+          }}
         >
           <Text
             style={styles.cancelButtonText}
