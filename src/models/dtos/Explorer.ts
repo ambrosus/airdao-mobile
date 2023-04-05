@@ -57,3 +57,18 @@ export interface ExplorerInfoDTO {
   totalEvents: number;
   totalSupply: number;
 }
+
+export interface ExplorerAccountDTO {
+  _id: string;
+  address: string;
+  balance: {
+    wei: string;
+    ether: number;
+  };
+  byteCode: string;
+  isContract: boolean;
+  power: number;
+  role: number;
+  timestamp: number;
+  totalTx: number;
+}

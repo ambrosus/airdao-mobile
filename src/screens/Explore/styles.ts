@@ -7,5 +7,9 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(30),
     paddingLeft: scale(16),
     paddingRight: scale(18)
+  },
+  list: {
+    flexGrow: 1,
+    paddingBottom: '20%'
   }
 });

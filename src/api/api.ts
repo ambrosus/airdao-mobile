@@ -1,4 +1,4 @@
-import { AMBTokenDTO, ExplorerInfoDTO } from '@models/dtos';
+import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import axios from 'axios';
 
 export const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
@@ -14,6 +14,17 @@ export const getExplorerInfo = async (): Promise<ExplorerInfoDTO> => {
   try {
     const response = await axios.get('https://explorer-api.ambrosus.io/info/');
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getExplorerAccounts = async (): Promise<ExplorerAccountDTO[]> => {
+  try {
+    const response = await axios.get(
+      'https://explorer-api.ambrosus.io/accounts/'
+    );
+    return response.data.data;
   } catch (error) {
     throw error;
   }
