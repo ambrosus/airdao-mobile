@@ -3,11 +3,12 @@ import { BottomSheet } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
+import { styles } from '@screens/Lists/components/ListsOfWallets/components/ListItem/components/BottomSheetListAction/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -33,11 +34,7 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
           Whales
         </Text>
         <Spacer value={32} />
-        <Button
-          type="base"
-          style={styles.bottomSheetButton}
-          onPress={() => localRef.current?.dismiss()}
-        >
+        <Button type="base" style={styles.bottomSheetButton}>
           <Text
             style={styles.cancelButtonText}
             fontFamily="Inter_600SemiBold"
@@ -69,22 +66,3 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
-  text: {
-    alignSelf: 'center'
-  },
-  bottomSheetButton: {
-    marginHorizontal: 16,
-    borderRadius: 25,
-    backgroundColor: COLORS.whiteGrey
-  },
-  cancelButtonText: {
-    paddingVertical: 12,
-    alignSelf: 'center'
-  }
-});
