@@ -6,3 +6,4 @@ export * from './Header';
 export * from './CircularLogo';
 export * from './PercentChange';
 export * from './PopUpInfo';
+export * from './SegmentedPicker';

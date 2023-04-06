@@ -1,15 +1,16 @@
 export interface NotificationSettings {
   priceAlerts: boolean;
   priceThreshold: {
-    min: number;
-    max: number;
+    min: number | null;
+    max: number | null;
   };
-  percentChangeAlerts: boolean;
+  pricePercentThreshold: number;
   transactionAlerts: boolean;
   transactionThreshold: {
-    min: number;
-    max: number;
+    min: number | null;
+    max: number | null;
   };
+  balancePercentChange: number;
 }
 
 export interface NotificationFilter {
