@@ -1,12 +1,8 @@
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigation from '@navigation/NavigationContainer';
 import { useAppInit } from '@hooks/useAppInit';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ListsContextProvider } from '@contexts/ListsContext';
-
-const queryClient = new QueryClient();
+import { Providers } from './Providers';
 
 export default function App() {
   const { isAppReady } = useAppInit();
@@ -16,14 +12,11 @@ export default function App() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider style={{ flex: 1 }}>
-        <ListsContextProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Navigation />
-          </GestureHandlerRootView>
-        </ListsContextProvider>
-      </SafeAreaProvider>
-    </QueryClientProvider>
+    // @ts-ignore
+    <Providers>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Navigation />
+      </GestureHandlerRootView>
+    </Providers>
   );
 }
