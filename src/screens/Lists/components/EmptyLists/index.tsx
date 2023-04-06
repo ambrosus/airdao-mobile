@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetCreateNewList } from '@screens/Lists/components/BottomSheetCreateNewList';
+import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
 
 export const EmptyLists = () => {
   const bottomRef = useRef<BottomSheetRef>(null);
@@ -38,7 +38,8 @@ export const EmptyLists = () => {
           </Text>
         </Row>
       </Button>
-      <BottomSheetCreateNewList
+      <BottomSheetCreateRenameList
+        type="create"
         ref={bottomRef}
         handleOnCreateList={handleOnCreateNewList}
       />

@@ -14,13 +14,14 @@ type Props = {
   ref: RefObject<BottomSheetRef>;
   handleOnDeleteItem: (listId: string) => void;
   item: WalletGroup;
+  handleOnRenameButtonPress: () => void;
 };
 
 export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
-  ({ handleOnDeleteItem, item }, ref) => {
+  ({ handleOnDeleteItem, item, handleOnRenameButtonPress }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
-      <BottomSheet height={375} ref={localRef}>
+      <BottomSheet height={300} ref={localRef}>
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />
         </View>
@@ -31,10 +32,14 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          Whales
+          {item.title}
         </Text>
         <Spacer value={32} />
-        <Button type="base" style={styles.bottomSheetButton}>
+        <Button
+          type="base"
+          style={styles.bottomSheetButton}
+          onPress={handleOnRenameButtonPress}
+        >
           <Text
             style={styles.cancelButtonText}
             fontFamily="Inter_600SemiBold"

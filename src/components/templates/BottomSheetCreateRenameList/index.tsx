@@ -10,12 +10,23 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  handleOnCreateList: (value: string) => void;
+  handleOnRenameList?: (selectedListId: string, newListName: string) => void;
+  handleOnCreateList?: (value: string) => void;
+
+  listTitle?: string;
+  listId?: string;
+  type: 'rename' | 'create';
 };
-export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetCreateRenameList = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
-    const { handleOnCreateList } = props;
-    const [listName, setListName] = useState<string>('');
+    const {
+      handleOnRenameList,
+      listTitle,
+      type = 'create',
+      handleOnCreateList,
+      listId
+    } = props;
+    const [listName, setListName] = useState<string>(listTitle || '');
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     return (
@@ -31,7 +42,7 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
               fontSize={20}
               color={COLORS.black}
             >
-              Create new List
+              {type === 'create' ? ' Create new List' : 'Rename List'}
             </Text>
           </View>
           <Spacer value={36} />
@@ -48,7 +59,7 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
             value={listName}
             onChangeValue={(value) => setListName(value)}
             type="text"
-            placeholder="Enter list name"
+            placeholder={'Enter list name'}
             placeholderTextColor="black"
             style={[styles.bottomSheetInput]}
           />
@@ -58,7 +69,12 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
             type="base"
             style={styles.bottomSheetCreateButton}
             onPress={() => {
-              handleOnCreateList(listName);
+              if (handleOnCreateList) {
+                handleOnCreateList(listName);
+              }
+              if (handleOnRenameList && listId) {
+                handleOnRenameList(listId, listName);
+              }
             }}
           >
             <Text
@@ -66,7 +82,7 @@ export const BottomSheetCreateNewList = forwardRef<BottomSheetRef, Props>(
               fontSize={16}
               color={COLORS.black}
             >
-              Create
+              {type === 'create' ? 'Create' : 'Rename'}
             </Text>
           </Button>
           <Spacer value={24} />
