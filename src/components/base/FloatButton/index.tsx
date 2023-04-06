@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
@@ -13,25 +13,27 @@ type Props = {
 
 const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
 
-export const FloatButton = ({ title, icon, onPress, bottomPadding }: Props) => {
-  const bottomSafeArea = useSafeAreaInsets().bottom || 34;
-  const bottomTabBarHeight =
-    bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.buttonStyle,
-        {
-          bottom: bottomTabBarHeight + bottomSafeArea
-        }
-      ]}
-    >
-      {icon}
-      <Text style={styles.bottomButtonText}>{title}</Text>
-    </Pressable>
-  );
-};
+export const FloatButton = memo(
+  ({ title, icon, onPress, bottomPadding }: Props) => {
+    const bottomSafeArea = useSafeAreaInsets().bottom || 34;
+    const bottomTabBarHeight =
+      bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
+    return (
+      <Pressable
+        onPress={onPress}
+        style={[
+          styles.buttonStyle,
+          {
+            bottom: bottomTabBarHeight + bottomSafeArea
+          }
+        ]}
+      >
+        {icon}
+        <Text style={styles.bottomButtonText}>{title}</Text>
+      </Pressable>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   buttonStyle: {

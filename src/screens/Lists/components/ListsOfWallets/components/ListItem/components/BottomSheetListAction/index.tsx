@@ -3,20 +3,25 @@ import { BottomSheet } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
+import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
+import { styles } from '@screens/Lists/components/ListsOfWallets/components/ListItem/components/BottomSheetListAction/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
+  handleOnDeleteItem: (listId: string) => void;
+  item: WalletGroup;
+  handleOnRenameButtonPress: () => void;
 };
 
 export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
-  (props, ref) => {
+  ({ handleOnDeleteItem, item, handleOnRenameButtonPress }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
-      <BottomSheet height={375} ref={localRef}>
+      <BottomSheet height={300} ref={localRef}>
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />
         </View>
@@ -27,13 +32,13 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          Whales
+          {item.title}
         </Text>
         <Spacer value={32} />
         <Button
           type="base"
           style={styles.bottomSheetButton}
-          onPress={() => localRef.current?.dismiss()}
+          onPress={handleOnRenameButtonPress}
         >
           <Text
             style={styles.cancelButtonText}
@@ -48,7 +53,10 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
         <Button
           type="base"
           style={styles.bottomSheetButton}
-          onPress={() => localRef.current?.dismiss()}
+          onPress={() => {
+            handleOnDeleteItem(item.id);
+            localRef.current?.dismiss();
+          }}
         >
           <Text
             style={styles.cancelButtonText}
@@ -63,22 +71,3 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
-  text: {
-    alignSelf: 'center'
-  },
-  bottomSheetButton: {
-    marginHorizontal: 16,
-    borderRadius: 25,
-    backgroundColor: COLORS.whiteGrey
-  },
-  cancelButtonText: {
-    paddingVertical: 12,
-    alignSelf: 'center'
-  }
-});

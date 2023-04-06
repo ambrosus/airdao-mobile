@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ListsOfWallets } from './components/ListsOfWallets';
 import { Spacer } from '@components/base/Spacer';
@@ -6,37 +6,48 @@ import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FloatButton } from '@components/base/FloatButton';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheetCreateNewList } from '@screens/Lists/components/BottomSheetCreateNewList';
-import { StatusBar } from 'expo-status-bar';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-
+import { EmptyLists } from '@screens/Lists/components/EmptyLists';
+import { getData } from '@helpers/storageHelpers';
+import { useLists } from '@contexts/ListsContext';
+import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
 export const ListsScreen = () => {
-  const [listName, setListName] = useState<string>('');
-  const bottomRef = useRef<BottomSheetRef>(null);
+  const { listsOfWallets, setListsOfWallets, handleOnCreate, createListRef } =
+    useLists((v) => v);
 
-  const handleOnCreateNewList = useCallback(() => {
-    bottomRef.current?.show();
-  }, []);
+  const handleOnOpenCreateNewList = useCallback(() => {
+    createListRef.current?.show();
+  }, [createListRef]);
+
+  useEffect(() => {
+    const getDataLists = async () => {
+      const lists = await getData('UserWalletsLists');
+      setListsOfWallets(lists || []);
+    };
+    getDataLists();
+  }, [setListsOfWallets]);
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#222222" />
       <SafeAreaView style={{ flex: 1 }}>
         <ListsScreenHeader />
         <Spacer value={32} />
         <View style={styles.separateLine} />
-        <ListsOfWallets />
+        {!listsOfWallets.length ? (
+          <EmptyLists />
+        ) : (
+          <ListsOfWallets listsOfWallets={listsOfWallets} />
+        )}
       </SafeAreaView>
       <FloatButton
         title="Create new list"
         icon={<AddIcon />}
-        onPress={handleOnCreateNewList}
+        onPress={handleOnOpenCreateNewList}
       />
-      <BottomSheetCreateNewList
-        ref={bottomRef}
-        listName={listName}
-        handleListNameChange={setListName}
+      <BottomSheetCreateRenameList
+        type="create"
+        handleOnCreateList={handleOnCreate}
+        ref={createListRef}
       />
     </>
   );

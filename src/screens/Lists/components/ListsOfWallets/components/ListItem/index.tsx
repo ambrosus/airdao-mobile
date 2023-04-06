@@ -1,6 +1,5 @@
-import React, { FC, useCallback, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { COLORS } from '@constants/colors';
+import React, { FC, useCallback, useMemo, useRef } from 'react';
+import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Text } from '@components/base';
 import { OptionsIcon } from '@components/svg/icons/Options';
@@ -10,78 +9,83 @@ import { useNavigation } from '@react-navigation/native';
 import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
+import { useLists } from '@contexts/ListsContext';
+import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
+import { styles } from './styles';
 
 type Props = {
   item: WalletGroup;
 };
 
 export const ListItem: FC<Props> = ({ item }) => {
+  const { handleOnDelete, handleOnRename } = useLists((v) => v);
+
   const listActionRef = useRef<BottomSheetRef>(null);
+  const listRenameRef = useRef<BottomSheetRef>(null);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+
   const handleOpenListAction = useCallback(() => {
     listActionRef.current?.show();
   }, []);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
-  const navigateToLists = () => {
+
+  const handleOpenRenameModal = useCallback(() => {
+    listActionRef.current?.dismiss();
+    setTimeout(() => {
+      listRenameRef.current?.show();
+    }, 900);
+  }, []);
+
+  const handleItemPress = () => {
     navigation.navigate('SingleListScreen', {
       item
     });
   };
+
+  const tokensFormatted = useMemo(() => {
+    const formattedNumber = item.tokens
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return `$${formattedNumber} (${formattedNumber} AMB)`;
+  }, [item.tokens]);
+
   return (
-    <Button type="base" onPress={navigateToLists}>
-      <View style={styles.container}>
-        <View style={styles.itemInfo}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          <Spacer value={4} />
-          <View style={styles.itemSubInfo}>
-            <Text style={styles.walletsCount}>{item.wallets}</Text>
-            <Text style={styles.tokensCount}>{item.tokens}</Text>
+    <>
+      <Button type="base" onPress={handleItemPress}>
+        <View style={styles.container}>
+          <View style={styles.itemInfo}>
+            <Text style={styles.itemTitle}>{item.title}</Text>
+            <Spacer value={4} />
+            <View style={styles.itemSubInfo}>
+              <Text style={styles.walletsCount}>
+                {item.addresses + ' addresses'}
+              </Text>
+              <Text style={styles.tokensCount}>{tokensFormatted}</Text>
+            </View>
           </View>
+          <Button
+            style={styles.optionButton}
+            type="base"
+            onPress={handleOpenListAction}
+          >
+            <OptionsIcon />
+          </Button>
+          <BottomSheetListAction
+            item={item}
+            ref={listActionRef}
+            handleOnDeleteItem={handleOnDelete}
+            handleOnRenameButtonPress={handleOpenRenameModal}
+          />
         </View>
-        <Button
-          style={styles.optionButton}
-          type="base"
-          onPress={handleOpenListAction}
-        >
-          <OptionsIcon />
-        </Button>
-        <BottomSheetListAction ref={listActionRef} />
-      </View>
-    </Button>
+      </Button>
+      <BottomSheetCreateRenameList
+        type="rename"
+        listId={item.id}
+        listTitle={item.title}
+        handleOnRenameList={handleOnRename}
+        ref={listRenameRef}
+      />
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 32,
-    paddingLeft: 19,
-    paddingRight: 29,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemInfo: {},
-  itemSubInfo: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 17
-  },
-  walletsCount: {
-    paddingRight: 14,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 16
-  },
-  tokensCount: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 12,
-    color: COLORS.lightGrey,
-    paddingTop: 2
-  },
-  optionButton: {
-    alignItems: 'center',
-    width: 25
-  }
-});
