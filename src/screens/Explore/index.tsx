@@ -70,12 +70,12 @@ export const ExploreScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardDismissingView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <SearchAdress
           onContentVisibilityChanged={setSearchAddressContentVisible}
         />
         {searchAddressContentVisible ? null : (
-          <View style={styles.container}>
+          <KeyboardDismissingView style={styles.container}>
             <Spacer value={verticalScale(25)} />
             <TotalAdresses
               addressCount={infoData?.totalAddresses || 0}
@@ -117,9 +117,9 @@ export const ExploreScreen = () => {
                 </>
               )
             )}
-          </View>
+          </KeyboardDismissingView>
         )}
-      </KeyboardDismissingView>
+      </View>
     </SafeAreaView>
   );
 };

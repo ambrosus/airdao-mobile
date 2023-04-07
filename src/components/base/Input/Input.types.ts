@@ -17,4 +17,9 @@ export type InputRef = {
    * focuses on input
    */
   focus: () => void;
+
+  /**
+   * cleares the input
+   */
+  clear: () => void;
 };

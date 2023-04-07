@@ -15,6 +15,9 @@ export const NumberInput = React.forwardRef<InputRef, InputProps>(
         return {
           focus() {
             rnInputRef.current?.focus();
+          },
+          clear() {
+            rnInputRef.current?.clear();
           }
         };
       },

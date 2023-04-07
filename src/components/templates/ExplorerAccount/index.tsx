@@ -23,7 +23,7 @@ export const ExplorerAccountView = (
 
   const AMBBalance = account.ambBalance;
   const USDBalance = AMBBalance * ambPriceUSD;
-  const percentage = AMBBalance / totalSupply;
+  const percentage = (AMBBalance / totalSupply) * 100;
 
   return (
     <View style={styles.container}>

@@ -3,3 +3,8 @@ export interface QueryResponse<T> {
   error: any;
   data: T;
 }
+
+export interface PaginatedQueryResponse<T> extends QueryResponse<T> {
+  hasNextPage: boolean;
+  fetchNextPage: () => unknown;
+}
