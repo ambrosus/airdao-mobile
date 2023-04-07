@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { shadow } from '@constants/shadow';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,6 +10,7 @@ export const styles = StyleSheet.create({
   },
   header: {
     shadowColor: 'transparent',
+    zIndex: 1000,
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
   },
@@ -16,5 +18,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#2f2b431a',
     height: 1,
     width: '100%'
+  },
+  input: {
+    ...shadow,
+    flex: 1,
+    paddingHorizontal: scale(12),
+    paddingVertical: verticalScale(8),
+    borderRadius: moderateScale(82),
+    backgroundColor: '#FFFFFF'
   }
 });
