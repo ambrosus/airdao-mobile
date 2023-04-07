@@ -9,10 +9,14 @@ export const styles = StyleSheet.create({
   text: {
     alignSelf: 'center'
   },
-  bottomSheetButton: {
+  bottomSheetRenameButton: {
     marginHorizontal: 16,
     borderRadius: 25,
-    backgroundColor: COLORS.whiteGrey
+    backgroundColor: COLORS.grey
+  },
+  bottomSheetDeleteButton: {
+    marginHorizontal: 16,
+    borderRadius: 25
   },
   cancelButtonText: {
     paddingVertical: 12,

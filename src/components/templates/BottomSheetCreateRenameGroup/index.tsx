@@ -1,4 +1,10 @@
-import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  RefObject,
+  useCallback,
+  useState
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
@@ -10,24 +16,42 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  handleOnRenameList?: (selectedListId: string, newListName: string) => void;
-  handleOnCreateList?: (value: string) => void;
-
-  listTitle?: string;
-  listId?: string;
+  handleOnRenameGroup?: (selectedListId: string, newListName: string) => void;
+  handleOnCreateGroup?: (value: string) => void;
+  groupTitle?: string;
+  groupId?: string;
   type: 'rename' | 'create';
 };
-export const BottomSheetCreateRenameList = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
     const {
-      handleOnRenameList,
-      listTitle,
+      handleOnRenameGroup,
+      groupTitle,
       type = 'create',
-      handleOnCreateList,
-      listId
+      handleOnCreateGroup,
+      groupId
     } = props;
-    const [listName, setListName] = useState<string>(listTitle || '');
+    const [localGroupName, setLocalGroupName] = useState<string>(
+      groupTitle || ''
+    );
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+
+    const handleButtonPress = useCallback(() => {
+      if (handleOnCreateGroup) {
+        handleOnCreateGroup(localGroupName);
+      }
+      if (handleOnRenameGroup && groupId) {
+        handleOnRenameGroup(groupId, localGroupName);
+      }
+      localRef.current?.dismiss();
+      setLocalGroupName('');
+    }, [
+      groupId,
+      handleOnCreateGroup,
+      handleOnRenameGroup,
+      localGroupName,
+      localRef
+    ]);
 
     return (
       <>
@@ -56,8 +80,8 @@ export const BottomSheetCreateRenameList = forwardRef<BottomSheetRef, Props>(
             </Text>
           </View>
           <Input
-            value={listName}
-            onChangeValue={(value) => setListName(value)}
+            value={localGroupName}
+            onChangeValue={(value) => setLocalGroupName(value)}
             type="text"
             placeholder={'Enter list name'}
             placeholderTextColor="black"
@@ -65,22 +89,15 @@ export const BottomSheetCreateRenameList = forwardRef<BottomSheetRef, Props>(
           />
           <Spacer value={32} />
           <Button
-            disabled={!listName.length}
+            disabled={!localGroupName.length}
             type="base"
-            style={styles.bottomSheetCreateButton}
-            onPress={() => {
-              if (handleOnCreateList) {
-                handleOnCreateList(listName);
-              }
-              if (handleOnRenameList && listId) {
-                handleOnRenameList(listId, listName);
-              }
-            }}
+            style={styles.bottomSheetCreateRenameButton}
+            onPress={handleButtonPress}
           >
             <Text
               fontFamily="Inter_500Medium"
               fontSize={16}
-              color={COLORS.black}
+              color={COLORS.white}
             >
               {type === 'create' ? 'Create' : 'Rename'}
             </Text>
@@ -93,7 +110,7 @@ export const BottomSheetCreateRenameList = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.black}
+              color={COLORS.buttonTextColor}
               fontSize={16}
             >
               Cancel
@@ -125,8 +142,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.silver
   },
-  bottomSheetCreateButton: {
-    backgroundColor: COLORS.whiteGrey,
+  bottomSheetCreateRenameButton: {
+    backgroundColor: COLORS.grey,
     marginHorizontal: 18,
     paddingVertical: 16,
     borderRadius: 25,

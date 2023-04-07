@@ -1,31 +1,33 @@
 import React, { useCallback, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ListsOfWallets } from './components/ListsOfWallets';
+import { ListsOfAddressGroup } from './components/ListsOfAddressGroup';
 import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { EmptyListsOfGroups } from '@screens/Lists/components/EmptyListsOfGroups';
+import { getDataToSecureStore } from '@helpers/storageHelpers';
+import { useLists } from '@contexts/ListsContext';
 import { FloatButton } from '@components/base/FloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { EmptyLists } from '@screens/Lists/components/EmptyLists';
-import { getData } from '@helpers/storageHelpers';
-import { useLists } from '@contexts/ListsContext';
-import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 export const ListsScreen = () => {
-  const { listsOfWallets, setListsOfWallets, handleOnCreate, createListRef } =
-    useLists((v) => v);
-
+  const {
+    setListsOfAddressGroup,
+    listsOfAddressGroup,
+    handleOnCreate,
+    createGroupRef
+  } = useLists((v) => v);
   const handleOnOpenCreateNewList = useCallback(() => {
-    createListRef.current?.show();
-  }, [createListRef]);
-
+    createGroupRef.current?.show();
+  }, [createGroupRef]);
   useEffect(() => {
-    const getDataLists = async () => {
-      const lists = await getData('UserWalletsLists');
-      setListsOfWallets(lists || []);
+    const getDataGroups = async () => {
+      const lists = await getDataToSecureStore('UserGroupsOfAddresses');
+      setListsOfAddressGroup(lists || []);
     };
-    getDataLists();
-  }, [setListsOfWallets]);
+    getDataGroups();
+  }, [setListsOfAddressGroup]);
 
   return (
     <>
@@ -33,10 +35,10 @@ export const ListsScreen = () => {
         <ListsScreenHeader />
         <Spacer value={32} />
         <View style={styles.separateLine} />
-        {!listsOfWallets.length ? (
-          <EmptyLists />
+        {!listsOfAddressGroup.length ? (
+          <EmptyListsOfGroups />
         ) : (
-          <ListsOfWallets listsOfWallets={listsOfWallets} />
+          <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
         )}
       </SafeAreaView>
       <FloatButton
@@ -44,10 +46,10 @@ export const ListsScreen = () => {
         icon={<AddIcon />}
         onPress={handleOnOpenCreateNewList}
       />
-      <BottomSheetCreateRenameList
+      <BottomSheetCreateRenameGroup
         type="create"
-        handleOnCreateList={handleOnCreate}
-        ref={createListRef}
+        handleOnCreateGroup={handleOnCreate}
+        ref={createGroupRef}
       />
     </>
   );

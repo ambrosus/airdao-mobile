@@ -7,18 +7,22 @@ import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
-import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
-import { styles } from '@screens/Lists/components/ListsOfWallets/components/ListItem/components/BottomSheetListAction/styles';
+import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   handleOnDeleteItem: (listId: string) => void;
-  item: WalletGroup;
+  item: ListsOfAddressesGroupType;
   handleOnRenameButtonPress: () => void;
+  type?: 'rename' | 'create';
 };
-
-export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
-  ({ handleOnDeleteItem, item, handleOnRenameButtonPress }, ref) => {
+//              Are you sure you want to remove {item.groupTitle} from lists?
+export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
+  (
+    { handleOnDeleteItem, item, handleOnRenameButtonPress, type = 'rename' },
+    ref
+  ) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
       <BottomSheet height={300} ref={localRef}>
@@ -32,37 +36,39 @@ export const BottomSheetListAction = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          {item.title}
+          {type === 'rename'
+            ? `Edit ${item.groupTitle}`
+            : `Are you sure want to remove selected Addresses from ${item.groupTitle}?`}
         </Text>
         <Spacer value={32} />
         <Button
           type="base"
-          style={styles.bottomSheetButton}
+          style={styles.bottomSheetRenameButton}
           onPress={handleOnRenameButtonPress}
         >
           <Text
             style={styles.cancelButtonText}
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.black}
+            color={COLORS.white}
           >
-            Rename List
+            {type ? 'Rename List' : 'Remove'}
           </Text>
         </Button>
         <Spacer value={24} />
         <Button
           type="base"
-          style={styles.bottomSheetButton}
+          style={styles.bottomSheetDeleteButton}
           onPress={() => {
-            handleOnDeleteItem(item.id);
-            localRef.current?.dismiss();
+            handleOnDeleteItem(item.groupId);
+            // navigation.goBack();
           }}
         >
           <Text
             style={styles.cancelButtonText}
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.black}
+            color={COLORS.buttonTextColor}
           >
             Delete List
           </Text>

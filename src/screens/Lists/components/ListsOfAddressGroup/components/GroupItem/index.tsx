@@ -4,62 +4,62 @@ import { Spacer } from '@components/base/Spacer';
 import { Button, Text } from '@components/base';
 import { OptionsIcon } from '@components/svg/icons/Options';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheetListAction } from '@screens/Lists/components/ListsOfWallets/components/ListItem/components/BottomSheetListAction';
 import { useNavigation } from '@react-navigation/native';
-import { WalletGroup } from '@screens/Lists/components/ListsOfWallets';
+import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { useLists } from '@contexts/ListsContext';
-import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
+import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 
 type Props = {
-  item: WalletGroup;
+  group: ListsOfAddressesGroupType;
 };
 
-export const ListItem: FC<Props> = ({ item }) => {
+export const GroupItem: FC<Props> = ({ group }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
 
-  const listActionRef = useRef<BottomSheetRef>(null);
-  const listRenameRef = useRef<BottomSheetRef>(null);
+  const groupItemActionRef = useRef<BottomSheetRef>(null);
+  const groupRenameRef = useRef<BottomSheetRef>(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
-  const handleOpenListAction = useCallback(() => {
-    listActionRef.current?.show();
+  const handleOpenGroupAction = useCallback(() => {
+    groupItemActionRef.current?.show();
   }, []);
 
   const handleOpenRenameModal = useCallback(() => {
-    listActionRef.current?.dismiss();
+    groupItemActionRef.current?.dismiss();
     setTimeout(() => {
-      listRenameRef.current?.show();
+      groupRenameRef.current?.show();
     }, 900);
   }, []);
 
   const handleItemPress = () => {
-    navigation.navigate('SingleListScreen', {
-      item
+    navigation.navigate('SingleAddressGroup', {
+      group
     });
   };
 
   const tokensFormatted = useMemo(() => {
-    const formattedNumber = item.tokens
+    const formattedNumber = group.groupTokens
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return `$${formattedNumber} (${formattedNumber} AMB)`;
-  }, [item.tokens]);
+  }, [group.groupTokens]);
 
   return (
     <>
       <Button type="base" onPress={handleItemPress}>
         <View style={styles.container}>
           <View style={styles.itemInfo}>
-            <Text style={styles.itemTitle}>{item.title}</Text>
+            <Text style={styles.itemTitle}>{group.groupTitle}</Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
               <Text style={styles.walletsCount}>
-                {item.addresses + ' addresses'}
+                {group.addressesCount + ' addresses'}
               </Text>
               <Text style={styles.tokensCount}>{tokensFormatted}</Text>
             </View>
@@ -67,24 +67,24 @@ export const ListItem: FC<Props> = ({ item }) => {
           <Button
             style={styles.optionButton}
             type="base"
-            onPress={handleOpenListAction}
+            onPress={handleOpenGroupAction}
           >
             <OptionsIcon />
           </Button>
-          <BottomSheetListAction
-            item={item}
-            ref={listActionRef}
+          <BottomSheetGroupAction
+            item={group}
+            ref={groupItemActionRef}
             handleOnDeleteItem={handleOnDelete}
             handleOnRenameButtonPress={handleOpenRenameModal}
           />
         </View>
       </Button>
-      <BottomSheetCreateRenameList
+      <BottomSheetCreateRenameGroup
         type="rename"
-        listId={item.id}
-        listTitle={item.title}
-        handleOnRenameList={handleOnRename}
-        ref={listRenameRef}
+        groupId={group.groupId}
+        groupTitle={group.groupTitle}
+        handleOnRenameGroup={handleOnRename}
+        ref={groupRenameRef}
       />
     </>
   );

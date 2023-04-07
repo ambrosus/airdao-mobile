@@ -1,12 +1,13 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { Button, Row, Text } from '@components/base';
+import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheet, Slider } from '@components/composite';
+import { BottomSheet, Header, Slider } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
+import { styles } from '@screens/Lists/components/BottomSheetFilters/styes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -18,32 +19,28 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
     return (
       <BottomSheet height={800} ref={localRef}>
         <View style={styles.container}>
-          <Row justifyContent="space-between" alignItems="center">
-            <Button type="base" onPress={() => localRef.current?.dismiss()}>
-              <View style={{ width: 38 }}>
+          <Header
+            style={styles.header}
+            title="List settings"
+            titlePosition="center"
+            backIconVisible={false}
+            contentLeft={
+              <Button type="base" onPress={() => localRef.current?.dismiss()}>
                 <CloseIcon />
-              </View>
-            </Button>
-            <Text
-              style={{
-                alignSelf: 'center',
-                fontFamily: 'Inter_600SemiBold',
-                fontSize: 15,
-                color: COLORS.black
-              }}
-            >
-              Filter by
-            </Text>
-            <Button type="base" onPress={() => localRef.current?.dismiss()}>
-              <Text
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.lightGrey}
-                fontSize={16}
-              >
-                Done
-              </Text>
-            </Button>
-          </Row>
+              </Button>
+            }
+            contentRight={
+              <Button type="base" onPress={() => localRef.current?.dismiss()}>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.lightGrey}
+                  fontSize={16}
+                >
+                  Save
+                </Text>
+              </Button>
+            }
+          />
           <Spacer value={39} />
           <Text
             fontFamily="Inter_600SemiBold"
@@ -102,29 +99,3 @@ export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    paddingHorizontal: 20
-  },
-  separator: {
-    height: 1,
-    backgroundColor: COLORS.silver,
-    width: '100%'
-  },
-  sliderText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 12,
-    justifyContent: 'flex-start',
-    color: COLORS.silver
-  },
-  sliderTextContainer: {
-    marginTop: -40,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  slider: {
-    alignItems: 'center'
-  }
-});
