@@ -1,0 +1,27 @@
+import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { GroupItem } from '@screens/Lists/components/ListsOfAddressGroup/components/GroupItem';
+import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
+
+type Props = {
+  listsOfAddressGroup: ListsOfAddressesGroupType[];
+};
+export const ListsOfAddressGroup = ({ listsOfAddressGroup }: Props) => {
+  return (
+    <View style={styles.groupsContainer}>
+      <FlatList
+        contentContainerStyle={{
+          paddingBottom: 150
+        }}
+        data={listsOfAddressGroup}
+        renderItem={({ item, index }) => {
+          return <GroupItem key={index} group={item} />;
+        }}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  groupsContainer: { flex: 1, flexGrow: 1 }
+});

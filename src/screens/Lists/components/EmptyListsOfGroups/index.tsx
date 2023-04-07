@@ -1,18 +1,23 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { BottomSheetRef } from '@components/composite';
-import { BottomSheetCreateRenameList } from '@components/templates/BottomSheetCreateRenameList';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
+import { useLists } from '@contexts/ListsContext';
+import { TokenLogo } from '@components/svg/icons/TokenLogo';
 
-export const EmptyLists = () => {
-  const bottomRef = useRef<BottomSheetRef>(null);
-  const handleOnCreateNewList = useCallback(() => {
-    bottomRef.current?.show();
-  }, []);
+export const EmptyListsOfGroups = () => {
+  const { handleOnCreate, createGroupRef } = useLists((v) => v);
+
+  const handleOnOpenCreateNewList = useCallback(() => {
+    createGroupRef.current?.show();
+  }, [createGroupRef]);
+
   return (
     <View style={styles.container}>
+      <TokenLogo />
+      <Spacer value={16} />
       <Text
         fontFamily="Inter_400Regular"
         fontSize={15}
@@ -22,7 +27,7 @@ export const EmptyLists = () => {
       </Text>
       <Spacer value={12} />
       <Button
-        onPress={handleOnCreateNewList}
+        onPress={handleOnOpenCreateNewList}
         type="base"
         style={styles.createButton}
       >
@@ -38,10 +43,10 @@ export const EmptyLists = () => {
           </Text>
         </Row>
       </Button>
-      <BottomSheetCreateRenameList
+      <BottomSheetCreateRenameGroup
         type="create"
-        ref={bottomRef}
-        handleOnCreateList={handleOnCreateNewList}
+        handleOnCreateGroup={handleOnCreate}
+        ref={createGroupRef}
       />
     </View>
   );

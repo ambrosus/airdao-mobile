@@ -14,7 +14,6 @@ module.exports = function (api) {
             '@components': './src/components',
             '@constants': './src/constants',
             '@screens': './src/screens',
-            '@constants': './src/constants',
             '@helpers': './src/helpers',
             '@theme': './src/theme',
             '@appTypes': './src/appTypes',

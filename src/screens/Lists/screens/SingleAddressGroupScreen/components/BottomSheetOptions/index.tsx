@@ -11,8 +11,8 @@ import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { BottomSheetRenameList } from '@screens/Lists/screens/SIngleListScreen/components/BottomSheetOptions/components/BottomSheetRenameList';
-import { BottomSheetDeleteList } from '@screens/Lists/screens/SIngleListScreen/components/BottomSheetOptions/components/BottomSheetDeleteList';
+import { BottomSheetRenameList } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetOptions/components/BottomSheetRenameList';
+import { BottomSheetDeleteList } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetOptions/components/BottomSheetDeleteList';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 
 type Props = {
