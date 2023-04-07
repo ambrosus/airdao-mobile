@@ -69,28 +69,30 @@ export const ExploreScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: verticalScale(12) }}>
       <View style={{ flex: 1 }}>
         <SearchAdress
           onContentVisibilityChanged={setSearchAddressContentVisible}
         />
         {searchAddressContentVisible ? null : (
-          <KeyboardDismissingView style={styles.container}>
-            <Spacer value={verticalScale(25)} />
-            <TotalAdresses
-              addressCount={infoData?.totalAddresses || 0}
-              holderCount={infoData?.totalHolders || 0}
-            />
-            <Spacer value={verticalScale(29)} />
-            <Row justifyContent="space-between" alignItems="center">
-              <Text fontFamily="Inter_700Bold" fontWeight="600" fontSize={20}>
-                Popular Wallets
-              </Text>
-              <Button onPress={openFilter}>
-                <FilterIcon />
-              </Button>
-            </Row>
-            <Spacer value={verticalScale(29)} />
+          <View style={styles.container}>
+            <KeyboardDismissingView>
+              <Spacer value={verticalScale(25)} />
+              <TotalAdresses
+                addressCount={infoData?.totalAddresses || 0}
+                holderCount={infoData?.totalHolders || 0}
+              />
+              <Spacer value={verticalScale(29)} />
+              <Row justifyContent="space-between" alignItems="center">
+                <Text fontFamily="Inter_700Bold" fontWeight="600" fontSize={20}>
+                  Popular Wallets
+                </Text>
+                <Button onPress={openFilter}>
+                  <FilterIcon />
+                </Button>
+              </Row>
+              <Spacer value={verticalScale(29)} />
+            </KeyboardDismissingView>
             {accountsLoading ? (
               <Spinner />
             ) : accountsError ? (
@@ -117,7 +119,7 @@ export const ExploreScreen = () => {
                 </>
               )
             )}
-          </KeyboardDismissingView>
+          </View>
         )}
       </View>
     </SafeAreaView>

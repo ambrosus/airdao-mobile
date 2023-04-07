@@ -17,6 +17,9 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
           },
           clear() {
             rnInputRef.current?.clear();
+          },
+          setText(text: string) {
+            rnInputRef.current?.setNativeProps({ text });
           }
         };
       },

@@ -22,4 +22,10 @@ export type InputRef = {
    * cleares the input
    */
   clear: () => void;
+
+  /**
+   *
+   * @param text - sets text of input to given text
+   */
+  setText: (text: string) => void;
 };

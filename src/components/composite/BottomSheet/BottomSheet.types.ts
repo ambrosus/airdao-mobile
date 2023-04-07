@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ViewStyle } from 'react-native';
+import { ViewProps, ViewStyle } from 'react-native';
 
 export interface BottomSheetProps {
   backdropColor?: string;
@@ -7,6 +7,7 @@ export interface BottomSheetProps {
   borderRadius?: ViewStyle['borderRadius'];
   children?: ReactNode;
   isNestedSheet?: boolean;
+  containerStyle?: ViewProps['style'];
 }
 
 export type BottomSheetRef = {

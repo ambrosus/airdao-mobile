@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
 import {
+  Alert,
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
-  View
+  View,
+  useWindowDimensions
 } from 'react-native';
 import {
   Button,
@@ -13,7 +15,11 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { InputWithIcon } from '@components/composite';
+import {
+  BottomSheet,
+  BottomSheetRef,
+  InputWithIcon
+} from '@components/composite';
 import { CloseIcon, ScannerIcon, SearchIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import {
@@ -24,6 +30,8 @@ import {
 import { ExplorerAccountView } from '../ExplorerAccount';
 import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
 import { styles } from './styles';
+import { BarcodeScanner } from '../BarcodeScanner';
+import { etherumAddressRegex } from '@constants/regex';
 
 interface SearchAdressProps {
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
@@ -34,14 +42,17 @@ const LIMIT = 10;
 export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   const { onContentVisibilityChanged = () => null } = props;
   const [address, setAddress] = useState('');
-  const { data: explorerInfo } = useExplorerInfo();
   const initialMount = useRef(true);
   const inputRef = useRef<InputRef>(null);
+  const scannerModalRef = useRef<BottomSheetRef>(null);
+  const { height: WINDOW_HEIGHT } = useWindowDimensions();
+
+  const { data: explorerInfo } = useExplorerInfo();
   const {
     data: account,
     loading,
     error
-  } = useSearchAccount(address, !initialMount.current);
+  } = useSearchAccount(address, !initialMount.current && !!address);
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -78,6 +89,28 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     onContentVisibilityChanged(false);
   };
 
+  const showScanner = () => {
+    scannerModalRef.current?.show();
+  };
+
+  const hideScanner = () => {
+    scannerModalRef.current?.dismiss();
+  };
+  const onQRCodeScanned = (data: string) => {
+    const res = data.match(etherumAddressRegex);
+    if (res && res?.length > 0) {
+      hideScanner();
+      inputRef.current?.setText(res[0]);
+      onContentVisibilityChanged(true);
+      setTimeout(() => {
+        initialMount.current = false;
+        setAddress(res[0]);
+      }, 500);
+    } else {
+      Alert.alert('Invalid QR Code');
+    }
+  };
+
   return (
     <>
       <KeyboardDismissingView>
@@ -91,7 +124,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             style={styles.input}
             iconLeft={<SearchIcon color="#2f2b4399" />}
             iconRight={
-              <Button onPress={clearInput}>
+              <Button onPress={clearInput} style={{ zIndex: 1000 }}>
                 <CloseIcon color="#2f2b4399" scale={0.75} />
               </Button>
             }
@@ -102,13 +135,21 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onSubmitEditing={onInputSubmit}
           />
           <Spacer value={scale(7.5)} horizontal />
-          <Button>
+          <Button onPress={showScanner}>
             <ScannerIcon color="#000000" />
           </Button>
         </Row>
       </KeyboardDismissingView>
+      <BottomSheet height={WINDOW_HEIGHT} ref={scannerModalRef}>
+        <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
+      </BottomSheet>
       {loading && !!address && <Spinner />}
-      {error && !!address && <Text>Could not find the address</Text>}
+      {error && !!address && (
+        <View style={styles.error}>
+          <Text>Could not find the address</Text>
+        </View>
+      )}
+      {/* {!error && !loading && !account} */}
       {account && explorerInfo && (
         <>
           <Spacer value={verticalScale(22)} />

@@ -40,6 +40,7 @@ export function Header(props: HeaderProps): JSX.Element {
         </Text>
       );
     }
+    return title;
   };
 
   const renderContentLeft = () => {

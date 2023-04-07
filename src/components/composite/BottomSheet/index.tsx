@@ -13,7 +13,13 @@ import { KeyboardDismissingView } from '@components/base';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
-    { height, borderRadius = BottomSheetBorderRadius, children, isNestedSheet },
+    {
+      height,
+      borderRadius = BottomSheetBorderRadius,
+      children,
+      isNestedSheet,
+      containerStyle
+    },
     ref
   ) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -36,17 +42,20 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const content = useMemo(
       () => (
         <KeyboardDismissingView
-          style={{
-            height,
-            backgroundColor: '#FFFFFF',
-            borderTopLeftRadius: borderRadius,
-            borderTopRightRadius: borderRadius
-          }}
+          style={[
+            {
+              height,
+              backgroundColor: '#FFFFFF',
+              borderTopLeftRadius: borderRadius,
+              borderTopRightRadius: borderRadius
+            },
+            containerStyle
+          ]}
         >
           {children}
         </KeyboardDismissingView>
       ),
-      [height, borderRadius, children]
+      [height, borderRadius, containerStyle, children]
     );
     const backdropOpacity = isNestedSheet ? 0 : 0.5;
     return (

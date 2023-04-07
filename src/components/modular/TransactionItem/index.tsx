@@ -15,7 +15,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
     <>
       <Row alignItems="center" justifyContent="space-between">
         <Text fontSize={13} fontFamily="Inter_600SemiBold">
-          {transaction._id}
+          {transaction.type}
         </Text>
         <Text fontSize={13} fontFamily="Mersad_600SemiBold">
           {transaction.amount}
