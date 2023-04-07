@@ -18,6 +18,7 @@ export * from './Notification';
 export * from './PlusIcon';
 export * from './RightArrow';
 export * from './Scanner';
+export * from './Search';
 export * from './Settings';
 export * from './Share';
 export * from './Trade';

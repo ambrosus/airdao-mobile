@@ -1,3 +1,5 @@
+import { ExplorerAccountType } from '@appTypes';
+
 export interface ExplorerInfoDTO {
   network: 'production';
   timestamp: number;
@@ -71,4 +73,5 @@ export interface ExplorerAccountDTO {
   role: number;
   timestamp: number;
   totalTx: number;
+  type: ExplorerAccountType;
 }

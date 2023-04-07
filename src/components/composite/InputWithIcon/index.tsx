@@ -1,21 +1,25 @@
 import React, { forwardRef } from 'react';
 import { InputProps } from '@components/base/Input';
-import { Input, InputRef, Row } from '@components/base';
+import { Input, InputRef, Row, Spacer } from '@components/base';
 import { styles } from './styles';
+import { scale } from '@utils/scaling';
 
 interface InputWithIconProps extends InputProps {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
 }
 
-export const InputWithIconProps = forwardRef<InputRef, InputWithIconProps>(
+export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
   (props, ref) => {
-    const { iconLeft, iconRight, ...restProps } = props;
+    const { iconLeft, iconRight, style, ...restProps } = props;
 
     return (
-      <Row style={styles.container}>
+      <Row style={styles.container} alignItems="center">
         {iconLeft}
-        <Input ref={ref} {...restProps} />;{iconRight}
+        <Spacer horizontal value={scale(14.75)} />
+        <Input ref={ref} style={[style, styles.input]} {...restProps} />
+        <Spacer horizontal value={scale(14.75)} />
+        {iconRight}
       </Row>
     );
   }

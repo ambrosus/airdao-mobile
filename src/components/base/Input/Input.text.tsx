@@ -5,7 +5,7 @@ import { InputProps, InputRef } from './Input.types';
 export const TextInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
     const { value, style = {}, onChangeValue, ...restProps } = props;
-    const styles = [style, { color: '#000000' }];
+    const styles = [{ color: '#000000', padding: 0 }, style];
     const rnInputRef = useRef<RNTextInput>(null);
 
     useImperativeHandle(

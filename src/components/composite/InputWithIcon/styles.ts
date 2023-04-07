@@ -1,11 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { shadow } from '@constants/shadow';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
     ...shadow,
     paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(17)
+
+    backgroundColor: '#FFFFFF',
+    borderRadius: moderateScale(82),
+    borderWidth: 1,
+    borderColor: '#2f2b431a'
+  },
+  input: {
+    paddingVertical:
+      Platform.OS === 'android' ? verticalScale(8) : verticalScale(17)
   }
 });
