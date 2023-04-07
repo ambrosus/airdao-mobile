@@ -1,6 +1,7 @@
 export * from './BottomSheet';
 export * from './CheckBox';
 export * from './DatePicker';
+export * from './InputWithIcon';
 export * from './Slider';
 export * from './Header';
 export * from './CircularLogo';

@@ -70,15 +70,13 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
             placeholderTextColor="#2f2b4399"
             style={[styles.bottomSheetInput]}
             value=""
-            onChangeValue={() => {
-              console.log(123);
-            }}
+            onChangeValue={() => null}
           />
           <FloatButton
             title="Track new Address"
             icon={<AddIcon />}
             bottomPadding={0}
-            onPress={() => {}}
+            onPress={() => null}
           />
           <FlatList
             contentContainerStyle={{

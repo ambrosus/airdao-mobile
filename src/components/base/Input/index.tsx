@@ -17,3 +17,5 @@ export const Input = React.forwardRef<InputRef, InputProps>((props, ref) => {
     }
   }
 });
+
+export * from './Input.types';

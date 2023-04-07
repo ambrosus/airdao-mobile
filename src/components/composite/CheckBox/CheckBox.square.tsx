@@ -1,10 +1,10 @@
 import React from 'react';
-import { CheckBoxProps } from './CheckBox.types';
+import { SquareCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
 
-export const CheckBoxSquare = (props: CheckBoxProps): JSX.Element => {
+export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
   const { fillColor, value, onValueChange, ...iconProps } = props;
   const onPress = () => {
     if (typeof onValueChange === 'function') {

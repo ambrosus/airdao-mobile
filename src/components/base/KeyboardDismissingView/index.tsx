@@ -1,6 +1,12 @@
 import React from 'react';
-import { Keyboard, Pressable, ViewProps } from 'react-native';
+import { Keyboard, View, ViewProps } from 'react-native';
 
 export function KeyboardDismissingView(props: ViewProps): JSX.Element {
-  return <Pressable onPress={() => Keyboard.dismiss()} {...props} />;
+  return (
+    <View
+      onStartShouldSetResponder={() => true}
+      onResponderRelease={() => Keyboard.dismiss()}
+      {...props}
+    />
+  );
 }
