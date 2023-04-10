@@ -4,6 +4,7 @@ export * from './BezierChart';
 export * from './PortfolioPerformance';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetNotificationSettings';
+export * from './BottomSheetWatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';

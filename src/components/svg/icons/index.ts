@@ -2,6 +2,7 @@ export * from './Icon.types';
 export * from './Back';
 export * from './BottomSheetSwiper';
 export * from './Check';
+export * from './Checkmark';
 export * from './ChevronLeft';
 export * from './ChevronRight';
 export * from './ChevronDown';

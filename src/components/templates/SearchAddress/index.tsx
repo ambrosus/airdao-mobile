@@ -6,6 +6,10 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { BottomSheetWatchlistAddSuccess } from '../BottomSheetWatchlistAddSuccess';
+import { ExplorerAccountView } from '../ExplorerAccount';
+import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
+import { BarcodeScanner } from '../BarcodeScanner';
 import {
   Button,
   InputRef,
@@ -25,13 +29,12 @@ import { scale, verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
-  useTransactionsOfAccount
-} from '@hooks/query';
-import { ExplorerAccountView } from '../ExplorerAccount';
-import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
-import { styles } from './styles';
-import { BarcodeScanner } from '../BarcodeScanner';
+  useTransactionsOfAccount,
+  useAddToWatchlist
+} from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
+import { FloatButton } from '@components/base/FloatButton';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
@@ -59,6 +62,8 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
+  const { watchlist, addToWatchlist } = useAddToWatchlist();
+  const successModal = useRef<BottomSheetRef>(null);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
@@ -77,7 +82,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     setAddress(e.nativeEvent.text);
   };
 
-  const incrementPage = () => {
+  const loadMoreTransactions = () => {
     if (hasNextPage) {
       fetchNextPage();
     }
@@ -108,6 +113,17 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else {
       Alert.alert('Invalid QR Code');
+    }
+  };
+
+  const trackAddress = async () => {
+    if (account) {
+      if (watchlist.includes(account.address)) {
+        // TODO show flash message
+        return;
+      }
+      await addToWatchlist(account?.address);
+      successModal.current?.show();
     }
   };
 
@@ -149,7 +165,6 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
           <Text>Could not find the address</Text>
         </View>
       )}
-      {/* {!error && !loading && !account} */}
       {account && explorerInfo && (
         <>
           <Spacer value={verticalScale(22)} />
@@ -164,8 +179,20 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
           <Spacer value={verticalScale(24)} />
           <AccountTransactions
             transactions={transactions}
-            onEndReached={incrementPage}
+            onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
+          />
+          <FloatButton
+            title={
+              watchlist.includes(address) ? 'Go to watchlist' : 'Track Address'
+            }
+            icon={<></>}
+            // icon={<TradeIcon />}
+            onPress={trackAddress}
+          />
+          <BottomSheetWatchlistAddSuccess
+            address={address}
+            ref={successModal}
           />
         </>
       )}
