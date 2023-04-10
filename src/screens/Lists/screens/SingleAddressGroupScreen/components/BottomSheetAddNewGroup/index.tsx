@@ -1,37 +1,79 @@
-import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  RefObject,
+  useCallback,
+  useState
+} from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
 import { FlatList, View } from 'react-native';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { CheckBox } from '@components/base/CheckBox';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { randomUUID } from 'expo-crypto';
+import { useLists } from '@contexts/ListsContext';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
+  groupId: string;
 };
 
+const mockedAddresses: ListsOfAddressType[] = [
+  {
+    addressTitle: 'address 01',
+    addressPrice: '$45,000',
+    addressToken: '20 AMB',
+    addressProgress: '3.46%',
+    addressId: randomUUID()
+  },
+  {
+    addressTitle: 'address 02',
+    addressPrice: '$12,000',
+    addressToken: '341 AMB',
+    addressProgress: '1222.46%',
+    addressId: randomUUID()
+  }
+];
+
 export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
-  (props, ref) => {
+  ({ groupId }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const handleOnAddNewAddresses = useLists((v) => v.handleOnAddNewAddresses);
+    const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
+      string[]
+    >([]);
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false);
+    const handleOnAddNewAddress = useCallback(() => {
+      const selectedAddressesForGroup = mockedAddresses.filter((item) =>
+        idsOfSelectedAddresses.includes(item.addressId)
+      );
+      handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
+      localRef.current?.dismiss();
+    }, [groupId, handleOnAddNewAddresses, idsOfSelectedAddresses, localRef]);
 
-    const {
-      params: {
-        group: { listOfAddresses }
-      }
-    } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
+    const handleCheckBoxPress = useCallback(
+      (id: string) => {
+        if (!idsOfSelectedAddresses.includes(id)) {
+          setIdsOfSelectedAddresses([...idsOfSelectedAddresses, id]);
+        } else {
+          const selectedAddresses = idsOfSelectedAddresses.filter(
+            (i) => i !== id
+          );
+          setIdsOfSelectedAddresses(selectedAddresses);
+        }
+      },
+      [idsOfSelectedAddresses]
+    );
 
     return (
       <>
-        <BottomSheet ref={localRef} height={800}>
+        <BottomSheet ref={localRef} height={500}>
           <Header
             title="Add from watchlists"
             titlePosition="center"
@@ -48,12 +90,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
               </Button>
             }
             contentRight={
-              <Button
-                type="base"
-                onPress={() => {
-                  localRef.current?.dismiss();
-                }}
-              >
+              <Button type="base" onPress={handleOnAddNewAddress}>
                 <Text
                   fontFamily="Inter_600SemiBold"
                   color={COLORS.lightGrey}
@@ -74,7 +111,6 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
           />
           <FloatButton
             title="Track new Address"
-            icon={<AddIcon />}
             bottomPadding={0}
             onPress={() => null}
           />
@@ -82,7 +118,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
             contentContainerStyle={{
               paddingBottom: 150
             }}
-            data={listOfAddresses}
+            data={mockedAddresses}
             renderItem={({ item }) => {
               return (
                 <>
@@ -90,8 +126,10 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
                   <View style={styles.flatListContainer}>
                     <View style={styles.whalesTokenContainer}>
                       <CheckBox
-                        onPress={() => setToggleCheckBox(!toggleCheckBox)}
-                        isChecked={toggleCheckBox}
+                        onPress={() => handleCheckBoxPress(item.addressId)}
+                        isChecked={idsOfSelectedAddresses.includes(
+                          item.addressId
+                        )}
                       />
                       <View style={styles.infoContainer}>
                         <Row>

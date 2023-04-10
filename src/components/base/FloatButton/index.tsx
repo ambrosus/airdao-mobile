@@ -6,7 +6,7 @@ import { Text } from '@components/base';
 
 type Props = {
   title: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   onPress: () => void;
   bottomPadding?: number;
 };

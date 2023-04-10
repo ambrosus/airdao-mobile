@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ListsOfAddressGroup } from './components/ListsOfAddressGroup';
 import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { EmptyListsOfGroups } from '@screens/Lists/components/EmptyListsOfGroups';
 import { getDataToSecureStore } from '@helpers/storageHelpers';
 import { useLists } from '@contexts/ListsContext';
 import { FloatButton } from '@components/base/FloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
+import { EmptyListsOfGroups } from '@screens/Lists/components/EmptyListsOfGroups';
+import { ListsOfAddressGroup } from '@screens/Lists/components/ListsOfAddressGroup';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 export const ListsScreen = () => {
   const {
@@ -38,19 +38,21 @@ export const ListsScreen = () => {
         {!listsOfAddressGroup.length ? (
           <EmptyListsOfGroups />
         ) : (
-          <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
+          <>
+            <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
+            <FloatButton
+              title="Create new list"
+              icon={<AddIcon />}
+              onPress={handleOnOpenCreateNewList}
+            />
+            <BottomSheetCreateRenameGroup
+              type="create"
+              handleOnCreateGroup={handleOnCreate}
+              ref={createGroupRef}
+            />
+          </>
         )}
       </SafeAreaView>
-      <FloatButton
-        title="Create new list"
-        icon={<AddIcon />}
-        onPress={handleOnOpenCreateNewList}
-      />
-      <BottomSheetCreateRenameGroup
-        type="create"
-        handleOnCreateGroup={handleOnCreate}
-        ref={createGroupRef}
-      />
     </>
   );
 };

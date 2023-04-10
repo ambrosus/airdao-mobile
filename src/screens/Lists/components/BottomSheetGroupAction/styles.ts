@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16
   },
   text: {
-    alignSelf: 'center'
+    textAlign: 'center'
   },
   bottomSheetRenameButton: {
     marginHorizontal: 16,

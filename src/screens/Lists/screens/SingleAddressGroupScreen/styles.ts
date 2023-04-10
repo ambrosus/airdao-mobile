@@ -50,6 +50,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   buttonContainer: {
-    paddingHorizontal: 10
+    paddingHorizontal: 20
   }
 });

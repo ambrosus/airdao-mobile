@@ -10,11 +10,12 @@ import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { FloatButton } from '@components/base/FloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetAddNewGroup } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetAddNewWallet';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
+import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetSingleAddressAction';
+import { BottomSheetAddNewGroup } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetAddNewGroup';
 
 export const SingleAddressGroupScreen = () => {
   const {
@@ -26,12 +27,17 @@ export const SingleAddressGroupScreen = () => {
   const addNewGroupRef = useRef<BottomSheetRef>(null);
   const groupActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
+  const addressActionRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation();
 
   const { handleOnDelete, handleOnRename, listsOfAddressGroup } = useLists(
     (v) => v
   );
+
+  const handleOpenSingleAddressAction = useCallback(() => {
+    addressActionRef.current?.show();
+  }, []);
 
   const handleDeleteGroupPress = useCallback(
     (selectedGroupId: string) => {
@@ -154,24 +160,28 @@ export const SingleAddressGroupScreen = () => {
                   </Row>
                 </View>
                 <View style={styles.buttonContainer}>
-                  <Button>
+                  <Button type="base" onPress={handleOpenSingleAddressAction}>
                     <OptionsIcon />
                   </Button>
                 </View>
               </View>
+              <BottomSheetSingleAddressAction
+                ref={addressActionRef}
+                addressGroupId={groupId}
+                addressTitle={item.addressTitle}
+              />
             </View>
           );
         }}
       />
       <FloatButton
-        title="Add Wallet"
+        title="Add Address"
         icon={<AddIcon />}
         bottomPadding={0}
         onPress={handleOnOpenAddNewGroup}
       />
-      <BottomSheetAddNewGroup ref={addNewGroupRef} />
+      <BottomSheetAddNewGroup ref={addNewGroupRef} groupId={groupId} />
       <BottomSheetGroupAction
-        type="create"
         item={selectedList}
         ref={groupActionRef}
         handleOnDeleteItem={handleDeleteGroupPress}

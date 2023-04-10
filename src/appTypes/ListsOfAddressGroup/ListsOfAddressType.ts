@@ -3,4 +3,5 @@ export type ListsOfAddressType = {
   addressPrice: string;
   addressToken: string;
   addressProgress: string;
+  addressId: string;
 };
