@@ -6,15 +6,15 @@ import React, {
   useState
 } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/components/BottomSheetSingleAddressAction/styles';
 import { CloseIcon } from '@components/svg/icons';
+import { styles } from './styles';
 import { COLORS } from '@constants/colors';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { CheckBox } from '@components/base/CheckBox';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/ListOfAddressesGroupItem';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -84,36 +84,13 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
               (address) => address.addressId === pressedAddress.addressId
             );
             return (
-              <View style={styles.container}>
-                <View style={styles.itemInfo}>
-                  <Text
-                    fontFamily="Inter_600SemiBold"
-                    fontSize={17}
-                    color={COLORS.black}
-                    style={styles.itemTitle}
-                  >
-                    {item.groupTitle}
-                  </Text>
-                  <Spacer value={4} />
-                  <View style={styles.itemSubInfo}>
-                    <Text fontFamily="Inter_400Regular" fontSize={16}>
-                      {isAddressAlreadyInList
-                        ? `${pressedAddress.addressTitle} is already on this list`
-                        : `${item.addressesCount} Addresses`}
-                    </Text>
-                  </View>
-                </View>
-                <CheckBox
-                  onPress={() => {
-                    if (!isAddressAlreadyInList)
-                      handleOnCheckboxPress(item.groupId);
-                  }}
-                  isChecked={
-                    isAddressAlreadyInList ||
-                    idsOfSelectedGroups.includes(item.groupId)
-                  }
-                />
-              </View>
+              <ListOfAddressesGroupItem
+                handleOnCheckboxPress={handleOnCheckboxPress}
+                idsOfSelectedGroups={idsOfSelectedGroups}
+                item={item}
+                isAddressAlreadyInList={isAddressAlreadyInList}
+                pressedAddress={pressedAddress}
+              />
             );
           }}
         />

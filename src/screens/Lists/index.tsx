@@ -18,9 +18,7 @@ export const ListsScreen = () => {
     handleOnCreate,
     createGroupRef
   } = useLists((v) => v);
-  const handleOnOpenCreateNewList = useCallback(() => {
-    createGroupRef.current?.show();
-  }, [createGroupRef]);
+
   useEffect(() => {
     const getDataGroups = async () => {
       const lists = await getDataToSecureStore('UserGroupsOfAddresses');
@@ -28,6 +26,10 @@ export const ListsScreen = () => {
     };
     getDataGroups();
   }, [setListsOfAddressGroup]);
+
+  const handleOnOpenCreateNewList = useCallback(() => {
+    createGroupRef.current?.show();
+  }, [createGroupRef]);
 
   return (
     <>
@@ -40,15 +42,15 @@ export const ListsScreen = () => {
         ) : (
           <>
             <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
-            <FloatButton
-              title="Create new list"
-              icon={<AddIcon />}
-              onPress={handleOnOpenCreateNewList}
-            />
             <BottomSheetCreateRenameGroup
               type="create"
               handleOnCreateGroup={handleOnCreate}
               ref={createGroupRef}
+            />
+            <FloatButton
+              title="Create new list"
+              icon={<AddIcon />}
+              onPress={handleOnOpenCreateNewList}
             />
           </>
         )}
