@@ -38,6 +38,20 @@ const mockedAddresses: ListsOfAddressType[] = [
     addressToken: '341 AMB',
     addressProgress: '1222.46%',
     addressId: randomUUID()
+  },
+  {
+    addressTitle: 'address 03',
+    addressPrice: '$188,000',
+    addressToken: '78 AMB',
+    addressProgress: '22.9%',
+    addressId: randomUUID()
+  },
+  {
+    addressTitle: 'address 04',
+    addressPrice: '$5,872',
+    addressToken: '200 AMB',
+    addressProgress: '4.56%',
+    addressId: randomUUID()
   }
 ];
 
@@ -73,7 +87,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
 
     return (
       <>
-        <BottomSheet ref={localRef} height={500}>
+        <BottomSheet ref={localRef} height={800}>
           <Header
             title="Add from watchlists"
             titlePosition="center"
@@ -131,7 +145,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
                           item.addressId
                         )}
                       />
-                      <View style={styles.infoContainer}>
+                      <View style={styles.addressTitleContainer}>
                         <Row>
                           <Text
                             fontFamily="Inter_600SemiBold"
@@ -141,6 +155,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
                             {item.addressTitle}
                           </Text>
                           <Text
+                            style={styles.locationInfo}
                             fontFamily="Inter_600SemiBold"
                             fontSize={13}
                             color={COLORS.thinGrey}

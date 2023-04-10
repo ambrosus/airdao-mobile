@@ -2,7 +2,7 @@ import React, {
   ForwardedRef,
   forwardRef,
   RefObject,
-  useMemo,
+  useCallback,
   useState
 } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -13,34 +13,35 @@ import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { FlatList, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { CheckBox } from '@components/base/CheckBox';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  addressGroupId: string;
-  addressTitle: string;
+  address: ListsOfAddressType;
 };
 
 export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
-  ({ addressTitle }, ref) => {
-    const {
-      params: {
-        group: { groupId }
-      }
-    } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
-
+  ({ address: pressedAddress }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const { listsOfAddressGroup, handleOnAddressMove } = useLists((v) => v);
 
-    const { listsOfAddressGroup } = useLists((v) => v);
-    const idOfSelectedAddressGroup = useMemo(() => {
-      return listsOfAddressGroup.filter((item) => {
-        return item.groupId === groupId;
-      })[0].groupId;
-    }, [listsOfAddressGroup, groupId]);
+    const [idsOfSelectedGroups, setIdsOfSelectedGroups] = useState<string[]>(
+      []
+    );
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false);
+    const handleOnCheckboxPress = useCallback(
+      (selectedAddressId: string) => {
+        if (idsOfSelectedGroups.includes(selectedAddressId)) {
+          setIdsOfSelectedGroups(
+            idsOfSelectedGroups.filter((elem) => elem !== selectedAddressId)
+          );
+        } else {
+          setIdsOfSelectedGroups((curr) => [...curr, selectedAddressId]);
+        }
+      },
+      [idsOfSelectedGroups]
+    );
 
     return (
       <BottomSheet height={850} ref={localRef}>
@@ -55,7 +56,14 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
             </Button>
           }
           contentRight={
-            <Button type="base" onPress={() => localRef.current?.dismiss()}>
+            <Button
+              disabled={!idsOfSelectedGroups.length}
+              type="base"
+              onPress={() => {
+                handleOnAddressMove(idsOfSelectedGroups, pressedAddress);
+                localRef.current?.dismiss();
+              }}
+            >
               <Text
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.black}
@@ -72,6 +80,9 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
           }}
           data={listsOfAddressGroup}
           renderItem={({ item }) => {
+            const isAddressAlreadyInList = item.listOfAddresses.some(
+              (address) => address.addressId === pressedAddress.addressId
+            );
             return (
               <View style={styles.container}>
                 <View style={styles.itemInfo}>
@@ -86,15 +97,21 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
                   <Spacer value={4} />
                   <View style={styles.itemSubInfo}>
                     <Text fontFamily="Inter_400Regular" fontSize={16}>
-                      {idOfSelectedAddressGroup === item.groupId
-                        ? `${addressTitle} is already on this list`
+                      {isAddressAlreadyInList
+                        ? `${pressedAddress.addressTitle} is already on this list`
                         : `${item.addressesCount} Addresses`}
                     </Text>
                   </View>
                 </View>
                 <CheckBox
-                  onPress={() => setToggleCheckBox(!toggleCheckBox)}
-                  isChecked={toggleCheckBox}
+                  onPress={() => {
+                    if (!isAddressAlreadyInList)
+                      handleOnCheckboxPress(item.groupId);
+                  }}
+                  isChecked={
+                    isAddressAlreadyInList ||
+                    idsOfSelectedGroups.includes(item.groupId)
+                  }
                 />
               </View>
             );

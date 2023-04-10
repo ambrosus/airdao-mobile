@@ -44,12 +44,18 @@ export const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'column'
   },
+  contentContainer: {
+    alignItems: 'flex-end'
+  },
   priceProgressContainer: {
-    justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row'
   },
   buttonContainer: {
-    paddingHorizontal: 20
+    paddingRight: 20
+  },
+  actionButton: {
+    width: 25,
+    alignItems: 'flex-end'
   }
 });

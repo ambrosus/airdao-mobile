@@ -25,13 +25,21 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  addressTitleContainer: {
+    alignItems: 'flex-start',
+    paddingLeft: 16
+  },
+  locationInfo: {
+    paddingLeft: 5
+  },
   whalesTokenContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row'
   },
   infoContainer: {
     flexDirection: 'column',
-    paddingLeft: 10
+    paddingLeft: 10,
+    alignItems: 'flex-end'
   },
   priceProgressContainer: {
     alignItems: 'flex-end'

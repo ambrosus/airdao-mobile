@@ -48,9 +48,11 @@ export const SingleAddressGroupScreen = () => {
   );
 
   const selectedList = useMemo(
-    () => listsOfAddressGroup.filter((group) => group.groupId === groupId)[0],
+    () =>
+      listsOfAddressGroup.filter((group) => group.groupId === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
   );
+
   const { groupTokens, listOfAddresses, addressesCount, groupTitle } =
     selectedList;
 
@@ -82,7 +84,7 @@ export const SingleAddressGroupScreen = () => {
             </Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
-              <Text style={styles.idCount}>{addressesCount}</Text>
+              <Text style={styles.idCount}>{addressesCount} Addresses</Text>
               <Text style={styles.tokensCount}>{groupTokens}</Text>
             </View>
           </View>
@@ -115,62 +117,68 @@ export const SingleAddressGroupScreen = () => {
         data={listOfAddresses}
         renderItem={({ item }) => {
           return (
-            <View style={styles.flatListContainer}>
-              <View style={styles.whalesTokenContainer}>
-                <View style={styles.infoContainer}>
-                  <Row>
+            <>
+              <View style={styles.flatListContainer}>
+                <View style={styles.whalesTokenContainer}>
+                  <View style={styles.infoContainer}>
+                    <Row>
+                      <Text
+                        fontFamily="Inter_600SemiBold"
+                        fontSize={13}
+                        color={COLORS.black}
+                      >
+                        {item.addressTitle}
+                      </Text>
+                    </Row>
+                    <Spacer value={4} />
                     <Text
-                      fontFamily="Inter_600SemiBold"
+                      fontFamily="Mersad_600SemiBold"
+                      fontSize={13}
+                      color={COLORS.thinGrey}
+                    >
+                      {item.addressToken}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.priceProgressContainer}>
+                  <View style={styles.contentContainer}>
+                    <Text
+                      fontFamily="Mersad_600SemiBold"
                       fontSize={13}
                       color={COLORS.black}
                     >
-                      {item.addressTitle}
+                      {item.addressPrice}
                     </Text>
-                  </Row>
-                  <Spacer value={4} />
-                  <Text
-                    fontFamily="Mersad_600SemiBold"
-                    fontSize={13}
-                    color={COLORS.thinGrey}
-                  >
-                    {item.addressToken}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.priceProgressContainer}>
-                <View style={styles.infoContainer}>
-                  <Text
-                    fontFamily="Mersad_600SemiBold"
-                    fontSize={13}
-                    color={COLORS.black}
-                  >
-                    {item.addressPrice}
-                  </Text>
-                  <Spacer value={4} />
-                  <Row justifyContent="space-between" alignItems="center">
-                    <ProgressArrowIcon />
-                    <Text
-                      fontFamily="Mersad_600SemiBold"
-                      fontSize={12}
-                      color={COLORS.thinGrey}
-                      style={styles.progressIcon}
+                    <Spacer value={4} />
+                    <Row justifyContent="space-between" alignItems="center">
+                      <ProgressArrowIcon />
+                      <Text
+                        fontFamily="Mersad_600SemiBold"
+                        fontSize={12}
+                        color={COLORS.thinGrey}
+                        style={styles.progressIcon}
+                      >
+                        {item.addressProgress}
+                      </Text>
+                    </Row>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <Button
+                      style={styles.actionButton}
+                      type="base"
+                      onPress={handleOpenSingleAddressAction}
                     >
-                      {item.addressProgress}
-                    </Text>
-                  </Row>
+                      <OptionsIcon />
+                    </Button>
+                  </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                  <Button type="base" onPress={handleOpenSingleAddressAction}>
-                    <OptionsIcon />
-                  </Button>
-                </View>
+                <BottomSheetSingleAddressAction
+                  ref={addressActionRef}
+                  address={item}
+                />
               </View>
-              <BottomSheetSingleAddressAction
-                ref={addressActionRef}
-                addressGroupId={groupId}
-                addressTitle={item.addressTitle}
-              />
-            </View>
+              <Spacer value={32} />
+            </>
           );
         }}
       />

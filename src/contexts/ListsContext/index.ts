@@ -79,6 +79,7 @@ const ListsContext = () => {
         if (group.groupId === groupId) {
           return {
             ...group,
+            addressesCount: group.addressesCount + 1,
             listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
           };
         }
@@ -93,6 +94,38 @@ const ListsContext = () => {
     [listsOfAddressGroup]
   );
 
+  const handleOnAddressMove = async (
+    selectedGroupsIds: string[],
+    selectedAddress: ListsOfAddressType
+  ) => {
+    const editedGroups = listsOfAddressGroup.map((group) => {
+      if (selectedGroupsIds.includes(group.groupId)) {
+        return {
+          ...group,
+          addressesCount: group.addressesCount + 1,
+          listOfAddresses: [...group.listOfAddresses, selectedAddress]
+        };
+      }
+
+      setListsOfAddressGroup(
+        listsOfAddressGroup.filter((item) => {
+          if (item.groupId === group.groupId) {
+            item.listOfAddresses.filter(
+              (element) => element.addressId !== selectedAddress.addressId
+            );
+          }
+        })
+      );
+      return group;
+    });
+
+    await setDataToSecureStore(
+      'UserGroupsOfAddresses',
+      JSON.stringify(editedGroups)
+    );
+    setListsOfAddressGroup(editedGroups);
+  };
+
   return {
     listsOfAddressGroup,
     setListsOfAddressGroup,
@@ -100,7 +133,8 @@ const ListsContext = () => {
     handleOnCreate,
     handleOnRename,
     createGroupRef,
-    handleOnAddNewAddresses
+    handleOnAddNewAddresses,
+    handleOnAddressMove
   };
 };
 
