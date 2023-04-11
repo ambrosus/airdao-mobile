@@ -14,6 +14,7 @@ import {
 } from '@appTypes/ListsOfAddressGroup';
 import { useFullscreenModalHeight } from '@hooks';
 import { styles } from './styles';
+import { Cache, CacheKey } from '@utils/cache';
 
 interface EditAddressProps {
   address: ListsOfAddressType;
@@ -44,8 +45,14 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
     addToListModal.current?.show();
   };
 
-  const saveNewLists = () => {
+  const hideAddToListModal = () => {
+    addToListModal.current?.dismiss();
+  };
+
+  const saveNewLists = async () => {
     setListsOfAddressGroup(localLists);
+    await Cache.setItem(CacheKey.AddressLists, localLists);
+    hideAddToListModal();
   };
 
   const onPressListItem = (list: ListsOfAddressesGroupType) => {
