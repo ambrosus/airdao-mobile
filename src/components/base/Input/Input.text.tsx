@@ -1,11 +1,13 @@
 import React, { useImperativeHandle, useRef } from 'react';
-import { TextInput as RNTextInput } from 'react-native';
+import { TextInput as RNTextInput, StyleSheet } from 'react-native';
 import { InputProps, InputRef } from './Input.types';
+import { shadow } from '@constants/shadow';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 export const TextInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
     const { value, style = {}, onChangeValue, ...restProps } = props;
-    const styles = [{ color: '#000000', padding: 0 }, style];
+    const styles = [defaultStyles.container, style];
     const rnInputRef = useRef<RNTextInput>(null);
 
     useImperativeHandle(
@@ -37,3 +39,15 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
     );
   }
 );
+
+const defaultStyles = StyleSheet.create({
+  container: {
+    ...shadow,
+    backgroundColor: '#FFFFFF',
+    borderRadius: moderateScale(82),
+    color: '#000000',
+    padding: 0,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16)
+  }
+});
