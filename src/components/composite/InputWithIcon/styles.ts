@@ -13,6 +13,8 @@ export const styles = StyleSheet.create({
     borderColor: '#2f2b431a'
   },
   input: {
+    borderRadius: 0,
+    shadowColor: 'transparent',
     paddingVertical:
       Platform.OS === 'android' ? verticalScale(8) : verticalScale(17)
   }
