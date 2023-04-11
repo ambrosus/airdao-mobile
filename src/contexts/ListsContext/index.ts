@@ -4,17 +4,9 @@ import {
   ListsOfAddressType,
   ListsOfAddressesGroupType
 } from '@appTypes/ListsOfAddressGroup';
-import * as crypto from 'expo-crypto';
 import { setDataToSecureStore } from '@helpers/storageHelpers';
 import { BottomSheetRef } from '@components/composite';
-
-const defaultWalletValues: ListsOfAddressType = {
-  addressTitle: 'address 01',
-  addressPrice: '$45,000',
-  addressToken: '20 AMB',
-  addressProgress: '3.46%'
-};
-
+import { randomUUID } from 'expo-crypto';
 const ListsContext = () => {
   // save lists locally
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
@@ -45,8 +37,8 @@ const ListsContext = () => {
         addressesCount: 0,
         groupTitle: value,
         groupTokens: 2000,
-        listOfAddresses: [defaultWalletValues],
-        groupId: crypto.getRandomBytes(5).join('')
+        listOfAddresses: [],
+        groupId: randomUUID()
       };
       const newGroupsOfAddresses = [
         ...listsOfAddressGroup,
@@ -80,13 +72,69 @@ const ListsContext = () => {
     [listsOfAddressGroup]
   );
 
+  // handle function for adding address to group
+  const handleOnAddNewAddresses = useCallback(
+    async (selectedAddresses: ListsOfAddressType[], groupId: string) => {
+      const editedGroupsOfAddresses = listsOfAddressGroup.map((group) => {
+        if (group.groupId === groupId) {
+          return {
+            ...group,
+            addressesCount: group.addressesCount + 1,
+            listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
+          };
+        }
+        return group;
+      });
+      setListsOfAddressGroup(editedGroupsOfAddresses);
+      await setDataToSecureStore(
+        'UserGroupsOfAddresses',
+        JSON.stringify(editedGroupsOfAddresses)
+      );
+    },
+    [listsOfAddressGroup]
+  );
+
+  const handleOnAddressMove = async (
+    selectedGroupsIds: string[],
+    selectedAddress: ListsOfAddressType
+  ) => {
+    const editedGroups = listsOfAddressGroup.map((group) => {
+      if (selectedGroupsIds.includes(group.groupId)) {
+        return {
+          ...group,
+          addressesCount: group.addressesCount + 1,
+          listOfAddresses: [...group.listOfAddresses, selectedAddress]
+        };
+      }
+
+      setListsOfAddressGroup(
+        listsOfAddressGroup.filter((item) => {
+          if (item.groupId === group.groupId) {
+            item.listOfAddresses.filter(
+              (element) => element.addressId !== selectedAddress.addressId
+            );
+          }
+        })
+      );
+      return group;
+    });
+
+    await setDataToSecureStore(
+      'UserGroupsOfAddresses',
+      JSON.stringify(editedGroups)
+    );
+    setListsOfAddressGroup(editedGroups);
+  };
+
   return {
     listsOfAddressGroup,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,
     handleOnRename,
-    createGroupRef
+    createGroupRef,
+    handleOnAddNewAddresses,
+    handleOnAddressMove
   };
 };
 

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -15,14 +15,11 @@ type Props = {
   handleOnDeleteItem: (listId: string) => void;
   item: ListsOfAddressesGroupType;
   handleOnRenameButtonPress: () => void;
-  type?: 'rename' | 'create';
 };
-//              Are you sure you want to remove {item.groupTitle} from lists?
+
 export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
-  (
-    { handleOnDeleteItem, item, handleOnRenameButtonPress, type = 'rename' },
-    ref
-  ) => {
+  ({ handleOnDeleteItem, item, handleOnRenameButtonPress }, ref) => {
+    const [status, setStatus] = useState('rename');
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
       <BottomSheet height={300} ref={localRef}>
@@ -36,7 +33,7 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          {type === 'rename'
+          {status === 'rename'
             ? `Edit ${item.groupTitle}`
             : `Are you sure want to remove selected Addresses from ${item.groupTitle}?`}
         </Text>
@@ -52,7 +49,7 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
             fontSize={16}
             color={COLORS.white}
           >
-            {type ? 'Rename List' : 'Remove'}
+            {status ? 'Rename List' : 'Remove'}
           </Text>
         </Button>
         <Spacer value={24} />
@@ -60,8 +57,11 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
           type="base"
           style={styles.bottomSheetDeleteButton}
           onPress={() => {
-            handleOnDeleteItem(item.groupId);
-            // navigation.goBack();
+            if (status === 'delete') {
+              handleOnDeleteItem(item.groupId);
+            } else {
+              setStatus('delete');
+            }
           }}
         >
           <Text

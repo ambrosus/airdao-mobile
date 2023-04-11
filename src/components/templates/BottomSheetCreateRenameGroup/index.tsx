@@ -83,7 +83,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
             value={localGroupName}
             onChangeValue={(value) => setLocalGroupName(value)}
             type="text"
-            placeholder={'Enter list name'}
+            placeholder="Enter list name"
             placeholderTextColor="black"
             style={[styles.bottomSheetInput]}
           />
