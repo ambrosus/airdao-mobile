@@ -6,7 +6,7 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
-import { BottomSheetWatchlistAddSuccess } from '../BottomSheetWatchlistAddSuccess';
+import { WatchlistAddSuccess } from '../WatchlistAddSuccess';
 import { ExplorerAccountView } from '../ExplorerAccount';
 import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
 import { BarcodeScanner } from '../BarcodeScanner';
@@ -35,6 +35,7 @@ import {
 import { etherumAddressRegex } from '@constants/regex';
 import { FloatButton } from '@components/base/FloatButton';
 import { styles } from './styles';
+import { BottomSheetWithHeader } from '@components/modular';
 
 interface SearchAdressProps {
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
@@ -119,12 +120,20 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   const trackAddress = async () => {
     if (account) {
       if (watchlist.includes(account.address)) {
-        // TODO show flash message
+        // TODO navigate to watchlist
         return;
       }
       await addToWatchlist(account?.address);
-      successModal.current?.show();
+      showSuccessModal();
     }
+  };
+
+  const hideSuccessModal = () => {
+    successModal.current?.dismiss();
+  };
+
+  const showSuccessModal = () => {
+    successModal.current?.show();
   };
 
   return (
@@ -151,7 +160,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onSubmitEditing={onInputSubmit}
           />
           <Spacer value={scale(7.5)} horizontal />
-          <Button onPress={showScanner}>
+          <Button onPress={showScanner} type="circular" style={styles.scanner}>
             <ScannerIcon color="#000000" />
           </Button>
         </Row>
@@ -166,7 +175,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         </View>
       )}
       {account && explorerInfo && (
-        <>
+        <View style={{ paddingBottom: '20%', flex: 1 }}>
           <Spacer value={verticalScale(22)} />
           <KeyboardDismissingView>
             <ExplorerAccountView
@@ -189,16 +198,19 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             icon={<></>}
             onPress={trackAddress}
           />
-          <BottomSheetWatchlistAddSuccess
-            ref={successModal}
-            address={{
-              addressTitle: '',
-              addressPrice: '',
-              addressToken: address,
-              addressProgress: ''
-            }}
-          />
-        </>
+          <BottomSheetWithHeader ref={successModal} fullscreen title="">
+            <WatchlistAddSuccess
+              address={{
+                addressTitle: '',
+                addressPrice: '',
+                addressToken: '',
+                addressProgress: '',
+                addressId: address
+              }}
+              onDone={hideSuccessModal}
+            />
+          </BottomSheetWithHeader>
+        </View>
       )}
     </>
   );

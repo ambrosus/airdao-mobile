@@ -21,7 +21,7 @@ export const AddAddressToList = (props: AddAddressToListProps): JSX.Element => {
   const renderList = (args: ListRenderItemInfo<ListsOfAddressesGroupType>) => {
     const { item: list } = args;
     const selected =
-      list.listOfAddresses.indexOfItem(address, 'addressToken') > -1;
+      list.listOfAddresses.indexOfItem(address, 'addressId') > -1;
     const onPress = () => {
       onPressList(list);
     };

@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useMemo, useReducer, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
@@ -13,8 +13,8 @@ import {
   ListsOfAddressesGroupType
 } from '@appTypes/ListsOfAddressGroup';
 import { useFullscreenModalHeight } from '@hooks';
-import { styles } from './styles';
 import { Cache, CacheKey } from '@utils/cache';
+import { styles } from './styles';
 
 interface EditAddressProps {
   address: ListsOfAddressType;
@@ -35,6 +35,16 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
     (state) => !state,
     false
   );
+
+  const selectedLists = listsOfAddressGroup.filter((list) =>
+    list.listOfAddresses.indexOfItem(address, 'addressId')
+  );
+
+  const selectedListText = useMemo(() => {
+    if (selectedLists.length === 0) return 'None';
+    if (selectedLists.length === 1) return selectedLists[0].groupTitle;
+    return `${selectedLists.length} lists`;
+  }, [selectedLists]);
 
   const addToListModal = useRef<BottomSheetRef>(null);
   const showCreateNewListModal = () => {
@@ -62,10 +72,10 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
     if (!listFromLocalLists) return;
     const idx = listFromLocalLists.listOfAddresses.indexOfItem(
       address,
-      'addressToken'
+      'addressId'
     );
     if (idx > -1) {
-      listFromLocalLists.listOfAddresses.removeItem(address, 'addressToken');
+      listFromLocalLists.listOfAddresses.removeItem(address, 'addressId');
       listFromLocalLists.addressesCount--;
     } else {
       listFromLocalLists.listOfAddresses.push(address);
@@ -77,7 +87,7 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text title color="#222222">
+        <Text title color="#222222" fontFamily="Inter_600SemiBold">
           Address name
         </Text>
         <Spacer value={verticalScale(8)} />
@@ -97,31 +107,37 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
               color="#FFFFFF"
             />
             <Spacer horizontal value={12} />
-            <Text title color="#162C5D">
+            <Text title color="#162C5D" fontFamily="Inter_600SemiBold">
               This is my peronal Address
             </Text>
           </Row>
         </Button>
         <Spacer value={12} />
-        <Text fontWeight="400" color="#646464" fontSize={12}>
+        <Text
+          fontWeight="400"
+          color="#646464"
+          fontSize={12}
+          fontFamily="Inter_600SemiBold"
+        >
           {'Personal Addresses will be added to “My Addresses” by default'}
         </Text>
         <Spacer value={verticalScale(64)} />
-        <Text title fontSize={20}>
+        <Text fontSize={20} fontFamily="Inter_700Bold">
           Add to Lists
         </Text>
         <Spacer value={verticalScale(12)} />
         <Button onPress={showAddToListModal}>
           <Row alignItems="center" justifyContent="space-between">
-            <Text title>Select list</Text>
+            <Text title fontFamily="Inter_600SemiBold">
+              Select list
+            </Text>
             <Row alignItems="center">
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={13}
                 color="#828282"
               >
-                None
-                {/* TODO */}
+                {selectedListText}
               </Text>
               <Spacer horizontal value={scale(12)} />
               <ChevronRightIcon color="#828282" />
@@ -136,7 +152,10 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
         >
           <Row alignItems="center">
             <PlusIcon color="#000000" />
-            <Text title> Create new list</Text>
+            <Text title fontFamily="Inter_600SemiBold">
+              {'  '}
+              Create new list
+            </Text>
           </Row>
         </Button>
       </View>
