@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { ViewProps, ViewStyle } from 'react-native';
+import { ModalProps } from 'react-native-modal';
 
 export interface BottomSheetProps {
   backdropColor?: string;
@@ -8,6 +9,8 @@ export interface BottomSheetProps {
   children?: ReactNode;
   isNestedSheet?: boolean;
   containerStyle?: ViewProps['style'];
+  avoidKeyboard?: ModalProps['avoidKeyboard'];
+  fullscreen?: boolean;
 }
 
 export type BottomSheetRef = {

@@ -4,12 +4,14 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { KeyboardDismissingView } from '@components/base';
+import { useFullscreenModalHeight } from '@hooks';
+import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -18,11 +20,15 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       borderRadius = BottomSheetBorderRadius,
       children,
       isNestedSheet,
-      containerStyle
+      containerStyle,
+      avoidKeyboard = true,
+      fullscreen = false
     },
     ref
   ) => {
     const [isVisible, setIsVisible] = useState(false);
+    const fullscreenModalHeight = useFullscreenModalHeight();
+    const keyboardHeight = useKeyboardHeight();
 
     const show = useCallback(() => {
       setIsVisible(true);
@@ -44,7 +50,14 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         <KeyboardDismissingView
           style={[
             {
-              height,
+              height: fullscreen
+                ? fullscreenModalHeight -
+                  (avoidKeyboard
+                    ? 0
+                    : Platform.OS === 'ios'
+                    ? 0
+                    : keyboardHeight)
+                : height,
               backgroundColor: '#FFFFFF',
               borderTopLeftRadius: borderRadius,
               borderTopRightRadius: borderRadius
@@ -55,12 +68,23 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
           {children}
         </KeyboardDismissingView>
       ),
-      [height, borderRadius, containerStyle, children]
+      [
+        fullscreen,
+        fullscreenModalHeight,
+        avoidKeyboard,
+        keyboardHeight,
+        height,
+        borderRadius,
+        containerStyle,
+        children
+      ]
     );
+
     const backdropOpacity = isNestedSheet ? 0 : 0.5;
+
     return (
       <Modal
-        avoidKeyboard
+        avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
         swipeDirection="down"
