@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   input: {
     borderRadius: 0,
     shadowColor: 'transparent',
+    paddingHorizontal: 0,
     paddingVertical:
       Platform.OS === 'android' ? verticalScale(8) : verticalScale(17)
   }
