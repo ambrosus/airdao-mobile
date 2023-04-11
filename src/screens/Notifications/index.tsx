@@ -119,7 +119,6 @@ export const Notifications = (): JSX.Element => {
   };
 
   const showSettingsModal = () => {
-    // TODO
     settingsModal.current?.show();
   };
 

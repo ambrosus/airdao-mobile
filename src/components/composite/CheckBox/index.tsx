@@ -6,7 +6,6 @@ import { CheckBoxCircular } from './CheckBox.circular';
 export const CheckBox = (props: CheckBoxFactoryProps): JSX.Element => {
   const { type, ...checkBoxProps } = props;
 
-  // TODO implement circular CheckBox if needed
   switch (type) {
     case 'circular': {
       return <CheckBoxCircular {...checkBoxProps} />;

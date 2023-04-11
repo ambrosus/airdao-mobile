@@ -17,7 +17,6 @@ export function WalletHeader(): JSX.Element {
   };
 
   const navigateToNotifications = () => {
-    // TODO
     navigation.navigate('Notifications');
   };
 

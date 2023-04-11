@@ -46,12 +46,10 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   const chartData: Point[] = [];
 
   const onShareBalancePress = () => {
-    // TODO
     shareBottomSheet.current?.show();
   };
 
   const navigateToStats = () => {
-    // TODO
     navigation.navigate('AMBMarketScreen');
   };
 

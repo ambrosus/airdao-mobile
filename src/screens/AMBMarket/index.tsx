@@ -29,7 +29,6 @@ export function AMBMarket(): JSX.Element {
   const shareBottomSheet = useRef<BottomSheetRef>(null);
 
   const onSharePress = () => {
-    // TODO
     if (!data) return;
     shareBottomSheet.current?.show();
   };
@@ -39,7 +38,6 @@ export function AMBMarket(): JSX.Element {
   };
 
   const onTradePress = () => {
-    // TODO
     tradeBottomSheet.current?.show();
   };
 
