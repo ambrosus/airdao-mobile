@@ -1,20 +1,18 @@
-import React, { forwardRef } from 'react';
-import { View, useWindowDimensions } from 'react-native';
-import {
-  BottomSheet,
-  BottomSheetProps,
-  BottomSheetRef
-} from '@components/composite';
-import { styles } from './styles';
-import { Checkmark, CloseIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import React, { forwardRef, useRef } from 'react';
+import { View } from 'react-native';
+import { BottomSheetProps, BottomSheetRef } from '@components/composite';
+import { Checkmark } from '@components/svg/icons';
+import { BottomSheetWithHeader } from '@components/modular';
 import { Button, Spacer, Text } from '@components/base';
+import { EditAddress } from '../EditAddress';
+import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useForwardedRef } from '@hooks/useForwardedRef';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { styles } from './styles';
 
 interface BottomSheetWatchlistAddSuccessProps extends BottomSheetProps {
-  address: string;
+  address: ListsOfAddressType;
 }
 
 export const BottomSheetWatchlistAddSuccess = forwardRef<
@@ -23,23 +21,24 @@ export const BottomSheetWatchlistAddSuccess = forwardRef<
 >((props, ref) => {
   const { address, ...bottomSheetProps } = props;
   const localRef = useForwardedRef<BottomSheetRef>(ref);
-  const { height: WINDOW_HEIGHT } = useWindowDimensions();
-  const { top: topInset } = useSafeAreaInsets();
+  const editModal = useRef<BottomSheetRef>(null);
 
-  const dismiss = () => {
+  const dismissWatchlist = () => {
     localRef.current?.dismiss();
   };
 
+  const showEdit = () => {
+    editModal.current?.show();
+  };
+
   return (
-    <BottomSheet
+    <BottomSheetWithHeader
       ref={localRef}
-      height={WINDOW_HEIGHT - topInset}
+      fullscreen
       {...bottomSheetProps}
+      title=""
     >
       <View style={styles.container}>
-        <Button onPress={dismiss} style={styles.closeButton}>
-          <CloseIcon />
-        </Button>
         <View style={styles.content}>
           <Checkmark
             size={scale(96)}
@@ -51,7 +50,7 @@ export const BottomSheetWatchlistAddSuccess = forwardRef<
           <Text align="center" fontSize={17} fontWeight="600" color="#000000">
             You are on a roll!
             {`\n${StringUtils.formatAddress(
-              address,
+              address.addressToken,
               11,
               5
             )} has been added to your watchlist.`}
@@ -65,6 +64,7 @@ export const BottomSheetWatchlistAddSuccess = forwardRef<
         </View>
         <View style={styles.buttons}>
           <Button
+            onPress={showEdit}
             type="circular"
             style={{ ...styles.button, backgroundColor: '#676B73' }}
           >
@@ -74,14 +74,22 @@ export const BottomSheetWatchlistAddSuccess = forwardRef<
           </Button>
           <Spacer value={verticalScale(24)} />
           <Button
-            onPress={dismiss}
+            onPress={dismissWatchlist}
             type="circular"
             style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
           >
             <Text title>Done</Text>
           </Button>
         </View>
+        <BottomSheetWithHeader
+          title="Edit Address"
+          ref={editModal}
+          fullscreen
+          avoidKeyboard={false}
+        >
+          <EditAddress address={address} />
+        </BottomSheetWithHeader>
       </View>
-    </BottomSheet>
+    </BottomSheetWithHeader>
   );
 });

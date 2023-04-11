@@ -187,12 +187,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
               watchlist.includes(address) ? 'Go to watchlist' : 'Track Address'
             }
             icon={<></>}
-            // icon={<TradeIcon />}
             onPress={trackAddress}
           />
           <BottomSheetWatchlistAddSuccess
-            address={address}
             ref={successModal}
+            address={{
+              addressTitle: '',
+              addressPrice: '',
+              addressToken: address,
+              addressProgress: ''
+            }}
           />
         </>
       )}
