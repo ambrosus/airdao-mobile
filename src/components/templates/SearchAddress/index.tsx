@@ -27,6 +27,7 @@ import {
 import { CloseIcon, ScannerIcon, SearchIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import {
+  useAMBPrice,
   useExplorerInfo,
   useSearchAccount,
   useTransactionsOfAccount,
@@ -45,13 +46,11 @@ const LIMIT = 10;
 
 export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   const { onContentVisibilityChanged = () => null } = props;
+  const { data: ambToken } = useAMBPrice();
+  const { height: WINDOW_HEIGHT } = useWindowDimensions();
+  const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
   const initialMount = useRef(true);
-  const inputRef = useRef<InputRef>(null);
-  const scannerModalRef = useRef<BottomSheetRef>(null);
-  const { height: WINDOW_HEIGHT } = useWindowDimensions();
-
-  const { data: explorerInfo } = useExplorerInfo();
   const {
     data: account,
     loading,
@@ -64,6 +63,10 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
   const { watchlist, addToWatchlist } = useWatchlist();
+
+  const inputRef = useRef<InputRef>(null);
+  const scannerModalRef = useRef<BottomSheetRef>(null);
+
   const successModal = useRef<BottomSheetRef>(null);
 
   const onInputFocused = () => {
@@ -123,14 +126,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         // TODO navigate to watchlist
         return;
       }
-      await addToWatchlist({
-        addressId: account.address,
-        addressTitle: '',
-        addressPrice: '',
-        addressToken: '',
-        addressProgress: ''
-      });
-      showSuccessModal();
+      if (ambToken) {
+        await addToWatchlist({
+          addressTitle: '',
+          addressPrice: (account.ambBalance * ambToken.priceUSD).toString(),
+          addressToken: account.ambBalance.toString(),
+          addressProgress: '',
+          addressId: address
+        });
+        showSuccessModal();
+      }
     }
   };
 
@@ -209,18 +214,22 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onPress={trackAddress}
           />
           <BottomSheetWithHeader ref={successModal} fullscreen title="">
-            <WatchlistAddSuccess
-              onDone={hideSuccessModal}
-              wallet={
-                addressInWatchlist || {
-                  addressTitle: '',
-                  addressPrice: '',
-                  addressToken: '',
-                  addressProgress: '',
-                  addressId: address
+            {ambToken && (
+              <WatchlistAddSuccess
+                onDone={hideSuccessModal}
+                wallet={
+                  addressInWatchlist || {
+                    addressTitle: '',
+                    addressPrice: (
+                      account.ambBalance * ambToken.priceUSD
+                    ).toString(),
+                    addressToken: account.ambBalance.toString(),
+                    addressProgress: '',
+                    addressId: address
+                  }
                 }
-              }
-            />
+              />
+            )}
           </BottomSheetWithHeader>
         </View>
       )}

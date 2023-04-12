@@ -9,6 +9,8 @@ import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef, usePersonalList, useWatchlist } from '@hooks';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { useLists } from '@contexts/ListsContext';
+import { Cache, CacheKey } from '@utils/cache';
 import { styles } from './styles';
 
 interface WatchlistAddSuccessProps {
@@ -23,12 +25,12 @@ export const WatchlistAddSuccess = (
   const { personalList, addToPersonalList, removeFromPersonalList } =
     usePersonalList();
   const { updateWalletInList } = useWatchlist();
+  const { listsOfAddressGroup, setListsOfAddressGroup } = useLists((v) => v);
   const editModal = useForwardedRef<BottomSheetRef>(null);
   const [name, setName] = useState(wallet.addressTitle);
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'addressId') > -1
   );
-
   useEffect(() => {
     // TODO remove this effect once personal list becomes context
     setIsPersonalAddress(personalList.indexOfItem(wallet, 'addressId') > -1);
@@ -54,7 +56,17 @@ export const WatchlistAddSuccess = (
     ) {
       await removeFromPersonalList(wallet);
     }
-    await updateWalletInList({ ...wallet, addressTitle: name });
+    const newWallet: ListsOfAddressType = { ...wallet, addressTitle: name };
+    await updateWalletInList(newWallet);
+    // update lists where wallet is added
+    for (const list of listsOfAddressGroup) {
+      const { listOfAddresses } = list;
+      // check if wallet exists in the list
+      const idx = listOfAddresses.indexOfItem(newWallet, 'addressId');
+      if (idx > -1) listOfAddresses.splice(idx, 1, newWallet);
+    }
+    setListsOfAddressGroup(listsOfAddressGroup);
+    await Cache.setItem(CacheKey.AddressLists, listsOfAddressGroup);
     hideEdit();
   };
 
