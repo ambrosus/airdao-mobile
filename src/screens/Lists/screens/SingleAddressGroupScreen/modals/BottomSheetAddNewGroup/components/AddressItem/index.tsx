@@ -12,7 +12,7 @@ type Props = {
   idsOfSelectedAddresses: string[];
   handleCheckBoxPress: (id: string) => void;
 };
-export const AddressItem = ({
+export const AddressItemWithCheckbox = ({
   item,
   idsOfSelectedAddresses,
   handleCheckBoxPress

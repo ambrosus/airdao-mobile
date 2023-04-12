@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
   },
   container: {
     paddingTop: 15,
-    paddingHorizontal: 5,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center'
@@ -32,10 +31,11 @@ export const styles = StyleSheet.create({
     paddingTop: 2
   },
   optionsButton: { alignItems: 'center', height: '100%', width: 35 },
-  flatListContainer: {
+  itemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 1
   },
   whalesTokenContainer: {
     justifyContent: 'space-between',
@@ -48,14 +48,14 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   priceProgressContainer: {
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex: 1
   },
-  buttonContainer: {
-    paddingRight: 20
-  },
+  buttonContainer: {},
   actionButton: {
     width: 25,
-    alignItems: 'flex-end'
+    alignItems: 'center'
   }
 });

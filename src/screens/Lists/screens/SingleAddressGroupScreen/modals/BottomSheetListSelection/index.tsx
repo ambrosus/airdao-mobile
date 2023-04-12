@@ -1,4 +1,13 @@
-import React, { ForwardedRef, forwardRef, RefObject, useMemo } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
@@ -12,14 +21,23 @@ import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/compone
 import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
+import { CheckBox } from '@components/base/CheckBox';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
+  address?: ListsOfAddressType;
+  item: ListsOfAddressType;
 };
 
 export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
-  (props, ref) => {
+  ({ address, item }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const actionRef = useRef<BottomSheetRef>(null);
+    const [allSelectedAdresses, setAllSelectedAdresses] = useState<
+      ListsOfAddressType[]
+    >([]);
 
     const {
       params: {
@@ -38,34 +56,75 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
 
     const { listOfAddresses } = selectedList;
 
+    const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
+      string[]
+    >([]);
+
+    const handleCheckBoxPress = useCallback(
+      (id: string) => {
+        if (!idsOfSelectedAddresses.includes(id)) {
+          setIdsOfSelectedAddresses([...idsOfSelectedAddresses, id]);
+        } else {
+          const selectedAddresses = idsOfSelectedAddresses.filter(
+            (i) => i !== id
+          );
+          setIdsOfSelectedAddresses(selectedAddresses);
+        }
+      },
+      [idsOfSelectedAddresses]
+    );
+
+    const handleOpenSingleAddressAction = useCallback(() => {
+      actionRef.current?.show();
+    }, []);
+
+    useEffect(() => {
+      if (address?.addressId) {
+        setIdsOfSelectedAddresses([address.addressId]);
+        // setSelectedCount(1);
+      }
+    }, [address?.addressId]);
+
     return (
       <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
         <SafeAreaView>
           <View style={styles.header}>
             <Row alignItems="center" justifyContent="space-between">
-              <Button type="base" onPress={() => localRef.current?.dismiss()}>
-                <CloseIcon />
-              </Button>
-              <Text
-                fontFamily="Inter_600SemiBold"
-                fontSize={15}
-                color={COLORS.black}
-              >
-                selected
-              </Text>
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={12}
-                color="#2f2b4399"
-              >
-                total price
-              </Text>
-              <Button>
-                <MoveIcon />
-              </Button>
-              <Button>
-                <RemoveIcon />
-              </Button>
+              <Row alignItems="center">
+                <Button
+                  style={{ paddingRight: 20 }}
+                  type="base"
+                  onPress={() => localRef.current?.dismiss()}
+                >
+                  <CloseIcon />
+                </Button>
+                <Text
+                  style={{ paddingRight: 8 }}
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={15}
+                  color={COLORS.black}
+                >
+                  {idsOfSelectedAddresses.length} selected
+                </Text>
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={12}
+                  color="#2f2b4399"
+                >
+                  total price
+                </Text>
+              </Row>
+              <Row alignItems="center">
+                <Button
+                  onPress={handleOpenSingleAddressAction}
+                  style={{ paddingRight: 29 }}
+                >
+                  <MoveIcon />
+                </Button>
+                <Button>
+                  <RemoveIcon />
+                </Button>
+              </Row>
             </Row>
           </View>
           <Spacer value={34} />
@@ -76,10 +135,31 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
             style={styles.flatListContainer}
             data={listOfAddresses}
             renderItem={({ item }) => {
-              return <AddressItem item={item} />;
+              return (
+                <Row
+                  style={{ flex: 1, paddingBottom: 32 }}
+                  justifyContent="space-between"
+                >
+                  <View style={{ paddingRight: 16 }}>
+                    <CheckBox
+                      onPress={() => {
+                        handleCheckBoxPress(item.addressId);
+                      }}
+                      isChecked={idsOfSelectedAddresses.includes(
+                        item.addressId
+                      )}
+                    />
+                  </View>
+                  <AddressItem item={item} />
+                </Row>
+              );
             }}
           />
         </SafeAreaView>
+        <BottomSheetSingleAddressAction
+          ref={actionRef}
+          addresses={idsOfSelectedAddresses}
+        />
       </BottomSheet>
     );
   }

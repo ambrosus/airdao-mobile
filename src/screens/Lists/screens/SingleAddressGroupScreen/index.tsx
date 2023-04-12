@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { FlatList, SafeAreaView, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
@@ -14,6 +14,9 @@ import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 import { BottomSheetAddNewGroup } from './modals/BottomSheetAddNewGroup';
 import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
+import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 
 export const SingleAddressGroupScreen = () => {
   const {
@@ -22,10 +25,13 @@ export const SingleAddressGroupScreen = () => {
     }
   } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
 
+  const [pressedAddress, setPressedAddress] = useState<ListsOfAddressType>();
   const addNewGroupRef = useRef<BottomSheetRef>(null);
   const groupActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const addressActionRef = useRef<BottomSheetRef>(null);
+  const optionsRef = useRef<BottomSheetRef>(null);
+  const listSelectionRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation();
 
@@ -69,6 +75,18 @@ export const SingleAddressGroupScreen = () => {
     groupActionRef.current?.show();
   }, []);
 
+  const handleOnOpenOptions = useCallback(() => {
+    optionsRef.current?.show();
+  }, []);
+
+  const handleOnLongPress = useCallback(
+    (address: React.SetStateAction<ListsOfAddressType | undefined>) => {
+      listSelectionRef.current?.show();
+      setPressedAddress(address);
+    },
+    []
+  );
+
   const customHeader = useMemo(() => {
     return (
       <View style={styles.container}>
@@ -105,7 +123,7 @@ export const SingleAddressGroupScreen = () => {
   ]);
 
   return (
-    <SafeAreaView style={{ flex: 1, marginHorizontal: 17 }}>
+    <SafeAreaView style={{ flex: 1, marginLeft: 17, marginRight: 10 }}>
       {customHeader}
       <Spacer value={29} />
       <FlatList
@@ -115,11 +133,36 @@ export const SingleAddressGroupScreen = () => {
         data={listOfAddresses}
         renderItem={({ item }) => {
           return (
-            <AddressItem
-              item={item}
-              handleOpenSingleAddressAction={handleOpenSingleAddressAction}
-              ref={addressActionRef}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+                paddingBottom: 32
+              }}
+            >
+              <TouchableOpacity
+                onLongPress={() => handleOnLongPress(item)}
+                style={styles.itemContainer}
+              >
+                <AddressItem
+                  item={item}
+                  handleOpenSingleAddressAction={handleOpenSingleAddressAction}
+                  ref={addressActionRef}
+                />
+              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <Button
+                  style={styles.actionButton}
+                  type="base"
+                  onPress={handleOnOpenOptions}
+                >
+                  <OptionsIcon />
+                </Button>
+              </View>
+              <BottomSheetSingleAddressOptions ref={optionsRef} item={item} />
+            </View>
           );
         }}
       />
@@ -143,6 +186,11 @@ export const SingleAddressGroupScreen = () => {
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
       />
+      {/*<BottomSheetListSelection*/}
+      {/*  ref={listSelectionRef}*/}
+      {/*  address={pressedAddress}*/}
+      {/*  item={pressedAddress}*/}
+      {/*/>*/}
     </SafeAreaView>
   );
 };
