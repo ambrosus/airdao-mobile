@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
@@ -6,7 +6,7 @@ import { ChevronRightIcon, PlusIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
-import { AddAddressToList } from '../AddWalletToList';
+import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
 import {
   ListsOfAddressType,
@@ -16,12 +16,22 @@ import { useFullscreenModalHeight } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 import { styles } from './styles';
 
-interface EditAddressProps {
-  address: ListsOfAddressType;
+interface EditWalletProps {
+  wallet: ListsOfAddressType;
+  name: string;
+  isPersonalAddress: boolean;
+  onNameChange: (newName: string) => unknown;
+  onIsPersonalAddressChange: (newFlag: boolean) => unknown;
 }
 
-export const EditAddress = (props: EditAddressProps): JSX.Element => {
-  const { address } = props;
+export const EditWallet = (props: EditWalletProps): JSX.Element => {
+  const {
+    wallet,
+    name,
+    isPersonalAddress,
+    onIsPersonalAddressChange,
+    onNameChange
+  } = props;
   const {
     listsOfAddressGroup,
     setListsOfAddressGroup,
@@ -29,15 +39,10 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
     createGroupRef
   } = useLists((v) => v);
   const fullscreenModalHeight = useFullscreenModalHeight();
-  const [name, setName] = useState('');
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
-  const [isPersonalAddress, toggleIsPersonalAddress] = useReducer(
-    (state) => !state,
-    false
-  );
 
-  const selectedLists = listsOfAddressGroup.filter((list) =>
-    list.listOfAddresses.indexOfItem(address, 'addressId')
+  const selectedLists = listsOfAddressGroup.filter(
+    (list) => list.listOfAddresses.indexOfItem(wallet, 'addressId') > -1
   );
 
   const selectedListText = useMemo(() => {
@@ -71,14 +76,14 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
     );
     if (!listFromLocalLists) return;
     const idx = listFromLocalLists.listOfAddresses.indexOfItem(
-      address,
+      wallet,
       'addressId'
     );
     if (idx > -1) {
-      listFromLocalLists.listOfAddresses.removeItem(address, 'addressId');
+      listFromLocalLists.listOfAddresses.removeItem(wallet, 'addressId');
       listFromLocalLists.addressesCount--;
     } else {
-      listFromLocalLists.listOfAddresses.push(address);
+      listFromLocalLists.listOfAddresses.push(wallet);
       listFromLocalLists.addressesCount++;
     }
     setLocalLists([...localLists]);
@@ -95,10 +100,10 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
           placeholder="Placeholder"
           style={styles.input}
           value={name}
-          onChangeValue={setName}
+          onChangeValue={onNameChange}
         />
         <Spacer value={24} />
-        <Button onPress={toggleIsPersonalAddress}>
+        <Button onPress={() => onIsPersonalAddressChange(!isPersonalAddress)}>
           <Row alignItems="center">
             <CheckBox
               type="square"
@@ -171,8 +176,8 @@ export const EditAddress = (props: EditAddressProps): JSX.Element => {
         actionTitle="Save"
         onActionPress={saveNewLists}
       >
-        <AddAddressToList
-          address={address}
+        <AddWalletToList
+          wallet={wallet}
           lists={localLists}
           onPressList={onPressListItem}
         />

@@ -9,19 +9,18 @@ import { CheckBox } from '@components/composite';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 
-interface AddAddressToListProps {
-  address: ListsOfAddressType;
+interface AddWalletToListProps {
+  wallet: ListsOfAddressType;
   lists: ListsOfAddressesGroupType[];
   onPressList: (list: ListsOfAddressesGroupType) => unknown;
 }
 
-export const AddAddressToList = (props: AddAddressToListProps): JSX.Element => {
-  const { address, lists, onPressList } = props;
+export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
+  const { wallet, lists, onPressList } = props;
 
   const renderList = (args: ListRenderItemInfo<ListsOfAddressesGroupType>) => {
     const { item: list } = args;
-    const selected =
-      list.listOfAddresses.indexOfItem(address, 'addressId') > -1;
+    const selected = list.listOfAddresses.indexOfItem(wallet, 'addressId') > -1;
     const onPress = () => {
       onPressList(list);
     };

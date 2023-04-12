@@ -17,6 +17,7 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
       type="circular"
       borderRadius={scale(4)}
       onPress={onPress}
+      disabled={typeof onValueChange !== 'function'}
       style={{
         backgroundColor: value ? fillColor : 'transparent',
         borderColor: value ? 'transparent' : fillColor,

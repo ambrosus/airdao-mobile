@@ -1,33 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
 import { BottomSheetWithHeader } from '@components/modular';
 import { Button, Spacer, Text } from '@components/base';
-import { EditAddress } from '../EditAddress';
+import { EditWallet } from '../EditWallet';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
-import { useForwardedRef } from '@hooks/useForwardedRef';
+import { useForwardedRef, usePersonalList, useWatchlist } from '@hooks';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { styles } from './styles';
 
 interface WatchlistAddSuccessProps {
-  address: ListsOfAddressType;
+  wallet: ListsOfAddressType;
   onDone: () => unknown;
 }
 
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
-  const { address, onDone } = props;
+  const { wallet, onDone } = props;
+  const { personalList, addToPersonalList, removeFromPersonalList } =
+    usePersonalList();
+  const { updateWalletInList } = useWatchlist();
   const editModal = useForwardedRef<BottomSheetRef>(null);
+  const [name, setName] = useState(wallet.addressTitle);
+  const [isPersonalAddress, setIsPersonalAddress] = useState(
+    personalList.indexOfItem(wallet, 'addressId') > -1
+  );
+
+  useEffect(() => {
+    // TODO remove this effect once personal list becomes context
+    setIsPersonalAddress(personalList.indexOfItem(wallet, 'addressId') > -1);
+  }, [personalList, wallet]);
 
   const showEdit = () => {
     editModal.current?.show();
   };
 
+  const hideEdit = () => {
+    editModal.current?.dismiss();
+  };
+
   const saveAddress = async () => {
-    // TODO
+    if (
+      isPersonalAddress &&
+      personalList.indexOfItem(wallet, 'addressId') === -1
+    ) {
+      await addToPersonalList(wallet);
+    } else if (
+      !isPersonalAddress &&
+      personalList.indexOfItem(wallet, 'addressId') > -1
+    ) {
+      await removeFromPersonalList(wallet);
+    }
+    await updateWalletInList({ ...wallet, addressTitle: name });
+    hideEdit();
   };
 
   return (
@@ -49,7 +77,7 @@ export const WatchlistAddSuccess = (
         >
           You are on a roll!
           {`\n${StringUtils.formatAddress(
-            address.addressId,
+            wallet.addressId,
             11,
             5
           )} has been added to your watchlist.`}
@@ -94,7 +122,13 @@ export const WatchlistAddSuccess = (
         actionTitle="Save"
         onActionPress={saveAddress}
       >
-        <EditAddress address={address} />
+        <EditWallet
+          wallet={wallet}
+          name={name}
+          onNameChange={setName}
+          isPersonalAddress={isPersonalAddress}
+          onIsPersonalAddressChange={setIsPersonalAddress}
+        />
       </BottomSheetWithHeader>
     </View>
   );

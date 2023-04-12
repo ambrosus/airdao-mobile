@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
@@ -30,12 +30,12 @@ import {
   useExplorerInfo,
   useSearchAccount,
   useTransactionsOfAccount,
-  useAddToWatchlist
+  useWatchlist
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { FloatButton } from '@components/base/FloatButton';
-import { styles } from './styles';
 import { BottomSheetWithHeader } from '@components/modular';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
@@ -63,7 +63,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
-  const { watchlist, addToWatchlist } = useAddToWatchlist();
+  const { watchlist, addToWatchlist } = useWatchlist();
   const successModal = useRef<BottomSheetRef>(null);
 
   const onInputFocused = () => {
@@ -119,11 +119,17 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
 
   const trackAddress = async () => {
     if (account) {
-      if (watchlist.includes(account.address)) {
+      if (watchlist.findIndex((a) => a.addressId === account.address) > -1) {
         // TODO navigate to watchlist
         return;
       }
-      await addToWatchlist(account?.address);
+      await addToWatchlist({
+        addressId: account.address,
+        addressTitle: '',
+        addressPrice: '',
+        addressToken: '',
+        addressProgress: ''
+      });
       showSuccessModal();
     }
   };
@@ -135,6 +141,12 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   const showSuccessModal = () => {
     successModal.current?.show();
   };
+
+  const addressInWatchlist = useMemo(() => {
+    const idx = watchlist.findIndex((w) => w.addressId === address);
+    if (idx > -1) return watchlist[idx];
+    return null;
+  }, [watchlist, address]);
 
   return (
     <>
@@ -192,22 +204,22 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             loading={transactionsLoading && !!address}
           />
           <FloatButton
-            title={
-              watchlist.includes(address) ? 'Go to watchlist' : 'Track Address'
-            }
+            title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
             icon={<></>}
             onPress={trackAddress}
           />
           <BottomSheetWithHeader ref={successModal} fullscreen title="">
             <WatchlistAddSuccess
-              address={{
-                addressTitle: '',
-                addressPrice: '',
-                addressToken: '',
-                addressProgress: '',
-                addressId: address
-              }}
               onDone={hideSuccessModal}
+              wallet={
+                addressInWatchlist || {
+                  addressTitle: '',
+                  addressPrice: '',
+                  addressToken: '',
+                  addressProgress: '',
+                  addressId: address
+                }
+              }
             />
           </BottomSheetWithHeader>
         </View>

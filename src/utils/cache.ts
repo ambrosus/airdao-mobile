@@ -5,7 +5,8 @@ import { DefaultNotificationSettings } from '@constants/variables';
 export enum CacheKey {
   NotificationSettings = 'notification_settings',
   Watchlist = 'watchlist',
-  AddressLists = 'UserGroupsOfAddresses'
+  AddressLists = 'UserGroupsOfAddresses',
+  PersonalList = 'personal_list'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
