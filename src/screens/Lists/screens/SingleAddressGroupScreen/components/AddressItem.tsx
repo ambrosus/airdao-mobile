@@ -1,26 +1,40 @@
-import React, { ForwardedRef } from 'react';
-import { View } from 'react-native';
+import React, { ForwardedRef, useCallback, useRef } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { OptionsIcon } from '@components/svg/icons/Options';
-import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
+import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
 
 type Props = {
-  handleOpenSingleAddressAction: () => void;
+  handleOpenSingleAddressAction?: () => void;
   item: ListsOfAddressType;
 };
 const AddressItem = React.forwardRef<BottomSheetRef, Props>(
   ({ item, handleOpenSingleAddressAction }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const optionsRef = useRef<BottomSheetRef>(null);
+    const listSelectionRef = useRef<BottomSheetRef>(null);
 
+    const handleOnLongPress = useCallback(() => {
+      listSelectionRef.current?.show();
+    }, []);
+
+    const handleOnOpenOptions = useCallback(() => {
+      optionsRef.current?.show();
+    }, []);
     return (
       <>
-        <View style={styles.flatListContainer}>
+        <TouchableOpacity
+          onLongPress={handleOnLongPress}
+          style={styles.flatListContainer}
+        >
           <View style={styles.whalesTokenContainer}>
             <View style={styles.infoContainer}>
               <Row>
@@ -68,18 +82,29 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(
               <Button
                 style={styles.actionButton}
                 type="base"
-                onPress={handleOpenSingleAddressAction}
+                onPress={handleOnOpenOptions}
               >
                 <OptionsIcon />
               </Button>
             </View>
           </View>
-          <BottomSheetSingleAddressAction ref={localRef} address={item} />
-        </View>
+        </TouchableOpacity>
         <Spacer value={32} />
+        <BottomSheetSingleAddressOptions ref={optionsRef} item={item} />
+        <BottomSheetSingleAddressAction ref={localRef} address={item} />
+        <BottomSheetListSelection ref={listSelectionRef} />
       </>
     );
   }
 );
 
+// <>
+//     <AddressItemComponent/>
+//     <CheckBox/>
+// </>
+//
+// <>
+//     <AddressItemComponent/>
+//     <SomeOptionsButton/>
+// </>
 export default AddressItem;
