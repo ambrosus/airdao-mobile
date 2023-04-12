@@ -1,12 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ExploreScreen } from '@screens/Explore';
+import { ExploreTabParamsList } from '@appTypes/navigation';
 
-export type ExploresParamsList = {
-  ExploreScreen: undefined;
-};
-
-const Stack = createNativeStackNavigator<ExploresParamsList>();
+const Stack = createNativeStackNavigator<ExploreTabParamsList>();
 export const ExploreStack = () => {
   return (
     <Stack.Navigator
