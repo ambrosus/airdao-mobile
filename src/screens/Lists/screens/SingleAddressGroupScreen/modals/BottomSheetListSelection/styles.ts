@@ -2,11 +2,12 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   header: {
-    paddingHorizontal: 18
+    paddingLeft: 19.5,
+    paddingRight: 18
   },
+  headerLeftContent: {},
   container: {},
   flatListContainer: {
-    paddingLeft: 23.5,
-    paddingRight: 16.5
+    paddingHorizontal: 16.5
   }
 });

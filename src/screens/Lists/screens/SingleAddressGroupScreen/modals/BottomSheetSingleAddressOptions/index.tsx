@@ -78,7 +78,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         </Text>
       </Button>
       <BottomSheetConfirmRemove item={item} ref={confirmRemoveRef} />
-      <BottomSheetSingleAddressAction ref={actionRef} address={item} />
+      <BottomSheetSingleAddressAction ref={actionRef} addresses={item} />
     </BottomSheet>
   );
 });

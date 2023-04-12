@@ -79,7 +79,7 @@ const ListsContext = () => {
         if (group.groupId === groupId) {
           return {
             ...group,
-            addressesCount: group.addressesCount + 1,
+            addressesCount: group.addressesCount + selectedAddresses.length,
             listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
           };
         }
@@ -96,14 +96,14 @@ const ListsContext = () => {
 
   const handleOnAddressMove = async (
     selectedGroupsIds: string[],
-    selectedAddress: ListsOfAddressType
+    selectedAddresses: ListsOfAddressType[]
   ) => {
     const editedGroups = listsOfAddressGroup.map((group) => {
       if (selectedGroupsIds.includes(group.groupId)) {
         return {
           ...group,
           addressesCount: group.addressesCount + 1,
-          listOfAddresses: [...group.listOfAddresses, selectedAddress]
+          listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
         };
       }
 
@@ -111,7 +111,7 @@ const ListsContext = () => {
         listsOfAddressGroup.filter((item) => {
           if (item.groupId === group.groupId) {
             item.listOfAddresses.filter(
-              (element) => element.addressId !== selectedAddress.addressId
+              (element) => element.addressId !== selectedAddresses.addressId
             );
           }
         })
