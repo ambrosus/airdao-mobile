@@ -9,3 +9,4 @@ export * from './WatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';
+export * from './TransactionDetails';

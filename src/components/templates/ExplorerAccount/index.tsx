@@ -1,12 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
+import { useWatchlist } from '@hooks/cache';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -18,6 +19,10 @@ export const ExplorerAccountView = (
 ): JSX.Element => {
   const { account, totalSupply } = props;
   const { address } = account;
+  const { watchlist } = useWatchlist();
+  const walletInWatchlist = watchlist.find(
+    (w) => w.addressId === account.address
+  );
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
 
@@ -27,6 +32,25 @@ export const ExplorerAccountView = (
 
   return (
     <View style={styles.container}>
+      {walletInWatchlist && (
+        <>
+          <Row alignItems="center">
+            <Text fontFamily="Inter_600SemiBold" fontSize={15}>
+              {walletInWatchlist.addressTitle}
+            </Text>
+            <Spacer value={scale(12)} horizontal />
+            <Text
+              color="#828282"
+              fontFamily="Inter_400Regular"
+              fontSize={13}
+              fontWeight="400"
+            >
+              Added to Watchlists
+            </Text>
+          </Row>
+          <Spacer value={verticalScale(13)} />
+        </>
+      )}
       <Text fontSize={15} fontFamily="Inter_600SemiBold">
         {StringUtils.formatAddress(address, 11, 5)}
       </Text>

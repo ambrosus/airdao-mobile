@@ -1,19 +1,12 @@
-import { Row, Text } from '@components/base';
-import { TrendIcon } from '@components/svg/icons';
 import React from 'react';
 import { View } from 'react-native';
+import { Row, Text } from '@components/base';
+import { TrendIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
-
-export interface Wallet {
-  title: string;
-  price: number;
-  totalAmount: number;
-  currency: string;
-  last24HourChange: number;
-}
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 
 interface WalletItemProps {
-  item: Wallet;
+  item: ListsOfAddressType;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
@@ -21,18 +14,18 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
   return (
     <View>
       <Row justifyContent="space-between">
-        <Text fontWeight="600">{item.title}</Text>
+        <Text fontWeight="600">{item.addressTitle}</Text>
         <Text fontFamily="Mersad_600SemiBold">
-          ${NumberUtils.formatNumber(item.totalAmount, 0)}
+          ${NumberUtils.formatNumber(parseFloat(item.addressPrice), 0)}
         </Text>
       </Row>
       <Row justifyContent="space-between">
         <Text fontFamily="Mersad_600SemiBold" color="#2f2b4380" fontSize={13}>
-          {NumberUtils.formatNumber(item.price, 0)} {item.currency}
+          {NumberUtils.formatNumber(parseFloat(item.addressPrice), 0)} AMB
         </Text>
         <Row alignItems="center">
           <TrendIcon color="#2f2b4399" />
-          <Text color="#2f2b4399"> {item.last24HourChange}%</Text>
+          <Text color="#2f2b4399"> {item.addressProgress}%</Text>
         </Row>
       </Row>
     </View>

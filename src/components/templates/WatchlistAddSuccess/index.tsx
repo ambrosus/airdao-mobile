@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
-import { BottomSheetWithHeader } from '@components/modular';
 import { Button, Spacer, Text } from '@components/base';
-import { EditWallet } from '../EditWallet';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef } from '@hooks';
 import { useAllAddresses, useAllAddressesReducer } from '@contexts';
+import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import { styles } from './styles';
 
 interface WatchlistAddSuccessProps {
@@ -122,22 +122,7 @@ export const WatchlistAddSuccess = (
           </Text>
         </Button>
       </View>
-      <BottomSheetWithHeader
-        title="Edit Address"
-        ref={editModal}
-        fullscreen
-        avoidKeyboard={false}
-        actionTitle="Save"
-        onActionPress={saveAddress}
-      >
-        <EditWallet
-          wallet={wallet}
-          name={wallet.name}
-          onNameChange={onNameChange}
-          isPersonalAddress={!!wallet.isPersonal}
-          onIsPersonalAddressChange={togglePersonalAddress}
-        />
-      </BottomSheetWithHeader>
+      <BottomSheetEditWallet wallet={wallet} />
     </View>
   );
 };
