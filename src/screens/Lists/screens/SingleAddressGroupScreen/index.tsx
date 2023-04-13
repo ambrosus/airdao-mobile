@@ -186,11 +186,10 @@ export const SingleAddressGroupScreen = () => {
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
       />
-      {/*<BottomSheetListSelection*/}
-      {/*  ref={listSelectionRef}*/}
-      {/*  address={pressedAddress}*/}
-      {/*  item={pressedAddress}*/}
-      {/*/>*/}
+      <BottomSheetListSelection
+        ref={listSelectionRef}
+        address={pressedAddress}
+      />
     </SafeAreaView>
   );
 };

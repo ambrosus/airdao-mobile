@@ -28,11 +28,10 @@ import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAdd
 type Props = {
   ref: RefObject<BottomSheetRef>;
   address?: ListsOfAddressType;
-  item: ListsOfAddressType;
 };
 
 export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
-  ({ address, item }, ref) => {
+  ({ address }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const actionRef = useRef<BottomSheetRef>(null);
     const [allSelectedAdresses, setAllSelectedAdresses] = useState<
@@ -84,6 +83,14 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
         // setSelectedCount(1);
       }
     }, [address?.addressId]);
+
+    const selectedAddresses = useMemo(() => {
+      return listOfAddresses?.filter((addressItem) =>
+        idsOfSelectedAddresses.includes(addressItem.addressId)
+      );
+    }, [idsOfSelectedAddresses, listOfAddresses]);
+
+    console.log(selectedAddresses, idsOfSelectedAddresses, 'pokijhuijok');
 
     return (
       <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
@@ -158,7 +165,7 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
         </SafeAreaView>
         <BottomSheetSingleAddressAction
           ref={actionRef}
-          addresses={idsOfSelectedAddresses}
+          addresses={selectedAddresses}
         />
       </BottomSheet>
     );

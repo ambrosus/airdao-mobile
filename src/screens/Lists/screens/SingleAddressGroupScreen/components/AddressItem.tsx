@@ -63,7 +63,7 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(
             </Row>
           </View>
         </View>
-        <BottomSheetSingleAddressAction ref={localRef} address={item} />
+        <BottomSheetSingleAddressAction ref={localRef} addresses={[item]} />
       </>
     );
   }
