@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
-  ({ addresses: pressedAddresses }, ref) => {
+  ({ addresses }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const { listsOfAddressGroup, handleOnAddressMove } = useLists((v) => v);
 
@@ -42,7 +42,7 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
       },
       [idsOfSelectedGroups]
     );
-    console.log(pressedAddresses);
+
     return (
       <BottomSheet ref={localRef} isNestedSheet={false} height={850}>
         <SafeAreaView>
@@ -61,7 +61,7 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
                 disabled={!idsOfSelectedGroups.length}
                 type="base"
                 onPress={() => {
-                  handleOnAddressMove(idsOfSelectedGroups, pressedAddresses);
+                  handleOnAddressMove(idsOfSelectedGroups, addresses);
                   localRef.current?.dismiss();
                 }}
               >
@@ -75,28 +75,31 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
               </Button>
             }
           />
-          {true && (
-            <FlatList
-              contentContainerStyle={{
-                paddingBottom: 150
-              }}
-              data={listsOfAddressGroup}
-              renderItem={({ item }) => {
-                const isAddressAlreadyInList = item.listOfAddresses.some(
-                  (address) => address.addressId === pressedAddress.addressId
-                );
-                return (
-                  <ListOfAddressesGroupItem
-                    handleOnCheckboxPress={handleOnCheckboxPress}
-                    idsOfSelectedGroups={idsOfSelectedGroups}
-                    item={item}
-                    isAddressAlreadyInList={isAddressAlreadyInList}
-                    pressedAddresses={pressedAddresses}
-                  />
-                );
-              }}
-            />
-          )}
+          {/*{true && (*/}
+          <FlatList
+            contentContainerStyle={{
+              paddingBottom: 150
+            }}
+            data={listsOfAddressGroup}
+            renderItem={({ item }) => {
+              const addressesIds = addresses.map(
+                (addressItem) => addressItem.addressId
+              );
+              const isAddressesAlreadyInList = item.listOfAddresses.some(
+                (address) => addressesIds.includes(address.addressId)
+              );
+              return (
+                <ListOfAddressesGroupItem
+                  handleOnCheckboxPress={handleOnCheckboxPress}
+                  idsOfSelectedGroups={idsOfSelectedGroups}
+                  item={item}
+                  isAddressAlreadyInList={isAddressesAlreadyInList}
+                  pressedAddresses={addresses}
+                />
+              );
+            }}
+          />
+          {/*)}*/}
         </SafeAreaView>
       </BottomSheet>
     );

@@ -13,7 +13,7 @@ type Props = {
   item: ListsOfAddressesGroupType;
   handleOnCheckboxPress: (selectedAddressId: string) => void;
   idsOfSelectedGroups: string[];
-  pressedAddresses: ListsOfAddressType;
+  pressedAddresses: ListsOfAddressType[];
   isAddressAlreadyInList: boolean;
 };
 export const ListOfAddressesGroupItem = ({
@@ -38,7 +38,9 @@ export const ListOfAddressesGroupItem = ({
         <View style={styles.itemSubInfo}>
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
-              ? `${pressedAddresses.addressTitle} is already on this list`
+              ? `${pressedAddresses
+                  .map((address) => address.addressTitle)
+                  .join(', ')} is already on this list`
               : `${item.addressesCount} Addresses`}
           </Text>
         </View>
