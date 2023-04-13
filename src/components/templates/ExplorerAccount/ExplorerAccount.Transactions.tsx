@@ -4,6 +4,7 @@ import { Transaction } from '@models';
 import { TransactionItem } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
 import {
+  Button,
   KeyboardDismissingView,
   Row,
   Spacer,
@@ -15,17 +16,30 @@ interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
   loading?: boolean;
   onEndReached?: () => unknown;
+  onPressTransaction?: (transaction: Transaction) => unknown;
 }
 
 export const AccountTransactions = (
   props: ExplorerAccountViewTransactionsProps
 ): JSX.Element => {
-  const { transactions, loading, onEndReached } = props;
+  const { transactions, loading, onEndReached, onPressTransaction } = props;
 
   const renderTransaction = (
     args: ListRenderItemInfo<Transaction>
   ): JSX.Element => {
-    return <TransactionItem transaction={args.item} />;
+    const onPress = () => {
+      if (typeof onPressTransaction === 'function') {
+        onPressTransaction(args.item);
+      }
+    };
+    return (
+      <Button
+        disabled={typeof onPressTransaction !== 'function'}
+        onPress={onPress}
+      >
+        <TransactionItem transaction={args.item} />
+      </Button>
+    );
   };
 
   return (

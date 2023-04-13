@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { View } from 'react-native';
 import dayjs from 'dayjs';
@@ -5,13 +6,15 @@ import { Row, Spacer, Text } from '@components/base';
 import { LogoBigSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
+import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {
   balance: string;
   currency: string;
   currencyPosition: 'left' | 'right';
-  last24HourChange: number;
+  last24HourChange?: number;
+  txFee?: number;
   title: string;
   timestamp: Date;
 }
@@ -24,6 +27,7 @@ export function PortfolioPerformance(
     currency,
     currencyPosition,
     last24HourChange,
+    txFee,
     title,
     timestamp
   } = props;
@@ -43,13 +47,30 @@ export function PortfolioPerformance(
             </Text>
           </View>
           <Spacer value={verticalScale(16)} />
-          <Row alignItems="center" justifyContent="space-between">
-            <Text color="rgba(255, 255, 255, 0.5)">24H Change</Text>
-            <Row alignItems="center">
-              <TrendIcon color="#FFFFFF" />
-              <Text color="#FFFFFF"> %{last24HourChange.toFixed(2)}</Text>
-            </Row>
-          </Row>
+          {Object.hasOwn(props, 'last24HourChange') && (
+            <>
+              <Spacer value={verticalScale(9)} />
+              <Row alignItems="center" justifyContent="space-between">
+                <Text color="rgba(255, 255, 255, 0.5)">24H Change</Text>
+                <Row alignItems="center">
+                  <TrendIcon color="#FFFFFF" />
+                  <Text color="#FFFFFF"> %{last24HourChange!.toFixed(2)}</Text>
+                </Row>
+              </Row>
+            </>
+          )}
+          {!!Object.hasOwn(props, 'txFee') && (
+            <>
+              <Spacer value={verticalScale(9)} />
+              <Row alignItems="center">
+                <Text color="rgba(255, 255, 255, 0.5)">TxFee</Text>
+                <Text color="#FFFFFF">
+                  {'   '}
+                  {NumberUtils.formatNumber(txFee!, 5)}
+                </Text>
+              </Row>
+            </>
+          )}
           <Spacer value={verticalScale(9)} />
           <Row alignItems="center" justifyContent="space-between">
             <Text subtext color="rgba(255, 255, 255, 0.5)">
