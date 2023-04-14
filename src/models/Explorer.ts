@@ -28,6 +28,22 @@ export class ExplorerAccount {
     this.type = details.type;
   }
 
+  get name(): string {
+    return this.name;
+  }
+
+  set name(name: string) {
+    this.name = name;
+  }
+
+  get isPersonal(): boolean {
+    return this.isPersonal;
+  }
+
+  set isPersonal(flag: boolean) {
+    this.isPersonal = flag;
+  }
+
   calculatePercentHoldings(totalSupply: number): number {
     return (this.ambBalance / totalSupply) * 100;
   }
