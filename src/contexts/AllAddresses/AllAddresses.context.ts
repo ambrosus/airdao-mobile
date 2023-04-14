@@ -5,7 +5,7 @@ import {
   useContextSelector
 } from 'use-context-selector';
 
-export interface AllAdressesContextState {
+export interface AllAddressesContextState {
   addresses: ExplorerAccount[];
 }
 
@@ -16,25 +16,25 @@ export type AllAddressesAction = {
 };
 export type AllAddressesDispatch = (action: AllAddressesAction) => void;
 
-const initialState: AllAdressesContextState = {
+const initialState: AllAddressesContextState = {
   addresses: []
 };
 
-export const AllAdressesContext = createContext<
-  [AllAdressesContextState, AllAddressesDispatch]
+export const AllAddressesContext = createContext<
+  [AllAddressesContextState, AllAddressesDispatch]
 >([initialState, () => null]);
 
 export const useAllAddressesContext = (): [
-  AllAdressesContextState,
+  AllAddressesContextState,
   AllAddressesDispatch
 ] => {
-  return useContext(AllAdressesContext);
+  return useContext(AllAddressesContext);
 };
 
 export const useAllAddresses = () => {
-  return useContextSelector(AllAdressesContext, (v) => v[0].addresses);
+  return useContextSelector(AllAddressesContext, (v) => v[0].addresses);
 };
 
 export const useAllAddressesReducer = () => {
-  return useContextSelector(AllAdressesContext, (v) => v[1]);
+  return useContextSelector(AllAddressesContext, (v) => v[1]);
 };

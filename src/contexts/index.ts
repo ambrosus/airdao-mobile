@@ -1,1 +1,1 @@
-export * from './AllAdresses';
+export * from './AllAddresses';

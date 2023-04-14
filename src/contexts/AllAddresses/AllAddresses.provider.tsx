@@ -1,47 +1,47 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   AllAddressesAction,
-  AllAdressesContext,
-  AllAdressesContextState
-} from './AllAdresses.context';
+  AllAddressesContext,
+  AllAddressesContextState
+} from './AllAddresses.context';
 import { CacheableAddress } from '@appTypes/CacheableAddress';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { searchAddress } from '@api/api';
 
-export const AllAdressesProvider: React.FC = ({ children }: any) => {
-  const [allAdresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
+export const AllAddressesProvider: React.FC = ({ children }: any) => {
+  const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
 
   const addAddress = useCallback(
     (address: ExplorerAccount) => {
-      return allAdresses.concat(address);
+      return allAddresses.concat(address);
     },
-    [allAdresses]
+    [allAddresses]
   );
 
   const removeAddress = useCallback(
     (address: ExplorerAccount) => {
-      allAdresses.removeItem(address, 'address');
-      return allAdresses;
+      allAddresses.removeItem(address, 'address');
+      return allAddresses;
     },
-    [allAdresses]
+    [allAddresses]
   );
 
   const updateAddress = useCallback(
     (address: ExplorerAccount) => {
-      const idx = allAdresses.indexOfItem(address, 'address');
+      const idx = allAddresses.indexOfItem(address, 'address');
       if (idx > -1) {
-        allAdresses.splice(idx, 1, address);
-        return allAdresses;
+        allAddresses.splice(idx, 1, address);
+        return allAddresses;
       }
-      return allAdresses;
+      return allAddresses;
     },
-    [allAdresses]
+    [allAddresses]
   );
 
   const reducer = useCallback(
     (
-      state: AllAdressesContextState,
+      state: AllAddressesContextState,
       action: AllAddressesAction | { type: 'set'; payload: ExplorerAccount[] }
     ) => {
       switch (action.type) {
@@ -72,7 +72,7 @@ export const AllAdressesProvider: React.FC = ({ children }: any) => {
     },
     [addAddress, removeAddress, updateAddress]
   );
-  const value = useReducer(reducer, { addresses: allAdresses });
+  const value = useReducer(reducer, { addresses: allAddresses });
 
   const populateAddresses = async (
     addresses: CacheableAddress[]
@@ -103,8 +103,8 @@ export const AllAdressesProvider: React.FC = ({ children }: any) => {
   }, []);
 
   return (
-    <AllAdressesContext.Provider value={value}>
+    <AllAddressesContext.Provider value={value}>
       {children}
-    </AllAdressesContext.Provider>
+    </AllAddressesContext.Provider>
   );
 };
