@@ -1,6 +1,6 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Spacer, Text } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
@@ -31,6 +31,29 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           Are you sure want to remove selected {item.addressTitle} from Whales?
         </Text>
         <Spacer value={24} />
+        <Button onPress={() => null} style={styles.removeButton}>
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.white}
+          >
+            Remove
+          </Text>
+        </Button>
+        <Spacer value={24} />
+        <Button
+          type="base"
+          style={styles.bottomSheetCancelButton}
+          onPress={() => localRef.current?.dismiss()}
+        >
+          <Text
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.buttonTextColor}
+            fontSize={16}
+          >
+            Cancel
+          </Text>
+        </Button>
       </BottomSheet>
     );
   }

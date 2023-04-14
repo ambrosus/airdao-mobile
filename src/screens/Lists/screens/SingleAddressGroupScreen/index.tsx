@@ -57,8 +57,7 @@ export const SingleAddressGroupScreen = () => {
     [groupId, listsOfAddressGroup]
   );
 
-  const { groupTokens, listOfAddresses, addressesCount, groupTitle } =
-    selectedList;
+  const { groupTokens, listOfAddresses, groupTitle } = selectedList;
 
   const handleOpenRenameModal = useCallback(() => {
     groupActionRef.current?.dismiss();
@@ -100,7 +99,9 @@ export const SingleAddressGroupScreen = () => {
             </Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
-              <Text style={styles.idCount}>{addressesCount} Addresses</Text>
+              <Text style={styles.idCount}>
+                {selectedList.listOfAddresses.length} Addresses
+              </Text>
               <Text style={styles.tokensCount}>{groupTokens}</Text>
             </View>
           </View>
@@ -117,13 +118,13 @@ export const SingleAddressGroupScreen = () => {
   }, [
     navigation.goBack,
     groupTitle,
-    addressesCount,
+    selectedList.listOfAddresses.length,
     groupTokens,
     handleOpenGroupAction
   ]);
 
   return (
-    <SafeAreaView style={{ flex: 1, marginLeft: 17, marginRight: 10 }}>
+    <SafeAreaView style={styles.header}>
       {customHeader}
       <Spacer value={29} />
       <FlatList
@@ -133,18 +134,10 @@ export const SingleAddressGroupScreen = () => {
         data={listOfAddresses}
         renderItem={({ item }) => {
           return (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '100%',
-                alignItems: 'center',
-                paddingBottom: 32
-              }}
-            >
+            <View style={styles.addressItemContainer}>
               <TouchableOpacity
                 onLongPress={() => handleOnLongPress(item)}
-                style={styles.itemContainer}
+                style={styles.touchableAreaContainer}
               >
                 <AddressItem
                   item={item}

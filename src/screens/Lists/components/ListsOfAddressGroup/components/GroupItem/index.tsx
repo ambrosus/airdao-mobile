@@ -59,7 +59,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
               <Text style={styles.walletsCount}>
-                {group.addressesCount + ' addresses'}
+                {group.listOfAddresses.length + ' addresses'}
               </Text>
               <Text style={styles.tokensCount}>{tokensFormatted}</Text>
             </View>

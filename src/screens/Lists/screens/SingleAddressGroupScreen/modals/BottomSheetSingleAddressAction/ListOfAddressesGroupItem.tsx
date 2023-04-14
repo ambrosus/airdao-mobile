@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/styles';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
@@ -23,6 +23,17 @@ export const ListOfAddressesGroupItem = ({
   handleOnCheckboxPress,
   idsOfSelectedGroups
 }: Props) => {
+  useEffect(() => {
+    if (isAddressAlreadyInList && !idsOfSelectedGroups.includes(item.groupId)) {
+      handleOnCheckboxPress(item.groupId);
+    }
+  }, [
+    handleOnCheckboxPress,
+    idsOfSelectedGroups,
+    isAddressAlreadyInList,
+    item.groupId
+  ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>
@@ -47,11 +58,9 @@ export const ListOfAddressesGroupItem = ({
       </View>
       <CheckBox
         onPress={() => {
-          if (!isAddressAlreadyInList) handleOnCheckboxPress(item.groupId);
+          handleOnCheckboxPress(item.groupId);
         }}
-        isChecked={
-          isAddressAlreadyInList || idsOfSelectedGroups.includes(item.groupId)
-        }
+        isChecked={idsOfSelectedGroups.includes(item.groupId)}
       />
     </View>
   );
