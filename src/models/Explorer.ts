@@ -1,4 +1,4 @@
-import { ExplorerAccountType } from '@appTypes';
+import { CacheableAddress, ExplorerAccountType } from '@appTypes';
 import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 
 export class ExplorerInfo {
@@ -13,12 +13,15 @@ export class ExplorerInfo {
   }
 }
 
-export class ExplorerAccount {
+export class ExplorerAccount implements CacheableAddress {
   _id: string;
   address: string;
   ambBalance: number;
   transactionCount: number;
   type: ExplorerAccountType;
+  name: string;
+  isOnWatchlist?: boolean | undefined;
+  isPersonal?: boolean | undefined;
 
   constructor(details: ExplorerAccountDTO) {
     this._id = details._id;
@@ -26,22 +29,7 @@ export class ExplorerAccount {
     this.ambBalance = details.balance.ether;
     this.transactionCount = details.totalTx;
     this.type = details.type;
-  }
-
-  get name(): string {
-    return this.name;
-  }
-
-  set name(name: string) {
-    this.name = name;
-  }
-
-  get isPersonal(): boolean {
-    return this.isPersonal;
-  }
-
-  set isPersonal(flag: boolean) {
-    this.isPersonal = flag;
+    this.name = '';
   }
 
   calculatePercentHoldings(totalSupply: number): number {
