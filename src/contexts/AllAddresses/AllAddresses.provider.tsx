@@ -46,15 +46,6 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     ) => {
       switch (action.type) {
         case 'add': {
-          const final = { addresses: [...addAddress(action.payload)] };
-          Cache.setItem(
-            CacheKey.AllAddresses,
-            final.addresses.map((a) => ({
-              name: a.name,
-              isPersonal: a.isPersonal,
-              address: a.address
-            }))
-          );
           return { addresses: [...addAddress(action.payload)] };
         }
         case 'remove': {
