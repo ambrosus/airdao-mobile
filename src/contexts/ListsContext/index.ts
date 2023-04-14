@@ -79,7 +79,7 @@ const ListsContext = () => {
         if (group.groupId === groupId) {
           return {
             ...group,
-            addressesCount: group.addressesCount + 1,
+            addressesCount: group.addressesCount + selectedAddresses.length,
             listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
           };
         }
@@ -96,27 +96,41 @@ const ListsContext = () => {
 
   const handleOnAddressMove = async (
     selectedGroupsIds: string[],
-    selectedAddress: ListsOfAddressType
+    selectedAddresses: ListsOfAddressType[]
   ) => {
+    const selectedAddressesIds = selectedAddresses.map(
+      (elem) => elem.addressId
+    );
+    const addressConcat = (groupAddresses: ListsOfAddressType[]) => {
+      const newArr = [...groupAddresses];
+
+      selectedAddresses.forEach((selectedAddress) => {
+        const contains = newArr.every((address) =>
+          selectedAddressesIds.includes(address.addressId)
+        );
+        if (!contains) {
+          newArr.push(selectedAddress);
+        }
+      });
+
+      return newArr;
+    };
+
     const editedGroups = listsOfAddressGroup.map((group) => {
       if (selectedGroupsIds.includes(group.groupId)) {
         return {
           ...group,
           addressesCount: group.addressesCount + 1,
-          listOfAddresses: [...group.listOfAddresses, selectedAddress]
+          listOfAddresses: addressConcat(group.listOfAddresses)
+        };
+      } else {
+        return {
+          ...group,
+          listOfAddresses: group.listOfAddresses.filter(({ addressId }) => {
+            return !selectedAddressesIds.includes(addressId);
+          })
         };
       }
-
-      setListsOfAddressGroup(
-        listsOfAddressGroup.filter((item) => {
-          if (item.groupId === group.groupId) {
-            item.listOfAddresses.filter(
-              (element) => element.addressId !== selectedAddress.addressId
-            );
-          }
-        })
-      );
-      return group;
     });
 
     await setDataToSecureStore(

@@ -16,7 +16,7 @@ import { FlatList } from 'react-native';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { randomUUID } from 'expo-crypto';
 import { useLists } from '@contexts/ListsContext';
-import { AddressItem } from './components/AddressItem';
+import { AddressItemWithCheckbox } from './components/AddressItem';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -133,7 +133,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
             }}
             data={mockedAddresses}
             renderItem={({ item }) => (
-              <AddressItem
+              <AddressItemWithCheckbox
                 item={item}
                 handleCheckBoxPress={handleCheckBoxPress}
                 idsOfSelectedAddresses={idsOfSelectedAddresses}

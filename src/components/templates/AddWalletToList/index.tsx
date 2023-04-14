@@ -34,7 +34,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
             </Text>
             <Spacer value={verticalScale(4)} />
             <Text fontSize={16} fontWeight="400" fontFamily="Inter_400Regular">
-              {list.addressesCount} Adresses
+              {list.addressesCount} Addresses
             </Text>
           </View>
           <CheckBox

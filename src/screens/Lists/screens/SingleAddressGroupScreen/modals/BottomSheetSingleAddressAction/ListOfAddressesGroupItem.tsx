@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/styles';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
@@ -13,16 +13,27 @@ type Props = {
   item: ListsOfAddressesGroupType;
   handleOnCheckboxPress: (selectedAddressId: string) => void;
   idsOfSelectedGroups: string[];
-  pressedAddress: ListsOfAddressType;
+  pressedAddresses: ListsOfAddressType[];
   isAddressAlreadyInList: boolean;
 };
 export const ListOfAddressesGroupItem = ({
   item,
-  pressedAddress,
+  pressedAddresses,
   isAddressAlreadyInList,
   handleOnCheckboxPress,
   idsOfSelectedGroups
 }: Props) => {
+  useEffect(() => {
+    if (isAddressAlreadyInList && !idsOfSelectedGroups.includes(item.groupId)) {
+      handleOnCheckboxPress(item.groupId);
+    }
+  }, [
+    handleOnCheckboxPress,
+    idsOfSelectedGroups,
+    isAddressAlreadyInList,
+    item.groupId
+  ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>
@@ -38,18 +49,18 @@ export const ListOfAddressesGroupItem = ({
         <View style={styles.itemSubInfo}>
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
-              ? `${pressedAddress.addressTitle} is already on this list`
+              ? `${pressedAddresses
+                  .map((address) => address.addressTitle)
+                  .join(', ')} is already on this list`
               : `${item.addressesCount} Addresses`}
           </Text>
         </View>
       </View>
       <CheckBox
         onPress={() => {
-          if (!isAddressAlreadyInList) handleOnCheckboxPress(item.groupId);
+          handleOnCheckboxPress(item.groupId);
         }}
-        isChecked={
-          isAddressAlreadyInList || idsOfSelectedGroups.includes(item.groupId)
-        }
+        isChecked={idsOfSelectedGroups.includes(item.groupId)}
       />
     </View>
   );

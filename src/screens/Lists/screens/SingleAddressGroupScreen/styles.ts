@@ -2,12 +2,8 @@ import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  progressIcon: {
-    paddingLeft: 7
-  },
   container: {
     paddingTop: 15,
-    paddingHorizontal: 5,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center'
@@ -15,11 +11,11 @@ export const styles = StyleSheet.create({
   itemInfo: {
     flexDirection: 'row'
   },
+  itemTitle: {},
   itemSubInfo: {
     flexDirection: 'row',
     alignItems: 'center'
   },
-  itemTitle: {},
   idCount: {
     paddingRight: 14,
     fontFamily: 'Inter_400Regular',
@@ -31,11 +27,38 @@ export const styles = StyleSheet.create({
     color: COLORS.lightGrey,
     paddingTop: 2
   },
-  optionsButton: { alignItems: 'center', height: '100%', width: 35 },
-  flatListContainer: {
+  optionsButton: {
+    alignItems: 'center',
+    height: '100%',
+    width: 35
+  },
+  header: {
+    flex: 1,
+    marginLeft: 17,
+    marginRight: 10
+  },
+  addressItemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+    paddingBottom: 32
+  },
+  touchableAreaContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1
+  },
+  buttonContainer: {
+    paddingRight: 5
+  },
+  actionButton: {
+    width: 25,
     alignItems: 'center'
+  },
+  progressIcon: {
+    paddingLeft: 7
   },
   whalesTokenContainer: {
     justifyContent: 'space-between',
@@ -48,14 +71,9 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   priceProgressContainer: {
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    flexDirection: 'row'
-  },
-  buttonContainer: {
-    paddingRight: 20
-  },
-  actionButton: {
-    width: 25,
-    alignItems: 'flex-end'
+    flexDirection: 'row',
+    flex: 1
   }
 });

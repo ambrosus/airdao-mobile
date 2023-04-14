@@ -8,5 +8,6 @@ export const COLORS = {
   dark: '#222222',
   silver: '#C0C0C0',
   thinGrey: '#2f2b4380',
-  buttonTextColor: '#0e0e0e99'
+  buttonTextColor: '#0e0e0e99',
+  removeButtonColor: '#676b73'
 };
