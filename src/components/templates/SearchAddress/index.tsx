@@ -38,6 +38,7 @@ import { etherumAddressRegex } from '@constants/regex';
 import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
+import { useAllAddresses } from '@contexts';
 import { styles } from './styles';
 
 interface SearchAdressProps {
@@ -67,6 +68,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
   const { watchlist, addToWatchlist } = useWatchlist();
+  const allAdresses = useAllAddresses();
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
@@ -136,19 +138,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
 
   const trackAddress = async () => {
     if (account) {
-      if (watchlist.findIndex((a) => a.addressId === account.address) > -1) {
+      if (watchlist.indexOfItem(account, 'address') > -1) {
         // TODO navigate to watchlist
         navigation.jumpTo('Wallets');
         return;
       }
+      const finalAccount =
+        allAdresses.find((a) => a.address === account.address) || account;
+      account.isOnWatchlist = true;
       if (ambToken) {
-        await addToWatchlist({
-          addressTitle: '',
-          addressPrice: (account.ambBalance * ambToken.priceUSD).toString(),
-          addressToken: account.ambBalance.toString(),
-          addressProgress: '',
-          addressId: address
-        });
+        addToWatchlist(finalAccount);
         showSuccessModal();
       }
     }
@@ -163,7 +162,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   };
 
   const addressInWatchlist = useMemo(() => {
-    const idx = watchlist.findIndex((w) => w.addressId === address);
+    const idx = watchlist.findIndex((w) => w.address === address);
     if (idx > -1) return watchlist[idx];
     return null;
   }, [watchlist, address]);
@@ -229,20 +228,10 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onPress={trackAddress}
           />
           <BottomSheetWithHeader ref={successModal} fullscreen title="">
-            {ambToken && (
+            {ambToken && account && (
               <WatchlistAddSuccess
                 onDone={hideSuccessModal}
-                wallet={
-                  addressInWatchlist || {
-                    addressTitle: '',
-                    addressPrice: (
-                      account.ambBalance * ambToken.priceUSD
-                    ).toString(),
-                    addressToken: account.ambBalance.toString(),
-                    addressProgress: '',
-                    addressId: address
-                  }
-                }
+                address={address}
               />
             )}
           </BottomSheetWithHeader>

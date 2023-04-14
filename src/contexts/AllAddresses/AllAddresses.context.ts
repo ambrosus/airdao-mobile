@@ -9,7 +9,11 @@ export interface AllAddressesContextState {
   addresses: ExplorerAccount[];
 }
 
-export type AllAddressesActionType = 'add' | 'remove' | 'update';
+export type AllAddressesActionType =
+  | 'add'
+  | 'remove'
+  | 'update'
+  | 'add-or-update';
 export type AllAddressesAction = {
   type: AllAddressesActionType;
   payload: ExplorerAccount;

@@ -39,6 +39,19 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     [allAddresses]
   );
 
+  const addOrUpdateAddress = useCallback(
+    (address: ExplorerAccount) => {
+      const idx = allAddresses.indexOfItem(address, 'address');
+      if (idx > -1) {
+        allAddresses.splice(idx, 1, address);
+        return allAddresses;
+      } else {
+        return addAddress(address);
+      }
+    },
+    [addAddress, allAddresses]
+  );
+
   const reducer = useCallback(
     (
       state: AllAddressesContextState,
@@ -54,6 +67,9 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
         case 'update': {
           return { addresses: [...updateAddress(action.payload)] };
         }
+        case 'add-or-update': {
+          return { addresses: [...addOrUpdateAddress(action.payload)] };
+        }
         case 'set': {
           return { addresses: action.payload };
         }
@@ -61,7 +77,7 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
           return state;
       }
     },
-    [addAddress, removeAddress, updateAddress]
+    [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
   const value = useReducer(reducer, { addresses: allAddresses });
 
@@ -76,6 +92,7 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
         const newAccount = Object.assign({}, account);
         newAccount.name = address.name;
         newAccount.isPersonal = Boolean(address.isPersonal);
+        newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
         return newAccount;
       })
     );

@@ -8,16 +8,14 @@ import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
 import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
-import {
-  ListsOfAddressType,
-  ListsOfAddressesGroupType
-} from '@appTypes/ListsOfAddressGroup';
+import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
 import { useFullscreenModalHeight } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
+import { ExplorerAccount } from '@models/Explorer';
 import { styles } from './styles';
 
 interface EditWalletProps {
-  wallet: ListsOfAddressType;
+  wallet: ExplorerAccount;
   name: string;
   isPersonalAddress: boolean;
   onNameChange: (newName: string) => unknown;
@@ -42,7 +40,10 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
 
   const selectedLists = listsOfAddressGroup.filter(
-    (list) => list.listOfAddresses.indexOfItem(wallet, 'addressId') > -1
+    (list) =>
+      list.listOfAddresses.findIndex(
+        (address) => address.addressId === wallet.address
+      ) > -1
   );
 
   const selectedListText = useMemo(() => {
@@ -65,6 +66,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   };
 
   const saveNewLists = async () => {
+    // TODO refactor lists and use lists context
     setListsOfAddressGroup(localLists);
     await Cache.setItem(CacheKey.AddressLists, localLists);
     hideAddToListModal();
@@ -75,15 +77,20 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       (l) => l.groupId === list.groupId
     );
     if (!listFromLocalLists) return;
-    const idx = listFromLocalLists.listOfAddresses.indexOfItem(
-      wallet,
-      'addressId'
+    const idx = listFromLocalLists.listOfAddresses.findIndex(
+      (address) => address.addressId === wallet.address
     );
     if (idx > -1) {
-      listFromLocalLists.listOfAddresses.removeItem(wallet, 'addressId');
+      listFromLocalLists.listOfAddresses.splice(idx, 1);
       listFromLocalLists.addressesCount--;
     } else {
-      listFromLocalLists.listOfAddresses.push(wallet);
+      listFromLocalLists.listOfAddresses.push({
+        addressId: wallet.address,
+        addressTitle: wallet.name,
+        addressToken: wallet.ambBalance.toString(),
+        addressPrice: '',
+        addressProgress: ''
+      });
       listFromLocalLists.addressesCount++;
     }
     setLocalLists([...localLists]);
