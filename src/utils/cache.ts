@@ -6,7 +6,8 @@ export enum CacheKey {
   NotificationSettings = 'notification_settings',
   Watchlist = 'watchlist',
   AddressLists = 'UserGroupsOfAddresses',
-  PersonalList = 'personal_list'
+  PersonalList = 'personal_list',
+  AllAddresses = 'all_addresses'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
