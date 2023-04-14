@@ -9,11 +9,16 @@ import {
 } from './components';
 import { styles } from './styles';
 import { useAMBPrice } from '@hooks/query';
+import { PopUpOnBoarding } from '@components/composite/PopUpOnBoarding';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 export const WalletsScreen = () => {
   const { data } = useAMBPrice();
+  const { status } = useOnboardingStatus((v) => v);
   return (
     <View style={{ flex: 1 }}>
+      {status === 'step-1' ? <PopUpOnBoarding step="step-4" /> : null}
+
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
