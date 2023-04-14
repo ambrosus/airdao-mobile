@@ -33,6 +33,7 @@ export const ExploreScreen = () => {
   const sortModal = useRef<BottomSheetRef>(null);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
+  // const { status, setStatus } = useOnboardingStatus((v) => v);
 
   const [sortBy, setSortBy] = useState(ExplorerSort.Balance);
 
