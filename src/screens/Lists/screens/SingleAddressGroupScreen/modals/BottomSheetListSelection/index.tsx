@@ -34,17 +34,13 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
   ({ address }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const actionRef = useRef<BottomSheetRef>(null);
-    const [allSelectedAdresses, setAllSelectedAdresses] = useState<
-      ListsOfAddressType[]
-    >([]);
+    const { listsOfAddressGroup } = useLists((v) => v);
 
     const {
       params: {
         group: { groupId }
       }
     } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
-
-    const { listsOfAddressGroup } = useLists((v) => v);
 
     const selectedList = useMemo(
       () =>
@@ -80,7 +76,6 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
     useEffect(() => {
       if (address?.addressId) {
         setIdsOfSelectedAddresses([address.addressId]);
-        // setSelectedCount(1);
       }
     }, [address?.addressId]);
 
@@ -89,9 +84,6 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
         idsOfSelectedAddresses.includes(addressItem.addressId)
       );
     }, [idsOfSelectedAddresses, listOfAddresses]);
-
-    console.log(selectedAddresses, idsOfSelectedAddresses, 'pokijhuijok');
-
     return (
       <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
         <SafeAreaView>

@@ -58,7 +58,7 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
             }
             contentRight={
               <Button
-                disabled={!idsOfSelectedGroups.length}
+                //disabled={!idsOfSelectedGroups.length}
                 type="base"
                 onPress={() => {
                   handleOnAddressMove(idsOfSelectedGroups, addresses);
