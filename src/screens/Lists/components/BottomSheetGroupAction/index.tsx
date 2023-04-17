@@ -7,13 +7,13 @@ import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
-import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models/AccountList';
 import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   handleOnDeleteItem: (listId: string) => void;
-  item: ListsOfAddressesGroupType;
+  item: AccountList;
   handleOnRenameButtonPress: () => void;
 };
 
@@ -34,8 +34,8 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
           color={COLORS.black}
         >
           {status === 'rename'
-            ? `Edit ${item.groupTitle}`
-            : `Are you sure want to remove selected Addresses from ${item.groupTitle}?`}
+            ? `Edit ${item.name}`
+            : `Are you sure want to remove selected Addresses from ${item.name}?`}
         </Text>
         <Spacer value={32} />
         <Button
@@ -58,7 +58,7 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
           style={styles.bottomSheetDeleteButton}
           onPress={() => {
             if (status === 'delete') {
-              handleOnDeleteItem(item.groupId);
+              handleOnDeleteItem(item.id);
             } else {
               setStatus('delete');
             }

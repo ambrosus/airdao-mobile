@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
@@ -8,10 +8,9 @@ import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
 import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
-import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
 import { useFullscreenModalHeight } from '@hooks';
-import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
+import { AccountList } from '@models/AccountList';
 import { styles } from './styles';
 
 interface EditWalletProps {
@@ -36,19 +35,23 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     handleOnCreate,
     createGroupRef
   } = useLists((v) => v);
+
   const fullscreenModalHeight = useFullscreenModalHeight();
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
 
   const selectedLists = listsOfAddressGroup.filter(
     (list) =>
-      list.listOfAddresses.findIndex(
-        (address) => address.addressId === wallet.address
-      ) > -1
+      list.accounts.findIndex((account) => account.address === wallet.address) >
+      -1
   );
+
+  useEffect(() => {
+    setLocalLists(listsOfAddressGroup);
+  }, [listsOfAddressGroup]);
 
   const selectedListText = useMemo(() => {
     if (selectedLists.length === 0) return 'None';
-    if (selectedLists.length === 1) return selectedLists[0].groupTitle;
+    if (selectedLists.length === 1) return selectedLists[0].name;
     return `${selectedLists.length} lists`;
   }, [selectedLists]);
 
@@ -67,31 +70,25 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
 
   const saveNewLists = async () => {
     // TODO refactor lists and use lists context
-    setListsOfAddressGroup(localLists);
-    await Cache.setItem(CacheKey.AddressLists, localLists);
+    setListsOfAddressGroup(
+      localLists.map((l) => ({
+        ...l,
+        addresses: l.accounts.map((account) => account.address)
+      }))
+    );
     hideAddToListModal();
   };
 
-  const onPressListItem = (list: ListsOfAddressesGroupType) => {
-    const listFromLocalLists = localLists.find(
-      (l) => l.groupId === list.groupId
-    );
+  const onPressListItem = (list: AccountList) => {
+    const listFromLocalLists = localLists.find((l) => l.id === list.id);
     if (!listFromLocalLists) return;
-    const idx = listFromLocalLists.listOfAddresses.findIndex(
-      (address) => address.addressId === wallet.address
+    const idx = listFromLocalLists.accounts.findIndex(
+      (account) => account.address === wallet.address
     );
     if (idx > -1) {
-      listFromLocalLists.listOfAddresses.splice(idx, 1);
-      listFromLocalLists.addressesCount--;
+      listFromLocalLists.accounts.splice(idx, 1);
     } else {
-      listFromLocalLists.listOfAddresses.push({
-        addressId: wallet.address,
-        addressTitle: wallet.name,
-        addressToken: wallet.ambBalance.toString(),
-        addressPrice: '',
-        addressProgress: ''
-      });
-      listFromLocalLists.addressesCount++;
+      listFromLocalLists.accounts.push(wallet);
     }
     setLocalLists([...localLists]);
   };

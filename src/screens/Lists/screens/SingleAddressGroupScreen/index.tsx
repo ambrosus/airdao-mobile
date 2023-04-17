@@ -16,16 +16,16 @@ import { BottomSheetAddNewGroup } from './modals/BottomSheetAddNewGroup';
 import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
 import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
 import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ExplorerAccount } from '@models/Explorer';
 
 export const SingleAddressGroupScreen = () => {
   const {
     params: {
-      group: { groupId }
+      group: { id: groupId }
     }
   } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
 
-  const [pressedAddress, setPressedAddress] = useState<ListsOfAddressType>();
+  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewGroupRef = useRef<BottomSheetRef>(null);
   const groupActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
@@ -52,12 +52,13 @@ export const SingleAddressGroupScreen = () => {
   );
 
   const selectedList = useMemo(
-    () =>
-      listsOfAddressGroup.filter((group) => group.groupId === groupId)[0] || {},
+    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
   );
 
-  const { groupTokens, listOfAddresses, groupTitle } = selectedList;
+  const { accounts, name } = selectedList;
+  const groupTokens = selectedList.totalBalance;
+  const addressCount = selectedList.accountCount;
 
   const handleOpenRenameModal = useCallback(() => {
     groupActionRef.current?.dismiss();
@@ -79,7 +80,7 @@ export const SingleAddressGroupScreen = () => {
   }, []);
 
   const handleOnLongPress = useCallback(
-    (address: React.SetStateAction<ListsOfAddressType | undefined>) => {
+    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
       listSelectionRef.current?.show();
       setPressedAddress(address);
     },
@@ -95,13 +96,11 @@ export const SingleAddressGroupScreen = () => {
           </Button>
           <View style={{ paddingLeft: 20 }}>
             <Text title style={styles.itemTitle}>
-              {groupTitle}
+              {name}
             </Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
-              <Text style={styles.idCount}>
-                {selectedList.listOfAddresses.length} Addresses
-              </Text>
+              <Text style={styles.idCount}>{addressCount} Addresses</Text>
               <Text style={styles.tokensCount}>{groupTokens}</Text>
             </View>
           </View>
@@ -117,8 +116,8 @@ export const SingleAddressGroupScreen = () => {
     );
   }, [
     navigation.goBack,
-    groupTitle,
-    selectedList.listOfAddresses.length,
+    name,
+    addressCount,
     groupTokens,
     handleOpenGroupAction
   ]);
@@ -131,7 +130,7 @@ export const SingleAddressGroupScreen = () => {
         contentContainerStyle={{
           paddingBottom: 150
         }}
-        data={listOfAddresses}
+        data={accounts}
         renderItem={({ item }) => {
           return (
             <View style={styles.addressItemContainer}>
@@ -175,7 +174,7 @@ export const SingleAddressGroupScreen = () => {
       <BottomSheetCreateRenameGroup
         type="rename"
         groupId={groupId}
-        groupTitle={groupTitle}
+        groupTitle={name}
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
       />

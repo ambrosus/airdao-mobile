@@ -1,4 +1,4 @@
-import { CacheableAddress, ExplorerAccountType } from '@appTypes';
+import { CacheableAccount, ExplorerAccountType } from '@appTypes';
 import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 
 export class ExplorerInfo {
@@ -13,7 +13,7 @@ export class ExplorerInfo {
   }
 }
 
-export class ExplorerAccount implements CacheableAddress {
+export class ExplorerAccount implements CacheableAccount {
   _id: string;
   address: string;
   ambBalance: number;

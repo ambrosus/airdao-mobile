@@ -1,17 +1,45 @@
 import { createContextSelector } from '@helpers/createContextSelector';
-import { useCallback, useRef, useState } from 'react';
-import {
-  ListsOfAddressType,
-  ListsOfAddressesGroupType
-} from '@appTypes/ListsOfAddressGroup';
-import { setDataToSecureStore } from '@helpers/storageHelpers';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BottomSheetRef } from '@components/composite';
 import { randomUUID } from 'expo-crypto';
+import { AccountList } from '@models/AccountList';
+import { CacheableAccountList } from '@appTypes/CacheableAccountList';
+import { Cache, CacheKey } from '@utils/cache';
+import { useAllAddresses } from '@contexts/AllAddresses';
+import { ExplorerAccount } from '@models/Explorer';
+
 const ListsContext = () => {
+  const allAddresses = useAllAddresses();
   // save lists locally
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
-    ListsOfAddressesGroupType[]
+    CacheableAccountList[]
   >([]);
+
+  const lists = useMemo(() => {
+    const populatedLists: AccountList[] = listsOfAddressGroup.map(
+      (l) =>
+        new AccountList({
+          ...l,
+          accounts: l.addresses.map(
+            (address) =>
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              allAddresses.find(
+                (populatedAddress) => populatedAddress.address === address
+              )!
+          )
+        })
+    );
+    return populatedLists;
+  }, [allAddresses, listsOfAddressGroup]);
+
+  useEffect(() => {
+    const getLists = async () => {
+      const lists = ((await Cache.getItem(CacheKey.AddressLists)) ||
+        []) as CacheableAccountList[];
+      setListsOfAddressGroup(lists);
+    };
+    getLists();
+  }, [allAddresses]);
 
   // ref for open Create new List modal
   const createGroupRef = useRef<BottomSheetRef>(null);
@@ -19,13 +47,15 @@ const ListsContext = () => {
   // handle function for deleting list
   const handleOnDelete = useCallback(
     async (selectedGroupId: string) => {
-      const newGroupsOfAddresses: ListsOfAddressesGroupType[] =
-        listsOfAddressGroup.filter((item) => item.groupId !== selectedGroupId);
-      setListsOfAddressGroup(newGroupsOfAddresses);
-      await setDataToSecureStore(
-        'UserGroupsOfAddresses',
-        JSON.stringify(newGroupsOfAddresses)
+      listsOfAddressGroup.removeItem(
+        {
+          id: selectedGroupId,
+          name: '',
+          addresses: []
+        },
+        'id'
       );
+      setListsOfAddressGroup([...listsOfAddressGroup]);
     },
     [listsOfAddressGroup, setListsOfAddressGroup]
   );
@@ -33,22 +63,16 @@ const ListsContext = () => {
   // handle function for creating list
   const handleOnCreate = useCallback(
     async (value: string) => {
-      const newGroupOfAddresses: ListsOfAddressesGroupType = {
-        addressesCount: 0,
-        groupTitle: value,
-        groupTokens: 2000,
-        listOfAddresses: [],
-        groupId: randomUUID()
+      const newGroupOfAddresses: CacheableAccountList = {
+        id: randomUUID(),
+        name: value,
+        addresses: []
       };
       const newGroupsOfAddresses = [
         ...listsOfAddressGroup,
         newGroupOfAddresses
       ];
       setListsOfAddressGroup(newGroupsOfAddresses);
-      await setDataToSecureStore(
-        'UserGroupsOfAddresses',
-        JSON.stringify(newGroupsOfAddresses)
-      );
       createGroupRef.current?.dismiss();
     },
     [listsOfAddressGroup]
@@ -57,59 +81,48 @@ const ListsContext = () => {
   // handle function for renaming list
   const handleOnRename = useCallback(
     async (selectedGroupId: string, newGroupName: string) => {
-      const newGroupsOfAddresses: ListsOfAddressesGroupType[] =
+      const newGroupsOfAddresses: CacheableAccountList[] =
         listsOfAddressGroup.map((group) =>
-          selectedGroupId === group.groupId
-            ? { ...group, groupTitle: newGroupName }
+          selectedGroupId === group.id
+            ? { ...group, name: newGroupName }
             : group
         );
       setListsOfAddressGroup(newGroupsOfAddresses);
-      await setDataToSecureStore(
-        'UserGroupsOfAddresses',
-        JSON.stringify(newGroupsOfAddresses)
-      );
     },
     [listsOfAddressGroup]
   );
 
   // handle function for adding address to group
   const handleOnAddNewAddresses = useCallback(
-    async (selectedAddresses: ListsOfAddressType[], groupId: string) => {
+    async (selectedAddresses: ExplorerAccount[], groupId: string) => {
       const editedGroupsOfAddresses = listsOfAddressGroup.map((group) => {
-        if (group.groupId === groupId) {
+        if (group.id === groupId) {
           return {
             ...group,
-            addressesCount: group.addressesCount + selectedAddresses.length,
-            listOfAddresses: [...group.listOfAddresses, ...selectedAddresses]
+            addresses: selectedAddresses.map((a) => a.address)
           };
         }
         return group;
       });
       setListsOfAddressGroup(editedGroupsOfAddresses);
-      await setDataToSecureStore(
-        'UserGroupsOfAddresses',
-        JSON.stringify(editedGroupsOfAddresses)
-      );
     },
     [listsOfAddressGroup]
   );
 
   const handleOnAddressMove = async (
     selectedGroupsIds: string[],
-    selectedAddresses: ListsOfAddressType[]
+    selectedAddresses: ExplorerAccount[]
   ) => {
-    const selectedAddressesIds = selectedAddresses.map(
-      (elem) => elem.addressId
-    );
-    const addressConcat = (groupAddresses: ListsOfAddressType[]) => {
+    const selectedAddressesIds = selectedAddresses.map((elem) => elem.address);
+    const addressConcat = (groupAddresses: string[]) => {
       const newArr = [...groupAddresses];
 
       selectedAddresses.forEach((selectedAddress) => {
         const contains = newArr.every((address) =>
-          selectedAddressesIds.includes(address.addressId)
+          selectedAddressesIds.includes(address)
         );
         if (!contains) {
-          newArr.push(selectedAddress);
+          newArr.push(selectedAddress.address);
         }
       });
 
@@ -117,31 +130,25 @@ const ListsContext = () => {
     };
 
     const editedGroups = listsOfAddressGroup.map((group) => {
-      if (selectedGroupsIds.includes(group.groupId)) {
+      if (selectedGroupsIds.includes(group.id)) {
         return {
           ...group,
-          addressesCount: group.addressesCount + 1,
-          listOfAddresses: addressConcat(group.listOfAddresses)
+          addresses: addressConcat(group.addresses)
         };
       } else {
         return {
           ...group,
-          listOfAddresses: group.listOfAddresses.filter(({ addressId }) => {
-            return !selectedAddressesIds.includes(addressId);
-          })
+          addresses: group.addresses.filter(
+            (address) => !selectedAddressesIds.includes(address)
+          )
         };
       }
     });
-
-    await setDataToSecureStore(
-      'UserGroupsOfAddresses',
-      JSON.stringify(editedGroups)
-    );
     setListsOfAddressGroup(editedGroups);
   };
 
   return {
-    listsOfAddressGroup,
+    listsOfAddressGroup: lists,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,
