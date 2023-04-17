@@ -1,4 +1,4 @@
-export interface CacheableAddress {
+export interface CacheableAccount {
   name: string;
   address: string;
   isPersonal?: boolean;
