@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   AllAddressesAction,
-  AllAddressesContext,
   AllAddressesContextState
-} from './AllAddresses.context';
+} from './AllAddresses.types';
 import { CacheableAddress } from '@appTypes/CacheableAddress';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { searchAddress } from '@api/api';
+import { createContextSelector } from '@helpers/createContextSelector';
 
-export const AllAddressesProvider: React.FC = ({ children }: any) => {
+const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
 
   const addAddress = useCallback(
@@ -79,7 +79,7 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     },
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
-  const value = useReducer(reducer, { addresses: allAddresses });
+  const [, reducerFn] = useReducer(reducer, { addresses: allAddresses });
 
   const populateAddresses = async (
     addresses: CacheableAddress[]
@@ -98,6 +98,7 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     );
   };
 
+  // fetch all addresses on mount
   useEffect(() => {
     const getAddresses = async () => {
       const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
@@ -110,9 +111,19 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <AllAddressesContext.Provider value={value}>
-      {children}
-    </AllAddressesContext.Provider>
-  );
+  return {
+    addresses: allAddresses,
+    reducer: reducerFn
+  };
+};
+
+export const [AllAddressesProvider, useAllAddressesContext] =
+  createContextSelector(AllAddressesContext);
+
+export const useAllAddresses = () => {
+  return useAllAddressesContext((v) => v.addresses);
+};
+
+export const useAllAddressesReducer = () => {
+  return useAllAddressesContext((v) => v.reducer);
 };
