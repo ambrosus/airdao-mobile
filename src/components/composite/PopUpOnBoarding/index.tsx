@@ -1,12 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
-import Popover from 'react-native-popover-view';
+import { Dimensions, View } from 'react-native';
+import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { styles } from './styles';
 import { useOnboardingPopUp } from '@hooks/useOnBoardingPopUp';
 import { OnBoardingStatus } from '@components/composite/PopUpOnBoarding/PopUpOnBoarding.types';
 import { COLORS } from '@constants/colors';
 import { CloseIcon } from '@components/svg/icons';
+import { scale } from '@utils/scaling';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const PopUpOnBoarding = ({
   step,
@@ -23,6 +25,8 @@ export const PopUpOnBoarding = ({
     isButtonLeftVisible,
     buttonLeft
   } = useOnboardingPopUp(step);
+  const bottomSafeArea = useSafeAreaInsets().bottom || 34;
+  const bottomTabBarHeight = 65;
 
   if (!title) {
     return null;
@@ -30,7 +34,22 @@ export const PopUpOnBoarding = ({
 
   return (
     <View style={styles.popup}>
-      <Popover isVisible={true} popoverStyle={styles.popover}>
+      <Popover
+        isVisible={true}
+        popoverStyle={styles.popover}
+        from={(sourceRef, showPopover) => (
+          <View
+            ref={sourceRef}
+            style={{
+              position: 'absolute',
+              backgroundColor: 'red',
+
+              left: Dimensions.get('screen').width / 2,
+              bottom: bottomSafeArea + bottomTabBarHeight + 50
+            }}
+          />
+        )}
+      >
         <View style={styles.content}>
           <Row justifyContent="space-between">
             <Text
@@ -77,7 +96,7 @@ export const PopUpOnBoarding = ({
               <Button
                 style={styles.buttonRight}
                 onPress={() => {
-                  handleStepChange('step-4');
+                  handleStepChange('step-1');
                 }}
               >
                 <Text
