@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -11,17 +11,16 @@ import { styles } from './styles';
 import { useAMBPrice } from '@hooks/query';
 import { PopUpOnBoarding } from '@components/composite/PopUpOnBoarding';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { FloatButton } from '@components/base/FloatButton';
+import { AddIcon } from '@components/svg/icons/AddIcon';
 
 export const WalletsScreen = () => {
   const { data } = useAMBPrice();
   const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const stepRef = useRef();
 
   return (
     <View style={{ flex: 1 }}>
-      {status === 'step-1' ? (
-        <PopUpOnBoarding step="step-2" handleStepChange={handleStepChange} />
-      ) : null}
-
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -43,6 +42,16 @@ export const WalletsScreen = () => {
           </View>
         </View>
       </ScrollView>
+      {status === 'step-1' ? (
+        <View style={{ justifyContent: 'flex-end' }}>
+          <PopUpOnBoarding step="step-1" handleStepChange={handleStepChange} />
+        </View>
+      ) : null}
+      <FloatButton
+        title="Add a Address"
+        onPress={() => {}}
+        icon={<AddIcon />}
+      />
     </View>
   );
 };
