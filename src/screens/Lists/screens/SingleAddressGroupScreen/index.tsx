@@ -17,6 +17,7 @@ import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/compone
 import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
 import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
 import { ExplorerAccount } from '@models/Explorer';
+import { NumberUtils } from '@utils/number';
 
 export const SingleAddressGroupScreen = () => {
   const {
@@ -101,7 +102,9 @@ export const SingleAddressGroupScreen = () => {
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
               <Text style={styles.idCount}>{addressCount} Addresses</Text>
-              <Text style={styles.tokensCount}>{groupTokens}</Text>
+              <Text style={styles.tokensCount}>
+                {NumberUtils.formatNumber(groupTokens, 2)}
+              </Text>
             </View>
           </View>
         </View>

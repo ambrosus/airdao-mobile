@@ -35,4 +35,13 @@ export class ExplorerAccount implements CacheableAccount {
   calculatePercentHoldings(totalSupply: number): number {
     return (this.ambBalance / totalSupply) * 100;
   }
+
+  static toCacheable(from: ExplorerAccount): CacheableAccount {
+    return {
+      name: from.name,
+      address: from.address,
+      isPersonal: from.isPersonal,
+      isOnWatchlist: from.isOnWatchlist
+    };
+  }
 }

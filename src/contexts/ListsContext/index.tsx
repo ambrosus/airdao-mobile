@@ -14,7 +14,6 @@ const ListsContext = () => {
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
     CacheableAccountList[]
   >([]);
-
   const lists = useMemo(() => {
     const populatedLists: AccountList[] = listsOfAddressGroup.map(
       (l) =>
@@ -39,7 +38,7 @@ const ListsContext = () => {
       setListsOfAddressGroup(lists);
     };
     getLists();
-  }, [allAddresses]);
+  }, []);
 
   // ref for open Create new List modal
   const createGroupRef = useRef<BottomSheetRef>(null);
