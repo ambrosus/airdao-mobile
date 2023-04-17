@@ -1,8 +1,5 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
-import {
-  AllAddressesAction,
-  AllAddressesContextState
-} from './AllAddresses.types';
+import { useCallback, useEffect, useState } from 'react';
+import { AllAddressesAction } from './AllAddresses.types';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
@@ -54,32 +51,35 @@ const AllAddressesContext = () => {
 
   const reducer = useCallback(
     (
-      state: AllAddressesContextState,
       action: AllAddressesAction | { type: 'set'; payload: ExplorerAccount[] }
     ) => {
       switch (action.type) {
         case 'add': {
-          return { addresses: [...addAddress(action.payload)] };
+          setAllAddresses([...addAddress(action.payload)]);
+          break;
         }
         case 'remove': {
-          return { addresses: [...removeAddress(action.payload)] };
+          setAllAddresses([...removeAddress(action.payload)]);
+          break;
         }
         case 'update': {
-          return { addresses: [...updateAddress(action.payload)] };
+          setAllAddresses([...updateAddress(action.payload)]);
+          break;
         }
         case 'add-or-update': {
-          return { addresses: [...addOrUpdateAddress(action.payload)] };
+          setAllAddresses([...addOrUpdateAddress(action.payload)]);
+          break;
         }
         case 'set': {
-          return { addresses: action.payload };
+          setAllAddresses(action.payload);
+          break;
         }
         default:
-          return state;
+          break;
       }
     },
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
-  const [, reducerFn] = useReducer(reducer, { addresses: allAddresses });
 
   const populateAddresses = async (
     addresses: CacheableAccount[]
@@ -105,7 +105,7 @@ const AllAddressesContext = () => {
         []) as CacheableAccount[];
       const populatedAddresses = await populateAddresses(addresses);
       setAllAddresses(populatedAddresses);
-      reducer({ addresses: [] }, { type: 'set', payload: populatedAddresses });
+      reducer({ type: 'set', payload: populatedAddresses });
     };
     getAddresses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +113,7 @@ const AllAddressesContext = () => {
 
   return {
     addresses: allAddresses,
-    reducer: reducerFn
+    reducer
   };
 };
 

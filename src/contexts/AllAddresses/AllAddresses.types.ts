@@ -1,9 +1,5 @@
 import { ExplorerAccount } from '@models/Explorer';
 
-export interface AllAddressesContextState {
-  addresses: ExplorerAccount[];
-}
-
 export type AllAddressesActionType =
   | 'add'
   | 'remove'

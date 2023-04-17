@@ -12,6 +12,7 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { styles } from './styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
+import { NumberUtils } from '@utils/number';
 
 type Props = {
   group: AccountList;
@@ -44,9 +45,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
   };
 
   const tokensFormatted = useMemo(() => {
-    const formattedNumber = group.totalBalance
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
     return `$${formattedNumber} (${formattedNumber} AMB)`;
   }, [group.totalBalance]);
 
