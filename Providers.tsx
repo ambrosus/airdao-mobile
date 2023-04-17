@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListsContextProvider } from '@contexts/ListsContext';
+import { AllAddressesProvider } from '@contexts';
+import { OnboardingContextProvider } from '@contexts/OnBoardingUserContext';
 
 const queryClient = new QueryClient();
 
@@ -16,11 +18,16 @@ const WrappedSafeAreaProvider: React.FC = ({ children }: any) => (
 
 const independentProviders = [
   WrappedQueryClientProvider,
-  WrappedSafeAreaProvider
+  WrappedSafeAreaProvider,
+  AllAddressesProvider
 ];
 /**
  * The order of the providers matters
  */
-const providers = [...independentProviders, ListsContextProvider];
+const providers = [
+  ...independentProviders,
+  ListsContextProvider,
+  OnboardingContextProvider
+];
 
 export const Providers = combineComponents(...providers);
