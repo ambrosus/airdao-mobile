@@ -22,12 +22,12 @@ import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { CheckBox } from '@components/base/CheckBox';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  address?: ListsOfAddressType;
+  address?: ExplorerAccount;
 };
 
 export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
@@ -38,18 +38,17 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
 
     const {
       params: {
-        group: { groupId }
+        group: { id: groupId }
       }
     } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
 
     const selectedList = useMemo(
       () =>
-        listsOfAddressGroup.filter((group) => group.groupId === groupId)[0] ||
-        {},
+        listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
       [groupId, listsOfAddressGroup]
     );
 
-    const { listOfAddresses } = selectedList;
+    const { accounts: listOfAddresses } = selectedList;
 
     const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
       string[]
@@ -74,14 +73,14 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
     }, []);
 
     useEffect(() => {
-      if (address?.addressId) {
-        setIdsOfSelectedAddresses([address.addressId]);
+      if (address?.address) {
+        setIdsOfSelectedAddresses([address.address]);
       }
-    }, [address?.addressId]);
+    }, [address?.address]);
 
     const selectedAddresses = useMemo(() => {
       return listOfAddresses?.filter((addressItem) =>
-        idsOfSelectedAddresses.includes(addressItem.addressId)
+        idsOfSelectedAddresses.includes(addressItem.address)
       );
     }, [idsOfSelectedAddresses, listOfAddresses]);
     return (
@@ -142,11 +141,9 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
                   <View style={{ paddingRight: 16 }}>
                     <CheckBox
                       onPress={() => {
-                        handleCheckBoxPress(item.addressId);
+                        handleCheckBoxPress(item.address);
                       }}
-                      isChecked={idsOfSelectedAddresses.includes(
-                        item.addressId
-                      )}
+                      isChecked={idsOfSelectedAddresses.includes(item.address)}
                     />
                   </View>
                   <AddressItem item={item} />

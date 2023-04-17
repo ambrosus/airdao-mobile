@@ -6,12 +6,12 @@ import { COLORS } from '@constants/colors';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
   handleOpenSingleAddressAction?: () => void;
-  item: ListsOfAddressType;
+  item: ExplorerAccount;
 };
 const AddressItem = React.forwardRef<BottomSheetRef, Props>(({ item }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
@@ -26,7 +26,7 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(({ item }, ref) => {
               fontSize={13}
               color={COLORS.black}
             >
-              {item.addressTitle}
+              {item.name}
             </Text>
           </Row>
           <Spacer value={4} />
@@ -35,7 +35,7 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(({ item }, ref) => {
             fontSize={13}
             color={COLORS.thinGrey}
           >
-            {item.addressToken}
+            {item.ambBalance}
           </Text>
         </View>
       </View>
@@ -46,7 +46,7 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(({ item }, ref) => {
             fontSize={13}
             color={COLORS.black}
           >
-            {item.addressPrice}
+            {item.ambBalance}
           </Text>
           <Spacer value={4} />
           <Row justifyContent="space-between" alignItems="center">
@@ -57,7 +57,7 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(({ item }, ref) => {
               color={COLORS.thinGrey}
               style={styles.progressIcon}
             >
-              {item.addressProgress}
+              3.46%
             </Text>
           </Row>
         </View>

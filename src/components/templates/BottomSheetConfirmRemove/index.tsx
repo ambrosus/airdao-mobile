@@ -6,11 +6,11 @@ import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ListsOfAddressType;
+  item: ExplorerAccount;
 };
 
 export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
@@ -28,7 +28,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          Are you sure want to remove selected {item.addressTitle} from Whales?
+          Are you sure want to remove selected {item.name} from Whales?
         </Text>
         <Spacer value={24} />
         <Button onPress={() => null} style={styles.removeButton}>

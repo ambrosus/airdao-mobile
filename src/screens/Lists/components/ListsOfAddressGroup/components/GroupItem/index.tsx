@@ -5,16 +5,16 @@ import { Button, Text } from '@components/base';
 import { OptionsIcon } from '@components/svg/icons/Options';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
-import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
+import { AccountList } from '@models/AccountList';
 
 type Props = {
-  group: ListsOfAddressesGroupType;
+  group: AccountList;
 };
 
 export const GroupItem: FC<Props> = ({ group }) => {
@@ -44,22 +44,22 @@ export const GroupItem: FC<Props> = ({ group }) => {
   };
 
   const tokensFormatted = useMemo(() => {
-    const formattedNumber = group.groupTokens
+    const formattedNumber = group.totalBalance
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return `$${formattedNumber} (${formattedNumber} AMB)`;
-  }, [group.groupTokens]);
+  }, [group.totalBalance]);
 
   return (
     <>
       <Button type="base" onPress={handleItemPress}>
         <View style={styles.container}>
           <View style={styles.itemInfo}>
-            <Text style={styles.itemTitle}>{group.groupTitle}</Text>
+            <Text style={styles.itemTitle}>{group.name}</Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
               <Text style={styles.walletsCount}>
-                {group.listOfAddresses.length + ' addresses'}
+                {group.accountCount + ' addresses'}
               </Text>
               <Text style={styles.tokensCount}>{tokensFormatted}</Text>
             </View>
@@ -81,8 +81,8 @@ export const GroupItem: FC<Props> = ({ group }) => {
       </Button>
       <BottomSheetCreateRenameGroup
         type="rename"
-        groupId={group.groupId}
-        groupTitle={group.groupTitle}
+        groupId={group.id}
+        groupTitle={group.name}
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
       />

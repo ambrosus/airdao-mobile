@@ -1,10 +1,10 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { GroupItem } from '@screens/Lists/components/ListsOfAddressGroup/components/GroupItem';
-import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models/AccountList';
 
 type Props = {
-  listsOfAddressGroup: ListsOfAddressesGroupType[];
+  listsOfAddressGroup: AccountList[];
 };
 export const ListsOfAddressGroup = ({ listsOfAddressGroup }: Props) => {
   return (

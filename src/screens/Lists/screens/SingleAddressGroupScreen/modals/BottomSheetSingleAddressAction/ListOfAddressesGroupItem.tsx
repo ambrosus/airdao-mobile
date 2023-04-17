@@ -4,16 +4,14 @@ import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { CheckBox } from '@components/base/CheckBox';
-import {
-  ListsOfAddressesGroupType,
-  ListsOfAddressType
-} from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models/AccountList';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
-  item: ListsOfAddressesGroupType;
+  item: AccountList;
   handleOnCheckboxPress: (selectedAddressId: string) => void;
   idsOfSelectedGroups: string[];
-  pressedAddresses: ListsOfAddressType[];
+  pressedAddresses: ExplorerAccount[];
   isAddressAlreadyInList: boolean;
 };
 export const ListOfAddressesGroupItem = ({
@@ -24,14 +22,14 @@ export const ListOfAddressesGroupItem = ({
   idsOfSelectedGroups
 }: Props) => {
   useEffect(() => {
-    if (isAddressAlreadyInList && !idsOfSelectedGroups.includes(item.groupId)) {
-      handleOnCheckboxPress(item.groupId);
+    if (isAddressAlreadyInList && !idsOfSelectedGroups.includes(item.id)) {
+      handleOnCheckboxPress(item.id);
     }
   }, [
     handleOnCheckboxPress,
     idsOfSelectedGroups,
     isAddressAlreadyInList,
-    item.groupId
+    item.id
   ]);
 
   return (
@@ -43,24 +41,24 @@ export const ListOfAddressesGroupItem = ({
           color={COLORS.black}
           style={styles.itemTitle}
         >
-          {item.groupTitle}
+          {item.name}
         </Text>
         <Spacer value={4} />
         <View style={styles.itemSubInfo}>
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
               ? `${pressedAddresses
-                  .map((address) => address.addressTitle)
+                  .map((address) => address.name)
                   .join(', ')} is already on this list`
-              : `${item.addressesCount} Addresses`}
+              : `${item.addressCount} Addresses`}
           </Text>
         </View>
       </View>
       <CheckBox
         onPress={() => {
-          handleOnCheckboxPress(item.groupId);
+          handleOnCheckboxPress(item.id);
         }}
-        isChecked={idsOfSelectedGroups.includes(item.groupId)}
+        isChecked={idsOfSelectedGroups.includes(item.id)}
       />
     </View>
   );
