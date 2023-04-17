@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/styles';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { CheckBox } from '@components/base/CheckBox';
-import {
-  ListsOfAddressesGroupType,
-  ListsOfAddressType
-} from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models/AccountList';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
-  item: ListsOfAddressesGroupType;
+  item: AccountList;
   handleOnCheckboxPress: (selectedAddressId: string) => void;
   idsOfSelectedGroups: string[];
-  pressedAddress: ListsOfAddressType;
+  pressedAddresses: ExplorerAccount[];
   isAddressAlreadyInList: boolean;
 };
 export const ListOfAddressesGroupItem = ({
   item,
-  pressedAddress,
+  pressedAddresses,
   isAddressAlreadyInList,
   handleOnCheckboxPress,
   idsOfSelectedGroups
 }: Props) => {
+  useEffect(() => {
+    if (isAddressAlreadyInList && !idsOfSelectedGroups.includes(item.id)) {
+      handleOnCheckboxPress(item.id);
+    }
+  }, [
+    handleOnCheckboxPress,
+    idsOfSelectedGroups,
+    isAddressAlreadyInList,
+    item.id
+  ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>
@@ -32,24 +41,24 @@ export const ListOfAddressesGroupItem = ({
           color={COLORS.black}
           style={styles.itemTitle}
         >
-          {item.groupTitle}
+          {item.name}
         </Text>
         <Spacer value={4} />
         <View style={styles.itemSubInfo}>
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
-              ? `${pressedAddress.addressTitle} is already on this list`
-              : `${item.addressesCount} Addresses`}
+              ? `${pressedAddresses
+                  .map((address) => address.name)
+                  .join(', ')} is already on this list`
+              : `${item.addressCount} Addresses`}
           </Text>
         </View>
       </View>
       <CheckBox
         onPress={() => {
-          if (!isAddressAlreadyInList) handleOnCheckboxPress(item.groupId);
+          handleOnCheckboxPress(item.id);
         }}
-        isChecked={
-          isAddressAlreadyInList || idsOfSelectedGroups.includes(item.groupId)
-        }
+        isChecked={idsOfSelectedGroups.includes(item.id)}
       />
     </View>
   );

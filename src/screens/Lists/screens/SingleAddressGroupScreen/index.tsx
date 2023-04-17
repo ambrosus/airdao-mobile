@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { FlatList, SafeAreaView, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
@@ -14,18 +14,25 @@ import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 import { BottomSheetAddNewGroup } from './modals/BottomSheetAddNewGroup';
 import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
+import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
+import { ExplorerAccount } from '@models/Explorer';
+import { NumberUtils } from '@utils/number';
 
 export const SingleAddressGroupScreen = () => {
   const {
     params: {
-      group: { groupId }
+      group: { id: groupId }
     }
   } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
 
+  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewGroupRef = useRef<BottomSheetRef>(null);
   const groupActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const addressActionRef = useRef<BottomSheetRef>(null);
+  const optionsRef = useRef<BottomSheetRef>(null);
+  const listSelectionRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation();
 
@@ -46,13 +53,13 @@ export const SingleAddressGroupScreen = () => {
   );
 
   const selectedList = useMemo(
-    () =>
-      listsOfAddressGroup.filter((group) => group.groupId === groupId)[0] || {},
+    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
   );
 
-  const { groupTokens, listOfAddresses, addressesCount, groupTitle } =
-    selectedList;
+  const { accounts, name } = selectedList;
+  const groupTokens = selectedList.totalBalance;
+  const addressCount = selectedList.accountCount;
 
   const handleOpenRenameModal = useCallback(() => {
     groupActionRef.current?.dismiss();
@@ -69,6 +76,18 @@ export const SingleAddressGroupScreen = () => {
     groupActionRef.current?.show();
   }, []);
 
+  const handleOnOpenOptions = useCallback(() => {
+    optionsRef.current?.show();
+  }, []);
+
+  const handleOnLongPress = useCallback(
+    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
+      listSelectionRef.current?.show();
+      setPressedAddress(address);
+    },
+    []
+  );
+
   const customHeader = useMemo(() => {
     return (
       <View style={styles.container}>
@@ -78,12 +97,14 @@ export const SingleAddressGroupScreen = () => {
           </Button>
           <View style={{ paddingLeft: 20 }}>
             <Text title style={styles.itemTitle}>
-              {groupTitle}
+              {name}
             </Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>
-              <Text style={styles.idCount}>{addressesCount} Addresses</Text>
-              <Text style={styles.tokensCount}>{groupTokens}</Text>
+              <Text style={styles.idCount}>{addressCount} Addresses</Text>
+              <Text style={styles.tokensCount}>
+                {NumberUtils.formatNumber(groupTokens, 2)}
+              </Text>
             </View>
           </View>
         </View>
@@ -98,28 +119,45 @@ export const SingleAddressGroupScreen = () => {
     );
   }, [
     navigation.goBack,
-    groupTitle,
-    addressesCount,
+    name,
+    addressCount,
     groupTokens,
     handleOpenGroupAction
   ]);
 
   return (
-    <SafeAreaView style={{ flex: 1, marginHorizontal: 17 }}>
+    <SafeAreaView style={styles.header}>
       {customHeader}
       <Spacer value={29} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150
         }}
-        data={listOfAddresses}
+        data={accounts}
         renderItem={({ item }) => {
           return (
-            <AddressItem
-              item={item}
-              handleOpenSingleAddressAction={handleOpenSingleAddressAction}
-              ref={addressActionRef}
-            />
+            <View style={styles.addressItemContainer}>
+              <TouchableOpacity
+                onLongPress={() => handleOnLongPress(item)}
+                style={styles.touchableAreaContainer}
+              >
+                <AddressItem
+                  item={item}
+                  handleOpenSingleAddressAction={handleOpenSingleAddressAction}
+                  ref={addressActionRef}
+                />
+              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <Button
+                  style={styles.actionButton}
+                  type="base"
+                  onPress={handleOnOpenOptions}
+                >
+                  <OptionsIcon />
+                </Button>
+              </View>
+              <BottomSheetSingleAddressOptions ref={optionsRef} item={item} />
+            </View>
           );
         }}
       />
@@ -139,9 +177,13 @@ export const SingleAddressGroupScreen = () => {
       <BottomSheetCreateRenameGroup
         type="rename"
         groupId={groupId}
-        groupTitle={groupTitle}
+        groupTitle={name}
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
+      />
+      <BottomSheetListSelection
+        ref={listSelectionRef}
+        address={pressedAddress}
       />
     </SafeAreaView>
   );

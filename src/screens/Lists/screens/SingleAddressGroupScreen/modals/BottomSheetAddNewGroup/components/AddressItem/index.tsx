@@ -5,14 +5,14 @@ import { styles } from '../../styles';
 import { CheckBox } from '@components/base/CheckBox';
 import { COLORS } from '@constants/colors';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
-  item: ListsOfAddressType;
+  item: ExplorerAccount;
   idsOfSelectedAddresses: string[];
   handleCheckBoxPress: (id: string) => void;
 };
-export const AddressItem = ({
+export const AddressItemWithCheckbox = ({
   item,
   idsOfSelectedAddresses,
   handleCheckBoxPress
@@ -23,8 +23,8 @@ export const AddressItem = ({
       <View style={styles.flatListContainer}>
         <View style={styles.whalesTokenContainer}>
           <CheckBox
-            onPress={() => handleCheckBoxPress(item.addressId)}
-            isChecked={idsOfSelectedAddresses.includes(item.addressId)}
+            onPress={() => handleCheckBoxPress(item.address)}
+            isChecked={idsOfSelectedAddresses.includes(item.address)}
           />
           <View style={styles.addressTitleContainer}>
             <Row>
@@ -33,7 +33,7 @@ export const AddressItem = ({
                 fontSize={13}
                 color={COLORS.black}
               >
-                {item.addressTitle}
+                {item.name}
               </Text>
               <Text
                 style={styles.locationInfo}
@@ -50,7 +50,7 @@ export const AddressItem = ({
               fontSize={13}
               color={COLORS.thinGrey}
             >
-              {item.addressToken}
+              {item.ambBalance}
             </Text>
           </View>
         </View>
@@ -61,7 +61,8 @@ export const AddressItem = ({
               fontSize={13}
               color={COLORS.black}
             >
-              {item.addressPrice}
+              {/* TODO: use useAMBToken to find current price of amb and multiply by ambBalance  */}
+              {item.ambBalance}
             </Text>
             <Spacer value={4} />
             <Row justifyContent="space-between" alignItems="center">
@@ -72,7 +73,8 @@ export const AddressItem = ({
                 color={COLORS.thinGrey}
                 style={styles.progressIcon}
               >
-                {item.addressProgress}
+                {/* TODO: ExplorerAccount does not have progress  */}
+                3.46
               </Text>
             </Row>
           </View>
