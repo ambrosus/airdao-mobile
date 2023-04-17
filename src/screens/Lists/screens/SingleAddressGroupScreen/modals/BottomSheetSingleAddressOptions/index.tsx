@@ -12,13 +12,13 @@ import { View } from 'react-native';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions/styles';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
 import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ListsOfAddressType;
+  item: ExplorerAccount;
 };
 
 export const BottomSheetSingleAddressOptions = forwardRef<
@@ -49,7 +49,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         fontSize={20}
         color={COLORS.black}
       >
-        Edit {item.addressTitle}
+        Edit {item.name}
       </Text>
       <Spacer value={24} />
       <Button

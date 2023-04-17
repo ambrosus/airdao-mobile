@@ -5,7 +5,7 @@ import { DefaultNotificationSettings } from '@constants/variables';
 export enum CacheKey {
   NotificationSettings = 'notification_settings',
   Watchlist = 'watchlist',
-  AddressLists = 'UserGroupsOfAddresses',
+  AddressLists = 'address_lists',
   PersonalList = 'personal_list',
   AllAddresses = 'all_addresses'
 }

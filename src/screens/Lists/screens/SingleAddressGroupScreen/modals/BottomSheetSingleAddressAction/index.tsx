@@ -13,12 +13,12 @@ import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { FlatList, SafeAreaView } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/ListOfAddressesGroupItem';
+import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  addresses: ListsOfAddressType[];
+  addresses: ExplorerAccount[];
 };
 
 export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
@@ -83,10 +83,10 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
             data={listsOfAddressGroup}
             renderItem={({ item }) => {
               const addressesIds = addresses.map(
-                (addressItem) => addressItem.addressId
+                (addressItem) => addressItem.address
               );
-              const isAddressesAlreadyInList = item.listOfAddresses.some(
-                (address) => addressesIds.includes(address.addressId)
+              const isAddressesAlreadyInList = item.accounts.some((account) =>
+                addressesIds.includes(account.address)
               );
               return (
                 <ListOfAddressesGroupItem

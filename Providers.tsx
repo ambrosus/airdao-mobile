@@ -18,14 +18,14 @@ const WrappedSafeAreaProvider: React.FC = ({ children }: any) => (
 
 const independentProviders = [
   WrappedQueryClientProvider,
-  WrappedSafeAreaProvider,
-  AllAddressesProvider
+  WrappedSafeAreaProvider
 ];
 /**
  * The order of the providers matters
  */
 const providers = [
   ...independentProviders,
+  AllAddressesProvider,
   ListsContextProvider,
   OnboardingContextProvider
 ];

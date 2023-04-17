@@ -3,12 +3,12 @@ import React from 'react';
 import { TabsNavigator } from './TabsNavigator';
 import AppInitialization from './AppInit';
 import { SingleAddressGroupScreen } from '@screens/Lists/screens/SingleAddressGroupScreen';
-import { ListsOfAddressesGroupType } from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models/AccountList';
 
 export type RootStackParamsList = {
   AppInit: undefined;
   Tabs: undefined;
-  SingleAddressGroup: { group: ListsOfAddressesGroupType };
+  SingleAddressGroup: { group: AccountList };
 };
 
 export const RootStack = () => {

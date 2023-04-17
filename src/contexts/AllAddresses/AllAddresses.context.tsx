@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
-import {
-  AllAddressesAction,
-  AllAddressesContext,
-  AllAddressesContextState
-} from './AllAddresses.context';
-import { CacheableAddress } from '@appTypes/CacheableAddress';
+import { useCallback, useEffect, useState } from 'react';
+import { AllAddressesAction } from './AllAddresses.types';
+import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { searchAddress } from '@api/api';
+import { createContextSelector } from '@helpers/createContextSelector';
 
-export const AllAddressesProvider: React.FC = ({ children }: any) => {
+const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
 
   const addAddress = useCallback(
@@ -39,34 +36,53 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
     [allAddresses]
   );
 
+  const addOrUpdateAddress = useCallback(
+    (address: ExplorerAccount) => {
+      const idx = allAddresses.indexOfItem(address, 'address');
+      if (idx > -1) {
+        allAddresses.splice(idx, 1, address);
+        return allAddresses;
+      } else {
+        return addAddress(address);
+      }
+    },
+    [addAddress, allAddresses]
+  );
+
   const reducer = useCallback(
     (
-      state: AllAddressesContextState,
       action: AllAddressesAction | { type: 'set'; payload: ExplorerAccount[] }
     ) => {
       switch (action.type) {
         case 'add': {
-          return { addresses: [...addAddress(action.payload)] };
+          setAllAddresses([...addAddress(action.payload)]);
+          break;
         }
         case 'remove': {
-          return { addresses: [...removeAddress(action.payload)] };
+          setAllAddresses([...removeAddress(action.payload)]);
+          break;
         }
         case 'update': {
-          return { addresses: [...updateAddress(action.payload)] };
+          setAllAddresses([...updateAddress(action.payload)]);
+          break;
+        }
+        case 'add-or-update': {
+          setAllAddresses([...addOrUpdateAddress(action.payload)]);
+          break;
         }
         case 'set': {
-          return { addresses: action.payload };
+          setAllAddresses(action.payload);
+          break;
         }
         default:
-          return state;
+          break;
       }
     },
-    [addAddress, removeAddress, updateAddress]
+    [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
-  const value = useReducer(reducer, { addresses: allAddresses });
 
   const populateAddresses = async (
-    addresses: CacheableAddress[]
+    addresses: CacheableAccount[]
   ): Promise<ExplorerAccount[]> => {
     return await Promise.all(
       addresses.map(async (address) => {
@@ -76,26 +92,38 @@ export const AllAddressesProvider: React.FC = ({ children }: any) => {
         const newAccount = Object.assign({}, account);
         newAccount.name = address.name;
         newAccount.isPersonal = Boolean(address.isPersonal);
+        newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
         return newAccount;
       })
     );
   };
 
+  // fetch all addresses on mount
   useEffect(() => {
     const getAddresses = async () => {
       const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-        []) as CacheableAddress[];
+        []) as CacheableAccount[];
       const populatedAddresses = await populateAddresses(addresses);
       setAllAddresses(populatedAddresses);
-      reducer({ addresses: [] }, { type: 'set', payload: populatedAddresses });
+      reducer({ type: 'set', payload: populatedAddresses });
     };
     getAddresses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <AllAddressesContext.Provider value={value}>
-      {children}
-    </AllAddressesContext.Provider>
-  );
+  return {
+    addresses: allAddresses,
+    reducer
+  };
+};
+
+export const [AllAddressesProvider, useAllAddressesContext] =
+  createContextSelector(AllAddressesContext);
+
+export const useAllAddresses = () => {
+  return useAllAddressesContext((v) => v.addresses);
+};
+
+export const useAllAddressesReducer = () => {
+  return useAllAddressesContext((v) => v.reducer);
 };

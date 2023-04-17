@@ -1,43 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Cache, CacheKey } from '@utils/cache';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { useAllAddresses, useAllAddressesReducer } from '@contexts';
+import { ExplorerAccount } from '@models/Explorer';
 
 export const usePersonalList = () => {
-  const [personalList, setPersonalList] = useState<ListsOfAddressType[]>([]);
+  const allAddressesReducer = useAllAddressesReducer();
+  const allAddresses = useAllAddresses();
 
-  useEffect(() => {
-    getPersonalList();
-  }, []);
-
-  const addToPersonalList = async (address: ListsOfAddressType) => {
-    const personalList = await getPersonalList();
-    personalList.push(address);
-    await Cache.setItem(CacheKey.PersonalList, personalList);
-    await getPersonalList();
+  const addToPersonalList = async (address: ExplorerAccount) => {
+    const newAddress = Object.assign({}, address);
+    newAddress.isPersonal = true;
+    allAddressesReducer({ type: 'add-or-update', payload: newAddress });
   };
 
-  const getPersonalList = async () => {
-    const stringifiedWatchlist = (await Cache.getItem(
-      CacheKey.PersonalList
-    )) as ListsOfAddressType[];
-    let personalList: ListsOfAddressType[];
-    if (!stringifiedWatchlist) personalList = [];
-    else personalList = stringifiedWatchlist;
-    setPersonalList(personalList);
-    return personalList;
-  };
-
-  const removeFromPersonalList = async (address: ListsOfAddressType) => {
-    const personalList = await getPersonalList();
-    personalList.removeItem(address, 'addressId');
-    await Cache.setItem(CacheKey.PersonalList, personalList);
-    await getPersonalList();
+  const removeFromPersonalList = async (address: ExplorerAccount) => {
+    const newAddress = Object.assign({}, address);
+    newAddress.isPersonal = false;
+    allAddressesReducer({ type: 'add-or-update', payload: newAddress });
   };
 
   return {
-    personalList,
+    personalList: allAddresses.filter((account) => account.isPersonal),
     addToPersonalList,
-    removeFromPersonalList,
-    getPersonalList
+    removeFromPersonalList
   };
 };
