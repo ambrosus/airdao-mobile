@@ -3,7 +3,7 @@ import {
   AllAddressesAction,
   AllAddressesContextState
 } from './AllAddresses.types';
-import { CacheableAddress } from '@appTypes/CacheableAddress';
+import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { searchAddress } from '@api/api';
@@ -82,7 +82,7 @@ const AllAddressesContext = () => {
   const [, reducerFn] = useReducer(reducer, { addresses: allAddresses });
 
   const populateAddresses = async (
-    addresses: CacheableAddress[]
+    addresses: CacheableAccount[]
   ): Promise<ExplorerAccount[]> => {
     return await Promise.all(
       addresses.map(async (address) => {
@@ -102,7 +102,7 @@ const AllAddressesContext = () => {
   useEffect(() => {
     const getAddresses = async () => {
       const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-        []) as CacheableAddress[];
+        []) as CacheableAccount[];
       const populatedAddresses = await populateAddresses(addresses);
       setAllAddresses(populatedAddresses);
       reducer({ addresses: [] }, { type: 'set', payload: populatedAddresses });
