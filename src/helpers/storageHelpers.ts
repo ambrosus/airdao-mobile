@@ -11,7 +11,7 @@ export const getDataToSecureStore = async (key: string) => {
   try {
     const value = await SecureStore.getItemAsync(key);
     if (value !== null) {
-      return JSON.parse(value);
+      return value;
     }
   } catch (error) {
     throw error;

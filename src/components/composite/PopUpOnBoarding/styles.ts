@@ -1,21 +1,34 @@
-import { scale } from '@utils/scaling';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  popoverStyle: {
-    borderRadius: scale(4),
-    padding: scale(8)
+  popup: {
+    width: 123
   },
-  container: {
-    backgroundColor: '#DCDBDC',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: scale(16),
-    height: scale(16),
-    borderRadius: scale(8)
+  popover: {
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+    width: Dimensions.get('screen').width - 100
   },
-  popover: {},
-  content: {},
+  content: {
+    margin: 12
+  },
+  buttonRight: {
+    backgroundColor: '#0e0e0e0d',
+    borderRadius: 25,
+    alignItems: 'flex-end',
+    alignSelf: 'flex-end'
+  },
+  buttonText: {
+    marginHorizontal: 12,
+    marginVertical: 6
+  },
+  buttonLeft: {
+    backgroundColor: '#0e0e0e0d',
+    borderRadius: 25,
+    alignItems: 'flex-start',
+    alignSelf: 'flex-start'
+  },
   title: {},
   subtitle: {}
 });
