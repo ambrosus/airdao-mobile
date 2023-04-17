@@ -14,10 +14,13 @@ import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 export const WalletsScreen = () => {
   const { data } = useAMBPrice();
-  const { status } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+
   return (
     <View style={{ flex: 1 }}>
-      {status === 'step-1' ? <PopUpOnBoarding step="step-4" /> : null}
+      {status === 'step-1' ? (
+        <PopUpOnBoarding step="step-2" handleStepChange={handleStepChange} />
+      ) : null}
 
       <ScrollView
         contentContainerStyle={styles.container}

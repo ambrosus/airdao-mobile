@@ -1,11 +1,3 @@
-export enum PopUpPlacement {
-  TOP = 'top',
-  RIGHT = 'right',
-  BOTTOM = 'bottom',
-  LEFT = 'left',
-  CENTER = 'center'
-}
-
 export type OnBoardingStatus =
   | 'step-1'
   | 'step-2'
@@ -20,21 +12,11 @@ export type OnBoardingStatus =
   | 'step-11'
   | 'step-12';
 
-export type OnBoardingStepsType = {
-  OnBoardingStatus: PopUpOnboardingProps;
-};
-
-export type OnBoardingStep = {
-  title: string;
-  subtitle: string;
-  buttonLeft: () => void;
-  buttonRight: () => void;
-  isButtonClose: boolean;
-};
 export interface PopUpOnboardingProps {
   title: string;
   subtitle: string;
   buttonLeft: string;
+  isButtonLeftVisible?: boolean;
   buttonRight: string;
   isButtonClose: boolean;
 }
