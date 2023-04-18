@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
+
+  SplashScreen.preventAutoHideAsync();
+
   useEffect(() => {
     async function prepare() {
       try {
