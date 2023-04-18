@@ -9,8 +9,8 @@ import {
 } from './components';
 import { styles } from './styles';
 import { useAMBPrice } from '@hooks/query';
-import { PopUpOnBoarding } from '@components/composite/PopUpOnBoarding';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { WalletsFloatButton } from '@screens/Wallets/components/WalletsFloatButton';
 
 export const WalletsScreen = () => {
   const { data } = useAMBPrice();
@@ -18,10 +18,6 @@ export const WalletsScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {status === 'step-1' ? (
-        <PopUpOnBoarding step="step-2" handleStepChange={handleStepChange} />
-      ) : null}
-
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -43,6 +39,7 @@ export const WalletsScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <WalletsFloatButton status={status} handleStepChange={handleStepChange} />
     </View>
   );
 };

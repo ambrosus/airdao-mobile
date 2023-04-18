@@ -1,26 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createContextSelector } from '@helpers/createContextSelector';
-import { OnBoardingStatus } from '@components/composite/PopUpOnBoarding/PopUpOnBoarding.types';
+import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import {
   getDataToSecureStore,
   setDataToSecureStore
 } from '@helpers/storageHelpers';
 
 const OnboardingContext = () => {
-  const [status, setStatus] = useState<OnBoardingStatus | ''>('');
+  const [status, setStatus] = useState<OnBoardingStatus>('step-1');
 
   useEffect(() => {
     const getDataGroups = async () => {
       const step = await getDataToSecureStore('UserOnboardingSteps');
       // @ts-ignore
-      setStatus(step || '');
+      setStatus(step || 'step-1');
     };
     getDataGroups();
   }, []);
 
-  const handleStepChange = useCallback((step: OnBoardingStatus | '') => {
-    setStatus(step);
-    setDataToSecureStore('UserOnboardingSteps', step);
+  const handleStepChange = useCallback((nextStep: OnBoardingStatus) => {
+    setStatus(nextStep);
+    setDataToSecureStore('UserOnboardingSteps', nextStep);
   }, []);
 
   return {

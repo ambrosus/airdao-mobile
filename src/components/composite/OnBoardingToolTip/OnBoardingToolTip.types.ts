@@ -1,4 +1,5 @@
 export type OnBoardingStatus =
+  | 'none'
   | 'step-1'
   | 'step-2'
   | 'step-3'
@@ -12,7 +13,7 @@ export type OnBoardingStatus =
   | 'step-11'
   | 'step-12';
 
-export interface PopUpOnboardingProps {
+export interface OnBoardingToolTipInfo {
   title: string;
   subtitle: string;
   buttonLeft: string;
