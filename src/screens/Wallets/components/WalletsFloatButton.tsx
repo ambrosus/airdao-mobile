@@ -1,137 +1,102 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import { COLORS } from '@constants/colors';
+import React, { useCallback, useState } from 'react';
+import { Pressable, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Text } from '@components/base';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
-import { OnBoardingStatus } from '@components/composite/PopUpOnBoarding/PopUpOnBoarding.types';
-import { useOnboardingPopUp } from '@hooks/useOnBoardingPopUp';
-import { styles } from '@components/composite/PopUpOnBoarding/styles';
-import { CloseIcon } from '@components/svg/icons';
+import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
+import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
+import { styles } from '@screens/Wallets/components/styles';
+import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type Props = {
   status: OnBoardingStatus;
+  handleStepChange: (nextStep: OnBoardingStatus) => void;
 };
-const WalletsFloatButton = ({ status }: Props) => {
+
+const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
+
+export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
   const [toolTipVisible, setToolTipVisible] = useState(false);
+
+  const bottomSafeArea = useSafeAreaInsets().bottom || 34;
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   const {
     title,
-    isButtonClose,
+    subtitle,
+    buttonRight,
     buttonLeft,
     isButtonLeftVisible,
-    buttonRight,
-    subtitle
-  } = useOnboardingPopUp(status);
+    isButtonClose
+  } = useOnboardingToolTip(status);
 
-  return status !== 'none' ? (
+  const handleNextButtonPress = useCallback(() => {
+    handleStepChange('step-2');
+    setTimeout(() => {
+      navigation.navigate('Explore');
+    }, 0);
+  }, [handleStepChange, navigation]);
+
+  const onCloseTooltip = () => {
+    if (isButtonClose) {
+      setToolTipVisible(false);
+    }
+  };
+
+  const handleOnAddressButtonPress = () => {
+    setToolTipVisible(!toolTipVisible);
+    if (toolTipVisible) {
+      handleNextButtonPress();
+    }
+  };
+
+  return status === 'step-1' ? (
     <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'absolute',
-        alignSelf: 'center',
-        backgroundColor: COLORS.grey,
-        borderRadius: 24,
-        paddingHorizontal: 109,
-        bottom: 100
-      }}
+      style={[
+        styles.tooltip,
+        { bottom: bottomSafeArea + DEFAULT_BOTTOM_TAB_HEIGHT }
+      ]}
     >
       <Tooltip
         arrowSize={{ width: 16, height: 8 }}
         backgroundColor="rgba(0,0,0,0.5)"
         isVisible={toolTipVisible}
         content={
-          <View style={styles.content}>
-            <Row justifyContent="space-between">
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={12}
-                color={COLORS.black}
-                style={styles.title}
-              >
-                {title}
-              </Text>
-              {isButtonClose && (
-                <Button>
-                  <CloseIcon />
-                </Button>
-              )}
-            </Row>
-            <Spacer value={4} />
-            <Text
-              fontFamily="Inter_400Regular"
-              fontSize={12}
-              color={COLORS.grey}
-              style={styles.subtitle}
-            >
-              {subtitle}
-            </Text>
-            <Spacer value={12} />
-            <View style={{ alignItems: 'flex-end' }}>
-              <Row
-                justifyContent="space-between"
-                width={isButtonLeftVisible ? '100%' : undefined}
-              >
-                {isButtonLeftVisible && (
-                  <Button style={styles.buttonLeft}>
-                    <Text
-                      fontFamily="Inter_500Medium"
-                      fontSize={14}
-                      color={COLORS.black}
-                      style={styles.buttonText}
-                    >
-                      {buttonLeft}
-                    </Text>
-                  </Button>
-                )}
-                <Button style={styles.buttonRight} onPress={() => null}>
-                  <Text
-                    fontFamily="Inter_500Medium"
-                    fontSize={14}
-                    color={COLORS.black}
-                    style={styles.buttonText}
-                  >
-                    {buttonRight}
-                  </Text>
-                </Button>
-              </Row>
-            </View>
-          </View>
+          <OnBoardingToolTipBody
+            handleButtonClose={onCloseTooltip}
+            title={title}
+            buttonRight={buttonRight}
+            subtitle={subtitle}
+            buttonLeft={buttonLeft}
+            handleButtonRight={handleNextButtonPress}
+            isButtonLeftVisible={isButtonLeftVisible}
+          />
         }
         placement="top"
         onClose={() => null}
       >
-        <Button
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-          onPress={() => {
-            setToolTipVisible(!toolTipVisible);
-          }}
+        <Pressable
+          onPress={handleOnAddressButtonPress}
+          style={[
+            styles.tooltipButton,
+            toolTipVisible && { borderWidth: 1, borderColor: 'white' }
+          ]}
         >
           <AddIcon />
-          <Text
-            style={{
-              justifyContent: 'center',
-              fontFamily: 'Inter_500Medium',
-              fontSize: 16,
-              paddingVertical: 16,
-              paddingLeft: 5,
-              color: COLORS.white
-            }}
-          >
-            Add a Address
-          </Text>
-        </Button>
+          <Text style={styles.tooltipButtonText}>Add a Address</Text>
+        </Pressable>
       </Tooltip>
     </View>
   ) : (
-    <FloatButton title="123" onPress={() => null} icon={<AddIcon />} />
+    <FloatButton
+      title="Add a Address"
+      onPress={() => navigation.navigate('Explore')}
+      icon={<AddIcon />}
+    />
   );
 };
-
-export default WalletsFloatButton;
