@@ -10,11 +10,11 @@ import {
 import { styles } from './styles';
 import { useAMBPrice } from '@hooks/query';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import WalletsFloatButton from '@screens/Wallets/components/WalletsFloatButton';
+import { WalletsFloatButton } from '@screens/Wallets/components/WalletsFloatButton';
 
 export const WalletsScreen = () => {
   const { data } = useAMBPrice();
-  const { status } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
 
   return (
     <View style={{ flex: 1 }}>
@@ -39,7 +39,7 @@ export const WalletsScreen = () => {
           </View>
         </View>
       </ScrollView>
-      <WalletsFloatButton status={status} />
+      <WalletsFloatButton status={status} handleStepChange={handleStepChange} />
     </View>
   );
 };

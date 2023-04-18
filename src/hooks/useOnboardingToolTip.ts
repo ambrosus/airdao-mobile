@@ -1,12 +1,12 @@
 import {
   OnBoardingStatus,
-  PopUpOnboardingProps
-} from '@components/composite/PopUpOnBoarding/PopUpOnBoarding.types';
+  OnBoardingToolTipInfo
+} from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import { initialOnBoardingSteps } from '@contexts/OnBoardingUserContext/OnboardingStepsInfo';
 
-export const useOnboardingPopUp = (
+export const useOnboardingToolTip = (
   step: OnBoardingStatus
-): PopUpOnboardingProps => {
+): OnBoardingToolTipInfo => {
   const stepData = initialOnBoardingSteps[step];
 
   return {
