@@ -1,13 +1,12 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import Popover, { PopoverPlacement } from 'react-native-popover-view';
+import Popover from 'react-native-popover-view';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { styles } from './styles';
 import { useOnboardingPopUp } from '@hooks/useOnBoardingPopUp';
 import { OnBoardingStatus } from '@components/composite/PopUpOnBoarding/PopUpOnBoarding.types';
 import { COLORS } from '@constants/colors';
 import { CloseIcon } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const PopUpOnBoarding = ({
@@ -37,7 +36,7 @@ export const PopUpOnBoarding = ({
       <Popover
         isVisible={true}
         popoverStyle={styles.popover}
-        from={(sourceRef, showPopover) => (
+        from={(sourceRef) => (
           <View
             ref={sourceRef}
             style={{
