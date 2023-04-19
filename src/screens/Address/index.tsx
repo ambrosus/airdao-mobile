@@ -26,17 +26,20 @@ import { scale, verticalScale } from '@utils/scaling';
 import { Transaction } from '@models/Transaction';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { Toast, ToastType } from '@components/modular';
 import { styles } from './styles';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Address'>>();
   const { address } = params;
+  const initialMount = useRef(true);
   const {
     data: account,
     loading: accountLoading,
     error: accountError
-  } = useSearchAccount(address, true);
+  } = useSearchAccount(address, initialMount.current);
+  initialMount.current = false;
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -55,6 +58,7 @@ export const AddressDetails = (): JSX.Element => {
   const walletInWatchlist = watchlist.find((w) => w.address === address);
   const walletInPersonalList = personalList.find((w) => w.address === address);
   const finalAccount = walletInWatchlist || walletInPersonalList || account;
+  const finalAccountRef = useRef(finalAccount);
 
   if (accountLoading || explorerLoading || !finalAccount || !explorerInfo) {
     return (
@@ -94,15 +98,53 @@ export const AddressDetails = (): JSX.Element => {
   };
 
   const toggleWatchlist = () => {
-    finalAccount.isOnWatchlist
-      ? removeFromWatchlist(finalAccount)
-      : addToWatchlist(finalAccount);
+    Toast.hide();
+    const toastMessage = finalAccountRef.current?.isOnWatchlist
+      ? `You removed ${finalAccount.name ?? 'the address'} from Watchlists!`
+      : `${finalAccount.name ?? 'The address'} is now on your Watchlists!`;
+    const onUndo = toggleWatchlist;
+    Toast.show({ message: toastMessage, type: ToastType.Top, onUndo });
+    // TOOD: set timeout to show Toast immediately before context update.
+    // context updates shouldn't be too expensive but they seem to be.
+    setTimeout(() => {
+      finalAccountRef.current?.isOnWatchlist
+        ? removeFromWatchlist(finalAccount)
+        : addToWatchlist(finalAccount);
+      if (finalAccountRef.current) {
+        if (finalAccountRef.current.isOnWatchlist) {
+          finalAccountRef.current.isOnWatchlist = false;
+        } else {
+          finalAccountRef.current.isOnWatchlist = true;
+        }
+      }
+    }, 0);
   };
 
   const togglePersonalList = () => {
-    finalAccount.isPersonal
-      ? removeFromPersonalList(finalAccount)
-      : addToPersonalList(finalAccount);
+    Toast.hide();
+    const toastMessage = finalAccountRef.current?.isPersonal
+      ? `You removed ${
+          finalAccount.name ?? 'the address'
+        } from Personal Addresses!`
+      : `${
+          finalAccount.name ?? 'The address'
+        } is now on your Personal Addresses!`;
+    const onUndo = togglePersonalList;
+    Toast.show({ message: toastMessage, type: ToastType.Top, onUndo });
+    // TOOD: set timeout to show Toast immediately before context update.
+    // context updates shouldn't be too expensive but they seem to be.
+    setTimeout(() => {
+      finalAccountRef.current?.isPersonal
+        ? removeFromPersonalList(finalAccount)
+        : addToPersonalList(finalAccount);
+      if (finalAccountRef.current) {
+        if (finalAccountRef.current.isPersonal) {
+          finalAccountRef.current.isPersonal = false;
+        } else {
+          finalAccountRef.current.isPersonal = true;
+        }
+      }
+    }, 0);
   };
 
   const renderHeaderRight = () => {

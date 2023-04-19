@@ -68,5 +68,11 @@ export function Text(props: TextProps): JSX.Element {
     ...fixMisplacement()
   };
 
-  return <RNText style={[styles, propsStyle]} {...restProps} />;
+  return (
+    <RNText
+      style={[styles, propsStyle]}
+      {...restProps}
+      onPress={props.onPress}
+    />
+  );
 }

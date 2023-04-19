@@ -41,4 +41,5 @@ export type TextProps = FontSizeProps & {
   fontWeight?: FontWeight;
   fontFamily?: FontFamily;
   align?: TextStyle['textAlign'];
+  onPress?: () => unknown;
 };

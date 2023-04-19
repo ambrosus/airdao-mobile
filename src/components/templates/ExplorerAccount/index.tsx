@@ -9,7 +9,6 @@ import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
 import { StarFilledIcon } from '@components/svg/icons';
-import { useAllAddresses } from '@contexts';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -31,12 +30,6 @@ export const ExplorerAccountView = (
   } = props;
   const { address } = account;
   const { listsOfAddressGroup } = useLists((v) => v);
-  const allAddresses = useAllAddresses();
-  const accountFromCache = allAddresses.find(
-    (w) => w.address === account.address
-  );
-
-  const finalAccount = accountFromCache || account;
 
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
@@ -75,28 +68,32 @@ export const ExplorerAccountView = (
                 Added to {listsWithAccount.length} lists
               </Text>
             ))}
-          {watchlistDisplayType === 'details' ? (
-            <Text
-              color="#828282"
-              fontFamily="Inter_400Regular"
-              fontSize={13}
-              fontWeight="400"
-            >
-              {listsWithAccount.length > 0 && listInfoVisible ? ' ~ ' : ''}{' '}
-              Watchlisted
-            </Text>
-          ) : (
-            <Row alignItems="center">
-              <StarFilledIcon color="#FF5E0D" scale={0.75} />
-              <Text
-                color="#FF5E0D"
-                fontFamily="Inter_400Regular"
-                fontSize={13}
-                fontWeight="400"
-              >
-                Added to my watchlists
-              </Text>
-            </Row>
+          {account.isOnWatchlist && (
+            <>
+              {watchlistDisplayType === 'details' ? (
+                <Text
+                  color="#828282"
+                  fontFamily="Inter_400Regular"
+                  fontSize={13}
+                  fontWeight="400"
+                >
+                  {listsWithAccount.length > 0 && listInfoVisible ? ' ~ ' : ''}{' '}
+                  Watchlisted
+                </Text>
+              ) : (
+                <Row alignItems="center">
+                  <StarFilledIcon color="#FF5E0D" scale={0.75} />
+                  <Text
+                    color="#FF5E0D"
+                    fontFamily="Inter_400Regular"
+                    fontSize={13}
+                    fontWeight="400"
+                  >
+                    Added to my watchlists
+                  </Text>
+                </Row>
+              )}
+            </>
           )}
         </Row>
       </>
@@ -108,7 +105,7 @@ export const ExplorerAccountView = (
       {nameVisible && (
         <Row alignItems="center">
           <Text fontFamily="Inter_600SemiBold" fontSize={15}>
-            {finalAccount.name}
+            {account.name}
           </Text>
           {renderListAndWalletInfo()}
         </Row>
