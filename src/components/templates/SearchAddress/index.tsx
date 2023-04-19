@@ -212,6 +212,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             <ExplorerAccountView
               account={account}
               totalSupply={explorerInfo.totalSupply}
+              watchlistDisplayType="explorer"
             />
           </KeyboardDismissingView>
           <Spacer value={verticalScale(24)} />

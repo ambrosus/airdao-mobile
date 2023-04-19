@@ -7,53 +7,119 @@ import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { useWatchlist } from '@hooks/cache';
+import { useLists } from '@contexts/ListsContext';
+import { StarFilledIcon } from '@components/svg/icons';
+import { useAllAddresses } from '@contexts';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
   totalSupply: number;
+  listInfoVisible?: boolean;
+  watchlistDisplayType?: 'explorer' | 'details';
+  nameVisible?: boolean;
 }
 
 export const ExplorerAccountView = (
   props: ExplorerAccountProps
 ): JSX.Element => {
-  const { account, totalSupply } = props;
+  const {
+    account,
+    totalSupply,
+    listInfoVisible,
+    nameVisible,
+    watchlistDisplayType = 'details'
+  } = props;
   const { address } = account;
-  const { watchlist } = useWatchlist();
-  const walletInWatchlist = watchlist.find(
-    (w) => w.addressId === account.address
+  const { listsOfAddressGroup } = useLists((v) => v);
+  const allAddresses = useAllAddresses();
+  const accountFromCache = allAddresses.find(
+    (w) => w.address === account.address
   );
+
+  const finalAccount = accountFromCache || account;
+
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
 
   const AMBBalance = account.ambBalance;
   const USDBalance = AMBBalance * ambPriceUSD;
   const percentage = (AMBBalance / totalSupply) * 100;
+  const listsWithAccount = listsOfAddressGroup.filter(
+    (list) => list.accounts.indexOfItem(account, 'address') > -1
+  );
 
-  return (
-    <View style={styles.container}>
-      {walletInWatchlist && (
-        <>
-          <Row alignItems="center">
-            <Text fontFamily="Inter_600SemiBold" fontSize={15}>
-              {walletInWatchlist.addressTitle}
-            </Text>
-            <Spacer value={scale(12)} horizontal />
+  const renderListAndWalletInfo = () => {
+    return (
+      <>
+        <Spacer horizontal value={scale(13)} />
+
+        <Row alignItems="center">
+          {listInfoVisible &&
+            listsWithAccount.length > 0 &&
+            (listsWithAccount.length === 1 ? (
+              <Text
+                color="#828282"
+                fontFamily="Inter_400Regular"
+                fontSize={13}
+                fontWeight="400"
+              >
+                Added to {listsWithAccount[0].name}
+              </Text>
+            ) : (
+              <Text
+                color="#828282"
+                fontFamily="Inter_400Regular"
+                fontSize={13}
+                fontWeight="400"
+              >
+                Added to {listsWithAccount.length} lists
+              </Text>
+            ))}
+          {watchlistDisplayType === 'details' ? (
             <Text
               color="#828282"
               fontFamily="Inter_400Regular"
               fontSize={13}
               fontWeight="400"
             >
-              Added to Watchlists
+              {listsWithAccount.length > 0 && listInfoVisible ? ' ~ ' : ''}{' '}
+              Watchlisted
             </Text>
-          </Row>
-          <Spacer value={verticalScale(13)} />
-        </>
+          ) : (
+            <Row alignItems="center">
+              <StarFilledIcon color="#FF5E0D" scale={0.75} />
+              <Text
+                color="#FF5E0D"
+                fontFamily="Inter_400Regular"
+                fontSize={13}
+                fontWeight="400"
+              >
+                Added to my watchlists
+              </Text>
+            </Row>
+          )}
+        </Row>
+      </>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      {nameVisible && (
+        <Row alignItems="center">
+          <Text fontFamily="Inter_600SemiBold" fontSize={15}>
+            {finalAccount.name}
+          </Text>
+          {renderListAndWalletInfo()}
+        </Row>
       )}
-      <Text fontSize={15} fontFamily="Inter_600SemiBold">
-        {StringUtils.formatAddress(address, 11, 5)}
-      </Text>
+      <Spacer value={verticalScale(13)} />
+      <Row alignItems="center">
+        <Text fontSize={15} fontFamily="Inter_600SemiBold">
+          {StringUtils.formatAddress(address, 11, 5)}
+        </Text>
+        {!nameVisible && renderListAndWalletInfo()}
+      </Row>
       <Spacer value={verticalScale(12)} />
       <Text fontFamily="Mersad_600SemiBold" fontSize={36}>
         ${NumberUtils.formatNumber(USDBalance)}

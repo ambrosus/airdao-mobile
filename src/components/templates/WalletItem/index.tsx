@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { Row, Text } from '@components/base';
 import { TrendIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ExplorerAccount } from '@models/Explorer';
 
 interface WalletItemProps {
-  item: ListsOfAddressType;
+  item: ExplorerAccount;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
@@ -14,18 +14,19 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
   return (
     <View>
       <Row justifyContent="space-between">
-        <Text fontWeight="600">{item.addressTitle}</Text>
+        <Text fontWeight="600">{item.name}</Text>
         <Text fontFamily="Mersad_600SemiBold">
-          ${NumberUtils.formatNumber(parseFloat(item.addressPrice), 0)}
+          ${NumberUtils.formatNumber(item.ambBalance, 0)}
         </Text>
       </Row>
       <Row justifyContent="space-between">
         <Text fontFamily="Mersad_600SemiBold" color="#2f2b4380" fontSize={13}>
-          {NumberUtils.formatNumber(parseFloat(item.addressPrice), 0)} AMB
+          {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
         <Row alignItems="center">
           <TrendIcon color="#2f2b4399" />
-          <Text color="#2f2b4399"> {item.addressProgress}%</Text>
+          {/* TODO progress */}
+          <Text color="#2f2b4399"> 3.46%</Text>
         </Row>
       </Row>
     </View>
