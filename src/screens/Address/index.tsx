@@ -6,8 +6,10 @@ import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   BottomSheetSwiperIcon,
+  CheckmarkCircleIcon,
   EditIcon,
   PlusIcon,
+  StarFilledIcon,
   StarIcon
 } from '@components/svg/icons';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
@@ -15,6 +17,7 @@ import { ExplorerAccountView, TransactionDetails } from '@components/templates';
 import { AccountTransactions } from '@components/templates/ExplorerAccount/ExplorerAccount.Transactions';
 import {
   useExplorerInfo,
+  usePersonalList,
   useSearchAccount,
   useTransactionsOfAccount,
   useWatchlist
@@ -22,8 +25,8 @@ import {
 import { scale, verticalScale } from '@utils/scaling';
 import { Transaction } from '@models/Transaction';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
-import { styles } from './styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { styles } from './styles';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {
@@ -41,15 +44,19 @@ export const AddressDetails = (): JSX.Element => {
     hasNextPage
   } = useTransactionsOfAccount(address, 1, TRANSACTION_LIMIT, '', true);
   const { data: explorerInfo, loading: explorerLoading } = useExplorerInfo();
-  const { watchlist } = useWatchlist();
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useWatchlist();
+  const { personalList, addToPersonalList, removeFromPersonalList } =
+    usePersonalList();
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const transactionDetailsModal = useRef<BottomSheetRef>(null);
   const editModal = useRef<BottomSheetRef>(null);
 
-  const walletInWatchlist = watchlist.find((w) => w.addressId === address);
+  const walletInWatchlist = watchlist.find((w) => w.address === address);
+  const walletInPersonalList = personalList.find((w) => w.address === address);
+  const finalAccount = walletInWatchlist || walletInPersonalList || account;
 
-  if (accountLoading || explorerLoading || !account || !explorerInfo) {
+  if (accountLoading || explorerLoading || !finalAccount || !explorerInfo) {
     return (
       <SafeAreaView style={styles.container}>
         <Header />
@@ -86,15 +93,35 @@ export const AddressDetails = (): JSX.Element => {
     editModal.current?.show();
   };
 
+  const toggleWatchlist = () => {
+    finalAccount.isOnWatchlist
+      ? removeFromWatchlist(finalAccount)
+      : addToWatchlist(finalAccount);
+  };
+
+  const togglePersonalList = () => {
+    finalAccount.isPersonal
+      ? removeFromPersonalList(finalAccount)
+      : addToPersonalList(finalAccount);
+  };
+
   const renderHeaderRight = () => {
     return (
       <Row alignItems="center">
-        <Button style={styles.headerBtn} type="circular">
-          <PlusIcon />
+        <Button
+          style={styles.headerBtn}
+          type="circular"
+          onPress={togglePersonalList}
+        >
+          {!!walletInPersonalList ? <CheckmarkCircleIcon /> : <PlusIcon />}
         </Button>
         <Spacer value={scale(17)} horizontal />
-        <Button style={styles.headerBtn} type="circular">
-          <StarIcon />
+        <Button
+          style={styles.headerBtn}
+          type="circular"
+          onPress={toggleWatchlist}
+        >
+          {!!walletInWatchlist ? <StarFilledIcon /> : <StarIcon />}
         </Button>
         <Spacer value={scale(17)} horizontal />
         <Button
@@ -113,8 +140,10 @@ export const AddressDetails = (): JSX.Element => {
       <Header contentRight={renderHeaderRight()} />
       <Spacer value={verticalScale(52)} />
       <ExplorerAccountView
-        account={account}
+        account={finalAccount}
         totalSupply={explorerInfo?.totalSupply}
+        listInfoVisible={true}
+        nameVisible={true}
       />
       <Spacer value={verticalScale(32)} />
       <View style={styles.divider} />
@@ -137,8 +166,8 @@ export const AddressDetails = (): JSX.Element => {
           <TransactionDetails transaction={selectedTransaction!} />
         </View>
       </BottomSheet>
-      {walletInWatchlist && (
-        <BottomSheetEditWallet ref={editModal} wallet={walletInWatchlist} />
+      {finalAccount && (
+        <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
       )}
     </SafeAreaView>
   );

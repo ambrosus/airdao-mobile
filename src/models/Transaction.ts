@@ -9,8 +9,8 @@ export class Transaction {
   fee: number;
   type: TransactionType;
   hash: string;
-  from: ExplorerAccount;
-  to: ExplorerAccount;
+  from: ExplorerAccount | null;
+  to: ExplorerAccount | null;
 
   constructor(details: TransactionDTO) {
     this._id = details._id;
@@ -19,7 +19,7 @@ export class Transaction {
     this.fee = details.gasCost.ether;
     this.type = details.type;
     this.hash = details.hash;
-    this.from = new ExplorerAccount(details.from_id);
-    this.to = new ExplorerAccount(details.to_id);
+    this.from = details.from_id ? new ExplorerAccount(details.from_id) : null;
+    this.to = details.to_id ? new ExplorerAccount(details.to_id) : null;
   }
 }

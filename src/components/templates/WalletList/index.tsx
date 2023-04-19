@@ -11,12 +11,13 @@ import { WalletItem } from '../WalletItem';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { ExplorerAccount } from '@models/Explorer';
+import { WalletsNavigationProp } from '@appTypes/navigation';
 
 interface WalletListProps {
   title: string;
   totalAmount: number;
-  data: ListsOfAddressType[];
+  data: ExplorerAccount[];
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
@@ -24,16 +25,16 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const [listOpened, toggleList] = useReducer((opened) => !opened, false);
   const rotationAnimation = useRef<RotationAnimationRef>(null);
   // TODO set navigation prop
-  const navigation = useNavigation();
+  const navigation = useNavigation<WalletsNavigationProp>();
 
   const onTogglePress = () => {
     rotationAnimation.current?.rotate();
     toggleList();
   };
 
-  const renderWalletItem = (item: ListsOfAddressType, idx: number) => {
+  const renderWalletItem = (item: ExplorerAccount, idx: number) => {
     const navigateToAddressDetails = () => {
-      navigation.navigate('Address', { address: item.addressId });
+      navigation.navigate('Address', { address: item.address });
     };
     return (
       <Button key={idx} style={styles.item} onPress={navigateToAddressDetails}>

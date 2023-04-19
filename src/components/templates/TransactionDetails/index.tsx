@@ -51,24 +51,32 @@ export const TransactionDetails = (
           {NumberUtils.formatNumber(transaction.amount, 0)}
         </Text>
       </JustifiedRow>
-      <Spacer value={verticalScale(28)} />
-      <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          From
-        </Text>
-        <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
-          {StringUtils.formatAddress(transaction.from.address, 4, 5)}
-        </Text>
-      </JustifiedRow>
-      <Spacer value={verticalScale(28)} />
-      <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          To
-        </Text>
-        <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
-          {StringUtils.formatAddress(transaction.to.address, 4, 5)}
-        </Text>
-      </JustifiedRow>
+      {transaction.from && (
+        <>
+          <Spacer value={verticalScale(28)} />
+          <JustifiedRow>
+            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+              From
+            </Text>
+            <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
+              {StringUtils.formatAddress(transaction.from.address, 4, 5)}
+            </Text>
+          </JustifiedRow>
+        </>
+      )}
+      {transaction.to && (
+        <>
+          <Spacer value={verticalScale(28)} />
+          <JustifiedRow>
+            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+              To
+            </Text>
+            <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
+              {StringUtils.formatAddress(transaction.to.address, 4, 5)}
+            </Text>
+          </JustifiedRow>
+        </>
+      )}
       <Spacer value={verticalScale(28)} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
