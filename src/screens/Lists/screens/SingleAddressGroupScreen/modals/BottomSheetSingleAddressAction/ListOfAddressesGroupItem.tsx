@@ -48,9 +48,9 @@ export const ListOfAddressesGroupItem = ({
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
               ? `${pressedAddresses
-                  .map((address) => address.name)
+                  .map((address) => address.address)
                   .join(', ')} is already on this list`
-              : `${item.addressCount} Addresses`}
+              : `${item.accountCount} Addresses`}
           </Text>
         </View>
       </View>

@@ -19,6 +19,8 @@ export const ListsScreen = () => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
 
+  console.log(listsOfAddressGroup, 123123123123123);
+
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

@@ -19,7 +19,7 @@ const ListsContext = () => {
       (l) =>
         new AccountList({
           ...l,
-          accounts: l.addresses.map(
+          accounts: l.addresses?.map(
             (address) =>
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               allAddresses.find(
@@ -114,18 +114,8 @@ const ListsContext = () => {
   ) => {
     const selectedAddressesIds = selectedAddresses.map((elem) => elem.address);
     const addressConcat = (groupAddresses: string[]) => {
-      const newArr = [...groupAddresses];
-
-      selectedAddresses.forEach((selectedAddress) => {
-        const contains = newArr.every((address) =>
-          selectedAddressesIds.includes(address)
-        );
-        if (!contains) {
-          newArr.push(selectedAddress.address);
-        }
-      });
-
-      return newArr;
+      const set = new Set([...groupAddresses, ...selectedAddressesIds]);
+      return [...set.values()];
     };
 
     const editedGroups = listsOfAddressGroup.map((group) => {
@@ -146,8 +136,11 @@ const ListsContext = () => {
     setListsOfAddressGroup(editedGroups);
   };
 
+  console.log(listsOfAddressGroup, 'asdasda');
+
   return {
     listsOfAddressGroup: lists,
+    listsOfAddressGroupCacheable: listsOfAddressGroup,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,
