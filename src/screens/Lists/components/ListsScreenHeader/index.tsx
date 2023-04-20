@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
 import { Button, Text } from '@components/base';
@@ -9,6 +9,7 @@ import { BottomSheetListSettings } from '@screens/Lists/components/BottomSheetLi
 import { FilterIcon } from '@components/svg/icons/Filter';
 import { SettingsIcon } from '@components/svg/icons/Settings';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
+import { styles } from '@screens/Lists/components/ListsScreenHeader/styles';
 
 export const ListsScreenHeader = () => {
   const filterRef = useRef<BottomSheetRef>(null);
@@ -74,50 +75,3 @@ export const ListsScreenHeader = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: { paddingTop: 5, paddingLeft: 16 },
-  badgeButtonsContainer: {
-    flexDirection: 'row',
-    paddingRight: 17,
-    justifyContent: 'flex-end'
-  },
-  settingsButton: {
-    marginRight: 16
-  },
-  balanceSubtitle: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 12,
-    color: COLORS.lightGrey,
-    opacity: 1
-  },
-  balanceCount: {
-    paddingBottom: 12,
-    fontFamily: 'Mersad_600SemiBold',
-    fontSize: 36,
-    color: COLORS.black
-  },
-  balanceStats: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  balanceTokens: {
-    paddingRight: 14
-  },
-  progressInfo: {
-    paddingLeft: 7,
-    paddingRight: 4
-  },
-  badgeButtonContainer: {
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: ' rgba(47, 43, 67, 0.05)'
-  },
-  badgeButtonIcon: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

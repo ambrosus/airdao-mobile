@@ -35,9 +35,12 @@ export const SingleAddressGroupScreen = () => {
 
   const navigation = useNavigation();
 
-  const { handleOnDelete, handleOnRename, listsOfAddressGroup } = useLists(
-    (v) => v
-  );
+  const {
+    handleOnDelete,
+    handleOnRename,
+    listsOfAddressGroup,
+    setListsOfAddressGroup
+  } = useLists((v) => v);
 
   const handleDeleteGroupPress = useCallback(
     (selectedGroupId: string) => {
@@ -130,6 +133,7 @@ export const SingleAddressGroupScreen = () => {
         }}
         data={accounts}
         renderItem={({ item }) => {
+          console.log(item.name);
           return (
             <View style={styles.addressItemContainer}>
               <TouchableOpacity
@@ -151,6 +155,7 @@ export const SingleAddressGroupScreen = () => {
                 ref={optionsRef}
                 item={item}
                 groupId={selectedList.id}
+                setListsOfAddressGroup={setListsOfAddressGroup}
               />
             </View>
           );

@@ -21,14 +21,14 @@ interface Props {
 export function WalletItem(props: Props): JSX.Element {
   const { item, isWatchlist = false } = props;
 
+  const addressName = isWatchlist
+    ? StringUtils.formatAddress(item?.name || item?.address, 7, 9)
+    : item.name || StringUtils.formatAddress(item.address, 5, 7);
+
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <Row justifyContent="space-between">
-        <Text fontWeight="600">
-          {isWatchlist
-            ? StringUtils.formatAddress(item?.address, 7, 9)
-            : item.name || StringUtils.formatAddress(item.address, 5, 7)}
-        </Text>
+        <Text fontWeight="600">{addressName}</Text>
         <Text fontFamily="Mersad_600SemiBold">
           {isWatchlist
             ? StringUtils.pluralize(item.transactionCount, 'Transaction')
