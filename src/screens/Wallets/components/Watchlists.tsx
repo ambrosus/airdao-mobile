@@ -6,6 +6,10 @@ export function Watchlists(): JSX.Element {
   const { watchlist } = useWatchlist();
 
   return (
-    <WalletList title="Watchlists" totalAmount={1200000} data={watchlist} />
+    <WalletList
+      title="Watchlists"
+      totalAmount={watchlist.reduce((prev, curr) => prev + curr.ambBalance, 0)}
+      data={watchlist}
+    />
   );
 }
