@@ -24,7 +24,8 @@ interface RowItem {
 
 const SORT_ROWS: RowItem[] = [
   { title: 'Balance', value: ExplorerSort.Balance },
-  { title: 'Transaction Count', value: ExplorerSort['Transaction Count'] }
+  { title: 'Transaction Count', value: ExplorerSort['Transaction Count'] },
+  { title: 'Address', value: ExplorerSort.Address }
 ];
 
 export const BottomSheetWalletSort = forwardRef<
