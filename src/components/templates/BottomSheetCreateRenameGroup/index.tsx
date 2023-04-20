@@ -14,6 +14,7 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
+import { Toast, ToastType } from '@components/modular';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -40,14 +41,23 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
+        Toast.show({
+          message: `Way to go! ${localGroupName} list created.`,
+          type: ToastType.Top
+        });
       }
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
+        localRef.current?.dismiss();
+        Toast.show({
+          message: `${groupTitle} has been renamed to ${localGroupName}.`,
+          type: ToastType.Top
+        });
       }
-      localRef.current?.dismiss();
       setLocalGroupName('');
     }, [
       groupId,
+      groupTitle,
       handleOnCreateGroup,
       handleOnRenameGroup,
       localGroupName,

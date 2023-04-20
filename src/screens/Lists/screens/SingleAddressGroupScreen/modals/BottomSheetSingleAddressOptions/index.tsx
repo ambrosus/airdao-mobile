@@ -74,7 +74,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         fontSize={20}
         color={COLORS.black}
       >
-        Edit {item.name}
+        Edit {item.name || item.address}
       </Text>
       <Spacer value={24} />
       <Button onPress={handleOpenSingleAddressAction} style={styles.moveButton}>

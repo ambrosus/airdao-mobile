@@ -23,7 +23,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
 
     return (
       <>
-        <BottomSheet height={400} ref={localRef}>
+        <BottomSheet height={400} ref={localRef} isNestedSheet={true}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>

@@ -164,6 +164,7 @@ export const SingleAddressGroupScreen = () => {
       />
       <BottomSheetAddNewGroup ref={addNewGroupRef} groupId={groupId} />
       <BottomSheetGroupAction
+        type="rename"
         item={selectedList}
         ref={groupActionRef}
         handleOnDeleteItem={handleDeleteGroupPress}

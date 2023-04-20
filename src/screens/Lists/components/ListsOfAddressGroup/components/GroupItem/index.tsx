@@ -13,6 +13,7 @@ import { styles } from './styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
+import { BottomSheetConfirmRemoveGroup } from '@screens/Lists/components/BottomSheetConfirmRemoveGroup';
 
 type Props = {
   group: AccountList;
@@ -22,6 +23,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
+  const groupDeleteRef = useRef<BottomSheetRef>(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
@@ -37,6 +39,13 @@ export const GroupItem: FC<Props> = ({ group }) => {
     }, 900);
   }, []);
 
+  const handleOpenDeleteModal = useCallback(() => {
+    groupItemActionRef.current?.dismiss();
+    setTimeout(() => {
+      groupDeleteRef.current?.show();
+    }, 900);
+  }, []);
+
   const handleItemPress = () => {
     navigation.navigate('SingleAddressGroup', {
       group
@@ -47,6 +56,11 @@ export const GroupItem: FC<Props> = ({ group }) => {
     const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
     return `$${formattedNumber} (${formattedNumber} AMB)`;
   }, [group.totalBalance]);
+
+  const handleRemoveConfirm = (groupId: string) => {
+    handleOnDelete(groupId);
+    groupDeleteRef.current?.dismiss();
+  };
 
   return (
     <>
@@ -70,11 +84,24 @@ export const GroupItem: FC<Props> = ({ group }) => {
             <OptionsIcon />
           </Button>
           <BottomSheetGroupAction
+            handleOnDeleteButtonPress={handleOpenDeleteModal}
             item={group}
             ref={groupItemActionRef}
-            handleOnDeleteItem={handleOnDelete}
             handleOnRenameButtonPress={handleOpenRenameModal}
+            type="rename"
           />
+          <BottomSheetConfirmRemoveGroup
+            handleOnDeleteConfirm={handleRemoveConfirm}
+            item={group}
+            groupId={group.id}
+            ref={groupDeleteRef}
+          />
+          {/*<BottomSheetGroupAction*/}
+          {/*  handleOnDeleteButtonPress={}*/}
+          {/*  item={}*/}
+          {/*  handleOnRenameButtonPress={}*/}
+          {/*  type="delete"*/}
+          {/*/>*/}
         </View>
       </Button>
       <BottomSheetCreateRenameGroup
