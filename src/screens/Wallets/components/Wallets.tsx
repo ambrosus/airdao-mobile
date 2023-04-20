@@ -1,51 +1,18 @@
 import React from 'react';
-import { Wallet, WalletList } from '@components/templates';
+import { WalletList } from '@components/templates';
+import { usePersonalList } from '@hooks/cache';
 
 export function Wallets(): JSX.Element {
-  const wallets: Wallet[] = [
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    },
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    },
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    },
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    },
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    },
-    {
-      title: 'Wallet 1',
-      price: 20,
-      currency: 'AMB',
-      last24HourChange: 3.46,
-      totalAmount: 45000
-    }
-  ];
+  const { personalList } = usePersonalList();
 
-  return <WalletList title="My Wallets" totalAmount={90000} data={wallets} />;
+  return (
+    <WalletList
+      title="My Wallets"
+      totalAmount={personalList.reduce(
+        (prev, curr) => prev + curr.ambBalance,
+        0
+      )}
+      data={personalList}
+    />
+  );
 }

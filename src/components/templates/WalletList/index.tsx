@@ -7,31 +7,39 @@ import {
   RotationAnimation,
   RotationAnimationRef
 } from '@components/animations';
-import { WalletItem, Wallet } from '../WalletItem';
+import { WalletItem } from '../WalletItem';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useNavigation } from '@react-navigation/native';
+import { ExplorerAccount } from '@models/Explorer';
+import { WalletsNavigationProp } from '@appTypes/navigation';
 
 interface WalletListProps {
   title: string;
   totalAmount: number;
-  data: Wallet[];
+  data: ExplorerAccount[];
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
   const { title, totalAmount, data } = props;
   const [listOpened, toggleList] = useReducer((opened) => !opened, false);
   const rotationAnimation = useRef<RotationAnimationRef>(null);
+  // TODO set navigation prop
+  const navigation = useNavigation<WalletsNavigationProp>();
 
   const onTogglePress = () => {
     rotationAnimation.current?.rotate();
     toggleList();
   };
 
-  const renderWalletItem = (item: Wallet, idx: number) => {
+  const renderWalletItem = (item: ExplorerAccount, idx: number) => {
+    const navigateToAddressDetails = () => {
+      navigation.navigate('Address', { address: item.address });
+    };
     return (
-      <View key={idx} style={styles.item}>
+      <Button key={idx} style={styles.item} onPress={navigateToAddressDetails}>
         <WalletItem item={item} />
-      </View>
+      </Button>
     );
   };
 

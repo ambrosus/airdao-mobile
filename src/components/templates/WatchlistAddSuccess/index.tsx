@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
-import { BottomSheetWithHeader } from '@components/modular';
 import { Button, Spacer, Text } from '@components/base';
-import { EditWallet } from '../EditWallet';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef } from '@hooks';
 import { useAllAddresses, useAllAddressesReducer } from '@contexts';
 import { styles } from './styles';
+import { BottomSheetWithHeader } from '@components/modular';
+import { EditWallet } from '../EditWallet';
 
 interface WatchlistAddSuccessProps {
   address: string;

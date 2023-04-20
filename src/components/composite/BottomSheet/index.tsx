@@ -22,7 +22,8 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       isNestedSheet,
       containerStyle,
       avoidKeyboard = true,
-      fullscreen = false
+      fullscreen = false,
+      onClose
     },
     ref
   ) => {
@@ -37,7 +38,8 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const dismiss = useCallback(() => {
       setIsVisible(false);
       Keyboard.dismiss();
-    }, []);
+      if (typeof onClose === 'function') onClose();
+    }, [onClose]);
 
     useImperativeHandle(ref, () => ({
       show,
