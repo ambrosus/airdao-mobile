@@ -1,13 +1,9 @@
 import React from 'react';
-import { Row, Spacer, Text } from '@components/base';
+import { Spacer } from '@components/base';
 import { View } from 'react-native';
 import { styles } from '../../styles';
 import { CheckBox } from '@components/base/CheckBox';
-import { COLORS } from '@constants/colors';
-import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { ExplorerAccount } from '@models/Explorer';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
 import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
 
 type Props = {
@@ -20,7 +16,7 @@ export const AddressItemWithCheckbox = ({
   idsOfSelectedAddresses,
   handleCheckBoxPress
 }: Props) => {
-  const { address, transactionCount, ambBalance } = item;
+  const { address } = item;
   return (
     <>
       <Spacer value={29} />

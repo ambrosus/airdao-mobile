@@ -156,7 +156,11 @@ export const SingleAddressGroupScreen = () => {
                   <OptionsIcon />
                 </Button>
               </View>
-              <BottomSheetSingleAddressOptions ref={optionsRef} item={item} />
+              <BottomSheetSingleAddressOptions
+                ref={optionsRef}
+                item={item}
+                groupId={selectedList.id}
+              />
             </View>
           );
         }}

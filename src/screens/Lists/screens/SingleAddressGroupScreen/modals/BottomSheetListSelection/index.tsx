@@ -24,8 +24,6 @@ import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { CheckBox } from '@components/base/CheckBox';
 import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
 import { ExplorerAccount } from '@models/Explorer';
-import updateProps from 'react-native-reanimated/lib/types/lib/reanimated2/UpdateProps';
-import { CacheableAccount, CacheableAccountList } from '@appTypes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -36,12 +34,9 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
   ({ address }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const actionRef = useRef<BottomSheetRef>(null);
-    const {
-      listsOfAddressGroup,
-      listsOfAddressGroupCacheable,
-      handleOnDelete,
-      setListsOfAddressGroup
-    } = useLists((v) => v);
+    const { listsOfAddressGroup, handleOnDeleteAddressFromGroup } = useLists(
+      (v) => v
+    );
     const {
       params: {
         group: { id: groupId }
@@ -80,22 +75,8 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
     }, []);
 
     const handleDeleteAddress = () => {
-      const updatedGroups: CacheableAccountList[] =
-        listsOfAddressGroupCacheable.map((group) => {
-          if (groupId === group.id) {
-            const currentGroup = {
-              ...group,
-              addresses: group.addresses.filter((currentAddress) => {
-                return !idsOfSelectedAddresses.includes(currentAddress);
-              })
-            };
-            return currentGroup;
-          } else {
-            return group;
-          }
-        });
+      handleOnDeleteAddressFromGroup(groupId, idsOfSelectedAddresses);
       setIdsOfSelectedAddresses([]);
-      setListsOfAddressGroup(updatedGroups);
     };
 
     useEffect(() => {

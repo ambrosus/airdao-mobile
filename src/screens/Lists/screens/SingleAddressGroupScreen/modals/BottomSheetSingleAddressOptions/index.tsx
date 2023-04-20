@@ -19,12 +19,13 @@ import { ExplorerAccount } from '@models/Explorer';
 type Props = {
   ref: RefObject<BottomSheetRef>;
   item: ExplorerAccount;
+  groupId: string;
 };
 
 export const BottomSheetSingleAddressOptions = forwardRef<
   BottomSheetRef,
   Props
->(({ item }, ref) => {
+>(({ item, groupId }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const actionRef = useRef<BottomSheetRef>(null);
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
@@ -77,7 +78,11 @@ export const BottomSheetSingleAddressOptions = forwardRef<
           Remove
         </Text>
       </Button>
-      <BottomSheetConfirmRemove item={item} ref={confirmRemoveRef} />
+      <BottomSheetConfirmRemove
+        item={item}
+        ref={confirmRemoveRef}
+        groupId={groupId}
+      />
       <BottomSheetSingleAddressAction ref={actionRef} addresses={[item]} />
     </BottomSheet>
   );

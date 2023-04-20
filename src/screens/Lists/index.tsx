@@ -18,9 +18,6 @@ export const ListsScreen = () => {
   const handleOnOpenCreateNewList = useCallback(() => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
-
-  console.log(listsOfAddressGroup, 123123123123123);
-
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

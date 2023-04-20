@@ -20,8 +20,6 @@ type Props = {
 
 export const GroupItem: FC<Props> = ({ group }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
-
-  console.log(group);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
 

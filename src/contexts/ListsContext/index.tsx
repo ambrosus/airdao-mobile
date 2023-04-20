@@ -136,7 +136,27 @@ const ListsContext = () => {
     setListsOfAddressGroup(editedGroups);
   };
 
-  console.log(listsOfAddressGroup, 'asdasda');
+  const handleOnDeleteAddressFromGroup = (
+    groupId: string,
+    idsOfSelectedAddresses: string[]
+  ) => {
+    const updatedGroups: CacheableAccountList[] = listsOfAddressGroup.map(
+      (group) => {
+        if (groupId === group.id) {
+          const currentGroup = {
+            ...group,
+            addresses: group.addresses.filter((currentAddress) => {
+              return !idsOfSelectedAddresses.includes(currentAddress);
+            })
+          };
+          return currentGroup;
+        } else {
+          return group;
+        }
+      }
+    );
+    setListsOfAddressGroup(updatedGroups);
+  };
 
   return {
     listsOfAddressGroup: lists,
@@ -147,7 +167,8 @@ const ListsContext = () => {
     handleOnRename,
     createGroupRef,
     handleOnAddNewAddresses,
-    handleOnAddressMove
+    handleOnAddressMove,
+    handleOnDeleteAddressFromGroup
   };
 };
 
