@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { WalletsInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { WalletsActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
@@ -14,7 +14,6 @@ import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
 import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
-import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
 const tabs = {
@@ -44,11 +43,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   if (!tabBarVisible) return <></>;
 
   return (
-    <Animated.View
-      style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}
-      entering={SlideInDown}
-      exiting={SlideOutDown}
-    >
+    <View style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label: LabelType =
@@ -95,7 +90,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           </Pressable>
         );
       })}
-    </Animated.View>
+    </View>
   );
 };
 
