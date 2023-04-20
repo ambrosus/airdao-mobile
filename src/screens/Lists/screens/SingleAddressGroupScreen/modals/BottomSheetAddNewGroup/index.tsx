@@ -13,49 +13,18 @@ import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { FloatButton } from '@components/base/FloatButton';
 import { FlatList } from 'react-native';
-import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
-import { randomUUID } from 'expo-crypto';
 import { useLists } from '@contexts/ListsContext';
-import { AddressItemWithCheckbox } from './components/AddressItem';
+import { AddressItemWithCheckbox } from './components/AddressItemWithCheckbox';
+import { useWatchlist } from '@hooks';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   groupId: string;
 };
 
-const mockedAddresses: ListsOfAddressType[] = [
-  {
-    addressTitle: 'address 01',
-    addressPrice: '$45,000',
-    addressToken: '20 AMB',
-    addressProgress: '3.46%',
-    addressId: randomUUID()
-  },
-  {
-    addressTitle: 'address 02',
-    addressPrice: '$12,000',
-    addressToken: '341 AMB',
-    addressProgress: '1222.46%',
-    addressId: randomUUID()
-  },
-  {
-    addressTitle: 'address 03',
-    addressPrice: '$188,000',
-    addressToken: '78 AMB',
-    addressProgress: '22.9%',
-    addressId: randomUUID()
-  },
-  {
-    addressTitle: 'address 04',
-    addressPrice: '$5,872',
-    addressToken: '200 AMB',
-    addressProgress: '4.56%',
-    addressId: randomUUID()
-  }
-];
-
 export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
   ({ groupId }, ref) => {
+    const { watchlist } = useWatchlist();
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const handleOnAddNewAddresses = useLists((v) => v.handleOnAddNewAddresses);
     const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
@@ -63,12 +32,18 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
     >([]);
 
     const handleOnAddNewAddress = useCallback(() => {
-      const selectedAddressesForGroup = mockedAddresses.filter((item) =>
-        idsOfSelectedAddresses.includes(item.addressId)
+      const selectedAddressesForGroup = watchlist.filter((item) =>
+        idsOfSelectedAddresses.includes(item.address)
       );
       handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
       localRef.current?.dismiss();
-    }, [groupId, handleOnAddNewAddresses, idsOfSelectedAddresses, localRef]);
+    }, [
+      groupId,
+      handleOnAddNewAddresses,
+      idsOfSelectedAddresses,
+      localRef,
+      watchlist
+    ]);
 
     const handleCheckBoxPress = useCallback(
       (id: string) => {
@@ -131,7 +106,7 @@ export const BottomSheetAddNewGroup = forwardRef<BottomSheetRef, Props>(
             contentContainerStyle={{
               paddingBottom: 150
             }}
-            data={mockedAddresses}
+            data={watchlist}
             renderItem={({ item }) => (
               <AddressItemWithCheckbox
                 item={item}

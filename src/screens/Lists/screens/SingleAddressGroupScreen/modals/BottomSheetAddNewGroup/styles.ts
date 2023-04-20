@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
   },
-  flatListContainer: {
+  itemContainer: {
     paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between'

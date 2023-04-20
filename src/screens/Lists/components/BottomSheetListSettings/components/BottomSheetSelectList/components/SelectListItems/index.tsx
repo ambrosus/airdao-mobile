@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@components/base';
 import { Spacer } from '@components/base/Spacer';
 import { CheckBox } from '@components/base/CheckBox';
 import { COLORS } from '@constants/colors';
+import { styles } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList/components/SelectListItems/styles';
 
 type Props = {
   item: {
@@ -44,26 +45,3 @@ export const SelectListItems: FC<Props> = ({ item }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 32,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemInfo: {},
-  itemSubInfo: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 17
-  },
-  walletsCount: {
-    paddingRight: 14,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 16
-  }
-});

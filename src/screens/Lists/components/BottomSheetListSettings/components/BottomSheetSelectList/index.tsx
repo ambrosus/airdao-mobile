@@ -5,10 +5,11 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheet } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { SelectListItems } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList/components/SelectListItems';
 import { CheckBox } from '@components/base/CheckBox';
 import { Spacer } from '@components/base/Spacer';
+import { styles } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -89,16 +90,3 @@ export const BottomSheetSelectList = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    paddingHorizontal: 20
-  },
-  walletsContainer: { flexGrow: 1 },
-  infoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-});

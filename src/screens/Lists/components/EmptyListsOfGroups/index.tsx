@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
 import { TokenLogo } from '@components/svg/icons/TokenLogo';
+import { styles } from '@screens/Lists/components/EmptyListsOfGroups/styles';
 
 export const EmptyListsOfGroups = () => {
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
@@ -51,21 +52,3 @@ export const EmptyListsOfGroups = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 100
-  },
-  createButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    marginHorizontal: 16,
-    marginVertical: 12,
-    borderRadius: 25,
-    backgroundColor: COLORS.grey
-  },
-  text: {
-    paddingLeft: 10
-  }
-});

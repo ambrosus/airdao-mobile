@@ -7,15 +7,19 @@ import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models/Explorer';
+import { useLists } from '@contexts/ListsContext';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   item: ExplorerAccount;
+  groupId: string;
 };
 
 export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
-  ({ item }, ref) => {
+  ({ item, groupId }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
+
     return (
       <BottomSheet ref={localRef} height={350} isNestedSheet={true}>
         <View style={styles.icon}>
@@ -28,10 +32,16 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          Are you sure want to remove selected {item.name} from Whales?
+          Are you sure want to remove selected {item.address} from Whales?
         </Text>
         <Spacer value={24} />
-        <Button onPress={() => null} style={styles.removeButton}>
+        <Button
+          onPress={() => {
+            handleOnDeleteAddressFromGroup(groupId, [item.address]);
+            localRef.current?.dismiss();
+          }}
+          style={styles.removeButton}
+        >
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}

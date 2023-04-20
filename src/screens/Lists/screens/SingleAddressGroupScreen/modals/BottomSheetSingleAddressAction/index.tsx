@@ -58,7 +58,6 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
             }
             contentRight={
               <Button
-                //disabled={!idsOfSelectedGroups.length}
                 type="base"
                 onPress={() => {
                   handleOnAddressMove(idsOfSelectedGroups, addresses);
@@ -75,7 +74,6 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
               </Button>
             }
           />
-          {/*{true && (*/}
           <FlatList
             contentContainerStyle={{
               paddingBottom: 150
@@ -85,21 +83,23 @@ export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
               const addressesIds = addresses.map(
                 (addressItem) => addressItem.address
               );
-              const isAddressesAlreadyInList = item.accounts.some((account) =>
-                addressesIds.includes(account.address)
-              );
+              const alreadyExistsAddresses = item.accounts.filter((account) => {
+                return addressesIds.includes(account.address);
+              });
+
               return (
                 <ListOfAddressesGroupItem
                   handleOnCheckboxPress={handleOnCheckboxPress}
                   idsOfSelectedGroups={idsOfSelectedGroups}
                   item={item}
-                  isAddressAlreadyInList={isAddressesAlreadyInList}
-                  pressedAddresses={addresses}
+                  isAddressAlreadyInList={!!alreadyExistsAddresses.length}
+                  pressedAddresses={alreadyExistsAddresses.map(
+                    (address) => address.address
+                  )}
                 />
               );
             }}
           />
-          {/*)}*/}
         </SafeAreaView>
       </BottomSheet>
     );

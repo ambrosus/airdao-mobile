@@ -19,7 +19,7 @@ const ListsContext = () => {
       (l) =>
         new AccountList({
           ...l,
-          accounts: l.addresses.map(
+          accounts: l.addresses?.map(
             (address) =>
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               allAddresses.find(
@@ -114,18 +114,8 @@ const ListsContext = () => {
   ) => {
     const selectedAddressesIds = selectedAddresses.map((elem) => elem.address);
     const addressConcat = (groupAddresses: string[]) => {
-      const newArr = [...groupAddresses];
-
-      selectedAddresses.forEach((selectedAddress) => {
-        const contains = newArr.every((address) =>
-          selectedAddressesIds.includes(address)
-        );
-        if (!contains) {
-          newArr.push(selectedAddress.address);
-        }
-      });
-
-      return newArr;
+      const set = new Set([...groupAddresses, ...selectedAddressesIds]);
+      return [...set.values()];
     };
 
     const editedGroups = listsOfAddressGroup.map((group) => {
@@ -146,15 +136,39 @@ const ListsContext = () => {
     setListsOfAddressGroup(editedGroups);
   };
 
+  const handleOnDeleteAddressFromGroup = (
+    groupId: string,
+    idsOfSelectedAddresses: string[]
+  ) => {
+    const updatedGroups: CacheableAccountList[] = listsOfAddressGroup.map(
+      (group) => {
+        if (groupId === group.id) {
+          const currentGroup = {
+            ...group,
+            addresses: group.addresses.filter((currentAddress) => {
+              return !idsOfSelectedAddresses.includes(currentAddress);
+            })
+          };
+          return currentGroup;
+        } else {
+          return group;
+        }
+      }
+    );
+    setListsOfAddressGroup(updatedGroups);
+  };
+
   return {
     listsOfAddressGroup: lists,
+    listsOfAddressGroupCacheable: listsOfAddressGroup,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,
     handleOnRename,
     createGroupRef,
     handleOnAddNewAddresses,
-    handleOnAddressMove
+    handleOnAddressMove,
+    handleOnDeleteAddressFromGroup
   };
 };
 

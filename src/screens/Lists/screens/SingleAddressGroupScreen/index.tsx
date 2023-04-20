@@ -13,11 +13,11 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
 import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
 import { BottomSheetAddNewGroup } from './modals/BottomSheetAddNewGroup';
-import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
 import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
 import { BottomSheetListSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetListSelection';
 import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
+import { WalletItem } from '@components/templates';
 
 export const SingleAddressGroupScreen = () => {
   const {
@@ -30,7 +30,6 @@ export const SingleAddressGroupScreen = () => {
   const addNewGroupRef = useRef<BottomSheetRef>(null);
   const groupActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
-  const addressActionRef = useRef<BottomSheetRef>(null);
   const optionsRef = useRef<BottomSheetRef>(null);
   const listSelectionRef = useRef<BottomSheetRef>(null);
 
@@ -39,10 +38,6 @@ export const SingleAddressGroupScreen = () => {
   const { handleOnDelete, handleOnRename, listsOfAddressGroup } = useLists(
     (v) => v
   );
-
-  const handleOpenSingleAddressAction = useCallback(() => {
-    addressActionRef.current?.show();
-  }, []);
 
   const handleDeleteGroupPress = useCallback(
     (selectedGroupId: string) => {
@@ -141,11 +136,7 @@ export const SingleAddressGroupScreen = () => {
                 onLongPress={() => handleOnLongPress(item)}
                 style={styles.touchableAreaContainer}
               >
-                <AddressItem
-                  item={item}
-                  handleOpenSingleAddressAction={handleOpenSingleAddressAction}
-                  ref={addressActionRef}
-                />
+                <WalletItem item={item} />
               </TouchableOpacity>
               <View style={styles.buttonContainer}>
                 <Button
@@ -156,7 +147,11 @@ export const SingleAddressGroupScreen = () => {
                   <OptionsIcon />
                 </Button>
               </View>
-              <BottomSheetSingleAddressOptions ref={optionsRef} item={item} />
+              <BottomSheetSingleAddressOptions
+                ref={optionsRef}
+                item={item}
+                groupId={selectedList.id}
+              />
             </View>
           );
         }}

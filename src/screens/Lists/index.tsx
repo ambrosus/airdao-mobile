@@ -18,7 +18,6 @@ export const ListsScreen = () => {
   const handleOnOpenCreateNewList = useCallback(() => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
-
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
@@ -30,11 +29,6 @@ export const ListsScreen = () => {
         ) : (
           <>
             <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
-            <BottomSheetCreateRenameGroup
-              type="create"
-              handleOnCreateGroup={handleOnCreate}
-              ref={createGroupRef}
-            />
             <FloatButton
               title="Create new list"
               icon={<AddIcon />}
@@ -42,6 +36,11 @@ export const ListsScreen = () => {
             />
           </>
         )}
+        <BottomSheetCreateRenameGroup
+          type="create"
+          handleOnCreateGroup={handleOnCreate}
+          ref={createGroupRef}
+        />
       </SafeAreaView>
     </>
   );

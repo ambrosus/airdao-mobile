@@ -13,7 +13,7 @@ interface WalletItemProps {
 export function WalletItem(props: WalletItemProps): JSX.Element {
   const { item } = props;
   return (
-    <View>
+    <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
         <Text fontWeight="600">
           {item.name || StringUtils.formatAddress(item.address, 5, 7)}
