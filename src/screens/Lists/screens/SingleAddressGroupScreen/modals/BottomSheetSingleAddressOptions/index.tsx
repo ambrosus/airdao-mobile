@@ -16,22 +16,18 @@ import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAdd
 import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 import { ExplorerAccount } from '@models/Explorer';
 import { BottomSheetRenameAddress } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetRenameAddress';
-import { CacheableAccountList } from '@appTypes';
 import { useAllAddressesReducer } from '@contexts';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   item: ExplorerAccount;
   groupId: string;
-  setListsOfAddressGroup: React.Dispatch<
-    React.SetStateAction<CacheableAccountList[]>
-  >;
 };
 
 export const BottomSheetSingleAddressOptions = forwardRef<
   BottomSheetRef,
   Props
->(({ item, groupId, setListsOfAddressGroup }, ref) => {
+>(({ item, groupId }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const actionRef = useRef<BottomSheetRef>(null);
   const renameAddressRef = useRef<BottomSheetRef>(null);
@@ -54,12 +50,10 @@ export const BottomSheetSingleAddressOptions = forwardRef<
     (newName: string | false) => {
       if (!newName) return;
 
-      console.log(newName);
       const saveAddress = async () => {
         const newWallet: ExplorerAccount = Object.assign({}, item);
         newWallet.name = newName;
         newWallet.isPersonal = false;
-        console.log(newWallet);
         allAddressesReducer({ type: 'update', payload: newWallet });
         localRef.current?.dismiss();
       };
