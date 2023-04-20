@@ -39,7 +39,6 @@ import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses } from '@contexts';
-import { TabsNavigationProp } from '@appTypes/navigation';
 import { styles } from './styles';
 
 interface SearchAdressProps {
