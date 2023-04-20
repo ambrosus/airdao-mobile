@@ -9,6 +9,7 @@ import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
 import { StarFilledIcon } from '@components/svg/icons';
+import { CopyToClipboardButton } from '@components/composite';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -28,7 +29,6 @@ export const ExplorerAccountView = (
     nameVisible,
     watchlistDisplayType = 'details'
   } = props;
-  const { address } = account;
   const { listsOfAddressGroup } = useLists((v) => v);
 
   const { data } = useAMBPrice();
@@ -112,9 +112,14 @@ export const ExplorerAccountView = (
       )}
       <Spacer value={verticalScale(13)} />
       <Row alignItems="center">
-        <Text fontSize={15} fontFamily="Inter_600SemiBold">
-          {StringUtils.formatAddress(address, 11, 5)}
-        </Text>
+        <CopyToClipboardButton
+          textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
+          textToCopy={account.address}
+          textProps={{
+            fontSize: 15,
+            fontFamily: 'Inter_600SemiBold'
+          }}
+        />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
       <Spacer value={verticalScale(12)} />

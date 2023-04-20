@@ -8,6 +8,7 @@ export * from './ChevronLeft';
 export * from './ChevronRight';
 export * from './ChevronDown';
 export * from './Clipboard';
+export * from './ClipboardFilled';
 export * from './Close';
 export * from './DownArrow';
 export * from './Edit';
