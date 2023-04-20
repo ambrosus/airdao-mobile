@@ -90,7 +90,7 @@ export const WatchlistAddSuccess = (
           </Text>
         </Button>
       </View>
-      <BottomSheetEditWallet wallet={wallet} />
+      <BottomSheetEditWallet ref={editModal} wallet={wallet} />
     </View>
   );
 };
