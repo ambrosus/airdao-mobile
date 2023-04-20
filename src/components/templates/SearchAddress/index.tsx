@@ -7,7 +7,7 @@ import {
   useWindowDimensions
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { WatchlistAddSuccess } from '../WatchlistAddSuccess';
+import { WatchlistAddSuccess } from '@components/templates';
 import { ExplorerAccountView } from '../ExplorerAccount';
 import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
 import { BarcodeScanner } from '../BarcodeScanner';

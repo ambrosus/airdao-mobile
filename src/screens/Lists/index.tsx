@@ -29,11 +29,6 @@ export const ListsScreen = () => {
         ) : (
           <>
             <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
-            <BottomSheetCreateRenameGroup
-              type="create"
-              handleOnCreateGroup={handleOnCreate}
-              ref={createGroupRef}
-            />
             <FloatButton
               title="Create new list"
               icon={<AddIcon />}
@@ -41,6 +36,11 @@ export const ListsScreen = () => {
             />
           </>
         )}
+        <BottomSheetCreateRenameGroup
+          type="create"
+          handleOnCreateGroup={handleOnCreate}
+          ref={createGroupRef}
+        />
       </SafeAreaView>
     </>
   );
