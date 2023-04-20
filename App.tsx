@@ -3,6 +3,7 @@ import Navigation from '@navigation/NavigationContainer';
 import { useAppInit } from '@hooks/useAppInit';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Providers } from './Providers';
+import { Toast } from '@components/modular';
 import './src/prototypes/array';
 import { Toast } from '@components/modular';
 

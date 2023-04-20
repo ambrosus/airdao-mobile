@@ -1,6 +1,7 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   Button,
   KeyboardDismissingView,
@@ -21,6 +22,7 @@ import { verticalScale } from '@utils/scaling';
 import { FilterIcon } from '@components/svg/icons';
 import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerSort } from './Explore.types';
+import { ExploreTabParamsList } from '@appTypes/navigation';
 import { styles } from './styles';
 
 export const ExploreScreen = () => {
@@ -36,6 +38,12 @@ export const ExploreScreen = () => {
   // const { status, setStatus } = useOnboardingStatus((v) => v);
 
   const [sortBy, setSortBy] = useState(ExplorerSort.Balance);
+  const { params } = useRoute<RouteProp<ExploreTabParamsList>>();
+  const [addressFromParams, setAddressFromParams] = useState('');
+
+  useEffect(() => {
+    if (params?.address) setAddressFromParams(params.address);
+  }, [params?.address]);
 
   const sortedAccounts = useMemo(() => {
     if (sortBy && accounts) {
@@ -74,6 +82,7 @@ export const ExploreScreen = () => {
       <View style={{ flex: 1 }}>
         <SearchAdress
           onContentVisibilityChanged={setSearchAddressContentVisible}
+          initialValue={addressFromParams}
         />
         {searchAddressContentVisible ? null : (
           <View style={styles.container}>

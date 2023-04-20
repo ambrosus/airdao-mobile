@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
@@ -6,10 +6,9 @@ import { Button, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef } from '@hooks';
-import { useAllAddresses, useAllAddressesReducer } from '@contexts';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import { styles } from './styles';
-import { BottomSheetWithHeader } from '@components/modular';
-import { EditWallet } from '../EditWallet';
+import { useAllAddresses } from '@contexts';
 
 interface WatchlistAddSuccessProps {
   address: string;
@@ -20,17 +19,8 @@ export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
   const { address, onDone } = props;
-  const allAdressesReducer = useAllAddressesReducer();
   const allAddresses = useAllAddresses();
-  const [wallet, setWallet] = useState(
-    allAddresses.find((a) => a.address === address)
-  );
-
-  useEffect(() => {
-    if (!wallet) {
-      setWallet(allAddresses.find((a) => a.address === address));
-    }
-  }, [address, allAddresses, wallet]);
+  const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
   if (!wallet)
@@ -40,30 +30,8 @@ export const WatchlistAddSuccess = (
       </View>
     );
 
-  const onNameChange = (newName: string) => {
-    wallet.name = newName;
-    setWallet(Object.assign({}, wallet));
-  };
-
-  const togglePersonalAddress = (isPersonal: boolean) => {
-    wallet.isPersonal = isPersonal;
-    setWallet(Object.assign({}, wallet));
-  };
-
   const showEdit = () => {
     editModal.current?.show();
-  };
-
-  const hideEdit = () => {
-    editModal.current?.dismiss();
-  };
-
-  const saveAddress = async () => {
-    allAdressesReducer({
-      type: 'add-or-update',
-      payload: wallet
-    });
-    hideEdit();
   };
 
   return (
@@ -122,22 +90,7 @@ export const WatchlistAddSuccess = (
           </Text>
         </Button>
       </View>
-      <BottomSheetWithHeader
-        title="Edit Address"
-        ref={editModal}
-        fullscreen
-        avoidKeyboard={false}
-        actionTitle="Save"
-        onActionPress={saveAddress}
-      >
-        <EditWallet
-          wallet={wallet}
-          name={wallet.name}
-          onNameChange={onNameChange}
-          isPersonalAddress={!!wallet.isPersonal}
-          onIsPersonalAddressChange={togglePersonalAddress}
-        />
-      </BottomSheetWithHeader>
+      <BottomSheetEditWallet ref={editModal} wallet={wallet} />
     </View>
   );
 };

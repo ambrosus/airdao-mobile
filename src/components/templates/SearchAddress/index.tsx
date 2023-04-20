@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
@@ -6,6 +6,7 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { WatchlistAddSuccess } from '../WatchlistAddSuccess';
 import { ExplorerAccountView } from '../ExplorerAccount';
 import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
@@ -36,17 +37,20 @@ import {
 import { etherumAddressRegex } from '@constants/regex';
 import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetWithHeader } from '@components/modular';
+import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses } from '@contexts';
 import { styles } from './styles';
 
 interface SearchAdressProps {
+  initialValue?: string;
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
 }
 
 const LIMIT = 10;
 
 export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
-  const { onContentVisibilityChanged = () => null } = props;
+  const { initialValue, onContentVisibilityChanged = () => null } = props;
+  const navigation = useNavigation<TabsNavigationProp>();
   const { data: ambToken } = useAMBPrice();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
@@ -68,8 +72,18 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
-
+  const scanned = useRef(false);
   const successModal = useRef<BottomSheetRef>(null);
+
+  // listen to parent; especially useful for route params, dynamic links
+  useEffect(() => {
+    if (initialValue) {
+      initialMount.current = false;
+      setAddress(initialValue);
+      onContentVisibilityChanged(true);
+      inputRef.current?.setText(initialValue);
+    }
+  }, [initialValue, onContentVisibilityChanged]);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
@@ -117,8 +131,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         initialMount.current = false;
         setAddress(res[0]);
       }, 500);
-    } else {
-      Alert.alert('Invalid QR Code');
+    } else if (!scanned.current) {
+      scanned.current = true;
+      Alert.alert('Invalid QR Code', '', [
+        {
+          text: 'Scan Again',
+          onPress: () => {
+            scanned.current = false;
+          }
+        }
+      ]);
     }
   };
 
@@ -126,6 +148,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     if (account) {
       if (watchlist.indexOfItem(account, 'address') > -1) {
         // TODO navigate to watchlist
+        navigation.jumpTo('Wallets');
         return;
       }
       const finalAccount =
