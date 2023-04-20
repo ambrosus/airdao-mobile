@@ -6,12 +6,13 @@ import { COLORS } from '@constants/colors';
 import { CheckBox } from '@components/base/CheckBox';
 import { AccountList } from '@models/AccountList';
 import { ExplorerAccount } from '@models/Explorer';
+import { StringUtils } from '@utils/string';
 
 type Props = {
   item: AccountList;
   handleOnCheckboxPress: (selectedAddressId: string) => void;
   idsOfSelectedGroups: string[];
-  pressedAddresses: ExplorerAccount[];
+  pressedAddresses: string[];
   isAddressAlreadyInList: boolean;
 };
 export const ListOfAddressesGroupItem = ({
@@ -32,6 +33,7 @@ export const ListOfAddressesGroupItem = ({
     item.id
   ]);
 
+  // console.log(isAddressAlreadyInList);
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>
@@ -48,7 +50,7 @@ export const ListOfAddressesGroupItem = ({
           <Text fontFamily="Inter_400Regular" fontSize={16}>
             {isAddressAlreadyInList
               ? `${pressedAddresses
-                  .map((address) => address.address)
+                  .map((address) => StringUtils.formatAddress(address, 3, 4))
                   .join(', ')} is already on this list`
               : `${item.accountCount} Addresses`}
           </Text>

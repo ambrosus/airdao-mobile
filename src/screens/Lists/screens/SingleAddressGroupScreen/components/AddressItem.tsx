@@ -17,7 +17,7 @@ type Props = {
   handleOpenSingleAddressAction?: () => void;
   item: ExplorerAccount;
 };
-const AddressItem = React.forwardRef<BottomSheetRef, Props>(
+export const AddressItem = React.forwardRef<BottomSheetRef, Props>(
   ({ item: { address, ambBalance, transactionCount }, ref }) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
@@ -72,4 +72,3 @@ const AddressItem = React.forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-export default AddressItem;

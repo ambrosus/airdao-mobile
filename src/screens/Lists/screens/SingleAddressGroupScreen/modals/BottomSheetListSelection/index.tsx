@@ -17,13 +17,13 @@ import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { MoveIcon } from '@components/svg/icons/Move';
 import { RemoveIcon } from '@components/svg/icons/Remove';
-import AddressItem from '@screens/Lists/screens/SingleAddressGroupScreen/components/AddressItem';
 import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { CheckBox } from '@components/base/CheckBox';
 import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
 import { ExplorerAccount } from '@models/Explorer';
+import { WalletItem } from '@components/templates';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -153,7 +153,7 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
                       isChecked={idsOfSelectedAddresses.includes(item.address)}
                     />
                   </View>
-                  <AddressItem item={item} />
+                  <WalletItem item={item} isWatchlist />
                 </Row>
               );
             }}
