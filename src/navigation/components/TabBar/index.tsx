@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { WalletsInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { WalletsActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
@@ -12,6 +12,9 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
+import { useCurrentRoute } from '@contexts/Navigation';
+import { NavigationUtils } from '@utils/navigation';
+import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 
 type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
 const tabs = {
@@ -35,8 +38,17 @@ const tabs = {
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const bottomSafeArea = useSafeAreaInsets().bottom - 15;
+  const currentRoute = useCurrentRoute();
+  const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
+
+  if (!tabBarVisible) return <></>;
+
   return (
-    <View style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}>
+    <Animated.View
+      style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}
+      entering={SlideInDown}
+      exiting={SlideOutDown}
+    >
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label: LabelType =
@@ -83,7 +95,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           </Pressable>
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 

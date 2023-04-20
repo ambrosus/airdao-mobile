@@ -12,7 +12,14 @@ import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/ty
 import { AddressDetails } from '@screens/Address';
 import { WalletsParamsList, ListsParamsLists } from '@appTypes';
 
-export const getCommonStack = (
+const TabVisibleRoutes = [
+  'WalletsScreen',
+  'ExploreScreen',
+  'ListsScreen',
+  'SettingsScreen'
+];
+
+const getCommonStack = (
   Stack: TypedNavigator<
     WalletsParamsList | ListsParamsLists,
     StackNavigationState<ParamListBase>,
@@ -35,4 +42,8 @@ export const getCommonStack = (
   );
 };
 
-export const NavigationUtils = { getCommonStack };
+const getTabBarVisibility = (route: string): boolean => {
+  return TabVisibleRoutes.includes(route);
+};
+
+export const NavigationUtils = { getCommonStack, getTabBarVisibility };
