@@ -15,6 +15,7 @@ export function WalletHeader(): JSX.Element {
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
+  const scanned = useRef(false);
 
   const oepnScanner = () => {
     scanner.current?.show();
@@ -32,8 +33,16 @@ export function WalletHeader(): JSX.Element {
         screen: 'ExploreScreen',
         params: { address: res[0] }
       });
-    } else {
-      Alert.alert('Invalid QR Code');
+    } else if (!scanned.current) {
+      scanned.current = true;
+      Alert.alert('Invalid QR Code', '', [
+        {
+          text: 'Scan Again',
+          onPress: () => {
+            scanned.current = false;
+          }
+        }
+      ]);
     }
   };
 

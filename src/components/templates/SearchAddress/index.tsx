@@ -72,7 +72,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
-
+  const scanned = useRef(false);
   const successModal = useRef<BottomSheetRef>(null);
 
   // listen to parent; especially useful for route params, dynamic links
@@ -131,8 +131,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         initialMount.current = false;
         setAddress(res[0]);
       }, 500);
-    } else {
-      Alert.alert('Invalid QR Code');
+    } else if (!scanned.current) {
+      scanned.current = true;
+      Alert.alert('Invalid QR Code', '', [
+        {
+          text: 'Scan Again',
+          onPress: () => {
+            scanned.current = false;
+          }
+        }
+      ]);
     }
   };
 
