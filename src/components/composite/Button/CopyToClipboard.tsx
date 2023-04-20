@@ -4,7 +4,7 @@ import { TextProps } from '@components/base/Text/Text.types';
 import { BaseButtonProps, Button, Row, Spacer, Text } from '@components/base';
 import { ClipboardFilledIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
-import { Toast, ToastType } from '@components/modular';
+import { Toast, ToastType } from '@components/modular/Toast';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
