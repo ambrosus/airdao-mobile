@@ -5,7 +5,6 @@ import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { CheckBox } from '@components/base/CheckBox';
 import { AccountList } from '@models/AccountList';
-import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 
 type Props = {
