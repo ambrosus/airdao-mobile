@@ -32,20 +32,11 @@ export const SingleAddressGroupScreen = () => {
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const optionsRef = useRef<BottomSheetRef>(null);
   const listSelectionRef = useRef<BottomSheetRef>(null);
+  const groupDeleteRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation();
 
-  const { handleOnDelete, handleOnRename, listsOfAddressGroup } = useLists(
-    (v) => v
-  );
-
-  const handleDeleteGroupPress = useCallback(
-    (selectedGroupId: string) => {
-      handleOnDelete(selectedGroupId);
-      navigation.goBack();
-    },
-    [handleOnDelete, navigation]
-  );
+  const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
 
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
@@ -60,6 +51,13 @@ export const SingleAddressGroupScreen = () => {
     groupActionRef.current?.dismiss();
     setTimeout(() => {
       groupRenameRef.current?.show();
+    }, 900);
+  }, []);
+
+  const handleOpenDeleteModal = useCallback(() => {
+    groupActionRef.current?.dismiss();
+    setTimeout(() => {
+      groupDeleteRef.current?.show();
     }, 900);
   }, []);
 
@@ -167,7 +165,7 @@ export const SingleAddressGroupScreen = () => {
         type="rename"
         item={selectedList}
         ref={groupActionRef}
-        handleOnDeleteItem={handleDeleteGroupPress}
+        handleOnDeleteButtonPress={handleOpenDeleteModal}
         handleOnRenameButtonPress={handleOpenRenameModal}
       />
       <BottomSheetCreateRenameGroup

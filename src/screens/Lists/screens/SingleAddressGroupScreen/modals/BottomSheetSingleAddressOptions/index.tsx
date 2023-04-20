@@ -63,7 +63,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   );
 
   return (
-    <BottomSheet height={343} ref={localRef}>
+    <BottomSheet height={375} ref={localRef}>
       <View style={styles.icon}>
         <BottomSheetSwiperIcon />
       </View>

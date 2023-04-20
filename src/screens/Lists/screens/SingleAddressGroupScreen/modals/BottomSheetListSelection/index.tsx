@@ -153,7 +153,7 @@ export const BottomSheetListSelection = forwardRef<BottomSheetRef, Props>(
                       isChecked={idsOfSelectedAddresses.includes(item.address)}
                     />
                   </View>
-                  <WalletItem item={item} isWatchlist />
+                  <WalletItem item={item} />
                 </Row>
               );
             }}

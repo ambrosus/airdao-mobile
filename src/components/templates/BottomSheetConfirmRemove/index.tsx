@@ -21,7 +21,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
     const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
 
     return (
-      <BottomSheet ref={localRef} height={350} isNestedSheet={true}>
+      <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />
         </View>

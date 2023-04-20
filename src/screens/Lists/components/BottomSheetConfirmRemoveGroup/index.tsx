@@ -33,7 +33,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           color={COLORS.black}
         >
           Are you sure want to remove selected{' '}
-          {StringUtils.formatAddress(item.name, 3, 4)}
+          {StringUtils.formatAddress(item.name, 3, 4)} from lists
         </Text>
         <Spacer value={24} />
         <Button

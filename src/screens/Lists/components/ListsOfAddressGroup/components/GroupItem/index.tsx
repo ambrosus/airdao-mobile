@@ -96,12 +96,6 @@ export const GroupItem: FC<Props> = ({ group }) => {
             groupId={group.id}
             ref={groupDeleteRef}
           />
-          {/*<BottomSheetGroupAction*/}
-          {/*  handleOnDeleteButtonPress={}*/}
-          {/*  item={}*/}
-          {/*  handleOnRenameButtonPress={}*/}
-          {/*  type="delete"*/}
-          {/*/>*/}
         </View>
       </Button>
       <BottomSheetCreateRenameGroup
