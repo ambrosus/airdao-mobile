@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
   Button,
   KeyboardDismissingView,
@@ -27,17 +28,17 @@ import { styles } from './styles';
 
 export const ExploreScreen = () => {
   const { data: infoData } = useExplorerInfo();
+  const [sortBy, setSortBy] = useState(ExplorerSort.Balance);
   const {
     data: accounts,
     loading: accountsLoading,
     error: accountsError
-  } = useExplorerAccounts();
+  } = useExplorerAccounts(sortBy);
   const sortModal = useRef<BottomSheetRef>(null);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
   // const { status, setStatus } = useOnboardingStatus((v) => v);
 
-  const [sortBy, setSortBy] = useState(ExplorerSort.Balance);
   const { params } = useRoute<RouteProp<ExploreTabParamsList>>();
   const [addressFromParams, setAddressFromParams] = useState('');
 
@@ -79,13 +80,20 @@ export const ExploreScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: verticalScale(12) }}>
-      <View style={{ flex: 1 }}>
+      <KeyboardDismissingView
+        style={{ flex: 1 }}
+        disabled={!searchAddressContentVisible}
+      >
         <SearchAdress
           onContentVisibilityChanged={setSearchAddressContentVisible}
           initialValue={addressFromParams}
         />
         {searchAddressContentVisible ? null : (
-          <View style={styles.container}>
+          <Animated.View
+            style={styles.container}
+            entering={FadeIn}
+            exiting={FadeOut}
+          >
             <KeyboardDismissingView>
               <Spacer value={verticalScale(25)} />
               <TotalAdresses
@@ -101,7 +109,7 @@ export const ExploreScreen = () => {
                   <FilterIcon />
                 </Button>
               </Row>
-              <Spacer value={verticalScale(29)} />
+              <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
             {accountsLoading ? (
               <Spinner />
@@ -129,9 +137,9 @@ export const ExploreScreen = () => {
                 </>
               )
             )}
-          </View>
+          </Animated.View>
         )}
-      </View>
+      </KeyboardDismissingView>
     </SafeAreaView>
   );
 };

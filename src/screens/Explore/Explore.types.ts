@@ -1,4 +1,5 @@
 export enum ExplorerSort {
-  'Balance' = 0,
-  'Transaction Count' = 1
+  Balance = 'balance',
+  'Transaction Count' = 'totalTx',
+  Address = 'address'
 }

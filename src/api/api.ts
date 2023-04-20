@@ -2,6 +2,7 @@ import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
 import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
+import { ExplorerSort } from '@screens/Explore/Explore.types';
 import axios from 'axios';
 
 const getExplorerAccountTypeFromResponseMeta = (
@@ -30,10 +31,13 @@ export const getExplorerInfo = async (): Promise<ExplorerInfoDTO> => {
   }
 };
 
-export const getExplorerAccounts = async (): Promise<ExplorerAccountDTO[]> => {
+export const getExplorerAccounts = async (
+  limit = 20,
+  sort: ExplorerSort = ExplorerSort.Balance
+): Promise<ExplorerAccountDTO[]> => {
   try {
     const response = await axios.get(
-      'https://explorer-api.ambrosus.io/accounts/'
+      `https://explorer-api.ambrosus.io/accounts?limit=${limit}&sort=${sort}`
     );
     return response.data.data;
   } catch (error) {
