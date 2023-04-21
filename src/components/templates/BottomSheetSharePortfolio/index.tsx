@@ -1,6 +1,7 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { captureRef, CaptureOptions } from 'react-native-view-shot';
+import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -19,6 +20,8 @@ import {
   TwitterIcon
 } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
+import { ShareUtils } from '@utils/share';
+import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
@@ -33,19 +36,37 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const shareRef = useRef(null);
 
     // TODO change type
-    const onSharePress = async (type: any) => {
+    const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
         format: 'jpg'
+        // result: 'base64'
       };
-      const uri = await captureRef(shareRef, captureOptions);
-      console.log({ uri });
-      const res = await Sharing.shareAsync(uri, {
-        UTI: 'image/jpeg',
-        mimeType: 'image/jpeg',
-        dialogTitle: 'Check out price!'
-      });
-      console.log({ res });
+      const result = await captureRef(shareRef, captureOptions);
+      const base64 = `data:image/jpg;base64, ${result}`;
+      const uri = result;
+      if (type) {
+        console.log('share social');
+        ShareUtils.socialShareImage(
+          {
+            base64: base64,
+            title: `Share on ${type}!`
+          },
+          type
+        );
+      } else {
+        console.log(' share image');
+        ShareUtils.shareImage({
+          base64: uri,
+          title: `Share!`
+        });
+      }
+      // const res = await Sharing.shareAsync(`file://${base64}`, {
+      //   UTI: 'image/jpeg',
+      //   mimeType: 'image/jpeg',
+      //   dialogTitle: 'Check out price!'
+      // });
+      // console.log({ res });
     };
 
     return (
@@ -72,7 +93,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 <Button
                   type="circular"
                   style={styles.darkBtn}
-                  onPress={onSharePress}
+                  onPress={async () => onSharePress(Social.Twitter)}
                 >
                   <TwitterIcon color="#FFFFFF" />
                 </Button>
@@ -94,7 +115,11 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 <Text>Copy link</Text>
               </View>
               <View style={styles.shareButton}>
-                <Button type="circular" style={styles.lightBtn}>
+                <Button
+                  type="circular"
+                  style={styles.lightBtn}
+                  onPress={() => onSharePress()}
+                >
                   <PlusIcon color="#222222" />
                 </Button>
                 <Spacer value={verticalScale(8)} />
