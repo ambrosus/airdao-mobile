@@ -7,13 +7,13 @@ import { COLORS } from '@constants/colors';
 import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
-import { styles } from '@screens/Lists/components/BottomSheetFilters/styes';
+import { styles } from '@screens/Lists/components/BottomSheetListsFilters/styes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
 };
 
-export const BottomSheetFilters = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetListsFilters = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (

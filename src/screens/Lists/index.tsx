@@ -7,8 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLists } from '@contexts/ListsContext';
 import { FloatButton } from '@components/base/FloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { EmptyListsOfGroups } from '@screens/Lists/components/EmptyListsOfGroups';
-import { ListsOfAddressGroup } from '@screens/Lists/components/ListsOfAddressGroup';
+import { EmptyListsOfGroups } from '@screens/Lists/components/ListsGroups';
+import { ListsGroups } from '@screens/Lists/components/ListsOfAddressGroup';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 export const ListsScreen = () => {
   const { listsOfAddressGroup, handleOnCreate, createGroupRef } = useLists(
@@ -28,7 +28,7 @@ export const ListsScreen = () => {
           <EmptyListsOfGroups />
         ) : (
           <>
-            <ListsOfAddressGroup listsOfAddressGroup={listsOfAddressGroup} />
+            <ListsGroups listsOfAddressGroup={listsOfAddressGroup} />
             <FloatButton
               title="Create new list"
               icon={<AddIcon />}

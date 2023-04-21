@@ -17,7 +17,7 @@ type Props = {
   handleOnRenameButtonPress: () => void;
   type: 'rename' | 'delete';
 };
-export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetSingleGroupOption = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
     const {
       type = 'rename',

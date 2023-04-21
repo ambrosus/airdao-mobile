@@ -5,8 +5,8 @@ import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
-import { TokenLogo } from '@components/svg/icons/TokenLogo';
-import { styles } from '@screens/Lists/components/EmptyListsOfGroups/styles';
+import { styles } from '@screens/Lists/components/ListsGroups/styles';
+import { EmptyListsIcon } from '@components/svg/icons/Empty';
 
 export const EmptyListsOfGroups = () => {
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
@@ -17,7 +17,7 @@ export const EmptyListsOfGroups = () => {
 
   return (
     <View style={styles.container}>
-      <TokenLogo />
+      <EmptyListsIcon />
       <Spacer value={16} />
       <Text
         fontFamily="Inter_400Regular"

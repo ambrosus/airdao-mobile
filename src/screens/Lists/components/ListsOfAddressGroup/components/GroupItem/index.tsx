@@ -10,7 +10,7 @@ import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
+import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Lists/components/BottomSheetConfirmRemoveGroup';
@@ -28,7 +28,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
-  const handleOpenGroupAction = useCallback(() => {
+  const handleOpenSingleGroupOption = useCallback(() => {
     groupItemActionRef.current?.show();
   }, []);
 
@@ -79,11 +79,11 @@ export const GroupItem: FC<Props> = ({ group }) => {
           <Button
             style={styles.optionButton}
             type="base"
-            onPress={handleOpenGroupAction}
+            onPress={handleOpenSingleGroupOption}
           >
             <OptionsIcon />
           </Button>
-          <BottomSheetGroupAction
+          <BottomSheetSingleGroupOption
             handleOnDeleteButtonPress={handleOpenDeleteModal}
             item={group}
             ref={groupItemActionRef}

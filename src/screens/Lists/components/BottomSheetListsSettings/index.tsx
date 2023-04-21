@@ -16,13 +16,13 @@ import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { InfoIcon } from '@components/svg/icons/Info';
 import { RightArrowIcon } from '@components/svg/RightArrowIcon';
-import { BottomSheetSelectList } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList';
-import { styles } from '@screens/Lists/components/BottomSheetListSettings/styles';
+import { BottomSheetSelectList } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList';
+import { styles } from '@screens/Lists/components/BottomSheetListsSettings/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
 };
-export const BottomSheetListSettings = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const [isTransactionAlertsEnabled, setIsTransactionAlertsEnabled] =
