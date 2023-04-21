@@ -1,5 +1,7 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
+import { captureRef, CaptureOptions } from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -28,6 +30,23 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
   (props, ref) => {
     const { bottomSheetTitle, ...portfolioBalanceProps } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const shareRef = useRef(null);
+
+    // TODO change type
+    const onSharePress = async (type: any) => {
+      const captureOptions: CaptureOptions = {
+        fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
+        format: 'jpg'
+      };
+      const uri = await captureRef(shareRef, captureOptions);
+      console.log({ uri });
+      const res = await Sharing.shareAsync(uri, {
+        UTI: 'image/jpeg',
+        mimeType: 'image/jpeg',
+        dialogTitle: 'Check out price!'
+      });
+      console.log({ res });
+    };
 
     return (
       <BottomSheet ref={localRef}>
@@ -42,13 +61,19 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
             </Text>
           </View>
           <View style={styles.portfolioPerfomance}>
-            <PortfolioPerformance {...portfolioBalanceProps} />
+            <View ref={shareRef}>
+              <PortfolioPerformance {...portfolioBalanceProps} />
+            </View>
           </View>
           <Spacer value={verticalScale(40)} />
           <View style={styles.shareButtons}>
             <Row justifyContent="space-between" alignItems="center">
               <View style={styles.shareButton}>
-                <Button type="circular" style={styles.darkBtn}>
+                <Button
+                  type="circular"
+                  style={styles.darkBtn}
+                  onPress={onSharePress}
+                >
                   <TwitterIcon color="#FFFFFF" />
                 </Button>
                 <Spacer value={verticalScale(8)} />
