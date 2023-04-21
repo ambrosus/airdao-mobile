@@ -13,7 +13,7 @@ import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { FlatList, SafeAreaView } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction/ListOfAddressesGroupItem';
+import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
 import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   addresses: ExplorerAccount[];
 };
 
-export const BottomSheetSingleAddressAction = forwardRef<BottomSheetRef, Props>(
+export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
   ({ addresses }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const { listsOfAddressGroup, handleOnAddressMove } = useLists((v) => v);

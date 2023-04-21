@@ -21,13 +21,13 @@ export const AddressItemWithCheckbox = ({
     <>
       <Spacer value={29} />
       <View style={styles.itemContainer}>
-        <View style={{ paddingRight: 10 }}>
+        <View style={styles.checkboxPadding}>
           <CheckBox
             onPress={() => handleCheckBoxPress(address)}
             isChecked={idsOfSelectedAddresses.includes(address)}
           />
         </View>
-        <WalletItem item={item} isWatchlist />
+        <WalletItem item={item} />
       </View>
     </>
   );

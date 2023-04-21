@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 100
+    paddingTop: 132
   },
   createButton: {
     paddingHorizontal: 24,

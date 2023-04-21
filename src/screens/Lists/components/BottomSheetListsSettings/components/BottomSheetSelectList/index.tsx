@@ -6,10 +6,10 @@ import { BottomSheet } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { FlatList, View } from 'react-native';
-import { SelectListItems } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList/components/SelectListItems';
+import { ListsSettingsSelectList } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList';
 import { CheckBox } from '@components/base/CheckBox';
 import { Spacer } from '@components/base/Spacer';
-import { styles } from '@screens/Lists/components/BottomSheetListSettings/components/BottomSheetSelectList/styles';
+import { styles } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -81,7 +81,7 @@ export const BottomSheetSelectList = forwardRef<BottomSheetRef, Props>(
               }}
               data={mockedData}
               renderItem={({ item, index }) => {
-                return <SelectListItems key={index} item={item} />;
+                return <ListsSettingsSelectList key={index} item={item} />;
               }}
             />
           </View>

@@ -43,5 +43,8 @@ export const styles = StyleSheet.create({
   },
   priceProgressContainer: {
     alignItems: 'flex-end'
+  },
+  checkboxPadding: {
+    paddingRight: 16
   }
 });

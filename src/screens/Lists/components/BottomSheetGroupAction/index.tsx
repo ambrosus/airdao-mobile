@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheet } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -12,14 +12,19 @@ import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  handleOnDeleteItem: (listId: string) => void;
+  handleOnDeleteButtonPress: () => void;
   item: AccountList;
   handleOnRenameButtonPress: () => void;
+  type: 'rename' | 'delete';
 };
-
-export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
-  ({ handleOnDeleteItem, item, handleOnRenameButtonPress }, ref) => {
-    const [status, setStatus] = useState('rename');
+export const BottomSheetSingleGroupOption = forwardRef<BottomSheetRef, Props>(
+  (props, ref) => {
+    const {
+      type = 'rename',
+      handleOnDeleteButtonPress,
+      item,
+      handleOnRenameButtonPress
+    } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     return (
       <BottomSheet height={300} ref={localRef}>
@@ -33,9 +38,9 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          {status === 'rename'
+          {type === 'rename'
             ? `Edit ${item.name}`
-            : `Are you sure want to remove selected Addresses from ${item.name}?`}
+            : `Are you sure want to remove selected ${item.name} from lists?`}
         </Text>
         <Spacer value={32} />
         <Button
@@ -49,20 +54,14 @@ export const BottomSheetGroupAction = forwardRef<BottomSheetRef, Props>(
             fontSize={16}
             color={COLORS.white}
           >
-            {status ? 'Rename List' : 'Remove'}
+            {type === 'rename' ? 'Rename' : 'Delete'}
           </Text>
         </Button>
         <Spacer value={24} />
         <Button
           type="base"
           style={styles.bottomSheetDeleteButton}
-          onPress={() => {
-            if (status === 'delete') {
-              handleOnDeleteItem(item.id);
-            } else {
-              setStatus('delete');
-            }
-          }}
+          onPress={handleOnDeleteButtonPress}
         >
           <Text
             style={styles.cancelButtonText}

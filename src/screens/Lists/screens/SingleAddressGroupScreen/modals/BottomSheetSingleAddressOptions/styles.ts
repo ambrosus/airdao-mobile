@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16
   },
   text: {
+    paddingHorizontal: 43,
     textAlign: 'center'
   },
   moveButton: {

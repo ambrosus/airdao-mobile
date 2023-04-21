@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -7,6 +7,7 @@ import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
+import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetRenameAddress/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -23,7 +24,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
 
     return (
       <>
-        <BottomSheet height={400} ref={localRef}>
+        <BottomSheet height={400} ref={localRef} isNestedSheet={true}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>
@@ -90,37 +91,3 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  newListTitle: {
-    alignSelf: 'center'
-  },
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
-  bottomSheetSubtitle: {
-    paddingLeft: 16
-  },
-  bottomSheetInput: {
-    marginVertical: 8,
-    marginHorizontal: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: COLORS.silver
-  },
-  bottomSheetCreateRenameButton: {
-    backgroundColor: COLORS.grey,
-    marginHorizontal: 18,
-    paddingVertical: 16,
-    borderRadius: 25,
-    alignItems: 'center'
-  },
-  bottomSheetCancelButton: {
-    marginHorizontal: 18,
-    paddingVertical: 16,
-    alignItems: 'center'
-  }
-});

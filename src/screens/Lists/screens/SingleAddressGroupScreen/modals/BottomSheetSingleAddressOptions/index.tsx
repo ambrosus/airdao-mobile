@@ -12,7 +12,7 @@ import { View } from 'react-native';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions/styles';
-import { BottomSheetSingleAddressAction } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressAction';
+import { BottomSheetSingleAddressMove } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove';
 import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 import { ExplorerAccount } from '@models/Explorer';
 import { BottomSheetRenameAddress } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetRenameAddress';
@@ -29,15 +29,15 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   Props
 >(({ item, groupId }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const actionRef = useRef<BottomSheetRef>(null);
+  const singleAddressMoveRef = useRef<BottomSheetRef>(null);
   const renameAddressRef = useRef<BottomSheetRef>(null);
 
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
 
   const allAddressesReducer = useAllAddressesReducer();
 
-  const handleOpenSingleAddressAction = useCallback(() => {
-    actionRef.current?.show();
+  const handleOSingleAddressMove = useCallback(() => {
+    singleAddressMoveRef.current?.show();
   }, []);
 
   const handleOnOpenRenameAddress = () => renameAddressRef.current?.show();
@@ -63,7 +63,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   );
 
   return (
-    <BottomSheet height={343} ref={localRef}>
+    <BottomSheet height={375} ref={localRef}>
       <View style={styles.icon}>
         <BottomSheetSwiperIcon />
       </View>
@@ -74,10 +74,10 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         fontSize={20}
         color={COLORS.black}
       >
-        Edit {item.name}
+        Edit {item.name || item.address}
       </Text>
       <Spacer value={24} />
-      <Button onPress={handleOpenSingleAddressAction} style={styles.moveButton}>
+      <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
         <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.white}>
           Move
         </Text>
@@ -103,7 +103,10 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         ref={confirmRemoveRef}
         groupId={groupId}
       />
-      <BottomSheetSingleAddressAction ref={actionRef} addresses={[item]} />
+      <BottomSheetSingleAddressMove
+        ref={singleAddressMoveRef}
+        addresses={[item]}
+      />
       <BottomSheetRenameAddress
         handleOnRename={handleOnRenameAddress}
         ref={renameAddressRef}

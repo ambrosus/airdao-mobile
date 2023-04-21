@@ -6,7 +6,7 @@ import { AccountList } from '@models/AccountList';
 type Props = {
   listsOfAddressGroup: AccountList[];
 };
-export const ListsOfAddressGroup = ({ listsOfAddressGroup }: Props) => {
+export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
   return (
     <View style={styles.groupsContainer}>
       <FlatList

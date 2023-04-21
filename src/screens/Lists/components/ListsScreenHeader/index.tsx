@@ -4,8 +4,8 @@ import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
 import { Button, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheetFilters } from '@screens/Lists/components/BottomSheetFilters';
-import { BottomSheetListSettings } from '@screens/Lists/components/BottomSheetListSettings';
+import { BottomSheetListsFilters } from '@screens/Lists/components/BottomSheetListsFilters';
+import { BottomSheetListsSettings } from '@screens/Lists/components/BottomSheetListsSettings';
 import { FilterIcon } from '@components/svg/icons/Filter';
 import { SettingsIcon } from '@components/svg/icons/Settings';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
@@ -70,8 +70,8 @@ export const ListsScreenHeader = () => {
         </Text>
         <Text>24HR</Text>
       </View>
-      <BottomSheetFilters ref={filterRef} />
-      <BottomSheetListSettings ref={settingsRef} />
+      <BottomSheetListsFilters ref={filterRef} />
+      <BottomSheetListsSettings ref={settingsRef} />
     </View>
   );
 };

@@ -6,22 +6,22 @@ import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { ExplorerAccount } from '@models/Explorer';
-import { useLists } from '@contexts/ListsContext';
+import { StringUtils } from '@utils/string';
+import { AccountList } from '@models';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ExplorerAccount;
+  item: AccountList;
   groupId: string;
+  handleOnDeleteConfirm: (groupId: string) => void;
 };
 
-export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
-  ({ item, groupId }, ref) => {
+export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
+  ({ item, groupId, handleOnDeleteConfirm }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-    const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
 
     return (
-      <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
+      <BottomSheet ref={localRef} height={350}>
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />
         </View>
@@ -32,12 +32,13 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           fontSize={20}
           color={COLORS.black}
         >
-          Are you sure want to remove selected {item.address} from Whales?
+          Are you sure want to remove selected{' '}
+          {StringUtils.formatAddress(item.name, 3, 4)} from lists
         </Text>
         <Spacer value={24} />
         <Button
           onPress={() => {
-            handleOnDeleteAddressFromGroup(groupId, [item.address]);
+            handleOnDeleteConfirm(groupId);
             localRef.current?.dismiss();
           }}
           style={styles.removeButton}

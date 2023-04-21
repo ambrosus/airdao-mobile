@@ -10,9 +10,10 @@ import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { BottomSheetGroupAction } from '@screens/Lists/components/BottomSheetGroupAction';
+import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
+import { BottomSheetConfirmRemoveGroup } from '@screens/Lists/components/BottomSheetConfirmRemoveGroup';
 
 type Props = {
   group: AccountList;
@@ -22,11 +23,12 @@ export const GroupItem: FC<Props> = ({ group }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
+  const groupDeleteRef = useRef<BottomSheetRef>(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
 
-  const handleOpenGroupAction = useCallback(() => {
+  const handleOpenSingleGroupOption = useCallback(() => {
     groupItemActionRef.current?.show();
   }, []);
 
@@ -34,6 +36,13 @@ export const GroupItem: FC<Props> = ({ group }) => {
     groupItemActionRef.current?.dismiss();
     setTimeout(() => {
       groupRenameRef.current?.show();
+    }, 900);
+  }, []);
+
+  const handleOpenDeleteModal = useCallback(() => {
+    groupItemActionRef.current?.dismiss();
+    setTimeout(() => {
+      groupDeleteRef.current?.show();
     }, 900);
   }, []);
 
@@ -47,6 +56,11 @@ export const GroupItem: FC<Props> = ({ group }) => {
     const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
     return `$${formattedNumber} (${formattedNumber} AMB)`;
   }, [group.totalBalance]);
+
+  const handleRemoveConfirm = (groupId: string) => {
+    handleOnDelete(groupId);
+    groupDeleteRef.current?.dismiss();
+  };
 
   return (
     <>
@@ -65,15 +79,22 @@ export const GroupItem: FC<Props> = ({ group }) => {
           <Button
             style={styles.optionButton}
             type="base"
-            onPress={handleOpenGroupAction}
+            onPress={handleOpenSingleGroupOption}
           >
             <OptionsIcon />
           </Button>
-          <BottomSheetGroupAction
+          <BottomSheetSingleGroupOption
+            handleOnDeleteButtonPress={handleOpenDeleteModal}
             item={group}
             ref={groupItemActionRef}
-            handleOnDeleteItem={handleOnDelete}
             handleOnRenameButtonPress={handleOpenRenameModal}
+            type="rename"
+          />
+          <BottomSheetConfirmRemoveGroup
+            handleOnDeleteConfirm={handleRemoveConfirm}
+            item={group}
+            groupId={group.id}
+            ref={groupDeleteRef}
           />
         </View>
       </Button>
