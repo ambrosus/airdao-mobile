@@ -77,7 +77,7 @@ export function PortfolioPerformance(
               Time Stamp{' '}
             </Text>
             <Text subtext color="#FFFFFF">
-              {dayjs(timestamp).format('YYYY-mm-DD')}
+              {dayjs(timestamp).format('YYYY-MM-DD')}
             </Text>
             <Text subtext color="#FFFFFF">
               {' '}
