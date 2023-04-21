@@ -1,8 +1,6 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { captureRef, CaptureOptions } from 'react-native-view-shot';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -33,40 +31,29 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
   (props, ref) => {
     const { bottomSheetTitle, ...portfolioBalanceProps } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-    const shareRef = useRef(null);
+    const shareRef = useRef<View>(null);
 
-    // TODO change type
     const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
-        format: 'jpg'
-        // result: 'base64'
+        format: 'png'
       };
       const result = await captureRef(shareRef, captureOptions);
-      const base64 = `data:image/jpg;base64, ${result}`;
       const uri = result;
       if (type) {
-        console.log('share social');
         ShareUtils.socialShareImage(
           {
-            base64: base64,
+            uri: uri,
             title: `Share on ${type}!`
           },
           type
         );
       } else {
-        console.log(' share image');
         ShareUtils.shareImage({
-          base64: uri,
+          uri: uri,
           title: `Share!`
         });
       }
-      // const res = await Sharing.shareAsync(`file://${base64}`, {
-      //   UTI: 'image/jpeg',
-      //   mimeType: 'image/jpeg',
-      //   dialogTitle: 'Check out price!'
-      // });
-      // console.log({ res });
     };
 
     return (
@@ -101,7 +88,11 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 <Text>Twitter</Text>
               </View>
               <View style={styles.shareButton}>
-                <Button type="circular" style={styles.darkBtn}>
+                <Button
+                  type="circular"
+                  style={styles.darkBtn}
+                  onPress={() => onSharePress(Social.Sms)}
+                >
                   <MessagesIcon color="#FFFFFF" />
                 </Button>
                 <Spacer value={verticalScale(8)} />

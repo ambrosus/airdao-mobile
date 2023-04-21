@@ -1,12 +1,13 @@
 import Share from 'react-native-share';
+import * as ExpoSharing from 'expo-sharing';
 import { Social, SharingOptionsWithMedia } from '@appTypes';
 import { Platform } from 'react-native';
 
 const shareImage = async (options: SharingOptionsWithMedia) => {
-  console.log({ options });
-  await Share.open({
-    url: options.uri,
-    type: 'image/jpg'
+  return await ExpoSharing.shareAsync(options.uri, {
+    UTI: 'image/jpeg',
+    mimeType: 'image/jpeg',
+    dialogTitle: 'Check out price!'
   });
 };
 const socialShareImage = async (
@@ -15,8 +16,14 @@ const socialShareImage = async (
 ) => {
   await Share.shareSingle({
     title: options.title,
-    url: options.base64,
-    social
+    message: options.message,
+    url: Platform.select({
+      ios: 'file://' + options.uri,
+      android: options.uri
+    }),
+    subject: options.message,
+    social,
+    recipient: '' // this is important for SMS sharing. Leave it empty.
   });
 };
 

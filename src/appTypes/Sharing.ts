@@ -1,5 +1,6 @@
 export enum Social {
-  Twitter = 'twitter'
+  Twitter = 'twitter',
+  Sms = 'sms'
 }
 
 export interface SharingOptions {
@@ -8,6 +9,5 @@ export interface SharingOptions {
 }
 
 export interface SharingOptionsWithMedia extends SharingOptions {
-  uri?: string;
-  base64: string;
+  uri: string;
 }
