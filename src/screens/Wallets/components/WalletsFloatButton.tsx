@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { Text } from '@components/base';
@@ -21,6 +21,10 @@ const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
 
 export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
   const [toolTipVisible, setToolTipVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setToolTipVisible(true), 300);
+  }, []);
 
   const bottomSafeArea = useSafeAreaInsets().bottom || 34;
 

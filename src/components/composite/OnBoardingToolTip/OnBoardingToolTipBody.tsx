@@ -17,6 +17,7 @@ export const OnBoardingToolTipBody = ({
 }: Omit<OnBoardingToolTipInfo, 'isButtonClose'> & {
   handleButtonClose?: () => void;
   handleButtonRight?: () => void;
+  handleButtonLeft?: () => void;
 }) => {
   return (
     <View style={styles.content}>
