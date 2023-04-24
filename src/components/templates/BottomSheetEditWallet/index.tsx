@@ -27,7 +27,7 @@ export const BottomSheetEditWallet = forwardRef<
     personalList.indexOfItem(wallet, 'address') > -1
   );
 
-  const { status = 'step-5' } = useOnboardingStatus((v) => v);
+  const { status } = useOnboardingStatus((v) => v);
 
   const saveAddress = async () => {
     const newWallet: ExplorerAccount = Object.assign({}, wallet);

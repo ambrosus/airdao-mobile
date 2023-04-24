@@ -19,29 +19,30 @@ interface WatchlistAddSuccessProps {
   address: string;
   onDone: () => unknown;
   status: OnBoardingStatus;
+  handleSuccessModalClose?: () => void;
 }
 
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
-  const { address, onDone } = props;
+  const { address, onDone, handleSuccessModalClose = () => null } = props;
   const allAddresses = useAllAddresses();
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const { status = 'step-4', handleStepChange } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
   const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
-  const { title, subtitle, buttonRightTitle, buttonLeft, isButtonLeftVisible } =
-    useOnboardingToolTip(status);
+  const {
+    title,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
 
   useEffect(() => {
     setTimeout(() => setIsToolTipVisible(true), 2000);
   }, []);
-
-  const handleOnboardingStepChange = () => {
-    handleStepChange('step-5');
-    setIsToolTipVisible(false);
-  };
 
   if (!wallet)
     return (
@@ -51,8 +52,19 @@ export const WatchlistAddSuccess = (
     );
 
   const showEdit = () => {
+    handleStepChange('step-5');
     editModal.current?.show();
     setIsToolTipVisible(false);
+  };
+
+  const handleOnboardingSuccessStepChange = (type: 'back' | 'next') => {
+    handleStepChange(type === 'back' ? 'step-4' : 'step-5');
+    setIsToolTipVisible(false);
+    if (type === 'back') {
+      setTimeout(() => {
+        handleSuccessModalClose();
+      }, 2000);
+    }
   };
 
   return (
@@ -102,8 +114,13 @@ export const WatchlistAddSuccess = (
               title={title}
               buttonRightTitle={buttonRightTitle}
               subtitle={subtitle}
-              buttonLeft={buttonLeft}
-              handleButtonRightPress={handleOnboardingStepChange}
+              buttonLeftTitle={buttonLeftTitle}
+              handleButtonLeftPress={() =>
+                handleOnboardingSuccessStepChange('back')
+              }
+              handleButtonRightPress={() =>
+                handleOnboardingSuccessStepChange('next')
+              }
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }

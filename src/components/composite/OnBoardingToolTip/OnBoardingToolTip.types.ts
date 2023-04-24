@@ -16,7 +16,7 @@ export type OnBoardingStatus =
 export interface OnBoardingToolTipInfo {
   title: string;
   subtitle: string;
-  buttonLeft: string;
+  buttonLeftTitle: string;
   isButtonLeftVisible?: boolean;
   buttonRightTitle: string;
   isButtonClose: boolean;

@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   status: OnBoardingStatus;
-  handleOnboardingStepChange: () => void;
+  handleOnboardingStepChange: (nextStep: 'back' | 'next') => void;
   children: React.ReactNode;
   isToolTipVisible: boolean;
   onboardingButtonTitle?: string;
@@ -37,9 +37,9 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
     title,
     subtitle,
     buttonRightTitle,
-    buttonLeft,
-    isButtonLeftVisible,
-    isButtonClose
+    buttonLeftTitle,
+    isButtonClose,
+    isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
   const onCloseTooltip = useCallback(() => {
@@ -55,18 +55,24 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         title={title}
         buttonRightTitle={buttonRightTitle}
         subtitle={subtitle}
-        buttonLeft={buttonLeft}
-        handleButtonRightPress={handleOnboardingStepChange}
+        buttonLeftTitle={buttonLeftTitle}
         isButtonLeftVisible={isButtonLeftVisible}
+        handleButtonLeftPress={
+          status !== 'step-1'
+            ? () => handleOnboardingStepChange('back')
+            : undefined
+        }
+        handleButtonRightPress={() => handleOnboardingStepChange('next')}
       />
     );
   }, [
-    buttonLeft,
+    isButtonLeftVisible,
+    buttonLeftTitle,
     buttonRightTitle,
     handleOnboardingStepChange,
     isButtonClose,
-    isButtonLeftVisible,
     onCloseTooltip,
+    status,
     subtitle,
     title
   ]);
@@ -89,7 +95,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         onClose={() => null}
       >
         <Pressable
-          onPress={handleOnboardingStepChange}
+          onPress={() => handleOnboardingStepChange('next')}
           style={[
             styles.tooltipButton,
             { borderWidth: 1, borderColor: 'white' }

@@ -8,16 +8,17 @@ import { OnBoardingToolTipInfo } from '@components/composite/OnBoardingToolTip/O
 
 export const OnBoardingToolTipBody = ({
   title,
-  buttonLeft,
+  buttonLeftTitle,
   isButtonLeftVisible,
   buttonRightTitle,
   subtitle,
   handleButtonRightPress,
+  handleButtonLeftPress,
   handleButtonClose
 }: Omit<OnBoardingToolTipInfo, 'isButtonClose'> & {
   handleButtonClose?: () => void | null;
   handleButtonRightPress?: () => void;
-  handleButtonLeft?: () => void;
+  handleButtonLeftPress?: () => void | undefined;
 }) => {
   return (
     <View style={styles.content}>
@@ -52,14 +53,14 @@ export const OnBoardingToolTipBody = ({
           width={isButtonLeftVisible ? '100%' : undefined}
         >
           {isButtonLeftVisible ? (
-            <Button style={styles.buttonLeft}>
+            <Button style={styles.buttonLeft} onPress={handleButtonLeftPress}>
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
                 color={COLORS.black}
                 style={styles.buttonText}
               >
-                {buttonLeft}
+                {buttonLeftTitle}
               </Text>
             </Button>
           ) : null}

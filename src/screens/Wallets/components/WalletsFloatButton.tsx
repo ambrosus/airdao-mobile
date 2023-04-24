@@ -34,7 +34,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
     title,
     subtitle,
     buttonRightTitle,
-    buttonLeft,
+    buttonLeftTitle,
     isButtonLeftVisible,
     isButtonClose
   } = useOnboardingToolTip(status);
@@ -76,7 +76,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
             title={title}
             buttonRightTitle={buttonRightTitle}
             subtitle={subtitle}
-            buttonLeft={buttonLeft}
+            buttonLeftTitle={buttonLeftTitle}
             handleButtonRightPress={handleNextButtonPress}
             isButtonLeftVisible={isButtonLeftVisible}
           />

@@ -44,8 +44,13 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
 
   const { status = 'step-5', handleStepChange } = useOnboardingStatus((v) => v);
   const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
-  const { title, subtitle, buttonRightTitle, buttonLeft, isButtonLeftVisible } =
-    useOnboardingToolTip(status);
+  const {
+    title,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
 
   useEffect(() => {
     setTimeout(() => setIsToolTipVisible(true), 1000);
@@ -131,7 +136,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
               title={title}
               buttonRightTitle={buttonRightTitle}
               subtitle={subtitle}
-              buttonLeft={buttonLeft}
+              buttonLeftTitle={buttonLeftTitle}
               handleButtonRightPress={handleOnboardingStepChange}
               isButtonLeftVisible={isButtonLeftVisible}
             />

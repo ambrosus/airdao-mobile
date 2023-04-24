@@ -33,7 +33,7 @@ export const WalletsScreen = () => {
     setTimeout(() => setIsToolTipVisible(true), 1000);
   }, []);
 
-  const navigation = useNavigation<ExploreTabNavigationProp<any>>();
+  const navigation = useNavigation<ExploreTabNavigationProp<'Explore'>>();
 
   const handleOnboardingStepChange = () => {
     handleStepChange('step-2');

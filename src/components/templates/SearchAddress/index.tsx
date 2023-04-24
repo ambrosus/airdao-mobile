@@ -183,9 +183,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     return null;
   }, [watchlist, address]);
 
-  const handleOnboardingStepChange = () => {
-    handleStepChange('step-4');
+  const handleOnboardingStepChange = (type: 'back' | 'next') => {
+    handleStepChange(type === 'back' ? 'step-2' : 'step-4');
     setIsToolTipVisible(false);
+    trackAddress();
+  };
+
+  const handleSuccessModalClose = () => {
+    successModal.current?.dismiss();
   };
 
   return (
@@ -262,6 +267,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                 onDone={hideSuccessModal}
                 address={address}
                 status={status}
+                handleSuccessModalClose={handleSuccessModalClose}
               />
             )}
           </BottomSheetWithHeader>
