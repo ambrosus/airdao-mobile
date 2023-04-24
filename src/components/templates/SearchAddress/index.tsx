@@ -35,11 +35,14 @@ import {
   useWatchlist
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses } from '@contexts';
 import { styles } from './styles';
+import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
+import { FloatButton } from '@components/base/FloatButton';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -48,7 +51,7 @@ interface SearchAdressProps {
 
 const LIMIT = 10;
 
-export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
+export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
   const navigation = useNavigation<TabsNavigationProp>();
   const { data: ambToken } = useAMBPrice();
@@ -70,6 +73,11 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   const { watchlist, addToWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
 
+  // get status of current tooltip
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(true);
+
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
@@ -85,6 +93,15 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     }
   }, [initialValue, onContentVisibilityChanged]);
 
+  useEffect(() => {
+    // if (!transactionsLoading && !!address && !!transactions) {
+    //   setIsToolTipVisible(true);
+    // console.log(13);
+    // setTimeout(() => setIsToolTipVisible(true), 2000);
+    // }
+  }, [address, transactions, transactionsLoading]);
+
+  console.log(!transactionsLoading, !!address, !!transactions);
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
   };
@@ -99,7 +116,8 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
   ) => {
     initialMount.current = false;
-    setAddress(e.nativeEvent.text);
+    // setAddress(e.nativeEvent.text);
+    setAddress('0xF977814e90dA44bFA03b6295A0616a897441aceC');
   };
 
   const loadMoreTransactions = () => {
@@ -175,6 +193,13 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     return null;
   }, [watchlist, address]);
 
+  const onOnboardingStepChange = (nextStep: OnBoardingStatus) => {
+    handleStepChange(nextStep);
+    setIsToolTipVisible(false);
+  };
+
+  console.log(isToolTipVisible, 'isToolTipVisible');
+
   return (
     <>
       <KeyboardDismissingView>
@@ -214,7 +239,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         </View>
       )}
       {account && explorerInfo && (
-        <View style={{ paddingBottom: '20%', flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
           <KeyboardDismissingView>
             <ExplorerAccountView
@@ -231,11 +256,19 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
           />
-          <FloatButton
-            title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
-            icon={<></>}
-            onPress={trackAddress}
-          />
+          <OnboardingFloatButton
+            isIconVisible={false}
+            isToolTipVisible={isToolTipVisible}
+            status={status}
+            handleStepChange={onOnboardingStepChange}
+            FloatButtonTitle={'Track address'}
+          >
+            <FloatButton
+              title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
+              icon={<></>}
+              onPress={trackAddress}
+            />
+          </OnboardingFloatButton>
           <BottomSheetWithHeader ref={successModal} fullscreen title="">
             {ambToken && account && (
               <WatchlistAddSuccess

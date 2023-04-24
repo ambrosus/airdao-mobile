@@ -19,6 +19,15 @@ export const OnBoardingToolTipBody = ({
   handleButtonRight?: () => void;
   handleButtonLeft?: () => void;
 }) => {
+  console.log(
+    title,
+    buttonLeft,
+    isButtonLeftVisible,
+    buttonRight,
+    subtitle,
+    handleButtonRight,
+    handleButtonClose
+  );
   return (
     <View style={styles.content}>
       <Row justifyContent="space-between">

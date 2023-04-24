@@ -17,10 +17,11 @@ const OnboardingContext = () => {
     };
     getDataGroups();
   }, []);
+  // setDataToSecureStore('UserOnboardingSteps', 'step-1');
 
   const handleStepChange = useCallback((nextStep: OnBoardingStatus) => {
     setStatus(nextStep);
-    setDataToSecureStore('UserOnboardingSteps', nextStep);
+    // setDataToSecureStore('UserOnboardingSteps', nextStep);
   }, []);
 
   return {

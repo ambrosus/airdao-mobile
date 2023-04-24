@@ -11,7 +11,6 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { SearchAdress } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
 import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
 import {
@@ -25,6 +24,7 @@ import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerSort } from './Explore.types';
 import { ExploreTabParamsList } from '@appTypes/navigation';
 import { styles } from './styles';
+import { SearchAddress } from '@components/templates';
 
 export const ExploreScreen = () => {
   const { data: infoData } = useExplorerInfo();
@@ -84,7 +84,7 @@ export const ExploreScreen = () => {
         style={{ flex: 1 }}
         disabled={!searchAddressContentVisible}
       >
-        <SearchAdress
+        <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
           initialValue={addressFromParams}
         />
