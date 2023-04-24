@@ -15,12 +15,7 @@ import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButt
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
 import { useNavigation } from '@react-navigation/native';
-import {
-  ExploreTabNavigationProp,
-  TabsNavigationProp,
-  TabsParamsList
-} from '@appTypes';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { ExploreTabNavigationProp } from '@appTypes';
 
 export const WalletsScreen = () => {
   const { data: ambTokenData } = useAMBPrice();
@@ -38,7 +33,7 @@ export const WalletsScreen = () => {
     setTimeout(() => setIsToolTipVisible(true), 1000);
   }, []);
 
-  const navigation = useNavigation<TabsNavigationProp>();
+  const navigation = useNavigation<ExploreTabNavigationProp<any>>();
 
   const handleOnboardingStepChange = () => {
     handleStepChange('step-2');

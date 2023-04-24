@@ -42,7 +42,6 @@ import { styles } from './styles';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { FloatButton } from '@components/base/FloatButton';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -93,15 +92,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   }, [initialValue, onContentVisibilityChanged]);
 
-  useEffect(() => {
-    // if (!transactionsLoading && !!address && !!transactions) {
-    //   setIsToolTipVisible(true);
-    // console.log(13);
-    // setTimeout(() => setIsToolTipVisible(true), 2000);
-    // }
-  }, [address, transactions, transactionsLoading]);
-
-  // console.log(!transactionsLoading, !!address, !!transactions);
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
   };
@@ -258,7 +248,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             isToolTipVisible={isToolTipVisible}
             status={status}
             handleOnboardingStepChange={handleOnboardingStepChange}
-            onboardingButtonTitle="Track address"
+            onboardingButtonTitle="Track Address"
           >
             <FloatButton
               title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
@@ -271,6 +261,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               <WatchlistAddSuccess
                 onDone={hideSuccessModal}
                 address={address}
+                status={status}
               />
             )}
           </BottomSheetWithHeader>

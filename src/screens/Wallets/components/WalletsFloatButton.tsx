@@ -33,7 +33,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
   const {
     title,
     subtitle,
-    buttonRight,
+    buttonRightTitle,
     buttonLeft,
     isButtonLeftVisible,
     isButtonClose
@@ -74,10 +74,10 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
           <OnBoardingToolTipBody
             handleButtonClose={onCloseTooltip}
             title={title}
-            buttonRight={buttonRight}
+            buttonRightTitle={buttonRightTitle}
             subtitle={subtitle}
             buttonLeft={buttonLeft}
-            handleButtonRight={handleNextButtonPress}
+            handleButtonRightPress={handleNextButtonPress}
             isButtonLeftVisible={isButtonLeftVisible}
           />
         }

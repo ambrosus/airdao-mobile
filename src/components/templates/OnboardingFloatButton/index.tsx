@@ -36,14 +36,16 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
   const {
     title,
     subtitle,
-    buttonRight,
+    buttonRightTitle,
     buttonLeft,
     isButtonLeftVisible,
     isButtonClose
   } = useOnboardingToolTip(status);
 
   const onCloseTooltip = useCallback(() => {
-    setIsToolTipVisible(false);
+    if (setIsToolTipVisible) {
+      setIsToolTipVisible(false);
+    }
   }, [setIsToolTipVisible]);
 
   const content = useMemo(() => {
@@ -51,7 +53,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
       <OnBoardingToolTipBody
         handleButtonClose={isButtonClose ? onCloseTooltip : undefined}
         title={title}
-        buttonRightTitle={buttonRight}
+        buttonRightTitle={buttonRightTitle}
         subtitle={subtitle}
         buttonLeft={buttonLeft}
         handleButtonRightPress={handleOnboardingStepChange}
@@ -60,8 +62,9 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
     );
   }, [
     buttonLeft,
-    buttonRight,
+    buttonRightTitle,
     handleOnboardingStepChange,
+    isButtonClose,
     isButtonLeftVisible,
     onCloseTooltip,
     subtitle,

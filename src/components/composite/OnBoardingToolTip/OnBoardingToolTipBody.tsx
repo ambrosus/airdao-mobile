@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React from 'react';
 import { styles } from '@components/composite/OnBoardingToolTip/styles';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -19,7 +19,6 @@ export const OnBoardingToolTipBody = ({
   handleButtonRightPress?: () => void;
   handleButtonLeft?: () => void;
 }) => {
-  console.log(handleButtonRightPress);
   return (
     <View style={styles.content}>
       <Row justifyContent="space-between">

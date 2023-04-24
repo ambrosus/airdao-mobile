@@ -13,7 +13,7 @@ export const useOnboardingToolTip = (
     title: stepData.title,
     subtitle: stepData.subtitle,
     buttonLeft: stepData.buttonLeft,
-    buttonRight: stepData.buttonRight,
+    buttonRightTitle: stepData.buttonRightTitle,
     isButtonClose: stepData.isButtonClose,
     isButtonLeftVisible: stepData.isButtonLeftVisible
   };

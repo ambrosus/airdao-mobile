@@ -18,6 +18,6 @@ export interface OnBoardingToolTipInfo {
   subtitle: string;
   buttonLeft: string;
   isButtonLeftVisible?: boolean;
-  buttonRight: string;
+  buttonRightTitle: string;
   isButtonClose: boolean;
 }

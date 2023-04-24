@@ -12,6 +12,11 @@ import { useFullscreenModalHeight } from '@hooks';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
 import { styles } from './styles';
+import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
+import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 
 interface EditWalletProps {
   wallet: ExplorerAccount;
@@ -19,6 +24,7 @@ interface EditWalletProps {
   isPersonalAddress: boolean;
   onNameChange: (newName: string) => unknown;
   onIsPersonalAddressChange: (newFlag: boolean) => unknown;
+  status: OnBoardingStatus;
 }
 
 export const EditWallet = (props: EditWalletProps): JSX.Element => {
@@ -35,6 +41,20 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     handleOnCreate,
     createGroupRef
   } = useLists((v) => v);
+
+  const { status = 'step-5', handleStepChange } = useOnboardingStatus((v) => v);
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
+  const { title, subtitle, buttonRightTitle, buttonLeft, isButtonLeftVisible } =
+    useOnboardingToolTip(status);
+
+  useEffect(() => {
+    setTimeout(() => setIsToolTipVisible(true), 1000);
+  }, []);
+
+  const handleOnboardingStepChange = () => {
+    handleStepChange('step-6');
+    setIsToolTipVisible(false);
+  };
 
   const fullscreenModalHeight = useFullscreenModalHeight();
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
@@ -100,12 +120,32 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           Address name
         </Text>
         <Spacer value={verticalScale(8)} />
-        <Input
-          placeholder="Placeholder"
-          style={styles.input}
-          value={name}
-          onChangeValue={onNameChange}
-        />
+        <Tooltip
+          tooltipStyle={{ flex: 1 }}
+          contentStyle={{ height: 140 }}
+          arrowSize={{ width: 16, height: 8 }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={isToolTipVisible}
+          content={
+            <OnBoardingToolTipBody
+              title={title}
+              buttonRightTitle={buttonRightTitle}
+              subtitle={subtitle}
+              buttonLeft={buttonLeft}
+              handleButtonRightPress={handleOnboardingStepChange}
+              isButtonLeftVisible={isButtonLeftVisible}
+            />
+          }
+          placement="bottom"
+          onClose={() => null}
+        >
+          <Input
+            placeholder="Placeholder"
+            style={styles.input}
+            value={name}
+            onChangeValue={onNameChange}
+          />
+        </Tooltip>
         <Spacer value={24} />
         <Button onPress={() => onIsPersonalAddressChange(!isPersonalAddress)}>
           <Row alignItems="center">
