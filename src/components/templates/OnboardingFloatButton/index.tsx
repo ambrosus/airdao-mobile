@@ -2,22 +2,20 @@ import React, { useCallback, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { Text } from '@components/base';
-import { AddIcon } from '@components/svg/icons/AddIcon';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
 import { styles } from '@screens/Wallets/components/styles';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type Props = {
   status: OnBoardingStatus;
-  handleStepChange: (nextStep: OnBoardingStatus) => void;
+  handleOnboardingStepChange: () => void;
   children: React.ReactNode;
   isToolTipVisible: boolean;
-  FloatButtonTitle?: string;
-  isIconVisible?: boolean;
+  onboardingButtonTitle?: string;
+  onboardingButtonIcon?: React.ReactNode;
+  setIsToolTipVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
@@ -25,16 +23,13 @@ const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
 export const OnboardingFloatButton = (props: Props): JSX.Element => {
   const {
     status,
-    handleStepChange,
+    handleOnboardingStepChange,
     children,
     isToolTipVisible,
-    FloatButtonTitle,
-    isIconVisible
+    onboardingButtonTitle,
+    setIsToolTipVisible,
+    onboardingButtonIcon
   } = props;
-
-  // useEffect(() => {
-  //   setTimeout(() => setToolTipVisible(true), 300);
-  // }, []);
 
   const bottomSafeArea = useSafeAreaInsets().bottom || 34;
 
@@ -47,36 +42,33 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
     isButtonClose
   } = useOnboardingToolTip(status);
 
-  const handleNextButtonPress = useCallback(() => {
-    console.log(123);
-  }, []);
-
   const onCloseTooltip = useCallback(() => {
-    // isToolTipVisible(false);
-  }, []);
-
-  const handleOnAddressButtonPress = () => {
-    if (isToolTipVisible) {
-      handleNextButtonPress();
-    }
-    // setToolTipVisible(!isToolTipVisible);
-  };
+    setIsToolTipVisible(false);
+  }, [setIsToolTipVisible]);
 
   const content = useMemo(() => {
     return (
       <OnBoardingToolTipBody
-        handleButtonClose={onCloseTooltip}
+        handleButtonClose={isButtonClose ? onCloseTooltip : undefined}
         title={title}
-        buttonRight={buttonRight}
+        buttonRightTitle={buttonRight}
         subtitle={subtitle}
         buttonLeft={buttonLeft}
-        handleButtonRight={handleNextButtonPress}
+        handleButtonRightPress={handleOnboardingStepChange}
         isButtonLeftVisible={isButtonLeftVisible}
       />
     );
-  }, []);
+  }, [
+    buttonLeft,
+    buttonRight,
+    handleOnboardingStepChange,
+    isButtonLeftVisible,
+    onCloseTooltip,
+    subtitle,
+    title
+  ]);
 
-  return (
+  return isToolTipVisible ? (
     <View
       style={[
         styles.tooltip,
@@ -84,6 +76,8 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
       ]}
     >
       <Tooltip
+        tooltipStyle={{ flex: 1 }}
+        contentStyle={{ height: 140 }}
         arrowSize={{ width: 16, height: 8 }}
         backgroundColor="rgba(0,0,0,0.5)"
         isVisible={isToolTipVisible}
@@ -92,19 +86,18 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         onClose={() => null}
       >
         <Pressable
-          onPress={() => handleStepChange('step-2')}
+          onPress={handleOnboardingStepChange}
           style={[
             styles.tooltipButton,
             { borderWidth: 1, borderColor: 'white' }
           ]}
         >
-          {isIconVisible ? <AddIcon /> : null}
-          <Text style={styles.tooltipButtonText}>{FloatButtonTitle}</Text>
+          {onboardingButtonIcon ? onboardingButtonIcon : null}
+          <Text style={styles.tooltipButtonText}>{onboardingButtonTitle}</Text>
         </Pressable>
       </Tooltip>
     </View>
+  ) : (
+    <View>{children}</View>
   );
-  // : (
-  //     <View>{children}</View>
-  //   );
 };

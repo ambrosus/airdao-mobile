@@ -101,7 +101,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     // }
   }, [address, transactions, transactionsLoading]);
 
-  console.log(!transactionsLoading, !!address, !!transactions);
+  // console.log(!transactionsLoading, !!address, !!transactions);
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
   };
@@ -193,12 +193,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     return null;
   }, [watchlist, address]);
 
-  const onOnboardingStepChange = (nextStep: OnBoardingStatus) => {
-    handleStepChange(nextStep);
+  const handleOnboardingStepChange = () => {
+    handleStepChange('step-4');
     setIsToolTipVisible(false);
   };
-
-  console.log(isToolTipVisible, 'isToolTipVisible');
 
   return (
     <>
@@ -257,11 +255,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             loading={transactionsLoading && !!address}
           />
           <OnboardingFloatButton
-            isIconVisible={false}
             isToolTipVisible={isToolTipVisible}
             status={status}
-            handleStepChange={onOnboardingStepChange}
-            FloatButtonTitle={'Track address'}
+            handleOnboardingStepChange={handleOnboardingStepChange}
+            onboardingButtonTitle="Track address"
           >
             <FloatButton
               title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}

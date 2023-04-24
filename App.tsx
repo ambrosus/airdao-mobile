@@ -5,7 +5,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Providers } from './Providers';
 import { Toast } from '@components/modular';
 import './src/prototypes/array';
-
 export default function App() {
   const { isAppReady } = useAppInit();
 

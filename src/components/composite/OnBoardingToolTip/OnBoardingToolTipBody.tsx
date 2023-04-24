@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import { styles } from '@components/composite/OnBoardingToolTip/styles';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -10,24 +10,16 @@ export const OnBoardingToolTipBody = ({
   title,
   buttonLeft,
   isButtonLeftVisible,
-  buttonRight,
+  buttonRightTitle,
   subtitle,
-  handleButtonRight,
+  handleButtonRightPress,
   handleButtonClose
 }: Omit<OnBoardingToolTipInfo, 'isButtonClose'> & {
-  handleButtonClose?: () => void;
-  handleButtonRight?: () => void;
+  handleButtonClose?: () => void | null;
+  handleButtonRightPress?: () => void;
   handleButtonLeft?: () => void;
 }) => {
-  console.log(
-    title,
-    buttonLeft,
-    isButtonLeftVisible,
-    buttonRight,
-    subtitle,
-    handleButtonRight,
-    handleButtonClose
-  );
+  console.log(handleButtonRightPress);
   return (
     <View style={styles.content}>
       <Row justifyContent="space-between">
@@ -39,11 +31,11 @@ export const OnBoardingToolTipBody = ({
         >
           {title}
         </Text>
-        {!!handleButtonClose && (
-          <Button onPress={() => handleButtonClose()}>
+        {!!handleButtonClose ? (
+          <Button onPress={handleButtonClose}>
             <CloseIcon />
           </Button>
-        )}
+        ) : null}
       </Row>
       <Spacer value={4} />
       <Text
@@ -60,7 +52,7 @@ export const OnBoardingToolTipBody = ({
           justifyContent="space-between"
           width={isButtonLeftVisible ? '100%' : undefined}
         >
-          {isButtonLeftVisible && (
+          {isButtonLeftVisible ? (
             <Button style={styles.buttonLeft}>
               <Text
                 fontFamily="Inter_500Medium"
@@ -71,15 +63,15 @@ export const OnBoardingToolTipBody = ({
                 {buttonLeft}
               </Text>
             </Button>
-          )}
-          <Button style={styles.buttonRight} onPress={handleButtonRight}>
+          ) : null}
+          <Button style={styles.buttonRight} onPress={handleButtonRightPress}>
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
               color={COLORS.black}
               style={styles.buttonText}
             >
-              {buttonRight}
+              {buttonRightTitle}
             </Text>
           </Button>
         </Row>

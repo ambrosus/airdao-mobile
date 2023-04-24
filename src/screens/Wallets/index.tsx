@@ -14,10 +14,13 @@ import { styles } from './styles';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
-// import { useNavigation } from '@react-navigation/native';
-// import { ExploreTabNavigationProp } from '@appTypes';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import { useNavigation } from '@react-navigation/native';
+import {
+  ExploreTabNavigationProp,
+  TabsNavigationProp,
+  TabsParamsList
+} from '@appTypes';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 export const WalletsScreen = () => {
   const { data: ambTokenData } = useAMBPrice();
@@ -27,7 +30,6 @@ export const WalletsScreen = () => {
     (prev, curr) => prev + curr.ambBalance,
     0
   );
-  const navigation = useNavigation();
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
 
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
@@ -36,11 +38,17 @@ export const WalletsScreen = () => {
     setTimeout(() => setIsToolTipVisible(true), 1000);
   }, []);
 
-  // const navigation = useNavigation<ExploreTabNavigationProp>();
+  const navigation = useNavigation<TabsNavigationProp>();
 
-  const onOnboardingStepChange = (nextStep: OnBoardingStatus) => {
-    handleStepChange(nextStep);
+  const handleOnboardingStepChange = () => {
+    handleStepChange('step-2');
     setIsToolTipVisible(false);
+    setTimeout(() => navigation.navigate('Explore'), 300);
+  };
+
+  const handleOnFloatButtonPress = () => {
+    setIsToolTipVisible(false);
+    navigation.navigate('Explore');
   };
 
   return (
@@ -67,15 +75,16 @@ export const WalletsScreen = () => {
         </View>
       </ScrollView>
       <OnboardingFloatButton
-        FloatButtonTitle={'Add a Address'}
+        setIsToolTipVisible={setIsToolTipVisible}
+        onboardingButtonTitle="Add a Address"
         isToolTipVisible={isToolTipVisible}
         status={status}
-        isIconVisible={true}
-        handleStepChange={onOnboardingStepChange}
+        onboardingButtonIcon={<AddIcon />}
+        handleOnboardingStepChange={handleOnboardingStepChange}
       >
         <FloatButton
           title="Add a Address"
-          onPress={() => navigation.navigate('Explore')}
+          onPress={handleOnFloatButtonPress}
           icon={<AddIcon />}
         />
       </OnboardingFloatButton>
