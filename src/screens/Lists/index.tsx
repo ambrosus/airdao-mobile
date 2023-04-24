@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
@@ -18,10 +18,18 @@ export const ListsScreen = () => {
   const handleOnOpenCreateNewList = useCallback(() => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
+
+  const totalAmount = useMemo(() => {
+    return listsOfAddressGroup.reduce(
+      (partialSum, el) => partialSum + el.totalBalance,
+      0
+    );
+  }, [listsOfAddressGroup]);
+
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
-        <ListsScreenHeader />
+        <ListsScreenHeader totalAmount={totalAmount} />
         <Spacer value={32} />
         <View style={styles.separateLine} />
         {!listsOfAddressGroup.length ? (

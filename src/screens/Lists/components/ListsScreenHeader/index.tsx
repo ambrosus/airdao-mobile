@@ -10,8 +10,12 @@ import { FilterIcon } from '@components/svg/icons/Filter';
 import { SettingsIcon } from '@components/svg/icons/Settings';
 import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { styles } from '@screens/Lists/components/ListsScreenHeader/styles';
+import { NumberUtils } from '@utils/number';
 
-export const ListsScreenHeader = () => {
+type Props = {
+  totalAmount: number;
+};
+export const ListsScreenHeader = ({ totalAmount }: Props) => {
   const filterRef = useRef<BottomSheetRef>(null);
   const handleOpenFilter = useCallback(() => {
     filterRef.current?.show();
@@ -45,7 +49,9 @@ export const ListsScreenHeader = () => {
       <Spacer value={9} />
       <Text style={styles.balanceSubtitle}>Total list balance</Text>
       <Spacer value={15} />
-      <Text style={styles.balanceCount}>$3,900.90</Text>
+      <Text style={styles.balanceCount}>
+        ${NumberUtils.formatNumber(totalAmount, 0)}
+      </Text>
       <View style={styles.balanceStats}>
         <Text
           style={[

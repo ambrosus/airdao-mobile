@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
-import {
-  getDataToSecureStore,
-  setDataToSecureStore
-} from '@helpers/storageHelpers';
+import { getDataToSecureStore } from '@helpers/storageHelpers';
 
 const OnboardingContext = () => {
   const [status, setStatus] = useState<OnBoardingStatus>('step-1');
