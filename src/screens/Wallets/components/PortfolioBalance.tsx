@@ -23,7 +23,7 @@ interface PortfolioBalanceProps {
   AMBBalance: number;
   AMBPrice: number;
   balanceLast24HourChange: number;
-  AMBPriceLast24HourChange: number;
+  AMBPriceLast24HourChange: number; // TODO there is actually no percent change coming from API
 }
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
@@ -146,7 +146,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
       </View>
       <SharePortfolio
         ref={shareBottomSheet}
-        balance={NumberUtils.formatNumber(20000, 0)}
+        balance={NumberUtils.formatNumber(AMBBalance, 0)}
         currency="AMB"
         currencyPosition="right"
         last24HourChange={3.46}

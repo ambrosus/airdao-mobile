@@ -100,8 +100,8 @@ export const AddressDetails = (): JSX.Element => {
   const toggleWatchlist = () => {
     Toast.hide();
     const toastMessage = finalAccountRef.current?.isOnWatchlist
-      ? `You removed ${finalAccount.name ?? 'the address'} from Watchlists!`
-      : `${finalAccount.name ?? 'The address'} is now on your Watchlists!`;
+      ? `You removed ${finalAccount.name || 'the address'} from Watchlists!`
+      : `${finalAccount.name || 'The address'} is now on your Watchlists!`;
     const onUndo = toggleWatchlist;
     Toast.show({ message: toastMessage, type: ToastType.Top, onUndo });
     // TOOD: set timeout to show Toast immediately before context update.
@@ -124,10 +124,10 @@ export const AddressDetails = (): JSX.Element => {
     Toast.hide();
     const toastMessage = finalAccountRef.current?.isPersonal
       ? `You removed ${
-          finalAccount.name ?? 'the address'
+          finalAccount.name || 'the address'
         } from Personal Addresses!`
       : `${
-          finalAccount.name ?? 'The address'
+          finalAccount.name || 'The address'
         } is now on your Personal Addresses!`;
     const onUndo = togglePersonalList;
     Toast.show({ message: toastMessage, type: ToastType.Top, onUndo });
