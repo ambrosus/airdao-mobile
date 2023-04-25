@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AllAddressesAction } from './AllAddresses.types';
+import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
@@ -97,7 +97,8 @@ const AllAddressesContext = () => {
       })
     );
   };
-
+  // uncomment to clear watchlist
+  // Cache.setItem(CacheKey.AllAddresses, []);
   // fetch all addresses on mount
   useEffect(() => {
     const getAddresses = async () => {

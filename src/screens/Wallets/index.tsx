@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -15,7 +15,8 @@ import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButt
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
 import { useNavigation } from '@react-navigation/native';
-import { ExploreTabNavigationProp } from '@appTypes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabsParamsList } from '@appTypes';
 
 export const WalletsScreen = () => {
   const { data: ambTokenData } = useAMBPrice();
@@ -25,26 +26,26 @@ export const WalletsScreen = () => {
     (prev, curr) => prev + curr.ambBalance,
     0
   );
+  const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
+
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
 
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 1000);
+    setTimeout(() => setIsToolTipVisible(true), 300);
   }, []);
 
-  const navigation = useNavigation<ExploreTabNavigationProp<'Explore'>>();
-
-  const handleOnboardingStepChange = () => {
-    handleStepChange('step-2');
+  const handleOnboardingStepChange = useCallback(() => {
+    handleStepChange('step-3');
     setIsToolTipVisible(false);
-    setTimeout(() => navigation.navigate('Explore'), 300);
-  };
+    setTimeout(() => navigation.navigate('Tabs', { screen: 'Explore' }), 300);
+  }, [handleStepChange, navigation]);
 
-  const handleOnFloatButtonPress = () => {
+  const handleOnFloatButtonPress = useCallback(() => {
     setIsToolTipVisible(false);
-    navigation.navigate('Explore');
-  };
+    navigation.navigate('Tabs', { screen: 'Explore' });
+  }, [navigation]);
 
   return (
     <View style={{ flex: 1 }}>

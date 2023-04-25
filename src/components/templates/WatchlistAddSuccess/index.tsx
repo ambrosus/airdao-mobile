@@ -41,7 +41,7 @@ export const WatchlistAddSuccess = (
   } = useOnboardingToolTip(status);
 
   useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 2000);
+    setTimeout(() => setIsToolTipVisible(true), 500);
   }, []);
 
   if (!wallet)
@@ -63,7 +63,7 @@ export const WatchlistAddSuccess = (
     if (type === 'back') {
       setTimeout(() => {
         handleSuccessModalClose();
-      }, 2000);
+      }, 500);
     }
   };
 
@@ -105,7 +105,7 @@ export const WatchlistAddSuccess = (
       <View style={styles.buttons}>
         <Tooltip
           tooltipStyle={{ flex: 1 }}
-          contentStyle={{ height: 140 }}
+          contentStyle={{ height: 136, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           backgroundColor="rgba(0,0,0,0.5)"
           isVisible={isToolTipVisible}
@@ -153,7 +153,7 @@ export const WatchlistAddSuccess = (
           </Text>
         </Button>
       </View>
-      <BottomSheetEditWallet status={status} ref={editModal} wallet={wallet} />
+      <BottomSheetEditWallet ref={editModal} wallet={wallet} />
     </View>
   );
 };

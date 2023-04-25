@@ -11,6 +11,7 @@ import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabsParamsList } from '@appTypes';
 
 type Props = {
   status: OnBoardingStatus;
@@ -28,7 +29,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
 
   const bottomSafeArea = useSafeAreaInsets().bottom || 34;
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   const {
     title,
@@ -42,7 +43,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
   const handleNextButtonPress = useCallback(() => {
     handleStepChange('step-2');
     setTimeout(() => {
-      navigation.navigate('Explore');
+      navigation.navigate('Tabs', { screen: 'Explore' });
     }, 0);
   }, [handleStepChange, navigation]);
 

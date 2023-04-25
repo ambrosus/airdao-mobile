@@ -6,12 +6,9 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { useAllAddressesReducer } from '@contexts';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
-  status: OnBoardingStatus;
 }
 
 export const BottomSheetEditWallet = forwardRef<
@@ -26,9 +23,6 @@ export const BottomSheetEditWallet = forwardRef<
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'address') > -1
   );
-
-  const { status } = useOnboardingStatus((v) => v);
-
   const saveAddress = async () => {
     const newWallet: ExplorerAccount = Object.assign({}, wallet);
     newWallet.name = name;
@@ -39,6 +33,7 @@ export const BottomSheetEditWallet = forwardRef<
 
   return (
     <BottomSheetWithHeader
+      isNestedSheet={true}
       title="Edit Address"
       ref={localRef}
       fullscreen
@@ -49,7 +44,6 @@ export const BottomSheetEditWallet = forwardRef<
     >
       {wallet && (
         <EditWallet
-          status={status}
           wallet={wallet}
           name={name}
           onNameChange={setName}

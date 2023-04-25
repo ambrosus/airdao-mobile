@@ -1,6 +1,7 @@
 import { shadow } from '@constants/shadow';
 import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,8 +17,15 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF'
   },
   newListButton: {
+    borderWidth: 1,
+    borderColor: 'white',
     width: '100%',
     backgroundColor: '#0e0e0e0d',
     paddingVertical: verticalScale(12)
+  },
+  separator: {
+    height: 1,
+    backgroundColor: COLORS.silver,
+    width: '100%'
   }
 });

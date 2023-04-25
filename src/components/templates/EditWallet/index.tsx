@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
@@ -17,6 +23,7 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
+import { COLORS } from '@constants/colors';
 
 interface EditWalletProps {
   wallet: ExplorerAccount;
@@ -24,7 +31,6 @@ interface EditWalletProps {
   isPersonalAddress: boolean;
   onNameChange: (newName: string) => unknown;
   onIsPersonalAddressChange: (newFlag: boolean) => unknown;
-  status: OnBoardingStatus;
 }
 
 export const EditWallet = (props: EditWalletProps): JSX.Element => {
@@ -42,8 +48,10 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     createGroupRef
   } = useLists((v) => v);
 
-  const { status = 'step-5', handleStepChange } = useOnboardingStatus((v) => v);
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const [activeToolTip, setActiveToolTip] = useState<
+    'input' | 'checkbox' | 'button' | null
+  >(null);
   const {
     title,
     subtitle,
@@ -52,13 +60,31 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
-  useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 1000);
+  const currentTooltip = useCallback((newStatus: OnBoardingStatus) => {
+    return newStatus === 'step-5'
+      ? 'input'
+      : newStatus === 'step-6'
+      ? 'checkbox'
+      : newStatus === 'step-7'
+      ? 'button'
+      : null;
   }, []);
 
-  const handleOnboardingStepChange = () => {
-    handleStepChange('step-6');
-    setIsToolTipVisible(false);
+  console.log(activeToolTip, status);
+
+  useEffect(() => {
+    setTimeout(() => setActiveToolTip(currentTooltip(status)), 2000);
+  }, [status]);
+
+  const handleOnboardingStepChange = (amount: number) => {
+    // const nextStep: OnBoardingStatus =
+    //   'step-' + (parseInt(status.slice(-1), 10) + amount);
+
+    const lastNumber = +status.match(/(\d+)$/)[1] + amount;
+
+    const outputString = status.replace(/(\d+)$/, lastNumber);
+    handleStepChange(outputString);
+    setActiveToolTip(currentTooltip(outputString));
   };
 
   const fullscreenModalHeight = useFullscreenModalHeight();
@@ -127,17 +153,18 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
         <Spacer value={verticalScale(8)} />
         <Tooltip
           tooltipStyle={{ flex: 1 }}
-          contentStyle={{ height: 140 }}
+          contentStyle={{ height: 152, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isToolTipVisible}
+          isVisible={activeToolTip === 'input'}
           content={
             <OnBoardingToolTipBody
               title={title}
               buttonRightTitle={buttonRightTitle}
               subtitle={subtitle}
               buttonLeftTitle={buttonLeftTitle}
-              handleButtonRightPress={handleOnboardingStepChange}
+              handleButtonRightPress={() => handleOnboardingStepChange(1)}
+              handleButtonLeftPress={() => handleOnboardingStepChange(-1)}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }
@@ -145,6 +172,10 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           onClose={() => null}
         >
           <Input
+            onBlur={() => {
+              setActiveToolTip('checkbox');
+              handleOnboardingStepChange(1);
+            }}
             placeholder="Placeholder"
             style={styles.input}
             value={name}
@@ -152,30 +183,68 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           />
         </Tooltip>
         <Spacer value={24} />
-        <Button onPress={() => onIsPersonalAddressChange(!isPersonalAddress)}>
-          <Row alignItems="center">
-            <CheckBox
-              type="square"
-              value={isPersonalAddress}
-              fillColor="#646464"
-              color="#FFFFFF"
+        <Tooltip
+          tooltipStyle={{ flex: 1 }}
+          contentStyle={{ height: 136, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={activeToolTip === 'checkbox'}
+          content={
+            <OnBoardingToolTipBody
+              title={title}
+              buttonRightTitle={buttonRightTitle}
+              subtitle={subtitle}
+              buttonLeftTitle={buttonLeftTitle}
+              handleButtonRightPress={() => handleOnboardingStepChange(1)}
+              handleButtonLeftPress={() => handleOnboardingStepChange(-1)}
+              isButtonLeftVisible={isButtonLeftVisible}
             />
-            <Spacer horizontal value={12} />
-            <Text title color="#162C5D" fontFamily="Inter_600SemiBold">
-              This is my peronal Address
-            </Text>
-          </Row>
-        </Button>
-        <Spacer value={12} />
-        <Text
-          fontWeight="400"
-          color="#646464"
-          fontSize={12}
-          fontFamily="Inter_600SemiBold"
+          }
+          placement="bottom"
+          onClose={() => null}
         >
-          {'Personal Addresses will be added to “My Addresses” by default'}
-        </Text>
-        <Spacer value={verticalScale(64)} />
+          <View
+            style={{
+              // TODO fix styles of container paddings
+              borderWidth: 1,
+              borderRadius: 10,
+              padding: 7,
+              borderColor: 'white'
+            }}
+          >
+            <Button
+              onPress={() => {
+                onIsPersonalAddressChange(!isPersonalAddress);
+                handleOnboardingStepChange(1);
+              }}
+            >
+              <Row alignItems="center">
+                <CheckBox
+                  type="square"
+                  value={isPersonalAddress}
+                  fillColor="#646464"
+                  color="#FFFFFF"
+                />
+                <Spacer horizontal value={12} />
+                <Text title color={COLORS.black} fontFamily="Inter_600SemiBold">
+                  This is my personal Address
+                </Text>
+              </Row>
+            </Button>
+            <Spacer value={12} />
+            <Text
+              fontWeight="400"
+              color="#646464"
+              fontSize={12}
+              fontFamily="Inter_600SemiBold"
+            >
+              {'Personal Addresses will be added to “My Addresses” by default'}
+            </Text>
+          </View>
+        </Tooltip>
+        <Spacer value={verticalScale(32)} />
+        <View style={styles.separator} />
+        <Spacer value={verticalScale(32)} />
         <Text fontSize={20} fontFamily="Inter_700Bold">
           Add to Lists
         </Text>
@@ -199,26 +268,52 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           </Row>
         </Button>
         <Spacer value={verticalScale(32)} />
-        <Button
-          type="circular"
-          style={styles.newListButton}
-          onPress={showCreateNewListModal}
+        <Tooltip
+          tooltipStyle={{ flex: 1 }}
+          contentStyle={{ height: 152, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={activeToolTip === 'button'}
+          content={
+            <OnBoardingToolTipBody
+              title={title}
+              buttonRightTitle={buttonRightTitle}
+              subtitle={subtitle}
+              buttonLeftTitle={buttonLeftTitle}
+              handleButtonRightPress={() => handleOnboardingStepChange(1)}
+              handleButtonLeftPress={() => handleOnboardingStepChange(-1)}
+              isButtonLeftVisible={isButtonLeftVisible}
+            />
+          }
+          placement="top"
+          onClose={() => null}
         >
-          <Row alignItems="center">
-            <PlusIcon color="#000000" />
-            <Text title fontFamily="Inter_600SemiBold">
-              {'  '}
-              Create new list
-            </Text>
-          </Row>
-        </Button>
+          <Button
+            type="circular"
+            style={styles.newListButton}
+            onPress={() => {
+              showCreateNewListModal();
+              handleOnboardingStepChange(1);
+            }}
+          >
+            <Row alignItems="center">
+              <PlusIcon color="#000000" />
+              <Text title fontFamily="Inter_600SemiBold">
+                {'  '}
+                Create new list
+              </Text>
+            </Row>
+          </Button>
+        </Tooltip>
       </View>
       <BottomSheetCreateRenameGroup
+        status={status}
         ref={createGroupRef}
         type="create"
         handleOnCreateGroup={handleOnCreate}
       />
       <BottomSheetWithHeader
+        isNestedSheet
         ref={addToListModal}
         height={fullscreenModalHeight}
         title="Add to lists"

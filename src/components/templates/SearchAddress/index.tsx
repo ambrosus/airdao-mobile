@@ -106,7 +106,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
   ) => {
     initialMount.current = false;
-    setAddress(e.nativeEvent.text);
+    // setAddress(e.nativeEvent.text);
+    setAddress('0xF977814e90dA44bFA03b6295A0616a897441aceC');
   };
 
   const loadMoreTransactions = () => {
@@ -173,7 +174,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   };
 
   const showSuccessModal = () => {
-    successModal.current?.show();
+    setTimeout(() => {
+      successModal.current?.show();
+    }, 300);
   };
 
   const addressInWatchlist = useMemo(() => {
@@ -185,7 +188,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const handleOnboardingStepChange = (type: 'back' | 'next') => {
     handleStepChange(type === 'back' ? 'step-2' : 'step-4');
     setIsToolTipVisible(false);
-    trackAddress();
+    if (type !== 'back') trackAddress();
+    // else navigation.navigate('Wallets');
   };
 
   const handleSuccessModalClose = () => {
