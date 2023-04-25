@@ -25,6 +25,7 @@ export const ListsScreen = () => {
       0
     );
   }, [listsOfAddressGroup]);
+
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

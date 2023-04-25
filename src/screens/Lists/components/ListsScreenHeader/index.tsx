@@ -12,7 +12,10 @@ import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { styles } from '@screens/Lists/components/ListsScreenHeader/styles';
 import { NumberUtils } from '@utils/number';
 
-export const ListsScreenHeader = ({ totalAmount }: { totalAmount: number }) => {
+type Props = {
+  totalAmount: number;
+};
+export const ListsScreenHeader = ({ totalAmount }: Props) => {
   const filterRef = useRef<BottomSheetRef>(null);
   const handleOpenFilter = useCallback(() => {
     filterRef.current?.show();

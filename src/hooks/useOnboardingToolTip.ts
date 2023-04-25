@@ -12,8 +12,8 @@ export const useOnboardingToolTip = (
   return {
     title: stepData.title,
     subtitle: stepData.subtitle,
-    buttonLeft: stepData.buttonLeft,
-    buttonRight: stepData.buttonRight,
+    buttonLeftTitle: stepData.buttonLeftTitle,
+    buttonRightTitle: stepData.buttonRightTitle,
     isButtonClose: stepData.isButtonClose,
     isButtonLeftVisible: stepData.isButtonLeftVisible
   };

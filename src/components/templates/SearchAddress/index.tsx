@@ -35,11 +35,13 @@ import {
   useWatchlist
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses } from '@contexts';
 import { styles } from './styles';
+import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
+import { FloatButton } from '@components/base/FloatButton';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -48,7 +50,7 @@ interface SearchAdressProps {
 
 const LIMIT = 10;
 
-export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
+export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
   const navigation = useNavigation<TabsNavigationProp>();
   const { data: ambToken } = useAMBPrice();
@@ -69,6 +71,11 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
   const { watchlist, addToWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
+
+  // get status of current tooltip
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(true);
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
@@ -175,6 +182,16 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
     return null;
   }, [watchlist, address]);
 
+  const handleOnboardingStepChange = (type: 'back' | 'next') => {
+    handleStepChange(type === 'back' ? 'step-2' : 'step-4');
+    setIsToolTipVisible(false);
+    trackAddress();
+  };
+
+  const handleSuccessModalClose = () => {
+    successModal.current?.dismiss();
+  };
+
   return (
     <>
       <KeyboardDismissingView>
@@ -214,7 +231,7 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
         </View>
       )}
       {account && explorerInfo && (
-        <View style={{ paddingBottom: '20%', flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
           <KeyboardDismissingView>
             <ExplorerAccountView
@@ -231,16 +248,25 @@ export const SearchAdress = (props: SearchAdressProps): JSX.Element => {
             onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
           />
-          <FloatButton
-            title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
-            icon={<></>}
-            onPress={trackAddress}
-          />
+          <OnboardingFloatButton
+            isToolTipVisible={isToolTipVisible}
+            status={status}
+            handleOnboardingStepChange={handleOnboardingStepChange}
+            onboardingButtonTitle="Track Address"
+          >
+            <FloatButton
+              title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
+              icon={<></>}
+              onPress={trackAddress}
+            />
+          </OnboardingFloatButton>
           <BottomSheetWithHeader ref={successModal} fullscreen title="">
             {ambToken && account && (
               <WatchlistAddSuccess
                 onDone={hideSuccessModal}
                 address={address}
+                status={status}
+                handleSuccessModalClose={handleSuccessModalClose}
               />
             )}
           </BottomSheetWithHeader>

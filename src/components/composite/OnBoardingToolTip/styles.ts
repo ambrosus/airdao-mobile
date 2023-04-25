@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
   buttonRight: {
     backgroundColor: '#0e0e0e0d',
     borderRadius: 25,
-    // alignItems: 'center'
     alignSelf: 'flex-start'
   },
   buttonText: {
@@ -18,7 +17,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#0e0e0e0d',
     borderRadius: 25,
     alignItems: 'center',
-    // alignSelf: 'flex-start',
     marginBottom: 15
   },
   title: {},

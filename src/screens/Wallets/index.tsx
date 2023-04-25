@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -9,9 +9,13 @@ import {
 } from './components';
 import { useAMBPrice } from '@hooks/query';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { WalletsFloatButton } from '@screens/Wallets/components/WalletsFloatButton';
 import { usePersonalList } from '@hooks/cache';
 import { styles } from './styles';
+import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
+import { AddIcon } from '@components/svg/icons/AddIcon';
+import { FloatButton } from '@components/base/FloatButton';
+import { useNavigation } from '@react-navigation/native';
+import { ExploreTabNavigationProp } from '@appTypes';
 
 export const WalletsScreen = () => {
   const { data: ambTokenData } = useAMBPrice();
@@ -22,6 +26,25 @@ export const WalletsScreen = () => {
     0
   );
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
+
+  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setIsToolTipVisible(true), 1000);
+  }, []);
+
+  const navigation = useNavigation<ExploreTabNavigationProp<'Explore'>>();
+
+  const handleOnboardingStepChange = () => {
+    handleStepChange('step-2');
+    setIsToolTipVisible(false);
+    setTimeout(() => navigation.navigate('Explore'), 300);
+  };
+
+  const handleOnFloatButtonPress = () => {
+    setIsToolTipVisible(false);
+    navigation.navigate('Explore');
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -46,7 +69,20 @@ export const WalletsScreen = () => {
           </View>
         </View>
       </ScrollView>
-      <WalletsFloatButton status={status} handleStepChange={handleStepChange} />
+      <OnboardingFloatButton
+        setIsToolTipVisible={setIsToolTipVisible}
+        onboardingButtonTitle="Add a Address"
+        isToolTipVisible={isToolTipVisible}
+        status={status}
+        onboardingButtonIcon={<AddIcon />}
+        handleOnboardingStepChange={handleOnboardingStepChange}
+      >
+        <FloatButton
+          title="Add a Address"
+          onPress={handleOnFloatButtonPress}
+          icon={<AddIcon />}
+        />
+      </OnboardingFloatButton>
     </View>
   );
 };

@@ -8,15 +8,17 @@ import { OnBoardingToolTipInfo } from '@components/composite/OnBoardingToolTip/O
 
 export const OnBoardingToolTipBody = ({
   title,
-  buttonLeft,
+  buttonLeftTitle,
   isButtonLeftVisible,
-  buttonRight,
+  buttonRightTitle,
   subtitle,
-  handleButtonRight,
+  handleButtonRightPress,
+  handleButtonLeftPress,
   handleButtonClose
 }: Omit<OnBoardingToolTipInfo, 'isButtonClose'> & {
-  handleButtonClose?: () => void;
-  handleButtonRight?: () => void;
+  handleButtonClose?: () => void | null;
+  handleButtonRightPress?: () => void;
+  handleButtonLeftPress?: () => void | undefined;
 }) => {
   return (
     <View style={styles.content}>
@@ -29,11 +31,11 @@ export const OnBoardingToolTipBody = ({
         >
           {title}
         </Text>
-        {!!handleButtonClose && (
-          <Button onPress={() => handleButtonClose()}>
+        {!!handleButtonClose ? (
+          <Button onPress={handleButtonClose}>
             <CloseIcon />
           </Button>
-        )}
+        ) : null}
       </Row>
       <Spacer value={4} />
       <Text
@@ -50,26 +52,26 @@ export const OnBoardingToolTipBody = ({
           justifyContent="space-between"
           width={isButtonLeftVisible ? '100%' : undefined}
         >
-          {isButtonLeftVisible && (
-            <Button style={styles.buttonLeft}>
+          {isButtonLeftVisible ? (
+            <Button style={styles.buttonLeft} onPress={handleButtonLeftPress}>
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
                 color={COLORS.black}
                 style={styles.buttonText}
               >
-                {buttonLeft}
+                {buttonLeftTitle}
               </Text>
             </Button>
-          )}
-          <Button style={styles.buttonRight} onPress={handleButtonRight}>
+          ) : null}
+          <Button style={styles.buttonRight} onPress={handleButtonRightPress}>
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
               color={COLORS.black}
               style={styles.buttonText}
             >
-              {buttonRight}
+              {buttonRightTitle}
             </Text>
           </Button>
         </Row>
