@@ -30,7 +30,9 @@ export const WatchlistAddSuccess = (
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
+    (v) => v
+  );
   const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const {
     title,
@@ -118,9 +120,10 @@ export const WatchlistAddSuccess = (
               handleButtonLeftPress={() =>
                 handleOnboardingSuccessStepChange('back')
               }
-              handleButtonRightPress={() =>
-                handleOnboardingSuccessStepChange('next')
-              }
+              handleButtonRightPress={() => {
+                handleSkipTutorial();
+                setIsToolTipVisible(false);
+              }}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }

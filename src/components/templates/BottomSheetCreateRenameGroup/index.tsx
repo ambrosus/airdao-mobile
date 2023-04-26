@@ -29,7 +29,7 @@ type Props = {
   groupTitle?: string;
   groupId?: string;
   type: 'rename' | 'create';
-  status: OnBoardingStatus;
+  handleSaveTooltipVisible?: () => void;
 };
 export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
@@ -38,10 +38,12 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       groupTitle,
       type = 'create',
       handleOnCreateGroup,
-      groupId
+      groupId,
+      handleSaveTooltipVisible
     } = props;
 
-    const { status, handleStepChange } = useOnboardingStatus((v) => v);
+    const { status, handleStepChange, handleSkipTutorial } =
+      useOnboardingStatus((v) => v);
     const [activeToolTip, setActiveToolTip] = useState<
       'input' | 'button' | null
     >(null);
@@ -70,6 +72,10 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       const nextStep = 'step-' + (parseInt(status.slice(-1), 10) + 1);
       handleStepChange(nextStep);
       setActiveToolTip(currentTooltip(nextStep));
+      if (nextStep === 'step-10' && handleSaveTooltipVisible) {
+        console.log(123);
+        handleSaveTooltipVisible();
+      }
     };
 
     const [localGroupName, setLocalGroupName] = useState<string>(
@@ -141,7 +147,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     buttonRightTitle={buttonRightTitle}
                     subtitle={subtitle}
                     buttonLeftTitle={buttonLeftTitle}
-                    handleButtonRightPress={handleOnboardingStepChange}
+                    handleButtonRightPress={handleSkipTutorial}
                     handleButtonLeftPress={handleOnboardingStepChange}
                     isButtonLeftVisible={isButtonLeftVisible}
                   />
@@ -175,7 +181,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     buttonRightTitle={buttonRightTitle}
                     subtitle={subtitle}
                     buttonLeftTitle={buttonLeftTitle}
-                    handleButtonRightPress={handleOnboardingStepChange}
+                    handleButtonRightPress={handleSkipTutorial}
                     handleButtonLeftPress={handleOnboardingStepChange}
                     isButtonLeftVisible={isButtonLeftVisible}
                   />

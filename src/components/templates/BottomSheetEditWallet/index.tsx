@@ -16,6 +16,8 @@ export const BottomSheetEditWallet = forwardRef<
   BottomSheetEditWalletProps
 >((props, ref) => {
   const { wallet, ...bottomSheetProps } = props;
+  const [isSaveToolTipVisible, setIsSaveToolTipVisible] =
+    useState<boolean>(false);
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { personalList } = usePersonalList();
@@ -31,8 +33,14 @@ export const BottomSheetEditWallet = forwardRef<
     localRef.current?.dismiss();
   };
 
+  const handleSaveTooltipVisible = () => {
+    console.log(1111111);
+    setTimeout(() => setIsSaveToolTipVisible(true), 1000);
+  };
+
   return (
     <BottomSheetWithHeader
+      isToolTipVisible={isSaveToolTipVisible}
       isNestedSheet={true}
       title="Edit Address"
       ref={localRef}
@@ -49,6 +57,7 @@ export const BottomSheetEditWallet = forwardRef<
           onNameChange={setName}
           isPersonalAddress={isPersonalAddress}
           onIsPersonalAddressChange={setIsPersonalAddress}
+          handleSaveTooltipVisible={handleSaveTooltipVisible}
         />
       )}
     </BottomSheetWithHeader>

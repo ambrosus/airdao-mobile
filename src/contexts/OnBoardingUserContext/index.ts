@@ -21,9 +21,14 @@ const OnboardingContext = () => {
     // setDataToSecureStore('UserOnboardingSteps', nextStep);
   }, []);
 
+  const handleSkipTutorial = useCallback(() => {
+    setStatus('none');
+  }, []);
+
   return {
     status,
-    handleStepChange
+    handleStepChange,
+    handleSkipTutorial
   };
 };
 
