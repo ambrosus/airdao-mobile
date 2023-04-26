@@ -6,3 +6,4 @@ export * from './useForwardedRef';
 export * from './useAppInit';
 export * from './useAppState';
 export * from './useCachePurifier';
+export * from './useOnboardingToolTip';
