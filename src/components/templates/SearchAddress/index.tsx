@@ -93,7 +93,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   useEffect(() => {
     if (status === 'step-3') {
-      setTimeout(() => setIsToolTipVisible(true), 300);
+      setIsToolTipVisible(true);
     }
   }, [status]);
 

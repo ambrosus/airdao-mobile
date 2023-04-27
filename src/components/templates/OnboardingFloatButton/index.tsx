@@ -65,17 +65,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         handleButtonRightPress={() => handleOnboardingStepChange('next')}
       />
     );
-  }, [
-    isButtonLeftVisible,
-    buttonLeftTitle,
-    buttonRightTitle,
-    handleOnboardingStepChange,
-    isButtonClose,
-    onCloseTooltip,
-    status,
-    subtitle,
-    title
-  ]);
+  }, []);
 
   return isToolTipVisible ? (
     <View

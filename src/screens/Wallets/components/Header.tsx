@@ -85,11 +85,12 @@ export function WalletHeader(props: Props): JSX.Element {
               subtitle={subtitle}
               buttonLeftTitle={buttonLeftTitle}
               handleButtonRightPress={handleSkipTutorial}
-              handleButtonLeftPress={() => {}}
+              handleButtonLeftPress={() => undefined}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }
           placement="bottom"
+          i
           onClose={() => null}
         >
           <Button

@@ -68,7 +68,7 @@ export const WatchlistAddSuccess = (
     );
 
   const showEdit = () => {
-    handleStepChange('step-5');
+    if (status !== 'none') handleStepChange('step-5');
     editModal.current?.show();
     setIsToolTipVisible(false);
   };

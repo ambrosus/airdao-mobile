@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
-  useEffect,
   useState
 } from 'react';
 import { View } from 'react-native';
@@ -17,7 +16,6 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import { Toast, ToastType } from '@components/modular';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -30,6 +28,10 @@ type Props = {
   groupId?: string;
   type: 'rename' | 'create';
   handleSaveTooltipVisible?: () => void;
+  status?: OnBoardingStatus;
+  handleStepChange?: (nextStep: OnBoardingStatus) => void;
+  handleSkipTutorial?: () => void;
+  isAnimationFinished?: boolean;
 };
 export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
@@ -39,14 +41,12 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       type = 'create',
       handleOnCreateGroup,
       groupId,
-      handleSaveTooltipVisible
+      handleSaveTooltipVisible,
+      handleSkipTutorial,
+      status = 'none',
+      handleStepChange = () => null,
+      isAnimationFinished = false
     } = props;
-
-    const { status, handleStepChange, handleSkipTutorial } =
-      useOnboardingStatus((v) => v);
-    const [activeToolTip, setActiveToolTip] = useState<
-      'input' | 'button' | 'none'
-    >('none');
 
     const {
       title,
@@ -56,39 +56,21 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       isButtonLeftVisible
     } = useOnboardingToolTip(status);
 
-    const currentTooltip = useCallback((status: OnBoardingStatus) => {
-      return status === 'step-8'
-        ? 'input'
-        : status === 'step-9'
-        ? 'button'
-        : 'none';
-    }, []);
+    const [localGroupName, setLocalGroupName] = useState<string>(
+      groupTitle || ''
+    );
 
-    useEffect(() => {
-      if (activeToolTip === 'input' || activeToolTip === 'button') {
-        setTimeout(() => setActiveToolTip('none'), 0);
-      }
-    }, [activeToolTip]);
-
-    useEffect(() => {
-      setTimeout(() => setActiveToolTip(currentTooltip(status)), 500);
-    }, [currentTooltip, status]);
+    const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     const handleOnboardingStepChange = () => {
       // @ts-ignore
       const nextStep: OnBoardingStatus =
         'step-' + (parseInt(status.slice(-1), 10) + 1);
       handleStepChange(nextStep);
-      setActiveToolTip(currentTooltip(nextStep));
       if (nextStep === 'step-10' && handleSaveTooltipVisible) {
         handleSaveTooltipVisible();
       }
     };
-
-    const [localGroupName, setLocalGroupName] = useState<string>(
-      groupTitle || ''
-    );
-    const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
@@ -147,7 +129,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 contentStyle={{ height: 152, borderRadius: 8 }}
                 arrowSize={{ width: 16, height: 8 }}
                 backgroundColor="rgba(0,0,0,0.5)"
-                isVisible={activeToolTip === 'input'}
+                isVisible={status === 'step-8' && isAnimationFinished}
                 content={
                   <OnBoardingToolTipBody
                     title={title}
@@ -164,7 +146,6 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 <Input
                   onBlur={() => {
-                    setActiveToolTip('button');
                     handleOnboardingStepChange();
                   }}
                   value={localGroupName}
@@ -181,7 +162,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 contentStyle={{ height: 108, borderRadius: 8 }}
                 arrowSize={{ width: 16, height: 8 }}
                 backgroundColor="rgba(0,0,0,0.5)"
-                isVisible={activeToolTip === 'button'}
+                isVisible={status === 'step-9'}
                 content={
                   <OnBoardingToolTipBody
                     title={title}

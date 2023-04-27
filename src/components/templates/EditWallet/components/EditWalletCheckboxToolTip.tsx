@@ -12,7 +12,7 @@ type Props = {
   isPersonalAddress: boolean;
   onIsPersonalAddressChange: (newFlag: boolean) => unknown;
   handleOnboardingStepChange: (amount: number) => void;
-  activeToolTip: 'input' | 'checkbox' | 'button' | 'none';
+  isActiveToolTip?: boolean;
 };
 
 export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
@@ -20,7 +20,7 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
     isPersonalAddress,
     onIsPersonalAddressChange,
     handleOnboardingStepChange,
-    activeToolTip
+    isActiveToolTip = false
   } = props;
   const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
   const {
@@ -37,7 +37,7 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
       contentStyle={{ height: 136, borderRadius: 8 }}
       arrowSize={{ width: 16, height: 8 }}
       backgroundColor="rgba(0,0,0,0.5)"
-      isVisible={activeToolTip === 'checkbox'}
+      isVisible={isActiveToolTip}
       content={
         <OnBoardingToolTipBody
           title={title}

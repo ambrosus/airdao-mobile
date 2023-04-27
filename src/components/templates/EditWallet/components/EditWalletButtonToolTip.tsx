@@ -10,11 +10,11 @@ import { useLists } from '@contexts/ListsContext';
 
 type Props = {
   handleOnboardingStepChange: (amount: number) => void;
-  activeToolTip: 'input' | 'checkbox' | 'button' | 'none';
+  isActiveToolTip?: boolean;
 };
 
 export const EditWalletButtonToolTip = (props: Props): JSX.Element => {
-  const { activeToolTip, handleOnboardingStepChange } = props;
+  const { isActiveToolTip = false, handleOnboardingStepChange } = props;
   const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
   const {
     title,
@@ -35,7 +35,7 @@ export const EditWalletButtonToolTip = (props: Props): JSX.Element => {
       contentStyle={{ height: 152, borderRadius: 8 }}
       arrowSize={{ width: 16, height: 8 }}
       backgroundColor="rgba(0,0,0,0.5)"
-      isVisible={activeToolTip === 'button'}
+      isVisible={isActiveToolTip}
       content={
         <OnBoardingToolTipBody
           title={title}

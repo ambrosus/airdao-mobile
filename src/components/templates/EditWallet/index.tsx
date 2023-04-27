@@ -48,17 +48,26 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     handleOnCreate,
     createGroupRef
   } = useLists((v) => v);
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
+    (v) => v
+  );
   const fullscreenModalHeight = useFullscreenModalHeight();
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
-  const [activeToolTip, setActiveToolTip] = useState<
-    'input' | 'checkbox' | 'button' | 'none'
-  >('none');
+  const [showFirstToolTip, setShowFirstToolTip] = useState<boolean>(false);
+  const [
+    isCreateBottomSheetAnimationFinished,
+    setIsCreateBottomSheetAnimationFinished
+  ] = useState<boolean>(false);
 
-  const selectedLists = listsOfAddressGroup.filter(
-    (list) =>
-      list.accounts.findIndex((account) => account.address === wallet.address) >
-      -1
+  const selectedLists = useMemo(
+    () =>
+      listsOfAddressGroup.filter(
+        (list) =>
+          list.accounts.findIndex(
+            (account) => account.address === wallet.address
+          ) > -1
+      ),
+    [listsOfAddressGroup, wallet.address]
   );
 
   useEffect(() => {
@@ -81,7 +90,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     addToListModal.current?.dismiss();
   };
 
-  const saveNewLists = async () => {
+  const saveNewLists = useCallback(async () => {
     // TODO refactor lists and use lists context
     setListsOfAddressGroup(
       localLists.map((l) => ({
@@ -90,63 +99,48 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       }))
     );
     hideAddToListModal();
-  };
+  }, [localLists, setListsOfAddressGroup]);
 
-  const onPressListItem = (list: AccountList) => {
-    const listFromLocalLists = localLists.find((l) => l.id === list.id);
-    if (!listFromLocalLists) return;
-    const idx = listFromLocalLists.accounts.findIndex(
-      (account) => account.address === wallet.address
-    );
-    if (idx > -1) {
-      listFromLocalLists.accounts.splice(idx, 1);
-    } else {
-      listFromLocalLists.accounts.push(wallet);
-    }
-    setLocalLists([...localLists]);
-  };
-
-  const currentTooltip = useCallback((newStatus: OnBoardingStatus) => {
-    return newStatus === 'step-5'
-      ? 'input'
-      : newStatus === 'step-6'
-      ? 'checkbox'
-      : newStatus === 'step-7'
-      ? 'button'
-      : 'none';
-  }, []);
+  const onPressListItem = useCallback(
+    (list: AccountList) => {
+      const listFromLocalLists = localLists.find((l) => l.id === list.id);
+      if (!listFromLocalLists) return;
+      const idx = listFromLocalLists.accounts.findIndex(
+        (account) => account.address === wallet.address
+      );
+      if (idx > -1) {
+        listFromLocalLists.accounts.splice(idx, 1);
+      } else {
+        listFromLocalLists.accounts.push(wallet);
+      }
+      setLocalLists([...localLists]);
+    },
+    [localLists, wallet]
+  );
 
   const handleOnboardingStepChange = useCallback(
     (amount: number) => {
-      if (status === 'none') {
-        return;
-      }
-
       const currentStep = parseInt(status.slice(-1), 10);
 
       // @ts-ignore
       const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
       handleStepChange(nextStep);
-
-      setActiveToolTip(currentTooltip(nextStep));
     },
-    [status, handleStepChange, currentTooltip]
+    [status, handleStepChange]
   );
 
+  // call only once, wait when bottomsheet will be opened
   useEffect(() => {
-    if (
-      activeToolTip === 'input' ||
-      activeToolTip === 'checkbox' ||
-      activeToolTip === 'button'
-    ) {
-      setTimeout(() => setActiveToolTip('none'), 0);
+    setTimeout(() => setShowFirstToolTip(true), 1000);
+  }, []);
+
+  useEffect(() => {
+    if (status === 'step-8') {
+      setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1000);
     }
-  }, [activeToolTip]);
+  }, [status]);
 
-  useEffect(() => {
-    setTimeout(() => setActiveToolTip(currentTooltip(status)), 500);
-  }, [currentTooltip, status]);
-
+  console.log(isCreateBottomSheetAnimationFinished);
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -155,14 +149,14 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
         </Text>
         <Spacer value={verticalScale(8)} />
         <EditWalletInputToolTip
-          activeToolTip={activeToolTip}
+          isActiveToolTip={status === 'step-5' && showFirstToolTip}
           handleOnboardingStepChange={handleOnboardingStepChange}
           name={name}
           onNameChange={onNameChange}
         />
         <Spacer value={24} />
         <EditWalletCheckboxToolTip
-          activeToolTip={activeToolTip}
+          isActiveToolTip={status === 'step-6'}
           handleOnboardingStepChange={handleOnboardingStepChange}
           onIsPersonalAddressChange={onIsPersonalAddressChange}
           isPersonalAddress={isPersonalAddress}
@@ -194,7 +188,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
         </Button>
         <Spacer value={verticalScale(32)} />
         <EditWalletButtonToolTip
-          activeToolTip={activeToolTip}
+          isActiveToolTip={status === 'step-7'}
           handleOnboardingStepChange={handleOnboardingStepChange}
         />
       </View>
@@ -203,6 +197,10 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
         type="create"
         handleOnCreateGroup={handleOnCreate}
         handleSaveTooltipVisible={handleSaveTooltipVisible}
+        status={status}
+        handleStepChange={handleStepChange}
+        handleSkipTutorial={handleSkipTutorial}
+        isAnimationFinished={isCreateBottomSheetAnimationFinished}
       />
       <BottomSheetWithHeader
         isNestedSheet

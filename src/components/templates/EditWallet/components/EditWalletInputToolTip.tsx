@@ -10,10 +10,10 @@ type Props = {
   name: string;
   onNameChange: (newName: string) => unknown;
   handleOnboardingStepChange: (amount: number) => void;
-  activeToolTip: 'input' | 'checkbox' | 'button' | 'none';
+  isActiveToolTip?: boolean;
 };
 export const EditWalletInputToolTip = (props: Props): JSX.Element => {
-  const { name, onNameChange, handleOnboardingStepChange, activeToolTip } =
+  const { name, onNameChange, handleOnboardingStepChange, isActiveToolTip } =
     props;
   const { handleSkipTutorial, status } = useOnboardingStatus((v) => v);
   const {
@@ -23,14 +23,14 @@ export const EditWalletInputToolTip = (props: Props): JSX.Element => {
     buttonRightTitle,
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
-
+  console.log(isActiveToolTip);
   return (
     <Tooltip
       tooltipStyle={{ flex: 1 }}
       contentStyle={{ height: 152, borderRadius: 8 }}
       arrowSize={{ width: 16, height: 8 }}
       backgroundColor="rgba(0,0,0,0.5)"
-      isVisible={activeToolTip === 'input'}
+      isVisible={isActiveToolTip}
       content={
         <OnBoardingToolTipBody
           title={title}
