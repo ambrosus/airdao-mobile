@@ -16,11 +16,10 @@ import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 
 type Props = {
   isToolTipVisible?: boolean;
-  setIsQRCodeToolTipVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function WalletHeader(props: Props): JSX.Element {
-  const { isToolTipVisible, setIsQRCodeToolTipVisible } = props;
+  const { isToolTipVisible } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
@@ -90,17 +89,9 @@ export function WalletHeader(props: Props): JSX.Element {
             />
           }
           placement="bottom"
-          i
           onClose={() => null}
         >
-          <Button
-            onPress={() => {
-              if (setIsQRCodeToolTipVisible) {
-                setIsQRCodeToolTipVisible(false);
-              }
-              openScanner();
-            }}
-          >
+          <Button onPress={openScanner}>
             <ScannerIcon color={COLORS.white} />
           </Button>
         </Tooltip>
