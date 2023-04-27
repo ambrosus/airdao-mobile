@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { EditWallet } from '../EditWallet';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
 import { BottomSheetWithHeader } from '@components/modular';
@@ -6,6 +6,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { useAllAddressesReducer } from '@contexts';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -21,6 +22,8 @@ export const BottomSheetEditWallet = forwardRef<
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { personalList } = usePersonalList();
+  const { handleStepChange, status } = useOnboardingStatus((v) => v);
+
   const [name, setName] = useState(wallet.name);
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'address') > -1
@@ -34,9 +37,14 @@ export const BottomSheetEditWallet = forwardRef<
   };
 
   const handleSaveTooltipVisible = () => {
-    console.log(1111111);
     setTimeout(() => setIsSaveToolTipVisible(true), 1000);
   };
+
+  useEffect(() => {
+    if (status === 'step-10') {
+      setTimeout(() => setIsSaveToolTipVisible(true), 0);
+    }
+  }, [status]);
 
   return (
     <BottomSheetWithHeader
@@ -47,7 +55,10 @@ export const BottomSheetEditWallet = forwardRef<
       fullscreen
       avoidKeyboard={false}
       actionTitle="Save"
-      onActionPress={saveAddress}
+      onActionPress={() => {
+        saveAddress();
+        handleStepChange('step-11');
+      }}
       {...bottomSheetProps}
     >
       {wallet && (

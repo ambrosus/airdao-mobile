@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -21,7 +21,6 @@ interface BottomSheetWithHeaderProps extends BottomSheetProps {
   onActionPress?: () => unknown;
   status?: OnBoardingStatus;
   isToolTipVisible?: boolean;
-  setIsToolTipVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   handleOnboardingStepChange?: (nextStep: 'back' | 'next') => void;
 }
 
@@ -30,8 +29,13 @@ export const BottomSheetWithHeader = forwardRef<
   BottomSheetWithHeaderProps
 >((props, ref) => {
   const { handleSkipTutorial, status } = useOnboardingStatus((v) => v);
-  const { subtitle, buttonRightTitle, buttonLeftTitle, isButtonLeftVisible } =
-    useOnboardingToolTip(status);
+  const {
+    title: toolTipTitle,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
   const {
     title,
     actionTitle,
@@ -48,21 +52,19 @@ export const BottomSheetWithHeader = forwardRef<
     localRef.current?.dismiss();
   };
 
-  console.log(onActionPress);
-
   const renderContentRight = () => {
     if (actionTitle) {
       return (
         <Tooltip
           tooltipStyle={{ top: 35 }}
-          contentStyle={{ height: 146, borderRadius: 8 }}
+          contentStyle={{ height: 130, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           arrowStyle={{ flex: 1, position: 'relative', top: 35 }}
           backgroundColor="rgba(0,0,0,0.5)"
           isVisible={isToolTipVisible}
           content={
             <OnBoardingToolTipBody
-              title="Save changes"
+              title={toolTipTitle}
               buttonRightTitle={buttonRightTitle}
               subtitle={subtitle}
               buttonLeftTitle={buttonLeftTitle}
@@ -83,12 +85,15 @@ export const BottomSheetWithHeader = forwardRef<
               if (status === 'step-10' && onActionPress) {
                 return setTimeout(() => {
                   onActionPress();
-                }, 400);
+                }, 1000);
               }
               if (onActionPress) onActionPress();
             }}
           >
-            <Text color="#2F2B43" opacity={0.5}>
+            <Text
+              color={isToolTipVisible ? '#2F2B43' : '#F6F6F6'}
+              opacity={0.5}
+            >
               {actionTitle}
             </Text>
           </Button>

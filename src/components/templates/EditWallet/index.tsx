@@ -124,7 +124,8 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
 
       const currentStep = parseInt(status.slice(-1), 10);
 
-      const nextStep = `step-${currentStep + amount}`;
+      // @ts-ignore
+      const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
       handleStepChange(nextStep);
 
       setActiveToolTip(currentTooltip(nextStep));
@@ -133,8 +134,18 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   );
 
   useEffect(() => {
-    setTimeout(() => setActiveToolTip(currentTooltip(status)), 1000);
-  }, [status]);
+    if (
+      activeToolTip === 'input' ||
+      activeToolTip === 'checkbox' ||
+      activeToolTip === 'button'
+    ) {
+      setTimeout(() => setActiveToolTip('none'), 0);
+    }
+  }, [activeToolTip]);
+
+  useEffect(() => {
+    setTimeout(() => setActiveToolTip(currentTooltip(status)), 500);
+  }, [currentTooltip, status]);
 
   return (
     <View style={styles.container}>

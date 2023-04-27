@@ -9,15 +9,34 @@ import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
+import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 
-export function WalletHeader(): JSX.Element {
+type Props = {
+  isToolTipVisible?: boolean;
+  setIsQRCodeToolTipVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function WalletHeader(props: Props): JSX.Element {
+  const { isToolTipVisible, setIsQRCodeToolTipVisible } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
 
-  const oepnScanner = () => {
+  const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
+  const {
+    title,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
+
+  const openScanner = () => {
     scanner.current?.show();
   };
 
@@ -53,9 +72,37 @@ export function WalletHeader(): JSX.Element {
   const renderContentRight = () => {
     return (
       <>
-        <Button onPress={oepnScanner}>
-          <ScannerIcon color={COLORS.white} />
-        </Button>
+        <Tooltip
+          tooltipStyle={{ flex: 1 }}
+          contentStyle={{ height: 152, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={isToolTipVisible}
+          content={
+            <OnBoardingToolTipBody
+              title={title}
+              buttonRightTitle={buttonRightTitle}
+              subtitle={subtitle}
+              buttonLeftTitle={buttonLeftTitle}
+              handleButtonRightPress={handleSkipTutorial}
+              handleButtonLeftPress={() => {}}
+              isButtonLeftVisible={isButtonLeftVisible}
+            />
+          }
+          placement="bottom"
+          onClose={() => null}
+        >
+          <Button
+            onPress={() => {
+              if (setIsQRCodeToolTipVisible) {
+                setIsQRCodeToolTipVisible(false);
+              }
+              openScanner();
+            }}
+          >
+            <ScannerIcon color={COLORS.white} />
+          </Button>
+        </Tooltip>
         <Spacer horizontal value={scale(20)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color={COLORS.white} />

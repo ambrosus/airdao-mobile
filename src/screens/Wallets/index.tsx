@@ -31,20 +31,30 @@ export const WalletsScreen = () => {
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
 
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
+  const [isQRCodeToolTipVisible, setIsQRCodeToolTipVisible] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 300);
-  }, []);
+    if (status === 'step-1') {
+      setTimeout(() => setIsToolTipVisible(true), 300);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (status === 'step-12') {
+      setTimeout(() => setIsQRCodeToolTipVisible(true), 0);
+    }
+  }, [status]);
 
   const handleOnboardingStepChange = useCallback(() => {
     handleStepChange('step-3');
     setIsToolTipVisible(false);
-    setTimeout(() => navigation.navigate('Tabs', { screen: 'Explore' }), 300);
+    setTimeout(() => navigation.navigate('Explore'), 300);
   }, [handleStepChange, navigation]);
 
   const handleOnFloatButtonPress = useCallback(() => {
     setIsToolTipVisible(false);
-    navigation.navigate('Tabs', { screen: 'Explore' });
+    navigation.navigate('Explore');
   }, [navigation]);
 
   return (
@@ -55,6 +65,8 @@ export const WalletsScreen = () => {
       >
         <StatusBar style="light" backgroundColor="#222222" />
         <PortfolioBalance
+          isToolTipVisible={isQRCodeToolTipVisible}
+          setIsQRCodeToolTipVisible={setIsQRCodeToolTipVisible}
           USDBalance={USDBalance}
           AMBBalance={ambBalance}
           balanceLast24HourChange={3.46}

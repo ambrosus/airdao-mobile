@@ -14,6 +14,8 @@ import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/O
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes';
 
 interface WatchlistAddSuccessProps {
   address: string;
@@ -25,6 +27,9 @@ interface WatchlistAddSuccessProps {
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
+  const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
+    useState<boolean>(false);
   const { address, onDone, handleSuccessModalClose = () => null } = props;
   const allAddresses = useAllAddresses();
   const wallet = allAddresses.find((w) => w.address === address);
@@ -33,7 +38,6 @@ export const WatchlistAddSuccess = (
   const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
     (v) => v
   );
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const {
     title,
     subtitle,
@@ -43,8 +47,18 @@ export const WatchlistAddSuccess = (
   } = useOnboardingToolTip(status);
 
   useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 500);
-  }, []);
+    if (status === 'step-4') {
+      setTimeout(() => setIsToolTipVisible(true), 500);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (status === 'step-11') {
+      setTimeout(() => setIsDoneToolTipVisible(true), 0);
+    }
+  }, [status]);
+
+  const navigation = useNavigation<WalletsNavigationProp>();
 
   if (!wallet)
     return (
@@ -120,10 +134,7 @@ export const WatchlistAddSuccess = (
               handleButtonLeftPress={() =>
                 handleOnboardingSuccessStepChange('back')
               }
-              handleButtonRightPress={() => {
-                handleSkipTutorial();
-                setIsToolTipVisible(false);
-              }}
+              handleButtonRightPress={handleSkipTutorial}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }
@@ -146,15 +157,51 @@ export const WatchlistAddSuccess = (
           </Button>
         </Tooltip>
         <Spacer value={verticalScale(24)} />
-        <Button
-          onPress={onDone}
-          type="circular"
-          style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
+        <Tooltip
+          tooltipStyle={{ flex: 1, left: 30 }}
+          contentStyle={{ height: 80, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          childrenWrapperStyle={{
+            backgroundColor: 'transparent',
+            borderRadius: 25,
+            borderWidth: 1,
+            borderColor: 'white',
+            paddingHorizontal: 18
+          }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={isDoneToolTipVisible}
+          content={
+            <OnBoardingToolTipBody
+              buttonRightTitle={''}
+              title={title}
+              subtitle={subtitle}
+              buttonLeftTitle={''}
+            />
+          }
+          placement="top"
+          onClose={() => null}
         >
-          <Text title fontFamily="Inter_600SemiBold">
-            Done
-          </Text>
-        </Button>
+          <Button
+            onPress={() => {
+              if (status === 'step-11' && onDone) {
+                return setTimeout(() => {
+                  onDone();
+                  handleStepChange('step-12');
+                  setTimeout(() => {
+                    navigation.navigate('Wallets');
+                  }, 500);
+                }, 1000);
+              }
+              if (onDone) onDone();
+            }}
+            type="circular"
+            style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
+          >
+            <Text title fontFamily="Inter_600SemiBold">
+              Done
+            </Text>
+          </Button>
+        </Tooltip>
       </View>
       <BottomSheetEditWallet ref={editModal} wallet={wallet} />
     </View>

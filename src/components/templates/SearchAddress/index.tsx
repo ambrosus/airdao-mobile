@@ -75,8 +75,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   // get status of current tooltip
   const { status, handleStepChange } = useOnboardingStatus((v) => v);
 
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(true);
-
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
@@ -91,6 +90,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       inputRef.current?.setText(initialValue);
     }
   }, [initialValue, onContentVisibilityChanged]);
+
+  useEffect(() => {
+    if (status === 'step-3') {
+      setTimeout(() => setIsToolTipVisible(true), 300);
+    }
+  }, [status]);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);

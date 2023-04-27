@@ -45,8 +45,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const { status, handleStepChange, handleSkipTutorial } =
       useOnboardingStatus((v) => v);
     const [activeToolTip, setActiveToolTip] = useState<
-      'input' | 'button' | null
-    >(null);
+      'input' | 'button' | 'none'
+    >('none');
 
     const {
       title,
@@ -61,19 +61,26 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         ? 'input'
         : status === 'step-9'
         ? 'button'
-        : null;
+        : 'none';
     }, []);
+
+    useEffect(() => {
+      if (activeToolTip === 'input' || activeToolTip === 'button') {
+        setTimeout(() => setActiveToolTip('none'), 0);
+      }
+    }, [activeToolTip]);
 
     useEffect(() => {
       setTimeout(() => setActiveToolTip(currentTooltip(status)), 500);
     }, [currentTooltip, status]);
 
     const handleOnboardingStepChange = () => {
-      const nextStep = 'step-' + (parseInt(status.slice(-1), 10) + 1);
+      // @ts-ignore
+      const nextStep: OnBoardingStatus =
+        'step-' + (parseInt(status.slice(-1), 10) + 1);
       handleStepChange(nextStep);
       setActiveToolTip(currentTooltip(nextStep));
       if (nextStep === 'step-10' && handleSaveTooltipVisible) {
-        console.log(123);
         handleSaveTooltipVisible();
       }
     };
