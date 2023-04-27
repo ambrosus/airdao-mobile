@@ -75,6 +75,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   // get status of current tooltip
   const { status, handleStepChange } = useOnboardingStatus((v) => v);
 
+  const [isEditToolTipVisible, setIsEditToolTipVisible] =
+    useState<boolean>(false);
+
+  const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
+    useState<boolean>(false);
+
   const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
@@ -201,6 +207,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     successModal.current?.dismiss();
   };
 
+  console.log(isDoneToolTipVisible);
   return (
     <>
       <KeyboardDismissingView>
@@ -260,7 +267,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           <OnboardingFloatButton
             isToolTipVisible={isToolTipVisible}
             status={status}
-            handleOnboardingStepChange={handleOnboardingStepChange}
+            handleOnboardingStepChange={(nextStep) => {
+              handleOnboardingStepChange(nextStep);
+              setTimeout(() => setIsEditToolTipVisible(true), 2000);
+            }}
             onboardingButtonTitle="Track Address"
           >
             <FloatButton
@@ -276,6 +286,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                 address={address}
                 status={status}
                 handleSuccessModalClose={handleSuccessModalClose}
+                isEditToolTipVisible={isEditToolTipVisible}
+                setIsEditToolTipVisible={setIsEditToolTipVisible}
+                isDoneToolTipVisible={isDoneToolTipVisible}
+                setIsDoneToolTipVisible={setIsDoneToolTipVisible}
               />
             )}
           </BottomSheetWithHeader>

@@ -1,4 +1,11 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 import { EditWallet } from '../EditWallet';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
 import { BottomSheetWithHeader } from '@components/modular';
@@ -10,13 +17,14 @@ import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
+  setIsDoneToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const BottomSheetEditWallet = forwardRef<
   BottomSheetRef,
   BottomSheetEditWalletProps
 >((props, ref) => {
-  const { wallet, ...bottomSheetProps } = props;
+  const { wallet, setIsDoneToolTipVisible, ...bottomSheetProps } = props;
   const [isSaveToolTipVisible, setIsSaveToolTipVisible] =
     useState<boolean>(false);
   const allAddressesReducer = useAllAddressesReducer();
@@ -40,11 +48,19 @@ export const BottomSheetEditWallet = forwardRef<
     setTimeout(() => setIsSaveToolTipVisible(true), 1000);
   };
 
-  useEffect(() => {
-    if (status === 'step-10') {
-      setTimeout(() => setIsSaveToolTipVisible(true), 0);
+  const handleActionPress = useCallback(() => {
+    if (status === 'step-10' && setIsDoneToolTipVisible) {
+      setIsSaveToolTipVisible(false);
+      handleStepChange('step-11');
+      setTimeout(() => {
+        saveAddress();
+      }, 0);
+      setTimeout(() => {
+        setIsDoneToolTipVisible(true);
+      }, 3000);
     }
-  }, [status]);
+    saveAddress();
+  }, [handleStepChange, saveAddress, setIsDoneToolTipVisible, status]);
 
   return (
     <BottomSheetWithHeader
@@ -55,10 +71,7 @@ export const BottomSheetEditWallet = forwardRef<
       fullscreen
       avoidKeyboard={false}
       actionTitle="Save"
-      onActionPress={() => {
-        saveAddress();
-        handleStepChange('step-11');
-      }}
+      onActionPress={handleActionPress}
       {...bottomSheetProps}
     >
       {wallet && (

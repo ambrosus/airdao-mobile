@@ -125,6 +125,9 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       // @ts-ignore
       const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
       handleStepChange(nextStep);
+      if (nextStep === 'step-8') {
+        setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1000);
+      }
     },
     [status, handleStepChange]
   );
@@ -134,13 +137,6 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     setTimeout(() => setShowFirstToolTip(true), 1000);
   }, []);
 
-  useEffect(() => {
-    if (status === 'step-8') {
-      setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1000);
-    }
-  }, [status]);
-
-  console.log(isCreateBottomSheetAnimationFinished);
   return (
     <View style={styles.container}>
       <View style={styles.content}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
@@ -22,15 +22,25 @@ interface WatchlistAddSuccessProps {
   onDone: () => unknown;
   status: OnBoardingStatus;
   handleSuccessModalClose?: () => void;
+  isEditToolTipVisible?: boolean;
+  setIsEditToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
+  isDoneToolTipVisible?: boolean;
+  setIsDoneToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
-  const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
-    useState<boolean>(false);
-  const { address, onDone, handleSuccessModalClose = () => null } = props;
+  const {
+    address,
+    onDone,
+    handleSuccessModalClose = () => null,
+    setIsEditToolTipVisible = () => null,
+    isEditToolTipVisible = false,
+    isDoneToolTipVisible = false,
+    setIsDoneToolTipVisible = () => null
+  } = props;
+
   const allAddresses = useAllAddresses();
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
@@ -46,18 +56,6 @@ export const WatchlistAddSuccess = (
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
-  useEffect(() => {
-    if (status === 'step-4') {
-      setTimeout(() => setIsToolTipVisible(true), 500);
-    }
-  }, [status]);
-
-  useEffect(() => {
-    if (status === 'step-11') {
-      setTimeout(() => setIsDoneToolTipVisible(true), 0);
-    }
-  }, [status]);
-
   const navigation = useNavigation<WalletsNavigationProp>();
 
   if (!wallet)
@@ -70,16 +68,16 @@ export const WatchlistAddSuccess = (
   const showEdit = () => {
     if (status !== 'none') handleStepChange('step-5');
     editModal.current?.show();
-    setIsToolTipVisible(false);
+    setIsEditToolTipVisible(false);
   };
 
   const handleOnboardingSuccessStepChange = (type: 'back' | 'next') => {
     handleStepChange(type === 'back' ? 'step-4' : 'step-5');
-    setIsToolTipVisible(false);
+    setIsEditToolTipVisible(false);
     if (type === 'back') {
       setTimeout(() => {
         handleSuccessModalClose();
-      }, 500);
+      }, 0);
     }
   };
 
@@ -124,7 +122,7 @@ export const WatchlistAddSuccess = (
           contentStyle={{ height: 136, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isToolTipVisible}
+          isVisible={isEditToolTipVisible}
           content={
             <OnBoardingToolTipBody
               title={title}
@@ -203,7 +201,11 @@ export const WatchlistAddSuccess = (
           </Button>
         </Tooltip>
       </View>
-      <BottomSheetEditWallet ref={editModal} wallet={wallet} />
+      <BottomSheetEditWallet
+        ref={editModal}
+        wallet={wallet}
+        setIsDoneToolTipVisible={setIsDoneToolTipVisible}
+      />
     </View>
   );
 };
