@@ -80,7 +80,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               style={[
                 styles.labelStyle,
                 {
-                  color: isFocused ? '#222222' : '#2f2b43',
+                  color: isFocused ? COLORS.mainBlue : '#676b73',
                   opacity: isFocused ? 1 : 0.7
                 }
               ]}

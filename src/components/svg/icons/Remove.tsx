@@ -3,9 +3,9 @@ import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 
 export function RemoveIcon(props: IconProps) {
-  const { scale = 1, color = 'black' } = props;
-  const width = 21,
-    height = 21;
+  const { scale = 1, color = '#ff4747' } = props;
+  const width = 21;
+  const height = 21;
   return (
     <Svg
       width={width}

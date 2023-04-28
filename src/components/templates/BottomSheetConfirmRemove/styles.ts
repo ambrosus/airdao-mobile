@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   removeButton: {
-    backgroundColor: COLORS.removeButtonColor,
+    backgroundColor: COLORS.crimsonRed,
     marginHorizontal: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,

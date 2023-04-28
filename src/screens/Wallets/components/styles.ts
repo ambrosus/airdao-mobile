@@ -12,10 +12,12 @@ export const styles = StyleSheet.create({
     borderRadius: 24
   },
   tooltipButton: {
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: COLORS.deepBlue,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.grey,
     paddingHorizontal: 109,
     borderRadius: 24
   },

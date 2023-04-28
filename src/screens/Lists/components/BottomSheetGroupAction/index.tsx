@@ -67,7 +67,7 @@ export const BottomSheetSingleGroupOption = forwardRef<BottomSheetRef, Props>(
             style={styles.cancelButtonText}
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.buttonTextColor}
+            color={COLORS.crimsonRed}
           >
             Delete List
           </Text>

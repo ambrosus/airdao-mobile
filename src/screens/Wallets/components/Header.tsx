@@ -29,7 +29,8 @@ export function WalletHeader(): JSX.Element {
 
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
 
-  const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
+  const { status, handleSkipTutorial = () => setIsToolTipVisible(false) } =
+    useOnboardingStatus((v) => v);
   const {
     title,
     subtitle,
@@ -49,6 +50,11 @@ export function WalletHeader(): JSX.Element {
   const closeScanner = () => {
     scanner.current?.dismiss();
   };
+
+  const handleOnSkipTutorial = useCallback(() => {
+    handleSkipTutorial();
+    setIsToolTipVisible(false);
+  }, [handleSkipTutorial]);
 
   const onQRCodeScanned = useCallback(
     (data: string) => {
@@ -89,11 +95,12 @@ export function WalletHeader(): JSX.Element {
           isVisible={isToolTipVisible}
           content={
             <OnBoardingToolTipBody
+              handleButtonClose={handleOnSkipTutorial}
               title={title}
               buttonRightTitle={buttonRightTitle}
               subtitle={subtitle}
               buttonLeftTitle={buttonLeftTitle}
-              handleButtonRightPress={handleSkipTutorial}
+              handleButtonRightPress={handleOnSkipTutorial}
               handleButtonLeftPress={() => undefined}
               isButtonLeftVisible={isButtonLeftVisible}
             />
@@ -128,7 +135,7 @@ export function WalletHeader(): JSX.Element {
     WINDOW_HEIGHT,
     buttonLeftTitle,
     buttonRightTitle,
-    handleSkipTutorial,
+    handleOnSkipTutorial,
     isButtonLeftVisible,
     isToolTipVisible,
     navigateToNotifications,

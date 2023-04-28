@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export function LogoSVG(props: IconProps) {
-  const { scale = 1, color = '#646464' } = props;
-  const width = 14,
-    height = 17;
+  const { scale = 1, color = '#5985EB' } = props;
+  const width = 14;
+  const height = 17;
   return (
     <Svg
       width={width}

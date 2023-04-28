@@ -7,6 +7,7 @@ import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/O
 import { styles } from '@screens/Wallets/components/styles';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 type Props = {
   status: OnBoardingStatus;
@@ -42,6 +43,8 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
+  const { handleSkipTutorial } = useOnboardingStatus((v) => v);
+
   const onCloseTooltip = useCallback(() => {
     if (setIsToolTipVisible) {
       setIsToolTipVisible(false);
@@ -62,7 +65,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
             ? () => handleOnboardingStepChange('back')
             : undefined
         }
-        handleButtonRightPress={() => handleOnboardingStepChange('next')}
+        handleButtonRightPress={handleSkipTutorial}
       />
     );
     /* eslint-disable react-hooks/exhaustive-deps */
@@ -89,10 +92,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
           onPress={() => {
             handleOnboardingStepChange('next');
           }}
-          style={[
-            styles.tooltipButton,
-            { borderWidth: 1, borderColor: 'white' }
-          ]}
+          style={styles.tooltipButton}
         >
           {onboardingButtonIcon ? onboardingButtonIcon : null}
           <Text style={styles.tooltipButtonText}>{onboardingButtonTitle}</Text>

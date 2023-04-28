@@ -4,8 +4,8 @@ import { Rect, Svg } from 'react-native-svg';
 
 export function BottomSheetSwiperIcon(props: IconProps) {
   const { scale = 1, color = '#2F2B43' } = props;
-  const width = 75,
-    height = 7;
+  const width = 75;
+  const height = 7;
   return (
     <Svg
       width={width}

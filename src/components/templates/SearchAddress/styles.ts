@@ -1,5 +1,6 @@
 import { moderateScale, scale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   input: {
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   scanner: {
-    backgroundColor: '#0e0e0e0d',
+    backgroundColor: COLORS.powderWhite,
     height: moderateScale(48),
     width: moderateScale(48)
   }

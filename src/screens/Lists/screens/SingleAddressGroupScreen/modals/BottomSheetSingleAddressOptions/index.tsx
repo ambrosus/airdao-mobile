@@ -93,7 +93,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={16}
-          color={COLORS.buttonTextColor}
+          color={COLORS.crimsonRed}
         >
           Remove
         </Text>

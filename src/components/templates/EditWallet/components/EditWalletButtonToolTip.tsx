@@ -7,6 +7,7 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { useLists } from '@contexts/ListsContext';
+import { COLORS } from '@constants/colors';
 
 type Props = {
   handleOnboardingStepChange: (amount: number) => void;
@@ -59,8 +60,13 @@ export const EditWalletButtonToolTip = (props: Props): JSX.Element => {
         }}
       >
         <Row alignItems="center">
-          <PlusIcon color="#000000" />
-          <Text title fontFamily="Inter_600SemiBold">
+          <PlusIcon color={COLORS.deepBlue} />
+          <Text
+            style={{ left: 10.5 }}
+            title
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.deepBlue}
+          >
             Create new list
           </Text>
         </Row>

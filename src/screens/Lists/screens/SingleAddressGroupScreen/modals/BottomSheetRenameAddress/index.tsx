@@ -40,11 +40,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           </View>
           <Spacer value={36} />
           <View style={styles.bottomSheetSubtitle}>
-            <Text
-              fontFamily="Inter_500Medium"
-              fontSize={16}
-              color={COLORS.dark}
-            >
+            <Text fontFamily="Inter_500Medium" fontSize={16} color={COLORS.oil}>
               List name
             </Text>
           </View>
@@ -80,7 +76,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.buttonTextColor}
+              color={COLORS.midnight}
               fontSize={16}
             >
               Cancel

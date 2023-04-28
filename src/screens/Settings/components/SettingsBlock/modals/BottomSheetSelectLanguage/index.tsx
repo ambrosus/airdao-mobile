@@ -93,7 +93,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
             >
               <Text
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.lightGrey}
+                color={COLORS.jungleGreen}
                 fontSize={16}
               >
                 Save

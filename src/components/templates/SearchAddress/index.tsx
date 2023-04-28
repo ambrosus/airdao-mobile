@@ -45,6 +45,7 @@ import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { FloatButton } from '@components/base/FloatButton';
 import { styles } from './styles';
+import { COLORS } from '@constants/colors';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -63,7 +64,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   } = props;
   const navigation = useNavigation<TabsNavigationProp>();
   // get status of current tooltip
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
+    (v) => v
+  );
   const {
     title,
     subtitle,
@@ -238,11 +241,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setSearchToolTipVisible(false);
     navigation.goBack();
   };
-
-  const skipTutorial = () => {
-    // TODO
-  };
-
   return (
     <>
       <KeyboardDismissingView>
@@ -259,13 +257,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                 isVisible={searchTooltipVisible}
                 content={
                   <OnBoardingToolTipBody
-                    handleButtonClose={skipTutorial}
+                    handleButtonClose={handleSkipTutorial}
                     title={title}
                     buttonRightTitle={buttonRightTitle}
                     subtitle={subtitle}
                     buttonLeftTitle={buttonLeftTitle}
                     handleButtonLeftPress={onSearchTooltipBack}
-                    handleButtonRightPress={skipTutorial}
+                    handleButtonRightPress={handleSkipTutorial}
                     isButtonLeftVisible={isButtonLeftVisible}
                   />
                 }
@@ -315,7 +313,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           )}
           <Spacer value={scale(7.5)} horizontal />
           <Button onPress={showScanner} type="circular" style={styles.scanner}>
-            <ScannerIcon color="#000000" />
+            <ScannerIcon color={COLORS.electricBlue} />
           </Button>
         </Row>
       </KeyboardDismissingView>

@@ -79,14 +79,22 @@ export function AMBMarket(): JSX.Element {
                   {NumberUtils.formatNumber(20000, 0)} AMB
                 </Text>
                 <Spacer horizontal value={scale(14)} />
-                <PercentChange color="#2F2B43" change={data.percentChange24H} />
+                <PercentChange
+                  color={COLORS.jungleGreen}
+                  change={data.percentChange24H}
+                />
                 <Text fontSize={12} fontWeight="500" color="#323232">
                   {' '}
                   24H
                 </Text>
               </Row>
             </View>
-            <BezierChart data={[]} axisColor={COLORS.white} />
+            <BezierChart
+              data={[]}
+              axisColor={COLORS.white}
+              strokeColor={COLORS.jungleGreen}
+              axisLabelColor={COLORS.asphalt}
+            />
             <Spacer value={verticalScale(60)} />
             <View style={styles.horizontalPadding}>
               <Row flex={1}>

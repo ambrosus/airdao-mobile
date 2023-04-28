@@ -57,7 +57,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
       <WalletHeader />
       <View style={styles.content}>
-        <Text fontFamily="Inter_500Medium" color="#828282">
+        <Text fontFamily="Inter_500Medium" color={COLORS.white}>
           My Wallet Value
         </Text>
         <Row alignItems="center" style={styles.balance}>
@@ -96,8 +96,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             {NumberUtils.formatNumber(AMBBalance)} AMB
           </Text>
           <Row alignItems="center" style={styles.balanceLast24HourChange}>
-            <TrendIcon color={COLORS.lightGrey} />
-            <Text color={COLORS.lightGrey}>
+            <TrendIcon color={COLORS.transparentWhite} />
+            <Text color={COLORS.transparentWhite}>
               {'  '}
               {NumberUtils.formatNumber(balanceLast24HourChange)}%
             </Text>
@@ -107,9 +107,9 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           <BezierChart
             height={verticalScale(200)}
             data={chartData}
-            axisLabelColor="#ffffff66"
-            strokeColor="#ffffff66"
-            axisColor="#222222"
+            axisLabelColor={COLORS.veryLightGrey}
+            strokeColor={COLORS.dimGrey}
+            axisColor={COLORS.deepBlue}
           />
         </View>
         <Button
@@ -129,7 +129,11 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
               >
                 AMB PRICE: ${AMBPrice}
               </Text>
-              <Text fontSize={12} fontWeight="500" color={COLORS.lightGrey}>
+              <Text
+                fontSize={12}
+                fontWeight="500"
+                color={COLORS.transparentWhite}
+              >
                 {'  ' + (AMBPriceLast24HourChange > 0 ? '+' : '')}
                 {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
               </Text>
@@ -161,7 +165,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     minHeight: Dimensions.get('window').height * 0.5,
-    backgroundColor: '#222222',
+    backgroundColor: COLORS.deepBlue,
     borderBottomLeftRadius: scale(28),
     borderBottomRightRadius: scale(28),
     paddingBottom: verticalScale(20)

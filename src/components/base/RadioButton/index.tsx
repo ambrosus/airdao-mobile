@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   radioButtonIcon: {
-    backgroundColor: COLORS.grey,
+    backgroundColor: COLORS.sapphireBlue,
     height: 24,
     width: 24,
     borderRadius: 50,
