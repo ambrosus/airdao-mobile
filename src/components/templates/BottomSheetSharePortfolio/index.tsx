@@ -79,7 +79,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
               <View style={styles.shareButton}>
                 <Button
                   type="circular"
-                  style={styles.darkBtn}
+                  style={styles.twitterBtn}
                   onPress={async () => onSharePress(Social.Twitter)}
                 >
                   <TwitterIcon color="#FFFFFF" />
@@ -90,7 +90,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
               <View style={styles.shareButton}>
                 <Button
                   type="circular"
-                  style={styles.darkBtn}
+                  style={styles.messagesBtn}
                   onPress={() => onSharePress(Social.Sms)}
                 >
                   <MessagesIcon color="#FFFFFF" />

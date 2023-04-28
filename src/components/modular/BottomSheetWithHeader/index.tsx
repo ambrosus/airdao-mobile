@@ -14,6 +14,7 @@ import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoar
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { COLORS } from '@constants/colors';
 
 interface BottomSheetWithHeaderProps extends BottomSheetProps {
   title: string;
@@ -88,10 +89,7 @@ export const BottomSheetWithHeader = forwardRef<
               if (onActionPress) onActionPress();
             }}
           >
-            <Text
-              color={isToolTipVisible ? '#F6F6F6' : '#2F2B43'}
-              opacity={0.5}
-            >
+            <Text color={isToolTipVisible ? COLORS.white : COLORS.jungleGreen}>
               {actionTitle}
             </Text>
           </Button>

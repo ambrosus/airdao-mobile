@@ -1,13 +1,25 @@
 export const COLORS = {
+  mainBlue: '#457eff',
+  deepBlue: '#3568dd',
+  electricBlue: '#457eff',
+  sapphireBlue: '#2563eb',
+  crimsonRed: '#ff4747',
+  jungleGreen: '#159f80',
+  powderBlue: '#edf3ff',
+  transparentWhite: '#ffffffb3',
   black: '#000000',
-  white: '#F9F9F9',
+  white: '#FFFFFF',
   darkGrey: '#2f2b43',
   lightGrey: '#828282',
   grey: '#646464',
   whiteGrey: '#2f2b430d',
   dark: '#222222',
   silver: '#C0C0C0',
+  asphalt: '#a1a6b2',
   thinGrey: '#2f2b4380',
   buttonTextColor: '#0e0e0e99',
-  removeButtonColor: '#676b73'
+  removeButtonColor: '#676b73',
+  charcoal: '#0e0e0e0d',
+  faintYellow: '#ffffff66',
+  lightYellow: '#ffffff99'
 };

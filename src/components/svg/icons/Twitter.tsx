@@ -3,7 +3,7 @@ import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export function TwitterIcon(props: IconProps) {
-  const { scale = 1, color = '#646464' } = props;
+  const { scale = 1, color = '#1d9bf0' } = props;
   const width = 20,
     height = 17;
   return (

@@ -1,5 +1,6 @@
 import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -20,7 +21,15 @@ export const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: verticalScale(12),
-    width: '100%'
+    width: '100%',
+    backgroundColor: COLORS.deepBlue
+  },
+  editButton: {
+    paddingVertical: verticalScale(12),
+    width: '100%',
+    backgroundColor: COLORS.deepBlue,
+    borderWidth: 1,
+    borderColor: COLORS.white
   },
   closeButton: {
     position: 'absolute',

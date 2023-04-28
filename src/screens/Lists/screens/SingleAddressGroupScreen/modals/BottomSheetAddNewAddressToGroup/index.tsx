@@ -83,7 +83,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             <Button type="base" onPress={handleOnAddNewAddress}>
               <Text
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.lightGrey}
+                color={COLORS.jungleGreen}
                 fontSize={16}
               >
                 Add to list

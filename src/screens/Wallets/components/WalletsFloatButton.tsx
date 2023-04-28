@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from '@appTypes';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 
 type Props = {
   status: OnBoardingStatus;
@@ -40,6 +41,8 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
     isButtonClose
   } = useOnboardingToolTip(status);
 
+  const { handleSkipTutorial } = useOnboardingStatus((v) => v);
+
   const handleNextButtonPress = useCallback(() => {
     handleStepChange('step-2');
     setTimeout(() => {
@@ -60,6 +63,10 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
     }
   };
 
+  const handleNavigate = useCallback(() => {
+    navigation.navigate('Explore', { screen: 'ExploreScreen' });
+  }, [navigation]);
+
   return status === 'step-1' ? (
     <View
       style={[
@@ -78,7 +85,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
             buttonRightTitle={buttonRightTitle}
             subtitle={subtitle}
             buttonLeftTitle={buttonLeftTitle}
-            handleButtonRightPress={handleNextButtonPress}
+            handleButtonRightPress={handleSkipTutorial}
             isButtonLeftVisible={isButtonLeftVisible}
           />
         }
@@ -100,7 +107,7 @@ export const WalletsFloatButton = ({ status, handleStepChange }: Props) => {
   ) : (
     <FloatButton
       title="Add a Address"
-      onPress={() => navigation.navigate('Explore')}
+      onPress={handleNavigate}
       icon={<AddIcon />}
     />
   );

@@ -1,13 +1,23 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons';
 
-export const ListsActiveIcon = () => {
+export function ListsActiveIcon(props: IconProps) {
+  const { scale = 1, color = '#457EFF' } = props;
+  const width = 24;
+  const height = 24;
   return (
-    <Svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+    <Svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ transform: [{ scale }] }}
+      fill="none"
+    >
       <Path
         d="M5.5 3.5C4.39543 3.5 3.5 4.39543 3.5 5.5V8C3.5 9.10457 4.39543 10 5.5 10H8C9.10457 10 10 9.10457 10 8V5.5C10 4.39543 9.10457 3.5 8 3.5H5.5ZM5.5 12C4.39543 12 3.5 12.8954 3.5 14V16.5C3.5 17.6046 4.39543 18.5 5.5 18.5H8C9.10457 18.5 10 17.6046 10 16.5V14C10 12.8954 9.10457 12 8 12H5.5ZM14 3.5C12.8954 3.5 12 4.39543 12 5.5V8C12 9.10457 12.8954 10 14 10H16.5C17.6046 10 18.5 9.10457 18.5 8V5.5C18.5 4.39543 17.6046 3.5 16.5 3.5H14ZM14 12C12.8954 12 12 12.8954 12 14V16.5C12 17.6046 12.8954 18.5 14 18.5H16.5C17.6046 18.5 18.5 17.6046 18.5 16.5V14C18.5 12.8954 17.6046 12 16.5 12H14ZM0 3.75C0 1.67893 1.67893 0 3.75 0H18.25C20.3211 0 22 1.67893 22 3.75V18.25C22 20.3211 20.3211 22 18.25 22H3.75C1.67893 22 0 20.3211 0 18.25V3.75ZM3.75 1.5C2.50736 1.5 1.5 2.50736 1.5 3.75V18.25C1.5 19.4926 2.50736 20.5 3.75 20.5H18.25C19.4926 20.5 20.5 19.4926 20.5 18.25V3.75C20.5 2.50736 19.4926 1.5 18.25 1.5H3.75Z"
-        fill="black"
+        fill={color}
       />
     </Svg>
   );
-};
+}

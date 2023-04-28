@@ -94,12 +94,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         }
         contentRight={
           <Button onPress={saveSettings}>
-            <Text
-              title
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.darkGrey}
-              opacity={0.5}
-            >
+            <Text title fontFamily="Inter_500Medium" color={COLORS.jungleGreen}>
               Save
             </Text>
           </Button>

@@ -16,6 +16,7 @@ import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoar
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
+import { COLORS } from '@constants/colors';
 
 interface WatchlistAddSuccessProps {
   address: string;
@@ -89,8 +90,8 @@ export const WatchlistAddSuccess = (
         <Checkmark
           size={scale(96)}
           iconScale={4}
-          fillColor="#BFBFBF"
-          iconColor="#FFFFFF"
+          fillColor={COLORS.jungleGreen}
+          iconColor={COLORS.white}
         />
         <Spacer value={verticalScale(49)} />
         <Text
@@ -134,23 +135,17 @@ export const WatchlistAddSuccess = (
               handleButtonLeftPress={() =>
                 handleOnboardingSuccessStepChange('back')
               }
-              handleButtonRightPress={handleSkipTutorial}
+              handleButtonRightPress={() => {
+                handleSkipTutorial();
+                setIsEditToolTipVisible(false);
+              }}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }
           placement="top"
           onClose={() => null}
         >
-          <Button
-            onPress={showEdit}
-            type="circular"
-            style={{
-              ...styles.button,
-              backgroundColor: '#676B73',
-              borderWidth: 1,
-              borderColor: 'white'
-            }}
-          >
+          <Button onPress={showEdit} type="circular" style={styles.editButton}>
             <Text title color="#FFFFFF" fontFamily="Inter_600SemiBold">
               Edit Address
             </Text>
@@ -162,11 +157,10 @@ export const WatchlistAddSuccess = (
           contentStyle={{ height: 80, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           childrenWrapperStyle={{
-            backgroundColor: 'transparent',
+            backgroundColor: '#edf3ff',
             borderRadius: 25,
             borderWidth: 1,
-            borderColor: 'white',
-            paddingHorizontal: 18
+            borderColor: 'white'
           }}
           backgroundColor="rgba(0,0,0,0.5)"
           isVisible={isDoneToolTipVisible}
@@ -196,9 +190,12 @@ export const WatchlistAddSuccess = (
               }
             }}
             type="circular"
-            style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
+            style={{
+              ...styles.button,
+              backgroundColor: '#edf3ff'
+            }}
           >
-            <Text title fontFamily="Inter_600SemiBold">
+            <Text title fontFamily="Inter_600SemiBold" color={COLORS.deepBlue}>
               Done
             </Text>
           </Button>

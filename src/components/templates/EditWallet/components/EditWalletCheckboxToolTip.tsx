@@ -71,8 +71,8 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
             <CheckBox
               type="square"
               value={isPersonalAddress}
-              fillColor="#646464"
-              color="#FFFFFF"
+              fillColor={COLORS.deepBlue}
+              color={COLORS.white}
             />
             <Spacer horizontal value={12} />
             <Text title color={COLORS.black} fontFamily="Inter_600SemiBold">

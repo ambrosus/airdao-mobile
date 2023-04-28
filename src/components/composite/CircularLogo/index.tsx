@@ -6,7 +6,7 @@ import { styles } from './styles';
 export function CircularLogo(): JSX.Element {
   return (
     <View style={styles.container}>
-      <LogoSVG />
+      <LogoSVG color="#51545a" />
     </View>
   );
 }

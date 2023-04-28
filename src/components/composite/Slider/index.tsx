@@ -112,11 +112,11 @@ export function Slider(props: SliderProps): JSX.Element {
 
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
-      ctx.offsetX = knobX.value;
+      (ctx as { offsetX: number }).offsetX = knobX.value;
     },
     onActive: (event, ctx) => {
       if (knobX.value + knobSize + 10 >= knobX2.value) return;
-      let nextX = ctx.offsetX + event.translationX;
+      let nextX = (ctx as { offsetX: number }).offsetX + event.translationX;
       if (nextX < 0) nextX = 0;
       else if (nextX > width) nextX = width;
 
@@ -129,11 +129,11 @@ export function Slider(props: SliderProps): JSX.Element {
 
   const onGestureEvent2 = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
-      ctx.offsetX = knobX2.value;
+      (ctx as { offsetX: number }).offsetX = knobX.value;
     },
     onActive: (event, ctx) => {
       if (knobX2.value <= knobX.value + knobSize) return;
-      let nextX = ctx.offsetX + event.translationX;
+      let nextX = (ctx as { offsetX: number }).offsetX + event.translationX;
       if (nextX < 0) nextX = 0;
       else if (nextX > width) nextX = width;
 

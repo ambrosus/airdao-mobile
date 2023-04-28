@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   icon: {
@@ -10,7 +11,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   moveButton: {
-    backgroundColor: '#676b73',
+    backgroundColor: COLORS.deepBlue,
     marginHorizontal: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,

@@ -66,7 +66,7 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
               >
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.black}
+                  color={COLORS.jungleGreen}
                   fontSize={16}
                 >
                   Move

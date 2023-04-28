@@ -6,7 +6,7 @@ import { COLORS } from '@constants/colors';
 
 export const CheckBox = ({ isChecked, onPress }: CheckBoxProps) => {
   const iconName = isChecked ? 'checkbox-marked' : 'checkbox-blank-outline';
-
+  // TODO change checkbox colors to sapphireBlue '#2563eb'
   return (
     <View style={styles.container}>
       <Pressable onPress={onPress}>
