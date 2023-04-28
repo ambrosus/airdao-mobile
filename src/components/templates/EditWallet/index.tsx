@@ -120,13 +120,15 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
 
   const handleOnboardingStepChange = useCallback(
     (amount: number) => {
-      const currentStep = parseInt(status.slice(-1), 10);
+      if (status !== 'none') {
+        const currentStep = parseInt(status.slice(-1), 10);
 
-      // @ts-ignore
-      const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
-      handleStepChange(nextStep);
-      if (nextStep === 'step-8') {
-        setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1500);
+        // @ts-ignore
+        const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
+        handleStepChange(nextStep);
+        if (nextStep === 'step-8') {
+          setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1500);
+        }
       }
     },
     [status, handleStepChange]

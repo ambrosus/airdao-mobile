@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
 import {
   LearnAboutAirDAO,
   PortfolioBalance,
   Wallets,
   Watchlists
 } from './components';
-import { useAMBPrice } from '@hooks/query';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { usePersonalList } from '@hooks/cache';
-import { styles } from './styles';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
-import { useNavigation } from '@react-navigation/native';
-import { TabsNavigationProp } from '@appTypes';
+import { useAMBPrice } from '@hooks/query';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { usePersonalList } from '@hooks/cache';
+import { ExploreTabNavigationProp } from '@appTypes';
+import { styles } from './styles';
 
 export const WalletsScreen = () => {
+  const navigation = useNavigation<ExploreTabNavigationProp>();
   const { data: ambTokenData } = useAMBPrice();
   const { status, handleStepChange } = useOnboardingStatus((v) => v);
   const { personalList } = usePersonalList();
@@ -25,7 +26,6 @@ export const WalletsScreen = () => {
     (prev, curr) => prev + curr.ambBalance,
     0
   );
-  const navigation = useNavigation<TabsNavigationProp>();
 
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
 

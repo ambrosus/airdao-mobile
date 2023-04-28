@@ -6,6 +6,7 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import { useNavigation } from '@react-navigation/native';
 import { WatchlistAddSuccess } from '@components/templates/WatchlistAddSuccess';
 import { ExplorerAccountView } from '../ExplorerAccount';
@@ -23,7 +24,8 @@ import {
 import {
   BottomSheet,
   BottomSheetRef,
-  InputWithIcon
+  InputWithIcon,
+  OnBoardingToolTipBody
 } from '@components/composite';
 import { CloseIcon, ScannerIcon, SearchIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
@@ -32,28 +34,47 @@ import {
   useExplorerInfo,
   useSearchAccount,
   useTransactionsOfAccount,
-  useWatchlist
+  useWatchlist,
+  useOnboardingToolTip
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses } from '@contexts';
-import { styles } from './styles';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { FloatButton } from '@components/base/FloatButton';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
+  withOnboarding?: boolean;
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
 }
 
 const LIMIT = 10;
+const demoAddress = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
 
 export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
-  const { initialValue, onContentVisibilityChanged = () => null } = props;
+  const {
+    initialValue,
+    withOnboarding,
+    onContentVisibilityChanged = () => null
+  } = props;
   const navigation = useNavigation<TabsNavigationProp>();
+  // get status of current tooltip
+  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const {
+    title,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
   const { data: ambToken } = useAMBPrice();
+  const [searchTooltipVisible, setSearchToolTipVisible] = useState(
+    withOnboarding && status === 'step-2'
+  );
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
@@ -71,9 +92,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
   const { watchlist, addToWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
-
-  // get status of current tooltip
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
 
   const [isEditToolTipVisible, setIsEditToolTipVisible] =
     useState<boolean>(false);
@@ -189,6 +207,15 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }, 300);
   };
 
+  const setOnboardingAddress = () => {
+    inputRef.current?.setText(demoAddress);
+    initialMount.current = false;
+    setAddress(demoAddress);
+    onContentVisibilityChanged(true);
+    setSearchToolTipVisible(false);
+    inputRef.current?.setText(demoAddress);
+    handleStepChange('step-3');
+  };
   const addressInWatchlist = useMemo(() => {
     const idx = watchlist.findIndex((w) => w.address === address);
     if (idx > -1) return watchlist[idx];
@@ -206,6 +233,16 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     successModal.current?.dismiss();
   };
 
+  const onSearchTooltipBack = () => {
+    handleStepChange('step-1');
+    setSearchToolTipVisible(false);
+    navigation.goBack();
+  };
+
+  const skipTutorial = () => {
+    // TODO
+  };
+
   return (
     <>
       <KeyboardDismissingView>
@@ -214,21 +251,68 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           justifyContent="space-between"
           style={styles.top}
         >
-          <InputWithIcon
-            ref={inputRef}
-            style={styles.input}
-            iconLeft={<SearchIcon color="#2f2b4399" />}
-            iconRight={
-              <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                <CloseIcon color="#2f2b4399" scale={0.75} />
-              </Button>
-            }
-            placeholder={'Search public address'}
-            returnKeyType="search"
-            onFocus={onInputFocused}
-            onBlur={onInputBlur}
-            onSubmitEditing={onInputSubmit}
-          />
+          {searchTooltipVisible ? (
+            <View>
+              <Tooltip
+                arrowSize={{ width: 16, height: 8 }}
+                backgroundColor="rgba(0,0,0,0.5)"
+                isVisible={searchTooltipVisible}
+                content={
+                  <OnBoardingToolTipBody
+                    handleButtonClose={skipTutorial}
+                    title={title}
+                    buttonRightTitle={buttonRightTitle}
+                    subtitle={subtitle}
+                    buttonLeftTitle={buttonLeftTitle}
+                    handleButtonLeftPress={onSearchTooltipBack}
+                    handleButtonRightPress={skipTutorial}
+                    isButtonLeftVisible={isButtonLeftVisible}
+                  />
+                }
+                placement="bottom"
+                onClose={() => null}
+              >
+                <Button
+                  onPress={setOnboardingAddress}
+                  style={{ width: '100%' }}
+                >
+                  <InputWithIcon
+                    ref={inputRef}
+                    style={styles.input}
+                    editable={false}
+                    onPressIn={setOnboardingAddress}
+                    iconLeft={<SearchIcon color="#2f2b4399" />}
+                    iconRight={
+                      <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                        <CloseIcon color="#2f2b4399" scale={0.75} />
+                      </Button>
+                    }
+                    placeholder={demoAddress}
+                    returnKeyType="search"
+                    onFocus={onInputFocused}
+                    onBlur={onInputBlur}
+                    onSubmitEditing={onInputSubmit}
+                  />
+                </Button>
+              </Tooltip>
+            </View>
+          ) : (
+            <InputWithIcon
+              ref={inputRef}
+              style={styles.input}
+              iconLeft={<SearchIcon color="#2f2b4399" />}
+              iconRight={
+                <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                  <CloseIcon color="#2f2b4399" scale={0.75} />
+                </Button>
+              }
+              placeholder={'Search public address'}
+              returnKeyType="search"
+              onFocus={onInputFocused}
+              onBlur={onInputBlur}
+              onSubmitEditing={onInputSubmit}
+            />
+          )}
           <Spacer value={scale(7.5)} horizontal />
           <Button onPress={showScanner} type="circular" style={styles.scanner}>
             <ScannerIcon color="#000000" />

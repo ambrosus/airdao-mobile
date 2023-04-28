@@ -44,7 +44,7 @@ export const BottomSheetEditWallet = forwardRef<
   }, [allAddressesReducer, isPersonalAddress, localRef, name, wallet]);
 
   const handleSaveTooltipVisible = () => {
-    setTimeout(() => setIsSaveToolTipVisible(true), 1000);
+    setTimeout(() => setIsSaveToolTipVisible(true), 2000);
   };
 
   const handleActionPress = useCallback(() => {

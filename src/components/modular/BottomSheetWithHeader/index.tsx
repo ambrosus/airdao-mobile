@@ -89,7 +89,7 @@ export const BottomSheetWithHeader = forwardRef<
             }}
           >
             <Text
-              color={isToolTipVisible ? '#2F2B43' : '#F6F6F6'}
+              color={isToolTipVisible ? '#F6F6F6' : '#2F2B43'}
               opacity={0.5}
             >
               {actionTitle}

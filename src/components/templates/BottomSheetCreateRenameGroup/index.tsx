@@ -61,7 +61,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       isButtonLeftVisible
     } = useOnboardingToolTip(status);
 
-    const handleOnboardingStepChange = () => {
+    const handleOnboardingStepChange = useCallback(() => {
       // @ts-ignore
       const nextStep: OnBoardingStatus =
         'step-' + (parseInt(status.slice(-1), 10) + 1);
@@ -69,16 +69,16 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       if (nextStep === 'step-10' && handleSaveTooltipVisible) {
         handleSaveTooltipVisible();
       }
-    };
+    }, [handleSaveTooltipVisible, handleStepChange, status]);
 
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
+        localRef.current?.dismiss();
         Toast.show({
           message: `Way to go! ${localGroupName} list created.`,
           type: ToastType.Top
         });
-        localRef.current?.dismiss();
       }
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
@@ -89,11 +89,13 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         });
       }
       setLocalGroupName('');
+      handleOnboardingStepChange();
     }, [
       groupId,
       groupTitle,
       handleOnCreateGroup,
       handleOnRenameGroup,
+      handleOnboardingStepChange,
       localGroupName,
       localRef
     ]);

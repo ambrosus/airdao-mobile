@@ -72,12 +72,14 @@ export const WatchlistAddSuccess = (
   };
 
   const handleOnboardingSuccessStepChange = (type: 'back' | 'next') => {
-    handleStepChange(type === 'back' ? 'step-4' : 'step-5');
-    setIsEditToolTipVisible(false);
-    if (type === 'back') {
-      setTimeout(() => {
-        handleSuccessModalClose();
-      }, 0);
+    if (status !== 'none') {
+      handleStepChange(type === 'back' ? 'step-4' : 'step-5');
+      setIsEditToolTipVisible(false);
+      if (type === 'back') {
+        setTimeout(() => {
+          handleSuccessModalClose();
+        }, 0);
+      }
     }
   };
 

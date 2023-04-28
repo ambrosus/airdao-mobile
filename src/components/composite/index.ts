@@ -9,3 +9,4 @@ export * from './CircularLogo';
 export * from './PercentChange';
 export * from './PopUpInfo';
 export * from './SegmentedPicker';
+export * from './OnBoardingToolTip/OnBoardingToolTipBody';
