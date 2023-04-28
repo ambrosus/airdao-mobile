@@ -126,7 +126,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
       handleStepChange(nextStep);
       if (nextStep === 'step-8') {
-        setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1000);
+        setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1500);
       }
     },
     [status, handleStepChange]

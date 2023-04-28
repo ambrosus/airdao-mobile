@@ -1,5 +1,12 @@
 export const initialOnBoardingSteps = {
-  'none': {},
+  'none': {
+    title: '',
+    subtitle: '',
+    buttonLeftTitle: '',
+    buttonRightTitle: '',
+    isButtonClose: false,
+    isButtonLeftVisible: false
+  },
   'step-1': {
     title: 'Add a Address',
     subtitle:

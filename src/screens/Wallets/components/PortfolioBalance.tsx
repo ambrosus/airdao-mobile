@@ -24,12 +24,10 @@ interface PortfolioBalanceProps {
   AMBPrice: number;
   balanceLast24HourChange: number;
   AMBPriceLast24HourChange: number; // TODO there is actually no percent change coming from API
-  isQRCodeToolTipVisible?: boolean;
 }
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   const {
-    isQRCodeToolTipVisible,
     USDBalance,
     AMBBalance,
     balanceLast24HourChange,
@@ -57,7 +55,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
-      <WalletHeader isToolTipVisible={isQRCodeToolTipVisible} />
+      <WalletHeader />
       <View style={styles.content}>
         <Text fontFamily="Inter_500Medium" color="#828282">
           My Wallet Value

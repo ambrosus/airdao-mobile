@@ -181,16 +181,17 @@ export const WatchlistAddSuccess = (
         >
           <Button
             onPress={() => {
+              if (onDone && status !== 'step-11') return onDone();
               if (status === 'step-11' && onDone) {
-                return setTimeout(() => {
+                setIsDoneToolTipVisible(false);
+
+                handleStepChange('step-12');
+                navigation.navigate('Wallets');
+
+                setTimeout(() => {
                   onDone();
-                  handleStepChange('step-12');
-                  setTimeout(() => {
-                    navigation.navigate('Wallets');
-                  }, 500);
                 }, 1000);
               }
-              if (onDone) onDone();
             }}
             type="circular"
             style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}

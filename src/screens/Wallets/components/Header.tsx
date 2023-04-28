@@ -1,4 +1,10 @@
-import React, { useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -14,17 +20,14 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 
-type Props = {
-  isToolTipVisible?: boolean;
-};
-
-export function WalletHeader(props: Props): JSX.Element {
-  const { isToolTipVisible } = props;
+export function WalletHeader(): JSX.Element {
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
+
+  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
 
   const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
   const {
@@ -35,6 +38,10 @@ export function WalletHeader(props: Props): JSX.Element {
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
+  useEffect(() => {
+    if (status === 'step-12') setTimeout(() => setIsToolTipVisible(true), 500);
+  }, [status]);
+
   const openScanner = () => {
     scanner.current?.show();
   };
@@ -43,32 +50,35 @@ export function WalletHeader(props: Props): JSX.Element {
     scanner.current?.dismiss();
   };
 
-  const onQRCodeScanned = (data: string) => {
-    const res = data.match(etherumAddressRegex);
-    if (res && res?.length > 0) {
-      closeScanner();
-      navigation.navigate('Explore', {
-        screen: 'ExploreScreen',
-        params: { address: res[0] }
-      });
-    } else if (!scanned.current) {
-      scanned.current = true;
-      Alert.alert('Invalid QR Code', '', [
-        {
-          text: 'Scan Again',
-          onPress: () => {
-            scanned.current = false;
+  const onQRCodeScanned = useCallback(
+    (data: string) => {
+      const res = data.match(etherumAddressRegex);
+      if (res && res?.length > 0) {
+        closeScanner();
+        navigation.navigate('Explore', {
+          screen: 'ExploreScreen',
+          params: { address: res[0] }
+        });
+      } else if (!scanned.current) {
+        scanned.current = true;
+        Alert.alert('Invalid QR Code', '', [
+          {
+            text: 'Scan Again',
+            onPress: () => {
+              scanned.current = false;
+            }
           }
-        }
-      ]);
-    }
-  };
+        ]);
+      }
+    },
+    [navigation]
+  );
 
-  const navigateToNotifications = () => {
+  const navigateToNotifications = useCallback(() => {
     navigation.navigate('Notifications');
-  };
+  }, []);
 
-  const renderContentRight = () => {
+  const renderContentRight = useMemo(() => {
     return (
       <>
         <Tooltip
@@ -91,7 +101,12 @@ export function WalletHeader(props: Props): JSX.Element {
           placement="bottom"
           onClose={() => null}
         >
-          <Button onPress={openScanner}>
+          <Button
+            onPress={() => {
+              setIsToolTipVisible(false);
+              openScanner();
+            }}
+          >
             <ScannerIcon color={COLORS.white} />
           </Button>
         </Tooltip>
@@ -109,13 +124,24 @@ export function WalletHeader(props: Props): JSX.Element {
         </BottomSheet>
       </>
     );
-  };
+  }, [
+    WINDOW_HEIGHT,
+    buttonLeftTitle,
+    buttonRightTitle,
+    handleSkipTutorial,
+    isButtonLeftVisible,
+    isToolTipVisible,
+    navigateToNotifications,
+    onQRCodeScanned,
+    subtitle,
+    title
+  ]);
 
   return (
     <Header
       backIconVisible={false}
       style={styles.container}
-      contentRight={renderContentRight()}
+      contentRight={renderContentRight}
     />
   );
 }

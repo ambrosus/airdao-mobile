@@ -145,9 +145,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 onClose={() => null}
               >
                 <Input
-                  onBlur={() => {
-                    handleOnboardingStepChange();
-                  }}
+                  onBlur={handleOnboardingStepChange}
                   value={localGroupName}
                   onChangeValue={(value) => setLocalGroupName(value)}
                   type="text"
@@ -181,10 +179,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   disabled={!localGroupName.length}
                   type="circular"
                   style={styles.bottomSheetCreateRenameButton}
-                  onPress={() => {
-                    handleButtonPress();
-                    handleOnboardingStepChange();
-                  }}
+                  onPress={handleButtonPress}
                 >
                   <Text
                     fontFamily="Inter_500Medium"

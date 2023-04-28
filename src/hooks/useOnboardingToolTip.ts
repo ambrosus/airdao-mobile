@@ -10,11 +10,11 @@ export const useOnboardingToolTip = (
   const stepData = initialOnBoardingSteps[step];
 
   return {
-    title: stepData.title,
-    subtitle: stepData.subtitle,
-    buttonLeftTitle: stepData.buttonLeftTitle,
-    buttonRightTitle: stepData.buttonRightTitle,
-    isButtonClose: stepData.isButtonClose,
-    isButtonLeftVisible: stepData.isButtonLeftVisible
+    title: stepData?.title,
+    subtitle: stepData?.subtitle,
+    buttonLeftTitle: stepData?.buttonLeftTitle,
+    buttonRightTitle: stepData?.buttonRightTitle,
+    isButtonClose: stepData?.isButtonClose,
+    isButtonLeftVisible: stepData?.isButtonLeftVisible
   };
 };

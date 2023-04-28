@@ -49,6 +49,8 @@ export const WalletsScreen = () => {
     }
   }, [status]);
 
+  console.log(status, 'header');
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -57,7 +59,6 @@ export const WalletsScreen = () => {
       >
         <StatusBar style="light" backgroundColor="#222222" />
         <PortfolioBalance
-          isQRCodeToolTipVisible={status === 'step-12'}
           USDBalance={USDBalance}
           AMBBalance={ambBalance}
           balanceLast24HourChange={3.46}

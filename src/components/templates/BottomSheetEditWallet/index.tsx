@@ -53,11 +53,8 @@ export const BottomSheetEditWallet = forwardRef<
       setIsSaveToolTipVisible(false);
       handleStepChange('step-11');
       setTimeout(() => {
-        saveAddress();
-      }, 0);
-      setTimeout(() => {
         setIsDoneToolTipVisible(true);
-      }, 3000);
+      }, 1500);
     }
     saveAddress();
   }, [handleStepChange, saveAddress, setIsDoneToolTipVisible, status]);

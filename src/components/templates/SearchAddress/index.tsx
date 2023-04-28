@@ -207,7 +207,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     successModal.current?.dismiss();
   };
 
-  console.log(isDoneToolTipVisible);
   return (
     <>
       <KeyboardDismissingView>
@@ -269,7 +268,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             status={status}
             handleOnboardingStepChange={(nextStep) => {
               handleOnboardingStepChange(nextStep);
-              setTimeout(() => setIsEditToolTipVisible(true), 2000);
+              setTimeout(() => setIsEditToolTipVisible(true), 1500);
             }}
             onboardingButtonTitle="Track Address"
           >

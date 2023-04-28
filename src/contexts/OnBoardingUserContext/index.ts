@@ -25,6 +25,8 @@ const OnboardingContext = () => {
     setStatus('none');
   }, []);
 
+  console.log(status);
+
   return {
     status,
     handleStepChange,
