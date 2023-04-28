@@ -47,6 +47,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       handleStepChange = () => null,
       isAnimationFinished = false
     } = props;
+
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const [localGroupName, setLocalGroupName] = useState<string>(
       groupTitle || ''
