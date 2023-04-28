@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   SetStateAction,
   useCallback,
-  useEffect,
   useState
 } from 'react';
 import { EditWallet } from '../EditWallet';
@@ -36,13 +35,13 @@ export const BottomSheetEditWallet = forwardRef<
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'address') > -1
   );
-  const saveAddress = async () => {
+  const saveAddress = useCallback(async () => {
     const newWallet: ExplorerAccount = Object.assign({}, wallet);
     newWallet.name = name;
     newWallet.isPersonal = isPersonalAddress;
     allAddressesReducer({ type: 'update', payload: newWallet });
     localRef.current?.dismiss();
-  };
+  }, [allAddressesReducer, isPersonalAddress, localRef, name, wallet]);
 
   const handleSaveTooltipVisible = () => {
     setTimeout(() => setIsSaveToolTipVisible(true), 1000);

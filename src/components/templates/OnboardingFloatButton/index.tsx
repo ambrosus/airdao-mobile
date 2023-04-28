@@ -65,6 +65,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         handleButtonRightPress={() => handleOnboardingStepChange('next')}
       />
     );
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
   return isToolTipVisible ? (

@@ -23,7 +23,7 @@ export const EditWalletInputToolTip = (props: Props): JSX.Element => {
     buttonRightTitle,
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
-  console.log(isActiveToolTip);
+
   return (
     <Tooltip
       tooltipStyle={{ flex: 1 }}

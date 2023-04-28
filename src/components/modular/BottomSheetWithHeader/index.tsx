@@ -70,9 +70,7 @@ export const BottomSheetWithHeader = forwardRef<
               buttonLeftTitle={buttonLeftTitle}
               handleButtonRightPress={handleSkipTutorial}
               handleButtonLeftPress={() =>
-                handleOnboardingStepChange
-                  ? handleOnboardingStepChange('back')
-                  : console.log('prev step')
+                handleOnboardingStepChange && handleOnboardingStepChange('back')
               }
               isButtonLeftVisible={isButtonLeftVisible}
             />

@@ -76,7 +76,7 @@ export function WalletHeader(): JSX.Element {
 
   const navigateToNotifications = useCallback(() => {
     navigation.navigate('Notifications');
-  }, []);
+  }, [navigation]);
 
   const renderContentRight = useMemo(() => {
     return (
