@@ -65,17 +65,8 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         handleButtonRightPress={() => handleOnboardingStepChange('next')}
       />
     );
-  }, [
-    isButtonLeftVisible,
-    buttonLeftTitle,
-    buttonRightTitle,
-    handleOnboardingStepChange,
-    isButtonClose,
-    onCloseTooltip,
-    status,
-    subtitle,
-    title
-  ]);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, []);
 
   return isToolTipVisible ? (
     <View
@@ -86,7 +77,7 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
     >
       <Tooltip
         tooltipStyle={{ flex: 1 }}
-        contentStyle={{ height: 140 }}
+        contentStyle={{ height: 136, borderRadius: 8 }}
         arrowSize={{ width: 16, height: 8 }}
         backgroundColor="rgba(0,0,0,0.5)"
         isVisible={isToolTipVisible}
@@ -95,7 +86,9 @@ export const OnboardingFloatButton = (props: Props): JSX.Element => {
         onClose={() => null}
       >
         <Pressable
-          onPress={() => handleOnboardingStepChange('next')}
+          onPress={() => {
+            handleOnboardingStepChange('next');
+          }}
           style={[
             styles.tooltipButton,
             { borderWidth: 1, borderColor: 'white' }

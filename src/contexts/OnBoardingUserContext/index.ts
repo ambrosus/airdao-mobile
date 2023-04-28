@@ -4,13 +4,13 @@ import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoar
 import { getDataToSecureStore } from '@helpers/storageHelpers';
 
 const OnboardingContext = () => {
-  const [status, setStatus] = useState<OnBoardingStatus>('step-1');
+  const [status, setStatus] = useState<OnBoardingStatus>('none');
 
   useEffect(() => {
     const getDataGroups = async () => {
       const step = await getDataToSecureStore('UserOnboardingSteps');
       // @ts-ignore
-      setStatus(step || 'step-1');
+      setStatus(step || 'none');
     };
     getDataGroups();
   }, []);
@@ -21,9 +21,14 @@ const OnboardingContext = () => {
     // setDataToSecureStore('UserOnboardingSteps', nextStep);
   }, []);
 
+  const handleSkipTutorial = useCallback(() => {
+    setStatus('none');
+  }, []);
+
   return {
     status,
-    handleStepChange
+    handleStepChange,
+    handleSkipTutorial
   };
 };
 

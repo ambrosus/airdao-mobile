@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
@@ -14,24 +14,40 @@ import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/O
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes';
 
 interface WatchlistAddSuccessProps {
   address: string;
   onDone: () => unknown;
   status: OnBoardingStatus;
   handleSuccessModalClose?: () => void;
+  isEditToolTipVisible?: boolean;
+  setIsEditToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
+  isDoneToolTipVisible?: boolean;
+  setIsDoneToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
-  const { address, onDone, handleSuccessModalClose = () => null } = props;
+  const {
+    address,
+    onDone,
+    handleSuccessModalClose = () => null,
+    setIsEditToolTipVisible = () => null,
+    isEditToolTipVisible = false,
+    isDoneToolTipVisible = false,
+    setIsDoneToolTipVisible = () => null
+  } = props;
+
   const allAddresses = useAllAddresses();
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
+  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
+    (v) => v
+  );
   const {
     title,
     subtitle,
@@ -40,9 +56,7 @@ export const WatchlistAddSuccess = (
     isButtonLeftVisible
   } = useOnboardingToolTip(status);
 
-  useEffect(() => {
-    setTimeout(() => setIsToolTipVisible(true), 2000);
-  }, []);
+  const navigation = useNavigation<WalletsNavigationProp>();
 
   if (!wallet)
     return (
@@ -52,18 +66,20 @@ export const WatchlistAddSuccess = (
     );
 
   const showEdit = () => {
-    handleStepChange('step-5');
+    if (status !== 'none') handleStepChange('step-5');
     editModal.current?.show();
-    setIsToolTipVisible(false);
+    setIsEditToolTipVisible(false);
   };
 
   const handleOnboardingSuccessStepChange = (type: 'back' | 'next') => {
-    handleStepChange(type === 'back' ? 'step-4' : 'step-5');
-    setIsToolTipVisible(false);
-    if (type === 'back') {
-      setTimeout(() => {
-        handleSuccessModalClose();
-      }, 2000);
+    if (status !== 'none') {
+      handleStepChange(type === 'back' ? 'step-4' : 'step-5');
+      setIsEditToolTipVisible(false);
+      if (type === 'back') {
+        setTimeout(() => {
+          handleSuccessModalClose();
+        }, 0);
+      }
     }
   };
 
@@ -105,10 +121,10 @@ export const WatchlistAddSuccess = (
       <View style={styles.buttons}>
         <Tooltip
           tooltipStyle={{ flex: 1 }}
-          contentStyle={{ height: 140 }}
+          contentStyle={{ height: 136, borderRadius: 8 }}
           arrowSize={{ width: 16, height: 8 }}
           backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isToolTipVisible}
+          isVisible={isEditToolTipVisible}
           content={
             <OnBoardingToolTipBody
               title={title}
@@ -118,9 +134,7 @@ export const WatchlistAddSuccess = (
               handleButtonLeftPress={() =>
                 handleOnboardingSuccessStepChange('back')
               }
-              handleButtonRightPress={() =>
-                handleOnboardingSuccessStepChange('next')
-              }
+              handleButtonRightPress={handleSkipTutorial}
               isButtonLeftVisible={isButtonLeftVisible}
             />
           }
@@ -143,17 +157,58 @@ export const WatchlistAddSuccess = (
           </Button>
         </Tooltip>
         <Spacer value={verticalScale(24)} />
-        <Button
-          onPress={onDone}
-          type="circular"
-          style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
+        <Tooltip
+          tooltipStyle={{ flex: 1, left: 30 }}
+          contentStyle={{ height: 80, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          childrenWrapperStyle={{
+            backgroundColor: 'transparent',
+            borderRadius: 25,
+            borderWidth: 1,
+            borderColor: 'white',
+            paddingHorizontal: 18
+          }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={isDoneToolTipVisible}
+          content={
+            <OnBoardingToolTipBody
+              buttonRightTitle={''}
+              title={title}
+              subtitle={subtitle}
+              buttonLeftTitle={''}
+            />
+          }
+          placement="top"
+          onClose={() => null}
         >
-          <Text title fontFamily="Inter_600SemiBold">
-            Done
-          </Text>
-        </Button>
+          <Button
+            onPress={() => {
+              if (onDone && status !== 'step-11') return onDone();
+              if (status === 'step-11' && onDone) {
+                setIsDoneToolTipVisible(false);
+
+                handleStepChange('step-12');
+                navigation.navigate('Wallets');
+
+                setTimeout(() => {
+                  onDone();
+                }, 1000);
+              }
+            }}
+            type="circular"
+            style={{ ...styles.button, backgroundColor: '#0e0e0e0d' }}
+          >
+            <Text title fontFamily="Inter_600SemiBold">
+              Done
+            </Text>
+          </Button>
+        </Tooltip>
       </View>
-      <BottomSheetEditWallet status={status} ref={editModal} wallet={wallet} />
+      <BottomSheetEditWallet
+        ref={editModal}
+        wallet={wallet}
+        setIsDoneToolTipVisible={setIsDoneToolTipVisible}
+      />
     </View>
   );
 };

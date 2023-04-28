@@ -1,4 +1,10 @@
-import React, { useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -9,6 +15,10 @@ import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
+import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
+import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
 
 export function WalletHeader(): JSX.Element {
   const navigation = useNavigation<WalletsNavigationProp>();
@@ -17,7 +27,22 @@ export function WalletHeader(): JSX.Element {
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
 
-  const oepnScanner = () => {
+  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
+
+  const { status, handleSkipTutorial } = useOnboardingStatus((v) => v);
+  const {
+    title,
+    subtitle,
+    buttonRightTitle,
+    buttonLeftTitle,
+    isButtonLeftVisible
+  } = useOnboardingToolTip(status);
+
+  useEffect(() => {
+    if (status === 'step-12') setTimeout(() => setIsToolTipVisible(true), 500);
+  }, [status]);
+
+  const openScanner = () => {
     scanner.current?.show();
   };
 
@@ -25,37 +50,66 @@ export function WalletHeader(): JSX.Element {
     scanner.current?.dismiss();
   };
 
-  const onQRCodeScanned = (data: string) => {
-    const res = data.match(etherumAddressRegex);
-    if (res && res?.length > 0) {
-      closeScanner();
-      navigation.navigate('Explore', {
-        screen: 'ExploreScreen',
-        params: { address: res[0] }
-      });
-    } else if (!scanned.current) {
-      scanned.current = true;
-      Alert.alert('Invalid QR Code', '', [
-        {
-          text: 'Scan Again',
-          onPress: () => {
-            scanned.current = false;
+  const onQRCodeScanned = useCallback(
+    (data: string) => {
+      const res = data.match(etherumAddressRegex);
+      if (res && res?.length > 0) {
+        closeScanner();
+        navigation.navigate('Explore', {
+          screen: 'ExploreScreen',
+          params: { address: res[0] }
+        });
+      } else if (!scanned.current) {
+        scanned.current = true;
+        Alert.alert('Invalid QR Code', '', [
+          {
+            text: 'Scan Again',
+            onPress: () => {
+              scanned.current = false;
+            }
           }
-        }
-      ]);
-    }
-  };
+        ]);
+      }
+    },
+    [navigation]
+  );
 
-  const navigateToNotifications = () => {
+  const navigateToNotifications = useCallback(() => {
     navigation.navigate('Notifications');
-  };
+  }, [navigation]);
 
-  const renderContentRight = () => {
+  const renderContentRight = useMemo(() => {
     return (
       <>
-        <Button onPress={oepnScanner}>
-          <ScannerIcon color={COLORS.white} />
-        </Button>
+        <Tooltip
+          tooltipStyle={{ flex: 1 }}
+          contentStyle={{ height: 152, borderRadius: 8 }}
+          arrowSize={{ width: 16, height: 8 }}
+          backgroundColor="rgba(0,0,0,0.5)"
+          isVisible={isToolTipVisible}
+          content={
+            <OnBoardingToolTipBody
+              title={title}
+              buttonRightTitle={buttonRightTitle}
+              subtitle={subtitle}
+              buttonLeftTitle={buttonLeftTitle}
+              handleButtonRightPress={handleSkipTutorial}
+              handleButtonLeftPress={() => undefined}
+              isButtonLeftVisible={isButtonLeftVisible}
+            />
+          }
+          placement="bottom"
+          onClose={() => null}
+        >
+          <Button
+            onPress={() => {
+              setIsToolTipVisible(false);
+              openScanner();
+            }}
+          >
+            <ScannerIcon color={COLORS.white} />
+          </Button>
+        </Tooltip>
         <Spacer horizontal value={scale(20)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color={COLORS.white} />
@@ -70,13 +124,24 @@ export function WalletHeader(): JSX.Element {
         </BottomSheet>
       </>
     );
-  };
+  }, [
+    WINDOW_HEIGHT,
+    buttonLeftTitle,
+    buttonRightTitle,
+    handleSkipTutorial,
+    isButtonLeftVisible,
+    isToolTipVisible,
+    navigateToNotifications,
+    onQRCodeScanned,
+    subtitle,
+    title
+  ]);
 
   return (
     <Header
       backIconVisible={false}
       style={styles.container}
-      contentRight={renderContentRight()}
+      contentRight={renderContentRight}
     />
   );
 }

@@ -93,8 +93,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { watchlist, addToWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
 
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(true);
+  const [isEditToolTipVisible, setIsEditToolTipVisible] =
+    useState<boolean>(false);
 
+  const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
+    useState<boolean>(false);
+
+  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
@@ -109,6 +114,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       inputRef.current?.setText(initialValue);
     }
   }, [initialValue, onContentVisibilityChanged]);
+
+  useEffect(() => {
+    if (status === 'step-3') {
+      setIsToolTipVisible(true);
+    }
+  }, [status]);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
@@ -191,7 +202,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   };
 
   const showSuccessModal = () => {
-    successModal.current?.show();
+    setTimeout(() => {
+      successModal.current?.show();
+    }, 300);
   };
 
   const setOnboardingAddress = () => {
@@ -212,7 +225,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const handleOnboardingStepChange = (type: 'back' | 'next') => {
     handleStepChange(type === 'back' ? 'step-2' : 'step-4');
     setIsToolTipVisible(false);
-    trackAddress();
+    if (type !== 'back') trackAddress();
+    // else navigation.navigate('Wallets');
   };
 
   const handleSuccessModalClose = () => {
@@ -335,7 +349,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           <OnboardingFloatButton
             isToolTipVisible={isToolTipVisible}
             status={status}
-            handleOnboardingStepChange={handleOnboardingStepChange}
+            handleOnboardingStepChange={(nextStep) => {
+              handleOnboardingStepChange(nextStep);
+              setTimeout(() => setIsEditToolTipVisible(true), 1500);
+            }}
             onboardingButtonTitle="Track Address"
           >
             <FloatButton
@@ -351,6 +368,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                 address={address}
                 status={status}
                 handleSuccessModalClose={handleSuccessModalClose}
+                isEditToolTipVisible={isEditToolTipVisible}
+                setIsEditToolTipVisible={setIsEditToolTipVisible}
+                isDoneToolTipVisible={isDoneToolTipVisible}
+                setIsDoneToolTipVisible={setIsDoneToolTipVisible}
               />
             )}
           </BottomSheetWithHeader>

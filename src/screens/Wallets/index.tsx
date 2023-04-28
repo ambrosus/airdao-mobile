@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
@@ -26,23 +26,30 @@ export const WalletsScreen = () => {
     (prev, curr) => prev + curr.ambBalance,
     0
   );
+
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
 
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
 
-  const handleOnboardingStepChange = () => {
+  const handleOnboardingStepChange = useCallback(() => {
     handleStepChange('step-2');
     setIsToolTipVisible(false);
     setTimeout(
       () => navigation.navigate('Explore', { screen: 'ExploreScreen' }),
       300
     );
-  };
+  }, [handleStepChange, navigation]);
 
-  const handleOnFloatButtonPress = () => {
+  const handleOnFloatButtonPress = useCallback(() => {
     setIsToolTipVisible(false);
     navigation.navigate('Explore', { screen: 'ExploreScreen' });
-  };
+  }, [navigation]);
+
+  useEffect(() => {
+    if (status === 'step-1') {
+      setTimeout(() => setIsToolTipVisible(true), 300);
+    }
+  }, [status]);
 
   return (
     <View style={{ flex: 1 }}>
