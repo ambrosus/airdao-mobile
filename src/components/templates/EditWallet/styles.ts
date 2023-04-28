@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     width: '100%',
-    backgroundColor: COLORS.powderBlue,
+    backgroundColor: COLORS.powderWhite,
     paddingVertical: verticalScale(12)
   },
   separator: {

@@ -59,7 +59,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.buttonTextColor}
+            color={COLORS.midnight}
             fontSize={16}
           >
             Cancel

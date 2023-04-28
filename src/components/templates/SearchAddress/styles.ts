@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   scanner: {
-    backgroundColor: COLORS.powderBlue,
+    backgroundColor: COLORS.powderWhite,
     height: moderateScale(48),
     width: moderateScale(48)
   }

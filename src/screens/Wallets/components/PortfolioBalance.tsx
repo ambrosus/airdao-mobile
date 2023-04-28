@@ -107,8 +107,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           <BezierChart
             height={verticalScale(200)}
             data={chartData}
-            axisLabelColor={COLORS.lightYellow}
-            strokeColor={COLORS.faintYellow}
+            axisLabelColor={COLORS.veryLightGrey}
+            strokeColor={COLORS.dimGrey}
             axisColor={COLORS.deepBlue}
           />
         </View>

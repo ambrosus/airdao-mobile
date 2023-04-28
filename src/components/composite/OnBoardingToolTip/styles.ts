@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     margin: 12
   },
   buttonRight: {
-    backgroundColor: COLORS.powderBlue,
+    backgroundColor: COLORS.powderWhite,
     borderRadius: 25,
     alignSelf: 'flex-start'
   },
