@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
+  useMemo,
   useState
 } from 'react';
 import { View } from 'react-native';
@@ -61,15 +62,18 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       isButtonLeftVisible
     } = useOnboardingToolTip(status);
 
-    const handleOnboardingStepChange = useCallback(() => {
-      // @ts-ignore
-      const nextStep: OnBoardingStatus =
-        'step-' + (parseInt(status.slice(-1), 10) + 1);
-      handleStepChange(nextStep);
-      if (nextStep === 'step-10' && handleSaveTooltipVisible) {
-        handleSaveTooltipVisible();
-      }
-    }, [handleSaveTooltipVisible, handleStepChange, status]);
+    const handleOnboardingStepChange = useCallback(
+      (amount = 1) => {
+        // @ts-ignore
+        const nextStep: OnBoardingStatus =
+          'step-' + (parseInt(status.slice(-1), 10) + amount);
+        handleStepChange(nextStep);
+        if (nextStep === 'step-10' && handleSaveTooltipVisible) {
+          handleSaveTooltipVisible();
+        }
+      },
+      [handleSaveTooltipVisible, handleStepChange, status]
+    );
 
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
@@ -98,6 +102,35 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       handleOnboardingStepChange,
       localGroupName,
       localRef
+    ]);
+
+    const handleBackButtonPress = useCallback(() => {
+      if (status === 'step-8') {
+        localRef.current?.dismiss();
+      }
+      handleOnboardingStepChange(-1);
+    }, [handleOnboardingStepChange, localRef, status]);
+
+    const tooltipContent = useMemo(() => {
+      return (
+        <OnBoardingToolTipBody
+          title={title}
+          buttonRightTitle={buttonRightTitle}
+          subtitle={subtitle}
+          buttonLeftTitle={buttonLeftTitle}
+          handleButtonRightPress={handleSkipTutorial}
+          handleButtonLeftPress={handleBackButtonPress}
+          isButtonLeftVisible={isButtonLeftVisible}
+        />
+      );
+    }, [
+      buttonLeftTitle,
+      buttonRightTitle,
+      handleBackButtonPress,
+      handleSkipTutorial,
+      isButtonLeftVisible,
+      subtitle,
+      title
     ]);
 
     return (
@@ -131,22 +164,12 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 arrowSize={{ width: 16, height: 8 }}
                 backgroundColor="rgba(0,0,0,0.5)"
                 isVisible={status === 'step-8' && isAnimationFinished}
-                content={
-                  <OnBoardingToolTipBody
-                    title={title}
-                    buttonRightTitle={buttonRightTitle}
-                    subtitle={subtitle}
-                    buttonLeftTitle={buttonLeftTitle}
-                    handleButtonRightPress={handleSkipTutorial}
-                    handleButtonLeftPress={handleOnboardingStepChange}
-                    isButtonLeftVisible={isButtonLeftVisible}
-                  />
-                }
+                content={tooltipContent}
                 placement="bottom"
                 onClose={() => null}
               >
                 <Input
-                  onBlur={handleOnboardingStepChange}
+                  onBlur={() => handleOnboardingStepChange(1)}
                   value={localGroupName}
                   onChangeValue={(value) => setLocalGroupName(value)}
                   type="text"
@@ -162,17 +185,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 arrowSize={{ width: 16, height: 8 }}
                 backgroundColor="rgba(0,0,0,0.5)"
                 isVisible={status === 'step-9'}
-                content={
-                  <OnBoardingToolTipBody
-                    title={title}
-                    buttonRightTitle={buttonRightTitle}
-                    subtitle={subtitle}
-                    buttonLeftTitle={buttonLeftTitle}
-                    handleButtonRightPress={handleSkipTutorial}
-                    handleButtonLeftPress={handleOnboardingStepChange}
-                    isButtonLeftVisible={isButtonLeftVisible}
-                  />
-                }
+                content={tooltipContent}
                 placement="bottom"
                 onClose={() => null}
               >

@@ -102,7 +102,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
     useState<boolean>(false);
 
-  const [isToolTipVisible, setIsToolTipVisible] = useState<boolean>(false);
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
@@ -119,10 +118,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   }, [initialValue, onContentVisibilityChanged]);
 
   useEffect(() => {
-    if (status === 'step-3') {
-      setIsToolTipVisible(true);
+    if (status === 'step-2' && withOnboarding) {
+      setSearchToolTipVisible(true);
     }
-  }, [status]);
+  }, [status, withOnboarding]);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
@@ -227,9 +226,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const handleOnboardingStepChange = (type: 'back' | 'next') => {
     handleStepChange(type === 'back' ? 'step-2' : 'step-4');
-    setIsToolTipVisible(false);
     if (type !== 'back') trackAddress();
-    // else navigation.navigate('Wallets');
   };
 
   const handleSuccessModalClose = () => {
@@ -345,7 +342,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             loading={transactionsLoading && !!address}
           />
           <OnboardingFloatButton
-            isToolTipVisible={isToolTipVisible}
+            isToolTipVisible={status === 'step-3'}
             status={status}
             handleOnboardingStepChange={(nextStep) => {
               handleOnboardingStepChange(nextStep);
