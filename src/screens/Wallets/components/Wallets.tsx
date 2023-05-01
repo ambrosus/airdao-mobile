@@ -8,6 +8,7 @@ export function Wallets(): JSX.Element {
   return (
     <WalletList
       title="My Wallets"
+      emptyText="You haven't added a personal address yet"
       totalAmount={personalList.reduce(
         (prev, curr) => prev + curr.ambBalance,
         0

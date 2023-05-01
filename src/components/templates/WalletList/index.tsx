@@ -1,30 +1,37 @@
 import React, { useReducer, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import {
   RotationAnimation,
   RotationAnimationRef
 } from '@components/animations';
 import { WalletItem } from '../WalletItem';
-import { ChevronDownIcon } from '@components/svg/icons';
+import {
+  ChevronDownIcon,
+  EmptyWalletListPlaceholderIcon,
+  PlusIcon
+} from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 
-interface WalletListProps {
+interface EmptyWalletListProps {
+  emptyText: string;
+}
+
+interface WalletListProps extends EmptyWalletListProps {
   title: string;
   totalAmount: number;
   data: ExplorerAccount[];
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
-  const { title, totalAmount, data } = props;
+  const { title, totalAmount, data, emptyText } = props;
   const [listOpened, toggleList] = useReducer((opened) => !opened, false);
   const rotationAnimation = useRef<RotationAnimationRef>(null);
-  // TODO set navigation prop
   const navigation = useNavigation<WalletsNavigationProp>();
 
   const onTogglePress = () => {
@@ -40,6 +47,38 @@ export function WalletList(props: WalletListProps): JSX.Element {
       <Button key={idx} style={styles.item} onPress={navigateToAddressDetails}>
         <WalletItem item={item} />
       </Button>
+    );
+  };
+
+  const renderEmpty = () => {
+    return (
+      <View style={styles.emptyContainer}>
+        <EmptyWalletListPlaceholderIcon />
+        <Spacer value={verticalScale(16)} />
+        <Text
+          color="#51545A"
+          fontWeight="400"
+          fontSize={15}
+          align="center"
+          fontFamily="Inter_400Regular"
+        >
+          {emptyText}
+        </Text>
+        <Spacer value={verticalScale(16)} />
+        <Button style={styles.addBtn}>
+          <Row alignItems="center">
+            <PlusIcon color={COLORS.white} scale={0.86} />
+            <Spacer horizontal value={scale(10.5)} />
+            <Text
+              fontSize={16}
+              fontFamily="Inter_500Medium"
+              color={COLORS.white}
+            >
+              Add an address
+            </Text>
+          </Row>
+        </Button>
+      </View>
     );
   };
 
@@ -64,9 +103,12 @@ export function WalletList(props: WalletListProps): JSX.Element {
           </RotationAnimation>
         </Button>
       </Row>
-      {listOpened && (
-        <View style={styles.list}>{data.map(renderWalletItem)}</View>
-      )}
+      {listOpened &&
+        (data.length > 0 ? (
+          <View style={styles.list}>{data.map(renderWalletItem)}</View>
+        ) : (
+          renderEmpty()
+        ))}
     </>
   );
 }
@@ -88,5 +130,17 @@ const styles = StyleSheet.create({
   },
   item: {
     marginTop: verticalScale(20)
+  },
+  emptyContainer: {
+    paddingTop: verticalScale(20),
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: scale(200)
+  },
+  addBtn: {
+    backgroundColor: COLORS.mainBlue,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(200)
   }
 });

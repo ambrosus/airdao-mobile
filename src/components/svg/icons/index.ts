@@ -12,6 +12,8 @@ export * from './ClipboardFilled';
 export * from './Close';
 export * from './DownArrow';
 export * from './Edit';
+export * from './Empty';
+export * from './EmptyWalletListPlaceholder';
 export * from './EyeVisible';
 export * from './EyeInvisible';
 export * from './Filter';

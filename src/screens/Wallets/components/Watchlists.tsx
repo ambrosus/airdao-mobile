@@ -8,6 +8,7 @@ export function Watchlists(): JSX.Element {
   return (
     <WalletList
       title="Watchlists"
+      emptyText="You haven't added an address to watchlist"
       totalAmount={watchlist.reduce((prev, curr) => prev + curr.ambBalance, 0)}
       data={watchlist}
     />
