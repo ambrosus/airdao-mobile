@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { Text } from '@components/base';
 import { Spacer } from '@components/base/Spacer';
-import { CheckBox } from '@components/base/CheckBox';
+import { CheckBox } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { styles } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList/styles';
 
@@ -21,7 +21,7 @@ export const ListsSettingsSelectList: FC<Props> = ({ item }) => {
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={17}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
           style={styles.itemTitle}
         >
           {item.title}
@@ -31,7 +31,7 @@ export const ListsSettingsSelectList: FC<Props> = ({ item }) => {
           <Text
             fontFamily="Inter_400Regular"
             fontSize={16}
-            color={COLORS.black}
+            color={COLORS.smokyBlack}
             style={styles.walletsCount}
           >
             {item.wallets}
@@ -39,8 +39,11 @@ export const ListsSettingsSelectList: FC<Props> = ({ item }) => {
         </View>
       </View>
       <CheckBox
-        onPress={() => setToggleCheckBox(!toggleCheckBox)}
-        isChecked={toggleCheckBox}
+        onValueChange={() => setToggleCheckBox(!toggleCheckBox)}
+        type="square"
+        fillColor={COLORS.sapphireBlue}
+        color={COLORS.white}
+        value={toggleCheckBox}
       />
     </View>
   );

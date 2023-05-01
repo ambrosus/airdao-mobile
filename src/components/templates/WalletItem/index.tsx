@@ -1,35 +1,45 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Row, Text } from '@components/base';
-import { TrendIcon } from '@components/svg/icons';
+import { Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
+import { useAMBPrice } from '@hooks';
+import { PercentChange } from '@components/composite';
+import { COLORS } from '@constants/colors';
 
 interface WalletItemProps {
   item: ExplorerAccount;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
+  const { data } = useAMBPrice();
   const { item } = props;
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
-        <Text fontWeight="600">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={13}
+          color={COLORS.smokyBlack}
+        >
           {item.name || StringUtils.formatAddress(item.address, 5, 7)}
         </Text>
-        <Text fontFamily="Mersad_600SemiBold">
+        <Text
+          fontFamily="Mersad_600SemiBold"
+          fontSize={13}
+          color={COLORS.smokyBlack}
+        >
           ${NumberUtils.formatNumber(item.ambBalance, 0)}
         </Text>
       </Row>
+      <Spacer value={5} />
       <Row justifyContent="space-between">
-        <Text fontFamily="Mersad_600SemiBold" color="#2f2b4380" fontSize={13}>
+        <Text fontFamily="Mersad_600SemiBold" color="#0e0e0e80" fontSize={13}>
           {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
         <Row alignItems="center">
-          <TrendIcon color="#2f2b4399" />
-          {/* TODO progress */}
-          <Text color="#2f2b4399"> 3.46%</Text>
+          <PercentChange change={data?.percentChange24H || 0} />
         </Row>
       </Row>
     </View>

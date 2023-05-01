@@ -146,7 +146,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 style={styles.newListTitle}
                 fontFamily="Inter_600SemiBold"
                 fontSize={20}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
               >
                 {type === 'create' ? ' Create new List' : 'Rename List'}
               </Text>

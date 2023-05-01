@@ -151,7 +151,8 @@ export const AddressDetails = (): JSX.Element => {
     return (
       <Row alignItems="center">
         <Button
-          style={styles.headerBtn}
+          // TODO change button background color when it's not pressed to #2f2b431a
+          style={styles.headerPersonalListBtn}
           type="circular"
           onPress={togglePersonalList}
         >
@@ -159,7 +160,8 @@ export const AddressDetails = (): JSX.Element => {
         </Button>
         <Spacer value={scale(17)} horizontal />
         <Button
-          style={styles.headerBtn}
+          // TODO change button background color when it's not pressed to #2f2b431a
+          style={styles.headerWatchListBtn}
           type="circular"
           onPress={toggleWatchlist}
         >

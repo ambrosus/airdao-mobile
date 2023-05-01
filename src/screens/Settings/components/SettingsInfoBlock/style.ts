@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   infoTextContainer: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
-    color: COLORS.black,
+    color: COLORS.smokyBlack,
     paddingLeft: 12
   }
 });

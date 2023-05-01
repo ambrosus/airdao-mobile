@@ -33,7 +33,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={20}
-              color={COLORS.black}
+              color={COLORS.smokyBlack}
             >
               Rename Address
             </Text>

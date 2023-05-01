@@ -36,7 +36,7 @@ export const BottomSheetSingleGroupOption = forwardRef<BottomSheetRef, Props>(
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={20}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
         >
           {type === 'rename'
             ? `Edit ${item.name}`

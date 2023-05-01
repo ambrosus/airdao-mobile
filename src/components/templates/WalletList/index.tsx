@@ -60,7 +60,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           onPress={onTogglePress}
         >
           <RotationAnimation ref={rotationAnimation}>
-            <ChevronDownIcon color={COLORS.black} />
+            <ChevronDownIcon color={COLORS.smokyBlack} />
           </RotationAnimation>
         </Button>
       </Row>

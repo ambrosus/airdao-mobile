@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    padding: moderateScale(7),
+    paddingVertical: moderateScale(7),
+    paddingHorizontal: moderateScale(9),
     marginRight: scale(11),
     backgroundColor: '#D9D9D9',
     borderRadius: 36

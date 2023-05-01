@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   optionInfoText: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
-    color: COLORS.black,
+    color: COLORS.smokyBlack,
     paddingLeft: 12
   },
   optionButtonText: {

@@ -14,14 +14,13 @@ export const styles = StyleSheet.create({
   balanceSubtitle: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
-    color: COLORS.lightGrey,
+    color: COLORS.slateGrey,
     opacity: 1
   },
   balanceCount: {
-    paddingBottom: 12,
     fontFamily: 'Mersad_600SemiBold',
     fontSize: 36,
-    color: COLORS.black
+    color: COLORS.smokyBlack
   },
   balanceStats: {
     flexDirection: 'row',

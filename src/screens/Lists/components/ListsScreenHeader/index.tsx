@@ -1,21 +1,23 @@
 import React, { useCallback, useRef } from 'react';
 import { View } from 'react-native';
-import { Spacer } from '@components/base/Spacer';
-import { COLORS } from '@constants/colors';
-import { Button, Text } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { BottomSheetListsFilters } from '@screens/Lists/components/BottomSheetListsFilters';
 import { BottomSheetListsSettings } from '@screens/Lists/components/BottomSheetListsSettings';
 import { FilterIcon } from '@components/svg/icons/Filter';
 import { SettingsIcon } from '@components/svg/icons/Settings';
-import { ProgressArrowIcon } from '@components/svg/icons/ProgressArrow';
 import { styles } from '@screens/Lists/components/ListsScreenHeader/styles';
 import { NumberUtils } from '@utils/number';
+import { PercentChange } from '@components/composite';
+import { useAMBPrice } from '@hooks';
+import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 type Props = {
   totalAmount: number;
 };
 export const ListsScreenHeader = ({ totalAmount }: Props) => {
+  const { data } = useAMBPrice();
   const filterRef = useRef<BottomSheetRef>(null);
   const handleOpenFilter = useCallback(() => {
     filterRef.current?.show();
@@ -52,6 +54,7 @@ export const ListsScreenHeader = ({ totalAmount }: Props) => {
       <Text style={styles.balanceCount}>
         ${NumberUtils.formatNumber(totalAmount, 0)}
       </Text>
+      <Spacer value={12} />
       <View style={styles.balanceStats}>
         <Text
           style={[
@@ -61,20 +64,15 @@ export const ListsScreenHeader = ({ totalAmount }: Props) => {
         >
           20,000 AMB
         </Text>
-        <ProgressArrowIcon />
+        <PercentChange change={data?.percentChange24H || 0} />
+        <Spacer horizontal value={scale(4)} />
         <Text
-          style={[
-            styles.progressInfo,
-            {
-              fontFamily: 'Inter_500Medium',
-              fontSize: 12,
-              color: COLORS.lightGrey
-            }
-          ]}
+          fontFamily="Inter_500Medium"
+          fontSize={12}
+          color={COLORS.graphiteGrey}
         >
-          4%
+          24HR
         </Text>
-        <Text>24HR</Text>
       </View>
       <BottomSheetListsFilters ref={filterRef} />
       <BottomSheetListsSettings ref={settingsRef} />

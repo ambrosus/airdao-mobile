@@ -11,20 +11,24 @@ export const styles = StyleSheet.create({
   itemInfo: {
     flexDirection: 'row'
   },
-  itemTitle: {},
+  itemTitle: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 20,
+    color: COLORS.smokyBlack
+  },
   itemSubInfo: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'baseline'
   },
   idCount: {
     paddingRight: 14,
     fontFamily: 'Inter_400Regular',
-    fontSize: 16
+    fontSize: 12
   },
   tokensCount: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
-    color: COLORS.lightGrey,
+    color: COLORS.midnight,
     paddingTop: 2
   },
   optionsButton: {

@@ -70,7 +70,7 @@ export function AMBMarket(): JSX.Element {
                 </Text>
                 <Spacer horizontal value={scale(16)} />
                 <Button onPress={onSharePress} style={styles.shareBtn}>
-                  <ShareIcon color={COLORS.black} />
+                  <ShareIcon color={COLORS.smokyBlack} />
                 </Button>
               </Row>
               <Spacer value={verticalScale(12)} />
@@ -79,10 +79,7 @@ export function AMBMarket(): JSX.Element {
                   {NumberUtils.formatNumber(20000, 0)} AMB
                 </Text>
                 <Spacer horizontal value={scale(14)} />
-                <PercentChange
-                  color={COLORS.jungleGreen}
-                  change={data.percentChange24H}
-                />
+                <PercentChange change={data.percentChange24H} />
                 <Text fontSize={12} fontWeight="500" color="#323232">
                   {' '}
                   24H
@@ -114,10 +111,7 @@ export function AMBMarket(): JSX.Element {
                     ${NumberUtils.formatNumber(marketCap, 0)}
                   </Text>
                   <Spacer value={verticalScale(6)} />
-                  <PercentChange
-                    change={data.percentChange24H}
-                    color="#2f2b4399"
-                  />
+                  <PercentChange change={data.percentChange24H} />
                   {/* 24 Hour Volume */}
                   <Spacer value={verticalScale(52)} />
                   <Row alignItems="center">

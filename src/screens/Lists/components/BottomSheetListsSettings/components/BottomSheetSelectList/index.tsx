@@ -2,12 +2,11 @@ import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { Button, Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { BottomSheet } from '@components/composite';
+import { BottomSheet, CheckBox } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { FlatList, View } from 'react-native';
 import { ListsSettingsSelectList } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList';
-import { CheckBox } from '@components/base/CheckBox';
 import { Spacer } from '@components/base/Spacer';
 import { styles } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/styles';
 
@@ -46,7 +45,7 @@ export const BottomSheetSelectList = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={15}
-              color={COLORS.black}
+              color={COLORS.smokyBlack}
             >
               Select lists
             </Text>
@@ -65,13 +64,16 @@ export const BottomSheetSelectList = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={17}
-              color={COLORS.black}
+              color={COLORS.smokyBlack}
             >
               All
             </Text>
             <CheckBox
-              onPress={() => setToggleCheckBox(!toggleCheckBox)}
-              isChecked={toggleCheckBox}
+              onValueChange={() => setToggleCheckBox(!toggleCheckBox)}
+              type="square"
+              fillColor={COLORS.sapphireBlue}
+              color={COLORS.white}
+              value={toggleCheckBox}
             />
           </View>
           <View style={styles.walletsContainer}>

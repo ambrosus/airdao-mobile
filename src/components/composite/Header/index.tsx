@@ -33,7 +33,7 @@ export function Header(props: HeaderProps): JSX.Element {
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={15}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
           title
         >
           {title}

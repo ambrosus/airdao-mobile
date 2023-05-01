@@ -26,7 +26,7 @@ export const SettingsModalItem: FC<Props> = ({
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={17}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
           style={styles.itemTitle}
         >
           {item}
