@@ -30,7 +30,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={20}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
         >
           Are you sure want to remove selected {item.address} from Whales?
         </Text>

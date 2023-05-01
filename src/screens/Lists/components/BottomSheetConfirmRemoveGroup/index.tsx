@@ -30,7 +30,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={20}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
         >
           Are you sure want to remove selected{' '}
           {StringUtils.formatAddress(item.name, 3, 4)} from lists

@@ -6,6 +6,7 @@ import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
+import { COLORS } from '@constants/colors';
 
 interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -38,7 +39,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
           <CheckBox
             type="square"
             value={selected}
-            fillColor="#2f2b4399"
+            fillColor={COLORS.sapphireBlue}
             color="#FFFFFF"
           />
         </Row>

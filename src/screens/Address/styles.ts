@@ -1,5 +1,6 @@
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -24,6 +25,16 @@ export const styles = StyleSheet.create({
   },
   headerBtn: {
     backgroundColor: '#2f2b431a',
+    height: moderateScale(36),
+    width: moderateScale(36)
+  },
+  headerPersonalListBtn: {
+    backgroundColor: COLORS.powderWhite,
+    height: moderateScale(36),
+    width: moderateScale(36)
+  },
+  headerWatchListBtn: {
+    backgroundColor: COLORS.powderWhite,
     height: moderateScale(36),
     width: moderateScale(36)
   }

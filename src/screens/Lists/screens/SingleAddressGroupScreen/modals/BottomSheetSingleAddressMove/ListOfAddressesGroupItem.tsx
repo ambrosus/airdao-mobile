@@ -3,8 +3,8 @@ import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/B
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { CheckBox } from '@components/base/CheckBox';
 import { AccountList } from '@models/AccountList';
+import { CheckBox } from '@components/composite';
 import { StringUtils } from '@utils/string';
 
 type Props = {
@@ -39,7 +39,7 @@ export const ListOfAddressesGroupItem = ({
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={17}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
           style={styles.itemTitle}
         >
           {item.name}
@@ -56,10 +56,13 @@ export const ListOfAddressesGroupItem = ({
         </View>
       </View>
       <CheckBox
-        onPress={() => {
+        onValueChange={() => {
           handleOnCheckboxPress(item.id);
         }}
-        isChecked={idsOfSelectedGroups.includes(item.id)}
+        type="square"
+        fillColor={COLORS.sapphireBlue}
+        color={COLORS.white}
+        value={idsOfSelectedGroups.includes(item.id)}
       />
     </View>
   );

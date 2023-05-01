@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function StarFilledIcon(props: IconProps) {
-  const { scale = 1, color = '#000000' } = props;
+  const { scale = 1, color = COLORS.deepBlue } = props;
   const width = 20,
     height = 20;
   return (

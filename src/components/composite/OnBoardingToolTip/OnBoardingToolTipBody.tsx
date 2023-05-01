@@ -26,7 +26,7 @@ export const OnBoardingToolTipBody = ({
         <Text
           fontFamily="Inter_500Medium"
           fontSize={12}
-          color={COLORS.black}
+          color={COLORS.smokyBlack}
           style={styles.title}
         >
           {title}
@@ -57,7 +57,7 @@ export const OnBoardingToolTipBody = ({
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
                 style={styles.buttonText}
               >
                 {buttonLeftTitle}

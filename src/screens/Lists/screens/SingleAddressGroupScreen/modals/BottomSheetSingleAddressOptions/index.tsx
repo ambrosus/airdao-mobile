@@ -72,7 +72,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         style={styles.text}
         fontFamily="Inter_600SemiBold"
         fontSize={20}
-        color={COLORS.black}
+        color={COLORS.smokyBlack}
       >
         Edit {item.name || item.address}
       </Text>
@@ -84,7 +84,11 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       </Button>
       <Spacer value={24} />
       <Button style={styles.renameButton} onPress={handleOnOpenRenameAddress}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.black}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.smokyBlack}
+        >
           Rename
         </Text>
       </Button>

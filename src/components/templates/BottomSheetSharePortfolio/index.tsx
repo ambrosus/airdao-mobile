@@ -64,7 +64,11 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
           </View>
           <Spacer value={29} />
           <View style={styles.newListTitle}>
-            <Text fontFamily="Inter_600SemiBold" title color={COLORS.black}>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              title
+              color={COLORS.smokyBlack}
+            >
               {bottomSheetTitle}
             </Text>
           </View>

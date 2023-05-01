@@ -71,11 +71,15 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
             <CheckBox
               type="square"
               value={isPersonalAddress}
-              fillColor={COLORS.deepBlue}
+              fillColor={COLORS.sapphireBlue}
               color={COLORS.white}
             />
             <Spacer horizontal value={12} />
-            <Text title color={COLORS.black} fontFamily="Inter_600SemiBold">
+            <Text
+              title
+              color={COLORS.navyIndigo}
+              fontFamily="Inter_600SemiBold"
+            >
               This is my personal Address
             </Text>
           </Row>

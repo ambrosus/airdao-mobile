@@ -64,7 +64,7 @@ export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
           <View style={styles.container}>
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.black}
+              color={COLORS.smokyBlack}
               fontSize={20}
             >
               Notifications
@@ -82,7 +82,7 @@ export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
               >
                 Transaction alerts
               </Text>
@@ -102,7 +102,7 @@ export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
                 style={styles.infoContainer}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
               >
                 Set treshold
               </Text>
@@ -126,7 +126,7 @@ export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
                   style={styles.infoContainer}
                   fontFamily="Inter_600SemiBold"
                   fontSize={16}
-                  color={COLORS.black}
+                  color={COLORS.smokyBlack}
                 >
                   % Change in value
                 </Text>
@@ -167,7 +167,7 @@ export const BottomSheetListsSettings = forwardRef<BottomSheetRef, Props>(
                 style={styles.infoContainer}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
               >
                 Select List
               </Text>

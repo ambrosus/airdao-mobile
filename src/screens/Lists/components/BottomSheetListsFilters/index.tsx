@@ -44,7 +44,7 @@ export const BottomSheetListsFilters = forwardRef<BottomSheetRef, Props>(
           <Spacer value={39} />
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.black}
+            color={COLORS.smokyBlack}
             fontSize={16}
           >
             Balance
@@ -72,7 +72,7 @@ export const BottomSheetListsFilters = forwardRef<BottomSheetRef, Props>(
           <Spacer value={20} />
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.black}
+            color={COLORS.smokyBlack}
             fontSize={16}
           >
             Number of wallets

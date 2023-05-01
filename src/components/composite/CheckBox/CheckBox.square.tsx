@@ -3,6 +3,7 @@ import { SquareCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
   const { fillColor, value, onValueChange, ...iconProps } = props;
@@ -20,7 +21,7 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
       disabled={typeof onValueChange !== 'function'}
       style={{
         backgroundColor: value ? fillColor : 'transparent',
-        borderColor: value ? 'transparent' : fillColor,
+        borderColor: COLORS.shadowBlue,
         borderWidth: value ? 0 : 1,
         width: scale(24),
         height: scale(24)

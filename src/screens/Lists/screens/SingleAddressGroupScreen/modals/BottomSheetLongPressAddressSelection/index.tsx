@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { BottomSheet, BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { Dimensions, FlatList, SafeAreaView, View } from 'react-native';
@@ -20,7 +20,6 @@ import { RemoveIcon } from '@components/svg/icons/Remove';
 import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
-import { CheckBox } from '@components/base/CheckBox';
 import { BottomSheetSingleAddressMove } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove';
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
@@ -108,7 +107,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                 style={{ paddingRight: 8 }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
-                color={COLORS.black}
+                color={COLORS.smokyBlack}
               >
                 {idsOfSelectedAddresses.length} selected
               </Text>
@@ -148,10 +147,13 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
               >
                 <View style={{ paddingRight: 16 }}>
                   <CheckBox
-                    onPress={() => {
+                    onValueChange={() => {
                       handleCheckBoxPress(item.address);
                     }}
-                    isChecked={idsOfSelectedAddresses.includes(item.address)}
+                    type="square"
+                    fillColor={COLORS.sapphireBlue}
+                    color={COLORS.white}
+                    value={idsOfSelectedAddresses.includes(item.address)}
                   />
                 </View>
                 <WalletItem item={item} />
