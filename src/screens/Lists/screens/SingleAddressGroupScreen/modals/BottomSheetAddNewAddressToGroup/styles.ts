@@ -46,5 +46,40 @@ export const styles = StyleSheet.create({
   },
   checkboxPadding: {
     paddingRight: 16
+  },
+  bottomButtons: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    bottom: 20
+  },
+  bottomAddToListButton: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: COLORS.deepBlue,
+    borderRadius: 25,
+    width: '90%'
+  },
+  bottomAddToListButtonText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 16,
+    paddingVertical: 16,
+    color: COLORS.white
+  },
+  bottomTrackNewAddressButtonText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 16,
+    paddingVertical: 16,
+    color: COLORS.deepBlue
+  },
+  bottomTrackNewAddressButton: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 25,
+    width: '90%',
+    backgroundColor: '#c9d9ff'
   }
 });

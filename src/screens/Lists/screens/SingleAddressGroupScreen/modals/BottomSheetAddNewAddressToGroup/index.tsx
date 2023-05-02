@@ -6,13 +6,12 @@ import React, {
   useState
 } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Input, Text } from '@components/base';
+import { Button, Input, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
-import { CloseIcon } from '@components/svg/icons';
+import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { FloatButton } from '@components/base/FloatButton';
-import { FlatList } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { AddressItemWithCheckbox } from './components/AddressItemWithCheckbox';
 import { useWatchlist } from '@hooks';
@@ -76,33 +75,30 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 localRef.current?.dismiss();
               }}
             >
-              <CloseIcon />
+              {Platform.OS === 'ios' ? <CloseIcon /> : <BackIcon />}
             </Button>
           }
           contentRight={
-            <Button type="base" onPress={handleOnAddNewAddress}>
-              <Text
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.jungleGreen}
-                fontSize={16}
-              >
-                Add to list
-              </Text>
-            </Button>
+            Platform.OS === 'ios' && (
+              <Button type="base" onPress={handleOnAddNewAddress}>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.jungleGreen}
+                  fontSize={16}
+                >
+                  Add to list
+                </Text>
+              </Button>
+            )
           }
         />
         <Input
           type="text"
           placeholder="Search watchlist"
           placeholderTextColor="#2f2b4399"
-          style={[styles.bottomSheetInput]}
+          style={styles.bottomSheetInput}
           value=""
           onChangeValue={() => null}
-        />
-        <FloatButton
-          title="Track new Address"
-          bottomPadding={0}
-          onPress={() => null}
         />
         <FlatList
           contentContainerStyle={{
@@ -117,6 +113,36 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             />
           )}
         />
+        <View style={styles.bottomButtons}>
+          {Platform.OS === 'android' && (
+            <Button
+              style={styles.bottomAddToListButton}
+              onPress={handleOnAddNewAddress}
+            >
+              <Text style={styles.bottomAddToListButtonText}>Add to list</Text>
+            </Button>
+          )}
+          <Spacer value={20} />
+          <Button
+            style={
+              Platform.OS === 'ios'
+                ? styles.bottomAddToListButton
+                : styles.bottomTrackNewAddressButton
+            }
+            onPress={() => null}
+          >
+            <Text
+              style={
+                Platform.OS === 'ios'
+                  ? styles.bottomAddToListButtonText
+                  : styles.bottomTrackNewAddressButtonText
+              }
+            >
+              Track new Address
+            </Text>
+          </Button>
+          <Spacer value={24} />
+        </View>
       </BottomSheet>
     </>
   );

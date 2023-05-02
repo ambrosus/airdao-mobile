@@ -10,6 +10,7 @@ import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
+import { COLORS } from '@constants/colors';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
@@ -58,7 +59,11 @@ export const TransactionDetails = (
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
               From
             </Text>
-            <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
+            <Text
+              color={COLORS.mainBlue}
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+            >
               {StringUtils.formatAddress(transaction.from.address, 4, 5)}
             </Text>
           </JustifiedRow>
@@ -71,7 +76,11 @@ export const TransactionDetails = (
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
               To
             </Text>
-            <Text color="#828282" fontFamily="Inter_600SemiBold" fontSize={16}>
+            <Text
+              color={COLORS.mainBlue}
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+            >
               {StringUtils.formatAddress(transaction.to.address, 4, 5)}
             </Text>
           </JustifiedRow>

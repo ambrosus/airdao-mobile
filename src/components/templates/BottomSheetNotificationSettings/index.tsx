@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { Platform, ScrollView, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Switch } from 'react-native-gesture-handler';
 import {
@@ -15,13 +15,14 @@ import {
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Input, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { CloseIcon } from '@components/svg/icons';
+import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { useAMBPrice } from '@hooks/query';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
 import { styles } from './styles';
+import { FloatButton } from '@components/base/FloatButton';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text title fontFamily="Inter_600SemiBold">
@@ -89,15 +90,21 @@ export const BottomSheetNotificationSettings = forwardRef<
         style={styles.header}
         contentLeft={
           <Button onPress={localRef.current?.dismiss}>
-            <CloseIcon />
+            {Platform.OS === 'ios' ? <CloseIcon /> : <BackIcon />}
           </Button>
         }
         contentRight={
-          <Button onPress={saveSettings}>
-            <Text title fontFamily="Inter_500Medium" color={COLORS.jungleGreen}>
-              Save
-            </Text>
-          </Button>
+          Platform.OS === 'ios' && (
+            <Button onPress={saveSettings}>
+              <Text
+                title
+                fontFamily="Inter_500Medium"
+                color={COLORS.jungleGreen}
+              >
+                Save
+              </Text>
+            </Button>
+          )
         }
       />
       <ScrollView
@@ -295,6 +302,17 @@ export const BottomSheetNotificationSettings = forwardRef<
           <Spacer value={verticalScale(32)} />
         </View>
       </ScrollView>
+      {Platform.OS === 'android' ? (
+        <FloatButton
+          title="Save"
+          onPress={() => {
+            localRef.current?.dismiss();
+          }}
+          bottomPadding={17}
+        />
+      ) : (
+        <></>
+      )}
     </BottomSheet>
   );
 });

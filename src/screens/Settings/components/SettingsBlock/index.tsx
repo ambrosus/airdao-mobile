@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View } from 'react-native';
-import { Button, Row, Text } from '@components/base';
+import { Platform, View } from 'react-native';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { RightArrowIcon } from '@components/svg/RightArrowIcon';
 import { DarkNotificationIcon } from '@components/svg/icons/DarkNotification';
 import { CurrencyIcon } from '@components/svg/icons/Currency';
@@ -46,39 +46,84 @@ export const SettingsBlock = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Button onPress={handleOnSelectBaseCurrency} type="base">
-        <Row
-          style={styles.optionContainer}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Row style={styles.infoTextContainer}>
-            <CurrencyIcon />
-            <Text style={styles.optionInfoText}>Base currency</Text>
-          </Row>
-          <Row style={styles.infoTextContainer} alignItems="center">
+    <View>
+      {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={82} />}
+      {Platform.OS === 'ios' ? (
+        <>
+          <Button onPress={handleOnSelectBaseCurrency} type="base">
+            <Row
+              style={styles.optionContainer}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Row style={styles.infoTextContainer}>
+                <CurrencyIcon />
+                <Text style={styles.optionInfoText}>Base currency</Text>
+              </Row>
+              <Row style={styles.infoTextContainer} alignItems="center">
+                <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
+                <RightArrowIcon />
+              </Row>
+            </Row>
+          </Button>
+          <Spacer value={44} />
+        </>
+      ) : (
+        <Button onPress={handleOnSelectBaseCurrency} type="base">
+          <View
+            style={{
+              paddingBottom: 35,
+              flexDirection: 'column',
+              alignItems: 'flex-start'
+            }}
+          >
+            <Row style={styles.infoTextContainer}>
+              <CurrencyIcon />
+              <Text style={styles.optionInfoText}>Base currency</Text>
+            </Row>
+            <Spacer value={10} />
             <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
-            <RightArrowIcon />
-          </Row>
-        </Row>
-      </Button>
-      <Button onPress={handleOnOpenLanguageModal} type="base">
-        <Row
-          style={styles.optionContainer}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Row style={styles.infoTextContainer}>
-            <LanguageIcon />
-            <Text style={styles.optionInfoText}>Language</Text>
-          </Row>
-          <Row style={styles.infoTextContainer} alignItems="center">
+          </View>
+        </Button>
+      )}
+      {Platform.OS === 'ios' ? (
+        <>
+          <Button onPress={handleOnOpenLanguageModal} type="base">
+            <Row
+              style={styles.optionContainer}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Row style={styles.infoTextContainer}>
+                <LanguageIcon />
+                <Text style={styles.optionInfoText}>Language</Text>
+              </Row>
+              <Row style={styles.infoTextContainer} alignItems="center">
+                <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
+                <RightArrowIcon />
+              </Row>
+            </Row>
+          </Button>
+          <Spacer value={44} />
+        </>
+      ) : (
+        <Button onPress={handleOnOpenLanguageModal} type="base">
+          <View
+            style={{
+              paddingBottom: 35,
+              flexDirection: 'column',
+              alignItems: 'flex-start'
+            }}
+          >
+            <Row style={styles.infoTextContainer}>
+              <LanguageIcon />
+              <Text style={styles.optionInfoText}>Language</Text>
+            </Row>
+            <Spacer value={10} />
             <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
-            <RightArrowIcon />
-          </Row>
-        </Row>
-      </Button>
+          </View>
+        </Button>
+      )}
       <Button onPress={handleOnOpenNotificationSettings} type="base">
         <Row
           style={styles.optionContainer}
@@ -94,6 +139,7 @@ export const SettingsBlock = () => {
           </Row>
         </Row>
       </Button>
+      <Spacer value={42} />
       <BottomSheetNotificationSettings ref={notificationSettingsRef} />
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}

@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { BottomSheet, CheckBox, Header } from '@components/composite';
 import {
   BottomSheetProps,
@@ -11,6 +11,7 @@ import { CloseIcon } from '@components/svg/icons';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
+import { FloatButton } from '@components/base/FloatButton';
 
 interface WalletSortProps extends BottomSheetProps {
   sort: ExplorerSort;
@@ -64,7 +65,11 @@ export const BottomSheetWalletSort = forwardRef<
   };
 
   return (
-    <BottomSheet ref={localRef} {...bottomSheetProps}>
+    <BottomSheet
+      ref={localRef}
+      {...bottomSheetProps}
+      fullscreen={Platform.OS === 'android'}
+    >
       <View>
         <Header
           style={styles.header}
@@ -75,22 +80,31 @@ export const BottomSheetWalletSort = forwardRef<
             </Button>
           }
           contentRight={
-            <Button onPress={onSubmit}>
-              <Text
-                title
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.darkGrey}
-                opacity={0.5}
-              >
-                Done
-              </Text>
-            </Button>
+            Platform.OS === 'ios' && (
+              <Button onPress={onSubmit}>
+                <Text
+                  title
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.darkGrey}
+                  opacity={0.5}
+                >
+                  Done
+                </Text>
+              </Button>
+            )
           }
           title="Sort By"
         />
         <Spacer value={verticalScale(32)} />
         <View style={styles.container}>{SORT_ROWS.map(renderRow)}</View>
       </View>
+      {Platform.OS === 'android' && (
+        <FloatButton
+          title="Apply Filter"
+          onPress={onSubmit}
+          bottomPadding={17}
+        />
+      )}
     </BottomSheet>
   );
 });

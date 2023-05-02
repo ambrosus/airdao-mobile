@@ -13,6 +13,8 @@ import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { useAllAddressesReducer } from '@contexts';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { FloatButton } from '@components/base/FloatButton';
+import { Platform } from 'react-native';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -66,19 +68,28 @@ export const BottomSheetEditWallet = forwardRef<
       ref={localRef}
       fullscreen
       avoidKeyboard={false}
-      actionTitle="Save"
-      onActionPress={handleActionPress}
+      actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
+      onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}
       {...bottomSheetProps}
     >
       {wallet && (
-        <EditWallet
-          wallet={wallet}
-          name={name}
-          onNameChange={setName}
-          isPersonalAddress={isPersonalAddress}
-          onIsPersonalAddressChange={setIsPersonalAddress}
-          handleSaveTooltipVisible={handleSaveTooltipVisible}
-        />
+        <>
+          <EditWallet
+            wallet={wallet}
+            name={name}
+            onNameChange={setName}
+            isPersonalAddress={isPersonalAddress}
+            onIsPersonalAddressChange={setIsPersonalAddress}
+            handleSaveTooltipVisible={handleSaveTooltipVisible}
+          />
+          {Platform.OS === 'android' && (
+            <FloatButton
+              title="Save"
+              onPress={handleActionPress}
+              bottomPadding={17}
+            />
+          )}
+        </>
       )}
     </BottomSheetWithHeader>
   );
