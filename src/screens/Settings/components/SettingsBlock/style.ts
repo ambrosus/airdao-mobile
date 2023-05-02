@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: 50
+    paddingTop: verticalScale(12)
   },
   optionContainer: {
-    paddingBottom: 35,
+    marginBottom: verticalScale(22),
     flexDirection: 'row'
   },
   optionInfoText: {
