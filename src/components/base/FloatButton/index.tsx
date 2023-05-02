@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     backgroundColor: COLORS.deepBlue,
-    borderRadius: 24,
+    borderRadius: 1000,
     paddingHorizontal: 109
   },
   bottomButtonText: {
