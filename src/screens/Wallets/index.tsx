@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -69,9 +69,11 @@ export const WalletsScreen = () => {
           <Wallets />
           <View style={styles.divider} />
           <Watchlists />
-          <View style={styles.airdao}>
-            <LearnAboutAirDAO />
-          </View>
+          {Platform.OS === 'ios' && (
+            <View style={styles.airdao}>
+              <LearnAboutAirDAO />
+            </View>
+          )}
         </View>
       </ScrollView>
       <OnboardingFloatButton

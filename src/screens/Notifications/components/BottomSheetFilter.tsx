@@ -57,17 +57,16 @@ export const BottomSheetFilter = forwardRef<
           backIconVisible={false}
           style={styles.header}
           contentLeft={
-            <Button onPress={localRef.current?.dismiss}>
+            <Button onPress={() => localRef.current?.dismiss()}>
               <CloseIcon />
             </Button>
           }
           contentRight={
-            <Button>
+            <Button onPress={() => localRef.current?.dismiss()}>
               <Text
                 title
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.darkGrey}
-                opacity={0.5}
+                color={COLORS.jungleGreen}
               >
                 Done
               </Text>
@@ -100,7 +99,7 @@ export const BottomSheetFilter = forwardRef<
                 <CheckBox
                   type="square"
                   color={COLORS.white}
-                  fillColor={'#2f2b4399'}
+                  fillColor={COLORS.sapphireBlue}
                   value={localFilter.priceAlerts}
                   onValueChange={(newValue) =>
                     onFilterKeyChange('priceAlerts', newValue)
@@ -130,7 +129,7 @@ export const BottomSheetFilter = forwardRef<
                 <CheckBox
                   type="square"
                   color={COLORS.white}
-                  fillColor={'#2f2b4399'}
+                  fillColor={COLORS.sapphireBlue}
                   value={localFilter.transactionAlerts}
                   onValueChange={(newValue) =>
                     onFilterKeyChange('transactionAlerts', newValue)
@@ -157,7 +156,7 @@ export const BottomSheetFilter = forwardRef<
                 <CheckBox
                   type="square"
                   color={COLORS.white}
-                  fillColor={'#2f2b4399'}
+                  fillColor={COLORS.sapphireBlue}
                   value={localFilter.marketUpdates}
                   onValueChange={(newValue) =>
                     onFilterKeyChange('marketUpdates', newValue)
@@ -184,7 +183,7 @@ export const BottomSheetFilter = forwardRef<
                 <CheckBox
                   type="square"
                   color={COLORS.white}
-                  fillColor={'#2f2b4399'}
+                  fillColor={COLORS.sapphireBlue}
                   value={localFilter.walletUpdates}
                   onValueChange={(newValue) =>
                     onFilterKeyChange('walletUpdates', newValue)
