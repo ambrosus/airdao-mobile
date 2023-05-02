@@ -7,6 +7,7 @@ import { RootStack, RootStackParamsList } from './stacks/RootStack';
 import { navTheme } from '@constants/navTheme';
 import { useCachePurifier } from '@hooks/useCachePurifier';
 import { NavigationProvider } from '@contexts/Navigation';
+import { StatusBar } from '@components/templates';
 
 const Navigation = () => {
   useCachePurifier();
@@ -41,6 +42,7 @@ const Navigation = () => {
     >
       {/* @ts-ignore */}
       <NavigationProvider currentRoute={currentRoute}>
+        <StatusBar />
         <RootStack />
       </NavigationProvider>
     </NavigationContainer>

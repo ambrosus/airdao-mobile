@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import {
   LearnAboutAirDAO,
@@ -57,7 +56,6 @@ export const WalletsScreen = () => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBar style="light" backgroundColor="#222222" />
         <PortfolioBalance
           USDBalance={USDBalance}
           AMBBalance={ambBalance}

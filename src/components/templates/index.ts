@@ -10,3 +10,4 @@ export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';
 export * from './TransactionDetails';
+export * from './StatusBar';
