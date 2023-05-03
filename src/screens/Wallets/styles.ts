@@ -20,5 +20,8 @@ export const styles = StyleSheet.create({
   },
   airdao: {
     marginTop: verticalScale(32)
+  },
+  floatButtonTitle: {
+    fontFamily: 'Inter_600SemiBold'
   }
 });

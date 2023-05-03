@@ -61,23 +61,7 @@ export const styles = StyleSheet.create({
     width: 25,
     alignItems: 'center'
   },
-  progressIcon: {
-    paddingLeft: 7
-  },
-  whalesTokenContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row'
-  },
-  infoContainer: {
-    flexDirection: 'column'
-  },
-  contentContainer: {
-    alignItems: 'flex-end'
-  },
-  priceProgressContainer: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flex: 1
+  floatButtonTitle: {
+    fontFamily: 'Inter_600SemiBold'
   }
 });

@@ -9,10 +9,9 @@ import {
 import { Button, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
-import { BackIcon } from '@components/svg/icons';
+import { BackIcon, PlusIcon } from '@components/svg/icons';
 import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { FloatButton } from '@components/base/FloatButton';
-import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetRef } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
@@ -24,6 +23,7 @@ import { BottomSheetLongPressAddressSelection } from '@screens/Lists/screens/Sin
 import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
+import { COLORS } from '@constants/colors';
 
 export const SingleAddressGroupScreen = () => {
   const {
@@ -162,8 +162,9 @@ export const SingleAddressGroupScreen = () => {
         }}
       />
       <FloatButton
+        titleStyle={styles.floatButtonTitle}
         title="Add Address"
-        icon={<AddIcon />}
+        icon={<PlusIcon color={COLORS.white} />}
         bottomPadding={0}
         onPress={handleAddNewAddressToGroup}
       />

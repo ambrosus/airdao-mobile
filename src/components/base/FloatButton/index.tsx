@@ -1,11 +1,12 @@
 import React, { memo } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, TextStyle, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
 
 type Props = {
   title: string;
+  titleStyle?: TextStyle;
   icon?: JSX.Element;
   onPress: () => void;
   bottomPadding?: number;
@@ -14,7 +15,7 @@ type Props = {
 const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
 
 export const FloatButton = memo(
-  ({ title, icon, onPress, bottomPadding }: Props) => {
+  ({ title, icon, onPress, bottomPadding, titleStyle }: Props) => {
     const bottomSafeArea = useSafeAreaInsets().bottom || 34;
     const bottomTabBarHeight =
       bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
@@ -28,8 +29,8 @@ export const FloatButton = memo(
           }
         ]}
       >
-        {icon}
-        <Text style={styles.bottomButtonText}>{title}</Text>
+        <View style={styles.iconPadding}>{icon}</View>
+        <Text style={[styles.bottomButtonText, titleStyle]}>{title}</Text>
       </Pressable>
     );
   }
@@ -51,5 +52,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 16,
     color: COLORS.white
+  },
+  iconPadding: {
+    paddingRight: 10.5
   }
 });

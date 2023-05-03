@@ -16,7 +16,8 @@ import {
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccount } from '@models/Explorer';
-import { WalletsNavigationProp } from '@appTypes/navigation';
+import { TabsParamsList, WalletsNavigationProp } from '@appTypes/navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -33,6 +34,8 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const [listOpened, toggleList] = useReducer((opened) => !opened, false);
   const rotationAnimation = useRef<RotationAnimationRef>(null);
   const navigation = useNavigation<WalletsNavigationProp>();
+  const navigationToExplore =
+    useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   const onTogglePress = () => {
     rotationAnimation.current?.rotate();
@@ -65,7 +68,12 @@ export function WalletList(props: WalletListProps): JSX.Element {
           {emptyText}
         </Text>
         <Spacer value={verticalScale(16)} />
-        <Button style={styles.addBtn}>
+        <Button
+          onPress={() =>
+            navigationToExplore.navigate('Explore', { screen: 'ExploreScreen' })
+          }
+          style={styles.addBtn}
+        >
           <Row alignItems="center">
             <PlusIcon color={COLORS.white} scale={0.86} />
             <Spacer horizontal value={scale(10.5)} />

@@ -83,6 +83,7 @@ export const WalletsScreen = () => {
         handleOnboardingStepChange={handleOnboardingStepChange}
       >
         <FloatButton
+          titleStyle={styles.floatButtonTitle}
           title="Add a Address"
           onPress={handleOnFloatButtonPress}
           icon={<AddIcon />}

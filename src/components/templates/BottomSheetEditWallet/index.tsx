@@ -63,7 +63,7 @@ export const BottomSheetEditWallet = forwardRef<
   return (
     <BottomSheetWithHeader
       isToolTipVisible={isSaveToolTipVisible}
-      isNestedSheet={true}
+      isNestedSheet={false}
       title="Edit Address"
       ref={localRef}
       height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}

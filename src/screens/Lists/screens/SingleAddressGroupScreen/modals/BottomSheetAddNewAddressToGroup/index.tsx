@@ -5,11 +5,16 @@ import React, {
   useCallback,
   useState
 } from 'react';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Input, Spacer, Text } from '@components/base';
+import {
+  BottomSheet,
+  BottomSheetRef,
+  Header,
+  InputWithIcon
+} from '@components/composite';
+import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
-import { BackIcon, CloseIcon } from '@components/svg/icons';
+import { BackIcon, CloseIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
@@ -103,14 +108,17 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             )
           }
         />
-        <Input
-          type="text"
-          placeholder="Search watchlist"
-          placeholderTextColor="#2f2b4399"
-          style={styles.bottomSheetInput}
-          value=""
-          onChangeValue={() => null}
-        />
+        <View style={styles.bottomSheetInput}>
+          <InputWithIcon
+            iconLeft={<SearchIcon color="#2f2b4399" />}
+            type="text"
+            style={{ width: '65%', height: 50 }}
+            placeholder="Search watchlist"
+            placeholderTextColor="#2f2b4399"
+            value=""
+            onChangeValue={() => null}
+          />
+        </View>
         <FlatList
           contentContainerStyle={{
             paddingBottom: 150
