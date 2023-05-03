@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,14 +9,14 @@ export const styles = StyleSheet.create({
     paddingTop: 132
   },
   createButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    marginHorizontal: 16,
-    marginVertical: 12,
+    paddingLeft: scale(18),
+    paddingRight: scale(16),
+    paddingVertical: verticalScale(8),
+    marginTop: verticalScale(16),
     borderRadius: 25,
     backgroundColor: COLORS.deepBlue
   },
   text: {
-    paddingLeft: 10
+    marginLeft: scale(10)
   }
 });

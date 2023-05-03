@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: 32,
-    paddingHorizontal: 19,
+    paddingTop: verticalScale(32),
+    paddingHorizontal: scale(19),
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center'
   },
-  itemInfo: {},
   itemSubInfo: {
     flexDirection: 'row',
     alignItems: 'center'
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     fontSize: 17
   },
   walletsCount: {
-    paddingRight: 14,
+    paddingRight: scale(14),
     fontFamily: 'Inter_400Regular',
     fontSize: 16
   },
@@ -31,6 +31,6 @@ export const styles = StyleSheet.create({
   },
   optionButton: {
     alignItems: 'center',
-    width: 40
+    width: moderateScale(40)
   }
 });

@@ -64,7 +64,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
     <>
       <Button type="base" onPress={handleItemPress}>
         <View style={styles.container}>
-          <View style={styles.itemInfo}>
+          <View>
             <Text style={styles.itemTitle}>{group.name}</Text>
             <Spacer value={4} />
             <View style={styles.itemSubInfo}>

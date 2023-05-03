@@ -7,6 +7,7 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { useLists } from '@contexts/ListsContext';
 import { styles } from '@screens/Lists/components/ListsGroups/styles';
 import { EmptyListsIcon } from '@components/svg/icons/Empty';
+import { verticalScale } from '@utils/scaling';
 
 export const EmptyListsOfGroups = () => {
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
@@ -18,7 +19,7 @@ export const EmptyListsOfGroups = () => {
   return (
     <View style={styles.container}>
       <EmptyListsIcon />
-      <Spacer value={16} />
+      <Spacer value={verticalScale(16)} />
       <Text
         fontFamily="Inter_400Regular"
         fontSize={15}
@@ -26,7 +27,6 @@ export const EmptyListsOfGroups = () => {
       >
         Nothing to see here...yet
       </Text>
-      <Spacer value={12} />
       <Button
         onPress={handleOnOpenCreateNewList}
         type="base"
