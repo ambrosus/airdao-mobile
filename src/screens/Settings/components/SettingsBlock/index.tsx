@@ -47,7 +47,7 @@ export const SettingsBlock = () => {
 
   return (
     <View>
-      {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={82} />}
+      {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={42} />}
       {Platform.OS === 'ios' ? (
         <>
           <Button onPress={handleOnSelectBaseCurrency} type="base">
@@ -66,7 +66,7 @@ export const SettingsBlock = () => {
               </Row>
             </Row>
           </Button>
-          <Spacer value={44} />
+          <Spacer value={20} />
         </>
       ) : (
         <Button onPress={handleOnSelectBaseCurrency} type="base">
@@ -104,7 +104,7 @@ export const SettingsBlock = () => {
               </Row>
             </Row>
           </Button>
-          <Spacer value={44} />
+          <Spacer value={20} />
         </>
       ) : (
         <Button onPress={handleOnOpenLanguageModal} type="base">
@@ -139,7 +139,7 @@ export const SettingsBlock = () => {
           </Row>
         </Row>
       </Button>
-      <Spacer value={42} />
+      <Spacer value={14} />
       <BottomSheetNotificationSettings ref={notificationSettingsRef} />
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}
