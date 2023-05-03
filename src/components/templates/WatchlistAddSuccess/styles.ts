@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(18)
   },
   content: {
-    paddingHorizontal: scale(28),
+    paddingHorizontal: scale(46),
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -34,6 +34,6 @@ export const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     top: verticalScale(22),
-    left: scale(22)
+    left: scale(24)
   }
 });
