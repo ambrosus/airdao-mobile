@@ -7,7 +7,7 @@ import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
-import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetRenameAddress/styles';
+import { styles } from '@screens/List/modals/BottomSheetRenameAddress/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

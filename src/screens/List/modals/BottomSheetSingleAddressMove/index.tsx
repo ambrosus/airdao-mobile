@@ -13,7 +13,7 @@ import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { FlatList, SafeAreaView } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
+import { ListOfAddressesGroupItem } from '@screens/List/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
 import { ExplorerAccount } from '@models/Explorer';
 
 type Props = {

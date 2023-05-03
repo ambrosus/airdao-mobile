@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove/styles';
+import { styles } from '@screens/List/modals/BottomSheetSingleAddressMove/styles';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -32,7 +32,6 @@ export const ListOfAddressesGroupItem = ({
     item.id
   ]);
 
-  // console.log(isAddressAlreadyInList);
   return (
     <View style={styles.container}>
       <View style={styles.itemInfo}>

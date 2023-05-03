@@ -5,8 +5,6 @@ import { Button, Text } from '@components/base';
 import { OptionsIcon } from '@components/svg/icons/Options';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
@@ -14,6 +12,7 @@ import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSh
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Lists/components/BottomSheetConfirmRemoveGroup';
+import { ListsNavigationProp } from '@appTypes/navigation';
 
 type Props = {
   group: AccountList;
@@ -25,8 +24,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+  const navigation = useNavigation<ListsNavigationProp>();
 
   const handleOpenSingleGroupOption = useCallback(() => {
     groupItemActionRef.current?.show();
