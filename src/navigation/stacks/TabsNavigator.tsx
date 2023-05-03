@@ -17,7 +17,11 @@ export const TabsNavigator = () => {
       }}
       tabBar={(props) => <TabBar {...props} />}
     >
-      <BottomTabs.Screen name="Wallets" component={WalletsStack} />
+      <BottomTabs.Screen
+        name="Wallets"
+        component={WalletsStack}
+        options={{ tabBarLabel: 'Home' }}
+      />
       <BottomTabs.Screen name="Explore" component={ExploreStack} />
       <BottomTabs.Screen name="Lists" component={ListsStack} />
       <BottomTabs.Screen name="Settings" component={SettingsStack} />
