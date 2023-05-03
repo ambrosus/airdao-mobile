@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
-  BottomSheetSwiperIcon,
   CheckmarkCircleIcon,
   EditIcon,
   PlusIcon,
@@ -13,8 +11,10 @@ import {
   StarIcon
 } from '@components/svg/icons';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { ExplorerAccountView, TransactionDetails } from '@components/templates';
-import { AccountTransactions } from '@components/templates/ExplorerAccount/ExplorerAccount.Transactions';
+import {
+  ExplorerAccountView,
+  AccountTransactions
+} from '@components/templates';
 import {
   useExplorerInfo,
   usePersonalList,
@@ -23,7 +23,6 @@ import {
   useWatchlist
 } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
-import { Transaction } from '@models/Transaction';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 import { Toast, ToastType } from '@components/modular';
@@ -50,9 +49,6 @@ export const AddressDetails = (): JSX.Element => {
   const { watchlist, addToWatchlist, removeFromWatchlist } = useWatchlist();
   const { personalList, addToPersonalList, removeFromPersonalList } =
     usePersonalList();
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
-  const transactionDetailsModal = useRef<BottomSheetRef>(null);
   const editModal = useRef<BottomSheetRef>(null);
 
   const walletInWatchlist = watchlist.find((w) => w.address === address);
@@ -86,11 +82,6 @@ export const AddressDetails = (): JSX.Element => {
     if (hasNextPage) {
       fetchNextPage();
     }
-  };
-
-  const showTransactionDetails = (transaction: Transaction) => {
-    transactionDetailsModal.current?.show();
-    setSelectedTransaction(transaction);
   };
 
   const showEditModal = () => {
@@ -196,20 +187,7 @@ export const AddressDetails = (): JSX.Element => {
         transactions={transactions}
         onEndReached={loadMoreTransactions}
         loading={transactionsLoading && !!address}
-        onPressTransaction={showTransactionDetails}
       />
-      <BottomSheet ref={transactionDetailsModal} height={verticalScale(556.58)}>
-        <View style={styles.transactionDetailsTop}>
-          <BottomSheetSwiperIcon />
-          <Spacer value={verticalScale(26.46)} />
-          <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            Transaction Details
-          </Text>
-        </View>
-        <View style={styles.transactionDetails}>
-          <TransactionDetails transaction={selectedTransaction!} />
-        </View>
-      </BottomSheet>
       {finalAccount && (
         <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
       )}

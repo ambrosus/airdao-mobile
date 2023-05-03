@@ -11,8 +11,7 @@ import {
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { useNavigation } from '@react-navigation/native';
 import { WatchlistAddSuccess } from '@components/templates/WatchlistAddSuccess';
-import { ExplorerAccountView } from '../ExplorerAccount';
-import { AccountTransactions } from '../ExplorerAccount/ExplorerAccount.Transactions';
+import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import {
   Button,
@@ -46,8 +45,8 @@ import { useAllAddresses } from '@contexts';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { FloatButton } from '@components/base/FloatButton';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
