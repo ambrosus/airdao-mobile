@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Platform, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';
@@ -227,7 +227,11 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       <BottomSheetWithHeader
         isNestedSheet
         ref={addToListModal}
-        height={fullscreenModalHeight}
+        height={
+          Platform.OS === 'ios'
+            ? fullscreenModalHeight
+            : Dimensions.get('screen').height
+        }
         title="Add to lists"
         actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
         onActionPress={Platform.OS === 'ios' ? saveNewLists : undefined}

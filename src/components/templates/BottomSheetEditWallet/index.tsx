@@ -14,7 +14,7 @@ import { ExplorerAccount } from '@models/Explorer';
 import { useAllAddressesReducer } from '@contexts';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { FloatButton } from '@components/base/FloatButton';
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -66,7 +66,7 @@ export const BottomSheetEditWallet = forwardRef<
       isNestedSheet={true}
       title="Edit Address"
       ref={localRef}
-      fullscreen
+      height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
       avoidKeyboard={false}
       actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
       onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}

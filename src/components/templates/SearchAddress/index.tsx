@@ -4,7 +4,9 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
   View,
-  useWindowDimensions
+  useWindowDimensions,
+  Platform,
+  Dimensions
 } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { useNavigation } from '@react-navigation/native';
@@ -356,7 +358,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               onPress={trackAddress}
             />
           </OnboardingFloatButton>
-          <BottomSheetWithHeader ref={successModal} fullscreen title="">
+          <BottomSheetWithHeader
+            ref={successModal}
+            height={
+              Platform.OS === 'android' ? Dimensions.get('screen').height : 0
+            }
+            title=""
+            fullscreen={Platform.OS === 'ios' && true}
+          >
             {ambToken && account && (
               <WatchlistAddSuccess
                 onDone={hideSuccessModal}

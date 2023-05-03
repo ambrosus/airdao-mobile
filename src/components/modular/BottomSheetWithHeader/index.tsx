@@ -6,7 +6,7 @@ import {
   Header
 } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
-import { Button, Text } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
 import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
@@ -15,6 +15,8 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { COLORS } from '@constants/colors';
+import { Platform } from 'react-native';
+import { scale } from '@utils/scaling';
 
 interface BottomSheetWithHeaderProps extends BottomSheetProps {
   title: string;
@@ -101,6 +103,7 @@ export const BottomSheetWithHeader = forwardRef<
   return (
     <BottomSheet ref={localRef} {...bottomSheetProps}>
       <>
+        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
           style={styles.header}
           backIconVisible={false}
@@ -110,6 +113,7 @@ export const BottomSheetWithHeader = forwardRef<
             </Button>
           }
           contentRight={renderContentRight()}
+          titleStyle={styles.headerTitle}
           title={title}
         />
         {children}

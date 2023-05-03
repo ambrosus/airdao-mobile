@@ -2,12 +2,13 @@ import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { FlatList, Platform, View } from 'react-native';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 import { FloatButton } from '@components/base/FloatButton';
+import { scale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -68,9 +69,13 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
     };
 
     return (
-      <BottomSheet ref={localRef} height={852}>
-        {Platform.OS === 'android' && <Spacer value={27} />}
+      <BottomSheet
+        ref={localRef}
+        height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
+      >
+        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
+          titleStyle={styles.headerTitle}
           title="Select language"
           titlePosition="center"
           backIconVisible={false}

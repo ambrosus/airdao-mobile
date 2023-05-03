@@ -20,6 +20,11 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
   },
+  headerTitle: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 20,
+    color: COLORS.smokyBlack
+  },
   itemContainer: {
     paddingHorizontal: 16,
     flexDirection: 'row',

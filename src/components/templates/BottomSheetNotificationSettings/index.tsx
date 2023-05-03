@@ -1,5 +1,11 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Platform, ScrollView, useWindowDimensions, View } from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  useWindowDimensions,
+  View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Switch } from 'react-native-gesture-handler';
 import {
@@ -82,8 +88,18 @@ export const BottomSheetNotificationSettings = forwardRef<
   };
 
   return (
-    <BottomSheet height={WINDOW_HEIGHT - topInset} ref={localRef} {...props}>
+    <BottomSheet
+      height={
+        Platform.OS === 'ios'
+          ? WINDOW_HEIGHT - topInset
+          : Dimensions.get('screen').height
+      }
+      ref={localRef}
+      {...props}
+    >
+      {Platform.OS === 'android' && <Spacer value={scale(57)} />}
       <Header
+        titleStyle={styles.headerTitle}
         title="Notification settings"
         titlePosition="center"
         backIconVisible={false}

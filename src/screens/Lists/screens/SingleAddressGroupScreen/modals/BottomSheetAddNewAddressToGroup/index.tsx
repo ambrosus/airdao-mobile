@@ -11,10 +11,14 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
 import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { FlatList, Platform, View } from 'react-native';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { AddressItemWithCheckbox } from './components/AddressItemWithCheckbox';
 import { useWatchlist } from '@hooks';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabsParamsList } from '@appTypes';
+import { scale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -31,6 +35,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
     string[]
   >([]);
+
+  const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   const handleOnAddNewAddress = useCallback(() => {
     const selectedAddressesForGroup = watchlist.filter((item) =>
@@ -62,8 +68,13 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   return (
     <>
-      <BottomSheet ref={localRef} height={800}>
+      <BottomSheet
+        ref={localRef}
+        height={Platform.OS === 'ios' ? 800 : Dimensions.get('screen').height}
+      >
+        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
+          titleStyle={styles.headerTitle}
           title="Add from watchlists"
           titlePosition="center"
           style={styles.header}
@@ -129,7 +140,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 ? styles.bottomAddToListButton
                 : styles.bottomTrackNewAddressButton
             }
-            onPress={() => null}
+            onPress={() =>
+              navigation.navigate('Explore', { screen: 'ExploreScreen' })
+            }
           >
             <Text
               style={

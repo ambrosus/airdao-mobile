@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, View } from 'react-native';
 import { BottomSheet, CheckBox, Header } from '@components/composite';
 import {
   BottomSheetProps,
@@ -68,8 +68,9 @@ export const BottomSheetWalletSort = forwardRef<
     <BottomSheet
       ref={localRef}
       {...bottomSheetProps}
-      fullscreen={Platform.OS === 'android'}
+      height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
     >
+      {Platform.OS === 'android' && <Spacer value={scale(57)} />}
       <View>
         <Header
           style={styles.header}
@@ -94,6 +95,7 @@ export const BottomSheetWalletSort = forwardRef<
             )
           }
           title="Sort By"
+          titleStyle={styles.headerTitle}
         />
         <Spacer value={verticalScale(32)} />
         <View style={styles.container}>{SORT_ROWS.map(renderRow)}</View>
@@ -119,6 +121,11 @@ const styles = StyleSheet.create({
     shadowColor: 'transparent',
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
+  },
+  headerTitle: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 16,
+    color: COLORS.smokyBlack
   },
   item: {
     marginBottom: verticalScale(41.5)

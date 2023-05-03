@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useRef, useState } from 'react';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, Platform } from 'react-native';
 import {
   BottomSheet,
   CheckBox,
@@ -53,6 +53,7 @@ export const BottomSheetFilter = forwardRef<
       <View>
         <Header
           title="Filter By"
+          titleStyle={styles.headerTitle}
           titlePosition="center"
           backIconVisible={false}
           style={styles.header}
@@ -62,15 +63,17 @@ export const BottomSheetFilter = forwardRef<
             </Button>
           }
           contentRight={
-            <Button onPress={() => localRef.current?.dismiss()}>
-              <Text
-                title
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.jungleGreen}
-              >
-                Done
-              </Text>
-            </Button>
+            Platform.OS === 'ios' && (
+              <Button onPress={() => localRef.current?.dismiss()}>
+                <Text
+                  title
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.jungleGreen}
+                >
+                  Done
+                </Text>
+              </Button>
+            )
           }
         />
         <View style={styles.container}>
@@ -97,8 +100,7 @@ export const BottomSheetFilter = forwardRef<
               </Text>
               {localFilter.priceAlerts && (
                 <CheckBox
-                  type="square"
-                  color={COLORS.white}
+                  type="circular"
                   fillColor={COLORS.sapphireBlue}
                   value={localFilter.priceAlerts}
                   onValueChange={(newValue) =>
@@ -127,8 +129,7 @@ export const BottomSheetFilter = forwardRef<
               </Text>
               {localFilter.transactionAlerts && (
                 <CheckBox
-                  type="square"
-                  color={COLORS.white}
+                  type="circular"
                   fillColor={COLORS.sapphireBlue}
                   value={localFilter.transactionAlerts}
                   onValueChange={(newValue) =>
@@ -154,8 +155,7 @@ export const BottomSheetFilter = forwardRef<
               </Text>
               {localFilter.marketUpdates && (
                 <CheckBox
-                  type="square"
-                  color={COLORS.white}
+                  type="circular"
                   fillColor={COLORS.sapphireBlue}
                   value={localFilter.marketUpdates}
                   onValueChange={(newValue) =>
@@ -181,8 +181,7 @@ export const BottomSheetFilter = forwardRef<
               </Text>
               {localFilter.walletUpdates && (
                 <CheckBox
-                  type="square"
-                  color={COLORS.white}
+                  type="circular"
                   fillColor={COLORS.sapphireBlue}
                   value={localFilter.walletUpdates}
                   onValueChange={(newValue) =>
@@ -228,5 +227,10 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(18),
     height: '100%',
     backgroundColor: '#FFFFFF'
+  },
+  headerTitle: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 20,
+    color: COLORS.smokyBlack
   }
 });

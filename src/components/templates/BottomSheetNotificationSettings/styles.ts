@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -13,6 +14,11 @@ export const styles = StyleSheet.create({
     zIndex: 1000,
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
+  },
+  headerTitle: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 20,
+    color: COLORS.smokyBlack
   },
   separator: {
     backgroundColor: '#2f2b431a',

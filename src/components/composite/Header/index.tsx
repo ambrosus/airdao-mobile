@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { BackIcon } from '@components/svg/icons';
 import { Button, Row, Text } from '@components/base';
 import { HeaderProps } from './Header.types';
@@ -15,6 +15,7 @@ export function Header(props: HeaderProps): JSX.Element {
     title,
     titlePosition = 'center',
     style = {},
+    titleStyle = {},
     onBackPress
   } = props;
   const navigation = useNavigation();
@@ -31,6 +32,7 @@ export function Header(props: HeaderProps): JSX.Element {
     if (typeof title === 'string') {
       return (
         <Text
+          style={Platform.OS === 'android' && titleStyle}
           fontFamily="Inter_600SemiBold"
           fontSize={15}
           color={COLORS.smokyBlack}
