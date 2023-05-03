@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
   Button,
@@ -23,10 +23,14 @@ import { verticalScale } from '@utils/scaling';
 import { FilterIcon } from '@components/svg/icons';
 import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerSort } from './Explore.types';
-import { ExploreTabParamsList } from '@appTypes/navigation';
+import {
+  ExploreTabNavigationProp,
+  ExploreTabParamsList
+} from '@appTypes/navigation';
 import { styles } from './styles';
 
 export const ExploreScreen = () => {
+  const navigation = useNavigation<ExploreTabNavigationProp>();
   const { data: infoData } = useExplorerInfo();
   const [sortBy, setSortBy] = useState(ExplorerSort.Balance);
   const {
@@ -69,11 +73,16 @@ export const ExploreScreen = () => {
 
   const renderAccount = (args: ListRenderItemInfo<ExplorerAccount>) => {
     const { item } = args;
+    const navigateToWallet = () => {
+      navigation.navigate('Address', { address: item.address });
+    };
     return (
-      <ExplorerWalletItem
-        item={item}
-        totalSupply={infoData?.totalSupply || 1}
-      />
+      <Button onPress={navigateToWallet}>
+        <ExplorerWalletItem
+          item={item}
+          totalSupply={infoData?.totalSupply || 1}
+        />
+      </Button>
     );
   };
 
