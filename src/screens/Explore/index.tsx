@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, ListRenderItemInfo } from 'react-native';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -79,10 +79,7 @@ export const ExploreScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: verticalScale(12) }}>
-      <KeyboardDismissingView
-        style={{ flex: 1 }}
-        disabled={!searchAddressContentVisible}
-      >
+      <View style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
           initialValue={addressFromParams}
@@ -139,7 +136,7 @@ export const ExploreScreen = () => {
             )}
           </Animated.View>
         )}
-      </KeyboardDismissingView>
+      </View>
     </SafeAreaView>
   );
 };

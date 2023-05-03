@@ -26,5 +26,6 @@ export const COLORS = {
   transparentWhite: '#ffffffb3',
   veryLightGrey: '#ffffff99',
   white: '#FFFFFF',
-  navyIndigo: '#162c5d'
+  navyIndigo: '#162c5d',
+  separator: '#2f2b431a'
 };

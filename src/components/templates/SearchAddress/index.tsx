@@ -103,6 +103,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
     useState<boolean>(false);
+  const [searchInputFocused, setSearchInputFocused] = useState(false);
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
@@ -122,17 +123,21 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   useEffect(() => {
     if (status === 'step-2' && withOnboarding) {
       setSearchToolTipVisible(true);
+    } else {
+      setSearchToolTipVisible(false);
     }
   }, [status, withOnboarding]);
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
+    setSearchInputFocused(true);
   };
 
   const onInputBlur = () => {
     if (!account && !loading) {
       onContentVisibilityChanged(false);
     }
+    setSearchInputFocused(false);
   };
 
   const onInputSubmit = (
@@ -240,9 +245,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setSearchToolTipVisible(false);
     navigation.goBack();
   };
+
   return (
     <>
-      <KeyboardDismissingView>
+      <KeyboardDismissingView
+        style={{
+          flex: searchInputFocused && !account ? 1 : 0
+        }}
+      >
         <Row
           alignItems="center"
           justifyContent="space-between"
