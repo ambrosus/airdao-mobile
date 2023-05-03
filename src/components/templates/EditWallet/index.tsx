@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';
@@ -23,6 +23,7 @@ import { EditWalletCheckboxToolTip } from '@components/templates/EditWallet/comp
 import { EditWalletButtonToolTip } from '@components/templates/EditWallet/components/EditWalletButtonToolTip';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
+import { FloatButton } from '@components/base/FloatButton';
 
 interface EditWalletProps {
   wallet: ExplorerAccount;
@@ -166,12 +167,37 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           Add to Lists
         </Text>
         <Spacer value={verticalScale(12)} />
-        <Button onPress={showAddToListModal}>
-          <Row alignItems="center" justifyContent="space-between">
-            <Text title fontFamily="Inter_600SemiBold">
-              Select list
-            </Text>
-            <Row alignItems="center">
+        {Platform.OS === 'ios' ? (
+          <Button onPress={showAddToListModal}>
+            <Row alignItems="center" justifyContent="space-between">
+              <Text title fontFamily="Inter_600SemiBold">
+                Select list
+              </Text>
+              <Row alignItems="center">
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={13}
+                  color="#828282"
+                >
+                  {selectedListText}
+                </Text>
+                <Spacer horizontal value={scale(12)} />
+                <ChevronRightIcon color="#828282" />
+              </Row>
+            </Row>
+          </Button>
+        ) : (
+          <Button onPress={showAddToListModal}>
+            <View
+              style={{
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }}
+            >
+              <Text title fontFamily="Inter_600SemiBold">
+                Select list
+              </Text>
+              <Spacer value={scale(10)} />
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={13}
@@ -179,11 +205,9 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
               >
                 {selectedListText}
               </Text>
-              <Spacer horizontal value={scale(12)} />
-              <ChevronRightIcon color="#828282" />
-            </Row>
-          </Row>
-        </Button>
+            </View>
+          </Button>
+        )}
         <Spacer value={verticalScale(32)} />
         <EditWalletButtonToolTip
           isActiveToolTip={status === 'step-7'}
@@ -203,16 +227,23 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       <BottomSheetWithHeader
         isNestedSheet
         ref={addToListModal}
-        height={fullscreenModalHeight}
+        height={
+          Platform.OS === 'ios'
+            ? fullscreenModalHeight
+            : Dimensions.get('screen').height
+        }
         title="Add to lists"
-        actionTitle="Save"
-        onActionPress={saveNewLists}
+        actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
+        onActionPress={Platform.OS === 'ios' ? saveNewLists : undefined}
       >
         <AddWalletToList
           wallet={wallet}
           lists={localLists}
           onPressList={onPressListItem}
         />
+        {Platform.OS === 'android' && (
+          <FloatButton bottomPadding={17} title="Save" onPress={saveNewLists} />
+        )}
       </BottomSheetWithHeader>
     </View>
   );

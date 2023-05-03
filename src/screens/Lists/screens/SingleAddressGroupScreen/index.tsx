@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  SafeAreaView,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
@@ -120,6 +126,7 @@ export const SingleAddressGroupScreen = () => {
 
   return (
     <SafeAreaView style={styles.header}>
+      {Platform.OS === 'android' && <Spacer value={30} />}
       {customHeader}
       <Spacer value={29} />
       <FlatList

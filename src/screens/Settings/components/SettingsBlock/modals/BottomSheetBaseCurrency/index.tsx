@@ -1,12 +1,15 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
+import { BackIcon } from '@components/svg/icons';
+import { FloatButton } from '@components/base/FloatButton';
+import { scale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -69,8 +72,13 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
       setModalActiveCurrency(value);
     };
     return (
-      <BottomSheet height={852} ref={localRef}>
+      <BottomSheet
+        height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
+        ref={localRef}
+      >
+        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
+          titleStyle={styles.headerTitle}
           title="Select base currency"
           titlePosition="center"
           style={styles.header}
@@ -82,28 +90,32 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
                 localRef.current?.dismiss();
               }}
             >
-              <CloseIcon />
+              {Platform.OS === 'ios' ? <CloseIcon /> : <BackIcon />}
             </Button>
           }
           contentRight={
-            <Button
-              type="base"
-              onPress={() => {
-                localRef.current?.dismiss();
-                handleCurrencySave(modalActiveCurrency);
-              }}
-            >
-              <Text
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.jungleGreen}
-                fontSize={16}
-              >
-                Save
-              </Text>
-            </Button>
+            <>
+              {Platform.OS === 'ios' && (
+                <Button
+                  type="base"
+                  onPress={() => {
+                    localRef.current?.dismiss();
+                    handleCurrencySave(modalActiveCurrency);
+                  }}
+                >
+                  <Text
+                    fontFamily="Inter_600SemiBold"
+                    color={COLORS.jungleGreen}
+                    fontSize={16}
+                  >
+                    Save
+                  </Text>
+                </Button>
+              )}
+            </>
           }
         />
-        <Spacer value={40} />
+        {Platform.OS === 'android' && <Spacer value={19} />}
         <View>
           <FlatList
             contentContainerStyle={{
@@ -122,6 +134,16 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             }}
           />
         </View>
+        {Platform.OS === 'android' && (
+          <FloatButton
+            title="Save"
+            onPress={() => {
+              localRef.current?.dismiss();
+              handleCurrencySave(modalActiveCurrency);
+            }}
+            bottomPadding={17}
+          />
+        )}
       </BottomSheet>
     );
   }

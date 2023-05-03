@@ -43,14 +43,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: COLORS.deepBlue,
     borderRadius: 1000,
-    paddingHorizontal: 109
+    justifyContent: 'center',
+    width: '90%'
   },
   bottomButtonText: {
-    justifyContent: 'center',
     fontFamily: 'Inter_500Medium',
     fontSize: 16,
     paddingVertical: 16,
-    paddingLeft: 5,
     color: COLORS.white
   }
 });

@@ -1,4 +1,4 @@
-import { Button, Row, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import React from 'react';
 import { View } from 'react-native';
 import { HelpIcon } from '@components/svg/icons/Help';
@@ -8,21 +8,24 @@ import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
 export const SettingsInfoBlock = () => {
   return (
-    <View style={styles.container}>
+    <View>
+      <Spacer value={40} />
       <Button type="base">
-        <Row style={styles.infoContainer}>
+        <Row>
           <AirDAOLogo />
           <Text style={styles.infoTextContainer}>About AirDAO</Text>
         </Row>
       </Button>
+      <Spacer value={42} />
       <Button type="base">
-        <Row style={styles.infoContainer}>
+        <Row>
           <HelpIcon />
           <Text style={styles.infoTextContainer}>Help center</Text>
         </Row>
       </Button>
+      <Spacer value={43} />
       <Button type="base">
-        <Row style={styles.infoContainer}>
+        <Row>
           <AppStoreIcon />
           <Text style={styles.infoTextContainer}>Rate us on the App Store</Text>
         </Row>
