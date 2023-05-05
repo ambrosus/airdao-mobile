@@ -8,7 +8,7 @@ import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
 export const SettingsInfoBlock = () => {
   return (
-    <View>
+    <View testID="setting-screen_settings-info-block">
       <Spacer value={40} />
       <Button type="base">
         <Row>

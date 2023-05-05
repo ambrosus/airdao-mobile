@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 16
   },
+  checkboxPadding: {
+    paddingRight: 16
+  },
   header: {
     shadowColor: 'transparent',
     borderTopLeftRadius: scale(10),

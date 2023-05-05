@@ -51,7 +51,7 @@ export const WalletsScreen = () => {
   }, [status]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} testID="wallets-screen">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}

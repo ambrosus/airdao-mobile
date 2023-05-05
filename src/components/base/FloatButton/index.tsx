@@ -21,6 +21,7 @@ export const FloatButton = memo(
       bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
     return (
       <Pressable
+        testID="Float_Button"
         onPress={onPress}
         style={[
           styles.buttonStyle,

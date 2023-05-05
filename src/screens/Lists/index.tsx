@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLists } from '@contexts/ListsContext';
 import { FloatButton } from '@components/base/FloatButton';
 import { EmptyListsOfGroups } from '@screens/Lists/components/ListsGroups';
@@ -11,6 +10,7 @@ import { ListsGroups } from '@screens/Lists/components/ListsOfAddressGroup';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { PlusIcon } from '@components/svg/icons';
 import { styles } from '@screens/Lists/styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export const ListsScreen = () => {
   const { listsOfAddressGroup, handleOnCreate, createGroupRef } = useLists(
     (v) => v
@@ -28,30 +28,28 @@ export const ListsScreen = () => {
   }, [listsOfAddressGroup]);
 
   return (
-    <>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ListsScreenHeader totalAmount={totalAmount} />
-        <Spacer value={32} />
-        <View style={styles.separateLine} />
-        {!listsOfAddressGroup.length ? (
-          <EmptyListsOfGroups />
-        ) : (
-          <>
-            <ListsGroups listsOfAddressGroup={listsOfAddressGroup} />
-            <FloatButton
-              titleStyle={styles.floatButtonTitle}
-              title="Create new list"
-              icon={<PlusIcon color={COLORS.white} />}
-              onPress={handleOnOpenCreateNewList}
-            />
-          </>
-        )}
-        <BottomSheetCreateRenameGroup
-          type="create"
-          handleOnCreateGroup={handleOnCreate}
-          ref={createGroupRef}
-        />
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
+      <ListsScreenHeader totalAmount={totalAmount} />
+      <Spacer value={32} />
+      <View style={styles.separateLine} />
+      {!listsOfAddressGroup.length ? (
+        <EmptyListsOfGroups />
+      ) : (
+        <>
+          <ListsGroups listsOfAddressGroup={listsOfAddressGroup} />
+          <FloatButton
+            titleStyle={styles.floatButtonTitle}
+            title="Create new list"
+            icon={<PlusIcon color={COLORS.white} />}
+            onPress={handleOnOpenCreateNewList}
+          />
+        </>
+      )}
+      <BottomSheetCreateRenameGroup
+        type="create"
+        handleOnCreateGroup={handleOnCreate}
+        ref={createGroupRef}
+      />
+    </SafeAreaView>
   );
 };

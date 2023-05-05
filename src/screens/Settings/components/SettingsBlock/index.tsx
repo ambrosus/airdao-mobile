@@ -46,10 +46,10 @@ export const SettingsBlock = () => {
   }, []);
 
   return (
-    <View>
+    <View testID="settings-screen_settings-block">
       {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={42} />}
       {Platform.OS === 'ios' ? (
-        <>
+        <View testID="bottom-sheet-select-base-currency">
           <Button onPress={handleOnSelectBaseCurrency} type="base">
             <Row
               style={styles.optionContainer}
@@ -67,27 +67,29 @@ export const SettingsBlock = () => {
             </Row>
           </Button>
           <Spacer value={20} />
-        </>
+        </View>
       ) : (
-        <Button onPress={handleOnSelectBaseCurrency} type="base">
-          <View
-            style={{
-              paddingBottom: 35,
-              flexDirection: 'column',
-              alignItems: 'flex-start'
-            }}
-          >
-            <Row style={styles.infoTextContainer}>
-              <CurrencyIcon />
-              <Text style={styles.optionInfoText}>Base currency</Text>
-            </Row>
-            <Spacer value={10} />
-            <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
-          </View>
-        </Button>
+        <View testID="bottom-sheet-select-base-currency">
+          <Button onPress={handleOnSelectBaseCurrency} type="base">
+            <View
+              style={{
+                paddingBottom: 35,
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }}
+            >
+              <Row style={styles.infoTextContainer}>
+                <CurrencyIcon />
+                <Text style={styles.optionInfoText}>Base currency</Text>
+              </Row>
+              <Spacer value={10} />
+              <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
+            </View>
+          </Button>
+        </View>
       )}
       {Platform.OS === 'ios' ? (
-        <>
+        <View testID="bottom-sheet-select-language">
           <Button onPress={handleOnOpenLanguageModal} type="base">
             <Row
               style={styles.optionContainer}
@@ -105,40 +107,44 @@ export const SettingsBlock = () => {
             </Row>
           </Button>
           <Spacer value={20} />
-        </>
+        </View>
       ) : (
-        <Button onPress={handleOnOpenLanguageModal} type="base">
-          <View
-            style={{
-              paddingBottom: 35,
-              flexDirection: 'column',
-              alignItems: 'flex-start'
-            }}
+        <View testID="bottom-sheet-select-language">
+          <Button onPress={handleOnOpenLanguageModal} type="base">
+            <View
+              style={{
+                paddingBottom: 35,
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }}
+            >
+              <Row style={styles.infoTextContainer}>
+                <LanguageIcon />
+                <Text style={styles.optionInfoText}>Language</Text>
+              </Row>
+              <Spacer value={10} />
+              <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
+            </View>
+          </Button>
+        </View>
+      )}
+      <View testID="bottom-sheet-notification-settings">
+        <Button onPress={handleOnOpenNotificationSettings} type="base">
+          <Row
+            style={styles.optionContainer}
+            justifyContent="space-between"
+            alignItems="center"
           >
             <Row style={styles.infoTextContainer}>
-              <LanguageIcon />
-              <Text style={styles.optionInfoText}>Language</Text>
+              <DarkNotificationIcon />
+              <Text style={styles.optionInfoText}>Notification settings</Text>
             </Row>
-            <Spacer value={10} />
-            <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
-          </View>
+            <Row style={styles.infoTextContainer} alignItems="center">
+              <RightArrowIcon />
+            </Row>
+          </Row>
         </Button>
-      )}
-      <Button onPress={handleOnOpenNotificationSettings} type="base">
-        <Row
-          style={styles.optionContainer}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Row style={styles.infoTextContainer}>
-            <DarkNotificationIcon />
-            <Text style={styles.optionInfoText}>Notification settings</Text>
-          </Row>
-          <Row style={styles.infoTextContainer} alignItems="center">
-            <RightArrowIcon />
-          </Row>
-        </Row>
-      </Button>
+      </View>
       <Spacer value={14} />
       <BottomSheetNotificationSettings ref={notificationSettingsRef} />
       <BottomSheetSelectBaseCurrency
