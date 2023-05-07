@@ -9,6 +9,7 @@ export function Row(props: RowProps): JSX.Element {
     flex,
     width,
     style = {},
+    testID,
     children
   } = props;
   const styles: ViewStyle = {
@@ -19,5 +20,9 @@ export function Row(props: RowProps): JSX.Element {
     flexDirection: 'row',
     width
   };
-  return <View style={styles}>{children}</View>;
+  return (
+    <View style={styles} testID={testID}>
+      {children}
+    </View>
+  );
 }

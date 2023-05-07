@@ -13,15 +13,6 @@
     "precommit": "npm run lint",
     "test": "jest"
   },
-  "jest": {
-    "preset": "jest-expo",
-    "transform": {
-      "\\.tsx$": "<rootDir>/node_modules/babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!victory-native)/|node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
-    ]
-  },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",

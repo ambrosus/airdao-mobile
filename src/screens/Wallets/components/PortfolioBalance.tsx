@@ -54,7 +54,10 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
+    <View
+      style={[styles.container, { paddingTop: safeAreaInsets.top }]}
+      testID="portfolio-balance"
+    >
       <WalletHeader />
       <View style={styles.content}>
         <Text fontFamily="Inter_500Medium" color={COLORS.white}>
@@ -62,7 +65,12 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
         </Text>
         <Row alignItems="center" style={styles.balance}>
           <Row flex={1}>
-            <Text color={COLORS.white} heading fontFamily="Mersad_600SemiBold">
+            <Text
+              color={COLORS.white}
+              heading
+              fontFamily="Mersad_600SemiBold"
+              testID="Portfolio_Balance_Title"
+            >
               $
               {balanceVisible
                 ? NumberUtils.formatNumber(USDBalance)
@@ -73,7 +81,11 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             </Text>
           </Row>
           {USDBalance > 0 && (
-            <Row alignItems="center" flex={1}>
+            <Row
+              alignItems="center"
+              flex={1}
+              testID="Portfolio_Balance_USDBalance"
+            >
               <Button
                 onPress={toggleBalanceVisibility}
                 type="circular"

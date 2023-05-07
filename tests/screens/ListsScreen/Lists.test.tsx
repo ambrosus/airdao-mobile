@@ -58,13 +58,13 @@ jest.mock('react-native', () => ({
   // })
 }));
 
-jest.mock('expo-unimodules', () => ({
-  NativeUnimoduleProxy: {
-    addListener: jest.fn(),
-    removeListeners: jest.fn(),
-    getModule: jest.fn()
-  }
-}));
+// jest.mock('expo-unimodules', () => ({
+//   NativeUnimoduleProxy: {
+//     addListener: jest.fn(),
+//     removeListeners: jest.fn(),
+//     getModule: jest.fn()
+//   }
+// }));
 
 jest.mock('@helpers/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]
