@@ -11,10 +11,12 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon } from '@components/svg/icons';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
-import { FlatList, SafeAreaView } from 'react-native';
+
+import { FlatList } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { ListOfAddressesGroupItem } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
 import { ExplorerAccount } from '@models/Explorer';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
