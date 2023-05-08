@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect, useMemo } from 'react';
-import { View } from 'react-native';
+import { Platform, StatusBar, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Tooltip, { TooltipStyleProps } from 'react-native-walkthrough-tooltip';
 import { OnBoardingToolTipBody } from '@components/composite';
@@ -23,6 +23,7 @@ interface OnboardingViewProps extends PropsWithChildren {
     next?: () => unknown;
     skip?: () => unknown;
   };
+  removeAndroidStatusBarHeight?: boolean; // Android only
 }
 
 export const OnboardingView = (props: OnboardingViewProps) => {
@@ -33,7 +34,8 @@ export const OnboardingView = (props: OnboardingViewProps) => {
     childrenAlwaysVisible = false,
     tooltipPlacement,
     contentStyle = {},
-    helpers = {}
+    helpers = {},
+    removeAndroidStatusBarHeight = false
   } = props;
   const { status, back, next, skip, registerHelpers } = useOnboardingStatus(
     (v) => v
@@ -93,6 +95,14 @@ export const OnboardingView = (props: OnboardingViewProps) => {
         content={content}
         placement={tooltipPlacement}
         onClose={() => null}
+        topAdjustment={
+          removeAndroidStatusBarHeight
+            ? Platform.select({
+                android: -(StatusBar.currentHeight || 0),
+                default: 0
+              })
+            : 0
+        }
       >
         <Button style={{ width: '100%' }} onPress={() => next(thisStep)}>
           <View pointerEvents="none">{children}</View>

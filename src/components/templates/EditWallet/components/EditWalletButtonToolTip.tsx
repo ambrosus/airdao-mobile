@@ -17,7 +17,6 @@ export const EditWalletButtonToolTip = (): JSX.Element => {
       thisStep={7}
       childrenAlwaysVisible
       tooltipPlacement="top"
-      contentStyle={{ minHeight: 162 }}
       helpers={{
         next: () => {
           setTimeout(() => {

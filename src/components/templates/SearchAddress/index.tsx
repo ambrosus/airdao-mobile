@@ -42,8 +42,8 @@ import { TabsNavigationProp } from '@appTypes/navigation';
 import { useAllAddresses, useOnboardingStatus } from '@contexts';
 import { FloatButton } from '@components/base/FloatButton';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import { OnboardingView } from '../OnboardingView';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -236,6 +236,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               next: setOnboardingAddress,
               back: onSearchTooltipBack
             }}
+            removeAndroidStatusBarHeight
           >
             <InputWithIcon
               ref={inputRef}
@@ -290,15 +291,20 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             type="float"
             thisStep={3}
             childrenAlwaysVisible
-            contentStyle={{ minHeight: 120 }}
             tooltipPlacement="top"
             helpers={{
               next: trackAddress
             }}
+            removeAndroidStatusBarHeight
           >
             {status === 3 ? (
               <View style={styles.trackBtn}>
-                <Text fontFamily="Inter_600SemiBold" title color={COLORS.white}>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={16}
+                  fontWeight="600"
+                  color={COLORS.white}
+                >
                   {addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
                 </Text>
               </View>

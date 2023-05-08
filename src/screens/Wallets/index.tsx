@@ -77,10 +77,10 @@ export const WalletsScreen = () => {
         type="float"
         thisStep={1}
         tooltipPlacement="top"
-        contentStyle={{ minHeight: 136 }}
         helpers={{
           next: navigateToExplore
         }}
+        removeAndroidStatusBarHeight
       >
         <Row
           alignItems="center"
