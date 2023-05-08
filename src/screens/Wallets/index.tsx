@@ -23,9 +23,7 @@ export const WalletsScreen = () => {
   const isFocused = useIsFocused();
 
   const { data: ambTokenData } = useAMBPrice();
-  const { start: startOnboarding, registerHelpers } = useOnboardingStatus(
-    (v) => v
-  );
+  const { start: startOnboarding } = useOnboardingStatus((v) => v);
   const { personalList } = usePersonalList();
   const ambBalance = personalList.reduce(
     (prev, curr) => prev + curr.ambBalance,
@@ -42,7 +40,6 @@ export const WalletsScreen = () => {
   useLayoutEffect(() => {
     if (isFocused) {
       setTimeout(() => {
-        registerHelpers({ next: navigateToExplore });
         if (!onboardinStarted.current) {
           onboardinStarted.current = true;
           startOnboarding();
@@ -81,6 +78,9 @@ export const WalletsScreen = () => {
         thisStep={1}
         tooltipPlacement="top"
         contentStyle={{ minHeight: 136 }}
+        helpers={{
+          next: navigateToExplore
+        }}
       >
         <Row
           alignItems="center"

@@ -1,10 +1,4 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import React, { ForwardedRef, forwardRef, useCallback, useState } from 'react';
 import { EditWallet } from '../EditWallet';
 import {
   BottomSheet,
@@ -44,7 +38,7 @@ export const BottomSheetEditWallet = forwardRef<
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'address') > -1
   );
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
+  const { status } = useOnboardingStatus((v) => v);
   const { createGroupRef } = useLists((v) => v);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,20 +54,14 @@ export const BottomSheetEditWallet = forwardRef<
     localRef.current?.dismiss();
   }, [localRef]);
 
-  useEffect(() => {
-    if (status === 10) {
-      // register helpers for save address tooltip
-      registerHelpers({
-        next: saveAddress,
-        back: () => {
-          setTimeout(() => {
-            createGroupRef.current?.show();
-          }, 500);
-        }
-      });
-    }
-  }, [status, createGroupRef, registerHelpers, saveAddress, dismiss]);
+  // onboarding functions
+  const onSaveAddressOnboardingBack = () => {
+    setTimeout(() => {
+      createGroupRef.current?.show();
+    }, 500);
+  };
 
+  // end of onboarding functions
   const renderContentRight = () => {
     const isToolTipVisible = status === 10;
     return (
@@ -82,6 +70,10 @@ export const BottomSheetEditWallet = forwardRef<
         childrenAlwaysVisible
         tooltipPlacement="left"
         contentStyle={{ marginTop: verticalScale(20) }}
+        helpers={{
+          next: saveAddress,
+          back: onSaveAddressOnboardingBack
+        }}
       >
         <Button onPress={saveAddress}>
           <Text color={isToolTipVisible ? COLORS.white : COLORS.jungleGreen}>

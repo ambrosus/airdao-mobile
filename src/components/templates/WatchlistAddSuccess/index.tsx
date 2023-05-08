@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
@@ -7,7 +7,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef } from '@hooks';
 import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
-import { useAllAddresses, useOnboardingStatus } from '@contexts';
+import { useAllAddresses } from '@contexts';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
@@ -28,8 +28,6 @@ export const WatchlistAddSuccess = (
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
-
   const navigation = useNavigation<WalletsNavigationProp>();
 
   // onboarding registration
@@ -43,21 +41,6 @@ export const WatchlistAddSuccess = (
     onDone();
     navigation.jumpTo('Wallets');
   };
-
-  useEffect(() => {
-    if (status === 4) {
-      registerHelpers({
-        next: showEdit,
-        back: onDone // hide WatchlistAddSuccess
-      });
-    } else if (status === 11) {
-      // TODO register helper for done
-      registerHelpers({
-        next: onDoneDuringOnboarding
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   if (!wallet)
     return (
@@ -106,6 +89,10 @@ export const WatchlistAddSuccess = (
           thisStep={4}
           childrenAlwaysVisible
           tooltipPlacement="top"
+          helpers={{
+            next: showEdit,
+            back: onDone // hide WatchlistAddSuccess
+          }}
         >
           <Button onPress={showEdit} type="circular" style={styles.editButton}>
             <Text title color="#FFFFFF" fontFamily="Inter_600SemiBold">
@@ -118,6 +105,10 @@ export const WatchlistAddSuccess = (
           thisStep={11}
           childrenAlwaysVisible
           tooltipPlacement="top"
+          helpers={{
+            next: onDoneDuringOnboarding,
+            back: showEdit
+          }}
         >
           <Button
             onPress={onDone}

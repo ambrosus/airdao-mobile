@@ -9,7 +9,7 @@ import {
   Platform,
   Dimensions
 } from 'react-native';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { WatchlistAddSuccess } from '@components/templates/WatchlistAddSuccess';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
@@ -62,7 +62,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   } = props;
   const navigation = useNavigation<TabsNavigationProp>();
   // get status of current tooltip
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
+  const { status } = useOnboardingStatus((v) => v);
 
   const { data: ambToken } = useAMBPrice();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
@@ -90,7 +90,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const successModal = useRef<BottomSheetRef>(null);
-  const isFocused = useIsFocused();
 
   // onboarding registration
   const setOnboardingAddress = () => {
@@ -99,38 +98,16 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setAddress(demoAddress);
     onContentVisibilityChanged(true);
     inputRef.current?.setText(demoAddress);
-    registerOnboardingHelpersTrack();
   };
 
   const onSearchTooltipBack = () => {
     navigation.goBack();
   };
 
-  const registerOnboardingHelpersSearch = () => {
-    registerHelpers({
-      next: setOnboardingAddress,
-      back: onSearchTooltipBack
-    });
-  };
-
-  const registerOnboardingHelpersTrack = () => {
-    registerHelpers({
-      next: trackAddress,
-      back: registerOnboardingHelpersSearch
-    });
-  };
-
   useEffect(() => {
     accountRef.current = account;
     ambTokenRef.current = ambToken;
   }, [account, ambToken]);
-
-  useEffect(() => {
-    if (withOnboarding && isFocused) {
-      if (status === 2) registerOnboardingHelpersSearch();
-      else if (status === 3) registerOnboardingHelpersTrack();
-    }
-  }, [status, withOnboarding, isFocused]);
 
   // listen to parent; especially useful for route params, dynamic links
   useEffect(() => {
@@ -255,6 +232,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             thisStep={2}
             tooltipPlacement="bottom"
             childrenAlwaysVisible={true}
+            helpers={{
+              next: setOnboardingAddress,
+              back: onSearchTooltipBack
+            }}
           >
             <InputWithIcon
               ref={inputRef}
@@ -311,6 +292,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             childrenAlwaysVisible
             contentStyle={{ minHeight: 120 }}
             tooltipPlacement="top"
+            helpers={{
+              next: trackAddress
+            }}
           >
             {status === 3 ? (
               <View style={styles.trackBtn}>
