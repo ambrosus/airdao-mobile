@@ -14,9 +14,9 @@ import {
   useLists,
   useOnboardingStatus
 } from '@contexts';
-import { Platform } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { Platform, View } from 'react-native';
+import { Button, Text } from '@components/base';
+import { verticalScale } from '@utils/scaling';
 import { CloseIcon } from '@components/svg/icons';
 import { OnboardingView } from '../OnboardingView';
 import { COLORS } from '@constants/colors';
@@ -92,7 +92,6 @@ export const BottomSheetEditWallet = forwardRef<
       {...bottomSheetProps}
     >
       <>
-        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
           style={styles.header}
           backIconVisible={false}
@@ -101,19 +100,44 @@ export const BottomSheetEditWallet = forwardRef<
               <CloseIcon />
             </Button>
           }
-          contentRight={renderContentRight()}
+          contentRight={Platform.OS === 'ios' && renderContentRight()}
           titleStyle={styles.headerTitle}
           title="Edit Address"
         />
         {wallet && (
-          <EditWallet
-            wallet={wallet}
-            name={name}
-            onNameChange={setName}
-            isPersonalAddress={isPersonalAddress}
-            onIsPersonalAddressChange={setIsPersonalAddress}
-            onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
-          />
+          <>
+            <EditWallet
+              wallet={wallet}
+              name={name}
+              onNameChange={setName}
+              isPersonalAddress={isPersonalAddress}
+              onIsPersonalAddressChange={setIsPersonalAddress}
+              onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
+            />
+            {Platform.OS === 'android' && (
+              <View
+                style={{
+                  bottom: verticalScale(85)
+                }}
+              >
+                <OnboardingView
+                  thisStep={10}
+                  childrenAlwaysVisible
+                  tooltipPlacement="top"
+                  helpers={{
+                    next: saveAddress,
+                    back: onSaveAddressOnboardingBack
+                  }}
+                >
+                  <Button style={styles.saveBtnAndroid}>
+                    <Text fontWeight="500" title color={COLORS.white}>
+                      Save
+                    </Text>
+                  </Button>
+                </OnboardingView>
+              </View>
+            )}
+          </>
         )}
       </>
     </BottomSheet>

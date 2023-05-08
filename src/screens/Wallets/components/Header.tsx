@@ -62,6 +62,7 @@ export function WalletHeader(): JSX.Element {
           childrenAlwaysVisible
           tooltipPlacement="bottom"
           helpers={{ next: openScanner }}
+          removeAndroidStatusBarHeight
         >
           <Button
             onPress={() => {
