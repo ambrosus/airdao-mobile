@@ -15,6 +15,7 @@
       "@appTypes/*": ["./src/appTypes/*"],
       "@screens/*": ["./src/screens/*"],
       "@components/*": ["./src/components/*"],
+      "@contexts/*": ["./src/contexts/*"],
       "@constants/*": ["./src/constants/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@models/*": ["./src/models/*"],

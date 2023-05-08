@@ -1,3 +1,4 @@
+import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
@@ -23,5 +24,12 @@ export const styles = StyleSheet.create({
   },
   floatButtonTitle: {
     fontFamily: 'Inter_600SemiBold'
+  },
+  addAddressBtn: {
+    backgroundColor: COLORS.deepBlue,
+    borderRadius: 1000,
+    paddingVertical: verticalScale(8),
+    paddingLeft: scale(18),
+    paddingRight: scale(16)
   }
 });

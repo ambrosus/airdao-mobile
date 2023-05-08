@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -8,8 +9,7 @@ import {
   Platform,
   Dimensions
 } from 'react-native';
-import Tooltip from 'react-native-walkthrough-tooltip';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { WatchlistAddSuccess } from '@components/templates/WatchlistAddSuccess';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
@@ -25,8 +25,7 @@ import {
 import {
   BottomSheet,
   BottomSheetRef,
-  InputWithIcon,
-  OnBoardingToolTipBody
+  InputWithIcon
 } from '@components/composite';
 import { CloseIcon, ScannerIcon, SearchIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
@@ -35,18 +34,16 @@ import {
   useExplorerInfo,
   useSearchAccount,
   useTransactionsOfAccount,
-  useWatchlist,
-  useOnboardingToolTip
+  useWatchlist
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { BottomSheetWithHeader } from '@components/modular';
 import { TabsNavigationProp } from '@appTypes/navigation';
-import { useAllAddresses } from '@contexts';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
+import { useAllAddresses, useOnboardingStatus } from '@contexts';
 import { FloatButton } from '@components/base/FloatButton';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
+import { OnboardingView } from '../OnboardingView';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -65,20 +62,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   } = props;
   const navigation = useNavigation<TabsNavigationProp>();
   // get status of current tooltip
-  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
-    (v) => v
-  );
-  const {
-    title,
-    subtitle,
-    buttonRightTitle,
-    buttonLeftTitle,
-    isButtonLeftVisible
-  } = useOnboardingToolTip(status);
+  const { status, registerHelpers } = useOnboardingStatus((v) => v);
+
   const { data: ambToken } = useAMBPrice();
-  const [searchTooltipVisible, setSearchToolTipVisible] = useState(
-    withOnboarding && status === 'step-2'
-  );
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
@@ -94,20 +80,57 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
+  const accountRef = useRef(account);
+  const ambTokenRef = useRef(ambToken);
   const { watchlist, addToWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
-
-  const [isEditToolTipVisible, setIsEditToolTipVisible] =
-    useState<boolean>(false);
-
-  const [isDoneToolTipVisible, setIsDoneToolTipVisible] =
-    useState<boolean>(false);
   const [searchInputFocused, setSearchInputFocused] = useState(false);
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const successModal = useRef<BottomSheetRef>(null);
+  const isFocused = useIsFocused();
+
+  // onboarding registration
+  const setOnboardingAddress = () => {
+    inputRef.current?.setText(demoAddress);
+    initialMount.current = false;
+    setAddress(demoAddress);
+    onContentVisibilityChanged(true);
+    inputRef.current?.setText(demoAddress);
+    registerOnboardingHelpersTrack();
+  };
+
+  const onSearchTooltipBack = () => {
+    navigation.goBack();
+  };
+
+  const registerOnboardingHelpersSearch = () => {
+    registerHelpers({
+      next: setOnboardingAddress,
+      back: onSearchTooltipBack
+    });
+  };
+
+  const registerOnboardingHelpersTrack = () => {
+    registerHelpers({
+      next: trackAddress,
+      back: registerOnboardingHelpersSearch
+    });
+  };
+
+  useEffect(() => {
+    accountRef.current = account;
+    ambTokenRef.current = ambToken;
+  }, [account, ambToken]);
+
+  useEffect(() => {
+    if (withOnboarding && isFocused) {
+      if (status === 2) registerOnboardingHelpersSearch();
+      else if (status === 3) registerOnboardingHelpersTrack();
+    }
+  }, [status, withOnboarding, isFocused]);
 
   // listen to parent; especially useful for route params, dynamic links
   useEffect(() => {
@@ -119,13 +142,25 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   }, [initialValue, onContentVisibilityChanged]);
 
-  useEffect(() => {
-    if (status === 'step-2' && withOnboarding) {
-      setSearchToolTipVisible(true);
-    } else {
-      setSearchToolTipVisible(false);
+  const trackAddress = async () => {
+    if (accountRef.current) {
+      if (
+        !withOnboarding &&
+        watchlist.indexOfItem(accountRef.current, 'address') > -1
+      ) {
+        navigation.jumpTo('Wallets');
+        return;
+      }
+      const finalAccount =
+        allAdresses.find((a) => a.address === accountRef.current?.address) ||
+        accountRef.current;
+      accountRef.current.isOnWatchlist = true;
+      if (ambTokenRef.current) {
+        addToWatchlist(finalAccount);
+        showSuccessModal();
+      }
     }
-  }, [status, withOnboarding]);
+  };
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
@@ -154,8 +189,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const clearInput = () => {
     inputRef.current?.clear();
+    onContentVisibilityChanged(address === '');
     setAddress('');
-    onContentVisibilityChanged(false);
   };
 
   const showScanner = () => {
@@ -188,23 +223,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   };
 
-  const trackAddress = async () => {
-    if (account) {
-      if (watchlist.indexOfItem(account, 'address') > -1) {
-        // TODO navigate to watchlist
-        navigation.jumpTo('Wallets');
-        return;
-      }
-      const finalAccount =
-        allAdresses.find((a) => a.address === account.address) || account;
-      account.isOnWatchlist = true;
-      if (ambToken) {
-        addToWatchlist(finalAccount);
-        showSuccessModal();
-      }
-    }
-  };
-
   const hideSuccessModal = () => {
     successModal.current?.dismiss();
   };
@@ -215,35 +233,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }, 300);
   };
 
-  const setOnboardingAddress = () => {
-    inputRef.current?.setText(demoAddress);
-    initialMount.current = false;
-    setAddress(demoAddress);
-    onContentVisibilityChanged(true);
-    setSearchToolTipVisible(false);
-    inputRef.current?.setText(demoAddress);
-    handleStepChange('step-3');
-  };
   const addressInWatchlist = useMemo(() => {
     const idx = watchlist.findIndex((w) => w.address === address);
     if (idx > -1) return watchlist[idx];
     return null;
   }, [watchlist, address]);
-
-  const handleOnboardingStepChange = (type: 'back' | 'next') => {
-    handleStepChange(type === 'back' ? 'step-2' : 'step-4');
-    if (type !== 'back') trackAddress();
-  };
-
-  const handleSuccessModalClose = () => {
-    successModal.current?.dismiss();
-  };
-
-  const onSearchTooltipBack = () => {
-    handleStepChange('step-1');
-    setSearchToolTipVisible(false);
-    navigation.goBack();
-  };
 
   return (
     <>
@@ -257,52 +251,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           justifyContent="space-between"
           style={styles.top}
         >
-          {searchTooltipVisible ? (
-            <View>
-              <Tooltip
-                arrowSize={{ width: 16, height: 8 }}
-                backgroundColor="rgba(0,0,0,0.5)"
-                isVisible={searchTooltipVisible}
-                content={
-                  <OnBoardingToolTipBody
-                    handleButtonClose={handleSkipTutorial}
-                    title={title}
-                    buttonRightTitle={buttonRightTitle}
-                    subtitle={subtitle}
-                    buttonLeftTitle={buttonLeftTitle}
-                    handleButtonLeftPress={onSearchTooltipBack}
-                    handleButtonRightPress={handleSkipTutorial}
-                    isButtonLeftVisible={isButtonLeftVisible}
-                  />
-                }
-                placement="bottom"
-                onClose={() => null}
-              >
-                <Button
-                  onPress={setOnboardingAddress}
-                  style={{ width: '100%' }}
-                >
-                  <InputWithIcon
-                    ref={inputRef}
-                    style={styles.input}
-                    editable={false}
-                    onPressIn={setOnboardingAddress}
-                    iconLeft={<SearchIcon color="#2f2b4399" />}
-                    iconRight={
-                      <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                        <CloseIcon color="#2f2b4399" scale={0.75} />
-                      </Button>
-                    }
-                    placeholder={demoAddress}
-                    returnKeyType="search"
-                    onFocus={onInputFocused}
-                    onBlur={onInputBlur}
-                    onSubmitEditing={onInputSubmit}
-                  />
-                </Button>
-              </Tooltip>
-            </View>
-          ) : (
+          <OnboardingView
+            thisStep={2}
+            tooltipPlacement="bottom"
+            childrenAlwaysVisible={true}
+          >
             <InputWithIcon
               ref={inputRef}
               style={styles.input}
@@ -318,7 +271,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               onBlur={onInputBlur}
               onSubmitEditing={onInputSubmit}
             />
-          )}
+          </OnboardingView>
           <Spacer value={scale(7.5)} horizontal />
           <Button onPress={showScanner} type="circular" style={styles.scanner}>
             <ScannerIcon color={COLORS.electricBlue} />
@@ -352,21 +305,27 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
           />
-          <OnboardingFloatButton
-            isToolTipVisible={status === 'step-3'}
-            status={status}
-            handleOnboardingStepChange={(nextStep) => {
-              handleOnboardingStepChange(nextStep);
-              setTimeout(() => setIsEditToolTipVisible(true), 1500);
-            }}
-            onboardingButtonTitle="Track Address"
+          <OnboardingView
+            type="float"
+            thisStep={3}
+            childrenAlwaysVisible
+            contentStyle={{ minHeight: 120 }}
+            tooltipPlacement="top"
           >
-            <FloatButton
-              title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
-              icon={<></>}
-              onPress={trackAddress}
-            />
-          </OnboardingFloatButton>
+            {status === 3 ? (
+              <View style={styles.trackBtn}>
+                <Text fontFamily="Inter_600SemiBold" title color={COLORS.white}>
+                  {addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
+                </Text>
+              </View>
+            ) : (
+              <FloatButton
+                title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}
+                icon={<></>}
+                onPress={trackAddress}
+              />
+            )}
+          </OnboardingView>
           <BottomSheetWithHeader
             ref={successModal}
             height={
@@ -379,12 +338,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               <WatchlistAddSuccess
                 onDone={hideSuccessModal}
                 address={address}
-                status={status}
-                handleSuccessModalClose={handleSuccessModalClose}
-                isEditToolTipVisible={isEditToolTipVisible}
-                setIsEditToolTipVisible={setIsEditToolTipVisible}
-                isDoneToolTipVisible={isDoneToolTipVisible}
-                setIsDoneToolTipVisible={setIsDoneToolTipVisible}
               />
             )}
           </BottomSheetWithHeader>

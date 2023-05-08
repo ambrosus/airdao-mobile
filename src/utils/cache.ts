@@ -7,7 +7,8 @@ export enum CacheKey {
   Watchlist = 'watchlist',
   AddressLists = 'address_lists',
   PersonalList = 'personal_list',
-  AllAddresses = 'all_addresses'
+  AllAddresses = 'all_addresses',
+  Onboarding = 'onboarding'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
@@ -26,6 +27,11 @@ const setItem = async (key: CacheKey, item: any): Promise<void> => {
   await SecureStore.setItemAsync(key, JSON.stringify(item));
 };
 
+/**
+ *
+ * @param key
+ * @returns parsed value or null
+ */
 const getItem = async (key: CacheKey): Promise<unknown | null> => {
   const item = await SecureStore.getItemAsync(key);
   if (item) return JSON.parse(item);

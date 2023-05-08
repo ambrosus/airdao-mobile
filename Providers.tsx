@@ -3,8 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListsContextProvider } from '@contexts/ListsContext';
-import { AllAddressesProvider } from '@contexts';
-import { OnboardingContextProvider } from '@contexts/OnBoardingUserContext';
+import { AllAddressesProvider, OnboardingContextProvider } from '@contexts';
 
 const queryClient = new QueryClient();
 
