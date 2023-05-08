@@ -110,8 +110,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
               >
                 <Input
-                  ref={nameInput}
                   testID="BottomSheetCreateRename_Input"
+                  ref={nameInput}
                   value={localGroupName}
                   onChangeValue={setLocalGroupName}
                   type="text"

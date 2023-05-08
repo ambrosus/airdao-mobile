@@ -1,4 +1,5 @@
 import React, { ForwardedRef, forwardRef, useCallback, useState } from 'react';
+import { Platform, View } from 'react-native';
 import { EditWallet } from '../EditWallet';
 import {
   BottomSheet,
@@ -6,6 +7,7 @@ import {
   BottomSheetRef,
   Header
 } from '@components/composite';
+import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
@@ -14,8 +16,6 @@ import {
   useLists,
   useOnboardingStatus
 } from '@contexts';
-import { Platform, View } from 'react-native';
-import { Button, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { CloseIcon } from '@components/svg/icons';
 import { OnboardingView } from '../OnboardingView';
@@ -129,7 +129,11 @@ export const BottomSheetEditWallet = forwardRef<
                     back: onSaveAddressOnboardingBack
                   }}
                 >
-                  <Button style={styles.saveBtnAndroid}>
+                  <Button
+                    style={styles.saveBtnAndroid}
+                    testID="BottomSheet_Edit_Wallet_FloatButton"
+                    onPress={saveAddress}
+                  >
                     <Text fontWeight="500" title color={COLORS.white}>
                       Save
                     </Text>

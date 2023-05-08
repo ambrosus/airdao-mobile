@@ -24,8 +24,14 @@ export const BottomSheetWithHeader = forwardRef<
   BottomSheetRef,
   BottomSheetWithHeaderProps
 >((props, ref) => {
-  const { title, actionTitle, onActionPress, children, ...bottomSheetProps } =
-    props;
+  const {
+    title,
+    actionTitle,
+    onActionPress,
+    children,
+    actionButtonTestID,
+    ...bottomSheetProps
+  } = props;
 
   const localRef = useForwardedRef<BottomSheetRef>(ref);
 
@@ -36,7 +42,7 @@ export const BottomSheetWithHeader = forwardRef<
   const renderContentRight = () => {
     if (actionTitle) {
       return (
-        <Button onPress={onActionPress}>
+        <Button onPress={onActionPress} testID={actionButtonTestID}>
           <Text color={COLORS.jungleGreen}>{actionTitle}</Text>
         </Button>
       );
@@ -51,10 +57,7 @@ export const BottomSheetWithHeader = forwardRef<
           style={styles.header}
           backIconVisible={false}
           contentLeft={
-            <Button
-              onPress={dismiss}
-              testID="bottom-sheet-with-header-close-icon"
-            >
+            <Button onPress={dismiss}>
               <CloseIcon />
             </Button>
           }
