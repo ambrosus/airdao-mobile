@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { BottomSheetRef } from '@components/composite';
 import { Checkmark } from '@components/svg/icons';
@@ -7,57 +7,57 @@ import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useForwardedRef } from '@hooks';
 import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
-import { styles } from './styles';
-import { useAllAddresses } from '@contexts';
-import Tooltip from 'react-native-walkthrough-tooltip';
-import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
-import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { useAllAddresses, useOnboardingStatus } from '@contexts';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
+import { OnboardingView } from '../OnboardingView';
+import { styles } from './styles';
 
 interface WatchlistAddSuccessProps {
   address: string;
   onDone: () => unknown;
-  status: OnBoardingStatus;
-  handleSuccessModalClose?: () => void;
-  isEditToolTipVisible?: boolean;
-  setIsEditToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
-  isDoneToolTipVisible?: boolean;
-  setIsDoneToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const WatchlistAddSuccess = (
   props: WatchlistAddSuccessProps
 ): JSX.Element => {
-  const {
-    address,
-    onDone,
-    handleSuccessModalClose = () => null,
-    setIsEditToolTipVisible = () => null,
-    isEditToolTipVisible = false,
-    isDoneToolTipVisible = false,
-    setIsDoneToolTipVisible = () => null
-  } = props;
+  const { address, onDone } = props;
 
   const allAddresses = useAllAddresses();
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
-    (v) => v
-  );
-  const {
-    title,
-    subtitle,
-    buttonRightTitle,
-    buttonLeftTitle,
-    isButtonLeftVisible
-  } = useOnboardingToolTip(status);
+  const { status, registerHelpers } = useOnboardingStatus((v) => v);
 
   const navigation = useNavigation<WalletsNavigationProp>();
+
+  // onboarding registration
+  const showEdit = async () => {
+    setTimeout(() => {
+      editModal.current?.show();
+    }, 100);
+  };
+
+  const onDoneDuringOnboarding = () => {
+    onDone();
+    navigation.jumpTo('Wallets');
+  };
+
+  useEffect(() => {
+    if (status === 4) {
+      registerHelpers({
+        next: showEdit,
+        back: onDone // hide WatchlistAddSuccess
+      });
+    } else if (status === 11) {
+      // TODO register helper for done
+      registerHelpers({
+        next: onDoneDuringOnboarding
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   if (!wallet)
     return (
@@ -65,24 +65,6 @@ export const WatchlistAddSuccess = (
         <Text>Unknown Error</Text>
       </View>
     );
-
-  const showEdit = () => {
-    if (status !== 'none') handleStepChange('step-5');
-    editModal.current?.show();
-    setIsEditToolTipVisible(false);
-  };
-
-  const handleOnboardingSuccessStepChange = (type: 'back' | 'next') => {
-    if (status !== 'none') {
-      handleStepChange(type === 'back' ? 'step-4' : 'step-5');
-      setIsEditToolTipVisible(false);
-      if (type === 'back') {
-        setTimeout(() => {
-          handleSuccessModalClose();
-        }, 0);
-      }
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -120,75 +102,25 @@ export const WatchlistAddSuccess = (
         </Text>
       </View>
       <View style={styles.buttons}>
-        <Tooltip
-          tooltipStyle={{ flex: 1 }}
-          contentStyle={{ height: 136, borderRadius: 8 }}
-          arrowSize={{ width: 16, height: 8 }}
-          backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isEditToolTipVisible}
-          content={
-            <OnBoardingToolTipBody
-              title={title}
-              buttonRightTitle={buttonRightTitle}
-              subtitle={subtitle}
-              buttonLeftTitle={buttonLeftTitle}
-              handleButtonLeftPress={() =>
-                handleOnboardingSuccessStepChange('back')
-              }
-              handleButtonRightPress={() => {
-                handleSkipTutorial();
-                setIsEditToolTipVisible(false);
-              }}
-              isButtonLeftVisible={isButtonLeftVisible}
-            />
-          }
-          placement="top"
-          onClose={() => null}
+        <OnboardingView
+          thisStep={4}
+          childrenAlwaysVisible
+          tooltipPlacement="top"
         >
           <Button onPress={showEdit} type="circular" style={styles.editButton}>
             <Text title color="#FFFFFF" fontFamily="Inter_600SemiBold">
               Edit Address
             </Text>
           </Button>
-        </Tooltip>
+        </OnboardingView>
         <Spacer value={verticalScale(24)} />
-        <Tooltip
-          tooltipStyle={{ flex: 1, left: 30 }}
-          contentStyle={{ height: 80, borderRadius: 8 }}
-          arrowSize={{ width: 16, height: 8 }}
-          childrenWrapperStyle={{
-            backgroundColor: '#edf3ff',
-            borderRadius: 25,
-            borderWidth: 1,
-            borderColor: 'white'
-          }}
-          backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isDoneToolTipVisible}
-          content={
-            <OnBoardingToolTipBody
-              buttonRightTitle={''}
-              title={title}
-              subtitle={subtitle}
-              buttonLeftTitle={''}
-            />
-          }
-          placement="top"
-          onClose={() => null}
+        <OnboardingView
+          thisStep={11}
+          childrenAlwaysVisible
+          tooltipPlacement="top"
         >
           <Button
-            onPress={() => {
-              if (onDone && status !== 'step-11') return onDone();
-              if (status === 'step-11' && onDone) {
-                setIsDoneToolTipVisible(false);
-
-                handleStepChange('step-12');
-                navigation.navigate('Wallets');
-
-                setTimeout(() => {
-                  onDone();
-                }, 1000);
-              }
-            }}
+            onPress={onDone}
             type="circular"
             style={{
               ...styles.button,
@@ -203,13 +135,9 @@ export const WatchlistAddSuccess = (
               Done
             </Text>
           </Button>
-        </Tooltip>
+        </OnboardingView>
       </View>
-      <BottomSheetEditWallet
-        ref={editModal}
-        wallet={wallet}
-        setIsDoneToolTipVisible={setIsDoneToolTipVisible}
-      />
+      <BottomSheetEditWallet ref={editModal} wallet={wallet} />
     </View>
   );
 };

@@ -1,10 +1,10 @@
 import React from 'react';
-import { styles } from '@components/composite/OnBoardingToolTip/styles';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { CloseIcon } from '@components/svg/icons';
 import { View } from 'react-native';
-import { OnBoardingToolTipInfo } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { CloseIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { OnBoardingToolTipInfo } from './OnBoardingToolTip.types';
+import { styles } from './styles';
 
 export const OnBoardingToolTipBody = ({
   title,
@@ -18,7 +18,7 @@ export const OnBoardingToolTipBody = ({
 }: Omit<OnBoardingToolTipInfo, 'isButtonClose'> & {
   handleButtonClose?: () => void | null;
   handleButtonRightPress?: () => void;
-  handleButtonLeftPress?: () => void | undefined;
+  handleButtonLeftPress?: () => unknown;
 }) => {
   return (
     <View style={styles.content}>

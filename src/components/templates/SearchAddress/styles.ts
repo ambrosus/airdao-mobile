@@ -1,5 +1,5 @@
-import { moderateScale, scale } from '@utils/scaling';
-import { StyleSheet } from 'react-native';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
@@ -23,5 +23,13 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.powderWhite,
     height: moderateScale(48),
     width: moderateScale(48)
+  },
+  trackBtn: {
+    backgroundColor: COLORS.deepBlue,
+    paddingVertical: 16,
+    width: Dimensions.get('window').width - verticalScale(36),
+    borderRadius: 1000,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
