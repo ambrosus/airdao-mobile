@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Tooltip, { TooltipStyleProps } from 'react-native-walkthrough-tooltip';
@@ -18,6 +18,11 @@ interface OnboardingViewProps extends PropsWithChildren {
   tooltipPlacement?: 'center' | 'bottom' | 'left' | 'right' | 'top' | undefined;
   thisStep: number;
   contentStyle?: TooltipStyleProps['contentStyle'];
+  helpers?: {
+    back?: () => unknown;
+    next?: () => unknown;
+    skip?: () => unknown;
+  };
 }
 
 export const OnboardingView = (props: OnboardingViewProps) => {
@@ -27,9 +32,22 @@ export const OnboardingView = (props: OnboardingViewProps) => {
     thisStep = -1,
     childrenAlwaysVisible = false,
     tooltipPlacement,
-    contentStyle = {}
+    contentStyle = {},
+    helpers = {}
   } = props;
-  const { status, back, next, skip } = useOnboardingStatus((v) => v);
+  const { status, back, next, skip, registerHelpers } = useOnboardingStatus(
+    (v) => v
+  );
+
+  useEffect(() => {
+    if (Object.keys(helpers).length > 0 && status === thisStep) {
+      const backFn = helpers.back || undefined;
+      const nextFn = helpers.next || undefined;
+      const skipFn = helpers.skip || undefined;
+      registerHelpers({ back: backFn, next: nextFn, skip: skipFn });
+    }
+  }, [helpers, thisStep, status, registerHelpers]);
+
   const {
     title,
     body,

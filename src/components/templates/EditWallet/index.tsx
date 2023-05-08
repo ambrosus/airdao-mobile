@@ -52,19 +52,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   const showCreateNewListModal = () => {
     createGroupRef.current?.show();
   };
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
-  // onboarding registration
-  useEffect(() => {
-    if (status === 7)
-      registerHelpers({
-        next: () => {
-          setTimeout(() => {
-            showCreateNewListModal();
-          }, 100);
-        }
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  const { status } = useOnboardingStatus((v) => v);
 
   const fullscreenModalHeight = useFullscreenModalHeight();
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
@@ -85,18 +73,6 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     onNameChange('Demo Address');
     nameInput.current?.setText('Demo Address');
   };
-
-  useEffect(() => {
-    if (status === 5) {
-      registerHelpers({
-        next: setOnboardingAddress,
-        back: onboardingProps.onAddressNameTooltipBackPress
-      });
-    } else if (status === 6) {
-      registerHelpers({ next: () => onIsPersonalAddressChange(true) });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   useEffect(() => {
     setLocalLists(listsOfAddressGroup);
@@ -156,6 +132,10 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           thisStep={5}
           tooltipPlacement="bottom"
           childrenAlwaysVisible
+          helpers={{
+            next: setOnboardingAddress,
+            back: onboardingProps.onAddressNameTooltipBackPress
+          }}
         >
           <Input
             ref={nameInput}
@@ -171,6 +151,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           thisStep={6}
           tooltipPlacement="bottom"
           childrenAlwaysVisible
+          helpers={{ next: () => onIsPersonalAddressChange(true) }}
         >
           <View
             style={{
@@ -267,6 +248,13 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           thisStep={7}
           childrenAlwaysVisible
           tooltipPlacement="top"
+          helpers={{
+            next: () => {
+              setTimeout(() => {
+                showCreateNewListModal();
+              }, 100);
+            }
+          }}
         >
           <Button
             type="circular"

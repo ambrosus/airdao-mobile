@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
-  useEffect,
   useRef,
   useState
 } from 'react';
@@ -17,7 +16,6 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import { Toast, ToastType } from '@components/modular';
-import { useOnboardingStatus } from '@contexts';
 import { OnboardingView } from '../OnboardingView';
 
 type Props = {
@@ -43,22 +41,14 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const [localGroupName, setLocalGroupName] = useState<string>(
       groupTitle || ''
     );
-    const { status, registerHelpers } = useOnboardingStatus((v) => v);
 
-    // onboarding registrtation
+    // onboarding functions
     const setDemoName = () => {
       nameInput.current?.setText('Demo group');
       setLocalGroupName('Demo Group');
     };
 
-    useEffect(() => {
-      if (status === 8) {
-        registerHelpers({ next: setDemoName, back: localRef.current?.dismiss });
-      } else if (status === 9) {
-        registerHelpers({ next: handleButtonPress });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, localRef.current]);
+    // end of onboarding functions
 
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
@@ -117,6 +107,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 thisStep={8}
                 tooltipPlacement="bottom"
                 childrenAlwaysVisible
+                helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
               >
                 <Input
                   ref={nameInput}
@@ -133,6 +124,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 thisStep={9}
                 tooltipPlacement="bottom"
                 childrenAlwaysVisible
+                helpers={{ next: handleButtonPress }}
               >
                 <Button
                   testID="BottomSheetCreateRename_Button"

@@ -1,30 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Row, Text } from '@components/base';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { PlusIcon } from '@components/svg/icons';
-import { useOnboardingStatus, useLists } from '@contexts';
+import { useLists } from '@contexts';
 import { COLORS } from '@constants/colors';
 import { styles } from '../styles';
 
 export const EditWalletButtonToolTip = (): JSX.Element => {
   const { createGroupRef } = useLists((v) => v);
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
   const showCreateNewListModal = () => {
     createGroupRef.current?.show();
   };
-
-  // onboarding registration
-  useEffect(() => {
-    if (status === 7)
-      registerHelpers({
-        next: () => {
-          setTimeout(() => {
-            showCreateNewListModal();
-          }, 100);
-        }
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   return (
     <OnboardingView
@@ -32,6 +18,13 @@ export const EditWalletButtonToolTip = (): JSX.Element => {
       childrenAlwaysVisible
       tooltipPlacement="top"
       contentStyle={{ minHeight: 162 }}
+      helpers={{
+        next: () => {
+          setTimeout(() => {
+            showCreateNewListModal();
+          }, 100);
+        }
+      }}
     >
       <Button
         type="circular"

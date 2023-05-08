@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -9,7 +9,6 @@ import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
-import { useOnboardingStatus } from '@contexts';
 import { OnboardingView } from '@components/templates/OnboardingView';
 
 export function WalletHeader(): JSX.Element {
@@ -18,18 +17,6 @@ export function WalletHeader(): JSX.Element {
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
-
-  const { status, registerHelpers } = useOnboardingStatus((v) => v);
-
-  // register for onboarding
-  useEffect(() => {
-    if (status === 12) {
-      registerHelpers({
-        next: openScanner
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   const openScanner = () => {
     scanner.current?.show();
@@ -74,6 +61,7 @@ export function WalletHeader(): JSX.Element {
           thisStep={12}
           childrenAlwaysVisible
           tooltipPlacement="bottom"
+          helpers={{ next: openScanner }}
         >
           <Button
             onPress={() => {
