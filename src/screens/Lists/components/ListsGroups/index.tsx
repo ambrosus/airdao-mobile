@@ -16,7 +16,7 @@ export const EmptyListsOfGroups = () => {
   }, [createGroupRef]);
 
   return (
-    <View style={styles.container}>
+    <View testID="empty-lists-of-groups" style={styles.container}>
       <EmptyListsIcon />
       <Spacer value={16} />
       <Text
@@ -35,6 +35,7 @@ export const EmptyListsOfGroups = () => {
         <Row justifyContent="space-between" alignItems="center">
           <AddIcon />
           <Text
+            testID="create-new-list-button"
             fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.white}

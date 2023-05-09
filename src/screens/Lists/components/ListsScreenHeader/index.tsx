@@ -27,7 +27,7 @@ export const ListsScreenHeader = ({ totalAmount }: Props) => {
     settingsRef.current?.show();
   }, []);
   return (
-    <View testID="lists-screen-total-amount" style={styles.headerContainer}>
+    <View style={styles.headerContainer}>
       <View style={styles.badgeButtonsContainer}>
         <Button
           onPress={handleOpenFilter}

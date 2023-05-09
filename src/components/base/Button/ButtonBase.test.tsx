@@ -5,7 +5,11 @@ import { Text } from 'react-native';
 
 describe('BaseButton', () => {
   it('renders correctly', () => {
-    const { getByText } = render(<BaseButton></BaseButton>);
+    const { getByText } = render(
+      <BaseButton>
+        <Text>Press me</Text>
+      </BaseButton>
+    );
     const button = getByText('Press me');
     expect(button).toBeDefined();
   });

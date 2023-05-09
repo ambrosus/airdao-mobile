@@ -71,7 +71,7 @@ export const BottomSheetWalletSort = forwardRef<
       height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
     >
       {Platform.OS === 'android' && <Spacer value={scale(57)} />}
-      <View>
+      <View testID="filter-bottom-sheet">
         <Header
           style={styles.header}
           backIconVisible={false}

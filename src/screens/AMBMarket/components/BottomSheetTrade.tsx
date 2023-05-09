@@ -61,7 +61,7 @@ export const BottomSheetTrade = forwardRef<BottomSheetRef, BottomSheetProps>(
 
     return (
       <BottomSheet ref={localRef}>
-        <View style={styles.container}>
+        <View testID="trade-bottom-sheet" style={styles.container}>
           <Spacer value={16} />
           <BottomSheetSwiperIcon />
           <Spacer value={verticalScale(34)} />

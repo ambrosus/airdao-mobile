@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler/jestSetup';
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 
 const mockIsPackageInstalled = jest.fn((value) => ({
   value,
@@ -42,14 +43,16 @@ jest.mock('react-native-reanimated', () => {
   return Reanimated;
 });
 
-jest.mock('react-native-safe-area-context', () => {
-  // require('react-native-safe-area-context/jest/mock').default;
-  const inset = { top: 0, right: 0, bottom: 0, left: 0 };
-  return {
-    SafeAreaProvider: jest.fn().mockImplementation(({ children }) => children),
-    useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
-  };
-});
+jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
+
+//     () => {
+//   const inset = { top: 0, right: 0, bottom: 0, left: 0 };
+//   return {
+//     SafeAreaProvider: jest.fn().mockImplementation(({ children }) => children),
+//     SafeAreaView: jest.fn().mockImplementation(({ children }) => children),
+//     useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
+//   };
+// });
 
 jest.mock('@helpers/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]

@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { WalletsScreen } from '@screens/Wallets';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 jest.mock('@contexts/OnBoardingUserContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
@@ -66,9 +67,11 @@ const queryClient = new QueryClient();
 
 const Component = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WalletsScreen />
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <WalletsScreen />
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 };
 describe('WalletsScreen', () => {

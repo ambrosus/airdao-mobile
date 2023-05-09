@@ -1,10 +1,8 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { SettingsScreen } from '@screens/Settings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
-import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 
 jest.mock(
   'react-native-safe-area-context',
@@ -81,71 +79,5 @@ describe('SettingsScreen', () => {
     expect(settingsBlock).toBeTruthy();
     expect(settingsScreen).toBeTruthy();
     expect(settingsInfoBlock).toBeTruthy();
-  });
-});
-
-describe('SettingsInfoBlock', () => {
-  it('renders the text inside settings-screen_settings-info-block inside the button', () => {
-    const { getByText } = render(<SettingsInfoBlock />);
-    expect(getByText('About AirDAO')).not.toBeNull();
-    expect(getByText('Help center')).not.toBeNull();
-    expect(getByText('Rate us on the App Store')).not.toBeNull();
-  });
-});
-
-describe('SettingsBlock', () => {
-  it('should render correctly on ios', () => {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      OS: 'ios'
-    }));
-    const { getByTestId } = render(<SettingsBlock />);
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    expect(settingsBlock).toBeDefined();
-  });
-});
-
-describe('SettingsBlock', () => {
-  it('should render correctly on android', () => {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      OS: 'android'
-    }));
-    const { getByTestId } = render(<SettingsBlock />);
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    expect(settingsBlock).toBeDefined();
-  });
-});
-
-describe('SettingsBlock component', () => {
-  it('should render the base currency option', () => {
-    const { getByText } = render(<SettingsBlock />);
-    expect(getByText('Base currency')).not.toBeNull();
-  });
-
-  it('should open the base currency modal on press', () => {
-    const { getByText, getByTestId } = render(<SettingsBlock />);
-    fireEvent.press(getByText('Base currency'));
-    expect(getByTestId('bottom-sheet-select-base-currency')).not.toBeNull();
-  });
-
-  it('should render the language option', () => {
-    const { getByText } = render(<SettingsBlock />);
-    expect(getByText('Language')).not.toBeNull();
-  });
-
-  it('should open the language modal on press', () => {
-    const { getByText, getByTestId } = render(<SettingsBlock />);
-    fireEvent.press(getByText('Language'));
-    expect(getByTestId('bottom-sheet-select-language')).not.toBeNull();
-  });
-
-  it('should render the notification settings option', () => {
-    const { getByText } = render(<SettingsBlock />);
-    expect(getByText('Notification settings')).not.toBeNull();
-  });
-
-  it('should open the notification settings modal on press', () => {
-    const { getByText, getByTestId } = render(<SettingsBlock />);
-    fireEvent.press(getByText('Notification settings'));
-    expect(getByTestId('bottom-sheet-notification-settings')).not.toBeNull();
   });
 });

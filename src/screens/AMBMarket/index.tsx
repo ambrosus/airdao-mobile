@@ -53,7 +53,11 @@ export function AMBMarket(): JSX.Element {
         showsVerticalScrollIndicator={false}
       >
         {error && renderErrorView()}
-        {loading && <Spinner />}
+        {loading && (
+          <View testID="spinner">
+            <Spinner />
+          </View>
+        )}
         {data && (
           <>
             <View style={styles.horizontalPadding}>
@@ -69,7 +73,11 @@ export function AMBMarket(): JSX.Element {
                   ${data.priceUSD}
                 </Text>
                 <Spacer horizontal value={scale(16)} />
-                <Button onPress={onSharePress} style={styles.shareBtn}>
+                <Button
+                  testID="share-button"
+                  onPress={onSharePress}
+                  style={styles.shareBtn}
+                >
                   <ShareIcon color={COLORS.smokyBlack} />
                 </Button>
               </Row>
@@ -81,7 +89,6 @@ export function AMBMarket(): JSX.Element {
                 <Spacer horizontal value={scale(14)} />
                 <PercentChange change={data.percentChange24H} />
                 <Text fontSize={12} fontWeight="500" color="#323232">
-                  {' '}
                   24H
                 </Text>
               </Row>
@@ -245,6 +252,7 @@ export function AMBMarket(): JSX.Element {
         )}
       </ScrollView>
       <FloatButton
+        testID="trade-button"
         title="Trade AMB"
         icon={<TradeIcon />}
         onPress={onTradePress}

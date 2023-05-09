@@ -38,6 +38,7 @@ export const ListsScreen = () => {
         <>
           <ListsGroups listsOfAddressGroup={listsOfAddressGroup} />
           <FloatButton
+            testID="float-button"
             titleStyle={styles.floatButtonTitle}
             title="Create new list"
             icon={<PlusIcon color={COLORS.white} />}
@@ -45,11 +46,13 @@ export const ListsScreen = () => {
           />
         </>
       )}
-      <BottomSheetCreateRenameGroup
-        type="create"
-        handleOnCreateGroup={handleOnCreate}
-        ref={createGroupRef}
-      />
+      <View testID="query-bottom-sheet-create">
+        <BottomSheetCreateRenameGroup
+          type="create"
+          handleOnCreateGroup={handleOnCreate}
+          ref={createGroupRef}
+        />
+      </View>
     </SafeAreaView>
   );
 };
