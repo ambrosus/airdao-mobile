@@ -136,7 +136,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheet height={500} ref={localRef}>
-          <View style={styles.container}>
+          <View testID="bottom-sheet-create" style={styles.container}>
             <View style={styles.content}>
               <View style={styles.icon}>
                 <BottomSheetSwiperIcon />

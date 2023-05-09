@@ -66,6 +66,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
             },
             containerStyle
           ]}
+          testID="bottom-sheet-content"
         >
           {children}
         </KeyboardDismissingView>
@@ -86,6 +87,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
 
     return (
       <Modal
+        testID="bottom-sheet"
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}

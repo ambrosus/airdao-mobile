@@ -8,7 +8,7 @@ type Props = {
 };
 export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
   return (
-    <View style={styles.groupsContainer}>
+    <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150

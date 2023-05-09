@@ -11,7 +11,7 @@ import React, {
 import { BottomSheet, BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { Dimensions, FlatList, SafeAreaView, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from '@screens/List/modals/BottomSheetLongPressAddressSelection/styles';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -22,6 +22,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { BottomSheetSingleAddressMove } from '@screens/List/modals/BottomSheetSingleAddressMove';
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListsParamsLists } from '@appTypes/navigation';
 
 type Props = {

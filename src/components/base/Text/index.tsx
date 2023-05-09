@@ -21,6 +21,7 @@ export function Text(props: TextProps): JSX.Element {
     fontWeight = 'normal',
     align = 'auto',
     fontFamily = 'Inter_500Medium',
+    testID,
     ...restProps
   } = props;
 
@@ -70,6 +71,7 @@ export function Text(props: TextProps): JSX.Element {
 
   return (
     <RNText
+      testID={testID}
       style={[styles, propsStyle]}
       {...restProps}
       onPress={props.onPress}

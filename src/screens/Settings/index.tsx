@@ -8,7 +8,7 @@ import { scale } from '@utils/scaling';
 
 export const SettingsScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />

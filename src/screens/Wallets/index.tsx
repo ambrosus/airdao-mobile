@@ -10,9 +10,8 @@ import {
 import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { FloatButton } from '@components/base/FloatButton';
-import { useAMBPrice } from '@hooks/query';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { usePersonalList } from '@hooks/cache';
+import { usePersonalList, useAMBPrice } from '@hooks';
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 
@@ -27,7 +26,6 @@ export const WalletsScreen = () => {
   );
 
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
-
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
 
   const handleOnboardingStepChange = useCallback(() => {
@@ -51,7 +49,7 @@ export const WalletsScreen = () => {
   }, [status]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} testID="wallets-screen">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -87,6 +85,7 @@ export const WalletsScreen = () => {
           title="Add a Address"
           onPress={handleOnFloatButtonPress}
           icon={<AddIcon />}
+          testID="onboarding-float-button"
         />
       </OnboardingFloatButton>
     </View>

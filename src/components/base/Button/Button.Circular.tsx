@@ -4,7 +4,13 @@ import { BaseButton } from './Button.Base';
 import { CircularButtonProps } from './Button.types';
 
 export function CircularButton(props: CircularButtonProps): JSX.Element {
-  const { style = {}, children, borderRadius = 56, ...restProps } = props;
+  const {
+    style = {},
+    children,
+    borderRadius = 56,
+    testID,
+    ...restProps
+  } = props;
 
   const styles: ViewStyle = {
     ...style,
@@ -14,7 +20,7 @@ export function CircularButton(props: CircularButtonProps): JSX.Element {
   };
 
   return (
-    <BaseButton {...restProps} style={styles}>
+    <BaseButton {...restProps} style={styles} testID={testID}>
       {children}
     </BaseButton>
   );

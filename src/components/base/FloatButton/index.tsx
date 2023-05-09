@@ -10,17 +10,26 @@ type Props = {
   icon?: JSX.Element;
   onPress: () => void;
   bottomPadding?: number;
+  testID?: string;
 };
 
 const DEFAULT_BOTTOM_TAB_HEIGHT = 65;
 
 export const FloatButton = memo(
-  ({ title, icon, onPress, bottomPadding, titleStyle }: Props) => {
+  ({
+    title,
+    icon,
+    onPress,
+    bottomPadding,
+    titleStyle,
+    testID = 'Float_Button'
+  }: Props) => {
     const bottomSafeArea = useSafeAreaInsets().bottom || 34;
     const bottomTabBarHeight =
       bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
     return (
       <Pressable
+        testID={testID}
         onPress={onPress}
         style={[
           styles.buttonStyle,
@@ -30,7 +39,12 @@ export const FloatButton = memo(
         ]}
       >
         <View style={styles.iconPadding}>{icon}</View>
-        <Text style={[styles.bottomButtonText, titleStyle]}>{title}</Text>
+        <Text
+          style={[styles.bottomButtonText, titleStyle]}
+          testID="Float_Button_Title"
+        >
+          {title}
+        </Text>
       </Pressable>
     );
   }

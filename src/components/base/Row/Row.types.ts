@@ -8,4 +8,5 @@ export type RowProps = {
   width?: ViewStyle['width'];
   flex?: ViewStyle['flex'];
   children?: ReactNode;
+  testID?: string;
 };

@@ -88,7 +88,7 @@ export const ExploreScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: verticalScale(12) }}>
-      <View style={{ flex: 1 }}>
+      <View testID="explore-screen" style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
           initialValue={addressFromParams}
@@ -111,14 +111,18 @@ export const ExploreScreen = () => {
                 <Text fontFamily="Inter_700Bold" fontWeight="600" fontSize={20}>
                   Popular Wallets
                 </Text>
-                <Button onPress={openFilter}>
-                  <FilterIcon />
-                </Button>
+                <View>
+                  <Button onPress={openFilter} testID="filter-button">
+                    <FilterIcon />
+                  </Button>
+                </View>
               </Row>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
             {accountsLoading ? (
-              <Spinner />
+              <View testID="spinner">
+                <Spinner />
+              </View>
             ) : accountsError ? (
               <Text>Could not load accounts info</Text>
             ) : (
@@ -135,11 +139,13 @@ export const ExploreScreen = () => {
                       <Spacer value={verticalScale(26)} />
                     )}
                   />
-                  <BottomSheetWalletSort
-                    ref={sortModal}
-                    sort={sortBy}
-                    setSort={setSortBy}
-                  />
+                  <View testID="bottom-sheet-wallet-sort">
+                    <BottomSheetWalletSort
+                      ref={sortModal}
+                      sort={sortBy}
+                      setSort={setSortBy}
+                    />
+                  </View>
                 </>
               )
             )}

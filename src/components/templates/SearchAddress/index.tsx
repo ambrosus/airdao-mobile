@@ -304,6 +304,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             </View>
           ) : (
             <InputWithIcon
+              testID="search-input"
               ref={inputRef}
               style={styles.input}
               iconLeft={<SearchIcon color="#2f2b4399" />}
