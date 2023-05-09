@@ -33,7 +33,7 @@ let mockedData = {
     marketCapUSD: 0
   },
   loading: false,
-  error: undefined
+  error: false
 };
 
 jest.mock('@hooks/query', () => ({
@@ -77,11 +77,11 @@ describe('AMBMarket', () => {
         marketCapUSD: 994
       },
       loading: true,
-      error: undefined
+      error: false
     };
     const { getByTestId } = render(<Component />);
     await waitFor(async () => {
-      const spinner = await getByTestId('spinner');
+      expect(await getByTestId('spinner'));
     });
     expect(getByTestId('spinner')).toBeDefined();
   });
@@ -115,7 +115,6 @@ describe('AMBMarket', () => {
     const { getByText, getByTestId } = render(<Component />);
     expect(getByText('AMB Market')).toBeDefined();
     expect(getByText('Amber (AMB)')).toBeDefined();
-    // expect(getByText('$')).toBeDefined();
     expect(getByTestId('trade-button')).toBeDefined();
   });
 
