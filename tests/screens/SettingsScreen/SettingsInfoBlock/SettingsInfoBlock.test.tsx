@@ -22,3 +22,5 @@ describe('SettingsInfoBlock', () => {
     expect(rateButton).toBeTruthy();
   });
 });
+
+// only one should be active

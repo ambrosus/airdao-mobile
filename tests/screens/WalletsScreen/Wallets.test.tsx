@@ -96,3 +96,8 @@ describe('WalletsScreen', () => {
     expect(onboardingFloatButton).toBeTruthy();
   });
 });
+
+// wallets
+// LearnAboutAirDAO
+
+// lists

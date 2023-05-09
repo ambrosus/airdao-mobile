@@ -4,7 +4,7 @@ import { ExplorerAccount } from '@models/Explorer';
 export const useWatchlist = () => {
   const allAddressesReducer = useAllAddressesReducer();
   const allAddresses = useAllAddresses();
-
+  console.log(allAddresses);
   const addToWatchlist = async (address: ExplorerAccount) => {
     const newAddress = Object.assign({}, address);
     newAddress.isOnWatchlist = true;

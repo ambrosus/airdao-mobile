@@ -18,11 +18,11 @@ export const NotificationsHeader = (
   const renderContentRight = () => {
     return (
       <Row alignItems="center">
-        <Button onPress={onFilterPress}>
+        <Button onPress={onFilterPress} testID="filter-button">
           <FilterIcon />
         </Button>
         <Spacer value={38} horizontal />
-        <Button onPress={onSettingsPress}>
+        <Button onPress={onSettingsPress} testID="settings-button">
           <SettingsIcon />
         </Button>
       </Row>

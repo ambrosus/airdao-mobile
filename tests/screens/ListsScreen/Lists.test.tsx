@@ -66,7 +66,7 @@ const Component = () => {
 };
 
 describe('ListsScreen', () => {
-  it('renders without crashing', async () => {
+  it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('lists-screen')).toBeTruthy();
   });

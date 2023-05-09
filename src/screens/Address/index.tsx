@@ -60,7 +60,7 @@ export const AddressDetails = (): JSX.Element => {
     return (
       <SafeAreaView style={styles.container}>
         <Header />
-        <View style={styles.center}>
+        <View testID="loading-spinner" style={styles.center}>
           <Spinner />
         </View>
       </SafeAreaView>
@@ -142,6 +142,7 @@ export const AddressDetails = (): JSX.Element => {
     return (
       <Row alignItems="center">
         <Button
+          testID="personal-list-button"
           // TODO change button background color when it's not pressed to #2f2b431a
           style={styles.headerPersonalListBtn}
           type="circular"
@@ -151,6 +152,7 @@ export const AddressDetails = (): JSX.Element => {
         </Button>
         <Spacer value={scale(17)} horizontal />
         <Button
+          testID="watchlist-button"
           // TODO change button background color when it's not pressed to #2f2b431a
           style={styles.headerWatchListBtn}
           type="circular"
@@ -171,7 +173,7 @@ export const AddressDetails = (): JSX.Element => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View testID="address-screen" style={styles.container}>
       <Header contentRight={renderHeaderRight()} />
       <Spacer value={verticalScale(52)} />
       <ExplorerAccountView
@@ -191,6 +193,6 @@ export const AddressDetails = (): JSX.Element => {
       {finalAccount && (
         <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
       )}
-    </SafeAreaView>
+    </View>
   );
 };

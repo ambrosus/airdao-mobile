@@ -132,3 +132,7 @@ describe('AMBMarket', () => {
     expect(getByTestId('share-bottom-sheet')).toBeDefined();
   });
 });
+
+// PopUpInfo
+// Percent
+// text
