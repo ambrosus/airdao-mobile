@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
-import { COLORS } from '@constants/colors';
 import { ListsScreenHeader } from './components/ListsScreenHeader';
 import { useLists } from '@contexts/ListsContext';
 import { FloatButton } from '@components/base/FloatButton';
@@ -11,6 +9,11 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { PlusIcon } from '@components/svg/icons';
 import { styles } from '@screens/Lists/styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Separator } from '@components/base';
+import { verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { View } from 'react-native';
+
 export const ListsScreen = () => {
   const { listsOfAddressGroup, handleOnCreate, createGroupRef } = useLists(
     (v) => v
@@ -30,8 +33,8 @@ export const ListsScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
       <ListsScreenHeader totalAmount={totalAmount} />
-      <Spacer value={32} />
-      <View style={styles.separateLine} />
+      <Spacer value={verticalScale(33)} />
+      <Separator />
       {!listsOfAddressGroup.length ? (
         <EmptyListsOfGroups />
       ) : (

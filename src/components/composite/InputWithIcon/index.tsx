@@ -3,6 +3,7 @@ import { InputProps } from '@components/base/Input';
 import { Input, InputRef, Row, Spacer } from '@components/base';
 import { styles } from './styles';
 import { scale } from '@utils/scaling';
+import { View } from 'react-native';
 
 interface InputWithIconProps extends InputProps {
   iconLeft?: React.ReactNode;
@@ -19,7 +20,9 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
         <Spacer horizontal value={scale(14.75)} />
         <Input ref={ref} style={[style, styles.input]} {...restProps} />
         <Spacer horizontal value={scale(14.75)} />
-        {iconRight}
+        <View style={{ position: 'absolute', right: scale(17.75) }}>
+          {iconRight}
+        </View>
       </Row>
     );
   }

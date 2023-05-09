@@ -9,6 +9,7 @@ export interface BaseButtonProps {
   children?: ReactNode;
   onPress?: () => unknown;
   testID?: string;
+  onLongPress?: () => unknown;
 }
 
 export interface BorderedButtonProps extends BaseButtonProps {

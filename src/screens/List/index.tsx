@@ -1,36 +1,30 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  FlatList,
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { FlatList, Platform, SafeAreaView, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
 import { BackIcon, PlusIcon } from '@components/svg/icons';
-import { RootStackParamsList } from '@navigation/stacks/RootStack';
 import { FloatButton } from '@components/base/FloatButton';
 import { BottomSheetRef } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { styles } from '@screens/Lists/screens/SingleAddressGroupScreen/styles';
+import { styles } from '@screens/List/styles';
 import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSheetGroupAction';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { BottomSheetSingleAddressOptions } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetSingleAddressOptions';
-import { BottomSheetLongPressAddressSelection } from '@screens/Lists/screens/SingleAddressGroupScreen/modals/BottomSheetLongPressAddressSelection';
+import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetLongPressAddressSelection } from '@screens/List/modals/BottomSheetLongPressAddressSelection';
 import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
 import { COLORS } from '@constants/colors';
+import { ListsNavigationProp, ListsParamsLists } from '@appTypes/navigation';
 
 export const SingleAddressGroupScreen = () => {
   const {
     params: {
       group: { id: groupId }
     }
-  } = useRoute<RouteProp<RootStackParamsList, 'SingleAddressGroup'>>();
+  } = useRoute<RouteProp<ListsParamsLists, 'SingleAddressGroup'>>();
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
@@ -40,7 +34,7 @@ export const SingleAddressGroupScreen = () => {
   const longPressAddressSelectionRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<ListsNavigationProp>();
 
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
 
@@ -124,6 +118,10 @@ export const SingleAddressGroupScreen = () => {
     handleOpenGroupAction
   ]);
 
+  const navigateToAddressDetails = (item: ExplorerAccount) => {
+    navigation.navigate('Address', { address: item.address });
+  };
+
   return (
     <SafeAreaView style={styles.header}>
       {Platform.OS === 'android' && <Spacer value={30} />}
@@ -137,12 +135,13 @@ export const SingleAddressGroupScreen = () => {
         renderItem={({ item }) => {
           return (
             <View style={styles.addressItemContainer}>
-              <TouchableOpacity
+              <Button
+                onPress={() => navigateToAddressDetails(item)}
                 onLongPress={() => handleOnLongPress(item)}
                 style={styles.touchableAreaContainer}
               >
                 <WalletItem item={item} />
-              </TouchableOpacity>
+              </Button>
               <View style={styles.buttonContainer}>
                 <Button
                   style={styles.actionButton}

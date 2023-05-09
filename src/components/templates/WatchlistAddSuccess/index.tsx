@@ -113,7 +113,7 @@ export const WatchlistAddSuccess = (
           align="center"
           fontWeight="400"
           fontSize={13}
-          color="#646464"
+          color="#51545A"
           fontFamily="Inter_400Regular"
         >
           {"Let's personalize new address! Click 'Edit Address' to get started"}
@@ -192,10 +192,14 @@ export const WatchlistAddSuccess = (
             type="circular"
             style={{
               ...styles.button,
-              backgroundColor: '#edf3ff'
+              backgroundColor: COLORS.charcoal
             }}
           >
-            <Text title fontFamily="Inter_600SemiBold" color={COLORS.deepBlue}>
+            <Text
+              title
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.smokyBlack}
+            >
               Done
             </Text>
           </Button>

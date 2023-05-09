@@ -137,3 +137,6 @@ export const ExplorerAccountView = (
     </View>
   );
 };
+
+export * from './ExplorerAccount.Transactions';
+export * from './ExplorerAccount.TransactionItem';

@@ -55,7 +55,10 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
         const isFocused = state.index === index;
 
-        const icon = tabs[label][isFocused ? 'activeIcon' : 'inactiveIcon'];
+        const icon =
+          tabs[route.name as LabelType][
+            isFocused ? 'activeIcon' : 'inactiveIcon'
+          ];
 
         const onPress = () => {
           // @ts-ignore
