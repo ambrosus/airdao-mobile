@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -63,5 +63,35 @@ describe('SettingsBlock component', () => {
     const { getByText, getByTestId } = render(<Component />);
     fireEvent.press(getByText('Notification settings'));
     expect(getByTestId('bottom-sheet-notification-settings')).not.toBeNull();
+  });
+
+  it('should have only one radiobutton active on select base currency', () => {
+    const { getByText, getByTestId, getAllByTestId } = render(<Component />);
+    fireEvent.press(getByText('Base currency'));
+    const baseCurrencyModal = getByTestId('bottom-sheet-select-base-currency');
+    expect(baseCurrencyModal).not.toBeNull();
+    const radioButtons = getAllByTestId('radio-button');
+    act(() => {
+      fireEvent.press(radioButtons[0]);
+    });
+
+    const otherButtons = radioButtons.filter(
+      (item) =>
+        item.props.children[0].props.children.props.style[0].borderColor ===
+        '#FFFFFF'
+    );
+    expect(otherButtons.length).toBe(1);
+
+    act(() => {
+      fireEvent.press(radioButtons[1]);
+    });
+
+    const otherButtons2 = radioButtons.filter(
+      (item) =>
+        item.props.children[0].props.children.props.style[0].borderColor ===
+        '#FFFFFF'
+    );
+
+    expect(otherButtons2.length).toBe(1);
   });
 });

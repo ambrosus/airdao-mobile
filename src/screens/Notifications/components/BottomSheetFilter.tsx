@@ -50,7 +50,7 @@ export const BottomSheetFilter = forwardRef<
       borderRadius={scale(10)}
       {...bottomSheetProps}
     >
-      <View>
+      <View testID="filter-modal">
         <Header
           title="Filter By"
           titleStyle={styles.headerTitle}

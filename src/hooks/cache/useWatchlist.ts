@@ -1,10 +1,12 @@
-import { useAllAddresses, useAllAddressesReducer } from '@contexts';
+import {
+  useAllAddresses,
+  useAllAddressesReducer
+} from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
 
 export const useWatchlist = () => {
   const allAddressesReducer = useAllAddressesReducer();
   const allAddresses = useAllAddresses();
-
   const addToWatchlist = async (address: ExplorerAccount) => {
     const newAddress = Object.assign({}, address);
     newAddress.isOnWatchlist = true;

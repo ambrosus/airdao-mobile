@@ -14,7 +14,7 @@ import { ExplorerAccount } from '@models/Explorer';
 import { useAllAddressesReducer } from '@contexts';
 import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
 import { FloatButton } from '@components/base/FloatButton';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -61,36 +61,38 @@ export const BottomSheetEditWallet = forwardRef<
   }, [handleStepChange, saveAddress, setIsDoneToolTipVisible, status]);
 
   return (
-    <BottomSheetWithHeader
-      isToolTipVisible={isSaveToolTipVisible}
-      isNestedSheet={false}
-      title="Edit Address"
-      ref={localRef}
-      height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
-      avoidKeyboard={false}
-      actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
-      onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}
-      {...bottomSheetProps}
-    >
-      {wallet && (
-        <>
-          <EditWallet
-            wallet={wallet}
-            name={name}
-            onNameChange={setName}
-            isPersonalAddress={isPersonalAddress}
-            onIsPersonalAddressChange={setIsPersonalAddress}
-            handleSaveTooltipVisible={handleSaveTooltipVisible}
-          />
-          {Platform.OS === 'android' && (
-            <FloatButton
-              title="Save"
-              onPress={handleActionPress}
-              bottomPadding={17}
+    <View testID="bottom-sheet-edit-wallet">
+      <BottomSheetWithHeader
+        isToolTipVisible={isSaveToolTipVisible}
+        isNestedSheet={false}
+        title="Edit Address"
+        ref={localRef}
+        height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
+        avoidKeyboard={false}
+        actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
+        onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}
+        {...bottomSheetProps}
+      >
+        {wallet && (
+          <>
+            <EditWallet
+              wallet={wallet}
+              name={name}
+              onNameChange={setName}
+              isPersonalAddress={isPersonalAddress}
+              onIsPersonalAddressChange={setIsPersonalAddress}
+              handleSaveTooltipVisible={handleSaveTooltipVisible}
             />
-          )}
-        </>
-      )}
-    </BottomSheetWithHeader>
+            {Platform.OS === 'android' && (
+              <FloatButton
+                title="Save"
+                onPress={handleActionPress}
+                bottomPadding={17}
+              />
+            )}
+          </>
+        )}
+      </BottomSheetWithHeader>
+    </View>
   );
 });

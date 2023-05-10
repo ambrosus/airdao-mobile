@@ -44,6 +44,16 @@ jest.mock('@hooks', () => ({
   useFullscreenModalHeight: () => []
 }));
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: () => ({
+    params: { address: '' }
+  }),
+  useNavigation: jest.fn(() => ({
+    goBack: jest.fn()
+  }))
+}));
+
 const Component = () => {
   return (
     <SafeAreaProvider>
@@ -54,8 +64,9 @@ const Component = () => {
   );
 };
 describe('AMBMarket', () => {
-  it('renders without error', () => {
-    render(<Component />);
+  it('renders correctly', () => {
+    const { getByTestId } = render(<Component />);
+    expect(getByTestId('ambmarket-screen')).toBeDefined();
   });
 
   it('displays loading spinner when data is not available', async () => {
@@ -130,5 +141,31 @@ describe('AMBMarket', () => {
     const shareButton = getByTestId('share-button');
     fireEvent.press(shareButton);
     expect(getByTestId('share-bottom-sheet')).toBeDefined();
+  });
+
+  it('should show percent correctly', () => {
+    mockedData = {
+      data: {
+        _id: '98949',
+        id: 10,
+        name: 'token',
+        symbol: 'lslafslkf',
+        circulatingSupply: 100,
+        maxSupply: null,
+        totalSupply: 100000,
+        rank: 9000,
+        percentChange1H: 878,
+        percentChange24H: 5533,
+        percentChange7D: 1213,
+        priceUSD: 100,
+        volumeUSD: 91281820,
+        marketCapUSD: 994
+      },
+      loading: false,
+      error: false
+    };
+    const { getAllByTestId } = render(<Component />);
+    const title = getAllByTestId('PercentChange_Title')[0];
+    expect(title.props.children[1]).toBe('5,533.00');
   });
 });

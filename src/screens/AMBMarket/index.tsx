@@ -42,7 +42,7 @@ export function AMBMarket(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView testID="ambmarket-screen" style={styles.container}>
       <Header
         title="AMB Market"
         titlePosition="left"
@@ -109,6 +109,7 @@ export function AMBMarket(): JSX.Element {
                       Market Cap{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="market-cap-popupinfo"
                       body={AMBMarketItemsInfo.marketCap.body}
                       title={AMBMarketItemsInfo.marketCap.title}
                     />
@@ -126,6 +127,7 @@ export function AMBMarket(): JSX.Element {
                       24hr Volume{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="24-hour-volume-popupinfo"
                       placement={PopUpPlacement.BOTTOM}
                       body={AMBMarketItemsInfo.volume24H.body}
                       title={AMBMarketItemsInfo.volume24H.title}
@@ -147,6 +149,7 @@ export function AMBMarket(): JSX.Element {
                       Circulating Supply{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="circulation-popupinfo"
                       placement={PopUpPlacement.BOTTOM}
                       body={AMBMarketItemsInfo.circulatingSupply.body}
                       title={AMBMarketItemsInfo.circulatingSupply.title}
@@ -169,6 +172,7 @@ export function AMBMarket(): JSX.Element {
                       Fully Diluted Market Cap{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="diluted-cap-popupinfo"
                       body={AMBMarketItemsInfo.fullyDilutedMarketCap.body}
                       title={AMBMarketItemsInfo.fullyDilutedMarketCap.title}
                     />
@@ -182,13 +186,14 @@ export function AMBMarket(): JSX.Element {
                     change={data.percentChange24H}
                     color="#2f2b4399"
                   />
-                  {/* CEX Volumne */}
+                  {/* CEX Volume */}
                   <Spacer value={verticalScale(38.49)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
                       CEX Volume{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="cex-volume-popupinfo"
                       placement={PopUpPlacement.BOTTOM}
                       body={AMBMarketItemsInfo.cexVol.body}
                       title={AMBMarketItemsInfo.cexVol.title}
@@ -199,13 +204,14 @@ export function AMBMarket(): JSX.Element {
                     ${NumberUtils.formatNumber(data.volumeUSD, 0)}
                   </Text>
 
-                  {/* DEX Volumne */}
+                  {/* DEX Volume */}
                   <Spacer value={verticalScale(12)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
                       DEX Volume{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="dex-volume-popupinfo"
                       placement={PopUpPlacement.BOTTOM}
                       body={AMBMarketItemsInfo.dexVol.body}
                       title={AMBMarketItemsInfo.dexVol.title}
@@ -214,13 +220,14 @@ export function AMBMarket(): JSX.Element {
                   <Spacer value={verticalScale(6)} />
                   <Text fontFamily="Mersad_600SemiBold">- -</Text>
 
-                  {/* Max Suppy */}
+                  {/* Max Supply */}
                   <Spacer value={verticalScale(31.35)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
                       Max Suppy{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="max-supply-popupinfo"
                       body={AMBMarketItemsInfo.maxSupply.body}
                       title={AMBMarketItemsInfo.maxSupply.title}
                     />
@@ -230,13 +237,14 @@ export function AMBMarket(): JSX.Element {
                     {NumberUtils.formatNumber(6500000000, 0)}
                   </Text>
 
-                  {/* Total Suppy */}
+                  {/* Total Supply */}
                   <Spacer value={verticalScale(12)} />
                   <Row alignItems="center">
                     <Text fontSize={12} color="#828282">
-                      Total Suppy{'  '}
+                      Total Supply{'  '}
                     </Text>
                     <PopUpInfo
+                      testID="total-supply-popupinfo"
                       body={AMBMarketItemsInfo.totalSupply.body}
                       title={AMBMarketItemsInfo.totalSupply.title}
                     />

@@ -7,14 +7,18 @@ import { styles } from './styles';
 import { verticalScale } from '@utils/scaling';
 
 export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
-  const { body, title, placement } = props;
+  const { body, title, placement, testID } = props;
   return (
     <Popover
       placement={(placement || 'auto') as PopoverPlacement}
       popoverStyle={styles.popoverStyle}
       from={(sourceRef, showPopover) => (
         <View>
-          <Button onPress={showPopover} style={styles.container}>
+          <Button
+            testID={testID}
+            onPress={showPopover}
+            style={styles.container}
+          >
             <Text color="#FFFFFF" fontSize={10}>
               i
             </Text>
