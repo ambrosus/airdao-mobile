@@ -13,10 +13,6 @@ jest.mock('victory-native', () => {
   };
 });
 
-// jest.mock('@models/Notification', () => ({
-//   Notification: jest.fn()
-// }));
-
 const queryClient = new QueryClient();
 
 const Component = () => {
@@ -35,18 +31,11 @@ describe('Notifications Screen', () => {
     expect(getByTestId('notifications-screen')).toBeTruthy();
   });
 
-  // it('shows empty notification message when there are no notifications', () => {
-  //   const { getByText } = render(<Component />);
-  //   jest.spyOn(Notification, 'length', 'get').mockReturnValue(0);
-  //   expect(
-  //     getByText('You have no notifications right now. Come back later.')
-  //   ).toBeTruthy();
-  // });
-
   it('displays notification sections', () => {
     const { getByText } = render(<Component />);
     expect(getByText('TODAY')).toBeTruthy();
     expect(getByText('YESTERDAY')).toBeTruthy();
+    expect(getByText('Yay! AMB price is up +10.56% ~$30,000')).toBeTruthy();
   });
 
   it('opens filter modal when filter button is pressed', async () => {
@@ -65,5 +54,3 @@ describe('Notifications Screen', () => {
     expect(getByTestId('settings-modal')).toBeDefined();
   });
 });
-
-// sectionlist

@@ -36,7 +36,6 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const navigation = useNavigation<WalletsNavigationProp>();
   const navigationToExplore =
     useNavigation<NativeStackNavigationProp<TabsParamsList>>();
-
   const onTogglePress = () => {
     rotationAnimation.current?.rotate();
     toggleList();
@@ -47,7 +46,12 @@ export function WalletList(props: WalletListProps): JSX.Element {
       navigation.navigate('Address', { address: item.address });
     };
     return (
-      <Button key={idx} style={styles.item} onPress={navigateToAddressDetails}>
+      <Button
+        key={idx}
+        style={styles.item}
+        onPress={navigateToAddressDetails}
+        testID={`WalletItem_${idx}`}
+      >
         <WalletItem item={item} />
       </Button>
     );
@@ -55,7 +59,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
 
   const renderEmpty = () => {
     return (
-      <View style={styles.emptyContainer}>
+      <View testID="empty-list" style={styles.emptyContainer}>
         <EmptyWalletListPlaceholderIcon />
         <Spacer value={verticalScale(16)} />
         <Text
@@ -102,6 +106,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           </Text>
         </Row>
         <Button
+          testID="toggle-button"
           type="circular"
           style={styles.toggleBtn}
           onPress={onTogglePress}

@@ -72,7 +72,7 @@ export const AddressDetails = (): JSX.Element => {
       <SafeAreaView style={styles.container}>
         <Header />
         <View style={styles.center}>
-          <Text>Error Occured</Text>
+          <Text>Error Occurred</Text>
         </View>
       </SafeAreaView>
     );
@@ -173,7 +173,7 @@ export const AddressDetails = (): JSX.Element => {
   };
 
   return (
-    <View testID="address-screen" style={styles.container}>
+    <SafeAreaView testID="address-screen" style={styles.container}>
       <Header contentRight={renderHeaderRight()} />
       <Spacer value={verticalScale(52)} />
       <ExplorerAccountView
@@ -193,6 +193,6 @@ export const AddressDetails = (): JSX.Element => {
       {finalAccount && (
         <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
       )}
-    </View>
+    </SafeAreaView>
   );
 };

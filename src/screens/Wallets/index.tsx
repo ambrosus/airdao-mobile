@@ -66,7 +66,7 @@ export const WalletsScreen = () => {
           <View style={styles.divider} />
           <Watchlists />
           {Platform.OS === 'ios' && (
-            <View style={styles.airdao}>
+            <View testID="learn-about-airdao" style={styles.airdao}>
               <LearnAboutAirDAO />
             </View>
           )}

@@ -1,16 +1,9 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { AddressDetails } from '@screens/Address';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAllAddresses } from '@contexts';
 
-// jest.spyOn(ArrayD, 'indexOfItem').mockImplementation(() => ({
-//   indexOfItem: jest.fn(() => 5)
-// }));
-// jest.mock('../../../index.d.ts', () => ({
-//   indexOfItem: jest.fn(() => 123)
-// }));
 jest.mock('victory-native', () => {
   return {
     VictoryChart: jest.fn(),
@@ -19,17 +12,6 @@ jest.mock('victory-native', () => {
     VictoryAxis: jest.fn()
   };
 });
-
-jest.mock('@contexts', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    handleStepChange: jest.fn()
-  })),
-  useAllAddresses: jest.fn(() => {
-    return [];
-  }),
-  useAllAddressesReducer: jest.fn()
-}));
 jest.mock('@contexts/OnBoardingUserContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
@@ -104,27 +86,39 @@ let mockedData = {
   error: false
 };
 
+jest.mock('@contexts/OnBoardingUserContext', () => ({
+  useOnboardingStatus: jest.fn(() => ({
+    status: 'none'
+  }))
+}));
+
+jest.mock('@contexts/AllAddresses', () => ({
+  useAllAddressesReducer: () => jest.fn(),
+  useAllAddresses: jest.fn(() => {
+    return [];
+  })
+}));
 jest.mock('@hooks/query/useSearchAccount', () => ({
   useSearchAccount: jest.fn(() => mockedData)
 }));
 
-jest.mock('@hooks/cache/usePersonalList', () => ({
-  usePersonalList: jest.fn(() => ({
-    personalList: [
+const mockeRremoveFromWatchlist = jest.fn();
+jest.mock('@hooks/cache/useWatchlist', () => ({
+  useWatchlist: jest.fn(() => ({
+    removeFromWatchlist: mockeRremoveFromWatchlist,
+    watchlist: [
       {
-        _id: '6200de3b523162b8b87baff1',
-        address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
-        ambBalance: 1154670697.424454,
-        transactionCount: 17,
-        type: 'undefined',
-        name: ''
+        _id: '123123',
+        address: '123123123',
+        ambBalance: 100,
+        transactionCount: 1,
+        type: 'account',
+        name: 'asdasdasd'
       }
     ],
-    addToPersonalList: jest.fn(),
-    removeFromPersonalList: jest.fn()
+    addToWatchlist: mockeRremoveFromWatchlist
   }))
 }));
-
 jest.mock('@utils/string');
 
 const queryClient = new QueryClient();
@@ -140,6 +134,25 @@ const Component = () => {
 };
 
 describe('AddressDetails', () => {
+  it('toaster should be visible', async () => {
+    const { getByTestId } = render(<Component />);
+    const button = getByTestId('watchlist-button');
+    act(() => {
+      fireEvent.press(button);
+    });
+    await new Promise((res) => setTimeout(res, 4000));
+    expect(mockeRremoveFromWatchlist).toHaveBeenCalled();
+  });
+  it('should open the edit wallet modal on press', async () => {
+    const { getByTestId } = render(<Component />);
+    const editWalletModal = getByTestId('bottom-sheet-edit-wallet');
+    act(() => {
+      fireEvent.press(editWalletModal);
+    });
+    await new Promise((res) => setTimeout(res, 500));
+    expect(getByTestId('bottom-sheet-edit-wallet')).toBeDefined();
+  });
+
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('address-screen')).toBeTruthy();
@@ -184,10 +197,6 @@ describe('AddressDetails', () => {
       error: true
     };
     const { getByText } = render(<Component />);
-    expect(getByText('Error Occured')).toBeDefined();
+    expect(getByText('Error Occurred')).toBeDefined();
   });
 });
-
-// Toaster
-// FetchNextPage
-// Modal

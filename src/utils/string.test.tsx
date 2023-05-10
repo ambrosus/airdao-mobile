@@ -2,44 +2,67 @@ import { StringUtils } from '@utils/string';
 
 describe('StringUtils', () => {
   describe('formatAddress', () => {
-    it('truncates the address based on the given padding', () => {
-      expect(StringUtils.formatAddress('1234 Main St', 2, 2)).toBe('12.. St');
-      expect(StringUtils.formatAddress('1234 Main St', 3, 1)).toBe('123...t');
-      expect(StringUtils.formatAddress('1234 Main St', 0, 4)).toBe('....St');
+    it('returns the original address when paddingLeft + paddingRight is >= to the address length', () => {
+      const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+      const paddingLeft = 20;
+      const paddingRight = 30;
+      const result = StringUtils.formatAddress(
+        address,
+        paddingLeft,
+        paddingRight
+      );
+      expect(result).toBe(address);
     });
 
-    it('replaces truncated characters with dots', () => {
-      expect(StringUtils.formatAddress('1234 Main St', 2, 2)).toBe('12.. St');
-      expect(StringUtils.formatAddress('1234 Main St', 3, 1)).toBe('123...t');
-      expect(StringUtils.formatAddress('1234 Main St', 0, 4)).toBe('....St');
+    it('formats the address with dots in the middle when paddingLeft + paddingRight is < than the address length', () => {
+      const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+      const paddingLeft = 3;
+      const paddingRight = 4;
+      const result = StringUtils.formatAddress(
+        address,
+        paddingLeft,
+        paddingRight
+      );
+      expect(result).toBe('0xF9...aceC');
     });
 
-    it('handles cases where the padding is greater than or equal to the length of the address', () => {
-      expect(StringUtils.formatAddress('1234 Main St', 20, 20)).toBe(
-        '1234 Main St'
+    it('formats the address with the specified number of dots in the middle', () => {
+      const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+      const paddingLeft = 2;
+      const paddingRight = 4;
+      const dotCount = 2;
+      const result = StringUtils.formatAddress(
+        address,
+        paddingLeft,
+        paddingRight,
+        dotCount
       );
-      expect(StringUtils.formatAddress('1234 Main St', 10, 10)).toBe(
-        '1234 Main St'
-      );
-      expect(StringUtils.formatAddress('1234 Main St', 5, 5)).toBe(
-        '1234 Main St'
-      );
+      expect(result).toBe('0xF..aceC');
     });
   });
 
   describe('pluralize', () => {
-    it('adds an "s" to the end of a string if the count is greater than 1', () => {
-      expect(StringUtils.pluralize(0, 'cat')).toBe('0 cats');
-      expect(StringUtils.pluralize(1, 'cat')).toBe('1 cat');
-      expect(StringUtils.pluralize(2, 'cat')).toBe('2 cats');
-      expect(StringUtils.pluralize(0, 'person', 'people')).toBe('0 people');
-      expect(StringUtils.pluralize(1, 'person', 'people')).toBe('1 person');
-      expect(StringUtils.pluralize(2, 'person', 'people')).toBe('2 people');
+    it('returns the singular form when count is 1', () => {
+      const count = 1;
+      const str = 'Wallet';
+      const pluralForm = 'Wallets';
+      const result = StringUtils.pluralize(count, str, pluralForm);
+      expect(result).toBe('1 Wallet');
     });
 
-    it('does not add an "s" to the end of a string if the count is 1', () => {
-      expect(StringUtils.pluralize(1, 'cat')).toBe('1 cat');
-      expect(StringUtils.pluralize(1, 'person', 'people')).toBe('1 person');
+    it('returns the plural form when count is > than 1', () => {
+      const count = 5;
+      const str = 'Wallet';
+      const pluralForm = 'Wallets';
+      const result = StringUtils.pluralize(count, str, pluralForm);
+      expect(result).toBe('5 Wallets');
+    });
+
+    it('returns the default plural form when count is > than 1 and no pluralForm is provided', () => {
+      const count = 3;
+      const str = 'Wallet';
+      const result = StringUtils.pluralize(count, str);
+      expect(result).toBe('3 Wallets');
     });
   });
 });

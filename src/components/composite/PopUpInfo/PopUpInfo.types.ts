@@ -6,6 +6,7 @@ export enum PopUpPlacement {
   CENTER = 'center'
 }
 export interface PopUpInfoProps {
+  testID?: string;
   title: string;
   body: string;
   placement?: PopUpPlacement;

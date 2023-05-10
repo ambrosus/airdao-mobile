@@ -81,5 +81,3 @@ describe('SettingsScreen', () => {
     expect(settingsInfoBlock).toBeTruthy();
   });
 });
-
-// open modal

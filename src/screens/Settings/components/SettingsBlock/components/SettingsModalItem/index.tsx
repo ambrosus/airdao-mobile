@@ -20,6 +20,7 @@ export const SettingsModalItem: FC<Props> = ({
     <View style={styles.container}>
       <Row style={styles.itemInfo} alignItems="center">
         <RadioButton
+          testID="radio-button"
           isActive={modalActiveItem === item}
           onPress={() => handleItemPress(item)}
         />

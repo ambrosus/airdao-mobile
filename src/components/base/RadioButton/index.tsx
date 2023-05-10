@@ -5,11 +5,16 @@ import { COLORS } from '@constants/colors';
 type Props = {
   onPress: () => void;
   isActive: boolean;
+  testID?: string;
 };
 
-export const RadioButton = ({ onPress, isActive }: Props) => {
+export const RadioButton = ({ onPress, isActive, testID }: Props) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.mainContainer}>
+    <TouchableOpacity
+      testID={testID}
+      onPress={onPress}
+      style={styles.mainContainer}
+    >
       <View style={[styles.radioButtonIcon]}>
         <View
           style={[
