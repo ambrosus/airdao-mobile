@@ -14,7 +14,7 @@ import { FontSizeKey, TextProps } from './Text.types';
 
 export function Text(props: TextProps): JSX.Element {
   const {
-    style: propsStyle,
+    style: propsStyle = {},
     color = '#000000',
     fontSize,
     opacity = 1,
@@ -43,16 +43,15 @@ export function Text(props: TextProps): JSX.Element {
   const fixMisplacement = () => {
     if (Platform.OS === 'ios') {
       switch (fontFamily) {
-        case 'Inter_500Medium':
-        case 'Inter_600SemiBold':
-        case 'Inter_700Bold':
-          break;
         case 'Mersad_600SemiBold': {
           return {
             lineHeight: getFontSize() * 1.4, // a workaround to avoid incorrect placement of Text components when used with custom fonts
             height: getFontSize()
           };
         }
+        case 'Inter_500Medium':
+        case 'Inter_600SemiBold':
+        case 'Inter_700Bold':
         default:
           break;
       }
@@ -72,7 +71,8 @@ export function Text(props: TextProps): JSX.Element {
   return (
     <RNText
       testID={testID}
-      style={[styles, propsStyle]}
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      style={{ ...styles, ...(propsStyle as {}) }}
       {...restProps}
       onPress={props.onPress}
     />

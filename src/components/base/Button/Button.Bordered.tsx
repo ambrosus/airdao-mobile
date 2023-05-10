@@ -20,7 +20,11 @@ export function BorderedButton(props: BorderedButtonProps): JSX.Element {
   };
 
   return (
-    <BaseButton {...restProps} style={styles} testID={testID}>
+    <BaseButton
+      {...restProps}
+      style={styles}
+      testID={testID ?? 'bordered-button'}
+    >
       {children}
     </BaseButton>
   );

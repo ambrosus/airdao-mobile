@@ -20,6 +20,7 @@ export const Spacer = memo(
     flexGrow,
     horizontal,
     pointerEvents,
+    testID,
     onLayout: handleLayout
   }: Props) => {
     return (
@@ -33,6 +34,7 @@ export const Spacer = memo(
           flexGrow
         }}
         pointerEvents={pointerEvents}
+        testID={testID}
       />
     );
   }

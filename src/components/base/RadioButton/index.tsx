@@ -1,25 +1,26 @@
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, ViewProps } from 'react-native';
 import React from 'react';
 import { COLORS } from '@constants/colors';
 
 type Props = {
   onPress: () => void;
   isActive: boolean;
-  testID?: string;
+  testID?: ViewProps['testID'];
 };
 
 export const RadioButton = ({ onPress, isActive, testID }: Props) => {
   return (
     <TouchableOpacity
-      testID={testID}
       onPress={onPress}
       style={styles.mainContainer}
+      testID={testID}
     >
       <View style={[styles.radioButtonIcon]}>
         <View
           style={[
             isActive ? styles.radioButtonActive : styles.radioButtonInactive
           ]}
+          testID={isActive ? 'radio-button-active' : 'radio-button-inactive'}
         />
       </View>
     </TouchableOpacity>

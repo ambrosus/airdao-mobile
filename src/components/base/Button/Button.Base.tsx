@@ -9,7 +9,7 @@ export function BaseButton(props: ButtonProps): JSX.Element {
       disabled={disabled}
       onPress={onPress}
       style={style}
-      testID={testID}
+      testID={testID ?? 'base-button'}
       onLongPress={onLongPress}
     >
       {children}

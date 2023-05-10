@@ -6,10 +6,9 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 export const TextInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
-    const { value, style = {}, onChangeValue, ...restProps } = props;
+    const { value, style = {}, testID, onChangeValue, ...restProps } = props;
     const styles = [defaultStyles.container, style];
     const rnInputRef = useRef<RNTextInput>(null);
-
     useImperativeHandle(
       ref,
       () => {
@@ -34,6 +33,7 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
         value={value}
         onChangeText={onChangeValue}
         style={styles}
+        testID={testID}
         {...restProps}
       />
     );

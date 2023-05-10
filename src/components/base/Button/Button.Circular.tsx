@@ -20,7 +20,11 @@ export function CircularButton(props: CircularButtonProps): JSX.Element {
   };
 
   return (
-    <BaseButton {...restProps} style={styles} testID={testID}>
+    <BaseButton
+      {...restProps}
+      style={styles}
+      testID={testID ?? 'circular-button'}
+    >
       {children}
     </BaseButton>
   );
