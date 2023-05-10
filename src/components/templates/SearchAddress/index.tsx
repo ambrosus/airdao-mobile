@@ -191,7 +191,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const trackAddress = async () => {
     if (account) {
       if (watchlist.indexOfItem(account, 'address') > -1) {
-        // TODO navigate to watchlist
         navigation.jumpTo('Wallets');
         return;
       }

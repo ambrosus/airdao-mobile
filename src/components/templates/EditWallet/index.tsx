@@ -92,7 +92,6 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   };
 
   const saveNewLists = useCallback(async () => {
-    // TODO refactor lists and use lists context
     setListsOfAddressGroup(
       localLists.map((l) => ({
         ...l,

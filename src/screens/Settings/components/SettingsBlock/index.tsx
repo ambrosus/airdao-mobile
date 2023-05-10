@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { RightArrowIcon } from '@components/svg/RightArrowIcon';
+import { RightArrowIcon } from '@components/svg/icons';
 import { DarkNotificationIcon } from '@components/svg/icons/DarkNotification';
 import { CurrencyIcon } from '@components/svg/icons/Currency';
 import { LanguageIcon } from '@components/svg/icons/Language';

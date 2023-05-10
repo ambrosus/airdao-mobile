@@ -15,7 +15,7 @@ import { COLORS } from '@constants/colors';
 import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { InfoIcon } from '@components/svg/icons/Info';
-import { RightArrowIcon } from '@components/svg/RightArrowIcon';
+import { RightArrowIcon } from '@components/svg/icons';
 import { BottomSheetSelectList } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList';
 import { styles } from '@screens/Lists/components/BottomSheetListsSettings/styles';
 
