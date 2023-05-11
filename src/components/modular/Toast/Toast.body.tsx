@@ -18,9 +18,9 @@ import { Button, Row, Text } from '@components/base';
 import { CloseIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './Toast.styles';
-import { ToastOptions, ToastType } from './Toast.types';
+import { ToastOptions, ToastRef, ToastType } from './Toast.types';
 
-export const ToastBody = forwardRef((_, ref) => {
+export const ToastBody = forwardRef<ToastRef>((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const DISTANCE_FROM_EDGE = verticalScale(15);
   const defaultOptions: ToastOptions = useMemo(
@@ -104,6 +104,7 @@ export const ToastBody = forwardRef((_, ref) => {
       exiting={(isTopToast ? SlideOutUp : SlideOutDown).duration(
         (options.duration ?? 500) / 2
       )}
+      testID="toast"
     >
       <Row alignItems="center" justifyContent="space-between">
         <View style={{ flex: 4 }}>
@@ -132,6 +133,7 @@ export const ToastBody = forwardRef((_, ref) => {
         <Button
           onPress={hide}
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          testID="toast-close-button"
         >
           <CloseIcon color="#FFFFFF" />
         </Button>

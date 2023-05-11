@@ -20,9 +20,10 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       borderRadius = BottomSheetBorderRadius,
       children,
       isNestedSheet,
-      containerStyle,
+      containerStyle = {},
       avoidKeyboard = true,
       fullscreen = false,
+      testID,
       onClose
     },
     ref
@@ -50,23 +51,18 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const content = useMemo(
       () => (
         <KeyboardDismissingView
-          style={[
-            {
-              height: fullscreen
-                ? fullscreenModalHeight -
-                  (avoidKeyboard
-                    ? 0
-                    : Platform.OS === 'ios'
-                    ? 0
-                    : keyboardHeight)
-                : height,
-              backgroundColor: '#FFFFFF',
-              borderTopLeftRadius: borderRadius,
-              borderTopRightRadius: borderRadius
-            },
-            containerStyle
-          ]}
-          testID="bottom-sheet-content"
+          style={{
+            height: fullscreen
+              ? fullscreenModalHeight -
+                (avoidKeyboard ? 0 : Platform.OS === 'ios' ? 0 : keyboardHeight)
+              : height,
+            backgroundColor: '#FFFFFF',
+            borderTopLeftRadius: borderRadius,
+            borderTopRightRadius: borderRadius,
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            ...(containerStyle as {})
+          }}
+          testID={(testID || '') + '-content'}
         >
           {children}
         </KeyboardDismissingView>
@@ -79,6 +75,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         height,
         borderRadius,
         containerStyle,
+        testID,
         children
       ]
     );
@@ -87,7 +84,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
 
     return (
       <Modal
-        testID="bottom-sheet"
+        testID={testID}
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}

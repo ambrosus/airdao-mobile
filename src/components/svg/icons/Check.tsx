@@ -3,7 +3,7 @@ import { Path, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export function CheckIcon(props: IconProps) {
-  const { scale = 1, color = '#000000' } = props;
+  const { scale = 1, color = '#000000', testID } = props;
   const width = 14,
     height = 10;
   return (
@@ -13,6 +13,7 @@ export function CheckIcon(props: IconProps) {
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
       style={{ transform: [{ scale }] }}
+      testID={testID}
     >
       <Path
         d="M13 1.5l-7.636 7L1 4.5"

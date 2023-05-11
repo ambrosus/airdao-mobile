@@ -165,7 +165,7 @@ describe('AMBMarket', () => {
       error: false
     };
     const { getAllByTestId } = render(<Component />);
-    const title = getAllByTestId('PercentChange_Title')[0];
+    const title = getAllByTestId('percent-change-text')[0];
     expect(title.props.children[1]).toBe('5,533.00');
   });
 });

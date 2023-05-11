@@ -6,7 +6,7 @@ import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
-  const { fillColor, value, onValueChange, ...iconProps } = props;
+  const { fillColor, value, testID, onValueChange, ...iconProps } = props;
   const onPress = () => {
     if (typeof onValueChange === 'function') {
       onValueChange(!value);
@@ -26,8 +26,11 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
         width: scale(24),
         height: scale(24)
       }}
+      testID={testID}
     >
-      {value && <CheckIcon {...iconProps} />}
+      {value && (
+        <CheckIcon {...iconProps} testID={(testID || '') + '-square'} />
+      )}
     </Button>
   );
 };

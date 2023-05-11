@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { TextStyle, ViewStyle } from 'react-native';
+import { TextStyle, ViewProps, ViewStyle } from 'react-native';
 
 export interface HeaderProps {
   backIconVisible?: boolean;
@@ -10,4 +10,5 @@ export interface HeaderProps {
   contentLeft?: ReactNode;
   contentRight?: ReactNode;
   style?: ViewStyle;
+  testID?: ViewProps['testID'];
 }

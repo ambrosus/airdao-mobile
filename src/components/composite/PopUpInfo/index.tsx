@@ -10,14 +10,15 @@ export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
   const { body, title, placement, testID } = props;
   return (
     <Popover
+      testID={testID}
       placement={(placement || 'auto') as PopoverPlacement}
       popoverStyle={styles.popoverStyle}
       from={(sourceRef, showPopover) => (
         <View>
           <Button
-            testID={testID}
             onPress={showPopover}
             style={styles.container}
+            testID={testID + '-popover-button'}
           >
             <Text color="#FFFFFF" fontSize={10}>
               i

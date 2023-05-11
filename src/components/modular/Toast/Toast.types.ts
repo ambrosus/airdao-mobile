@@ -9,3 +9,15 @@ export interface ToastOptions {
   type: ToastType;
   onUndo?: () => void;
 }
+
+export type ToastRef = {
+  /**
+   * Shows Toast
+   */
+  show: (params: ToastOptions) => void;
+
+  /**
+   * Hides Toast
+   */
+  hide: () => void;
+};

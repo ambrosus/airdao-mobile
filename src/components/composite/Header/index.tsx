@@ -16,6 +16,7 @@ export function Header(props: HeaderProps): JSX.Element {
     titlePosition = 'center',
     style = {},
     titleStyle = {},
+    testID,
     onBackPress
   } = props;
   const navigation = useNavigation();
@@ -37,6 +38,7 @@ export function Header(props: HeaderProps): JSX.Element {
           fontSize={15}
           color={COLORS.smokyBlack}
           title
+          testID={(testID || '') + '-title'}
         >
           {title}
         </Text>
@@ -49,12 +51,17 @@ export function Header(props: HeaderProps): JSX.Element {
     return (
       <>
         {backIconVisible && (
-          <Button onPress={_onBackPress}>
+          <Button onPress={_onBackPress} testID={(testID || '') + '-backIcon'}>
             <BackIcon />
           </Button>
         )}
         {titlePosition === 'left' && (
-          <View style={styles.titleOnLeft}>{renderTitle()}</View>
+          <View
+            style={styles.titleOnLeft}
+            testID={(testID || '') + '-titleLeft'}
+          >
+            {renderTitle()}
+          </View>
         )}
         {contentLeft}
       </>
@@ -74,6 +81,7 @@ export function Header(props: HeaderProps): JSX.Element {
       justifyContent="space-between"
       alignItems="center"
       style={{ ...styles.container, ...style }}
+      testID={testID}
     >
       <Row style={styles.left} alignItems="center">
         {renderContentLeft()}

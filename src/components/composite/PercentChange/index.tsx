@@ -12,7 +12,7 @@ interface PercentChangeProps
 }
 
 export function PercentChange(props: PercentChangeProps): JSX.Element {
-  const { change, color = 'black', fontSize = 12, fontWeight = '500' } = props;
+  const { change, color, fontSize = 12, fontWeight = '500' } = props;
 
   return (
     <Row alignItems="center">
@@ -23,8 +23,10 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
       <Text
         fontSize={fontSize}
         fontWeight={fontWeight}
-        color={color || change >= 0 ? COLORS.crimsonRed : COLORS.jungleGreen}
-        testID="PercentChange_Title"
+        color={
+          color ? color : change >= 0 ? COLORS.crimsonRed : COLORS.jungleGreen
+        }
+        testID="percent-change-text"
       >
         {' '}
         {NumberUtils.formatNumber(change, 2)}%

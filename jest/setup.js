@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler/jestSetup';
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
-
+import { setUpTests } from 'react-native-reanimated/lib/reanimated2/jestUtils';
+setUpTests();
 const mockIsPackageInstalled = jest.fn((value) => ({
   value,
   isInstalled: true

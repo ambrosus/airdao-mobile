@@ -1,3 +1,5 @@
+import { ViewProps } from 'react-native';
+
 export enum PopUpPlacement {
   TOP = 'top',
   RIGHT = 'right',
@@ -10,4 +12,5 @@ export interface PopUpInfoProps {
   title: string;
   body: string;
   placement?: PopUpPlacement;
+  testID?: ViewProps['testID'];
 }

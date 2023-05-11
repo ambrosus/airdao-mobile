@@ -5,7 +5,7 @@ import { Button } from '@components/base';
 import { moderateScale } from '@utils/scaling';
 
 export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
-  const { size = 24, fillColor, value, onValueChange } = props;
+  const { size = 24, fillColor, value, testID, onValueChange } = props;
   const innerCircleSize = size / 3;
   const onPress = () => {
     if (typeof onValueChange === 'function') {
@@ -26,6 +26,7 @@ export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
         width: moderateScale(size),
         height: moderateScale(size)
       }}
+      testID={testID}
     >
       <View
         style={{
@@ -34,6 +35,7 @@ export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
           height: moderateScale(innerCircleSize),
           backgroundColor: value ? '#FFFFFF' : 'transparent'
         }}
+        testID={(testID || '') + '-circular'}
       />
     </Button>
   );

@@ -12,6 +12,7 @@ export interface BottomSheetProps {
   avoidKeyboard?: ModalProps['avoidKeyboard'];
   fullscreen?: boolean;
   onClose?: () => unknown;
+  testID?: ViewProps['testID'];
 }
 
 export type BottomSheetRef = {

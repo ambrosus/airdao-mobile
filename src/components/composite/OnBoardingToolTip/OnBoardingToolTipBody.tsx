@@ -32,7 +32,7 @@ export const OnBoardingToolTipBody = ({
           {title}
         </Text>
         {!!handleButtonClose ? (
-          <Button onPress={handleButtonClose}>
+          <Button onPress={handleButtonClose} testID="onboarding-close-button">
             <CloseIcon />
           </Button>
         ) : null}
