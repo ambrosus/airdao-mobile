@@ -57,7 +57,10 @@ export const BottomSheetWithHeader = forwardRef<
           style={styles.header}
           backIconVisible={false}
           contentLeft={
-            <Button onPress={dismiss}>
+            <Button
+              onPress={dismiss}
+              testID="bottom-sheet-with-header-close-icon"
+            >
               <CloseIcon />
             </Button>
           }
