@@ -15,6 +15,7 @@ export const NumberInput = React.forwardRef<InputRef, InputProps>(
         style={styles}
         {...restProps}
         keyboardType="number-pad"
+        {...restProps}
       />
     );
   }

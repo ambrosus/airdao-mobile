@@ -120,7 +120,6 @@ describe('WalletsScreen', () => {
     const { getAllByTestId, getByTestId } = render(<Component />);
     const toggleButton = getAllByTestId('toggle-button');
     await fireEvent.press(toggleButton[0]);
-    await new Promise((res) => setTimeout(res, 1000));
     expect(getByTestId('empty-list')).toBeDefined();
   });
 
@@ -138,7 +137,6 @@ describe('WalletsScreen', () => {
     const { getAllByTestId, getByTestId } = render(<Component />);
     const toggleButton = getAllByTestId('toggle-button');
     await fireEvent.press(toggleButton[0]);
-    await new Promise((res) => setTimeout(res, 1000));
     expect(getByTestId('WalletItem_0')).toBeDefined();
   });
 });

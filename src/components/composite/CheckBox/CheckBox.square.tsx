@@ -15,6 +15,7 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
 
   return (
     <Button
+      testID={testID}
       type="circular"
       borderRadius={scale(4)}
       onPress={onPress}
@@ -26,7 +27,6 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
         width: scale(24),
         height: scale(24)
       }}
-      testID={testID}
     >
       {value && (
         <CheckIcon {...iconProps} testID={(testID || '') + '-square'} />

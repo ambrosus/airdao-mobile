@@ -22,8 +22,10 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
       if (typeof onSelectSegment === 'function') onSelectSegment(segment);
     };
     const selected = selectedSegment === segment.id;
+
     return (
       <Button
+        testID={`SegmentButton_${segment.id}`}
         key={segment.id}
         onPress={onPress}
         style={{

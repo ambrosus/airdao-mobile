@@ -140,7 +140,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View testID="EditWallet_Container" style={styles.container}>
       <View style={styles.content}>
         <Text title color="#222222" fontFamily="Inter_600SemiBold">
           Address name

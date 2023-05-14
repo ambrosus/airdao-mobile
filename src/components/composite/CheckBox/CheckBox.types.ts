@@ -4,6 +4,7 @@ import { ViewProps } from 'react-native';
 export type CheckBoxType = 'square' | 'circular';
 
 export interface BaseCheckBoxProps {
+  testID?: string;
   fillColor?: string;
   value: boolean;
   onValueChange?: (newValue: boolean) => unknown;

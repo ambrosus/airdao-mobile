@@ -65,6 +65,12 @@ jest.mock('@hooks/query/useExplorerAccounts', () => ({
   useExplorerAccounts: jest.fn(() => mockedData)
 }));
 
+jest.mock('@hooks/query/useExplorerInfo', () => ({
+  useExplorerInfo: jest.fn(() => ({
+    data: []
+  }))
+}));
+
 const queryClient = new QueryClient();
 
 const Component = () => {
@@ -82,17 +88,16 @@ describe('ExploreScreen', () => {
     expect(getByTestId('explore-screen')).toBeTruthy();
   });
 
-  it('input is visible', async () => {
-    const { getByTestId } = render(<Component />);
-    expect(getByTestId('search-input')).not.toBeNull();
-  });
-
   it('opens filter modal when filter button pressed', async () => {
     const { getByTestId } = render(<Component />);
     const filterButton = getByTestId('filter-button');
     fireEvent.press(filterButton);
-    await new Promise((res) => setTimeout(res, 1000));
     expect(getByTestId('bottom-sheet-wallet-sort')).toBeDefined();
+  });
+
+  it('input is visible', async () => {
+    const { getByTestId } = render(<Component />);
+    expect(getByTestId('search-input')).not.toBeNull();
   });
 
   it('displays loading spinner while loading accounts', async () => {

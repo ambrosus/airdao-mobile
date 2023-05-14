@@ -62,6 +62,7 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
         }}
       >
         <Button
+          testID="EditWallet_Personal_Address_Switch"
           onPress={() => {
             onIsPersonalAddressChange(!isPersonalAddress);
             handleOnboardingStepChange(1);
@@ -69,6 +70,7 @@ export const EditWalletCheckboxToolTip = (props: Props): JSX.Element => {
         >
           <Row alignItems="center">
             <CheckBox
+              testID="EditWallet_Checkbox"
               type="square"
               value={isPersonalAddress}
               fillColor={COLORS.sapphireBlue}
