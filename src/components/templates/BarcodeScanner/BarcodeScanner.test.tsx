@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Camera, PermissionResponse } from 'expo-camera';
 import { BarcodeScanner } from '@components/templates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -41,6 +41,7 @@ describe('BarcodeScanner', () => {
   afterAll(() => {
     cameraPermissionMock.mockRestore();
   });
+  //export type PermissionStatus = 'granted' | 'denied' | 'never_ask_again';
 
   beforeEach(() => {
     clearAllMocks();
@@ -52,9 +53,10 @@ describe('BarcodeScanner', () => {
     cameraPermissionMock = jest
       .spyOn(Camera, 'getCameraPermissionsAsync')
       .mockResolvedValue({ status: 'granted' } as PermissionResponse);
-    const { queryByTestId } = render(<Component />);
-    const camera = queryByTestId('BarcodeScanner_Container');
-    expect(camera).toBeDefined();
+    const { getByTestId } = render(<Component />);
+    await waitFor(async () => {
+      await getByTestId('BarcodeScanner_Container');
+    });
   });
 
   it('does not render Camera component when camera permission is not granted', async () => {
@@ -62,22 +64,24 @@ describe('BarcodeScanner', () => {
       .spyOn(Camera, 'getCameraPermissionsAsync')
       .mockResolvedValue({ status: 'denied' } as PermissionResponse);
     const { queryByTestId } = render(<Component />);
-    const camera = queryByTestId('BarcodeScanner_Container');
-    expect(camera).toBeNull();
+    await waitFor(async () => {
+      const camera = await queryByTestId('BarcodeScanner_Container');
+      expect(camera).toBeNull();
+    });
   });
 
-  // TODO onClose
-  // it('calls onClose when Close button is pressed', async () => {
-  //   cameraPermissionMock = jest
-  //     .spyOn(Camera, 'getCameraPermissionsAsync')
-  //     .mockImplementation(() => {
-  //       return { status: 'granted' };
-  //     });
-  //   const { queryByTestId } = render(<Component />);
-  //   const closeButton = queryByTestId('BarcodeScanner_Close_Button');
-  //   act(() => {
-  //     fireEvent.press(closeButton);
-  //   });
-  //   expect(mockOnClose).toHaveBeenCalled();
-  // });
+  it('calls onClose when Close button is pressed', async () => {
+    cameraPermissionMock = jest
+      .spyOn(Camera, 'getCameraPermissionsAsync')
+      .mockResolvedValue({ status: 'granted' } as PermissionResponse);
+    const { getByTestId } = render(<Component />);
+    await waitFor(async () => {
+      await getByTestId('BarcodeScanner_Container');
+      await getByTestId('BarcodeScanner_Close_Button');
+    });
+    await act(async () => {
+      await fireEvent.press(getByTestId('BarcodeScanner_Close_Button'));
+    });
+    expect(mockOnClose).toHaveBeenCalled();
+  });
 });
