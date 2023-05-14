@@ -25,6 +25,7 @@ interface BottomSheetWithHeaderProps extends BottomSheetProps {
   status?: OnBoardingStatus;
   isToolTipVisible?: boolean;
   handleOnboardingStepChange?: (nextStep: 'back' | 'next') => void;
+  actionButtonTestID?: string;
 }
 
 export const BottomSheetWithHeader = forwardRef<
@@ -46,6 +47,7 @@ export const BottomSheetWithHeader = forwardRef<
     children,
     isToolTipVisible,
     handleOnboardingStepChange,
+    actionButtonTestID,
     ...bottomSheetProps
   } = props;
 
@@ -82,6 +84,7 @@ export const BottomSheetWithHeader = forwardRef<
           onClose={() => null}
         >
           <Button
+            testID={actionButtonTestID}
             onPress={() => {
               if (status === 'step-10' && onActionPress) {
                 return setTimeout(() => {

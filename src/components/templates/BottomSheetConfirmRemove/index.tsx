@@ -19,51 +19,53 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
   ({ item, groupId }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
-
     return (
       <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
-        <View style={styles.icon}>
-          <BottomSheetSwiperIcon />
+        <View testID="BottomSheetConfirmRemove_Container">
+          <View style={styles.icon}>
+            <BottomSheetSwiperIcon />
+          </View>
+          <Spacer value={32} />
+          <Text
+            style={styles.text}
+            fontFamily="Inter_600SemiBold"
+            fontSize={20}
+            color={COLORS.smokyBlack}
+          >
+            Are you sure want to remove selected {item.address} from Whales?
+          </Text>
+          <Spacer value={24} />
+          <Button
+            testID="BottomSheetConfirmRemove_Button"
+            onPress={() => {
+              handleOnDeleteAddressFromGroup(groupId, [item.address]);
+              localRef.current?.dismiss();
+            }}
+            style={styles.removeButton}
+          >
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.white}
+            >
+              Remove
+            </Text>
+          </Button>
+          <Spacer value={24} />
+          <Button
+            type="base"
+            style={styles.bottomSheetCancelButton}
+            onPress={() => localRef.current?.dismiss()}
+          >
+            <Text
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.midnight}
+              fontSize={16}
+            >
+              Cancel
+            </Text>
+          </Button>
         </View>
-        <Spacer value={32} />
-        <Text
-          style={styles.text}
-          fontFamily="Inter_600SemiBold"
-          fontSize={20}
-          color={COLORS.smokyBlack}
-        >
-          Are you sure want to remove selected {item.address} from Whales?
-        </Text>
-        <Spacer value={24} />
-        <Button
-          onPress={() => {
-            handleOnDeleteAddressFromGroup(groupId, [item.address]);
-            localRef.current?.dismiss();
-          }}
-          style={styles.removeButton}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.white}
-          >
-            Remove
-          </Text>
-        </Button>
-        <Spacer value={24} />
-        <Button
-          type="base"
-          style={styles.bottomSheetCancelButton}
-          onPress={() => localRef.current?.dismiss()}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.midnight}
-            fontSize={16}
-          >
-            Cancel
-          </Text>
-        </Button>
       </BottomSheet>
     );
   }

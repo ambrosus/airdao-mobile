@@ -61,7 +61,7 @@ export const BottomSheetEditWallet = forwardRef<
   }, [handleStepChange, saveAddress, setIsDoneToolTipVisible, status]);
 
   return (
-    <View testID="bottom-sheet-edit-wallet">
+    <View testID="BottomSheetEditWallet">
       <BottomSheetWithHeader
         isToolTipVisible={isSaveToolTipVisible}
         isNestedSheet={false}
@@ -71,26 +71,24 @@ export const BottomSheetEditWallet = forwardRef<
         avoidKeyboard={false}
         actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
         onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}
+        actionButtonTestID="BottomSheetEditWallet_Action_Button"
         {...bottomSheetProps}
       >
-        {wallet && (
-          <>
-            <EditWallet
-              wallet={wallet}
-              name={name}
-              onNameChange={setName}
-              isPersonalAddress={isPersonalAddress}
-              onIsPersonalAddressChange={setIsPersonalAddress}
-              handleSaveTooltipVisible={handleSaveTooltipVisible}
-            />
-            {Platform.OS === 'android' && (
-              <FloatButton
-                title="Save"
-                onPress={handleActionPress}
-                bottomPadding={17}
-              />
-            )}
-          </>
+        <EditWallet
+          wallet={wallet}
+          name={name}
+          onNameChange={setName}
+          isPersonalAddress={isPersonalAddress}
+          onIsPersonalAddressChange={setIsPersonalAddress}
+          handleSaveTooltipVisible={handleSaveTooltipVisible}
+        />
+        {Platform.OS === 'android' && (
+          <FloatButton
+            testID="BottomSheet_Edit_Wallet_FloatButton"
+            title="Save"
+            onPress={handleActionPress}
+            bottomPadding={17}
+          />
         )}
       </BottomSheetWithHeader>
     </View>

@@ -136,13 +136,14 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheet height={500} ref={localRef}>
-          <View testID="bottom-sheet-create" style={styles.container}>
+          <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
               <View style={styles.icon}>
                 <BottomSheetSwiperIcon />
               </View>
               <Spacer value={29} />
               <Text
+                testID="BottomSheetCreateRename_Title"
                 style={styles.newListTitle}
                 fontFamily="Inter_600SemiBold"
                 fontSize={20}
@@ -169,6 +170,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 onClose={() => null}
               >
                 <Input
+                  testID="BottomSheetCreateRename_Input"
                   onBlur={() => handleOnboardingStepChange(1)}
                   value={localGroupName}
                   onChangeValue={(value) => setLocalGroupName(value)}
@@ -190,6 +192,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 onClose={() => null}
               >
                 <Button
+                  testID="BottomSheetCreateRename_Button"
                   disabled={!localGroupName.length}
                   type="circular"
                   style={styles.bottomSheetCreateRenameButton}
@@ -206,6 +209,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               </Tooltip>
               <Spacer value={24} />
               <Button
+                testID="BottomSheetCreateRename_Cancel_Button"
                 type="base"
                 style={styles.bottomSheetCancelButton}
                 onPress={() => localRef.current?.dismiss()}

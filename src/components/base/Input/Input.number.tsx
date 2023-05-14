@@ -4,7 +4,7 @@ import { TextInput } from './Input.text';
 
 export const NumberInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
-    const { value, style = {}, onChangeValue } = props;
+    const { value, style = {}, onChangeValue, ...restProps } = props;
     const styles = [{ color: '#000000', padding: 0 }, style];
 
     return (
@@ -14,6 +14,7 @@ export const NumberInput = React.forwardRef<InputRef, InputProps>(
         onChangeText={onChangeValue}
         style={styles}
         keyboardType="number-pad"
+        {...restProps}
       />
     );
   }

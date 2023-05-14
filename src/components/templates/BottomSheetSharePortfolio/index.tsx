@@ -82,6 +82,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
             <Row justifyContent="space-between" alignItems="center">
               <View style={styles.shareButton}>
                 <Button
+                  testID="SharePortfolio_Twitter_Button"
                   type="circular"
                   style={styles.twitterBtn}
                   onPress={async () => onSharePress(Social.Twitter)}
@@ -93,6 +94,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
               </View>
               <View style={styles.shareButton}>
                 <Button
+                  testID="SharePortfolio_Message_Button"
                   type="circular"
                   style={styles.messagesBtn}
                   onPress={() => onSharePress(Social.Sms)}
@@ -103,7 +105,11 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 <Text>Messages</Text>
               </View>
               <View style={styles.shareButton}>
-                <Button type="circular" style={styles.lightBtn}>
+                <Button
+                  testID="SharePortfolio_Clipboard_Button"
+                  type="circular"
+                  style={styles.lightBtn}
+                >
                   <ClipboardIcon color="#222222" />
                 </Button>
                 <Spacer value={verticalScale(8)} />
@@ -111,6 +117,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
               </View>
               <View style={styles.shareButton}>
                 <Button
+                  testID="SharePortfolio_More_Button"
                   type="circular"
                   style={styles.lightBtn}
                   onPress={() => onSharePress()}
