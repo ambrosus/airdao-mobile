@@ -169,7 +169,7 @@ export const Notifications = (): JSX.Element => {
   };
 
   return (
-    <SafeAreaView testID="notifications-screen" style={styles.container}>
+    <SafeAreaView testID="NotificationScreen" style={styles.container}>
       <Header
         onFilterPress={showFilterModal}
         onSettingsPress={showSettingsModal}

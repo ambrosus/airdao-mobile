@@ -28,7 +28,7 @@ const Component = () => {
 describe('Notifications Screen', () => {
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
-    expect(getByTestId('notifications-screen')).toBeTruthy();
+    expect(getByTestId('NotificationScreen')).toBeTruthy();
   });
 
   it('displays notification sections', () => {
@@ -42,7 +42,6 @@ describe('Notifications Screen', () => {
     const { getByTestId } = render(<Component />);
     const filterButton = getByTestId('filter-button');
     fireEvent.press(filterButton);
-    await new Promise((res) => setTimeout(res, 500));
     expect(getByTestId('filter-modal')).toBeDefined();
   });
 
@@ -50,7 +49,6 @@ describe('Notifications Screen', () => {
     const { getByTestId } = render(<Component />);
     const filterButton = getByTestId('settings-button');
     fireEvent.press(filterButton);
-    await new Promise((res) => setTimeout(res, 500));
-    expect(getByTestId('settings-modal')).toBeDefined();
+    expect(getByTestId('BottomSheetNotiSettings_Container')).toBeDefined();
   });
 });

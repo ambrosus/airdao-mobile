@@ -3,6 +3,7 @@ import { IconProps } from '@components/svg/icons';
 export type CheckBoxType = 'square' | 'circular';
 
 export interface BaseCheckBoxProps {
+  testID?: string;
   fillColor?: string;
   value: boolean;
   onValueChange?: (newValue: boolean) => unknown;

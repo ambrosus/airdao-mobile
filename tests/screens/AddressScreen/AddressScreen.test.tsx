@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { AddressDetails } from '@screens/Address';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -59,9 +59,11 @@ const mockedListsOfAddressGroup = [
     ]
   }
 ];
+
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
 });
+
 jest.mock('@contexts/ListsContext', () => ({
   useLists: jest.fn(() => ({
     listsOfAddressGroup: mockedListsOfAddressGroup,
@@ -102,10 +104,11 @@ jest.mock('@hooks/query/useSearchAccount', () => ({
   useSearchAccount: jest.fn(() => mockedData)
 }));
 
-const mockeRremoveFromWatchlist = jest.fn();
+const mockRemoveFromWatchlist = jest.fn();
+
 jest.mock('@hooks/cache/useWatchlist', () => ({
   useWatchlist: jest.fn(() => ({
-    removeFromWatchlist: mockeRremoveFromWatchlist,
+    removeFromWatchlist: mockRemoveFromWatchlist,
     watchlist: [
       {
         _id: '123123',
@@ -116,9 +119,10 @@ jest.mock('@hooks/cache/useWatchlist', () => ({
         name: 'asdasdasd'
       }
     ],
-    addToWatchlist: mockeRremoveFromWatchlist
+    addToWatchlist: mockRemoveFromWatchlist
   }))
 }));
+
 jest.mock('@utils/string');
 
 const queryClient = new QueryClient();
@@ -137,20 +141,20 @@ describe('AddressDetails', () => {
   it('toaster should be visible', async () => {
     const { getByTestId } = render(<Component />);
     const button = getByTestId('watchlist-button');
-    act(() => {
-      fireEvent.press(button);
+    await act(async () => {
+      await fireEvent.press(button);
     });
-    await new Promise((res) => setTimeout(res, 4000));
-    expect(mockeRremoveFromWatchlist).toHaveBeenCalled();
+    await waitFor(async () => {
+      await expect(mockRemoveFromWatchlist).toHaveBeenCalled();
+    });
   });
   it('should open the edit wallet modal on press', async () => {
     const { getByTestId } = render(<Component />);
-    const editWalletModal = getByTestId('bottom-sheet-edit-wallet');
+    const editWalletModal = getByTestId('BottomSheetEditWallet');
     act(() => {
       fireEvent.press(editWalletModal);
     });
-    await new Promise((res) => setTimeout(res, 500));
-    expect(getByTestId('bottom-sheet-edit-wallet')).toBeDefined();
+    expect(getByTestId('BottomSheetEditWallet')).toBeDefined();
   });
 
   it('renders correctly', async () => {

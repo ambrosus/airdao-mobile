@@ -79,7 +79,11 @@ export function Header(props: HeaderProps): JSX.Element {
         {renderContentLeft()}
       </Row>
       <View style={styles.center}>{renderContentCenter()}</View>
-      <Row style={styles.right} alignItems="center">
+      <Row
+        style={styles.right}
+        alignItems="center"
+        testID="Header_ContentRight"
+      >
         {renderContentRight()}
       </Row>
     </Row>

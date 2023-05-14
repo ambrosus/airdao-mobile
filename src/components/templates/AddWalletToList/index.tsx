@@ -25,7 +25,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
     };
 
     return (
-      <Button onPress={onPress}>
+      <Button onPress={onPress} testID="AddWalletToList_Container">
         <Row alignItems="center" justifyContent="space-between">
           <View>
             <Text fontSize={17} fontFamily="Inter_700Bold" fontWeight="600">
@@ -37,6 +37,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
             </Text>
           </View>
           <CheckBox
+            testID="AddWalletToList_Checkbox"
             type="square"
             value={selected}
             fillColor={COLORS.sapphireBlue}

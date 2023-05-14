@@ -98,6 +98,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   return (
     <>
       <Camera
+        testID="BarcodeScanner_Container"
         ref={camera}
         type={CameraType.back}
         style={{ flex: 1, marginTop: imagePadding, marginBottom: imagePadding }}
@@ -109,7 +110,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
           style={{ backgroundColor: 'transparent', marginTop: topInset }}
           backIconVisible={false}
           contentLeft={
-            <Button onPress={onClose}>
+            <Button testID="BarcodeScanner_Close_Button" onPress={onClose}>
               <CloseIcon color="#FFFFFF" />
             </Button>
           }

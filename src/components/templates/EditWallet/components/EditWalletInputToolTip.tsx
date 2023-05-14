@@ -46,6 +46,7 @@ export const EditWalletInputToolTip = (props: Props): JSX.Element => {
       onClose={() => null}
     >
       <Input
+        testID="Edit_Wallet_Input"
         onBlur={() => {
           handleOnboardingStepChange(1);
         }}
