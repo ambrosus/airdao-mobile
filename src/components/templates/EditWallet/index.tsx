@@ -6,9 +6,9 @@ import React, {
   useState
 } from 'react';
 import { Dimensions, Platform, View } from 'react-native';
-import { BottomSheetRef } from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { BottomSheetRef, CheckBox } from '@components/composite';
+import { Button, Input, InputRef, Row, Spacer, Text } from '@components/base';
+import { ChevronRightIcon, PlusIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
@@ -17,13 +17,10 @@ import { BottomSheetWithHeader } from '@components/modular';
 import { useFullscreenModalHeight } from '@hooks';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
+import { useOnboardingStatus } from '@contexts';
+import { OnboardingView } from '../OnboardingView';
+import { COLORS } from '@constants/colors';
 import { styles } from './styles';
-import { EditWalletInputToolTip } from '@components/templates/EditWallet/components/EditWalletInputToolTip';
-import { EditWalletCheckboxToolTip } from '@components/templates/EditWallet/components/EditWalletCheckboxToolTip';
-import { EditWalletButtonToolTip } from '@components/templates/EditWallet/components/EditWalletButtonToolTip';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
-import { FloatButton } from '@components/base/FloatButton';
 
 interface EditWalletProps {
   wallet: ExplorerAccount;
@@ -31,7 +28,9 @@ interface EditWalletProps {
   isPersonalAddress: boolean;
   onNameChange: (newName: string) => unknown;
   onIsPersonalAddressChange: (newFlag: boolean) => unknown;
-  handleSaveTooltipVisible?: () => void;
+  onboardingProps?: {
+    onAddressNameTooltipBackPress: () => unknown;
+  };
 }
 
 export const EditWallet = (props: EditWalletProps): JSX.Element => {
@@ -39,9 +38,9 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     wallet,
     name,
     isPersonalAddress,
+    onboardingProps = { onAddressNameTooltipBackPress: () => null },
     onIsPersonalAddressChange,
-    onNameChange,
-    handleSaveTooltipVisible
+    onNameChange
   } = props;
   const {
     listsOfAddressGroup,
@@ -49,16 +48,14 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     handleOnCreate,
     createGroupRef
   } = useLists((v) => v);
-  const { status, handleStepChange, handleSkipTutorial } = useOnboardingStatus(
-    (v) => v
-  );
+  const showCreateNewListModal = () => {
+    createGroupRef.current?.show();
+  };
+  const { status } = useOnboardingStatus((v) => v);
+
   const fullscreenModalHeight = useFullscreenModalHeight();
   const [localLists, setLocalLists] = useState(listsOfAddressGroup);
-  const [showFirstToolTip, setShowFirstToolTip] = useState<boolean>(false);
-  const [
-    isCreateBottomSheetAnimationFinished,
-    setIsCreateBottomSheetAnimationFinished
-  ] = useState<boolean>(false);
+  const nameInput = useRef<InputRef>(null);
 
   const selectedLists = useMemo(
     () =>
@@ -70,6 +67,11 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
       ),
     [listsOfAddressGroup, wallet.address]
   );
+
+  const setOnboardingAddress = () => {
+    onNameChange('Demo Address');
+    nameInput.current?.setText('Demo Address');
+  };
 
   useEffect(() => {
     setLocalLists(listsOfAddressGroup);
@@ -118,85 +120,93 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     [localLists, wallet]
   );
 
-  const handleOnboardingStepChange = useCallback(
-    (amount: number) => {
-      if (status !== 'none') {
-        const currentStep = parseInt(status.slice(-1), 10);
-
-        // @ts-ignore
-        const nextStep: OnBoardingStatus = `step-${currentStep + amount}`;
-        handleStepChange(nextStep);
-        if (nextStep === 'step-8') {
-          setTimeout(() => setIsCreateBottomSheetAnimationFinished(true), 1500);
-        }
-      }
-    },
-    [status, handleStepChange]
-  );
-
-  // call only once, wait when bottomsheet will be opened
-  useEffect(() => {
-    setTimeout(() => setShowFirstToolTip(true), 1000);
-  }, []);
-
   return (
-    <View testID="EditWallet_Container" style={styles.container}>
-      <View style={styles.content}>
-        <Text title color="#222222" fontFamily="Inter_600SemiBold">
-          Address name
-        </Text>
-        <Spacer value={verticalScale(8)} />
-        <EditWalletInputToolTip
-          isActiveToolTip={status === 'step-5' && showFirstToolTip}
-          handleOnboardingStepChange={handleOnboardingStepChange}
-          name={name}
-          onNameChange={onNameChange}
+    <View style={styles.container} testID="EditWallet_Container">
+      <Text title color="#222222" fontFamily="Inter_600SemiBold">
+        Address name
+      </Text>
+      <Spacer value={verticalScale(8)} />
+      <OnboardingView
+        thisStep={5}
+        tooltipPlacement="bottom"
+        childrenAlwaysVisible
+        helpers={{
+          next: setOnboardingAddress,
+          back: onboardingProps.onAddressNameTooltipBackPress
+        }}
+      >
+        <Input
+          ref={nameInput}
+          placeholder="Placeholder"
+          style={styles.input}
+          value={name}
+          onChangeValue={onNameChange}
+          editable={status !== 5}
         />
-        <Spacer value={24} />
-        <EditWalletCheckboxToolTip
-          isActiveToolTip={status === 'step-6'}
-          handleOnboardingStepChange={handleOnboardingStepChange}
-          onIsPersonalAddressChange={onIsPersonalAddressChange}
-          isPersonalAddress={isPersonalAddress}
-        />
-        <Spacer value={verticalScale(32)} />
-        <View style={styles.separator} />
-        <Spacer value={verticalScale(32)} />
-        <Text fontSize={20} fontFamily="Inter_700Bold">
-          Add to Lists
-        </Text>
-        <Spacer value={verticalScale(12)} />
-        {Platform.OS === 'ios' ? (
-          <Button onPress={showAddToListModal}>
-            <Row alignItems="center" justifyContent="space-between">
-              <Text title fontFamily="Inter_600SemiBold">
-                Select list
+      </OnboardingView>
+      <Spacer value={24} />
+      <OnboardingView
+        thisStep={6}
+        tooltipPlacement="bottom"
+        childrenAlwaysVisible
+        helpers={{ next: () => onIsPersonalAddressChange(true) }}
+      >
+        <View
+          style={{
+            // TODO fix styles of container paddings
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 7,
+            borderColor: 'white'
+          }}
+        >
+          <Button
+            onPress={() => {
+              onIsPersonalAddressChange(!isPersonalAddress);
+            }}
+          >
+            <Row alignItems="center">
+              <CheckBox
+                type="square"
+                value={isPersonalAddress}
+                fillColor={COLORS.sapphireBlue}
+                color={COLORS.white}
+              />
+              <Spacer horizontal value={12} />
+              <Text
+                title
+                color={COLORS.navyIndigo}
+                fontFamily="Inter_600SemiBold"
+              >
+                This is my personal Address
               </Text>
-              <Row alignItems="center">
-                <Text
-                  fontFamily="Inter_600SemiBold"
-                  fontSize={13}
-                  color="#828282"
-                >
-                  {selectedListText}
-                </Text>
-                <Spacer horizontal value={scale(12)} />
-                <ChevronRightIcon color="#828282" />
-              </Row>
             </Row>
           </Button>
-        ) : (
-          <Button onPress={showAddToListModal}>
-            <View
-              style={{
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }}
-            >
-              <Text title fontFamily="Inter_600SemiBold">
-                Select list
-              </Text>
-              <Spacer value={scale(10)} />
+          <Spacer value={12} />
+          <Text
+            fontWeight="400"
+            color="#646464"
+            fontSize={12}
+            fontFamily="Inter_600SemiBold"
+          >
+            {'Personal Addresses will be added to “My Addresses” by default'}
+          </Text>
+        </View>
+      </OnboardingView>
+      <Spacer value={verticalScale(32)} />
+      <View style={styles.separator} />
+      <Spacer value={verticalScale(32)} />
+      <Text fontSize={20} fontFamily="Inter_700Bold">
+        Add to Lists
+      </Text>
+      <Spacer value={verticalScale(12)} />
+      {Platform.OS === 'ios' ? (
+        <Button onPress={showAddToListModal}>
+          <Row alignItems="center" justifyContent="space-between">
+            <Text title fontFamily="Inter_600SemiBold">
+              Select list
+            </Text>
+            <Row alignItems="center">
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={13}
@@ -204,24 +214,67 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
               >
                 {selectedListText}
               </Text>
-            </View>
-          </Button>
-        )}
-        <Spacer value={verticalScale(32)} />
-        <EditWalletButtonToolTip
-          isActiveToolTip={status === 'step-7'}
-          handleOnboardingStepChange={handleOnboardingStepChange}
-        />
-      </View>
+              <Spacer horizontal value={scale(12)} />
+              <ChevronRightIcon color="#828282" />
+            </Row>
+          </Row>
+        </Button>
+      ) : (
+        <Button onPress={showAddToListModal}>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start'
+            }}
+          >
+            <Text title fontFamily="Inter_600SemiBold">
+              Select list
+            </Text>
+            <Spacer value={scale(10)} />
+            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#828282">
+              {selectedListText}
+            </Text>
+          </View>
+        </Button>
+      )}
+      <Spacer value={verticalScale(32)} />
+      <OnboardingView
+        thisStep={7}
+        childrenAlwaysVisible
+        tooltipPlacement="top"
+        helpers={{
+          next: () => {
+            setTimeout(() => {
+              showCreateNewListModal();
+            }, 100);
+          }
+        }}
+      >
+        <Button
+          type="circular"
+          style={styles.newListButton}
+          onPress={() => {
+            showCreateNewListModal();
+          }}
+        >
+          <Row alignItems="center">
+            <PlusIcon color={COLORS.deepBlue} />
+            <Text
+              style={{ left: 10.5 }}
+              title
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.deepBlue}
+            >
+              Create new list
+            </Text>
+          </Row>
+        </Button>
+      </OnboardingView>
+      {/* <EditWalletButtonToolTip /> */}
       <BottomSheetCreateRenameGroup
         ref={createGroupRef}
         type="create"
         handleOnCreateGroup={handleOnCreate}
-        handleSaveTooltipVisible={handleSaveTooltipVisible}
-        status={status}
-        handleStepChange={handleStepChange}
-        handleSkipTutorial={handleSkipTutorial}
-        isAnimationFinished={isCreateBottomSheetAnimationFinished}
       />
       <BottomSheetWithHeader
         isNestedSheet
@@ -240,9 +293,6 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           lists={localLists}
           onPressList={onPressListItem}
         />
-        {Platform.OS === 'android' && (
-          <FloatButton bottomPadding={17} title="Save" onPress={saveNewLists} />
-        )}
       </BottomSheetWithHeader>
     </View>
   );

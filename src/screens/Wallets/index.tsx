@@ -1,24 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
   LearnAboutAirDAO,
   PortfolioBalance,
   Wallets,
   Watchlists
 } from './components';
-import { OnboardingFloatButton } from '@components/templates/OnboardingFloatButton';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { FloatButton } from '@components/base/FloatButton';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
+import { useOnboardingStatus } from '@contexts';
 import { usePersonalList, useAMBPrice } from '@hooks';
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
+import { OnboardingView } from '@components/templates/OnboardingView';
+import { Row, Spacer, Text } from '@components/base';
+import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const WalletsScreen = () => {
   const navigation = useNavigation<ExploreTabNavigationProp>();
+  const isFocused = useIsFocused();
+
   const { data: ambTokenData } = useAMBPrice();
-  const { status, handleStepChange } = useOnboardingStatus((v) => v);
+  const { start: startOnboarding } = useOnboardingStatus((v) => v);
   const { personalList } = usePersonalList();
   const ambBalance = personalList.reduce(
     (prev, curr) => prev + curr.ambBalance,
@@ -26,27 +30,23 @@ export const WalletsScreen = () => {
   );
 
   const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
-  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
+  const onboardinStarted = useRef(false);
 
-  const handleOnboardingStepChange = useCallback(() => {
-    handleStepChange('step-2');
-    setIsToolTipVisible(false);
-    setTimeout(
-      () => navigation.navigate('Explore', { screen: 'ExploreScreen' }),
-      300
-    );
-  }, [handleStepChange, navigation]);
-
-  const handleOnFloatButtonPress = useCallback(() => {
-    setIsToolTipVisible(false);
+  const navigateToExplore = useCallback(() => {
     navigation.navigate('Explore', { screen: 'ExploreScreen' });
   }, [navigation]);
 
-  useEffect(() => {
-    if (status === 'step-1') {
-      setTimeout(() => setIsToolTipVisible(true), 300);
+  useLayoutEffect(() => {
+    if (isFocused) {
+      setTimeout(() => {
+        if (!onboardinStarted.current) {
+          onboardinStarted.current = true;
+          startOnboarding();
+        }
+      }, 1000);
     }
-  }, [status]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
   return (
     <View style={{ flex: 1 }} testID="wallets-screen">
@@ -72,22 +72,28 @@ export const WalletsScreen = () => {
           )}
         </View>
       </ScrollView>
-      <OnboardingFloatButton
-        setIsToolTipVisible={setIsToolTipVisible}
-        onboardingButtonTitle="Add a Address"
-        isToolTipVisible={isToolTipVisible}
-        status={status}
-        onboardingButtonIcon={<AddIcon />}
-        handleOnboardingStepChange={handleOnboardingStepChange}
+      <OnboardingView
+        type="float"
+        thisStep={1}
+        tooltipPlacement="top"
+        helpers={{
+          next: navigateToExplore
+        }}
+        removeAndroidStatusBarHeight
       >
-        <FloatButton
-          titleStyle={styles.floatButtonTitle}
-          title="Add a Address"
-          onPress={handleOnFloatButtonPress}
-          icon={<AddIcon />}
+        <Row
+          alignItems="center"
+          justifyContent="center"
+          style={styles.addAddressBtn}
           testID="onboarding-float-button"
-        />
-      </OnboardingFloatButton>
+        >
+          <AddIcon />
+          <Spacer horizontal value={scale(10.5)} />
+          <Text title fontFamily="Inter_600SemiBold" color={COLORS.white}>
+            Add an Address
+          </Text>
+        </Row>
+      </OnboardingView>
     </View>
   );
 };

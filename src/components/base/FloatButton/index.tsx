@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, TextStyle, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   title: string;
@@ -59,12 +60,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.deepBlue,
     borderRadius: 1000,
     justifyContent: 'center',
-    width: '90%'
+    width: '90%',
+    paddingVertical: verticalScale(12)
   },
   bottomButtonText: {
     fontFamily: 'Inter_500Medium',
     fontSize: 16,
-    paddingVertical: 16,
     color: COLORS.white
   },
   iconPadding: {

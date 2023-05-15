@@ -1,96 +1,149 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  SetStateAction,
-  useCallback,
-  useState
-} from 'react';
+import React, { ForwardedRef, forwardRef, useCallback, useState } from 'react';
+import { Platform, View } from 'react-native';
 import { EditWallet } from '../EditWallet';
-import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetWithHeader } from '@components/modular';
+import {
+  BottomSheet,
+  BottomSheetProps,
+  BottomSheetRef,
+  Header
+} from '@components/composite';
+import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { useAllAddressesReducer } from '@contexts';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import { FloatButton } from '@components/base/FloatButton';
-import { Dimensions, Platform, View } from 'react-native';
+import {
+  useAllAddressesReducer,
+  useLists,
+  useOnboardingStatus
+} from '@contexts';
+import { verticalScale } from '@utils/scaling';
+import { CloseIcon } from '@components/svg/icons';
+import { OnboardingView } from '../OnboardingView';
+import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
-  setIsDoneToolTipVisible?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const BottomSheetEditWallet = forwardRef<
   BottomSheetRef,
   BottomSheetEditWalletProps
 >((props, ref) => {
-  const { wallet, setIsDoneToolTipVisible, ...bottomSheetProps } = props;
-  const [isSaveToolTipVisible, setIsSaveToolTipVisible] =
-    useState<boolean>(false);
+  const { wallet, ...bottomSheetProps } = props;
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { personalList } = usePersonalList();
-  const { handleStepChange, status } = useOnboardingStatus((v) => v);
-
   const [name, setName] = useState(wallet.name);
   const [isPersonalAddress, setIsPersonalAddress] = useState(
     personalList.indexOfItem(wallet, 'address') > -1
   );
-  const saveAddress = useCallback(async () => {
+  const { status } = useOnboardingStatus((v) => v);
+  const { createGroupRef } = useLists((v) => v);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const saveAddress = async () => {
     const newWallet: ExplorerAccount = Object.assign({}, wallet);
     newWallet.name = name;
     newWallet.isPersonal = isPersonalAddress;
     allAddressesReducer({ type: 'update', payload: newWallet });
     localRef.current?.dismiss();
-  }, [allAddressesReducer, isPersonalAddress, localRef, name, wallet]);
-
-  const handleSaveTooltipVisible = () => {
-    setTimeout(() => setIsSaveToolTipVisible(true), 2000);
   };
 
-  const handleActionPress = useCallback(() => {
-    if (status === 'step-10' && setIsDoneToolTipVisible) {
-      setIsSaveToolTipVisible(false);
-      handleStepChange('step-11');
-      setTimeout(() => {
-        setIsDoneToolTipVisible(true);
-      }, 1500);
-    }
-    saveAddress();
-  }, [handleStepChange, saveAddress, setIsDoneToolTipVisible, status]);
+  const dismiss = useCallback(() => {
+    localRef.current?.dismiss();
+  }, [localRef]);
+
+  // onboarding functions
+  const onSaveAddressOnboardingBack = () => {
+    setTimeout(() => {
+      createGroupRef.current?.show();
+    }, 500);
+  };
+
+  // end of onboarding functions
+  const renderContentRight = () => {
+    const isToolTipVisible = status === 10;
+    return (
+      <OnboardingView
+        thisStep={10}
+        childrenAlwaysVisible
+        tooltipPlacement="left"
+        contentStyle={{ marginTop: verticalScale(20) }}
+        helpers={{
+          next: saveAddress,
+          back: onSaveAddressOnboardingBack
+        }}
+      >
+        <Button onPress={saveAddress}>
+          <Text color={isToolTipVisible ? COLORS.white : COLORS.jungleGreen}>
+            Save
+          </Text>
+        </Button>
+      </OnboardingView>
+    );
+  };
 
   return (
-    <View testID="BottomSheetEditWallet">
-      <BottomSheetWithHeader
-        isToolTipVisible={isSaveToolTipVisible}
-        isNestedSheet={false}
-        title="Edit Address"
-        ref={localRef}
-        height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
-        avoidKeyboard={false}
-        actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
-        onActionPress={Platform.OS === 'ios' ? handleActionPress : undefined}
-        actionButtonTestID="BottomSheetEditWallet_Action_Button"
-        {...bottomSheetProps}
-      >
-        <EditWallet
-          wallet={wallet}
-          name={name}
-          onNameChange={setName}
-          isPersonalAddress={isPersonalAddress}
-          onIsPersonalAddressChange={setIsPersonalAddress}
-          handleSaveTooltipVisible={handleSaveTooltipVisible}
+    <BottomSheet
+      ref={localRef}
+      fullscreen
+      avoidKeyboard={false}
+      {...bottomSheetProps}
+    >
+      <>
+        <Header
+          style={styles.header}
+          backIconVisible={false}
+          contentLeft={
+            <Button onPress={dismiss}>
+              <CloseIcon />
+            </Button>
+          }
+          contentRight={Platform.OS === 'ios' && renderContentRight()}
+          titleStyle={styles.headerTitle}
+          title="Edit Address"
         />
-        {Platform.OS === 'android' && (
-          <FloatButton
-            testID="BottomSheet_Edit_Wallet_FloatButton"
-            title="Save"
-            onPress={handleActionPress}
-            bottomPadding={17}
-          />
+        {wallet && (
+          <>
+            <EditWallet
+              wallet={wallet}
+              name={name}
+              onNameChange={setName}
+              isPersonalAddress={isPersonalAddress}
+              onIsPersonalAddressChange={setIsPersonalAddress}
+              onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
+            />
+            {Platform.OS === 'android' && (
+              <View
+                style={{
+                  bottom: verticalScale(85)
+                }}
+              >
+                <OnboardingView
+                  thisStep={10}
+                  childrenAlwaysVisible
+                  tooltipPlacement="top"
+                  helpers={{
+                    next: saveAddress,
+                    back: onSaveAddressOnboardingBack
+                  }}
+                >
+                  <Button
+                    style={styles.saveBtnAndroid}
+                    testID="BottomSheet_Edit_Wallet_FloatButton"
+                    onPress={saveAddress}
+                  >
+                    <Text fontWeight="500" title color={COLORS.white}>
+                      Save
+                    </Text>
+                  </Button>
+                </OnboardingView>
+              </View>
+            )}
+          </>
         )}
-      </BottomSheetWithHeader>
-    </View>
+      </>
+    </BottomSheet>
   );
 });

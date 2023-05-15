@@ -3,12 +3,12 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
-  useMemo,
+  useRef,
   useState
 } from 'react';
 import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
-import { Button, Input, Text } from '@components/base';
+import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -16,10 +16,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import { Toast, ToastType } from '@components/modular';
-import { OnBoardingStatus } from '@components/composite/OnBoardingToolTip/OnBoardingToolTip.types';
-import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
-import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
-import Tooltip from 'react-native-walkthrough-tooltip';
+import { OnboardingView } from '../OnboardingView';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -28,11 +25,6 @@ type Props = {
   groupTitle?: string;
   groupId?: string;
   type: 'rename' | 'create';
-  handleSaveTooltipVisible?: () => void;
-  status?: OnBoardingStatus;
-  handleStepChange?: (nextStep: OnBoardingStatus) => void;
-  handleSkipTutorial?: () => void;
-  isAnimationFinished?: boolean;
 };
 export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
   (props, ref) => {
@@ -41,39 +33,22 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       groupTitle,
       type = 'create',
       handleOnCreateGroup,
-      groupId,
-      handleSaveTooltipVisible,
-      handleSkipTutorial,
-      status = 'none',
-      handleStepChange = () => null,
-      isAnimationFinished = false
+      groupId
     } = props;
 
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const nameInput = useRef<InputRef>(null);
     const [localGroupName, setLocalGroupName] = useState<string>(
       groupTitle || ''
     );
 
-    const {
-      title,
-      subtitle,
-      buttonRightTitle,
-      buttonLeftTitle,
-      isButtonLeftVisible
-    } = useOnboardingToolTip(status);
+    // onboarding functions
+    const setDemoName = () => {
+      nameInput.current?.setText('Demo group');
+      setLocalGroupName('Demo Group');
+    };
 
-    const handleOnboardingStepChange = useCallback(
-      (amount = 1) => {
-        // @ts-ignore
-        const nextStep: OnBoardingStatus =
-          'step-' + (parseInt(status.slice(-1), 10) + amount);
-        handleStepChange(nextStep);
-        if (nextStep === 'step-10' && handleSaveTooltipVisible) {
-          handleSaveTooltipVisible();
-        }
-      },
-      [handleSaveTooltipVisible, handleStepChange, status]
-    );
+    // end of onboarding functions
 
     const handleButtonPress = useCallback(() => {
       if (handleOnCreateGroup) {
@@ -93,44 +68,13 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         });
       }
       setLocalGroupName('');
-      handleOnboardingStepChange();
     }, [
       groupId,
       groupTitle,
       handleOnCreateGroup,
       handleOnRenameGroup,
-      handleOnboardingStepChange,
       localGroupName,
       localRef
-    ]);
-
-    const handleBackButtonPress = useCallback(() => {
-      if (status === 'step-8') {
-        localRef.current?.dismiss();
-      }
-      handleOnboardingStepChange(-1);
-    }, [handleOnboardingStepChange, localRef, status]);
-
-    const tooltipContent = useMemo(() => {
-      return (
-        <OnBoardingToolTipBody
-          title={title}
-          buttonRightTitle={buttonRightTitle}
-          subtitle={subtitle}
-          buttonLeftTitle={buttonLeftTitle}
-          handleButtonRightPress={handleSkipTutorial}
-          handleButtonLeftPress={handleBackButtonPress}
-          isButtonLeftVisible={isButtonLeftVisible}
-        />
-      );
-    }, [
-      buttonLeftTitle,
-      buttonRightTitle,
-      handleBackButtonPress,
-      handleSkipTutorial,
-      isButtonLeftVisible,
-      subtitle,
-      title
     ]);
 
     return (
@@ -159,37 +103,29 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 List name
               </Text>
-              <Tooltip
-                tooltipStyle={{ flex: 1 }}
-                contentStyle={{ height: 152, borderRadius: 8 }}
-                arrowSize={{ width: 16, height: 8 }}
-                backgroundColor="rgba(0,0,0,0.5)"
-                isVisible={status === 'step-8' && isAnimationFinished}
-                content={tooltipContent}
-                placement="bottom"
-                onClose={() => null}
+              <OnboardingView
+                thisStep={8}
+                tooltipPlacement="bottom"
+                childrenAlwaysVisible
+                helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
               >
                 <Input
                   testID="BottomSheetCreateRename_Input"
-                  onBlur={() => handleOnboardingStepChange(1)}
+                  ref={nameInput}
                   value={localGroupName}
-                  onChangeValue={(value) => setLocalGroupName(value)}
+                  onChangeValue={setLocalGroupName}
                   type="text"
                   placeholder="Enter list name"
                   placeholderTextColor="black"
                   style={[styles.bottomSheetInput]}
                 />
-              </Tooltip>
+              </OnboardingView>
               <Spacer value={32} />
-              <Tooltip
-                tooltipStyle={{ flex: 1 }}
-                contentStyle={{ height: 108, borderRadius: 8 }}
-                arrowSize={{ width: 16, height: 8 }}
-                backgroundColor="rgba(0,0,0,0.5)"
-                isVisible={status === 'step-9'}
-                content={tooltipContent}
-                placement="bottom"
-                onClose={() => null}
+              <OnboardingView
+                thisStep={9}
+                tooltipPlacement="bottom"
+                childrenAlwaysVisible
+                helpers={{ next: handleButtonPress }}
               >
                 <Button
                   testID="BottomSheetCreateRename_Button"
@@ -206,7 +142,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     {type === 'create' ? 'Create' : 'Rename'}
                   </Text>
                 </Button>
-              </Tooltip>
+              </OnboardingView>
               <Spacer value={24} />
               <Button
                 testID="BottomSheetCreateRename_Cancel_Button"

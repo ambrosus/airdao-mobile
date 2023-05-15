@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -15,10 +9,7 @@ import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
-import { useOnboardingStatus } from '@contexts/OnBoardingUserContext';
-import Tooltip from 'react-native-walkthrough-tooltip';
-import { OnBoardingToolTipBody } from '@components/composite/OnBoardingToolTip/OnBoardingToolTipBody';
-import { useOnboardingToolTip } from '@hooks/useOnboardingToolTip';
+import { OnboardingView } from '@components/templates/OnboardingView';
 
 export function WalletHeader(): JSX.Element {
   const navigation = useNavigation<WalletsNavigationProp>();
@@ -27,22 +18,6 @@ export function WalletHeader(): JSX.Element {
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
 
-  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
-
-  const { status, handleSkipTutorial = () => setIsToolTipVisible(false) } =
-    useOnboardingStatus((v) => v);
-  const {
-    title,
-    subtitle,
-    buttonRightTitle,
-    buttonLeftTitle,
-    isButtonLeftVisible
-  } = useOnboardingToolTip(status);
-
-  useEffect(() => {
-    if (status === 'step-12') setTimeout(() => setIsToolTipVisible(true), 500);
-  }, [status]);
-
   const openScanner = () => {
     scanner.current?.show();
   };
@@ -50,11 +25,6 @@ export function WalletHeader(): JSX.Element {
   const closeScanner = () => {
     scanner.current?.dismiss();
   };
-
-  const handleOnSkipTutorial = useCallback(() => {
-    handleSkipTutorial();
-    setIsToolTipVisible(false);
-  }, [handleSkipTutorial]);
 
   const onQRCodeScanned = useCallback(
     (data: string) => {
@@ -87,36 +57,21 @@ export function WalletHeader(): JSX.Element {
   const renderContentRight = useMemo(() => {
     return (
       <>
-        <Tooltip
-          tooltipStyle={{ flex: 1 }}
-          contentStyle={{ height: 152, borderRadius: 8 }}
-          arrowSize={{ width: 16, height: 8 }}
-          backgroundColor="rgba(0,0,0,0.5)"
-          isVisible={isToolTipVisible}
-          content={
-            <OnBoardingToolTipBody
-              handleButtonClose={handleOnSkipTutorial}
-              title={title}
-              buttonRightTitle={buttonRightTitle}
-              subtitle={subtitle}
-              buttonLeftTitle={buttonLeftTitle}
-              handleButtonRightPress={handleOnSkipTutorial}
-              handleButtonLeftPress={() => undefined}
-              isButtonLeftVisible={isButtonLeftVisible}
-            />
-          }
-          placement="bottom"
-          onClose={() => null}
+        <OnboardingView
+          thisStep={12}
+          childrenAlwaysVisible
+          tooltipPlacement="bottom"
+          helpers={{ next: openScanner }}
+          removeAndroidStatusBarHeight
         >
           <Button
             onPress={() => {
-              setIsToolTipVisible(false);
               openScanner();
             }}
           >
             <ScannerIcon color={COLORS.white} />
           </Button>
-        </Tooltip>
+        </OnboardingView>
         <Spacer horizontal value={scale(20)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color={COLORS.white} />
@@ -131,18 +86,7 @@ export function WalletHeader(): JSX.Element {
         </BottomSheet>
       </>
     );
-  }, [
-    WINDOW_HEIGHT,
-    buttonLeftTitle,
-    buttonRightTitle,
-    handleOnSkipTutorial,
-    isButtonLeftVisible,
-    isToolTipVisible,
-    navigateToNotifications,
-    onQRCodeScanned,
-    subtitle,
-    title
-  ]);
+  }, [WINDOW_HEIGHT, navigateToNotifications, onQRCodeScanned]);
 
   return (
     <Header
