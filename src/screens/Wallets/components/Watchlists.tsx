@@ -7,7 +7,7 @@ export function Watchlists(): JSX.Element {
   const { watchlist } = useWatchlist();
 
   return (
-    <View testID="watchlists">
+    <View testID="Watchlists">
       <WalletList
         title="Watchlists"
         emptyText="You haven't added an address to watchlist"

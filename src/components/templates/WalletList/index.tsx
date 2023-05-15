@@ -106,7 +106,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           </Text>
         </Row>
         <Button
-          testID="toggle-button"
+          testID="ToggleButton"
           type="circular"
           style={styles.toggleBtn}
           onPress={onTogglePress}

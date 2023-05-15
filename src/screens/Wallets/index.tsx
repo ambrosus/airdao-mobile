@@ -49,7 +49,7 @@ export const WalletsScreen = () => {
   }, [isFocused]);
 
   return (
-    <View style={{ flex: 1 }} testID="wallets-screen">
+    <View style={{ flex: 1 }} testID="Wallets_Screen">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -66,7 +66,7 @@ export const WalletsScreen = () => {
           <View style={styles.divider} />
           <Watchlists />
           {Platform.OS === 'ios' && (
-            <View testID="learn-about-airdao" style={styles.airdao}>
+            <View testID="Learn_About_AirDAO" style={styles.airdao}>
               <LearnAboutAirDAO />
             </View>
           )}

@@ -49,5 +49,9 @@ export const RotationAnimation = React.forwardRef<
     };
   });
 
-  return <Animated.View style={animatedStyle}>{children}</Animated.View>;
+  return (
+    <Animated.View testID="AnimatedView" style={animatedStyle}>
+      {children}
+    </Animated.View>
+  );
 });
