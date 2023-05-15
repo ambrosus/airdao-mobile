@@ -11,14 +11,15 @@
     "jsx": "react",
     "allowJs": true,
     "paths": {
-      "@navigation/*": ["./src/navigation/*"],
+      "@api/*": ["./src/api/*"],
       "@appTypes/*": ["./src/appTypes/*"],
       "@screens/*": ["./src/screens/*"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@models/*": ["./src/models/*"],
-      "@api/*": ["./src/api/*"],
+      "@mocks/*": ["./src/__mocks__/*"],
+      "@navigation/*": ["./src/navigation/*"],
       "@utils/*": ["./src/utils/*"],
       "@*": ["./src/*"]
     }

@@ -34,7 +34,7 @@ export const TransactionDetails = (
   if (!transaction) return <></>;
 
   return (
-    <View>
+    <View testID="transaction-details">
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           Method
@@ -63,6 +63,7 @@ export const TransactionDetails = (
               color={COLORS.mainBlue}
               fontFamily="Inter_600SemiBold"
               fontSize={16}
+              testID="transaction-details-from"
             >
               {StringUtils.formatAddress(transaction.from.address, 4, 5)}
             </Text>
@@ -80,6 +81,7 @@ export const TransactionDetails = (
               color={COLORS.mainBlue}
               fontFamily="Inter_600SemiBold"
               fontSize={16}
+              testID="transaction-details-to"
             >
               {StringUtils.formatAddress(transaction.to.address, 4, 5)}
             </Text>
@@ -117,6 +119,7 @@ export const TransactionDetails = (
         type="circular"
         style={styles.shareBtn}
         onPress={showShareTransaction}
+        testID="transaction-details-share-button"
       >
         <Row alignItems="center">
           <ShareIcon color="#000000" />

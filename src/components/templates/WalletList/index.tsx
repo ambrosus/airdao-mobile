@@ -95,13 +95,18 @@ export function WalletList(props: WalletListProps): JSX.Element {
   };
 
   return (
-    <>
+    <View testID="wallet-list-container">
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           <Text title fontWeight="500">
             {title} {'   '}
           </Text>
-          <Text subtitle fontSize={13} fontWeight="600">
+          <Text
+            subtitle
+            fontSize={13}
+            fontWeight="600"
+            testID="wallet-list-total-amount"
+          >
             ~ ${NumberUtils.formatNumber(totalAmount, 0)}
           </Text>
         </Row>
@@ -118,11 +123,13 @@ export function WalletList(props: WalletListProps): JSX.Element {
       </Row>
       {listOpened &&
         (data.length > 0 ? (
-          <View style={styles.list}>{data.map(renderWalletItem)}</View>
+          <View style={styles.list} testID="wallet-list">
+            {data.map(renderWalletItem)}
+          </View>
         ) : (
           renderEmpty()
         ))}
-    </>
+    </View>
   );
 }
 

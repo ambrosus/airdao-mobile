@@ -10,7 +10,7 @@ module.exports = function (api) {
         'module-resolver',
         {
           alias: {
-            '@navigation': './src/navigation',
+            '@api': './src/api',
             '@components': './src/components',
             '@constants': './src/constants',
             '@screens': './src/screens',
@@ -19,8 +19,9 @@ module.exports = function (api) {
             '@appTypes': './src/appTypes',
             '@contexts': './src/contexts',
             '@hooks': './src/hooks',
-            '@api': './src/api',
             '@models': './src/models',
+            '@mocks': './src/__mocks__',
+            '@navigation': './src/navigation',
             '@utils': './src/utils'
           },
           extensions: ['.ts', '.tsx']
