@@ -54,11 +54,11 @@ jest.mock('@contexts/ListsContext', () => ({
   }))
 }));
 
-jest.mock('@contexts/OnBoardingUserContext', () => ({
+jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
-    handleStepChange: jest.fn(),
-    handleSkipTutorial: jest.fn()
+    back: jest.fn(),
+    skip: jest.fn()
   }))
 }));
 
@@ -89,9 +89,13 @@ describe('BottomSheetEditWallet', () => {
     expect(getByText('This is my personal Address')).toBeDefined();
     expect(getByText('Add to Lists')).toBeDefined();
     expect(getByText('Create new list')).toBeDefined();
+    expect(getByTestId('BottomSheetCreateRename')).toBeDefined();
+    expect(getByTestId('BottomSheetCreateRename_Title')).toBeDefined();
+    expect(getByTestId('BottomSheetCreateRename_Input')).toBeDefined();
+    expect(getByTestId('BottomSheetCreateRename_Button')).toBeDefined();
   });
 
-  it('should not render floatbutton if Platform = IOS', () => {
+  it('should not render float button if Platform = IOS', () => {
     const { queryByTestId } = render(<Component />);
     const bottomSheetEditWallet = queryByTestId(
       'BottomSheet_Edit_Wallet_FloatButton'
@@ -117,13 +121,5 @@ describe('BottomSheetEditWallet', () => {
       backgroundColor: '#2563eb',
       borderWidth: 0
     });
-  });
-
-  it('BottomSheetCreateRenameGroup should be on screen', () => {
-    const { getByTestId } = render(<Component />);
-    expect(getByTestId('BottomSheetCreateRename')).toBeDefined();
-    expect(getByTestId('BottomSheetCreateRename_Title')).toBeDefined();
-    expect(getByTestId('BottomSheetCreateRename_Input')).toBeDefined();
-    expect(getByTestId('BottomSheetCreateRename_Button')).toBeDefined();
   });
 });

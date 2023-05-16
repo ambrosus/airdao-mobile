@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup/index';
-import { render } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 
 const queryClient = new QueryClient();
 
@@ -10,8 +10,16 @@ jest.mock('react-native-modal', () => {
   return ({ children }: { children: React.ReactNode }) => <>{children}</>;
 });
 
+jest.mock('@contexts/OnBoardingContext', () => ({
+  useOnboardingStatus: jest.fn(() => ({
+    status: '0',
+    back: jest.fn(),
+    skip: jest.fn()
+  }))
+}));
+
 describe('BottomSheetCreateRenameGroup', () => {
-  it('renders correctly when creating a new group', () => {
+  it('renders correctly when creating a new group', async () => {
     const handleOnCreateGroup = jest.fn();
     const { getByTestId, getByText } = render(
       <SafeAreaProvider>
@@ -32,6 +40,19 @@ describe('BottomSheetCreateRenameGroup', () => {
     expect(cancelButton).toBeDefined();
     expect(createButton).toBeDefined();
     expect(getByText('Create')).toBeTruthy();
+    await act(async () => {
+      await fireEvent.press(input);
+      await fireEvent.changeText(input, 'My Personal Group');
+      await fireEvent.press(input, 'submitEditing', {
+        nativeEvent: { text: 'My Personal Group' }
+      });
+    });
+    await act(async () => {
+      await fireEvent.press(createButton);
+    });
+    await waitFor(async () => {
+      await expect(handleOnCreateGroup).toHaveBeenCalled();
+    });
   });
 
   it('renders correctly when renaming a group', () => {

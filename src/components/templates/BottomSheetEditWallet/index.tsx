@@ -85,65 +85,67 @@ export const BottomSheetEditWallet = forwardRef<
   };
 
   return (
-    <BottomSheet
-      ref={localRef}
-      fullscreen
-      avoidKeyboard={false}
-      {...bottomSheetProps}
-    >
-      <>
-        <Header
-          style={styles.header}
-          backIconVisible={false}
-          contentLeft={
-            <Button onPress={dismiss}>
-              <CloseIcon />
-            </Button>
-          }
-          contentRight={Platform.OS === 'ios' && renderContentRight()}
-          titleStyle={styles.headerTitle}
-          title="Edit Address"
-        />
-        {wallet && (
-          <>
-            <EditWallet
-              wallet={wallet}
-              name={name}
-              onNameChange={setName}
-              isPersonalAddress={isPersonalAddress}
-              onIsPersonalAddressChange={setIsPersonalAddress}
-              onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
-            />
-            {Platform.OS === 'android' && (
-              <View
-                style={{
-                  bottom: verticalScale(85)
-                }}
-              >
-                <OnboardingView
-                  thisStep={10}
-                  childrenAlwaysVisible
-                  tooltipPlacement="top"
-                  helpers={{
-                    next: saveAddress,
-                    back: onSaveAddressOnboardingBack
+    <View testID="BottomSheetEditWallet">
+      <BottomSheet
+        ref={localRef}
+        fullscreen
+        avoidKeyboard={false}
+        {...bottomSheetProps}
+      >
+        <>
+          <Header
+            style={styles.header}
+            backIconVisible={false}
+            contentLeft={
+              <Button onPress={dismiss}>
+                <CloseIcon />
+              </Button>
+            }
+            contentRight={Platform.OS === 'ios' && renderContentRight()}
+            titleStyle={styles.headerTitle}
+            title="Edit Address"
+          />
+          {wallet && (
+            <>
+              <EditWallet
+                wallet={wallet}
+                name={name}
+                onNameChange={setName}
+                isPersonalAddress={isPersonalAddress}
+                onIsPersonalAddressChange={setIsPersonalAddress}
+                onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
+              />
+              {Platform.OS === 'android' && (
+                <View
+                  style={{
+                    bottom: verticalScale(85)
                   }}
                 >
-                  <Button
-                    style={styles.saveBtnAndroid}
-                    testID="BottomSheet_Edit_Wallet_FloatButton"
-                    onPress={saveAddress}
+                  <OnboardingView
+                    thisStep={10}
+                    childrenAlwaysVisible
+                    tooltipPlacement="top"
+                    helpers={{
+                      next: saveAddress,
+                      back: onSaveAddressOnboardingBack
+                    }}
                   >
-                    <Text fontWeight="500" title color={COLORS.white}>
-                      Save
-                    </Text>
-                  </Button>
-                </OnboardingView>
-              </View>
-            )}
-          </>
-        )}
-      </>
-    </BottomSheet>
+                    <Button
+                      style={styles.saveBtnAndroid}
+                      testID="BottomSheet_Edit_Wallet_FloatButton"
+                      onPress={saveAddress}
+                    >
+                      <Text fontWeight="500" title color={COLORS.white}>
+                        Save
+                      </Text>
+                    </Button>
+                  </OnboardingView>
+                </View>
+              )}
+            </>
+          )}
+        </>
+      </BottomSheet>
+    </View>
   );
 });

@@ -7,7 +7,7 @@ export function Wallets(): JSX.Element {
   const { personalList } = usePersonalList();
 
   return (
-    <View testID="wallets-list">
+    <View testID="Wallets_List">
       <WalletList
         title="My Wallets"
         emptyText="You haven't added a personal address yet"
