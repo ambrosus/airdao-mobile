@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { RotationAnimation } from '@components/animations';
 
 jest.mock('react-native-reanimated', () => {
-  const Reanimated = require('react-native-reanimated/mock');
+  const Reanimated = jest.requireActual('react-native-reanimated/mock');
   Reanimated.default.call = (func: () => void) => {
     func();
   };

@@ -1,23 +1,17 @@
 import React from 'react';
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
-import { WalletsScreen } from '@screens/Wallets';
+import { fireEvent, render } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  RotationAnimation,
-  RotationAnimationRef
-} from '@components/animations';
-import { Button } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
+import { Platform } from 'react-native';
+import { WalletsScreen } from '@screens/Wallets';
 
 jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
     back: jest.fn(),
-    skip: jest.fn()
+    skip: jest.fn(),
+    start: jest.fn()
   }))
 }));
 
@@ -121,9 +115,9 @@ describe('WalletsScreen', () => {
 
   it('WatchList should be empty when there are any wallets inside', async () => {
     mockedData = [];
-    const { getAllByTestId, getByTestId } = render(<Component />);
-    const toggleButton = getAllByTestId('ToggleButton');
-    await fireEvent.press(toggleButton[0]);
+    const { getByTestId } = render(<Component />);
+    const toggleButton = getByTestId('ToggleButton_Wallets');
+    await fireEvent.press(toggleButton);
     expect(getByTestId('empty-list')).toBeDefined();
   });
 
@@ -138,29 +132,9 @@ describe('WalletsScreen', () => {
         name: 'asdasdasd'
       }
     ];
-    const { getAllByTestId, getByTestId } = render(<Component />);
-    const toggleButton = getAllByTestId('ToggleButton');
-    await fireEvent.press(toggleButton[0]);
+    const { getByTestId } = render(<Component />);
+    const toggleButton = getByTestId('ToggleButton_WatchList');
+    await fireEvent.press(toggleButton);
     expect(getByTestId('WalletItem_0')).toBeDefined();
-  });
-
-  it.skip('rotates the component when the rotate method is called', async () => {
-    const rotationAnimationRef = React.createRef<RotationAnimationRef>();
-    const { getByTestId, getAllByTestId } = render(<Component />);
-    const animatedView = getAllByTestId('AnimatedView');
-    const toggleButton = getAllByTestId('ToggleButton');
-    expect(animatedView.props.style.transform[0].rotate).toBe('0deg');
-    await act(async () => {
-      await rotationAnimationRef.current?.rotate();
-    });
-    await act(async () => {
-      await fireEvent.press(getByTestId(toggleButton)[0]);
-    });
-    await waitFor(async () => {
-      const updatedAnimatedView = await getByTestId('AnimatedView_0');
-      await expect(updatedAnimatedView.props.style.transform[0].rotate).toBe(
-        '180deg'
-      );
-    });
   });
 });
