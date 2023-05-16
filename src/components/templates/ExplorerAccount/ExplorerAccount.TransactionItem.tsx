@@ -25,7 +25,11 @@ export const ExplorerAccountTransactionItem = (
 
   return (
     <>
-      <Button disabled={disabled} onPress={showTransactionDetails}>
+      <Button
+        testID="Transaction_Button"
+        disabled={disabled}
+        onPress={showTransactionDetails}
+      >
         <TransactionItem transaction={transaction} />
       </Button>
       <BottomSheet ref={transactionDetailsModal} height={verticalScale(556.58)}>

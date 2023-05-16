@@ -113,6 +113,7 @@ export const ExplorerAccountView = (
       <Spacer value={verticalScale(13)} />
       <Row alignItems="center">
         <CopyToClipboardButton
+          testID="CopyToClipboardButton"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{

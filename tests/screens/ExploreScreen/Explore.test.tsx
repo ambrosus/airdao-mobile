@@ -12,9 +12,11 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: jest.fn()
 }));
 
-jest.mock('@contexts/OnBoardingUserContext', () => ({
+jest.mock('@contexts/OnboardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
-    status: 'none'
+    status: 'none',
+    skip: jest.fn(),
+    back: jest.fn()
   }))
 }));
 
@@ -97,7 +99,7 @@ describe('ExploreScreen', () => {
 
   it('input is visible', async () => {
     const { getByTestId } = render(<Component />);
-    expect(getByTestId('search-input')).not.toBeNull();
+    expect(getByTestId('Search_Address_Input')).not.toBeNull();
   });
 
   it('displays loading spinner while loading accounts', async () => {
@@ -117,7 +119,7 @@ describe('ExploreScreen', () => {
       error: false
     };
     const { getByTestId } = render(<Component />);
-    const input = getByTestId('search-input');
+    const input = getByTestId('Search_Address_Input');
     await act(async () => {
       await fireEvent.press(input);
       await fireEvent.changeText(input, '123213312');

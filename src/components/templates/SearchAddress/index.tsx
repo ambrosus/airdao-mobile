@@ -219,6 +219,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   return (
     <>
       <KeyboardDismissingView
+        testID="Search_Address"
         style={{
           flex: searchInputFocused && !account ? 1 : 0
         }}
@@ -239,12 +240,16 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             removeAndroidStatusBarHeight
           >
             <InputWithIcon
-              testID="search-input"
+              testID="Search_Address_Input"
               ref={inputRef}
               style={styles.input}
               iconLeft={<SearchIcon color="#2f2b4399" />}
               iconRight={
-                <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                <Button
+                  testID="Clear_Input_Button"
+                  onPress={clearInput}
+                  style={{ zIndex: 1000 }}
+                >
                   <CloseIcon color="#2f2b4399" scale={0.75} />
                 </Button>
               }
@@ -256,7 +261,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             />
           </OnboardingView>
           <Spacer value={scale(7.5)} horizontal />
-          <Button onPress={showScanner} type="circular" style={styles.scanner}>
+          <Button
+            testID="Barcode_Scanner"
+            onPress={showScanner}
+            type="circular"
+            style={styles.scanner}
+          >
             <ScannerIcon color={COLORS.electricBlue} />
           </Button>
         </Row>

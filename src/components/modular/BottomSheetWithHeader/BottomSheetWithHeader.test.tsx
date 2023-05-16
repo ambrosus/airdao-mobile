@@ -4,11 +4,14 @@ import { BottomSheetWithHeader } from '.';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 
-jest.mock('@contexts/OnBoardingUserContext', () => ({
+jest.mock('@contexts/OnboardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
-    status: 'none'
+    status: 'none',
+    skip: jest.fn(),
+    back: jest.fn()
   }))
 }));
+
 jest.mock('@hooks', () => ({
   useOnboardingToolTip: jest.fn(() => ({
     title: '',

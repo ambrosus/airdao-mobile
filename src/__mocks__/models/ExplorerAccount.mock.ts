@@ -10,7 +10,5 @@ export const MockExplorerAccount: ExplorerAccount = {
   name: 'Test Account',
   isOnWatchlist: true,
   isPersonal: true,
-  calculatePercentHoldings: function (): number {
-    return 0;
-  }
+  calculatePercentHoldings: () => 0
 };

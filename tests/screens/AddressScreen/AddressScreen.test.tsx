@@ -12,12 +12,6 @@ jest.mock('victory-native', () => {
     VictoryAxis: jest.fn()
   };
 });
-jest.mock('@contexts/OnBoardingUserContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    handleStepChange: jest.fn()
-  }))
-}));
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -88,9 +82,11 @@ let mockedData = {
   error: false
 };
 
-jest.mock('@contexts/OnBoardingUserContext', () => ({
+jest.mock('@contexts/OnboardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
-    status: 'none'
+    status: 'none',
+    skip: jest.fn(),
+    back: jest.fn()
   }))
 }));
 
