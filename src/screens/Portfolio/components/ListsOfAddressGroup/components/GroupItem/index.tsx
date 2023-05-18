@@ -1,30 +1,40 @@
 import React, { FC, useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
-import { Button, Text } from '@components/base';
+import { Button, Row, Text } from '@components/base';
 import { OptionsIcon } from '@components/svg/icons/Options';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSheetGroupAction';
+import { BottomSheetSingleGroupOption } from '@screens/Portfolio/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
-import { BottomSheetConfirmRemoveGroup } from '@screens/Lists/components/BottomSheetConfirmRemoveGroup';
-import { ListsNavigationProp } from '@appTypes/navigation';
+import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/BottomSheetConfirmRemoveGroup';
+import { PortfolioNavigationProp } from '@appTypes/navigation';
+import { COLORS } from '@constants/colors';
+import { StringUtils } from '@utils/string';
+import { PercentChange } from '@components/composite';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   group: AccountList;
+  balanceAndProgressVisible?: boolean;
+  isFirstItem: boolean;
 };
 
-export const GroupItem: FC<Props> = ({ group }) => {
+export const GroupItem: FC<Props> = ({
+  group,
+  balanceAndProgressVisible = false,
+  isFirstItem
+}) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
 
-  const navigation = useNavigation<ListsNavigationProp>();
+  const navigation = useNavigation<PortfolioNavigationProp>();
 
   const handleOpenSingleGroupOption = useCallback(() => {
     groupItemActionRef.current?.show();
@@ -52,7 +62,7 @@ export const GroupItem: FC<Props> = ({ group }) => {
 
   const tokensFormatted = useMemo(() => {
     const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
-    return `$${formattedNumber} (${formattedNumber} AMB)`;
+    return `$${formattedNumber}`;
   }, [group.totalBalance]);
 
   const handleRemoveConfirm = (groupId: string) => {
@@ -60,27 +70,55 @@ export const GroupItem: FC<Props> = ({ group }) => {
     groupDeleteRef.current?.dismiss();
   };
 
+  const stylesForFirstItem = useMemo(() => {
+    return { marginTop: verticalScale(20), borderBottomWidth: 0 };
+  }, []);
+
   return (
     <>
-      <Button type="base" onPress={handleItemPress}>
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.itemTitle}>{group.name}</Text>
-            <Spacer value={4} />
-            <View style={styles.itemSubInfo}>
-              <Text style={styles.walletsCount}>
-                {group.accountCount + ' addresses'}
-              </Text>
-              <Text style={styles.tokensCount}>{tokensFormatted}</Text>
-            </View>
-          </View>
-          <Button
-            style={styles.optionButton}
-            type="base"
-            onPress={handleOpenSingleGroupOption}
-          >
-            <OptionsIcon />
-          </Button>
+      <Button
+        type="base"
+        onPress={handleItemPress}
+        style={[
+          {
+            paddingVertical: 15,
+            borderColor: COLORS.thinGrey,
+            borderBottomWidth: 0.5,
+            borderTopWidth: 0.5
+          },
+          isFirstItem && stylesForFirstItem
+        ]}
+      >
+        <View style={{ justifyContent: 'space-between' }}>
+          <Row justifyContent="space-between">
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={13}
+              color={COLORS.smokyBlack}
+            >
+              <Text style={styles.itemTitle}>{group.name}</Text>
+            </Text>
+            <Text
+              fontFamily="Mersad_600SemiBold"
+              fontSize={13}
+              color={COLORS.smokyBlack}
+            >
+              {tokensFormatted}
+            </Text>
+          </Row>
+          <Spacer value={5} />
+          <Row justifyContent="space-between">
+            <Text
+              fontFamily="Mersad_600SemiBold"
+              color="#0e0e0e80"
+              fontSize={13}
+            >
+              {group.accountCount + ' addresses'}
+            </Text>
+            <Row alignItems="center">
+              <PercentChange change={123 || 0} />
+            </Row>
+          </Row>
           <BottomSheetSingleGroupOption
             handleOnDeleteButtonPress={handleOpenDeleteModal}
             item={group}

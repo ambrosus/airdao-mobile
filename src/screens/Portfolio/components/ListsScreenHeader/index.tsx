@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
-import { styles } from '@screens/Lists/components/ListsScreenHeader/styles';
+import { styles } from '@screens/Portfolio/components/ListsScreenHeader/styles';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
 import { useAMBPrice } from '@hooks';

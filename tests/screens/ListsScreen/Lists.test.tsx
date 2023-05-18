@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ListsScreen } from '@screens/Lists';
+import { PortfolioScreen } from '@screens/Portfolio';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 let mockedListsOfAddressGroup = [
@@ -59,13 +59,13 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <ListsScreen />
+        <PortfolioScreen />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
 
-describe('ListsScreen', () => {
+describe('PortfolioScreen', () => {
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('lists-screen')).toBeTruthy();

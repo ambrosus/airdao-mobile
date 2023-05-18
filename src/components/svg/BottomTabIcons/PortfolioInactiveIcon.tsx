@@ -2,7 +2,7 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 
-export function ListsInactiveIcon(props: IconProps) {
+export function PortfolioInactiveIcon(props: IconProps) {
   const { scale = 1, color = '#676B73' } = props;
   const width = 24;
   const height = 24;

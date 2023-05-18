@@ -4,18 +4,10 @@ import { View } from 'react-native';
 import { HelpIcon } from '@components/svg/icons/Help';
 import { AppStoreIcon } from '@components/svg/icons/AppStore';
 import { styles } from './style';
-import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
 export const SettingsInfoBlock = () => {
   return (
     <View testID="setting-screen_settings-info-block">
-      <Spacer value={40} />
-      <Button type="base">
-        <Row>
-          <AirDAOLogo />
-          <Text style={styles.infoTextContainer}>About AirDAO</Text>
-        </Row>
-      </Button>
       <Spacer value={42} />
       <Button type="base">
         <Row>

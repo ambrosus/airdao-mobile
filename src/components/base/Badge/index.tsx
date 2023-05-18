@@ -4,12 +4,12 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 type Props = {
   icon: JSX.Element;
 };
-export const BadgeButton: FC<Props> = (props) => {
+export const Badge: FC<Props> = (props) => {
   const { icon } = props;
   return (
-    <TouchableOpacity style={styles.buttonBackgroundStyle}>
+    <View style={styles.buttonBackgroundStyle}>
       <View style={styles.buttonStyle}>{icon}</View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
     backgroundColor: ' rgba(47, 43, 67, 0.05)'
   },
   buttonStyle: {
-    width: 40,
-    height: 40,
+    padding: 8,
+    // width: 40,
+    // height: 40,
     alignItems: 'center',
     justifyContent: 'center'
   }

@@ -1,15 +1,21 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, Platform, SafeAreaView, View } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
+import {
+  FlatList,
+  Platform,
+  SafeAreaView,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { OptionsIcon } from '@components/svg/icons/Options';
-import { BackIcon, PlusIcon } from '@components/svg/icons';
+import { BackIcon, EditIcon, PlusIcon } from '@components/svg/icons';
 import { FloatButton } from '@components/base/FloatButton';
-import { BottomSheetRef } from '@components/composite';
+import { BottomSheetRef, PercentChange } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from '@screens/List/styles';
-import { BottomSheetSingleGroupOption } from '@screens/Lists/components/BottomSheetGroupAction';
+import { BottomSheetSingleGroupOption } from '@screens/Portfolio/components/BottomSheetGroupAction';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
 import { BottomSheetLongPressAddressSelection } from '@screens/List/modals/BottomSheetLongPressAddressSelection';
@@ -17,14 +23,20 @@ import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { ListsNavigationProp, ListsParamsLists } from '@appTypes/navigation';
+import {
+  PortfolioNavigationProp,
+  PortfolioParamsPortfolio
+} from '@appTypes/navigation';
+import { Badge } from '@components/base/Badge';
+import { scale } from '@utils/scaling';
+import { AddIcon } from '@components/svg/icons/AddIcon';
 
 export const SingleAddressGroupScreen = () => {
   const {
     params: {
-      group: { id: groupId }
+      group: { id: groupId, name: groupName }
     }
-  } = useRoute<RouteProp<ListsParamsLists, 'SingleAddressGroup'>>();
+  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
@@ -34,7 +46,7 @@ export const SingleAddressGroupScreen = () => {
   const longPressAddressSelectionRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
 
-  const navigation = useNavigation<ListsNavigationProp>();
+  const navigation = useNavigation<PortfolioNavigationProp>();
 
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
 
@@ -88,33 +100,34 @@ export const SingleAddressGroupScreen = () => {
           <Button onPress={navigation.goBack}>
             <BackIcon />
           </Button>
-          <View style={{ paddingLeft: 20 }}>
-            <Text title style={styles.itemTitle}>
-              {name}
-            </Text>
-            <Spacer value={4} />
-            <View style={styles.itemSubInfo}>
-              <Text style={styles.idCount}>{addressCount} Addresses</Text>
-              <Text style={styles.tokensCount}>
-                {NumberUtils.formatNumber(groupTokens, 2)}
-              </Text>
-            </View>
-          </View>
+          <Spacer horizontal value={scale(16)} />
+          <Text title style={styles.itemTitle}>
+            {name}
+          </Text>
         </View>
-        <Button
-          onPress={handleOpenGroupAction}
-          type="base"
-          style={styles.optionsButton}
-        >
-          <OptionsIcon />
-        </Button>
+        <Row>
+          <Button
+            onPress={handleAddNewAddressToGroup}
+            type="circular"
+            style={styles.addButton}
+          >
+            <AddIcon color={COLORS.white} scale={0.8} />
+          </Button>
+          <Spacer horizontal value={scale(32)} />
+          <Button
+            onPress={handleOpenGroupAction}
+            type="circular"
+            style={styles.optionsButton}
+          >
+            <EditIcon color={COLORS.smokyBlack} />
+          </Button>
+        </Row>
       </View>
     );
   }, [
     navigation.goBack,
     name,
-    addressCount,
-    groupTokens,
+    handleAddNewAddressToGroup,
     handleOpenGroupAction
   ]);
 
@@ -126,50 +139,61 @@ export const SingleAddressGroupScreen = () => {
     <SafeAreaView style={styles.header}>
       {Platform.OS === 'android' && <Spacer value={30} />}
       {customHeader}
-      <Spacer value={29} />
+      <Spacer value={32} />
+
+      <View style={{ alignItems: 'center' }}>
+        <Text color={COLORS.slateGrey} fontFamily="Inter_600SemiBold">
+          TOTAL BALANCE
+        </Text>
+        <Spacer value={10} />
+        <Text title fontFamily="Inter_700Bold">
+          ${NumberUtils.formatNumber(groupTokens, 2)}
+        </Text>
+        <Spacer value={10} />
+        <Badge
+          icon={
+            <Row>
+              <PercentChange fontSize={14} change={123 || 0} />
+              <Text>(24hr)</Text>
+            </Row>
+          }
+        />
+      </View>
+      <Spacer value={35} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150
         }}
         data={accounts}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
+          const borderStyles = {
+            paddingVertical: 15,
+            borderColor: COLORS.thinGrey,
+            borderBottomWidth: 0.5,
+            borderTopWidth: index === 0 ? 0.5 : 0
+          };
           return (
-            <View style={styles.addressItemContainer}>
-              <Button
-                onPress={() => navigateToAddressDetails(item)}
-                onLongPress={() => handleOnLongPress(item)}
-                style={styles.touchableAreaContainer}
-              >
-                <WalletItem item={item} />
-              </Button>
-              <View style={styles.buttonContainer}>
-                <Button
-                  style={styles.actionButton}
-                  type="base"
-                  onPress={handleOnOpenOptions}
-                >
-                  <OptionsIcon />
-                </Button>
-              </View>
-              <BottomSheetSingleAddressOptions
-                ref={singleAddressOptionsRef}
-                item={item}
-                groupId={selectedList.id}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => navigateToAddressDetails(item)}
+              onLongPress={() => handleOnLongPress(item)}
+              style={[styles.touchableAreaContainer, { ...borderStyles }]}
+            >
+              <WalletItem item={item} />
+            </TouchableOpacity>
           );
         }}
       />
-      <FloatButton
-        titleStyle={styles.floatButtonTitle}
-        title="Add Address"
-        icon={<PlusIcon color={COLORS.white} />}
-        bottomPadding={0}
-        onPress={handleAddNewAddressToGroup}
-      />
+      {/*<FloatButton*/}
+      {/*  titleStyle={styles.floatButtonTitle}*/}
+      {/*  title="Add Address"*/}
+      {/*  icon={<PlusIcon color={COLORS.white} />}*/}
+      {/*  bottomPadding={0}*/}
+      {/*  onPress={handleAddNewAddressToGroup}*/}
+      {/*/>*/}
       <BottomSheetAddNewAddressToGroup
         ref={addNewAddressToGroupRef}
         groupId={groupId}
+        groupName={groupName}
       />
       <BottomSheetSingleGroupOption
         type="rename"

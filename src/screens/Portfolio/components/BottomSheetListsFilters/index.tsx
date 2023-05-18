@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { CloseIcon } from '@components/svg/icons/Close';
-import { styles } from '@screens/Lists/components/BottomSheetListsFilters/styes';
+import { styles } from '@screens/Portfolio/components/BottomSheetListsFilters/styes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

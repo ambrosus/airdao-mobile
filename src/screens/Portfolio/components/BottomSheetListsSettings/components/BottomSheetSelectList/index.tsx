@@ -6,9 +6,9 @@ import { BottomSheet, CheckBox } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { FlatList, View } from 'react-native';
-import { ListsSettingsSelectList } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList';
+import { ListsSettingsSelectList } from '@screens/Portfolio/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList';
 import { Spacer } from '@components/base/Spacer';
-import { styles } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/styles';
+import { styles } from '@screens/Portfolio/components/BottomSheetListsSettings/components/BottomSheetSelectList/styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

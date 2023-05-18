@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts/ListsContext';
-import { styles } from '@screens/Lists/components/ListsGroups/styles';
+import { styles } from '@screens/Portfolio/components/ListsGroups/styles';
 import { EmptyListsIcon } from '@components/svg/icons/Empty';
 import { verticalScale } from '@utils/scaling';
 

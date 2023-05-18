@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useCallback, useReducer, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
@@ -24,14 +24,26 @@ interface EmptyWalletListProps {
 }
 
 interface WalletListProps extends EmptyWalletListProps {
-  title: string;
+  title?: string;
   totalAmount: number;
   data: ExplorerAccount[];
+  isListOpened?: boolean;
+  isPortfolioFlow?: boolean;
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
-  const { title, totalAmount, data, emptyText } = props;
-  const [listOpened, toggleList] = useReducer((opened) => !opened, false);
+  const {
+    title,
+    totalAmount,
+    data,
+    emptyText,
+    isListOpened = false,
+    isPortfolioFlow = false
+  } = props;
+  const [listOpened, toggleList] = useReducer(
+    (opened) => !opened,
+    isListOpened
+  );
   const rotationAnimation = useRef<RotationAnimationRef>(null);
   const navigation = useNavigation<WalletsNavigationProp>();
   const navigationToExplore =
@@ -41,21 +53,33 @@ export function WalletList(props: WalletListProps): JSX.Element {
     toggleList();
   };
 
-  const renderWalletItem = (item: ExplorerAccount, idx: number) => {
-    const navigateToAddressDetails = () => {
-      navigation.navigate('Address', { address: item.address });
-    };
-    return (
-      <Button
-        key={idx}
-        style={styles.item}
-        onPress={navigateToAddressDetails}
-        testID={`WalletItem_${idx}`}
-      >
-        <WalletItem item={item} />
-      </Button>
-    );
-  };
+  const renderWalletItem = useCallback(
+    (item: ExplorerAccount, idx: number) => {
+      const navigateToAddressDetails = () => {
+        navigation.navigate('Address', { address: item.address });
+      };
+      const stylesForPortfolio = isPortfolioFlow
+        ? {
+            paddingVertical: 15,
+            borderColor: COLORS.thinGrey,
+            borderBottomWidth: 0.5,
+            borderTopWidth: idx === 0 ? 0.5 : 0,
+            marginTop: idx === 0 ? verticalScale(20) : 0
+          }
+        : null;
+      return (
+        <Button
+          key={idx}
+          style={[{ ...styles.item }, stylesForPortfolio]}
+          onPress={navigateToAddressDetails}
+          testID={`WalletItem_${idx}`}
+        >
+          <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
+        </Button>
+      );
+    },
+    [isPortfolioFlow, navigation]
+  );
 
   const renderEmpty = () => {
     return (
@@ -97,24 +121,28 @@ export function WalletList(props: WalletListProps): JSX.Element {
   return (
     <>
       <Row alignItems="center" justifyContent="space-between">
-        <Row alignItems="center">
-          <Text title fontWeight="500">
-            {title} {'   '}
-          </Text>
-          <Text subtitle fontSize={13} fontWeight="600">
-            ~ ${NumberUtils.formatNumber(totalAmount, 0)}
-          </Text>
-        </Row>
-        <Button
-          testID="toggle-button"
-          type="circular"
-          style={styles.toggleBtn}
-          onPress={onTogglePress}
-        >
-          <RotationAnimation ref={rotationAnimation}>
-            <ChevronDownIcon color={COLORS.smokyBlack} />
-          </RotationAnimation>
-        </Button>
+        {!!title ? (
+          <>
+            <Row alignItems="center">
+              <Text title fontWeight="500">
+                {title} {'   '}
+              </Text>
+              <Text subtitle fontSize={13} fontWeight="600">
+                ~ ${NumberUtils.formatNumber(totalAmount, 0)}
+              </Text>
+            </Row>
+            <Button
+              testID="toggle-button"
+              type="circular"
+              style={styles.toggleBtn}
+              onPress={onTogglePress}
+            >
+              <RotationAnimation ref={rotationAnimation}>
+                <ChevronDownIcon color={COLORS.smokyBlack} />
+              </RotationAnimation>
+            </Button>
+          </>
+        ) : null}
       </Row>
       {listOpened &&
         (data.length > 0 ? (

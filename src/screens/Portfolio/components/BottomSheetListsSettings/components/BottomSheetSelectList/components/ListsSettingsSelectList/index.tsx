@@ -4,7 +4,7 @@ import { Text } from '@components/base';
 import { Spacer } from '@components/base/Spacer';
 import { CheckBox } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { styles } from '@screens/Lists/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList/styles';
+import { styles } from '@screens/Portfolio/components/BottomSheetListsSettings/components/BottomSheetSelectList/components/ListsSettingsSelectList/styles';
 
 type Props = {
   item: {

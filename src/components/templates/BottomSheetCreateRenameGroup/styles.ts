@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(12)
   },
   newListTitle: {
-    alignSelf: 'center'
+    alignSelf: 'flex-start'
   },
   icon: {
     alignSelf: 'center',
@@ -36,8 +36,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   bottomSheetCancelButton: {
-    paddingVertical: 16,
+    borderColor: 'transparent',
     width: '100%',
+    borderWidth: 1,
+    backgroundColor: COLORS.charcoal,
+    paddingVertical: 16,
+    borderRadius: 25,
     alignItems: 'center'
   }
 });

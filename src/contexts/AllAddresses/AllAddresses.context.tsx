@@ -99,6 +99,11 @@ const AllAddressesContext = () => {
   };
   // uncomment to clear watchlist
   // Cache.setItem(CacheKey.AllAddresses, []);
+  // Cache.setItem(CacheKey.NotificationSettings, []);
+  // Cache.setItem(CacheKey.Watchlist, []);
+  // Cache.setItem(CacheKey.AddressLists, []);
+  // Cache.setItem(CacheKey.PersonalList, []);
+
   // fetch all addresses on mount
   useEffect(() => {
     const getAddresses = async () => {

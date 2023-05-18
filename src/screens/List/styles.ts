@@ -33,8 +33,17 @@ export const styles = StyleSheet.create({
   },
   optionsButton: {
     alignItems: 'center',
-    height: '100%',
-    width: 35
+    backgroundColor: COLORS.charcoal,
+    borderRadius: 50,
+    width: 32,
+    height: 32
+  },
+  addButton: {
+    alignItems: 'center',
+    backgroundColor: COLORS.electricBlue,
+    borderRadius: 50,
+    width: 32,
+    height: 32
   },
   header: {
     flex: 1,
@@ -44,16 +53,10 @@ export const styles = StyleSheet.create({
   addressItemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
     alignItems: 'center',
     paddingBottom: 32
   },
-  touchableAreaContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1
-  },
+  touchableAreaContainer: {},
   buttonContainer: {
     paddingRight: 5
   },

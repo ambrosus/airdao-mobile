@@ -155,7 +155,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
   ) => {
     initialMount.current = false;
-    setAddress(e.nativeEvent.text);
+    // setAddress(e.nativeEvent.text);
+    setAddress('0xd2A13daa7d9390Cf63925B82D9A708a1e27C9f15');
   };
 
   const loadMoreTransactions = () => {

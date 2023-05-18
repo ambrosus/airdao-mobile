@@ -87,7 +87,7 @@ describe('BottomSheetEditWallet', () => {
     expect(getByTestId('EditWallet_Container')).toBeDefined();
     expect(getByText('Address name')).toBeDefined();
     expect(getByText('This is my personal Address')).toBeDefined();
-    expect(getByText('Add to Lists')).toBeDefined();
+    expect(getByText('Add to Portfolio')).toBeDefined();
     expect(getByText('Create new list')).toBeDefined();
   });
 
