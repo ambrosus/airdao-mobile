@@ -94,7 +94,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
 
   return (
     <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1, paddingTop: 60 }}>
         <View style={styles.header}>
           <Row alignItems="center" justifyContent="space-between">
             <Row alignItems="center">

@@ -167,7 +167,7 @@ export const SingleAddressGroupScreen = () => {
         data={accounts}
         renderItem={({ item, index }) => {
           const borderStyles = {
-            paddingVertical: 15,
+            paddingVertical: 31,
             borderColor: COLORS.thinGrey,
             borderBottomWidth: 0.5,
             borderTopWidth: index === 0 ? 0.5 : 0

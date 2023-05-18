@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   moveButton: {
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.charcoal,
     marginHorizontal: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   removeButton: {
+    backgroundColor: '#ffd9cd',
     marginHorizontal: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,

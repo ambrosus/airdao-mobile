@@ -2,7 +2,6 @@ import React, { FC, useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Row, Text } from '@components/base';
-import { OptionsIcon } from '@components/svg/icons/Options';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
 import { useLists } from '@contexts/ListsContext';
@@ -14,7 +13,6 @@ import { NumberUtils } from '@utils/number';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/BottomSheetConfirmRemoveGroup';
 import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
 import { PercentChange } from '@components/composite';
 import { verticalScale } from '@utils/scaling';
 
@@ -24,11 +22,7 @@ type Props = {
   isFirstItem: boolean;
 };
 
-export const GroupItem: FC<Props> = ({
-  group,
-  balanceAndProgressVisible = false,
-  isFirstItem
-}) => {
+export const GroupItem: FC<Props> = ({ group, isFirstItem }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
@@ -81,10 +75,10 @@ export const GroupItem: FC<Props> = ({
         onPress={handleItemPress}
         style={[
           {
-            paddingVertical: 15,
-            borderColor: COLORS.thinGrey,
-            borderBottomWidth: 0.5,
-            borderTopWidth: 0.5
+            paddingVertical: 31,
+            borderColor: COLORS.charcoal,
+            borderBottomWidth: 1,
+            borderTopWidth: 1
           },
           isFirstItem && stylesForFirstItem
         ]}

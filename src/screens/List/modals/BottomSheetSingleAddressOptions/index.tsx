@@ -63,32 +63,28 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   );
 
   return (
-    <BottomSheet height={375} ref={localRef}>
+    <BottomSheet height={300} ref={localRef}>
       <View style={styles.icon}>
         <BottomSheetSwiperIcon />
       </View>
-      <Spacer value={32} />
-      <Text
-        style={styles.text}
-        fontFamily="Inter_600SemiBold"
-        fontSize={20}
-        color={COLORS.smokyBlack}
-      >
-        Edit {item.name || item.address}
-      </Text>
+      {/*<Spacer value={32} />*/}
+      {/*<Text*/}
+      {/*  style={styles.text}*/}
+      {/*  fontFamily="Inter_600SemiBold"*/}
+      {/*  fontSize={20}*/}
+      {/*  color={COLORS.smokyBlack}*/}
+      {/*>*/}
+      {/*  Edit {item.name || item.address}*/}
+      {/*</Text>*/}
       <Spacer value={24} />
       <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.white}>
+        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
           Move
         </Text>
       </Button>
       <Spacer value={24} />
       <Button style={styles.renameButton} onPress={handleOnOpenRenameAddress}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.smokyBlack}
-        >
+        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
           Rename
         </Text>
       </Button>

@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   header: {
     flex: 1,
     marginLeft: 17,
-    marginRight: 10
+    marginRight: 17
   },
   addressItemContainer: {
     flexDirection: 'row',

@@ -1,4 +1,10 @@
-import React, { useCallback, useReducer, useRef } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
@@ -10,6 +16,7 @@ import {
 import { WalletItem } from '../WalletItem';
 import {
   ChevronDownIcon,
+  EditIcon,
   EmptyWalletListPlaceholderIcon,
   PlusIcon
 } from '@components/svg/icons';
@@ -18,6 +25,12 @@ import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccount } from '@models/Explorer';
 import { TabsParamsList, WalletsNavigationProp } from '@appTypes/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Swipeable } from 'react-native-gesture-handler';
+import { RemoveIcon } from '@components/svg/icons/Remove';
+import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetRef } from '@components/composite';
+import { useLists } from '@contexts';
+import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -38,20 +51,51 @@ export function WalletList(props: WalletListProps): JSX.Element {
     data,
     emptyText,
     isListOpened = false,
-    isPortfolioFlow = false
+    isPortfolioFlow = false,
+    groupId
   } = props;
   const [listOpened, toggleList] = useReducer(
     (opened) => !opened,
     isListOpened
   );
+  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
+
   const rotationAnimation = useRef<RotationAnimationRef>(null);
+  const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
+  const confirmRemoveRef = useRef<BottomSheetRef>(null);
+
+  const { listsOfAddressGroup } = useLists((v) => v);
+
+  const selectedList = useMemo(
+    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
+    [groupId, listsOfAddressGroup]
+  );
+
   const navigation = useNavigation<WalletsNavigationProp>();
+
   const navigationToExplore =
     useNavigation<NativeStackNavigationProp<TabsParamsList>>();
+
   const onTogglePress = () => {
     rotationAnimation.current?.rotate();
     toggleList();
   };
+
+  const handleOnLongPress = useCallback(
+    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
+      singleAddressOptionsRef.current?.show();
+      setPressedAddress(address);
+    },
+    []
+  );
+
+  const handleOnOpenOptions = useCallback(() => {
+    singleAddressOptionsRef.current?.show();
+  }, []);
+
+  const handleConfirmRemove = useCallback(() => {
+    confirmRemoveRef.current?.show();
+  }, []);
 
   const renderWalletItem = useCallback(
     (item: ExplorerAccount, idx: number) => {
@@ -60,25 +104,103 @@ export function WalletList(props: WalletListProps): JSX.Element {
       };
       const stylesForPortfolio = isPortfolioFlow
         ? {
-            paddingVertical: 15,
-            borderColor: COLORS.thinGrey,
+            paddingVertical: 34,
+            borderColor: COLORS.charcoal,
             borderBottomWidth: 0.5,
             borderTopWidth: idx === 0 ? 0.5 : 0,
             marginTop: idx === 0 ? verticalScale(20) : 0
           }
         : null;
+
+      const row: any[] = [];
+      let prevOpenedRow;
+      const closeRow = (index) => {
+        if (prevOpenedRow && prevOpenedRow !== row[index]) {
+          prevOpenedRow.close();
+        }
+        prevOpenedRow = row[index];
+      };
+
+      const renderRightActions = () => {
+        return (
+          <>
+            <View
+              style={{
+                marginTop: 30,
+                alignContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                width: 152,
+                height: 110,
+                flexDirection: 'row',
+                backgroundColor: COLORS.charcoal
+              }}
+            >
+              <Button onPress={handleOnOpenOptions}>
+                <EditIcon scale={1.5} color={COLORS.electricBlue} />
+              </Button>
+              <Spacer horizontal value={scale(52)} />
+              <Button onPress={handleConfirmRemove}>
+                <RemoveIcon />
+              </Button>
+            </View>
+            <BottomSheetSingleAddressOptions
+              ref={singleAddressOptionsRef}
+              item={item}
+              groupId={selectedList.id}
+            />
+            <BottomSheetConfirmRemove
+              item={item}
+              ref={confirmRemoveRef}
+              groupId={groupId}
+            />
+          </>
+        );
+      };
+
       return (
-        <Button
-          key={idx}
-          style={[{ ...styles.item }, stylesForPortfolio]}
-          onPress={navigateToAddressDetails}
-          testID={`WalletItem_${idx}`}
-        >
-          <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
-        </Button>
+        <>
+          <Swipeable
+            renderRightActions={(progress, dragX) =>
+              renderRightActions(progress, dragX)
+            }
+            onSwipeableOpen={() => closeRow()}
+            rightOpenValue={-100}
+          >
+            <View
+              style={{
+                backgroundColor: COLORS.white
+              }}
+            >
+              <Button
+                key={idx}
+                style={[{ ...styles.item }, stylesForPortfolio]}
+                onPress={navigateToAddressDetails}
+                onLongPress={() => handleOnLongPress(item)}
+                testID={`WalletItem_${idx}`}
+              >
+                <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
+              </Button>
+            </View>
+          </Swipeable>
+          <BottomSheetSingleAddressOptions
+            ref={singleAddressOptionsRef}
+            item={item}
+            groupId={selectedList.id}
+          />
+        </>
       );
     },
-    [isPortfolioFlow, navigation]
+    [
+      groupId,
+      handleConfirmRemove,
+      handleOnLongPress,
+      handleOnOpenOptions,
+      isPortfolioFlow,
+      navigation,
+      selectedList.id
+    ]
   );
 
   const renderEmpty = () => {

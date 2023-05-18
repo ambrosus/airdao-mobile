@@ -3,10 +3,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { PortfolioScreenTabs } from '@screens/Portfolio/components/PortfolioScreenTabs';
 import { TabView } from 'react-native-tab-view';
 import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Collections';
-import { Watchlists } from '@screens/Wallets/components/Watchlists';
 import { WalletList } from '@components/templates';
 import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
+import { Button } from '@components/base';
+
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
   { key: 'second', title: 'Collections' }

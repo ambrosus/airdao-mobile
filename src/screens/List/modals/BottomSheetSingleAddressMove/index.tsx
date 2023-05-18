@@ -5,14 +5,19 @@ import React, {
   useCallback,
   useState
 } from 'react';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import {
+  BottomSheet,
+  BottomSheetRef,
+  Header,
+  InputWithIcon
+} from '@components/composite';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { CloseIcon } from '@components/svg/icons';
+import { CloseIcon, SearchIcon } from '@components/svg/icons';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { ListOfAddressesGroupItem } from '@screens/List/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
 import { ExplorerAccount } from '@models/Explorer';
@@ -46,11 +51,19 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
     );
 
     return (
-      <BottomSheet ref={localRef} isNestedSheet={false} height={850}>
+      <BottomSheet ref={localRef} isNestedSheet height={800}>
         <SafeAreaView>
           <Header
             style={styles.header}
-            title="Move to another list"
+            title={
+              <Text
+                fontFamily="Inter_700Bold"
+                fontSize={18}
+                color={COLORS.nero}
+              >
+                Move address to collection
+              </Text>
+            }
             titlePosition="center"
             backIconVisible={false}
             contentLeft={
@@ -76,6 +89,17 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
               </Button>
             }
           />
+          <View style={{ borderRadius: 25, paddingHorizontal: 16 }}>
+            <InputWithIcon
+              iconLeft={<SearchIcon color="#2f2b4399" />}
+              type="text"
+              style={{ width: '65%', height: 50 }}
+              placeholder="Search collections"
+              placeholderTextColor="#2f2b4399"
+              value=""
+              onChangeValue={() => null}
+            />
+          </View>
           <FlatList
             contentContainerStyle={{
               paddingBottom: 150
