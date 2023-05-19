@@ -13,6 +13,10 @@ export default function App() {
     Permissions.requestPermissions();
   }, []);
 
+  useEffect(() => {
+    Permissions.requestPermissions();
+  }, []);
+
   if (!isAppReady) {
     return null;
   }
