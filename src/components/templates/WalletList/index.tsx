@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -31,6 +31,7 @@ import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomShee
 import { BottomSheetRef } from '@components/composite';
 import { useLists } from '@contexts';
 import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
+import { RenderItem } from '@components/templates/WalletList/components/RenderItem';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -58,20 +59,8 @@ export function WalletList(props: WalletListProps): JSX.Element {
     (opened) => !opened,
     isListOpened
   );
-  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
 
   const rotationAnimation = useRef<RotationAnimationRef>(null);
-  const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
-  const confirmRemoveRef = useRef<BottomSheetRef>(null);
-
-  const { listsOfAddressGroup } = useLists((v) => v);
-
-  const selectedList = useMemo(
-    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
-    [groupId, listsOfAddressGroup]
-  );
-
-  const navigation = useNavigation<WalletsNavigationProp>();
 
   const navigationToExplore =
     useNavigation<NativeStackNavigationProp<TabsParamsList>>();
@@ -80,128 +69,6 @@ export function WalletList(props: WalletListProps): JSX.Element {
     rotationAnimation.current?.rotate();
     toggleList();
   };
-
-  const handleOnLongPress = useCallback(
-    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
-      singleAddressOptionsRef.current?.show();
-      setPressedAddress(address);
-    },
-    []
-  );
-
-  const handleOnOpenOptions = useCallback(() => {
-    singleAddressOptionsRef.current?.show();
-  }, []);
-
-  const handleConfirmRemove = useCallback(() => {
-    confirmRemoveRef.current?.show();
-  }, []);
-
-  const renderWalletItem = useCallback(
-    (item: ExplorerAccount, idx: number) => {
-      const navigateToAddressDetails = () => {
-        navigation.navigate('Address', { address: item.address });
-      };
-      const stylesForPortfolio = isPortfolioFlow
-        ? {
-            paddingVertical: 34,
-            borderColor: COLORS.charcoal,
-            borderBottomWidth: 0.5,
-            borderTopWidth: idx === 0 ? 0.5 : 0,
-            marginTop: idx === 0 ? verticalScale(20) : 0
-          }
-        : null;
-
-      const row: any[] = [];
-      let prevOpenedRow;
-      const closeRow = (index) => {
-        if (prevOpenedRow && prevOpenedRow !== row[index]) {
-          prevOpenedRow.close();
-        }
-        prevOpenedRow = row[index];
-      };
-
-      const renderRightActions = () => {
-        return (
-          <>
-            <View
-              style={{
-                marginTop: 30,
-                alignContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                width: 152,
-                height: 110,
-                flexDirection: 'row',
-                backgroundColor: COLORS.charcoal
-              }}
-            >
-              <Button onPress={handleOnOpenOptions}>
-                <EditIcon scale={1.5} color={COLORS.electricBlue} />
-              </Button>
-              <Spacer horizontal value={scale(52)} />
-              <Button onPress={handleConfirmRemove}>
-                <RemoveIcon />
-              </Button>
-            </View>
-            <BottomSheetSingleAddressOptions
-              ref={singleAddressOptionsRef}
-              item={item}
-              groupId={selectedList.id}
-            />
-            <BottomSheetConfirmRemove
-              item={item}
-              ref={confirmRemoveRef}
-              groupId={groupId}
-            />
-          </>
-        );
-      };
-
-      return (
-        <>
-          <Swipeable
-            renderRightActions={(progress, dragX) =>
-              renderRightActions(progress, dragX)
-            }
-            onSwipeableOpen={() => closeRow()}
-            rightOpenValue={-100}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.white
-              }}
-            >
-              <Button
-                key={idx}
-                style={[{ ...styles.item }, stylesForPortfolio]}
-                onPress={navigateToAddressDetails}
-                onLongPress={() => handleOnLongPress(item)}
-                testID={`WalletItem_${idx}`}
-              >
-                <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
-              </Button>
-            </View>
-          </Swipeable>
-          <BottomSheetSingleAddressOptions
-            ref={singleAddressOptionsRef}
-            item={item}
-            groupId={selectedList.id}
-          />
-        </>
-      );
-    },
-    [
-      groupId,
-      handleConfirmRemove,
-      handleOnLongPress,
-      handleOnOpenOptions,
-      isPortfolioFlow,
-      navigation,
-      selectedList.id
-    ]
-  );
 
   const renderEmpty = () => {
     return (
@@ -268,7 +135,19 @@ export function WalletList(props: WalletListProps): JSX.Element {
       </Row>
       {listOpened &&
         (data.length > 0 ? (
-          <View style={styles.list}>{data.map(renderWalletItem)}</View>
+          <View style={styles.list}>
+            <FlatList
+              data={data}
+              renderItem={(item, index) => (
+                <RenderItem
+                  item={item.item}
+                  idx={index}
+                  isPortfolioFlow={isPortfolioFlow}
+                  groupId={groupId}
+                />
+              )}
+            />
+          </View>
         ) : (
           renderEmpty()
         ))}
