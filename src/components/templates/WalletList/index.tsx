@@ -1,37 +1,24 @@
-import React, {
-  useCallback,
-  useMemo,
-  useReducer,
-  useRef,
-  useState
-} from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useReducer, useRef } from 'react';
+import { FlatList, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import {
   RotationAnimation,
   RotationAnimationRef
 } from '@components/animations';
-import { WalletItem } from '../WalletItem';
 import {
   ChevronDownIcon,
-  EditIcon,
   EmptyWalletListPlaceholderIcon,
   PlusIcon
 } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccount } from '@models/Explorer';
-import { TabsParamsList, WalletsNavigationProp } from '@appTypes/navigation';
+import { TabsParamsList } from '@appTypes/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Swipeable } from 'react-native-gesture-handler';
-import { RemoveIcon } from '@components/svg/icons/Remove';
-import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
-import { BottomSheetRef } from '@components/composite';
-import { useLists } from '@contexts';
-import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 import { RenderItem } from '@components/templates/WalletList/components/RenderItem';
+import { styles } from '@components/templates/WalletList/styles';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -154,35 +141,3 @@ export function WalletList(props: WalletListProps): JSX.Element {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  toggleBtn: {
-    borderRadius: scale(36),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F2',
-    padding: scale(12)
-  },
-  chevronIcon: {
-    width: scale(12),
-    height: scale(12)
-  },
-  list: {
-    paddingTop: verticalScale(1)
-  },
-  item: {
-    marginTop: verticalScale(20)
-  },
-  emptyContainer: {
-    paddingTop: verticalScale(20),
-    alignItems: 'center',
-    alignSelf: 'center',
-    width: scale(200)
-  },
-  addBtn: {
-    backgroundColor: COLORS.mainBlue,
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: scale(16),
-    borderRadius: moderateScale(200)
-  }
-});

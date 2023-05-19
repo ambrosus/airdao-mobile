@@ -6,7 +6,6 @@ import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/c
 import { WalletList } from '@components/templates';
 import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
-import { Button } from '@components/base';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },

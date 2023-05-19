@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 type Props = {
   icon: JSX.Element;

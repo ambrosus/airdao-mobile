@@ -8,17 +8,13 @@ import {
 } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { OptionsIcon } from '@components/svg/icons/Options';
-import { BackIcon, EditIcon, PlusIcon } from '@components/svg/icons';
-import { FloatButton } from '@components/base/FloatButton';
+import { BackIcon, EditIcon } from '@components/svg/icons';
 import { BottomSheetRef, PercentChange } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from '@screens/List/styles';
-import { BottomSheetSingleGroupOption } from '@screens/Portfolio/components/BottomSheetGroupAction';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
-import { BottomSheetLongPressAddressSelection } from '@screens/List/modals/BottomSheetLongPressAddressSelection';
 import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
@@ -40,11 +36,8 @@ export const SingleAddressGroupScreen = () => {
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
-  const singleGroupOptionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
-  const longPressAddressSelectionRef = useRef<BottomSheetRef>(null);
-  const groupDeleteRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
@@ -57,37 +50,22 @@ export const SingleAddressGroupScreen = () => {
 
   const { accounts, name } = selectedList;
   const groupTokens = selectedList.totalBalance;
-  const addressCount = selectedList.accountCount;
 
   const handleOpenRenameModal = useCallback(() => {
-    singleGroupOptionRef.current?.dismiss();
     setTimeout(() => {
       groupRenameRef.current?.show();
     }, 900);
   }, []);
 
-  const handleOpenDeleteModal = useCallback(() => {
-    singleGroupOptionRef.current?.dismiss();
-    setTimeout(() => {
-      groupDeleteRef.current?.show();
-    }, 900);
-  }, []);
-
   const handleAddNewAddressToGroup = useCallback(() => {
-    addNewAddressToGroupRef.current?.show();
-  }, []);
-
-  const handleOpenGroupAction = useCallback(() => {
-    singleGroupOptionRef.current?.show();
-  }, []);
-
-  const handleOnOpenOptions = useCallback(() => {
-    singleAddressOptionsRef.current?.show();
+    setTimeout(() => {
+      addNewAddressToGroupRef.current?.show();
+    }, 900);
   }, []);
 
   const handleOnLongPress = useCallback(
     (address: React.SetStateAction<ExplorerAccount | undefined>) => {
-      longPressAddressSelectionRef.current?.show();
+      singleAddressOptionsRef.current?.show();
       setPressedAddress(address);
     },
     []
@@ -115,7 +93,7 @@ export const SingleAddressGroupScreen = () => {
           </Button>
           <Spacer horizontal value={scale(32)} />
           <Button
-            onPress={handleOpenGroupAction}
+            onPress={handleOpenRenameModal}
             type="circular"
             style={styles.optionsButton}
           >
@@ -128,7 +106,7 @@ export const SingleAddressGroupScreen = () => {
     navigation.goBack,
     name,
     handleAddNewAddressToGroup,
-    handleOpenGroupAction
+    handleOpenRenameModal
   ]);
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {
@@ -183,24 +161,15 @@ export const SingleAddressGroupScreen = () => {
           );
         }}
       />
-      {/*<FloatButton*/}
-      {/*  titleStyle={styles.floatButtonTitle}*/}
-      {/*  title="Add Address"*/}
-      {/*  icon={<PlusIcon color={COLORS.white} />}*/}
-      {/*  bottomPadding={0}*/}
-      {/*  onPress={handleAddNewAddressToGroup}*/}
-      {/*/>*/}
       <BottomSheetAddNewAddressToGroup
         ref={addNewAddressToGroupRef}
         groupId={groupId}
         groupName={groupName}
       />
-      <BottomSheetSingleGroupOption
-        type="rename"
-        item={selectedList}
-        ref={singleGroupOptionRef}
-        handleOnDeleteButtonPress={handleOpenDeleteModal}
-        handleOnRenameButtonPress={handleOpenRenameModal}
+      <BottomSheetSingleAddressOptions
+        ref={singleAddressOptionsRef}
+        item={pressedAddress}
+        groupId={selectedList.id}
       />
       <BottomSheetCreateRenameGroup
         type="rename"
@@ -208,10 +177,6 @@ export const SingleAddressGroupScreen = () => {
         groupTitle={name}
         handleOnRenameGroup={handleOnRename}
         ref={groupRenameRef}
-      />
-      <BottomSheetLongPressAddressSelection
-        ref={longPressAddressSelectionRef}
-        address={pressedAddress}
       />
     </SafeAreaView>
   );

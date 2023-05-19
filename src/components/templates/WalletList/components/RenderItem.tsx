@@ -1,12 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { COLORS } from '@constants/colors';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { StyleSheet, View } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
+import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
 import { RemoveIcon } from '@components/svg/icons/Remove';
 import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
-import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 import { Swipeable } from 'react-native-gesture-handler';
 import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
@@ -14,6 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { useLists } from '@contexts';
+import { styles } from '@components/templates/WalletList/styles';
+import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 
 type Props = {
   item: ExplorerAccount;
@@ -31,7 +32,6 @@ export const RenderItem = ({
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
 
   const { listsOfAddressGroup } = useLists((v) => v);
-  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
 
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
@@ -39,13 +39,6 @@ export const RenderItem = ({
   );
 
   const navigation = useNavigation<WalletsNavigationProp>();
-  const handleOnLongPress = useCallback(
-    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
-      singleAddressOptionsRef.current?.show();
-      setPressedAddress(address);
-    },
-    []
-  );
 
   const handleOnOpenOptions = useCallback(() => {
     singleAddressOptionsRef.current?.show();
@@ -69,19 +62,7 @@ export const RenderItem = ({
   const renderRightActions = () => {
     return (
       <>
-        <View
-          style={{
-            marginTop: 30,
-            alignContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-            justifyContent: 'center',
-            width: 152,
-            height: 110,
-            flexDirection: 'row',
-            backgroundColor: COLORS.charcoal
-          }}
-        >
+        <View style={styles.rightActions}>
           <Button onPress={handleOnOpenOptions}>
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
@@ -95,7 +76,7 @@ export const RenderItem = ({
           item={item}
           groupId={selectedList.id}
         />
-        <BottomSheetConfirmRemove
+        <BottomSheetRemoveAddressFromWatchlists
           item={item}
           ref={confirmRemoveRef}
           groupId={groupId}
@@ -103,8 +84,6 @@ export const RenderItem = ({
       </>
     );
   };
-
-  console.log(item);
 
   return (
     <>
@@ -122,54 +101,12 @@ export const RenderItem = ({
             key={idx}
             style={[{ ...styles.item }, stylesForPortfolio]}
             onPress={navigateToAddressDetails}
-            onLongPress={() => {
-              if (isPortfolioFlow) {
-                return handleOnLongPress(item);
-              }
-            }}
             testID={`WalletItem_${idx}`}
           >
             <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
           </Button>
         </View>
       </Swipeable>
-      <BottomSheetSingleAddressOptions
-        ref={singleAddressOptionsRef}
-        item={pressedAddress || item}
-        groupId={selectedList.id}
-      />
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  toggleBtn: {
-    borderRadius: scale(36),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F2',
-    padding: scale(12)
-  },
-  chevronIcon: {
-    width: scale(12),
-    height: scale(12)
-  },
-  list: {
-    paddingTop: verticalScale(1)
-  },
-  item: {
-    marginTop: verticalScale(20)
-  },
-  emptyContainer: {
-    paddingTop: verticalScale(20),
-    alignItems: 'center',
-    alignSelf: 'center',
-    width: scale(200)
-  },
-  addBtn: {
-    backgroundColor: COLORS.mainBlue,
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: scale(16),
-    borderRadius: moderateScale(200)
-  }
-});

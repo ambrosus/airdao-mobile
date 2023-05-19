@@ -10,13 +10,14 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { scale } from '@utils/scaling';
-import { Route } from '@react-navigation/native';
+import { Route, useNavigation } from '@react-navigation/native';
 import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
 import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
 import { TabViewProps } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
+import { ExploreTabNavigationProp } from '@appTypes';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderPortfolioTab']>
@@ -34,6 +35,12 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const handleOnOpenCreateNewList = useCallback(() => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
+
+  const navigation = useNavigation<ExploreTabNavigationProp>();
+
+  const navigateToExplore = useCallback(() => {
+    navigation.navigate('Explore', { screen: 'ExploreScreen' });
+  }, [navigation]);
 
   const refs = useMemo(
     () =>
@@ -82,7 +89,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           </Text>
           {props.index === 0 ? (
             <Button
-              onPress={handleOnOpenCreateNewList}
+              onPress={navigateToExplore}
               style={{ justifyContent: 'center', height: 45, width: 109 }}
             >
               <Row>

@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   removeButton: {
-    backgroundColor: '#ffd9cd',
+    backgroundColor: COLORS.pinkRed,
     marginHorizontal: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,

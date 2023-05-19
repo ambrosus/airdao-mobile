@@ -44,7 +44,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.crimsonRed}
             >
               Remove
             </Text>
@@ -57,7 +57,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.midnight}
+              color={COLORS.smokyBlack}
               fontSize={16}
             >
               Cancel

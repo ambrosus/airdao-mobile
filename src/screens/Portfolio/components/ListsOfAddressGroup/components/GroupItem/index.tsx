@@ -30,10 +30,6 @@ export const GroupItem: FC<Props> = ({ group, isFirstItem }) => {
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
-  const handleOpenSingleGroupOption = useCallback(() => {
-    groupItemActionRef.current?.show();
-  }, []);
-
   const handleOpenRenameModal = useCallback(() => {
     groupItemActionRef.current?.dismiss();
     setTimeout(() => {

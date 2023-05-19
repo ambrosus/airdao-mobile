@@ -29,5 +29,6 @@ export const COLORS = {
   navyIndigo: '#162c5d',
   separator: '#2f2b431a',
   nero: '#191919',
-  linkWater: '#c2c5cc'
+  linkWater: '#c2c5cc',
+  pinkRed: '#ffd9cd'
 };

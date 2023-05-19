@@ -93,7 +93,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                {type === 'create' ? ' Create Collection' : 'Rename List'}
+                {type === 'create' ? ' Create Collection' : 'Rename Collection'}
               </Text>
               <Spacer value={8} />
               <OnboardingView
