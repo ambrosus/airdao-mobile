@@ -52,13 +52,13 @@ export const RenderItem = ({
   };
   const stylesForPortfolio = isPortfolioFlow
     ? {
-        paddingVertical: 34,
+        paddingVertical: 18,
         borderColor: COLORS.charcoal,
-        borderBottomWidth: 0.5,
-        borderTopWidth: idx === 0 ? 0.5 : 0,
+        borderBottomWidth: idx !== 0 ? 0.5 : 0,
+        borderTopWidth: 0.5,
         marginTop: idx === 0 ? verticalScale(20) : 0
       }
-    : null;
+    : {};
   const renderRightActions = () => {
     return (
       <>

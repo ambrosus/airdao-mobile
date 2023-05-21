@@ -23,7 +23,11 @@ type Props = {
   wrapperStyles?: ViewStyle;
 };
 
-export const GroupItem: FC<Props> = ({ group, isFirstItem, wrapperStyles }) => {
+export const GroupItem: FC<Props> = ({
+  group,
+  isFirstItem,
+  wrapperStyles = {}
+}) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
@@ -67,9 +71,9 @@ export const GroupItem: FC<Props> = ({ group, isFirstItem, wrapperStyles }) => {
 
   const containerStyles = useMemo(() => {
     const mainStyle = isFirstItem
-      ? { ...styles.container, ...stylesForFirstItem }
-      : { ...styles.container };
-    return wrapperStyles || mainStyle;
+      ? { ...styles.container, ...stylesForFirstItem, ...wrapperStyles }
+      : { ...styles.container, ...wrapperStyles };
+    return mainStyle;
   }, [isFirstItem, stylesForFirstItem, wrapperStyles]);
 
   return (

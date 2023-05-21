@@ -48,6 +48,7 @@ export const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1 }} testID="Wallets_Screen">
+      <HomeHeader />
       <ScrollView
         bounces={false}
         contentContainerStyle={styles.container}
@@ -60,9 +61,9 @@ export const HomeScreen = () => {
           AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
           AMBPrice={ambTokenData?.priceUSD || NaN}
         />
-        {/*<View style={styles.homeTabs}>*/}
-        <HomeTabs />
-        {/*</View>*/}
+        <View style={styles.homeTabs}>
+          <HomeTabs />
+        </View>
         <Spacer value={scale(24)} />
         <View style={styles.homeHighlights}>
           <HomeHighlights />

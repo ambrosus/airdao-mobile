@@ -125,11 +125,12 @@ export function WalletList(props: WalletListProps): JSX.Element {
         (data.length > 0 ? (
           <View style={styles.list}>
             <FlatList
+              style={{ height: '100%' }}
               data={data}
-              renderItem={(item, index) => (
+              renderItem={(item) => (
                 <RenderItem
                   item={item.item}
-                  idx={index}
+                  idx={item.index}
                   isPortfolioFlow={isPortfolioFlow}
                   groupId={groupId}
                 />

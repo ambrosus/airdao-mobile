@@ -35,7 +35,6 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     AMBPrice
   } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
-  const safeAreaInsets = useSafeAreaInsets();
   const [balanceVisible, toggleBalanceVisibility] = useReducer(
     (visible) => !visible,
     true
@@ -54,11 +53,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   };
 
   return (
-    <View
-      style={[styles.container, { paddingTop: safeAreaInsets.top }]}
-      testID="portfolio-balance"
-    >
-      <HomeHeader />
+    <View style={styles.container} testID="portfolio-balance">
       <View style={styles.content}>
         <Spacer value={scale(38)} />
         <Row alignItems="center" justifyContent="center">

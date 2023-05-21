@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     marginHorizontal: scale(16),
     backgroundColor: 'white',
-    borderRadius: 24
-    // minHeight: 400
+    borderRadius: 24,
+    height: 400
   },
   homeHighlights: {
     backgroundColor: 'white',

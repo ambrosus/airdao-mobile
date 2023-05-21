@@ -9,8 +9,10 @@ import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function HomeHeader(): JSX.Element {
+  const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
@@ -96,10 +98,14 @@ export function HomeHeader(): JSX.Element {
     );
   }, [WINDOW_HEIGHT, onQRCodeScanned]);
 
+  const headerStyles = useMemo(() => {
+    return { ...styles.container, marginTop: safeAreaInsetsTop };
+  }, [safeAreaInsetsTop]);
+
   return (
     <Header
       backIconVisible={false}
-      style={styles.container}
+      style={headerStyles}
       contentRight={renderContentRight}
       contentLeft={renderContentLeft}
     />

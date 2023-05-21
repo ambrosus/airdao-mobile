@@ -4,7 +4,7 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingVertical: 11,
+    paddingVertical: 16,
     borderColor: COLORS.charcoal,
     borderBottomWidth: 1,
     borderTopWidth: 1
