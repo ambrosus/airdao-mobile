@@ -1,10 +1,9 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
+import { HomeScreen } from '@screens/Wallets';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
 import { Platform } from 'react-native';
-import { WalletsScreen } from '@screens/Wallets';
 
 jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
@@ -79,14 +78,12 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <WalletsScreen />
-        </NavigationContainer>
+        <HomeScreen />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
-describe('WalletsScreen', () => {
+describe('HomeScreen', () => {
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('Wallets_Screen')).toBeDefined();

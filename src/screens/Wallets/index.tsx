@@ -1,12 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import {
-  LearnAboutAirDAO,
-  PortfolioBalance,
-  Wallets,
-  Watchlists
-} from './components';
+import { PortfolioBalance } from './components';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { useOnboardingStatus } from '@contexts';
 import { usePersonalList, useAMBPrice } from '@hooks';
@@ -16,8 +11,11 @@ import { OnboardingView } from '@components/templates/OnboardingView';
 import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { HomeTabs } from '@screens/Wallets/components/HomeTabs/HomeTabs';
+import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
+import { HomeHeader } from '@screens/Wallets/components/Header';
 
-export const WalletsScreen = () => {
+export const HomeScreen = () => {
   const navigation = useNavigation<ExploreTabNavigationProp>();
   const isFocused = useIsFocused();
 
@@ -51,6 +49,7 @@ export const WalletsScreen = () => {
   return (
     <View style={{ flex: 1 }} testID="Wallets_Screen">
       <ScrollView
+        bounces={false}
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
@@ -61,15 +60,12 @@ export const WalletsScreen = () => {
           AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
           AMBPrice={ambTokenData?.priceUSD || NaN}
         />
-        <View style={styles.content}>
-          <Wallets />
-          <View style={styles.divider} />
-          <Watchlists />
-          {Platform.OS === 'ios' && (
-            <View testID="Learn_About_AirDAO" style={styles.airdao}>
-              <LearnAboutAirDAO />
-            </View>
-          )}
+        {/*<View style={styles.homeTabs}>*/}
+        <HomeTabs />
+        {/*</View>*/}
+        <Spacer value={scale(24)} />
+        <View style={styles.homeHighlights}>
+          <HomeHighlights />
         </View>
       </ScrollView>
       <OnboardingView

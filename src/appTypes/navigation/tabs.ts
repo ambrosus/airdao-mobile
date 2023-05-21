@@ -5,7 +5,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 export type TabsParamsList = {
   Wallets: undefined;
   Explore: NavigatorScreenParams<ExploreTabParamsList>;
-  Lists: undefined;
+  Portfolio: undefined;
   Settings: undefined;
   Tabs: { screen: string };
 };

@@ -1,0 +1,49 @@
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useLists } from '@contexts';
+import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
+import { Button, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+
+export const HomeCollections = () => {
+  const { listsOfAddressGroup } = useLists((v) => v);
+  return (
+    <View
+      style={{
+        // flex: 1,
+        paddingHorizontal: 24
+      }}
+    >
+      {listsOfAddressGroup.slice(0, 4).map((item, index) => {
+        return (
+          <GroupItem
+            key={index}
+            group={item}
+            isFirstItem={index === 0}
+            wrapperStyles={{ paddingTop: 22 }}
+          />
+        );
+      })}
+      <Button onPress={() => {}} style={styles.seeAllButton}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.deepBlue}
+          style={{ marginVertical: 12 }}
+        >
+          See all
+        </Text>
+      </Button>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  seeAllButton: {
+    alignItems: 'center',
+    backgroundColor: '#edf3ff',
+    borderRadius: 24,
+    alignSelf: 'center',
+    width: '90%'
+  }
+});

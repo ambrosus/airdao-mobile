@@ -23,6 +23,6 @@ export class AccountList {
 
   // returns total AMB Balance
   get totalBalance(): number {
-    return this.accounts.reduce((prev, cur) => prev + cur.ambBalance, 0);
+    return this.accounts.reduce((prev, cur) => prev + cur?.ambBalance, 0);
   }
 }
