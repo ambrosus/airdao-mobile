@@ -1,13 +1,14 @@
 {
   "name": "airdao",
   "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "dev-client:ios": "eas build --profile development-simulator --platform ios",
     "dev-client:android": "eas build --profile development --platform android",
-    "start": "expo start --dev-client",
+    "start": "expo start",
     "start:dev": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint 'src/**/*.{js,ts,tsx}'",
     "prepare": "husky install",
