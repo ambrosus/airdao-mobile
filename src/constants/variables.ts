@@ -14,3 +14,5 @@ export const DefaultNotificationSettings: NotificationSettings = {
   pricePercentThreshold: 5,
   balancePercentChange: 5
 };
+
+export const CRYPTO_ADDRESS_MAX_LENGTH = 62;

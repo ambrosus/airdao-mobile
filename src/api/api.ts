@@ -10,7 +10,8 @@ const getExplorerAccountTypeFromResponseMeta = (
 ): ExplorerAccountType => {
   if (search.includes('apollo')) return ExplorerAccountType.Apollo;
   else if (search.includes('atlas')) return ExplorerAccountType.Atlas;
-  return ExplorerAccountType.Account;
+  else if (search.includes('addresses')) return ExplorerAccountType.Atlas;
+  throw Error('Given address does not belong to an account!');
 };
 
 export const getAMBTokenData = async (): Promise<AMBTokenDTO> => {

@@ -27,7 +27,7 @@ import {
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { CloseIcon, ScannerIcon, SearchIcon } from '@components/svg/icons';
+import { ScannerQRIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import {
   useAMBPrice,
@@ -44,6 +44,8 @@ import { FloatButton } from '@components/base/FloatButton';
 import { COLORS } from '@constants/colors';
 import { OnboardingView } from '../OnboardingView';
 import { styles } from './styles';
+import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -164,12 +166,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   };
 
-  const clearInput = () => {
-    inputRef.current?.clear();
-    onContentVisibilityChanged(address === '');
-    setAddress('');
-  };
-
   const showScanner = () => {
     scannerModalRef.current?.show();
   };
@@ -242,10 +238,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               testID="search-input"
               ref={inputRef}
               style={styles.input}
-              iconLeft={<SearchIcon color="#2f2b4399" />}
+              maxLength={CRYPTO_ADDRESS_MAX_LENGTH}
               iconRight={
-                <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                  <CloseIcon color="#2f2b4399" scale={0.75} />
+                <Button onPress={showScanner}>
+                  <ScannerQRIcon />
                 </Button>
               }
               placeholder={'Search public address'}
@@ -256,20 +252,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             />
           </OnboardingView>
           <Spacer value={scale(7.5)} horizontal />
-          <Button onPress={showScanner} type="circular" style={styles.scanner}>
-            <ScannerIcon color={COLORS.electricBlue} />
-          </Button>
         </Row>
       </KeyboardDismissingView>
       <BottomSheet height={WINDOW_HEIGHT} ref={scannerModalRef}>
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
       {loading && !!address && <Spinner />}
-      {error && !!address && (
-        <View style={styles.error}>
-          <Text>Could not find the address</Text>
-        </View>
-      )}
+      {error && !!address && <SearchAddressNoResult />}
       {account && explorerInfo && (
         <View style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
