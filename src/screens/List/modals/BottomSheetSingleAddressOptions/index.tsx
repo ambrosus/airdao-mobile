@@ -88,7 +88,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         </Text>
       </Button>
       <BottomSheetConfirmRemove
-        item={[item]}
+        address={item.address}
         ref={confirmRemoveRef}
         groupId={groupId}
       />
@@ -99,7 +99,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       <BottomSheetRenameAddress
         handleOnRename={handleOnRenameAddress}
         ref={renameAddressRef}
-        address={[item]}
+        address={item.address}
       />
     </BottomSheet>
   );

@@ -6,7 +6,7 @@ import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
 import { RemoveIcon } from '@components/svg/icons/Remove';
 import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
-import { Swipeable } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
@@ -54,15 +54,23 @@ export const RenderItem = ({
     ? {
         paddingVertical: 18,
         borderColor: COLORS.charcoal,
-        borderBottomWidth: idx !== 0 ? 0.5 : 0,
-        borderTopWidth: 0.5,
+        borderBottomWidth: idx !== 0 ? 1 : 0,
+        borderTopWidth: 2,
         marginTop: idx === 0 ? verticalScale(20) : 0
       }
     : {};
   const renderRightActions = () => {
     return (
       <>
-        <View style={styles.rightActions}>
+        <View
+          style={{
+            backgroundColor: COLORS.charcoal,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: scale(130)
+          }}
+        >
           <Button onPress={handleOnOpenOptions}>
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
@@ -92,7 +100,7 @@ export const RenderItem = ({
       >
         <View
           style={{
-            backgroundColor: COLORS.white
+            backgroundColor: 'white'
           }}
         >
           <Button

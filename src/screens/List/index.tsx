@@ -65,8 +65,8 @@ export const SingleAddressGroupScreen = () => {
 
   const handleOnLongPress = useCallback(
     (address: React.SetStateAction<ExplorerAccount | undefined>) => {
-      singleAddressOptionsRef.current?.show();
       setPressedAddress(address);
+      singleAddressOptionsRef.current?.show();
     },
     []
   );
@@ -166,11 +166,13 @@ export const SingleAddressGroupScreen = () => {
         groupId={groupId}
         groupName={groupName}
       />
-      <BottomSheetSingleAddressOptions
-        ref={singleAddressOptionsRef}
-        item={pressedAddress}
-        groupId={selectedList.id}
-      />
+      {pressedAddress && (
+        <BottomSheetSingleAddressOptions
+          ref={singleAddressOptionsRef}
+          item={pressedAddress}
+          groupId={selectedList.id}
+        />
+      )}
       <BottomSheetCreateRenameGroup
         type="rename"
         groupId={groupId}
