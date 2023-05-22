@@ -10,11 +10,11 @@ export const styles = StyleSheet.create({
     paddingTop: 16
   },
   bottomSheetSubtitle: {
-    paddingLeft: 16
+    paddingLeft: 24
   },
   bottomSheetInput: {
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 24,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 25,

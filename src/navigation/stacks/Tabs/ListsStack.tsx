@@ -1,20 +1,20 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ListsScreen } from '@screens/Lists';
-import { ListsParamsLists } from '@appTypes/navigation/lists';
+import { PortfolioScreen } from '@screens/Portfolio';
 import { NavigationUtils } from '@utils/navigation';
 import { SingleAddressGroupScreen } from '@screens/List';
+import { PortfolioParamsPortfolio } from '@appTypes';
 
-const Stack = createNativeStackNavigator<ListsParamsLists>();
-export const ListsStack = () => {
+const Stack = createNativeStackNavigator<PortfolioParamsPortfolio>();
+export const PortfolioStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="ListsScreen"
+      initialRouteName="PortfolioScreen"
     >
       <Stack.Screen
-        name="ListsScreen"
-        component={ListsScreen}
+        name="PortfolioScreen"
+        component={PortfolioScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -27,4 +27,4 @@ export const ListsStack = () => {
   );
 };
 
-export default ListsStack;
+export default PortfolioStack;

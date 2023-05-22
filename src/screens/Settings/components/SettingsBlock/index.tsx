@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { RightArrowIcon } from '@components/svg/icons';
+import { ChevronRightIcon, RightArrowIcon } from '@components/svg/icons';
 import { DarkNotificationIcon } from '@components/svg/icons/DarkNotification';
 import { CurrencyIcon } from '@components/svg/icons/Currency';
 import { LanguageIcon } from '@components/svg/icons/Language';
@@ -16,6 +16,7 @@ import {
 } from '@screens/Settings/components/SettingsBlock/modals/BottomSheetSelectLanguage';
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { styles } from '@screens/Settings/components/SettingsBlock/style';
+import { COLORS } from '@constants/colors';
 export const SettingsBlock = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('English');
   const [selectedCurrency, setSelectedCurrency] =
@@ -62,7 +63,7 @@ export const SettingsBlock = () => {
               </Row>
               <Row style={styles.infoTextContainer} alignItems="center">
                 <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
-                <RightArrowIcon />
+                <ChevronRightIcon color={COLORS.smokyBlack} />
               </Row>
             </Row>
           </Button>
@@ -102,7 +103,7 @@ export const SettingsBlock = () => {
               </Row>
               <Row style={styles.infoTextContainer} alignItems="center">
                 <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
-                <RightArrowIcon />
+                <ChevronRightIcon color={COLORS.smokyBlack} />
               </Row>
             </Row>
           </Button>

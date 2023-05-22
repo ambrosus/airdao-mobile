@@ -28,20 +28,14 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>
-          <Spacer value={29} />
-          <View style={styles.newListTitle}>
+          <Spacer value={24} />
+          <View style={styles.bottomSheetSubtitle}>
             <Text
               fontFamily="Inter_600SemiBold"
-              fontSize={20}
-              color={COLORS.smokyBlack}
+              fontSize={16}
+              color={COLORS.nero}
             >
-              Rename Address
-            </Text>
-          </View>
-          <Spacer value={36} />
-          <View style={styles.bottomSheetSubtitle}>
-            <Text fontFamily="Inter_500Medium" fontSize={16} color={COLORS.oil}>
-              List name
+              Rename address
             </Text>
           </View>
           <Input
@@ -52,31 +46,43 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             placeholderTextColor="black"
             style={[styles.bottomSheetInput]}
           />
-          <Spacer value={32} />
+          <Spacer value={24} />
           <Button
             type="base"
-            style={styles.bottomSheetCreateRenameButton}
+            style={{
+              backgroundColor: COLORS.deepBlue,
+              marginHorizontal: 24,
+              paddingVertical: 16,
+              borderRadius: 25,
+              alignItems: 'center'
+            }}
             onPress={() => {
               handleOnRename(localAddressName !== address && localAddressName);
             }}
           >
             <Text
-              fontFamily="Inter_500Medium"
+              fontFamily="Inter_600SemiBold"
               fontSize={16}
               color={COLORS.white}
             >
-              Rename
+              Save
             </Text>
           </Button>
           <Spacer value={24} />
           <Button
             type="base"
-            style={styles.bottomSheetCancelButton}
+            style={{
+              backgroundColor: COLORS.charcoal,
+              marginHorizontal: 24,
+              paddingVertical: 16,
+              borderRadius: 25,
+              alignItems: 'center'
+            }}
             onPress={() => localRef.current?.dismiss()}
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.midnight}
+              color={COLORS.smokyBlack}
               fontSize={16}
             >
               Cancel

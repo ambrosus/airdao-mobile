@@ -1,24 +1,23 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
+import { useForwardedRef, useWatchlist } from '@hooks';
 import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models/Explorer';
-import { useLists } from '@contexts/ListsContext';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   item: ExplorerAccount;
-  groupId: string;
 };
 
 export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
-  ({ item, groupId }, ref) => {
+  ({ item }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-    const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
+    const { removeFromWatchlist } = useWatchlist();
+
     return (
       <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
         <View testID="BottomSheetConfirmRemove_Container">
@@ -38,15 +37,14 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           <Button
             testID="BottomSheetConfirmRemove_Button"
             onPress={() => {
-              handleOnDeleteAddressFromGroup(groupId, [item.address]);
-              localRef.current?.dismiss();
+              removeFromWatchlist(item);
             }}
             style={styles.removeButton}
           >
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.crimsonRed}
             >
               Remove
             </Text>
@@ -59,7 +57,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.midnight}
+              color={COLORS.smokyBlack}
               fontSize={16}
             >
               Cancel

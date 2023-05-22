@@ -10,18 +10,18 @@ import {
 } from '@react-navigation/native';
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { AddressDetails } from '@screens/Address';
-import { WalletsParamsList, ListsParamsLists } from '@appTypes';
+import { WalletsParamsList, PortfolioParamsPortfolio } from '@appTypes';
 
 const TabVisibleRoutes = [
   'WalletsScreen',
+  'PortfolioScreen',
   'ExploreScreen',
-  'ListsScreen',
   'SettingsScreen'
 ];
 
 const getCommonStack = (
   Stack: TypedNavigator<
-    WalletsParamsList | ListsParamsLists,
+    WalletsParamsList | PortfolioParamsPortfolio,
     StackNavigationState<ParamListBase>,
     NativeStackNavigationOptions,
     NativeStackNavigationEventMap,

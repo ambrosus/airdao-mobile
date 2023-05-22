@@ -23,7 +23,7 @@ import { BottomSheetSingleAddressMove } from '@screens/List/modals/BottomSheetSi
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ListsParamsLists } from '@appTypes/navigation';
+import { PortfolioParamsPortfolio } from '@appTypes/navigation';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -43,7 +43,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
     params: {
       group: { id: groupId }
     }
-  } = useRoute<RouteProp<ListsParamsLists, 'SingleAddressGroup'>>();
+  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
 
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
@@ -87,13 +87,14 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
   }, [address?.address]);
 
   const selectedAddresses = useMemo(() => {
-    return listOfAddresses?.filter((addressItem) =>
-      idsOfSelectedAddresses.includes(addressItem.address)
-    );
+    return listOfAddresses?.filter((addressItem) => {
+      idsOfSelectedAddresses.includes(addressItem.address);
+    });
   }, [idsOfSelectedAddresses, listOfAddresses]);
+
   return (
     <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1, paddingTop: 60 }}>
         <View style={styles.header}>
           <Row alignItems="center" justifyContent="space-between">
             <Row alignItems="center">
@@ -140,7 +141,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
           }}
           style={styles.flatListContainer}
           data={listOfAddresses}
-          renderItem={({ item }) => {
+          renderItem={({ item }: { item: ExplorerAccount }) => {
             return (
               <Row
                 style={{ flex: 1, paddingBottom: 32 }}

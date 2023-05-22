@@ -31,7 +31,6 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const singleAddressMoveRef = useRef<BottomSheetRef>(null);
   const renameAddressRef = useRef<BottomSheetRef>(null);
-
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
 
   const allAddressesReducer = useAllAddressesReducer();
@@ -49,7 +48,6 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   const handleOnRenameAddress = useCallback(
     (newName: string | false) => {
       if (!newName) return;
-
       const saveAddress = async () => {
         const newWallet: ExplorerAccount = Object.assign({}, item);
         newWallet.name = newName;
@@ -63,33 +61,20 @@ export const BottomSheetSingleAddressOptions = forwardRef<
   );
 
   return (
-    <BottomSheet height={375} ref={localRef}>
+    <BottomSheet height={300} ref={localRef}>
       <View style={styles.icon}>
         <BottomSheetSwiperIcon />
       </View>
-      <Spacer value={32} />
-      <Text
-        style={styles.text}
-        fontFamily="Inter_600SemiBold"
-        fontSize={20}
-        color={COLORS.smokyBlack}
-      >
-        Edit {item.name || item.address}
-      </Text>
       <Spacer value={24} />
-      <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.white}>
-          Move
+      <Button style={styles.renameButton} onPress={handleOnOpenRenameAddress}>
+        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
+          Rename Address
         </Text>
       </Button>
       <Spacer value={24} />
-      <Button style={styles.renameButton} onPress={handleOnOpenRenameAddress}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.smokyBlack}
-        >
-          Rename
+      <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
+        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
+          Move to another collection
         </Text>
       </Button>
       <Spacer value={24} />
@@ -99,11 +84,11 @@ export const BottomSheetSingleAddressOptions = forwardRef<
           fontSize={16}
           color={COLORS.crimsonRed}
         >
-          Remove
+          Remove from collection
         </Text>
       </Button>
       <BottomSheetConfirmRemove
-        item={item}
+        item={[item]}
         ref={confirmRemoveRef}
         groupId={groupId}
       />
@@ -114,7 +99,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       <BottomSheetRenameAddress
         handleOnRename={handleOnRenameAddress}
         ref={renameAddressRef}
-        address={item.address}
+        address={[item]}
       />
     </BottomSheet>
   );

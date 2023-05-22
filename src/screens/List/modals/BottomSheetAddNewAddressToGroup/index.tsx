@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
+  useMemo,
   useState
 } from 'react';
 import {
@@ -14,26 +15,26 @@ import {
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
-import { BackIcon, CloseIcon, SearchIcon } from '@components/svg/icons';
+import { SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { AddressItemWithCheckbox } from './components/AddressItemWithCheckbox';
 import { useWatchlist } from '@hooks';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { TabsParamsList } from '@appTypes';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
+import { WalletItem } from '@components/templates';
+import { ExplorerAccount } from '@models';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   groupId: string;
+  groupName?: string;
+  isFirstItem?: string;
 };
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
   Props
->(({ groupId }, ref) => {
+>(({ groupId, groupName, isFirstItem }, ref) => {
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const handleOnAddNewAddresses = useLists((v) => v.handleOnAddNewAddresses);
@@ -41,35 +42,39 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     string[]
   >([]);
 
-  const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
-
-  const handleOnAddNewAddress = useCallback(() => {
-    const selectedAddressesForGroup = watchlist.filter((item) =>
-      idsOfSelectedAddresses.includes(item.address)
-    );
-    handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
-    localRef.current?.dismiss();
-  }, [
-    groupId,
-    handleOnAddNewAddresses,
-    idsOfSelectedAddresses,
-    localRef,
-    watchlist
-  ]);
-
-  const handleCheckBoxPress = useCallback(
+  const handleItemPress = useCallback(
     (id: string) => {
       if (!idsOfSelectedAddresses.includes(id)) {
         setIdsOfSelectedAddresses([...idsOfSelectedAddresses, id]);
+        const ids = [...idsOfSelectedAddresses, id];
+        const selectedAddressesForGroup = watchlist.filter((item) =>
+          ids.includes(item._id)
+        );
+        handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
       } else {
         const selectedAddresses = idsOfSelectedAddresses.filter(
           (i) => i !== id
         );
         setIdsOfSelectedAddresses(selectedAddresses);
+        const selectedAddressesForGroup = watchlist.filter((item) =>
+          selectedAddresses.includes(item._id)
+        );
+        handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
       }
+      localRef.current?.dismiss();
     },
-    [idsOfSelectedAddresses]
+    [
+      groupId,
+      handleOnAddNewAddresses,
+      idsOfSelectedAddresses,
+      localRef,
+      watchlist
+    ]
   );
+
+  const stylesForFirstItem = useMemo(() => {
+    return { marginTop: verticalScale(20), borderBottomWidth: 0 };
+  }, []);
 
   return (
     <>
@@ -80,33 +85,16 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         {Platform.OS === 'android' && <Spacer value={scale(57)} />}
         <Header
           titleStyle={styles.headerTitle}
-          title="Add from watchlists"
+          title={
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={18}
+              color={COLORS.nero}
+            >{`Add address to ${groupName}`}</Text>
+          }
           titlePosition="center"
           style={styles.header}
           backIconVisible={false}
-          contentLeft={
-            <Button
-              type="base"
-              onPress={() => {
-                localRef.current?.dismiss();
-              }}
-            >
-              {Platform.OS === 'ios' ? <CloseIcon /> : <BackIcon />}
-            </Button>
-          }
-          contentRight={
-            Platform.OS === 'ios' && (
-              <Button type="base" onPress={handleOnAddNewAddress}>
-                <Text
-                  fontFamily="Inter_600SemiBold"
-                  color={COLORS.jungleGreen}
-                  fontSize={16}
-                >
-                  Add to list
-                </Text>
-              </Button>
-            )
-          }
         />
         <View style={styles.bottomSheetInput}>
           <InputWithIcon
@@ -121,16 +109,31 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         </View>
         <FlatList
           contentContainerStyle={{
-            paddingBottom: 150
+            paddingBottom: 150,
+            paddingHorizontal: 24,
+            paddingTop: 24
           }}
           data={watchlist}
-          renderItem={({ item }) => (
-            <AddressItemWithCheckbox
-              item={item}
-              handleCheckBoxPress={handleCheckBoxPress}
-              idsOfSelectedAddresses={idsOfSelectedAddresses}
-            />
-          )}
+          renderItem={({ item }: { item: ExplorerAccount }) => {
+            return (
+              <Button
+                onPress={() => {
+                  handleItemPress(item._id);
+                }}
+                style={[
+                  {
+                    paddingVertical: 18,
+                    borderColor: COLORS.thinGrey,
+                    borderBottomWidth: 0.2,
+                    borderTopWidth: 0.2
+                  },
+                  isFirstItem && stylesForFirstItem
+                ]}
+              >
+                <WalletItem item={item} />
+              </Button>
+            );
+          }}
         />
         <View style={styles.bottomButtons}>
           {Platform.OS === 'android' && (
@@ -141,28 +144,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
               <Text style={styles.bottomAddToListButtonText}>Add to list</Text>
             </Button>
           )}
-          <Spacer value={20} />
-          <Button
-            style={
-              Platform.OS === 'ios'
-                ? styles.bottomAddToListButton
-                : styles.bottomTrackNewAddressButton
-            }
-            onPress={() =>
-              navigation.navigate('Explore', { screen: 'ExploreScreen' })
-            }
-          >
-            <Text
-              style={
-                Platform.OS === 'ios'
-                  ? styles.bottomAddToListButtonText
-                  : styles.bottomTrackNewAddressButtonText
-              }
-            >
-              Track new Address
-            </Text>
-          </Button>
-          <Spacer value={24} />
         </View>
       </BottomSheet>
     </>

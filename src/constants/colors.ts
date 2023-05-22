@@ -27,5 +27,8 @@ export const COLORS = {
   veryLightGrey: '#ffffff99',
   white: '#FFFFFF',
   navyIndigo: '#162c5d',
-  separator: '#2f2b431a'
+  separator: '#2f2b431a',
+  nero: '#191919',
+  linkWater: '#c2c5cc',
+  pinkRed: '#ffd9cd'
 };
