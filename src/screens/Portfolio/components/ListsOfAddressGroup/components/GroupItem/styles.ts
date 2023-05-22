@@ -1,14 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(32),
-    paddingHorizontal: scale(19),
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center'
+    paddingVertical: 16,
+    borderColor: COLORS.charcoal,
+    borderBottomWidth: 1,
+    borderTopWidth: 1
   },
   itemSubInfo: {
     flexDirection: 'row',

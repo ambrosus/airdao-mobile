@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { WalletsInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
-import { WalletsActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
+import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
+import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
 import { ExploreActiveIcon } from '@components/svg/BottomTabIcons/ExploreActiveIcon';
 import { PortfolioInactiveIcon } from '@components/svg/BottomTabIcons/PortfolioInactiveIcon';
@@ -18,8 +18,8 @@ import { NavigationUtils } from '@utils/navigation';
 type LabelType = 'Settings' | 'Portfolio' | 'Explore' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <WalletsInactiveIcon />,
-    activeIcon: <WalletsActiveIcon />
+    inactiveIcon: <HomeInactiveIcon />,
+    activeIcon: <HomeActiveIcon />
   },
   Portfolio: {
     inactiveIcon: <PortfolioInactiveIcon />,

@@ -3,15 +3,16 @@ import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export function WalletHeader(): JSX.Element {
+export function HomeHeader(): JSX.Element {
+  const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = 2;
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
@@ -57,6 +58,24 @@ export function WalletHeader(): JSX.Element {
   const renderContentRight = useMemo(() => {
     return (
       <>
+        <Spacer horizontal value={scale(20)} />
+        <Button onPress={navigateToNotifications}>
+          <NotificationIcon color="#393b40" />
+          {unreadNotificationCount > 0 && (
+            <View style={styles.notificationCountContainer}>
+              <Text color="white" subtext>
+                {unreadNotificationCount}
+              </Text>
+            </View>
+          )}
+        </Button>
+      </>
+    );
+  }, [navigateToNotifications]);
+
+  const renderContentLeft = useMemo(() => {
+    return (
+      <>
         <OnboardingView
           thisStep={12}
           childrenAlwaysVisible
@@ -69,41 +88,37 @@ export function WalletHeader(): JSX.Element {
               openScanner();
             }}
           >
-            <ScannerIcon color={COLORS.white} />
+            <ScannerIcon color="#393b40" />
           </Button>
         </OnboardingView>
-        <Spacer horizontal value={scale(20)} />
-        <Button onPress={navigateToNotifications}>
-          <NotificationIcon color={COLORS.white} />
-          {unreadNotificationCount > 0 && (
-            <View style={styles.notificationCountContainer}>
-              <Text subtext>{unreadNotificationCount}</Text>
-            </View>
-          )}
-        </Button>
         <BottomSheet height={WINDOW_HEIGHT} ref={scanner}>
           <BarcodeScanner onScanned={onQRCodeScanned} onClose={closeScanner} />
         </BottomSheet>
       </>
     );
-  }, [WINDOW_HEIGHT, navigateToNotifications, onQRCodeScanned]);
+  }, [WINDOW_HEIGHT, onQRCodeScanned]);
+
+  const headerStyles = useMemo(() => {
+    return { ...styles.container, marginTop: safeAreaInsetsTop };
+  }, [safeAreaInsetsTop]);
 
   return (
     <Header
       backIconVisible={false}
-      style={styles.container}
+      style={headerStyles}
       contentRight={renderContentRight}
+      contentLeft={renderContentLeft}
     />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent'
+    backgroundColor: '#f3f5f7'
   },
   notificationCountContainer: {
     position: 'absolute',
-    backgroundColor: COLORS.white,
+    backgroundColor: '#ff7a00',
     right: 0,
     top: -verticalScale(4),
     borderRadius: scale(7),

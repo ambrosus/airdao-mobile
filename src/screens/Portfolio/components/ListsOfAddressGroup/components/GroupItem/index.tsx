@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useRef } from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -18,11 +18,15 @@ import { verticalScale } from '@utils/scaling';
 
 type Props = {
   group: AccountList;
-  balanceAndProgressVisible?: boolean;
   isFirstItem: boolean;
+  wrapperStyles?: ViewStyle;
 };
 
-export const GroupItem: FC<Props> = ({ group, isFirstItem }) => {
+export const GroupItem: FC<Props> = ({
+  group,
+  isFirstItem,
+  wrapperStyles = {}
+}) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
@@ -45,9 +49,10 @@ export const GroupItem: FC<Props> = ({ group, isFirstItem }) => {
   }, []);
 
   const handleItemPress = () => {
-    navigation.navigate('SingleAddressGroup', {
-      group
-    });
+    navigation.navigate('Portfolio');
+    setTimeout(() => {
+      navigation.navigate('SingleAddressGroup', { group });
+    }, 400);
   };
 
   const tokensFormatted = useMemo(() => {
@@ -64,21 +69,16 @@ export const GroupItem: FC<Props> = ({ group, isFirstItem }) => {
     return { marginTop: verticalScale(20), borderBottomWidth: 0 };
   }, []);
 
+  const containerStyles = useMemo(() => {
+    const mainStyle = isFirstItem
+      ? { ...styles.container, ...stylesForFirstItem, ...wrapperStyles }
+      : { ...styles.container, ...wrapperStyles };
+    return mainStyle;
+  }, [isFirstItem, stylesForFirstItem, wrapperStyles]);
+
   return (
     <>
-      <Button
-        type="base"
-        onPress={handleItemPress}
-        style={[
-          {
-            paddingVertical: 31,
-            borderColor: COLORS.charcoal,
-            borderBottomWidth: 1,
-            borderTopWidth: 1
-          },
-          isFirstItem && stylesForFirstItem
-        ]}
-      >
+      <Button type="base" onPress={handleItemPress} style={containerStyles}>
         <View style={{ justifyContent: 'space-between' }}>
           <Row justifyContent="space-between">
             <Text

@@ -6,6 +6,7 @@ import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/c
 import { WalletList } from '@components/templates';
 import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
+import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
@@ -20,7 +21,7 @@ type PortfolioTabViewRoute = {
 };
 
 type RenderSceneProps = Parameters<
-  PortfolioTabViewProps<PortfolioTabViewRoute>['renderScene']
+  TabViewProps<PortfolioTabViewRoute>['renderScene']
 >[0];
 
 const WatchList = () => {

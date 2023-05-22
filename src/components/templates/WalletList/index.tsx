@@ -30,6 +30,7 @@ interface WalletListProps extends EmptyWalletListProps {
   data: ExplorerAccount[];
   isListOpened?: boolean;
   isPortfolioFlow?: boolean;
+  groupId?: string;
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
@@ -100,7 +101,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           <>
             <Row alignItems="center">
               <Text title fontWeight="500">
-                {title} {'   '}
+                {title}
               </Text>
               <Text subtitle fontSize={13} fontWeight="600">
                 ~ ${NumberUtils.formatNumber(totalAmount, 0)}
@@ -123,13 +124,23 @@ export function WalletList(props: WalletListProps): JSX.Element {
       </Row>
       {listOpened &&
         (data.length > 0 ? (
-          <View style={styles.list}>
+          <View>
             <FlatList
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    height: 2,
+                    backgroundColor: COLORS.charcoal
+                  }}
+                />
+              )}
+              style={{ height: '100%' }}
               data={data}
-              renderItem={(item, index) => (
+              renderItem={(item) => (
                 <RenderItem
                   item={item.item}
-                  idx={index}
+                  idx={item.index}
                   isPortfolioFlow={isPortfolioFlow}
                   groupId={groupId}
                 />

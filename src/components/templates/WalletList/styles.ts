@@ -14,9 +14,6 @@ export const styles = StyleSheet.create({
     width: scale(12),
     height: scale(12)
   },
-  list: {
-    paddingTop: verticalScale(1)
-  },
   item: {
     marginTop: verticalScale(20)
   },
@@ -39,7 +36,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     width: 152,
-    height: 110,
+    height: scale(82),
     flexDirection: 'row',
     backgroundColor: COLORS.charcoal
   }

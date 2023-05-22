@@ -10,6 +10,7 @@ export class AccountList {
   id: string;
   name: string;
   accounts: ExplorerAccount[];
+  groupId?: string;
 
   constructor(details: AccountListConstructor) {
     this.id = details.id;
@@ -23,6 +24,6 @@ export class AccountList {
 
   // returns total AMB Balance
   get totalBalance(): number {
-    return this.accounts.reduce((prev, cur) => prev + cur.ambBalance, 0);
+    return this.accounts.reduce((prev, cur) => prev + cur?.ambBalance, 0);
   }
 }

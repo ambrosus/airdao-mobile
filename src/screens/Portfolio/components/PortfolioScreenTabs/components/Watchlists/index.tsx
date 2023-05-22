@@ -5,6 +5,8 @@ import { styles } from '@screens/List/styles';
 import { WalletItem } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { useLists } from '@contexts';
+import { useNavigation } from '@react-navigation/native';
+import { ExploreTabNavigationProp } from '@appTypes';
 
 type Props = {
   group: AccountList;
@@ -17,6 +19,8 @@ export const Watchlists: FC<Props> = ({ group: { groupId } }) => {
     [groupId, listsOfAddressGroup]
   );
   const { accounts } = selectedList;
+
+  const navigation = useNavigation<ExploreTabNavigationProp>();
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {
     navigation.navigate('Address', { address: item.address });

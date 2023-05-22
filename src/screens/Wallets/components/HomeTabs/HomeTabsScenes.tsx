@@ -6,16 +6,17 @@ import React, {
   useState
 } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Button, Spacer } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { scale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
 import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
 import { TabViewProps, Route } from 'react-native-tab-view';
-import { useLists } from '@contexts';
+import { scale } from '@utils/scaling';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
 
@@ -26,21 +27,32 @@ type Props<T extends Route> = Parameters<
   index: number;
 };
 
-export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
+export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
+  const navigation = useNavigation<ExploreTabNavigationProp>();
   const containerRef = useRef<View | null>(null);
+  const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
+  const createRenameGroupRef = useRef<BottomSheetRef>(null);
+
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
 
-  const { handleOnCreate, createGroupRef } = useLists((v) => v);
-  const handleOnOpenCreateNewList = useCallback(() => {
-    createGroupRef.current?.show();
-  }, [createGroupRef]);
+  const handleOnCreateCollectionOrAddAddress = useCallback(() => {
+    createCollectionOrAddAddressRef.current?.show();
+  }, []);
 
-  const navigation = useNavigation<ExploreTabNavigationProp>();
+  const handleOnAddNewAddress = useCallback(() => {
+    createCollectionOrAddAddressRef.current?.dismiss();
 
-  const navigateToExplore = useCallback(() => {
-    navigation.navigate('Explore', { screen: 'ExploreScreen' });
+    setTimeout(
+      () => navigation.navigate('Explore', { screen: 'ExploreScreen' }),
+      400
+    );
   }, [navigation]);
+
+  const handleCreateCollectionPress = useCallback(() => {
+    createCollectionOrAddAddressRef.current?.dismiss();
+    setTimeout(() => createRenameGroupRef.current?.show(), 400);
+  }, []);
 
   const refs = useMemo(
     () =>
@@ -78,53 +90,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
 
   return (
     <>
-      <View style={styles.container}>
-        <Row justifyContent="space-between" alignItems="center">
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.smokyBlack}
-          >
-            Portfolio
-          </Text>
-          {props.index === 0 ? (
-            <Button
-              onPress={navigateToExplore}
-              style={{ justifyContent: 'center', height: 45, width: 109 }}
-            >
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  Add address
-                </Text>
-              </Row>
-            </Button>
-          ) : (
-            <Button
-              onPress={handleOnOpenCreateNewList}
-              style={{ justifyContent: 'center', height: 45, width: 138 }}
-            >
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  Create collection
-                </Text>
-              </Row>
-            </Button>
-          )}
-        </Row>
-      </View>
-      <Spacer value={12} />
       <View
         style={{
           flexDirection: 'row'
@@ -157,19 +122,36 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             navigationState={props.navigationState}
           />
         )}
+        <Spacer horizontal value={scale(32)} />
+        <Button
+          type="circular"
+          onPress={handleOnCreateCollectionOrAddAddress}
+          style={styles.addButton}
+        >
+          <AddIcon color={COLORS.white} scale={0.8} />
+        </Button>
+        <BottomSheetCreateCollectionOrAddAddress
+          handleOnAddNewAddress={handleOnAddNewAddress}
+          handleCreateCollectionPress={handleCreateCollectionPress}
+          ref={createCollectionOrAddAddressRef}
+        />
+        <BottomSheetCreateRenameGroup
+          type="create"
+          ref={createRenameGroupRef}
+        />
       </View>
-      <BottomSheetCreateRenameGroup
-        type="create"
-        handleOnCreateGroup={handleOnCreate}
-        ref={createGroupRef}
-      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-    paddingTop: 16
+  addButton: {
+    marginTop: scale(10),
+    alignSelf: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.electricBlue,
+    borderRadius: 50,
+    width: 32,
+    height: 32
   }
 });

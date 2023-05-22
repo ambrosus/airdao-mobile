@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 type Props = {
   onPress: (index: number) => void;
   index: number;
-  opacity: Animated.AnimatedInterpolation;
+  opacity: Animated.AnimatedInterpolation<number>;
   ref: React.RefObject<any>;
   children: React.ReactNode;
 };

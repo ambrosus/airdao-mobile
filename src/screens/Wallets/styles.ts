@@ -1,16 +1,25 @@
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const homeTabsContainerHeight = Dimensions.get('screen').height * 0.44;
 
 export const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f3f5f7',
     paddingBottom: '25%'
   },
-  content: {
-    paddingHorizontal: scale(16),
-    paddingTop: verticalScale(48)
+  homeTabs: {
+    paddingHorizontal: scale(10),
+    marginHorizontal: scale(16),
+    backgroundColor: 'white',
+    borderRadius: 24,
+    height: homeTabsContainerHeight
+  },
+  homeHighlights: {
+    backgroundColor: 'white',
+    borderRadius: 24,
+    marginHorizontal: scale(16)
   },
   divider: {
     height: 2,
@@ -27,7 +36,6 @@ export const styles = StyleSheet.create({
   },
   addAddressBtn: {
     backgroundColor: COLORS.deepBlue,
-    borderRadius: 1000,
     paddingVertical: verticalScale(8),
     paddingLeft: scale(18),
     paddingRight: scale(16)

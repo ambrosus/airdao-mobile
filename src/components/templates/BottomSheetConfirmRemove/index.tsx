@@ -1,22 +1,35 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { useForwardedRef, useWatchlist } from '@hooks';
+import { useForwardedRef } from '@hooks';
 import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { ExplorerAccount } from '@models/Explorer';
+import { useLists } from '@contexts';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { PortfolioParamsPortfolio } from '@appTypes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ExplorerAccount;
+  address?: string;
+  groupId: string;
 };
 
 export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
-  ({ item }, ref) => {
+  ({ address }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-    const { removeFromWatchlist } = useWatchlist();
+    const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
+
+    const {
+      params: {
+        group: { id: groupId }
+      }
+    } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
+
+    const handleDeleteAddress = () => {
+      handleOnDeleteAddressFromGroup(groupId, [address as string]);
+    };
 
     return (
       <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
@@ -31,13 +44,14 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             fontSize={20}
             color={COLORS.smokyBlack}
           >
-            Are you sure want to remove selected {item.address} from Whales?
+            Are you sure want to remove selected {address} from Whales?
           </Text>
           <Spacer value={24} />
           <Button
             testID="BottomSheetConfirmRemove_Button"
             onPress={() => {
-              removeFromWatchlist(item);
+              handleDeleteAddress();
+              localRef.current?.dismiss();
             }}
             style={styles.removeButton}
           >

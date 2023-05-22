@@ -10,10 +10,10 @@ import {
 } from '@react-navigation/native';
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { AddressDetails } from '@screens/Address';
-import { WalletsParamsList, PortfolioParamsPortfolio } from '@appTypes';
+import { HomeParamsList, PortfolioParamsPortfolio } from '@appTypes';
 
 const TabVisibleRoutes = [
-  'WalletsScreen',
+  'HomeScreen',
   'PortfolioScreen',
   'ExploreScreen',
   'SettingsScreen'
@@ -21,7 +21,7 @@ const TabVisibleRoutes = [
 
 const getCommonStack = (
   Stack: TypedNavigator<
-    WalletsParamsList | PortfolioParamsPortfolio,
+    HomeParamsList | PortfolioParamsPortfolio,
     StackNavigationState<ParamListBase>,
     NativeStackNavigationOptions,
     NativeStackNavigationEventMap,

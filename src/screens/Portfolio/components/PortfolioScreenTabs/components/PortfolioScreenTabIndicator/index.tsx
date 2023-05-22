@@ -10,7 +10,7 @@ import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/compo
 
 type Props<T extends Route> = {
   measures: Measure[];
-  position: Animated.AnimatedInterpolation;
+  position: Animated.AnimatedInterpolation<number>;
   navigationState: NavigationState<T>;
 };
 
