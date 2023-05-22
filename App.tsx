@@ -9,7 +9,6 @@ import Permissions from '@utils/permissions';
 
 export default function App() {
   const { isAppReady } = useAppInit();
-
   useEffect(() => {
     Permissions.requestPermissions();
   }, []);
