@@ -10,6 +10,7 @@ export class AccountList {
   id: string;
   name: string;
   accounts: ExplorerAccount[];
+  groupId?: string;
 
   constructor(details: AccountListConstructor) {
     this.id = details.id;

@@ -10,6 +10,7 @@ import { COLORS } from '@constants/colors';
 
 interface WalletItemProps {
   item: ExplorerAccount;
+  isPortfolioFlow?: boolean;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {

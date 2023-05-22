@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Ref } from 'react';
 import { ViewStyle } from 'react-native';
 
 export type RowProps = {
@@ -9,4 +9,5 @@ export type RowProps = {
   flex?: ViewStyle['flex'];
   children?: ReactNode;
   testID?: string;
+  ref?: Ref<any>;
 };

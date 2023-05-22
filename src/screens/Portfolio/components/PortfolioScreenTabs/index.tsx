@@ -10,17 +10,17 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { scale } from '@utils/scaling';
-import { Route, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
 import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
-import { TabViewProps } from 'react-native-tab-view';
+import { TabViewProps, Route } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
 
 type Props<T extends Route> = Parameters<
-  NonNullable<TabViewProps<T>['renderPortfolioTab']>
+  NonNullable<TabViewProps<T>['renderTabBar']>
 >[0] & {
   onIndexChange: (index: number) => void;
   index: number;

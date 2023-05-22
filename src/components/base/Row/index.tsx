@@ -10,7 +10,8 @@ export function Row(props: RowProps): JSX.Element {
     width,
     style = {},
     testID,
-    children
+    children,
+    ref
   } = props;
   const styles: ViewStyle = {
     ...style,
@@ -21,7 +22,7 @@ export function Row(props: RowProps): JSX.Element {
     width
   };
   return (
-    <View style={styles} testID={testID}>
+    <View style={styles} testID={testID} ref={ref}>
       {children}
     </View>
   );

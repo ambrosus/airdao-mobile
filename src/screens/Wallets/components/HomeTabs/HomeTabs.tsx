@@ -1,9 +1,11 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import React, { useState } from 'react';
 import { TabView } from 'react-native-tab-view';
 import { HomeTabsScenes } from '@screens/Wallets/components/HomeTabs/HomeTabsScenes';
 import { HomeWatchlists } from '@screens/Wallets/components/HomeTabs/HomeWatchlists';
 import { HomeCollections } from '@screens/Wallets/components/HomeTabs/HomeCollections';
+import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
+import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 
 const homeTabRoutes = [
   { key: 'first', title: 'Watchlists' },
@@ -18,7 +20,7 @@ type HomeTabViewRoute = {
 };
 
 type RenderSceneProps = Parameters<
-  HomeTabViewRo<HomeTabViewRoute>['renderScene']
+  TabViewProps<HomeTabViewRoute>['renderScene']
 >[0];
 const renderScene = ({ route }: RenderSceneProps) => {
   switch (route.key) {
@@ -40,7 +42,7 @@ export const HomeTabs = () => {
   return (
     <View style={styles.homeTabs} testID="lists-screen">
       <TabView<HomeTabViewRoute>
-        style={{ flex: 1 }}
+        style={styles.tabView}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
@@ -50,24 +52,6 @@ export const HomeTabs = () => {
           );
         }}
       />
-      {/*<Button onPress={navigateToPortfolio} style={styles.seeAllButton}>*/}
-      {/*  <Text*/}
-      {/*    fontFamily="Inter_600SemiBold"*/}
-      {/*    fontSize={16}*/}
-      {/*    color={COLORS.deepBlue}*/}
-      {/*    style={{ marginVertical: 12 }}*/}
-      {/*  >*/}
-      {/*    See all*/}
-      {/*  </Text>*/}
-      {/*</Button>*/}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  homeTabs: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 24
-  }
-});

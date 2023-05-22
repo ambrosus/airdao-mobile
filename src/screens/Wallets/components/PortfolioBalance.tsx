@@ -1,8 +1,6 @@
 import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { HomeHeader } from './Header';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
@@ -13,8 +11,6 @@ import {
 import { NumberUtils } from '@utils/number';
 import { BezierChart, Point, SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { useNavigation } from '@react-navigation/native';
-import { WalletsNavigationProp } from '@appTypes/navigation';
 import { Badge } from '@components/base/Badge';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
@@ -27,14 +23,7 @@ interface PortfolioBalanceProps {
 }
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
-  const {
-    USDBalance,
-    AMBBalance,
-    balanceLast24HourChange,
-    AMBPriceLast24HourChange,
-    AMBPrice
-  } = props;
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const { USDBalance, AMBBalance, balanceLast24HourChange } = props;
   const [balanceVisible, toggleBalanceVisibility] = useReducer(
     (visible) => !visible,
     true
@@ -46,10 +35,6 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 
   const onShareBalancePress = () => {
     shareBottomSheet.current?.show();
-  };
-
-  const navigateToStats = () => {
-    navigation.navigate('AMBMarketScreen');
   };
 
   return (

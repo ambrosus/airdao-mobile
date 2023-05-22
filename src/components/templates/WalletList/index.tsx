@@ -30,6 +30,7 @@ interface WalletListProps extends EmptyWalletListProps {
   data: ExplorerAccount[];
   isListOpened?: boolean;
   isPortfolioFlow?: boolean;
+  groupId?: string;
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {

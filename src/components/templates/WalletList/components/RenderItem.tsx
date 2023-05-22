@@ -79,7 +79,6 @@ export const RenderItem = ({
         <BottomSheetRemoveAddressFromWatchlists
           item={item}
           ref={confirmRemoveRef}
-          groupId={groupId}
         />
       </>
     );
@@ -90,7 +89,6 @@ export const RenderItem = ({
       <Swipeable
         enabled={isPortfolioFlow}
         renderRightActions={() => renderRightActions()}
-        rightOpenValue={-100}
       >
         <View
           style={{

@@ -6,15 +6,14 @@ import React, {
   useState
 } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Spacer } from '@components/base';
+import { Button, Spacer } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { Route, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
 import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
-import { TabViewProps } from 'react-native-tab-view';
-import { useLists } from '@contexts';
+import { TabViewProps, Route } from 'react-native-tab-view';
 import { scale } from '@utils/scaling';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress';
@@ -22,7 +21,7 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { ExploreTabNavigationProp } from '@appTypes';
 
 type Props<T extends Route> = Parameters<
-  NonNullable<TabViewProps<T>['renderHomeTab']>
+  NonNullable<TabViewProps<T>['renderTabBar']>
 >[0] & {
   onIndexChange: (index: number) => void;
   index: number;
@@ -36,8 +35,6 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
 
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
-
-  const { handleOnCreate } = useLists((v) => v);
 
   const handleOnCreateCollectionOrAddAddress = useCallback(() => {
     createCollectionOrAddAddressRef.current?.show();
@@ -69,11 +66,11 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
     const measureValues: Measure[] = [];
     setTimeout(() => {
       refs.forEach((r) => {
-        if (!r.current || !containerRef.current) {
+        if (!r.current) {
           return;
         }
         r.current.measureLayout(
-          containerRef.current,
+          containerRef.current as any,
           (x, y, width, height) => {
             measureValues.push({
               x,
@@ -93,7 +90,12 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
 
   return (
     <>
-      <Row ref={containerRef}>
+      <View
+        style={{
+          flexDirection: 'row'
+        }}
+        ref={containerRef}
+      >
         {props.navigationState.routes.map((route, i) => {
           const opacity = props.position.interpolate({
             inputRange,
@@ -137,13 +139,14 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
           type="create"
           ref={createRenameGroupRef}
         />
-      </Row>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   addButton: {
+    marginTop: scale(10),
     alignSelf: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.electricBlue,

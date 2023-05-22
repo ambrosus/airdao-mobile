@@ -4,7 +4,7 @@ import { ViewStyle } from 'react-native';
 export type ButtonType = 'base' | 'bordered' | 'circular';
 
 export interface BaseButtonProps {
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
   disabled?: boolean;
   children?: ReactNode;
   onPress?: () => unknown;

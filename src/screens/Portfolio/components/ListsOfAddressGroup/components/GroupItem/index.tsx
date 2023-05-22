@@ -18,7 +18,6 @@ import { verticalScale } from '@utils/scaling';
 
 type Props = {
   group: AccountList;
-  balanceAndProgressVisible?: boolean;
   isFirstItem: boolean;
   wrapperStyles?: ViewStyle;
 };
@@ -50,9 +49,10 @@ export const GroupItem: FC<Props> = ({
   }, []);
 
   const handleItemPress = () => {
-    navigation.navigate('SingleAddressGroup', {
-      group
-    });
+    navigation.navigate('Portfolio');
+    setTimeout(() => {
+      navigation.navigate('SingleAddressGroup', { group });
+    }, 400);
   };
 
   const tokensFormatted = useMemo(() => {

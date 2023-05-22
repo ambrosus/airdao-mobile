@@ -1,11 +1,11 @@
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const homeTabsContainerHeight = Dimensions.get('screen').height * 0.44;
 
 export const styles = StyleSheet.create({
   container: {
-    // flexGrow: 1,
-    // flex: 1,
     backgroundColor: '#f3f5f7',
     paddingBottom: '25%'
   },
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16),
     backgroundColor: 'white',
     borderRadius: 24,
-    height: 400
+    height: homeTabsContainerHeight
   },
   homeHighlights: {
     backgroundColor: 'white',
