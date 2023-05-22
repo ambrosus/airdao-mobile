@@ -4,11 +4,8 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
   View,
-  useWindowDimensions,
-  Platform,
-  Dimensions
+  useWindowDimensions
 } from 'react-native';
-import { WatchlistAddSuccess } from '@components/templates/WatchlistAddSuccess';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import {
@@ -26,14 +23,13 @@ import {
 import { ScannerQRIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import {
-  useAMBPrice,
   useExplorerInfo,
   useSearchAccount,
   useTransactionsOfAccount,
   useWatchlist
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { BottomSheetWithHeader, Toast, ToastType } from '@components/modular';
+import { Toast, ToastType } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { SearchAddressNoResult } from './SearchAddress.NoMatch';
@@ -50,7 +46,6 @@ const LIMIT = 10;
 export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
 
-  const { data: ambToken } = useAMBPrice();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
@@ -66,14 +61,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
-  // const accountRef = useRef(account);
   const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
 
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
-  const successModal = useRef<BottomSheetRef>(null);
   const editModal = useRef<BottomSheetRef>(null);
 
   const finalAccount =
@@ -93,7 +86,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     if (finalAccount) {
       if (finalAccount.isOnWatchlist) {
         removeFromWatchlist(finalAccount);
-        // if (accountRef.current) accountRef.current.isOnWatchlist = false;
       } else {
         addToWatchlist(finalAccount);
         Toast.show({
@@ -102,7 +94,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           type: ToastType.Top,
           onBodyPress: editModal.current?.show
         });
-        // if (accountRef.current) accountRef.current.isOnWatchlist = true;
       }
     }
   };
@@ -160,10 +151,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   };
 
-  const hideSuccessModal = () => {
-    successModal.current?.dismiss();
-  };
-
   return (
     <>
       <KeyboardDismissingView style={styles.input}>
@@ -183,22 +170,19 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           onSubmitEditing={onInputSubmit}
         />
       </KeyboardDismissingView>
-
       <BottomSheet height={WINDOW_HEIGHT} ref={scannerModalRef}>
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
       {loading && !!address && <Spinner />}
       {error && !!address && <SearchAddressNoResult />}
-      {account && explorerInfo && (
+      {finalAccount && explorerInfo && (
         <View style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
           <KeyboardDismissingView>
-            {finalAccount && (
-              <ExplorerAccountView
-                account={finalAccount}
-                onToggleWatchlist={toggleWatchlist}
-              />
-            )}
+            <ExplorerAccountView
+              account={finalAccount}
+              onToggleWatchlist={toggleWatchlist}
+            />
           </KeyboardDismissingView>
           <Spacer value={verticalScale(24)} />
           <View style={styles.divider} />
@@ -208,23 +192,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
           />
-          <BottomSheetWithHeader
-            containerStyle={styles.bottomSheetHeader}
-            ref={successModal}
-            height={
-              Platform.OS === 'android' ? Dimensions.get('screen').height : 0
-            }
-            title=""
-            fullscreen={Platform.OS === 'ios' && true}
-          >
-            {ambToken && account && (
-              <WatchlistAddSuccess
-                onDone={hideSuccessModal}
-                address={address}
-              />
-            )}
-          </BottomSheetWithHeader>
-          <BottomSheetEditWallet ref={editModal} wallet={account} />
+          <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </View>
       )}
     </>

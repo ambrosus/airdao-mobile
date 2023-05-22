@@ -1,23 +1,25 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { CheckBox, InputWithIcon } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
+import { InputWithIcon } from '@components/composite';
+import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
 import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
+import { useLists } from '@contexts/ListsContext';
 
 interface AddWalletToListProps {
   wallet: ExplorerAccount;
   lists: AccountList[];
-  onPressList: (list: AccountList) => unknown;
+  onWalletToggled?: () => unknown;
 }
 
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
-  const { wallet, lists, onPressList } = props;
+  const { wallet, lists, onWalletToggled } = props;
+  const { toggleAddressInList } = useLists((v) => v);
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
     () =>
@@ -25,11 +27,15 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
     [lists, searchText]
   );
 
+  const toggleWalletInList = (list: AccountList) => {
+    toggleAddressInList(wallet, list);
+    if (typeof onWalletToggled === 'function') onWalletToggled();
+  };
+
   const renderList = (args: ListRenderItemInfo<AccountList>) => {
     const { item: list } = args;
-    const selected = list.accounts.indexOfItem(wallet, 'address') > -1;
     const onPress = () => {
-      onPressList(list);
+      toggleWalletInList(list);
     };
 
     return (
@@ -39,18 +45,6 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
         style={styles.item}
       >
         <Row alignItems="center" justifyContent="space-between">
-          {selected && (
-            <>
-              <CheckBox
-                testID="AddWalletToList_Checkbox"
-                type="square"
-                value={selected}
-                fillColor={COLORS.sapphireBlue}
-                color="#FFFFFF"
-              />
-              <Spacer value={scale(16)} horizontal />
-            </>
-          )}
           <View style={{ flex: 1 }}>
             <Row alignItems="center" justifyContent="space-between">
               <Text

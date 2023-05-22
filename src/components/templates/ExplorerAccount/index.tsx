@@ -13,8 +13,6 @@ import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
-import { AccountList } from '@models/AccountList';
-import { useWatchlist } from '@hooks/cache';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 
 interface ExplorerAccountProps {
@@ -28,8 +26,7 @@ export const ExplorerAccountView = (
   props: ExplorerAccountProps
 ): JSX.Element => {
   const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
-  const { listsOfAddressGroup, setListsOfAddressGroup } = useLists((v) => v);
-  const { addToWatchlist } = useWatchlist();
+  const { listsOfAddressGroup } = useLists((v) => v);
   const fullscreenHeight = useFullscreenModalHeight();
 
   const { data } = useAMBPrice();
@@ -46,26 +43,9 @@ export const ExplorerAccountView = (
   const showAddToList = () => {
     addToListModal.current?.show();
   };
-  const toggleWalletInList = (list: AccountList) => {
-    const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
-    if (!listInContext) return;
-    if (listInContext.accounts.indexOfItem(account, '_id') > -1) {
-      listInContext.accounts.removeItem(account, '_id');
-    } else {
-      listInContext.accounts.push(account);
-    }
-    if (!account.isOnWatchlist) {
-      addToWatchlist(account);
-    }
-    // timeout ensures that the account has been added to all addresses by adding to watchlist
-    setTimeout(() => {
-      setListsOfAddressGroup(
-        listsOfAddressGroup.map((l) => ({
-          ...l,
-          addresses: l.accounts.map((account) => account.address)
-        }))
-      );
-    }, 0);
+
+  const hideAddToList = () => {
+    addToListModal.current?.dismiss();
   };
 
   const renderListAndWalletInfo = () => {
@@ -201,7 +181,7 @@ export const ExplorerAccountView = (
         <AddWalletToList
           wallet={account}
           lists={listsOfAddressGroup}
-          onPressList={toggleWalletInList}
+          onWalletToggled={hideAddToList}
         />
       </BottomSheetWithHeader>
     </View>
