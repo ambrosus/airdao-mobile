@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { CheckBox } from '@components/composite';
-import { verticalScale } from '@utils/scaling';
+import { CheckBox, InputWithIcon } from '@components/composite';
+import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
 import { COLORS } from '@constants/colors';
+import { SearchIcon } from '@components/svg/icons';
+import { NumberUtils } from '@utils/number';
 
 interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -16,6 +18,12 @@ interface AddWalletToListProps {
 
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   const { wallet, lists, onPressList } = props;
+  const [searchText, setSearchText] = useState('');
+  const filteredLists = useMemo(
+    () =>
+      searchText ? lists.filter((l) => l.name.includes(searchText)) : lists,
+    [lists, searchText]
+  );
 
   const renderList = (args: ListRenderItemInfo<AccountList>) => {
     const { item: list } = args;
@@ -25,24 +33,53 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
     };
 
     return (
-      <Button onPress={onPress} testID="AddWalletToList_Container">
+      <Button
+        onPress={onPress}
+        testID="AddWalletToList_Container"
+        style={styles.item}
+      >
         <Row alignItems="center" justifyContent="space-between">
-          <View>
-            <Text fontSize={17} fontFamily="Inter_700Bold" fontWeight="600">
-              {list.name}
-            </Text>
+          {selected && (
+            <>
+              <CheckBox
+                testID="AddWalletToList_Checkbox"
+                type="square"
+                value={selected}
+                fillColor={COLORS.sapphireBlue}
+                color="#FFFFFF"
+              />
+              <Spacer value={scale(16)} horizontal />
+            </>
+          )}
+          <View style={{ flex: 1 }}>
+            <Row alignItems="center" justifyContent="space-between">
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                fontWeight="500"
+                color={COLORS.smokyBlack}
+              >
+                {list.name}
+              </Text>
+              <Text
+                fontSize={13}
+                fontWeight="600"
+                fontFamily="Mersad_600SemiBold"
+                color={COLORS.smokyBlack}
+              >
+                ${NumberUtils.formatNumber(list.totalBalance, 2)}
+              </Text>
+            </Row>
             <Spacer value={verticalScale(4)} />
-            <Text fontSize={16} fontWeight="400" fontFamily="Inter_400Regular">
+            <Text
+              fontSize={12}
+              fontWeight="500"
+              fontFamily="Inter_500Medium"
+              color={COLORS.smokyBlack50}
+            >
               {list.accountCount} Addresses
             </Text>
           </View>
-          <CheckBox
-            testID="AddWalletToList_Checkbox"
-            type="square"
-            value={selected}
-            fillColor={COLORS.sapphireBlue}
-            color="#FFFFFF"
-          />
         </Row>
       </Button>
     );
@@ -50,11 +87,21 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
 
   return (
     <FlatList
-      data={lists}
+      data={filteredLists}
       renderItem={renderList}
       keyExtractor={(l) => l.id}
       contentContainerStyle={styles.list}
-      ItemSeparatorComponent={() => <Spacer value={verticalScale(28)} />}
+      ListHeaderComponent={
+        <View style={styles.searchBar}>
+          <InputWithIcon
+            value={searchText}
+            onChangeValue={setSearchText}
+            placeholder="Search collections"
+            iconLeft={<SearchIcon color={COLORS.midnight} />}
+          />
+        </View>
+      }
+      stickyHeaderIndices={[0]}
     />
   );
 };

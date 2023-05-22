@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 export const styles = StyleSheet.create({
   input: {
     width: '90%',
-    paddingRight: scale(13)
+    alignSelf: 'center'
   },
   top: {
     paddingLeft: scale(16),
