@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { ViewStyle } from 'react-native';
+import { ViewProps } from 'react-native';
 
 export type ButtonType = 'base' | 'bordered' | 'circular';
 
 export interface BaseButtonProps {
-  style?: ViewStyle;
+  style?: ViewProps['style'];
   disabled?: boolean;
   children?: ReactNode;
   onPress?: () => unknown;

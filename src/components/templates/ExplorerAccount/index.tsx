@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -8,44 +8,70 @@ import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
-import { StarFilledIcon } from '@components/svg/icons';
-import { CopyToClipboardButton } from '@components/composite';
+import { PlusIcon } from '@components/svg/icons';
+import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { AddWalletToList } from '../AddWalletToList';
+import { BottomSheetWithHeader } from '@components/modular';
+import { AccountList } from '@models/AccountList';
+import { useWatchlist } from '@hooks/cache';
+import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
-  totalSupply: number;
   listInfoVisible?: boolean;
-  watchlistDisplayType?: 'explorer' | 'details';
   nameVisible?: boolean;
+  onToggleWatchlist: () => unknown;
 }
 
 export const ExplorerAccountView = (
   props: ExplorerAccountProps
 ): JSX.Element => {
-  const {
-    account,
-    totalSupply,
-    listInfoVisible,
-    nameVisible,
-    watchlistDisplayType = 'details'
-  } = props;
-  const { listsOfAddressGroup } = useLists((v) => v);
+  const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
+  const { listsOfAddressGroup, setListsOfAddressGroup } = useLists((v) => v);
+  const { addToWatchlist } = useWatchlist();
+  const fullscreenHeight = useFullscreenModalHeight();
 
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
 
+  const addToListModal = useRef<BottomSheetRef>(null);
+
   const AMBBalance = account.ambBalance;
   const USDBalance = AMBBalance * ambPriceUSD;
-  const percentage = (AMBBalance / totalSupply) * 100;
   const listsWithAccount = listsOfAddressGroup.filter(
     (list) => list.accounts.indexOfItem(account, 'address') > -1
   );
+
+  const showAddToList = () => {
+    addToListModal.current?.show();
+  };
+  const toggleWalletInList = (list: AccountList) => {
+    const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
+    if (!listInContext) return;
+    if (listInContext.accounts.indexOfItem(account, '_id') > -1) {
+      listInContext.accounts.removeItem(account, '_id');
+    } else {
+      listInContext.accounts.push(account);
+    }
+    if (!account.isOnWatchlist) {
+      addToWatchlist(account);
+    }
+    // timeout ensures that the account has been added to all addresses by adding to watchlist
+    setTimeout(() => {
+      setListsOfAddressGroup(
+        listsOfAddressGroup.map((l) => ({
+          ...l,
+          addresses: l.accounts.map((account) => account.address)
+        }))
+      );
+    }, 0);
+  };
 
   const renderListAndWalletInfo = () => {
     return (
       <>
         <Spacer horizontal value={scale(13)} />
-
         <Row alignItems="center">
           {listInfoVisible &&
             listsWithAccount.length > 0 &&
@@ -68,33 +94,6 @@ export const ExplorerAccountView = (
                 Added to {listsWithAccount.length} lists
               </Text>
             ))}
-          {account.isOnWatchlist && (
-            <>
-              {watchlistDisplayType === 'details' ? (
-                <Text
-                  color="#828282"
-                  fontFamily="Inter_400Regular"
-                  fontSize={13}
-                  fontWeight="400"
-                >
-                  {listsWithAccount.length > 0 && listInfoVisible ? ' ~ ' : ''}{' '}
-                  Watchlisted
-                </Text>
-              ) : (
-                <Row alignItems="center">
-                  <StarFilledIcon color="#FF5E0D" scale={0.75} />
-                  <Text
-                    color="#FF5E0D"
-                    fontFamily="Inter_400Regular"
-                    fontSize={13}
-                    fontWeight="400"
-                  >
-                    Added to my watchlists
-                  </Text>
-                </Row>
-              )}
-            </>
-          )}
         </Row>
       </>
     );
@@ -116,24 +115,95 @@ export const ExplorerAccountView = (
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
-            fontSize: 15,
-            fontFamily: 'Inter_600SemiBold'
+            fontSize: 13,
+            fontFamily: 'Inter_600SemiBold',
+            color: COLORS.slateGrey
           }}
         />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
       <Spacer value={verticalScale(12)} />
-      <Text fontFamily="Mersad_600SemiBold" fontSize={36}>
+      <Text
+        fontFamily="Mersad_600SemiBold"
+        fontSize={30}
+        color={COLORS.jetBlack}
+      >
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
-      <Spacer value={verticalScale(12)} />
-      <Text fontSize={12} fontWeight="500">
-        {NumberUtils.formatNumber(AMBBalance, 2)} AMB
-      </Text>
-      <Spacer value={verticalScale(12)} />
-      <Text fontSize={11} fontWeight="400">
-        Holding {NumberUtils.formatNumber(percentage, 2)}% Supply
-      </Text>
+      <Spacer value={verticalScale(16)} />
+      <Row alignItems="center">
+        <Button
+          style={{
+            ...styles.actionButton,
+            backgroundColor: account.isOnWatchlist
+              ? COLORS.warning
+              : COLORS.mainBlue
+          }}
+          type="circular"
+          onPress={onToggleWatchlist}
+        >
+          <Row alignItems="center">
+            <Text
+              fontSize={12}
+              color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
+            >
+              {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
+            </Text>
+            {!account.isOnWatchlist && (
+              <>
+                <Spacer value={scale(7)} horizontal />
+                <PlusIcon color={COLORS.white} scale={0.5} />
+              </>
+            )}
+          </Row>
+        </Button>
+        <Spacer value={scale(16)} horizontal />
+        <Button
+          style={{
+            ...styles.actionButton,
+            backgroundColor:
+              listsWithAccount.length > 0 ? COLORS.warning : COLORS.powderWhite
+          }}
+          type="circular"
+          onPress={showAddToList}
+        >
+          <Row alignItems="center">
+            <Text
+              color={
+                listsWithAccount.length > 0
+                  ? COLORS.liver
+                  : COLORS.darkCornflowerBlue
+              }
+              fontSize={12}
+            >
+              {listsWithAccount.length === 0
+                ? 'ADD TO COLLECTION'
+                : listsWithAccount.length === 1
+                ? listsWithAccount[0].name
+                : `Added to ${listsWithAccount.length} collections`}
+            </Text>
+            {listsWithAccount.length === 0 && (
+              <>
+                <Spacer value={scale(7)} horizontal />
+                <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
+              </>
+            )}
+          </Row>
+        </Button>
+      </Row>
+      <BottomSheetWithHeader
+        ref={addToListModal}
+        height={fullscreenHeight * 0.95}
+        title="Add address to collection"
+        avoidKeyboard={false}
+        swiperIconVisible={true}
+      >
+        <AddWalletToList
+          wallet={account}
+          lists={listsOfAddressGroup}
+          onPressList={toggleWalletInList}
+        />
+      </BottomSheetWithHeader>
     </View>
   );
 };

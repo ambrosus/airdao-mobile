@@ -10,5 +10,9 @@ interface SeparatorProps {
 
 export const Separator = (props: SeparatorProps) => {
   const { width = '100%', height = 1, color = COLORS.separator } = props;
-  return <View style={{ width, height, backgroundColor: color }} />;
+  return (
+    <View
+      style={{ width, height, backgroundColor: color, borderRadius: 1000 }}
+    />
+  );
 };
