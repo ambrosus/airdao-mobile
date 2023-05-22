@@ -18,12 +18,10 @@ jest.mock('react-native-view-shot', () => ({
   captureRef: jest.fn()
 }));
 
-const mockedShareUtils = jest.fn();
-
 jest.mock('@utils/share', () => ({
   ShareUtils: {
-    shareImage: mockedShareUtils,
-    socialShareImage: mockedShareUtils
+    shareImage: jest.fn(),
+    socialShareImage: jest.fn()
   }
 }));
 
@@ -54,7 +52,7 @@ const Component = () => {
 };
 
 describe('SharePortfolio', () => {
-  it('Bottom Sheet and its components inside renders correctly', () => {
+  it('BottomSheet and its components inside renders correctly', () => {
     const { getByTestId, getByText } = render(<Component />);
     const shareBottomSheet = getByTestId('share-bottom-sheet');
     const title = getByText(mockedBottomSheetTitle);
@@ -70,7 +68,7 @@ describe('SharePortfolio', () => {
     expect(title).toBeDefined();
   });
 
-  it.skip('calls onSharePress with Twitter option when Twitter button is pressed', async () => {
+  it('calls onSharePress with Twitter option when Twitter button is pressed', async () => {
     ShareUtils.socialShareImage = jest.fn();
     const { getByTestId } = render(<Component />);
     const twitterButton = getByTestId('SharePortfolio_Twitter_Button');
@@ -78,19 +76,19 @@ describe('SharePortfolio', () => {
       fireEvent.press(twitterButton);
     });
     await waitFor(() => {
-      expect(mockedShareUtils).toHaveBeenCalled();
+      expect(ShareUtils.socialShareImage).toHaveBeenCalled();
     });
   });
 
-  it.skip('calls onSharePress with Messages option when Messages button is pressed', async () => {
+  it('calls onSharePress with Messages option when Messages button is pressed', async () => {
     ShareUtils.socialShareImage = jest.fn();
     const { getByTestId } = render(<Component />);
     const messagesButton = getByTestId('SharePortfolio_Message_Button');
     act(() => {
       fireEvent.press(messagesButton);
     });
-    expect(mockedShareUtils).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(ShareUtils.socialShareImage).toHaveBeenCalled();
+    });
   });
 });
-
-// TODO button tests

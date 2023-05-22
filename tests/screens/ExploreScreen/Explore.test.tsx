@@ -12,9 +12,11 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: jest.fn()
 }));
 
-jest.mock('@contexts/OnBoardingUserContext', () => ({
+jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
-    status: 'none'
+    status: 'none',
+    back: jest.fn(),
+    skip: jest.fn()
   }))
 }));
 

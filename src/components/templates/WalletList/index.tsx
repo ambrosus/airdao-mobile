@@ -93,7 +93,6 @@ export function WalletList(props: WalletListProps): JSX.Element {
       </View>
     );
   };
-
   return (
     <>
       <Row alignItems="center" justifyContent="space-between">
@@ -108,7 +107,9 @@ export function WalletList(props: WalletListProps): JSX.Element {
               </Text>
             </Row>
             <Button
-              testID="toggle-button"
+              testID={`ToggleButton_${
+                title === 'My Wallets' ? 'Wallets' : 'WatchList'
+              }`}
               type="circular"
               style={styles.toggleBtn}
               onPress={onTogglePress}
