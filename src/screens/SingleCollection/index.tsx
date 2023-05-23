@@ -12,9 +12,9 @@ import { BackIcon, EditIcon } from '@components/svg/icons';
 import { BottomSheetRef, PercentChange } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { styles } from '@screens/List/styles';
+import { styles } from '@screens/SingleCollection/styles';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetSingleAddressOptions } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions';
 import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
@@ -27,19 +27,17 @@ import { Badge } from '@components/base/Badge';
 import { scale } from '@utils/scaling';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 
-export const SingleAddressGroupScreen = () => {
+export const SingleGroupScreen = () => {
   const {
     params: {
       group: { id: groupId, name: groupName }
     }
-  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
+  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
-
-  const navigation = useNavigation<PortfolioNavigationProp>();
 
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
 
@@ -50,6 +48,12 @@ export const SingleAddressGroupScreen = () => {
 
   const { accounts, name } = selectedList;
   const groupTokens = selectedList.totalBalance;
+
+  const navigation = useNavigation<PortfolioNavigationProp>();
+
+  const navigateToAddressDetails = (item: ExplorerAccount) => {
+    navigation.navigate('Address', { address: item.address });
+  };
 
   const handleOpenRenameModal = useCallback(() => {
     setTimeout(() => {
@@ -108,10 +112,6 @@ export const SingleAddressGroupScreen = () => {
     handleAddNewAddressToGroup,
     handleOpenRenameModal
   ]);
-
-  const navigateToAddressDetails = (item: ExplorerAccount) => {
-    navigation.navigate('Address', { address: item.address });
-  };
 
   return (
     <SafeAreaView style={styles.header}>

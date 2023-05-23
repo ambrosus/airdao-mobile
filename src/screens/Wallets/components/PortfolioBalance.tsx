@@ -1,9 +1,10 @@
 import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
+  ChevronRightIcon,
   EyeInvisibleIcon,
   EyeVisibleIcon,
   ShareIcon
@@ -93,28 +94,38 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           )}
         </Row>
         <Spacer value={scale(16)} />
-        <View style={{ width: '50%', alignSelf: 'center' }}>
+        <View style={styles.badge}>
           <Badge
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
-                <Text color={COLORS.jungleGreen}>
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={16}
+                  color={COLORS.jungleGreen}
+                >
                   + {NumberUtils.formatNumber(balanceLast24HourChange)}%
                 </Text>
                 <Spacer horizontal value={scale(4)} />
-                <Text>(24hr)</Text>
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={14}
+                  color={COLORS.smokyBlack}
+                >
+                  (24hr)
+                </Text>
+                <Spacer horizontal value={scale(4)} />
+                <ChevronRightIcon color={COLORS.smokyBlack} />
               </Row>
             }
           />
         </View>
-        <View style={styles.chart}>
-          <BezierChart
-            height={verticalScale(200)}
-            data={chartData}
-            axisLabelColor={COLORS.smokyBlack}
-            strokeColor={COLORS.jungleGreen}
-            axisColor="transparent"
-          />
-        </View>
+        <BezierChart
+          height={verticalScale(200)}
+          data={chartData}
+          axisLabelColor={COLORS.smokyBlack}
+          strokeColor={COLORS.jungleGreen}
+          axisColor="transparent"
+        />
       </View>
       <SharePortfolio
         ref={shareBottomSheet}
@@ -134,10 +145,6 @@ const styles = StyleSheet.create({
   container: {
     minHeight: Dimensions.get('window').height * 0.5,
     backgroundColor: '#f3f5f7'
-    // backgroundColor: 'red',
-    // borderBottomLeftRadius: scale(28),
-    // borderBottomRightRadius: scale(28),
-    // paddingBottom: verticalScale(20)
   },
   content: {
     backgroundColor: 'white',
@@ -145,6 +152,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginHorizontal: 20,
     marginVertical: 20
+  },
+  badge: {
+    width: '40%',
+    alignSelf: 'center'
   },
   balance: {
     marginTop: verticalScale(17),
@@ -156,20 +167,7 @@ const styles = StyleSheet.create({
     height: scale(24),
     marginLeft: scale(14)
   },
-  ambBalance: {
-    marginTop: verticalScale(12)
-  },
   balanceLast24HourChange: {
     marginHorizontal: scale(13)
-  },
-  chart: {
-    // marginTop: verticalScale(8)
-  },
-  stats: {
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: scale(16),
-    marginTop: verticalScale(20),
-    borderRadius: moderateScale(15),
-    backgroundColor: 'rgba(255, 255, 255, 0.05)'
   }
 });

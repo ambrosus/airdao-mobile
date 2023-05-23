@@ -25,7 +25,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
       params: {
         group: { id: groupId }
       }
-    } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
+    } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
 
     const handleDeleteAddress = () => {
       handleOnDeleteAddressFromGroup(groupId, [address as string]);

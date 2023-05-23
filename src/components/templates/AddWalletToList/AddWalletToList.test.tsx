@@ -81,7 +81,7 @@ describe('AddWalletToList', () => {
 
   it('calls onPressList when a list is pressed', () => {
     const { getByText } = render(<Component />);
-    fireEvent.press(getByText('List 1'));
+    fireEvent.press(getByText('SingleCollection 1'));
     expect(onPressList).toHaveBeenCalledWith(lists[0]);
   });
 
