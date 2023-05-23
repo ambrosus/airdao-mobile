@@ -1,54 +1,22 @@
-import { FlatList, View } from 'react-native';
-import { Button } from '@components/base';
-import React, { FC, useMemo } from 'react';
-import { styles } from '@screens/List/styles';
-import { WalletItem } from '@components/templates';
-import { AccountList, ExplorerAccount } from '@models';
-import { useLists } from '@contexts';
-import { useNavigation } from '@react-navigation/native';
-import { ExploreTabNavigationProp } from '@appTypes';
+import { useWatchlist } from '@hooks';
+import { View } from 'react-native';
+import { WalletList } from '@components/templates';
+import React from 'react';
 
-type Props = {
-  group: AccountList;
-};
-
-export const Watchlists: FC<Props> = ({ group: { groupId } }) => {
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const selectedList = useMemo(
-    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
-    [groupId, listsOfAddressGroup]
-  );
-  const { accounts } = selectedList;
-
-  const navigation = useNavigation<ExploreTabNavigationProp>();
-
-  const navigateToAddressDetails = (item: ExplorerAccount) => {
-    navigation.navigate('Address', { address: item.address });
-  };
+export const WatchList = () => {
+  const { watchlist } = useWatchlist();
 
   return (
-    <View
-      style={{
-        flex: 1
-      }}
-    >
-      <FlatList
-        contentContainerStyle={{
-          paddingBottom: 150
-        }}
-        data={accounts}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.addressItemContainer}>
-              <Button
-                onPress={() => navigateToAddressDetails(item)}
-                style={styles.touchableAreaContainer}
-              >
-                <WalletItem item={item} />
-              </Button>
-            </View>
-          );
-        }}
+    <View style={{ paddingHorizontal: 17 }}>
+      <WalletList
+        isListOpened={true}
+        isPortfolioFlow={true}
+        emptyText=""
+        totalAmount={watchlist.reduce(
+          (prev, curr) => prev + curr.ambBalance,
+          0
+        )}
+        data={watchlist}
       />
     </View>
   );

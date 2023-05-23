@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { styles } from '@screens/List/modals/BottomSheetSingleAddressMove/styles';
+import { styles } from '@screens/SingleCollection/modals/BottomSheetSingleAddressMove/styles';
 import { View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -18,6 +18,7 @@ import { TabViewProps, Route } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
+import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -88,10 +89,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             Portfolio
           </Text>
           {props.index === 0 ? (
-            <Button
-              onPress={navigateToExplore}
-              style={{ justifyContent: 'center', height: 45, width: 109 }}
-            >
+            <Button onPress={navigateToExplore} style={styles.navigationButton}>
               <Row>
                 <AddIcon color={COLORS.deepBlue} />
                 <Spacer horizontal value={scale(6.5)} />
@@ -107,7 +105,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           ) : (
             <Button
               onPress={handleOnOpenCreateNewList}
-              style={{ justifyContent: 'center', height: 45, width: 138 }}
+              style={styles.createNewListButton}
             >
               <Row>
                 <AddIcon color={COLORS.deepBlue} />
@@ -166,10 +164,3 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-    paddingTop: 16
-  }
-});

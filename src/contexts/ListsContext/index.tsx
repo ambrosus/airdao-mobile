@@ -40,7 +40,7 @@ const ListsContext = () => {
     getLists();
   }, []);
 
-  // ref for open Create new List modal
+  // ref for open Create new SingleCollection modal
   const createGroupRef = useRef<BottomSheetRef>(null);
 
   // handle function for deleting list

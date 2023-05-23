@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useLists } from '@contexts';
 import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
 import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
+import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -20,7 +20,7 @@ export const HomeCollections = () => {
   }, [navigation]);
 
   return (
-    <View style={{ paddingHorizontal: 24, flex: 1 }}>
+    <View style={styles.homeCollectionsContainer}>
       <View style={{ flex: 1 }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
@@ -50,14 +50,3 @@ export const HomeCollections = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  seeAllButton: {
-    alignItems: 'center',
-    backgroundColor: '#edf3ff',
-    borderRadius: 24,
-    alignSelf: 'center',
-    width: '100%',
-    marginBottom: scale(24)
-  }
-});

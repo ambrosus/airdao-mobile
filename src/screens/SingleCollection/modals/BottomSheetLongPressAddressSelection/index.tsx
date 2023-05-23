@@ -12,14 +12,14 @@ import { BottomSheet, BottomSheetRef, CheckBox } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { Dimensions, FlatList, View } from 'react-native';
-import { styles } from '@screens/List/modals/BottomSheetLongPressAddressSelection/styles';
+import { styles } from '@screens/SingleCollection/modals/BottomSheetLongPressAddressSelection/styles';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { MoveIcon } from '@components/svg/icons/Move';
 import { RemoveIcon } from '@components/svg/icons/Remove';
 import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { BottomSheetSingleAddressMove } from '@screens/List/modals/BottomSheetSingleAddressMove';
+import { BottomSheetSingleAddressMove } from '@screens/SingleCollection/modals/BottomSheetSingleAddressMove';
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -43,7 +43,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
     params: {
       group: { id: groupId }
     }
-  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleAddressGroup'>>();
+  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
 
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},

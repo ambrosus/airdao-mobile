@@ -3,10 +3,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { PortfolioScreenTabs } from '@screens/Portfolio/components/PortfolioScreenTabs';
 import { TabView } from 'react-native-tab-view';
 import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Collections';
-import { WalletList } from '@components/templates';
-import { useWatchlist } from '@hooks';
-import { View } from 'react-native';
 import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
+import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Watchlists';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
@@ -24,24 +22,6 @@ type RenderSceneProps = Parameters<
   TabViewProps<PortfolioTabViewRoute>['renderScene']
 >[0];
 
-const WatchList = () => {
-  const { watchlist } = useWatchlist();
-
-  return (
-    <View style={{ paddingHorizontal: 17 }}>
-      <WalletList
-        isListOpened={true}
-        isPortfolioFlow={true}
-        emptyText=""
-        totalAmount={watchlist.reduce(
-          (prev, curr) => prev + curr.ambBalance,
-          0
-        )}
-        data={watchlist}
-      />
-    </View>
-  );
-};
 const renderScene = ({ route }: RenderSceneProps) => {
   switch (route.key) {
     case 'first':
