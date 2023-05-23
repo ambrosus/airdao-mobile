@@ -17,7 +17,7 @@ const AppInitialization = () => {
     (async () => {
       try {
         const value = await Cache.getItem(CacheKey.IsFirstInit);
-        if (!value) {
+        if (true) {
           return navigation.navigate('WelcomeScreen');
         }
         return navigation.navigate('Tabs', { screen: 'Wallets' });

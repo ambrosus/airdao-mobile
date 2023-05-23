@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 import { scale } from '@utils/scaling';
@@ -9,45 +9,45 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from '@appTypes';
 import { Cache, CacheKey } from '@utils/cache';
 
+const options = [
+  {
+    title: 'Add address to your watchlist',
+    subtitle: 'and monitor their transactions in real-time'
+  },
+  {
+    title: 'Track AMB price',
+    subtitle: 'get insights and make better investment decisions'
+  },
+  {
+    title: 'Create and manage collections',
+    subtitle: ' of addresses for better tracking.'
+  }
+];
+
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   const Icon = () => {
-    return (
-      <View
-        style={{
-          borderRadius: 50,
-          width: 52,
-          height: 52,
-          backgroundColor: '#d9d9d9'
-        }}
-      />
-    );
+    return <View style={styles.logo} />;
   };
 
   return (
-    <View style={{ flex: 1, paddingTop: 40 }}>
-      <Spacer value={41} />
-      <Row justifyContent="center" alignItems="center">
-        <AirDAOLogo />
-        <Spacer horizontal value={scale(8)} />
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={15}
-          color={COLORS.smokyBlack}
-        >
-          AirDAO
-        </Text>
-      </Row>
-      <Spacer value={21} />
-      <View
-        style={{
-          // flex: 1,
-          paddingLeft: scale(24),
-          paddingTop: 30
-        }}
-      >
-        <View style={{ paddingRight: 60 }}>
+    <View style={styles.container}>
+      <View>
+        <Spacer value={41} />
+        <Row justifyContent="center" alignItems="center">
+          <AirDAOLogo />
+          <Spacer horizontal value={scale(8)} />
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={15}
+            color={COLORS.smokyBlack}
+          >
+            AirDAO
+          </Text>
+        </Row>
+        <Spacer value={21} />
+        <View style={styles.optionsContainer}>
           <Text
             fontFamily="Inter_700Bold"
             fontSize={24}
@@ -114,32 +114,43 @@ export const WelcomeScreen = () => {
           </Row>
         </View>
       </View>
-      <View style={{ justifyContent: 'flex-end', marginBottom: 30 }}>
-        <Button
-          onPress={async () => {
-            await Cache.setItem(CacheKey.IsFirstInit, true);
-            setTimeout(() => {
-              navigation.navigate('Tabs', { screen: 'Wallets' });
-            }, 300);
-          }}
-          style={{
-            width: '90%',
-            alignSelf: 'center',
-            alignItems: 'center',
-            backgroundColor: COLORS.deepBlue,
-            borderRadius: 24
-          }}
+      <Button
+        onPress={async () => {
+          await Cache.setItem(CacheKey.IsFirstInit, true);
+          setTimeout(() => {
+            navigation.navigate('Tabs', { screen: 'Wallets' });
+          }, 300);
+        }}
+        style={{
+          width: '90%',
+          alignSelf: 'center',
+          alignItems: 'center',
+          backgroundColor: COLORS.deepBlue,
+          borderRadius: 24,
+          paddingHorizontal: 16,
+          marginBottom: 30
+        }}
+      >
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.white}
+          style={{ paddingVertical: 15 }}
         >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.white}
-            style={{ marginVertical: 12 }}
-          >
-            Get started
-          </Text>
-        </Button>
-      </View>
+          Get started
+        </Text>
+      </Button>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingTop: 40, justifyContent: 'space-between' },
+  logo: {
+    borderRadius: 50,
+    width: 52,
+    height: 52,
+    backgroundColor: '#d9d9d9'
+  },
+  optionsContainer: { paddingRight: 60, paddingLeft: scale(24), paddingTop: 30 }
+});
