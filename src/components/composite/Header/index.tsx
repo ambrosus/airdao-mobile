@@ -33,10 +33,10 @@ export function Header(props: HeaderProps): JSX.Element {
       return (
         <Text
           style={Platform.OS === 'android' && titleStyle}
-          fontFamily="Inter_600SemiBold"
-          fontSize={15}
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          fontWeight="700"
           color={COLORS.smokyBlack}
-          title
         >
           {title}
         </Text>
@@ -50,7 +50,7 @@ export function Header(props: HeaderProps): JSX.Element {
       <>
         {backIconVisible && (
           <Button onPress={_onBackPress}>
-            <BackIcon />
+            <BackIcon color={COLORS.smokyBlack} />
           </Button>
         )}
         {titlePosition === 'left' && (
