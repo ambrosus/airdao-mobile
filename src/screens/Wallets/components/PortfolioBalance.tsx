@@ -106,15 +106,13 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             }
           />
         </View>
-        <View style={styles.chart}>
-          <BezierChart
-            height={verticalScale(200)}
-            data={chartData}
-            axisLabelColor={COLORS.smokyBlack}
-            strokeColor={COLORS.jungleGreen}
-            axisColor="transparent"
-          />
-        </View>
+        <BezierChart
+          height={verticalScale(200)}
+          data={chartData}
+          axisLabelColor={COLORS.smokyBlack}
+          strokeColor={COLORS.jungleGreen}
+          axisColor="transparent"
+        />
       </View>
       <SharePortfolio
         ref={shareBottomSheet}
@@ -134,10 +132,6 @@ const styles = StyleSheet.create({
   container: {
     minHeight: Dimensions.get('window').height * 0.5,
     backgroundColor: '#f3f5f7'
-    // backgroundColor: 'red',
-    // borderBottomLeftRadius: scale(28),
-    // borderBottomRightRadius: scale(28),
-    // paddingBottom: verticalScale(20)
   },
   content: {
     backgroundColor: 'white',
@@ -161,9 +155,6 @@ const styles = StyleSheet.create({
   },
   balanceLast24HourChange: {
     marginHorizontal: scale(13)
-  },
-  chart: {
-    // marginTop: verticalScale(8)
   },
   stats: {
     paddingVertical: verticalScale(12),

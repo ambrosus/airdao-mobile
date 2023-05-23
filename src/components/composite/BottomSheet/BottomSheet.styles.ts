@@ -2,7 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    margin: 0,
+    marginHorizontal: 10,
+    marginVertical: 16,
     justifyContent: 'flex-end'
   }
 });

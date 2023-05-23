@@ -8,7 +8,8 @@ export enum CacheKey {
   AddressLists = 'address_lists',
   PersonalList = 'personal_list',
   AllAddresses = 'all_addresses',
-  Onboarding = 'onboarding'
+  Onboarding = 'onboarding',
+  IsFirstInit = 'isFirstInit'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
