@@ -7,7 +7,7 @@ import { AccountList } from '@models/AccountList';
 
 export type PortfolioParamsPortfolio = {
   PortfolioScreen: undefined;
-  SingleAddressGroup: { group: AccountList };
+  SingleGroup: { group: AccountList };
 } & CommonStackParamsList;
 
 export type PortfolioNavigationProp = CompositeNavigationProp<

@@ -1,9 +1,9 @@
 import React from 'react';
-import { FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { Button, Row, Text } from '@components/base';
 import { HighlightItem } from '@screens/Wallets/components/HomeHighlightsSlider/HighlightItem';
+import { styles } from '@screens/Wallets/components/HomeHighlightsSlider/styles';
 
 const highlightsItems: {
   time: string;
@@ -69,10 +69,3 @@ export const HomeHighlights = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    paddingTop: scale(24),
-    paddingHorizontal: scale(24)
-  }
-});

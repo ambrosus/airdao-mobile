@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { styles } from '@screens/Wallets/components/HomeHighlightsSlider/styles';
 
 type Props = {
   item: { name: string; time: string };
@@ -31,17 +32,3 @@ export const HighlightItem = ({ item }: Props) => {
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: verticalScale(24),
-    marginHorizontal: scale(18)
-  },
-  image: {
-    backgroundColor: '#d9d9d9',
-    borderRadius: 8,
-    width: 180,
-    height: 160,
-    alignItems: 'center'
-  }
-});

@@ -11,11 +11,11 @@ import { useForwardedRef } from '@hooks';
 import { View } from 'react-native';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { styles } from '@screens/List/modals/BottomSheetSingleAddressOptions/styles';
-import { BottomSheetSingleAddressMove } from '@screens/List/modals/BottomSheetSingleAddressMove';
+import { styles } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions/styles';
+import { BottomSheetSingleAddressMove } from '@screens/SingleCollection/modals/BottomSheetSingleAddressMove';
 import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfirmRemove';
 import { ExplorerAccount } from '@models/Explorer';
-import { BottomSheetRenameAddress } from '@screens/List/modals/BottomSheetRenameAddress';
+import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
 import { useAllAddressesReducer } from '@contexts';
 
 type Props = {

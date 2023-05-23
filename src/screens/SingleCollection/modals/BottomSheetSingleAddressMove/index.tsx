@@ -19,7 +19,7 @@ import { COLORS } from '@constants/colors';
 
 import { FlatList, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
-import { ListOfAddressesGroupItem } from '@screens/List/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
+import { ListOfAddressesGroupItem } from '@screens/SingleCollection/modals/BottomSheetSingleAddressMove/ListOfAddressesGroupItem';
 import { ExplorerAccount } from '@models/Explorer';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

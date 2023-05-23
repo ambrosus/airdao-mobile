@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { PortfolioStack } from './Tabs/ListsStack';
+import { PortfolioStack } from './Tabs/PortfolioStack';
 import SettingsStack from './Tabs/SettingsStack';
 import ExploreStack from './Tabs/ExploreStack';
-import HomeStack from './Tabs/WalletsStack';
+import HomeStack from './Tabs/HomeStack';
 import TabBar from '@navigation/components/TabBar';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
 

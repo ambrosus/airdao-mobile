@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
 import { AccountList } from '@models/AccountList';
+import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
@@ -23,11 +24,3 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  groupsContainer: {
-    flex: 1,
-    flexGrow: 1,
-    paddingHorizontal: 17
-  }
-});

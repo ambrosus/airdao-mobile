@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
 import { RemoveIcon } from '@components/svg/icons/Remove';
-import { BottomSheetSingleAddressOptions } from '@screens/List/modals/BottomSheetSingleAddressOptions';
+import { BottomSheetSingleAddressOptions } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
