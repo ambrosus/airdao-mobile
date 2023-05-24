@@ -10,17 +10,18 @@ module.exports = function (api) {
         'module-resolver',
         {
           alias: {
-            '@navigation': './src/navigation',
+            '@api': './src/api',
+            '@appTypes': './src/appTypes',
             '@components': './src/components',
             '@constants': './src/constants',
-            '@screens': './src/screens',
-            '@helpers': './src/helpers',
-            '@theme': './src/theme',
-            '@appTypes': './src/appTypes',
             '@contexts': './src/contexts',
             '@hooks': './src/hooks',
-            '@api': './src/api',
+            '@helpers': './src/helpers',
+            '@lib': './src/lib',
             '@models': './src/models',
+            '@navigation': './src/navigation',
+            '@screens': './src/screens',
+            '@theme': './src/theme',
             '@utils': './src/utils'
           },
           extensions: ['.ts', '.tsx']
