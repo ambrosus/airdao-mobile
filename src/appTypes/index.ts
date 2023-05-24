@@ -6,4 +6,5 @@ export * from './QueryResponse';
 export * from './CacheableAccount';
 export * from './CacheableAccountList';
 export * from './OnboardingContent';
+export * from './Permission';
 export * from './Sharing';
