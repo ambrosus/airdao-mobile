@@ -26,7 +26,7 @@ export class ExplorerAccount implements CacheableAccount {
   constructor(details: ExplorerAccountDTO) {
     this._id = details._id;
     this.address = details.address;
-    this.ambBalance = details.balance.ether;
+    this.ambBalance = details.balance?.ether || 0;
     this.transactionCount = details.totalTx;
     this.type = details.type;
     this.name = '';

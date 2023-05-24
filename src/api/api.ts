@@ -1,16 +1,19 @@
+import axios from 'axios';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
 import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { ExplorerSort } from '@screens/Explore/Explore.types';
-import axios from 'axios';
+
+const walletAPI = 'https://wallet-api-api.ambrosus-dev.io';
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
 ): ExplorerAccountType => {
   if (search.includes('apollo')) return ExplorerAccountType.Apollo;
   else if (search.includes('atlas')) return ExplorerAccountType.Atlas;
-  return ExplorerAccountType.Account;
+  else if (search.includes('addresses')) return ExplorerAccountType.Atlas;
+  throw Error('Given address does not belong to an account!');
 };
 
 export const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
@@ -77,6 +80,22 @@ export const getTransactionsOfAccount = async (
         }&limit=${limit}&type=${type}`
       : null;
     return { data: response.data.data, next: nextUrl };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendPushToken = async (
+  deviceID: string,
+  pushToken: string
+): Promise<void> => {
+  if (!deviceID || !pushToken) return;
+  try {
+    await axios.post(`${walletAPI}/api/v1/watcher`, {
+      address: deviceID,
+      // eslint-disable-next-line camelcase
+      push_token: pushToken
+    });
   } catch (error) {
     throw error;
   }

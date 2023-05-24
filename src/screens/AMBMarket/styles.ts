@@ -1,16 +1,16 @@
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.culturedWhite
   },
   scrollView: {
     flexGrow: 1,
-    paddingTop: verticalScale(37.5),
-    paddingBottom: '40%'
+    paddingBottom: '40%',
+    paddingHorizontal: scale(16)
   },
   horizontalPadding: {
     paddingHorizontal: scale(25)
@@ -18,7 +18,11 @@ export const styles = StyleSheet.create({
   shareBtn: {
     backgroundColor: '#2f2b430d'
   },
-  column: {
-    flex: 1
+  body: {
+    backgroundColor: COLORS.white,
+    borderRadius: moderateScale(24),
+    paddingHorizontal: scale(24),
+    paddingTop: verticalScale(24),
+    marginTop: verticalScale(25)
   }
 });
