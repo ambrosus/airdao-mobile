@@ -318,6 +318,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             )}
           </OnboardingView>
           <BottomSheetWithHeader
+            containerStyle={{
+              marginHorizontal: -20,
+              marginBottom: -20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0
+            }}
             ref={successModal}
             height={
               Platform.OS === 'android' ? Dimensions.get('screen').height : 0

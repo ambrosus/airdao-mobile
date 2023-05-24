@@ -1,11 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -19,8 +20,16 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
 >(({ handleCreateCollectionPress, handleOnAddNewAddress }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
+  const bottomSafeArea = useSafeAreaInsets().bottom - 10;
+
   return (
-    <BottomSheet height={250} ref={localRef}>
+    <BottomSheet
+      height={250}
+      ref={localRef}
+      containerStyle={
+        Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+      }
+    >
       <View style={{ flex: 1 }}>
         <View
           style={{
