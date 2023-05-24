@@ -31,5 +31,11 @@ export const styles = StyleSheet.create({
     borderRadius: 120,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  bottomSheetHeader: {
+    marginHorizontal: -20,
+    marginBottom: -20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
   }
 });

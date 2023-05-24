@@ -172,17 +172,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
       {Platform.OS === 'android' && (
         <Button
           type="circular"
-          style={{
-            width: 48,
-            height: 48,
-            backgroundColor: COLORS.electricBlue,
-            borderRadius: 50,
-            position: 'absolute',
-            alignSelf: 'flex-end',
-            bottom: '18%',
-            right: '4%',
-            zIndex: 10
-          }}
+          style={styles.androidButton}
           onPress={addAddressOrCreateCollectionButton}
         >
           <PlusIcon color="white" />
