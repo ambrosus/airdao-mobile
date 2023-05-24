@@ -37,7 +37,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
         paddingVertical: 18,
         borderColor: COLORS.charcoal,
         borderBottomWidth: idx !== 0 ? 1 : 0,
-        borderTopWidth: 2,
+        borderTopWidth: idx === 0 ? 1 : 0,
         marginTop: idx === 0 ? verticalScale(20) : 0
       }
     : {};
@@ -87,11 +87,6 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
           ref={renameAddressRef}
           address={item.address}
         />
-        {/*<BottomSheetSingleAddressOptions*/}
-        {/*  ref={singleAddressOptionsRef}*/}
-        {/*  item={item}*/}
-        {/*  groupId={selectedList.id}*/}
-        {/*/>*/}
         <BottomSheetRemoveAddressFromWatchlists
           item={item}
           ref={confirmRemoveRef}

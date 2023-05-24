@@ -36,8 +36,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
     data,
     emptyText,
     isListOpened = false,
-    isPortfolioFlow = false,
-    groupId
+    isPortfolioFlow = false
   } = props;
   const [listOpened, toggleList] = useReducer(
     (opened) => !opened,
@@ -120,7 +119,6 @@ export function WalletList(props: WalletListProps): JSX.Element {
                   item={item.item}
                   idx={item.index}
                   isPortfolioFlow={isPortfolioFlow}
-                  groupId={groupId}
                 />
               )}
             />

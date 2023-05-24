@@ -78,6 +78,20 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     });
   }, [refs]);
 
+  const addAddressOrCreateCollectionButton = () => {
+    if (props.index === 0) {
+      navigateToExplore();
+    } else handleOnOpenCreateNewList();
+  };
+
+  const portfolioTabsButton = () => {
+    if (props.index === 0) {
+      navigateToExplore();
+    } else {
+      handleOnOpenCreateNewList();
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -90,41 +104,22 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             >
               Portfolio
             </Text>
-            {props.index === 0 ? (
-              <Button
-                onPress={navigateToExplore}
-                style={styles.navigationButton}
-              >
-                <Row>
-                  <AddIcon color={COLORS.deepBlue} />
-                  <Spacer horizontal value={scale(6.5)} />
-                  <Text
-                    fontFamily="Inter_500Medium"
-                    fontSize={14}
-                    color={COLORS.deepBlue}
-                  >
-                    Add address
-                  </Text>
-                </Row>
-              </Button>
-            ) : (
-              <Button
-                onPress={handleOnOpenCreateNewList}
-                style={styles.createNewListButton}
-              >
-                <Row>
-                  <AddIcon color={COLORS.deepBlue} />
-                  <Spacer horizontal value={scale(6.5)} />
-                  <Text
-                    fontFamily="Inter_500Medium"
-                    fontSize={14}
-                    color={COLORS.deepBlue}
-                  >
-                    Create collection
-                  </Text>
-                </Row>
-              </Button>
-            )}
+            <Button
+              onPress={portfolioTabsButton}
+              style={styles.createNewListButton}
+            >
+              <Row>
+                <AddIcon color={COLORS.deepBlue} />
+                <Spacer horizontal value={scale(6.5)} />
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={14}
+                  color={COLORS.deepBlue}
+                >
+                  {props.index === 0 ? 'Add address' : 'Create collection'}
+                </Text>
+              </Row>
+            </Button>
           </Row>
         ) : (
           <>
@@ -188,11 +183,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             right: '4%',
             zIndex: 10
           }}
-          onPress={() => {
-            if (props.index === 0) {
-              navigateToExplore();
-            } else handleOnOpenCreateNewList();
-          }}
+          onPress={addAddressOrCreateCollectionButton}
         >
           <PlusIcon color="white" />
         </Button>
