@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
-  useMemo,
   useState
 } from 'react';
 import {
@@ -19,7 +18,7 @@ import { COLORS } from '@constants/colors';
 import { Dimensions, FlatList, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { useWatchlist } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
 
@@ -27,13 +26,12 @@ type Props = {
   ref: RefObject<BottomSheetRef>;
   groupId: string;
   groupName?: string;
-  isFirstItem?: string;
 };
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
   Props
->(({ groupId, groupName, isFirstItem }, ref) => {
+>(({ groupId, groupName }, ref) => {
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const handleOnAddNewAddresses = useLists((v) => v.handleOnAddNewAddresses);
@@ -70,10 +68,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       watchlist
     ]
   );
-
-  const stylesForFirstItem = useMemo(() => {
-    return { marginTop: verticalScale(20), borderBottomWidth: 0 };
-  }, []);
 
   return (
     <>
@@ -122,31 +116,18 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 onPress={() => {
                   handleItemPress(item._id);
                 }}
-                style={[
-                  {
-                    paddingVertical: 18,
-                    borderColor: COLORS.thinGrey,
-                    borderBottomWidth: 0.2,
-                    borderTopWidth: 0.2
-                  },
-                  isFirstItem && stylesForFirstItem
-                ]}
+                style={{
+                  paddingVertical: 18,
+                  borderColor: COLORS.thinGrey,
+                  borderBottomWidth: 0.2,
+                  borderTopWidth: 0.2
+                }}
               >
                 <WalletItem item={item} />
               </Button>
             );
           }}
         />
-        {/*<View style={styles.bottomButtons}>*/}
-        {/*  {Platform.OS === 'android' && (*/}
-        {/*    <Button*/}
-        {/*      style={styles.bottomAddToListButton}*/}
-        {/*      onPress={handleOnAddNewAddress}*/}
-        {/*    >*/}
-        {/*      <Text style={styles.bottomAddToListButtonText}>Add to list</Text>*/}
-        {/*    </Button>*/}
-        {/*  )}*/}
-        {/*</View>*/}
       </BottomSheet>
     </>
   );

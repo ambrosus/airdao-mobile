@@ -66,7 +66,10 @@ export const GroupItem: FC<Props> = ({
   };
 
   const stylesForFirstItem = useMemo(() => {
-    return { marginTop: verticalScale(20), borderBottomWidth: 0 };
+    return {
+      marginTop: verticalScale(20),
+      borderTopWidth: 1
+    };
   }, []);
 
   const containerStyles = useMemo(() => {
