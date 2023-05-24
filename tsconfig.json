@@ -11,17 +11,18 @@
     "jsx": "react",
     "allowJs": true,
     "paths": {
-      "@navigation/*": ["./src/navigation/*"],
-      "@appTypes/*": ["./src/appTypes/*"],
-      "@screens/*": ["./src/screens/*"],
-      "@components/*": ["./src/components/*"],
-      "@contexts/*": ["./src/contexts/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@models/*": ["./src/models/*"],
+      "@*": ["./src/*"],
       "@api/*": ["./src/api/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@*": ["./src/*"]
+      "@appTypes/*": ["./src/appTypes/*"],
+      "@components/*": ["./src/components/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@models/*": ["./src/models/*"],
+      "@navigation/*": ["./src/navigation/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

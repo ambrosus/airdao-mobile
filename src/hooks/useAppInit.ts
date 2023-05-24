@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { DeviceService, NotificationService } from '@lib';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -11,6 +12,8 @@ export const useAppInit = () => {
   useEffect(() => {
     async function prepare() {
       try {
+        DeviceService.setupUniqueDeviceID();
+        NotificationService.setup();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
