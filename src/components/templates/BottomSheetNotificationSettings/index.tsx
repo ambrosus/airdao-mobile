@@ -96,6 +96,7 @@ export const BottomSheetNotificationSettings = forwardRef<
       }
       ref={localRef}
       {...props}
+      containerStyle={styles.bottomSheet}
     >
       {Platform.OS === 'android' && <Spacer value={scale(57)} />}
       <Header

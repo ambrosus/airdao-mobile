@@ -63,8 +63,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
                     : keyboardHeight)
                 : height,
               backgroundColor: '#FFFFFF',
-              borderTopLeftRadius: borderRadius,
-              borderTopRightRadius: borderRadius
+              borderRadius
             },
             containerStyle
           ]}

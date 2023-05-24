@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   bottomSheetInput: {
@@ -9,16 +8,6 @@ export const styles = StyleSheet.create({
   },
   checkboxPadding: {
     paddingRight: 16
-  },
-  header: {
-    shadowColor: 'transparent',
-    borderTopLeftRadius: scale(10),
-    borderTopRightRadius: scale(10)
-  },
-  headerTitle: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 20,
-    color: COLORS.smokyBlack
   },
   itemContainer: {
     paddingHorizontal: 16,

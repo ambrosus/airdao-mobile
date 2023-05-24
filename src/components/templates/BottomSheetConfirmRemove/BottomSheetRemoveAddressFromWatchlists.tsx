@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef, useWatchlist } from '@hooks';
@@ -7,6 +7,7 @@ import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -20,8 +21,17 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { removeFromWatchlist } = useWatchlist();
 
+  const bottomSafeArea = useSafeAreaInsets().bottom - 10;
+
   return (
-    <BottomSheet ref={localRef} height={275} isNestedSheet={false}>
+    <BottomSheet
+      ref={localRef}
+      height={275}
+      isNestedSheet={false}
+      containerStyle={
+        Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+      }
+    >
       <View testID="BottomSheetConfirmRemove_Container">
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />

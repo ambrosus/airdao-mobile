@@ -192,6 +192,50 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             onEndReached={loadMoreTransactions}
             loading={transactionsLoading && !!address}
           />
+          {/*<OnboardingView*/}
+          {/*  type="float"*/}
+          {/*  thisStep={3}*/}
+          {/*  childrenAlwaysVisible*/}
+          {/*  tooltipPlacement="top"*/}
+          {/*  helpers={{*/}
+          {/*    next: trackAddress*/}
+          {/*  }}*/}
+          {/*  removeAndroidStatusBarHeight*/}
+          {/*>*/}
+          {/*  {status === 3 ? (*/}
+          {/*    <View style={styles.trackBtn}>*/}
+          {/*      <Text*/}
+          {/*        fontFamily="Inter_600SemiBold"*/}
+          {/*        fontSize={16}*/}
+          {/*        fontWeight="600"*/}
+          {/*        color={COLORS.white}*/}
+          {/*      >*/}
+          {/*        {addressInWatchlist ? 'Go to watchlist' : 'Track Address'}*/}
+          {/*      </Text>*/}
+          {/*    </View>*/}
+          {/*  ) : (*/}
+          {/*    <FloatButton*/}
+          {/*      title={addressInWatchlist ? 'Go to watchlist' : 'Track Address'}*/}
+          {/*      icon={<></>}*/}
+          {/*      onPress={trackAddress}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*</OnboardingView>*/}
+          {/*<BottomSheetWithHeader*/}
+          {/*  ref={successModal}*/}
+          {/*  height={*/}
+          {/*    Platform.OS === 'android' ? Dimensions.get('screen').height : 0*/}
+          {/*  }*/}
+          {/*  title=""*/}
+          {/*  fullscreen={Platform.OS === 'ios' && true}*/}
+          {/*>*/}
+          {/*  {ambToken && account && (*/}
+          {/*    <WatchlistAddSuccess*/}
+          {/*      onDone={hideSuccessModal}*/}
+          {/*      address={address}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*</BottomSheetWithHeader>*/}
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </View>
       )}

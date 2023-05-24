@@ -45,6 +45,11 @@ export const BottomSheetFilter = forwardRef<
 
   return (
     <BottomSheet
+      containerStyle={{
+        marginHorizontal: -20,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
+      }}
       ref={localRef}
       height={WINDOW_HEIGHT * 0.9}
       borderRadius={scale(10)}

@@ -3,6 +3,11 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 16,
+    borderColor: COLORS.charcoal,
+    borderTopWidth: 0
+  },
   toggleBtn: {
     borderRadius: scale(36),
     justifyContent: 'center',

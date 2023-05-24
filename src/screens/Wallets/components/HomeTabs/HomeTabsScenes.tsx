@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -123,7 +123,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
             navigationState={props.navigationState}
           />
         )}
-        <Spacer horizontal value={scale(32)} />
+        <Spacer horizontal value={scale(Platform.OS === 'android' ? 24 : 32)} />
         <Button
           type="circular"
           onPress={handleOnCreateCollectionOrAddAddress}
