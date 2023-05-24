@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -19,6 +19,7 @@ import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
+import { PlusIcon } from '@components/svg/icons';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -80,47 +81,64 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   return (
     <>
       <View style={styles.container}>
-        <Row justifyContent="space-between" alignItems="center">
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.smokyBlack}
-          >
-            Portfolio
-          </Text>
-          {props.index === 0 ? (
-            <Button onPress={navigateToExplore} style={styles.navigationButton}>
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  Add address
-                </Text>
-              </Row>
-            </Button>
-          ) : (
-            <Button
-              onPress={handleOnOpenCreateNewList}
-              style={styles.createNewListButton}
+        {Platform.OS === 'ios' ? (
+          <Row justifyContent="space-between" alignItems="center">
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.smokyBlack}
             >
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  Create collection
-                </Text>
-              </Row>
-            </Button>
-          )}
-        </Row>
+              Portfolio
+            </Text>
+            {props.index === 0 ? (
+              <Button
+                onPress={navigateToExplore}
+                style={styles.navigationButton}
+              >
+                <Row>
+                  <AddIcon color={COLORS.deepBlue} />
+                  <Spacer horizontal value={scale(6.5)} />
+                  <Text
+                    fontFamily="Inter_500Medium"
+                    fontSize={14}
+                    color={COLORS.deepBlue}
+                  >
+                    Add address
+                  </Text>
+                </Row>
+              </Button>
+            ) : (
+              <Button
+                onPress={handleOnOpenCreateNewList}
+                style={styles.createNewListButton}
+              >
+                <Row>
+                  <AddIcon color={COLORS.deepBlue} />
+                  <Spacer horizontal value={scale(6.5)} />
+                  <Text
+                    fontFamily="Inter_500Medium"
+                    fontSize={14}
+                    color={COLORS.deepBlue}
+                  >
+                    Create collection
+                  </Text>
+                </Row>
+              </Button>
+            )}
+          </Row>
+        ) : (
+          <>
+            <Row alignItems="center" justifyContent="center">
+              <Text
+                fontFamily="Inter_700Bold"
+                fontSize={16}
+                color={COLORS.smokyBlack}
+              >
+                Portfolio
+              </Text>
+            </Row>
+          </>
+        )}
       </View>
       <Spacer value={12} />
       <View
@@ -156,6 +174,29 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           />
         )}
       </View>
+      {Platform.OS === 'android' && (
+        <Button
+          type="circular"
+          style={{
+            width: 48,
+            height: 48,
+            backgroundColor: COLORS.electricBlue,
+            borderRadius: 50,
+            position: 'absolute',
+            alignSelf: 'flex-end',
+            bottom: '18%',
+            right: '4%',
+            zIndex: 10
+          }}
+          onPress={() => {
+            if (props.index === 0) {
+              navigateToExplore();
+            } else handleOnOpenCreateNewList();
+          }}
+        >
+          <PlusIcon color="white" />
+        </Button>
+      )}
       <BottomSheetCreateRenameGroup
         type="create"
         handleOnCreateGroup={handleOnCreate}

@@ -9,15 +9,14 @@ import React, {
 import {
   BottomSheet,
   BottomSheetRef,
-  Header,
   InputWithIcon
 } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
-import { SearchIcon } from '@components/svg/icons';
+import { BottomSheetSwiperIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { Dimensions, FlatList, Platform, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { useWatchlist } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
@@ -79,23 +78,26 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   return (
     <>
       <BottomSheet
+        containerStyle={{
+          marginHorizontal: -20,
+          marginBottom: -20,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0
+        }}
         ref={localRef}
-        height={Platform.OS === 'ios' ? 800 : Dimensions.get('screen').height}
+        height={Dimensions.get('screen').height * 0.85}
       >
-        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
-        <Header
-          titleStyle={styles.headerTitle}
-          title={
-            <Text
-              fontFamily="Inter_700Bold"
-              fontSize={18}
-              color={COLORS.nero}
-            >{`Add address to ${groupName}`}</Text>
-          }
-          titlePosition="center"
-          style={styles.header}
-          backIconVisible={false}
-        />
+        <View style={{ alignItems: 'center' }}>
+          <Spacer value={scale(16)} />
+          <BottomSheetSwiperIcon />
+          <Spacer value={scale(12)} />
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={18}
+            color={COLORS.nero}
+          >{`Add address to ${groupName}`}</Text>
+        </View>
+        <Spacer value={scale(12)} />
         <View style={styles.bottomSheetInput}>
           <InputWithIcon
             iconLeft={<SearchIcon color="#2f2b4399" />}
@@ -135,16 +137,16 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             );
           }}
         />
-        <View style={styles.bottomButtons}>
-          {Platform.OS === 'android' && (
-            <Button
-              style={styles.bottomAddToListButton}
-              onPress={handleOnAddNewAddress}
-            >
-              <Text style={styles.bottomAddToListButtonText}>Add to list</Text>
-            </Button>
-          )}
-        </View>
+        {/*<View style={styles.bottomButtons}>*/}
+        {/*  {Platform.OS === 'android' && (*/}
+        {/*    <Button*/}
+        {/*      style={styles.bottomAddToListButton}*/}
+        {/*      onPress={handleOnAddNewAddress}*/}
+        {/*    >*/}
+        {/*      <Text style={styles.bottomAddToListButtonText}>Add to list</Text>*/}
+        {/*    </Button>*/}
+        {/*  )}*/}
+        {/*</View>*/}
       </BottomSheet>
     </>
   );

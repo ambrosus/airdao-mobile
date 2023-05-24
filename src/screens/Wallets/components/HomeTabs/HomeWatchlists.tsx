@@ -7,6 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
@@ -18,6 +19,10 @@ export const HomeWatchlists = () => {
       navigation.navigate('Portfolio');
     }, 400);
   }, [navigation]);
+
+  if (watchlist.length === 0) {
+    return <RenderEmpty text="addresses" />;
+  }
 
   return (
     <View style={styles.homeWatchlistsContainer}>

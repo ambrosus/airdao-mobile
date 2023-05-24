@@ -1,48 +1,30 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
 import { RemoveIcon } from '@components/svg/icons/Remove';
-import { BottomSheetSingleAddressOptions } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
-import { useLists } from '@contexts';
+import { useAllAddressesReducer } from '@contexts';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
+import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
 
 type Props = {
   item: ExplorerAccount;
   idx: number;
   isPortfolioFlow?: boolean;
-  groupId?: string;
 };
-export const RenderItem = ({
-  item,
-  idx,
-  isPortfolioFlow = false,
-  groupId
-}: Props) => {
-  const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
+export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
 
-  const { listsOfAddressGroup } = useLists((v) => v);
-
-  const selectedList = useMemo(
-    () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
-    [groupId, listsOfAddressGroup]
-  );
-
   const navigation = useNavigation<WalletsNavigationProp>();
-
-  const handleOnOpenOptions = useCallback(() => {
-    singleAddressOptionsRef.current?.show();
-  }, []);
 
   const handleConfirmRemove = useCallback(() => {
     confirmRemoveRef.current?.show();
@@ -59,6 +41,27 @@ export const RenderItem = ({
         marginTop: idx === 0 ? verticalScale(20) : 0
       }
     : {};
+
+  const renameAddressRef = useRef<BottomSheetRef>(null);
+  const handleOnOpenRenameAddress = () => renameAddressRef.current?.show();
+
+  const allAddressesReducer = useAllAddressesReducer();
+
+  const handleOnRenameAddress = useCallback(
+    (newName: string | false) => {
+      if (!newName) return;
+      const saveAddress = async () => {
+        const newWallet: ExplorerAccount = Object.assign({}, item);
+        newWallet.name = newName;
+        newWallet.isPersonal = false;
+        allAddressesReducer({ type: 'update', payload: newWallet });
+        renameAddressRef.current?.dismiss();
+      };
+      saveAddress();
+    },
+    [allAddressesReducer, item, renameAddressRef]
+  );
+
   const renderRightActions = () => {
     return (
       <>
@@ -71,7 +74,7 @@ export const RenderItem = ({
             width: scale(130)
           }}
         >
-          <Button onPress={handleOnOpenOptions}>
+          <Button onPress={handleOnOpenRenameAddress}>
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
           <Spacer horizontal value={scale(52)} />
@@ -79,11 +82,16 @@ export const RenderItem = ({
             <RemoveIcon />
           </Button>
         </View>
-        <BottomSheetSingleAddressOptions
-          ref={singleAddressOptionsRef}
-          item={item}
-          groupId={selectedList.id}
+        <BottomSheetRenameAddress
+          handleOnRename={handleOnRenameAddress}
+          ref={renameAddressRef}
+          address={item.address}
         />
+        {/*<BottomSheetSingleAddressOptions*/}
+        {/*  ref={singleAddressOptionsRef}*/}
+        {/*  item={item}*/}
+        {/*  groupId={selectedList.id}*/}
+        {/*/>*/}
         <BottomSheetRemoveAddressFromWatchlists
           item={item}
           ref={confirmRemoveRef}

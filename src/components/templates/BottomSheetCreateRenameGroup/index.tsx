@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -17,6 +17,7 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import { Toast, ToastType } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -77,9 +78,17 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       localRef
     ]);
 
+    const bottomSafeArea = useSafeAreaInsets().bottom - 10;
+
     return (
       <>
-        <BottomSheet height={350} ref={localRef}>
+        <BottomSheet
+          height={350}
+          ref={localRef}
+          containerStyle={
+            Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+          }
+        >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
               <View style={styles.icon}>

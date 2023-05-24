@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, useWindowDimensions } from 'react-native';
+import { Platform, SafeAreaView, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
-import { Button, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
+import { scale } from '@utils/scaling';
 
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;
@@ -92,7 +93,14 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
     return <Text>Requesting for camera permission</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <Spacer value={scale(250)} />
+        <Row justifyContent="center">
+          <Text>No access to camera</Text>
+        </Row>
+      </SafeAreaView>
+    );
   }
 
   return (

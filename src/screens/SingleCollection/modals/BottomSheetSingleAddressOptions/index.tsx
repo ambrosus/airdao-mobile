@@ -8,7 +8,7 @@ import React, {
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions/styles';
@@ -17,6 +17,7 @@ import { BottomSheetConfirmRemove } from '@components/templates/BottomSheetConfi
 import { ExplorerAccount } from '@models/Explorer';
 import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
 import { useAllAddressesReducer } from '@contexts';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -60,8 +61,16 @@ export const BottomSheetSingleAddressOptions = forwardRef<
     [allAddressesReducer, item, localRef]
   );
 
+  const bottomSafeArea = useSafeAreaInsets().bottom - 10;
+
   return (
-    <BottomSheet height={300} ref={localRef}>
+    <BottomSheet
+      height={300}
+      ref={localRef}
+      containerStyle={
+        Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+      }
+    >
       <View style={styles.icon}>
         <BottomSheetSwiperIcon />
       </View>

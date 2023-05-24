@@ -7,6 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -18,6 +19,10 @@ export const HomeCollections = () => {
       navigation.navigate('Portfolio');
     }, 400);
   }, [navigation]);
+
+  if (listsOfAddressGroup.length === 0) {
+    return <RenderEmpty text="collections" />;
+  }
 
   return (
     <View style={styles.homeCollectionsContainer}>
