@@ -4,6 +4,7 @@ export * from './WalletItem';
 export * from './BezierChart';
 export * from './PortfolioPerformance';
 export * from './BottomSheetSharePortfolio';
+export * from './BottomSheetAddWalletToList';
 export * from './BottomSheetNotificationSettings';
 export * from './WatchlistAddSuccess';
 export * from './SearchAddress';

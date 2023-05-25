@@ -181,7 +181,7 @@ export const ExplorerAccountView = (
         <AddWalletToList
           wallet={account}
           lists={listsOfAddressGroup}
-          onWalletToggled={hideAddToList}
+          onWalletMove={hideAddToList}
         />
       </BottomSheetWithHeader>
     </View>

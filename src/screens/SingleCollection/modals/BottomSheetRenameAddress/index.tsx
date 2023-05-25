@@ -26,80 +26,76 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
     const bottomSafeArea = useSafeAreaInsets().bottom - 10;
 
     return (
-      <>
-        <BottomSheet
-          height={400}
-          ref={localRef}
-          isNestedSheet={false}
-          containerStyle={
-            Platform.OS === 'android' && { marginBottom: bottomSafeArea }
-          }
+      <BottomSheet
+        ref={localRef}
+        containerStyle={
+          Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+        }
+      >
+        <View style={styles.icon}>
+          <BottomSheetSwiperIcon />
+        </View>
+        <Spacer value={24} />
+        <View style={styles.bottomSheetSubtitle}>
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.nero}
+          >
+            Rename address
+          </Text>
+        </View>
+        <Input
+          value={localAddressName}
+          onChangeValue={(value) => setLocalAddressName(value)}
+          type="text"
+          placeholder="Enter list name"
+          placeholderTextColor="black"
+          style={[styles.bottomSheetInput]}
+        />
+        <Spacer value={24} />
+        <Button
+          type="base"
+          style={{
+            backgroundColor: COLORS.deepBlue,
+            marginHorizontal: 24,
+            paddingVertical: 16,
+            borderRadius: 25,
+            alignItems: 'center'
+          }}
+          onPress={() => {
+            handleOnRename(localAddressName !== address && localAddressName);
+          }}
         >
-          <View style={styles.icon}>
-            <BottomSheetSwiperIcon />
-          </View>
-          <Spacer value={24} />
-          <View style={styles.bottomSheetSubtitle}>
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.nero}
-            >
-              Rename address
-            </Text>
-          </View>
-          <Input
-            value={localAddressName}
-            onChangeValue={(value) => setLocalAddressName(value)}
-            type="text"
-            placeholder="Enter list name"
-            placeholderTextColor="black"
-            style={[styles.bottomSheetInput]}
-          />
-          <Spacer value={24} />
-          <Button
-            type="base"
-            style={{
-              backgroundColor: COLORS.deepBlue,
-              marginHorizontal: 24,
-              paddingVertical: 16,
-              borderRadius: 25,
-              alignItems: 'center'
-            }}
-            onPress={() => {
-              handleOnRename(localAddressName !== address && localAddressName);
-            }}
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.white}
           >
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.white}
-            >
-              Save
-            </Text>
-          </Button>
-          <Spacer value={24} />
-          <Button
-            type="base"
-            style={{
-              backgroundColor: COLORS.charcoal,
-              marginHorizontal: 24,
-              paddingVertical: 16,
-              borderRadius: 25,
-              alignItems: 'center'
-            }}
-            onPress={() => localRef.current?.dismiss()}
+            Save
+          </Text>
+        </Button>
+        <Spacer value={24} />
+        <Button
+          type="base"
+          style={{
+            backgroundColor: COLORS.charcoal,
+            marginHorizontal: 24,
+            paddingVertical: 16,
+            borderRadius: 25,
+            alignItems: 'center'
+          }}
+          onPress={() => localRef.current?.dismiss()}
+        >
+          <Text
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.smokyBlack}
+            fontSize={16}
           >
-            <Text
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.smokyBlack}
-              fontSize={16}
-            >
-              Cancel
-            </Text>
-          </Button>
-        </BottomSheet>
-      </>
+            Cancel
+          </Text>
+        </Button>
+      </BottomSheet>
     );
   }
 );

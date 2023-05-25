@@ -34,6 +34,7 @@ export const COLORS = {
   smokyBlack5: '#0e0e0e0d',
   smokyBlack50: '#0e0e0e80',
   thinGrey: '#2f2b4380',
+  transparent: 'transparent',
   transparentWhite: '#ffffffb3',
   veryLightGrey: '#ffffff99',
   white: '#FFFFFF',
