@@ -1,10 +1,7 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
-import {
-  BottomSheet,
-  BottomSheetProps,
-  BottomSheetRef
-} from '@components/composite';
+import { BottomSheetProps, BottomSheetRef } from '@components/composite';
+import { BottomSheetFloat, Toast, ToastType } from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -13,7 +10,6 @@ import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/Botto
 import { COLORS } from '@constants/colors';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 import { styles } from './styles';
-import { Toast, ToastType } from '@components/modular';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -83,7 +79,7 @@ export const BottomSheetEditWallet = forwardRef<
   }, [dismissThis, listsWithCurrentWallet, toggleAddressInList, wallet]);
 
   return (
-    <BottomSheet
+    <BottomSheetFloat
       ref={localRef}
       swiperIconVisible
       avoidKeyboard={false}
@@ -165,6 +161,6 @@ export const BottomSheetEditWallet = forwardRef<
         ref={renameWalletModalRef}
         address={wallet.name}
       />
-    </BottomSheet>
+    </BottomSheetFloat>
   );
 });
