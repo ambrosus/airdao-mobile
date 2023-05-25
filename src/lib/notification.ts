@@ -1,33 +1,23 @@
 import messaging from '@react-native-firebase/messaging';
-import { Permission } from '@appTypes/Permission';
-import PermissionService from './permission';
-import { DeviceService } from './device';
-import { sendPushToken } from '@api/api';
+import { Cache, CacheKey } from '@utils/cache';
 
-class NotificationService {
-  constructor() {
-    this.listenTokenChanges();
+export class NotificationService {
+  constructor(listener?: (newToken: string) => unknown) {
+    this.listenTokenChanges(listener);
   }
 
   async getPushToken(): Promise<string> {
     return await messaging().getToken();
   }
 
-  private listenTokenChanges() {
-    messaging().onTokenRefresh(this.setup);
+  private listenTokenChanges(callback?: (newToken: string) => unknown) {
+    messaging().onTokenRefresh((token: string) => {
+      if (typeof callback === 'function') callback(token);
+    });
   }
 
   async setup() {
-    const granted = await PermissionService.getPermission(
-      Permission.Notifications
-    );
-    const deviceID = DeviceService.getDeviceID();
     const pushToken = await this.getPushToken();
-    if (granted && pushToken && deviceID) {
-      // TODO call api to save push token under deviceID as PK
-      sendPushToken(deviceID, pushToken);
-    }
+    Cache.setItem(CacheKey.NotificationToken, pushToken);
   }
 }
-
-export default new NotificationService();
