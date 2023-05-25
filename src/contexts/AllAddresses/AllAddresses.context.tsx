@@ -1,13 +1,31 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { searchAddress } from '@api/api';
+import { API, searchAddress } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
+import { NotificationService } from '@lib';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
+
+  const watchlistedAccounts = allAddresses.filter(
+    (address) => address.isOnWatchlist
+  );
+  const watchlistedAccountsRef = useRef(watchlistedAccounts);
+  watchlistedAccountsRef.current = watchlistedAccounts;
+
+  useEffect(() => {
+    const onNotificationTokenRefresh = () => {
+      const notificationService = new NotificationService();
+      watchlistedAccountsRef.current.forEach((account) => {
+        notificationService.setup();
+        API.watchAddress(account.address);
+      });
+    };
+    new NotificationService(onNotificationTokenRefresh);
+  }, [allAddresses]);
 
   const addAddress = useCallback(
     (address: ExplorerAccount) => {

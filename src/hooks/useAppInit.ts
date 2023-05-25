@@ -13,7 +13,8 @@ export const useAppInit = () => {
     async function prepare() {
       try {
         DeviceService.setupUniqueDeviceID();
-        NotificationService.setup();
+        const notificationService = new NotificationService();
+        notificationService.setup();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
