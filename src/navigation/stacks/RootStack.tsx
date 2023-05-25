@@ -3,12 +3,7 @@ import React from 'react';
 import { TabsNavigator } from './TabsNavigator';
 import AppInitialization from './AppInit';
 import { WelcomeScreen } from '@screens/Welcome';
-
-export type RootStackParamsList = {
-  AppInit: undefined;
-  Tabs: undefined;
-  WelcomeScreen: undefined;
-};
+import { RootStackParamsList } from '@appTypes';
 
 export const RootStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamsList>();

@@ -1,26 +1,22 @@
 import { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { TabsParamsList } from '@appTypes';
 import * as SplashScreen from 'expo-splash-screen';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@utils/cache';
-import { RootStackParamsList } from '@navigation/stacks/RootStack';
 
 // here we will check if user has token
 const AppInitialization = () => {
-  const navigation =
-    useNavigation<
-      NativeStackNavigationProp<TabsParamsList | RootStackParamsList>
-    >();
+  const navigation = useNavigation<RootNavigationProp>();
 
   useEffect(() => {
     (async () => {
       try {
         const value = await Cache.getItem(CacheKey.IsFirstInit);
-        if (true) {
+        if (value) {
           return navigation.navigate('WelcomeScreen');
+        } else {
+          return navigation.navigate('Tabs', { screen: 'Wallets' });
         }
-        return navigation.navigate('Tabs', { screen: 'Wallets' });
       } catch (error) {
         // tslint:disable-next-line:no-console
         console.error('Error retrieving data:', error);
