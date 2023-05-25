@@ -1,12 +1,18 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
 import { AccountList } from '@models/AccountList';
+import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
 };
 export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
+  if (listsOfAddressGroup.length === 0) {
+    return <RenderEmpty text="collections" />;
+  }
+
   return (
     <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
@@ -23,11 +29,3 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  groupsContainer: {
-    flex: 1,
-    flexGrow: 1,
-    paddingHorizontal: 17
-  }
-});

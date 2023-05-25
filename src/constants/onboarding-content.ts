@@ -43,7 +43,7 @@ const addToList: OnboardingContentInterface = {
 };
 
 const changeListName: OnboardingContentInterface = {
-  title: 'List name',
+  title: 'SingleCollection name',
   body: `You can customize your list by giving it a custom name that's easy for you to remember. This can help you identify lists more easily and keep track of multiple Addresses inside it.`
 };
 

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { useWatchlist } from '@hooks';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { RenderItem } from '@components/templates/WalletList/components/RenderItem';
 import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
+import { styles } from '@screens/Wallets/components/HomeTabs/styles';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
@@ -19,8 +20,12 @@ export const HomeWatchlists = () => {
     }, 400);
   }, [navigation]);
 
+  if (watchlist.length === 0) {
+    return <RenderEmpty text="addresses" />;
+  }
+
   return (
-    <View style={{ paddingHorizontal: 24, flex: 1 }}>
+    <View style={styles.homeWatchlistsContainer}>
       <View style={{ flex: 1 }}>
         {watchlist.slice(0, 4).map((item, index) => {
           return (
@@ -43,14 +48,3 @@ export const HomeWatchlists = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  seeAllButton: {
-    alignItems: 'center',
-    backgroundColor: '#edf3ff',
-    borderRadius: 24,
-    alignSelf: 'center',
-    width: '100%',
-    marginBottom: scale(24)
-  }
-});

@@ -1,10 +1,11 @@
 import React from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { TextProps } from '@components/base/Text/Text.types';
-import { BaseButtonProps, Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { ClipboardFilledIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
 import { Toast, ToastType } from '@components/modular/Toast';
+import { BaseButtonProps } from '@components/base/Button';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {

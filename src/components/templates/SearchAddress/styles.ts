@@ -1,10 +1,11 @@
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   input: {
-    width: '65%'
+    width: '90%',
+    alignSelf: 'center'
   },
   top: {
     paddingLeft: scale(16),
@@ -14,16 +15,6 @@ export const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#2f2b431a'
   },
-  error: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  scanner: {
-    backgroundColor: COLORS.powderWhite,
-    height: moderateScale(48),
-    width: moderateScale(48)
-  },
   trackBtn: {
     backgroundColor: COLORS.deepBlue,
     paddingVertical: verticalScale(9),
@@ -31,5 +22,11 @@ export const styles = StyleSheet.create({
     borderRadius: 120,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  bottomSheetHeader: {
+    marginHorizontal: -20,
+    marginBottom: -20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
   }
 });

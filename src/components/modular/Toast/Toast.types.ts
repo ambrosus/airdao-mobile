@@ -4,8 +4,10 @@ export enum ToastType {
 }
 
 export interface ToastOptions {
+  title: string;
   message: string;
   duration?: number;
   type: ToastType;
   onUndo?: () => void;
+  onBodyPress?: () => void;
 }

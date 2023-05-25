@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -19,6 +19,7 @@ import { BottomSheetRef } from '@components/composite';
 import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
+import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -122,7 +123,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
             navigationState={props.navigationState}
           />
         )}
-        <Spacer horizontal value={scale(32)} />
+        <Spacer horizontal value={scale(Platform.OS === 'android' ? 24 : 32)} />
         <Button
           type="circular"
           onPress={handleOnCreateCollectionOrAddAddress}
@@ -143,15 +144,3 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  addButton: {
-    marginTop: scale(10),
-    alignSelf: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.electricBlue,
-    borderRadius: 50,
-    width: 32,
-    height: 32
-  }
-});

@@ -8,7 +8,6 @@ import './src/prototypes/array';
 
 export default function App() {
   const { isAppReady } = useAppInit();
-
   if (!isAppReady) {
     return null;
   }

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -18,6 +18,8 @@ import { TabViewProps, Route } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
+import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
+import { PlusIcon } from '@components/svg/icons';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -76,21 +78,35 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     });
   }, [refs]);
 
+  const addAddressOrCreateCollectionButton = () => {
+    if (props.index === 0) {
+      navigateToExplore();
+    } else handleOnOpenCreateNewList();
+  };
+
+  const portfolioTabsButton = () => {
+    if (props.index === 0) {
+      navigateToExplore();
+    } else {
+      handleOnOpenCreateNewList();
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
-        <Row justifyContent="space-between" alignItems="center">
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.smokyBlack}
-          >
-            Portfolio
-          </Text>
-          {props.index === 0 ? (
+        {Platform.OS === 'ios' ? (
+          <Row justifyContent="space-between" alignItems="center">
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.smokyBlack}
+            >
+              Portfolio
+            </Text>
             <Button
-              onPress={navigateToExplore}
-              style={{ justifyContent: 'center', height: 45, width: 109 }}
+              onPress={portfolioTabsButton}
+              style={styles.createNewListButton}
             >
               <Row>
                 <AddIcon color={COLORS.deepBlue} />
@@ -100,29 +116,24 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
                   fontSize={14}
                   color={COLORS.deepBlue}
                 >
-                  Add address
+                  {props.index === 0 ? 'Add address' : 'Create collection'}
                 </Text>
               </Row>
             </Button>
-          ) : (
-            <Button
-              onPress={handleOnOpenCreateNewList}
-              style={{ justifyContent: 'center', height: 45, width: 138 }}
-            >
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  Create collection
-                </Text>
-              </Row>
-            </Button>
-          )}
-        </Row>
+          </Row>
+        ) : (
+          <>
+            <Row alignItems="center" justifyContent="center">
+              <Text
+                fontFamily="Inter_700Bold"
+                fontSize={16}
+                color={COLORS.smokyBlack}
+              >
+                Portfolio
+              </Text>
+            </Row>
+          </>
+        )}
       </View>
       <Spacer value={12} />
       <View
@@ -158,6 +169,15 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           />
         )}
       </View>
+      {Platform.OS === 'android' && (
+        <Button
+          type="circular"
+          style={styles.androidButton}
+          onPress={addAddressOrCreateCollectionButton}
+        >
+          <PlusIcon color="white" />
+        </Button>
+      )}
       <BottomSheetCreateRenameGroup
         type="create"
         handleOnCreateGroup={handleOnCreate}
@@ -166,10 +186,3 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-    paddingTop: 16
-  }
-});

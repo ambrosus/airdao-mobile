@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { BottomSheetSingleGroupOption } from '@screens/Portfolio/components/BottomSheetGroupAction';
+import { BottomSheetSingleCollectionOption } from '@screens/Portfolio/components/BottomSheetGroupAction';
 import { AccountList } from '@models/AccountList';
 import { NumberUtils } from '@utils/number';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/BottomSheetConfirmRemoveGroup';
@@ -51,7 +51,7 @@ export const GroupItem: FC<Props> = ({
   const handleItemPress = () => {
     navigation.navigate('Portfolio');
     setTimeout(() => {
-      navigation.navigate('SingleAddressGroup', { group });
+      navigation.navigate('SingleGroup', { group });
     }, 400);
   };
 
@@ -66,7 +66,10 @@ export const GroupItem: FC<Props> = ({
   };
 
   const stylesForFirstItem = useMemo(() => {
-    return { marginTop: verticalScale(20), borderBottomWidth: 0 };
+    return {
+      marginTop: verticalScale(20),
+      borderTopWidth: 1
+    };
   }, []);
 
   const containerStyles = useMemo(() => {
@@ -109,7 +112,7 @@ export const GroupItem: FC<Props> = ({
               <PercentChange change={123 || 0} />
             </Row>
           </Row>
-          <BottomSheetSingleGroupOption
+          <BottomSheetSingleCollectionOption
             handleOnDeleteButtonPress={handleOpenDeleteModal}
             item={group}
             ref={groupItemActionRef}

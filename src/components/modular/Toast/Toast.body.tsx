@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   SlideInDown,
   SlideInUp,
@@ -19,6 +19,7 @@ import { CloseIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './Toast.styles';
 import { ToastOptions, ToastType } from './Toast.types';
+import { COLORS } from '@constants/colors';
 
 export const ToastBody = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
@@ -26,8 +27,10 @@ export const ToastBody = forwardRef((_, ref) => {
   const defaultOptions: ToastOptions = useMemo(
     () => ({
       message: '',
+      title: '',
       duration: 3500, // ms
-      type: ToastType.Top
+      type: ToastType.Top,
+      onBodyPress: undefined
     }),
     []
   );
@@ -43,19 +46,13 @@ export const ToastBody = forwardRef((_, ref) => {
   }, []);
 
   const hide = useCallback(() => {
-    setOptions({
-      message: '',
-      duration: 3500, // ms
-      type: ToastType.Top
-    });
+    setOptions(defaultOptions);
     setToastVisible(false);
     clearTimer();
-  }, [clearTimer]);
+  }, [clearTimer, defaultOptions]);
 
   const startTimer = useCallback(() => {
-    // console.log('timer started');
     timerRef.current = setTimeout(() => {
-      //   console.log('timer cleared');
       timerRef.current = null;
       hide();
     }, options.duration);
@@ -63,7 +60,6 @@ export const ToastBody = forwardRef((_, ref) => {
 
   const show = useCallback(
     (params: ToastOptions) => {
-      //   console.log('show() called');
       setOptions({ ...defaultOptions, ...params });
       setToastVisible(true);
       startTimer();
@@ -90,7 +86,6 @@ export const ToastBody = forwardRef((_, ref) => {
   const placement = DISTANCE_FROM_EDGE + (isTopToast ? topInset : bottomInset);
 
   if (!toastVisible) return null;
-
   return (
     <Animated.View
       style={[
@@ -105,37 +100,49 @@ export const ToastBody = forwardRef((_, ref) => {
         (options.duration ?? 500) / 2
       )}
     >
-      <Row alignItems="center" justifyContent="space-between">
-        <View style={{ flex: 4 }}>
-          <Text
-            fontSize={16}
-            fontWeight="600"
-            fontFamily="Inter_600SemiBold"
-            color="#FFFFFF"
-            style={{ flexDirection: 'row', alignItems: 'baseline' }}
+      <Pressable
+        disabled={typeof options.onBodyPress !== 'function'}
+        onPress={options.onBodyPress}
+      >
+        <Row alignItems="center" justifyContent="space-between">
+          <View style={{ flex: 4 }}>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.white}
+            >
+              {options.title}
+            </Text>
+            <Text
+              fontSize={14}
+              fontWeight="400"
+              fontFamily="Inter_400Regular"
+              color={COLORS.white}
+              style={{ flexDirection: 'row', alignItems: 'baseline' }}
+            >
+              {options.message}
+              {typeof options.onUndo === 'function' && (
+                <Text
+                  onPress={onUndoPress}
+                  fontSize={16}
+                  fontWeight="600"
+                  fontFamily="Inter_600SemiBold"
+                  color="#A1A6B2"
+                >
+                  {' '}
+                  Undo
+                </Text>
+              )}
+            </Text>
+          </View>
+          <Button
+            onPress={hide}
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            {options.message}
-            {typeof options.onUndo === 'function' && (
-              <Text
-                onPress={onUndoPress}
-                fontSize={16}
-                fontWeight="600"
-                fontFamily="Inter_600SemiBold"
-                color="#A1A6B2"
-              >
-                {' '}
-                Undo
-              </Text>
-            )}
-          </Text>
-        </View>
-        <Button
-          onPress={hide}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <CloseIcon color="#FFFFFF" />
-        </Button>
-      </Row>
+            <CloseIcon color="#FFFFFF" />
+          </Button>
+        </Row>
+      </Pressable>
     </Animated.View>
   );
 });

@@ -18,6 +18,7 @@ interface BottomSheetWithHeaderProps extends BottomSheetProps {
   actionTitle?: string;
   onActionPress?: () => unknown;
   actionButtonTestID?: string;
+  closeVisible?: boolean;
 }
 
 export const BottomSheetWithHeader = forwardRef<
@@ -30,6 +31,7 @@ export const BottomSheetWithHeader = forwardRef<
     onActionPress,
     children,
     actionButtonTestID,
+    closeVisible = false,
     ...bottomSheetProps
   } = props;
 
@@ -57,13 +59,23 @@ export const BottomSheetWithHeader = forwardRef<
           style={styles.header}
           backIconVisible={false}
           contentLeft={
-            <Button onPress={dismiss}>
-              <CloseIcon />
-            </Button>
+            closeVisible && (
+              <Button onPress={dismiss}>
+                <CloseIcon />
+              </Button>
+            )
           }
           contentRight={renderContentRight()}
           titleStyle={styles.headerTitle}
-          title={title}
+          title={
+            <Text
+              fontSize={18}
+              fontFamily="Inter_700Bold"
+              color={COLORS.jetBlack}
+            >
+              {title}
+            </Text>
+          }
         />
         {children}
       </>

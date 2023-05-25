@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback } from 'react';
 import { View, Animated, TouchableOpacity } from 'react-native';
-import { COLORS } from '@constants/colors';
+import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem/styles';
 
 type Props = {
   onPress: (index: number) => void;
@@ -16,18 +16,10 @@ export const PortfolioScreenTabItem = forwardRef<any, Props>((props, ref) => {
   }, [props]);
 
   return (
-    <TouchableOpacity
-      style={{ paddingHorizontal: 16, paddingTop: 16, alignItems: 'center' }}
-      onPress={handlePress}
-    >
+    <TouchableOpacity style={styles.tabTitle} onPress={handlePress}>
       <View style={{ paddingBottom: 4 }} ref={ref}>
         <Animated.Text
-          style={{
-            color: COLORS.nero,
-            fontSize: 20,
-            fontFamily: 'Inter_700Bold',
-            opacity: props.opacity
-          }}
+          style={[styles.tabTitleText, { opacity: props.opacity }]}
         >
           {props.children}
         </Animated.Text>
