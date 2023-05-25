@@ -6,7 +6,7 @@ import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
 import { RemoveIcon } from '@components/svg/icons/Remove';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { WalletItem } from '@components/templates';
+import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
