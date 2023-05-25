@@ -7,7 +7,7 @@ export const StatusBar = () => {
   const currentRoute = useCurrentRoute();
   return (
     <ExpoStatusBar
-      style="dark"
+      style={currentRoute === 'HomeScreen' ? 'dark' : 'light'}
       backgroundColor={currentRoute === 'HomeScreen' ? '#f3f5f7' : COLORS.white}
     />
   );
