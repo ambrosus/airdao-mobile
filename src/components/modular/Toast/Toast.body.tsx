@@ -52,9 +52,7 @@ export const ToastBody = forwardRef((_, ref) => {
   }, [clearTimer, defaultOptions]);
 
   const startTimer = useCallback(() => {
-    // console.log('timer started');
     timerRef.current = setTimeout(() => {
-      //   console.log('timer cleared');
       timerRef.current = null;
       hide();
     }, options.duration);
@@ -62,7 +60,6 @@ export const ToastBody = forwardRef((_, ref) => {
 
   const show = useCallback(
     (params: ToastOptions) => {
-      //   console.log('show() called');
       setOptions({ ...defaultOptions, ...params });
       setToastVisible(true);
       startTimer();
