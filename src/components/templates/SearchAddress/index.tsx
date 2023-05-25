@@ -174,7 +174,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
       {loading && !!address && <Spinner />}
-      {error && !!address && <SearchAddressNoResult />}
+      {error && !!address && !finalAccount && <SearchAddressNoResult />}
       {finalAccount && explorerInfo && (
         <View style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
