@@ -9,21 +9,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from '@appTypes';
 import { Cache, CacheKey } from '@utils/cache';
 
-const options = [
-  {
-    title: 'Add address to your watchlist',
-    subtitle: 'and monitor their transactions in real-time'
-  },
-  {
-    title: 'Track AMB price',
-    subtitle: 'get insights and make better investment decisions'
-  },
-  {
-    title: 'Create and manage collections',
-    subtitle: ' of addresses for better tracking.'
-  }
-];
-
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
