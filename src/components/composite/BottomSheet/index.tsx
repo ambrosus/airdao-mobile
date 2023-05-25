@@ -4,14 +4,15 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { Keyboard, Platform, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
-import { KeyboardDismissingView } from '@components/base';
+import { KeyboardDismissingView, Separator } from '@components/base';
 import { useFullscreenModalHeight } from '@hooks';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
+import { COLORS } from '@constants/colors';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -24,6 +25,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       avoidKeyboard = true,
       fullscreen = false,
       testID,
+      swiperIconVisible = false,
       onClose
     },
     ref
@@ -62,8 +64,13 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
             // eslint-disable-next-line @typescript-eslint/ban-types
             ...(containerStyle as {})
           }}
-          testID={(testID || '') + '-content'}
+          testID={(testID || 'bottom-sheet') + '-content'}
         >
+          {swiperIconVisible && (
+            <View style={styles.swiper}>
+              <Separator height={4} color={COLORS.lavenderGray} />
+            </View>
+          )}
           {children}
         </KeyboardDismissingView>
       ),
@@ -76,12 +83,12 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         borderRadius,
         containerStyle,
         testID,
+        swiperIconVisible,
         children
       ]
     );
 
     const backdropOpacity = isNestedSheet ? 0 : 0.5;
-
     return (
       <Modal
         testID={testID}

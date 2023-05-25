@@ -3,12 +3,14 @@ import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
 
 export enum CacheKey {
-  NotificationSettings = 'notification_settings',
-  Watchlist = 'watchlist',
   AddressLists = 'address_lists',
-  PersonalList = 'personal_list',
   AllAddresses = 'all_addresses',
-  Onboarding = 'onboarding'
+  DeviceID = 'device_id',
+  NotificationToken = 'notification_token',
+  NotificationSettings = 'notification_settings',
+  PersonalList = 'personal_list',
+  Onboarding = 'onboarding',
+  Watchlist = 'watchlist'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {

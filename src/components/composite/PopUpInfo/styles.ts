@@ -7,11 +7,11 @@ export const styles = StyleSheet.create({
     padding: scale(8)
   },
   container: {
-    backgroundColor: '#DCDBDC',
+    backgroundColor: '#C2C5CC',
     justifyContent: 'center',
     alignItems: 'center',
-    width: scale(16),
-    height: scale(16),
+    width: scale(12),
+    height: scale(12),
     borderRadius: scale(8)
   }
 });

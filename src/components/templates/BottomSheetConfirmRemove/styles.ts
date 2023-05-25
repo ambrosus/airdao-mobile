@@ -11,15 +11,17 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   removeButton: {
-    backgroundColor: COLORS.crimsonRed,
-    marginHorizontal: 16,
+    backgroundColor: COLORS.pinkRed,
+    marginHorizontal: 24,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 25,
     alignItems: 'center'
   },
   bottomSheetCancelButton: {
-    marginHorizontal: 18,
+    backgroundColor: COLORS.charcoal,
+    borderRadius: 25,
+    marginHorizontal: 24,
     paddingVertical: 16,
     alignItems: 'center'
   }

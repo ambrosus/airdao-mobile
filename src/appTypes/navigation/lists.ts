@@ -5,12 +5,12 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommonStackParamsList } from './common';
 import { AccountList } from '@models/AccountList';
 
-export type ListsParamsLists = {
-  ListsScreen: undefined;
-  SingleAddressGroup: { group: AccountList };
+export type PortfolioParamsPortfolio = {
+  PortfolioScreen: undefined;
+  SingleGroup: { group: AccountList };
 } & CommonStackParamsList;
 
-export type ListsNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Lists'>,
-  NativeStackNavigationProp<ListsParamsLists>
+export type PortfolioNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabsParamsList, 'Portfolio'>,
+  NativeStackNavigationProp<PortfolioParamsPortfolio>
 >;

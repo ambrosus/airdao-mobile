@@ -13,6 +13,14 @@ jest.mock('victory-native', () => {
   };
 });
 
+jest.mock('@contexts/OnBoardingContext', () => ({
+  useOnboardingStatus: jest.fn(() => ({
+    status: 'none',
+    back: jest.fn(),
+    skip: jest.fn()
+  }))
+}));
+
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => ({
@@ -82,11 +90,11 @@ let mockedData = {
   error: false
 };
 
-jest.mock('@contexts/OnboardingContext', () => ({
+jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
-    skip: jest.fn(),
-    back: jest.fn()
+    back: jest.fn(),
+    skip: jest.fn()
   }))
 }));
 
@@ -134,6 +142,11 @@ const Component = () => {
 };
 
 describe('AddressDetails', () => {
+  it('renders correctly', async () => {
+    const { getByTestId } = render(<Component />);
+    expect(getByTestId('address-screen')).toBeTruthy();
+  });
+
   it('toaster should be visible', async () => {
     const { getByTestId } = render(<Component />);
     const button = getByTestId('watchlist-button');
@@ -147,15 +160,10 @@ describe('AddressDetails', () => {
   it('should open the edit wallet modal on press', async () => {
     const { getByTestId } = render(<Component />);
     const editWalletModal = getByTestId('BottomSheetEditWallet');
-    act(() => {
-      fireEvent.press(editWalletModal);
+    await act(async () => {
+      await fireEvent.press(editWalletModal);
     });
     expect(getByTestId('BottomSheetEditWallet')).toBeDefined();
-  });
-
-  it('renders correctly', async () => {
-    const { getByTestId } = render(<Component />);
-    expect(getByTestId('address-screen')).toBeTruthy();
   });
 
   it('should render loading spinner when account and explorer info are loading', () => {

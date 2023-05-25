@@ -1,22 +1,19 @@
 import React, { useReducer, useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { WalletHeader } from './Header';
-import { Button, Row, Text } from '@components/base';
+import { scale, verticalScale } from '@utils/scaling';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
+  ChevronRightIcon,
   EyeInvisibleIcon,
   EyeVisibleIcon,
-  RightArrowIcon,
-  ShareIcon,
-  TrendIcon
+  ShareIcon
 } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { BezierChart, Point, SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { useNavigation } from '@react-navigation/native';
-import { WalletsNavigationProp } from '@appTypes/navigation';
+import { Badge } from '@components/base/Badge';
+import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
 interface PortfolioBalanceProps {
   USDBalance: number;
@@ -27,15 +24,7 @@ interface PortfolioBalanceProps {
 }
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
-  const {
-    USDBalance,
-    AMBBalance,
-    balanceLast24HourChange,
-    AMBPriceLast24HourChange,
-    AMBPrice
-  } = props;
-  const navigation = useNavigation<WalletsNavigationProp>();
-  const safeAreaInsets = useSafeAreaInsets();
+  const { USDBalance, AMBBalance, balanceLast24HourChange } = props;
   const [balanceVisible, toggleBalanceVisibility] = useReducer(
     (visible) => !visible,
     true
@@ -49,37 +38,38 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     shareBottomSheet.current?.show();
   };
 
-  const navigateToStats = () => {
-    navigation.navigate('AMBMarketScreen');
-  };
-
   return (
-    <View
-      style={[styles.container, { paddingTop: safeAreaInsets.top }]}
-      testID="portfolio-balance"
-    >
-      <WalletHeader />
+    <View style={styles.container} testID="portfolio-balance">
       <View style={styles.content}>
-        <Text fontFamily="Inter_500Medium" color={COLORS.white}>
-          My Wallet Value
-        </Text>
-        <Row alignItems="center" style={styles.balance}>
-          <Row flex={1}>
-            <Text
-              color={COLORS.white}
-              heading
-              fontFamily="Mersad_600SemiBold"
-              testID="Portfolio_Balance_Title"
-            >
-              $
-              {balanceVisible
-                ? NumberUtils.formatNumber(USDBalance)
-                : NumberUtils.formatNumber(USDBalance)
-                    .split('')
-                    .map((ch) => (ch === '.' ? ch : '*'))
-                    .join('')}
-            </Text>
-          </Row>
+        <Spacer value={scale(38)} />
+        <Row alignItems="center" justifyContent="center">
+          <AirDAOLogo />
+          <Spacer horizontal value={scale(10)} />
+          <Text
+            align="center"
+            fontFamily="Inter_600SemiBold"
+            fontSize={15}
+            color={COLORS.smokyBlack}
+          >
+            AirDAO (AMB)
+          </Text>
+        </Row>
+        <Row style={styles.balance}>
+          <Text
+            color={COLORS.smokyBlack}
+            heading
+            fontFamily="Mersad_600SemiBold"
+            fontSize={30}
+            testID="Portfolio_Balance_Title"
+          >
+            $
+            {balanceVisible
+              ? NumberUtils.formatNumber(USDBalance)
+              : NumberUtils.formatNumber(USDBalance)
+                  .split('')
+                  .map((ch) => (ch === '.' ? ch : '*'))
+                  .join('')}
+          </Text>
           {USDBalance > 0 && (
             <Row
               alignItems="center"
@@ -98,67 +88,44 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
                 type="circular"
                 style={styles.balanceAction}
               >
-                <ShareIcon />
+                <ShareIcon color={COLORS.smokyBlack} />
               </Button>
             </Row>
           )}
         </Row>
-        <Row alignItems="center" style={styles.ambBalance}>
-          <Text color={COLORS.white}>
-            {NumberUtils.formatNumber(AMBBalance)} AMB
-          </Text>
-          <Row alignItems="center" style={styles.balanceLast24HourChange}>
-            <TrendIcon color={COLORS.transparentWhite} />
-            <Text color={COLORS.transparentWhite}>
-              {'  '}
-              {NumberUtils.formatNumber(balanceLast24HourChange)}%
-            </Text>
-          </Row>
-        </Row>
-        <View style={styles.chart}>
-          <BezierChart
-            height={verticalScale(200)}
-            data={chartData}
-            axisLabelColor={COLORS.veryLightGrey}
-            strokeColor={COLORS.dimGrey}
-            axisColor={COLORS.deepBlue}
+        <Spacer value={scale(16)} />
+        <View style={styles.badge}>
+          <Badge
+            icon={
+              <Row alignItems="center" style={styles.balanceLast24HourChange}>
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={16}
+                  color={COLORS.jungleGreen}
+                >
+                  + {NumberUtils.formatNumber(balanceLast24HourChange)}%
+                </Text>
+                <Spacer horizontal value={scale(4)} />
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={14}
+                  color={COLORS.smokyBlack}
+                >
+                  (24hr)
+                </Text>
+                <Spacer horizontal value={scale(4)} />
+                <ChevronRightIcon color={COLORS.smokyBlack} />
+              </Row>
+            }
           />
         </View>
-        <Button
-          type="bordered"
-          borderRadius={scale(15)}
-          style={styles.stats}
-          borderColor="rgba(255, 255, 255, 0.1)"
-          onPress={navigateToStats}
-        >
-          <Row flex={1} alignItems="center" justifyContent="space-between">
-            <Row alignItems="center">
-              <Text
-                subtitle
-                fontSize={13}
-                fontWeight="600"
-                color={COLORS.white}
-              >
-                AMB PRICE: ${AMBPrice}
-              </Text>
-              <Text
-                fontSize={12}
-                fontWeight="500"
-                color={COLORS.transparentWhite}
-              >
-                {'  ' + (AMBPriceLast24HourChange > 0 ? '+' : '')}
-                {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
-              </Text>
-            </Row>
-            <Row alignItems="center">
-              <Text fontSize={14} fontWeight="500" color={COLORS.white}>
-                {' '}
-                See Stats {'  '}
-              </Text>
-              <RightArrowIcon />
-            </Row>
-          </Row>
-        </Button>
+        <BezierChart
+          height={verticalScale(200)}
+          data={chartData}
+          axisLabelColor={COLORS.smokyBlack}
+          strokeColor={COLORS.jungleGreen}
+          axisColor="transparent"
+        />
       </View>
       <SharePortfolio
         ref={shareBottomSheet}
@@ -177,16 +144,22 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     minHeight: Dimensions.get('window').height * 0.5,
-    backgroundColor: COLORS.deepBlue,
-    borderBottomLeftRadius: scale(28),
-    borderBottomRightRadius: scale(28),
-    paddingBottom: verticalScale(20)
+    backgroundColor: '#f3f5f7'
   },
   content: {
-    paddingHorizontal: '5%'
+    backgroundColor: 'white',
+    shadowOpacity: 0.1,
+    borderRadius: 24,
+    marginHorizontal: 20,
+    marginVertical: 20
+  },
+  badge: {
+    width: '40%',
+    alignSelf: 'center'
   },
   balance: {
-    marginTop: verticalScale(12)
+    marginTop: verticalScale(17),
+    alignSelf: 'center'
   },
   balanceAction: {
     backgroundColor: '#FFFFFF1A',
@@ -194,20 +167,7 @@ const styles = StyleSheet.create({
     height: scale(24),
     marginLeft: scale(14)
   },
-  ambBalance: {
-    marginTop: verticalScale(12)
-  },
   balanceLast24HourChange: {
-    marginLeft: scale(14)
-  },
-  chart: {
-    marginTop: verticalScale(8)
-  },
-  stats: {
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: scale(16),
-    marginTop: verticalScale(20),
-    borderRadius: moderateScale(15),
-    backgroundColor: 'rgba(255, 255, 255, 0.05)'
+    marginHorizontal: scale(13)
   }
 });

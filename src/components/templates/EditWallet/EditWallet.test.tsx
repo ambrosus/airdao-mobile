@@ -30,11 +30,11 @@ jest.mock('@contexts/ListsContext', () => ({
   }))
 }));
 
-jest.mock('@contexts/OnboardingContext', () => ({
+jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
-    skip: jest.fn(),
-    back: jest.fn()
+    back: jest.fn(),
+    skip: jest.fn()
   }))
 }));
 

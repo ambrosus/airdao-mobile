@@ -57,7 +57,7 @@ export const BottomSheetWalletSort = forwardRef<
           <CheckBox
             value={localSort === item.value}
             type="circular"
-            fillColor="#2f2b4399"
+            fillColor={COLORS.sapphireBlue}
           />
         </Row>
       </Button>
@@ -86,8 +86,7 @@ export const BottomSheetWalletSort = forwardRef<
                 <Text
                   title
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.darkGrey}
-                  opacity={0.5}
+                  color={COLORS.jungleGreen}
                 >
                   Done
                 </Text>

@@ -5,11 +5,15 @@ import { randomUUID } from 'expo-crypto';
 import { AccountList } from '@models/AccountList';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
 import { Cache, CacheKey } from '@utils/cache';
-import { useAllAddresses } from '@contexts/AllAddresses';
+import {
+  useAllAddresses,
+  useAllAddressesReducer
+} from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
 
 const ListsContext = () => {
   const allAddresses = useAllAddresses();
+  const allAddressesReducer = useAllAddressesReducer();
   // save lists locally
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
     CacheableAccountList[]
@@ -40,7 +44,7 @@ const ListsContext = () => {
     getLists();
   }, []);
 
-  // ref for open Create new List modal
+  // ref for open Create new SingleCollection modal
   const createGroupRef = useRef<BottomSheetRef>(null);
 
   // handle function for deleting list
@@ -158,6 +162,28 @@ const ListsContext = () => {
     setListsOfAddressGroup(updatedGroups);
   };
 
+  const toggleAddressInList = (account: ExplorerAccount, list: AccountList) => {
+    const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
+    if (!listInContext) return;
+    if (listInContext.addresses.indexOfItem(account.address) > -1) {
+      listInContext.addresses.removeItem(account.address);
+    } else {
+      listInContext.addresses.push(account.address);
+    }
+    listsOfAddressGroup.forEach((l) => {
+      if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
+        l.addresses.removeItem(account.address);
+      }
+    });
+    if (allAddresses.indexOfItem(account, 'address') === -1) {
+      allAddressesReducer({ type: 'add', payload: account });
+    }
+    // timeout ensures that the account has been added to all addresses
+    setTimeout(() => {
+      setListsOfAddressGroup([...listsOfAddressGroup]);
+    }, 0);
+  };
+
   return {
     listsOfAddressGroup: lists,
     listsOfAddressGroupCacheable: listsOfAddressGroup,
@@ -168,7 +194,8 @@ const ListsContext = () => {
     createGroupRef,
     handleOnAddNewAddresses,
     handleOnAddressMove,
-    handleOnDeleteAddressFromGroup
+    handleOnDeleteAddressFromGroup,
+    toggleAddressInList
   };
 };
 

@@ -6,19 +6,31 @@ import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { ExplorerAccount } from '@models/Explorer';
-import { useLists } from '@contexts/ListsContext';
+import { useLists } from '@contexts';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { PortfolioParamsPortfolio } from '@appTypes';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ExplorerAccount;
+  address?: string;
   groupId: string;
 };
 
 export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
-  ({ item, groupId }, ref) => {
+  ({ address }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const { handleOnDeleteAddressFromGroup } = useLists((v) => v);
+
+    const {
+      params: {
+        group: { id: groupId }
+      }
+    } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
+
+    const handleDeleteAddress = () => {
+      handleOnDeleteAddressFromGroup(groupId, [address as string]);
+    };
+
     return (
       <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
         <View testID="BottomSheetConfirmRemove_Container">
@@ -32,13 +44,13 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             fontSize={20}
             color={COLORS.smokyBlack}
           >
-            Are you sure want to remove selected {item.address} from Whales?
+            Are you sure want to remove selected {address} from Whales?
           </Text>
           <Spacer value={24} />
           <Button
             testID="BottomSheetConfirmRemove_Button"
             onPress={() => {
-              handleOnDeleteAddressFromGroup(groupId, [item.address]);
+              handleDeleteAddress();
               localRef.current?.dismiss();
             }}
             style={styles.removeButton}
@@ -46,7 +58,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.crimsonRed}
             >
               Remove
             </Text>
@@ -59,7 +71,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.midnight}
+              color={COLORS.smokyBlack}
               fontSize={16}
             >
               Cancel

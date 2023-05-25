@@ -1,11 +1,11 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { WalletsInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
-import { WalletsActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
+import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
+import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
 import { ExploreActiveIcon } from '@components/svg/BottomTabIcons/ExploreActiveIcon';
-import { ListsInactiveIcon } from '@components/svg/BottomTabIcons/ListsInactiveIcon';
-import { ListsActiveIcon } from '@components/svg/BottomTabIcons/ListsActiveIcon';
+import { PortfolioInactiveIcon } from '@components/svg/BottomTabIcons/PortfolioInactiveIcon';
+import { PortfolioActiveIcon } from '@components/svg/BottomTabIcons/PortfolioActiveIcon';
 import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsInactiveIcon';
 import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiveIcon';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -15,19 +15,19 @@ import { Text } from '@components/base';
 import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
 
-type LabelType = 'Settings' | 'Lists' | 'Explore' | 'Wallets';
+type LabelType = 'Settings' | 'Portfolio' | 'Explore' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <WalletsInactiveIcon />,
-    activeIcon: <WalletsActiveIcon />
+    inactiveIcon: <HomeInactiveIcon />,
+    activeIcon: <HomeActiveIcon />
+  },
+  Portfolio: {
+    inactiveIcon: <PortfolioInactiveIcon />,
+    activeIcon: <PortfolioActiveIcon />
   },
   Explore: {
     inactiveIcon: <ExploreInactiveIcon />,
     activeIcon: <ExploreActiveIcon />
-  },
-  Lists: {
-    inactiveIcon: <ListsInactiveIcon />,
-    activeIcon: <ListsActiveIcon />
   },
   Settings: {
     inactiveIcon: <SettingsInactiveIcon />,

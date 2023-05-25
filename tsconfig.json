@@ -11,18 +11,19 @@
     "jsx": "react",
     "allowJs": true,
     "paths": {
+      "@*": ["./src/*"],
       "@api/*": ["./src/api/*"],
       "@appTypes/*": ["./src/appTypes/*"],
-      "@screens/*": ["./src/screens/*"],
       "@components/*": ["./src/components/*"],
-      "@contexts/*": ["./src/contexts/*"],
       "@constants/*": ["./src/constants/*"],
+      "@contexts/*": ["./src/contexts/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
       "@models/*": ["./src/models/*"],
       "@mocks/*": ["./src/__mocks__/*"],
       "@navigation/*": ["./src/navigation/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@*": ["./src/*"]
+      "@screens/*": ["./src/screens/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

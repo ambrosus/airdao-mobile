@@ -10,6 +10,7 @@ const formatAddress = (
   paddingRight: number,
   dotCount = 3
 ): string => {
+  if (!address || typeof address !== 'string') return '';
   if (paddingLeft + paddingRight >= address.length) return address;
   let str = '';
   let dotCounter = 0;

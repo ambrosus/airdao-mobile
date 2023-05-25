@@ -1,16 +1,16 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
-import { WalletsScreen } from '@screens/Wallets';
+import { HomeScreen } from '@screens/Wallets';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 
-jest.mock('@contexts/OnboardingContext', () => ({
+jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
     status: 'none',
+    back: jest.fn(),
     skip: jest.fn(),
-    back: jest.fn()
+    start: jest.fn()
   }))
 }));
 
@@ -78,19 +78,17 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <WalletsScreen />
-        </NavigationContainer>
+        <HomeScreen />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
-describe('WalletsScreen', () => {
+describe('HomeScreen', () => {
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
-    expect(getByTestId('wallets-screen')).toBeDefined();
-    expect(getByTestId('wallets-list')).toBeDefined();
-    expect(getByTestId('watchlists')).toBeDefined();
+    expect(getByTestId('Wallets_Screen')).toBeDefined();
+    expect(getByTestId('Wallets_List')).toBeDefined();
+    expect(getByTestId('Watchlists')).toBeDefined();
   });
 
   it('renders PortfolioBalance with correct props', () => {
@@ -101,30 +99,22 @@ describe('WalletsScreen', () => {
     expect(usdBalance.props.children).toBeTruthy();
   });
 
-  it.skip('renders OnboardingFloatButton with correct props', () => {
-    const { getByTestId } = render(<Component />);
-    const onboardingFloatButton = getByTestId('onboarding-float-button');
-    const onboardingFloatButtonTitle = getByTestId('Float_Button_Title');
-    expect(onboardingFloatButtonTitle.props.children).toEqual('Add a Address');
-    expect(onboardingFloatButton).toBeTruthy();
-  });
-
   it('LearnAboutAirDAO component is rendered only on iOS', () => {
     const { getByTestId } = render(<Component />);
     if (Platform.OS === 'ios') {
-      const learnAboutAirDAOComponent = getByTestId('learn-about-airdao');
+      const learnAboutAirDAOComponent = getByTestId('Learn_About_AirDAO');
       expect(learnAboutAirDAOComponent).toBeTruthy();
     } else {
-      const learnAboutAirDAOComponent = getByTestId('learn-about-airdao');
+      const learnAboutAirDAOComponent = getByTestId('Learn_About_AirDAO');
       expect(learnAboutAirDAOComponent).toBeNull();
     }
   });
 
   it('WatchList should be empty when there are any wallets inside', async () => {
     mockedData = [];
-    const { getAllByTestId, getByTestId } = render(<Component />);
-    const toggleButton = getAllByTestId('toggle-button');
-    await fireEvent.press(toggleButton[0]);
+    const { getByTestId } = render(<Component />);
+    const toggleButton = getByTestId('ToggleButton_Wallets');
+    await fireEvent.press(toggleButton);
     expect(getByTestId('empty-list')).toBeDefined();
   });
 
@@ -139,9 +129,9 @@ describe('WalletsScreen', () => {
         name: 'asdasdasd'
       }
     ];
-    const { getAllByTestId, getByTestId } = render(<Component />);
-    const toggleButton = getAllByTestId('toggle-button');
-    await fireEvent.press(toggleButton[0]);
+    const { getByTestId } = render(<Component />);
+    const toggleButton = getByTestId('ToggleButton_WatchList');
+    await fireEvent.press(toggleButton);
     expect(getByTestId('WalletItem_0')).toBeDefined();
   });
 });

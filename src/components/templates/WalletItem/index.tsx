@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
+import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
 import { ExplorerAccount } from '@models/Explorer';
@@ -10,14 +10,14 @@ import { COLORS } from '@constants/colors';
 
 interface WalletItemProps {
   item: ExplorerAccount;
-  testID?: ViewProps['testID'];
+  isPortfolioFlow?: boolean;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
   const { data } = useAMBPrice();
-  const { item, testID } = props;
+  const { item } = props;
   return (
-    <View style={{ flex: 1, justifyContent: 'space-between' }} testID={testID}>
+    <View style={{ justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
         <Text
           fontFamily="Inter_600SemiBold"

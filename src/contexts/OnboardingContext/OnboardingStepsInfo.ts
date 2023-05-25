@@ -66,7 +66,7 @@ export const initialOnBoardingSteps = {
     isButtonLeftVisible: true
   },
   'step-8': {
-    title: 'List name',
+    title: 'SingleCollection name',
     subtitle: `You can customize your list by giving it a custom name that's easy for you to remember. This can help you identify lists more easily and keep track of multiple Addresses inside it.`,
     buttonLeftTitle: 'Back',
     buttonRightTitle: 'Skip Tutorial',

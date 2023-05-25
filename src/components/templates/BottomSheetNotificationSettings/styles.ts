@@ -32,5 +32,11 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(8),
     borderRadius: moderateScale(82),
     backgroundColor: '#FFFFFF'
+  },
+  bottomSheet: {
+    marginHorizontal: -20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    marginBottom: -20
   }
 });

@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -17,6 +17,7 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import { Toast, ToastType } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -56,7 +57,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         localRef.current?.dismiss();
         Toast.show({
           message: `Way to go! ${localGroupName} list created.`,
-          type: ToastType.Top
+          type: ToastType.Top,
+          title: ''
         });
       }
       if (handleOnRenameGroup && groupId) {
@@ -64,7 +66,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         localRef.current?.dismiss();
         Toast.show({
           message: `${groupTitle} has been renamed to ${localGroupName}.`,
-          type: ToastType.Top
+          type: ToastType.Top,
+          title: ''
         });
       }
       setLocalGroupName('');
@@ -77,32 +80,33 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       localRef
     ]);
 
+    const bottomSafeArea = useSafeAreaInsets().bottom - 10;
+
     return (
       <>
-        <BottomSheet height={500} ref={localRef}>
+        <BottomSheet
+          height={350}
+          ref={localRef}
+          containerStyle={
+            Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+          }
+        >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
               <View style={styles.icon}>
                 <BottomSheetSwiperIcon />
               </View>
-              <Spacer value={29} />
+              <Spacer value={24} />
               <Text
                 testID="BottomSheetCreateRename_Title"
                 style={styles.newListTitle}
                 fontFamily="Inter_600SemiBold"
-                fontSize={20}
+                fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                {type === 'create' ? ' Create new List' : 'Rename List'}
+                {type === 'create' ? ' Create Collection' : 'Rename Collection'}
               </Text>
-              <Spacer value={36} />
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={16}
-                color={COLORS.oil}
-              >
-                List name
-              </Text>
+              <Spacer value={8} />
               <OnboardingView
                 thisStep={8}
                 tooltipPlacement="bottom"
@@ -115,12 +119,12 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   value={localGroupName}
                   onChangeValue={setLocalGroupName}
                   type="text"
-                  placeholder="Enter list name"
+                  placeholder="Enter collection name"
                   placeholderTextColor="black"
                   style={[styles.bottomSheetInput]}
                 />
               </OnboardingView>
-              <Spacer value={32} />
+              <Spacer value={24} />
               <OnboardingView
                 thisStep={9}
                 tooltipPlacement="bottom"
@@ -135,7 +139,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   onPress={handleButtonPress}
                 >
                   <Text
-                    fontFamily="Inter_500Medium"
+                    fontFamily="Inter_600SemiBold"
                     fontSize={16}
                     color={COLORS.white}
                   >
@@ -152,7 +156,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.midnight}
+                  color={COLORS.nero}
                   fontSize={16}
                 >
                   Cancel
