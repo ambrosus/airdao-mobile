@@ -7,6 +7,7 @@ export const Collections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
   return (
     <View
+      testID="Collections"
       style={{
         flex: 1
       }}

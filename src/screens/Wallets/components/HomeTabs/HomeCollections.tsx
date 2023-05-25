@@ -25,7 +25,7 @@ export const HomeCollections = () => {
   }
 
   return (
-    <View style={styles.homeCollectionsContainer}>
+    <View style={styles.homeCollectionsContainer} testID="Home_Collections">
       <View style={{ flex: 1 }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (

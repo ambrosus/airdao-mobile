@@ -47,7 +47,7 @@ export const HomeScreen = () => {
   }, [isFocused]);
 
   return (
-    <View style={{ flex: 1 }} testID="Wallets_Screen">
+    <View style={{ flex: 1 }} testID="Home_Screen">
       <HomeHeader />
       <ScrollView
         bounces={false}

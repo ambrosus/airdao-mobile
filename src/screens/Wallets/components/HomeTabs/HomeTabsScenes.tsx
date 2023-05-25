@@ -43,7 +43,6 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
 
   const handleOnAddNewAddress = useCallback(() => {
     createCollectionOrAddAddressRef.current?.dismiss();
-
     setTimeout(
       () => navigation.navigate('Explore', { screen: 'ExploreScreen' }),
       400
@@ -125,6 +124,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
         )}
         <Spacer horizontal value={scale(Platform.OS === 'android' ? 24 : 32)} />
         <Button
+          testID="Add_Address_Or_Create_Collection_Button"
           type="circular"
           onPress={handleOnCreateCollectionOrAddAddress}
           style={styles.addButton}

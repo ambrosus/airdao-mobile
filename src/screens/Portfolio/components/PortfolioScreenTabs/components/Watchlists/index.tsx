@@ -7,7 +7,7 @@ export const WatchList = () => {
   const { watchlist } = useWatchlist();
 
   return (
-    <View style={{ paddingHorizontal: 17 }}>
+    <View style={{ paddingHorizontal: 17 }} testID="Watchlist">
       <WalletList
         isListOpened={true}
         isPortfolioFlow={true}

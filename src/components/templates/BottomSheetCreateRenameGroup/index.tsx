@@ -83,7 +83,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const bottomSafeArea = useSafeAreaInsets().bottom - 10;
 
     return (
-      <>
+      <View testID="BottomSheetCreateRename">
         <BottomSheet
           height={350}
           ref={localRef}
@@ -91,7 +91,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }
           }
         >
-          <View testID="BottomSheetCreateRename" style={styles.container}>
+          <View style={styles.container}>
             <View style={styles.content}>
               <View style={styles.icon}>
                 <BottomSheetSwiperIcon />
@@ -165,7 +165,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
             </View>
           </View>
         </BottomSheet>
-      </>
+      </View>
     );
   }
 );

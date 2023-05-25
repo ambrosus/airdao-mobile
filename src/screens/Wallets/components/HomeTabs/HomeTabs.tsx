@@ -40,7 +40,7 @@ export const HomeTabs = () => {
   );
 
   return (
-    <View style={styles.homeTabs} testID="lists-screen">
+    <View style={styles.homeTabs} testID="Home_Tabs">
       <TabView<HomeTabViewRoute>
         style={styles.tabView}
         navigationState={{ index, routes }}

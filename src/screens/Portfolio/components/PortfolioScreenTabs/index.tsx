@@ -105,6 +105,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
               Portfolio
             </Text>
             <Button
+              testID="Create_Collection_Button"
               onPress={portfolioTabsButton}
               style={styles.createNewListButton}
             >

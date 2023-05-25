@@ -41,7 +41,7 @@ const highlightsItems: {
 
 export const HomeHighlights = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} testID="Home_Highlights">
       <Row
         style={styles.header}
         justifyContent="space-between"

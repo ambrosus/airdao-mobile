@@ -39,7 +39,7 @@ export const PortfolioScreen = () => {
     portfolioTabRoutes as unknown as PortfolioTabViewRoute[]
   );
   return (
-    <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
+    <SafeAreaView style={{ flex: 1 }} testID="Portfolio_Screen">
       <TabView<PortfolioTabViewRoute>
         navigationState={{ index, routes }}
         renderScene={renderScene}

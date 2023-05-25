@@ -113,6 +113,7 @@ export function HomeHeader(): JSX.Element {
 
   return (
     <Header
+      testID="Home_Screen_Header"
       backIconVisible={false}
       style={headerStyles}
       contentRight={renderContentRight}

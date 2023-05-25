@@ -98,6 +98,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
   return (
     <>
       <Swipeable
+        testID="Swipeable_Element"
         enabled={isPortfolioFlow}
         renderRightActions={() => renderRightActions()}
       >

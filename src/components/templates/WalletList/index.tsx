@@ -52,7 +52,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
 
   const renderEmpty = () => {
     return (
-      <View testID="empty-list" style={styles.emptyContainer}>
+      <View testID="Empty_Watchlist" style={styles.emptyContainer}>
         <EmptyWalletListPlaceholderIcon />
         <Spacer value={verticalScale(16)} />
         <Text

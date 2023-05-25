@@ -11,7 +11,7 @@ type RenderEmptyProps = {
 
 export const RenderEmpty = ({ text }: RenderEmptyProps) => {
   return (
-    <View testID="empty-list" style={styles.emptyContainer}>
+    <View testID="Empty_Item" style={styles.emptyContainer}>
       <EmptyWalletListPlaceholderIcon />
       <Spacer value={verticalScale(16)} />
       <Text fontFamily="Inter_400Regular" fontSize={15} color="#51545a">
