@@ -25,6 +25,7 @@ export * from './LogoBig';
 export * from './LogoGradient';
 export * from './Messages';
 export * from './Notification';
+export * from './Options';
 export * from './PlusIcon';
 export * from './RightArrow';
 export * from './Scanner';

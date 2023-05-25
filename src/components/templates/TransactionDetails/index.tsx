@@ -16,6 +16,8 @@ interface TransactionDetailsProps {
   transaction: Transaction;
 }
 
+const ROW_MARGIN = verticalScale(24);
+
 const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
   <Row alignItems="center" justifyContent="space-between">
     {children}
@@ -43,7 +45,7 @@ export const TransactionDetails = (
           {transaction.type}
         </Text>
       </JustifiedRow>
-      <Spacer value={verticalScale(28)} />
+      <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           Amount
@@ -54,7 +56,7 @@ export const TransactionDetails = (
       </JustifiedRow>
       {transaction.from && (
         <>
-          <Spacer value={verticalScale(28)} />
+          <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
               From
@@ -71,7 +73,7 @@ export const TransactionDetails = (
       )}
       {transaction.to && (
         <>
-          <Spacer value={verticalScale(28)} />
+          <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
               To
@@ -86,16 +88,7 @@ export const TransactionDetails = (
           </JustifiedRow>
         </>
       )}
-      <Spacer value={verticalScale(28)} />
-      <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          TxHash
-        </Text>
-        <Text color="#222222" fontFamily="Inter_600SemiBold" fontSize={16}>
-          {StringUtils.formatAddress(transaction.hash, 4, 4)}
-        </Text>
-      </JustifiedRow>
-      <Spacer value={verticalScale(28)} />
+      <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           TxFee
@@ -104,7 +97,7 @@ export const TransactionDetails = (
           {transaction.fee}
         </Text>
       </JustifiedRow>
-      <Spacer value={verticalScale(28)} />
+      <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           Time
@@ -113,6 +106,7 @@ export const TransactionDetails = (
           {dayjs(transaction.timestamp).fromNow()}
         </Text>
       </JustifiedRow>
+      <Spacer value={ROW_MARGIN} />
       <Button
         type="circular"
         style={styles.shareBtn}

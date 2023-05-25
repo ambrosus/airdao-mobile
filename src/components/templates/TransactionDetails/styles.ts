@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
   },
   shareBtn: {
     backgroundColor: '#0e0e0e0d',
-    marginTop: verticalScale(40.5),
     paddingVertical: verticalScale(12.5)
   }
 });
