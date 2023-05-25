@@ -1,0 +1,27 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "jsx": "react",
+    "allowJs": true,
+    "paths": {
+      "@navigation/*": ["./src/navigation/*"],
+      "@appTypes/*": ["./src/appTypes/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@components/*": ["./src/components/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@models/*": ["./src/models/*"],
+      "@api/*": ["./src/api/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@*": ["./src/*"]
+    }
+  }
+}
