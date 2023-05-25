@@ -11,14 +11,14 @@ import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useLists } from '@contexts/ListsContext';
 
-interface AddWalletToListProps {
+export interface AddWalletToListProps {
   wallet: ExplorerAccount;
   lists: AccountList[];
-  onWalletToggled?: () => unknown;
+  onWalletMove?: (newList: AccountList) => unknown;
 }
 
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
-  const { wallet, lists, onWalletToggled } = props;
+  const { wallet, lists, onWalletMove } = props;
   const { toggleAddressInList } = useLists((v) => v);
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
@@ -29,7 +29,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
 
   const toggleWalletInList = (list: AccountList) => {
     toggleAddressInList(wallet, list);
-    if (typeof onWalletToggled === 'function') onWalletToggled();
+    if (typeof onWalletMove === 'function') onWalletMove(list);
   };
 
   const renderList = (args: ListRenderItemInfo<AccountList>) => {

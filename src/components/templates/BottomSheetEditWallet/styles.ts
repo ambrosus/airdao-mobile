@@ -1,24 +1,17 @@
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  header: {
-    shadowColor: 'transparent',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+  content: {
+    paddingHorizontal: scale(18),
+    paddingBottom: verticalScale(24)
   },
-  headerTitle: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 20,
-    color: COLORS.smokyBlack
-  },
-  saveBtnAndroid: {
-    backgroundColor: COLORS.deepBlue,
-    borderRadius: 1000,
-    width: '90%',
+  actionBtn: {
+    marginTop: verticalScale(24),
+    paddingVertical: verticalScale(12),
     alignSelf: 'center',
-    paddingVertical: 12,
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: COLORS.smokyBlack5,
+    width: '100%'
   }
 });

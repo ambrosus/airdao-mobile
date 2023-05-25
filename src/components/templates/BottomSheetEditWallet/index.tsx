@@ -1,26 +1,19 @@
-import React, { ForwardedRef, forwardRef, useCallback, useState } from 'react';
-import { Platform, View } from 'react-native';
-import { EditWallet } from '../EditWallet';
+import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
+import { View } from 'react-native';
 import {
   BottomSheet,
   BottomSheetProps,
-  BottomSheetRef,
-  Header
+  BottomSheetRef
 } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { usePersonalList } from '@hooks/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import {
-  useAllAddressesReducer,
-  useLists,
-  useOnboardingStatus
-} from '@contexts';
-import { verticalScale } from '@utils/scaling';
-import { CloseIcon } from '@components/svg/icons';
-import { OnboardingView } from '../OnboardingView';
+import { useAllAddressesReducer, useLists } from '@contexts';
+import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
 import { COLORS } from '@constants/colors';
+import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 import { styles } from './styles';
+import { Toast, ToastType } from '@components/modular';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -33,119 +26,145 @@ export const BottomSheetEditWallet = forwardRef<
   const { wallet, ...bottomSheetProps } = props;
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { personalList } = usePersonalList();
-  const [name, setName] = useState(wallet.name);
-  const [isPersonalAddress, setIsPersonalAddress] = useState(
-    personalList.indexOfItem(wallet, 'address') > -1
+  const { listsOfAddressGroup, toggleAddressInList } = useLists((v) => v);
+  const renameWalletModalRef = useRef<BottomSheetRef>(null);
+  const addToCollectionModalRef = useRef<BottomSheetRef>(null);
+
+  const listsWithCurrentWallet = listsOfAddressGroup.filter((list) =>
+    list.accounts.some((acc) => acc.address === wallet.address)
   );
-  const { status } = useOnboardingStatus((v) => v);
-  const { createGroupRef } = useLists((v) => v);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const saveAddress = async () => {
-    const newWallet: ExplorerAccount = Object.assign({}, wallet);
-    newWallet.name = name;
-    newWallet.isPersonal = isPersonalAddress;
-    allAddressesReducer({ type: 'update', payload: newWallet });
-    localRef.current?.dismiss();
-  };
-
-  const dismiss = useCallback(() => {
+  const dismissThis = useCallback(() => {
     localRef.current?.dismiss();
   }, [localRef]);
 
-  // onboarding functions
-  const onSaveAddressOnboardingBack = () => {
-    setTimeout(() => {
-      createGroupRef.current?.show();
-    }, 500);
-  };
+  const showRename = useCallback(() => {
+    renameWalletModalRef.current?.show();
+  }, [renameWalletModalRef]);
 
-  // end of onboarding functions
-  const renderContentRight = () => {
-    const isToolTipVisible = status === 10;
-    return (
-      <OnboardingView
-        thisStep={10}
-        childrenAlwaysVisible
-        tooltipPlacement="left"
-        contentStyle={{ marginTop: verticalScale(20) }}
-        helpers={{
-          next: saveAddress,
-          back: onSaveAddressOnboardingBack
-        }}
-      >
-        <Button onPress={saveAddress}>
-          <Text color={isToolTipVisible ? COLORS.white : COLORS.jungleGreen}>
-            Save
-          </Text>
-        </Button>
-      </OnboardingView>
-    );
-  };
+  const dismissRename = useCallback(() => {
+    renameWalletModalRef.current?.dismiss();
+  }, [renameWalletModalRef]);
+
+  const handleOnRenameAddress = useCallback(
+    (newName: string | false) => {
+      if (!newName) return;
+      const saveAddress = async () => {
+        const newWallet: ExplorerAccount = Object.assign({}, wallet);
+        newWallet.name = newName;
+        allAddressesReducer({ type: 'update', payload: newWallet });
+        dismissThis();
+        dismissRename();
+      };
+      saveAddress();
+    },
+    [allAddressesReducer, dismissRename, dismissThis, wallet]
+  );
+
+  const showAddToCollection = useCallback(() => {
+    addToCollectionModalRef.current?.show();
+  }, [addToCollectionModalRef]);
+
+  const dismissAddToCollection = useCallback(() => {
+    addToCollectionModalRef.current?.dismiss();
+  }, [addToCollectionModalRef]);
+
+  const removeFromCollection = useCallback(() => {
+    if (listsWithCurrentWallet.length > 0) {
+      const list = listsWithCurrentWallet[0];
+      toggleAddressInList(wallet, list);
+      dismissThis();
+      Toast.show({
+        title: '',
+        message: 'Successfully removed wallet from collection!',
+        type: ToastType.Top
+      });
+    }
+  }, [dismissThis, listsWithCurrentWallet, toggleAddressInList, wallet]);
 
   return (
-    <View testID="BottomSheetEditWallet">
-      <BottomSheet
-        ref={localRef}
-        fullscreen
-        avoidKeyboard={false}
-        {...bottomSheetProps}
-      >
-        <>
-          <Header
-            style={styles.header}
-            backIconVisible={false}
-            contentLeft={
-              <Button onPress={dismiss}>
-                <CloseIcon />
-              </Button>
-            }
-            contentRight={Platform.OS === 'ios' && renderContentRight()}
-            titleStyle={styles.headerTitle}
-            title="Edit Address"
-          />
-          {wallet && (
-            <>
-              <EditWallet
-                wallet={wallet}
-                name={name}
-                onNameChange={setName}
-                isPersonalAddress={isPersonalAddress}
-                onIsPersonalAddressChange={setIsPersonalAddress}
-                onboardingProps={{ onAddressNameTooltipBackPress: dismiss }}
-              />
-              {Platform.OS === 'android' && (
-                <View
-                  style={{
-                    bottom: verticalScale(85)
-                  }}
-                >
-                  <OnboardingView
-                    thisStep={10}
-                    childrenAlwaysVisible
-                    tooltipPlacement="top"
-                    helpers={{
-                      next: saveAddress,
-                      back: onSaveAddressOnboardingBack
-                    }}
-                  >
-                    <Button
-                      style={styles.saveBtnAndroid}
-                      testID="BottomSheet_Edit_Wallet_FloatButton"
-                      onPress={saveAddress}
-                    >
-                      <Text fontWeight="500" title color={COLORS.white}>
-                        Save
-                      </Text>
-                    </Button>
-                  </OnboardingView>
-                </View>
+    <BottomSheet
+      ref={localRef}
+      swiperIconVisible
+      avoidKeyboard={false}
+      {...bottomSheetProps}
+    >
+      <View style={styles.content}>
+        <Button type="circular" onPress={showRename} style={styles.actionBtn}>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.smokyBlack}
+          >
+            Rename Address
+          </Text>
+        </Button>
+        {listsWithCurrentWallet.length > 0 ? (
+          <>
+            <Button
+              type="circular"
+              onPress={showAddToCollection}
+              style={styles.actionBtn}
+            >
+              <Text
+                fontSize={16}
+                fontFamily="Inter_600SemiBold"
+                color={COLORS.smokyBlack}
+              >
+                Move to another collection
+              </Text>
+            </Button>
+            <Button
+              type="circular"
+              style={{
+                ...styles.actionBtn,
+                backgroundColor: COLORS.transparent
+              }}
+              onPress={removeFromCollection}
+            >
+              <Text color={COLORS.crimsonRed}>Remove from collection</Text>
+            </Button>
+            <BottomSheetAddWalletToList
+              ref={addToCollectionModalRef}
+              title="Move to another collection"
+              wallet={wallet}
+              lists={listsOfAddressGroup.filter(
+                (list) => listsWithCurrentWallet.indexOfItem(list, 'id') === -1
               )}
-            </>
-          )}
-        </>
-      </BottomSheet>
-    </View>
+              onWalletMove={dismissAddToCollection}
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              type="circular"
+              onPress={showAddToCollection}
+              style={styles.actionBtn}
+            >
+              <Text
+                fontSize={16}
+                fontFamily="Inter_600SemiBold"
+                color={COLORS.smokyBlack}
+              >
+                Add to collection
+              </Text>
+            </Button>
+            <BottomSheetAddWalletToList
+              ref={addToCollectionModalRef}
+              title="Add to collection"
+              wallet={wallet}
+              lists={listsOfAddressGroup}
+              onWalletMove={dismissAddToCollection}
+            />
+          </>
+        )}
+      </View>
+
+      <BottomSheetRenameAddress
+        handleOnRename={handleOnRenameAddress}
+        ref={renameWalletModalRef}
+        address={wallet.name}
+      />
+    </BottomSheet>
   );
 });

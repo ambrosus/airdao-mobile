@@ -11,10 +11,9 @@ import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
-import { useAllAddressesReducer } from '@contexts';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
-import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
+import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 
 type Props = {
   item: ExplorerAccount;
@@ -42,25 +41,13 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
       }
     : {};
 
-  const renameAddressRef = useRef<BottomSheetRef>(null);
-  const handleOnOpenRenameAddress = () => renameAddressRef.current?.show();
+  const editModalRef = useRef<BottomSheetRef>(null);
+  const swipeable = useRef<Swipeable>(null);
 
-  const allAddressesReducer = useAllAddressesReducer();
-
-  const handleOnRenameAddress = useCallback(
-    (newName: string | false) => {
-      if (!newName) return;
-      const saveAddress = async () => {
-        const newWallet: ExplorerAccount = Object.assign({}, item);
-        newWallet.name = newName;
-        newWallet.isPersonal = false;
-        allAddressesReducer({ type: 'update', payload: newWallet });
-        renameAddressRef.current?.dismiss();
-      };
-      saveAddress();
-    },
-    [allAddressesReducer, item, renameAddressRef]
-  );
+  const showEdit = () => {
+    editModalRef.current?.show();
+    swipeable.current?.close();
+  };
 
   const renderRightActions = () => {
     return (
@@ -74,7 +61,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             width: scale(130)
           }}
         >
-          <Button onPress={handleOnOpenRenameAddress}>
+          <Button onPress={showEdit}>
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
           <Spacer horizontal value={scale(52)} />
@@ -82,11 +69,6 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             <RemoveIcon />
           </Button>
         </View>
-        <BottomSheetRenameAddress
-          handleOnRename={handleOnRenameAddress}
-          ref={renameAddressRef}
-          address={item.address}
-        />
         <BottomSheetRemoveAddressFromWatchlists
           item={item}
           ref={confirmRemoveRef}
@@ -98,6 +80,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
   return (
     <>
       <Swipeable
+        ref={swipeable}
         enabled={isPortfolioFlow}
         renderRightActions={() => renderRightActions()}
       >
@@ -115,6 +98,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
           </Button>
         </View>
+        <BottomSheetEditWallet wallet={item} ref={editModalRef} />
       </Swipeable>
     </>
   );
