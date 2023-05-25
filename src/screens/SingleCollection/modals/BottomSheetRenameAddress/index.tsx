@@ -1,14 +1,14 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BottomSheetFloat } from '@components/modular';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -23,14 +23,10 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
     );
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
-    const bottomSafeArea = useSafeAreaInsets().bottom - 10;
-
     return (
-      <BottomSheet
+      <BottomSheetFloat
         ref={localRef}
-        containerStyle={
-          Platform.OS === 'android' && { marginBottom: bottomSafeArea }
-        }
+        containerStyle={{ paddingBottom: verticalScale(24) }}
       >
         <View style={styles.icon}>
           <BottomSheetSwiperIcon />
@@ -95,7 +91,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             Cancel
           </Text>
         </Button>
-      </BottomSheet>
+      </BottomSheetFloat>
     );
   }
 );

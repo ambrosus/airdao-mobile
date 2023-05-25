@@ -9,7 +9,7 @@ import { Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddIcon } from '@components/svg/icons/AddIcon';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
@@ -20,6 +20,7 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
 import { PlusIcon } from '@components/svg/icons';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -32,6 +33,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
+  const bottomTabHeight = useBottomTabBarHeight();
 
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
   const handleOnOpenCreateNewList = useCallback(() => {
@@ -172,10 +174,13 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
       {Platform.OS === 'android' && (
         <Button
           type="circular"
-          style={styles.androidButton}
+          style={{
+            ...styles.androidButton,
+            bottom: bottomTabHeight + verticalScale(54)
+          }}
           onPress={addAddressOrCreateCollectionButton}
         >
-          <PlusIcon color="white" />
+          <PlusIcon color={COLORS.white} />
         </Button>
       )}
       <BottomSheetCreateRenameGroup

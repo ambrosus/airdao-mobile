@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,8 +24,8 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     position: 'absolute',
     alignSelf: 'flex-end',
-    bottom: '18%',
-    right: '4%',
+    bottom: 50,
+    right: scale(15),
     zIndex: 10
   }
 });
