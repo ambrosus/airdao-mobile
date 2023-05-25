@@ -19,7 +19,7 @@ export const ExploreScreen = () => {
       style={{ flex: 1, paddingTop: verticalScale(12) }}
       testID="explore-screen"
     >
-      <KeyboardDismissingView style={{ flex: 1 }}>
+      <KeyboardDismissingView style={{ flex: 1 }} testID="explore-screen-kdv">
         <SearchAddress initialValue={addressFromParams} />
       </KeyboardDismissingView>
     </SafeAreaView>
