@@ -14,12 +14,13 @@ import { COLORS } from '@constants/colors';
 import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
+import { useWatchlist } from '@hooks';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
   listInfoVisible?: boolean;
   nameVisible?: boolean;
-  onToggleWatchlist: () => unknown;
+  onToggleWatchlist?: (isOnWatchlist: boolean) => unknown;
 }
 
 export const ExplorerAccountView = (
@@ -28,6 +29,7 @@ export const ExplorerAccountView = (
   const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
   const { listsOfAddressGroup } = useLists((v) => v);
   const fullscreenHeight = useFullscreenModalHeight();
+  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
 
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
@@ -46,6 +48,18 @@ export const ExplorerAccountView = (
 
   const hideAddToList = () => {
     addToListModal.current?.dismiss();
+  };
+
+  const toggleWatchlist = async () => {
+    if (account) {
+      if (account.isOnWatchlist) {
+        removeFromWatchlist(account);
+        if (typeof onToggleWatchlist === 'function') onToggleWatchlist(false);
+      } else {
+        addToWatchlist(account);
+        if (typeof onToggleWatchlist === 'function') onToggleWatchlist(true);
+      }
+    }
   };
 
   const renderListAndWalletInfo = () => {
@@ -82,14 +96,16 @@ export const ExplorerAccountView = (
   return (
     <View style={styles.container}>
       {nameVisible && (
-        <Row alignItems="center">
-          <Text fontFamily="Inter_600SemiBold" fontSize={15}>
-            {account.name}
-          </Text>
-          {renderListAndWalletInfo()}
-        </Row>
+        <>
+          <Row alignItems="center">
+            <Text fontFamily="Inter_600SemiBold" fontSize={15}>
+              {account.name}
+            </Text>
+            {renderListAndWalletInfo()}
+          </Row>
+          <Spacer value={verticalScale(13)} />
+        </>
       )}
-      <Spacer value={verticalScale(13)} />
       <Row alignItems="center">
         <CopyToClipboardButton
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
@@ -120,7 +136,7 @@ export const ExplorerAccountView = (
               : COLORS.mainBlue
           }}
           type="circular"
-          onPress={onToggleWatchlist}
+          onPress={toggleWatchlist}
         >
           <Row alignItems="center">
             <Text

@@ -2,9 +2,8 @@ import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TransactionDetails } from '../TransactionDetails';
 import { Button, Spacer, Text } from '@components/base';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { TransactionItem } from '@components/modular';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetFloat, TransactionItem } from '@components/modular';
 import { Transaction } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
 
@@ -28,9 +27,8 @@ export const ExplorerAccountTransactionItem = (
       <Button disabled={disabled} onPress={showTransactionDetails}>
         <TransactionItem transaction={transaction} />
       </Button>
-      <BottomSheet ref={transactionDetailsModal} height={verticalScale(556.58)}>
+      <BottomSheetFloat ref={transactionDetailsModal} swiperIconVisible>
         <View style={styles.transactionDetailsTop}>
-          <BottomSheetSwiperIcon />
           <Spacer value={verticalScale(26.46)} />
           <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
             Transaction Details
@@ -39,7 +37,7 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetails}>
           <TransactionDetails transaction={transaction} />
         </View>
-      </BottomSheet>
+      </BottomSheetFloat>
     </>
   );
 };
@@ -47,12 +45,10 @@ export const ExplorerAccountTransactionItem = (
 const styles = StyleSheet.create({
   transactionDetailsTop: {
     alignSelf: 'center',
-    alignItems: 'center',
-    marginTop: verticalScale(16.3)
+    alignItems: 'center'
   },
   transactionDetails: {
-    flex: 1,
-    paddingTop: verticalScale(31),
-    paddingHorizontal: scale(21)
+    paddingVertical: verticalScale(24),
+    paddingHorizontal: scale(24)
   }
 });

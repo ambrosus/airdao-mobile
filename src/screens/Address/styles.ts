@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#2f2b431a'
   },
   headerBtn: {
-    backgroundColor: '#2f2b431a',
+    backgroundColor: COLORS.smokyBlack5,
     height: moderateScale(36),
     width: moderateScale(36)
   },
