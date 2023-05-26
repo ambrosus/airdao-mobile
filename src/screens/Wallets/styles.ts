@@ -7,10 +7,9 @@ const homeTabsContainerHeight = Dimensions.get('screen').height * 0.44;
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f3f5f7',
-    paddingBottom: '25%'
+    paddingBottom: verticalScale(126)
   },
   homeTabs: {
-    paddingHorizontal: scale(10),
     marginHorizontal: scale(16),
     backgroundColor: 'white',
     borderRadius: 24,
@@ -19,7 +18,8 @@ export const styles = StyleSheet.create({
   homeHighlights: {
     backgroundColor: 'white',
     borderRadius: 24,
-    marginHorizontal: scale(16)
+    marginHorizontal: scale(16),
+    paddingBottom: verticalScale(28)
   },
   divider: {
     height: 2,

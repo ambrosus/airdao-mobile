@@ -1,12 +1,11 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
+import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
+import { BottomSheetFloat } from '@components/modular';
 import { useForwardedRef } from '@hooks';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -20,65 +19,53 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
 >(({ handleCreateCollectionPress, handleOnAddNewAddress }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
-  const bottomSafeArea = useSafeAreaInsets().bottom - 10;
-
   return (
-    <BottomSheet
-      height={250}
-      ref={localRef}
-      containerStyle={
-        Platform.OS === 'android' && { marginBottom: bottomSafeArea }
-      }
-    >
-      <View style={{ flex: 1 }}>
-        <View
+    <BottomSheetFloat ref={localRef} swiperIconVisible>
+      <View
+        style={{
+          paddingHorizontal: scale(18),
+          paddingBottom: verticalScale(24)
+        }}
+      >
+        <Spacer value={scale(24)} />
+        <Button
+          onPress={handleOnAddNewAddress}
+          type="circular"
           style={{
-            paddingHorizontal: scale(18)
+            backgroundColor: COLORS.electricBlue,
+            width: '90%',
+            alignSelf: 'center'
           }}
         >
-          <View style={{ alignSelf: 'center', paddingTop: verticalScale(16) }}>
-            <BottomSheetSwiperIcon />
-          </View>
-          <Spacer value={scale(24)} />
-          <Button
-            onPress={handleOnAddNewAddress}
-            type="circular"
-            style={{
-              backgroundColor: COLORS.electricBlue,
-              width: '90%',
-              alignSelf: 'center'
-            }}
+          <Text
+            style={{ marginVertical: 12 }}
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.white}
           >
-            <Text
-              style={{ marginVertical: 12 }}
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.white}
-            >
-              Add Address
-            </Text>
-          </Button>
-          <Spacer value={scale(24)} />
-          <Button
-            onPress={handleCreateCollectionPress}
-            type="circular"
-            style={{
-              backgroundColor: COLORS.charcoal,
-              width: '90%',
-              alignSelf: 'center'
-            }}
+            Add Address
+          </Text>
+        </Button>
+        <Spacer value={scale(24)} />
+        <Button
+          onPress={handleCreateCollectionPress}
+          type="circular"
+          style={{
+            backgroundColor: COLORS.charcoal,
+            width: '90%',
+            alignSelf: 'center'
+          }}
+        >
+          <Text
+            style={{ marginVertical: 12 }}
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.smokyBlack}
           >
-            <Text
-              style={{ marginVertical: 12 }}
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.smokyBlack}
-            >
-              Create Collection
-            </Text>
-          </Button>
-        </View>
+            Create Collection
+          </Text>
+        </Button>
       </View>
-    </BottomSheet>
+    </BottomSheetFloat>
   );
 });

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
@@ -13,16 +13,15 @@ export const styles = StyleSheet.create({
     paddingTop: scale(24)
   },
   addButton: {
-    marginTop: scale(10),
-    alignSelf: 'center',
-    alignItems: 'center',
+    right: scale(24),
+    position: 'absolute',
     backgroundColor: COLORS.electricBlue,
     borderRadius: 50,
-    width: 32,
-    height: 32
+    width: moderateScale(32),
+    height: moderateScale(32)
   },
   homeWatchlistsContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: scale(24),
     flex: 1
   },
   seeAllButton: {
