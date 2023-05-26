@@ -72,6 +72,5 @@ describe('SearchAddress', () => {
   });
 });
 
-// TODO clearInput
 // TODO WatchlistAddSuccess
 // TODO AccountTransactions

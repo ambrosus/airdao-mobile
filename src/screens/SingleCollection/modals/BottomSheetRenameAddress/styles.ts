@@ -21,6 +21,20 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.silver
   },
+  saveButton: {
+    backgroundColor: COLORS.deepBlue,
+    marginHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 25,
+    alignItems: 'center'
+  },
+  cancelButton: {
+    backgroundColor: COLORS.charcoal,
+    marginHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 25,
+    alignItems: 'center'
+  },
   bottomSheetCreateRenameButton: {
     backgroundColor: COLORS.grey,
     marginHorizontal: 18,

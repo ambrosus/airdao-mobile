@@ -21,7 +21,7 @@ export const HomeWatchlists = () => {
   }, [navigation]);
 
   if (watchlist.length === 0) {
-    return <RenderEmpty text="addresses" />;
+    return <RenderEmpty title="addresses" />;
   }
 
   return (

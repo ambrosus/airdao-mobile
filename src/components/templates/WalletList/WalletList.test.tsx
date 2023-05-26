@@ -1,15 +1,24 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { WalletList } from '.';
-import { act, fireEvent, render } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { MockExplorerAccount } from '@mocks/models';
 
 const mockAccount = MockExplorerAccount;
 
+jest.mock('victory-native', () => {
+  return {
+    VictoryChart: jest.fn(),
+    VictoryTheme: {},
+    VictoryLine: jest.fn(),
+    VictoryAxis: jest.fn()
+  };
+});
+
 const Component = () => (
   <SafeAreaProvider>
     <WalletList
-      title="Test List"
+      title="Test Collection"
       totalAmount={1000}
       data={[mockAccount]}
       emptyText={'Test Empty'}
@@ -20,8 +29,8 @@ const Component = () => (
 const ComponentWithEmptyData = () => (
   <SafeAreaProvider>
     <WalletList
-      title="Test List"
-      totalAmount={1000}
+      title="Empty Test Collection"
+      totalAmount={0}
       data={[]}
       emptyText={'Test Empty'}
     />
@@ -34,24 +43,17 @@ jest.mock('@hooks', () => ({
   useAMBPrice: () => []
 }));
 
-describe('WatchlistAddSuccess Component', () => {
+describe('WalletList Component', () => {
   it('should render correctly', () => {
-    const { getByTestId, queryByTestId, getByText } = render(<Component />);
-    expect(getByTestId('wallet-list-container')).toBeDefined();
-    const toggleBtn = getByTestId('toggle-button');
-    expect(toggleBtn).toBeDefined();
-    expect(getByText('Test List')).toBeDefined();
-    expect(getByTestId('wallet-list-total-amount')).toBeDefined();
-    expect(queryByTestId('wallet-list')).toBe(null);
-    // toggle list
-    act(() => fireEvent.press(toggleBtn));
-    expect(getByTestId('wallet-list')).toBeDefined();
+    const { getByTestId, getByText, findByText } = render(<Component />);
+    expect(getByText('Test Collection')).toBeDefined();
+    expect(findByText('~ $ 1,000')).toBeDefined();
+    expect(getByTestId('ToggleButton_WatchList')).toBeDefined();
+    expect(getByTestId('AnimatedView')).toBeDefined();
   });
-  it('should render correctly with empty data', () => {
-    const { getByTestId } = render(<ComponentWithEmptyData />);
-    expect(getByTestId('wallet-list-container')).toBeDefined();
-    const toggleBtn = getByTestId('toggle-button');
-    act(() => fireEvent.press(toggleBtn));
-    expect(getByTestId('empty-list')).toBeDefined();
+  it('should be rendered correctly with empty data', () => {
+    const { getByText, findByText } = render(<ComponentWithEmptyData />);
+    expect(getByText('Empty Test Collection')).toBeTruthy();
+    expect(findByText('0')).toBeTruthy();
   });
 });

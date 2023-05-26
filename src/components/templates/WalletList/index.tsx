@@ -104,13 +104,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
           <View>
             <FlatList
               ItemSeparatorComponent={() => (
-                <View
-                  style={{
-                    flex: 1,
-                    height: 2,
-                    backgroundColor: COLORS.charcoal
-                  }}
-                />
+                <View style={styles.itemSeparator} />
               )}
               style={{ height: '100%' }}
               data={data}

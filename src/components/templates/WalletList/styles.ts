@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
     padding: scale(12)
   },
+  itemSeparator: {
+    flex: 1,
+    height: 2,
+    backgroundColor: COLORS.charcoal
+  },
   chevronIcon: {
     width: scale(12),
     height: scale(12)
@@ -35,14 +40,10 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(200)
   },
   rightActions: {
-    marginTop: 30,
-    alignContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
+    backgroundColor: COLORS.charcoal,
     justifyContent: 'center',
-    width: 152,
-    height: scale(82),
+    alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: COLORS.charcoal
+    width: scale(130)
   }
 });

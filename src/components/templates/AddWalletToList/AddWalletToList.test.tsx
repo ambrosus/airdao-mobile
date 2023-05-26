@@ -2,7 +2,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AddWalletToList } from '@components/templates';
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { CheckBox } from '@components/composite';
 import { ExplorerAccountType } from '@appTypes';
 
@@ -19,7 +19,15 @@ Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
 });
 
-const onPressList = jest.fn();
+jest.mock('@contexts/ListsContext', () => ({
+  useLists: jest.fn(() => ({
+    toggleAddressInList: jest.fn()
+  }))
+}));
+
+// toggleAddressInList
+
+const hideAddToList = jest.fn();
 const wallet = {
   _id: 'wallet-id',
   address: 'wallet-address',
@@ -63,8 +71,8 @@ const Component = () => {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <AddWalletToList
+          onWalletToggled={hideAddToList}
           lists={lists}
-          onPressList={onPressList}
           wallet={wallet}
         />
       </QueryClientProvider>
@@ -77,12 +85,6 @@ describe('AddWalletToList', () => {
     const { getAllByTestId } = render(<Component />);
     const addWalletToList = getAllByTestId('AddWalletToList_Container')[0];
     expect(addWalletToList).toBeDefined();
-  });
-
-  it('calls onPressList when a list is pressed', () => {
-    const { getByText } = render(<Component />);
-    fireEvent.press(getByText('SingleCollection 1'));
-    expect(onPressList).toHaveBeenCalledWith(lists[0]);
   });
 
   it('displays the correct number of addresses in each list', () => {

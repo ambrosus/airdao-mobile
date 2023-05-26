@@ -21,7 +21,7 @@ export const HomeCollections = () => {
   }, [navigation]);
 
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="collections" />;
+    return <RenderEmpty title="collections" />;
   }
 
   return (

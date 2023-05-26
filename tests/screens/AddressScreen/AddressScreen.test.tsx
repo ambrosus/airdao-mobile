@@ -13,14 +13,6 @@ jest.mock('victory-native', () => {
   };
 });
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => ({

@@ -26,7 +26,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
     const bottomSafeArea = useSafeAreaInsets().bottom - 10;
 
     return (
-      <>
+      <View testID="BottomSheet_Rename_Address">
         <BottomSheet
           height={400}
           ref={localRef}
@@ -49,23 +49,19 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             </Text>
           </View>
           <Input
+            testID="Rename_Address_Input"
             value={localAddressName}
             onChangeValue={(value) => setLocalAddressName(value)}
             type="text"
-            placeholder="Enter list name"
+            placeholder="Enter name"
             placeholderTextColor="black"
             style={[styles.bottomSheetInput]}
           />
           <Spacer value={24} />
           <Button
+            testID="Save_Renamed_Address"
             type="base"
-            style={{
-              backgroundColor: COLORS.deepBlue,
-              marginHorizontal: 24,
-              paddingVertical: 16,
-              borderRadius: 25,
-              alignItems: 'center'
-            }}
+            style={styles.saveButton}
             onPress={() => {
               handleOnRename(localAddressName !== address && localAddressName);
             }}
@@ -81,13 +77,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           <Spacer value={24} />
           <Button
             type="base"
-            style={{
-              backgroundColor: COLORS.charcoal,
-              marginHorizontal: 24,
-              paddingVertical: 16,
-              borderRadius: 25,
-              alignItems: 'center'
-            }}
+            style={styles.cancelButton}
             onPress={() => localRef.current?.dismiss()}
           >
             <Text
@@ -99,7 +89,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             </Text>
           </Button>
         </BottomSheet>
-      </>
+      </View>
     );
   }
 );

@@ -17,7 +17,7 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
   const { data } = useAMBPrice();
   const { item } = props;
   return (
-    <View style={{ justifyContent: 'space-between' }}>
+    <View style={{ justifyContent: 'space-between' }} testID="Wallet_Item">
       <Row justifyContent="space-between">
         <Text
           fontFamily="Inter_600SemiBold"

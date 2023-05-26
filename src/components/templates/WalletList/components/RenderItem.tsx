@@ -65,20 +65,18 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
   const renderRightActions = () => {
     return (
       <>
-        <View
-          style={{
-            backgroundColor: COLORS.charcoal,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-            width: scale(130)
-          }}
-        >
-          <Button onPress={handleOnOpenRenameAddress}>
+        <View style={styles.rightActions} testID="Right_Actions">
+          <Button
+            testID="Rename_Address_Button"
+            onPress={handleOnOpenRenameAddress}
+          >
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
           <Spacer horizontal value={scale(52)} />
-          <Button onPress={handleConfirmRemove}>
+          <Button
+            testID="Confirm_Remove_Address_Button"
+            onPress={handleConfirmRemove}
+          >
             <RemoveIcon />
           </Button>
         </View>

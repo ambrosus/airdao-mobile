@@ -8,6 +8,7 @@ import { MockTransaction } from '../../../__mocks__';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { ExplorerAccountType } from '@appTypes';
 
 const mockTransaction = MockTransaction;
 
@@ -46,7 +47,7 @@ const mockTransaction = MockTransaction;
 //     fromNow: jest.fn
 //   }))
 // );
-dayjs().fromNow = jest.fn();
+// dayjs().fromNow = jest.fn();
 
 jest.mock('victory-native', () => {
   return {
@@ -91,17 +92,22 @@ const mockedAccount = {
   ambBalance: 100,
   address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
   name: 'Test Account',
-  isOnWatchlist: true
+  isOnWatchlist: true,
+  _id: '1234567890',
+  transactionCount: 1,
+  type: ExplorerAccountType.Account,
+  calculatePercentHoldings: () => 0
 };
-const mockedTotalSupply = 1000;
+
+const mockToggleWatchlist = jest.fn();
 
 const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <ExplorerAccountView
+          onToggleWatchlist={mockToggleWatchlist}
           account={mockedAccount}
-          totalSupply={mockedTotalSupply}
           nameVisible={true}
         />
       </QueryClientProvider>
@@ -110,9 +116,9 @@ const Component = () => {
 };
 
 describe('ExplorerAccountTransactionItem', () => {
-  afterAll(() => {
-    fromNowMock.mockRestore();
-  });
+  // afterAll(() => {
+  //   fromNowMock.mockRestore();
+  // });
   it('renders the component', () => {
     const { getByText } = render(
       <ExplorerAccountTransactionItem transaction={mockTransaction} />

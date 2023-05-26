@@ -6,16 +6,16 @@ import React from 'react';
 import { styles } from '@components/templates/RenderEmpty/styles';
 
 type RenderEmptyProps = {
-  text: string;
+  title: string;
 };
 
-export const RenderEmpty = ({ text }: RenderEmptyProps) => {
+export const RenderEmpty = ({ title }: RenderEmptyProps) => {
   return (
     <View testID="Empty_Item" style={styles.emptyContainer}>
-      <EmptyWalletListPlaceholderIcon />
+      <EmptyWalletListPlaceholderIcon testID="Empty_WalletList_Placeholder_Icon" />
       <Spacer value={verticalScale(16)} />
       <Text fontFamily="Inter_400Regular" fontSize={15} color="#51545a">
-        No {text} yet
+        No {title} yet
       </Text>
     </View>
   );

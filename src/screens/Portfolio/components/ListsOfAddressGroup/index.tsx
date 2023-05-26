@@ -10,7 +10,7 @@ type Props = {
 };
 export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="collections" />;
+    return <RenderEmpty title="collections" />;
   }
 
   return (
