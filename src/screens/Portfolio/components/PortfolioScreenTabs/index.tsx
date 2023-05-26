@@ -137,10 +137,11 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           </>
         )}
       </View>
-      <Spacer value={12} />
+      <Spacer value={verticalScale(27)} />
       <View
         style={{
-          flexDirection: 'row'
+          flexDirection: 'row',
+          paddingLeft: scale(16)
         }}
         ref={containerRef}
       >
@@ -152,15 +153,16 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             )
           });
           return (
-            <PortfolioScreenTabItem
-              key={i}
-              onPress={props.onIndexChange}
-              index={i}
-              opacity={opacity}
-              ref={refs[i]}
-            >
-              {route.title}
-            </PortfolioScreenTabItem>
+            <View key={i} style={{ marginRight: scale(16) }}>
+              <PortfolioScreenTabItem
+                onPress={props.onIndexChange}
+                index={i}
+                opacity={opacity}
+                ref={refs[i]}
+              >
+                {route.title}
+              </PortfolioScreenTabItem>
+            </View>
           );
         })}
         {measures.length > 0 && (

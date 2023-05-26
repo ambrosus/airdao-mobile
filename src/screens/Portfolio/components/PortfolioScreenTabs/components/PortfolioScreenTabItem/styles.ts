@@ -3,8 +3,6 @@ import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   tabTitle: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
     alignItems: 'center'
   },
   tabTitleText: {

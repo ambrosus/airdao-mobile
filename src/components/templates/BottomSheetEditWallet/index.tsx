@@ -27,7 +27,7 @@ export const BottomSheetEditWallet = forwardRef<
   const addToCollectionModalRef = useRef<BottomSheetRef>(null);
 
   const listsWithCurrentWallet = listsOfAddressGroup.filter((list) =>
-    list.accounts.some((acc) => acc.address === wallet.address)
+    list.accounts.some((acc) => acc?.address === wallet?.address)
   );
 
   const dismissThis = useCallback(() => {
