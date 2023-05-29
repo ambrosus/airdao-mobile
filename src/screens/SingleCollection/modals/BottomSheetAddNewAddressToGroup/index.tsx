@@ -1,10 +1,4 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  RefObject,
-  useCallback,
-  useState
-} from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useCallback } from 'react';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -20,53 +14,27 @@ import { useLists } from '@contexts/ListsContext';
 import { useWatchlist } from '@hooks';
 import { scale } from '@utils/scaling';
 import { WalletItem } from '@components/templates';
-import { ExplorerAccount } from '@models';
+import { AccountList, ExplorerAccount } from '@models';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  groupId: string;
-  groupName?: string;
+  collection: AccountList;
 };
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
   Props
->(({ groupId, groupName }, ref) => {
+>(({ collection }, ref) => {
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const handleOnAddNewAddresses = useLists((v) => v.handleOnAddNewAddresses);
-  const [idsOfSelectedAddresses, setIdsOfSelectedAddresses] = useState<
-    string[]
-  >([]);
+  const toggleAddressInList = useLists((v) => v.toggleAddressInList);
 
   const handleItemPress = useCallback(
-    (id: string) => {
-      if (!idsOfSelectedAddresses.includes(id)) {
-        setIdsOfSelectedAddresses([...idsOfSelectedAddresses, id]);
-        const ids = [...idsOfSelectedAddresses, id];
-        const selectedAddressesForGroup = watchlist.filter((item) =>
-          ids.includes(item._id)
-        );
-        handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
-      } else {
-        const selectedAddresses = idsOfSelectedAddresses.filter(
-          (i) => i !== id
-        );
-        setIdsOfSelectedAddresses(selectedAddresses);
-        const selectedAddressesForGroup = watchlist.filter((item) =>
-          selectedAddresses.includes(item._id)
-        );
-        handleOnAddNewAddresses(selectedAddressesForGroup, groupId);
-      }
+    (item: ExplorerAccount) => {
+      toggleAddressInList(item, collection);
       localRef.current?.dismiss();
     },
-    [
-      groupId,
-      handleOnAddNewAddresses,
-      idsOfSelectedAddresses,
-      localRef,
-      watchlist
-    ]
+    [collection, localRef, toggleAddressInList]
   );
 
   return (
@@ -79,7 +47,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           fontFamily="Inter_700Bold"
           fontSize={18}
           color={COLORS.nero}
-        >{`Add address to ${groupName}`}</Text>
+        >{`Add address to ${collection.name}`}</Text>
       </View>
       <Spacer value={scale(12)} />
       <View style={styles.bottomSheetInput}>
@@ -104,7 +72,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           return (
             <Button
               onPress={() => {
-                handleItemPress(item._id);
+                handleItemPress(item);
               }}
               style={{
                 paddingVertical: 18,

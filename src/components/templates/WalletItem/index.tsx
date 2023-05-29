@@ -15,15 +15,12 @@ interface WalletItemProps {
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
-  const { data } = useAMBPrice();
   const { item } = props;
-  const { data: ambTokenData } = useAMBPrice();
+  const { data } = useAMBPrice();
   const { listsOfAddressGroup } = useLists((v) => v);
-  const listWithWallet = listsOfAddressGroup.find(
-    (list) =>
-      list.accounts?.findIndex((account) => account?._id === item?._id) > -1
+  const listWithWallet = listsOfAddressGroup.find((list) =>
+    list.accounts?.findIndex((account) => account?._id === item?._id)
   );
-
   return (
     <View style={{ justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
