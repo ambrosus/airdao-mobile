@@ -17,13 +17,13 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
   return (
     <Row alignItems="center">
       <TrendIcon
-        color={color || change >= 0 ? COLORS.crimsonRed : COLORS.jungleGreen}
+        color={color || change >= 0 ? COLORS.jungleGreen : COLORS.crimsonRed}
         type={change >= 0 ? 'up' : 'down'}
       />
       <Text
         fontSize={fontSize}
         fontWeight={fontWeight}
-        color={color || change >= 0 ? COLORS.crimsonRed : COLORS.jungleGreen}
+        color={color || change >= 0 ? COLORS.jungleGreen : COLORS.crimsonRed}
         testID="PercentChange_Title"
       >
         {' '}
