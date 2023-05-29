@@ -1,9 +1,8 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { Dimensions, FlatList, Platform, View } from 'react-native';
+import { Dimensions, FlatList, Platform } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { CloseIcon } from '@components/svg/icons/Close';
 import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
@@ -71,12 +70,18 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
     const onCurrencyPress = (value: Currency) => {
       setModalActiveCurrency(value);
     };
+
     return (
       <BottomSheet
-        height={Platform.OS === 'ios' ? 852 : Dimensions.get('screen').height}
+        height={Dimensions.get('screen').height}
         ref={localRef}
+        containerStyle={styles.container}
       >
-        {Platform.OS === 'android' && <Spacer value={scale(57)} />}
+        {Platform.OS === 'android' ? (
+          <Spacer value={scale(57)} />
+        ) : (
+          <Spacer value={45} />
+        )}
         <Header
           titleStyle={styles.headerTitle}
           title="Select base currency"
@@ -90,7 +95,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
                 localRef.current?.dismiss();
               }}
             >
-              {Platform.OS === 'ios' ? <CloseIcon /> : <BackIcon />}
+              <BackIcon />
             </Button>
           }
           contentRight={
@@ -115,25 +120,23 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             </>
           }
         />
-        {Platform.OS === 'android' && <Spacer value={19} />}
-        <View>
-          <FlatList
-            contentContainerStyle={{
-              paddingBottom: 150
-            }}
-            data={mockedCurrencyList}
-            renderItem={({ item, index }) => {
-              return (
-                <SettingsModalItem
-                  modalActiveItem={modalActiveCurrency}
-                  handleItemPress={onCurrencyPress}
-                  item={item.currency}
-                  key={index}
-                />
-              );
-            }}
-          />
-        </View>
+        <Spacer value={19} />
+        <FlatList
+          contentContainerStyle={{
+            paddingBottom: 150
+          }}
+          data={mockedCurrencyList}
+          renderItem={({ item, index }) => {
+            return (
+              <SettingsModalItem
+                modalActiveItem={modalActiveCurrency}
+                handleItemPress={onCurrencyPress}
+                item={item.currency}
+                key={index}
+              />
+            );
+          }}
+        />
         {Platform.OS === 'android' && (
           <FloatButton
             title="Save"
