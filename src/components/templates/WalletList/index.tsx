@@ -101,28 +101,20 @@ export function WalletList(props: WalletListProps): JSX.Element {
       </Row>
       {listOpened &&
         (data.length > 0 ? (
-          <View>
-            <FlatList
-              ItemSeparatorComponent={() => (
-                <View
-                  style={{
-                    flex: 1,
-                    height: 2,
-                    backgroundColor: COLORS.charcoal
-                  }}
-                />
-              )}
-              style={{ height: '100%' }}
-              data={data}
-              renderItem={(item) => (
-                <RenderItem
-                  item={item.item}
-                  idx={item.index}
-                  isPortfolioFlow={isPortfolioFlow}
-                />
-              )}
-            />
-          </View>
+          <FlatList
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingTop: verticalScale(22)
+            }}
+            data={data}
+            renderItem={(item) => (
+              <RenderItem
+                item={item.item}
+                idx={item.index}
+                isPortfolioFlow={isPortfolioFlow}
+              />
+            )}
+          />
         ) : (
           renderEmpty()
         ))}
