@@ -16,7 +16,7 @@ interface WalletItemProps {
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
   const { item } = props;
-  const { data } = useAMBPrice();
+  const { data: ambTokenData } = useAMBPrice();
   const { listsOfAddressGroup } = useLists((v) => v);
   const listWithWallet = listsOfAddressGroup.find(
     (list) =>
@@ -74,7 +74,7 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
           {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
         <Row alignItems="center">
-          <PercentChange change={data?.percentChange24H || 0} />
+          <PercentChange change={ambTokenData?.percentChange24H || 0} />
         </Row>
       </Row>
     </View>

@@ -32,12 +32,12 @@ export const GroupItem: FC<Props> = ({
   swipeable
 }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
+  const { data: ambPriceData } = useAMBPrice();
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
 
   const navigation = useNavigation<PortfolioNavigationProp>();
   const swipeableRef = useRef<Swipeable>(null);
-  const { data: ambPriceData } = useAMBPrice();
   const tokensFormatted = useMemo(() => {
     const formattedNumber = NumberUtils.formatNumber(
       group.totalBalance * (ambPriceData?.priceUSD || 0),
@@ -137,9 +137,11 @@ export const GroupItem: FC<Props> = ({
             >
               {group.accountCount + ' addresses'}
             </Text>
-            <Row alignItems="center">
-              <PercentChange change={ambPriceData?.percentChange24H || 0} />
-            </Row>
+            {group.accountCount > 0 && (
+              <Row alignItems="center">
+                <PercentChange change={ambPriceData?.percentChange24H || 0} />
+              </Row>
+            )}
           </Row>
         </View>
       </Button>

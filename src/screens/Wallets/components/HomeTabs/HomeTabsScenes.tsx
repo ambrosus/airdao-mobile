@@ -36,8 +36,6 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
   const createRenameGroupRef = useRef<BottomSheetRef>(null);
 
-  const { handleOnCreate } = useLists((v) => v);
-
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
 
