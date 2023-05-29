@@ -1,42 +1,23 @@
-import React, { useReducer, useRef } from 'react';
+import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import {
-  ChevronRightIcon,
-  EyeInvisibleIcon,
-  EyeVisibleIcon,
-  ShareIcon
-} from '@components/svg/icons';
+import { ChevronRightIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
-import { BezierChart, Point, SharePortfolio } from '@components/templates';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { BezierChart, Point } from '@components/templates';
 import { Badge } from '@components/base/Badge';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 
 interface PortfolioBalanceProps {
-  USDBalance: number;
-  AMBBalance: number;
   AMBPrice: number;
-  balanceLast24HourChange: number;
   AMBPriceLast24HourChange: number; // TODO there is actually no percent change coming from API
 }
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
-  const { USDBalance, AMBBalance, balanceLast24HourChange } = props;
-  const [balanceVisible, toggleBalanceVisibility] = useReducer(
-    (visible) => !visible,
-    true
-  );
-
-  const shareBottomSheet = useRef<BottomSheetRef>(null);
+  const { AMBPrice, AMBPriceLast24HourChange } = props;
 
   const chartData: Point[] = [];
-
-  const onShareBalancePress = () => {
-    shareBottomSheet.current?.show();
-  };
 
   return (
     <View style={styles.container} testID="portfolio-balance">
@@ -62,36 +43,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             fontSize={30}
             testID="Portfolio_Balance_Title"
           >
-            $
-            {balanceVisible
-              ? NumberUtils.formatNumber(USDBalance)
-              : NumberUtils.formatNumber(USDBalance)
-                  .split('')
-                  .map((ch) => (ch === '.' ? ch : '*'))
-                  .join('')}
+            ${NumberUtils.formatNumber(AMBPrice, 6)}
           </Text>
-          {USDBalance > 0 && (
-            <Row
-              alignItems="center"
-              flex={1}
-              testID="Portfolio_Balance_USDBalance"
-            >
-              <Button
-                onPress={toggleBalanceVisibility}
-                type="circular"
-                style={styles.balanceAction}
-              >
-                {balanceVisible ? <EyeInvisibleIcon /> : <EyeVisibleIcon />}
-              </Button>
-              <Button
-                onPress={onShareBalancePress}
-                type="circular"
-                style={styles.balanceAction}
-              >
-                <ShareIcon color={COLORS.smokyBlack} />
-              </Button>
-            </Row>
-          )}
         </Row>
         <Spacer value={scale(16)} />
         <View style={styles.badge}>
@@ -103,7 +56,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
                   fontSize={16}
                   color={COLORS.jungleGreen}
                 >
-                  + {NumberUtils.formatNumber(balanceLast24HourChange)}%
+                  + {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
                 </Text>
                 <Spacer horizontal value={scale(4)} />
                 <Text
@@ -127,16 +80,6 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           axisColor="transparent"
         />
       </View>
-      <SharePortfolio
-        ref={shareBottomSheet}
-        balance={NumberUtils.formatNumber(AMBBalance, 0)}
-        currency="AMB"
-        currencyPosition="right"
-        last24HourChange={3.46}
-        title="My portfolio performance"
-        bottomSheetTitle="Share Portfolio Performance"
-        timestamp={new Date()}
-      />
     </View>
   );
 }
@@ -151,7 +94,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     borderRadius: 24,
     marginHorizontal: 20,
-    marginVertical: 20
+    marginVertical: 20,
+    alignItems: 'center'
   },
   badge: {
     width: '40%',
