@@ -1,11 +1,5 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  FlatList,
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import React, { useMemo, useRef } from 'react';
+import { Platform, SafeAreaView, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { EditIcon } from '@components/svg/icons';
@@ -14,10 +8,8 @@ import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { styles } from '@screens/SingleCollection/styles';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { BottomSheetSingleAddressOptions } from '@screens/SingleCollection/modals/BottomSheetSingleAddressOptions';
-import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
-import { BottomSheetEditCollection, WalletItem } from '@components/templates';
+import { BottomSheetEditCollection, WalletList } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { Badge } from '@components/base/Badge';
 import { scale } from '@utils/scaling';
@@ -38,10 +30,8 @@ export const SingleGroupScreen = () => {
   const navigation = useNavigation<CommonStackNavigationProp>();
   const { data: ambPriceData } = useAMBPrice();
 
-  const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
-  const singleAddressOptionsRef = useRef<BottomSheetRef>(null);
   const editCollectionModalRef = useRef<BottomSheetRef>(null);
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
 
@@ -52,18 +42,6 @@ export const SingleGroupScreen = () => {
 
   const { accounts, name } = selectedList;
   const groupTokens = selectedList.totalBalance;
-
-  const navigateToAddressDetails = (item: ExplorerAccount) => {
-    navigation.navigate('Address', { address: item.address });
-  };
-
-  const handleOnLongPress = useCallback(
-    (address: React.SetStateAction<ExplorerAccount | undefined>) => {
-      setPressedAddress(address);
-      singleAddressOptionsRef.current?.show();
-    },
-    []
-  );
 
   const showAddAddress = () => {
     addNewAddressToGroupRef.current?.show();
@@ -126,29 +104,11 @@ export const SingleGroupScreen = () => {
           }
         />
       </View>
-      <Spacer value={35} />
-      <FlatList
-        contentContainerStyle={{
-          paddingBottom: 150
-        }}
+      <WalletList
         data={accounts}
-        renderItem={({ item, index }) => {
-          const borderStyles = {
-            paddingVertical: 31,
-            borderColor: COLORS.separator,
-            borderBottomWidth: 0.5,
-            borderTopWidth: index === 0 ? 0.5 : 0
-          };
-          return (
-            <TouchableOpacity
-              onPress={() => navigateToAddressDetails(item)}
-              onLongPress={() => handleOnLongPress(item)}
-              style={[styles.touchableAreaContainer, { ...borderStyles }]}
-            >
-              <WalletItem item={item} />
-            </TouchableOpacity>
-          );
-        }}
+        emptyText={''}
+        isPortfolioFlow={true}
+        removeType="collection"
       />
       {Platform.OS === 'android' && (
         <FloatButton
@@ -161,13 +121,6 @@ export const SingleGroupScreen = () => {
         ref={addNewAddressToGroupRef}
         collection={selectedList}
       />
-      {pressedAddress && (
-        <BottomSheetSingleAddressOptions
-          ref={singleAddressOptionsRef}
-          item={pressedAddress}
-          groupId={selectedList.id}
-        />
-      )}
       <BottomSheetCreateRenameGroup
         type="rename"
         groupId={groupId}

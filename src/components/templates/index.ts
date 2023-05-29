@@ -4,6 +4,7 @@ export * from './WalletItem';
 export * from './BezierChart';
 export * from './PortfolioPerformance';
 export * from './BottomSheetEditCollection';
+export * from './BottomSheetRemoveAddressFromCollection';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetAddWalletToList';
 export * from './BottomSheetNotificationSettings';

@@ -18,9 +18,11 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
   const { item } = props;
   const { data } = useAMBPrice();
   const { listsOfAddressGroup } = useLists((v) => v);
-  const listWithWallet = listsOfAddressGroup.find((list) =>
-    list.accounts?.findIndex((account) => account?._id === item?._id)
+  const listWithWallet = listsOfAddressGroup.find(
+    (list) =>
+      list.accounts?.findIndex((account) => account?._id === item?._id) > -1
   );
+
   return (
     <View style={{ justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
