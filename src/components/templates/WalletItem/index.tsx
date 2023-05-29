@@ -7,24 +7,53 @@ import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks';
 import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { useLists } from '@contexts';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 interface WalletItemProps {
   item: ExplorerAccount;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
-  const { data } = useAMBPrice();
   const { item } = props;
+  const { data } = useAMBPrice();
+  const { listsOfAddressGroup } = useLists((v) => v);
+  const listWithWallet = listsOfAddressGroup.find((list) =>
+    list.accounts?.findIndex((account) => account?._id === item?._id)
+  );
   return (
     <View style={{ justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={13}
-          color={COLORS.smokyBlack}
-        >
-          {item.name || StringUtils.formatAddress(item.address, 5, 7)}
-        </Text>
+        <Row alignItems="center">
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={13}
+            color={COLORS.smokyBlack}
+          >
+            {item.name || StringUtils.formatAddress(item.address, 4, 4)}
+          </Text>
+          {listWithWallet && (
+            <>
+              <Spacer value={scale(13)} horizontal />
+              <View
+                style={{
+                  backgroundColor: COLORS.smokyBlack5,
+                  paddingVertical: verticalScale(4),
+                  paddingHorizontal: scale(8),
+                  borderRadius: moderateScale(20)
+                }}
+              >
+                <Text
+                  fontSize={12}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.graphiteGrey}
+                >
+                  {listWithWallet.name}
+                </Text>
+              </View>
+            </>
+          )}
+        </Row>
         <Text
           fontFamily="Mersad_600SemiBold"
           fontSize={13}

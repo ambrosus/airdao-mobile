@@ -27,14 +27,16 @@ import {
   CommonStackParamsList
 } from '@appTypes/navigation/common';
 import { FloatButton } from '@components/base/FloatButton';
+import { useAMBPrice } from '@hooks';
 
 export const SingleGroupScreen = () => {
   const {
     params: {
-      group: { id: groupId, name: groupName }
+      group: { id: groupId }
     }
   } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
   const navigation = useNavigation<CommonStackNavigationProp>();
+  const { data: ambPriceData } = useAMBPrice();
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
@@ -115,7 +117,10 @@ export const SingleGroupScreen = () => {
         <Badge
           icon={
             <Row>
-              <PercentChange fontSize={14} change={123 || 0} />
+              <PercentChange
+                fontSize={14}
+                change={ambPriceData?.percentChange24H || 0}
+              />
               <Text>(24hr)</Text>
             </Row>
           }
@@ -154,8 +159,7 @@ export const SingleGroupScreen = () => {
       )}
       <BottomSheetAddNewAddressToGroup
         ref={addNewAddressToGroupRef}
-        groupId={groupId}
-        groupName={groupName}
+        collection={selectedList}
       />
       {pressedAddress && (
         <BottomSheetSingleAddressOptions
