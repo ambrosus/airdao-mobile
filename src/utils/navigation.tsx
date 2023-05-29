@@ -11,6 +11,7 @@ import {
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { AddressDetails } from '@screens/Address';
 import { HomeParamsList, PortfolioParamsPortfolio } from '@appTypes';
+import { SingleGroupScreen } from '@screens/SingleCollection';
 
 const TabVisibleRoutes = [
   'HomeScreen',
@@ -38,6 +39,7 @@ const getCommonStack = (
   return (
     <>
       <Stack.Screen name="Address" component={AddressDetails} />
+      <Stack.Screen name="Collection" component={SingleGroupScreen} />
     </>
   );
 };

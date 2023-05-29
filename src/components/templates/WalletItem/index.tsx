@@ -12,7 +12,6 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 interface WalletItemProps {
   item: ExplorerAccount;
-  isPortfolioFlow?: boolean;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {

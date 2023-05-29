@@ -1,5 +1,5 @@
 import React, { useReducer, useRef } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
 import { verticalScale } from '@utils/scaling';
@@ -22,11 +22,15 @@ interface EmptyWalletListProps {
 
 interface WalletListProps extends EmptyWalletListProps {
   title?: string;
-  totalAmount: number;
+  totalAmount?: number;
   data: ExplorerAccount[];
   isListOpened?: boolean;
   isPortfolioFlow?: boolean;
   groupId?: string;
+  scrollEnabled?: boolean; // default to true
+  renderItem?: (
+    args: ListRenderItemInfo<ExplorerAccount>
+  ) => React.ReactElement;
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
@@ -36,7 +40,9 @@ export function WalletList(props: WalletListProps): JSX.Element {
     data,
     emptyText,
     isListOpened = false,
-    isPortfolioFlow = false
+    isPortfolioFlow = false,
+    scrollEnabled = true,
+    renderItem
   } = props;
   const [listOpened, toggleList] = useReducer(
     (opened) => !opened,
@@ -71,6 +77,17 @@ export function WalletList(props: WalletListProps): JSX.Element {
     );
   };
 
+  const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
+    if (typeof renderItem === 'function') return renderItem(args);
+    return (
+      <RenderItem
+        item={args.item}
+        idx={args.index}
+        isPortfolioFlow={isPortfolioFlow}
+      />
+    );
+  };
+
   return (
     <>
       <Row alignItems="center" justifyContent="space-between">
@@ -81,7 +98,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
                 {title}
               </Text>
               <Text subtitle fontSize={13} fontWeight="600">
-                ~ ${NumberUtils.formatNumber(totalAmount, 0)}
+                ~ ${NumberUtils.formatNumber(totalAmount || 0, 0)}
               </Text>
             </Row>
             <Button
@@ -106,14 +123,9 @@ export function WalletList(props: WalletListProps): JSX.Element {
               flexGrow: 1,
               paddingTop: verticalScale(22)
             }}
+            scrollEnabled={scrollEnabled}
             data={data}
-            renderItem={(item) => (
-              <RenderItem
-                item={item.item}
-                idx={item.index}
-                isPortfolioFlow={isPortfolioFlow}
-              />
-            )}
+            renderItem={renderWallet}
           />
         ) : (
           renderEmpty()

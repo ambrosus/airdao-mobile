@@ -3,9 +3,11 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
+import { AccountList } from '@models';
 
 export type CommonStackParamsList = {
   Address: { address: ListsOfAddressType['addressId'] };
+  Collection: { group: AccountList };
 };
 
 export type CommonStackNavigationProp = CompositeNavigationProp<

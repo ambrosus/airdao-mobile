@@ -8,7 +8,7 @@ import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { PortfolioParamsPortfolio } from '@appTypes';
+import { CommonStackParamsList } from '@appTypes/navigation/common';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -25,7 +25,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
       params: {
         group: { id: groupId }
       }
-    } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
+    } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
 
     const handleDeleteAddress = () => {
       handleOnDeleteAddressFromGroup(groupId, [address as string]);

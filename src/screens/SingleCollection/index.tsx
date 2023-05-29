@@ -19,20 +19,20 @@ import { ExplorerAccount } from '@models/Explorer';
 import { NumberUtils } from '@utils/number';
 import { WalletItem } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import {
-  PortfolioNavigationProp,
-  PortfolioParamsPortfolio
-} from '@appTypes/navigation';
 import { Badge } from '@components/base/Badge';
 import { scale } from '@utils/scaling';
 import { AddIcon } from '@components/svg/icons/AddIcon';
+import {
+  CommonStackNavigationProp,
+  CommonStackParamsList
+} from '@appTypes/navigation/common';
 
 export const SingleGroupScreen = () => {
   const {
     params: {
       group: { id: groupId, name: groupName }
     }
-  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
+  } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
 
   const [pressedAddress, setPressedAddress] = useState<ExplorerAccount>();
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
@@ -49,7 +49,7 @@ export const SingleGroupScreen = () => {
   const { accounts, name } = selectedList;
   const groupTokens = selectedList.totalBalance;
 
-  const navigation = useNavigation<PortfolioNavigationProp>();
+  const navigation = useNavigation<CommonStackNavigationProp>();
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {
     navigation.navigate('Address', { address: item.address });
