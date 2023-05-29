@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, SafeAreaView, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
+import {
+  BarCodeScanningResult,
+  Camera,
+  CameraType,
+  PermissionStatus
+} from 'expo-camera';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
-
+import BarCodeScanner from 'expo-barcode-scanner';
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;
   onClose: () => unknown;
@@ -28,7 +33,15 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await Camera.getCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
+
+      if (status === PermissionStatus.UNDETERMINED) {
+        await Camera.requestCameraPermissionsAsync();
+      }
+
+      const { status: updatedStatus } =
+        await Camera.getCameraPermissionsAsync();
+
+      setHasPermission(updatedStatus === 'granted');
     };
 
     getBarCodeScannerPermissions();
@@ -92,7 +105,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
-  if (hasPermission === false) {
+  if (!hasPermission) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <Spacer value={scale(250)} />

@@ -19,7 +19,8 @@
       "bundleIdentifier": "io.airdao.app",
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification"]
+        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
       }
     },
     "android": {
@@ -38,6 +39,12 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+        }
+      ],
       ["@react-native-firebase/app"],
       [
         "expo-camera",
