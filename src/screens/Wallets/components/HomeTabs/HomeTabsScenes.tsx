@@ -20,6 +20,7 @@ import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/B
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
+import { useLists } from '@contexts';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -33,6 +34,8 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
   const createRenameGroupRef = useRef<BottomSheetRef>(null);
+
+  const { handleOnCreate } = useLists((v) => v);
 
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
@@ -139,6 +142,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
         <BottomSheetCreateRenameGroup
           type="create"
           ref={createRenameGroupRef}
+          handleOnCreateGroup={handleOnCreate}
         />
       </View>
     </>

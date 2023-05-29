@@ -24,7 +24,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
 
   return (
     <BottomSheet
-      height={250}
+      height={200}
       ref={localRef}
       containerStyle={
         Platform.OS === 'android' && { marginBottom: bottomSafeArea }
