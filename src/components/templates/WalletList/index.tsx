@@ -72,12 +72,14 @@ export function WalletList(props: WalletListProps): JSX.Element {
     <FlatList
       contentContainerStyle={{
         flexGrow: 1,
-        paddingTop: verticalScale(22)
+        paddingTop: verticalScale(22),
+        paddingBottom: '25%'
       }}
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
       ListEmptyComponent={renderEmpty()}
+      showsVerticalScrollIndicator={false}
     />
   );
 }

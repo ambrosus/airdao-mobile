@@ -9,16 +9,7 @@ export const WatchList = () => {
 
   return (
     <View style={{ paddingHorizontal: scale(16) }}>
-      <WalletList
-        isListOpened={true}
-        isPortfolioFlow={true}
-        emptyText=""
-        totalAmount={watchlist.reduce(
-          (prev, curr) => prev + curr.ambBalance,
-          0
-        )}
-        data={watchlist}
-      />
+      <WalletList isPortfolioFlow={true} emptyText="" data={watchlist} />
     </View>
   );
 };

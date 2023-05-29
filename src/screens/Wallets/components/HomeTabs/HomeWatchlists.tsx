@@ -39,7 +39,6 @@ export const HomeWatchlists = () => {
     <View style={styles.homeWatchlistsContainer}>
       <View style={{ flex: 1 }}>
         <WalletList
-          isListOpened={true}
           isPortfolioFlow={false}
           emptyText=""
           data={watchlist.slice(0, 4)}
