@@ -55,6 +55,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnCreateGroup(localGroupName);
         localRef.current?.dismiss();
         Toast.show({
+          title: '',
           message: `Way to go! ${localGroupName} list created.`,
           type: ToastType.Top
         });
@@ -63,6 +64,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnRenameGroup(groupId, localGroupName);
         localRef.current?.dismiss();
         Toast.show({
+          title: '',
           message: `${groupTitle} has been renamed to ${localGroupName}.`,
           type: ToastType.Top
         });
