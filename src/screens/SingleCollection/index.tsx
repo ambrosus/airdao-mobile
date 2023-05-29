@@ -41,7 +41,7 @@ export const SingleGroupScreen = () => {
   );
 
   const { accounts, name } = selectedList;
-  const groupTokens = selectedList.totalBalance;
+  const groupTokens = selectedList.totalBalance * (ambPriceData?.priceUSD || 0);
 
   const showAddAddress = () => {
     addNewAddressToGroupRef.current?.show();
@@ -99,7 +99,7 @@ export const SingleGroupScreen = () => {
                 fontSize={14}
                 change={ambPriceData?.percentChange24H || 0}
               />
-              <Text>(24hr)</Text>
+              <Text> (24hr)</Text>
             </Row>
           }
         />
