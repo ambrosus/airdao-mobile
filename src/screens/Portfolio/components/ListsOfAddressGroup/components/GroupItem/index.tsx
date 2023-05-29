@@ -48,7 +48,7 @@ export const GroupItem: FC<Props> = ({
   }, []);
 
   const handleItemPress = () => {
-    navigation.navigate('SingleGroup', { group });
+    navigation.navigate('Collection', { group });
   };
 
   const handleRemoveConfirm = (groupId: string) => {

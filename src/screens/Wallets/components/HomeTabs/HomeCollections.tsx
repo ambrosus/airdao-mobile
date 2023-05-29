@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
+import { verticalScale } from '@utils/scaling';
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -26,7 +27,7 @@ export const HomeCollections = () => {
 
   return (
     <View style={styles.homeCollectionsContainer}>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: verticalScale(20) }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
             <GroupItem

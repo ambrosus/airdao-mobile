@@ -94,7 +94,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             onPress={navigateToAddressDetails}
             testID={`WalletItem_${idx}`}
           >
-            <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
+            <WalletItem item={item} />
           </Button>
         </View>
         <BottomSheetEditWallet wallet={item} ref={editModalRef} />
