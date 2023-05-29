@@ -1,9 +1,10 @@
 import React from 'react';
 import { FlatList, SafeAreaView } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { Button, Row, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { HighlightItem } from '@screens/Wallets/components/HomeHighlightsSlider/HighlightItem';
 import { styles } from '@screens/Wallets/components/HomeHighlightsSlider/styles';
+import { verticalScale } from '@utils/scaling';
 
 const highlightsItems: {
   time: string;
@@ -60,6 +61,7 @@ export const HomeHighlights = () => {
           </Text>
         </Button>
       </Row>
+      <Spacer value={verticalScale(24)} />
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}

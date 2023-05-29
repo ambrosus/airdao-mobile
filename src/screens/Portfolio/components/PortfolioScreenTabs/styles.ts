@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingTop: 16
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(28)
   },
   navigationButton: {
     justifyContent: 'center',
@@ -14,8 +14,7 @@ export const styles = StyleSheet.create({
   },
   createNewListButton: {
     justifyContent: 'center',
-    height: 45,
-    width: 138
+    right: scale(13)
   },
   androidButton: {
     width: 48,
