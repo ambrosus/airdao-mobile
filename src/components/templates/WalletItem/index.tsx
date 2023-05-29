@@ -12,11 +12,9 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 interface WalletItemProps {
   item: ExplorerAccount;
-  isPortfolioFlow?: boolean;
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
-  const { data } = useAMBPrice();
   const { item } = props;
   const { data: ambTokenData } = useAMBPrice();
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -76,7 +74,7 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
           {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
         <Row alignItems="center">
-          <PercentChange change={data?.percentChange24H || 0} />
+          <PercentChange change={ambTokenData?.percentChange24H || 0} />
         </Row>
       </Row>
     </View>

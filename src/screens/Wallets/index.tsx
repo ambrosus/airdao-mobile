@@ -4,7 +4,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { PortfolioBalance } from './components';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { useOnboardingStatus } from '@contexts';
-import { usePersonalList, useAMBPrice } from '@hooks';
+import { useAMBPrice } from '@hooks';
 import { ExploreTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 import { OnboardingView } from '@components/templates/OnboardingView';
@@ -21,13 +21,6 @@ export const HomeScreen = () => {
 
   const { data: ambTokenData } = useAMBPrice();
   const { start: startOnboarding } = useOnboardingStatus((v) => v);
-  const { personalList } = usePersonalList();
-  const ambBalance = personalList.reduce(
-    (prev, curr) => prev + curr.ambBalance,
-    0
-  );
-
-  const USDBalance = ambBalance * (ambTokenData?.priceUSD || 0);
   const onboardinStarted = useRef(false);
 
   const navigateToExplore = useCallback(() => {
@@ -58,9 +51,6 @@ export const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <PortfolioBalance
-          USDBalance={USDBalance}
-          AMBBalance={ambBalance}
-          balanceLast24HourChange={3.46}
           AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
           AMBPrice={ambTokenData?.priceUSD || NaN}
         />

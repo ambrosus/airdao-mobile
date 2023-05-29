@@ -15,7 +15,7 @@ const formatAddress = (
   let str = '';
   let dotCounter = 0;
   for (let i = 0; i < address.length; i++) {
-    if (i <= paddingLeft || address.length - i <= paddingRight)
+    if (i < paddingLeft || address.length - i <= paddingRight)
       str += address[i];
     else if (dotCounter < dotCount) {
       str += '.';

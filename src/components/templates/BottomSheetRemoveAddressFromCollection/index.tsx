@@ -1,43 +1,54 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { BottomSheetRef } from '@components/composite';
+import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { AccountList } from '@models';
+import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
+import { useLists } from '@contexts';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: AccountList;
-  groupId: string;
-  handleOnDeleteConfirm: (groupId: string) => void;
+  wallet: ExplorerAccount;
 };
 
-export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
-  ({ item, groupId, handleOnDeleteConfirm }, ref) => {
-    const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+export const BottomSheetRemoveAddressFromCollection = forwardRef<
+  BottomSheetRef,
+  Props
+>(({ wallet }, ref) => {
+  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const { toggleAddressInList, listsOfAddressGroup } = useLists((v) => v);
+  const collection = listsOfAddressGroup.find(
+    (list) =>
+      list.accounts.findIndex((account) => account._id === wallet._id) > -1
+  );
 
-    return (
-      <BottomSheetFloat
-        ref={localRef}
-        swiperIconVisible
-        containerStyle={{ paddingBottom: verticalScale(24) }}
-      >
+  return (
+    <BottomSheetFloat
+      ref={localRef}
+      containerStyle={{ paddingBottom: verticalScale(24) }}
+      swiperIconVisible
+    >
+      <View testID="BottomSheetConfirmRemove_Container">
         <Text
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={14}
           color={COLORS.smokyBlack}
         >
-          Remove {StringUtils.formatAddress(item.name, 3, 4)} from collections?
+          Remove this address from {collection ? collection.name : 'collection'}
+          ?
         </Text>
         <Spacer value={24} />
         <Button
+          testID="BottomSheetConfirmRemove_Button"
           onPress={() => {
-            handleOnDeleteConfirm(groupId);
+            if (collection) {
+              toggleAddressInList(wallet, collection);
+            }
             localRef.current?.dismiss();
           }}
           style={styles.removeButton}
@@ -58,13 +69,13 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.midnight}
+            color={COLORS.smokyBlack}
             fontSize={16}
           >
             Cancel
           </Text>
         </Button>
-      </BottomSheetFloat>
-    );
-  }
-);
+      </View>
+    </BottomSheetFloat>
+  );
+});

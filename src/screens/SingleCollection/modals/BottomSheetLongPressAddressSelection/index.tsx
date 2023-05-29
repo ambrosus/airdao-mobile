@@ -23,7 +23,7 @@ import { BottomSheetSingleAddressMove } from '@screens/SingleCollection/modals/B
 import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PortfolioParamsPortfolio } from '@appTypes/navigation';
+import { CommonStackParamsList } from '@appTypes/navigation/common';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -43,7 +43,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
     params: {
       group: { id: groupId }
     }
-  } = useRoute<RouteProp<PortfolioParamsPortfolio, 'SingleGroup'>>();
+  } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
 
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},

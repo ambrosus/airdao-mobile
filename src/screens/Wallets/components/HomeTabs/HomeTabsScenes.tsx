@@ -14,7 +14,7 @@ import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioS
 import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
 import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
 import { TabViewProps, Route } from 'react-native-tab-view';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
@@ -95,7 +95,10 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
     <>
       <View
         style={{
-          flexDirection: 'row'
+          flexDirection: 'row',
+          paddingHorizontal: scale(24),
+          alignItems: 'center',
+          height: verticalScale(32)
         }}
         ref={containerRef}
       >
@@ -107,15 +110,16 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
             )
           });
           return (
-            <PortfolioScreenTabItem
-              key={i}
-              onPress={props.onIndexChange}
-              index={i}
-              opacity={opacity}
-              ref={refs[i]}
-            >
-              {route.title}
-            </PortfolioScreenTabItem>
+            <View style={{ marginRight: scale(16) }} key={i}>
+              <PortfolioScreenTabItem
+                onPress={props.onIndexChange}
+                index={i}
+                opacity={opacity}
+                ref={refs[i]}
+              >
+                {route.title}
+              </PortfolioScreenTabItem>
+            </View>
           );
         })}
         {measures.length > 0 && (

@@ -25,8 +25,7 @@ import { verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
-  useTransactionsOfAccount,
-  useWatchlist
+  useTransactionsOfAccount
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { Toast, ToastType } from '@components/modular';
@@ -61,7 +60,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
-  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const allAdresses = useAllAddresses();
 
   const inputRef = useRef<InputRef>(null);
@@ -82,19 +80,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   }, [initialValue, onContentVisibilityChanged]);
 
-  const toggleWatchlist = async () => {
-    if (finalAccount) {
-      if (finalAccount.isOnWatchlist) {
-        removeFromWatchlist(finalAccount);
-      } else {
-        addToWatchlist(finalAccount);
-        Toast.show({
-          title: 'Way to go! Address watchlisted.',
-          message: 'Tap to rename Address',
-          type: ToastType.Top,
-          onBodyPress: editModal.current?.show
-        });
-      }
+  const toggleWatchlist = async (isOnWatchlist: boolean) => {
+    if (isOnWatchlist) {
+      Toast.show({
+        title: 'Way to go! Address watchlisted.',
+        message: 'Tap to rename Address',
+        type: ToastType.Top,
+        onBodyPress: editModal.current?.show
+      });
     }
   };
 

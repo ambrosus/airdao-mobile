@@ -17,7 +17,7 @@ export const PortfolioScreenTabItem = forwardRef<any, Props>((props, ref) => {
 
   return (
     <TouchableOpacity style={styles.tabTitle} onPress={handlePress}>
-      <View style={{ paddingBottom: 4 }} ref={ref}>
+      <View ref={ref}>
         <Animated.Text
           style={[styles.tabTitleText, { opacity: props.opacity }]}
         >

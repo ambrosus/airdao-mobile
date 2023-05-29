@@ -1,13 +1,13 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef, useWatchlist } from '@hooks';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BottomSheetFloat } from '@components/modular';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -21,22 +21,13 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { removeFromWatchlist } = useWatchlist();
 
-  const bottomSafeArea = useSafeAreaInsets().bottom - 10;
-
   return (
-    <BottomSheet
+    <BottomSheetFloat
       ref={localRef}
-      height={275}
-      isNestedSheet={false}
-      containerStyle={
-        Platform.OS === 'android' && { marginBottom: bottomSafeArea }
-      }
+      containerStyle={{ paddingBottom: verticalScale(24) }}
+      swiperIconVisible
     >
       <View testID="BottomSheetConfirmRemove_Container">
-        <View style={styles.icon}>
-          <BottomSheetSwiperIcon />
-        </View>
-        <Spacer value={24} />
         <Text
           style={styles.text}
           fontFamily="Inter_600SemiBold"
@@ -79,6 +70,6 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           </Text>
         </Button>
       </View>
-    </BottomSheet>
+    </BottomSheetFloat>
   );
 });

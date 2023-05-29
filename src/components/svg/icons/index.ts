@@ -27,6 +27,7 @@ export * from './Messages';
 export * from './Notification';
 export * from './Options';
 export * from './PlusIcon';
+export * from './Remove';
 export * from './RightArrow';
 export * from './Scanner';
 export * from './ScannerQR';

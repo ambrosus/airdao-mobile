@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
@@ -14,15 +14,21 @@ import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 
-type Props = {
+export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
   idx: number;
   isPortfolioFlow?: boolean;
+  removeType?: 'watchlist' | 'collection';
 };
-export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
+export const SwipeableWalletItem = ({
+  item,
+  idx,
+  isPortfolioFlow = false,
+  removeType = 'watchlist'
+}: SwipeableWalletItemProps) => {
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
-
   const navigation = useNavigation<WalletsNavigationProp>();
 
   const handleConfirmRemove = useCallback(() => {
@@ -35,9 +41,8 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
     ? {
         paddingVertical: 18,
         borderColor: COLORS.charcoal,
-        borderBottomWidth: idx !== 0 ? 1 : 0,
-        borderTopWidth: idx === 0 ? 1 : 0,
-        marginTop: idx === 0 ? verticalScale(20) : 0
+        borderBottomWidth: 1,
+        borderTopWidth: idx === 0 ? 1 : 0
       }
     : {};
 
@@ -69,10 +74,18 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             <RemoveIcon />
           </Button>
         </View>
-        <BottomSheetRemoveAddressFromWatchlists
-          item={item}
-          ref={confirmRemoveRef}
-        />
+        {removeType === 'watchlist' && (
+          <BottomSheetRemoveAddressFromWatchlists
+            item={item}
+            ref={confirmRemoveRef}
+          />
+        )}
+        {removeType === 'collection' && (
+          <BottomSheetRemoveAddressFromCollection
+            wallet={item}
+            ref={confirmRemoveRef}
+          />
+        )}
       </>
     );
   };
@@ -95,7 +108,7 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             onPress={navigateToAddressDetails}
             testID={`WalletItem_${idx}`}
           >
-            <WalletItem item={item} isPortfolioFlow={isPortfolioFlow} />
+            <WalletItem item={item} />
           </Button>
         </View>
         <BottomSheetEditWallet wallet={item} ref={editModalRef} />
