@@ -38,6 +38,7 @@ export const GroupItem: FC<Props> = ({
 
   const navigation = useNavigation<PortfolioNavigationProp>();
   const swipeableRef = useRef<Swipeable>(null);
+
   const tokensFormatted = useMemo(() => {
     const formattedNumber = NumberUtils.formatNumber(
       group.totalBalance * (ambPriceData?.priceUSD || 0),
