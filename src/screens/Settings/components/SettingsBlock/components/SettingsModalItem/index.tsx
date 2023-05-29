@@ -4,7 +4,7 @@ import { Currency } from '@screens/Settings/components/SettingsBlock/modals/Bott
 import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 type Props = {
   item: Language | Currency;
@@ -17,7 +17,10 @@ export const SettingsModalItem: FC<Props> = ({
   handleItemPress
 }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      onPress={() => handleItemPress(item)}
+      style={styles.container}
+    >
       <Row style={styles.itemInfo} alignItems="center">
         <RadioButton
           testID="radio-button"
@@ -33,7 +36,7 @@ export const SettingsModalItem: FC<Props> = ({
           {item}
         </Text>
       </Row>
-    </View>
+    </TouchableOpacity>
   );
 };
 

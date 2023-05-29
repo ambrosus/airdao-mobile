@@ -127,7 +127,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
             navigationState={props.navigationState}
           />
         )}
-        <Spacer horizontal value={scale(Platform.OS === 'android' ? 24 : 32)} />
+        <Spacer horizontal value={scale(Platform.OS === 'android' ? 24 : 12)} />
         <Button
           type="circular"
           onPress={handleOnCreateCollectionOrAddAddress}
