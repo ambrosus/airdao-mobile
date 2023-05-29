@@ -15,6 +15,7 @@ import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
 import { verticalScale } from '@utils/scaling';
+import { useAMBPrice } from '@hooks';
 
 type Props = {
   group: AccountList;
@@ -28,6 +29,7 @@ export const GroupItem: FC<Props> = ({
   wrapperStyles = {}
 }) => {
   const { handleOnDelete, handleOnRename } = useLists((v) => v);
+  const { data: ambPriceData } = useAMBPrice();
   const groupItemActionRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const groupDeleteRef = useRef<BottomSheetRef>(null);
@@ -56,9 +58,14 @@ export const GroupItem: FC<Props> = ({
   };
 
   const tokensFormatted = useMemo(() => {
-    const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
-    return `$${formattedNumber}`;
-  }, [group.totalBalance]);
+    const formattedNumber = NumberUtils.formatNumber(
+      group.totalBalance * (ambPriceData?.priceUSD || 0),
+      0
+    );
+    return ambPriceData?.priceUSD
+      ? `$${formattedNumber}`
+      : `${NumberUtils.formatNumber(group.totalBalance, 0)} AMB`;
+  }, [ambPriceData?.priceUSD, group.totalBalance]);
 
   const handleRemoveConfirm = (groupId: string) => {
     handleOnDelete(groupId);
@@ -108,9 +115,11 @@ export const GroupItem: FC<Props> = ({
             >
               {group.accountCount + ' addresses'}
             </Text>
-            <Row alignItems="center">
-              <PercentChange change={123 || 0} />
-            </Row>
+            {group.accountCount > 0 && (
+              <Row alignItems="center">
+                <PercentChange change={ambPriceData?.percentChange24H || 0} />
+              </Row>
+            )}
           </Row>
           <BottomSheetSingleCollectionOption
             handleOnDeleteButtonPress={handleOpenDeleteModal}
