@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     height: scale(12)
   },
   item: {
-    marginTop: verticalScale(20)
+    // marginTop: verticalScale(20)
   },
   emptyContainer: {
     paddingTop: verticalScale(20),

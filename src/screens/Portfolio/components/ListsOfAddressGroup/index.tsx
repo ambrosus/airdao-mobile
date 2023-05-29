@@ -4,6 +4,7 @@ import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/com
 import { AccountList } from '@models/AccountList';
 import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
@@ -17,12 +18,18 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
     <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
         contentContainerStyle={{
-          paddingBottom: 150
+          paddingBottom: 150,
+          paddingTop: verticalScale(22)
         }}
         data={listsOfAddressGroup}
         renderItem={({ item, index }: { item: AccountList; index: number }) => {
           return (
-            <GroupItem key={index} group={item} isFirstItem={index === 0} />
+            <GroupItem
+              key={index}
+              group={item}
+              isFirstItem={index === 0}
+              swipeable
+            />
           );
         }}
       />

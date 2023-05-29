@@ -10,12 +10,11 @@ import { Platform, View } from 'react-native';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
-import { Toast, ToastType } from '@components/modular';
+import { BottomSheetFloat, Toast, ToastType } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -82,7 +81,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
 
     return (
       <>
-        <BottomSheet
+        <BottomSheetFloat
           height={350}
           ref={localRef}
           containerStyle={
@@ -162,7 +161,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               </Button>
             </View>
           </View>
-        </BottomSheet>
+        </BottomSheetFloat>
       </>
     );
   }

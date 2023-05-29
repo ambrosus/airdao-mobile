@@ -1,13 +1,13 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { View } from 'react-native';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { StringUtils } from '@utils/string';
 import { AccountList } from '@models';
+import { BottomSheetFloat } from '@components/modular';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -21,19 +21,18 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
     return (
-      <BottomSheet ref={localRef} height={350}>
-        <View style={styles.icon}>
-          <BottomSheetSwiperIcon />
-        </View>
-        <Spacer value={32} />
+      <BottomSheetFloat
+        ref={localRef}
+        swiperIconVisible
+        containerStyle={{ paddingBottom: verticalScale(24) }}
+      >
         <Text
           style={styles.text}
           fontFamily="Inter_600SemiBold"
-          fontSize={20}
+          fontSize={14}
           color={COLORS.smokyBlack}
         >
-          Are you sure want to remove selected{' '}
-          {StringUtils.formatAddress(item.name, 3, 4)} from lists
+          Remove {StringUtils.formatAddress(item.name, 3, 4)} from collections?
         </Text>
         <Spacer value={24} />
         <Button
@@ -46,7 +45,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.white}
+            color={COLORS.crimsonRed}
           >
             Remove
           </Text>
@@ -65,7 +64,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
             Cancel
           </Text>
         </Button>
-      </BottomSheet>
+      </BottomSheetFloat>
     );
   }
 );

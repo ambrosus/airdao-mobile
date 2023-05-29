@@ -38,6 +38,7 @@ export const HomeCollections = () => {
                 borderTopWidth: 0,
                 borderBottomWidth: 0
               }}
+              swipeable={false}
             />
           );
         })}

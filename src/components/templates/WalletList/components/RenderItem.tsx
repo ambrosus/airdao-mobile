@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { EditIcon } from '@components/svg/icons';
@@ -35,9 +35,8 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
     ? {
         paddingVertical: 18,
         borderColor: COLORS.charcoal,
-        borderBottomWidth: idx !== 0 ? 1 : 0,
-        borderTopWidth: idx === 0 ? 1 : 0,
-        marginTop: idx === 0 ? verticalScale(20) : 0
+        borderBottomWidth: 1,
+        borderTopWidth: idx === 0 ? 1 : 0
       }
     : {};
 

@@ -4,7 +4,7 @@ export enum ToastType {
 }
 
 export interface ToastOptions {
-  title: string;
+  title?: string;
   message: string;
   duration?: number;
   type: ToastType;
