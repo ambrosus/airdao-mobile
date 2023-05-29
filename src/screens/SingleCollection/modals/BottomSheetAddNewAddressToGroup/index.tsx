@@ -70,65 +70,54 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   );
 
   return (
-    <>
-      <BottomSheet
-        containerStyle={{
-          marginHorizontal: -20,
-          marginBottom: -20,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0
-        }}
-        ref={localRef}
-        height={Dimensions.get('screen').height * 0.85}
-      >
-        <View style={{ alignItems: 'center' }}>
-          <Spacer value={scale(16)} />
-          <BottomSheetSwiperIcon />
-          <Spacer value={scale(12)} />
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={18}
-            color={COLORS.nero}
-          >{`Add address to ${groupName}`}</Text>
-        </View>
+    <BottomSheet ref={localRef} height={Dimensions.get('screen').height * 0.85}>
+      <View style={{ alignItems: 'center' }}>
+        <Spacer value={scale(16)} />
+        <BottomSheetSwiperIcon />
         <Spacer value={scale(12)} />
-        <View style={styles.bottomSheetInput}>
-          <InputWithIcon
-            iconLeft={<SearchIcon color="#2f2b4399" />}
-            type="text"
-            style={{ width: '65%', height: 50 }}
-            placeholder="Search watchlist"
-            placeholderTextColor="#2f2b4399"
-            value=""
-            onChangeValue={() => null}
-          />
-        </View>
-        <FlatList
-          contentContainerStyle={{
-            paddingBottom: 150,
-            paddingHorizontal: 24,
-            paddingTop: 24
-          }}
-          data={watchlist}
-          renderItem={({ item }: { item: ExplorerAccount }) => {
-            return (
-              <Button
-                onPress={() => {
-                  handleItemPress(item._id);
-                }}
-                style={{
-                  paddingVertical: 18,
-                  borderColor: COLORS.thinGrey,
-                  borderBottomWidth: 0.2,
-                  borderTopWidth: 0.2
-                }}
-              >
-                <WalletItem item={item} />
-              </Button>
-            );
-          }}
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={18}
+          color={COLORS.nero}
+        >{`Add address to ${groupName}`}</Text>
+      </View>
+      <Spacer value={scale(12)} />
+      <View style={styles.bottomSheetInput}>
+        <InputWithIcon
+          iconLeft={<SearchIcon color="#2f2b4399" />}
+          type="text"
+          style={{ width: '65%', height: 50 }}
+          placeholder="Search watchlist"
+          placeholderTextColor="#2f2b4399"
+          value=""
+          onChangeValue={() => null}
         />
-      </BottomSheet>
-    </>
+      </View>
+      <FlatList
+        contentContainerStyle={{
+          paddingBottom: 150,
+          paddingHorizontal: 24,
+          paddingTop: 24
+        }}
+        data={watchlist}
+        renderItem={({ item }: { item: ExplorerAccount }) => {
+          return (
+            <Button
+              onPress={() => {
+                handleItemPress(item._id);
+              }}
+              style={{
+                paddingVertical: 18,
+                borderColor: COLORS.separator,
+                borderBottomWidth: 0.2,
+                borderTopWidth: 0.2
+              }}
+            >
+              <WalletItem item={item} />
+            </Button>
+          );
+        }}
+      />
+    </BottomSheet>
   );
 });

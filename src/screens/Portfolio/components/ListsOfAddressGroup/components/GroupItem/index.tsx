@@ -16,6 +16,7 @@ import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
 import { scale } from '@utils/scaling';
 import { EditIcon, RemoveIcon } from '@components/svg/icons';
+import { useAMBPrice } from '@hooks';
 
 type Props = {
   group: AccountList;
@@ -36,7 +37,7 @@ export const GroupItem: FC<Props> = ({
 
   const navigation = useNavigation<PortfolioNavigationProp>();
   const swipeableRef = useRef<Swipeable>(null);
-
+  const { data: ambPriceData } = useAMBPrice();
   const tokensFormatted = useMemo(() => {
     const formattedNumber = NumberUtils.formatNumber(group.totalBalance, 0);
     return `$${formattedNumber}`;
@@ -132,7 +133,7 @@ export const GroupItem: FC<Props> = ({
               {group.accountCount + ' addresses'}
             </Text>
             <Row alignItems="center">
-              <PercentChange change={123 || 0} />
+              <PercentChange change={ambPriceData?.percentChange24H || 0} />
             </Row>
           </Row>
         </View>
