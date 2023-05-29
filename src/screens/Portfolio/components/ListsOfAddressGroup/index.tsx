@@ -22,6 +22,7 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
           paddingTop: verticalScale(22)
         }}
         data={listsOfAddressGroup}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item, index }: { item: AccountList; index: number }) => {
           return (
             <GroupItem
