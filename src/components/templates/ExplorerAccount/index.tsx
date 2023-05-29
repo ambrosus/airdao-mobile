@@ -97,6 +97,7 @@ export const ExplorerAccountView = (
     <View style={styles.container}>
       {nameVisible && (
         <>
+          <Spacer value={verticalScale(22)} />
           <Row alignItems="center">
             <Text fontFamily="Inter_600SemiBold" fontSize={15}>
               {account.name}
