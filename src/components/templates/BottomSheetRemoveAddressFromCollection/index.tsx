@@ -2,24 +2,29 @@ import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { useForwardedRef, useWatchlist } from '@hooks';
+import { useForwardedRef } from '@hooks';
 import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
+import { useLists } from '@contexts';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
-  item: ExplorerAccount;
+  wallet: ExplorerAccount;
 };
 
-export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
+export const BottomSheetRemoveAddressFromCollection = forwardRef<
   BottomSheetRef,
   Props
->(({ item }, ref) => {
+>(({ wallet }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { removeFromWatchlist } = useWatchlist();
+  const { toggleAddressInList, listsOfAddressGroup } = useLists((v) => v);
+  const collection = listsOfAddressGroup.find(
+    (list) =>
+      list.accounts.findIndex((account) => account._id === wallet._id) > -1
+  );
 
   return (
     <BottomSheetFloat
@@ -34,16 +39,17 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           fontSize={14}
           color={COLORS.smokyBlack}
         >
-          Remove this address from watchlist?
+          Remove this address from {collection ? collection.name : 'collection'}
+          ?
         </Text>
         <Spacer value={24} />
         <Button
           testID="BottomSheetConfirmRemove_Button"
           onPress={() => {
-            setTimeout(() => {
-              removeFromWatchlist(item);
-              localRef.current?.dismiss();
-            }, 800);
+            if (collection) {
+              toggleAddressInList(wallet, collection);
+            }
+            localRef.current?.dismiss();
           }}
           style={styles.removeButton}
         >

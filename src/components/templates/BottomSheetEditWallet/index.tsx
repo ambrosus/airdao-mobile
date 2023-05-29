@@ -114,7 +114,7 @@ export const BottomSheetEditWallet = forwardRef<
               type="circular"
               style={{
                 ...styles.actionBtn,
-                backgroundColor: COLORS.transparent
+                backgroundColor: COLORS.pinkRed
               }}
               onPress={removeFromCollection}
             >

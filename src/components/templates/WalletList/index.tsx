@@ -1,32 +1,24 @@
-import React, { useReducer, useRef } from 'react';
+import React from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { NumberUtils } from '@utils/number';
+import { Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import {
-  RotationAnimation,
-  RotationAnimationRef
-} from '@components/animations';
-import {
-  ChevronDownIcon,
-  EmptyWalletListPlaceholderIcon
-} from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
+import { EmptyWalletListPlaceholderIcon } from '@components/svg/icons';
 import { ExplorerAccount } from '@models/Explorer';
-import { RenderItem } from '@components/templates/WalletList/components/RenderItem';
+import {
+  SwipeableWalletItemProps,
+  SwipeableWalletItem
+} from '@components/templates/WalletList/components/RenderItem';
 import { styles } from '@components/templates/WalletList/styles';
 
 interface EmptyWalletListProps {
   emptyText: string;
 }
 
-interface WalletListProps extends EmptyWalletListProps {
-  title?: string;
-  totalAmount?: number;
+interface WalletListProps
+  extends EmptyWalletListProps,
+    Pick<SwipeableWalletItemProps, 'removeType'> {
   data: ExplorerAccount[];
-  isListOpened?: boolean;
   isPortfolioFlow?: boolean;
-  groupId?: string;
   scrollEnabled?: boolean; // default to true
   renderItem?: (
     args: ListRenderItemInfo<ExplorerAccount>
@@ -35,26 +27,13 @@ interface WalletListProps extends EmptyWalletListProps {
 
 export function WalletList(props: WalletListProps): JSX.Element {
   const {
-    title,
-    totalAmount,
     data,
     emptyText,
-    isListOpened = false,
     isPortfolioFlow = false,
     scrollEnabled = true,
-    renderItem
+    renderItem,
+    removeType = 'watchlist'
   } = props;
-  const [listOpened, toggleList] = useReducer(
-    (opened) => !opened,
-    isListOpened
-  );
-
-  const rotationAnimation = useRef<RotationAnimationRef>(null);
-
-  const onTogglePress = () => {
-    rotationAnimation.current?.rotate();
-    toggleList();
-  };
 
   const renderEmpty = () => {
     return (
@@ -80,56 +59,25 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     if (typeof renderItem === 'function') return renderItem(args);
     return (
-      <RenderItem
+      <SwipeableWalletItem
         item={args.item}
         idx={args.index}
         isPortfolioFlow={isPortfolioFlow}
+        removeType={removeType}
       />
     );
   };
 
   return (
-    <>
-      <Row alignItems="center" justifyContent="space-between">
-        {!!title ? (
-          <>
-            <Row alignItems="center">
-              <Text title fontWeight="500">
-                {title}
-              </Text>
-              <Text subtitle fontSize={13} fontWeight="600">
-                ~ ${NumberUtils.formatNumber(totalAmount || 0, 0)}
-              </Text>
-            </Row>
-            <Button
-              testID={`ToggleButton_${
-                title === 'My Wallets' ? 'Wallets' : 'WatchList'
-              }`}
-              type="circular"
-              style={styles.toggleBtn}
-              onPress={onTogglePress}
-            >
-              <RotationAnimation ref={rotationAnimation}>
-                <ChevronDownIcon color={COLORS.smokyBlack} />
-              </RotationAnimation>
-            </Button>
-          </>
-        ) : null}
-      </Row>
-      {listOpened &&
-        (data.length > 0 ? (
-          <FlatList
-            contentContainerStyle={{
-              flexGrow: 1,
-              paddingTop: verticalScale(22)
-            }}
-            scrollEnabled={scrollEnabled}
-            data={data}
-            renderItem={renderWallet}
-          />
-        ) : (
-          renderEmpty()
-        ))}
-    </>
+    <FlatList
+      contentContainerStyle={{
+        flexGrow: 1,
+        paddingTop: verticalScale(22)
+      }}
+      scrollEnabled={scrollEnabled}
+      data={data}
+      renderItem={renderWallet}
+      ListEmptyComponent={renderEmpty()}
+    />
   );
 }

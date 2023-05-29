@@ -14,15 +14,21 @@ import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 
-type Props = {
+export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
   idx: number;
   isPortfolioFlow?: boolean;
+  removeType?: 'watchlist' | 'collection';
 };
-export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
+export const SwipeableWalletItem = ({
+  item,
+  idx,
+  isPortfolioFlow = false,
+  removeType = 'watchlist'
+}: SwipeableWalletItemProps) => {
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
-
   const navigation = useNavigation<WalletsNavigationProp>();
 
   const handleConfirmRemove = useCallback(() => {
@@ -68,10 +74,18 @@ export const RenderItem = ({ item, idx, isPortfolioFlow = false }: Props) => {
             <RemoveIcon />
           </Button>
         </View>
-        <BottomSheetRemoveAddressFromWatchlists
-          item={item}
-          ref={confirmRemoveRef}
-        />
+        {removeType === 'watchlist' && (
+          <BottomSheetRemoveAddressFromWatchlists
+            item={item}
+            ref={confirmRemoveRef}
+          />
+        )}
+        {removeType === 'collection' && (
+          <BottomSheetRemoveAddressFromCollection
+            wallet={item}
+            ref={confirmRemoveRef}
+          />
+        )}
       </>
     );
   };
