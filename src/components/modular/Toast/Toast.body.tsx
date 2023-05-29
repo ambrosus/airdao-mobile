@@ -106,7 +106,7 @@ export const ToastBody = forwardRef((_, ref) => {
       >
         <Row alignItems="center" justifyContent="space-between">
           <View style={{ flex: 4 }}>
-            {Boolean(options.message) && (
+            {Boolean(options.title) && (
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
