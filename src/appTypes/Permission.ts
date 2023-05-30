@@ -1,8 +1,9 @@
 export enum Permission {
-  Notifications
+  Notifications,
+  Camera
 }
 
 export type PermissionOptions = {
-  request?: boolean;
+  requestAgain?: boolean;
   openSettings?: boolean;
 };

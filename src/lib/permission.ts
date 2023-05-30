@@ -1,33 +1,86 @@
-import { Permission, PermissionOptions } from '@appTypes';
+import { Camera } from 'expo-camera';
+import { Alert, Linking } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import { Permission, PermissionOptions } from '@appTypes';
+
+interface PermissionRequestResult {
+  granted: boolean;
+  canAskAgain?: boolean;
+}
 
 class PermissionService {
-  private async getNotificationPermission(request?: boolean): Promise<boolean> {
-    const result = await Notifications.getPermissionsAsync();
-    if (result.granted) return true;
-    if (request) {
-      const result = await Notifications.requestPermissionsAsync();
-      if (result.granted) return true;
+  private async getPermissionStatus(
+    permission: Permission
+  ): Promise<PermissionRequestResult> {
+    switch (permission) {
+      case Permission.Notifications: {
+        return await Notifications.getPermissionsAsync();
+      }
+      case Permission.Camera: {
+        return await Camera.getCameraPermissionsAsync();
+      }
+      default: {
+        return { granted: false, canAskAgain: false };
+      }
     }
-    return false;
+  }
+
+  private async requestPermission(
+    permission: Permission
+  ): Promise<PermissionRequestResult> {
+    switch (permission) {
+      case Permission.Notifications: {
+        return await Notifications.requestPermissionsAsync();
+      }
+      case Permission.Camera: {
+        return await Camera.requestCameraPermissionsAsync();
+      }
+      default: {
+        return { granted: false, canAskAgain: false };
+      }
+    }
   }
 
   async getPermission(
     permission: Permission,
     options?: PermissionOptions
   ): Promise<boolean> {
-    switch (permission) {
-      case Permission.Notifications: {
-        // TODO handle opening settings
-        return await this.getNotificationPermission(options?.request);
-      }
-      default:
-        return false;
+    const result: PermissionRequestResult = await this.getPermissionStatus(
+      permission
+    );
+    if (result.granted) return true;
+    if (result.canAskAgain && options?.requestAgain) {
+      return (await this.requestPermission(permission)).granted;
     }
+    if (!result.canAskAgain && options?.openSettings) {
+      this.showSettingsAlert();
+    }
+    return false;
   }
 
-  async requestPermissions() {
-    this.getPermission(Permission.Notifications, { request: true });
+  async requestNecessaryPermissions() {
+    this.getPermission(Permission.Notifications, { requestAgain: true });
+  }
+
+  private showSettingsAlert() {
+    Alert.alert(
+      'You denied access!',
+      'Go to your settings to give permission!',
+      [
+        {
+          text: 'Settings',
+          onPress: this.openSettings
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        }
+      ]
+    );
+  }
+
+  private openSettings() {
+    Linking.openSettings();
   }
 }
 

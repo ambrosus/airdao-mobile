@@ -1,17 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, SafeAreaView, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  BarCodeScanningResult,
-  Camera,
-  CameraType,
-  PermissionStatus
-} from 'expo-camera';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
+import { Button, Row, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
-import BarCodeScanner from 'expo-barcode-scanner';
+import { PermissionService } from '@lib';
+import { Permission } from '@appTypes';
+import { COLORS } from '@constants/colors';
+import { styles } from './styles';
+
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;
   onClose: () => unknown;
@@ -30,21 +28,16 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   const screenRatio = height / width;
   const [isRatioSet, setIsRatioSet] = useState(false);
 
+  const getCameraPermissions = async () => {
+    const granted = await PermissionService.getPermission(Permission.Camera, {
+      requestAgain: true,
+      openSettings: true
+    });
+    setHasPermission(granted);
+  };
+
   useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await Camera.getCameraPermissionsAsync();
-
-      if (status === PermissionStatus.UNDETERMINED) {
-        await Camera.requestCameraPermissionsAsync();
-      }
-
-      const { status: updatedStatus } =
-        await Camera.getCameraPermissionsAsync();
-
-      setHasPermission(updatedStatus === 'granted');
-    };
-
-    getBarCodeScannerPermissions();
+    getCameraPermissions();
   }, []);
 
   // set the camera ratio and padding.
@@ -107,11 +100,19 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   }
   if (!hasPermission) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <Spacer value={scale(250)} />
+      <SafeAreaView style={styles.noAccessContainer}>
         <Row justifyContent="center">
           <Text>No access to camera</Text>
         </Row>
+        <Button
+          style={styles.getAccessBtn}
+          type="circular"
+          onPress={getCameraPermissions}
+        >
+          <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
+            Give permission
+          </Text>
+        </Button>
       </SafeAreaView>
     );
   }
