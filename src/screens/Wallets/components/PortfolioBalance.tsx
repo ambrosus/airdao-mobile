@@ -1,13 +1,15 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { ChevronRightIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { BezierChart, Point } from '@components/templates';
 import { Badge } from '@components/base/Badge';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes';
 
 interface PortfolioBalanceProps {
   AMBPrice: number;
@@ -16,8 +18,13 @@ interface PortfolioBalanceProps {
 
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   const { AMBPrice, AMBPriceLast24HourChange } = props;
+  const navigation = useNavigation<WalletsNavigationProp>();
 
   const chartData: Point[] = [];
+
+  const navigateToAMBScreen = () => {
+    navigation.navigate('AMBMarketScreen');
+  };
 
   return (
     <View style={styles.container} testID="portfolio-balance">
@@ -47,7 +54,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           </Text>
         </Row>
         <Spacer value={scale(16)} />
-        <View style={styles.badge}>
+        <Button style={styles.badge} onPress={navigateToAMBScreen}>
           <Badge
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
@@ -71,7 +78,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
               </Row>
             }
           />
-        </View>
+        </Button>
         <BezierChart
           height={verticalScale(200)}
           data={chartData}
