@@ -114,10 +114,6 @@ export const Notifications = (): JSX.Element => {
     return sections;
   }, [notifications]);
 
-  const showFilterModal = () => {
-    filterModal.current?.show();
-  };
-
   const showSettingsModal = () => {
     settingsModal.current?.show();
   };
@@ -170,10 +166,7 @@ export const Notifications = (): JSX.Element => {
 
   return (
     <SafeAreaView testID="NotificationScreen" style={styles.container}>
-      <Header
-        onFilterPress={showFilterModal}
-        onSettingsPress={showSettingsModal}
-      />
+      <Header onSettingsPress={showSettingsModal} />
       <SectionList<Notification, NotificationSection>
         keyExtractor={(item) => item._id}
         sections={sectionizedNotificaitons}

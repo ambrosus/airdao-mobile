@@ -2,7 +2,7 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 
-export function ExploreActiveIcon(props: IconProps) {
+export function SearchActiveIcon(props: IconProps) {
   const { scale = 1, color = '#457EFF' } = props;
   const width = 24;
   const height = 24;

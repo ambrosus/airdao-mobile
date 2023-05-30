@@ -16,7 +16,7 @@ import { SingleGroupScreen } from '@screens/SingleCollection';
 const TabVisibleRoutes = [
   'HomeScreen',
   'PortfolioScreen',
-  'ExploreScreen',
+  'SearchScreen',
   'SettingsScreen'
 ];
 

@@ -3,7 +3,7 @@ import { QueryResponse } from '@appTypes/QueryResponse';
 import { getExplorerAccounts } from '@api/api';
 import { ExplorerAccountDTO } from '@models/index';
 import { ExplorerAccount } from '@models/Explorer';
-import { ExplorerSort } from '@screens/Explore/Explore.types';
+import { ExplorerSort } from '@screens/Search/Search.types';
 
 export function useExplorerAccounts(
   sort: ExplorerSort

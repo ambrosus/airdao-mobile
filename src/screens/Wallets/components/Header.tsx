@@ -32,8 +32,8 @@ export function HomeHeader(): JSX.Element {
       const res = data.match(etherumAddressRegex);
       if (res && res?.length > 0) {
         closeScanner();
-        navigation.navigate('Explore', {
-          screen: 'ExploreScreen',
+        navigation.navigate('Search', {
+          screen: 'SearchScreen',
           params: { address: res[0] }
         });
       } else if (!scanned.current) {
