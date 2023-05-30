@@ -8,6 +8,9 @@ import { Cache, CacheKey } from '@utils/cache';
 const AppInitialization = () => {
   const navigation = useNavigation<RootNavigationProp>();
 
+  // uncomment to clear IsFirstInit Cache key
+  // Cache.setItem(CacheKey.IsFirstInit, []);
+
   useEffect(() => {
     (async () => {
       try {

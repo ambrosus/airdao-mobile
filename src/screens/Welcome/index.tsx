@@ -101,20 +101,12 @@ export const WelcomeScreen = () => {
       </View>
       <Button
         onPress={async () => {
-          await Cache.setItem(CacheKey.IsFirstInit, true);
+          await Cache.setItem(CacheKey.IsFirstInit, false);
           setTimeout(() => {
             navigation.navigate('Tabs', { screen: 'Wallets' });
           }, 300);
         }}
-        style={{
-          width: '90%',
-          alignSelf: 'center',
-          alignItems: 'center',
-          backgroundColor: COLORS.deepBlue,
-          borderRadius: 24,
-          paddingHorizontal: 16,
-          marginBottom: 30
-        }}
+        style={styles.getStartedButton}
       >
         <Text
           fontFamily="Inter_600SemiBold"
@@ -137,5 +129,18 @@ const styles = StyleSheet.create({
     height: 52,
     backgroundColor: '#d9d9d9'
   },
-  optionsContainer: { paddingRight: 60, paddingLeft: scale(24), paddingTop: 30 }
+  optionsContainer: {
+    paddingRight: 60,
+    paddingLeft: scale(24),
+    paddingTop: 30
+  },
+  getStartedButton: {
+    width: '90%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.deepBlue,
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    marginBottom: 30
+  }
 });

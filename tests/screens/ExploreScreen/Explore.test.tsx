@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
-import { ExploreScreen } from '@screens/Explore';
+import { SearchScreen } from '@screens/Search';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -79,12 +79,12 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <ExploreScreen />
+        <SearchScreen />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
-describe('ExploreScreen', () => {
+describe('SearchScreen', () => {
   it('renders correctly', async () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('explore-screen')).toBeTruthy();

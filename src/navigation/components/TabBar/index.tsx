@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
-import { ExploreInactiveIcon } from '@components/svg/BottomTabIcons/ExploreInactiveIcon';
-import { ExploreActiveIcon } from '@components/svg/BottomTabIcons/ExploreActiveIcon';
+import { SearchInactiveIcon } from '@components/svg/BottomTabIcons/SearchInactiveIcon';
+import { SearchActiveIcon } from '@components/svg/BottomTabIcons/SearchActiveIcon';
 import { PortfolioInactiveIcon } from '@components/svg/BottomTabIcons/PortfolioInactiveIcon';
 import { PortfolioActiveIcon } from '@components/svg/BottomTabIcons/PortfolioActiveIcon';
 import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsInactiveIcon';
@@ -15,7 +15,7 @@ import { Text } from '@components/base';
 import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
 
-type LabelType = 'Settings' | 'Portfolio' | 'Explore' | 'Wallets';
+type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
   Wallets: {
     inactiveIcon: <HomeInactiveIcon />,
@@ -25,9 +25,9 @@ const tabs = {
     inactiveIcon: <PortfolioInactiveIcon />,
     activeIcon: <PortfolioActiveIcon />
   },
-  Explore: {
-    inactiveIcon: <ExploreInactiveIcon />,
-    activeIcon: <ExploreActiveIcon />
+  Search: {
+    inactiveIcon: <SearchInactiveIcon />,
+    activeIcon: <SearchActiveIcon />
   },
   Settings: {
     inactiveIcon: <SettingsInactiveIcon />,
