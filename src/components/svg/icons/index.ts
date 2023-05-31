@@ -33,6 +33,7 @@ export * from './Scanner';
 export * from './ScannerQR';
 export * from './Search';
 export * from './Settings';
+export * from './SettingsFilled';
 export * from './Share';
 export * from './Star';
 export * from './StarFilled';

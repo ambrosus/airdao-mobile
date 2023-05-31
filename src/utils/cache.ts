@@ -27,7 +27,11 @@ const getNotificationSettings = async (): Promise<NotificationSettings> => {
 };
 
 const setItem = async (key: CacheKey, item: any): Promise<void> => {
-  await SecureStore.setItemAsync(key, JSON.stringify(item));
+  try {
+    await SecureStore.setItemAsync(key, JSON.stringify(item));
+  } catch (error) {
+    throw error;
+  }
 };
 
 /**
@@ -36,9 +40,13 @@ const setItem = async (key: CacheKey, item: any): Promise<void> => {
  * @returns parsed value or null
  */
 const getItem = async (key: CacheKey): Promise<unknown | null> => {
-  const item = await SecureStore.getItemAsync(key);
-  if (item) return JSON.parse(item);
-  return null;
+  try {
+    const item = await SecureStore.getItemAsync(key);
+    if (item) return JSON.parse(item);
+    return null;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const deleteItem = async (key: CacheKey): Promise<void> => {

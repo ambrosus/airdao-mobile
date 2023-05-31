@@ -1,29 +1,34 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Button, Row, Spacer } from '@components/base';
 import { Header } from '@components/composite';
-import { FilterIcon, SettingsIcon } from '@components/svg/icons';
+import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { StyleSheet } from 'react-native';
+import { moderateScale } from '@utils/scaling';
 
 interface NotificationsHeaderProps {
-  onFilterPress: () => unknown;
   onSettingsPress: () => unknown;
 }
 
 export const NotificationsHeader = (
   props: NotificationsHeaderProps
 ): JSX.Element => {
-  const { onFilterPress = () => null, onSettingsPress = () => null } = props;
+  const { onSettingsPress = () => null } = props;
 
   const renderContentRight = () => {
     return (
       <Row alignItems="center">
-        <Button onPress={onFilterPress} testID="filter-button">
-          <FilterIcon />
-        </Button>
         <Spacer value={38} horizontal />
-        <Button onPress={onSettingsPress} testID="settings-button">
-          <SettingsIcon />
+        <Button
+          type="circular"
+          onPress={onSettingsPress}
+          testID="settings-button"
+          style={{
+            backgroundColor: COLORS.smokyBlack5,
+            padding: moderateScale(12)
+          }}
+        >
+          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.8} />
         </Button>
       </Row>
     );

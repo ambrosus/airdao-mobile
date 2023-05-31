@@ -17,6 +17,7 @@
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
       "@contexts/*": ["./src/contexts/*"],
+      "@database/*": ["./src/database/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
       "@models/*": ["./src/models/*"],

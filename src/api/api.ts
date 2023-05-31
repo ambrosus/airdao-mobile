@@ -4,7 +4,7 @@ import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
 import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { ExplorerSort } from '@screens/Explore/Explore.types';
-import { Cache, CacheKey } from '@utils/cache';
+import { NotificationService } from '@lib';
 
 const walletAPI = 'https://wallet-api-api.ambrosus-dev.io';
 
@@ -87,7 +87,8 @@ export const getTransactionsOfAccount = async (
 };
 
 export const watchAddress = async (address: string): Promise<void> => {
-  const pushToken = await Cache.getItem(CacheKey.NotificationToken);
+  const notificationService = new NotificationService();
+  const pushToken = await notificationService.getPushToken();
   if (!address || !pushToken) return;
   try {
     await axios.post(`${walletAPI}/api/v1/watcher`, {

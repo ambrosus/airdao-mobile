@@ -53,7 +53,7 @@ class PermissionService {
       return (await this.requestPermission(permission)).granted;
     }
     if (!result.canAskAgain && options?.openSettings) {
-      this.showSettingsAlert();
+      this.showSettingsAlert(permission);
     }
     return false;
   }
@@ -62,9 +62,9 @@ class PermissionService {
     this.getPermission(Permission.Notifications, { requestAgain: true });
   }
 
-  private showSettingsAlert() {
+  private showSettingsAlert(permission: string) {
     Alert.alert(
-      'You denied access!',
+      `You denied ${permission} access!`,
       'Go to your settings to give permission!',
       [
         {

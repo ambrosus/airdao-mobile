@@ -57,6 +57,18 @@
         {
           "ios": {
             "useFrameworks": "static"
+          },
+          "android": {
+            "kotlinVersion": "1.6.10"
+          }
+        }
+      ],
+      "@rafaellupo/watermelondb-firebase-expo-plugin",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.6.10"
           }
         }
       ]

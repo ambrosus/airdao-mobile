@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingTop: verticalScale(30),
     paddingBottom: '20%',
-    paddingHorizontal: scale(17)
+    paddingHorizontal: scale(15.5)
   },
   sectionSeparator: {
     borderBottomWidth: 1,
