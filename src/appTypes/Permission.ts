@@ -1,6 +1,6 @@
 export enum Permission {
-  Notifications,
-  Camera
+  Notifications = 'Notifications',
+  Camera = 'Camera'
 }
 
 export type PermissionOptions = {

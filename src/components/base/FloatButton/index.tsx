@@ -55,7 +55,6 @@ export const FloatButton = memo(
             >
               {title}
             </Text>
-            ƒ
           </>
         )}
       </Pressable>
