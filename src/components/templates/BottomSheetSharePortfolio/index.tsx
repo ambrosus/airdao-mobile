@@ -36,28 +36,30 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
-        format: 'png'
+        format: 'png',
+        width: 341,
+        height: 163
       };
       const result = await captureRef(shareRef, captureOptions);
       const uri = result;
       if (type) {
         ShareUtils.socialShareImage(
           {
-            uri: uri,
+            uri,
             title: `Share on ${type}!`
           },
           type
         );
       } else {
         ShareUtils.shareImage({
-          uri: uri,
+          uri,
           title: `Share!`
         });
       }
     };
 
     return (
-      <BottomSheet ref={localRef}>
+      <BottomSheet ref={localRef} isNestedSheet>
         <View testID="share-bottom-sheet" style={styles.container}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
