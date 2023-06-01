@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { captureRef, CaptureOptions } from 'react-native-view-shot';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -21,6 +21,7 @@ import { verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
+import * as SMS from 'expo-sms';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
@@ -34,14 +35,33 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const shareRef = useRef<View>(null);
 
     const onSharePress = async (type?: Social) => {
+      const fileName = `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`;
       const captureOptions: CaptureOptions = {
+<<<<<<< Updated upstream
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
+=======
+        fileName, // android only
+>>>>>>> Stashed changes
         format: 'png',
         width: 341,
         height: 163
       };
-      const result = await captureRef(shareRef, captureOptions);
-      const uri = result;
+      const uri = await captureRef(shareRef, captureOptions);
+      if (type === Social.Sms) {
+        const recipient = '';
+        const message = '';
+        const options: SMS.SMSOptions = {
+          attachments: {
+            uri,
+            mimeType: 'image/png',
+            filename: uri.split('/').slice(-1)[0]
+          }
+        };
+        await SMS.sendSMSAsync(recipient, message, options);
+      } else if (type === Social.Other) {
+        const scheme = 'sms:';
+        Linking.openURL(scheme);
+      }
       if (type) {
         ShareUtils.socialShareImage(
           {
