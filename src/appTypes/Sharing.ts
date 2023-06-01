@@ -1,6 +1,7 @@
 export enum Social {
   Twitter = 'twitter',
-  Sms = 'sms'
+  Sms = 'sms',
+  Other = 'Other'
 }
 
 export interface SharingOptions {
