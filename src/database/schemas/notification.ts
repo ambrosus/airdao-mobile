@@ -12,6 +12,7 @@ export const NotificationTable = tableSchema({
       name: 'body',
       type: 'string'
     },
+    { name: 'is_read', type: 'boolean' },
     { name: 'created_at', type: 'number' }
   ]
 });

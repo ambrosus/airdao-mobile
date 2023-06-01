@@ -22,12 +22,16 @@ export class NotificationService {
   private async handleNotification(
     message: FirebaseMessagingTypes.RemoteMessage
   ) {
-    const notification = message.notification;
+    const { notification, messageId } = message;
     if (notification) {
       const { body, title } = notification;
       if (body && title) {
         const databaseService = new DatabaseService();
-        await databaseService.saveNotification(title as NotificationType, body);
+        await databaseService.saveNotification(
+          messageId || '',
+          title as NotificationType,
+          body
+        );
       }
     }
   }

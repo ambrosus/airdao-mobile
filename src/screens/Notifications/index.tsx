@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   SectionList,
   SectionListData,
@@ -8,18 +8,17 @@ import {
 } from 'react-native';
 import dayjs from 'dayjs';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import withObservables from '@nozbe/with-observables';
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { NotificationsHeader as Header, NotificationBox } from './components';
 import { Notification } from '@models/Notification';
 import { scale, verticalScale } from '@utils/scaling';
-import { NotificationModel } from '@database/models';
 import { COLORS } from '@constants/colors';
+import { useObserveNotifications } from '@hooks';
+import { Q } from '@nozbe/watermelondb';
 import { DatabaseService } from '@lib';
 import { styles } from './styles';
-import { Q } from '@nozbe/watermelondb';
 
 interface NotificationSection {
   title: string;
@@ -29,21 +28,23 @@ interface NotificationSection {
 
 const DAY_FORMAT = 'DD MMMM YYYY';
 
-interface NotificationsProps {
-  notifications: NotificationModel[];
-}
+export const Notifications = (): JSX.Element => {
+  const notifications = useObserveNotifications(Q.sortBy('created_at', 'desc'));
 
-const NotificationsScreen = (props: NotificationsProps): JSX.Element => {
-  const { notifications } = props;
+  useEffect(() => {
+    const databaseService = new DatabaseService();
+    const unreadNotifications = notifications.filter((n) => !n.isRead);
+    databaseService.markAsRead(unreadNotifications);
+  }, [notifications]);
+
   const settingsModal = useRef<BottomSheetRef>(null);
 
   const sectionizedNotificaitons: NotificationSection[] = React.useMemo(() => {
     const sectionMap = new Map<string, Notification[]>();
     notifications.forEach((n) => {
-      const notification = n.hydrate();
       const key = dayjs(n.createdAt).format(DAY_FORMAT);
       const notificationsInSection = sectionMap.get(key) || [];
-      notificationsInSection.push(notification);
+      notificationsInSection.push(n);
       sectionMap.set(key, notificationsInSection);
     });
     const sections: NotificationSection[] = [];
@@ -131,11 +132,3 @@ const NotificationsScreen = (props: NotificationsProps): JSX.Element => {
     </SafeAreaView>
   );
 };
-
-const enhanceWithNotifications = withObservables([], () => ({
-  notifications: new DatabaseService().observeNotifications(
-    Q.sortBy('created_at', 'desc')
-  )
-}));
-
-export const Notifications = enhanceWithNotifications(NotificationsScreen);
