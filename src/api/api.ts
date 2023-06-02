@@ -3,7 +3,7 @@ import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
 import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
-import { ExplorerSort } from '@screens/Search/Search.types';
+import { SearchSort } from '@screens/Search/Search.types';
 import { NotificationService } from '@lib';
 
 const walletAPI = 'https://wallet-api-api.ambrosus-dev.io';
@@ -37,7 +37,7 @@ export const getExplorerInfo = async (): Promise<ExplorerInfoDTO> => {
 
 export const getExplorerAccounts = async (
   limit = 20,
-  sort: ExplorerSort = ExplorerSort.Balance
+  sort: SearchSort = SearchSort.Balance
 ): Promise<ExplorerAccountDTO[]> => {
   try {
     const response = await axios.get(
