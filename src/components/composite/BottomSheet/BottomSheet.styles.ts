@@ -3,8 +3,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    marginBottom: 0,
-    marginHorizontal: 0,
+    margin: 0,
     justifyContent: 'flex-end'
   },
   swiper: {
