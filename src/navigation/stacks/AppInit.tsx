@@ -14,8 +14,8 @@ const AppInitialization = () => {
   useEffect(() => {
     (async () => {
       try {
-        const value = await Cache.getItem(CacheKey.IsFirstInit);
-        if (value) {
+        const value = await Cache.getItem(CacheKey.IsSecondInit);
+        if (!value) {
           return navigation.navigate('WelcomeScreen');
         } else {
           return navigation.navigate('Tabs', { screen: 'Wallets' });

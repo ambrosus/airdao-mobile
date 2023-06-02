@@ -101,7 +101,7 @@ export const WelcomeScreen = () => {
       </View>
       <Button
         onPress={async () => {
-          await Cache.setItem(CacheKey.IsFirstInit, false);
+          await Cache.setItem(CacheKey.IsSecondInit, true);
           setTimeout(() => {
             navigation.navigate('Tabs', { screen: 'Wallets' });
           }, 300);

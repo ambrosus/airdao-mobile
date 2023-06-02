@@ -6,7 +6,7 @@ export enum CacheKey {
   AddressLists = 'address_lists',
   AllAddresses = 'all_addresses',
   DeviceID = 'device_id',
-  IsFirstInit = 'is_first_init',
+  IsSecondInit = 'is_second_init',
   NotificationToken = 'notification_token',
   NotificationSettings = 'notification_settings',
   PersonalList = 'personal_list',
