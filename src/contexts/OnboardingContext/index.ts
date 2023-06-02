@@ -4,7 +4,7 @@ import { OnboardingContent } from '@constants/onboarding-content';
 import { Cache, CacheKey } from '@utils/cache';
 
 const OnboardingContext = () => {
-  const [status, setStatus] = useState<number>(-1);
+  const [, setStatus] = useState<number>(-1);
 
   const emptyFn = () => null;
   const backHelper = useRef<() => unknown>(emptyFn);
@@ -67,7 +67,7 @@ const OnboardingContext = () => {
   };
 
   return {
-    status,
+    status: 'none',
     registerHelpers,
     back,
     next,
