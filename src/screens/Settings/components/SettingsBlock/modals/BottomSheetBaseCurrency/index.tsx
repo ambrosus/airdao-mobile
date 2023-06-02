@@ -1,14 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
-import { Dimensions, FlatList, Platform } from 'react-native';
+import { Button, Spacer } from '@components/base';
+import { Dimensions, FlatList } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 import { BackIcon } from '@components/svg/icons';
-import { FloatButton } from '@components/base/FloatButton';
-import { scale } from '@utils/scaling';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -66,26 +64,19 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
     const [modalActiveCurrency, setModalActiveCurrency] = useState<Currency>(
       selectedCurrency || ''
     );
+    const { top: topInset } = useSafeAreaInsets();
 
     const onCurrencyPress = (value: Currency) => {
       setModalActiveCurrency(value);
+      handleCurrencySave(value);
     };
 
     return (
-      <BottomSheet
-        height={Dimensions.get('screen').height}
-        ref={localRef}
-        containerStyle={styles.container}
-      >
-        {Platform.OS === 'android' ? (
-          <Spacer value={scale(57)} />
-        ) : (
-          <Spacer value={45} />
-        )}
+      <BottomSheet height={Dimensions.get('screen').height} ref={localRef}>
+        <Spacer value={topInset} />
         <Header
           titleStyle={styles.headerTitle}
           title="Select base currency"
-          titlePosition="center"
           style={styles.header}
           backIconVisible={false}
           contentLeft={
@@ -97,27 +88,6 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             >
               <BackIcon />
             </Button>
-          }
-          contentRight={
-            <>
-              {Platform.OS === 'ios' && (
-                <Button
-                  type="base"
-                  onPress={() => {
-                    localRef.current?.dismiss();
-                    handleCurrencySave(modalActiveCurrency);
-                  }}
-                >
-                  <Text
-                    fontFamily="Inter_600SemiBold"
-                    color={COLORS.jungleGreen}
-                    fontSize={16}
-                  >
-                    Save
-                  </Text>
-                </Button>
-              )}
-            </>
           }
         />
         <Spacer value={19} />
@@ -137,16 +107,6 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             );
           }}
         />
-        {Platform.OS === 'android' && (
-          <FloatButton
-            title="Save"
-            onPress={() => {
-              localRef.current?.dismiss();
-              handleCurrencySave(modalActiveCurrency);
-            }}
-            bottomPadding={17}
-          />
-        )}
       </BottomSheet>
     );
   }

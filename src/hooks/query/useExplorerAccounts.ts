@@ -3,10 +3,10 @@ import { QueryResponse } from '@appTypes/QueryResponse';
 import { getExplorerAccounts } from '@api/api';
 import { ExplorerAccountDTO } from '@models/index';
 import { ExplorerAccount } from '@models/Explorer';
-import { ExplorerSort } from '@screens/Search/Search.types';
+import { SearchSort } from '@screens/Search/Search.types';
 
 export function useExplorerAccounts(
-  sort: ExplorerSort
+  sort: SearchSort
 ): QueryResponse<ExplorerAccount[] | undefined> {
   const { data, isLoading, error } = useQuery<ExplorerAccountDTO[]>(
     ['explorer-accounts', sort],

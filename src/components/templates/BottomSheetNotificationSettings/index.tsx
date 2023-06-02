@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, Platform, ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
 import {
   BottomSheet,
@@ -15,11 +15,11 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import { FloatButton } from '@components/base/FloatButton';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -55,9 +55,10 @@ export const BottomSheetNotificationSettings = forwardRef<
   BottomSheetProps
 >((props, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { data: notificationSettings } = useNotificationSettings();
+  const { data: notificationSettings, save } = useNotificationSettings();
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
+  const { top: topInset } = useSafeAreaInsets();
 
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
@@ -72,6 +73,10 @@ export const BottomSheetNotificationSettings = forwardRef<
       ...localNotificationSettings,
       [key]: value
     });
+    save({
+      ...localNotificationSettings,
+      [key]: value
+    });
   };
 
   return (
@@ -79,9 +84,8 @@ export const BottomSheetNotificationSettings = forwardRef<
       height={Dimensions.get('screen').height}
       ref={localRef}
       {...props}
-      containerStyle={styles.bottomSheet}
     >
-      <Spacer value={scale(50)} />
+      <Spacer value={topInset} />
       <Header
         title={
           <Text
@@ -175,18 +179,6 @@ export const BottomSheetNotificationSettings = forwardRef<
           </Text>
         </View>
       </ScrollView>
-      {Platform.OS === 'android' ? (
-        <FloatButton
-          testID="BottomSheetNoti_Save_Button"
-          title="Save"
-          onPress={() => {
-            localRef.current?.dismiss();
-          }}
-          bottomPadding={17}
-        />
-      ) : (
-        <></>
-      )}
     </BottomSheet>
   );
 });
