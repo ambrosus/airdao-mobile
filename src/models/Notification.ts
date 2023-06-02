@@ -11,6 +11,7 @@ export class Notification {
   type: NotificationType;
   body: string;
   createdAt: Date;
+  isRead: boolean;
 
   constructor(details: NotificationDTO) {
     // TODO
@@ -20,6 +21,7 @@ export class Notification {
       'This is a demo notification body. TODO: Edit Notification constructor';
     this.type = NotificationType.PriceAlert;
     this.createdAt = new Date();
+    this.isRead = details.isRead;
   }
 }
 

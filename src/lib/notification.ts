@@ -1,5 +1,8 @@
-import messaging from '@react-native-firebase/messaging';
-import { Cache, CacheKey } from '@utils/cache';
+import { NotificationType } from '@models';
+import messaging, {
+  FirebaseMessagingTypes
+} from '@react-native-firebase/messaging';
+import { DatabaseService } from './database';
 
 export class NotificationService {
   constructor(listener?: (newToken: string) => unknown) {
@@ -16,8 +19,32 @@ export class NotificationService {
     });
   }
 
+  private async handleNotification(
+    message: FirebaseMessagingTypes.RemoteMessage
+  ) {
+    const { notification, messageId } = message;
+    if (notification) {
+      const { body, title } = notification;
+      if (body && title) {
+        const databaseService = new DatabaseService();
+        await databaseService.saveNotification(
+          messageId || '',
+          title as NotificationType,
+          body
+        );
+      }
+    }
+  }
+
+  private async handleForegroundNotification(
+    message: FirebaseMessagingTypes.RemoteMessage
+  ) {
+    // TODO we can show Toast message
+    this.handleNotification.bind(this)(message);
+  }
+
   async setup() {
-    const pushToken = await this.getPushToken();
-    Cache.setItem(CacheKey.NotificationToken, pushToken);
+    messaging().onMessage(this.handleForegroundNotification.bind(this));
+    messaging().setBackgroundMessageHandler(this.handleNotification.bind(this));
   }
 }

@@ -16,7 +16,7 @@ export const useAppInit = () => {
         DeviceService.setupUniqueDeviceID();
         const permission = await PermissionService.getPermission(
           Permission.Notifications,
-          { requestAgain: true }
+          { requestAgain: true, openSettings: true }
         );
         if (permission) {
           const notificationService = new NotificationService();
