@@ -5,6 +5,7 @@ import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 import { verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
@@ -19,16 +20,28 @@ export const ExplorerWalletItem = (
   return (
     <View>
       <Row alignItems="center" justifyContent="space-between">
-        <Text fontSize={13} fontFamily="Inter_600SemiBold">
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.smokyBlack}
+        >
           {StringUtils.formatAddress(address, 7, 9)}
         </Text>
-        <Text fontSize={13} fontFamily="Mersad_600SemiBold">
+        <Text
+          fontSize={13}
+          fontFamily="Mersad_600SemiBold"
+          color={COLORS.smokyBlack}
+        >
           {NumberUtils.formatNumber(ambBalance, 0)} AMB
         </Text>
       </Row>
       <Spacer value={verticalScale(5)} />
       <Row alignItems="center" justifyContent="space-between">
-        <Text fontSize={12} color="#646464">
+        <Text
+          fontSize={12}
+          color={COLORS.smokyBlack50}
+          fontFamily="Inter_500Medium"
+        >
           Holding{' '}
           {NumberUtils.formatNumber(
             item.calculatePercentHoldings(totalSupply),
@@ -38,9 +51,8 @@ export const ExplorerWalletItem = (
         </Text>
         <Text
           fontSize={13}
-          fontFamily="Mersad_600SemiBold"
-          color="#2F2B43"
-          opacity={0.5}
+          fontFamily="Inter_500Medium"
+          color={COLORS.smokyBlack50}
         >
           {StringUtils.pluralize(transactionCount, 'Transaction')}
         </Text>
