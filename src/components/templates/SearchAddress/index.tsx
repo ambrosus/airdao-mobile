@@ -12,6 +12,7 @@ import {
   Button,
   InputRef,
   KeyboardDismissingView,
+  Row,
   Spacer,
   Spinner
 } from '@components/base';
@@ -20,8 +21,8 @@ import {
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { ScannerQRIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
+import { scale, verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
@@ -34,6 +35,7 @@ import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { SearchAddressNoResult } from './SearchAddress.NoMatch';
 import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import { styles } from './styles';
+import { COLORS } from '@constants/colors';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -144,6 +146,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     }
   };
 
+  const clearInput = () => {
+    inputRef.current?.clear();
+    onContentVisibilityChanged(address === '');
+    setAddress('');
+  };
+
   return (
     <>
       <KeyboardDismissingView style={styles.input}>
@@ -151,10 +159,22 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           testID="search-input"
           ref={inputRef}
           maxLength={CRYPTO_ADDRESS_MAX_LENGTH}
+          iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
           iconRight={
-            <Button onPress={showScanner}>
-              <ScannerQRIcon />
-            </Button>
+            <Row alignItems="center">
+              {address.length > 0 && (
+                <>
+                  <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                    <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
+                  </Button>
+                  <Spacer value={scale(12)} horizontal />
+                </>
+              )}
+
+              <Button onPress={showScanner}>
+                <ScannerQRIcon />
+              </Button>
+            </Row>
           }
           placeholder={'Search public address'}
           returnKeyType="search"
