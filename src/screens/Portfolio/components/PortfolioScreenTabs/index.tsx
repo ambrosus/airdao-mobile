@@ -17,7 +17,7 @@ import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/compo
 import { TabViewProps, Route } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { ExploreTabNavigationProp } from '@appTypes';
+import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
 import { PlusIcon } from '@components/svg/icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -40,10 +40,10 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
 
-  const navigation = useNavigation<ExploreTabNavigationProp>();
+  const navigation = useNavigation<SearchTabNavigationProp>();
 
-  const navigateToExplore = useCallback(() => {
-    navigation.navigate('Explore', { screen: 'ExploreScreen' });
+  const navigateToSearch = useCallback(() => {
+    navigation.navigate('Search', { screen: 'SearchScreen' });
   }, [navigation]);
 
   const refs = useMemo(
@@ -82,13 +82,13 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
 
   const addAddressOrCreateCollectionButton = () => {
     if (props.index === 0) {
-      navigateToExplore();
+      navigateToSearch();
     } else handleOnOpenCreateNewList();
   };
 
   const portfolioTabsButton = () => {
     if (props.index === 0) {
-      navigateToExplore();
+      navigateToSearch();
     } else {
       handleOnOpenCreateNewList();
     }

@@ -1,12 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import {
-  Dimensions,
-  Platform,
-  ScrollView,
-  useWindowDimensions,
-  View
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
 import {
   BottomSheet,
@@ -19,19 +12,22 @@ import {
   BottomSheetRef
 } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Button, Input, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { BackIcon, CloseIcon } from '@components/svg/icons';
+import { BackIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
-import { useAMBPrice } from '@hooks/query';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
-import { DefaultNotificationSettings } from '@constants/variables';
 import { styles } from './styles';
 import { FloatButton } from '@components/base/FloatButton';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
-  <Text title fontFamily="Inter_600SemiBold">
+  <Text
+    title
+    fontFamily="Inter_600SemiBold"
+    fontSize={16}
+    color={COLORS.smokyBlack}
+  >
     {children}
   </Text>
 );
@@ -59,13 +55,9 @@ export const BottomSheetNotificationSettings = forwardRef<
   BottomSheetProps
 >((props, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { data } = useAMBPrice();
-  const { data: notificationSettings, save } = useNotificationSettings();
+  const { data: notificationSettings } = useNotificationSettings();
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
-
-  const { height: WINDOW_HEIGHT } = useWindowDimensions();
-  const { top: topInset } = useSafeAreaInsets();
 
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
@@ -82,53 +74,34 @@ export const BottomSheetNotificationSettings = forwardRef<
     });
   };
 
-  const saveSettings = async () => {
-    await save(localNotificationSettings);
-    localRef.current?.dismiss();
-  };
-
   return (
     <BottomSheet
-      height={
-        Platform.OS === 'ios'
-          ? WINDOW_HEIGHT - topInset
-          : Dimensions.get('screen').height
-      }
+      height={Dimensions.get('screen').height}
       ref={localRef}
       {...props}
       containerStyle={styles.bottomSheet}
     >
-      {Platform.OS === 'android' && <Spacer value={scale(57)} />}
+      <Spacer value={scale(50)} />
       <Header
-        titleStyle={styles.headerTitle}
-        title="Notification settings"
+        title={
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={16}
+            color={COLORS.smokyBlack}
+          >
+            Notification settings
+          </Text>
+        }
         titlePosition="center"
         backIconVisible={false}
         style={styles.header}
         contentLeft={
           <Button
-            testID="BottomSheetNotiSettings_Header_Left"
+            testID="BottomSheet_Notification_Settings_Header_Left"
             onPress={localRef.current?.dismiss}
           >
-            {Platform.OS === 'ios' ? (
-              <CloseIcon testID="BottomSheetNotiSettings_Header_Close_Icon" />
-            ) : (
-              <BackIcon testID="BottomSheetNotiSettings_Header_Back_Icon" />
-            )}
+            <BackIcon testID="Notification_Settings_Header_Back_Icon" />
           </Button>
-        }
-        contentRight={
-          Platform.OS === 'ios' && (
-            <Button onPress={saveSettings}>
-              <Text
-                title
-                fontFamily="Inter_500Medium"
-                color={COLORS.jungleGreen}
-              >
-                Save
-              </Text>
-            </Button>
-          )
         }
       />
       <ScrollView
@@ -138,12 +111,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         bounces={false}
       >
         <View style={styles.container}>
-          <Text color="#646464" fontWeight="400" fontSize={15}>
-            Set notifications for AMB token
-          </Text>
-
           {/* Price alerts */}
-          <Spacer value={verticalScale(12)} />
           <Button
             onPress={() =>
               onSettingsValueChange(
@@ -153,7 +121,7 @@ export const BottomSheetNotificationSettings = forwardRef<
             }
           >
             <Row alignItems="center" justifyContent="space-between">
-              <Title>Price alerts</Title>
+              <Title>Price alert</Title>
               <Switch
                 testID="BottomSheetNotiSettings_Price_Switch"
                 disabled
@@ -161,65 +129,12 @@ export const BottomSheetNotificationSettings = forwardRef<
               />
             </Row>
           </Button>
-
-          {/* Price Threshold */}
-          <Spacer value={verticalScale(32)} />
-          <Row alignItems="center">
-            <Title>Set price threshold</Title>
-            <Spacer value={scale(12)} horizontal />
-            <Text fontWeight="500" fontSize={12} color="#646464">
-              AMB PRICE: ~${data?.priceUSD}
-            </Text>
-          </Row>
-          <Spacer value={verticalScale(12)} />
-          <Row alignItems="center" justifyContent="space-between">
-            <Input
-              testID="BottomSheetNoti_Min_input"
-              type="number"
-              placeholder="Min"
-              style={styles.input}
-              value={
-                localNotificationSettings.priceThreshold.min
-                  ? localNotificationSettings.priceThreshold.min.toString()
-                  : undefined
-              }
-              onChangeValue={(newValue: string) =>
-                onSettingsValueChange('priceThreshold', {
-                  min:
-                    parseInt(newValue) ||
-                    DefaultNotificationSettings.priceThreshold.min,
-                  max: localNotificationSettings.priceThreshold.max
-                })
-              }
-            />
-            <Spacer horizontal value={scale(19)} />
-            <Input
-              testID="BottomSheetNoti_Max_input"
-              type="number"
-              placeholder="Max"
-              style={styles.input}
-              value={
-                localNotificationSettings.priceThreshold.max
-                  ? localNotificationSettings.priceThreshold.max.toString()
-                  : undefined
-              }
-              onChangeValue={(newValue: string) =>
-                onSettingsValueChange('priceThreshold', {
-                  min: localNotificationSettings.priceThreshold.min,
-                  max:
-                    parseInt(newValue) ||
-                    DefaultNotificationSettings.priceThreshold.max
-                })
-              }
-            />
-          </Row>
-
           {/* Percentage Change */}
-          <Spacer value={verticalScale(32)} />
-          <Title>AMB movement threshold</Title>
+          <Spacer value={verticalScale(24)} />
+          <Title>Price movement threshold</Title>
           <Spacer value={verticalScale(12)} />
           <Text fontSize={12} fontWeight="500" color="#646464">
-            You’ll be notified of significant increase & decrease of AMB token
+            You’ll be notified of significant increase & decrease of AMB price{' '}
           </Text>
           <Spacer value={verticalScale(12)} />
           <SegmentedPicker
@@ -237,16 +152,8 @@ export const BottomSheetNotificationSettings = forwardRef<
               )
             }
           />
-          <Spacer value={verticalScale(32)} />
-          <View style={styles.separator} />
-          <Spacer value={verticalScale(32)} />
-
-          {/* Transaction alerts */}
-          <Text fontSize={15} fontWeight="400" color="#646464">
-            Set notifications for Watchlists
-          </Text>
+          <Spacer value={verticalScale(24)} />
           {/* Transaction Alerts */}
-          <Spacer value={verticalScale(12)} />
           <Button
             onPress={() =>
               onSettingsValueChange(
@@ -256,81 +163,16 @@ export const BottomSheetNotificationSettings = forwardRef<
             }
           >
             <Row alignItems="center" justifyContent="space-between">
-              <Title>Transaction alerts</Title>
+              <Title>Transaction alert</Title>
               <Switch
                 disabled
                 value={localNotificationSettings.transactionAlerts}
               />
             </Row>
           </Button>
-          {/* Transaction threshold */}
-          <Spacer value={verticalScale(32)} />
-          <Title>Set transaction threshold</Title>
-          <Spacer value={verticalScale(12)} />
-          <Row alignItems="center" justifyContent="space-between">
-            <Input
-              type="number"
-              placeholder="Min"
-              style={styles.input}
-              value={
-                localNotificationSettings.transactionThreshold.min ===
-                DefaultNotificationSettings.transactionThreshold.min
-                  ? undefined
-                  : localNotificationSettings.transactionThreshold.min?.toString()
-              }
-              onChangeValue={(newValue: string) =>
-                onSettingsValueChange('transactionThreshold', {
-                  min:
-                    parseInt(newValue) ||
-                    DefaultNotificationSettings.transactionThreshold.min,
-                  max: localNotificationSettings.transactionThreshold.max
-                })
-              }
-            />
-            <Spacer horizontal value={scale(19)} />
-            <Input
-              type="number"
-              placeholder="Max"
-              style={styles.input}
-              value={
-                localNotificationSettings.transactionThreshold.max
-                  ? localNotificationSettings.transactionThreshold.max.toString()
-                  : undefined
-              }
-              onChangeValue={(newValue: string) =>
-                onSettingsValueChange('transactionThreshold', {
-                  min: localNotificationSettings.transactionThreshold.min,
-                  max:
-                    parseInt(newValue) ||
-                    DefaultNotificationSettings.transactionThreshold.max
-                })
-              }
-            />
-          </Row>
-          {/* Balance Percentage Change */}
-          <Spacer value={verticalScale(32)} />
-          <Title>AMB movement threshold</Title>
-          <Spacer value={verticalScale(12)} />
           <Text fontSize={12} fontWeight="500" color="#646464">
-            You’ll be notified of significant increase & decrease of AMB token
+            You’ll be notified of any transaction {'\n'} in your watchlist
           </Text>
-          <Spacer value={verticalScale(12)} />
-          <SegmentedPicker
-            segments={PercentThresholds}
-            selectedSegment={
-              PercentThresholds.find(
-                (s) =>
-                  s.value === localNotificationSettings.balancePercentChange
-              )?.id || PercentThresholds[0].id
-            }
-            onSelectSegment={(selectedSegment) =>
-              onSettingsValueChange(
-                'balancePercentChange',
-                selectedSegment.value
-              )
-            }
-          />
-          <Spacer value={verticalScale(32)} />
         </View>
       </ScrollView>
       {Platform.OS === 'android' ? (

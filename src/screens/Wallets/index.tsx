@@ -5,7 +5,7 @@ import { PortfolioBalance } from './components';
 import { AddIcon } from '@components/svg/icons/AddIcon';
 import { useOnboardingStatus } from '@contexts';
 import { useAMBPrice } from '@hooks';
-import { ExploreTabNavigationProp } from '@appTypes';
+import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { Row, Spacer, Text } from '@components/base';
@@ -16,15 +16,15 @@ import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider
 import { HomeHeader } from '@screens/Wallets/components/Header';
 
 export const HomeScreen = () => {
-  const navigation = useNavigation<ExploreTabNavigationProp>();
+  const navigation = useNavigation<SearchTabNavigationProp>();
   const isFocused = useIsFocused();
 
   const { data: ambTokenData } = useAMBPrice();
   const { start: startOnboarding } = useOnboardingStatus((v) => v);
   const onboardinStarted = useRef(false);
 
-  const navigateToExplore = useCallback(() => {
-    navigation.navigate('Explore', { screen: 'ExploreScreen' });
+  const navigateToSearch = useCallback(() => {
+    navigation.navigate('Search', { screen: 'SearchScreen' });
   }, [navigation]);
 
   useLayoutEffect(() => {
@@ -67,7 +67,7 @@ export const HomeScreen = () => {
         thisStep={1}
         tooltipPlacement="top"
         helpers={{
-          next: navigateToExplore
+          next: navigateToSearch
         }}
         removeAndroidStatusBarHeight
       >

@@ -6,7 +6,7 @@ import {
   BottomSheetRef
 } from '@components/composite/BottomSheet/BottomSheet.types';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { ExplorerSort } from '../Explore.types';
+import { ExplorerSort } from '../Search.types';
 import { CloseIcon } from '@components/svg/icons';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';

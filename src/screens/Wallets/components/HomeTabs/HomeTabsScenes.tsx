@@ -18,7 +18,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { ExploreTabNavigationProp } from '@appTypes';
+import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { useLists } from '@contexts';
 
@@ -30,7 +30,7 @@ type Props<T extends Route> = Parameters<
 };
 
 export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
-  const navigation = useNavigation<ExploreTabNavigationProp>();
+  const navigation = useNavigation<SearchTabNavigationProp>();
   const { handleOnCreate } = useLists((v) => v);
   const containerRef = useRef<View | null>(null);
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
@@ -47,7 +47,7 @@ export const HomeTabsScenes = <T extends Route>(props: Props<T>) => {
     createCollectionOrAddAddressRef.current?.dismiss();
 
     setTimeout(
-      () => navigation.navigate('Explore', { screen: 'ExploreScreen' }),
+      () => navigation.navigate('Search', { screen: 'SearchScreen' }),
       400
     );
   }, [navigation]);

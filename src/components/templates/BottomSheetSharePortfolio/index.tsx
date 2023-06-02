@@ -1,6 +1,6 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
-import { captureRef, CaptureOptions } from 'react-native-view-shot';
+import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
 import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -36,28 +36,30 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
-        format: 'png'
+        format: 'jpg',
+        width: 500,
+        height: 300,
+        quality: 1.0
       };
-      const result = await captureRef(shareRef, captureOptions);
-      const uri = result;
+      const uri = await captureRef(shareRef, captureOptions);
       if (type) {
         ShareUtils.socialShareImage(
           {
-            uri: uri,
+            uri,
             title: `Share on ${type}!`
           },
           type
         );
       } else {
         ShareUtils.shareImage({
-          uri: uri,
+          uri,
           title: `Share!`
         });
       }
     };
 
     return (
-      <BottomSheet ref={localRef}>
+      <BottomSheet ref={localRef} isNestedSheet>
         <View testID="share-bottom-sheet" style={styles.container}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
@@ -74,7 +76,9 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
           </View>
           <View style={styles.portfolioPerfomance}>
             <View ref={shareRef}>
-              <PortfolioPerformance {...portfolioBalanceProps} />
+              <ViewShot>
+                <PortfolioPerformance {...portfolioBalanceProps} />
+              </ViewShot>
             </View>
           </View>
           <Spacer value={verticalScale(40)} />
