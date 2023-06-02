@@ -1,14 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Spacer } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Dimensions, FlatList, Platform } from 'react-native';
+import { Dimensions, FlatList } from 'react-native';
 import { BackIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
-import { FloatButton } from '@components/base/FloatButton';
-import { scale } from '@utils/scaling';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -63,22 +61,16 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
     const [modalActiveLanguage, setModalActiveLanguage] = useState<Language>(
       selectedLanguage || ''
     );
+    const { top: topInset } = useSafeAreaInsets();
 
     const onLanguagePress = (value: Language) => {
       setModalActiveLanguage(value);
+      handleLanguageSave(value);
     };
 
     return (
-      <BottomSheet
-        ref={localRef}
-        height={Dimensions.get('screen').height}
-        containerStyle={styles.container}
-      >
-        {Platform.OS === 'android' ? (
-          <Spacer value={scale(57)} />
-        ) : (
-          <Spacer value={45} />
-        )}
+      <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
+        <Spacer value={topInset} />
         <Header
           titleStyle={styles.headerTitle}
           title="Select language"
@@ -94,27 +86,6 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
             >
               <BackIcon />
             </Button>
-          }
-          contentRight={
-            <>
-              {Platform.OS === 'ios' && (
-                <Button
-                  type="base"
-                  onPress={() => {
-                    localRef.current?.dismiss();
-                    handleLanguageSave(modalActiveLanguage);
-                  }}
-                >
-                  <Text
-                    fontFamily="Inter_600SemiBold"
-                    color={COLORS.jungleGreen}
-                    fontSize={16}
-                  >
-                    Save
-                  </Text>
-                </Button>
-              )}
-            </>
           }
         />
         <Spacer value={19} />
@@ -134,16 +105,6 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
             );
           }}
         />
-        {Platform.OS === 'android' && (
-          <FloatButton
-            title="Save"
-            onPress={() => {
-              localRef.current?.dismiss();
-              handleLanguageSave(modalActiveLanguage);
-            }}
-            bottomPadding={17}
-          />
-        )}
       </BottomSheet>
     );
   }
