@@ -92,7 +92,7 @@ export function HomeHeader(): JSX.Element {
             <ScannerIcon color="#393b40" />
           </Button>
         </OnboardingView>
-        <BottomSheet height={WINDOW_HEIGHT} ref={scanner}>
+        <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
           <BarcodeScanner onScanned={onQRCodeScanned} onClose={closeScanner} />
         </BottomSheet>
       </>

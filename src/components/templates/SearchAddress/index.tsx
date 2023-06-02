@@ -183,7 +183,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           onSubmitEditing={onInputSubmit}
         />
       </KeyboardDismissingView>
-      <BottomSheet height={WINDOW_HEIGHT} ref={scannerModalRef}>
+      <BottomSheet
+        height={WINDOW_HEIGHT}
+        ref={scannerModalRef}
+        borderRadius={0}
+      >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
       {loading && !!address && <Spinner />}
