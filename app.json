@@ -10,7 +10,9 @@
       "image": "./assets/splash.png",
       "backgroundColor": "#4680FF"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -19,8 +21,12 @@
       "bundleIdentifier": "io.airdao.app",
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification"],
-        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ],
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -45,7 +51,9 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
         }
       ],
-      ["@react-native-firebase/app"],
+      [
+        "@react-native-firebase/app"
+      ],
       [
         "expo-camera",
         {
@@ -53,10 +61,19 @@
         }
       ],
       [
+        "@morrowdigital/watermelondb-expo-plugin",
+        {
+          "databases": ["morrow.db"]
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "ios": {
             "useFrameworks": "static"
+          },
+          "android": {
+            "kotlinVersion": "1.6.10"
           }
         }
       ]
@@ -65,6 +82,12 @@
       "eas": {
         "projectId": "fe81238e-85e8-4ace-8b87-65ff01c085b7"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/fe81238e-85e8-4ace-8b87-65ff01c085b7"
     }
   }
 }

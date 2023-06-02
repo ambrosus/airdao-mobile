@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   SectionList,
   SectionListData,
@@ -11,20 +11,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import {
-  BottomSheetFilter,
-  NotificationsHeader as Header,
-  NotificationBox
-} from './components';
-import {
-  Notification,
-  NotificationType,
-  NotificationWithPriceChange
-} from '@models/Notification';
+import { NotificationsHeader as Header, NotificationBox } from './components';
+import { Notification } from '@models/Notification';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { useObserveNotifications } from '@hooks';
+import { Q } from '@nozbe/watermelondb';
+import { DatabaseService } from '@lib';
 import { styles } from './styles';
-import { NotificationFilter } from '@appTypes/notification';
 
 interface NotificationSection {
   title: string;
@@ -35,63 +29,15 @@ interface NotificationSection {
 const DAY_FORMAT = 'DD MMMM YYYY';
 
 export const Notifications = (): JSX.Element => {
-  const [filter, setFilter] = useState<NotificationFilter>({
-    selectedDate: null,
-    priceAlerts: true,
-    walletUpdates: true,
-    transactionAlerts: true,
-    marketUpdates: true
-  });
+  const notifications = useObserveNotifications(Q.sortBy('created_at', 'desc'));
 
-  const filterModal = useRef<BottomSheetRef>(null);
+  useEffect(() => {
+    const databaseService = new DatabaseService();
+    const unreadNotifications = notifications.filter((n) => !n.isRead);
+    databaseService.markAsRead(unreadNotifications);
+  }, [notifications]);
+
   const settingsModal = useRef<BottomSheetRef>(null);
-
-  const notifications: Notification[] = [
-    {
-      _id: '1',
-      type: NotificationType.WalletUpdate,
-      body: 'Wallet 01 is up +6.54% ~$5,000 in the last 1 hour.',
-      percentChange: 6.54,
-      amount: 5000,
-      createdAt: dayjs().subtract(5, 'seconds').toDate()
-    } as NotificationWithPriceChange,
-    {
-      _id: '2',
-      type: NotificationType.TransactionAlert,
-      body: 'Wallet 01 received 30.654 AMB ~$50,000 to 0xe4...569C',
-      createdAt: dayjs().subtract(5, 'minutes').toDate()
-    },
-    {
-      _id: '3',
-      type: NotificationType.PriceAlert,
-      body: 'Yay! AMB price is up +10.56% ~$30,000',
-      percentChange: 10.56,
-      amount: 30000,
-      createdAt: dayjs().subtract(25, 'hours').toDate()
-    },
-    {
-      _id: '4',
-      type: NotificationType.WalletUpdate,
-      body: 'Your wallet is up +6.54% ~$5,000 in the last 1 hour.',
-      percentChange: 6.54,
-      amount: 5000,
-      createdAt: dayjs().subtract(26, 'hours').toDate()
-    } as NotificationWithPriceChange,
-    {
-      _id: '5',
-      type: NotificationType.TransactionAlert,
-      body: 'Wallet 01 received 30.654 AMB ~$50,000 to 0xe4...569C',
-      createdAt: dayjs().subtract(38, 'hours').toDate()
-    },
-    {
-      _id: '6',
-      type: NotificationType.PriceAlert,
-      body: 'Yay! AMB price is up +10.56% ~$30,000',
-      percentChange: 10.56,
-      amount: 30000,
-      createdAt: dayjs().subtract(48, 'hours').toDate()
-    }
-  ];
 
   const sectionizedNotificaitons: NotificationSection[] = React.useMemo(() => {
     const sectionMap = new Map<string, Notification[]>();
@@ -137,7 +83,11 @@ export const Notifications = (): JSX.Element => {
             <Spacer value={verticalScale(32)} />
           </>
         )}
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#9E9E9E">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={12}
+          color={COLORS.smokyBlack50}
+        >
           {info.section.title.toUpperCase()}
         </Text>
         <Spacer value={verticalScale(20)} />
@@ -177,11 +127,6 @@ export const Notifications = (): JSX.Element => {
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
-      />
-      <BottomSheetFilter
-        ref={filterModal}
-        filter={filter}
-        onSubmit={setFilter}
       />
       <BottomSheetNotificationSettings ref={settingsModal} />
     </SafeAreaView>

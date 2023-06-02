@@ -3,18 +3,19 @@ import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useObserveNotificationCount } from '@hooks';
 
 export function HomeHeader(): JSX.Element {
   const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
-  const unreadNotificationCount = 2;
+  const unreadNotificationCount = useObserveNotificationCount();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
@@ -63,7 +64,7 @@ export function HomeHeader(): JSX.Element {
           <NotificationIcon color="#393b40" />
           {unreadNotificationCount > 0 && (
             <View style={styles.notificationCountContainer}>
-              <Text color="white" subtext>
+              <Text color="white" fontSize={11} fontFamily="Inter_600SemiBold">
                 {unreadNotificationCount}
               </Text>
             </View>
@@ -71,7 +72,7 @@ export function HomeHeader(): JSX.Element {
         </Button>
       </>
     );
-  }, [navigateToNotifications]);
+  }, [navigateToNotifications, unreadNotificationCount]);
 
   const renderContentLeft = useMemo(() => {
     return (
@@ -130,9 +131,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff7a00',
     right: 0,
     top: -verticalScale(4),
-    borderRadius: scale(7),
-    width: scale(14),
-    height: scale(14),
+    borderRadius: scale(9),
+    width: moderateScale(18),
+    height: moderateScale(18),
     justifyContent: 'center',
     alignItems: 'center'
   }

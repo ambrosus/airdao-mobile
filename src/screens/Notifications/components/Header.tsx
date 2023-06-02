@@ -1,9 +1,10 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Button, Row, Spacer } from '@components/base';
 import { Header } from '@components/composite';
-import { SettingsIcon } from '@components/svg/icons';
+import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { StyleSheet } from 'react-native';
+import { moderateScale } from '@utils/scaling';
 
 interface NotificationsHeaderProps {
   onSettingsPress: () => unknown;
@@ -18,8 +19,16 @@ export const NotificationsHeader = (
     return (
       <Row alignItems="center">
         <Spacer value={38} horizontal />
-        <Button onPress={onSettingsPress} testID="settings-button">
-          <SettingsIcon />
+        <Button
+          type="circular"
+          onPress={onSettingsPress}
+          testID="settings-button"
+          style={{
+            backgroundColor: COLORS.smokyBlack5,
+            padding: moderateScale(12)
+          }}
+        >
+          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.8} />
         </Button>
       </Row>
     );
