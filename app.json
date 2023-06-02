@@ -14,6 +14,7 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/logo.png",
       "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false
