@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, SafeAreaView, useWindowDimensions } from 'react-native';
+import { Platform, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
 import { Button, Row, Text } from '@components/base';
@@ -100,20 +100,31 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   }
   if (!hasPermission) {
     return (
-      <SafeAreaView style={styles.noAccessContainer}>
-        <Row justifyContent="center">
-          <Text>No access to camera</Text>
-        </Row>
-        <Button
-          style={styles.getAccessBtn}
-          type="circular"
-          onPress={getCameraPermissions}
-        >
-          <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
-            Give permission
-          </Text>
-        </Button>
-      </SafeAreaView>
+      <View style={{ flex: 1, paddingTop: topInset }}>
+        <Header
+          style={{ backgroundColor: 'transparent', zIndex: 1000 }}
+          backIconVisible={false}
+          contentLeft={
+            <Button testID="BarcodeScanner_Close_Button" onPress={onClose}>
+              <CloseIcon color={COLORS.jetBlack} />
+            </Button>
+          }
+        />
+        <View style={[styles.noAccessContainer, { marginTop: -topInset }]}>
+          <Row justifyContent="center">
+            <Text>No access to camera</Text>
+          </Row>
+          <Button
+            style={styles.getAccessBtn}
+            type="circular"
+            onPress={getCameraPermissions}
+          >
+            <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
+              Give permission
+            </Text>
+          </Button>
+        </View>
+      </View>
     );
   }
 
@@ -132,7 +143,11 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
           style={{ backgroundColor: 'transparent', marginTop: topInset }}
           backIconVisible={false}
           contentLeft={
-            <Button testID="BarcodeScanner_Close_Button" onPress={onClose}>
+            <Button
+              testID="BarcodeScanner_Close_Button"
+              onPress={onClose}
+              style={{ zIndex: 1000 }}
+            >
               <CloseIcon color="#FFFFFF" />
             </Button>
           }
