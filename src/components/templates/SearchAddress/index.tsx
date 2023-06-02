@@ -62,6 +62,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     fetchNextPage,
     hasNextPage
   } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
+  const [searchInputFocused, setSearchInputFocused] = useState(false);
+
   const allAdresses = useAllAddresses();
 
   const inputRef = useRef<InputRef>(null);
@@ -95,12 +97,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
+    setSearchInputFocused(true);
   };
 
   const onInputBlur = () => {
     if (!account && !loading) {
       onContentVisibilityChanged(false);
     }
+    setSearchInputFocused(false);
   };
 
   const onInputSubmit = (
@@ -154,7 +158,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   return (
     <>
-      <KeyboardDismissingView style={styles.input}>
+      <KeyboardDismissingView
+        style={{
+          ...styles.input,
+          flex: searchInputFocused && !account ? 1 : 0
+        }}
+      >
         <InputWithIcon
           testID="search-input"
           ref={inputRef}
@@ -193,7 +202,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       {loading && !!address && <Spinner />}
       {error && !!address && !finalAccount && <SearchAddressNoResult />}
       {finalAccount && explorerInfo && (
-        <View style={{ flex: 1 }}>
+        <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(22)} />
           <KeyboardDismissingView>
             <ExplorerAccountView
@@ -210,7 +219,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             loading={transactionsLoading && !!address}
           />
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
-        </View>
+        </KeyboardDismissingView>
       )}
     </>
   );
