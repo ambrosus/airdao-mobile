@@ -10,6 +10,7 @@ import { Badge } from '@components/base/Badge';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
+import { PercentChange } from '@components/composite';
 
 interface PortfolioBalanceProps {
   AMBPrice: number;
@@ -58,13 +59,11 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           <Badge
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
-                <Text
-                  fontFamily="Inter_500Medium"
+                <PercentChange
+                  change={AMBPriceLast24HourChange}
                   fontSize={16}
-                  color={COLORS.jungleGreen}
-                >
-                  + {NumberUtils.formatNumber(AMBPriceLast24HourChange)}%
-                </Text>
+                  fontWeight="500"
+                />
                 <Spacer horizontal value={scale(4)} />
                 <Text
                   fontFamily="Inter_500Medium"
