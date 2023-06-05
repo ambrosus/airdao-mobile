@@ -1,4 +1,7 @@
 {
+  "cli": {
+    "appVersionSource": "local"
+  },
   "build": {
     "dev": {
       "channel": "dev",
@@ -10,7 +13,6 @@
     },
     "stage": {
       "channel": "stage",
-      "distribution": "internal",
       "android": {
         "buildType": "apk"
       }

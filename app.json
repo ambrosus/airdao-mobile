@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDao",
     "slug": "AirDao",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -10,9 +10,7 @@
       "image": "./assets/splash.png",
       "backgroundColor": "#4680FF"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "icon": "./assets/logo.png",
       "supportsTablet": true,
@@ -22,15 +20,14 @@
       "bundleIdentifier": "io.airdao.app",
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "fetch",
-          "remote-notification"
-        ],
+        "UIBackgroundModes": ["fetch", "remote-notification"],
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
-      }
+      },
+      "buildNumber": "1.0.2"
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -52,9 +49,7 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
         }
       ],
-      [
-        "@react-native-firebase/app"
-      ],
+      ["@react-native-firebase/app"],
       [
         "expo-camera",
         {
