@@ -9,11 +9,11 @@ import { NotificationService } from '@lib';
 import { CMCChartData, CMCInterval } from '@appTypes';
 import { AMBToken } from '@models';
 
-const walletAPI = 'https://wallet-api-api.ambrosus-dev.io';
 // const CMC_API =
 //   'https://pro-api.coinmarketcap.com';
 
 const CMC_API = 'https://sandbox-api.coinmarketcap.com';
+const walletAPI = 'https://wallet-api-api.ambrosus.io/api/v1/watcher';
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
@@ -125,6 +125,24 @@ export const getAMBPriceHistoricalPricing = async (
       AMBToken.fromCMCResponse(quote)
     );
     return mappedData;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeWatcherFromAddress = async (
+  address: string
+): Promise<void> => {
+  const notificationService = new NotificationService();
+  const pushToken = await notificationService.getPushToken();
+  if (!address || !pushToken) return;
+  try {
+    await axios.delete(`${walletAPI}/api/v1/watcher`, {
+      data: {
+        address,
+        push_token: pushToken
+      }
+    });
   } catch (error) {
     throw error;
   }
