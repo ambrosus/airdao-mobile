@@ -79,7 +79,6 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             }
           />
         </Button>
-        <Text>Test EAS Update</Text>
         <BezierChart
           height={verticalScale(200)}
           data={chartData}
