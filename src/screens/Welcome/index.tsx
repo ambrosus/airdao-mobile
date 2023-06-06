@@ -20,9 +20,7 @@ export const WelcomeScreen = () => {
       <View>
         <Spacer value={41} />
         <Row justifyContent="center" alignItems="center">
-          <View style={styles.icon}>
-            <AirDAOLogo />
-          </View>
+          <AirDAOLogo />
           <Spacer horizontal value={scale(8)} />
           <Text
             fontFamily="Inter_600SemiBold"
@@ -89,7 +87,9 @@ export const WelcomeScreen = () => {
           </Row>
           <Spacer value={scale(40)} />
           <Row alignItems="center" style={{ paddingRight: 60 }}>
-            <ManageCollections />
+            <View style={styles.icon}>
+              <ManageCollections />
+            </View>
             <Spacer horizontal value={scale(24)} />
             <View style={{ paddingRight: 50 }}>
               <Text
@@ -129,6 +129,8 @@ export const WelcomeScreen = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 40, justifyContent: 'space-between' },
   icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 50,
     width: 52,
     height: 52,
