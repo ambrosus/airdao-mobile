@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
@@ -6,7 +7,7 @@ import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { SearchSort } from '@screens/Search/Search.types';
 import { NotificationService } from '@lib';
 
-const walletAPI = 'https://wallet-api-api.ambrosus-dev.io';
+const walletAPI = 'https://wallet-api-api.ambrosus.io/api/v1/watcher';
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
@@ -101,8 +102,27 @@ export const watchAddress = async (address: string): Promise<void> => {
   }
 };
 
+export const removeWatcherFromAddress = async (
+  address: string
+): Promise<void> => {
+  const notificationService = new NotificationService();
+  const pushToken = await notificationService.getPushToken();
+  if (!address || !pushToken) return;
+  try {
+    await axios.delete(`${walletAPI}/api/v1/watcher`, {
+      data: {
+        address,
+        push_token: pushToken
+      }
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const API = {
   watchAddress,
+  removeWatcherFromAddress,
   getAMBTokenData,
   getExplorerInfo,
   getExplorerAccounts,
