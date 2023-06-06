@@ -8,20 +8,21 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from '@appTypes';
 import { Cache, CacheKey } from '@utils/cache';
+import { AddAddressIcon } from '@components/svg/icons/AddAddress';
+import { TrackAMBIcon } from '@components/svg/icons/TrackAMB';
+import { ManageCollections } from '@components/svg/icons/ManageCollections';
 
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
-
-  const Icon = () => {
-    return <View style={styles.logo} />;
-  };
 
   return (
     <View style={styles.container}>
       <View>
         <Spacer value={41} />
         <Row justifyContent="center" alignItems="center">
-          <AirDAOLogo />
+          <View style={styles.icon}>
+            <AirDAOLogo />
+          </View>
           <Spacer horizontal value={scale(8)} />
           <Text
             fontFamily="Inter_600SemiBold"
@@ -42,7 +43,9 @@ export const WelcomeScreen = () => {
           </Text>
           <Spacer value={scale(36)} />
           <Row alignItems="center" style={{ paddingRight: 60 }}>
-            <Icon />
+            <View style={styles.icon}>
+              <AddAddressIcon />
+            </View>
             <Spacer horizontal value={scale(24)} />
             <View style={{ paddingRight: 50 }}>
               <Text
@@ -63,7 +66,9 @@ export const WelcomeScreen = () => {
           </Row>
           <Spacer value={scale(40)} />
           <Row alignItems="center" style={{ paddingRight: 60 }}>
-            <Icon />
+            <View style={styles.icon}>
+              <TrackAMBIcon />
+            </View>
             <Spacer horizontal value={scale(24)} />
             <View style={{ paddingRight: 60 }}>
               <Text
@@ -84,7 +89,7 @@ export const WelcomeScreen = () => {
           </Row>
           <Spacer value={scale(40)} />
           <Row alignItems="center" style={{ paddingRight: 60 }}>
-            <Icon />
+            <ManageCollections />
             <Spacer horizontal value={scale(24)} />
             <View style={{ paddingRight: 50 }}>
               <Text
@@ -123,11 +128,11 @@ export const WelcomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 40, justifyContent: 'space-between' },
-  logo: {
+  icon: {
     borderRadius: 50,
     width: 52,
     height: 52,
-    backgroundColor: '#d9d9d9'
+    backgroundColor: '#EDF3FF'
   },
   optionsContainer: {
     paddingRight: 60,
