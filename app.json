@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDao",
     "slug": "AirDao",
-    "version": "1.0.2",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -50,6 +50,7 @@
         }
       ],
       ["@react-native-firebase/app"],
+      ["@react-native-firebase/crashlytics"],
       [
         "expo-camera",
         {
