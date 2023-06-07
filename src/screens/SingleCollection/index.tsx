@@ -20,6 +20,7 @@ import {
 } from '@appTypes/navigation/common';
 import { FloatButton } from '@components/base/FloatButton';
 import { useAMBPrice } from '@hooks';
+import { StringUtils } from '@utils/string';
 
 export const SingleGroupScreen = () => {
   const {
@@ -55,7 +56,7 @@ export const SingleGroupScreen = () => {
     <SafeAreaView style={styles.header}>
       {Platform.OS === 'android' && <Spacer value={30} />}
       <Header
-        title={selectedList.name}
+        title={StringUtils.formatAddress(selectedList.name, 10, 0)}
         titlePosition="left"
         style={{ shadowColor: COLORS.transparent }}
         contentRight={
