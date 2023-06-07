@@ -56,8 +56,6 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
     navigation.navigate('AMBMarketScreen');
   };
 
-  console.log(chartData[49]);
-
   return (
     <View style={styles.container} testID="portfolio-balance">
       <Row alignItems="center" justifyContent="center">
