@@ -4,34 +4,53 @@ import { COLORS } from '@constants/colors';
 import { View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
 import { scale } from '@utils/scaling';
+import { SelectionDot } from './SelectionDot';
+
+interface Interval {
+  text: string;
+  value: any;
+}
 
 interface BezierChartProps {
-  height?: number;
   data: GraphPoint[];
   strokeColor?: string;
   axisLabelColor?: string;
   axisColor?: string;
-  intervals?: string[];
-  onPointSelected?: (point: GraphPoint) => unknown;
+  intervals?: Interval[];
+  selectedInterval?: Interval;
+  onPointSelected?: (point?: GraphPoint) => unknown;
+  onIntervalSelected?: (interval: Interval) => unknown;
 }
 
 export function BezierChart(props: BezierChartProps): JSX.Element {
   const {
-    height,
     strokeColor = COLORS.black,
-    axisLabelColor = COLORS.black,
-    axisColor = COLORS.black,
     intervals = [],
+    selectedInterval,
     data,
-    onPointSelected
+    onPointSelected,
+    onIntervalSelected
   } = props;
 
-  const length = data.length;
-
-  const renderInterval = (interval: string) => {
+  const renderInterval = (interval: Interval) => {
+    const onPress = () => {
+      if (typeof onIntervalSelected === 'function') {
+        onIntervalSelected(interval);
+      }
+    };
     return (
-      <Button key={interval}>
-        <Text>{interval}</Text>
+      <Button key={interval.value} onPress={onPress}>
+        <Text
+          color={
+            selectedInterval?.value === interval.value
+              ? COLORS.mainBlue
+              : COLORS.asphalt
+          }
+          fontSize={13}
+          fontFamily="Inter_600SemiBold"
+        >
+          {interval.text}
+        </Text>
       </Button>
     );
   };
@@ -45,13 +64,9 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     [onPointSelected]
   );
 
-  const onGestureStart = useCallback(() => {
-    console.log('on gesture start');
-  }, []);
-
   const onGestureEnd = useCallback(() => {
-    console.log('on gesture end');
     _onPointSelected(data[data.length - 1]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
@@ -59,32 +74,30 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
       <LineGraph
         style={{
           width: '100%',
-          aspectRatio: 1.2,
-          marginBottom: 100
+          aspectRatio: 1.4
         }}
-        verticalPadding={30}
         points={data}
         animated={true}
         color={strokeColor}
         enablePanGesture={true}
         panGestureDelay={300}
-        onGestureStart={onGestureStart}
         onGestureEnd={onGestureEnd}
         onPointSelected={_onPointSelected}
-        // onGestureEnd={() => {
-        //   if (typeof onPointSelected == 'function') {
-        //     // onPointSelected(data[data.length - 1]);
-        //   }
-        // }}
+        SelectionDot={SelectionDot}
       />
       {intervals.length > 0 && (
-        <Row
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ width: '80%', marginHorizontal: scale(36.5) }}
-        >
-          {intervals.map(renderInterval)}
-        </Row>
+        <>
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            style={{
+              width: '80%',
+              marginHorizontal: scale(36.5)
+            }}
+          >
+            {intervals.map(renderInterval)}
+          </Row>
+        </>
       )}
     </View>
   );
