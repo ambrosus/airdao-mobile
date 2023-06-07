@@ -14,6 +14,10 @@ import { AMBToken } from '@models';
 
 const CMC_API = 'https://sandbox-api.coinmarketcap.com';
 const walletAPI = 'https://wallet-api-api.ambrosus.io/api/v1/watcher';
+// const CMC_API =
+//   'https://pro-api.coinmarketcap.com';
+
+const CMC_API = 'https://sandbox-api.coinmarketcap.com';
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
@@ -143,6 +147,27 @@ export const removeWatcherFromAddress = async (
         push_token: pushToken
       }
     });
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAMBPriceHistoricalPricing = async (
+  interval: CMCInterval
+): Promise<AMBToken[]> => {
+  try {
+    const res = await axios.get(
+      `${CMC_API}/v3/cryptocurrency/quotes/historical?id=2081&interval=${interval}`,
+      {
+        headers: {
+          'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
+        }
+      }
+    );
+    const chartData: CMCChartData = res.data?.data;
+    const mappedData = chartData['2081'].quotes.map((quote) =>
+      AMBToken.fromCMCResponse(quote)
+    );
+    return mappedData;
   } catch (error) {
     throw error;
   }
