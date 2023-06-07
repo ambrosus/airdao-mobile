@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 import { AccountList } from '@models';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { styles } from './styles';
+import { StringUtils } from '@utils/string';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {
   collection: AccountList;
@@ -75,7 +76,9 @@ export const BottomSheetEditCollection = forwardRef<
           }}
           onPress={deleteCollection}
         >
-          <Text color={COLORS.crimsonRed}>Delete {collection.name}</Text>
+          <Text color={COLORS.crimsonRed}>
+            Delete {StringUtils.formatAddress(collection.name, 10, 0)}
+          </Text>
         </Button>
       </View>
 
