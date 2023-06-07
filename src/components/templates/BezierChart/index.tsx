@@ -1,22 +1,18 @@
+import React, { useCallback } from 'react';
+import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
-import React from 'react';
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryAxis,
-  VictoryTheme
-} from 'victory-native';
+import { View } from 'react-native';
+import { Button, Row, Text } from '@components/base';
+import { scale } from '@utils/scaling';
 
-export interface Point {
-  x: number;
-  y: number;
-}
 interface BezierChartProps {
   height?: number;
-  data: Point[];
+  data: GraphPoint[];
   strokeColor?: string;
   axisLabelColor?: string;
   axisColor?: string;
+  intervals?: string[];
+  onPointSelected?: (point: GraphPoint) => unknown;
 }
 
 export function BezierChart(props: BezierChartProps): JSX.Element {
@@ -24,39 +20,72 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     height,
     strokeColor = COLORS.black,
     axisLabelColor = COLORS.black,
-    axisColor = COLORS.black
+    axisColor = COLORS.black,
+    intervals = [],
+    data,
+    onPointSelected
   } = props;
+
+  const length = data.length;
+
+  const renderInterval = (interval: string) => {
+    return (
+      <Button key={interval}>
+        <Text>{interval}</Text>
+      </Button>
+    );
+  };
+
+  const _onPointSelected = useCallback(
+    (point: GraphPoint) => {
+      if (typeof onPointSelected === 'function') {
+        onPointSelected(point);
+      }
+    },
+    [onPointSelected]
+  );
+
+  const onGestureStart = useCallback(() => {
+    console.log('on gesture start');
+  }, []);
+
+  const onGestureEnd = useCallback(() => {
+    console.log('on gesture end');
+    _onPointSelected(data[data.length - 1]);
+  }, [data]);
+
   return (
-    <VictoryChart theme={VictoryTheme.material} height={height}>
-      <VictoryAxis
-        dependentAxis={false}
+    <View>
+      <LineGraph
         style={{
-          axis: { stroke: axisColor },
-          grid: {
-            stroke: 'transparent' //CHANGE COLOR OF X-AXIS GRID LINES
-          },
-          ticks: {
-            stroke: 'transparent'
-          },
-          tickLabels: {
-            fill: axisLabelColor //CHANGE COLOR OF X-AXIS LABELS
-          }
+          width: '100%',
+          aspectRatio: 1.2,
+          marginBottom: 100
         }}
+        verticalPadding={30}
+        points={data}
+        animated={true}
+        color={strokeColor}
+        enablePanGesture={true}
+        panGestureDelay={300}
+        onGestureStart={onGestureStart}
+        onGestureEnd={onGestureEnd}
+        onPointSelected={_onPointSelected}
+        // onGestureEnd={() => {
+        //   if (typeof onPointSelected == 'function') {
+        //     // onPointSelected(data[data.length - 1]);
+        //   }
+        // }}
       />
-      <VictoryLine
-        interpolation="natural"
-        style={{
-          data: { stroke: strokeColor }
-        }}
-        data={[
-          { x: 1, y: 2 },
-          { x: 2, y: 3 },
-          { x: 3, y: 5 },
-          { x: 4, y: 4 },
-          { x: 5, y: 5.5 },
-          { x: 5, y: 6.5 }
-        ]}
-      />
-    </VictoryChart>
+      {intervals.length > 0 && (
+        <Row
+          alignItems="center"
+          justifyContent="space-between"
+          style={{ width: '80%', marginHorizontal: scale(36.5) }}
+        >
+          {intervals.map(renderInterval)}
+        </Row>
+      )}
+    </View>
   );
 }

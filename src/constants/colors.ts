@@ -16,6 +16,7 @@ export const COLORS = {
   graphiteGrey: '#323232',
   grey: '#646464',
   jungleGreen: '#159f80',
+  chartGreen: '#2DBA8D',
   lavenderGray: '#C2C5CC',
   lightGrey: '#828282',
   lightSilver: '#D9D9D9',

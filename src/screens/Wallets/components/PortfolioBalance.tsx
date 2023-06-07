@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
+import { GraphPoint } from 'react-native-graph';
 import { scale, verticalScale } from '@utils/scaling';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { ChevronRightIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
-import { BezierChart, Point } from '@components/templates';
+import { BezierChart } from '@components/templates';
 import { Badge } from '@components/base/Badge';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 import { useNavigation } from '@react-navigation/native';
-import { WalletsNavigationProp } from '@appTypes';
+import { CMCInterval, WalletsNavigationProp } from '@appTypes';
 import { PercentChange } from '@components/composite';
+import { useAMBPriceHistorical } from '@hooks';
+import { generateRandomGraphData } from '@components/templates/BezierChart/data';
 
 interface PortfolioBalanceProps {
   AMBPrice: number;
@@ -20,12 +23,32 @@ interface PortfolioBalanceProps {
 export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   const { AMBPrice, AMBPriceLast24HourChange } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
+  const { data: historicalAMBPrice } = useAMBPriceHistorical('30d');
+  const [ambPriceDisplay, setAmbPriceDisplay] = useState(
+    Number.isNaN(AMBPrice) ? 0 : AMBPrice
+  );
 
-  const chartData: Point[] = [];
+  const [selectedInterval, setSelectedInverval] = useState<CMCInterval>('1h');
+
+  useEffect(() => {
+    setAmbPriceDisplay(Number.isNaN(AMBPrice) ? 0 : AMBPrice);
+  }, [AMBPrice]);
+
+  // const chartData: GraphPoint[] = historicalAMBPrice.map((token, idx) => ({
+  //   date: new Date(token.timestamp.getTime() + idx),
+  //   value: token.priceUSD
+  // }));
+
+  const chartData: GraphPoint[] = useMemo(
+    () => generateRandomGraphData(selectedInterval == '1h' ? 50 : 50),
+    [selectedInterval]
+  );
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
   };
+
+  console.log(chartData[49]);
 
   return (
     <View style={styles.container} testID="portfolio-balance">
@@ -44,6 +67,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           </Text>
         </Row>
         <Row style={styles.balance}>
+          {/* <Animated.Text>{ambPrice.current}</Animated.Text> */}
           <Text
             color={COLORS.smokyBlack}
             heading
@@ -51,7 +75,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
             fontSize={30}
             testID="Portfolio_Balance_Title"
           >
-            ${NumberUtils.formatNumber(AMBPrice, 6)}
+            ${NumberUtils.formatNumber(ambPriceDisplay, 6)}
           </Text>
         </Row>
         <Spacer value={scale(16)} />
@@ -79,11 +103,14 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
           />
         </Button>
         <BezierChart
+          key={selectedInterval}
+          intervals={['1H', '1D', '1W', '1M']}
           height={verticalScale(200)}
           data={chartData}
           axisLabelColor={COLORS.smokyBlack}
-          strokeColor={COLORS.jungleGreen}
+          strokeColor={COLORS.chartGreen}
           axisColor="transparent"
+          // onPointSelected={(point) => setAmbPriceDisplay(point.value)}
         />
       </View>
     </View>
