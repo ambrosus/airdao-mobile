@@ -55,7 +55,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           iconLeft={<SearchIcon color="#2f2b4399" />}
           type="text"
           style={{ width: '65%', height: 50 }}
-          placeholder="Search watchlist"
+          placeholder="Search public address"
           placeholderTextColor="#2f2b4399"
           value=""
           onChangeValue={() => null}
