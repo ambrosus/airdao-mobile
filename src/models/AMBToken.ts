@@ -1,3 +1,4 @@
+import { CMCChartQuote } from '@appTypes';
 import { AMBTokenDTO } from './dtos';
 
 export class AMBToken {
@@ -35,5 +36,27 @@ export class AMBToken {
     this.volumeUSD = details['24_volume_usd'];
     this.marketCapUSD = details.market_cap_usd;
     this.createdAt = new Date(details.createdAt);
+  }
+
+  static fromCMCResponse(data: CMCChartQuote): AMBToken {
+    const usdData = data.quote.USD;
+    return {
+      _id: 'amb',
+      id: 1,
+      name: 'AirDAO',
+      symbol: 'AMB',
+      circulatingSupply: usdData.circulating_supply,
+      maxSupply: -1,
+      totalSupply: usdData.total_supply,
+      timestamp: new Date(usdData.timestamp),
+      rank: -1,
+      percentChange1H: -1,
+      percentChange24H: -1,
+      percentChange7D: -1,
+      priceUSD: usdData.price,
+      volumeUSD: usdData.volume_24h,
+      marketCapUSD: usdData.market_cap,
+      createdAt: new Date()
+    };
   }
 }
