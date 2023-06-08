@@ -103,7 +103,7 @@ export const WelcomeScreen = () => {
         onPress={async () => {
           await Cache.setItem(CacheKey.IsSecondInit, true);
           setTimeout(() => {
-            navigation.navigate('Tabs', { screen: 'Wallets' });
+            navigation.replace('Tabs', { screen: 'Wallets' });
           }, 300);
         }}
         style={styles.getStartedButton}

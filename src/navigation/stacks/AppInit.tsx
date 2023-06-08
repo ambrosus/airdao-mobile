@@ -16,9 +16,9 @@ const AppInitialization = () => {
       try {
         const value = await Cache.getItem(CacheKey.IsSecondInit);
         if (!value) {
-          return navigation.navigate('WelcomeScreen');
+          return navigation.replace('WelcomeScreen');
         } else {
-          return navigation.navigate('Tabs', { screen: 'Wallets' });
+          return navigation.replace('Tabs', { screen: 'Wallets' });
         }
       } catch (error) {
         // tslint:disable-next-line:no-console
