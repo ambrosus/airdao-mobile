@@ -39,8 +39,12 @@ export const HomeTabs = () => {
     homeTabRoutes as unknown as HomeTabViewRoute[]
   );
 
+  const numTabs = 4;
+  const numItems = Math.min(numTabs, HomeTabsScenes.length);
+  const height = numItems * 340 + 100;
+
   return (
-    <View style={styles.homeTabs} testID="lists-screen">
+    <View style={[styles.homeTabs, { height }]} testID="lists-screen">
       <TabView<HomeTabViewRoute>
         style={styles.tabView}
         navigationState={{ index, routes }}
