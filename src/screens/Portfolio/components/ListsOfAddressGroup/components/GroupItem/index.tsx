@@ -17,7 +17,6 @@ import { PercentChange } from '@components/composite';
 import { scale } from '@utils/scaling';
 import { EditIcon, RemoveIcon } from '@components/svg/icons';
 import { useAMBPrice } from '@hooks';
-import { StringUtils } from '@utils/string';
 
 type Props = {
   group: AccountList;
@@ -116,12 +115,12 @@ export const GroupItem: FC<Props> = ({
           <Row justifyContent="space-between">
             <Text
               fontFamily="Inter_600SemiBold"
-              fontSize={13}
+              fontSize={17}
               color={COLORS.smokyBlack}
+              style={{ width: '70%' }}
+              numberOfLines={1}
             >
-              <Text style={styles.itemTitle}>
-                {StringUtils.formatAddress(group.name, 20, 0)}
-              </Text>
+              {group.name}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
