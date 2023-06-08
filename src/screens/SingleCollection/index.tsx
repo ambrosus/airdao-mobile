@@ -57,7 +57,6 @@ export const SingleGroupScreen = () => {
       <Header
         title={
           <Text
-            style={{ width: '50%' }}
             numberOfLines={1}
             fontFamily="Inter_700Bold"
             fontSize={16}
@@ -66,9 +65,11 @@ export const SingleGroupScreen = () => {
             {selectedList.name}
           </Text>
         }
-        leftContainerStyles={{ left: 0 }}
-        rightContainerStyles={{ right: '0%' }}
-        titlePosition="left"
+        centerContainerStyle={{
+          maxWidth: '70%',
+          alignItems: 'flex-start',
+          paddingLeft: scale(20)
+        }}
         style={{
           shadowColor: COLORS.transparent
         }}
