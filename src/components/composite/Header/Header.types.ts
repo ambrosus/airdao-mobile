@@ -12,4 +12,5 @@ export interface HeaderProps {
   style?: ViewStyle;
   leftContainerStyles?: ViewStyle;
   rightContainerStyles?: ViewStyle;
+  centerContainerStyle?: ViewStyle;
 }
