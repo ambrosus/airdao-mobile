@@ -8,12 +8,5 @@ export const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: scale(18)
-  },
-  image: {
-    backgroundColor: '#d9d9d9',
-    borderRadius: 8,
-    width: 180,
-    height: 160,
-    alignItems: 'center'
   }
 });
