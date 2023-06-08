@@ -20,7 +20,6 @@ import {
 } from '@appTypes/navigation/common';
 import { FloatButton } from '@components/base/FloatButton';
 import { useAMBPrice } from '@hooks';
-import { StringUtils } from '@utils/string';
 
 export const SingleGroupScreen = () => {
   const {
@@ -53,12 +52,26 @@ export const SingleGroupScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.header}>
+    <SafeAreaView style={{ flex: 1, marginHorizontal: 16 }}>
       {Platform.OS === 'android' && <Spacer value={30} />}
       <Header
-        title={StringUtils.formatAddress(selectedList.name, 10, 0)}
+        title={
+          <Text
+            style={{ width: '50%' }}
+            numberOfLines={1}
+            fontFamily="Inter_700Bold"
+            fontSize={16}
+            color={COLORS.smokyBlack}
+          >
+            {selectedList.name}
+          </Text>
+        }
+        leftContainerStyles={{ left: 0 }}
+        rightContainerStyles={{ right: '0%' }}
         titlePosition="left"
-        style={{ shadowColor: COLORS.transparent }}
+        style={{
+          shadowColor: COLORS.transparent
+        }}
         contentRight={
           <>
             {Platform.OS === 'ios' && (
@@ -85,11 +98,15 @@ export const SingleGroupScreen = () => {
       />
       <Spacer value={32} />
       <View style={{ alignItems: 'center' }}>
-        <Text color={COLORS.slateGrey} fontFamily="Inter_600SemiBold">
+        <Text
+          color={COLORS.smokyBlack50}
+          fontFamily="Inter_600SemiBold"
+          fontSize={12}
+        >
           TOTAL BALANCE
         </Text>
         <Spacer value={10} />
-        <Text title fontFamily="Inter_700Bold">
+        <Text fontFamily="Inter_700Bold" fontSize={30} color={COLORS.nero}>
           ${NumberUtils.formatNumber(groupTokens, 2)}
         </Text>
         <Spacer value={10} />

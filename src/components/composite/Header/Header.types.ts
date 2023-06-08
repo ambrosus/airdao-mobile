@@ -10,4 +10,6 @@ export interface HeaderProps {
   contentLeft?: ReactNode;
   contentRight?: ReactNode;
   style?: ViewStyle;
+  leftContainerStyles?: ViewStyle;
+  rightContainerStyles?: ViewStyle;
 }

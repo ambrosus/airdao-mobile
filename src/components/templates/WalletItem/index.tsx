@@ -42,13 +42,15 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
                   backgroundColor: COLORS.smokyBlack5,
                   paddingVertical: verticalScale(4),
                   paddingHorizontal: scale(8),
-                  borderRadius: moderateScale(20)
+                  borderRadius: moderateScale(20),
+                  width: '40%'
                 }}
               >
                 <Text
                   fontSize={12}
                   fontFamily="Inter_500Medium"
                   color={COLORS.graphiteGrey}
+                  numberOfLines={1}
                 >
                   {listWithWallet.name}
                 </Text>
