@@ -9,9 +9,6 @@ import { NotificationService } from '@lib';
 import { CMCChartData, CMCInterval } from '@appTypes';
 import { AMBToken } from '@models';
 
-// const CMC_API =
-//   'https://pro-api.coinmarketcap.com';
-
 const CMC_API = 'https://sandbox-api.coinmarketcap.com';
 const walletAPI = 'https://wallet-api-api.ambrosus.io/api/v1/watcher';
 // const CMC_API =
