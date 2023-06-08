@@ -67,7 +67,11 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
             }}
           />
           <Spacer value={scale(4)} horizontal />
-          <Text fontSize={13} color={COLORS.grey}>
+          <Text
+            fontSize={14}
+            color={COLORS.slateGrey}
+            fontFamily="Inter_600SemiBold"
+          >
             {dayjs(createdAt).fromNow()}
           </Text>
         </Row>
