@@ -16,6 +16,9 @@ export function Header(props: HeaderProps): JSX.Element {
     titlePosition = 'center',
     style = {},
     titleStyle = {},
+    leftContainerStyles = {},
+    rightContainerStyles = {},
+    centerContainerStyle = {},
     onBackPress
   } = props;
   const navigation = useNavigation();
@@ -75,12 +78,17 @@ export function Header(props: HeaderProps): JSX.Element {
       alignItems="center"
       style={{ ...styles.container, ...style }}
     >
-      <Row style={styles.left} alignItems="center">
+      <Row
+        style={{ ...styles.left, ...leftContainerStyles }}
+        alignItems="center"
+      >
         {renderContentLeft()}
       </Row>
-      <View style={styles.center}>{renderContentCenter()}</View>
+      <View style={[styles.center, centerContainerStyle]}>
+        {renderContentCenter()}
+      </View>
       <Row
-        style={styles.right}
+        style={{ ...styles.right, ...rightContainerStyles }}
         alignItems="center"
         testID="Header_ContentRight"
       >
