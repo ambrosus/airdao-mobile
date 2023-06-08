@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Text } from '@components/base';
-import { scale } from '@utils/scaling';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { scale, verticalScale } from '@utils/scaling';
 import { SelectionDot } from './SelectionDot';
 
 interface Interval {
@@ -32,14 +32,18 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     onIntervalSelected
   } = props;
 
-  const renderInterval = (interval: Interval) => {
+  const renderInterval = (interval: Interval, idx: number) => {
     const onPress = () => {
       if (typeof onIntervalSelected === 'function') {
         onIntervalSelected(interval);
       }
     };
     return (
-      <Button key={interval.value} onPress={onPress}>
+      <Button
+        key={interval.value}
+        onPress={onPress}
+        style={idx > 0 ? styles.interval : {}}
+      >
         <Text
           color={
             selectedInterval?.value === interval.value
@@ -74,7 +78,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
       <LineGraph
         style={{
           width: '100%',
-          aspectRatio: 1.4
+          aspectRatio: 4.72
         }}
         points={data}
         animated={true}
@@ -87,11 +91,8 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
       />
       {intervals.length > 0 && (
         <>
-          <Row
-            alignItems="center"
-            justifyContent="space-between"
-            style={styles.intervalsContainer}
-          >
+          <Spacer value={verticalScale(21)} />
+          <Row alignItems="center" justifyContent="center">
             {intervals.map(renderInterval)}
           </Row>
         </>
@@ -101,8 +102,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  intervalsContainer: {
-    width: '80%',
-    marginHorizontal: scale(36.5)
+  interval: {
+    marginLeft: scale(32)
   }
 });
