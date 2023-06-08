@@ -1,8 +1,6 @@
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { Dimensions, StyleSheet } from 'react-native';
-
-const homeTabsContainerHeight = Dimensions.get('screen').height * 0.44;
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,8 +10,7 @@ export const styles = StyleSheet.create({
   homeTabs: {
     marginHorizontal: scale(16),
     backgroundColor: 'white',
-    borderRadius: 24,
-    height: homeTabsContainerHeight
+    borderRadius: 24
   },
   homeHighlights: {
     backgroundColor: 'white',
