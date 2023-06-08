@@ -1,62 +1,108 @@
+import React, { useCallback } from 'react';
+import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
-import React from 'react';
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryAxis,
-  VictoryTheme
-} from 'victory-native';
+import { StyleSheet, View } from 'react-native';
+import { Button, Row, Text } from '@components/base';
+import { scale } from '@utils/scaling';
+import { SelectionDot } from './SelectionDot';
 
-export interface Point {
-  x: number;
-  y: number;
+interface Interval {
+  text: string;
+  value: any;
 }
+
 interface BezierChartProps {
-  height?: number;
-  data: Point[];
+  data: GraphPoint[];
   strokeColor?: string;
   axisLabelColor?: string;
   axisColor?: string;
+  intervals?: Interval[];
+  selectedInterval?: Interval;
+  onPointSelected?: (point?: GraphPoint) => unknown;
+  onIntervalSelected?: (interval: Interval) => unknown;
 }
 
 export function BezierChart(props: BezierChartProps): JSX.Element {
   const {
-    height,
     strokeColor = COLORS.black,
-    axisLabelColor = COLORS.black,
-    axisColor = COLORS.black
+    intervals = [],
+    selectedInterval,
+    data,
+    onPointSelected,
+    onIntervalSelected
   } = props;
-  return (
-    <VictoryChart theme={VictoryTheme.material} height={height}>
-      <VictoryAxis
-        dependentAxis={false}
-        style={{
-          axis: { stroke: axisColor },
-          grid: {
-            stroke: 'transparent' //CHANGE COLOR OF X-AXIS GRID LINES
-          },
-          ticks: {
-            stroke: 'transparent'
-          },
-          tickLabels: {
-            fill: axisLabelColor //CHANGE COLOR OF X-AXIS LABELS
+
+  const renderInterval = (interval: Interval) => {
+    const onPress = () => {
+      if (typeof onIntervalSelected === 'function') {
+        onIntervalSelected(interval);
+      }
+    };
+    return (
+      <Button key={interval.value} onPress={onPress}>
+        <Text
+          color={
+            selectedInterval?.value === interval.value
+              ? COLORS.mainBlue
+              : COLORS.asphalt
           }
-        }}
-      />
-      <VictoryLine
-        interpolation="natural"
+          fontSize={13}
+          fontFamily="Inter_600SemiBold"
+        >
+          {interval.text}
+        </Text>
+      </Button>
+    );
+  };
+
+  const _onPointSelected = useCallback(
+    (point: GraphPoint) => {
+      if (typeof onPointSelected === 'function') {
+        onPointSelected(point);
+      }
+    },
+    [onPointSelected]
+  );
+
+  const onGestureEnd = useCallback(() => {
+    _onPointSelected(data[data.length - 1]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  return (
+    <View>
+      <LineGraph
         style={{
-          data: { stroke: strokeColor }
+          width: '100%',
+          aspectRatio: 1.4
         }}
-        data={[
-          { x: 1, y: 2 },
-          { x: 2, y: 3 },
-          { x: 3, y: 5 },
-          { x: 4, y: 4 },
-          { x: 5, y: 5.5 },
-          { x: 5, y: 6.5 }
-        ]}
+        points={data}
+        animated={true}
+        color={strokeColor}
+        enablePanGesture={true}
+        panGestureDelay={300}
+        onGestureEnd={onGestureEnd}
+        onPointSelected={_onPointSelected}
+        SelectionDot={SelectionDot}
       />
-    </VictoryChart>
+      {intervals.length > 0 && (
+        <>
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            style={styles.intervalsContainer}
+          >
+            {intervals.map(renderInterval)}
+          </Row>
+        </>
+      )}
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  intervalsContainer: {
+    width: '80%',
+    marginHorizontal: scale(36.5)
+  }
+});

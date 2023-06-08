@@ -9,7 +9,7 @@ import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeTabs } from '@screens/Wallets/components/HomeTabs/HomeTabs';
 import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
@@ -50,10 +50,13 @@ export const HomeScreen = () => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <PortfolioBalance
-          AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
-          AMBPrice={ambTokenData?.priceUSD || NaN}
-        />
+        <View style={{ paddingHorizontal: scale(16) }}>
+          <PortfolioBalance
+            AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
+            AMBPrice={ambTokenData?.priceUSD || NaN}
+          />
+        </View>
+        <Spacer value={verticalScale(24)} />
         <View style={styles.homeTabs}>
           <HomeTabs />
         </View>

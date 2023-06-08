@@ -1,5 +1,6 @@
 export * from './CacheableAccount';
 export * from './CacheableAccountList';
+export * from './coinmarketcap';
 export * from './database';
 export * from './enums';
 export * from './MainNavigationParams';

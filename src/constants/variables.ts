@@ -16,3 +16,5 @@ export const DefaultNotificationSettings: NotificationSettings = {
 };
 
 export const CRYPTO_ADDRESS_MAX_LENGTH = 62;
+
+export const CMC_API_KEY = '';
