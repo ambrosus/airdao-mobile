@@ -1,4 +1,5 @@
 export * from './AddWalletToList';
+export * from './AMBPriceHistory';
 export * from './WalletList';
 export * from './WalletItem';
 export * from './BezierChart';
