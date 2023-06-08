@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { SelectionDot } from './SelectionDot';
@@ -90,10 +90,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
           <Row
             alignItems="center"
             justifyContent="space-between"
-            style={{
-              width: '80%',
-              marginHorizontal: scale(36.5)
-            }}
+            style={styles.intervalsContainer}
           >
             {intervals.map(renderInterval)}
           </Row>
@@ -102,3 +99,10 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  intervalsContainer: {
+    width: '80%',
+    marginHorizontal: scale(36.5)
+  }
+});
