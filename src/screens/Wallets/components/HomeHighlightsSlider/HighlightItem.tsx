@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@screens/Wallets/components/HomeHighlightsSlider/styles';
+import { useNavigation } from '@react-navigation/native';
+import { WalletsNavigationProp } from '@appTypes';
 
 type Props = {
   item: { name: string; time: string };
@@ -11,8 +13,17 @@ type Props = {
 };
 
 export const HighlightItem = ({ item, isNewsHighlights }: Props) => {
+  const navigation = useNavigation<WalletsNavigationProp>();
+
+  const navigationToSingleHighlight = useCallback(() => {
+    navigation.navigate('SingleHighlightScreen');
+  }, [navigation]);
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={navigationToSingleHighlight}
+    >
       {isNewsHighlights ? (
         <Image
           style={{

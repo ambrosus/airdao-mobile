@@ -3,12 +3,14 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
+import { SingleHighlightScreen } from '@screens/Highlights/components/SingleHighlightScreen';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
   Highlights: undefined;
+  SingleHighlightScreen: undefined;
 } & CommonStackParamsList;
 
 export type WalletsNavigationProp = CompositeNavigationProp<
