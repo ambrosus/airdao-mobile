@@ -8,5 +8,11 @@ export const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: scale(18)
+  },
+  image: {
+    flex: 1
+  },
+  highlightTitle: {
+    maxWidth: 180
   }
 });
