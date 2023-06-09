@@ -8,6 +8,7 @@ export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
+  Highlights: undefined;
 } & CommonStackParamsList;
 
 export type WalletsNavigationProp = CompositeNavigationProp<
