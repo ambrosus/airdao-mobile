@@ -10,7 +10,7 @@ import { CMCChartData, CMCInterval } from '@appTypes';
 import { AMBToken } from '@models';
 
 const CMC_API = 'https://sandbox-api.coinmarketcap.com';
-const walletAPI = 'https://wallet-api-api.ambrosus.io/api/v1/watcher';
+const walletAPI = 'https://wallet-api-api.ambrosus.io';
 // const CMC_API =
 //   'https://pro-api.coinmarketcap.com';
 
@@ -102,7 +102,8 @@ export const watchAddress = async (address: string): Promise<void> => {
     await axios.post(`${walletAPI}/api/v1/watcher`, {
       address,
       // eslint-disable-next-line camelcase
-      push_token: pushToken
+      push_token: pushToken,
+      threshold: 5
     });
   } catch (error) {
     throw error;
