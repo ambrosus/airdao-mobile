@@ -7,46 +7,13 @@ import { styles } from '@screens/Wallets/components/HomeHighlightsSlider/styles'
 import { verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
-
-const highlightsItems: {
-  time: string;
-  name: string;
-}[] = [
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  },
-  {
-    time: '2 days ago',
-    name: 'AirDAO: Transition to community governance'
-  }
-];
+import { mockedHighlights } from '../../../../mockedData/MockedHighlights';
 
 export const HomeHighlights = () => {
   const navigation = useNavigation<WalletsNavigationProp>();
 
   const navigateToHighlights = useCallback(() => {
-    navigation.navigate('Highlights');
+    return navigation.navigate('Highlights');
   }, [navigation]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -72,7 +39,7 @@ export const HomeHighlights = () => {
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        data={highlightsItems}
+        data={mockedHighlights}
         renderItem={({ item }) => (
           <HighlightItem isNewsHighlights={false} item={item} />
         )}
