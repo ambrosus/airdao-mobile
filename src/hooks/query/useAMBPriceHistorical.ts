@@ -8,7 +8,10 @@ export function useAMBPriceHistorical(
 ): QueryResponse<AMBToken[] | []> {
   const { data, isLoading, error } = useQuery<AMBToken[]>(
     ['amb-token-historical', interval],
-    () => getAMBPriceHistoricalPricing(interval)
+    () => getAMBPriceHistoricalPricing(interval),
+    {
+      keepPreviousData: true
+    }
   );
 
   return {
