@@ -3,11 +3,12 @@ import {
   NavigationContainer,
   NavigationContainerRef
 } from '@react-navigation/native';
-import { RootStack, RootStackParamsList } from './stacks/RootStack';
+import { RootStack } from './stacks/RootStack';
 import { navTheme } from '@constants/navTheme';
 import { useCachePurifier } from '@hooks/useCachePurifier';
 import { NavigationProvider } from '@contexts/Navigation';
 import { StatusBar } from '@components/templates';
+import { RootStackParamsList } from '@appTypes';
 
 const Navigation = () => {
   useCachePurifier();

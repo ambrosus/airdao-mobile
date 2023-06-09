@@ -43,4 +43,5 @@ export type TextProps = FontSizeProps & {
   align?: TextStyle['textAlign'];
   onPress?: () => unknown;
   testID?: string;
+  numberOfLines?: number;
 };

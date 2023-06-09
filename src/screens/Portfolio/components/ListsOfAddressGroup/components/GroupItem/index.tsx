@@ -115,10 +115,12 @@ export const GroupItem: FC<Props> = ({
           <Row justifyContent="space-between">
             <Text
               fontFamily="Inter_600SemiBold"
-              fontSize={13}
+              fontSize={17}
               color={COLORS.smokyBlack}
+              style={{ width: '70%' }}
+              numberOfLines={1}
             >
-              <Text style={styles.itemTitle}>{group.name}</Text>
+              {group.name}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"

@@ -41,6 +41,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const [localGroupName, setLocalGroupName] = useState<string>(
       groupTitle || ''
     );
+    const [emptyPlaceholder, setEmptyPlaceholder] = useState(false);
 
     // onboarding functions
     const setDemoName = () => {
@@ -51,6 +52,12 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     // end of onboarding functions
 
     const handleButtonPress = useCallback(() => {
+      if (!localGroupName) {
+        setEmptyPlaceholder(true);
+        return;
+      }
+      setEmptyPlaceholder(false);
+      // Proceed with form submission
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
         localRef.current?.dismiss();
@@ -60,6 +67,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
           type: ToastType.Top
         });
       }
+
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
         localRef.current?.dismiss();
@@ -69,6 +77,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
           type: ToastType.Top
         });
       }
+
       setLocalGroupName('');
     }, [
       groupId,
@@ -118,8 +127,14 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   value={localGroupName}
                   onChangeValue={setLocalGroupName}
                   type="text"
-                  placeholder="Enter collection name"
-                  placeholderTextColor="black"
+                  placeholder={
+                    emptyPlaceholder
+                      ? 'This field is required'
+                      : 'Enter collection name'
+                  }
+                  placeholderTextColor={
+                    emptyPlaceholder ? COLORS.crimsonRed : COLORS.midnight
+                  }
                   style={[styles.bottomSheetInput]}
                 />
               </OnboardingView>
@@ -132,7 +147,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 <Button
                   testID="BottomSheetCreateRename_Button"
-                  disabled={!localGroupName.length}
+                  // disabled={!localGroupName.length}
                   type="circular"
                   style={styles.bottomSheetCreateRenameButton}
                   onPress={handleButtonPress}
