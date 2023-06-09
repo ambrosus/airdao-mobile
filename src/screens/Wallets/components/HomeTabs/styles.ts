@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     height: moderateScale(32)
   },
   homeWatchlistsContainer: {
+    paddingTop: verticalScale(8),
     paddingHorizontal: scale(24),
     flex: 1
   },
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
     borderRadius: 24,
     alignSelf: 'center',
     width: '100%',
-    marginBottom: scale(24)
+    marginVertical: scale(24)
   },
   homeCollectionsContainer: {
     paddingHorizontal: 24,

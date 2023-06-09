@@ -36,8 +36,8 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(37),
-    paddingBottom: verticalScale(29),
+    paddingTop: verticalScale(36),
+    paddingBottom: verticalScale(32),
     backgroundColor: COLORS.white,
     borderRadius: 24,
     alignItems: 'center',
@@ -48,16 +48,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   balance: {
-    marginTop: verticalScale(17),
+    marginTop: verticalScale(16),
     alignSelf: 'center'
   },
   balanceAction: {
     backgroundColor: '#FFFFFF1A',
     width: scale(24),
     height: scale(24),
-    marginLeft: scale(14)
+    marginLeft: scale(16)
   },
   balanceLast24HourChange: {
-    marginHorizontal: scale(13)
+    marginHorizontal: scale(12)
   }
 });
