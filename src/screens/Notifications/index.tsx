@@ -118,7 +118,7 @@ export const Notifications = (): JSX.Element => {
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(32)} />}
+        ItemSeparatorComponent={() => <Spacer value={32} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}

@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16
   },
   portfolioPerfomance: {
-    marginHorizontal: scale(9),
+    marginHorizontal: scale(8),
     marginTop: verticalScale(30)
   },
   shareButtons: {

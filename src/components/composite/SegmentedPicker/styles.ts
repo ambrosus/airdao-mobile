@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: verticalScale(9)
+    paddingVertical: verticalScale(8)
   },
   selectedSegment: {
     ...shadow,

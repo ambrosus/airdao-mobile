@@ -31,7 +31,6 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     onPointSelected,
     onIntervalSelected
   } = props;
-
   const renderInterval = (interval: Interval, idx: number) => {
     const onPress = () => {
       if (typeof onIntervalSelected === 'function') {
