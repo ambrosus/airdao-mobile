@@ -35,14 +35,10 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(200)
   },
   rightActions: {
-    marginTop: 30,
-    alignContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
+    backgroundColor: COLORS.charcoal,
     justifyContent: 'center',
-    width: 152,
-    height: scale(82),
+    alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: COLORS.charcoal
+    width: scale(130)
   }
 });
