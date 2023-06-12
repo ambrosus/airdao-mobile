@@ -18,10 +18,13 @@ export const HomeWatchlists = () => {
   const navigationToWatchlist = useNavigation<WalletsNavigationProp>();
 
   const navigateToPortfolio = useCallback(() => {
-    setTimeout(() => {
-      navigationToPortfolio.navigate('Portfolio');
-    }, 400);
-  }, [navigationToPortfolio]);
+    navigation.navigate('Portfolio', {
+      screen: 'PortfolioScreen',
+      params: {
+        tabs: { activeTab: 0 }
+      }
+    });
+  }, [navigation]);
 
   if (watchlist.length === 0) {
     return <RenderEmpty text="addresses" />;

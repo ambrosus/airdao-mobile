@@ -17,9 +17,12 @@ export const HomeCollections = () => {
   const navigation = useNavigation<PortfolioNavigationProp>();
 
   const navigateToPortfolio = useCallback(() => {
-    setTimeout(() => {
-      navigation.navigate('Portfolio');
-    }, 400);
+    navigation.navigate('Portfolio', {
+      screen: 'PortfolioScreen',
+      params: {
+        tabs: { activeTab: 1 }
+      }
+    });
   }, [navigation]);
 
   const navigateToCollectionDetails = (group: AccountList) => {
