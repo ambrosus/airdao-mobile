@@ -43,7 +43,9 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
                   paddingVertical: verticalScale(4),
                   paddingHorizontal: scale(8),
                   borderRadius: moderateScale(20),
-                  width: '40%'
+                  width: '40%',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 <Text
