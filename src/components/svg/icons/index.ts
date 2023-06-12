@@ -1,6 +1,7 @@
 export * from './Icon.types';
 export * from './AirDAOLogo';
 export * from './Back';
+export * from './BellIcon';
 export * from './BottomSheetSwiper';
 export * from './Browser';
 export * from './Check';

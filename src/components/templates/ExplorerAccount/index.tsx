@@ -148,7 +148,7 @@ export const ExplorerAccountView = (
             </Text>
             {!account.isOnWatchlist && (
               <>
-                <Spacer value={scale(7)} horizontal />
+                <Spacer value={scale(8)} horizontal />
                 <PlusIcon color={COLORS.white} scale={0.5} />
               </>
             )}
@@ -181,7 +181,7 @@ export const ExplorerAccountView = (
             </Text>
             {listsWithAccount.length === 0 && (
               <>
-                <Spacer value={scale(7)} horizontal />
+                <Spacer value={scale(8)} horizontal />
                 <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
               </>
             )}

@@ -23,7 +23,7 @@ import { COLORS } from '@constants/colors';
 
 export const ToastBody = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
-  const DISTANCE_FROM_EDGE = verticalScale(15);
+  const DISTANCE_FROM_EDGE = verticalScale(16);
   const defaultOptions: ToastOptions = useMemo(
     () => ({
       message: '',
