@@ -9,6 +9,7 @@ import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { verticalScale } from '@utils/scaling';
+import { AccountList } from '@models';
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -21,6 +22,10 @@ export const HomeCollections = () => {
     }, 400);
   }, [navigation]);
 
+  const navigateToCollectionDetails = (group: AccountList) => {
+    navigation.navigate('Collection', { group });
+  };
+
   if (listsOfAddressGroup.length === 0) {
     return <RenderEmpty text="collections" />;
   }
@@ -31,17 +36,20 @@ export const HomeCollections = () => {
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
             <>
-              <GroupItem
-                key={index}
-                group={item}
-                isFirstItem={index === 0}
-                wrapperStyles={{
-                  paddingTop: 0,
-                  borderTopWidth: 0,
-                  borderBottomWidth: 0
-                }}
-                swipeable={false}
-              />
+              <Button onPress={() => navigateToCollectionDetails(item)}>
+                <GroupItem
+                  key={index}
+                  group={item}
+                  isFirstItem={index === 0}
+                  wrapperStyles={{
+                    paddingTop: 0,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0
+                  }}
+                  swipeable={false}
+                />
+              </Button>
+
               <Spacer value={verticalScale(7.5)} />
             </>
           );
