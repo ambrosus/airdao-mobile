@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, View } from 'react-native';
@@ -31,6 +31,8 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     onPointSelected,
     onIntervalSelected
   } = props;
+  const gestureStarted = useRef(false);
+
   const renderInterval = (interval: Interval, idx: number) => {
     const onPress = () => {
       if (typeof onIntervalSelected === 'function') {
@@ -59,8 +61,8 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
   };
 
   const _onPointSelected = useCallback(
-    (point: GraphPoint) => {
-      if (typeof onPointSelected === 'function') {
+    (point?: GraphPoint) => {
+      if (typeof onPointSelected === 'function' && gestureStarted.current) {
         onPointSelected(point);
       }
     },
@@ -68,9 +70,10 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
   );
 
   const onGestureEnd = useCallback(() => {
-    _onPointSelected(data[data.length - 1]);
+    _onPointSelected(undefined);
+    gestureStarted.current = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, gestureStarted.current]);
 
   return (
     <View>
@@ -84,6 +87,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
         color={strokeColor}
         enablePanGesture={true}
         panGestureDelay={300}
+        onGestureStart={() => (gestureStarted.current = true)}
         onGestureEnd={onGestureEnd}
         onPointSelected={_onPointSelected}
         SelectionDot={SelectionDot}
