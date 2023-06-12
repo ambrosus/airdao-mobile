@@ -33,7 +33,9 @@ export const SwipeableWalletItem = ({
 
   const handleConfirmRemove = useCallback(() => {
     confirmRemoveRef.current?.show();
+    swipeable.current?.close();
   }, []);
+
   const navigateToAddressDetails = () => {
     navigation.navigate('Address', { address: item.address });
   };
