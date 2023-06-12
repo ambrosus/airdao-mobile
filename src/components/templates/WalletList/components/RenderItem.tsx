@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { View } from 'react-native';
@@ -30,6 +30,7 @@ export const SwipeableWalletItem = ({
 }: SwipeableWalletItemProps) => {
   const confirmRemoveRef = useRef<BottomSheetRef>(null);
   const navigation = useNavigation<WalletsNavigationProp>();
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   const handleConfirmRemove = useCallback(() => {
     confirmRemoveRef.current?.show();
@@ -57,15 +58,7 @@ export const SwipeableWalletItem = ({
   const renderRightActions = () => {
     return (
       <>
-        <View
-          style={{
-            backgroundColor: COLORS.charcoal,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-            width: scale(130)
-          }}
-        >
+        <View style={styles.rightActions}>
           <Button onPress={showEdit}>
             <EditIcon scale={1.5} color={COLORS.electricBlue} />
           </Button>
@@ -91,28 +84,38 @@ export const SwipeableWalletItem = ({
   };
 
   return (
-    <>
-      <Swipeable
-        ref={swipeable}
-        enabled={isPortfolioFlow}
-        renderRightActions={() => renderRightActions()}
+    <Swipeable
+      ref={swipeable}
+      enabled={isPortfolioFlow}
+      renderRightActions={renderRightActions}
+      onBegan={() => {
+        setTimeout(() => {
+          setDisabled(true);
+        }, 80);
+      }}
+      onEnded={() => {
+        setDisabled(false);
+      }}
+    >
+      <View
+        style={{
+          backgroundColor: 'white'
+        }}
       >
-        <View
-          style={{
-            backgroundColor: 'white'
+        <Button
+          key={idx}
+          style={[{ ...styles.item }, stylesForPortfolio]}
+          onPress={() => {
+            if (!disabled) {
+              navigateToAddressDetails();
+            }
           }}
+          testID={`WalletItem_${idx}`}
         >
-          <Button
-            key={idx}
-            style={[{ ...styles.item }, stylesForPortfolio]}
-            onPress={navigateToAddressDetails}
-            testID={`WalletItem_${idx}`}
-          >
-            <WalletItem item={item} />
-          </Button>
-        </View>
-        <BottomSheetEditWallet wallet={item} ref={editModalRef} />
-      </Swipeable>
-    </>
+          <WalletItem item={item} />
+        </Button>
+      </View>
+      <BottomSheetEditWallet wallet={item} ref={editModalRef} />
+    </Swipeable>
   );
 };
