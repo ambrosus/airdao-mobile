@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PortfolioScreenTabs } from '@screens/Portfolio/components/PortfolioScreenTabs';
 import { TabView } from 'react-native-tab-view';
@@ -33,11 +33,26 @@ const renderScene = ({ route }: RenderSceneProps) => {
   }
 };
 
-export const PortfolioScreen = () => {
-  const [index, setIndex] = useState(0);
+type PortfolioScreenProps = {
+  route: {
+    params: {
+      tabs: { activeTab: number };
+    };
+  };
+};
+
+export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
+  const { activeTab } = route.params.tabs;
+
+  const [index, setIndex] = useState(activeTab);
   const [routes] = useState<PortfolioTabViewRoute[]>(
     portfolioTabRoutes as unknown as PortfolioTabViewRoute[]
   );
+
+  useLayoutEffect(() => {
+    setIndex(activeTab);
+  }, [activeTab]);
+
   return (
     <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
       <TabView<PortfolioTabViewRoute>
