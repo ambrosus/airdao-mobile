@@ -203,7 +203,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       {error && !!address && !finalAccount && <SearchAddressNoResult />}
       {finalAccount && explorerInfo && (
         <KeyboardDismissingView style={{ flex: 1 }}>
-          <Spacer value={verticalScale(22)} />
+          <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>
             <ExplorerAccountView
               account={finalAccount}

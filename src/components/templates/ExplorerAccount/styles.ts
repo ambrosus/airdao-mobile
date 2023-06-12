@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   actionButton: {
     paddingVertical: verticalScale(4),
     paddingLeft: scale(12),
-    paddingRight: scale(7.5),
+    paddingRight: scale(8),
     alignSelf: 'flex-start',
     minHeight: verticalScale(24)
   }

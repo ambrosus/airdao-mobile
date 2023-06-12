@@ -51,7 +51,7 @@ export const AccountTransactions = (
         renderItem={renderTransaction}
         keyExtractor={(t, i) => t._id + i}
         contentContainerStyle={styles.list}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(34)} />}
+        ItemSeparatorComponent={() => <Spacer value={verticalScale(32)} />}
         onEndReachedThreshold={0.6}
         onEndReached={onEndReached}
         ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
@@ -63,7 +63,7 @@ export const AccountTransactions = (
 const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
-    paddingHorizontal: scale(17),
+    paddingHorizontal: scale(16),
     paddingBottom: '20%'
   }
 });

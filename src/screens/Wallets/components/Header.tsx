@@ -109,6 +109,7 @@ export function HomeHeader(): JSX.Element {
       style={headerStyles}
       contentRight={renderContentRight}
       contentLeft={renderContentLeft}
+      title={<Text fontSize={12}>AirDAO Testing Build: v1.0.0.4</Text>}
     />
   );
 }
