@@ -5,7 +5,8 @@ import {
   BottomSheet,
   Header,
   SegmentedPicker,
-  Segment
+  Segment,
+  CopyToClipboardButton
 } from '@components/composite';
 import {
   BottomSheetProps,
@@ -20,6 +21,7 @@ import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
+import messaging from '@react-native-firebase/messaging';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -59,6 +61,10 @@ export const BottomSheetNotificationSettings = forwardRef<
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
   const { top: topInset } = useSafeAreaInsets();
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    messaging().getToken().then(setToken);
+  }, []);
 
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
@@ -177,6 +183,9 @@ export const BottomSheetNotificationSettings = forwardRef<
           <Text fontSize={12} fontWeight="500" color="#646464">
             You’ll be notified of any transaction {'\n'} in your watchlist
           </Text>
+        </View>
+        <View style={{ marginHorizontal: 50, marginTop: 50 }}>
+          <CopyToClipboardButton textToDisplay={token} />
         </View>
       </ScrollView>
     </BottomSheet>
