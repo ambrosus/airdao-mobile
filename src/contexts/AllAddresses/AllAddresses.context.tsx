@@ -18,11 +18,9 @@ const AllAddressesContext = () => {
 
   useEffect(() => {
     const onNotificationTokenRefresh = () => {
-      const notificationService = new NotificationService();
-      watchlistedAccountsRef.current.forEach((account) => {
-        notificationService.setup();
-        API.watchAddress(account.address);
-      });
+      API.watcherService.watchAddresses(
+        watchlistedAccountsRef.current.map((account) => account.address)
+      );
     };
     new NotificationService(onNotificationTokenRefresh);
   }, [allAddresses]);

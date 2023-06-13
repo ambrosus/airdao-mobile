@@ -5,12 +5,11 @@ import { ExplorerAccountType, TransactionType } from '@appTypes/enums';
 import { AMBTokenDTO, ExplorerAccountDTO, ExplorerInfoDTO } from '@models/dtos';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { SearchSort } from '@screens/Search/Search.types';
-import { NotificationService } from '@lib';
 import { CMCChartData, CMCInterval } from '@appTypes';
 import { AMBToken } from '@models';
+import { watcherService } from './watcher-service';
 
 const CMC_API = 'https://sandbox-api.coinmarketcap.com';
-const walletAPI = 'https://wallet-api-api.ambrosus.io';
 // const CMC_API =
 //   'https://pro-api.coinmarketcap.com';
 
@@ -94,61 +93,6 @@ export const getTransactionsOfAccount = async (
   }
 };
 
-export const watchAddress = async (address: string): Promise<void> => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
-  if (!address || !pushToken) return;
-  try {
-    await axios.post(`${walletAPI}/api/v1/watcher`, {
-      address,
-      // eslint-disable-next-line camelcase
-      push_token: pushToken,
-      threshold: 5
-    });
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getAMBPriceHistoricalPricing = async (
-  interval: CMCInterval
-): Promise<AMBToken[]> => {
-  try {
-    const res = await axios.get(
-      `${CMC_API}/v3/cryptocurrency/quotes/historical?id=2081&interval=${interval}`,
-      {
-        headers: {
-          'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
-        }
-      }
-    );
-    const chartData: CMCChartData = res.data?.data;
-    const mappedData = chartData['2081'].quotes.map((quote) =>
-      AMBToken.fromCMCResponse(quote)
-    );
-    return mappedData;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const removeWatcherFromAddress = async (
-  address: string
-): Promise<void> => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
-  if (!address || !pushToken) return;
-  try {
-    await axios.delete(`${walletAPI}/api/v1/watcher`, {
-      data: {
-        address,
-        push_token: pushToken
-      }
-    });
-  } catch (error) {
-    throw error;
-  }
-};
 export const getAMBPriceHistoricalPricing = async (
   interval: CMCInterval
 ): Promise<AMBToken[]> => {
@@ -172,11 +116,10 @@ export const getAMBPriceHistoricalPricing = async (
 };
 
 export const API = {
-  watchAddress,
-  removeWatcherFromAddress,
   getAMBTokenData,
   getExplorerInfo,
   getExplorerAccounts,
   searchAddress,
-  getTransactionsOfAccount
+  getTransactionsOfAccount,
+  watcherService
 };
