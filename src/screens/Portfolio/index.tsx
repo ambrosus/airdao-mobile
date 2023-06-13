@@ -5,6 +5,7 @@ import { TabView } from 'react-native-tab-view';
 import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Collections';
 import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
 import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Watchlists';
+import { useIsFocused } from '@react-navigation/native';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
@@ -42,16 +43,20 @@ type PortfolioScreenProps = {
 };
 
 export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
-  const { activeTab } = route.params.tabs;
+  const { activeTab = 0 } = route.params?.tabs;
 
   const [index, setIndex] = useState(activeTab);
   const [routes] = useState<PortfolioTabViewRoute[]>(
     portfolioTabRoutes as unknown as PortfolioTabViewRoute[]
   );
 
+  const focused = useIsFocused();
+
   useLayoutEffect(() => {
-    setIndex(activeTab);
-  }, [activeTab]);
+    if (focused) {
+      setIndex(activeTab);
+    }
+  }, [activeTab, focused]);
 
   return (
     <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
