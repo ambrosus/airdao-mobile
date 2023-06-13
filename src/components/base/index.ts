@@ -1,4 +1,3 @@
-export * from './AnimatedText';
 export { Button, ButtonType } from './Button';
 export * from './Input';
 export * from './Text';
