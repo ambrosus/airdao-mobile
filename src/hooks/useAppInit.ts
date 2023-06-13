@@ -3,6 +3,7 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { Permission } from '@appTypes';
+import { API } from '@api/api';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -14,13 +15,22 @@ export const useAppInit = () => {
     async function prepare() {
       try {
         DeviceService.setupUniqueDeviceID();
-        const permission = await PermissionService.getPermission(
-          Permission.Notifications,
-          { requestAgain: true, openSettings: true }
-        );
-        if (permission) {
-          const notificationService = new NotificationService();
-          notificationService.setup();
+        await PermissionService.getPermission(Permission.Notifications, {
+          requestAgain: true,
+          openSettings: true
+        });
+        const notificationService = new NotificationService();
+        notificationService.setup();
+        let notificationTokenSavedToRemoteDB = false;
+        try {
+          notificationTokenSavedToRemoteDB = Boolean(
+            await API.watcherService.getWatcherInfoOfCurrentUser()
+          );
+        } catch (error) {
+          notificationTokenSavedToRemoteDB = false;
+        }
+        if (!notificationTokenSavedToRemoteDB) {
+          await API.watcherService.createWatcherForCurrentUser();
         }
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
