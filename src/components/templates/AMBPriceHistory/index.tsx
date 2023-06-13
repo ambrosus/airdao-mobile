@@ -1,16 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Animated, {
-  runOnJS,
   useAnimatedProps,
-  useAnimatedStyle,
   useDerivedValue,
-  useSharedValue,
-  withTiming
+  useSharedValue
 } from 'react-native-reanimated';
-import moment from 'moment';
+import { TextInput } from 'react-native';
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
-import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon, LogoGradient } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
@@ -20,6 +17,8 @@ import { PercentChange } from '@components/composite';
 import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
 
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
   onBadgePress?: () => unknown;
@@ -28,73 +27,25 @@ interface AMBPriceHistoryProps {
 export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const { badgeType, onBadgePress } = props;
   const { data: ambPriceNow } = useAMBPrice();
-  const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
   const [selectedInterval, setSelectedInverval] = useState<CMCInterval>('1h');
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
-  const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
-  const selectedPointDate = useSharedValue(-1);
-  const [value, setValue] = useState('');
-
-  useEffect(() => {
-    if (ambPriceNow) {
-      ambPriceNowRef.current = ambPriceNow.priceUSD;
-      ambPrice.value = ambPriceNow.priceUSD;
-    }
-  }, [ambPrice, ambPriceNow]);
+  const ambPrice = useSharedValue(0);
 
   const formattedPrice = useDerivedValue(() => {
-    return `$${ambPrice.value.toFixed(6)}`;
+    return ambPrice.value.toFixed(6);
   }, [ambPrice.value]);
-
-  const chartData: GraphPoint[] = historicalAMBPrice.map((token, idx) => {
+  const animatedProps = useAnimatedProps(() => {
     return {
-      date: new Date(token.timestamp.getTime() + idx * 1000 * 60 * 60),
-      value: token.priceUSD
-    };
-  });
-
-  const priceAnimatedProps = useAnimatedProps(() => {
-    return {
-      text: `$${ambPrice.value.toFixed(6).toString()}`
+      text: `$${formattedPrice.value.toString()}`
     } as any;
   });
 
-  const animatedDate = useDerivedValue(() => {
-    if (selectedPointDate.value !== -1) {
-      return `${new Date(selectedPointDate.value)}`;
-    }
-    return '';
-  });
-
-  const formatDate = (selectedPointDate: number) => {
-    const formattedDate = moment(selectedPointDate).format('hh:mm');
-    setValue(formattedDate);
-  };
-
-  const dateAnimatedProps = useAnimatedProps(() => {
-    if (selectedPointDate.value !== -1) {
-      runOnJS(formatDate)(selectedPointDate.value);
-      return {
-        text: value
-      } as any;
-    }
+  const chartData: GraphPoint[] = historicalAMBPrice.map((token, idx) => {
     return {
-      text: ''
+      date: new Date(token.timestamp.getTime() + idx),
+      value: token.priceUSD
     };
   });
-
-  const animatedDateContainerStyles = useAnimatedStyle(() => {
-    if (selectedPointDate.value !== -1) {
-      return {
-        marginLeft: withTiming(8),
-        opacity: withTiming(1)
-      };
-    }
-    return {
-      marginLeft: withTiming(-24),
-      opacity: withTiming(0)
-    };
-  }, [selectedInterval]);
 
   return (
     <>
@@ -111,9 +62,11 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
         </Text>
       </Row>
       <Row style={styles.balance}>
-        <AnimatedText
-          value={formattedPrice}
-          animatedProps={priceAnimatedProps}
+        <AnimatedTextInput
+          underlineColorAndroid="transparent"
+          editable={false}
+          value={formattedPrice.value}
+          {...{ animatedProps }}
           style={{
             fontSize: 30,
             fontFamily: 'Mersad_600SemiBold',
@@ -121,50 +74,37 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           }}
         />
       </Row>
-      <Row alignItems="center">
-        <Button
-          style={styles.badge}
-          disabled={badgeType !== 'button'}
-          onPress={onBadgePress}
-        >
-          <Badge
-            icon={
-              <Row alignItems="center" style={styles.balanceLast24HourChange}>
-                <PercentChange
-                  change={ambPriceNow?.percentChange24H || 0}
-                  fontSize={16}
-                  fontWeight="500"
-                />
-                <Spacer horizontal value={scale(4)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.smokyBlack}
-                >
-                  Today
-                </Text>
-                {badgeType === 'button' && (
-                  <>
-                    <Spacer horizontal value={scale(4)} />
-                    <ChevronRightIcon color={COLORS.smokyBlack} />
-                  </>
-                )}
-              </Row>
-            }
-          />
-        </Button>
-        <Animated.View style={animatedDateContainerStyles}>
-          <AnimatedText
-            value={animatedDate}
-            animatedProps={dateAnimatedProps}
-            style={{
-              fontSize: 12,
-              fontFamily: 'Inter_500Medium',
-              color: COLORS.asphalt
-            }}
-          />
-        </Animated.View>
-      </Row>
+      <Button
+        style={styles.badge}
+        disabled={badgeType !== 'button'}
+        onPress={onBadgePress}
+      >
+        <Badge
+          icon={
+            <Row alignItems="center" style={styles.balanceLast24HourChange}>
+              <PercentChange
+                change={ambPriceNow?.percentChange24H || 0}
+                fontSize={16}
+                fontWeight="500"
+              />
+              <Spacer horizontal value={scale(4)} />
+              <Text
+                fontFamily="Inter_500Medium"
+                fontSize={14}
+                color={COLORS.smokyBlack}
+              >
+                (24hr)
+              </Text>
+              {badgeType === 'button' && (
+                <>
+                  <Spacer horizontal value={scale(4)} />
+                  <ChevronRightIcon color={COLORS.smokyBlack} />
+                </>
+              )}
+            </Row>
+          }
+        />
+      </Button>
       <Spacer value={verticalScale(34)} />
       <BezierChart
         intervals={[
@@ -193,10 +133,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
         onPointSelected={(point) => {
           if (point) {
             ambPrice.value = point.value;
-            selectedPointDate.value = point.date.getTime();
-          } else {
-            ambPrice.value = ambPriceNowRef.current || 0;
-            selectedPointDate.value = -1;
           }
         }}
         onIntervalSelected={(interval) =>
