@@ -38,9 +38,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
 
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const nameInput = useRef<InputRef>(null);
-    const [localGroupName, setLocalGroupName] = useState<string>(
-      groupTitle || ''
-    );
+    const [localGroupName, setLocalGroupName] = useState<string>('');
+
     const [emptyPlaceholder, setEmptyPlaceholder] = useState(false);
 
     // onboarding functions
@@ -90,6 +89,10 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
 
     const bottomSafeArea = useSafeAreaInsets().bottom - 10;
 
+    const handleDismiss = useCallback(() => {
+      setLocalGroupName('');
+    }, []);
+
     return (
       <>
         <BottomSheetFloat
@@ -98,6 +101,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
           containerStyle={
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }
           }
+          onClose={handleDismiss}
         >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
@@ -147,7 +151,6 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 <Button
                   testID="BottomSheetCreateRename_Button"
-                  // disabled={!localGroupName.length}
                   type="circular"
                   style={styles.bottomSheetCreateRenameButton}
                   onPress={handleButtonPress}

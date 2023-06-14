@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef } from 'react';
 import {
   SectionList,
@@ -13,11 +12,12 @@ import { BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { NotificationsHeader as Header, NotificationBox } from './components';
 import { Notification } from '@models/Notification';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useObserveNotifications } from '@hooks';
 import { Q } from '@nozbe/watermelondb';
 import { DatabaseService } from '@lib';
+import { BellIcon } from '@components/svg/icons';
 import { styles } from './styles';
 
 interface NotificationSection {
@@ -78,9 +78,7 @@ export const Notifications = (): JSX.Element => {
       <>
         {info.section.index !== 0 && (
           <>
-            <Spacer value={verticalScale(32)} />
-            <View style={styles.sectionSeparator} />
-            <Spacer value={verticalScale(32)} />
+            <Spacer value={verticalScale(40)} />
           </>
         )}
         <Text
@@ -98,17 +96,15 @@ export const Notifications = (): JSX.Element => {
   const renderEmpty = () => {
     return (
       <View style={styles.emptyContainer}>
-        <View
-          style={{
-            height: scale(82),
-            width: scale(82),
-            borderRadius: scale(41),
-            backgroundColor: '#F2F2F2'
-          }}
-        />
+        <BellIcon />
         <Spacer value={verticalScale(16)} />
-        <Text align="center" color={COLORS.grey} fontSize={15} fontWeight="400">
-          You have no notifications right now. Come back later.
+        <Text
+          align="center"
+          color={COLORS.davysGray}
+          fontSize={15}
+          fontFamily="Inter_400Regular"
+        >
+          You have no notifications right now.{'\n'} Come back later.
         </Text>
       </View>
     );
@@ -122,7 +118,7 @@ export const Notifications = (): JSX.Element => {
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(32)} />}
+        ItemSeparatorComponent={() => <Spacer value={32} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}

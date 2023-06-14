@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     paddingBottom: verticalScale(12)
   },
   list: {
-    paddingHorizontal: scale(21)
+    paddingHorizontal: scale(20)
   },
   item: {
     marginTop: verticalScale(20),

@@ -11,7 +11,7 @@ export const DatePicker = (props: DatePickerProps): JSX.Element => {
     () => (
       <Row>
         <ChevronLeftIcon color="#000000" scale={1.2} />
-        <Spacer value={scale(31)} horizontal />
+        <Spacer value={scale(32)} horizontal />
         <ChevronRightIcon color="#000000" scale={1.2} />
       </Row>
     ),
