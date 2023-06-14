@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useLists } from '@contexts';
 import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
@@ -35,23 +35,22 @@ export const HomeCollections = () => {
       <View style={{ flex: 1, paddingTop: verticalScale(20) }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
-            <>
-              <Button onPress={() => navigateToCollectionDetails(item)}>
-                <GroupItem
-                  key={index}
-                  group={item}
-                  isFirstItem={index === 0}
-                  wrapperStyles={{
-                    paddingTop: 0,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0
-                  }}
-                  swipeable={false}
-                />
-              </Button>
-
-              <Spacer value={verticalScale(7.5)} />
-            </>
+            <Button
+              onPress={() => navigateToCollectionDetails(item)}
+              key={item.id}
+            >
+              <GroupItem
+                group={item}
+                isFirstItem={index === 0}
+                wrapperStyles={{
+                  paddingTop: 0,
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0,
+                  marginBottom: verticalScale(7.5)
+                }}
+                swipeable={false}
+              />
+            </Button>
           );
         })}
       </View>
