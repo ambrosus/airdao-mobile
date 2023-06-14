@@ -11,17 +11,14 @@ export class Notification {
   type: NotificationType;
   body: string;
   createdAt: Date;
-  isRead: boolean;
+  // isRead: boolean;
 
   constructor(details: NotificationDTO) {
-    // TODO
     this._id = details._id;
-    this.type = NotificationType.PriceAlert;
-    this.body =
-      'This is a demo notification body. TODO: Edit Notification constructor';
-    this.type = NotificationType.PriceAlert;
-    this.createdAt = new Date();
-    this.isRead = details.isRead;
+    this.body = details.body;
+    this.type = details.title as NotificationType;
+    this.createdAt = new Date(details.timestamp);
+    // this.isRead = details.isRead;
   }
 }
 
@@ -30,7 +27,6 @@ export class NotificationWithPriceChange extends Notification {
   percentChange: number;
   amount: number;
   constructor(details: NotificationDTO) {
-    // TODO
     super(details);
     this.type = NotificationType.PriceAlert;
     this.percentChange = 0;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   SectionList,
   SectionListData,
@@ -14,10 +14,8 @@ import { NotificationsHeader as Header, NotificationBox } from './components';
 import { Notification } from '@models/Notification';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useObserveNotifications } from '@hooks';
-import { Q } from '@nozbe/watermelondb';
-import { DatabaseService } from '@lib';
 import { BellIcon } from '@components/svg/icons';
+import { useNotificationsQuery } from '@hooks/query';
 import { styles } from './styles';
 
 interface NotificationSection {
@@ -29,13 +27,13 @@ interface NotificationSection {
 const DAY_FORMAT = 'DD MMMM YYYY';
 
 export const Notifications = (): JSX.Element => {
-  const notifications = useObserveNotifications(Q.sortBy('created_at', 'desc'));
+  const { data: notifications } = useNotificationsQuery();
 
-  useEffect(() => {
-    const databaseService = new DatabaseService();
-    const unreadNotifications = notifications.filter((n) => !n.isRead);
-    databaseService.markAsRead(unreadNotifications);
-  }, [notifications]);
+  // useEffect(() => {
+  //   const databaseService = new DatabaseService();
+  //   const unreadNotifications = notifications.filter((n) => !n.isRead);
+  //   databaseService.markAsRead(unreadNotifications);
+  // }, [notifications]);
 
   const settingsModal = useRef<BottomSheetRef>(null);
 
@@ -88,7 +86,7 @@ export const Notifications = (): JSX.Element => {
         >
           {info.section.title.toUpperCase()}
         </Text>
-        <Spacer value={verticalScale(20)} />
+        <Spacer value={verticalScale(16)} />
       </>
     );
   };
