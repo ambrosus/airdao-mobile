@@ -2,8 +2,9 @@
 import axios from 'axios';
 import { NotificationService } from '@lib';
 import { WatcherInfoDTO } from '@models';
+import Config from '@constants/config';
 
-const watcherAPI = 'https://wallet-api-api.ambrosus-dev.io/api/v1/watcher';
+const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
 const getWatcherInfoOfCurrentUser =
   async (): Promise<WatcherInfoDTO | null> => {

@@ -1,3 +1,5 @@
+import { NotificationDTO } from './NotificationDTO';
+
 interface WatcherInfoAddress {
   address: string;
   last_tx: unknown;
@@ -6,7 +8,7 @@ interface WatcherInfoAddress {
 export interface WatcherInfoDTO {
   addresses: WatcherInfoAddress[];
   created_at: string;
-  history_notifications: [];
+  history_notifications: NotificationDTO[];
   id: string;
   push_token: string;
   threshold: number;
