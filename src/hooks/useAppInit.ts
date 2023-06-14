@@ -30,8 +30,9 @@ export const useAppInit = () => {
           notificationTokenSavedToRemoteDB = false;
         }
         if (!notificationTokenSavedToRemoteDB) {
-          await API.watcherService.createWatcherForCurrentUser();
+          API.watcherService.createWatcherForCurrentUser();
         }
+
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
