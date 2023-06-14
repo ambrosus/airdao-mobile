@@ -88,15 +88,10 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   });
 
   const animatedDateContainerStyles = useAnimatedStyle(() => {
-    if (selectedPointDate.value !== -1) {
-      return {
-        marginLeft: withTiming(8),
-        opacity: withTiming(1)
-      };
-    }
     return {
-      marginLeft: withTiming(-24),
-      opacity: withTiming(0)
+      marginLeft:
+        selectedPointDate.value !== -1 ? withTiming(8) : withTiming(-24),
+      opacity: selectedPointDate.value !== -1 ? withTiming(1) : withTiming(0)
     };
   }, [selectedInterval]);
 
