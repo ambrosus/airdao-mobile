@@ -1,5 +1,8 @@
 export interface NotificationDTO {
   // TODO: will implement once API is ready
   _id: string;
-  isRead: boolean;
+  title: string;
+  body: string;
+  sent: unknown;
+  timestamp: Date;
 }
