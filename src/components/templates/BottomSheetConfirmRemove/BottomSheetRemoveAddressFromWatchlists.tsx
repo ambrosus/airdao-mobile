@@ -40,10 +40,10 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
         <Button
           testID="BottomSheetConfirmRemove_Button"
           onPress={() => {
+            removeFromWatchlist(item);
             setTimeout(() => {
-              removeFromWatchlist(item);
               localRef.current?.dismiss();
-            }, 800);
+            }, 100);
           }}
           style={styles.removeButton}
         >
