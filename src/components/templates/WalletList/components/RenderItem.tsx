@@ -43,6 +43,7 @@ export const SwipeableWalletItem = memo(
 
       const handleConfirmRemove = useCallback(() => {
         confirmRemoveRef.current?.show();
+        swipeRef.current?.close();
       }, []);
 
       const navigateToAddressDetails = useCallback(() => {
@@ -63,10 +64,10 @@ export const SwipeableWalletItem = memo(
           }
         : {};
 
-      const showEdit = () => {
+      const showEdit = useCallback(() => {
         editModalRef.current?.show();
         swipeRef.current?.close();
-      };
+      }, []);
 
       const handleSwipeableOpen = useCallback(() => {
         clearTimeout(timeoutRef.current ?? undefined);
@@ -116,12 +117,14 @@ export const SwipeableWalletItem = memo(
             </Pressable>
             {removeType === 'watchlist' && (
               <BottomSheetRemoveAddressFromWatchlists
+                key={item.address}
                 item={item}
                 ref={confirmRemoveRef}
               />
             )}
             {removeType === 'collection' && (
               <BottomSheetRemoveAddressFromCollection
+                key={item.address}
                 wallet={item}
                 ref={confirmRemoveRef}
               />

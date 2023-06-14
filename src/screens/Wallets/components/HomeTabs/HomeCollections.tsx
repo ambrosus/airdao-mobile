@@ -30,9 +30,8 @@ export const HomeCollections = () => {
       <View style={{ flex: 1, paddingTop: verticalScale(20) }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
-            <>
+            <React.Fragment key={item.id}>
               <GroupItem
-                key={index}
                 group={item}
                 isFirstItem={index === 0}
                 wrapperStyles={{
@@ -43,7 +42,7 @@ export const HomeCollections = () => {
                 swipeable={false}
               />
               <Spacer value={verticalScale(7.5)} />
-            </>
+            </React.Fragment>
           );
         })}
       </View>
