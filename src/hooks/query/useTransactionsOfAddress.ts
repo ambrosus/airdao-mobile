@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
-import { getTransactionsOfAccount } from '@api/api';
+import { API } from '@api/api';
 import { Transaction } from '@models/index';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { TransactionType } from '@appTypes/enums';
@@ -23,7 +23,7 @@ export function useTransactionsOfAccount(
   } = useInfiniteQuery<PaginatedResponseBody<TransactionDTO[]>>(
     ['address-transactions', address, page, limit, type],
     () =>
-      getTransactionsOfAccount(
+      API.explorerService.getTransactionsOfAccount(
         address,
         (data?.pages.length || 0) + 1,
         limit,
