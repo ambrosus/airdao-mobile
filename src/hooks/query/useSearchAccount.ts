@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
-import { searchAddress } from '@api/api';
+import { API } from '@api/api';
 import { ExplorerAccountDTO } from '@models/index';
 import { ExplorerAccount } from '@models/Explorer';
 
@@ -10,7 +10,7 @@ export function useSearchAccount(
 ): QueryResponse<ExplorerAccount | undefined> {
   const { data, error, isInitialLoading } = useQuery<ExplorerAccountDTO>(
     ['search-account', address],
-    () => searchAddress(address),
+    () => API.explorerService.searchAddress(address),
     { enabled }
   );
 
