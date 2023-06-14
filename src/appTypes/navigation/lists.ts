@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommonStackParamsList } from './common';
 
 export type PortfolioParamsPortfolio = {
-  PortfolioScreen: undefined;
+  PortfolioScreen: { tabs: { activeTab: number } };
 } & CommonStackParamsList;
 
 export type PortfolioNavigationProp = CompositeNavigationProp<

@@ -4,7 +4,7 @@ import { ListRenderItemInfo, View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
-import { PortfolioNavigationProp, WalletsNavigationProp } from '@appTypes';
+import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { WalletItem, WalletList } from '@components/templates';
@@ -14,21 +14,23 @@ import { verticalScale } from '@utils/scaling';
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
 
-  const navigationToPortfolio = useNavigation<PortfolioNavigationProp>();
-  const navigationToWatchlist = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<PortfolioNavigationProp>();
 
   const navigateToPortfolio = useCallback(() => {
-    setTimeout(() => {
-      navigationToPortfolio.navigate('Portfolio');
-    }, 400);
-  }, [navigationToPortfolio]);
+    navigation.navigate('Portfolio', {
+      screen: 'PortfolioScreen',
+      params: {
+        tabs: { activeTab: 0 }
+      }
+    });
+  }, [navigation]);
 
   if (watchlist.length === 0) {
     return <RenderEmpty text="addresses" />;
   }
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {
-    return navigationToWatchlist.navigate('Address', { address: item.address });
+    return navigation.navigate('Address', { address: item.address });
   };
 
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
