@@ -6,6 +6,7 @@ import { CommonStackParamsList } from './common';
 
 export type PortfolioParamsPortfolio = {
   PortfolioScreen: undefined;
+  SingleGroup: undefined;
 } & CommonStackParamsList;
 
 export type PortfolioNavigationProp = CompositeNavigationProp<

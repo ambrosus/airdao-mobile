@@ -10,10 +10,9 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(18)
   },
   image: {
-    backgroundColor: '#d9d9d9',
-    borderRadius: 8,
-    width: 180,
-    height: 160,
-    alignItems: 'center'
+    flex: 1
+  },
+  highlightTitle: {
+    maxWidth: 180
   }
 });
