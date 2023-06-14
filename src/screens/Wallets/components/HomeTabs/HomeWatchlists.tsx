@@ -29,10 +29,16 @@ export const HomeWatchlists = () => {
     return <RenderEmpty text="addresses" />;
   }
 
+  const navigateToAddressDetails = (item: ExplorerAccount) => {
+    return navigation.navigate('Address', { address: item.address });
+  };
+
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     return (
       <View>
-        <WalletItem item={args.item} />
+        <Button onPress={() => navigateToAddressDetails(args.item)}>
+          <WalletItem item={args.item} />
+        </Button>
         <Spacer value={verticalScale(24)} />
       </View>
     );

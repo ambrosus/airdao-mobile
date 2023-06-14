@@ -38,7 +38,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
           )}
           %
         </Text>
-        <Spacer value={verticalScale(5)} />
+        <Spacer value={verticalScale(4)} />
         <Text fontSize={13} color={COLORS.darkGrey} opacity={0.5}>
           ${NumberUtils.formatNumber(notificationWithPriceChange.amount, 0)}
         </Text>
@@ -67,11 +67,15 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
             }}
           />
           <Spacer value={scale(4)} horizontal />
-          <Text fontSize={13} color={COLORS.grey}>
+          <Text
+            fontSize={14}
+            color={COLORS.slateGrey}
+            fontFamily="Inter_600SemiBold"
+          >
             {dayjs(createdAt).fromNow()}
           </Text>
         </Row>
-        <Spacer value={verticalScale(5)} />
+        <Spacer value={verticalScale(4)} />
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"
@@ -79,7 +83,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
         >
           {body}
         </Text>
-        <Spacer value={verticalScale(5)} />
+        <Spacer value={verticalScale(4)} />
       </View>
       <Spacer horizontal value={scale(21)} />
       {renderChangeInfo()}

@@ -59,12 +59,14 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     if (typeof renderItem === 'function') return renderItem(args);
     return (
-      <SwipeableWalletItem
-        item={args.item}
-        idx={args.index}
-        isPortfolioFlow={isPortfolioFlow}
-        removeType={removeType}
-      />
+      <View key={args.item.address}>
+        <SwipeableWalletItem
+          item={args.item}
+          idx={args.index}
+          isPortfolioFlow={isPortfolioFlow}
+          removeType={removeType}
+        />
+      </View>
     );
   };
 
@@ -72,7 +74,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
     <FlatList
       contentContainerStyle={{
         flexGrow: 1,
-        paddingTop: verticalScale(22),
+        paddingTop: verticalScale(16),
         paddingBottom: '25%'
       }}
       scrollEnabled={scrollEnabled}

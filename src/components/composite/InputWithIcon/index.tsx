@@ -15,9 +15,9 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
     return (
       <Row style={styles.container} alignItems="center">
         {iconLeft}
-        <Spacer horizontal value={scale(14.75)} />
+        <Spacer horizontal value={scale(16)} />
         <Input ref={ref} style={[style, styles.input]} {...restProps} />
-        <Spacer horizontal value={scale(14.75)} />
+        <Spacer horizontal value={scale(16)} />
         {iconRight}
       </Row>
     );
