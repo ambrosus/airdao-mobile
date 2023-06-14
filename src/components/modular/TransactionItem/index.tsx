@@ -21,7 +21,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
           {transaction.amount}
         </Text>
       </Row>
-      <Spacer value={verticalScale(5)} />
+      <Spacer value={verticalScale(4)} />
       <Row alignItems="center" justifyContent="space-between">
         <Text fontSize={12} fontFamily="Inter_500Medium" color="#646464">
           {dayjs(transaction.timestamp).fromNow()}

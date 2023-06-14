@@ -6,8 +6,8 @@ import { COLORS } from '@constants/colors';
 export const styles = StyleSheet.create({
   container: {
     paddingTop: verticalScale(12),
-    paddingLeft: scale(17),
-    paddingRight: scale(19)
+    paddingLeft: scale(16),
+    paddingRight: scale(20)
   },
   header: {
     shadowColor: 'transparent',

@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   trackBtn: {
     backgroundColor: COLORS.deepBlue,
-    paddingVertical: verticalScale(9),
+    paddingVertical: verticalScale(8),
     width: Dimensions.get('window').width - verticalScale(32),
     borderRadius: 120,
     alignItems: 'center',

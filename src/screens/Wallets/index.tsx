@@ -12,7 +12,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeTabs } from '@screens/Wallets/components/HomeTabs/HomeTabs';
-import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
+// import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
 import { HomeHeader } from '@screens/Wallets/components/Header';
 
 export const HomeScreen = () => {
@@ -60,10 +60,10 @@ export const HomeScreen = () => {
         <View style={styles.homeTabs}>
           <HomeTabs />
         </View>
-        <Spacer value={scale(24)} />
-        <View style={styles.homeHighlights}>
-          <HomeHighlights />
-        </View>
+        {/*<Spacer value={scale(24)} />*/}
+        {/*<View style={styles.homeHighlights}>*/}
+        {/*  <HomeHighlights />*/}
+        {/*</View>*/}
       </ScrollView>
       <OnboardingView
         type="float"
