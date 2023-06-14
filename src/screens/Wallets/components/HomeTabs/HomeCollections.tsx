@@ -35,10 +35,7 @@ export const HomeCollections = () => {
       <View style={{ flex: 1, paddingTop: verticalScale(20) }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
-            <Button
-              onPress={() => navigateToCollectionDetails(item)}
-              key={item.id}
-            >
+            <React.Fragment key={item.id}>
               <GroupItem
                 group={item}
                 isFirstItem={index === 0}
@@ -50,7 +47,8 @@ export const HomeCollections = () => {
                 }}
                 swipeable={false}
               />
-            </Button>
+              <Spacer value={verticalScale(7.5)} />
+            </React.Fragment>
           );
         })}
       </View>
