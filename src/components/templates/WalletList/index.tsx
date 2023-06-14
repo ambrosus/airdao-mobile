@@ -59,12 +59,14 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     if (typeof renderItem === 'function') return renderItem(args);
     return (
-      <SwipeableWalletItem
-        item={args.item}
-        idx={args.index}
-        isPortfolioFlow={isPortfolioFlow}
-        removeType={removeType}
-      />
+      <View key={args.item.address}>
+        <SwipeableWalletItem
+          item={args.item}
+          idx={args.index}
+          isPortfolioFlow={isPortfolioFlow}
+          removeType={removeType}
+        />
+      </View>
     );
   };
 
