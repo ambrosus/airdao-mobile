@@ -4,12 +4,10 @@ import { PermissionService } from '@lib';
 import { ExplorerAccount } from '@models';
 
 const watchChangesOfWallet = async (wallet: ExplorerAccount) => {
-  const notificationPermissionGranted = await PermissionService.getPermission(
-    Permission.Notifications
-  );
-  if (notificationPermissionGranted) {
-    API.watchAddress(wallet.address);
-  }
+  await PermissionService.getPermission(Permission.Notifications, {
+    requestAgain: true
+  });
+  API.watcherService.watchAddresses([wallet.address]);
 };
 
 export const WALLET_UTILS = { watchChangesOfWallet };

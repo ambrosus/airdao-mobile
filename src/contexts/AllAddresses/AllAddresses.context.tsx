@@ -3,7 +3,7 @@ import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@utils/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { API, searchAddress } from '@api/api';
+import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { NotificationService } from '@lib';
 
@@ -18,11 +18,9 @@ const AllAddressesContext = () => {
 
   useEffect(() => {
     const onNotificationTokenRefresh = () => {
-      const notificationService = new NotificationService();
-      watchlistedAccountsRef.current.forEach((account) => {
-        notificationService.setup();
-        API.watchAddress(account.address);
-      });
+      API.watcherService.watchAddresses(
+        watchlistedAccountsRef.current.map((account) => account.address)
+      );
     };
     new NotificationService(onNotificationTokenRefresh);
   }, [allAddresses]);
@@ -105,7 +103,7 @@ const AllAddressesContext = () => {
     return await Promise.all(
       addresses.map(async (address) => {
         const account = new ExplorerAccount(
-          await searchAddress(address.address)
+          await API.explorerService.searchAddress(address.address)
         );
         const newAccount = Object.assign({}, account);
         newAccount.name = address.name;

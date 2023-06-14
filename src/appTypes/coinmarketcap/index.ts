@@ -1,27 +1,29 @@
-export interface CMCChartQuote {
-  timestamp: string;
-  quote: {
-    USD: {
-      price: number;
-      volume_24h: number;
-      market_cap: number;
-      circulating_supply: number;
-      total_supply: number;
-      timestamp: string;
-    };
-  };
-}
+// export interface CMCChartQuote {
+//   timestamp: string;
+//   quote: {
+//     USD: {
+//       price: number;
+//       volume_24h: number;
+//       market_cap: number;
+//       circulating_supply: number;
+//       total_supply: number;
+//       timestamp: string;
+//     };
+//   };
+// }
+export type CMCChartQuote = [number, number];
 
-export interface CMCChartData {
-  [key: string]: {
-    id: number;
-    symbol: string;
-    is_active: number;
-    is_fiat: unknown;
-    quotes: CMCChartQuote[];
-  };
-}
+// export interface CMCChartData {
+//   [key: string]: {
+//     id: number;
+//     symbol: string;
+//     is_active: number;
+//     is_fiat: unknown;
+//     quotes: CMCChartQuote[];
+//   };
+// }
 
+export type CMCChartData = [number, number][];
 export type CMCInterval =
   | 'hourly'
   | 'daily'

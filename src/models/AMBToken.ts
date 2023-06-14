@@ -39,24 +39,42 @@ export class AMBToken {
   }
 
   static fromCMCResponse(data: CMCChartQuote): AMBToken {
-    const usdData = data.quote.USD;
     return {
       _id: 'amb',
       id: 1,
       name: 'AirDAO',
       symbol: 'AMB',
-      circulatingSupply: usdData.circulating_supply,
+      circulatingSupply: -1,
       maxSupply: -1,
-      totalSupply: usdData.total_supply,
-      timestamp: new Date(usdData.timestamp),
+      totalSupply: -1,
+      timestamp: new Date(data[0]),
       rank: -1,
       percentChange1H: -1,
       percentChange24H: -1,
       percentChange7D: -1,
-      priceUSD: usdData.price,
-      volumeUSD: usdData.volume_24h,
-      marketCapUSD: usdData.market_cap,
-      createdAt: new Date()
+      priceUSD: data[1],
+      volumeUSD: -1,
+      marketCapUSD: -1,
+      createdAt: new Date(data[0])
     };
+    // const usdData = data.quote.USD;
+    // return {
+    //   _id: 'amb',
+    //   id: 1,
+    //   name: 'AirDAO',
+    //   symbol: 'AMB',
+    //   circulatingSupply: usdData.circulating_supply,
+    //   maxSupply: -1,
+    //   totalSupply: usdData.total_supply,
+    //   timestamp: new Date(usdData.timestamp),
+    //   rank: -1,
+    //   percentChange1H: -1,
+    //   percentChange24H: -1,
+    //   percentChange7D: -1,
+    //   priceUSD: usdData.price,
+    //   volumeUSD: usdData.volume_24h,
+    //   marketCapUSD: usdData.market_cap,
+    //   createdAt: new Date()
+    // };
   }
 }

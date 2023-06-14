@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
-import { getExplorerAccounts } from '@api/api';
+import { API } from '@api/api';
 import { ExplorerAccountDTO } from '@models/index';
 import { ExplorerAccount } from '@models/Explorer';
 import { SearchSort } from '@screens/Search/Search.types';
@@ -10,7 +10,7 @@ export function useExplorerAccounts(
 ): QueryResponse<ExplorerAccount[] | undefined> {
   const { data, isLoading, error } = useQuery<ExplorerAccountDTO[]>(
     ['explorer-accounts', sort],
-    () => getExplorerAccounts(20, sort)
+    () => API.explorerService.getExplorerAccounts(20, sort)
   );
 
   return {

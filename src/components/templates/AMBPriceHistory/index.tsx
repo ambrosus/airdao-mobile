@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Animated, {
   runOnJS,
   useAnimatedProps,
@@ -25,11 +25,18 @@ interface AMBPriceHistoryProps {
   onBadgePress?: () => unknown;
 }
 
+const intervalTimeDiffMap: { [key in CMCInterval]: number } = {
+  // '1h': 3.6 * 10e5,
+  '1d': 8.64 * 10e6,
+  'weekly': 6.048 * 10e7,
+  'monthly': 2.628 * 10e8
+};
+
 export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const { badgeType, onBadgePress } = props;
   const { data: ambPriceNow } = useAMBPrice();
   const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
-  const [selectedInterval, setSelectedInverval] = useState<CMCInterval>('1h');
+  const [selectedInterval, setSelectedInverval] = useState<CMCInterval>('1d');
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
@@ -45,16 +52,24 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ambPriceNow, didSetAMBPriceFromAPI.current]);
 
+  const historicalAMBPriceWithInterval = useMemo(() => {
+    const diff = intervalTimeDiffMap[selectedInterval];
+    return historicalAMBPrice.filter(
+      (token) => new Date().getTime() - token.timestamp.getTime() <= diff
+    );
+  }, [historicalAMBPrice, selectedInterval]);
   const formattedPrice = useDerivedValue(() => {
     return `$${ambPrice.value.toFixed(6)}`;
   }, [ambPrice.value]);
 
-  const chartData: GraphPoint[] = historicalAMBPrice.map((token, idx) => {
-    return {
-      date: new Date(token.timestamp.getTime() + idx * 1000 * 60 * 60),
-      value: token.priceUSD
-    };
-  });
+  const chartData: GraphPoint[] = historicalAMBPriceWithInterval.map(
+    (token) => {
+      return {
+        date: new Date(token.timestamp.getTime()),
+        value: token.priceUSD
+      };
+    }
+  );
 
   const priceAnimatedProps = useAnimatedProps(() => {
     return {
@@ -167,10 +182,10 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       <Spacer value={verticalScale(34)} />
       <BezierChart
         intervals={[
-          {
-            text: '1H',
-            value: '1h'
-          },
+          // {
+          //   text: '1H',
+          //   value: '1h'
+          // },
           {
             text: '1D',
             value: '1d'
