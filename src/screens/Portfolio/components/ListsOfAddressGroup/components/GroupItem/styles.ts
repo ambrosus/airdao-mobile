@@ -32,5 +32,12 @@ export const styles = StyleSheet.create({
   optionButton: {
     alignItems: 'center',
     width: moderateScale(40)
+  },
+  rightActions: {
+    backgroundColor: COLORS.charcoal,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: scale(130)
   }
 });
