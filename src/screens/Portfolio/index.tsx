@@ -43,9 +43,8 @@ type PortfolioScreenProps = {
 };
 
 export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
-  const { activeTab = 0 } = route.params?.tabs;
-
-  const [index, setIndex] = useState(activeTab);
+  const activeTab = route?.params?.tabs?.activeTab;
+  const [index, setIndex] = useState(0);
   const [routes] = useState<PortfolioTabViewRoute[]>(
     portfolioTabRoutes as unknown as PortfolioTabViewRoute[]
   );
@@ -53,7 +52,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   const focused = useIsFocused();
 
   useLayoutEffect(() => {
-    if (focused) {
+    if (focused && activeTab) {
       setIndex(activeTab);
     }
   }, [activeTab, focused]);
