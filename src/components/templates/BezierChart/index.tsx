@@ -2,8 +2,8 @@ import React, { useCallback, useRef } from 'react';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { Button, Row, Text } from '@components/base';
+import { scale } from '@utils/scaling';
 import { SelectionDot } from './SelectionDot';
 
 interface Interval {
@@ -91,10 +91,11 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
         onGestureEnd={onGestureEnd}
         onPointSelected={_onPointSelected}
         SelectionDot={SelectionDot}
+        verticalPadding={21}
       />
       {intervals.length > 0 && (
         <>
-          <Spacer value={verticalScale(21)} />
+          {/* <Spacer value={verticalScale(21)} /> */}
           <Row alignItems="center" justifyContent="center">
             {intervals.map(renderInterval)}
           </Row>
