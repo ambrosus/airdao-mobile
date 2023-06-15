@@ -12,7 +12,15 @@ import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useObserveNotificationCount } from '@hooks';
 
-export function HomeHeader(): JSX.Element {
+type Props = {
+  newNotificationsCount?: number;
+  setLastNotificationTime?: () => void;
+};
+
+export function HomeHeader({
+  newNotificationsCount = 0,
+  setLastNotificationTime = () => null
+}: Props): JSX.Element {
   const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = useObserveNotificationCount();
@@ -54,7 +62,8 @@ export function HomeHeader(): JSX.Element {
 
   const navigateToNotifications = useCallback(() => {
     navigation.navigate('Notifications');
-  }, [navigation]);
+    setLastNotificationTime();
+  }, [navigation, setLastNotificationTime]);
 
   const renderContentRight = useMemo(() => {
     return (
@@ -62,17 +71,17 @@ export function HomeHeader(): JSX.Element {
         <Spacer horizontal value={scale(20)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color="#393b40" />
-          {unreadNotificationCount > 0 && (
+          {unreadNotificationCount + newNotificationsCount > 0 && (
             <View style={styles.notificationCountContainer}>
               <Text color="white" fontSize={11} fontFamily="Inter_600SemiBold">
-                {unreadNotificationCount}
+                {unreadNotificationCount + newNotificationsCount}
               </Text>
             </View>
           )}
         </Button>
       </>
     );
-  }, [navigateToNotifications, unreadNotificationCount]);
+  }, [navigateToNotifications, newNotificationsCount, unreadNotificationCount]);
 
   const renderContentLeft = useMemo(() => {
     return (
