@@ -4,5 +4,5 @@ export interface NotificationDTO {
   title: string;
   body: string;
   sent: unknown;
-  timestamp: Date;
+  timestamp: string;
 }
