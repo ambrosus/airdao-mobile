@@ -19,9 +19,14 @@ export const styles = StyleSheet.create({
   },
   rightActions: {
     backgroundColor: COLORS.charcoal,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     width: scale(130)
+  },
+  rightActionsButton: {
+    width: '50%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

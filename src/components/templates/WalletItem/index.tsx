@@ -74,7 +74,7 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
       </Row>
       <Spacer value={5} />
       <Row justifyContent="space-between">
-        <Text fontFamily="Mersad_600SemiBold" color="#0e0e0e80" fontSize={13}>
+        <Text fontFamily="Inter_500Medium" color="#0e0e0e80" fontSize={12}>
           {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
         <Row alignItems="center">
