@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
-import { verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { AccountList } from '@models';
 
 export const HomeCollections = () => {
@@ -35,7 +35,7 @@ export const HomeCollections = () => {
 
   return (
     <View style={styles.homeCollectionsContainer}>
-      <View style={{ flex: 1, paddingTop: verticalScale(20) }}>
+      <View style={{ flex: 1, paddingTop: scale(10) }}>
         {listsOfAddressGroup.slice(0, 4).map((item, index) => {
           return (
             <View key={item.id}>
@@ -43,10 +43,9 @@ export const HomeCollections = () => {
                 group={item}
                 isFirstItem={index === 0}
                 wrapperStyles={{
-                  paddingTop: 0,
+                  paddingVertical: 32,
                   borderTopWidth: 0,
-                  borderBottomWidth: 0,
-                  marginBottom: verticalScale(7.5)
+                  borderBottomWidth: 0
                 }}
                 swipeable={false}
               />
