@@ -34,19 +34,19 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 
 const PercentThresholds: Segment[] = [
   {
-    title: '5%',
-    value: 5,
-    id: '5'
+    title: '0.5%',
+    value: 0.5,
+    id: '1'
   },
   {
-    title: '8%',
-    value: 8,
-    id: '8'
+    title: '1%',
+    value: 1,
+    id: '2'
   },
   {
-    title: '10%',
-    value: 10,
-    id: '10'
+    title: '1.5%',
+    value: 1.5,
+    id: '3'
   }
 ];
 
