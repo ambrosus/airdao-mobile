@@ -12,17 +12,6 @@ export const SettingsScreen = () => {
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
-      <Spacer value={100} />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          paddingBottom: 72
-        }}
-      >
-        <Text>Channel: {Updates.channel}</Text>
-        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.11</Text>
-      </View>
     </SafeAreaView>
   );
 };
