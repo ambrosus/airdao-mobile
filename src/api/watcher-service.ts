@@ -14,7 +14,7 @@ const getWatcherInfoOfCurrentUser =
       const response = await axios.get(`${watcherAPI}/${pushToken}`);
       return response.data;
     } catch (error) {
-      return null;
+      throw error;
     }
   };
 

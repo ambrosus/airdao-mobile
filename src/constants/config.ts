@@ -9,7 +9,7 @@ const Config = {
 if (Updates.channel === 'main') {
   Config.WALLET_API_URL = 'https://wallet-api-api.ambrosus.io';
 } else if (Updates.channel === 'stage') {
-  Config.WALLET_API_URL = 'https://wallet-api-api.ambrosus-test.io';
+  Config.WALLET_API_URL = 'https://wallet-api.ambrosus-test.io';
 }
 
 export default Config;
