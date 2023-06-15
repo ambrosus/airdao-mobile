@@ -10,9 +10,9 @@ export function useNotificationsQuery(): QueryResponse<Notification[]> {
   );
   return {
     data:
-      data && Array.isArray(data.history_notifications)
-        ? data.history_notifications
-            .map((n) => new Notification(n))
+      data && Array.isArray(data.historical_notifications)
+        ? data.historical_notifications
+            .map((n) => new Notification({ ...n, _id: n.timestamp }))
             .sort((n1, n2) => n2.createdAt.getTime() - n1.createdAt.getTime())
         : [],
     loading: isLoading,

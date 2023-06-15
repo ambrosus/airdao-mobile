@@ -8,7 +8,7 @@ interface WatcherInfoAddress {
 export interface WatcherInfoDTO {
   addresses: WatcherInfoAddress[];
   created_at: string;
-  history_notifications: NotificationDTO[];
+  historical_notifications: NotificationDTO[];
   id: string;
   push_token: string;
   threshold: number;
