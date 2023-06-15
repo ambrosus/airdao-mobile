@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
-import { Permission } from '@appTypes';
+import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
+import { Cache, CacheKey } from '@utils/cache';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -30,7 +31,21 @@ export const useAppInit = () => {
           notificationTokenSavedToRemoteDB = false;
         }
         if (!notificationTokenSavedToRemoteDB) {
-          API.watcherService.createWatcherForCurrentUser();
+          try {
+            const watchlist = (
+              ((await Cache.getItem(CacheKey.AllAddresses)) ||
+                []) as CacheableAccount[]
+            ).filter((a) => a.isOnWatchlist);
+            await API.watcherService.createWatcherForCurrentUser();
+            if (watchlist.length > 0) {
+              // save under new push token
+              API.watcherService.watchAddresses(
+                watchlist.map((w) => w.address)
+              );
+            }
+          } catch (error) {
+            // ignore
+          }
         }
 
         await Font.loadAsync({
