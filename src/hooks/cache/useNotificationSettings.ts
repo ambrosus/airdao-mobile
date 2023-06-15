@@ -1,3 +1,4 @@
+import { API } from '@api/api';
 import { QueryResponse } from '@appTypes/QueryResponse';
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
@@ -15,6 +16,7 @@ export const useNotificationSettings =
     );
 
     const saveSettings = async (newSettings: NotificationSettings) => {
+      await API.watcherService.updateNotificationSettings(newSettings);
       await Cache.setItem(CacheKey.NotificationSettings, newSettings);
       refetch();
     };

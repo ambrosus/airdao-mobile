@@ -3,6 +3,7 @@ import axios from 'axios';
 import { NotificationService } from '@lib';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
+import { NotificationSettings } from '@appTypes';
 
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
@@ -37,7 +38,7 @@ const watchAddresses = async (addresses: string[]): Promise<void> => {
       addresses,
       // eslint-disable-next-line camelcase
       push_token: pushToken,
-      threshold: 5 // TODO remove threshold
+      threshold: 0.5 // TODO remove threshold
     });
   } catch (error) {
     throw error;
@@ -78,10 +79,30 @@ const removeWatcherForAddresses = async (
   }
 };
 
+const updateNotificationSettings = async (
+  settings: NotificationSettings
+): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { pricePercentThreshold, priceAlerts, transactionAlerts } = settings;
+  const notificationService = new NotificationService();
+  const pushToken = await notificationService.getPushToken();
+  try {
+    await axios.put(`${watcherAPI}`, {
+      addresses: [],
+      // eslint-disable-next-line camelcase
+      push_token: pushToken,
+      threshold: pricePercentThreshold
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const watcherService = {
   watchAddresses,
   removeWatcherForAddresses,
   getWatcherInfoOfCurrentUser,
   createWatcherForCurrentUser,
-  removeAllWatchersFromCurrentUser
+  removeAllWatchersFromCurrentUser,
+  updateNotificationSettings
 };
