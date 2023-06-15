@@ -9,7 +9,9 @@ export enum CacheKey {
   IsSecondInit = 'is_second_init',
   NotificationSettings = 'notification_settings',
   PersonalList = 'personal_list',
-  Onboarding = 'onboarding'
+  Onboarding = 'onboarding',
+  Watchlist = 'watchlist',
+  LastNotificationTimestamp = 'last_notification_timestamp'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
