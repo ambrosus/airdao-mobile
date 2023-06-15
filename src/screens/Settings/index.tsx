@@ -5,8 +5,8 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
-import * as Updates from 'expo-updates';
 import { Spacer, Text } from '@components/base';
+import * as Updates from 'expo-updates';
 
 export const SettingsScreen = () => {
   return (
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   container: {
-    flex: 1,
     paddingLeft: scale(19),
     paddingRight: scale(23)
   }

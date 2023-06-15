@@ -5,8 +5,7 @@ import {
   BottomSheet,
   Header,
   SegmentedPicker,
-  Segment,
-  CopyToClipboardButton
+  Segment
 } from '@components/composite';
 import {
   BottomSheetProps,
@@ -21,7 +20,6 @@ import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import messaging from '@react-native-firebase/messaging';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -36,19 +34,19 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 
 const PercentThresholds: Segment[] = [
   {
-    title: '5%',
-    value: 5,
-    id: '5'
+    title: '0.5%',
+    value: 0.5,
+    id: '1'
   },
   {
-    title: '8%',
-    value: 8,
-    id: '8'
+    title: '1%',
+    value: 1,
+    id: '2'
   },
   {
-    title: '10%',
-    value: 10,
-    id: '10'
+    title: '1.5%',
+    value: 1.5,
+    id: '3'
   }
 ];
 
@@ -61,10 +59,6 @@ export const BottomSheetNotificationSettings = forwardRef<
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
   const { top: topInset } = useSafeAreaInsets();
-  const [token, setToken] = useState('');
-  useEffect(() => {
-    messaging().getToken().then(setToken);
-  }, []);
 
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
@@ -183,9 +177,6 @@ export const BottomSheetNotificationSettings = forwardRef<
           <Text fontSize={12} fontWeight="500" color="#646464">
             You’ll be notified of any transaction {'\n'} in your watchlist
           </Text>
-        </View>
-        <View style={{ marginHorizontal: 50, marginTop: 50 }}>
-          <CopyToClipboardButton textToDisplay={token} />
         </View>
       </ScrollView>
     </BottomSheet>
