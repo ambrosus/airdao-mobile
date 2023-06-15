@@ -23,7 +23,7 @@ export const SettingsScreen = () => {
         }}
       >
         <Text>Channel: {Updates.channel}</Text>
-        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.10</Text>
+        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.11</Text>
       </View>
     </SafeAreaView>
   );
