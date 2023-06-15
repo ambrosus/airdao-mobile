@@ -66,16 +66,13 @@ const removeWatcherForAddresses = async (
   const pushToken = await notificationService.getPushToken();
   if (!addresses || !addresses.length || !pushToken) return;
   try {
-    await axios.delete(
-      `https://wallet-api-api.ambrosus-dev.io/api/v1/watcher-addresses`,
-      {
-        data: {
-          addresses,
-          // eslint-disable-next-line camelcase
-          push_token: pushToken
-        }
+    await axios.delete(`${watcherAPI}-addresses`, {
+      data: {
+        addresses,
+        // eslint-disable-next-line camelcase
+        push_token: pushToken
       }
-    );
+    });
   } catch (error) {
     throw error;
   }
