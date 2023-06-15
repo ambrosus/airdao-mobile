@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   container: {
+    flex: 1,
     paddingLeft: scale(19),
     paddingRight: scale(23)
   }
