@@ -3,8 +3,7 @@ import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { Animated, Pressable } from 'react-native';
 import { Button, Spacer } from '@components/base';
-import { EditIcon } from '@components/svg/icons';
-import { RemoveIcon } from '@components/svg/icons/Remove';
+import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
@@ -111,7 +110,7 @@ export const SwipeableWalletItem = memo(
                 </Button>
                 <Spacer horizontal value={scale(52)} />
                 <Button onPress={handleConfirmRemove}>
-                  <RemoveIcon color={COLORS.lightPink} />
+                  <TrashIcon color={COLORS.lightPink} />
                 </Button>
               </Animated.View>
             </Pressable>
