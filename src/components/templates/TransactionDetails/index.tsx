@@ -11,6 +11,7 @@ import { StringUtils } from '@utils/string';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { useAMBPrice } from '@hooks';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
@@ -29,6 +30,11 @@ export const TransactionDetails = (
 ): JSX.Element => {
   const { transaction } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
+  const { data: ambData } = useAMBPrice();
+  const ambPrice = ambData ? ambData.priceUSD : -1;
+  const totalTransactionAmount = ambData
+    ? NumberUtils.formatNumber(transaction.amount * ambPrice, 0)
+    : -1;
 
   const showShareTransaction = () => {
     shareTransactionModal.current?.show();
@@ -51,7 +57,8 @@ export const TransactionDetails = (
           Amount
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
-          {NumberUtils.formatNumber(transaction.amount, 0)}
+          {NumberUtils.formatNumber(transaction.amount, 0)} AMB
+          {totalTransactionAmount !== -1 && ` ($${totalTransactionAmount})`}
         </Text>
       </JustifiedRow>
       {transaction.from && (
