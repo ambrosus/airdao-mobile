@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
-import { Switch } from 'react-native-gesture-handler';
 import {
   BottomSheet,
   Header,
@@ -12,7 +11,7 @@ import {
   BottomSheetRef
 } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
@@ -34,19 +33,19 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 
 const PercentThresholds: Segment[] = [
   {
-    title: '5%',
-    value: 5,
-    id: '5'
+    title: '0.5%',
+    value: 0.5,
+    id: '1'
   },
   {
-    title: '8%',
-    value: 8,
-    id: '8'
+    title: '1%',
+    value: 1,
+    id: '2'
   },
   {
-    title: '10%',
-    value: 10,
-    id: '10'
+    title: '1.5%',
+    value: 1.5,
+    id: '3'
   }
 ];
 
@@ -81,6 +80,7 @@ export const BottomSheetNotificationSettings = forwardRef<
 
   return (
     <BottomSheet
+      containerStyle={styles.bottomSheet}
       height={Dimensions.get('screen').height}
       ref={localRef}
       {...props}

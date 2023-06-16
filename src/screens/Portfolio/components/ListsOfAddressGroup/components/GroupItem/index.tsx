@@ -21,7 +21,7 @@ import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/Bot
 import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
-import { EditIcon, RemoveIcon } from '@components/svg/icons';
+import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { useAMBPrice } from '@hooks';
 
 type Props = {
@@ -130,13 +130,13 @@ export const GroupItem = memo(
                   onPress={handleOpenRenameModal}
                   style={styles.rightActionsButton}
                 >
-                  <EditIcon scale={1.5} color={COLORS.electricBlue} />
+                  <EditIcon scale={1.5} color={COLORS.deepBlue} />
                 </Button>
                 <Button
                   onPress={handleConfirmRemove}
                   style={styles.rightActionsButton}
                 >
-                  <RemoveIcon />
+                  <TrashIcon color={COLORS.lightPink} />
                 </Button>
               </Animated.View>
             </Pressable>

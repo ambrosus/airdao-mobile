@@ -29,7 +29,9 @@ export const SearchScreen = () => {
   const {
     data: accounts,
     loading: accountsLoading,
-    error: accountsError
+    error: accountsError,
+    hasNextPage,
+    fetchNextPage
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
@@ -40,6 +42,12 @@ export const SearchScreen = () => {
   useEffect(() => {
     if (params?.address) setAddressFromParams(params.address);
   }, [params?.address]);
+
+  const loadMoreAccounts = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const renderAccount = (args: ListRenderItemInfo<ExplorerAccount>) => {
     const { item } = args;
@@ -53,6 +61,14 @@ export const SearchScreen = () => {
           totalSupply={infoData?.totalSupply || 1}
         />
       </Button>
+    );
+  };
+
+  const renderSpinner = () => {
+    return (
+      <View testID="spinner">
+        <Spinner />
+      </View>
     );
   };
 
@@ -81,11 +97,7 @@ export const SearchScreen = () => {
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
-            {accountsLoading ? (
-              <View testID="spinner">
-                <Spinner />
-              </View>
-            ) : accountsError ? (
+            {accountsError ? (
               <Text>Could not load accounts info</Text>
             ) : (
               infoData &&
@@ -100,6 +112,11 @@ export const SearchScreen = () => {
                     ItemSeparatorComponent={() => (
                       <Spacer value={verticalScale(26)} />
                     )}
+                    onEndReachedThreshold={0.75}
+                    onEndReached={loadMoreAccounts}
+                    ListFooterComponent={() =>
+                      accountsLoading ? renderSpinner() : <></>
+                    }
                   />
                 </>
               )
