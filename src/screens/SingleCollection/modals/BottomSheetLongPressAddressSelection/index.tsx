@@ -13,10 +13,9 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetLongPressAddressSelection/styles';
-import { CloseIcon } from '@components/svg/icons';
+import { CloseIcon, TrashIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { MoveIcon } from '@components/svg/icons/Move';
-import { RemoveIcon } from '@components/svg/icons/Remove';
 import { useLists } from '@contexts/ListsContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { BottomSheetSingleAddressMove } from '@screens/SingleCollection/modals/BottomSheetSingleAddressMove';
@@ -129,7 +128,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                 <MoveIcon />
               </Button>
               <Button onPress={handleDeleteAddress}>
-                <RemoveIcon />
+                <TrashIcon color={COLORS.lightPink} />
               </Button>
             </Row>
           </Row>
