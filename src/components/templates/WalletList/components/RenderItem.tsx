@@ -83,9 +83,49 @@ export const SwipeableWalletItem = memo(
         setSwipeState(true);
       }, [previousRef, timeoutRef]);
 
-      const handleSwipeableWillClose = useCallback(() => {
-        setSwipeState(false);
-      }, []);
+      const SwipeAction: React.FC<SwipeActionsProps> = ({ dragX, onPress }) => {
+        const trans = dragX.interpolate({
+          inputRange: [-100, 0],
+          outputRange: [0, 20],
+          extrapolate: 'clamp'
+        });
+
+        return (
+          <>
+            <Pressable style={styles.rightActions} onPress={onPress}>
+              <Animated.View
+                style={[
+                  styles.rightActions,
+                  { backgroundColor: 'transparent' },
+                  { transform: [{ translateX: trans }] }
+                ]}
+              >
+                <Button onPress={showEdit}>
+                  <EditIcon scale={1.5} color={COLORS.deepBlue} />
+                </Button>
+                <Spacer horizontal value={scale(52)} />
+                <Button onPress={handleConfirmRemove}>
+                  <RemoveIcon color={COLORS.lightPink} />
+                </Button>
+              </Animated.View>
+            </Pressable>
+            {removeType === 'watchlist' && (
+              <BottomSheetRemoveAddressFromWatchlists
+                key={item.address}
+                item={item}
+                ref={confirmRemoveRef}
+              />
+            )}
+            {removeType === 'collection' && (
+              <BottomSheetRemoveAddressFromCollection
+                key={item.address}
+                wallet={item}
+                ref={confirmRemoveRef}
+              />
+            )}
+          </>
+        );
+      };
 
       return (
         <Swipeable

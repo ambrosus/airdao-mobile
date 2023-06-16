@@ -126,17 +126,12 @@ export const GroupItem = memo(
                   { transform: [{ translateX: trans }] }
                 ]}
               >
-                <Button
-                  onPress={handleOpenRenameModal}
-                  style={styles.rightActionsButton}
-                >
-                  <EditIcon scale={1.5} color={COLORS.electricBlue} />
+                <Button onPress={handleOpenRenameModal}>
+                  <EditIcon scale={1.5} color={COLORS.deepBlue} />
                 </Button>
-                <Button
-                  onPress={handleConfirmRemove}
-                  style={styles.rightActionsButton}
-                >
-                  <RemoveIcon />
+                <Spacer horizontal value={scale(52)} />
+                <Button onPress={handleConfirmRemove}>
+                  <RemoveIcon color={COLORS.lightPink} />
                 </Button>
               </Animated.View>
             </Pressable>
