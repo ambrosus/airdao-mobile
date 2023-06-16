@@ -9,7 +9,7 @@ import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
+import { SwipeAction } from './SwipeAction';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
