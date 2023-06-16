@@ -10,6 +10,7 @@ import {
   Text
 } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
+import { COLORS } from '@constants/colors';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -40,7 +41,11 @@ export const AccountTransactions = (
       <KeyboardDismissingView>
         <Row>
           <Spacer horizontal value={scale(16)} />
-          <Text fontFamily="Inter_600SemiBold" fontSize={20}>
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={20}
+            color={COLORS.jetBlack}
+          >
             Recent Activity
           </Text>
         </Row>
