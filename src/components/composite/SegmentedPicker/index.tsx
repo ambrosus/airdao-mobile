@@ -1,6 +1,7 @@
 import { Button, Row, Text } from '@components/base';
 import React from 'react';
 import { styles } from './styles';
+import { COLORS } from '@constants/colors';
 
 export interface Segment {
   id: string;
@@ -33,7 +34,9 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
           ...(selected ? styles.selectedSegment : {})
         }}
       >
-        <Text>{segment.title}</Text>
+        <Text style={selected && { color: COLORS.electricBlue }}>
+          {segment.title}
+        </Text>
       </Button>
     );
   };
