@@ -129,7 +129,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                 <MoveIcon />
               </Button>
               <Button onPress={handleDeleteAddress}>
-                <RemoveIcon />
+                <RemoveIcon color={COLORS.lightPink} />
               </Button>
             </Row>
           </Row>
