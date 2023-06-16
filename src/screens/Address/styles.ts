@@ -1,4 +1,4 @@
-import { moderateScale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#2f2b431a'
+    backgroundColor: COLORS.separator,
+    marginHorizontal: scale(16)
   },
   headerBtn: {
     backgroundColor: COLORS.smokyBlack5,

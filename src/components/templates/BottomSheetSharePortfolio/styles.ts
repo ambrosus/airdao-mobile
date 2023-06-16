@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   container: {
-    paddingBottom: verticalScale(54)
+    paddingBottom: verticalScale(64)
   },
   newListTitle: {
     alignSelf: 'center'
