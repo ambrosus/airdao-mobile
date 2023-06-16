@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -10,23 +16,18 @@ import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useObserveNotificationCount } from '@hooks';
+import { useNotificationsQuery, useObserveNotificationCount } from '@hooks';
+import { Cache, CacheKey } from '@utils/cache';
 
-type Props = {
-  newNotificationsCount?: number;
-  setLastNotificationTime?: () => void;
-};
-
-export function HomeHeader({
-  newNotificationsCount = 0,
-  setLastNotificationTime = () => null
-}: Props): JSX.Element {
+export function HomeHeader(): JSX.Element {
   const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
   const unreadNotificationCount = useObserveNotificationCount();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
+  const [newNotificationsCount, setNewNotificationsCount] = useState(0);
+  const { data: notifications } = useNotificationsQuery();
 
   const openScanner = () => {
     scanner.current?.show();
@@ -59,6 +60,27 @@ export function HomeHeader({
     },
     [navigation]
   );
+
+  const handleNotificationsCheck = useCallback(async () => {
+    const res = (await Cache.getItem(CacheKey.LastNotificationTimestamp)) || 0;
+    const count = notifications?.filter((notification) => {
+      return notification?.createdAt.getTime() > res;
+    });
+    setNewNotificationsCount(count?.length);
+  }, [notifications]);
+
+  useEffect(() => {
+    handleNotificationsCheck();
+  }, [handleNotificationsCheck]);
+
+  const setLastNotificationTime = useCallback(() => {
+    if (notifications[0]?.createdAt) {
+      Cache.setItem(
+        CacheKey.LastNotificationTimestamp,
+        notifications[0].createdAt
+      );
+    }
+  }, [notifications]);
 
   const navigateToNotifications = useCallback(() => {
     navigation.navigate('Notifications');
