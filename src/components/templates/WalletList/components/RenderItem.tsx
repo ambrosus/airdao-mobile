@@ -66,6 +66,7 @@ export const SwipeableWalletItem = memo(
         if (previousRef && typeof previousRef !== 'function') {
           previousRef.current = swipeRef.current;
         }
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
 
       const handleSwipeableWillOpen = useCallback(() => {
@@ -79,7 +80,12 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
+
+      const handleSwipeableWillClose = useCallback(() => {
+        setSwipeState(false);
+      }, []);
 
       return (
         <Swipeable
@@ -97,8 +103,7 @@ export const SwipeableWalletItem = memo(
           ref={swipeRef}
           onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}
-          onSwipeableWillClose={() => setSwipeState(true)}
-          onSwipeableClose={() => setSwipeState(true)}
+          onSwipeableWillClose={handleSwipeableWillClose}
         >
           <Pressable
             style={[

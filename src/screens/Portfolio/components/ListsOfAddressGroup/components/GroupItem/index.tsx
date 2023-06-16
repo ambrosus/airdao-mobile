@@ -45,9 +45,7 @@ export const GroupItem = memo(
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      const [swipeState, setSwipeState] = useState<
-        'closed' | 'open' | 'closing'
-      >('closed');
+      const [swipeState, setSwipeState] = useState<boolean>(false);
 
       const navigation = useNavigation<PortfolioNavigationProp>();
       const swipeableRef = useRef<Swipeable>(null);
@@ -90,7 +88,7 @@ export const GroupItem = memo(
         if (previousRef && typeof previousRef !== 'function') {
           previousRef.current = swipeableRef.current;
         }
-        setSwipeState('open');
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
 
       const handleSwipeableWillOpen = useCallback(() => {
@@ -104,11 +102,11 @@ export const GroupItem = memo(
             previousRef.current?.close();
           }
         }
-        setSwipeState('closing');
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
-        setSwipeState('closed');
+        setSwipeState(false);
       }, []);
 
       const SwipeAction: React.FC<SwipeActionsProps> = ({ dragX, onPress }) => {
@@ -169,12 +167,7 @@ export const GroupItem = memo(
           onSwipeableWillClose={handleSwipeableWillClose}
         >
           <Pressable onPress={handleItemPress} style={containerStyles}>
-            <View
-              style={[
-                swipeState !== 'closed' && { paddingRight: 16 },
-                styles.item
-              ]}
-            >
+            <View style={[swipeState && { paddingRight: 16 }, styles.item]}>
               <Row justifyContent="space-between">
                 <Text
                   fontFamily="Inter_500Medium"
