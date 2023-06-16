@@ -82,7 +82,6 @@ const removeWatcherForAddresses = async (
 const updateNotificationSettings = async (
   settings: NotificationSettings
 ): Promise<void> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { pricePercentThreshold, priceAlerts, transactionAlerts } = settings;
   const notificationService = new NotificationService();
   const pushToken = await notificationService.getPushToken();
@@ -91,7 +90,9 @@ const updateNotificationSettings = async (
       addresses: [],
       // eslint-disable-next-line camelcase
       push_token: pushToken,
-      threshold: pricePercentThreshold
+      threshold: pricePercentThreshold,
+      tx_notification: transactionAlerts ? 'on' : 'off',
+      price_notification: priceAlerts ? 'on' : 'off'
     });
   } catch (error) {
     throw error;
