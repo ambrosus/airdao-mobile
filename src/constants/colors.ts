@@ -4,6 +4,7 @@ export const COLORS = {
   jetBlack: '#191919',
   charcoal: '#0e0e0e0d',
   crimsonRed: '#ff4747',
+  lightPink: '#FD6E65',
   culturedWhite: '#F3F5F7',
   darkCornflowerBlue: '#1A3D8D',
   darkGrey: '#2f2b43',

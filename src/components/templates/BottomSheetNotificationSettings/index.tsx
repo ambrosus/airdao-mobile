@@ -80,7 +80,9 @@ export const BottomSheetNotificationSettings = forwardRef<
 
   return (
     <BottomSheet
+      containerStyle={styles.bottomSheet}
       height={Dimensions.get('screen').height}
+      containerStyle={styles.bottomSheet}
       ref={localRef}
       {...props}
     >

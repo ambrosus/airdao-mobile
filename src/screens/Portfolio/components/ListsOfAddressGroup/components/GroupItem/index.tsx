@@ -15,7 +15,7 @@ import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
 import { scale } from '@utils/scaling';
-import { EditIcon, RemoveIcon } from '@components/svg/icons';
+import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { useAMBPrice } from '@hooks';
 
 type Props = {
@@ -113,11 +113,11 @@ export const GroupItem = memo(
                 ]}
               >
                 <Button onPress={handleOpenRenameModal}>
-                  <EditIcon scale={1.5} color={COLORS.electricBlue} />
+                  <EditIcon scale={1.5} color={COLORS.deepBlue} />
                 </Button>
                 <Spacer horizontal value={scale(52)} />
                 <Button onPress={handleConfirmRemove}>
-                  <RemoveIcon />
+                  <TrashIcon color={COLORS.lightPink} />
                 </Button>
               </Animated.View>
             </Pressable>
