@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated, Pressable } from 'react-native';
 import { styles } from '@components/templates/WalletList/styles';
 import { Button } from '@components/base';
-import { EditIcon, RemoveIcon } from '@components/svg/icons';
+import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { ExplorerAccount } from '@models';
@@ -57,7 +57,7 @@ export const SwipeAction: React.FC<SwipeActionsProps> = ({
             onPress={handleConfirmRemove}
             style={styles.rightActionsButton}
           >
-            <RemoveIcon />
+            <TrashIcon color={COLORS.crimsonRed} />
           </Button>
         </Animated.View>
       </Pressable>
