@@ -34,9 +34,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF'
   },
   bottomSheet: {
-    marginHorizontal: -20,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    marginBottom: -20
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0
   }
 });

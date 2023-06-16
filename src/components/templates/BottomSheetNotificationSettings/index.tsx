@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
-import { Switch } from 'react-native-gesture-handler';
 import {
   BottomSheet,
   Header,
@@ -12,7 +11,7 @@ import {
   BottomSheetRef
 } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
@@ -81,6 +80,7 @@ export const BottomSheetNotificationSettings = forwardRef<
 
   return (
     <BottomSheet
+      containerStyle={styles.bottomSheet}
       height={Dimensions.get('screen').height}
       ref={localRef}
       {...props}

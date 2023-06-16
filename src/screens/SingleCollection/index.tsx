@@ -52,7 +52,7 @@ export const SingleGroupScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, marginHorizontal: 16 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       {Platform.OS === 'android' && <Spacer value={30} />}
       <Header
         title={
@@ -123,12 +123,14 @@ export const SingleGroupScreen = () => {
           }
         />
       </View>
-      <WalletList
-        data={accounts}
-        emptyText={''}
-        isPortfolioFlow={true}
-        removeType="collection"
-      />
+      <View style={{ flex: 1, paddingHorizontal: scale(16) }}>
+        <WalletList
+          data={accounts}
+          emptyText={''}
+          isPortfolioFlow={true}
+          removeType="collection"
+        />
+      </View>
       {Platform.OS === 'android' && (
         <FloatButton
           type="circular"

@@ -19,7 +19,7 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150,
-          paddingTop: verticalScale(22)
+          paddingTop: verticalScale(16)
         }}
         data={listsOfAddressGroup}
         showsVerticalScrollIndicator={false}

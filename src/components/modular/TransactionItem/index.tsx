@@ -3,6 +3,7 @@ import { Transaction } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import dayjs from 'dayjs';
+import { COLORS } from '@constants/colors';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -14,19 +15,35 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   return (
     <>
       <Row alignItems="center" justifyContent="space-between">
-        <Text fontSize={13} fontFamily="Inter_600SemiBold">
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.smokyBlack}
+        >
           {transaction.type}
         </Text>
-        <Text fontSize={13} fontFamily="Mersad_600SemiBold">
-          {transaction.amount}
+        <Text
+          fontSize={13}
+          fontFamily="Mersad_600SemiBold"
+          color={COLORS.smokyBlack}
+        >
+          {transaction.amount} AMB
         </Text>
       </Row>
       <Spacer value={verticalScale(4)} />
       <Row alignItems="center" justifyContent="space-between">
-        <Text fontSize={12} fontFamily="Inter_500Medium" color="#646464">
+        <Text
+          fontSize={12}
+          fontFamily="Inter_500Medium"
+          color={COLORS.smokyBlack50}
+        >
           {dayjs(transaction.timestamp).fromNow()}
         </Text>
-        <Text fontSize={13} fontFamily="Mersad_600SemiBold" color="#646464">
+        <Text
+          fontSize={12}
+          fontFamily="Inter_500Medium"
+          color={COLORS.smokyBlack50}
+        >
           {transaction.fee} TxFee
         </Text>
       </Row>

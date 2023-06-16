@@ -5,8 +5,8 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
-import { Spacer, Text } from '@components/base';
-import * as Updates from 'expo-updates';
+// import { Spacer, Text } from '@components/base';
+// import * as Updates from 'expo-updates';
 
 export const SettingsScreen = () => {
   return (
@@ -14,7 +14,7 @@ export const SettingsScreen = () => {
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
-      <Spacer value={100} />
+      {/* <Spacer value={100} />
       <View
         style={{
           flex: 1,
@@ -24,7 +24,7 @@ export const SettingsScreen = () => {
       >
         <Text>Channel: {Updates.channel}</Text>
         <Text fontSize={12}>AirDAO Testing Build: v1.0.0.12</Text>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

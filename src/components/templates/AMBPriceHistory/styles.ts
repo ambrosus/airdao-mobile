@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
     ...shadow
   },
   badge: {
-    width: '40%',
     alignSelf: 'center'
   },
   balance: {
