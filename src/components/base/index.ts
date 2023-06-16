@@ -7,3 +7,4 @@ export * from './KeyboardDismissingView';
 export * from './Separator';
 export * from './Spacer';
 export * from './Spinner';
+export * from './Switch';

@@ -19,6 +19,7 @@ export const COLORS = {
   chartGreen: '#2DBA8D',
   chartSelectionLightGreen: '#73E5B7',
   chartSelectionDarkGreen: '#0A8575',
+  switchGreen: '#53B483',
   lavenderGray: '#C2C5CC',
   lightGrey: '#828282',
   lightSilver: '#D9D9D9',
