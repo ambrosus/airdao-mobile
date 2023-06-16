@@ -1,4 +1,11 @@
-import React, { forwardRef, memo, useCallback, useMemo, useRef } from 'react';
+import React, {
+  forwardRef,
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { Animated, Pressable, View, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Spacer } from '@components/base/Spacer';
@@ -14,7 +21,6 @@ import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/Bot
 import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
-import { scale } from '@utils/scaling';
 import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { useAMBPrice } from '@hooks';
 
@@ -32,12 +38,14 @@ interface SwipeActionsProps {
 
 export const GroupItem = memo(
   forwardRef<Swipeable, Props>(
-    ({ group, isFirstItem, wrapperStyles }, previousRef) => {
+    ({ group, isFirstItem, wrapperStyles, swipeable }, previousRef) => {
       const { handleOnDelete, handleOnRename } = useLists((v) => v);
       const { data: ambPriceData } = useAMBPrice();
       const groupRenameRef = useRef<BottomSheetRef>(null);
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+      const [swipeState, setSwipeState] = useState<boolean>(false);
 
       const navigation = useNavigation<PortfolioNavigationProp>();
       const swipeableRef = useRef<Swipeable>(null);
@@ -80,6 +88,7 @@ export const GroupItem = memo(
         if (previousRef && typeof previousRef !== 'function') {
           previousRef.current = swipeableRef.current;
         }
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
 
       const handleSwipeableWillOpen = useCallback(() => {
@@ -93,7 +102,12 @@ export const GroupItem = memo(
             previousRef.current?.close();
           }
         }
+        setSwipeState(true);
       }, [previousRef, timeoutRef]);
+
+      const handleSwipeableWillClose = useCallback(() => {
+        setSwipeState(false);
+      }, []);
 
       const SwipeAction: React.FC<SwipeActionsProps> = ({ dragX, onPress }) => {
         const trans = dragX.interpolate({
@@ -112,11 +126,16 @@ export const GroupItem = memo(
                   { transform: [{ translateX: trans }] }
                 ]}
               >
-                <Button onPress={handleOpenRenameModal}>
+                <Button
+                  onPress={handleOpenRenameModal}
+                  style={styles.rightActionsButton}
+                >
                   <EditIcon scale={1.5} color={COLORS.deepBlue} />
                 </Button>
-                <Spacer horizontal value={scale(52)} />
-                <Button onPress={handleConfirmRemove}>
+                <Button
+                  onPress={handleConfirmRemove}
+                  style={styles.rightActionsButton}
+                >
                   <TrashIcon color={COLORS.lightPink} />
                 </Button>
               </Animated.View>
@@ -140,17 +159,19 @@ export const GroupItem = memo(
 
       return (
         <Swipeable
+          enabled={swipeable}
           renderRightActions={(_, dragX) => <SwipeAction dragX={dragX} />}
           ref={swipeableRef}
           onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}
+          onSwipeableWillClose={handleSwipeableWillClose}
         >
           <Pressable onPress={handleItemPress} style={containerStyles}>
-            <View style={{ justifyContent: 'space-between' }}>
+            <View style={[swipeState && { paddingRight: 16 }, styles.item]}>
               <Row justifyContent="space-between">
                 <Text
-                  fontFamily="Inter_600SemiBold"
-                  fontSize={17}
+                  fontFamily="Inter_500Medium"
+                  fontSize={14}
                   color={COLORS.smokyBlack}
                   style={{ width: '70%' }}
                   numberOfLines={1}
@@ -165,12 +186,12 @@ export const GroupItem = memo(
                   {tokensFormatted}
                 </Text>
               </Row>
-              <Spacer value={5} />
+              <Spacer value={4} />
               <Row justifyContent="space-between">
                 <Text
-                  fontFamily="Mersad_600SemiBold"
+                  fontFamily="Inter_500Medium"
                   color="#0e0e0e80"
-                  fontSize={13}
+                  fontSize={12}
                 >
                   {group.accountCount + ' addresses'}
                 </Text>

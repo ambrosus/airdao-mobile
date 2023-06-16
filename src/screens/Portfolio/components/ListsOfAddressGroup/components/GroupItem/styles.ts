@@ -5,10 +5,13 @@ import { moderateScale, scale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
-    paddingVertical: 16,
+    paddingTop: 14,
+    paddingBottom: 18,
     borderColor: COLORS.charcoal,
-    borderBottomWidth: 1,
-    borderTopWidth: 1
+    borderBottomWidth: 1
+  },
+  item: {
+    justifyContent: 'space-between'
   },
   itemSubInfo: {
     flexDirection: 'row',
@@ -35,9 +38,14 @@ export const styles = StyleSheet.create({
   },
   rightActions: {
     backgroundColor: COLORS.charcoal,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     width: scale(130)
+  },
+  rightActionsButton: {
+    width: 65,
+    height: 65,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
