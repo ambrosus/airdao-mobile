@@ -47,7 +47,7 @@ export const ExplorerAccountView = (
   };
 
   const hideAddToList = () => {
-    addToListModal.current?.dismiss();
+    setTimeout(() => addToListModal.current?.dismiss(), 250);
   };
 
   const toggleWatchlist = async () => {
