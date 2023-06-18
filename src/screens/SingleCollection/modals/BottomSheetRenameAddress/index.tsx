@@ -45,20 +45,14 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           value={localAddressName}
           onChangeValue={(value) => setLocalAddressName(value)}
           type="text"
-          placeholder="Enter list name"
+          placeholder="Edit name"
           placeholderTextColor="black"
           style={[styles.bottomSheetInput]}
         />
         <Spacer value={24} />
         <Button
           type="base"
-          style={{
-            backgroundColor: COLORS.deepBlue,
-            marginHorizontal: 24,
-            paddingVertical: 16,
-            borderRadius: 25,
-            alignItems: 'center'
-          }}
+          style={styles.saveButton}
           onPress={() => {
             handleOnRename(localAddressName !== address && localAddressName);
           }}
@@ -74,13 +68,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
         <Spacer value={24} />
         <Button
           type="base"
-          style={{
-            backgroundColor: COLORS.charcoal,
-            marginHorizontal: 24,
-            paddingVertical: 16,
-            borderRadius: 25,
-            alignItems: 'center'
-          }}
+          style={styles.cancelButton}
           onPress={() => localRef.current?.dismiss()}
         >
           <Text
