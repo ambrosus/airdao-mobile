@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Header,
@@ -116,23 +116,23 @@ export const BottomSheetNotificationSettings = forwardRef<
       >
         <View style={styles.container}>
           {/* Price alerts */}
-          <Button
-            onPress={() =>
-              onSettingsValueChange(
-                'priceAlerts',
-                !localNotificationSettings.priceAlerts
-              )
-            }
-          >
-            <Row alignItems="center" justifyContent="space-between">
-              <Title>Price alert</Title>
+          <Row alignItems="center" justifyContent="space-between">
+            <Title>Price alert</Title>
+            <Pressable
+              onPress={() =>
+                onSettingsValueChange(
+                  'priceAlerts',
+                  !localNotificationSettings.priceAlerts
+                )
+              }
+            >
               <Switch
                 testID="BottomSheetNotiSettings_Price_Switch"
                 disabled
                 value={localNotificationSettings.priceAlerts}
               />
-            </Row>
-          </Button>
+            </Pressable>
+          </Row>
           {/* Percentage Change */}
           <Spacer value={verticalScale(24)} />
           <Title>Price movement threshold</Title>
@@ -158,22 +158,22 @@ export const BottomSheetNotificationSettings = forwardRef<
           />
           <Spacer value={verticalScale(24)} />
           {/* Transaction Alerts */}
-          <Button
-            onPress={() =>
-              onSettingsValueChange(
-                'transactionAlerts',
-                !localNotificationSettings.transactionAlerts
-              )
-            }
-          >
-            <Row alignItems="center" justifyContent="space-between">
-              <Title>Transaction alert</Title>
+          <Row alignItems="center" justifyContent="space-between">
+            <Title>Transaction alert</Title>
+            <Pressable
+              onPress={() =>
+                onSettingsValueChange(
+                  'transactionAlerts',
+                  !localNotificationSettings.transactionAlerts
+                )
+              }
+            >
               <Switch
                 disabled
                 value={localNotificationSettings.transactionAlerts}
               />
-            </Row>
-          </Button>
+            </Pressable>
+          </Row>
           <Text fontSize={12} fontWeight="500" color="#646464">
             You’ll be notified of any transaction {'\n'} in your watchlist
           </Text>
