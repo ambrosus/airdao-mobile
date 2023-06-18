@@ -69,6 +69,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
 
   useEffect(() => {
     handleNotificationsCheck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notifications]);
 
   const setLastNotificationTime = useCallback(() => {
