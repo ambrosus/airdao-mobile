@@ -6,10 +6,10 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Animated, Pressable, View, ViewStyle } from 'react-native';
+import { Pressable, View, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Spacer } from '@components/base/Spacer';
-import { Button, Row, Text } from '@components/base';
+import { Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
 import { useLists } from '@contexts/ListsContext';
@@ -21,8 +21,8 @@ import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/Bot
 import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
 import { PercentChange } from '@components/composite';
-import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { useAMBPrice } from '@hooks';
+import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
 
 type Props = {
   group: AccountList;
@@ -30,12 +30,6 @@ type Props = {
   wrapperStyles?: ViewStyle;
   swipeable?: boolean;
 };
-
-interface SwipeActionsProps {
-  dragX: Animated.AnimatedInterpolation<number>;
-  onPress?: () => void;
-}
-
 export const GroupItem = memo(
   forwardRef<Swipeable, Props>(
     ({ group, isFirstItem, wrapperStyles, swipeable }, previousRef) => {
@@ -109,41 +103,6 @@ export const GroupItem = memo(
         setSwipeState(false);
       }, []);
 
-      const SwipeAction: React.FC<SwipeActionsProps> = ({ dragX, onPress }) => {
-        const trans = dragX.interpolate({
-          inputRange: [-100, 0],
-          outputRange: [0, 20],
-          extrapolate: 'clamp'
-        });
-
-        return (
-          <>
-            <Pressable style={styles.rightActions} onPress={onPress}>
-              <Animated.View
-                style={[
-                  styles.rightActions,
-                  { backgroundColor: 'transparent' },
-                  { transform: [{ translateX: trans }] }
-                ]}
-              >
-                <Button
-                  onPress={handleOpenRenameModal}
-                  style={styles.rightActionsButton}
-                >
-                  <EditIcon scale={1.5} color={COLORS.deepBlue} />
-                </Button>
-                <Button
-                  onPress={handleConfirmRemove}
-                  style={styles.rightActionsButton}
-                >
-                  <TrashIcon color={COLORS.lightPink} />
-                </Button>
-              </Animated.View>
-            </Pressable>
-          </>
-        );
-      };
-
       const stylesForFirstItem = useMemo(() => {
         return {
           borderTopWidth: 1
@@ -151,16 +110,21 @@ export const GroupItem = memo(
       }, []);
 
       const containerStyles = useMemo(() => {
-        const mainStyle = isFirstItem
+        return isFirstItem
           ? { ...styles.container, ...stylesForFirstItem, ...wrapperStyles }
           : { ...styles.container, ...wrapperStyles };
-        return mainStyle;
       }, [isFirstItem, stylesForFirstItem, wrapperStyles]);
 
       return (
         <Swipeable
           enabled={swipeable}
-          renderRightActions={(_, dragX) => <SwipeAction dragX={dragX} />}
+          renderRightActions={(_, dragX) => (
+            <SwipeAction
+              dragX={dragX}
+              showEdit={handleOpenRenameModal}
+              handleConfirmRemove={handleConfirmRemove}
+            />
+          )}
           ref={swipeableRef}
           onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}

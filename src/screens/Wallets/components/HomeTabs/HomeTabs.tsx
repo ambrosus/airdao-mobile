@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import React, { useState } from 'react';
 import { TabView } from 'react-native-tab-view';
 import { HomeTabsScenes } from '@screens/Wallets/components/HomeTabs/HomeTabsScenes';
@@ -41,7 +41,7 @@ export const HomeTabs = () => {
 
   const numTabs = 4;
   const numItems = Math.min(numTabs, HomeTabsScenes.length);
-  const height = numItems * 340 + 100;
+  const height = numItems * (Dimensions.get('screen').height * 0.45) + 100;
 
   return (
     <View style={[styles.homeTabs, { height }]} testID="lists-screen">

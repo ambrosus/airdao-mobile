@@ -41,7 +41,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
       toggleAddressInList(item, collection);
-      localRef.current?.dismiss();
+      setTimeout(() => {
+        localRef.current?.dismiss();
+      }, 250);
     },
     [collection, localRef, toggleAddressInList]
   );
