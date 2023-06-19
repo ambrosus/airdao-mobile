@@ -69,7 +69,11 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
     };
 
     return (
-      <BottomSheet ref={localRef} height={Dimensions.get('screen').height}>
+      <BottomSheet
+        ref={localRef}
+        height={Dimensions.get('screen').height}
+        containerStyle={styles.bottomSheet}
+      >
         <Spacer value={topInset} />
         <Header
           titleStyle={styles.headerTitle}

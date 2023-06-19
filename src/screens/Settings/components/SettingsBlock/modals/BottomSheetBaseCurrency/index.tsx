@@ -72,7 +72,11 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
     };
 
     return (
-      <BottomSheet height={Dimensions.get('screen').height} ref={localRef}>
+      <BottomSheet
+        height={Dimensions.get('screen').height}
+        ref={localRef}
+        containerStyle={styles.bottomSheet}
+      >
         <Spacer value={topInset} />
         <Header
           titleStyle={styles.headerTitle}
