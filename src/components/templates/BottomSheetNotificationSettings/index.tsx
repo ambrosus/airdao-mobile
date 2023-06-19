@@ -102,7 +102,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         contentLeft={
           <Button
             testID="BottomSheet_Notification_Settings_Header_Left"
-            onPress={localRef.current?.dismiss}
+            onPress={() => localRef.current?.dismiss()}
           >
             <BackIcon testID="Notification_Settings_Header_Back_Icon" />
           </Button>
@@ -116,23 +116,19 @@ export const BottomSheetNotificationSettings = forwardRef<
       >
         <View style={styles.container}>
           {/* Price alerts */}
-          <Button
-            onPress={() =>
-              onSettingsValueChange(
-                'priceAlerts',
-                !localNotificationSettings.priceAlerts
-              )
-            }
-          >
-            <Row alignItems="center" justifyContent="space-between">
-              <Title>Price alert</Title>
-              <Switch
-                testID="BottomSheetNotiSettings_Price_Switch"
-                disabled
-                value={localNotificationSettings.priceAlerts}
-              />
-            </Row>
-          </Button>
+          <Row alignItems="center" justifyContent="space-between">
+            <Title>Price alert</Title>
+            <Switch
+              onValueChange={() =>
+                onSettingsValueChange(
+                  'priceAlerts',
+                  !localNotificationSettings.priceAlerts
+                )
+              }
+              testID="BottomSheetNotiSettings_Price_Switch"
+              value={localNotificationSettings.priceAlerts}
+            />
+          </Row>
           {/* Percentage Change */}
           <Spacer value={verticalScale(24)} />
           <Title>Price movement threshold</Title>
@@ -158,22 +154,18 @@ export const BottomSheetNotificationSettings = forwardRef<
           />
           <Spacer value={verticalScale(24)} />
           {/* Transaction Alerts */}
-          <Button
-            onPress={() =>
-              onSettingsValueChange(
-                'transactionAlerts',
-                !localNotificationSettings.transactionAlerts
-              )
-            }
-          >
-            <Row alignItems="center" justifyContent="space-between">
-              <Title>Transaction alert</Title>
-              <Switch
-                disabled
-                value={localNotificationSettings.transactionAlerts}
-              />
-            </Row>
-          </Button>
+          <Row alignItems="center" justifyContent="space-between">
+            <Title>Transaction alert</Title>
+            <Switch
+              onValueChange={() =>
+                onSettingsValueChange(
+                  'transactionAlerts',
+                  !localNotificationSettings.transactionAlerts
+                )
+              }
+              value={localNotificationSettings.transactionAlerts}
+            />
+          </Row>
           <Text fontSize={12} fontWeight="500" color="#646464">
             You’ll be notified of any transaction {'\n'} in your watchlist
           </Text>
