@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   homeTabs: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
+    paddingVertical: scale(24),
     borderRadius: 24
   },
   tabView: {
@@ -21,20 +22,18 @@ export const styles = StyleSheet.create({
     height: moderateScale(32)
   },
   homeWatchlistsContainer: {
-    paddingTop: verticalScale(8),
-    paddingHorizontal: scale(24),
-    flex: 1
+    flex: 1,
+    paddingHorizontal: scale(24)
   },
   seeAllButton: {
+    marginHorizontal: scale(24),
+    paddingVertical: 12,
     alignItems: 'center',
-    backgroundColor: '#edf3ff',
-    borderRadius: 24,
-    alignSelf: 'center',
-    width: '100%',
-    marginVertical: scale(24)
+    backgroundColor: COLORS.powderWhite,
+    borderRadius: 24
   },
   homeCollectionsContainer: {
-    paddingHorizontal: 24,
-    flex: 1
+    flex: 1,
+    paddingHorizontal: scale(24)
   }
 });
