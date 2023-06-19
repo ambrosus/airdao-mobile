@@ -9,9 +9,9 @@ import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { SwipeAction } from './SwipeAction';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
-import { BottomSheetRemoveAddressFromCollection } from '@components/templates';
+import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
+import { SwipeAction } from './SwipeAction';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
