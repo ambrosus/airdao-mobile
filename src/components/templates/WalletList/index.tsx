@@ -1,14 +1,12 @@
 import React from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import { Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import { EmptyWalletListPlaceholderIcon } from '@components/svg/icons';
 import { ExplorerAccount } from '@models/Explorer';
 import {
   SwipeableWalletItemProps,
   SwipeableWalletItem
-} from '@components/templates/WalletList/components/RenderItem';
-import { styles } from '@components/templates/WalletList/styles';
+} from '@components/templates/WalletList/components/SwipeableWalletItem';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -28,33 +26,11 @@ interface WalletListProps
 export function WalletList(props: WalletListProps): JSX.Element {
   const {
     data,
-    emptyText,
     isPortfolioFlow = false,
     scrollEnabled = true,
     renderItem,
     removeType = 'watchlist'
   } = props;
-
-  const renderEmpty = () => {
-    return (
-      <View testID="empty-list" style={styles.emptyContainer}>
-        <EmptyWalletListPlaceholderIcon />
-        <Spacer value={verticalScale(16)} />
-        <Text
-          color="#51545A"
-          fontWeight="400"
-          fontSize={15}
-          align="center"
-          fontFamily="Inter_400Regular"
-        >
-          {emptyText}
-        </Text>
-        <Text fontFamily="Inter_400Regular" fontSize={15} color="#51545a">
-          No addresses yet
-        </Text>
-      </View>
-    );
-  };
 
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     if (typeof renderItem === 'function') return renderItem(args);
@@ -80,7 +56,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
-      ListEmptyComponent={renderEmpty()}
+      ListEmptyComponent={<RenderEmpty text="addresses" />}
       showsVerticalScrollIndicator={false}
     />
   );
