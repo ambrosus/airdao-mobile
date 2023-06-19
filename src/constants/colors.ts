@@ -43,6 +43,7 @@ export const COLORS = {
   transparentWhite: '#ffffffb3',
   veryLightGrey: '#ffffff99',
   white: '#FFFFFF',
+  white50: 'rgba(255, 255, 255, 0.5)',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a',
   nero: '#191919',

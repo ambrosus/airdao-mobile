@@ -26,4 +26,29 @@ const addSignToNumber = (num: number): string => {
   return (num > 0 ? '+' : '-') + num;
 };
 
-export const NumberUtils = { formatNumber, addSignToNumber };
+const abbreviateNumber = (num: number): string => {
+  let newValue = num.toString();
+  if (num >= 1000) {
+    const suffixes = ['', 'k', 'm', 'b', 't'];
+    const suffixNum = Math.floor(('' + num).length / 3);
+    let shortValue = '';
+    for (let precision = 2; precision >= 1; precision--) {
+      shortValue = parseFloat(
+        (suffixNum != 0 ? num / Math.pow(1000, suffixNum) : num).toPrecision(
+          precision
+        )
+      ).toString();
+      const dotLessShortValue = (shortValue + '').replace(
+        /[^a-zA-Z 0-9]+/g,
+        ''
+      );
+      if (dotLessShortValue.length <= 2) {
+        break;
+      }
+    }
+    newValue = shortValue + (suffixes[suffixNum] || '');
+  }
+  return newValue;
+};
+
+export const NumberUtils = { formatNumber, addSignToNumber, abbreviateNumber };
