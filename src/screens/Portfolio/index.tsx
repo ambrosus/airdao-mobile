@@ -52,7 +52,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   const focused = useIsFocused();
 
   useLayoutEffect(() => {
-    if (focused && activeTab) {
+    if (focused && typeof activeTab === 'number') {
       setIndex(activeTab);
     }
   }, [activeTab, focused]);

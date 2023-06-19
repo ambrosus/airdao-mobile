@@ -9,6 +9,8 @@ import { WalletsNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
+import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { SwipeAction } from './SwipeAction';
 
 export type SwipeableWalletItemProps = {
@@ -93,11 +95,8 @@ export const SwipeableWalletItem = memo(
           renderRightActions={(_, dragX) => (
             <SwipeAction
               dragX={dragX}
-              item={item}
               showEdit={showEdit}
-              confirmRemoveRef={confirmRemoveRef}
               handleConfirmRemove={handleConfirmRemove}
-              removeType={removeType}
             />
           )}
           ref={swipeRef}
@@ -116,6 +115,20 @@ export const SwipeableWalletItem = memo(
             <WalletItem item={item} />
           </Pressable>
           <BottomSheetEditWallet wallet={item} ref={editModalRef} />
+          {removeType === 'watchlist' && (
+            <BottomSheetRemoveAddressFromWatchlists
+              key={item.address}
+              item={item}
+              ref={confirmRemoveRef}
+            />
+          )}
+          {removeType === 'collection' && (
+            <BottomSheetRemoveAddressFromCollection
+              key={item.address}
+              wallet={item}
+              ref={confirmRemoveRef}
+            />
+          )}
         </Swipeable>
       );
     }

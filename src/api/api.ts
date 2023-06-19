@@ -8,7 +8,7 @@ import { explorerService } from './explorer-service';
 
 // const cmcApiUrl = Config.CMC_API_URL;
 
-export const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
+const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
   try {
     const response = await axios.get('https://token.ambrosus.io/');
     return response.data.data;
@@ -17,7 +17,7 @@ export const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
   }
 };
 
-export const getAMBPriceHistoricalPricing = async (
+const getAMBPriceHistoricalPricing = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interval: CMCInterval
 ): Promise<AMBToken[]> => {
@@ -44,6 +44,7 @@ export const getAMBPriceHistoricalPricing = async (
 
 export const API = {
   getAMBTokenData,
+  getAMBPriceHistoricalPricing,
   explorerService,
   watcherService
 };

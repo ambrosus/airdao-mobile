@@ -16,18 +16,18 @@ import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNotificationsQuery, useObserveNotificationCount } from '@hooks';
+import { useAppState, useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 
-export function HomeHeader(): JSX.Element {
+export const HomeHeader = React.memo((): JSX.Element => {
   const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
-  const unreadNotificationCount = useObserveNotificationCount();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
   const { data: notifications } = useNotificationsQuery();
+  const appState = useAppState();
 
   const openScanner = () => {
     scanner.current?.show();
@@ -62,16 +62,21 @@ export function HomeHeader(): JSX.Element {
   );
 
   const handleNotificationsCheck = useCallback(async () => {
-    const res = (await Cache.getItem(CacheKey.LastNotificationTimestamp)) || 0;
+    const res =
+      ((await Cache.getItem(CacheKey.LastNotificationTimestamp)) as number) ||
+      0;
     const count = notifications?.filter((notification) => {
       return notification?.createdAt.getTime() > res;
-    });
-    setNewNotificationsCount(count?.length);
+    })?.length;
+    setNewNotificationsCount(count);
   }, [notifications]);
 
   useEffect(() => {
-    handleNotificationsCheck();
-  }, [handleNotificationsCheck]);
+    if (appState === 'background') {
+      handleNotificationsCheck();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notifications, appState]);
 
   const setLastNotificationTime = useCallback(() => {
     if (notifications[0]?.createdAt) {
@@ -79,6 +84,7 @@ export function HomeHeader(): JSX.Element {
         CacheKey.LastNotificationTimestamp,
         notifications[0].createdAt
       );
+      setNewNotificationsCount(0);
     }
   }, [notifications]);
 
@@ -93,17 +99,17 @@ export function HomeHeader(): JSX.Element {
         <Spacer horizontal value={scale(20)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color="#393b40" />
-          {unreadNotificationCount + newNotificationsCount > 0 && (
+          {newNotificationsCount > 0 && (
             <View style={styles.notificationCountContainer}>
               <Text color="white" fontSize={11} fontFamily="Inter_600SemiBold">
-                {unreadNotificationCount + newNotificationsCount}
+                {newNotificationsCount}
               </Text>
             </View>
           )}
         </Button>
       </>
     );
-  }, [navigateToNotifications, newNotificationsCount, unreadNotificationCount]);
+  }, [navigateToNotifications, newNotificationsCount]);
 
   const renderContentLeft = useMemo(() => {
     return (
@@ -142,7 +148,7 @@ export function HomeHeader(): JSX.Element {
       contentLeft={renderContentLeft}
     />
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -1,29 +1,21 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useWatchlist } from '@hooks';
-import { ListRenderItemInfo, View } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
+import { View } from 'react-native';
+import { Button, Spacer } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
-import { WalletItem, WalletList } from '@components/templates';
+import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils/scaling';
+
+const ITEM_COUNT = 4;
 
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
 
   const navigation = useNavigation<PortfolioNavigationProp>();
-
-  const navigateToPortfolio = useCallback(() => {
-    navigation.navigate('Portfolio', {
-      screen: 'PortfolioScreen',
-      params: {
-        tabs: { activeTab: 0 }
-      }
-    });
-  }, [navigation]);
 
   if (watchlist.length === 0) {
     return <RenderEmpty text="addresses" />;
@@ -33,38 +25,18 @@ export const HomeWatchlists = () => {
     return navigation.navigate('Address', { address: item.address });
   };
 
-  const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
-    return (
-      <View>
-        <Button onPress={() => navigateToAddressDetails(args.item)}>
-          <WalletItem item={args.item} />
-        </Button>
-        <Spacer value={verticalScale(24)} />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.homeWatchlistsContainer}>
-      <View style={{ flex: 1 }}>
-        <WalletList
-          isPortfolioFlow={false}
-          emptyText=""
-          data={watchlist.slice(0, 4)}
-          scrollEnabled={false}
-          renderItem={renderWallet}
-        />
-      </View>
-      <Button onPress={navigateToPortfolio} style={styles.seeAllButton}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.deepBlue}
-          style={{ marginVertical: 12 }}
-        >
-          See all
-        </Text>
-      </Button>
+      {watchlist.slice(0, ITEM_COUNT).map((item, index) => {
+        return (
+          <View key={item._id}>
+            <Button onPress={() => navigateToAddressDetails(item)}>
+              <WalletItem item={item} />
+            </Button>
+            {index !== ITEM_COUNT - 1 && <Spacer value={verticalScale(24)} />}
+          </View>
+        );
+      })}
     </View>
   );
 };
