@@ -52,10 +52,10 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   const focused = useIsFocused();
 
   useLayoutEffect(() => {
-    if (focused && Object.hasOwn(route?.params.tabs, 'activeTab')) {
+    if (focused && typeof activeTab === 'number') {
       setIndex(activeTab);
     }
-  }, [activeTab, focused, route?.params.tabs]);
+  }, [activeTab, focused]);
 
   return (
     <SafeAreaView style={{ flex: 1 }} testID="lists-screen">
