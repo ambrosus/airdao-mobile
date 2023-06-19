@@ -18,5 +18,9 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
     color: COLORS.smokyBlack
+  },
+  bottomSheet: {
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0
   }
 });
