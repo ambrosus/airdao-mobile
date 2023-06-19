@@ -5,13 +5,19 @@ import { AccountList } from '@models/AccountList';
 import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { verticalScale } from '@utils/scaling';
+import { Spacer } from '@components/base';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
 };
 export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="collections" />;
+    return (
+      <>
+        <Spacer value={20} />
+        <RenderEmpty text="collections" />
+      </>
+    );
   }
 
   return (

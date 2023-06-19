@@ -16,7 +16,7 @@ import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNotificationsQuery } from '@hooks';
+import { useAppState, useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 
 export const HomeHeader = React.memo((): JSX.Element => {
@@ -27,6 +27,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const scanned = useRef(false);
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
   const { data: notifications } = useNotificationsQuery();
+  const appState = useAppState();
+
   const openScanner = () => {
     scanner.current?.show();
   };
@@ -60,7 +62,9 @@ export const HomeHeader = React.memo((): JSX.Element => {
   );
 
   const handleNotificationsCheck = useCallback(async () => {
-    const res = (await Cache.getItem(CacheKey.LastNotificationTimestamp)) || 0;
+    const res =
+      ((await Cache.getItem(CacheKey.LastNotificationTimestamp)) as number) ||
+      0;
     const count = notifications?.filter((notification) => {
       return notification?.createdAt.getTime() > res;
     })?.length;
@@ -68,9 +72,11 @@ export const HomeHeader = React.memo((): JSX.Element => {
   }, [notifications]);
 
   useEffect(() => {
-    handleNotificationsCheck();
+    if (appState === 'background') {
+      handleNotificationsCheck();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notifications]);
+  }, [notifications, appState]);
 
   const setLastNotificationTime = useCallback(() => {
     if (notifications[0]?.createdAt) {

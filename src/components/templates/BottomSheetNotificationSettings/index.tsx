@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Header,
@@ -102,7 +102,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         contentLeft={
           <Button
             testID="BottomSheet_Notification_Settings_Header_Left"
-            onPress={localRef.current?.dismiss}
+            onPress={() => localRef.current?.dismiss()}
           >
             <BackIcon testID="Notification_Settings_Header_Back_Icon" />
           </Button>
@@ -118,20 +118,16 @@ export const BottomSheetNotificationSettings = forwardRef<
           {/* Price alerts */}
           <Row alignItems="center" justifyContent="space-between">
             <Title>Price alert</Title>
-            <Pressable
-              onPress={() =>
+            <Switch
+              onValueChange={() =>
                 onSettingsValueChange(
                   'priceAlerts',
                   !localNotificationSettings.priceAlerts
                 )
               }
-            >
-              <Switch
-                testID="BottomSheetNotiSettings_Price_Switch"
-                disabled
-                value={localNotificationSettings.priceAlerts}
-              />
-            </Pressable>
+              testID="BottomSheetNotiSettings_Price_Switch"
+              value={localNotificationSettings.priceAlerts}
+            />
           </Row>
           {/* Percentage Change */}
           <Spacer value={verticalScale(24)} />
@@ -160,19 +156,15 @@ export const BottomSheetNotificationSettings = forwardRef<
           {/* Transaction Alerts */}
           <Row alignItems="center" justifyContent="space-between">
             <Title>Transaction alert</Title>
-            <Pressable
-              onPress={() =>
+            <Switch
+              onValueChange={() =>
                 onSettingsValueChange(
                   'transactionAlerts',
                   !localNotificationSettings.transactionAlerts
                 )
               }
-            >
-              <Switch
-                disabled
-                value={localNotificationSettings.transactionAlerts}
-              />
-            </Pressable>
+              value={localNotificationSettings.transactionAlerts}
+            />
           </Row>
           <Text fontSize={12} fontWeight="500" color="#646464">
             You’ll be notified of any transaction {'\n'} in your watchlist
