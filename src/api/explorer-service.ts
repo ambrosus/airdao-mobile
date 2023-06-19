@@ -67,12 +67,10 @@ const getTransactionsOfAccount = async (
     const response = await axios.get(
       `${exploreApiUrl}/accounts/${address}/transactions?page=${page}&limit=${limit}&type=${type}`
     );
-    const nextUrl = response.data.pagination.hasNext
-      ? `${exploreApiUrl}/accounts/${address}/transactions?page=${
-          page + 1
-        }&limit=${limit}&type=${type}`
-      : null;
-    return { data: response.data.data, next: nextUrl };
+    return {
+      data: response.data.data,
+      next: response.data.pagination.hasNext ? (page + 1).toString() : null
+    };
   } catch (error) {
     throw error;
   }
