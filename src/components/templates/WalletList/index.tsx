@@ -9,7 +9,7 @@ import {
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 interface EmptyWalletListProps {
-  emptyText: string;
+  emptyText?: string;
 }
 
 interface WalletListProps
