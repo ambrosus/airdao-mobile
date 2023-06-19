@@ -22,15 +22,16 @@ export function useTransactionsOfAccount(
     fetchNextPage
   } = useInfiniteQuery<PaginatedResponseBody<TransactionDTO[]>>(
     ['address-transactions', address, page, limit, type],
-    () =>
-      API.explorerService.getTransactionsOfAccount(
-        address,
-        (data?.pages.length || 0) + 1,
-        limit,
-        type
-      ) as any,
     {
       enabled,
+      queryFn: ({ pageParam = 1 }) => {
+        return API.explorerService.getTransactionsOfAccount(
+          address,
+          parseInt(pageParam),
+          limit,
+          type
+        );
+      },
       getNextPageParam: (lastPage: PaginatedResponseBody<TransactionDTO[]>) => {
         if (lastPage.next) {
           return lastPage.next;
