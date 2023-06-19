@@ -3,7 +3,7 @@ import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import dayjs from 'dayjs';
 import { Row, Spacer, Text } from '@components/base';
-import { LogoBigSVG, TrendIcon } from '@components/svg/icons';
+import { LogoSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
@@ -36,80 +36,104 @@ export function PortfolioPerformance(
     <ImageBackground
       source={require('../../../../assets/images/portfolio-perfomance.png')}
       resizeMode="cover"
-      imageStyle={{ borderRadius: 16 }}
+      imageStyle={styles.container}
     >
-      <View style={styles.container}>
-        <Row>
-          <View>
-            <Text fontSize={16} color={COLORS.white}>
-              {title}
-            </Text>
-            <View style={styles.balance}>
-              <Text
-                heading
-                fontFamily="Mersad_600SemiBold"
-                color={COLORS.white}
-              >
-                {currencyPosition === 'left' ? currency : ''}
-                {balance}
-                {currencyPosition === 'right' ? ' ' + currency : ''}
-              </Text>
-            </View>
-            <Spacer value={verticalScale(16)} />
-            {Object.hasOwn(props, 'last24HourChange') && (
-              <>
-                <Spacer value={verticalScale(9)} />
+      <Row alignItems="center" style={styles.innerContainer}>
+        <View style={styles.details}>
+          {/* title */}
+          <Text
+            fontSize={13}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.white}
+          >
+            {title}
+          </Text>
+          <Spacer value={verticalScale(6)} />
+          {/* balance */}
+          <Text
+            fontSize={24}
+            fontFamily="Mersad_600SemiBold"
+            color={COLORS.white}
+          >
+            {currencyPosition === 'left' ? currency : ''}
+            {balance}
+            {currencyPosition === 'right' ? ' ' + currency : ''}
+          </Text>
+          {/* fee */}
+          {Object.hasOwn(props, 'txFee') && (
+            <>
+              <Spacer value={verticalScale(6)} />
+              <Row alignItems="center">
+                <Text
+                  fontSize={11}
+                  color={COLORS.white50}
+                  fontFamily="Inter_600SemiBold"
+                >
+                  TxFee
+                </Text>
+                <Spacer horizontal value={scale(8)} />
+                <Text
+                  color={COLORS.white}
+                  fontSize={11}
+                  fontFamily="Inter_600SemiBold"
+                >
+                  {NumberUtils.formatNumber(txFee!, 5)}
+                </Text>
+              </Row>
+            </>
+          )}
+          {/* 24hr change */}
+          {Object.hasOwn(props, 'last24HourChange') && (
+            <>
+              <Spacer value={verticalScale(6)} />
+              <Row alignItems="center">
+                <Text
+                  fontSize={11}
+                  color={COLORS.white50}
+                  fontFamily="Inter_600SemiBold"
+                >
+                  24H Change
+                </Text>
+                <Spacer horizontal value={scale(10)} />
                 <Row alignItems="center">
-                  <Text color="rgba(255, 255, 255, 0.5)">24H Change</Text>
-                  <Spacer horizontal value={scale(10)} />
-                  <Row alignItems="center">
-                    <TrendIcon color="#FFFFFF" />
-                    <Spacer horizontal value={scale(7)} />
-                    <Text color="#FFFFFF">
-                      {' '}
-                      {last24HourChange!.toFixed(2)}%
-                    </Text>
-                  </Row>
-                </Row>
-              </>
-            )}
-            {!!Object.hasOwn(props, 'txFee') && (
-              <>
-                <Spacer value={verticalScale(9)} />
-                <Row alignItems="center">
-                  <Text color="rgba(255, 255, 255, 0.5)">TxFee</Text>
-                  <Text color="#FFFFFF">
-                    {'   '}
-                    {NumberUtils.formatNumber(txFee!, 5)}
+                  <TrendIcon
+                    color={COLORS.white}
+                    type={(last24HourChange || 0) >= 0 ? 'up' : 'down'}
+                  />
+                  <Spacer horizontal value={scale(8)} />
+                  <Text fontSize={12} color={COLORS.white}>
+                    {' '}
+                    {last24HourChange!.toFixed(2)}%
                   </Text>
                 </Row>
-              </>
-            )}
-            <Spacer value={verticalScale(9)} />
-            <Row alignItems="center" justifyContent="space-between">
-              <Text subtext color="rgba(255, 255, 255, 0.5)">
-                Time Stamp{' '}
-              </Text>
-              <Text subtext color="#FFFFFF">
-                {dayjs(timestamp).format('YYYY-MM-DD')}
-              </Text>
-              <Text subtext color="#FFFFFF">
-                {' '}
-                {dayjs(timestamp).format('hh:mm A')}
-              </Text>
-            </Row>
-          </View>
+              </Row>
+            </>
+          )}
+          {/* timestamp */}
+          <Spacer value={verticalScale(8)} />
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.white}
+            >
+              {dayjs(timestamp).format('YYYY-MM-DD')}
+            </Text>
+            <Text
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.white}
+            >
+              {dayjs(timestamp).format('hh:mm A').toLowerCase()}
+            </Text>
+          </Row>
+        </View>
+        <View style={styles.logoContainer}>
           <View style={styles.logo}>
-            <View style={styles.logoEllipseOuter}>
-              <View style={styles.logoEllipseMiddle}>
-                <View style={styles.logoEllipseInner}>
-                  <LogoBigSVG />
-                </View>
-              </View>
-            </View>
+            <LogoSVG color={COLORS.white} scale={2} />
           </View>
-        </Row>
-      </View>
+        </View>
+      </Row>
     </ImageBackground>
   );
 }

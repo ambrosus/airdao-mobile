@@ -1,8 +1,8 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
-import { BottomSheet } from '@components/composite';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import { BottomSheetFloat } from '@components/modular';
+import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -59,7 +59,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     };
 
     return (
-      <BottomSheet ref={localRef} isNestedSheet>
+      <BottomSheetFloat ref={localRef}>
         <View testID="share-bottom-sheet" style={styles.container}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
@@ -67,8 +67,8 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
           <Spacer value={29} />
           <View style={styles.newListTitle}>
             <Text
-              fontFamily="Inter_600SemiBold"
-              title
+              fontSize={20}
+              fontFamily="Inter_700Bold"
               color={COLORS.smokyBlack}
             >
               {bottomSheetTitle}
@@ -134,7 +134,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
             </Row>
           </View>
         </View>
-      </BottomSheet>
+      </BottomSheetFloat>
     );
   }
 );

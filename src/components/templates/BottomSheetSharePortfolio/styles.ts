@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   container: {
-    paddingBottom: verticalScale(64)
+    paddingBottom: verticalScale(24)
   },
   newListTitle: {
     alignSelf: 'center'
@@ -12,8 +12,8 @@ export const styles = StyleSheet.create({
     paddingTop: 16
   },
   portfolioPerfomance: {
-    marginHorizontal: scale(8),
-    marginTop: verticalScale(30)
+    marginHorizontal: scale(24),
+    marginTop: verticalScale(17)
   },
   shareButtons: {
     paddingHorizontal: scale(30)
