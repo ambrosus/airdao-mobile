@@ -20,8 +20,8 @@ export const CopyToClipboardButton = (
   const { textToDisplay, textToCopy, textProps, ...buttonProps } = props;
 
   const onPress = async () => {
-    await Clipboard.setStringAsync(textToCopy || textToDisplay);
     Toast.show({ message: 'Copied to Clipboard', type: ToastType.Bottom });
+    await Clipboard.setStringAsync(textToCopy || textToDisplay);
   };
 
   return (
