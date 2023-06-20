@@ -1,12 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Spacer } from '@components/base';
+import { Spacer, Text } from '@components/base';
 import { Dimensions, FlatList } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
-import { BackIcon } from '@components/svg/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { COLORS } from '@constants/colors';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -30,33 +30,33 @@ type CurrencyData = {
 };
 
 const mockedCurrencyList: CurrencyData[] = [
-  {
-    currency: 'Australian Dollar (AUD)'
-  },
-  {
-    currency: 'Bitcoin (BTC)'
-  },
-  {
-    currency: 'British Pound Sterling (GBP)'
-  },
-  {
-    currency: 'Canadian Dollar (CAD)'
-  },
-  {
-    currency: 'Chinese Yuan CNY)'
-  },
-  {
-    currency: 'Euro (EUR)'
-  },
-  {
-    currency: 'Japanese Yen (JPY)'
-  },
+  // {
+  //   currency: 'Australian Dollar (AUD)'
+  // },
+  // {
+  //   currency: 'Bitcoin (BTC)'
+  // },
+  // {
+  //   currency: 'British Pound Sterling (GBP)'
+  // },
+  // {
+  //   currency: 'Canadian Dollar (CAD)'
+  // },
+  // {
+  //   currency: 'Chinese Yuan CNY)'
+  // },
+  // {
+  //   currency: 'Euro (EUR)'
+  // },
+  // {
+  //   currency: 'Japanese Yen (JPY)'
+  // },
   {
     currency: 'US Dollars (USD)'
-  },
-  {
-    currency: 'Satoshi (SATS)'
   }
+  // {
+  //   currency: 'Satoshi (SATS)'
+  // }
 ];
 export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
   ({ selectedCurrency, handleCurrencySave }, ref) => {
@@ -79,20 +79,19 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
       >
         <Spacer value={topInset} />
         <Header
-          titleStyle={styles.headerTitle}
-          title="Select base currency"
-          style={styles.header}
-          backIconVisible={false}
-          contentLeft={
-            <Button
-              type="base"
-              onPress={() => {
-                localRef.current?.dismiss();
-              }}
+          title={
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.smokyBlack}
             >
-              <BackIcon />
-            </Button>
+              Select base currency
+            </Text>
           }
+          titlePosition="left"
+          style={styles.header}
+          backIconVisible={true}
+          onBackPress={() => localRef.current?.dismiss()}
         />
         <Spacer value={19} />
         <FlatList
