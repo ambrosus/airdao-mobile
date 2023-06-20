@@ -1,12 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, Spacer } from '@components/base';
+import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Dimensions, FlatList } from 'react-native';
-import { BackIcon } from '@components/svg/icons';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { COLORS } from '@constants/colors';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -31,28 +31,28 @@ type LanguageData = {
 const mockedLanguages: LanguageData[] = [
   {
     language: 'English'
-  },
-  {
-    language: 'Arabic'
-  },
-  {
-    language: 'Spanish'
-  },
-  {
-    language: 'Turkish'
-  },
-  {
-    language: 'Hindi'
-  },
-  {
-    language: 'Portuguese'
-  },
-  {
-    language: 'Russian'
-  },
-  {
-    language: 'Chinese'
   }
+  // {
+  //   language: 'Arabic'
+  // },
+  // {
+  //   language: 'Spanish'
+  // },
+  // {
+  //   language: 'Turkish'
+  // },
+  // {
+  //   language: 'Hindi'
+  // },
+  // {
+  //   language: 'Portuguese'
+  // },
+  // {
+  //   language: 'Russian'
+  // },
+  // {
+  //   language: 'Chinese'
+  // }
 ];
 
 export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
@@ -77,20 +77,19 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
         <Spacer value={topInset} />
         <Header
           titleStyle={styles.headerTitle}
-          title="Select language"
-          titlePosition="center"
-          backIconVisible={false}
-          style={styles.header}
-          contentLeft={
-            <Button
-              type="base"
-              onPress={() => {
-                localRef.current?.dismiss();
-              }}
+          title={
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.smokyBlack}
             >
-              <BackIcon />
-            </Button>
+              Select language
+            </Text>
           }
+          titlePosition="left"
+          backIconVisible={true}
+          style={styles.header}
+          onBackPress={() => localRef.current?.dismiss()}
         />
         <Spacer value={19} />
         <FlatList

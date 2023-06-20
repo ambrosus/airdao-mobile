@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   headerTitle: {
     fontFamily: 'Inter_700Bold',
-    fontSize: 20,
+    fontSize: 16,
     color: COLORS.smokyBlack
   },
   bottomSheet: {

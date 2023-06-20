@@ -5,6 +5,7 @@ import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { scale } from '@utils/scaling';
 
 type Props = {
   item: Language | Currency;
@@ -29,8 +30,8 @@ export const SettingsModalItem: FC<Props> = ({
         />
         <Text
           fontFamily="Inter_600SemiBold"
-          fontSize={17}
-          color={COLORS.smokyBlack}
+          fontSize={16}
+          color={COLORS.slateGrey}
           style={styles.itemTitle}
         >
           {item}
@@ -42,7 +43,7 @@ export const SettingsModalItem: FC<Props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 15,
+    paddingHorizontal: scale(18),
     paddingBottom: 32,
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -50,8 +51,6 @@ const styles = StyleSheet.create({
   },
   itemInfo: {},
   itemTitle: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 17,
     paddingLeft: 12
   }
 });
