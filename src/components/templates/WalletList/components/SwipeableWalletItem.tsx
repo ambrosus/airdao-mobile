@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
-import { Animated, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
@@ -12,6 +12,11 @@ import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWall
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { SwipeAction } from './SwipeAction';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -33,7 +38,7 @@ export const SwipeableWalletItem = memo(
 
       const navigation = useNavigation<WalletsNavigationProp>();
 
-      const paddingRightAnim = useRef(new Animated.Value(0)).current;
+      const paddingRightAnimation = useSharedValue(0);
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
@@ -74,20 +79,18 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
-        Animated.timing(paddingRightAnim, {
-          toValue: 16,
-          duration: 200,
-          useNativeDriver: false
-        }).start();
-      }, [paddingRightAnim, previousRef]);
+        paddingRightAnimation.value = withTiming(16, { duration: 200 });
+      }, [paddingRightAnimation, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
-        Animated.timing(paddingRightAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: false
-        }).start();
-      }, [paddingRightAnim]);
+        paddingRightAnimation.value = withTiming(0, { duration: 200 });
+      }, [paddingRightAnimation]);
+
+      const animatedStyle = useAnimatedStyle(() => {
+        return {
+          paddingRight: paddingRightAnimation.value
+        };
+      });
 
       return (
         <Swipeable
@@ -105,11 +108,7 @@ export const SwipeableWalletItem = memo(
         >
           <Pressable onPress={navigateToAddressDetails}>
             <Animated.View
-              style={[
-                { ...styles.item },
-                stylesForPortfolio,
-                { paddingRight: paddingRightAnim }
-              ]}
+              style={[{ ...styles.item }, stylesForPortfolio, animatedStyle]}
             >
               <WalletItem item={item} />
             </Animated.View>
