@@ -7,11 +7,6 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming
-} from 'react-native-reanimated';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
@@ -45,8 +40,6 @@ export const GroupItem = memo(
         group.id,
         swipeableRef
       );
-
-      const paddingRightAnimation = useSharedValue(0);
 
       const handleOpenRenameModal = useCallback(() => {
         groupRenameRef.current?.show();
