@@ -1,8 +1,18 @@
 import React, { forwardRef, memo, useCallback, useMemo, useRef } from 'react';
-import { Pressable, ViewStyle } from 'react-native';
+import { DeviceEventEmitter, Pressable, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { AccountList } from '@models/AccountList';
@@ -10,12 +20,8 @@ import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/Bot
 import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
+import { useSwipeableDismissListener } from '@hooks';
 import { styles } from './styles';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming
-} from 'react-native-reanimated';
 
 type Props = {
   group: AccountList;
@@ -31,8 +37,14 @@ export const GroupItem = memo(
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
       const swipeableRef = useRef<Swipeable>(null);
-
       const navigation = useNavigation<PortfolioNavigationProp>();
+      const paddingRightAnimation = useSharedValue(0);
+      // close swipeable on another swipeable open
+      useSwipeableDismissListener(
+        'collection-item-opened',
+        group.id,
+        swipeableRef
+      );
 
       const paddingRightAnimation = useSharedValue(0);
 
@@ -61,6 +73,7 @@ export const GroupItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
+        DeviceEventEmitter.emit('collection-item-opened', group.id);
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&
@@ -72,7 +85,7 @@ export const GroupItem = memo(
           }
         }
         paddingRightAnimation.value = withTiming(16, { duration: 200 });
-      }, [paddingRightAnimation, previousRef]);
+      }, [group.id, paddingRightAnimation, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
         paddingRightAnimation.value = withTiming(0, { duration: 200 });
