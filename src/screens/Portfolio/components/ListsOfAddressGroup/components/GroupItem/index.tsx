@@ -1,11 +1,4 @@
-import React, {
-  forwardRef,
-  memo,
-  useCallback,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { forwardRef, memo, useCallback, useMemo, useRef } from 'react';
 import { Pressable, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
@@ -18,6 +11,11 @@ import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
 import { styles } from './styles';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 
 type Props = {
   group: AccountList;
@@ -32,11 +30,11 @@ export const GroupItem = memo(
       const groupRenameRef = useRef<BottomSheetRef>(null);
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-      const [swipeState, setSwipeState] = useState<boolean>(false);
+      const swipeableRef = useRef<Swipeable>(null);
 
       const navigation = useNavigation<PortfolioNavigationProp>();
-      const swipeableRef = useRef<Swipeable>(null);
+
+      const paddingRightAnimation = useSharedValue(0);
 
       const handleOpenRenameModal = useCallback(() => {
         groupRenameRef.current?.show();
@@ -62,14 +60,6 @@ export const GroupItem = memo(
         swipeableRef.current?.close();
       }, []);
 
-      const handleSwipeableOpen = useCallback(() => {
-        clearTimeout(timeoutRef.current ?? undefined);
-        if (previousRef && typeof previousRef !== 'function') {
-          previousRef.current = swipeableRef.current;
-        }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
-
       const handleSwipeableWillOpen = useCallback(() => {
         clearTimeout(timeoutRef.current ?? undefined);
         if (
@@ -81,12 +71,18 @@ export const GroupItem = memo(
             previousRef.current?.close();
           }
         }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
+        paddingRightAnimation.value = withTiming(16, { duration: 200 });
+      }, [paddingRightAnimation, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
-        setSwipeState(false);
-      }, []);
+        paddingRightAnimation.value = withTiming(0, { duration: 200 });
+      }, [paddingRightAnimation]);
+
+      const animatedStyle = useAnimatedStyle(() => {
+        return {
+          paddingRight: paddingRightAnimation.value
+        };
+      });
 
       const stylesForFirstItem = useMemo(() => {
         return {
@@ -111,15 +107,13 @@ export const GroupItem = memo(
             />
           )}
           ref={swipeableRef}
-          onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
         >
           <Pressable onPress={handleItemPress} style={containerStyles}>
-            <CollectionItem
-              collection={group}
-              style={[swipeState && { paddingRight: 16 }, styles.item]}
-            />
+            <Animated.View style={[{ ...styles.item }, animatedStyle]}>
+              <CollectionItem collection={group} />
+            </Animated.View>
           </Pressable>
           <BottomSheetConfirmRemoveGroup
             handleOnDeleteConfirm={handleRemoveConfirm}

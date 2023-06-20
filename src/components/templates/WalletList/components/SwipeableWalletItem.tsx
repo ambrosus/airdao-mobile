@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
+import React, { forwardRef, memo, useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
 import { Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -12,6 +12,11 @@ import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWall
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { SwipeAction } from './SwipeAction';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -31,9 +36,9 @@ export const SwipeableWalletItem = memo(
       const confirmRemoveRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      const [swipeState, setSwipeState] = useState<boolean>(false);
-
       const navigation = useNavigation<WalletsNavigationProp>();
+
+      const paddingRightAnimation = useSharedValue(0);
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
@@ -63,14 +68,6 @@ export const SwipeableWalletItem = memo(
         swipeRef.current?.close();
       }, []);
 
-      const handleSwipeableOpen = useCallback(() => {
-        clearTimeout(timeoutRef.current ?? undefined);
-        if (previousRef && typeof previousRef !== 'function') {
-          previousRef.current = swipeRef.current;
-        }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
-
       const handleSwipeableWillOpen = useCallback(() => {
         clearTimeout(timeoutRef.current ?? undefined);
         if (
@@ -82,12 +79,18 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
+        paddingRightAnimation.value = withTiming(16, { duration: 200 });
+      }, [paddingRightAnimation, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
-        setSwipeState(false);
-      }, []);
+        paddingRightAnimation.value = withTiming(0, { duration: 200 });
+      }, [paddingRightAnimation]);
+
+      const animatedStyle = useAnimatedStyle(() => {
+        return {
+          paddingRight: paddingRightAnimation.value
+        };
+      });
 
       return (
         <Swipeable
@@ -100,19 +103,15 @@ export const SwipeableWalletItem = memo(
             />
           )}
           ref={swipeRef}
-          onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
         >
-          <Pressable
-            style={[
-              { ...styles.item },
-              stylesForPortfolio,
-              swipeState && { paddingRight: 16 }
-            ]}
-            onPress={navigateToAddressDetails}
-          >
-            <WalletItem item={item} />
+          <Pressable onPress={navigateToAddressDetails}>
+            <Animated.View
+              style={[{ ...styles.item }, stylesForPortfolio, animatedStyle]}
+            >
+              <WalletItem item={item} />
+            </Animated.View>
           </Pressable>
           <BottomSheetEditWallet wallet={item} ref={editModalRef} />
           {removeType === 'watchlist' && (
