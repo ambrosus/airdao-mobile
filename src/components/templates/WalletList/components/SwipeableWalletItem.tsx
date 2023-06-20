@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, useCallback, useRef } from 'react';
 import { COLORS } from '@constants/colors';
-import { Pressable } from 'react-native';
+import { Animated, DeviceEventEmitter, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
@@ -12,11 +12,7 @@ import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWall
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { SwipeAction } from './SwipeAction';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming
-} from 'react-native-reanimated';
+import { useSwipeableDismissListener } from '@hooks';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -39,6 +35,9 @@ export const SwipeableWalletItem = memo(
       const navigation = useNavigation<WalletsNavigationProp>();
 
       const paddingRightAnimation = useSharedValue(0);
+
+      // close swipeable on another swipeable open
+      useSwipeableDismissListener('collection-item-opened', item._id, swipeRef);
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
@@ -79,8 +78,13 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
-        paddingRightAnimation.value = withTiming(16, { duration: 200 });
-      }, [paddingRightAnimation, previousRef]);
+        Animated.timing(paddingRightAnim, {
+          toValue: 16,
+          duration: 200,
+          useNativeDriver: false
+        }).start();
+        DeviceEventEmitter.emit('collection-item-opened', item._id);
+      }, [item._id, paddingRightAnim, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
         paddingRightAnimation.value = withTiming(0, { duration: 200 });

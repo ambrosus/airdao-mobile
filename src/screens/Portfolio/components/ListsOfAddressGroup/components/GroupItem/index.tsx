@@ -1,5 +1,10 @@
 import React, { forwardRef, memo, useCallback, useMemo, useRef } from 'react';
-import { Pressable, ViewStyle } from 'react-native';
+import {
+  Animated,
+  DeviceEventEmitter,
+  Pressable,
+  ViewStyle
+} from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
@@ -11,11 +16,7 @@ import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
 import { styles } from './styles';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming
-} from 'react-native-reanimated';
+import { useSwipeableDismissListener } from '@hooks';
 
 type Props = {
   group: AccountList;
@@ -31,10 +32,14 @@ export const GroupItem = memo(
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
       const swipeableRef = useRef<Swipeable>(null);
-
       const navigation = useNavigation<PortfolioNavigationProp>();
 
-      const paddingRightAnimation = useSharedValue(0);
+      // close swipeable on another swipeable open
+      useSwipeableDismissListener(
+        'collection-item-opened',
+        group.id,
+        swipeableRef
+      );
 
       const handleOpenRenameModal = useCallback(() => {
         groupRenameRef.current?.show();
@@ -61,6 +66,7 @@ export const GroupItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
+        DeviceEventEmitter.emit('collection-item-opened', group.id);
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&
@@ -71,8 +77,12 @@ export const GroupItem = memo(
             previousRef.current?.close();
           }
         }
-        paddingRightAnimation.value = withTiming(16, { duration: 200 });
-      }, [paddingRightAnimation, previousRef]);
+        Animated.timing(paddingRightAnim, {
+          toValue: 16,
+          duration: 200,
+          useNativeDriver: false
+        }).start();
+      }, [group.id, paddingRightAnim, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
         paddingRightAnimation.value = withTiming(0, { duration: 200 });
