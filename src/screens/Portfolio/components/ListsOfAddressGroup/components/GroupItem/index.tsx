@@ -6,8 +6,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming
 } from 'react-native-reanimated';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useNavigation } from '@react-navigation/native';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { AccountList } from '@models/AccountList';
@@ -33,14 +33,13 @@ export const GroupItem = memo(
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
       const swipeableRef = useRef<Swipeable>(null);
       const navigation = useNavigation<PortfolioNavigationProp>();
-
+      const paddingRightAnimation = useSharedValue(0);
       // close swipeable on another swipeable open
       useSwipeableDismissListener(
         'collection-item-opened',
         group.id,
         swipeableRef
       );
-      const paddingRightAnimation = useSharedValue(0);
 
       const handleOpenRenameModal = useCallback(() => {
         groupRenameRef.current?.show();
