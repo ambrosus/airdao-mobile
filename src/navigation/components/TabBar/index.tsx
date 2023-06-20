@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
 import { SearchInactiveIcon } from '@components/svg/BottomTabIcons/SearchInactiveIcon';
@@ -14,6 +14,10 @@ import { COLORS } from '@constants/colors';
 import { Text } from '@components/base';
 import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
+import Animated, {
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
@@ -40,10 +44,23 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const currentRoute = useCurrentRoute();
   const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    const opacity = tabBarVisible ? 1 : 0;
+    return {
+      opacity: withTiming(opacity, { duration: 200 })
+    };
+  });
+
   if (!tabBarVisible) return <></>;
 
   return (
-    <View style={[styles.mainContainer, { paddingBottom: bottomSafeArea }]}>
+    <Animated.View
+      style={[
+        styles.mainContainer,
+        { paddingBottom: bottomSafeArea },
+        animatedStyle
+      ]}
+    >
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label: LabelType =
@@ -93,7 +110,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           </Pressable>
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 

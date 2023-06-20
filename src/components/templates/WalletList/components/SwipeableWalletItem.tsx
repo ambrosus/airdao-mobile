@@ -1,7 +1,11 @@
-import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
-import { COLORS } from '@constants/colors';
-import { Pressable } from 'react-native';
+import React, { forwardRef, memo, useCallback, useRef } from 'react';
+import { DeviceEventEmitter, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming
+} from 'react-native-reanimated';
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +15,9 @@ import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
+import { COLORS } from '@constants/colors';
 import { SwipeAction } from './SwipeAction';
+import { useSwipeableDismissListener } from '@hooks';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -31,9 +37,11 @@ export const SwipeableWalletItem = memo(
       const confirmRemoveRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      const [swipeState, setSwipeState] = useState<boolean>(false);
-
       const navigation = useNavigation<WalletsNavigationProp>();
+
+      const paddingRightAnimation = useSharedValue(0);
+      // close swipeable on another swipeable open
+      useSwipeableDismissListener('wallet-item-opened', item._id, swipeRef);
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
@@ -63,15 +71,8 @@ export const SwipeableWalletItem = memo(
         swipeRef.current?.close();
       }, []);
 
-      const handleSwipeableOpen = useCallback(() => {
-        clearTimeout(timeoutRef.current ?? undefined);
-        if (previousRef && typeof previousRef !== 'function') {
-          previousRef.current = swipeRef.current;
-        }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
-
       const handleSwipeableWillOpen = useCallback(() => {
+        DeviceEventEmitter.emit('wallet-item-opened', item._id);
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&
@@ -82,12 +83,18 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
-        setSwipeState(true);
-      }, [previousRef, timeoutRef]);
+        paddingRightAnimation.value = withTiming(16, { duration: 200 });
+      }, [item._id, paddingRightAnimation, previousRef]);
 
       const handleSwipeableWillClose = useCallback(() => {
-        setSwipeState(false);
-      }, []);
+        paddingRightAnimation.value = withTiming(0, { duration: 200 });
+      }, [paddingRightAnimation]);
+
+      const animatedStyle = useAnimatedStyle(() => {
+        return {
+          paddingRight: paddingRightAnimation.value
+        };
+      });
 
       return (
         <Swipeable
@@ -100,19 +107,15 @@ export const SwipeableWalletItem = memo(
             />
           )}
           ref={swipeRef}
-          onSwipeableOpen={handleSwipeableOpen}
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
         >
-          <Pressable
-            style={[
-              { ...styles.item },
-              stylesForPortfolio,
-              swipeState && { paddingRight: 16 }
-            ]}
-            onPress={navigateToAddressDetails}
-          >
-            <WalletItem item={item} />
+          <Pressable onPress={navigateToAddressDetails}>
+            <Animated.View
+              style={[{ ...styles.item }, stylesForPortfolio, animatedStyle]}
+            >
+              <WalletItem item={item} />
+            </Animated.View>
           </Pressable>
           <BottomSheetEditWallet wallet={item} ref={editModalRef} />
           {removeType === 'watchlist' && (
