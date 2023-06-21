@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -16,8 +10,9 @@ import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAppState, useNotificationsQuery } from '@hooks';
+import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
+import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const { top: safeAreaInsetsTop } = useSafeAreaInsets();
@@ -25,9 +20,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
-  const [newNotificationsCount, setNewNotificationsCount] = useState(0);
   const { data: notifications } = useNotificationsQuery();
-  const appState = useAppState();
+  const newNotificationsCount = useNewNotificationsCount();
 
   const openScanner = () => {
     scanner.current?.show();
@@ -61,30 +55,12 @@ export const HomeHeader = React.memo((): JSX.Element => {
     [navigation]
   );
 
-  const handleNotificationsCheck = useCallback(async () => {
-    const res =
-      ((await Cache.getItem(CacheKey.LastNotificationTimestamp)) as number) ||
-      0;
-    const count = notifications?.filter((notification) => {
-      return notification?.createdAt.getTime() > res;
-    })?.length;
-    setNewNotificationsCount(count);
-  }, [notifications]);
-
-  useEffect(() => {
-    if (appState === 'background') {
-      handleNotificationsCheck();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notifications, appState]);
-
   const setLastNotificationTime = useCallback(() => {
     if (notifications[0]?.createdAt) {
       Cache.setItem(
         CacheKey.LastNotificationTimestamp,
         notifications[0].createdAt
       );
-      setNewNotificationsCount(0);
     }
   }, [notifications]);
 
