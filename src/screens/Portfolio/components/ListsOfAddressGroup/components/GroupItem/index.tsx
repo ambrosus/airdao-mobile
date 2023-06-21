@@ -16,6 +16,7 @@ import { PortfolioNavigationProp } from '@appTypes/navigation';
 import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
 import { useSwipeableDismissListener } from '@hooks';
+import { EVENTS } from '@constants/events';
 import { styles } from './styles';
 
 type Props = {
@@ -66,7 +67,7 @@ export const GroupItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
-        DeviceEventEmitter.emit('collection-item-opened', group.id);
+        DeviceEventEmitter.emit(EVENTS.CollectionItemOpened, group.id);
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&

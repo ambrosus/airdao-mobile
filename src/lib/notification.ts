@@ -1,8 +1,10 @@
-import { NotificationType } from '@models';
 import messaging, {
   FirebaseMessagingTypes
 } from '@react-native-firebase/messaging';
+import { DeviceEventEmitter } from 'react-native';
+import { NotificationType } from '@models';
 import { DatabaseService } from './database';
+import { EVENTS } from '@constants/events';
 
 export class NotificationService {
   constructor(listener?: (newToken: string) => unknown) {
@@ -37,14 +39,16 @@ export class NotificationService {
   }
 
   private async handleForegroundNotification(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     message: FirebaseMessagingTypes.RemoteMessage
   ) {
     // TODO we can show Toast message
-    this.handleNotification.bind(this)(message);
+    DeviceEventEmitter.emit(EVENTS.NotificationReceived);
+    // this.handleNotification.bind(this)(message);
   }
 
   async setup() {
     messaging().onMessage(this.handleForegroundNotification.bind(this));
-    messaging().setBackgroundMessageHandler(this.handleNotification.bind(this));
+    // messaging().setBackgroundMessageHandler(this.handleNotification.bind(this));
   }
 }
