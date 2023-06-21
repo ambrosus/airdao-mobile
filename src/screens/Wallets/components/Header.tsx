@@ -59,7 +59,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
     if (notifications[0]?.createdAt) {
       Cache.setItem(
         CacheKey.LastNotificationTimestamp,
-        notifications[0].createdAt
+        notifications[0].createdAt.getTime()
       );
     }
   }, [notifications]);
