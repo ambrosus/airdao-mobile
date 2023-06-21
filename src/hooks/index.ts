@@ -5,6 +5,7 @@ export * from './useFullscreenModalHeight';
 export * from './useKeyboardHeight';
 export * from './useForwardedRef';
 export * from './useAppInit';
+export * from './useAppFocused';
 export * from './useAppState';
 export * from './useCachePurifier';
 export * from './useInitialMountEffect';
