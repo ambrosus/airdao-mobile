@@ -13,8 +13,7 @@ export const styles = StyleSheet.create({
     width: 109
   },
   createNewListButton: {
-    justifyContent: 'center',
-    right: scale(13)
+    justifyContent: 'center'
   },
   androidButton: {
     width: 48,
