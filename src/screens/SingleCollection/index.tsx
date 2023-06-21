@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Platform, SafeAreaView, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -43,13 +43,13 @@ export const SingleGroupScreen = () => {
   const { accounts, name } = selectedList;
   const groupTokens = selectedList.totalBalance * (ambPriceData?.priceUSD || 0);
 
-  const showAddAddress = useCallback(() => {
+  const showAddAddress = () => {
     addNewAddressToGroupRef.current?.show();
-  }, []);
+  };
 
-  const showEditCollection = useCallback(() => {
+  const showEditCollection = () => {
     editCollectionModalRef.current?.show();
-  }, []);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
