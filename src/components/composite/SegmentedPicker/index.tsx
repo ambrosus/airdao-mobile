@@ -1,7 +1,8 @@
 import { Button, Row, Text } from '@components/base';
 import React from 'react';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { TextStyle, ViewStyle } from 'react-native';
+import { styles as staticStyles } from './styles';
 
 export interface Segment {
   id: string;
@@ -12,11 +13,37 @@ export interface Segment {
 export interface SegmentedPickerProps {
   segments: Segment[];
   selectedSegment: string;
+  styles?: {
+    container?: ViewStyle;
+    segment?: {
+      selected?: ViewStyle;
+      unselected?: ViewStyle;
+    };
+    segmentText?: {
+      selected?: TextStyle;
+      unselected?: TextStyle;
+    };
+  };
   onSelectSegment?: (selectedSegment: Segment) => unknown;
 }
 
 export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
-  const { segments, selectedSegment, onSelectSegment } = props;
+  const {
+    segments,
+    selectedSegment,
+    styles = {
+      container: {},
+      segment: {
+        selected: {},
+        unselected: {}
+      },
+      segmentText: {
+        selected: {},
+        unselected: {}
+      }
+    },
+    onSelectSegment
+  } = props;
 
   const renderSegment = (segment: Segment) => {
     const onPress = () => {
@@ -30,11 +57,19 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
         key={segment.id}
         onPress={onPress}
         style={{
-          ...styles.segment,
-          ...(selected ? styles.selectedSegment : {})
+          ...staticStyles.segment,
+          ...(selected
+            ? { ...staticStyles.selectedSegment, ...styles.segment?.selected }
+            : { ...styles.segment?.unselected })
         }}
       >
-        <Text style={selected && { color: COLORS.electricBlue }}>
+        <Text
+          style={
+            selected
+              ? { color: COLORS.electricBlue, ...styles.segmentText?.selected }
+              : { ...styles.segmentText?.unselected }
+          }
+        >
           {segment.title}
         </Text>
       </Button>
@@ -42,7 +77,10 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
   };
 
   return (
-    <Row alignItems="center" style={styles.container}>
+    <Row
+      alignItems="center"
+      style={{ ...staticStyles.container, ...styles.container }}
+    >
       {segments.map(renderSegment)}
     </Row>
   );

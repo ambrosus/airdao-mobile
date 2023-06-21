@@ -6,28 +6,43 @@ import React, {
   useMemo,
   useState
 } from 'react';
+import { Dimensions, FlatList, ListRenderItemInfo, View } from 'react-native';
 import {
   BottomSheet,
   BottomSheetRef,
-  InputWithIcon
+  InputWithIcon,
+  Segment,
+  SegmentedPicker
 } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { styles } from './styles';
-import { BottomSheetSwiperIcon, SearchIcon } from '@components/svg/icons';
+import { SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { Dimensions, FlatList, Platform, View } from 'react-native';
 import { useLists } from '@contexts/ListsContext';
 import { useWatchlist } from '@hooks';
-import { scale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { WalletItem } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { StringUtils } from '@utils/string';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   collection: AccountList;
 };
+
+const AddressSources: Segment[] = [
+  {
+    title: 'Top Holders',
+    value: 0,
+    id: '1'
+  },
+  {
+    title: 'Watchlist',
+    value: 1,
+    id: '2'
+  }
+];
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
@@ -37,6 +52,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const toggleAddressInList = useLists((v) => v.toggleAddressInList);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [scrollViewIdx, setScrollViewIdx] = useState(0);
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
@@ -55,22 +71,34 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     );
   }, [watchlist, searchValue]);
 
+  const renderItem = (
+    args: ListRenderItemInfo<ExplorerAccount>
+  ): JSX.Element => {
+    const { item } = args;
+    return (
+      <Button
+        onPress={() => {
+          handleItemPress(item);
+        }}
+        style={styles.item}
+      >
+        <WalletItem item={item} indicatorVisible={true} />
+      </Button>
+    );
+  };
+
   return (
     <BottomSheet
       ref={localRef}
       height={Dimensions.get('screen').height * 0.85}
       avoidKeyboard={false}
-      containerStyle={
-        Platform.OS === 'android' && {
-          flex: 1,
-          marginTop: Dimensions.get('screen').height * 0.05
-        }
-      }
+      swiperIconVisible={true}
+      containerStyle={{
+        paddingHorizontal: scale(24)
+      }}
     >
       <View style={{ alignItems: 'center' }}>
-        <Spacer value={scale(16)} />
-        <BottomSheetSwiperIcon />
-        <Spacer value={scale(12)} />
+        <Spacer value={verticalScale(24)} />
         <Text
           fontFamily="Inter_700Bold"
           fontSize={18}
@@ -81,7 +109,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           0
         )}`}</Text>
       </View>
-      <Spacer value={scale(12)} />
+      <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
         <InputWithIcon
           iconLeft={<SearchIcon color="#2f2b4399" />}
@@ -93,30 +121,43 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           onChangeValue={setSearchValue}
         />
       </View>
+      <Spacer value={scale(24)} />
+      <SegmentedPicker
+        segments={AddressSources}
+        selectedSegment={
+          AddressSources.find((s) => s.value === scrollViewIdx)?.id ||
+          AddressSources[0].id
+        }
+        onSelectSegment={(selectedSegment) =>
+          setScrollViewIdx(selectedSegment.value as number)
+        }
+        styles={{
+          container: {
+            paddingVertical: verticalScale(2),
+            borderRadius: moderateScale(8)
+          },
+          segment: {
+            selected: {
+              borderRadius: moderateScale(8)
+            }
+          },
+          segmentText: {
+            selected: {
+              color: COLORS.neutral800
+            },
+            unselected: {
+              color: COLORS.neutral800
+            }
+          }
+        }}
+      />
       <FlatList
         contentContainerStyle={{
           paddingBottom: 150,
-          paddingHorizontal: 24,
-          paddingTop: 24
+          paddingTop: verticalScale(24)
         }}
         data={filteredAddresses}
-        renderItem={({ item }: { item: ExplorerAccount }) => {
-          return (
-            <Button
-              onPress={() => {
-                handleItemPress(item);
-              }}
-              style={{
-                paddingVertical: 18,
-                borderColor: COLORS.separator,
-                borderBottomWidth: 0.2,
-                borderTopWidth: 0.2
-              }}
-            >
-              <WalletItem item={item} />
-            </Button>
-          );
-        }}
+        renderItem={renderItem}
       />
     </BottomSheet>
   );
