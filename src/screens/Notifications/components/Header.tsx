@@ -28,7 +28,7 @@ export const NotificationsHeader = (
             padding: moderateScale(12)
           }}
         >
-          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.8} />
+          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.1} />
         </Button>
       </Row>
     );
