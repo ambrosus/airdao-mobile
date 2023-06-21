@@ -1,5 +1,6 @@
-import { Dimensions, ScrollView, View } from 'react-native';
 import React, { useCallback, useRef, useState } from 'react';
+import { Dimensions, ScrollView, View } from 'react-native';
+import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import { HomeWatchlists } from '@screens/Wallets/components/HomeTabs/HomeWatchlists';
 import { HomeCollections } from '@screens/Wallets/components/HomeTabs/HomeCollections';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
@@ -13,16 +14,21 @@ import { SearchTabNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts';
+import { useWatchlist } from '@hooks';
 
 export const HomeTabs = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
-  const { handleOnCreate } = useLists((v) => v);
+  const { handleOnCreate, listsOfAddressGroup } = useLists((v) => v);
+  const { watchlist } = useWatchlist();
 
   const scrollView = useRef<ScrollView>(null);
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
   const createRenameGroupRef = useRef<BottomSheetRef>(null);
   const tabWidth = Dimensions.get('window').width - scale(32);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const seeAllVisible =
+    currentIndex === 0 ? watchlist.length > 0 : listsOfAddressGroup.length > 0;
 
   const handleOnCreateCollectionOrAddAddress = useCallback(() => {
     createCollectionOrAddAddressRef.current?.show();
@@ -131,16 +137,20 @@ export const HomeTabs = () => {
         }}
       /> */}
       </ScrollView>
-      <Spacer value={verticalScale(24)} />
-      <Button onPress={seeAll} style={styles.seeAllButton}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.deepBlue}
-        >
-          See all
-        </Text>
-      </Button>
+      {seeAllVisible && (
+        <Animated.View entering={SlideInLeft} exiting={SlideOutRight}>
+          <Spacer value={verticalScale(24)} />
+          <Button onPress={seeAll} style={styles.seeAllButton}>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.deepBlue}
+            >
+              See all
+            </Text>
+          </Button>
+        </Animated.View>
+      )}
       <BottomSheetCreateCollectionOrAddAddress
         handleOnAddNewAddress={handleOnAddNewAddress}
         handleCreateCollectionPress={handleCreateCollectionPress}
