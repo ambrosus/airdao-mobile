@@ -58,6 +58,7 @@ export const SearchScreen = () => {
       <Button onPress={navigateToWallet}>
         <ExplorerWalletItem
           item={item}
+          indicatorVisible={true}
           totalSupply={infoData?.totalSupply || 1}
         />
       </Button>

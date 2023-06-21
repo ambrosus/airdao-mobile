@@ -7,21 +7,17 @@ import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks';
 import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { useLists } from '@contexts';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
+import { AddressIndicator } from '../AddressIndicator';
 
 interface WalletItemProps {
   item: ExplorerAccount;
+  indicatorVisible?: boolean; // show info whether address is watchlisted or added to collection
 }
 
 export function WalletItem(props: WalletItemProps): JSX.Element {
-  const { item } = props;
+  const { item, indicatorVisible } = props;
   const { data: ambTokenData } = useAMBPrice();
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const listWithWallet = listsOfAddressGroup.find(
-    (list) =>
-      list.accounts?.findIndex((account) => account?._id === item?._id) > -1
-  );
 
   return (
     <View style={{ justifyContent: 'space-between' }}>
@@ -34,29 +30,10 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
           >
             {item.name || StringUtils.formatAddress(item.address, 4, 4)}
           </Text>
-          {listWithWallet && (
+          {indicatorVisible && (
             <>
               <Spacer value={scale(13)} horizontal />
-              <View
-                style={{
-                  backgroundColor: COLORS.smokyBlack5,
-                  paddingVertical: verticalScale(4),
-                  paddingHorizontal: scale(8),
-                  borderRadius: moderateScale(20),
-                  width: '40%',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Text
-                  fontSize={12}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.graphiteGrey}
-                  numberOfLines={1}
-                >
-                  {listWithWallet.name}
-                </Text>
-              </View>
+              <AddressIndicator address={item.address} />
             </>
           )}
         </Row>
