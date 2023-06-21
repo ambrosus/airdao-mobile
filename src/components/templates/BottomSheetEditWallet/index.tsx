@@ -31,7 +31,9 @@ export const BottomSheetEditWallet = forwardRef<
   );
 
   const dismissThis = useCallback(() => {
-    localRef.current?.dismiss();
+    setTimeout(() => {
+      localRef.current?.dismiss();
+    }, 800);
   }, [localRef]);
 
   const showRename = useCallback(() => {
@@ -39,7 +41,9 @@ export const BottomSheetEditWallet = forwardRef<
   }, [renameWalletModalRef]);
 
   const dismissRename = useCallback(() => {
-    renameWalletModalRef.current?.dismiss();
+    setTimeout(() => {
+      renameWalletModalRef.current?.dismiss();
+    }, 400);
   }, [renameWalletModalRef]);
 
   const handleOnRenameAddress = useCallback(
@@ -49,9 +53,9 @@ export const BottomSheetEditWallet = forwardRef<
         const newWallet: ExplorerAccount = Object.assign({}, wallet);
         newWallet.name = newName;
         allAddressesReducer({ type: 'update', payload: newWallet });
-        dismissThis();
         dismissRename();
       };
+      dismissThis();
       saveAddress();
     },
     [allAddressesReducer, dismissRename, dismissThis, wallet]

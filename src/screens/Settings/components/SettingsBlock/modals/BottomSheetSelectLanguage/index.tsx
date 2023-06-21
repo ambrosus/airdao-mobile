@@ -7,6 +7,7 @@ import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/co
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -80,7 +81,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
           title={
             <Text
               fontFamily="Inter_700Bold"
-              fontSize={16}
+              fontSize={scale(16)}
               color={COLORS.smokyBlack}
             >
               Select language
