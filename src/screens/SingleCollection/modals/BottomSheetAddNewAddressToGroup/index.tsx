@@ -43,7 +43,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       toggleAddressInList(item, collection);
       setTimeout(() => {
         localRef.current?.dismiss();
-      }, 250);
+      }, 400);
     },
     [collection, localRef, toggleAddressInList]
   );
