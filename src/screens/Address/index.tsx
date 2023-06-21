@@ -37,13 +37,19 @@ export const AddressDetails = (): JSX.Element => {
     loading: accountLoading,
     error: accountError
   } = useSearchAccount(address, initialMount.current);
-  initialMount.current = false;
   const {
     data: transactions,
     loading: transactionsLoading,
     fetchNextPage,
     hasNextPage
-  } = useTransactionsOfAccount(address, 1, TRANSACTION_LIMIT, '', true);
+  } = useTransactionsOfAccount(
+    address,
+    1,
+    TRANSACTION_LIMIT,
+    '',
+    !initialMount.current // not fetching transaction on initial mount to prevent FPS drop caused by dayjs.fromNow inside <TransactionItem /> component.
+  );
+  initialMount.current = false;
   const { data: explorerInfo, loading: explorerLoading } = useExplorerInfo();
   const { data: ambPrice } = useAMBPrice();
   const { watchlist } = useWatchlist();
