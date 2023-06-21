@@ -18,6 +18,7 @@ import { BottomSheetRemoveAddressFromCollection } from '@components/templates/Bo
 import { COLORS } from '@constants/colors';
 import { SwipeAction } from './SwipeAction';
 import { useSwipeableDismissListener } from '@hooks';
+import { EVENTS } from '@constants/events';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -72,7 +73,7 @@ export const SwipeableWalletItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
-        DeviceEventEmitter.emit('wallet-item-opened', item._id);
+        DeviceEventEmitter.emit(EVENTS.WalletItemOpened, item._id);
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&
