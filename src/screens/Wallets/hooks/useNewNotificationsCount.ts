@@ -23,7 +23,7 @@ export function useNewNotificationsCount(): number {
   useEffect(() => {
     if (focused) checkNewNotificationCount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focused]);
+  }, [focused, notifications]);
 
   useEffect(() => {
     const notificationListener = DeviceEventEmitter.addListener(
