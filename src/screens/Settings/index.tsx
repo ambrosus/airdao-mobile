@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
@@ -8,11 +7,11 @@ import { scale } from '@utils/scaling';
 
 export const SettingsScreen = () => {
   return (
-    <SafeAreaView style={styles.container} testID="settings-screen">
+    <View style={styles.container} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -23,7 +22,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   container: {
-    flex: 1,
     paddingLeft: scale(19),
     paddingRight: scale(23)
   }

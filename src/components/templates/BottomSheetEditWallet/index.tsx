@@ -62,11 +62,13 @@ export const BottomSheetEditWallet = forwardRef<
   );
 
   const showAddToCollection = useCallback(() => {
-    addToCollectionModalRef.current?.show();
-  }, [addToCollectionModalRef]);
+    setTimeout(() => {
+      addToCollectionModalRef.current?.show();
+    }, 400);
+  }, []);
 
   const dismissAddToCollection = useCallback(() => {
-    addToCollectionModalRef.current?.dismiss();
+    setTimeout(() => addToCollectionModalRef.current?.dismiss(), 400);
   }, [addToCollectionModalRef]);
 
   const removeFromCollection = useCallback(() => {

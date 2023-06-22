@@ -9,13 +9,11 @@ import { WalletsNavigationProp } from '@appTypes/navigation';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
 
 export const HomeHeader = React.memo((): JSX.Element => {
-  const { top: safeAreaInsetsTop } = useSafeAreaInsets();
   const navigation = useNavigation<WalletsNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
@@ -113,8 +111,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
   }, [WINDOW_HEIGHT, onQRCodeScanned]);
 
   const headerStyles = useMemo(() => {
-    return { ...styles.container, marginTop: safeAreaInsetsTop };
-  }, [safeAreaInsetsTop]);
+    return { ...styles.container };
+  }, []);
 
   return (
     <Header
