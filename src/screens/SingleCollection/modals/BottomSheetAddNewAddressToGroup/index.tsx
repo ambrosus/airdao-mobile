@@ -3,11 +3,11 @@ import React, {
   forwardRef,
   RefObject,
   useCallback,
-  useMemo,
   useRef,
   useState
 } from 'react';
 import {
+  Alert,
   Dimensions,
   FlatList,
   ListRenderItemInfo,
@@ -22,17 +22,18 @@ import {
   Segment,
   SegmentedPicker
 } from '@components/composite';
-import { Button, Spacer, Spinner, Text } from '@components/base';
+import { Button, InputRef, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { SearchIcon } from '@components/svg/icons';
+import { ScannerQRIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts/ListsContext';
-import { useExplorerAccounts, useWatchlist } from '@hooks';
+import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { WalletItem } from '@components/templates';
+import { BarcodeScanner, WalletItem } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
+import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 
 type Props = {
@@ -64,17 +65,25 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     hasNextPage: hasMoreTopHolders,
     fetchNextPage: fetchMoreTopHolders
   } = useExplorerAccounts(SearchSort.Balance);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const {
+    data: searchedAccount,
+    loading: searchLoading,
+    error: searchError
+  } = useSearchAccount(searchValue, !!searchValue);
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const toggleAddressInList = useLists((v) => v.toggleAddressInList);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [scrollViewIdx, setScrollViewIdx] = useState<
     'watchlist' | 'topHolders'
   >('watchlist');
-  const { width: WINDOW_WIDTH } = useWindowDimensions();
+  const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = useWindowDimensions();
   const tabWidth = WINDOW_WIDTH - scale(48);
 
   const scrollRef = useRef<ScrollView>(null);
+  const inputRef = useRef<InputRef>(null);
+  const scannerModalRef = useRef<BottomSheetRef>(null);
+  const scanned = useRef(false);
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
@@ -86,13 +95,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     },
     [collection, localRef, toggleAddressInList]
   );
-
-  const filteredAddresses = useMemo(() => {
-    return watchlist.filter(
-      (item) =>
-        item.name.includes(searchValue) || item.address.includes(searchValue)
-    );
-  }, [watchlist, searchValue]);
 
   const renderItem = (
     args: ListRenderItemInfo<ExplorerAccount>
@@ -122,6 +124,35 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     setScrollViewIdx(segment.id as any);
   };
 
+  const showScanner = () => {
+    scannerModalRef.current?.show();
+  };
+
+  const hideScanner = () => {
+    scannerModalRef.current?.dismiss();
+  };
+
+  const onQRCodeScanned = (data: string) => {
+    const res = data.match(etherumAddressRegex);
+    if (res && res?.length > 0) {
+      hideScanner();
+      inputRef.current?.setText(res[0]);
+      setTimeout(() => {
+        setSearchValue(res[0]);
+      }, 500);
+    } else if (!scanned.current) {
+      scanned.current = true;
+      Alert.alert('Invalid QR Code', '', [
+        {
+          text: 'Scan Again',
+          onPress: () => {
+            scanned.current = false;
+          }
+        }
+      ]);
+    }
+  };
+
   return (
     <BottomSheet
       ref={localRef}
@@ -147,7 +178,13 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
         <InputWithIcon
+          ref={inputRef}
           iconLeft={<SearchIcon color="#2f2b4399" />}
+          iconRight={
+            <Button onPress={showScanner}>
+              <ScannerQRIcon />
+            </Button>
+          }
           type="text"
           style={{ width: '65%', height: 50 }}
           placeholder="Search public address"
@@ -157,70 +194,100 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         />
       </View>
       <Spacer value={scale(24)} />
-      <SegmentedPicker
-        segments={AddressSources}
-        selectedSegment={scrollViewIdx}
-        onSelectSegment={onSelectSegment}
-        styles={{
-          container: {
-            paddingVertical: verticalScale(2),
-            borderRadius: moderateScale(8)
-          },
-          segment: {
-            selected: {
-              borderRadius: moderateScale(8),
-              paddingVertical: verticalScale(6)
-            },
-            unselected: {
-              paddingVertical: verticalScale(6)
-            }
-          },
-          segmentText: {
-            selected: {
-              color: COLORS.neutral800
-            },
-            unselected: {
-              color: COLORS.neutral800
-            }
-          }
-        }}
-      />
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        pagingEnabled
-        scrollEnabled={false}
+      <BottomSheet
+        height={WINDOW_HEIGHT}
+        ref={scannerModalRef}
+        borderRadius={0}
       >
-        <View style={{ width: tabWidth }}>
-          <FlatList
-            contentContainerStyle={{
-              paddingBottom: 150,
-              paddingTop: verticalScale(24)
-            }}
-            data={filteredAddresses}
-            renderItem={renderItem}
-          />
+        <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
+      </BottomSheet>
+      {!!searchValue ? (
+        <View>
+          {searchLoading && <Spinner />}
+          {Boolean(searchError) && <View>Could not find address</View>}
+          {searchedAccount && (
+            <View>
+              <Button
+                onPress={() => {
+                  handleItemPress(searchedAccount);
+                }}
+                style={styles.item}
+              >
+                <WalletItem item={searchedAccount} indicatorVisible={true} />
+              </Button>
+            </View>
+          )}
         </View>
-        <View style={{ width: tabWidth }}>
-          <FlatList
-            contentContainerStyle={{
-              paddingBottom: 150,
-              paddingTop: verticalScale(24)
+      ) : (
+        <>
+          <SegmentedPicker
+            segments={AddressSources}
+            selectedSegment={scrollViewIdx}
+            onSelectSegment={onSelectSegment}
+            styles={{
+              container: {
+                paddingVertical: verticalScale(2),
+                borderRadius: moderateScale(8)
+              },
+              segment: {
+                selected: {
+                  borderRadius: moderateScale(8),
+                  paddingVertical: verticalScale(6)
+                },
+                unselected: {
+                  paddingVertical: verticalScale(6)
+                }
+              },
+              segmentText: {
+                selected: {
+                  color: COLORS.neutral800
+                },
+                unselected: {
+                  color: COLORS.neutral800
+                }
+              }
             }}
-            data={topHolders}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => <Spacer value={verticalScale(26)} />}
-            onEndReachedThreshold={0.75}
-            onEndReached={loadMoreTopHolders}
-            ListFooterComponent={() =>
-              topHoldersLoading ? <Spinner /> : <></>
-            }
           />
-        </View>
-      </ScrollView>
+          <ScrollView
+            ref={scrollRef}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            pagingEnabled
+            scrollEnabled={false}
+          >
+            <View style={{ width: tabWidth }}>
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: 150,
+                  paddingTop: verticalScale(24)
+                }}
+                data={watchlist}
+                renderItem={renderItem}
+              />
+            </View>
+            <View style={{ width: tabWidth }}>
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: 150,
+                  paddingTop: verticalScale(24)
+                }}
+                data={topHolders}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => (
+                  <Spacer value={verticalScale(26)} />
+                )}
+                onEndReachedThreshold={0.75}
+                onEndReached={loadMoreTopHolders}
+                ListFooterComponent={() =>
+                  topHoldersLoading ? <Spinner /> : <></>
+                }
+              />
+            </View>
+          </ScrollView>
+        </>
+      )}
     </BottomSheet>
   );
 });
