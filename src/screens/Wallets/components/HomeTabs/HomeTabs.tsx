@@ -45,7 +45,7 @@ export const HomeTabs = () => {
 
   const handleCreateCollectionPress = useCallback(() => {
     createCollectionOrAddAddressRef.current?.dismiss();
-    setTimeout(() => createRenameGroupRef.current?.show(), 400);
+    setTimeout(() => createRenameGroupRef.current?.show(), 500);
   }, []);
 
   const seeAll = useCallback(() => {

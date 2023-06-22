@@ -59,7 +59,6 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       // Proceed with form submission
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
-        localRef.current?.dismiss();
         Toast.show({
           title: '',
           message: `Way to go! ${localGroupName} list created.`,
@@ -69,7 +68,6 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
 
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
-        localRef.current?.dismiss();
         Toast.show({
           title: '',
           message: `${groupTitle} has been renamed to ${localGroupName}.`,
@@ -78,6 +76,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       }
 
       setLocalGroupName('');
+      setTimeout(() => localRef.current?.dismiss(), 400);
     }, [
       groupId,
       groupTitle,
@@ -169,7 +168,11 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 testID="BottomSheetCreateRename_Cancel_Button"
                 type="base"
                 style={styles.bottomSheetCancelButton}
-                onPress={() => localRef.current?.dismiss()}
+                onPress={() => {
+                  setTimeout(() => {
+                    localRef.current?.dismiss();
+                  }, 400);
+                }}
               >
                 <Text
                   fontFamily="Inter_600SemiBold"

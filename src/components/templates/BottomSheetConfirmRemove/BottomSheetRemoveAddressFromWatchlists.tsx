@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useCallback } from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
@@ -21,6 +21,13 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { removeFromWatchlist } = useWatchlist();
 
+  const handleRemoveAddressFromWatchlist = useCallback(() => {
+    removeFromWatchlist(item);
+    setTimeout(() => {
+      localRef.current?.dismiss();
+    }, 400);
+  }, [item, localRef, removeFromWatchlist]);
+
   return (
     <BottomSheetFloat
       ref={localRef}
@@ -39,12 +46,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
         <Spacer value={24} />
         <Button
           testID="BottomSheetConfirmRemove_Button"
-          onPress={() => {
-            removeFromWatchlist(item);
-            setTimeout(() => {
-              localRef.current?.dismiss();
-            }, 100);
-          }}
+          onPress={handleRemoveAddressFromWatchlist}
           style={styles.removeButton}
         >
           <Text

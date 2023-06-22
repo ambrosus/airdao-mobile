@@ -37,7 +37,7 @@ export const WelcomeScreen = () => {
         <View style={styles.optionsContainer}>
           <Text
             fontFamily="Inter_700Bold"
-            fontSize={scale(24)}
+            fontSize={24}
             color={COLORS.smokyBlack}
           >
             Experience the ease of tracking addresses on the go!

@@ -107,6 +107,8 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         style={styles.container}
         animationInTiming={400}
         animationOutTiming={400}
+        backdropTransitionInTiming={400}
+        backdropTransitionOutTiming={400}
       >
         {content}
       </Modal>

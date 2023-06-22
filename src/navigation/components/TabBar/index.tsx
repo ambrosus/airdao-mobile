@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
 import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
@@ -18,6 +18,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming
 } from 'react-native-reanimated';
+import { useFocusEffect } from '@react-navigation/native';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
@@ -43,6 +44,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const bottomSafeArea = useSafeAreaInsets().bottom - 15;
   const currentRoute = useCurrentRoute();
   const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
+  const [isReady, setIsReady] = useState(false);
 
   const animatedStyle = useAnimatedStyle(() => {
     const opacity = tabBarVisible ? 1 : 0;
@@ -51,7 +53,16 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     };
   });
 
-  if (!tabBarVisible) return <></>;
+  useLayoutEffect(() => {
+    setIsReady(true);
+  }, []);
+
+  useFocusEffect(() => {
+    // Reset the tab bar animation when it gains focus
+    animatedStyle.opacity = withTiming(1, { duration: 200 });
+  });
+
+  if (!isReady || !tabBarVisible) return <></>;
 
   return (
     <Animated.View
