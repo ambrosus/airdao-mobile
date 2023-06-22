@@ -4,9 +4,17 @@ import React, {
   RefObject,
   useCallback,
   useMemo,
+  useRef,
   useState
 } from 'react';
-import { Dimensions, FlatList, ListRenderItemInfo, View } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ListRenderItemInfo,
+  ScrollView,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -14,16 +22,17 @@ import {
   Segment,
   SegmentedPicker
 } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts/ListsContext';
-import { useWatchlist } from '@hooks';
+import { useExplorerAccounts, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { WalletItem } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { StringUtils } from '@utils/string';
+import { SearchSort } from '@screens/Search/Search.types';
 import { styles } from './styles';
 
 type Props = {
@@ -33,14 +42,14 @@ type Props = {
 
 const AddressSources: Segment[] = [
   {
-    title: 'Top Holders',
+    title: 'Watchlist',
     value: 0,
-    id: '1'
+    id: 'watchlist'
   },
   {
-    title: 'Watchlist',
+    title: 'Top Holders',
     value: 1,
-    id: '2'
+    id: 'topHolders'
   }
 ];
 
@@ -48,16 +57,30 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
   Props
 >(({ collection }, ref) => {
+  const {
+    data: topHolders,
+    loading: topHoldersLoading,
+    // error: topHoldersError,
+    hasNextPage: hasMoreTopHolders,
+    fetchNextPage: fetchMoreTopHolders
+  } = useExplorerAccounts(SearchSort.Balance);
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const toggleAddressInList = useLists((v) => v.toggleAddressInList);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [scrollViewIdx, setScrollViewIdx] = useState(0);
+  const [scrollViewIdx, setScrollViewIdx] = useState<
+    'watchlist' | 'topHolders'
+  >('watchlist');
+  const { width: WINDOW_WIDTH } = useWindowDimensions();
+  const tabWidth = WINDOW_WIDTH - scale(48);
+
+  const scrollRef = useRef<ScrollView>(null);
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
       toggleAddressInList(item, collection);
       setTimeout(() => {
+        setScrollViewIdx('watchlist');
         localRef.current?.dismiss();
       }, 400);
     },
@@ -85,6 +108,18 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         <WalletItem item={item} indicatorVisible={true} />
       </Button>
     );
+  };
+
+  const loadMoreTopHolders = () => {
+    if (hasMoreTopHolders) {
+      fetchMoreTopHolders();
+    }
+  };
+
+  const onSelectSegment = (segment: Segment) => {
+    const idx = AddressSources.findIndex((s) => s.id === segment.id);
+    scrollRef.current?.scrollTo({ x: tabWidth * idx, animated: true });
+    setScrollViewIdx(segment.id as any);
   };
 
   return (
@@ -124,13 +159,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       <Spacer value={scale(24)} />
       <SegmentedPicker
         segments={AddressSources}
-        selectedSegment={
-          AddressSources.find((s) => s.value === scrollViewIdx)?.id ||
-          AddressSources[0].id
-        }
-        onSelectSegment={(selectedSegment) =>
-          setScrollViewIdx(selectedSegment.value as number)
-        }
+        selectedSegment={scrollViewIdx}
+        onSelectSegment={onSelectSegment}
         styles={{
           container: {
             paddingVertical: verticalScale(2),
@@ -138,7 +168,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           },
           segment: {
             selected: {
-              borderRadius: moderateScale(8)
+              borderRadius: moderateScale(8),
+              paddingVertical: verticalScale(6)
+            },
+            unselected: {
+              paddingVertical: verticalScale(6)
             }
           },
           segmentText: {
@@ -151,14 +185,42 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }
         }}
       />
-      <FlatList
-        contentContainerStyle={{
-          paddingBottom: 150,
-          paddingTop: verticalScale(24)
-        }}
-        data={filteredAddresses}
-        renderItem={renderItem}
-      />
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        pagingEnabled
+        scrollEnabled={false}
+      >
+        <View style={{ width: tabWidth }}>
+          <FlatList
+            contentContainerStyle={{
+              paddingBottom: 150,
+              paddingTop: verticalScale(24)
+            }}
+            data={filteredAddresses}
+            renderItem={renderItem}
+          />
+        </View>
+        <View style={{ width: tabWidth }}>
+          <FlatList
+            contentContainerStyle={{
+              paddingBottom: 150,
+              paddingTop: verticalScale(24)
+            }}
+            data={topHolders}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <Spacer value={verticalScale(26)} />}
+            onEndReachedThreshold={0.75}
+            onEndReached={loadMoreTopHolders}
+            ListFooterComponent={() =>
+              topHoldersLoading ? <Spinner /> : <></>
+            }
+          />
+        </View>
+      </ScrollView>
     </BottomSheet>
   );
 });

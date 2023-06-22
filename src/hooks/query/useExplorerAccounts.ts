@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
@@ -10,7 +9,6 @@ import { PaginatedResponseBody } from '@appTypes/Pagination';
 export function useExplorerAccounts(
   sort: SearchSort
 ): PaginatedQueryResponse<ExplorerAccount[] | undefined> {
-  const nextKey = useRef('');
   const {
     data,
     error,
@@ -20,16 +18,16 @@ export function useExplorerAccounts(
     fetchNextPage
   } = useInfiniteQuery<PaginatedResponseBody<ExplorerAccountDTO[]>>(
     ['explorer-accounts', sort],
-    () => API.explorerService.getExplorerAccounts(20, nextKey.current, sort),
     {
+      queryFn: ({ pageParam = '' }) => {
+        return API.explorerService.getExplorerAccounts(20, pageParam, sort);
+      },
       getNextPageParam: (
         lastPage: PaginatedResponseBody<ExplorerAccountDTO[]>
       ) => {
         if (lastPage.next) {
-          nextKey.current = lastPage.next;
           return lastPage.next;
         }
-        nextKey.current = '';
         return null;
       }
     }
