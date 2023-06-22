@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
@@ -7,14 +7,25 @@ import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBloc
 import { scale } from '@utils/scaling';
 import { Spacer, Text } from '@components/base';
 import * as Updates from 'expo-updates';
+import messaging from '@react-native-firebase/messaging';
+import { CopyToClipboardButton } from '@components/composite';
 
 export const SettingsScreen = () => {
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    messaging().getToken().then(setToken);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
       <Spacer value={100} />
+      <View style={{ paddingHorizontal: 50 }}>
+        <CopyToClipboardButton textToDisplay={token} />
+      </View>
       <View
         style={{
           flex: 1,
@@ -23,7 +34,7 @@ export const SettingsScreen = () => {
         }}
       >
         <Text>Channel: {Updates.channel}</Text>
-        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.12</Text>
+        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.15</Text>
       </View>
     </SafeAreaView>
   );
