@@ -15,7 +15,7 @@ interface WalletItemProps {
   indicatorVisible?: boolean; // show info whether address is watchlisted or added to collection
 }
 
-export function WalletItem(props: WalletItemProps): JSX.Element {
+function WalletItemView(props: WalletItemProps): JSX.Element {
   const { item, indicatorVisible } = props;
   const { data: ambTokenData } = useAMBPrice();
 
@@ -61,3 +61,5 @@ export function WalletItem(props: WalletItemProps): JSX.Element {
     </View>
   );
 }
+
+export const WalletItem = React.memo(WalletItemView);

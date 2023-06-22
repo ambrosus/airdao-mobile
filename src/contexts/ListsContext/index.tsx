@@ -162,22 +162,27 @@ const ListsContext = () => {
     setListsOfAddressGroup(updatedGroups);
   };
 
-  const toggleAddressInList = (account: ExplorerAccount, list: AccountList) => {
-    const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
-    if (!listInContext) return;
-    if (listInContext.addresses.indexOfItem(account.address) > -1) {
-      listInContext.addresses.removeItem(account.address);
-    } else {
-      listInContext.addresses.push(account.address);
-    }
-    listsOfAddressGroup.forEach((l) => {
-      if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
-        l.addresses.removeItem(account.address);
+  const toggleAddressesInList = (
+    accounts: ExplorerAccount[],
+    list: AccountList
+  ) => {
+    accounts.forEach((account) => {
+      const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
+      if (!listInContext) return;
+      if (listInContext.addresses.indexOfItem(account.address) > -1) {
+        listInContext.addresses.removeItem(account.address);
+      } else {
+        listInContext.addresses.push(account.address);
+      }
+      listsOfAddressGroup.forEach((l) => {
+        if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
+          l.addresses.removeItem(account.address);
+        }
+      });
+      if (allAddresses.indexOfItem(account, 'address') === -1) {
+        allAddressesReducer({ type: 'add', payload: account });
       }
     });
-    if (allAddresses.indexOfItem(account, 'address') === -1) {
-      allAddressesReducer({ type: 'add', payload: account });
-    }
     // timeout ensures that the account has been added to all addresses
     setTimeout(() => {
       setListsOfAddressGroup([...listsOfAddressGroup]);
@@ -195,7 +200,7 @@ const ListsContext = () => {
     handleOnAddNewAddresses,
     handleOnAddressMove,
     handleOnDeleteAddressFromGroup,
-    toggleAddressInList
+    toggleAddressesInList
   };
 };
 

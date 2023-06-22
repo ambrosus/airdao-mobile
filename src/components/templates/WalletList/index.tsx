@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
@@ -7,6 +7,7 @@ import {
   SwipeableWalletItem
 } from '@components/templates/WalletList/components/SwipeableWalletItem';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
+import Animated, { SlideOutRight } from 'react-native-reanimated';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -35,14 +36,14 @@ export function WalletList(props: WalletListProps): JSX.Element {
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
     if (typeof renderItem === 'function') return renderItem(args);
     return (
-      <View key={args.item.address}>
+      <Animated.View key={args.item.address} exiting={SlideOutRight}>
         <SwipeableWalletItem
           item={args.item}
           idx={args.index}
           isPortfolioFlow={isPortfolioFlow}
           removeType={removeType}
         />
-      </View>
+      </Animated.View>
     );
   };
 
@@ -50,8 +51,8 @@ export function WalletList(props: WalletListProps): JSX.Element {
     <FlatList
       contentContainerStyle={{
         flexGrow: 1,
-        paddingTop: verticalScale(16),
-        paddingBottom: '25%'
+        paddingTop: verticalScale(16)
+        // paddingBottom: '25%'
       }}
       scrollEnabled={scrollEnabled}
       data={data}

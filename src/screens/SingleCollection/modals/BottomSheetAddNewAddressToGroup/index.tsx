@@ -18,11 +18,12 @@ import {
 import {
   BottomSheet,
   BottomSheetRef,
+  CheckBox,
   InputWithIcon,
   Segment,
   SegmentedPicker
 } from '@components/composite';
-import { Button, InputRef, Spacer, Spinner, Text } from '@components/base';
+import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ScannerQRIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -35,6 +36,8 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
+import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
+import { FloatButton } from '@components/base/FloatButton';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -73,7 +76,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   } = useSearchAccount(searchValue, !!searchValue);
   const { watchlist } = useWatchlist();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const toggleAddressInList = useLists((v) => v.toggleAddressInList);
+  const toggleAddressesInList = useLists((v) => v.toggleAddressesInList);
   const [scrollViewIdx, setScrollViewIdx] = useState<
     'watchlist' | 'topHolders'
   >('watchlist');
@@ -84,30 +87,75 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const inputRef = useRef<InputRef>(null);
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
+  const [selectedAddresses, setSelectedAddresses] = useState<ExplorerAccount[]>(
+    []
+  );
+
+  const selectionStarted = selectedAddresses.length > 0;
+  const selectingAddedItems = selectionStarted
+    ? collection.accounts.some(
+        (account) => account._id === selectedAddresses[0]._id
+      )
+    : false;
+
+  const resetState = () => {
+    setSelectedAddresses([]);
+    setScrollViewIdx('watchlist');
+    scrollRef.current?.scrollTo({ x: 0, animated: false });
+  };
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
-      toggleAddressInList(item, collection);
-      setTimeout(() => {
-        setScrollViewIdx('watchlist');
-        localRef.current?.dismiss();
-      }, 400);
+      const idx = selectedAddresses.indexOfItem(item, '_id');
+      if (idx > -1) selectedAddresses.splice(idx);
+      else selectedAddresses.push(item);
+      setSelectedAddresses([...selectedAddresses]);
+      // setScrollViewIdx('watchlist');
+      // localRef.current?.dismiss();
+      // setTimeout(() => {
+      //   toggleAddressInList(item, collection);
+      // }, 1000);
     },
-    [collection, localRef, toggleAddressInList]
+    [selectedAddresses]
   );
 
   const renderItem = (
     args: ListRenderItemInfo<ExplorerAccount>
   ): JSX.Element => {
     const { item } = args;
+    const selected = selectedAddresses.indexOfItem(item, '_id') > -1;
+    const itemExistsInCollection =
+      collection.accounts.indexOfItem(item, '_id') > -1;
+    const disabled =
+      selectionStarted &&
+      (selectingAddedItems ? !itemExistsInCollection : itemExistsInCollection);
     return (
       <Button
         onPress={() => {
           handleItemPress(item);
         }}
-        style={styles.item}
+        onLongPress={() => {
+          handleItemPress(item);
+        }}
+        disabled={disabled}
+        style={{ ...styles.item, opacity: disabled ? 0.5 : 1 }}
       >
-        <WalletItem item={item} indicatorVisible={true} />
+        <Row alignItems="center">
+          {selectionStarted && (
+            <Row>
+              <CheckBox
+                fillColor={COLORS.blue500}
+                color={COLORS.white}
+                type="square"
+                value={selected}
+              />
+              <Spacer horizontal value={scale(16)} />
+            </Row>
+          )}
+          <View style={{ flex: 1 }}>
+            <WalletItem item={item} indicatorVisible={true} />
+          </View>
+        </Row>
       </Button>
     );
   };
@@ -153,6 +201,14 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     }
   };
 
+  const submitSelectedAddresses = () => {
+    resetState();
+    localRef.current?.dismiss();
+    setTimeout(() => {
+      toggleAddressesInList(selectedAddresses, collection);
+    }, 1000);
+  };
+
   return (
     <BottomSheet
       ref={localRef}
@@ -162,6 +218,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       containerStyle={{
         paddingHorizontal: scale(24)
       }}
+      onClose={resetState}
     >
       <View style={{ alignItems: 'center' }}>
         <Spacer value={verticalScale(24)} />
@@ -202,9 +259,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
       {!!searchValue ? (
-        <View>
+        <View style={{ flex: 1 }}>
           {searchLoading && <Spinner />}
-          {Boolean(searchError) && <View>Could not find address</View>}
+          {Boolean(searchError) && <SearchAddressNoResult />}
           {searchedAccount && (
             <View>
               <Button
@@ -221,6 +278,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       ) : (
         <>
           <SegmentedPicker
+            disabled={selectionStarted}
             segments={AddressSources}
             selectedSegment={scrollViewIdx}
             onSelectSegment={onSelectSegment}
@@ -248,6 +306,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
               }
             }}
           />
+          <Spacer value={verticalScale(24)} />
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={{ flexGrow: 1 }}
@@ -259,8 +318,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             <View style={{ width: tabWidth }}>
               <FlatList
                 contentContainerStyle={{
-                  paddingBottom: 150,
-                  paddingTop: verticalScale(24)
+                  paddingBottom: 150
                 }}
                 data={watchlist}
                 renderItem={renderItem}
@@ -269,15 +327,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             <View style={{ width: tabWidth }}>
               <FlatList
                 contentContainerStyle={{
-                  paddingBottom: 150,
-                  paddingTop: verticalScale(24)
+                  paddingBottom: 150
                 }}
                 data={topHolders}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => (
-                  <Spacer value={verticalScale(26)} />
-                )}
                 onEndReachedThreshold={0.75}
                 onEndReached={loadMoreTopHolders}
                 ListFooterComponent={() =>
@@ -287,6 +341,16 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             </View>
           </ScrollView>
         </>
+      )}
+      {selectionStarted && (
+        <FloatButton
+          title={
+            selectingAddedItems
+              ? `Remove ${selectedAddresses.length} Addresses`
+              : `Add ${selectedAddresses.length} Addresses`
+          }
+          onPress={submitSelectedAddresses}
+        />
       )}
     </BottomSheet>
   );

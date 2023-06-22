@@ -24,11 +24,13 @@ export interface SegmentedPickerProps {
       unselected?: TextStyle;
     };
   };
+  disabled?: boolean;
   onSelectSegment?: (selectedSegment: Segment) => unknown;
 }
 
 export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
   const {
+    disabled = false,
     segments,
     selectedSegment,
     styles = {
@@ -53,6 +55,7 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
 
     return (
       <Button
+        disabled={disabled}
         testID={`SegmentButton_${segment.id}`}
         key={segment.id}
         onPress={onPress}
