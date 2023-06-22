@@ -22,7 +22,7 @@ export const BottomSheetEditWallet = forwardRef<
   const { wallet, ...bottomSheetProps } = props;
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { listsOfAddressGroup, toggleAddressInList } = useLists((v) => v);
+  const { listsOfAddressGroup, toggleAddressesInList } = useLists((v) => v);
   const renameWalletModalRef = useRef<BottomSheetRef>(null);
   const addToCollectionModalRef = useRef<BottomSheetRef>(null);
 
@@ -68,7 +68,7 @@ export const BottomSheetEditWallet = forwardRef<
   const removeFromCollection = useCallback(() => {
     if (listsWithCurrentWallet.length > 0) {
       const list = listsWithCurrentWallet[0];
-      toggleAddressInList(wallet, list);
+      toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
         title: '',
@@ -76,7 +76,7 @@ export const BottomSheetEditWallet = forwardRef<
         type: ToastType.Top
       });
     }
-  }, [dismissThis, listsWithCurrentWallet, toggleAddressInList, wallet]);
+  }, [dismissThis, listsWithCurrentWallet, toggleAddressesInList, wallet]);
 
   return (
     <BottomSheetFloat

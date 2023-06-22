@@ -51,7 +51,6 @@ export const styles = StyleSheet.create({
   item: {
     paddingVertical: 18,
     borderColor: COLORS.separator,
-    borderBottomWidth: 0.2,
-    borderTopWidth: 0.2
+    borderBottomWidth: 0.2
   }
 });
