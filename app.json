@@ -39,6 +39,12 @@
       ],
       "googleServicesFile": "./firebase/google-services.json"
     },
+    "notification": {
+      "icon": "./assets/adaptive-icon.png",
+      "color": "#457eff",
+      "androidMode": "default",
+      "androidCollapsedTitle": "Updates from AirDao"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },
