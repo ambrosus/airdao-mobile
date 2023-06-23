@@ -53,7 +53,6 @@ export const SingleGroupScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {Platform.OS === 'android' && <Spacer value={30} />}
       <Header
         title={
           <Text
