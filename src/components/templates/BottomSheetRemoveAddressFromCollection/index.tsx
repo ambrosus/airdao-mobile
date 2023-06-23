@@ -20,7 +20,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
   Props
 >(({ wallet }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { toggleAddressInList, listsOfAddressGroup } = useLists((v) => v);
+  const { toggleAddressesInList, listsOfAddressGroup } = useLists((v) => v);
   const collection = listsOfAddressGroup.find(
     (list) =>
       list.accounts.findIndex((account) => account._id === wallet._id) > -1
@@ -47,7 +47,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           testID="BottomSheetConfirmRemove_Button"
           onPress={() => {
             if (collection) {
-              toggleAddressInList(wallet, collection);
+              toggleAddressesInList([wallet], collection);
             }
             localRef.current?.dismiss();
           }}

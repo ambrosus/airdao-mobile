@@ -4,29 +4,59 @@ import { View } from 'react-native';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { useLists } from '@contexts';
+import { useWatchlist } from '@hooks';
+import { AddressIndicator } from '@components/templates';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
   totalSupply: number;
+  indicatorVisible?: boolean; // show info whether address is watchlisted or added to collection
 }
 
 export const ExplorerWalletItem = (
   props: ExplorerWalletItemProps
 ): JSX.Element => {
-  const { item, totalSupply } = props;
+  const { item, totalSupply, indicatorVisible } = props;
   const { address, transactionCount, ambBalance } = item;
+  const { listsOfAddressGroup } = useLists((v) => v);
+  const { watchlist } = useWatchlist();
+  const listWithAddress = listsOfAddressGroup.filter(
+    (list) => list.accounts.indexOfItem(item, 'address') > -1
+  );
+  const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
+
+  const leftPadding = indicatorVisible
+    ? listWithAddress.length > 0 || isWatchlisted
+      ? 4
+      : 7
+    : 7;
+  const rightPadding = indicatorVisible
+    ? listWithAddress.length > 0 || isWatchlisted
+      ? 4
+      : 9
+    : 9;
+
   return (
     <View>
       <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack}
-        >
-          {StringUtils.formatAddress(address, 7, 9)}
-        </Text>
+        <Row alignItems="center">
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            color={COLORS.smokyBlack}
+          >
+            {StringUtils.formatAddress(address, leftPadding, rightPadding)}
+          </Text>
+          {indicatorVisible && (
+            <>
+              <Spacer value={scale(10)} horizontal />
+              <AddressIndicator address={item.address} />
+            </>
+          )}
+        </Row>
         <Text
           fontSize={13}
           fontFamily="Mersad_600SemiBold"
