@@ -27,7 +27,9 @@ export const BottomSheetEditCollection = forwardRef<
   const renameCollectionModalRef = useRef<BottomSheetRef>(null);
 
   const dismissThis = useCallback(() => {
-    localRef.current?.dismiss();
+    setTimeout(() => {
+      localRef.current?.dismiss();
+    }, 800);
   }, [localRef]);
 
   const showRename = useCallback(() => {
@@ -35,7 +37,9 @@ export const BottomSheetEditCollection = forwardRef<
   }, [renameCollectionModalRef]);
 
   const dismissRename = useCallback(() => {
-    renameCollectionModalRef.current?.dismiss();
+    setTimeout(() => {
+      renameCollectionModalRef.current?.dismiss();
+    }, 400);
   }, [renameCollectionModalRef]);
 
   const deleteCollection = () => {
