@@ -5,7 +5,7 @@ import {
   SectionListRenderItemInfo,
   View
 } from 'react-native';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
@@ -40,7 +40,7 @@ export const Notifications = (): JSX.Element => {
   const sectionizedNotificaitons: NotificationSection[] = React.useMemo(() => {
     const sectionMap = new Map<string, Notification[]>();
     notifications.forEach((n) => {
-      const key = dayjs(n.createdAt).format(DAY_FORMAT);
+      const key = moment(n.createdAt).format(DAY_FORMAT);
       const notificationsInSection = sectionMap.get(key) || [];
       notificationsInSection.push(n);
       sectionMap.set(key, notificationsInSection);
@@ -48,8 +48,8 @@ export const Notifications = (): JSX.Element => {
     const sections: NotificationSection[] = [];
     let index = 0;
     for (const [date, notifications] of sectionMap) {
-      const today = dayjs().format(DAY_FORMAT);
-      const yesterday = dayjs().subtract(1, 'day').format(DAY_FORMAT);
+      const today = moment().format(DAY_FORMAT);
+      const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
       const title =
         date === today ? 'Today' : date === yesterday ? 'Yesterday' : date;
       sections.push({ title, data: notifications, index });

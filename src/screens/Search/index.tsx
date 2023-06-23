@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
@@ -58,6 +57,7 @@ export const SearchScreen = () => {
       <Button onPress={navigateToWallet}>
         <ExplorerWalletItem
           item={item}
+          indicatorVisible={true}
           totalSupply={infoData?.totalSupply || 1}
         />
       </Button>
@@ -73,7 +73,7 @@ export const SearchScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: verticalScale(12) }}>
+    <View style={{ flex: 1, paddingTop: verticalScale(12) }}>
       <View testID="explore-screen" style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
@@ -124,6 +124,6 @@ export const SearchScreen = () => {
           </Animated.View>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

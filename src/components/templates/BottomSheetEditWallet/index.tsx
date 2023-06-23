@@ -22,7 +22,7 @@ export const BottomSheetEditWallet = forwardRef<
   const { wallet, ...bottomSheetProps } = props;
   const allAddressesReducer = useAllAddressesReducer();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { listsOfAddressGroup, toggleAddressInList } = useLists((v) => v);
+  const { listsOfAddressGroup, toggleAddressesInList } = useLists((v) => v);
   const renameWalletModalRef = useRef<BottomSheetRef>(null);
   const addToCollectionModalRef = useRef<BottomSheetRef>(null);
 
@@ -31,7 +31,9 @@ export const BottomSheetEditWallet = forwardRef<
   );
 
   const dismissThis = useCallback(() => {
-    localRef.current?.dismiss();
+    setTimeout(() => {
+      localRef.current?.dismiss();
+    }, 800);
   }, [localRef]);
 
   const showRename = useCallback(() => {
@@ -39,7 +41,9 @@ export const BottomSheetEditWallet = forwardRef<
   }, [renameWalletModalRef]);
 
   const dismissRename = useCallback(() => {
-    renameWalletModalRef.current?.dismiss();
+    setTimeout(() => {
+      renameWalletModalRef.current?.dismiss();
+    }, 400);
   }, [renameWalletModalRef]);
 
   const handleOnRenameAddress = useCallback(
@@ -49,26 +53,28 @@ export const BottomSheetEditWallet = forwardRef<
         const newWallet: ExplorerAccount = Object.assign({}, wallet);
         newWallet.name = newName;
         allAddressesReducer({ type: 'update', payload: newWallet });
-        dismissThis();
         dismissRename();
       };
+      dismissThis();
       saveAddress();
     },
     [allAddressesReducer, dismissRename, dismissThis, wallet]
   );
 
   const showAddToCollection = useCallback(() => {
-    addToCollectionModalRef.current?.show();
-  }, [addToCollectionModalRef]);
+    setTimeout(() => {
+      addToCollectionModalRef.current?.show();
+    }, 400);
+  }, []);
 
   const dismissAddToCollection = useCallback(() => {
-    addToCollectionModalRef.current?.dismiss();
+    setTimeout(() => addToCollectionModalRef.current?.dismiss(), 400);
   }, [addToCollectionModalRef]);
 
   const removeFromCollection = useCallback(() => {
     if (listsWithCurrentWallet.length > 0) {
       const list = listsWithCurrentWallet[0];
-      toggleAddressInList(wallet, list);
+      toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
         title: '',
@@ -76,7 +82,7 @@ export const BottomSheetEditWallet = forwardRef<
         type: ToastType.Top
       });
     }
-  }, [dismissThis, listsWithCurrentWallet, toggleAddressInList, wallet]);
+  }, [dismissThis, listsWithCurrentWallet, toggleAddressesInList, wallet]);
 
   return (
     <BottomSheetFloat

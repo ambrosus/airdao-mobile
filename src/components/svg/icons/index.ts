@@ -41,3 +41,4 @@ export * from './StarFilled';
 export * from './Trade';
 export * from './Trend';
 export * from './Twitter';
+export * from './Watchlist';

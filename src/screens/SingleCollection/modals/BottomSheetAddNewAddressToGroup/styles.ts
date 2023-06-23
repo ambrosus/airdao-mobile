@@ -3,8 +3,7 @@ import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   bottomSheetInput: {
-    borderRadius: 25,
-    paddingHorizontal: 16
+    borderRadius: 25
   },
   checkboxPadding: {
     paddingRight: 16
@@ -48,5 +47,10 @@ export const styles = StyleSheet.create({
     borderRadius: 25,
     width: '90%',
     backgroundColor: '#c9d9ff'
+  },
+  item: {
+    paddingVertical: 18,
+    borderColor: COLORS.separator,
+    borderBottomWidth: 0.2
   }
 });

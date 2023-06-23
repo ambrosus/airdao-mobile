@@ -1,3 +1,4 @@
+export * from './AddressIndicator';
 export * from './AddWalletToList';
 export * from './AMBPriceHistory';
 export * from './WalletList';

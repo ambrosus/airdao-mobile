@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 import { scale } from '@utils/scaling';
@@ -12,13 +12,16 @@ import { AddAddressIcon } from '@components/svg/icons/AddAddress';
 import { TrackAMBIcon } from '@components/svg/icons/TrackAMB';
 import { ManageCollections } from '@components/svg/icons/ManageCollections';
 
+const screenHeight = Dimensions.get('screen').height;
+const spacerValue = screenHeight < 800 ? scale(20) : scale(35);
+
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
-        <Spacer value={41} />
+        <Spacer value={scale(16)} />
         <Row justifyContent="center" alignItems="center">
           <AirDAOLogo />
           <Spacer horizontal value={scale(8)} />
@@ -30,7 +33,7 @@ export const WelcomeScreen = () => {
             AirDAO
           </Text>
         </Row>
-        <Spacer value={21} />
+        <Spacer value={spacerValue} />
         <View style={styles.optionsContainer}>
           <Text
             fontFamily="Inter_700Bold"
@@ -67,7 +70,7 @@ export const WelcomeScreen = () => {
             <View style={styles.icon}>
               <TrackAMBIcon />
             </View>
-            <Spacer horizontal value={scale(24)} />
+            <Spacer horizontal value={24} />
             <View style={{ paddingRight: 60 }}>
               <Text
                 fontFamily="Inter_600SemiBold"
@@ -98,7 +101,14 @@ export const WelcomeScreen = () => {
                 color={COLORS.smokyBlack}
               >
                 Create and manage collections
-                <Text color="#a1a6b2"> of addresses for better tracking.</Text>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={15}
+                  color="#a1a6b2"
+                >
+                  {' \n'}
+                  of addresses for better tracking.
+                </Text>
               </Text>
             </View>
           </Row>
@@ -122,12 +132,12 @@ export const WelcomeScreen = () => {
           Get started
         </Text>
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 40, justifyContent: 'space-between' },
+  container: { flex: 1, justifyContent: 'space-between' },
   icon: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -138,8 +148,7 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     paddingRight: 60,
-    paddingLeft: scale(24),
-    paddingTop: 30
+    paddingLeft: scale(24)
   },
   getStartedButton: {
     width: '90%',

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
@@ -18,7 +17,7 @@ export const SettingsScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container} testID="settings-screen">
+    <View style={styles.container} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
@@ -34,9 +33,9 @@ export const SettingsScreen = () => {
         }}
       >
         <Text>Channel: {Updates.channel}</Text>
-        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.15</Text>
+        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.16</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -47,7 +46,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   container: {
-    flex: 1,
     paddingLeft: scale(19),
     paddingRight: scale(23)
   }

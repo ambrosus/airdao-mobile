@@ -40,10 +40,7 @@ export const HomeScreen = () => {
   }, [isFocused]);
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: '#f3f5f7' }}
-      testID="Wallets_Screen"
-    >
+    <View style={{ backgroundColor: '#f3f5f7' }} testID="Wallets_Screen">
       <HomeHeader />
       <ScrollView
         bounces={false}

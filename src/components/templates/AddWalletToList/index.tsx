@@ -19,7 +19,7 @@ export interface AddWalletToListProps {
 
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   const { wallet, lists, onWalletMove } = props;
-  const { toggleAddressInList } = useLists((v) => v);
+  const { toggleAddressesInList } = useLists((v) => v);
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
     () =>
@@ -28,7 +28,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   );
 
   const toggleWalletInList = (list: AccountList) => {
-    toggleAddressInList(wallet, list);
+    toggleAddressesInList([wallet], list);
     if (typeof onWalletMove === 'function') onWalletMove(list);
   };
 

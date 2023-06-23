@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { Spacer, Text } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { useCurrentRoute } from '@contexts';
+import { NavigationUtils } from '@utils/navigation';
 
 type Props = {
   title?: string;
@@ -28,8 +30,14 @@ export const FloatButton = memo(
     type = 'primary'
   }: Props) => {
     const bottomSafeArea = useSafeAreaInsets().bottom || 34;
-    const bottomTabBarHeight =
-      bottomPadding !== undefined ? bottomPadding : DEFAULT_BOTTOM_TAB_HEIGHT;
+    const currentRoute = useCurrentRoute();
+    const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
+    const bottomTabBarHeight = tabBarVisible
+      ? bottomPadding !== undefined
+        ? bottomPadding
+        : DEFAULT_BOTTOM_TAB_HEIGHT
+      : 0;
+
     return (
       <Pressable
         testID={testID}
