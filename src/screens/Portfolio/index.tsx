@@ -5,7 +5,7 @@ import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/c
 import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
 import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Watchlists';
 import { useIsFocused } from '@react-navigation/native';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
@@ -58,7 +58,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   }, [activeTab, focused]);
 
   return (
-    <View style={{ flex: 1 }} testID="lists-screen">
+    <SafeAreaView edges={['top']} style={{ flex: 1 }} testID="lists-screen">
       <TabView<PortfolioTabViewRoute>
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -71,6 +71,6 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
           />
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };

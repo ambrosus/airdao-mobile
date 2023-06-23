@@ -14,6 +14,7 @@ import { COLORS } from '@constants/colors';
 import { HomeTabs } from '@screens/Wallets/components/HomeTabs/HomeTabs';
 // import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
 import { HomeHeader } from '@screens/Wallets/components/Header';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const HomeScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
@@ -40,7 +41,11 @@ export const HomeScreen = () => {
   }, [isFocused]);
 
   return (
-    <View style={{ backgroundColor: '#f3f5f7' }} testID="Wallets_Screen">
+    <SafeAreaView
+      edges={['top']}
+      style={{ backgroundColor: COLORS.culturedWhite }}
+      testID="Wallets_Screen"
+    >
       <HomeHeader />
       <ScrollView
         bounces={false}
@@ -84,6 +89,6 @@ export const HomeScreen = () => {
           </Text>
         </Row>
       </OnboardingView>
-    </View>
+    </SafeAreaView>
   );
 };

@@ -106,7 +106,11 @@ export const AddressDetails = (): JSX.Element => {
   };
 
   return (
-    <View testID="address-screen" style={styles.container}>
+    <SafeAreaView
+      edges={['top']}
+      testID="address-screen"
+      style={styles.container}
+    >
       <Header
         contentRight={
           <Row alignItems="center">
@@ -155,6 +159,6 @@ export const AddressDetails = (): JSX.Element => {
         last24HourChange={ambPrice?.percentChange24H || 0}
         timestamp={ambPrice?.timestamp || new Date()}
       />
-    </View>
+    </SafeAreaView>
   );
 };
