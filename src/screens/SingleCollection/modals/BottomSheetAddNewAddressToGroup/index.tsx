@@ -106,17 +106,19 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
-      const idx = selectedAddresses.indexOfItem(item, '_id');
-      if (idx > -1) selectedAddresses.splice(idx);
-      else selectedAddresses.push(item);
-      setSelectedAddresses([...selectedAddresses]);
-      // setScrollViewIdx('watchlist');
-      // localRef.current?.dismiss();
-      // setTimeout(() => {
-      //   toggleAddressInList(item, collection);
-      // }, 1000);
+      // const idx = selectedAddresses.indexOfItem(item, '_id');
+      // if (idx > -1) selectedAddresses.splice(idx);
+      // else selectedAddresses.push(item);
+      // setSelectedAddresses([...selectedAddresses]);
+
+      // old
+      setScrollViewIdx('watchlist');
+      localRef.current?.dismiss();
+      setTimeout(() => {
+        toggleAddressesInList([item], collection);
+      }, 1000);
     },
-    [selectedAddresses]
+    [collection, localRef, toggleAddressesInList]
   );
 
   const renderItem = (
@@ -132,12 +134,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     return (
       <Button
         onPress={() => {
-          handleItemPress(item);
+          if (!disabled) handleItemPress(item);
         }}
-        onLongPress={() => {
-          handleItemPress(item);
-        }}
-        disabled={disabled}
+        // onLongPress={() => {
+        //   if (!disabled) handleItemPress(item);
+        // }}
         style={{ ...styles.item, opacity: disabled ? 0.5 : 1 }}
       >
         <Row alignItems="center">
@@ -202,10 +203,10 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   };
 
   const submitSelectedAddresses = () => {
-    resetState();
     localRef.current?.dismiss();
+    toggleAddressesInList(selectedAddresses, collection);
     setTimeout(() => {
-      toggleAddressesInList(selectedAddresses, collection);
+      resetState();
     }, 1000);
   };
 
