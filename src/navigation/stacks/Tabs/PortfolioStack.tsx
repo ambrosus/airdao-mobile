@@ -1,8 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PortfolioScreen } from '@screens/Portfolio';
-import { NavigationUtils } from '@utils/navigation';
 import { PortfolioParamsPortfolio } from '@appTypes';
+import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<PortfolioParamsPortfolio>();
 export const PortfolioStack = () => {
@@ -16,7 +16,7 @@ export const PortfolioStack = () => {
         component={PortfolioScreen}
         options={{ headerShown: false }}
       />
-      {NavigationUtils.getCommonStack(Stack as any)}
+      {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );
 };

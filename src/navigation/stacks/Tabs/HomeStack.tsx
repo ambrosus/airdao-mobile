@@ -4,7 +4,7 @@ import { HomeScreen } from '@screens/Wallets';
 import { AMBMarket } from '@screens/AMBMarket';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { Notifications } from '@screens/Notifications';
-import { NavigationUtils } from '@utils/navigation';
+import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -16,7 +16,7 @@ export const HomeStack = () => {
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
       <Stack.Screen name="Notifications" component={Notifications} />
-      {NavigationUtils.getCommonStack(Stack as any)}
+      {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );
 };
