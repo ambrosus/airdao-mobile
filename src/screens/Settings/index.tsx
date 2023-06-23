@@ -26,7 +26,7 @@ export const SettingsScreen = () => {
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
-      <Spacer value={100} />
+      {/* <Spacer value={100} />
       <View style={{ paddingHorizontal: 50 }}>
         <CopyToClipboardButton textToDisplay={token} />
       </View>
@@ -39,7 +39,7 @@ export const SettingsScreen = () => {
       >
         <Text>Channel: {Updates.channel}</Text>
         <Text fontSize={12}>AirDAO Testing Build: v1.0.0.16</Text>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
