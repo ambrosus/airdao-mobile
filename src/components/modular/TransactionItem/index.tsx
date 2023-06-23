@@ -2,7 +2,7 @@ import React from 'react';
 import { Transaction } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { COLORS } from '@constants/colors';
 
 interface TransactionItemProps {
@@ -37,7 +37,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
           fontFamily="Inter_500Medium"
           color={COLORS.smokyBlack50}
         >
-          {dayjs(transaction.timestamp).fromNow()}
+          {moment(transaction.timestamp).fromNow()}
         </Text>
         <Text
           fontSize={12}

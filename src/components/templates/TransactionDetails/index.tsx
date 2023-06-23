@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
@@ -110,7 +110,7 @@ export const TransactionDetails = (
           Time
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
-          {dayjs(transaction.timestamp).fromNow()}
+          {moment(transaction.timestamp).fromNow()}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />

@@ -47,7 +47,7 @@ export const AddressDetails = (): JSX.Element => {
     1,
     TRANSACTION_LIMIT,
     '',
-    !initialMount.current // not fetching transaction on initial mount to prevent FPS drop caused by dayjs.fromNow inside <TransactionItem /> component.
+    !initialMount.current // not fetching transaction on initial mount to prevent FPS drop caused by moment.fromNow inside <TransactionItem /> component.
   );
   initialMount.current = false;
   const { data: explorerInfo, loading: explorerLoading } = useExplorerInfo();
