@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchScreen } from '@screens/Search';
 import { SearchTabParamsList } from '@appTypes/navigation';
-import { NavigationUtils } from '@utils/navigation';
+import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<SearchTabParamsList>();
 export const SearchStack = () => {
@@ -12,7 +12,7 @@ export const SearchStack = () => {
       initialRouteName="SearchScreen"
     >
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
-      {NavigationUtils.getCommonStack(Stack as any)}
+      {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );
 };
