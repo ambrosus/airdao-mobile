@@ -109,7 +109,11 @@ export const Notifications = (): JSX.Element => {
   };
 
   return (
-    <SafeAreaView testID="NotificationScreen" style={styles.container}>
+    <SafeAreaView
+      edges={['top']}
+      testID="NotificationScreen"
+      style={styles.container}
+    >
       <Header onSettingsPress={showSettingsModal} />
       <SectionList<Notification, NotificationSection>
         keyExtractor={(item) => item._id}

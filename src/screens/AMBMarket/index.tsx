@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   AMBPriceInfo,
   BottomSheetTrade,
@@ -17,6 +16,7 @@ import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>
@@ -41,7 +41,11 @@ export function AMBMarket(): JSX.Element {
   };
 
   return (
-    <SafeAreaView testID="ambmarket-screen" style={styles.container}>
+    <SafeAreaView
+      edges={['top']}
+      testID="ambmarket-screen"
+      style={styles.container}
+    >
       <Header
         title="Statistics"
         style={{
