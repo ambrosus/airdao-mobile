@@ -66,7 +66,7 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
-            <AMBPriceInfo priceUSD={ambPrice.priceUSD} />
+            <AMBPriceInfo />
             <View style={styles.body}>
               <BodyTitle title="Info" />
               <Spacer value={verticalScale(16)} />
