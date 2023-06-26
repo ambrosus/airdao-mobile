@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { AirDAOLogo } from '@components/svg/icons/AirDAOLogo';
 import { scale } from '@utils/scaling';
@@ -11,6 +11,7 @@ import { Cache, CacheKey } from '@utils/cache';
 import { AddAddressIcon } from '@components/svg/icons/AddAddress';
 import { TrackAMBIcon } from '@components/svg/icons/TrackAMB';
 import { ManageCollections } from '@components/svg/icons/ManageCollections';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenHeight = Dimensions.get('screen').height;
 const spacerValue = screenHeight < 800 ? scale(20) : scale(35);
@@ -19,7 +20,7 @@ export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<TabsParamsList>>();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <View>
         <Spacer value={scale(16)} />
         <Row justifyContent="center" alignItems="center">
@@ -107,7 +108,7 @@ export const WelcomeScreen = () => {
                   color="#a1a6b2"
                 >
                   {' \n'}
-                  of addresses for better tracking.
+                  of addresses for better tracking
                 </Text>
               </Text>
             </View>
