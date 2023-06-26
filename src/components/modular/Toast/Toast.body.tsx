@@ -139,7 +139,11 @@ export const ToastBody = forwardRef((_, ref) => {
           </View>
           <Button
             onPress={hide}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'flex-end'
+            }}
           >
             <CloseIcon color="#FFFFFF" />
           </Button>
