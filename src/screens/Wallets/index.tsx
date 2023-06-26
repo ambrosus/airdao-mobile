@@ -1,5 +1,5 @@
 import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { PortfolioBalance } from './components';
 import { AddIcon } from '@components/svg/icons/AddIcon';
@@ -43,7 +43,10 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView
       edges={['top']}
-      style={{ backgroundColor: COLORS.white }}
+      style={{
+        backgroundColor:
+          Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite
+      }}
       testID="Wallets_Screen"
     >
       <HomeHeader />
