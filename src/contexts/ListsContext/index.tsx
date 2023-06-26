@@ -180,13 +180,14 @@ const ListsContext = () => {
         }
       });
       if (allAddresses.indexOfItem(account, 'address') === -1) {
-        allAddressesReducer({ type: 'add', payload: account });
+        allAddresses.push(account);
       }
     });
+    allAddressesReducer({ type: 'set', payload: allAddresses });
     // timeout ensures that the account has been added to all addresses
-    setTimeout(() => {
-      setListsOfAddressGroup([...listsOfAddressGroup]);
-    }, 0);
+    // setTimeout(() => {
+    setListsOfAddressGroup([...listsOfAddressGroup]);
+    // }, 0);
   };
 
   return {

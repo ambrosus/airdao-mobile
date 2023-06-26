@@ -7,6 +7,7 @@ export interface BaseButtonProps {
   style?: ViewProps['style'];
   disabled?: boolean;
   children?: ReactNode;
+  activeOpacity?: number;
   onPress?: () => unknown;
   testID?: string;
   onLongPress?: () => unknown;
