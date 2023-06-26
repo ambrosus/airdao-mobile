@@ -49,7 +49,7 @@ export function AMBMarket(): JSX.Element {
       <Header
         title="Statistics"
         style={{
-          backgroundColor: COLORS.culturedWhite,
+          backgroundColor: COLORS.white,
           shadowColor: COLORS.culturedWhite
         }}
         contentRight={
@@ -59,6 +59,7 @@ export function AMBMarket(): JSX.Element {
         }
       />
       <ScrollView
+        bounces={false}
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
@@ -70,6 +71,7 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
+            <Spacer value={verticalScale(16)} />
             <AMBPriceInfo />
             <View style={styles.body}>
               <BodyTitle title="Info" />
