@@ -12,6 +12,7 @@ import { OnboardingView } from '@components/templates/OnboardingView';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
+import { COLORS } from '@constants/colors';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<WalletsNavigationProp>();
@@ -126,7 +127,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f3f5f7'
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.culturedWhite
   },
   notificationCountContainer: {
     position: 'absolute',

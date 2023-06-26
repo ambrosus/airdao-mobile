@@ -43,7 +43,7 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView
       edges={['top']}
-      style={{ backgroundColor: COLORS.culturedWhite }}
+      style={{ backgroundColor: COLORS.white }}
       testID="Wallets_Screen"
     >
       <HomeHeader />
@@ -52,6 +52,7 @@ export const HomeScreen = () => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
+        <Spacer value={verticalScale(16)} />
         <View style={{ paddingHorizontal: scale(16) }}>
           <PortfolioBalance
             AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
