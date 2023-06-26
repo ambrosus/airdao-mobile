@@ -142,8 +142,7 @@ export const ToastBody = forwardRef((_, ref) => {
             style={{
               flex: 1,
               justifyContent: 'center',
-              alignItems: 'flex-end',
-              marginRight: scale(16)
+              alignItems: 'flex-end'
             }}
           >
             <CloseIcon color="#FFFFFF" />
