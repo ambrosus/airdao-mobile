@@ -12,12 +12,11 @@ import {
 } from '@components/templates/PortfolioPerformance';
 import {
   BottomSheetSwiperIcon,
-  ClipboardIcon,
   MessagesIcon,
   PlusIcon,
   TwitterIcon
 } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
@@ -96,7 +95,9 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 <Spacer value={verticalScale(8)} />
                 <Text>Twitter</Text>
               </View>
-              <View style={styles.shareButton}>
+              <View
+                style={[styles.shareButton, { marginHorizontal: scale(36) }]}
+              >
                 <Button
                   testID="SharePortfolio_Message_Button"
                   type="circular"
@@ -107,17 +108,6 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                 </Button>
                 <Spacer value={verticalScale(8)} />
                 <Text>Messages</Text>
-              </View>
-              <View style={styles.shareButton}>
-                <Button
-                  testID="SharePortfolio_Clipboard_Button"
-                  type="circular"
-                  style={styles.lightBtn}
-                >
-                  <ClipboardIcon color="#222222" />
-                </Button>
-                <Spacer value={verticalScale(8)} />
-                <Text>Copy link</Text>
               </View>
               <View style={styles.shareButton}>
                 <Button
