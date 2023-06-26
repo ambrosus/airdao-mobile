@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, View } from 'react-native';
 
 type Props = {
   value?: number;
@@ -10,7 +10,6 @@ type Props = {
   pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
   onLayout?: (event: LayoutChangeEvent) => void;
   testID?: string;
-  style?: ViewStyle;
 };
 
 export const Spacer = memo(
@@ -21,22 +20,18 @@ export const Spacer = memo(
     flexGrow,
     horizontal,
     pointerEvents,
-    style,
     onLayout: handleLayout
   }: Props) => {
     return (
       <View
         onLayout={handleLayout}
-        style={[
-          {
-            height: horizontal ? undefined : value,
-            width: horizontal ? value : undefined,
-            flexBasis,
-            flexShrink,
-            flexGrow
-          },
-          style
-        ]}
+        style={{
+          height: horizontal ? undefined : value,
+          width: horizontal ? value : undefined,
+          flexBasis,
+          flexShrink,
+          flexGrow
+        }}
         pointerEvents={pointerEvents}
       />
     );

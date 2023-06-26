@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import {
   AMBPriceInfo,
   BottomSheetTrade,
@@ -49,7 +49,8 @@ export function AMBMarket(): JSX.Element {
       <Header
         title="Statistics"
         style={{
-          backgroundColor: COLORS.white,
+          backgroundColor:
+            Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
           shadowColor: COLORS.culturedWhite
         }}
         contentRight={
