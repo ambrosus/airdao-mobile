@@ -115,7 +115,7 @@ export const SwipeableWalletItem = memo(
             <Animated.View
               style={[{ ...styles.item }, stylesForPortfolio, animatedStyle]}
             >
-              <WalletItem item={item} />
+              <WalletItem item={item} indicatorVisible={true} />
             </Animated.View>
           </Pressable>
           <BottomSheetEditWallet wallet={item} ref={editModalRef} />
