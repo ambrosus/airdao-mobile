@@ -98,9 +98,9 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
-        swipeDirection="down"
+        swipeDirection={['down']}
         onSwipeComplete={dismiss}
-        propagateSwipe
+        useNativeDriverForBackdrop
         onBackButtonPress={dismiss}
         onBackdropPress={dismiss}
         backdropOpacity={backdropOpacity}
