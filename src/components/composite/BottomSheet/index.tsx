@@ -101,7 +101,6 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         swipeDirection={['down']}
         onSwipeComplete={dismiss}
         useNativeDriverForBackdrop
-        propagateSwipe
         onBackButtonPress={dismiss}
         onBackdropPress={dismiss}
         backdropOpacity={backdropOpacity}
