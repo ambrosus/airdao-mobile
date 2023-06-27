@@ -53,7 +53,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontWeight="500"
                 color={COLORS.smokyBlack}
                 numberOfLines={1}
-                style={{ flex: 1 }}
+                style={{ width: '50%' }}
               >
                 {list.name}
               </Text>
