@@ -110,13 +110,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       if (idx > -1) selectedAddresses.splice(idx, 1);
       else selectedAddresses.push(item);
       setSelectedAddresses([...selectedAddresses]);
-
-      // old
-      // setScrollViewIdx('watchlist');
-      // localRef.current?.dismiss();
-      // setTimeout(() => {
-      //   toggleAddressesInList([item], collection);
-      // }, 1000);
     },
     [selectedAddresses]
   );
