@@ -5,12 +5,13 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.culturedWhite
+    backgroundColor: COLORS.white
   },
   scrollView: {
     flexGrow: 1,
     paddingBottom: '40%',
-    paddingHorizontal: scale(16)
+    paddingHorizontal: scale(16),
+    backgroundColor: COLORS.culturedWhite
   },
   horizontalPadding: {
     paddingHorizontal: scale(25)
