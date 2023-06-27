@@ -28,7 +28,8 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
             fontSize={13}
             color={COLORS.smokyBlack}
           >
-            {item.name || StringUtils.formatAddress(item.address, 4, 4)}
+            {StringUtils.formatAddress(item.name, 4, 4) ||
+              StringUtils.formatAddress(item.address, 4, 4)}
           </Text>
           {indicatorVisible && (
             <>
