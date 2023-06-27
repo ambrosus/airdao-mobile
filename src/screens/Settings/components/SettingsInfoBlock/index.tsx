@@ -26,14 +26,14 @@ export const SettingsInfoBlock = () => {
           onPress={openLink}
           onLongPress={openClearCacheModal}
         >
-          <Row>
+          <Row alignItems="center">
             <HelpIcon />
             <Text style={styles.infoTextContainer}>Help center</Text>
           </Row>
         </Button>
         <Spacer value={43} />
         <Button type="base">
-          <Row>
+          <Row alignItems="center">
             <AppStoreIcon />
             <Text style={styles.infoTextContainer}>
               Rate us on the App Store
