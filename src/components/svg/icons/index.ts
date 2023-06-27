@@ -1,5 +1,6 @@
 export * from './Icon.types';
 export * from './AirDAOLogo';
+export * from './AppStore';
 export * from './Back';
 export * from './BellIcon';
 export * from './BottomSheetSwiper';
@@ -27,6 +28,7 @@ export * from './LogoGradient';
 export * from './Messages';
 export * from './Notification';
 export * from './Options';
+export * from './PlayStore';
 export * from './PlusIcon';
 export * from './Remove';
 export * from './RightArrow';
