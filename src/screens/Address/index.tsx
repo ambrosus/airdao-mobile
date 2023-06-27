@@ -116,7 +116,7 @@ export const AddressDetails = (): JSX.Element => {
               type="circular"
               onPress={shareShareModal}
             >
-              <ShareIcon color={COLORS.smokyBlack} />
+              <ShareIcon color={COLORS.smokyBlack} scale={1.1} />
             </Button>
             <Spacer value={scale(32)} horizontal />
             <Button
@@ -125,7 +125,7 @@ export const AddressDetails = (): JSX.Element => {
               onPress={showEditModal}
             >
               {Platform.select({
-                ios: <EditIcon color={COLORS.smokyBlack} />,
+                ios: <EditIcon color={COLORS.smokyBlack} scale={1.1} />,
                 android: <OptionsIcon color={COLORS.smokyBlack} />
               })}
             </Button>
