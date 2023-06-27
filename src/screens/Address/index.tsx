@@ -137,7 +137,9 @@ export const AddressDetails = (): JSX.Element => {
         nameVisible={true}
         onToggleWatchlist={onToggleWatchlist}
       />
-      <Spacer value={verticalScale(32)} />
+      <Spacer value={verticalScale(16)} />
+      <View style={styles.divider} />
+      <Spacer value={verticalScale(16)} />
       <AccountTransactions
         transactions={transactions}
         onEndReached={loadMoreTransactions}
