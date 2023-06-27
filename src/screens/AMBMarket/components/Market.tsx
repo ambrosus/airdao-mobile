@@ -1,9 +1,13 @@
 import React from 'react';
-import { Image, Linking, StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RightArrowIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
+import { BinanceIcon } from '@components/svg/icons/Binance';
+import { KuCoinIcon } from '@components/svg/icons/KuCoin';
+import { ProBitGlobalIcon } from '@components/svg/icons/ProBitGlobal';
+import { MEXCIcon } from '@components/svg/icons/MEXC';
 
 interface MarketItem {
   title: string;
@@ -15,22 +19,22 @@ const marketItems: MarketItem[] = [
   {
     title: 'Binance',
     url: 'https://www.binance.com/en/trade/AMB_USDT',
-    icon: <Image source={require('../../../assets/images/binance.png')} />
+    icon: <BinanceIcon />
   },
   {
     title: 'KuCoin',
     url: 'https://www.kucoin.com/trade/AMB-USDT',
-    icon: <Image source={require('../../../assets/images/kucoin.png')} />
+    icon: <KuCoinIcon />
   },
   {
     title: 'ProBit Global',
     url: 'https://www.probit.com/app/exchange/AMB-USDT',
-    icon: <Image source={require('../../../assets/images/probit.png')} />
+    icon: <ProBitGlobalIcon />
   },
   {
     title: 'MEXC',
     url: 'https://www.mexc.com/exchange/AMB_USDT',
-    icon: <Image source={require('../../../assets/images/mexc.png')} />
+    icon: <MEXCIcon />
   }
 ];
 
