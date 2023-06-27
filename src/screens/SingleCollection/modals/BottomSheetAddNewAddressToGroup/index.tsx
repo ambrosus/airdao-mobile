@@ -228,10 +228,14 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
         <InputWithIcon
+          editable={selectedAddresses.length === 0}
           ref={inputRef}
           iconLeft={<SearchIcon color="#2f2b4399" />}
           iconRight={
-            <Button onPress={showScanner}>
+            <Button
+              onPress={showScanner}
+              disabled={selectedAddresses.length > 0}
+            >
               <ScannerQRIcon />
             </Button>
           }
