@@ -9,7 +9,6 @@ import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
 import { useLists } from '@contexts';
-import { StringUtils } from '@utils/string';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -39,12 +38,9 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           fontFamily="Inter_600SemiBold"
           fontSize={14}
           color={COLORS.smokyBlack}
+          numberOfLines={1}
         >
-          Remove this address from{' '}
-          {collection
-            ? StringUtils.formatAddress(collection.name, 10, 0)
-            : 'collection'}
-          ?
+          Remove this address from {collection?.name}?
         </Text>
         <Spacer value={24} />
         <Button
