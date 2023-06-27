@@ -8,7 +8,7 @@ export const WatchList = () => {
   const { watchlist } = useWatchlist();
 
   return (
-    <View style={{ paddingHorizontal: scale(16) }}>
+    <View style={{ paddingHorizontal: scale(16), flex: 1 }}>
       <WalletList isPortfolioFlow={true} emptyText="" data={watchlist} />
     </View>
   );
