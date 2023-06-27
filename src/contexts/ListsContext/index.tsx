@@ -167,12 +167,15 @@ const ListsContext = () => {
     list: AccountList
   ) => {
     accounts.forEach((account) => {
+      const newAddress: ExplorerAccount = Object.assign({}, account);
       const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
       if (!listInContext) return;
       if (listInContext.addresses.indexOfItem(account.address) > -1) {
         listInContext.addresses.removeItem(account.address);
       } else {
         listInContext.addresses.push(account.address);
+        // add to watchlist if not watchlisted
+        if (!newAddress.isOnWatchlist) newAddress.isOnWatchlist = true;
       }
       listsOfAddressGroup.forEach((l) => {
         if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
@@ -180,7 +183,7 @@ const ListsContext = () => {
         }
       });
       if (allAddresses.indexOfItem(account, 'address') === -1) {
-        allAddresses.push(account);
+        allAddresses.push(newAddress);
       }
     });
     allAddressesReducer({ type: 'set', payload: allAddresses });
