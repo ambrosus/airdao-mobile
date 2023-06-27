@@ -51,7 +51,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
 
     const content = useMemo(
       () => (
-        <KeyboardDismissingView
+        <View
           style={[
             {
               height: fullscreen
@@ -75,8 +75,10 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
               <Separator height={4} color={COLORS.lavenderGray} />
             </View>
           )}
-          {children}
-        </KeyboardDismissingView>
+          <KeyboardDismissingView style={{ flex: 1 }}>
+            {children}
+          </KeyboardDismissingView>
+        </View>
       ),
       [
         fullscreen,
@@ -101,6 +103,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         swipeDirection={['down']}
         onSwipeComplete={dismiss}
         useNativeDriverForBackdrop
+        propagateSwipe
         onBackButtonPress={dismiss}
         onBackdropPress={dismiss}
         backdropOpacity={backdropOpacity}
