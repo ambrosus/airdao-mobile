@@ -57,7 +57,7 @@ export const SettingsBlock = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Row style={styles.infoTextContainer}>
+              <Row style={styles.infoTextContainer} alignItems="center">
                 <CurrencyIcon />
                 <Text style={styles.optionInfoText}>Base currency</Text>
               </Row>
@@ -79,7 +79,7 @@ export const SettingsBlock = () => {
                 alignItems: 'flex-start'
               }}
             >
-              <Row style={styles.infoTextContainer}>
+              <Row alignItems="center" style={styles.infoTextContainer}>
                 <CurrencyIcon />
                 <Text style={styles.optionInfoText}>Base currency</Text>
               </Row>
@@ -97,7 +97,7 @@ export const SettingsBlock = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Row style={styles.infoTextContainer}>
+              <Row alignItems="center" style={styles.infoTextContainer}>
                 <LanguageIcon />
                 <Text style={styles.optionInfoText}>Language</Text>
               </Row>
@@ -119,7 +119,7 @@ export const SettingsBlock = () => {
                 alignItems: 'flex-start'
               }}
             >
-              <Row style={styles.infoTextContainer}>
+              <Row alignItems="center" style={styles.infoTextContainer}>
                 <LanguageIcon />
                 <Text style={styles.optionInfoText}>Language</Text>
               </Row>
@@ -136,11 +136,11 @@ export const SettingsBlock = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Row style={styles.infoTextContainer}>
+            <Row alignItems="center" style={styles.infoTextContainer}>
               <DarkNotificationIcon />
               <Text style={styles.optionInfoText}>Notification settings</Text>
             </Row>
-            <Row style={styles.infoTextContainer} alignItems="center">
+            <Row alignItems="center" style={styles.infoTextContainer}>
               <RightArrowIcon />
             </Row>
           </Row>
