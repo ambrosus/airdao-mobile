@@ -49,37 +49,81 @@ export const SettingsBlock = () => {
   return (
     <View testID="settings-screen_settings-block">
       {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={42} />}
-      <View testID="bottom-sheet-select-base-currency">
-        <Button onPress={handleOnSelectBaseCurrency} type="base">
-          <Row
-            style={styles.optionContainer}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Row style={styles.infoTextContainer}>
-              <CurrencyIcon />
-              <Text style={styles.optionInfoText}>Base currency</Text>
+      {Platform.OS === 'ios' ? (
+        <View testID="bottom-sheet-select-base-currency">
+          <Button onPress={handleOnSelectBaseCurrency} type="base">
+            <Row
+              style={styles.optionContainer}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Row style={styles.infoTextContainer} alignItems="center">
+                <CurrencyIcon />
+                <Text style={styles.optionInfoText}>Base currency</Text>
+              </Row>
+              <Row style={styles.infoTextContainer} alignItems="center">
+                <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
+                <ChevronRightIcon color={COLORS.smokyBlack} />
+              </Row>
             </Row>
-            <Row style={styles.infoTextContainer} alignItems="center">
+          </Button>
+          <Spacer value={20} />
+        </View>
+      ) : (
+        <View testID="bottom-sheet-select-base-currency">
+          <Button onPress={handleOnSelectBaseCurrency} type="base">
+            <View
+              style={{
+                paddingBottom: 35,
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }}
+            >
+              <Row alignItems="center" style={styles.infoTextContainer}>
+                <CurrencyIcon />
+                <Text style={styles.optionInfoText}>Base currency</Text>
+              </Row>
+              <Spacer value={10} />
               <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
-              <ChevronRightIcon color={COLORS.smokyBlack} />
+            </View>
+          </Button>
+        </View>
+      )}
+      {Platform.OS === 'ios' ? (
+        <View testID="bottom-sheet-select-language">
+          <Button onPress={handleOnOpenLanguageModal} type="base">
+            <Row
+              style={styles.optionContainer}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Row alignItems="center" style={styles.infoTextContainer}>
+                <LanguageIcon />
+                <Text style={styles.optionInfoText}>Language</Text>
+              </Row>
+              <Row style={styles.infoTextContainer} alignItems="center">
+                <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
+                <ChevronRightIcon color={COLORS.smokyBlack} />
+              </Row>
             </Row>
-          </Row>
-        </Button>
-        <Spacer value={20} />
-      </View>
-      <View testID="bottom-sheet-select-language">
-        <Button onPress={handleOnOpenLanguageModal} type="base">
-          <Row
-            style={styles.optionContainer}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Row style={styles.infoTextContainer}>
-              <LanguageIcon />
-              <Text style={styles.optionInfoText}>Language</Text>
-            </Row>
-            <Row style={styles.infoTextContainer} alignItems="center">
+          </Button>
+          <Spacer value={20} />
+        </View>
+      ) : (
+        <View testID="bottom-sheet-select-language">
+          <Button onPress={handleOnOpenLanguageModal} type="base">
+            <View
+              style={{
+                paddingBottom: 35,
+                flexDirection: 'column',
+                alignItems: 'flex-start'
+              }}
+            >
+              <Row alignItems="center" style={styles.infoTextContainer}>
+                <LanguageIcon />
+                <Text style={styles.optionInfoText}>Language</Text>
+              </Row>
+              <Spacer value={10} />
               <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
               <ChevronRightIcon color={COLORS.smokyBlack} />
             </Row>
@@ -98,8 +142,8 @@ export const SettingsBlock = () => {
               <DarkNotificationIcon />
               <Text style={styles.optionInfoText}>Notification settings</Text>
             </Row>
-            <Row style={styles.infoTextContainer} alignItems="center">
-              <ChevronRightIcon color={COLORS.smokyBlack} />
+            <Row alignItems="center" style={styles.infoTextContainer}>
+              <RightArrowIcon />
             </Row>
           </Row>
         </Button>

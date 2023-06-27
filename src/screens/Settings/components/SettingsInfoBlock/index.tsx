@@ -34,10 +34,7 @@ export const SettingsInfoBlock = () => {
         <Spacer value={43} />
         <Button type="base">
           <Row alignItems="center">
-            {Platform.select({
-              ios: <AppStoreIcon />,
-              android: <PlayStoreIcon />
-            })}
+            <AppStoreIcon />
             <Text style={styles.infoTextContainer}>
               {Platform.select({
                 ios: 'Rate us on the App Store',
