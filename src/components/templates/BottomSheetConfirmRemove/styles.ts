@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   icon: {
@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     marginTop: verticalScale(24),
+    marginHorizontal: scale(24),
     textAlign: 'center'
   },
   removeButton: {
