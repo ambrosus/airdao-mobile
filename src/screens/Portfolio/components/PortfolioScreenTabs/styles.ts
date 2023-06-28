@@ -5,7 +5,7 @@ import { scale, verticalScale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   container: {
     paddingHorizontal: scale(16),
-    paddingTop: verticalScale(28)
+    paddingTop: verticalScale(16)
   },
   navigationButton: {
     justifyContent: 'center',
