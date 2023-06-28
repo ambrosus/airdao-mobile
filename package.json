@@ -22,9 +22,6 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.21.5",
-    "@morrowdigital/watermelondb-expo-plugin": "^2.1.2",
-    "@nozbe/watermelondb": "^0.26.0",
-    "@nozbe/with-observables": "^1.4.1",
     "@react-native-firebase/analytics": "^17.5.0",
     "@react-native-firebase/app": "^17.5.0",
     "@react-native-firebase/crashlytics": "^17.5.0",
