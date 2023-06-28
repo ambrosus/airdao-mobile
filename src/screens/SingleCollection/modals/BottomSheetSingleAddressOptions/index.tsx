@@ -52,7 +52,6 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       const saveAddress = async () => {
         const newWallet: ExplorerAccount = Object.assign({}, item);
         newWallet.name = newName;
-        newWallet.isPersonal = false;
         allAddressesReducer({ type: 'update', payload: newWallet });
         localRef.current?.dismiss();
       };

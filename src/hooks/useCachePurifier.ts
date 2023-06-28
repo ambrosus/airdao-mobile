@@ -24,7 +24,7 @@ export const useCachePurifier = () => {
 
     // filter unique addresses
     const knownAddresses: CacheableAccount[] = allAddresses
-      .filter((account) => account.isPersonal || account.isOnWatchlist)
+      .filter((account) => account.isOnWatchlist)
       .map((account) => ExplorerAccount.toCacheable(account));
 
     for (const list of listsOfAddressGroup) {

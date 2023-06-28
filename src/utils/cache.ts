@@ -8,7 +8,6 @@ export enum CacheKey {
   DeviceID = 'device_id',
   IsSecondInit = 'is_second_init',
   NotificationSettings = 'notification_settings',
-  PersonalList = 'personal_list',
   Onboarding = 'onboarding',
   Watchlist = 'watchlist',
   LastNotificationTimestamp = 'last_notification_timestamp'
