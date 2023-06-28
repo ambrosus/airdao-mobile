@@ -26,7 +26,7 @@ export const SettingsInfoBlock = () => {
           onPress={openLink}
           onLongPress={openClearCacheModal}
         >
-          <Row>
+          <Row alignItems="center">
             <HelpIcon />
             <Text style={styles.infoTextContainer}>Help center</Text>
           </Row>
