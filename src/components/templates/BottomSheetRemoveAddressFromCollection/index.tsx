@@ -38,9 +38,9 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           fontFamily="Inter_600SemiBold"
           fontSize={14}
           color={COLORS.smokyBlack}
+          numberOfLines={1}
         >
-          Remove this address from {collection ? collection.name : 'collection'}
-          ?
+          Remove this address from {collection?.name}?
         </Text>
         <Spacer value={24} />
         <Button
