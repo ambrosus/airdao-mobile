@@ -5,6 +5,7 @@ import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
+import * as ExpoSecureStore from 'expo-secure-store';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -15,6 +16,13 @@ export const useAppInit = () => {
   useEffect(() => {
     async function prepare() {
       try {
+        const migratedCache = await ExpoSecureStore.getItemAsync(
+          CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
+        );
+        await Cache.deleteAll();
+        if (!migratedCache) {
+          await Cache.setItem(CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE, true);
+        }
         DeviceService.setupUniqueDeviceID();
         await PermissionService.getPermission(Permission.Notifications, {
           requestAgain: true,
