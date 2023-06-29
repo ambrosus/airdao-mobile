@@ -75,9 +75,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
               <Separator height={4} color={COLORS.lavenderGray} />
             </View>
           )}
-          <KeyboardDismissingView style={{ flex: 1 }}>
-            {children}
-          </KeyboardDismissingView>
+          {children}
         </View>
       ),
       [
