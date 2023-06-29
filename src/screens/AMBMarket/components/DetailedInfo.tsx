@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   AMBMarketItem,
   AMBMarketItemsInfo,
   InfoKey
 } from '../AMBMarket.constants';
-import { Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { PopUpInfo } from '@components/composite';
@@ -15,6 +15,7 @@ type AMBDetailedInfoProps = {
 };
 
 export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
+  const [visiblePopUpKey, setVisiblePopUpKey] = useState('');
   const renderRow = (row: AMBMarketItem) => {
     return (
       <Row
@@ -23,17 +24,25 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
         justifyContent="space-between"
         style={styles.item}
       >
-        <Row alignItems="center">
-          <Text
-            fontSize={12}
-            color={COLORS.slateGrey}
-            fontFamily="Inter_500Medium"
-          >
-            {row.title}
-          </Text>
-          <Spacer value={scale(7)} horizontal />
-          <PopUpInfo testID={row.testID} body={row.body} title={row.title} />
-        </Row>
+        <Button onPress={() => setVisiblePopUpKey(row.key)}>
+          <Row alignItems="center">
+            <Text
+              fontSize={12}
+              color={COLORS.slateGrey}
+              fontFamily="Inter_500Medium"
+            >
+              {row.title}
+            </Text>
+            <Spacer value={scale(7)} horizontal />
+            <PopUpInfo
+              testID={row.testID}
+              body={row.body}
+              title={row.title}
+              isVisible={visiblePopUpKey === row.key ? true : undefined}
+              onBackdropPress={() => setVisiblePopUpKey('')}
+            />
+          </Row>
+        </Button>
         <Text
           fontSize={13}
           color={COLORS.smokyBlack}
