@@ -16,13 +16,18 @@ export const useAppInit = () => {
   useEffect(() => {
     async function prepare() {
       try {
+        // TODO remove in prod release
         const migratedCache = await ExpoSecureStore.getItemAsync(
           CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
         );
-        await Cache.deleteAll();
         if (!migratedCache) {
-          await Cache.setItem(CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE, true);
+          await Cache.deleteAll();
+          await ExpoSecureStore.setItemAsync(
+            CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE,
+            'true'
+          );
         }
+        // TODO remove until here
         DeviceService.setupUniqueDeviceID();
         await PermissionService.getPermission(Permission.Notifications, {
           requestAgain: true,
