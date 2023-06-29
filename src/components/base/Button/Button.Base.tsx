@@ -3,7 +3,15 @@ import { TouchableOpacity } from 'react-native';
 import { ButtonProps } from './Button.types';
 
 export function BaseButton(props: ButtonProps): JSX.Element {
-  const { disabled, children, style, onPress, testID, onLongPress } = props;
+  const {
+    disabled,
+    children,
+    style,
+    testID,
+    activeOpacity,
+    onPress,
+    onLongPress
+  } = props;
   return (
     <TouchableOpacity
       disabled={disabled}
@@ -11,6 +19,7 @@ export function BaseButton(props: ButtonProps): JSX.Element {
       style={style}
       testID={testID}
       onLongPress={onLongPress}
+      activeOpacity={activeOpacity}
     >
       {children}
     </TouchableOpacity>

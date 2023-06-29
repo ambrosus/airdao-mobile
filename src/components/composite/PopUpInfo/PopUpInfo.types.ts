@@ -10,4 +10,6 @@ export interface PopUpInfoProps {
   title: string;
   body: string;
   placement?: PopUpPlacement;
+  isVisible?: boolean;
+  onBackdropPress?: () => void;
 }

@@ -18,7 +18,7 @@ interface WalletItemProps {
 function WalletItemView(props: WalletItemProps): JSX.Element {
   const { item, indicatorVisible } = props;
   const { data: ambTokenData } = useAMBPrice();
-
+  const usdBalance = item.ambBalance * (ambTokenData?.priceUSD || 0);
   return (
     <View style={{ justifyContent: 'space-between' }}>
       <Row justifyContent="space-between">
@@ -28,7 +28,8 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
             fontSize={13}
             color={COLORS.smokyBlack}
           >
-            {item.name || StringUtils.formatAddress(item.address, 4, 4)}
+            {StringUtils.formatAddress(item.name, 4, 4) ||
+              StringUtils.formatAddress(item.address, 4, 4)}
           </Text>
           {indicatorVisible && (
             <>
@@ -43,10 +44,9 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
           color={COLORS.smokyBlack}
         >
           $
-          {NumberUtils.formatNumber(
-            item.ambBalance * (ambTokenData?.priceUSD || 0),
-            0
-          )}
+          {usdBalance >= 100
+            ? NumberUtils.formatNumber(usdBalance, 0)
+            : NumberUtils.formatNumber(usdBalance, 2)}
         </Text>
       </Row>
       <Spacer value={5} />

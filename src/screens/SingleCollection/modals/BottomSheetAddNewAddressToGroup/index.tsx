@@ -15,6 +15,8 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
+import { FloatButton } from '@components/base/FloatButton';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -36,8 +38,6 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
-import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
-import { FloatButton } from '@components/base/FloatButton';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -106,19 +106,12 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const handleItemPress = useCallback(
     (item: ExplorerAccount) => {
-      // const idx = selectedAddresses.indexOfItem(item, '_id');
-      // if (idx > -1) selectedAddresses.splice(idx);
-      // else selectedAddresses.push(item);
-      // setSelectedAddresses([...selectedAddresses]);
-
-      // old
-      setScrollViewIdx('watchlist');
-      localRef.current?.dismiss();
-      setTimeout(() => {
-        toggleAddressesInList([item], collection);
-      }, 1000);
+      const idx = selectedAddresses.indexOfItem(item, '_id');
+      if (idx > -1) selectedAddresses.splice(idx, 1);
+      else selectedAddresses.push(item);
+      setSelectedAddresses([...selectedAddresses]);
     },
-    [collection, localRef, toggleAddressesInList]
+    [selectedAddresses]
   );
 
   const renderItem = (
@@ -136,9 +129,10 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         onPress={() => {
           if (!disabled) handleItemPress(item);
         }}
-        // onLongPress={() => {
-        //   if (!disabled) handleItemPress(item);
-        // }}
+        onLongPress={() => {
+          if (!disabled) handleItemPress(item);
+        }}
+        activeOpacity={disabled ? 0.5 : undefined}
         style={{ ...styles.item, opacity: disabled ? 0.5 : 1 }}
       >
         <Row alignItems="center">
@@ -205,9 +199,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const submitSelectedAddresses = () => {
     localRef.current?.dismiss();
     toggleAddressesInList(selectedAddresses, collection);
-    setTimeout(() => {
-      resetState();
-    }, 1000);
+    resetState();
   };
 
   return (
@@ -236,10 +228,14 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
         <InputWithIcon
+          editable={selectedAddresses.length === 0}
           ref={inputRef}
           iconLeft={<SearchIcon color="#2f2b4399" />}
           iconRight={
-            <Button onPress={showScanner}>
+            <Button
+              onPress={showScanner}
+              disabled={selectedAddresses.length > 0}
+            >
               <ScannerQRIcon />
             </Button>
           }

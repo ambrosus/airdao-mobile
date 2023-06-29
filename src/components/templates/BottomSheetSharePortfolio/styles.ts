@@ -16,7 +16,8 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(17)
   },
   shareButtons: {
-    paddingHorizontal: scale(30)
+    paddingHorizontal: scale(30),
+    alignItems: 'center'
   },
   twitterBtn: {
     backgroundColor: '#1d9bf0',

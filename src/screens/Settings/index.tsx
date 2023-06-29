@@ -4,11 +4,11 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
-import { Spacer, Text } from '@components/base';
-import * as Updates from 'expo-updates';
+// import { Spacer, Text } from '@components/base';
+// import * as Updates from 'expo-updates';
 import messaging from '@react-native-firebase/messaging';
-import { CopyToClipboardButton } from '@components/composite';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { CopyToClipboardButton } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SettingsScreen = () => {
   const [token, setToken] = useState('');
@@ -17,12 +17,9 @@ export const SettingsScreen = () => {
     messaging().getToken().then(setToken);
   }, []);
 
+  const { top } = useSafeAreaInsets();
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={styles.container}
-      testID="settings-screen"
-    >
+    <View style={[{ top }, styles.container]} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
@@ -40,7 +37,7 @@ export const SettingsScreen = () => {
         <Text>Channel: {Updates.channel}</Text>
         <Text fontSize={12}>AirDAO Testing Build: v1.0.0.16</Text>
       </View> */}
-    </SafeAreaView>
+    </View>
   );
 };
 
