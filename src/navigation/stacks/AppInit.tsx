@@ -14,13 +14,18 @@ const AppInitialization = () => {
   useEffect(() => {
     (async () => {
       try {
+        // TODO remove before prod
         const migratedCache = await ExpoSecureStore.getItemAsync(
           CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
         );
-        await Cache.deleteAll();
         if (!migratedCache) {
-          await Cache.setItem(CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE, true);
+          await Cache.deleteAll();
+          await ExpoSecureStore.setItemAsync(
+            CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE,
+            'true'
+          );
         }
+        // TODO remove until here
         const value = await Cache.getItem(CacheKey.IsSecondInit);
         if (!value) {
           return navigation.replace('WelcomeScreen');
