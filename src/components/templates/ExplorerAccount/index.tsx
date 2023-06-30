@@ -108,6 +108,7 @@ export const ExplorerAccountView = (
       )}
       <Row alignItems="center">
         <CopyToClipboardButton
+          testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
@@ -127,41 +128,47 @@ export const ExplorerAccountView = (
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
       <Spacer value={verticalScale(16)} />
-      <ScrollView
-        horizontal
-        bounces={false}
-        showsHorizontalScrollIndicator={false}
-      >
-        <Row alignItems="center">
-          <Button
-            style={{
-              ...styles.actionButton,
-              backgroundColor: account.isOnWatchlist
-                ? COLORS.warning
-                : COLORS.mainBlue
-            }}
-            type="circular"
-            onPress={toggleWatchlist}
-          >
-            <Row alignItems="center">
-              <Text
-                fontSize={12}
-                color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
-              >
-                {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
-              </Text>
-              {!account.isOnWatchlist && (
-                <>
-                  <Spacer value={scale(8)} horizontal />
-                </>
-              )}
-            </Row>
-          </Button>
-          <Spacer value={scale(16)} horizontal />
-          <Button
-            style={{
-              ...styles.actionButton,
-              backgroundColor:
+      <Row alignItems="center">
+        <Button
+          style={{
+            ...styles.actionButton,
+            backgroundColor: account.isOnWatchlist
+              ? COLORS.warning
+              : COLORS.mainBlue
+          }}
+          type="circular"
+          onPress={toggleWatchlist}
+          testID="Add_To_Watchlist_Button"
+        >
+          <Row alignItems="center">
+            <Text
+              fontSize={12}
+              color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
+            >
+              {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
+            </Text>
+            {!account.isOnWatchlist && (
+              <>
+                <Spacer value={scale(8)} horizontal />
+                <PlusIcon color={COLORS.white} scale={0.5} />
+              </>
+            )}
+          </Row>
+        </Button>
+        <Spacer value={scale(16)} horizontal />
+        <Button
+          style={{
+            ...styles.actionButton,
+            backgroundColor:
+              listsWithAccount.length > 0 ? COLORS.warning : COLORS.powderWhite
+          }}
+          type="circular"
+          onPress={showAddToList}
+          testID="Add_To_Collection_Button"
+        >
+          <Row alignItems="center">
+            <Text
+              color={
                 listsWithAccount.length > 0
                   ? COLORS.warning
                   : COLORS.powderWhite

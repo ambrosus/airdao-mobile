@@ -4,10 +4,10 @@ import {
   ExplorerAccountTransactionItem,
   ExplorerAccountView
 } from '@components/templates';
-import { MockTransaction } from '../../../__mocks__';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { MockTransaction } from '@__mocks__/models/Transaction.mock';
 
 const mockTransaction = MockTransaction;
 
@@ -47,15 +47,6 @@ const mockTransaction = MockTransaction;
 //   }))
 // );
 dayjs().fromNow = jest.fn();
-
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
 
 const queryClient = new QueryClient();
 

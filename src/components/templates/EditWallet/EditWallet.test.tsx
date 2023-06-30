@@ -38,15 +38,6 @@ jest.mock('@contexts/OnBoardingContext', () => ({
   }))
 }));
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 const onNameChangeMock = jest.fn();
 const onIsPersonalAddressChangeMock = jest.fn();
 

@@ -6,15 +6,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import clearAllMocks = jest.clearAllMocks;
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 let mockOnScanned: any;
 let mockOnClose: any;
 let cameraPermissionMock: any;
@@ -41,7 +32,7 @@ describe('BarcodeScanner', () => {
   afterAll(() => {
     cameraPermissionMock.mockRestore();
   });
-  //export type PermissionStatus = 'granted' | 'denied' | 'never_ask_again';
+  // export type PermissionStatus = 'granted' | 'denied' | 'never_ask_again';
 
   beforeEach(() => {
     clearAllMocks();
@@ -63,10 +54,9 @@ describe('BarcodeScanner', () => {
     cameraPermissionMock = jest
       .spyOn(Camera, 'getCameraPermissionsAsync')
       .mockResolvedValue({ status: 'denied' } as PermissionResponse);
-    const { queryByTestId } = render(<Component />);
+    const { getByText } = render(<Component />);
     await waitFor(async () => {
-      const camera = await queryByTestId('BarcodeScanner_Container');
-      expect(camera).toBeNull();
+      expect(getByText('No access to camera')).toBeTruthy();
     });
   });
 

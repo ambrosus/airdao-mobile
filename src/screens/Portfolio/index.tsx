@@ -60,7 +60,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   }, [activeTab, focused]);
 
   return (
-    <View style={{ flex: 1, top }} testID="lists-screen">
+    <SafeAreaView edges={['top']} style={{ flex: 1 }} testID="Portfolio_Screen">
       <TabView<PortfolioTabViewRoute>
         navigationState={{ index, routes }}
         renderScene={renderScene}

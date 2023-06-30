@@ -214,6 +214,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                   <ScannerQRIcon />
                 </Button>
               )}
+
+              <Button onPress={showScanner} testID="Barcode_Scanner">
+                <ScannerQRIcon />
+              </Button>
             </Row>
           }
           placeholder={'Search Address or TX hash'}

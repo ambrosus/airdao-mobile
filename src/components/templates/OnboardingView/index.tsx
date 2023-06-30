@@ -85,6 +85,7 @@ export const OnboardingView = (props: OnboardingViewProps) => {
             ]
           : []
       }
+      testID="Onboarding_View"
     >
       <Tooltip
         tooltipStyle={{ flex: 1 }}
@@ -104,7 +105,11 @@ export const OnboardingView = (props: OnboardingViewProps) => {
             : 0
         }
       >
-        <Button style={{ width: '100%' }} onPress={() => next(thisStep)}>
+        <Button
+          style={{ width: '100%' }}
+          onPress={() => next(thisStep)}
+          testID="Onboarding_Button"
+        >
           <View pointerEvents="none">{children}</View>
         </Button>
       </Tooltip>

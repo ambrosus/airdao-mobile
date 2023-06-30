@@ -27,7 +27,7 @@ export const HomeWatchlists = () => {
   };
 
   return (
-    <View style={styles.homeWatchlistsContainer}>
+    <View style={styles.homeWatchlistsContainer} testID="Home_Watchlists">
       {watchlist.slice(0, ITEM_COUNT).map((item, index) => {
         return (
           <View key={item._id}>

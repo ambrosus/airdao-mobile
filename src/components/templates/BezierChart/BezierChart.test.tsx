@@ -3,15 +3,6 @@ import { render } from '@testing-library/react-native';
 import { BezierChart } from '@components/templates';
 import { COLORS } from '@constants/colors';
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 describe('BezierChart', () => {
   const data = [
     { x: 1, y: 2 },

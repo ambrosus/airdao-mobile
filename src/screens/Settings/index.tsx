@@ -9,7 +9,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export const SettingsScreen = () => {
   const { top } = useSafeAreaInsets();
   return (
-    <View style={[{ top }, styles.container]} testID="settings-screen">
+    <SafeAreaView
+      edges={['top']}
+      style={styles.container}
+      testID="Settings_Screen"
+    >
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />

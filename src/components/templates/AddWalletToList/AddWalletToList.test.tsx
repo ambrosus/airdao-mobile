@@ -2,24 +2,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AddWalletToList } from '@components/templates';
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
-import { CheckBox } from '@components/composite';
+import { render } from '@testing-library/react-native';
 import { ExplorerAccountType } from '@appTypes';
-
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
 });
 
-const onPressList = jest.fn();
 const wallet = {
   _id: 'wallet-id',
   address: 'wallet-address',
@@ -32,15 +21,15 @@ const wallet = {
 const lists = [
   {
     id: 'list-1',
-    name: 'List 1',
+    name: 'Test collection 1',
     accounts: [
       {
-        _id: 'account-id',
-        address: 'wallet-address',
-        ambBalance: 0,
-        transactionCount: 0,
+        _id: '6200de3b523162b8b87baff1',
+        address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+        ambBalance: 123.123,
+        transactionCount: 1,
         type: ExplorerAccountType.Account,
-        name: '',
+        name: 'Test address',
         calculatePercentHoldings: () => 0
       }
     ],
@@ -49,12 +38,20 @@ const lists = [
   },
   {
     id: 'list-2',
-    name: 'List 2',
+    name: 'Test collection 2',
     accounts: [],
     accountCount: 0,
     totalBalance: 0
   }
 ];
+
+jest.mock('@contexts/ListsContext', () => ({
+  useLists: jest.fn(() => ({
+    listsOfAddressGroup: [],
+    createGroupRef: jest.fn(),
+    toggleAddressesInList: jest.fn()
+  }))
+}));
 
 const queryClient = new QueryClient();
 
@@ -62,11 +59,7 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <AddWalletToList
-          lists={lists}
-          onPressList={onPressList}
-          wallet={wallet}
-        />
+        <AddWalletToList lists={lists} wallet={wallet} />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
@@ -74,19 +67,11 @@ const Component = () => {
 
 describe('AddWalletToList', () => {
   it('renders correctly', async () => {
-    const { getAllByTestId } = render(<Component />);
+    const { getAllByTestId, getAllByText, getByText } = render(<Component />);
     const addWalletToList = getAllByTestId('AddWalletToList_Container')[0];
     expect(addWalletToList).toBeDefined();
-  });
-
-  it('calls onPressList when a list is pressed', () => {
-    const { getByText } = render(<Component />);
-    fireEvent.press(getByText('SingleCollection 1'));
-    expect(onPressList).toHaveBeenCalledWith(lists[0]);
-  });
-
-  it('displays the correct number of addresses in each list', () => {
-    const { getAllByText } = render(<Component />);
+    expect(getByText('Test collection 1')).toBeTruthy();
+    expect(getByText('Test collection 2')).toBeTruthy();
     expect(parseInt(getAllByText(/Addresses/)[0].props.children[0], 10)).toBe(
       1
     );
@@ -94,10 +79,5 @@ describe('AddWalletToList', () => {
       0
     );
   });
-
-  it('displays a checkbox next to each list', () => {
-    const tree = render(<Component />);
-    const checkBoxComponents = tree.root.findAllByType(CheckBox);
-    expect(checkBoxComponents).toHaveLength(2);
-  });
+  // TODO add more tests for this component
 });

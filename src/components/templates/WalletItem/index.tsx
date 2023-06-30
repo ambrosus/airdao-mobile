@@ -20,13 +20,14 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
   const { data: ambTokenData } = useAMBPrice();
   const usdBalance = item.ambBalance * (ambTokenData?.priceUSD || 0);
   return (
-    <View style={{ justifyContent: 'space-between' }}>
-      <Row justifyContent="space-between">
-        <Row alignItems="center">
+    <View style={{ justifyContent: 'space-between' }} testID="Wallet_Item_View">
+      <Row justifyContent="space-between" testID="wallet-item-row1">
+        <Row alignItems="center" testID="Wallet_Item_Row1_Inner">
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={13}
             color={COLORS.smokyBlack}
+            testID="Wallet_Item_Name"
           >
             {StringUtils.formatAddress(item.name, 4, 4) ||
               StringUtils.formatAddress(item.address, 4, 4)}
@@ -34,7 +35,10 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
           {indicatorVisible && (
             <>
               <Spacer value={scale(13)} horizontal />
-              <AddressIndicator address={item.address} />
+              <AddressIndicator
+                address={item.address}
+                testID="Wallet_Item_Address_Indicator"
+              />
             </>
           )}
         </Row>
@@ -42,6 +46,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
           fontFamily="Mersad_600SemiBold"
           fontSize={13}
           color={COLORS.smokyBlack}
+          testID="Wallet_Item_Balance"
         >
           $
           {usdBalance >= 100
@@ -50,11 +55,16 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
         </Text>
       </Row>
       <Spacer value={5} />
-      <Row justifyContent="space-between">
-        <Text fontFamily="Inter_500Medium" color="#0e0e0e80" fontSize={12}>
+      <Row justifyContent="space-between" testID="Wallet_Item_Row2">
+        <Text
+          fontFamily="Inter_500Medium"
+          color="#0e0e0e80"
+          fontSize={12}
+          testID="Wallet_Item_AMB"
+        >
           {NumberUtils.formatNumber(item.ambBalance, 0)} AMB
         </Text>
-        <Row alignItems="center">
+        <Row alignItems="center" testID="Wallet_Item_Percent_Change">
           <PercentChange change={ambTokenData?.percentChange24H || 0} />
         </Row>
       </Row>

@@ -9,15 +9,6 @@ jest.mock('react-native-modal', () => {
   return ({ children }: { children: React.ReactNode }) => <>{children}</>;
 });
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 const queryClient = new QueryClient();
 
 const Component = () => {

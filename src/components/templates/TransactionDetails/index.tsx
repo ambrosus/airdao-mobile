@@ -56,7 +56,7 @@ export const TransactionDetails = (
   };
 
   return (
-    <View>
+    <View testID="Transaction_Details">
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           Method
@@ -137,23 +137,19 @@ export const TransactionDetails = (
           {moment(transaction.timestamp).fromNow()}
         </Text>
       </JustifiedRow>
-      {isShareable && (
-        <>
-          <Spacer value={ROW_MARGIN} />
-          <Button
-            type="circular"
-            style={styles.shareBtn}
-            onPress={showShareTransaction}
-          >
-            <Row alignItems="center">
-              <ShareIcon color="#000000" />
-              <Spacer value={scale(3.5)} horizontal />
-              <Text>Share transaction</Text>
-            </Row>
-          </Button>
-        </>
-      )}
-
+      <Spacer value={ROW_MARGIN} />
+      <Button
+        type="circular"
+        style={styles.shareBtn}
+        onPress={showShareTransaction}
+        testID="Show_Share_Transaction_Button"
+      >
+        <Row alignItems="center">
+          <ShareIcon color="#000000" />
+          <Spacer value={scale(3.5)} horizontal />
+          <Text>Share transaction</Text>
+        </Row>
+      </Button>
       <SharePortfolio
         ref={shareTransactionModal}
         balance={NumberUtils.formatNumber(transaction.amount, 0)}

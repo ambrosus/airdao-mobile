@@ -84,8 +84,119 @@ export const WelcomeScreen = () => {
           >
             Get started
           </Text>
-        </Button>
-      </LinearGradient>
+        </Row>
+        <Spacer value={spacerValue} />
+        <View style={styles.optionsContainer} testID="Options_List">
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={24}
+            color={COLORS.smokyBlack}
+          >
+            Experience the ease of tracking addresses on the go!
+          </Text>
+          <Spacer value={scale(36)} />
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="First_Option"
+          >
+            <View style={styles.icon}>
+              <AddAddressIcon />
+            </View>
+            <Spacer horizontal value={scale(24)} />
+            <View style={{ paddingRight: 50 }}>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color={COLORS.smokyBlack}
+              >
+                Add address to your watchlist
+              </Text>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color="#a1a6b2"
+              >
+                and monitor their transactions in real-time
+              </Text>
+            </View>
+          </Row>
+          <Spacer value={scale(40)} />
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="Second_Option"
+          >
+            <View style={styles.icon}>
+              <TrackAMBIcon />
+            </View>
+            <Spacer horizontal value={24} />
+            <View style={{ paddingRight: 60 }}>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color={COLORS.smokyBlack}
+              >
+                Track AMB price,
+              </Text>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color="#a1a6b2"
+              >
+                get insights and make better investment decisions
+              </Text>
+            </View>
+          </Row>
+          <Spacer value={scale(40)} />
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="Third_Option"
+          >
+            <View style={styles.icon}>
+              <ManageCollections />
+            </View>
+            <Spacer horizontal value={scale(24)} />
+            <View style={{ paddingRight: 50 }}>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color={COLORS.smokyBlack}
+              >
+                Create and manage collections
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={15}
+                  color="#a1a6b2"
+                >
+                  {' \n'}
+                  of addresses for better tracking.
+                </Text>
+              </Text>
+            </View>
+          </Row>
+        </View>
+      </View>
+      <Button
+        testID="Get_Started_Button"
+        onPress={async () => {
+          await Cache.setItem(CacheKey.IsSecondInit, true);
+          setTimeout(() => {
+            navigation.replace('Tabs', { screen: 'Wallets' });
+          }, 300);
+        }}
+        style={styles.getStartedButton}
+      >
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.white}
+          style={{ paddingVertical: 15 }}
+        >
+          Get started
+        </Text>
+      </Button>
     </SafeAreaView>
   );
 };

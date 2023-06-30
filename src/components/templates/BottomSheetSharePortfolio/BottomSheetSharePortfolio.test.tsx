@@ -5,15 +5,6 @@ import React from 'react';
 import { ShareUtils } from '@utils/share';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 jest.mock('react-native-view-shot', () => ({
   captureRef: jest.fn()
 }));

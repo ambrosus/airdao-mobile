@@ -47,7 +47,7 @@ export const SettingsBlock = () => {
   }, []);
 
   return (
-    <View testID="settings-screen_settings-block">
+    <View testID="Settings_Screen_Settings_Block">
       {Platform.OS === 'ios' ? <Spacer value={25} /> : <Spacer value={42} />}
       <View testID="bottom-sheet-select-base-currency">
         <Button onPress={handleOnSelectBaseCurrency} type="base">
