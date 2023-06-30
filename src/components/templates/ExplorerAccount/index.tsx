@@ -8,7 +8,6 @@ import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
-import { PlusIcon } from '@components/svg/icons';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { AddWalletToList } from '../AddWalletToList';
@@ -154,7 +153,6 @@ export const ExplorerAccountView = (
               {!account.isOnWatchlist && (
                 <>
                   <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.white} scale={0.5} />
                 </>
               )}
             </Row>
@@ -189,7 +187,6 @@ export const ExplorerAccountView = (
               {listsWithAccount.length === 0 && (
                 <>
                   <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
                 </>
               )}
             </Row>
