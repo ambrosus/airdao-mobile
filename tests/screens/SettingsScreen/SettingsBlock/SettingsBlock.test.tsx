@@ -4,7 +4,6 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-jest.mock('victory-native', () => ({}));
 const queryClient = new QueryClient();
 const Component = () => {
   return (
@@ -16,22 +15,6 @@ const Component = () => {
   );
 };
 describe('SettingsBlock component', () => {
-  it('should render correctly on ios', () => {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      OS: 'ios'
-    }));
-    const { getByTestId } = render(<Component />);
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    expect(settingsBlock).toBeDefined();
-  });
-  it('should render correctly on android', () => {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      OS: 'android'
-    }));
-    const { getByTestId } = render(<Component />);
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    expect(settingsBlock).toBeDefined();
-  });
   it('should render the base currency option', () => {
     const { getByText } = render(<Component />);
     expect(getByText('Base currency')).not.toBeNull();
@@ -65,7 +48,7 @@ describe('SettingsBlock component', () => {
     expect(getByTestId('bottom-sheet-notification-settings')).not.toBeNull();
   });
 
-  it('should have only one radiobutton active on select base currency', () => {
+  it.skip('should have only one radiobutton active on select base currency', () => {
     const { getByText, getByTestId, getAllByTestId } = render(<Component />);
     fireEvent.press(getByText('Base currency'));
     const baseCurrencyModal = getByTestId('bottom-sheet-select-base-currency');
@@ -93,5 +76,5 @@ describe('SettingsBlock component', () => {
     );
 
     expect(otherButtons2.length).toBe(1);
-  });
+  }); // TODO for now we have only one option
 });

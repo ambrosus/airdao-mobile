@@ -109,6 +109,7 @@ export const ExplorerAccountView = (
       )}
       <Row alignItems="center">
         <CopyToClipboardButton
+          testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
@@ -138,6 +139,7 @@ export const ExplorerAccountView = (
           }}
           type="circular"
           onPress={toggleWatchlist}
+          testID="Add_To_Watchlist_Button"
         >
           <Row alignItems="center">
             <Text
@@ -163,6 +165,7 @@ export const ExplorerAccountView = (
           }}
           type="circular"
           onPress={showAddToList}
+          testID="Add_To_Collection_Button"
         >
           <Row alignItems="center">
             <Text

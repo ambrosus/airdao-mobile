@@ -11,6 +11,7 @@ interface AddressIndicatorProps {
   address: string;
   hideWatchlist?: boolean;
   hideCollection?: boolean;
+  testID?: string;
 }
 
 export function AddressIndicator(props: AddressIndicatorProps): JSX.Element {

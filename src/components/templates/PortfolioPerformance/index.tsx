@@ -37,6 +37,7 @@ export function PortfolioPerformance(
       source={require('../../../../assets/images/portfolio-perfomance.png')}
       resizeMode="cover"
       imageStyle={styles.container}
+      testID="Portfolio_Performance"
     >
       <Row alignItems="center" style={styles.innerContainer}>
         <View style={styles.details}>

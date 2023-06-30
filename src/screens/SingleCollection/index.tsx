@@ -53,7 +53,11 @@ export const SingleGroupScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1 }}>
+    <SafeAreaView
+      edges={['top']}
+      style={{ flex: 1 }}
+      testID="Single_Collection"
+    >
       <Header
         title={
           <Text
@@ -78,6 +82,7 @@ export const SingleGroupScreen = () => {
             {Platform.OS === 'ios' && (
               <>
                 <Button
+                  testID="Add_Address_Button"
                   onPress={showAddAddress}
                   type="circular"
                   style={styles.addButton}
@@ -88,6 +93,7 @@ export const SingleGroupScreen = () => {
               </>
             )}
             <Button
+              testID="Edit_Collection_Button"
               onPress={showEditCollection}
               type="circular"
               style={styles.optionsButton}
@@ -123,7 +129,10 @@ export const SingleGroupScreen = () => {
           }
         />
       </View>
-      <View style={{ flex: 1, paddingHorizontal: scale(16) }}>
+      <View
+        style={{ flex: 1, paddingHorizontal: scale(16) }}
+        testID="List_Of_Addresses"
+      >
         <WalletList
           data={accounts}
           emptyText={''}

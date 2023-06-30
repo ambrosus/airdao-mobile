@@ -108,7 +108,7 @@ export const AddressDetails = (): JSX.Element => {
   return (
     <SafeAreaView
       edges={['top']}
-      testID="address-screen"
+      testID="Address_Screen"
       style={styles.container}
     >
       <Header
@@ -118,6 +118,7 @@ export const AddressDetails = (): JSX.Element => {
               style={styles.headerBtn}
               type="circular"
               onPress={shareShareModal}
+              testID="Share_Button"
             >
               <ShareIcon color={COLORS.smokyBlack} />
             </Button>
@@ -126,6 +127,7 @@ export const AddressDetails = (): JSX.Element => {
               style={styles.headerBtn}
               type="circular"
               onPress={showEditModal}
+              testID="Edit_Button"
             >
               {Platform.select({
                 ios: <EditIcon color={COLORS.smokyBlack} />,

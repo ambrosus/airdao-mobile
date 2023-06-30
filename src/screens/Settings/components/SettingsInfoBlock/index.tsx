@@ -19,7 +19,7 @@ export const SettingsInfoBlock = () => {
 
   return (
     <>
-      <View testID="setting-screen_settings-info-block">
+      <View testID="Settings_Screen_Settings_Info_Block">
         <Spacer value={42} />
         <Button
           type="base"

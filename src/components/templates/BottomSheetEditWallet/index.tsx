@@ -91,7 +91,7 @@ export const BottomSheetEditWallet = forwardRef<
       avoidKeyboard={false}
       {...bottomSheetProps}
     >
-      <View style={styles.content}>
+      <View style={styles.content} testID="Bottom_Sheet_Edit_Wallet">
         <Button type="circular" onPress={showRename} style={styles.actionBtn}>
           <Text
             fontSize={16}

@@ -42,7 +42,7 @@ export const TransactionDetails = (
   if (!transaction) return <></>;
 
   return (
-    <View>
+    <View testID="Transaction_Details">
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
           Method
@@ -118,6 +118,7 @@ export const TransactionDetails = (
         type="circular"
         style={styles.shareBtn}
         onPress={showShareTransaction}
+        testID="Show_Share_Transaction_Button"
       >
         <Row alignItems="center">
           <ShareIcon color="#000000" />

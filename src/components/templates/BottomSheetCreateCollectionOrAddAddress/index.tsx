@@ -26,6 +26,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
           paddingHorizontal: scale(18),
           paddingBottom: verticalScale(24)
         }}
+        testID="BottomSheet_Create_Collection_Or_Add_Address"
       >
         <Spacer value={scale(24)} />
         <Button

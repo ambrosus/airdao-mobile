@@ -41,6 +41,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     };
     return (
       <Button
+        testID="Chart_Interval"
         key={interval.value}
         onPress={onPress}
         style={idx > 0 ? styles.interval : {}}
@@ -78,6 +79,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
   return (
     <View>
       <LineGraph
+        testID="Bezier_Chart"
         style={{
           width: '100%',
           aspectRatio: 4.72

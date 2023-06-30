@@ -11,7 +11,7 @@ export const SettingsScreen = () => {
     <SafeAreaView
       edges={['top']}
       style={styles.container}
-      testID="settings-screen"
+      testID="Settings_Screen"
     >
       <SettingsBlock />
       <View style={styles.separator} />

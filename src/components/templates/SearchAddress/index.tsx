@@ -180,7 +180,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                 </>
               )}
 
-              <Button onPress={showScanner}>
+              <Button onPress={showScanner} testID="Barcode_Scanner">
                 <ScannerQRIcon />
               </Button>
             </Row>

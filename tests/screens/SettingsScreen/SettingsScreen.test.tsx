@@ -40,8 +40,6 @@ jest.mock('@components/templates', () => {
   };
 });
 
-jest.mock('victory-native', () => ({}));
-
 jest.mock('react-native-share', () => ({}));
 
 jest.mock('@react-navigation/native', () => {
@@ -52,6 +50,11 @@ jest.mock('@react-navigation/native', () => {
     useRoute: jest.fn()
   };
 });
+
+jest.mock('@hooks', () => ({
+  useForwardedRef: jest.fn(),
+  useFullscreenModalHeight: () => []
+}));
 
 const queryClient = new QueryClient();
 
@@ -73,9 +76,11 @@ describe('SettingsScreen', () => {
       </SafeAreaProvider>
     );
 
-    const settingsScreen = getByTestId('settings-screen');
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    const settingsInfoBlock = getByTestId('setting-screen_settings-info-block');
+    const settingsScreen = getByTestId('Settings_Screen');
+    const settingsBlock = getByTestId('Settings_Screen_Settings_Block');
+    const settingsInfoBlock = getByTestId(
+      'Settings_Screen_Settings_Info_Block'
+    );
     expect(settingsBlock).toBeTruthy();
     expect(settingsScreen).toBeTruthy();
     expect(settingsInfoBlock).toBeTruthy();

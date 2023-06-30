@@ -4,15 +4,6 @@ import React from 'react';
 import { Notifications } from '@screens/Notifications';
 import { fireEvent, render } from '@testing-library/react-native';
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 const queryClient = new QueryClient();
 
 const Component = () => {

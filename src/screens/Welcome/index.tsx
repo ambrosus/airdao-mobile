@@ -34,7 +34,7 @@ export const WelcomeScreen = () => {
           </Text>
         </Row>
         <Spacer value={spacerValue} />
-        <View style={styles.optionsContainer}>
+        <View style={styles.optionsContainer} testID="Options_List">
           <Text
             fontFamily="Inter_700Bold"
             fontSize={24}
@@ -43,7 +43,11 @@ export const WelcomeScreen = () => {
             Experience the ease of tracking addresses on the go!
           </Text>
           <Spacer value={scale(36)} />
-          <Row alignItems="center" style={{ paddingRight: 60 }}>
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="First_Option"
+          >
             <View style={styles.icon}>
               <AddAddressIcon />
             </View>
@@ -66,7 +70,11 @@ export const WelcomeScreen = () => {
             </View>
           </Row>
           <Spacer value={scale(40)} />
-          <Row alignItems="center" style={{ paddingRight: 60 }}>
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="Second_Option"
+          >
             <View style={styles.icon}>
               <TrackAMBIcon />
             </View>
@@ -89,7 +97,11 @@ export const WelcomeScreen = () => {
             </View>
           </Row>
           <Spacer value={scale(40)} />
-          <Row alignItems="center" style={{ paddingRight: 60 }}>
+          <Row
+            alignItems="center"
+            style={{ paddingRight: 60 }}
+            testID="Third_Option"
+          >
             <View style={styles.icon}>
               <ManageCollections />
             </View>
@@ -115,6 +127,7 @@ export const WelcomeScreen = () => {
         </View>
       </View>
       <Button
+        testID="Get_Started_Button"
         onPress={async () => {
           await Cache.setItem(CacheKey.IsSecondInit, true);
           setTimeout(() => {
