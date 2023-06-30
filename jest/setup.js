@@ -57,3 +57,67 @@ jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
 jest.mock('@helpers/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]
 }));
+
+jest.mock('@neverdull-agency/expo-unlimited-secure-store', () => {
+  return jest.fn();
+});
+
+jest.mock('@nozbe/watermelondb/adapters/sqlite', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return {
+        batch: jest.fn()
+      };
+    })
+  };
+});
+
+jest.mock('@nozbe/watermelondb', () => {
+  class MockModel {
+    _raw = null;
+    constructor(raw) {
+      this._raw = raw;
+    }
+  }
+  class MockDatabase {
+    constructor() {
+      // mock methods
+    }
+  }
+  const tableSchema = jest.fn().mockImplementation(() => {
+    return {
+      name: '',
+      columns: []
+    };
+  });
+  const appSchema = jest.fn().mockImplementation(() => {
+    return {
+      version: 1,
+      tables: []
+    };
+  });
+  return {
+    __esModule: true,
+    Model: MockModel,
+    Database: MockDatabase,
+    tableSchema: tableSchema,
+    appSchema: appSchema
+  };
+});
+
+jest.mock('@nozbe/watermelondb/hooks', () => ({
+  useDatabase: jest.fn()
+}));
+
+jest.mock('react-native-graph', () => ({
+  LineGraph: 'LineGraph',
+  GraphPoint: 'GraphPoint'
+}));
+
+jest.mock('@shopify/react-native-skia', () => ({
+  runSpring: jest.fn(),
+  useValue: jest.fn(),
+  Circle: 'Circle',
+  Group: 'Group'
+}));
