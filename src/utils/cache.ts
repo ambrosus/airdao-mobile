@@ -2,6 +2,10 @@
 import createSecureStore from '@neverdull-agency/expo-unlimited-secure-store';
 import * as ExpoSecureStore from 'expo-secure-store';
 const SecureStore = createSecureStore();
+//@ts-ignore
+ExpoSecureStore.getItem = ExpoSecureStore.getItemAsync;
+ExpoSecureStore.setItem = ExpoSecureStore.setItemAsync;
+ExpoSecureStore.removeItem = ExpoSecureStore.deleteItemAsync;
 
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
@@ -18,7 +22,7 @@ export enum CacheKey {
   DEV_ONLY_MIGRATED_SECURE_STORE = 'migrated_secure_store'
 }
 
-const ALL_CACHE_KEYS = [
+export const ALL_CACHE_KEYS_TO_MIGRATE = [
   CacheKey.AddressLists,
   CacheKey.AllAddresses,
   CacheKey.DeviceID,
@@ -31,8 +35,15 @@ const ALL_CACHE_KEYS = [
 ];
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {
+  let store = ExpoSecureStore;
+  const migrated = await ExpoSecureStore.getItemAsync(
+    CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
+  );
+  // @ts-ignore
+  if (migrated) store = SecureStore;
   try {
-    const result = await SecureStore.getItem(CacheKey.NotificationSettings);
+    // @ts-ignore
+    const result = await store.getItem(CacheKey.NotificationSettings);
     if (result) return JSON.parse(result) as NotificationSettings;
     return DefaultNotificationSettings;
   } catch (error) {
@@ -41,8 +52,15 @@ const getNotificationSettings = async (): Promise<NotificationSettings> => {
 };
 
 const setItem = async (key: CacheKey, item: any): Promise<void> => {
+  let store = ExpoSecureStore;
+  const migrated = await ExpoSecureStore.getItemAsync(
+    CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
+  );
+  // @ts-ignore
+  if (migrated) store = SecureStore;
   try {
-    await SecureStore.setItem(key, JSON.stringify(item));
+    // @ts-ignore
+    await store.setItem(key, JSON.stringify(item));
   } catch (error) {
     throw error;
   }
@@ -54,8 +72,15 @@ const setItem = async (key: CacheKey, item: any): Promise<void> => {
  * @returns parsed value or null
  */
 const getItem = async (key: CacheKey): Promise<unknown | null> => {
+  let store = ExpoSecureStore;
+  const migrated = await ExpoSecureStore.getItemAsync(
+    CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
+  );
+  // @ts-ignore
+  if (migrated) store = SecureStore;
   try {
-    const item = await SecureStore.getItem(key);
+    // @ts-ignore
+    const item = await store.getItem(key);
     if (item) return JSON.parse(item);
     return null;
   } catch (error) {
@@ -64,19 +89,19 @@ const getItem = async (key: CacheKey): Promise<unknown | null> => {
 };
 
 const deleteItem = async (key: CacheKey): Promise<void> => {
-  await SecureStore.removeItem(key);
-};
-
-const deleteAll = async (): Promise<void[]> => {
-  return Promise.all(
-    ALL_CACHE_KEYS.map((key) => ExpoSecureStore.deleteItemAsync(key))
+  let store = ExpoSecureStore;
+  const migrated = await ExpoSecureStore.getItemAsync(
+    CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
   );
+  // @ts-ignore
+  if (migrated) store = SecureStore;
+  // @ts-ignore
+  await store.removeItem(key);
 };
 
 export const Cache = {
   getNotificationSettings,
   setItem,
   getItem,
-  deleteItem,
-  deleteAll
+  deleteItem
 };
