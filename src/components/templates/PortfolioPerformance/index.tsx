@@ -51,7 +51,7 @@ export function PortfolioPerformance(
           <Spacer value={verticalScale(6)} />
           {/* balance */}
           <Text
-            fontSize={24}
+            fontSize={22}
             fontFamily="Mersad_600SemiBold"
             color={COLORS.white}
           >
@@ -100,9 +100,8 @@ export function PortfolioPerformance(
                     color={COLORS.white}
                     type={(last24HourChange || 0) >= 0 ? 'up' : 'down'}
                   />
-                  <Spacer horizontal value={scale(8)} />
+                  <Spacer horizontal value={scale(5)} />
                   <Text fontSize={12} color={COLORS.white}>
-                    {' '}
                     {last24HourChange!.toFixed(2)}%
                   </Text>
                 </Row>
