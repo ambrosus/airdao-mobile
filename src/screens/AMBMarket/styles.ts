@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
-    paddingBottom: '40%',
+    paddingBottom: '10%',
     paddingHorizontal: scale(16),
     backgroundColor: COLORS.culturedWhite
   },
