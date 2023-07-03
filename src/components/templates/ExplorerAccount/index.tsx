@@ -178,8 +178,10 @@ export const ExplorerAccountView = (
                 }
                 fontSize={12}
               >
-                {listsWithAccount.length === 0
+                {account.isOnWatchlist
                   ? 'ADD TO GROUP'
+                  : listsWithAccount.length === 0
+                  ? 'ADD TO GROUPS'
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
                   : `Added to ${listsWithAccount.length} groups`}
