@@ -8,7 +8,6 @@ import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
-import { PlusIcon } from '@components/svg/icons';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { AddWalletToList } from '../AddWalletToList';
@@ -154,7 +153,6 @@ export const ExplorerAccountView = (
               {!account.isOnWatchlist && (
                 <>
                   <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.white} scale={0.5} />
                 </>
               )}
             </Row>
@@ -180,8 +178,10 @@ export const ExplorerAccountView = (
                 }
                 fontSize={12}
               >
-                {listsWithAccount.length === 0
-                  ? 'ADD TO COLLECTION'
+                {account.isOnWatchlist
+                  ? 'ADD TO GROUP'
+                  : listsWithAccount.length === 0
+                  ? 'ADD TO GROUPS'
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
                   : `Added to ${listsWithAccount.length} collections`}
@@ -189,7 +189,6 @@ export const ExplorerAccountView = (
               {listsWithAccount.length === 0 && (
                 <>
                   <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
                 </>
               )}
             </Row>
