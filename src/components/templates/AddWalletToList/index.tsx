@@ -93,7 +93,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
           <InputWithIcon
             value={searchText}
             onChangeValue={setSearchText}
-            placeholder="Search collections"
+            placeholder="Search groups"
             iconLeft={<SearchIcon color={COLORS.midnight} />}
           />
         </View>

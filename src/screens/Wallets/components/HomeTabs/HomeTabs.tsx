@@ -95,7 +95,7 @@ export const HomeTabs = () => {
               color={currentIndex === 1 ? COLORS.jetBlack : COLORS.lavenderGray}
               fontSize={currentIndex === 1 ? 20 : 18}
             >
-              Collections
+              Groups
             </Text>
           </Button>
         </Row>

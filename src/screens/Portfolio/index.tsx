@@ -10,7 +10,7 @@ import { View } from 'react-native';
 
 const portfolioTabRoutes = [
   { key: 'first', title: 'Watchlists' },
-  { key: 'second', title: 'Collections' }
+  { key: 'second', title: 'Groups' }
 ] as const;
 
 type PortfolioTabRoutes = typeof portfolioTabRoutes;
