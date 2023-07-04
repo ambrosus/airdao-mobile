@@ -10,7 +10,9 @@ export const WatchList = () => {
   const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
 
   return (
-    <View style={{ paddingHorizontal: scale(16), flex: 1 }}>
+    <View
+      style={{ paddingHorizontal: scale(16), flex: 1, paddingBottom: '10%' }}
+    >
       <WalletList
         isPortfolioFlow={true}
         emptyText=""
