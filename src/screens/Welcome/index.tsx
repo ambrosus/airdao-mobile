@@ -101,7 +101,7 @@ export const WelcomeScreen = () => {
                 fontSize={15}
                 color={COLORS.smokyBlack}
               >
-                Create and manage collections
+                Create and manage groups
                 <Text
                   fontFamily="Inter_600SemiBold"
                   fontSize={15}
