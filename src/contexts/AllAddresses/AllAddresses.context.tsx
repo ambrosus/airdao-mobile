@@ -134,8 +134,26 @@ const AllAddressesContext = () => {
     getAddresses();
 
     // setup notification listenet
-    const onNewNotificationReceive = (data: any) => {
+    const onNewNotificationReceive = async (data: any) => {
       if (data.type == 'transaction-alert') {
+        const toIdx = allAddresses.findIndex(
+          (address) => address.address === data.to
+        );
+        const fromIdx = allAddresses.findIndex(
+          (address) => address.address === data.from
+        );
+        if (toIdx > -1) {
+          const updatedSenderAddress = await populateAddresses([
+            allAddresses[toIdx]
+          ]);
+          reducer({ type: 'update', payload: updatedSenderAddress[0] });
+        }
+        if (fromIdx > -1) {
+          const updatedReceivingAddress = await populateAddresses([
+            allAddresses[fromIdx]
+          ]);
+          reducer({ type: 'update', payload: updatedReceivingAddress[0] });
+        }
         // refetch();
       }
     };
