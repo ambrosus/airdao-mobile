@@ -9,8 +9,9 @@ import { Spacer } from '@components/base';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
+  onRefresh?: () => void;
 };
-export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
+export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
   if (listsOfAddressGroup.length === 0) {
     return (
       <>
@@ -39,6 +40,8 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
             />
           );
         }}
+        onRefresh={onRefresh}
+        refreshing={false}
       />
     </View>
   );

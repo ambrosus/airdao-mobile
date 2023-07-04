@@ -6,6 +6,8 @@ import { ExplorerAccount } from '@models/Explorer';
 import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { NotificationService } from '@lib';
+import { DeviceEventEmitter } from 'react-native';
+import { EVENTS } from '@constants/events';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -121,21 +123,34 @@ const AllAddressesContext = () => {
   // Cache.setItem(CacheKey.PersonalList, []);
 
   // fetch all addresses on mount
+  const getAddresses = async () => {
+    const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
+      []) as CacheableAccount[];
+    const populatedAddresses = await populateAddresses(addresses);
+    setAllAddresses(populatedAddresses);
+    reducer({ type: 'set', payload: populatedAddresses });
+  };
   useEffect(() => {
-    const getAddresses = async () => {
-      const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-        []) as CacheableAccount[];
-      const populatedAddresses = await populateAddresses(addresses);
-      setAllAddresses(populatedAddresses);
-      reducer({ type: 'set', payload: populatedAddresses });
-    };
     getAddresses();
+
+    // setup notification listenet
+    const onNewNotificationReceive = (data: any) => {
+      if (data.type == 'transaction-alert') {
+        // refetch();
+      }
+    };
+    const notificationListenter = DeviceEventEmitter.addListener(
+      EVENTS.NotificationReceived,
+      onNewNotificationReceive
+    );
+    return () => notificationListenter.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     addresses: allAddresses,
-    reducer
+    reducer,
+    refresh: getAddresses
   };
 };
 
