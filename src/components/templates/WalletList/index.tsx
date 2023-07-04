@@ -22,6 +22,7 @@ interface WalletListProps
   renderItem?: (
     args: ListRenderItemInfo<ExplorerAccount>
   ) => React.ReactElement;
+  onRefresh?: () => void;
 }
 
 export function WalletList(props: WalletListProps): JSX.Element {
@@ -29,8 +30,9 @@ export function WalletList(props: WalletListProps): JSX.Element {
     data,
     isPortfolioFlow = false,
     scrollEnabled = true,
+    removeType = 'watchlist',
     renderItem,
-    removeType = 'watchlist'
+    onRefresh
   } = props;
 
   const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
@@ -59,6 +61,8 @@ export function WalletList(props: WalletListProps): JSX.Element {
       renderItem={renderWallet}
       ListEmptyComponent={<RenderEmpty text="addresses" />}
       showsVerticalScrollIndicator={false}
+      onRefresh={onRefresh}
+      refreshing={false} // TODO
     />
   );
 }
