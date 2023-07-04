@@ -155,11 +155,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                   fontSize={14}
                   color={COLORS.smokyBlack}
                 >
-                  {selectedInterval === '1d'
-                    ? '24hrs'
-                    : selectedInterval === 'weekly'
-                    ? '1 Week'
-                    : '1 Month'}
+                  {selectedInterval && '24hrs'}
                 </Text>
                 {badgeType === 'button' && (
                   <>
