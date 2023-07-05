@@ -51,13 +51,17 @@ const getNotificationSettings = async (): Promise<NotificationSettings> => {
   }
 };
 
-const setItem = async (key: CacheKey, item: any): Promise<void> => {
+const setItem = async (
+  key: CacheKey,
+  item: any,
+  useNewLib?: boolean
+): Promise<void> => {
   let store = ExpoSecureStore;
   const migrated = await ExpoSecureStore.getItemAsync(
     CacheKey.DEV_ONLY_MIGRATED_SECURE_STORE
   );
   // @ts-ignore
-  if (migrated) store = SecureStore;
+  if (migrated || useNewLib) store = SecureStore;
   try {
     // @ts-ignore
     await store.setItem(key, JSON.stringify(item));

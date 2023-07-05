@@ -22,7 +22,7 @@ export const useCachePurifier = () => {
       const valueInOld = await ExpoSecureStore.getItemAsync(key);
       await ExpoSecureStore.deleteItemAsync(key);
       if (valueInOld) {
-        await Cache.setItem(key, JSON.parse(valueInOld));
+        await Cache.setItem(key, JSON.parse(valueInOld), true);
       }
     };
     if (!migratedCache) {
