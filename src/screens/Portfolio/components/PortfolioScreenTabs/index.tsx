@@ -104,7 +104,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
               fontSize={16}
               color={COLORS.smokyBlack}
             >
-              Portfolio
+              Watchlist
             </Text>
             <Button
               onPress={portfolioTabsButton}
@@ -131,7 +131,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
                 fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                Portfolio
+                Watchlist
               </Text>
             </Row>
           </>
