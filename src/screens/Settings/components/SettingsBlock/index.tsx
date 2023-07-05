@@ -56,7 +56,7 @@ export const SettingsBlock = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Row style={styles.infoTextContainer}>
+            <Row alignItems="center" style={styles.infoTextContainer}>
               <CurrencyIcon />
               <Text style={styles.optionInfoText}>Base currency</Text>
             </Row>
@@ -75,7 +75,7 @@ export const SettingsBlock = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Row style={styles.infoTextContainer}>
+            <Row alignItems="center" style={styles.infoTextContainer}>
               <LanguageIcon />
               <Text style={styles.optionInfoText}>Language</Text>
             </Row>

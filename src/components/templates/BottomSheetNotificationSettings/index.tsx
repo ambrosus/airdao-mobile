@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Header,
@@ -81,11 +81,11 @@ export const BottomSheetNotificationSettings = forwardRef<
   return (
     <BottomSheet
       containerStyle={styles.bottomSheet}
-      height={Dimensions.get('screen').height}
+      height={Dimensions.get('window').height}
       ref={localRef}
       {...props}
     >
-      <Spacer value={topInset} />
+      {Platform.OS === 'ios' && <Spacer value={topInset} />}
       <Header
         title={
           <Text
