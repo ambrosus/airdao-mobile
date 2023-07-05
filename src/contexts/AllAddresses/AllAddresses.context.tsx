@@ -6,6 +6,8 @@ import { ExplorerAccount } from '@models/Explorer';
 import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { NotificationService } from '@lib';
+import { DeviceEventEmitter } from 'react-native';
+import { EVENTS } from '@constants/events';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -121,21 +123,52 @@ const AllAddressesContext = () => {
   // Cache.setItem(CacheKey.PersonalList, []);
 
   // fetch all addresses on mount
+  const getAddresses = async () => {
+    const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
+      []) as CacheableAccount[];
+    const populatedAddresses = await populateAddresses(addresses);
+    setAllAddresses(populatedAddresses);
+    reducer({ type: 'set', payload: populatedAddresses });
+  };
   useEffect(() => {
-    const getAddresses = async () => {
-      const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-        []) as CacheableAccount[];
-      const populatedAddresses = await populateAddresses(addresses);
-      setAllAddresses(populatedAddresses);
-      reducer({ type: 'set', payload: populatedAddresses });
-    };
     getAddresses();
+
+    // setup notification listenet
+    const onNewNotificationReceive = async (data: any) => {
+      if (data.type == 'transaction-alert') {
+        const toIdx = allAddresses.findIndex(
+          (address) => address.address === data.to
+        );
+        const fromIdx = allAddresses.findIndex(
+          (address) => address.address === data.from
+        );
+        if (toIdx > -1) {
+          const updatedSenderAddress = await populateAddresses([
+            allAddresses[toIdx]
+          ]);
+          reducer({ type: 'update', payload: updatedSenderAddress[0] });
+        }
+        if (fromIdx > -1) {
+          const updatedReceivingAddress = await populateAddresses([
+            allAddresses[fromIdx]
+          ]);
+          reducer({ type: 'update', payload: updatedReceivingAddress[0] });
+        }
+        // refetch();
+      }
+    };
+    const notificationListenter = DeviceEventEmitter.addListener(
+      EVENTS.NotificationReceived,
+      onNewNotificationReceive
+    );
+    return () => notificationListenter.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     addresses: allAddresses,
-    reducer
+    reducer,
+    refresh: getAddresses
   };
 };
 
