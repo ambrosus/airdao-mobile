@@ -181,10 +181,10 @@ export const ExplorerAccountView = (
                 fontSize={12}
               >
                 {listsWithAccount.length === 0
-                  ? 'ADD TO COLLECTION'
+                  ? 'ADD TO GROUP'
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
-                  : `Added to ${listsWithAccount.length} collections`}
+                  : `Added to ${listsWithAccount.length} groups`}
               </Text>
               {listsWithAccount.length === 0 && (
                 <>
@@ -199,7 +199,7 @@ export const ExplorerAccountView = (
       <BottomSheetWithHeader
         ref={addToListModal}
         height={fullscreenHeight * 0.95}
-        title="Add address to collection"
+        title="Add address to group"
         avoidKeyboard={false}
         swiperIconVisible={true}
       >

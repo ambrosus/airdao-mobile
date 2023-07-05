@@ -115,7 +115,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                {type === 'create' ? ' Create Collection' : 'Rename Collection'}
+                {type === 'create' ? ' Create Group' : 'Rename Group'}
               </Text>
               <Spacer value={8} />
               <OnboardingView
@@ -133,7 +133,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   placeholder={
                     emptyPlaceholder
                       ? 'This field is required'
-                      : 'Enter collection name'
+                      : 'Enter group name'
                   }
                   placeholderTextColor={
                     emptyPlaceholder ? COLORS.crimsonRed : COLORS.midnight

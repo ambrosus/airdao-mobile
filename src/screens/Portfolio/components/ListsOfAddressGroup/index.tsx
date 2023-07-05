@@ -15,7 +15,7 @@ export const ListsGroups = ({ listsOfAddressGroup }: Props) => {
     return (
       <>
         <Spacer value={20} />
-        <RenderEmpty text="collections" />
+        <RenderEmpty text="groups" />
       </>
     );
   }
