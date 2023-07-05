@@ -78,7 +78,7 @@ export const BottomSheetEditWallet = forwardRef<
       dismissThis();
       Toast.show({
         title: '',
-        message: 'Successfully removed wallet from collection!',
+        message: 'Successfully removed wallet from group!',
         type: ToastType.Top
       });
     }
@@ -113,7 +113,7 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.smokyBlack}
               >
-                Move to another collection
+                Move to another group
               </Text>
             </Button>
             <Button
@@ -124,11 +124,11 @@ export const BottomSheetEditWallet = forwardRef<
               }}
               onPress={removeFromCollection}
             >
-              <Text color={COLORS.crimsonRed}>Remove from collection</Text>
+              <Text color={COLORS.crimsonRed}>Remove from group</Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title="Move to another collection"
+              title="Move to another group"
               wallet={wallet}
               lists={listsOfAddressGroup.filter(
                 (list) => listsWithCurrentWallet.indexOfItem(list, 'id') === -1
@@ -148,12 +148,12 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.smokyBlack}
               >
-                Add to collection
+                Add to group
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title="Add to collection"
+              title="Add to group"
               wallet={wallet}
               lists={listsOfAddressGroup}
               onWalletMove={dismissAddToCollection}

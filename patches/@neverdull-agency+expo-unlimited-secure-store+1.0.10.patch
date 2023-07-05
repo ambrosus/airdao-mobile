@@ -1,0 +1,12 @@
+diff --git a/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/aes.js b/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/aes.js
+index a527dc9..e0e8bdb 100644
+--- a/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/aes.js
++++ b/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/aes.js
+@@ -7,6 +7,7 @@ export const encryptWithRandomKey = (data) => {
+ };
+ 
+ export const decrypt = (data, key) => {
++    if(!data || !key) return null
+     const decryptedBytes = CryptoJS.AES.decrypt(data, key);
+     const decryptedValue = decryptedBytes.toString(CryptoJS.enc.Utf8);
+     return decryptedValue;

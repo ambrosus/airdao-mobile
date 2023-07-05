@@ -205,7 +205,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   return (
     <BottomSheet
       ref={localRef}
-      height={Dimensions.get('screen').height * 0.85}
+      height={Dimensions.get('window').height * 0.85}
       avoidKeyboard={false}
       swiperIconVisible={true}
       containerStyle={{
