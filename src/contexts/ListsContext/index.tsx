@@ -12,8 +12,22 @@ import {
 import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerAccountDTO } from '@models';
 import { API } from '@api/api';
+import Config from '@constants/config';
 
-const testAddresses = [
+const testEnvAddresses = [
+  '0xCF4FdE7Af51236631eab85C9DE60b7e1C0d3162E',
+  '0x7cee2ae3042D2C646Aa24FACfA92dfeE589046f0',
+  '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
+  '0xf5DcDb300Ab31F5143f380A00Ea9e8E8F1c0Ded3',
+  '0x88a31B42f05ad530EF237152Fde26d6cf0f89b0f',
+  '0x60bBa9ca40D4A5ef331b6065dC58a13c91a67B3C',
+  '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
+  '0x144D5dc1c119EC3D63ba846617E7BFefb00E268d',
+  '0xB38a013436755e0e56996f18f25946028Df8ee31',
+  '0xb739965B6692CFDA431959F3B423fD5870a57C50'
+];
+
+const prodEnvAddresses = [
   '0x68c66f1C56CC6341856cf4427650978B653C78D6',
   '0x51C17E332299dAaADCB9C8dd74F7C4845aEB52F6',
   '0xcC2c510Ad2a0560c2d6F2D25a9C9F7Ed4Ac73e38',
@@ -65,6 +79,9 @@ const testAddresses = [
   '0x8e224ea3892a25064f380d9A58F3197C4A5e0ef8',
   '0xb5B563e5ed9A9d4eaad3F498F497943d637920f3'
 ];
+
+const testAddresses =
+  Config.env === 'prod' ? prodEnvAddresses : testEnvAddresses;
 
 const ListsContext = () => {
   const allAddresses = useAllAddresses();
