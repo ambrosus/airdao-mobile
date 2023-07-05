@@ -2221,6 +2221,13 @@
   resolved "https://registry.yarnpkg.com/@morrowdigital/watermelondb-expo-plugin/-/watermelondb-expo-plugin-2.1.2.tgz#7c511d671cba68984d5b77a78d3b998bfb57a750"
   integrity sha512-mN/CISFEoA4w9HH62gQ7hHefpoNEGSp3eEs8kRUwtNpumBEr1Of8EEN1sNGmfB0IhB62Rj5gbFC+eBVhas4YXQ==
 
+"@neverdull-agency/expo-unlimited-secure-store@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@neverdull-agency/expo-unlimited-secure-store/-/expo-unlimited-secure-store-1.0.10.tgz#1e78b502257b267fc918a85eaa41aa01a46d2007"
+  integrity sha512-3rGdoSvp6vFgcwMep+r38xVfHYuQKDKBUQ8Kl4UtOfWcQR4iCKb3WiB5GxPuooVFuV54IGp/r4/tMTi+pQoReA==
+  dependencies:
+    crypto-js "^3.1.9-1"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -4184,6 +4191,11 @@ crypt@0.0.2, crypt@~0.0.1:
   version "0.0.2"
   resolved "https://registry.npmjs.org/crypt/-/crypt-0.0.2.tgz"
   integrity sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==
+
+crypto-js@^3.1.9-1:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"

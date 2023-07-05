@@ -109,7 +109,6 @@ const AllAddressesContext = () => {
         );
         const newAccount = Object.assign({}, account);
         newAccount.name = address.name;
-        newAccount.isPersonal = Boolean(address.isPersonal);
         newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
         return newAccount;
       })
