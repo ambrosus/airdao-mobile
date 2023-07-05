@@ -64,12 +64,6 @@
         }
       ],
       [
-        "@morrowdigital/watermelondb-expo-plugin",
-        {
-          "databases": ["morrow.db"]
-        }
-      ],
-      [
         "expo-build-properties",
         {
           "ios": {
