@@ -19,6 +19,7 @@ export enum CacheKey {
   Onboarding = 'onboarding',
   Watchlist = 'watchlist',
   LastNotificationTimestamp = 'last_notification_timestamp',
+  PreCreatedGroupWasCreated = 'pre_created_group_was_created',
   DEV_ONLY_MIGRATED_SECURE_STORE = 'migrated_secure_store'
 }
 
