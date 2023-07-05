@@ -11,7 +11,8 @@ export enum CacheKey {
   PersonalList = 'personal_list',
   Onboarding = 'onboarding',
   Watchlist = 'watchlist',
-  LastNotificationTimestamp = 'last_notification_timestamp'
+  LastNotificationTimestamp = 'last_notification_timestamp',
+  PreCreatedGroupWasCreated = 'pre_created_group_was_created'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {

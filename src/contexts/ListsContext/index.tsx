@@ -10,13 +10,11 @@ import {
   useAllAddressesReducer
 } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
-import { explorerService } from '@api/explorer-service';
 import { ExplorerAccountDTO } from '@models';
 import { API } from '@api/api';
 
 const testAddresses = [
   '0x68c66f1C56CC6341856cf4427650978B653C78D6',
-  '0x0039e7CD3d93a0a9406c615B3a53aAC98E9AC2FA',
   '0x51C17E332299dAaADCB9C8dd74F7C4845aEB52F6',
   '0xcC2c510Ad2a0560c2d6F2D25a9C9F7Ed4Ac73e38',
   '0xaf33c3aF89bb42e69986464112a8f16EfD6d5385',
@@ -214,12 +212,12 @@ const ListsContext = () => {
   const toggleAddressesInList = (
     accounts: ExplorerAccount[],
     list: AccountList,
-    ownGroup?: CacheableAccountList[]
+    customGroups?: CacheableAccountList[]
   ) => {
-    const groups = ownGroup || listsOfAddressGroup;
+    const listOfGroups = customGroups || listsOfAddressGroup;
     accounts.forEach((account) => {
       const newAddress: ExplorerAccount = Object.assign({}, account);
-      const listInContext = groups.find((l) => l.id === list.id);
+      const listInContext = listOfGroups.find((l) => l.id === list.id);
       if (!listInContext) return;
       if (listInContext.addresses.indexOfItem(account.address) > -1) {
         listInContext.addresses.removeItem(account.address);
@@ -228,7 +226,7 @@ const ListsContext = () => {
         // add to watchlist if not watchlisted
         if (!newAddress.isOnWatchlist) newAddress.isOnWatchlist = true;
       }
-      groups.forEach((l) => {
+      listOfGroups.forEach((l) => {
         if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
           l.addresses.removeItem(account.address);
         }
@@ -240,7 +238,7 @@ const ListsContext = () => {
     allAddressesReducer({ type: 'set', payload: allAddresses });
     // timeout ensures that the account has been added to all addresses
     // setTimeout(() => {
-    setListsOfAddressGroup([...groups]);
+    setListsOfAddressGroup([...listOfGroups]);
     // }, 0);
   };
 
@@ -249,33 +247,32 @@ const ListsContext = () => {
       const lists = ((await Cache.getItem(CacheKey.AddressLists)) ||
         []) as CacheableAccountList[];
       setListsOfAddressGroup(lists);
-      const newGroupOfAddresses = await handleOnCreate('TSESTSTST');
-      // const test = await API.explorerService.searchAddress(
-      //   '0x68c66f1C56CC6341856cf4427650978B653C78D6'
-      // );
-      const res = await Promise.all(
-        testAddresses.map(
-          async (address) => await API.explorerService.searchAddress(address)
-        )
-      );
-      console.log(res, ';lkamsd');
-      const newGroup = new AccountList({
-        ...newGroupOfAddresses,
-        accounts: []
-      });
-      toggleAddressesInList(
-        res.map((ea: ExplorerAccountDTO) => new ExplorerAccount(ea)),
-        new AccountList({
-          ...newGroupOfAddresses,
-          accounts: []
-        }),
-        [...lists, newGroupOfAddresses]
-      );
+
+      const shouldPreGroupBeCreated = !(await Cache.getItem(
+        CacheKey.PreCreatedGroupWasCreated
+      ));
+
+      if (shouldPreGroupBeCreated) {
+        const newGroupOfAddresses = await handleOnCreate('MultiSig Vault');
+        const res = await Promise.all(
+          testAddresses.map(
+            async (address) => await API.explorerService.searchAddress(address)
+          )
+        );
+        toggleAddressesInList(
+          res.map((ea: ExplorerAccountDTO) => new ExplorerAccount(ea)),
+          new AccountList({
+            ...newGroupOfAddresses,
+            accounts: []
+          }),
+          [...lists, newGroupOfAddresses]
+        );
+        await Cache.setItem(CacheKey.PreCreatedGroupWasCreated, true);
+      }
     };
     getLists();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(listsOfAddressGroup);
 
   return {
     listsOfAddressGroup: lists,
