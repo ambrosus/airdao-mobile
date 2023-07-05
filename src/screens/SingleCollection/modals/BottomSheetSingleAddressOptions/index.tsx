@@ -52,7 +52,6 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       const saveAddress = async () => {
         const newWallet: ExplorerAccount = Object.assign({}, item);
         newWallet.name = newName;
-        newWallet.isPersonal = false;
         allAddressesReducer({ type: 'update', payload: newWallet });
         localRef.current?.dismiss();
       };
@@ -83,7 +82,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       <Spacer value={24} />
       <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
         <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
-          Move to another collection
+          Move to another group
         </Text>
       </Button>
       <Spacer value={24} />
@@ -93,7 +92,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
           fontSize={16}
           color={COLORS.crimsonRed}
         >
-          Remove from collection
+          Remove from group
         </Text>
       </Button>
       <BottomSheetConfirmRemove

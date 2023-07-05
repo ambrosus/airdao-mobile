@@ -61,7 +61,7 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
                 fontSize={18}
                 color={COLORS.nero}
               >
-                Move address to collection
+                Move address to group
               </Text>
             }
             titlePosition="center"
@@ -94,7 +94,7 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
               iconLeft={<SearchIcon color="#2f2b4399" />}
               type="text"
               style={{ width: '65%', height: 50 }}
-              placeholder="Search collections"
+              placeholder="Search groups"
               placeholderTextColor="#2f2b4399"
               value=""
               onChangeValue={() => null}

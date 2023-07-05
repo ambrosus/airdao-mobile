@@ -1,13 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { HomeInactiveIcon } from '@components/svg/BottomTabIcons/WalletsInactiveIcon';
-import { HomeActiveIcon } from '@components/svg/BottomTabIcons/WalletsActiveIcon';
-import { SearchInactiveIcon } from '@components/svg/BottomTabIcons/SearchInactiveIcon';
-import { SearchActiveIcon } from '@components/svg/BottomTabIcons/SearchActiveIcon';
-import { PortfolioInactiveIcon } from '@components/svg/BottomTabIcons/PortfolioInactiveIcon';
-import { PortfolioActiveIcon } from '@components/svg/BottomTabIcons/PortfolioActiveIcon';
-import { SettingsInactiveIcon } from '@components/svg/BottomTabIcons/SettingsInactiveIcon';
-import { SettingsActiveIcon } from '@components/svg/BottomTabIcons/SettingsActiveIcon';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
@@ -19,24 +11,30 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
+import {
+  ExploreTabIcon,
+  WatchlistTabIcon,
+  OverviewTabIcon,
+  SettingsTabIcon
+} from '@components/svg/BottomTabIcons';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <HomeInactiveIcon />,
-    activeIcon: <HomeActiveIcon />
+    inactiveIcon: <OverviewTabIcon color={COLORS.gray200} />,
+    activeIcon: <OverviewTabIcon color={COLORS.mainBlue} />
   },
   Portfolio: {
-    inactiveIcon: <PortfolioInactiveIcon />,
-    activeIcon: <PortfolioActiveIcon />
+    inactiveIcon: <WatchlistTabIcon color={COLORS.gray200} />,
+    activeIcon: <WatchlistTabIcon color={COLORS.mainBlue} />
   },
   Search: {
-    inactiveIcon: <SearchInactiveIcon />,
-    activeIcon: <SearchActiveIcon />
+    inactiveIcon: <ExploreTabIcon color={COLORS.gray200} />,
+    activeIcon: <ExploreTabIcon color={COLORS.mainBlue} />
   },
   Settings: {
-    inactiveIcon: <SettingsInactiveIcon />,
-    activeIcon: <SettingsActiveIcon />
+    inactiveIcon: <SettingsTabIcon color={COLORS.gray200} />,
+    activeIcon: <SettingsTabIcon color={COLORS.mainBlue} />
   }
 };
 

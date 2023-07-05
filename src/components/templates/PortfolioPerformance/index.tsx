@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { Row, Spacer, Text } from '@components/base';
 import { LogoSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -117,14 +117,14 @@ export function PortfolioPerformance(
               fontFamily="Inter_600SemiBold"
               color={COLORS.white}
             >
-              {dayjs(timestamp).format('YYYY-MM-DD')}
+              {moment(timestamp).format('YYYY-MM-DD')}
             </Text>
             <Text
               fontSize={11}
               fontFamily="Inter_600SemiBold"
               color={COLORS.white}
             >
-              {dayjs(timestamp).format('hh:mm A').toLowerCase()}
+              {moment(timestamp).format('hh:mm A').toLowerCase()}
             </Text>
           </Row>
         </View>

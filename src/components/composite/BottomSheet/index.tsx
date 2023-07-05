@@ -9,7 +9,7 @@ import Modal from 'react-native-modal';
 import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
-import { KeyboardDismissingView, Separator } from '@components/base';
+import { Separator } from '@components/base';
 import { useFullscreenModalHeight } from '@hooks';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
@@ -51,7 +51,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
 
     const content = useMemo(
       () => (
-        <KeyboardDismissingView
+        <View
           style={[
             {
               height: fullscreen
@@ -76,7 +76,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
             </View>
           )}
           {children}
-        </KeyboardDismissingView>
+        </View>
       ),
       [
         fullscreen,
@@ -98,8 +98,9 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
-        swipeDirection="down"
+        swipeDirection={['down']}
         onSwipeComplete={dismiss}
+        useNativeDriverForBackdrop
         propagateSwipe
         onBackButtonPress={dismiss}
         onBackdropPress={dismiss}

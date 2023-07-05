@@ -16,7 +16,6 @@ import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
 import { useFullscreenModalHeight } from '@hooks';
 import { ExplorerAccount } from '@models/Explorer';
-import { AccountList } from '@models/AccountList';
 import { useOnboardingStatus } from '@contexts';
 import { OnboardingView } from '../OnboardingView';
 import { COLORS } from '@constants/colors';
@@ -103,23 +102,6 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
     hideAddToListModal();
   }, [localLists, setListsOfAddressGroup]);
 
-  const onPressListItem = useCallback(
-    (list: AccountList) => {
-      const listFromLocalLists = localLists.find((l) => l.id === list.id);
-      if (!listFromLocalLists) return;
-      const idx = listFromLocalLists.accounts.findIndex(
-        (account) => account.address === wallet.address
-      );
-      if (idx > -1) {
-        listFromLocalLists.accounts.splice(idx, 1);
-      } else {
-        listFromLocalLists.accounts.push(wallet);
-      }
-      setLocalLists([...localLists]);
-    },
-    [localLists, wallet]
-  );
-
   return (
     <View style={styles.container} testID="EditWallet_Container">
       <Text title color="#222222" fontFamily="Inter_600SemiBold">
@@ -142,7 +124,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           style={styles.input}
           value={name}
           onChangeValue={onNameChange}
-          editable={status !== 5}
+          editable={status !== '5'}
         />
       </OnboardingView>
       <Spacer value={24} />
@@ -291,11 +273,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
         actionTitle={Platform.OS === 'ios' ? 'Save' : ''}
         onActionPress={Platform.OS === 'ios' ? saveNewLists : undefined}
       >
-        <AddWalletToList
-          wallet={wallet}
-          lists={localLists}
-          onPressList={onPressListItem}
-        />
+        <AddWalletToList wallet={wallet} lists={localLists} />
       </BottomSheetWithHeader>
     </View>
   );

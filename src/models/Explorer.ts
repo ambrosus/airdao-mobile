@@ -21,7 +21,6 @@ export class ExplorerAccount implements CacheableAccount {
   type: ExplorerAccountType;
   name: string;
   isOnWatchlist?: boolean | undefined;
-  isPersonal?: boolean | undefined;
 
   constructor(details: ExplorerAccountDTO) {
     this._id = details._id;
@@ -40,7 +39,6 @@ export class ExplorerAccount implements CacheableAccount {
     return {
       name: from.name,
       address: from.address,
-      isPersonal: from.isPersonal,
       isOnWatchlist: from.isOnWatchlist
     };
   }

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Platform, SafeAreaView, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { EditIcon } from '@components/svg/icons';
@@ -20,6 +21,7 @@ import {
 } from '@appTypes/navigation/common';
 import { FloatButton } from '@components/base/FloatButton';
 import { useAMBPrice } from '@hooks';
+import { useAllAddressesContext } from '@contexts';
 
 export const SingleGroupScreen = () => {
   const {
@@ -34,7 +36,7 @@ export const SingleGroupScreen = () => {
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const editCollectionModalRef = useRef<BottomSheetRef>(null);
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
-
+  const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
@@ -52,8 +54,7 @@ export const SingleGroupScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {Platform.OS === 'android' && <Spacer value={30} />}
+    <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
         title={
           <Text
@@ -129,6 +130,7 @@ export const SingleGroupScreen = () => {
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
+          onRefresh={refetchAddresses}
         />
       </View>
       {Platform.OS === 'android' && (

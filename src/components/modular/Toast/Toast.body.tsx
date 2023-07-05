@@ -16,7 +16,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Row, Text } from '@components/base';
 import { CloseIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './Toast.styles';
 import { ToastOptions, ToastType } from './Toast.types';
 import { COLORS } from '@constants/colors';
@@ -139,7 +139,12 @@ export const ToastBody = forwardRef((_, ref) => {
           </View>
           <Button
             onPress={hide}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginRight: scale(16)
+            }}
           >
             <CloseIcon color="#FFFFFF" />
           </Button>

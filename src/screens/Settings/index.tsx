@@ -4,10 +4,12 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SettingsScreen = () => {
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={styles.container} testID="settings-screen">
+    <View style={[{ top }, styles.container]} testID="settings-screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />

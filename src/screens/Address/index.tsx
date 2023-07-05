@@ -13,7 +13,6 @@ import {
 import {
   useAMBPrice,
   useExplorerInfo,
-  usePersonalList,
   useSearchAccount,
   useTransactionsOfAccount,
   useWatchlist
@@ -47,19 +46,17 @@ export const AddressDetails = (): JSX.Element => {
     1,
     TRANSACTION_LIMIT,
     '',
-    !initialMount.current // not fetching transaction on initial mount to prevent FPS drop caused by dayjs.fromNow inside <TransactionItem /> component.
+    !initialMount.current // not fetching transaction on initial mount to prevent FPS drop caused by moment.fromNow inside <TransactionItem /> component.
   );
   initialMount.current = false;
   const { data: explorerInfo, loading: explorerLoading } = useExplorerInfo();
   const { data: ambPrice } = useAMBPrice();
   const { watchlist } = useWatchlist();
-  const { personalList } = usePersonalList();
   const editModal = useRef<BottomSheetRef>(null);
   const shareModal = useRef<BottomSheetRef>(null);
 
   const walletInWatchlist = watchlist.find((w) => w.address === address);
-  const walletInPersonalList = personalList.find((w) => w.address === address);
-  const finalAccount = walletInWatchlist || walletInPersonalList || account;
+  const finalAccount = walletInWatchlist || account;
 
   if (accountLoading || explorerLoading || !finalAccount || !explorerInfo) {
     return (
@@ -119,7 +116,7 @@ export const AddressDetails = (): JSX.Element => {
               type="circular"
               onPress={shareShareModal}
             >
-              <ShareIcon color={COLORS.smokyBlack} />
+              <ShareIcon color={COLORS.smokyBlack} scale={1.1} />
             </Button>
             <Spacer value={scale(32)} horizontal />
             <Button
@@ -128,7 +125,7 @@ export const AddressDetails = (): JSX.Element => {
               onPress={showEditModal}
             >
               {Platform.select({
-                ios: <EditIcon color={COLORS.smokyBlack} />,
+                ios: <EditIcon color={COLORS.smokyBlack} scale={1.1} />,
                 android: <OptionsIcon color={COLORS.smokyBlack} />
               })}
             </Button>
@@ -140,9 +137,9 @@ export const AddressDetails = (): JSX.Element => {
         nameVisible={true}
         onToggleWatchlist={onToggleWatchlist}
       />
-      <Spacer value={verticalScale(32)} />
+      <Spacer value={verticalScale(16)} />
       <View style={styles.divider} />
-      <Spacer value={verticalScale(32)} />
+      <Spacer value={verticalScale(16)} />
       <AccountTransactions
         transactions={transactions}
         onEndReached={loadMoreTransactions}

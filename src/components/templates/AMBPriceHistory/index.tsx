@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Animated, {
-  runOnJS,
   useAnimatedProps,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import moment from 'moment';
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
@@ -19,12 +17,14 @@ import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
 import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
+import { MONTH_NAMES } from '@constants/variables';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
   onBadgePress?: () => unknown;
 }
 
+// @ts-ignore
 const intervalTimeDiffMap: { [key in CMCInterval]: number } = {
   // '1h': 3.6 * 10e5,
   '1d': 8.64 * 10e6,
@@ -40,7 +40,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
-  const [formattedDate, setFormattedDate] = useState('');
   const didSetAMBPriceFromAPI = useRef(false);
 
   useEffect(() => {
@@ -81,18 +80,29 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
     return '';
   });
 
-  const formatDate = (selectedPointDate: number) => {
-    const now = moment();
-    const isToday = moment(selectedPointDate).isSame(now, 'day');
-    let formattedDate = '';
-    if (isToday) formattedDate = moment(selectedPointDate).format('hh:mm A');
-    else formattedDate = moment(selectedPointDate).format('MMMM DD hh:mm A');
-    setFormattedDate(formattedDate);
-  };
-
   const dateAnimatedProps = useAnimatedProps(() => {
     if (selectedPointDate.value !== -1) {
-      runOnJS(formatDate)(selectedPointDate.value);
+      // format data
+      const now = new Date();
+      const selectedDate = new Date(selectedPointDate.value);
+      const isToday = now.toDateString() === selectedDate.toDateString();
+      let formattedDate = '';
+      const hours = `0${selectedDate.getHours() % 12}`;
+      const meridiem = selectedDate.getHours() > 12 ? 'pm' : 'am';
+      const minutes =
+        selectedDate.getMinutes() >= 10
+          ? selectedDate.getMinutes()
+          : `0${selectedDate.getMinutes()}`;
+      if (isToday) {
+        formattedDate = `${hours}:${minutes} ${meridiem}`;
+      } else {
+        const month = MONTH_NAMES[selectedDate.getMonth()];
+        const date =
+          selectedDate.getDate() >= 10
+            ? selectedDate.getDate()
+            : `0${selectedDate.getDate()}`;
+        formattedDate = `${month} ${date} ${hours}:${minutes} ${meridiem}`;
+      }
       return {
         text: formattedDate
       } as any;
@@ -155,11 +165,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                   fontSize={14}
                   color={COLORS.smokyBlack}
                 >
-                  {selectedInterval === '1d'
-                    ? '24hrs'
-                    : selectedInterval === 'weekly'
-                    ? '1 Week'
-                    : '1 Month'}
+                  {selectedInterval && '24hrs'}
                 </Text>
                 {badgeType === 'button' && (
                   <>

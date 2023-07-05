@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     paddingVertical: verticalScale(12),
-    paddingLeft: scale(16),
-    paddingRight: scale(20)
+    paddingLeft: scale(16)
   }
 });

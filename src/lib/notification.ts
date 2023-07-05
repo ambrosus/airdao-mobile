@@ -43,7 +43,7 @@ export class NotificationService {
     message: FirebaseMessagingTypes.RemoteMessage
   ) {
     // TODO we can show Toast message
-    DeviceEventEmitter.emit(EVENTS.NotificationReceived);
+    DeviceEventEmitter.emit(EVENTS.NotificationReceived, message.data);
     // this.handleNotification.bind(this)(message);
   }
 

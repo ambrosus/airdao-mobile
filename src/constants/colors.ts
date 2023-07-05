@@ -1,7 +1,11 @@
 export const COLORS = {
   blue100: '#EDF3FF',
   blue500: '#2563EB',
+  gray200: '#C2C5CC',
+  gray400: '#676B73',
+  gray500: '#646464',
   gray700: '#323232',
+  gray800: '#222222',
   neutral800: '#191919',
   asphalt: '#a1a6b2',
   black: '#000000',

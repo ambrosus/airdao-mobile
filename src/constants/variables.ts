@@ -18,3 +18,18 @@ export const DefaultNotificationSettings: NotificationSettings = {
 export const CRYPTO_ADDRESS_MAX_LENGTH = 62;
 
 export const CMC_API_KEY = '';
+
+export const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];

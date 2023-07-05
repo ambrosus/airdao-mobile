@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform, ScrollView, View } from 'react-native';
 import {
   AMBPriceInfo,
   BottomSheetTrade,
@@ -15,8 +14,9 @@ import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>
@@ -41,20 +41,27 @@ export function AMBMarket(): JSX.Element {
   };
 
   return (
-    <SafeAreaView testID="ambmarket-screen" style={styles.container}>
+    <SafeAreaView
+      edges={['top']}
+      testID="ambmarket-screen"
+      style={styles.container}
+    >
       <Header
         title="Statistics"
         style={{
-          backgroundColor: COLORS.culturedWhite,
+          backgroundColor:
+            Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
           shadowColor: COLORS.culturedWhite
         }}
         contentRight={
           <Button onPress={onSharePress}>
-            <ShareIcon color={COLORS.jetBlack} scale={1.4} />
+            <ShareIcon color={COLORS.jetBlack} scale={1.5} />
+            <Spacer horizontal value={scale(20)} />
           </Button>
         }
       />
       <ScrollView
+        bounces={false}
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
@@ -66,7 +73,8 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
-            <AMBPriceInfo priceUSD={ambPrice.priceUSD} />
+            <Spacer value={verticalScale(16)} />
+            <AMBPriceInfo />
             <View style={styles.body}>
               <BodyTitle title="Info" />
               <Spacer value={verticalScale(16)} />

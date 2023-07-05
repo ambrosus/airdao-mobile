@@ -7,11 +7,8 @@ import {
 import { View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import moment from 'moment';
 import { COLORS } from '@constants/colors';
-
-dayjs.extend(relativeTime);
 
 interface NotificationBoxProps {
   notification: Notification;
@@ -72,7 +69,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
             color={COLORS.slateGrey}
             fontFamily="Inter_600SemiBold"
           >
-            {dayjs(createdAt).fromNow()}
+            {moment(createdAt).fromNow()}
           </Text>
         </Row>
         <Spacer value={verticalScale(4)} />
