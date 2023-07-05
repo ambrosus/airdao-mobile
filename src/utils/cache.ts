@@ -19,7 +19,7 @@ export enum CacheKey {
   Onboarding = 'onboarding',
   Watchlist = 'watchlist',
   LastNotificationTimestamp = 'last_notification_timestamp',
-  DEV_ONLY_MIGRATED_SECURE_STORE = 'migrated_secure_store'
+  PreCreatedGroupWasCreated = 'pre_created_group_was_created'
 }
 
 export const ALL_CACHE_KEYS_TO_MIGRATE = [

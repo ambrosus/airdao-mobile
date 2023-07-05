@@ -50,7 +50,6 @@ const searchAddress = async (address: string): Promise<ExplorerAccountDTO> => {
     const response = await axios.get(`${exploreApiUrl}/search/${address}`);
     const { meta, data } = response.data;
     const type = getExplorerAccountTypeFromResponseMeta(meta.search);
-    console.log(data.account ? { ...data.account, type } : { ...data, type });
     return data.account ? { ...data.account, type } : { ...data, type };
   } catch (error) {
     throw error;
