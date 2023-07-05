@@ -21,10 +21,18 @@ export const TabsNavigator = () => {
       <BottomTabs.Screen
         name="Wallets"
         component={HomeStack}
-        options={{ tabBarLabel: 'Home' }}
+        options={{ tabBarLabel: 'Overview' }}
       />
-      <BottomTabs.Screen name="Portfolio" component={PortfolioStack} />
-      <BottomTabs.Screen name="Search" component={SearchStack} />
+      <BottomTabs.Screen
+        name="Portfolio"
+        component={PortfolioStack}
+        options={{ tabBarLabel: 'Watchlist' }}
+      />
+      <BottomTabs.Screen
+        name="Search"
+        component={SearchStack}
+        options={{ tabBarLabel: 'Explore' }}
+      />
       <BottomTabs.Screen name="Settings" component={SettingsStack} />
     </BottomTabs.Navigator>
   );

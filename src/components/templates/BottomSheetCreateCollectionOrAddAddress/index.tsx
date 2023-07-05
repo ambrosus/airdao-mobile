@@ -62,7 +62,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.smokyBlack}
           >
-            Create Collection
+            Create Group
           </Text>
         </Button>
       </View>
