@@ -1,4 +1,4 @@
-export enum ToastType {
+export enum ToastPosition {
   Top = 'top',
   Bottom = 'bottom'
 }
@@ -7,7 +7,7 @@ export interface ToastOptions {
   title?: string;
   message: string;
   duration?: number;
-  type: ToastType;
+  type: ToastPosition;
   onUndo?: () => void;
   onBodyPress?: () => void;
 }
