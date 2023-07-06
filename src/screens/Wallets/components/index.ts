@@ -1,2 +1,4 @@
 export * from './PortfolioBalance';
-export * from './Watchlists';
+export * from './Header';
+export * from './HomeTabs';
+export * from './HomeHighlightsSlider';
