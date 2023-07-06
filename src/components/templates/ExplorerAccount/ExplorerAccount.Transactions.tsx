@@ -46,7 +46,7 @@ export const AccountTransactions = (
             fontSize={20}
             color={COLORS.jetBlack}
           >
-            Recent Activity
+            Recent activity
           </Text>
         </Row>
       </KeyboardDismissingView>
