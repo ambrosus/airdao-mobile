@@ -5,7 +5,7 @@ import { IconProps } from '@components/svg/icons';
 export function WatchlistTabIcon(props: IconProps) {
   const { scale = 1, color = '#457EFF' } = props;
   const width = 24;
-  const height = 19;
+  const height = 24;
   return (
     <Svg
       width={width}
