@@ -130,6 +130,7 @@ export const SingleGroupScreen = () => {
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
+          contentContainerStyle={{ paddingBottom: '10%' }}
           onRefresh={refetchAddresses}
         />
       </View>
