@@ -26,8 +26,8 @@ export const ToastBody = forwardRef((_, ref) => {
   const DISTANCE_FROM_EDGE = verticalScale(16);
   const defaultOptions: ToastOptions = useMemo(
     () => ({
-      message: 'Tap to rename address',
-      title: 'Way to go! Address watchlisted.',
+      message: '',
+      title: '',
       duration: 3500, // ms
       type: ToastPosition.Top,
       onBodyPress: undefined
