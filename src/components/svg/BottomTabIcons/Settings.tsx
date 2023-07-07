@@ -4,7 +4,7 @@ import { IconProps } from '@components/svg/icons';
 
 export function SettingsTabIcon(props: IconProps) {
   const { scale = 1, color = '#457EFF' } = props;
-  const width = 23;
+  const width = 24;
   const height = 24;
   return (
     <Svg
