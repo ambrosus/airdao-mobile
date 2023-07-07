@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-  View,
-  useWindowDimensions
-} from 'react-native';
+import { Alert, View, useWindowDimensions } from 'react-native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import {
@@ -22,7 +16,7 @@ import {
   InputWithIcon
 } from '@components/composite';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
@@ -50,12 +44,17 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
+  const [searchSubmitted, setSearchSubmitted] = useState(false);
   const initialMount = useRef(true);
+
   const {
     data: account,
     loading,
     error
-  } = useSearchAccount(address, !initialMount.current && !!address);
+  } = useSearchAccount(
+    address,
+    !initialMount.current && !!address && searchSubmitted
+  );
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -79,6 +78,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     if (initialValue) {
       initialMount.current = false;
       setAddress(initialValue);
+      setSearchSubmitted(true);
       onContentVisibilityChanged(true);
       inputRef.current?.setText(initialValue);
     }
@@ -107,11 +107,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setSearchInputFocused(false);
   };
 
-  const onInputSubmit = (
-    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
-  ) => {
+  const onInputSubmit = () => {
     initialMount.current = false;
-    setAddress(e.nativeEvent.text);
+    setSearchSubmitted(true);
+    // setAddress(e.nativeEvent.text);
   };
 
   const loadMoreTransactions = () => {
@@ -136,6 +135,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       setTimeout(() => {
         initialMount.current = false;
         setAddress(res[0]);
+        setSearchSubmitted(true);
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
@@ -152,8 +152,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const clearInput = () => {
     inputRef.current?.clear();
-    onContentVisibilityChanged(address === '');
+    inputRef.current?.blur();
+    onContentVisibilityChanged(false);
     setAddress('');
+    setSearchSubmitted(false);
   };
 
   return (
@@ -171,24 +173,22 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
           iconRight={
             <Row alignItems="center">
-              {address.length > 0 && (
-                <>
-                  <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                    <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
-                  </Button>
-                  <Spacer value={scale(12)} horizontal />
-                </>
+              {address.length > 0 ? (
+                <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                  <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
+                </Button>
+              ) : (
+                <Button onPress={showScanner}>
+                  <ScannerQRIcon />
+                </Button>
               )}
-
-              <Button onPress={showScanner}>
-                <ScannerQRIcon />
-              </Button>
             </Row>
           }
           placeholder={'Search public address'}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
+          onChangeText={setAddress}
           onSubmitEditing={onInputSubmit}
         />
       </KeyboardDismissingView>
@@ -201,7 +201,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       </BottomSheet>
       {loading && !!address && <Spinner />}
       {error && !!address && !finalAccount && <SearchAddressNoResult />}
-      {finalAccount && explorerInfo && (
+      {finalAccount && explorerInfo && searchSubmitted && (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>
