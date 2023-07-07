@@ -139,9 +139,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert('Invalid QR Code', '', [
+      Alert.alert('Invalid QR code', '', [
         {
-          text: 'Scan Again',
+          text: 'Scan again',
           onPress: () => {
             scanned.current = false;
           }

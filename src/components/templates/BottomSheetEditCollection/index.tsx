@@ -69,7 +69,7 @@ export const BottomSheetEditCollection = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.smokyBlack}
           >
-            Rename Collection
+            Rename collection
           </Text>
         </Button>
         <Button
