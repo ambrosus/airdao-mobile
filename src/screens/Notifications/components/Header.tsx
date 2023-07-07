@@ -23,10 +23,7 @@ export const NotificationsHeader = (
           type="circular"
           onPress={onSettingsPress}
           testID="settings-button"
-          style={{
-            backgroundColor: COLORS.smokyBlack5,
-            padding: moderateScale(12)
-          }}
+          style={styles.settingsBtn}
         >
           <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.1} />
         </Button>
@@ -48,5 +45,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
     color: COLORS.smokyBlack
+  },
+  settingsBtn: {
+    backgroundColor: COLORS.smokyBlack5,
+    height: moderateScale(40),
+    width: moderateScale(40)
   }
 });
