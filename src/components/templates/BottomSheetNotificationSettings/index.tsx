@@ -150,8 +150,18 @@ export const BottomSheetNotificationSettings = forwardRef<
           />
           <Spacer value={verticalScale(32)} />
           {/* Transaction Alerts */}
-          <Row alignItems="center" justifyContent="space-between">
-            <Title>Transaction alerts</Title>
+          <Row justifyContent="space-between">
+            <View>
+              <Title>Transaction alerts</Title>
+              <Spacer value={verticalScale(8)} />
+              <Text
+                fontSize={12}
+                fontFamily="Inter_500Medium"
+                color={COLORS.davysGray}
+              >
+                Get notified of transactions in your watchlist.
+              </Text>
+            </View>
             <Switch
               onValueChange={() =>
                 onSettingsValueChange(
@@ -162,13 +172,6 @@ export const BottomSheetNotificationSettings = forwardRef<
               value={localNotificationSettings.transactionAlerts}
             />
           </Row>
-          <Text
-            fontSize={12}
-            fontFamily="Inter_500Medium"
-            color={COLORS.davysGray}
-          >
-            Get notified of transactions in your watchlist.
-          </Text>
         </View>
       </ScrollView>
     </BottomSheet>
