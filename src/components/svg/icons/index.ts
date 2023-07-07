@@ -1,4 +1,5 @@
 export * from './Icon.types';
+export * from './AddIcon';
 export * from './AirDAOLogo';
 export * from './AppStore';
 export * from './Back';

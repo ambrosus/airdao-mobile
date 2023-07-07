@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ListRenderItemInfo } from 'react-native';
+import { FlatList, ListRenderItemInfo, ScrollViewProps } from 'react-native';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
@@ -19,6 +19,7 @@ interface WalletListProps
   data: ExplorerAccount[];
   isPortfolioFlow?: boolean;
   scrollEnabled?: boolean; // default to true
+  contentContainerStyle?: ScrollViewProps['contentContainerStyle'];
   renderItem?: (
     args: ListRenderItemInfo<ExplorerAccount>
   ) => React.ReactElement;
@@ -31,6 +32,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
     isPortfolioFlow = false,
     scrollEnabled = true,
     removeType = 'watchlist',
+    contentContainerStyle = {},
     renderItem,
     onRefresh
   } = props;
@@ -51,11 +53,13 @@ export function WalletList(props: WalletListProps): JSX.Element {
 
   return (
     <FlatList
-      contentContainerStyle={{
-        flexGrow: 1,
-        paddingTop: verticalScale(16)
-        // paddingBottom: '25%'
-      }}
+      contentContainerStyle={[
+        {
+          flexGrow: 1,
+          paddingTop: verticalScale(16)
+        },
+        contentContainerStyle
+      ]}
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
