@@ -12,11 +12,15 @@ type Props = {
   handleItemPress: (value: any) => void;
   modalActiveItem: Language | Currency;
 };
+
 export const SettingsModalItem: FC<Props> = ({
   item,
   modalActiveItem,
   handleItemPress
 }) => {
+  const isActive = modalActiveItem === item;
+  const textColor = isActive ? COLORS.nero : COLORS.slateGrey;
+
   return (
     <TouchableOpacity
       onPress={() => handleItemPress(item)}
@@ -25,13 +29,13 @@ export const SettingsModalItem: FC<Props> = ({
       <Row style={styles.itemInfo} alignItems="center">
         <RadioButton
           testID="radio-button"
-          isActive={modalActiveItem === item}
+          isActive={isActive}
           onPress={() => handleItemPress(item)}
         />
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={16}
-          color={COLORS.slateGrey}
+          color={textColor}
           style={styles.itemTitle}
         >
           {item}

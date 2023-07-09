@@ -112,7 +112,7 @@ export function AMBMarket(): JSX.Element {
       <SharePortfolio
         ref={shareBottomSheet}
         title="AMB Price"
-        bottomSheetTitle="Share AMB Price"
+        bottomSheetTitle="Share AMB price"
         balance={(ambPrice?.priceUSD || 0).toString()}
         currency={'$'}
         currencyPosition={'left'}

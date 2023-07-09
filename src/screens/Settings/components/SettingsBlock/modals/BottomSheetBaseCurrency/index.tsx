@@ -21,6 +21,7 @@ export type Currency =
   | 'British Pound Sterling (GBP)'
   | 'Canadian Dollar (CAD)'
   | 'Chinese Yuan CNY)'
+  | 'Ethereum (ETH)'
   | 'Euro (EUR)'
   | 'Japanese Yen (JPY)'
   | 'US Dollars (USD)'
@@ -46,6 +47,9 @@ const mockedCurrencyList: CurrencyData[] = [
   // {
   //   currency: 'Chinese Yuan CNY)'
   // },
+  {
+    currency: 'Ethereum (ETH)'
+  },
   // {
   //   currency: 'Euro (EUR)'
   // },

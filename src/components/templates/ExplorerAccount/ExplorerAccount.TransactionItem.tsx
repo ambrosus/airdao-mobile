@@ -42,7 +42,7 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetailsTop}>
           <Spacer value={verticalScale(26.46)} />
           <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            Transaction Details
+            Transaction details
           </Text>
         </View>
         <View style={styles.transactionDetails}>

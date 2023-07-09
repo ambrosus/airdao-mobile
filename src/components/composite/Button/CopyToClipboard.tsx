@@ -4,7 +4,7 @@ import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ClipboardFilledIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
-import { Toast, ToastType } from '@components/modular/Toast';
+import { Toast, ToastPosition } from '@components/modular/Toast';
 import { BaseButtonProps } from '@components/base/Button';
 
 export interface CopyToClipboardButtonProps
@@ -20,7 +20,7 @@ export const CopyToClipboardButton = (
   const { textToDisplay, textToCopy, textProps, ...buttonProps } = props;
 
   const onPress = async () => {
-    Toast.show({ message: 'Copied to Clipboard', type: ToastType.Bottom });
+    Toast.show({ message: 'Copied to Clipboard', type: ToastPosition.Bottom });
     await Clipboard.setStringAsync(textToCopy || textToDisplay);
   };
 

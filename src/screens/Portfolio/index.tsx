@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 
 const portfolioTabRoutes = [
-  { key: 'first', title: 'Watchlists' },
+  { key: 'first', title: 'Addresses' },
   { key: 'second', title: 'Groups' }
 ] as const;
 

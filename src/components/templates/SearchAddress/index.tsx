@@ -29,7 +29,7 @@ import {
   useTransactionsOfAccount
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { Toast, ToastType } from '@components/modular';
+import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { SearchAddressNoResult } from './SearchAddress.NoMatch';
@@ -108,7 +108,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       Toast.show({
         title: 'Way to go! Address watchlisted.',
         message: 'Tap to rename Address',
-        type: ToastType.Top,
+        type: ToastPosition.Top,
         onBodyPress: editModal.current?.show
       });
     }
@@ -157,9 +157,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert('Invalid QR Code', '', [
+      Alert.alert('Invalid QR code', '', [
         {
-          text: 'Scan Again',
+          text: 'Scan again',
           onPress: () => {
             scanned.current = false;
           }
