@@ -1,5 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, View, useWindowDimensions } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Alert,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import {
@@ -30,6 +36,9 @@ import { SearchAddressNoResult } from './SearchAddress.NoMatch';
 import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { useTransactionDetails } from '@hooks/query/useTransactionDetails';
+import { ExplorerTransaction } from '@components/templates/ExplorerTransaction';
+import { TransactionDetails } from '@components/templates';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -53,7 +62,28 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     error
   } = useSearchAccount(
     address,
-    !initialMount.current && !!address && searchSubmitted
+    !initialMount.current &&
+      !!address &&
+      address.length <= CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
+  const {
+    data: hashData,
+    loading: isHashLoading,
+    error: hashError
+  } = useTransactionDetails(
+    address,
+    !initialMount.current &&
+      !!address &&
+      address.length > CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
+  console.log(
+    isHashLoading,
+    !initialMount.current &&
+      !!address &&
+      address.length > CRYPTO_ADDRESS_MAX_LENGTH,
+    'isHashLoading'
   );
   const {
     data: transactions,
@@ -94,14 +124,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       });
     }
   };
-
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
     setSearchInputFocused(true);
   };
 
   const onInputBlur = () => {
-    if (!account && !loading) {
+    if (!account && !loading && !hashData && !isHashLoading) {
       onContentVisibilityChanged(false);
     }
     setSearchInputFocused(false);
@@ -158,6 +187,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setSearchSubmitted(false);
   };
 
+  const isLoading =
+    (loading && !!address && !isHashLoading) ||
+    (!loading && !!address && isHashLoading);
+
+  console.log(!loading, !!address, isHashLoading);
+
   return (
     <>
       <KeyboardDismissingView
@@ -169,7 +204,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
         <InputWithIcon
           testID="search-input"
           ref={inputRef}
-          maxLength={CRYPTO_ADDRESS_MAX_LENGTH}
+          maxLength={68}
           iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
           iconRight={
             <Row alignItems="center">
@@ -184,7 +219,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               )}
             </Row>
           }
-          placeholder={'Search public address'}
+          placeholder={'Search Address or TX hash'}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
@@ -199,9 +234,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {loading && !!address && <Spinner />}
-      {error && !!address && !finalAccount && <SearchAddressNoResult />}
-      {finalAccount && explorerInfo && searchSubmitted && (
+      {isLoading && <Spinner />}
+      {(error && !!address && !finalAccount) || (hashError && !!address) ? (
+        <SearchAddressNoResult />
+      ) : null}
+      {finalAccount && explorerInfo ? (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>
@@ -220,7 +257,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           />
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </KeyboardDismissingView>
-      )}
+      ) : !!hashData ? (
+        <KeyboardDismissingView style={{ flex: 1 }}>
+          <ExplorerTransaction transaction={hashData} />
+        </KeyboardDismissingView>
+      ) : null}
     </>
   );
 };
