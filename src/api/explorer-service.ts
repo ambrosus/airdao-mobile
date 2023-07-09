@@ -56,6 +56,18 @@ const searchAddress = async (address: string): Promise<ExplorerAccountDTO> => {
   }
 };
 
+const getTransactionDetails = async (hash: string): Promise<TransactionDTO> => {
+  try {
+    const response = await axios.get(
+      `https://explorer-api.ambrosus.io/search/${hash}`
+    );
+    const { data } = response.data;
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getTransactionsOfAccount = async (
   address: string,
   page: number,
@@ -80,5 +92,6 @@ export const explorerService = {
   getExplorerInfo,
   getExplorerAccounts,
   searchAddress,
-  getTransactionsOfAccount
+  getTransactionsOfAccount,
+  getTransactionDetails
 };
