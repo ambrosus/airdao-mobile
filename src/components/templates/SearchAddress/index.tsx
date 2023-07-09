@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
@@ -38,7 +38,6 @@ import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { useTransactionDetails } from '@hooks/query/useTransactionDetails';
 import { ExplorerTransaction } from '@components/templates/ExplorerTransaction';
-import { TransactionDetails } from '@components/templates';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -78,13 +77,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       address.length > CRYPTO_ADDRESS_MAX_LENGTH
   );
 
-  console.log(
-    isHashLoading,
-    !initialMount.current &&
-      !!address &&
-      address.length > CRYPTO_ADDRESS_MAX_LENGTH,
-    'isHashLoading'
-  );
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -190,8 +182,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const isLoading =
     (loading && !!address && !isHashLoading) ||
     (!loading && !!address && isHashLoading);
-
-  console.log(!loading, !!address, isHashLoading);
 
   return (
     <>
