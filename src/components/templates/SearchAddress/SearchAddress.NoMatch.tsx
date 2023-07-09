@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, verticalScale } from '@utils/scaling';
+import { NoMatch } from '@components/svg/icons/NoMatch';
 
 export function SearchAddressNoResult(): JSX.Element {
   return (
     <View style={styles.error}>
-      <View style={styles.circle} />
+      <NoMatch />
       <Spacer value={verticalScale(24)} />
       <Text
         color={COLORS.davysGray}
@@ -34,7 +35,7 @@ export function SearchAddressNoResult(): JSX.Element {
 const styles = StyleSheet.create({
   error: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: '50%',
     alignItems: 'center',
     paddingHorizontal: '15%'
   },
