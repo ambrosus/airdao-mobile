@@ -7,10 +7,12 @@ import { EVENTS } from '@constants/events';
 
 export function useNewNotificationsCount(): number {
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
-  const { data: notifications } = useNotificationsQuery();
+  const { data: notifications, refetch } = useNotificationsQuery();
   const focused = useAppFocus();
 
   const checkNewNotificationCount = async () => {
+    // refetch data
+    await refetch();
     const res =
       ((await Cache.getItem(CacheKey.LastNotificationTimestamp)) as number) ||
       0;
