@@ -6,15 +6,20 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
+import { TransactionDetails } from '../TransactionDetails';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import {
   Button,
   InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
-  Spinner
+  Spinner,
+  Text
 } from '@components/base';
 import {
   BottomSheet,
@@ -32,10 +37,10 @@ import { etherumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
-import { SearchAddressNoResult } from './SearchAddress.NoMatch';
-import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { useTransactionDetails } from '@hooks/query/useTransactionDetails';
+import { SearchTabNavigationProp } from '@apptypes';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -46,7 +51,7 @@ const LIMIT = 10;
 
 export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
-
+  const navigation = useNavigation<SearchTabNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
@@ -55,7 +60,24 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     data: account,
     loading,
     error
-  } = useSearchAccount(address, !initialMount.current && !!address);
+  } = useSearchAccount(
+    address,
+    !initialMount.current &&
+      !!address &&
+      address.length <= CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
+  const {
+    data: hashData,
+    loading: isHashLoading,
+    error: hashError
+  } = useTransactionDetails(
+    address,
+    !initialMount.current &&
+      !!address &&
+      address.length > CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -94,14 +116,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       });
     }
   };
-
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
     setSearchInputFocused(true);
   };
 
   const onInputBlur = () => {
-    if (!account && !loading) {
+    if (!account && !loading && !hashData && !isHashLoading) {
       onContentVisibilityChanged(false);
     }
     setSearchInputFocused(false);
@@ -156,6 +177,14 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     setAddress('');
   };
 
+  const isLoading =
+    (loading && !!address && !isHashLoading) ||
+    (!loading && !!address && isHashLoading);
+
+  const navigateToAddressDetails = (address: string) => {
+    navigation.navigate('Address', { address });
+  };
+
   return (
     <>
       <KeyboardDismissingView
@@ -167,7 +196,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
         <InputWithIcon
           testID="search-input"
           ref={inputRef}
-          maxLength={CRYPTO_ADDRESS_MAX_LENGTH}
+          maxLength={68}
           iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
           iconRight={
             <Row alignItems="center">
@@ -185,7 +214,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               </Button>
             </Row>
           }
-          placeholder={'Search public address'}
+          placeholder={'Search Address or TX hash'}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
@@ -199,9 +228,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {loading && !!address && <Spinner />}
-      {error && !!address && !finalAccount && <SearchAddressNoResult />}
-      {finalAccount && explorerInfo && (
+      {isLoading && <Spinner />}
+      {(error && !!address && !finalAccount) || (hashError && !!address) ? (
+        <SearchAddressNoResult />
+      ) : null}
+      {finalAccount && explorerInfo ? (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>
@@ -220,7 +251,26 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           />
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </KeyboardDismissingView>
-      )}
+      ) : !!hashData ? (
+        <KeyboardDismissingView
+          style={{ flex: 1, paddingHorizontal: scale(16) }}
+        >
+          <Spacer value={verticalScale(24)} />
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={20}
+            color={COLORS.neutral800}
+          >
+            Transaction details
+          </Text>
+          <Spacer value={verticalScale(24)} />
+          <TransactionDetails
+            transaction={hashData}
+            isShareable={false}
+            onPressAddress={navigateToAddressDetails}
+          />
+        </KeyboardDismissingView>
+      ) : null}
     </>
   );
 };
