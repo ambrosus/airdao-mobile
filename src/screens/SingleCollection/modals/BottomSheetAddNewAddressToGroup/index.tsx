@@ -27,7 +27,7 @@ import {
 } from '@components/composite';
 import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { ScannerQRIcon, SearchIcon } from '@components/svg/icons';
+import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts/ListsContext';
 import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
@@ -99,6 +99,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     : false;
 
   const resetState = () => {
+    setSearchValue('');
     setSelectedAddresses([]);
     setScrollViewIdx('watchlist');
     scrollRef.current?.scrollTo({ x: 0, animated: false });
@@ -202,6 +203,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     resetState();
   };
 
+  const clearSearch = () => {
+    setSearchValue('');
+    setScrollViewIdx('watchlist');
+  };
+
   return (
     <BottomSheet
       ref={localRef}
@@ -232,19 +238,25 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           ref={inputRef}
           iconLeft={<SearchIcon color="#2f2b4399" />}
           iconRight={
-            <Button
-              onPress={showScanner}
-              disabled={selectedAddresses.length > 0}
-            >
-              <ScannerQRIcon />
-            </Button>
+            searchValue.length > 0 ? (
+              <Button onPress={clearSearch}>
+                <CloseIcon />
+              </Button>
+            ) : (
+              <Button
+                onPress={showScanner}
+                disabled={selectedAddresses.length > 0}
+              >
+                <ScannerQRIcon />
+              </Button>
+            )
           }
           type="text"
           style={{ width: '65%', height: 50 }}
           placeholder="Search public address"
           placeholderTextColor="#2f2b4399"
           value={searchValue}
-          onChangeValue={setSearchValue}
+          onChangeText={setSearchValue}
         />
       </View>
       <Spacer value={scale(24)} />

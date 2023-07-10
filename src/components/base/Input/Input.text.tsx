@@ -23,6 +23,9 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
           focus() {
             rnInputRef.current?.focus();
           },
+          blur() {
+            rnInputRef.current?.blur();
+          },
           clear() {
             rnInputRef.current?.clear();
           },

@@ -20,6 +20,10 @@ export type InputRef = {
   focus: () => void;
 
   /**
+   * removes focus from input
+   */
+  blur: () => void;
+  /**
    * cleares the input
    */
   clear: () => void;
