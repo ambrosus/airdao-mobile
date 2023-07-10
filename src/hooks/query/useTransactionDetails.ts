@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { explorerService } from '@api/explorer-service';
+import { Transaction } from '@models';
 
 export function useTransactionDetails(hash: string, enabled = true) {
   const { data, error, isInitialLoading } = useQuery<TransactionDTO, Error>(
@@ -12,7 +13,7 @@ export function useTransactionDetails(hash: string, enabled = true) {
   );
 
   return {
-    data,
+    data: data ? new Transaction(data) : undefined,
     loading: isInitialLoading,
     error
   };

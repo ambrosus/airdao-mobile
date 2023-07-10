@@ -6,15 +6,20 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
+import { TransactionDetails } from '../TransactionDetails';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import {
   Button,
   InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
-  Spinner
+  Spinner,
+  Text
 } from '@components/base';
 import {
   BottomSheet,
@@ -32,12 +37,10 @@ import { etherumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
-import { SearchAddressNoResult } from './SearchAddress.NoMatch';
-import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { useTransactionDetails } from '@hooks/query/useTransactionDetails';
-import { ExplorerTransaction } from '@components/templates/ExplorerTransaction';
+import { SearchTabNavigationProp } from '@apptypes';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -48,7 +51,7 @@ const LIMIT = 10;
 
 export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
-
+  const navigation = useNavigation<SearchTabNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
@@ -178,6 +181,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     (loading && !!address && !isHashLoading) ||
     (!loading && !!address && isHashLoading);
 
+  const navigateToAddressDetails = (address: string) => {
+    navigation.navigate('Address', { address });
+  };
+
   return (
     <>
       <KeyboardDismissingView
@@ -245,8 +252,23 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </KeyboardDismissingView>
       ) : !!hashData ? (
-        <KeyboardDismissingView style={{ flex: 1 }}>
-          <ExplorerTransaction transaction={hashData} />
+        <KeyboardDismissingView
+          style={{ flex: 1, paddingHorizontal: scale(16) }}
+        >
+          <Spacer value={verticalScale(24)} />
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={20}
+            color={COLORS.neutral800}
+          >
+            Transaction details
+          </Text>
+          <Spacer value={verticalScale(24)} />
+          <TransactionDetails
+            transaction={hashData}
+            isShareable={false}
+            onPressAddress={navigateToAddressDetails}
+          />
         </KeyboardDismissingView>
       ) : null}
     </>
