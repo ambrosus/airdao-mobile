@@ -15,6 +15,7 @@ import { styles } from './styles';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
+  isShareable?: boolean;
   onPressAddress?: (address: string) => void;
 }
 
@@ -29,7 +30,7 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, onPressAddress } = props;
+  const { transaction, isShareable = true, onPressAddress } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const ambPrice = ambData ? ambData.priceUSD : -1;
@@ -42,13 +43,13 @@ export const TransactionDetails = (
   if (!transaction) return <></>;
   const addressesArePressable = typeof onPressAddress === 'function';
 
-  const navigateToSendingAddress = () => {
+  const onPressSendingAddress = () => {
     if (transaction.from && typeof onPressAddress === 'function') {
       onPressAddress(transaction.from.address);
     }
   };
 
-  const navigateToReceivingAddress = () => {
+  const onPressReceivingAddress = () => {
     if (transaction.to && typeof onPressAddress === 'function') {
       onPressAddress(transaction.to.address);
     }
@@ -83,7 +84,7 @@ export const TransactionDetails = (
             </Text>
             <Button
               disabled={!addressesArePressable}
-              onPress={navigateToSendingAddress}
+              onPress={onPressSendingAddress}
             >
               <Text
                 color={COLORS.mainBlue}
@@ -105,7 +106,7 @@ export const TransactionDetails = (
             </Text>
             <Button
               disabled={!addressesArePressable}
-              onPress={navigateToReceivingAddress}
+              onPress={onPressReceivingAddress}
             >
               <Text
                 color={COLORS.mainBlue}
@@ -136,18 +137,23 @@ export const TransactionDetails = (
           {moment(transaction.timestamp).fromNow()}
         </Text>
       </JustifiedRow>
-      <Spacer value={ROW_MARGIN} />
-      <Button
-        type="circular"
-        style={styles.shareBtn}
-        onPress={showShareTransaction}
-      >
-        <Row alignItems="center">
-          <ShareIcon color="#000000" />
-          <Spacer value={scale(3.5)} horizontal />
-          <Text>Share transaction</Text>
-        </Row>
-      </Button>
+      {isShareable && (
+        <>
+          <Spacer value={ROW_MARGIN} />
+          <Button
+            type="circular"
+            style={styles.shareBtn}
+            onPress={showShareTransaction}
+          >
+            <Row alignItems="center">
+              <ShareIcon color="#000000" />
+              <Spacer value={scale(3.5)} horizontal />
+              <Text>Share transaction</Text>
+            </Row>
+          </Button>
+        </>
+      )}
+
       <SharePortfolio
         ref={shareTransactionModal}
         balance={NumberUtils.formatNumber(transaction.amount, 0)}

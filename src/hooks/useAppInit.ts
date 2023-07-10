@@ -5,6 +5,7 @@ import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
+import { DEFAULT_WATCHLIST } from '@constants/variables';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -23,11 +24,16 @@ export const useAppInit = () => {
         const notificationService = new NotificationService();
         notificationService.setup();
         let notificationTokenSavedToRemoteDB = false;
+        let alreadyWatchedAddresses: string[] = [];
         try {
-          notificationTokenSavedToRemoteDB = Boolean(
-            await API.watcherService.getWatcherInfoOfCurrentUser()
-          );
+          const watcherInfo =
+            await API.watcherService.getWatcherInfoOfCurrentUser();
+          alreadyWatchedAddresses = watcherInfo
+            ? watcherInfo.addresses.map((a) => a.address)
+            : ([] as string[]);
+          notificationTokenSavedToRemoteDB = Boolean(watcherInfo);
         } catch (error) {
+          alreadyWatchedAddresses = [] as string[];
           notificationTokenSavedToRemoteDB = false;
         }
         if (!notificationTokenSavedToRemoteDB) {
@@ -47,6 +53,10 @@ export const useAppInit = () => {
             // ignore
           }
         }
+        const notWatchedDefaultAddresses = DEFAULT_WATCHLIST.filter(
+          (adress) => alreadyWatchedAddresses.indexOf(adress) === -1
+        );
+        API.watcherService.watchAddresses(notWatchedDefaultAddresses);
 
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),

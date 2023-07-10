@@ -98,7 +98,7 @@ export const BottomSheetEditWallet = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.smokyBlack}
           >
-            Rename Address
+            Rename address
           </Text>
         </Button>
         {listsWithCurrentWallet.length > 0 ? (

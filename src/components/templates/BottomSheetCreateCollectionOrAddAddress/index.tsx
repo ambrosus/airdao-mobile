@@ -43,7 +43,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.white}
           >
-            Add Address
+            Add address
           </Text>
         </Button>
         <Spacer value={scale(24)} />
@@ -62,7 +62,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.smokyBlack}
           >
-            Create Group
+            Create group
           </Text>
         </Button>
       </View>
