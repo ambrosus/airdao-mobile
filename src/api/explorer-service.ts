@@ -58,9 +58,7 @@ const searchAddress = async (address: string): Promise<ExplorerAccountDTO> => {
 
 const getTransactionDetails = async (hash: string): Promise<TransactionDTO> => {
   try {
-    const response = await axios.get(
-      `https://explorer-api.ambrosus.io/search/${hash}`
-    );
+    const response = await axios.get(`${exploreApiUrl}/search/${hash}`);
     const { data } = response.data;
     return data;
   } catch (error) {
