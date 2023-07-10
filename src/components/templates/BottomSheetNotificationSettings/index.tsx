@@ -150,7 +150,7 @@ export const BottomSheetNotificationSettings = forwardRef<
           />
           <Spacer value={verticalScale(32)} />
           {/* Transaction Alerts */}
-          <Row justifyContent="space-between">
+          <Row justifyContent="space-between" alignItems="center">
             <View>
               <Title>Transaction alerts</Title>
               <Spacer value={verticalScale(8)} />
