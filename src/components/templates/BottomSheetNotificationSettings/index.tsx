@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Header,
@@ -11,9 +11,8 @@ import {
   BottomSheetRef
 } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Button, Row, Spacer, Switch, Text } from '@components/base';
+import { Row, Spacer, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { BackIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
@@ -81,11 +80,11 @@ export const BottomSheetNotificationSettings = forwardRef<
   return (
     <BottomSheet
       containerStyle={styles.bottomSheet}
-      height={Dimensions.get('screen').height}
+      height={Dimensions.get('window').height}
       ref={localRef}
       {...props}
     >
-      <Spacer value={topInset} />
+      {Platform.OS === 'ios' && <Spacer value={topInset} />}
       <Header
         title={
           <Text
@@ -96,17 +95,10 @@ export const BottomSheetNotificationSettings = forwardRef<
             Notification settings
           </Text>
         }
-        titlePosition="center"
-        backIconVisible={false}
+        titlePosition="left"
+        backIconVisible={true}
+        onBackPress={() => localRef.current?.dismiss()}
         style={styles.header}
-        contentLeft={
-          <Button
-            testID="BottomSheet_Notification_Settings_Header_Left"
-            onPress={() => localRef.current?.dismiss()}
-          >
-            <BackIcon testID="Notification_Settings_Header_Back_Icon" />
-          </Button>
-        }
       />
       <ScrollView
         testID="BottomSheetNotiSettings_Container"
@@ -117,7 +109,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         <View style={styles.container}>
           {/* Price alerts */}
           <Row alignItems="center" justifyContent="space-between">
-            <Title>Price alert</Title>
+            <Title>Price alerts</Title>
             <Switch
               onValueChange={() =>
                 onSettingsValueChange(
@@ -130,13 +122,17 @@ export const BottomSheetNotificationSettings = forwardRef<
             />
           </Row>
           {/* Percentage Change */}
-          <Spacer value={verticalScale(24)} />
-          <Title>Price movement threshold</Title>
-          <Spacer value={verticalScale(12)} />
-          <Text fontSize={12} fontWeight="500" color="#646464">
-            You’ll be notified of significant increase & decrease of AMB price{' '}
+          <Spacer value={verticalScale(35)} />
+          <Title>Price alerts threshold</Title>
+          <Spacer value={verticalScale(8)} />
+          <Text
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            color={COLORS.davysGray}
+          >
+            Set 24hr price change amount to receive notifications.
           </Text>
-          <Spacer value={verticalScale(12)} />
+          <Spacer value={verticalScale(8)} />
           <SegmentedPicker
             segments={PercentThresholds}
             selectedSegment={
@@ -152,10 +148,20 @@ export const BottomSheetNotificationSettings = forwardRef<
               )
             }
           />
-          <Spacer value={verticalScale(24)} />
+          <Spacer value={verticalScale(32)} />
           {/* Transaction Alerts */}
-          <Row alignItems="center" justifyContent="space-between">
-            <Title>Transaction alert</Title>
+          <Row justifyContent="space-between" alignItems="center">
+            <View>
+              <Title>Transaction alerts</Title>
+              <Spacer value={verticalScale(8)} />
+              <Text
+                fontSize={12}
+                fontFamily="Inter_500Medium"
+                color={COLORS.davysGray}
+              >
+                Get notified of transactions in your watchlist.
+              </Text>
+            </View>
             <Switch
               onValueChange={() =>
                 onSettingsValueChange(
@@ -166,9 +172,6 @@ export const BottomSheetNotificationSettings = forwardRef<
               value={localNotificationSettings.transactionAlerts}
             />
           </Row>
-          <Text fontSize={12} fontWeight="500" color="#646464">
-            You’ll be notified of any transaction {'\n'} in your watchlist
-          </Text>
         </View>
       </ScrollView>
     </BottomSheet>

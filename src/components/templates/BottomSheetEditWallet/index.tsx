@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, Toast, ToastType } from '@components/modular';
+import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -79,8 +79,8 @@ export const BottomSheetEditWallet = forwardRef<
       dismissThis();
       Toast.show({
         title: '',
-        message: 'Successfully removed wallet from collection!',
-        type: ToastType.Top
+        message: 'Successfully removed wallet from group!',
+        type: ToastPosition.Top
       });
     }
   }, [dismissThis, listsWithCurrentWallet, toggleAddressesInList, wallet]);
@@ -99,7 +99,7 @@ export const BottomSheetEditWallet = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.smokyBlack}
           >
-            Rename Address
+            Rename address
           </Text>
         </Button>
         {listsWithCurrentWallet.length > 0 ? (
@@ -114,7 +114,7 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.smokyBlack}
               >
-                Move to another collection
+                Move to another group
               </Text>
             </Button>
             <Button
@@ -125,11 +125,11 @@ export const BottomSheetEditWallet = forwardRef<
               }}
               onPress={removeFromCollection}
             >
-              <Text color={COLORS.crimsonRed}>Remove from collection</Text>
+              <Text color={COLORS.crimsonRed}>Remove from group</Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title="Move to another collection"
+              title="Move to another group"
               wallet={wallet}
               lists={listsOfAddressGroup.filter(
                 (list) => listsWithCurrentWallet.indexOfItem(list, 'id') === -1
@@ -149,12 +149,12 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.smokyBlack}
               >
-                Add to collection
+                Add to group
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title="Add to collection"
+              title="Add to group"
               wallet={wallet}
               lists={listsOfAddressGroup}
               onWalletMove={dismissAddToCollection}

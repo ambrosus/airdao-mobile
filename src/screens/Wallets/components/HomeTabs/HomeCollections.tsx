@@ -22,7 +22,7 @@ export const HomeCollections = () => {
   };
 
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="collections" />;
+    return <RenderEmpty text="groups" />;
   }
 
   return (

@@ -1,20 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-  View,
-  useWindowDimensions
-} from 'react-native';
+import { Alert, View, useWindowDimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
+import { TransactionDetails } from '../TransactionDetails';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import {
   Button,
   InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
-  Spinner
+  Spinner,
+  Text
 } from '@components/base';
 import {
   BottomSheet,
@@ -26,16 +25,16 @@ import { scale, verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
-  useTransactionsOfAccount
+  useTransactionsOfAccount,
+  useTransactionDetails
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { Toast, ToastType } from '@components/modular';
+import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
-import { SearchAddressNoResult } from './SearchAddress.NoMatch';
-import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { SearchTabNavigationProp } from '@apptypes';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -46,16 +45,37 @@ const LIMIT = 10;
 
 export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
-
+  const navigation = useNavigation<SearchTabNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
+  const [searchSubmitted, setSearchSubmitted] = useState(false);
   const initialMount = useRef(true);
+
   const {
     data: account,
     loading,
     error
-  } = useSearchAccount(address, !initialMount.current && !!address);
+  } = useSearchAccount(
+    address,
+    !initialMount.current &&
+      !!address &&
+      searchSubmitted &&
+      address.length <= CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
+  const {
+    data: hashData,
+    loading: isHashLoading,
+    error: hashError
+  } = useTransactionDetails(
+    address,
+    !initialMount.current &&
+      !!address &&
+      searchSubmitted &&
+      address.length > CRYPTO_ADDRESS_MAX_LENGTH
+  );
+
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -79,6 +99,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     if (initialValue) {
       initialMount.current = false;
       setAddress(initialValue);
+      setSearchSubmitted(true);
       onContentVisibilityChanged(true);
       inputRef.current?.setText(initialValue);
     }
@@ -89,29 +110,26 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       Toast.show({
         title: 'Way to go! Address watchlisted.',
         message: 'Tap to rename Address',
-        type: ToastType.Top,
+        type: ToastPosition.Top,
         onBodyPress: editModal.current?.show
       });
     }
   };
-
   const onInputFocused = () => {
     onContentVisibilityChanged(true);
     setSearchInputFocused(true);
   };
 
   const onInputBlur = () => {
-    if (!account && !loading) {
+    if (!account && !loading && !hashData && !isHashLoading) {
       onContentVisibilityChanged(false);
     }
     setSearchInputFocused(false);
   };
 
-  const onInputSubmit = (
-    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
-  ) => {
+  const onInputSubmit = () => {
     initialMount.current = false;
-    setAddress(e.nativeEvent.text);
+    setSearchSubmitted(true);
   };
 
   const loadMoreTransactions = () => {
@@ -136,12 +154,13 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       setTimeout(() => {
         initialMount.current = false;
         setAddress(res[0]);
+        setSearchSubmitted(true);
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert('Invalid QR Code', '', [
+      Alert.alert('Invalid QR code', '', [
         {
-          text: 'Scan Again',
+          text: 'Scan again',
           onPress: () => {
             scanned.current = false;
           }
@@ -152,8 +171,18 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
 
   const clearInput = () => {
     inputRef.current?.clear();
-    onContentVisibilityChanged(address === '');
+    inputRef.current?.blur();
+    onContentVisibilityChanged(false);
     setAddress('');
+    setSearchSubmitted(false);
+  };
+
+  const isLoading =
+    (loading && !!address && !isHashLoading) ||
+    (!loading && !!address && isHashLoading);
+
+  const navigateToAddressDetails = (address: string) => {
+    navigation.navigate('Address', { address });
   };
 
   return (
@@ -167,28 +196,26 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
         <InputWithIcon
           testID="search-input"
           ref={inputRef}
-          maxLength={CRYPTO_ADDRESS_MAX_LENGTH}
+          maxLength={68}
           iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
           iconRight={
             <Row alignItems="center">
-              {address.length > 0 && (
-                <>
-                  <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                    <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
-                  </Button>
-                  <Spacer value={scale(12)} horizontal />
-                </>
+              {address.length > 0 ? (
+                <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+                  <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
+                </Button>
+              ) : (
+                <Button onPress={showScanner}>
+                  <ScannerQRIcon />
+                </Button>
               )}
-
-              <Button onPress={showScanner}>
-                <ScannerQRIcon />
-              </Button>
             </Row>
           }
-          placeholder={'Search public address'}
+          placeholder={'Search Address or TX hash'}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
+          onChangeText={setAddress}
           onSubmitEditing={onInputSubmit}
         />
       </KeyboardDismissingView>
@@ -199,9 +226,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {loading && !!address && <Spinner />}
-      {error && !!address && !finalAccount && <SearchAddressNoResult />}
-      {finalAccount && explorerInfo && (
+      {isLoading && <Spinner />}
+      {(error && !!address && !finalAccount) || (hashError && !!address) ? (
+        <SearchAddressNoResult />
+      ) : null}
+      {finalAccount && explorerInfo && searchSubmitted ? (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>
@@ -220,7 +249,26 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           />
           <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
         </KeyboardDismissingView>
-      )}
+      ) : !!hashData ? (
+        <KeyboardDismissingView
+          style={{ flex: 1, paddingHorizontal: scale(16) }}
+        >
+          <Spacer value={verticalScale(24)} />
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={20}
+            color={COLORS.neutral800}
+          >
+            Transaction details
+          </Text>
+          <Spacer value={verticalScale(24)} />
+          <TransactionDetails
+            transaction={hashData}
+            isShareable={false}
+            onPressAddress={navigateToAddressDetails}
+          />
+        </KeyboardDismissingView>
+      ) : null}
     </>
   );
 };

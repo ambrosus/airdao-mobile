@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FFFFFF',
     height: verticalScale(48),
+    minHeight: 56,
     paddingLeft: leftPadding,
     paddingRight: rightPadding,
     ...shadow

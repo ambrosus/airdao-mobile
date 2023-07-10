@@ -21,6 +21,7 @@ import {
 } from '@appTypes/navigation/common';
 import { FloatButton } from '@components/base/FloatButton';
 import { useAMBPrice } from '@hooks';
+import { useAllAddressesContext } from '@contexts';
 
 export const SingleGroupScreen = () => {
   const {
@@ -35,7 +36,7 @@ export const SingleGroupScreen = () => {
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const editCollectionModalRef = useRef<BottomSheetRef>(null);
   const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
-
+  const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
@@ -129,6 +130,8 @@ export const SingleGroupScreen = () => {
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
+          contentContainerStyle={{ paddingBottom: '10%' }}
+          onRefresh={refetchAddresses}
         />
       </View>
       {Platform.OS === 'android' && (

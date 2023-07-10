@@ -22,9 +22,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.21.5",
-    "@morrowdigital/watermelondb-expo-plugin": "^2.1.2",
-    "@nozbe/watermelondb": "^0.26.0",
-    "@nozbe/with-observables": "^1.4.1",
+    "@neverdull-agency/expo-unlimited-secure-store": "^1.0.10",
     "@react-native-firebase/analytics": "^17.5.0",
     "@react-native-firebase/app": "^17.5.0",
     "@react-native-firebase/crashlytics": "^17.5.0",
@@ -46,6 +44,7 @@
     "expo-crypto": "~12.2.1",
     "expo-dev-client": "~2.2.1",
     "expo-device": "~5.2.1",
+    "expo-file-system": "~15.2.2",
     "expo-font": "~11.1.1",
     "expo-notifications": "~0.18.1",
     "expo-secure-store": "~12.1.1",

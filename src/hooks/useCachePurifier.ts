@@ -12,7 +12,7 @@ export const useCachePurifier = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
   const appstate = useAppState();
 
-  const purifyAccounts = useCallback(() => {
+  const purifyAccounts = useCallback(async () => {
     // set lists
     const cacheableLists: CacheableAccountList[] = listsOfAddressGroup.map(
       (list) => ({
@@ -20,11 +20,11 @@ export const useCachePurifier = () => {
         addresses: list.accounts.map((account) => account.address)
       })
     );
-    Cache.setItem(CacheKey.AddressLists, cacheableLists);
+    await Cache.setItem(CacheKey.AddressLists, cacheableLists);
 
     // filter unique addresses
     const knownAddresses: CacheableAccount[] = allAddresses
-      .filter((account) => account.isPersonal || account.isOnWatchlist)
+      .filter((account) => account.isOnWatchlist)
       .map((account) => ExplorerAccount.toCacheable(account));
 
     for (const list of listsOfAddressGroup) {
@@ -34,7 +34,7 @@ export const useCachePurifier = () => {
         }
       }
     }
-    Cache.setItem(CacheKey.AllAddresses, knownAddresses);
+    await Cache.setItem(CacheKey.AllAddresses, knownAddresses);
   }, [allAddresses, listsOfAddressGroup]);
 
   const purifyCache = useCallback(() => {

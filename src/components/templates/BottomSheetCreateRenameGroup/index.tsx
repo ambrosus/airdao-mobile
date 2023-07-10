@@ -14,7 +14,7 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
-import { BottomSheetFloat, Toast, ToastType } from '@components/modular';
+import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -62,7 +62,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         Toast.show({
           title: '',
           message: `Way to go! ${localGroupName} list created.`,
-          type: ToastType.Top
+          type: ToastPosition.Top
         });
       }
 
@@ -71,7 +71,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         Toast.show({
           title: '',
           message: `${groupTitle} has been renamed to ${localGroupName}.`,
-          type: ToastType.Top
+          type: ToastPosition.Top
         });
       }
 
@@ -115,7 +115,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                {type === 'create' ? ' Create Collection' : 'Rename Collection'}
+                {type === 'create' ? ' Create group' : 'Rename group'}
               </Text>
               <Spacer value={8} />
               <OnboardingView
@@ -133,7 +133,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   placeholder={
                     emptyPlaceholder
                       ? 'This field is required'
-                      : 'Enter collection name'
+                      : 'Enter group name'
                   }
                   placeholderTextColor={
                     emptyPlaceholder ? COLORS.crimsonRed : COLORS.midnight

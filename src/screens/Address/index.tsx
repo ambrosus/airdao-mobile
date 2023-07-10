@@ -13,7 +13,6 @@ import {
 import {
   useAMBPrice,
   useExplorerInfo,
-  usePersonalList,
   useSearchAccount,
   useTransactionsOfAccount,
   useWatchlist
@@ -21,7 +20,7 @@ import {
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { Toast, ToastType } from '@components/modular';
+import { Toast, ToastPosition } from '@components/modular';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
@@ -53,13 +52,11 @@ export const AddressDetails = (): JSX.Element => {
   const { data: explorerInfo, loading: explorerLoading } = useExplorerInfo();
   const { data: ambPrice } = useAMBPrice();
   const { watchlist } = useWatchlist();
-  const { personalList } = usePersonalList();
   const editModal = useRef<BottomSheetRef>(null);
   const shareModal = useRef<BottomSheetRef>(null);
 
   const walletInWatchlist = watchlist.find((w) => w.address === address);
-  const walletInPersonalList = personalList.find((w) => w.address === address);
-  const finalAccount = walletInWatchlist || walletInPersonalList || account;
+  const finalAccount = walletInWatchlist || account;
 
   if (accountLoading || explorerLoading || !finalAccount || !explorerInfo) {
     return (
@@ -102,7 +99,7 @@ export const AddressDetails = (): JSX.Element => {
     const toastMessage = isOnWatchlist
       ? `${finalAccount.name || 'The address'} is now on your Watchlists!`
       : `You removed ${finalAccount.name || 'the address'} from Watchlists!`;
-    Toast.show({ message: toastMessage, type: ToastType.Top, title: '' });
+    Toast.show({ message: toastMessage, type: ToastPosition.Top, title: '' });
   };
 
   return (
