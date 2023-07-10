@@ -4,7 +4,7 @@ import { API } from '@api/api';
 import { Notification, WatcherInfoDTO } from '@models/index';
 
 export function useNotificationsQuery(): QueryResponse<Notification[]> {
-  const { data, error, isLoading } = useQuery<WatcherInfoDTO | null>(
+  const { data, error, isLoading, refetch } = useQuery<WatcherInfoDTO | null>(
     ['notifications'],
     API.watcherService.getWatcherInfoOfCurrentUser
   );
@@ -16,6 +16,7 @@ export function useNotificationsQuery(): QueryResponse<Notification[]> {
             .sort((n1, n2) => n2.createdAt.getTime() - n1.createdAt.getTime())
         : [],
     loading: isLoading,
-    error
+    error,
+    refetch
   };
 }
