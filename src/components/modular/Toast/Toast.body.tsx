@@ -15,10 +15,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Row, Text } from '@components/base';
-import { CloseIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { CheckIcon, CloseIcon } from '@components/svg/icons';
+import { verticalScale } from '@utils/scaling';
 import { styles } from './Toast.styles';
-import { ToastOptions, ToastType } from './Toast.types';
+import { ToastOptions, ToastPosition } from './Toast.types';
 import { COLORS } from '@constants/colors';
 
 export const ToastBody = forwardRef((_, ref) => {
@@ -29,7 +29,7 @@ export const ToastBody = forwardRef((_, ref) => {
       message: '',
       title: '',
       duration: 3500, // ms
-      type: ToastType.Top,
+      type: ToastPosition.Top,
       onBodyPress: undefined
     }),
     []
@@ -82,7 +82,7 @@ export const ToastBody = forwardRef((_, ref) => {
     if (typeof options.onUndo === 'function') options.onUndo();
   };
 
-  const isTopToast = options.type === ToastType.Top;
+  const isTopToast = options.type === ToastPosition.Top;
   const placement = DISTANCE_FROM_EDGE + (isTopToast ? topInset : bottomInset);
 
   if (!toastVisible) return null;
@@ -90,8 +90,8 @@ export const ToastBody = forwardRef((_, ref) => {
     <Animated.View
       style={[
         styles.containerStyle,
-        { top: options.type === ToastType.Top ? placement : undefined },
-        { bottom: options.type === ToastType.Top ? undefined : placement }
+        { top: options.type === ToastPosition.Top ? placement : undefined },
+        { bottom: options.type === ToastPosition.Top ? undefined : placement }
       ]}
       entering={(isTopToast ? SlideInUp : SlideInDown).duration(
         (options.duration ?? 500) / 2
@@ -105,12 +105,15 @@ export const ToastBody = forwardRef((_, ref) => {
         onPress={options.onBodyPress}
       >
         <Row alignItems="center" justifyContent="space-between">
-          <View style={{ flex: 4 }}>
+          <View style={styles.statusIcon}>
+            <CheckIcon color={COLORS.white} scale={0.8} />
+          </View>
+          <View style={{ flex: 1 }}>
             {Boolean(options.title) && (
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.white}
+                color={COLORS.neutral700}
               >
                 {options.title}
               </Text>
@@ -119,7 +122,7 @@ export const ToastBody = forwardRef((_, ref) => {
               fontSize={14}
               fontWeight="400"
               fontFamily="Inter_400Regular"
-              color={COLORS.white}
+              color={COLORS.neutral700}
               style={{ flexDirection: 'row', alignItems: 'baseline' }}
             >
               {options.message}
@@ -137,16 +140,8 @@ export const ToastBody = forwardRef((_, ref) => {
               )}
             </Text>
           </View>
-          <Button
-            onPress={hide}
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-              marginRight: scale(16)
-            }}
-          >
-            <CloseIcon color="#FFFFFF" />
+          <Button onPress={hide} style={styles.closeBtn}>
+            <CloseIcon color={COLORS.neutral700} />
           </Button>
         </Row>
       </Pressable>

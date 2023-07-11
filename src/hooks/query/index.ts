@@ -5,3 +5,4 @@ export * from './useExplorerAccounts';
 export * from './useNotifications';
 export * from './useSearchAccount';
 export * from './useTransactionsOfAddress';
+export * from './useTransactionDetails';

@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, Toast, ToastType } from '@components/modular';
+import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -68,8 +68,9 @@ export const BottomSheetEditWallet = forwardRef<
   }, []);
 
   const dismissAddToCollection = useCallback(() => {
-    setTimeout(() => addToCollectionModalRef.current?.dismiss(), 400);
-  }, [addToCollectionModalRef]);
+    addToCollectionModalRef.current?.dismiss();
+    localRef.current?.dismiss();
+  }, [localRef]);
 
   const removeFromCollection = useCallback(() => {
     if (listsWithCurrentWallet.length > 0) {
@@ -79,7 +80,7 @@ export const BottomSheetEditWallet = forwardRef<
       Toast.show({
         title: '',
         message: 'Successfully removed wallet from group!',
-        type: ToastType.Top
+        type: ToastPosition.Top
       });
     }
   }, [dismissThis, listsWithCurrentWallet, toggleAddressesInList, wallet]);
@@ -98,7 +99,7 @@ export const BottomSheetEditWallet = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.smokyBlack}
           >
-            Rename Address
+            Rename address
           </Text>
         </Button>
         {listsWithCurrentWallet.length > 0 ? (

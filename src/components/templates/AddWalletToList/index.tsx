@@ -28,7 +28,9 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   );
 
   const toggleWalletInList = (list: AccountList) => {
-    toggleAddressesInList([wallet], list);
+    setTimeout(() => {
+      toggleAddressesInList([wallet], list);
+    }, 400);
     if (typeof onWalletMove === 'function') onWalletMove(list);
   };
 
