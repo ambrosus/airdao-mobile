@@ -40,7 +40,7 @@
       "googleServicesFile": "./firebase/google-services.json"
     },
     "notification": {
-      "icon": "./assets/adaptive-icon.png",
+      "icon": "./assets/notification-icon.png",
       "color": "#457eff",
       "androidMode": "default",
       "androidCollapsedTitle": "Updates from AirDAO"
