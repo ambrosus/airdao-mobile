@@ -111,6 +111,7 @@ export const SwipeableWalletItem = memo(
           ref={swipeRef}
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
+          rightThreshold={0}
         >
           <Pressable onPress={navigateToAddressDetails}>
             <Animated.View
