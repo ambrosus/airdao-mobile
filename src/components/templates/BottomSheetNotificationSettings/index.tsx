@@ -57,7 +57,6 @@ export const BottomSheetNotificationSettings = forwardRef<
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
   const { top: topInset } = useSafeAreaInsets();
-
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
     [notificationSettings]

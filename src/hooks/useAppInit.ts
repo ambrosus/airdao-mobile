@@ -5,22 +5,31 @@ import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
-import { DEFAULT_WATCHLIST } from '@constants/variables';
+import {
+  DEFAULT_WATCHLIST,
+  DefaultNotificationSettings
+} from '@constants/variables';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
-
   SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
     async function prepare() {
       try {
         DeviceService.setupUniqueDeviceID();
-        await PermissionService.getPermission(Permission.Notifications, {
-          requestAgain: true,
-          openSettings: true
+        const notificationPermissionGranted =
+          await PermissionService.getPermission(Permission.Notifications, {
+            requestAgain: true,
+            openSettings: true
+          });
+        await Cache.setItem(CacheKey.NotificationSettings, {
+          ...DefaultNotificationSettings,
+          priceAlerts: notificationPermissionGranted,
+          transactionAlerts: notificationPermissionGranted
         });
+
         const notificationService = new NotificationService();
         notificationService.setup();
         let notificationTokenSavedToRemoteDB = false;
@@ -73,6 +82,7 @@ export const useAppInit = () => {
       }
     }
     prepare();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { isAppReady };
