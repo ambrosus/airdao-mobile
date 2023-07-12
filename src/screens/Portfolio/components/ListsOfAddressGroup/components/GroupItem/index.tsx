@@ -116,6 +116,7 @@ export const GroupItem = memo(
           ref={swipeableRef}
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
+          rightThreshold={0}
         >
           <Pressable onPress={handleItemPress} style={containerStyles}>
             <Animated.View style={[{ ...styles.item }, animatedStyle]}>
