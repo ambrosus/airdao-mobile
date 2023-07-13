@@ -129,7 +129,7 @@ export function PortfolioPerformance(
         </View>
         <View style={styles.logoContainer}>
           <View style={styles.logo}>
-            <LogoSVG color={COLORS.white} scale={2} />
+            <LogoSVG scale={0.5} />
           </View>
         </View>
       </Row>
