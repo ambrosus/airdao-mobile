@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingHorizontal: scale(16),
-    paddingBottom: '20%'
+    paddingBottom: '40%'
   }
 });
