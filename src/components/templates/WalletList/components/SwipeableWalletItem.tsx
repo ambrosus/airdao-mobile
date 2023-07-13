@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useCallback, useRef } from 'react';
+import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
 import { DeviceEventEmitter, Dimensions, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
@@ -39,6 +39,7 @@ export const SwipeableWalletItem = memo(
       const swipeRef = useRef<Swipeable>(null);
       const confirmRemoveRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+      const [open, setOpen] = useState<boolean>(false);
 
       const navigation = useNavigation<WalletsNavigationProp>();
 
@@ -87,12 +88,16 @@ export const SwipeableWalletItem = memo(
             previousRef.current?.close();
           }
         }
+        setOpen(true);
         paddingRightAnimation.value = withTiming(16, { duration: 200 });
-      }, [item._id, paddingRightAnimation, previousRef]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [item._id, paddingRightAnimation, previousRef, open]);
 
       const handleSwipeableWillClose = useCallback(() => {
+        setOpen(false);
         paddingRightAnimation.value = withTiming(0, { duration: 200 });
-      }, [paddingRightAnimation]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [paddingRightAnimation, open]);
 
       const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -114,7 +119,21 @@ export const SwipeableWalletItem = memo(
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
           rightThreshold={0}
-          hitSlop={{ left: -(screenWidth * 0.5), right: 0 }}
+          hitSlop={
+            open
+              ? {
+                  right: -(screenWidth * 0.35),
+                  left: 0,
+                  top: 0,
+                  bottom: 0
+                }
+              : {
+                  right: 0,
+                  left: -(screenWidth * 0.65),
+                  top: 0,
+                  bottom: 0
+                }
+          }
         >
           <Pressable onPress={navigateToAddressDetails}>
             <Animated.View
