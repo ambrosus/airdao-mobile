@@ -1,5 +1,5 @@
 import React, { forwardRef, memo, useCallback, useRef } from 'react';
-import { DeviceEventEmitter, Pressable } from 'react-native';
+import { DeviceEventEmitter, Dimensions, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -26,6 +26,8 @@ export type SwipeableWalletItemProps = {
   isPortfolioFlow?: boolean;
   removeType?: 'watchlist' | 'collection';
 };
+
+const screenWidth = Dimensions.get('screen').width;
 
 export const SwipeableWalletItem = memo(
   forwardRef<Swipeable, SwipeableWalletItemProps>(
@@ -112,6 +114,7 @@ export const SwipeableWalletItem = memo(
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
           rightThreshold={0}
+          hitSlop={{ left: -(screenWidth * 0.5), right: 0 }}
         >
           <Pressable onPress={navigateToAddressDetails}>
             <Animated.View
