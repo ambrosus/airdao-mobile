@@ -31,6 +31,7 @@ describe('BarcodeScanner', () => {
 
   afterAll(() => {
     cameraPermissionMock.mockRestore();
+    clearAllMocks();
   });
   // export type PermissionStatus = 'granted' | 'denied' | 'never_ask_again';
 
@@ -51,6 +52,7 @@ describe('BarcodeScanner', () => {
   });
 
   it('does not render Camera component when camera permission is not granted', async () => {
+    clearAllMocks();
     cameraPermissionMock = jest
       .spyOn(Camera, 'getCameraPermissionsAsync')
       .mockResolvedValue({ status: 'denied' } as PermissionResponse);

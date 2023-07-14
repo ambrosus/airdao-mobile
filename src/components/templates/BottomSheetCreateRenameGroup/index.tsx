@@ -101,6 +101,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }
           }
           onClose={handleDismiss}
+          testID="Create_Rename_Collection_BottomSheet"
         >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>

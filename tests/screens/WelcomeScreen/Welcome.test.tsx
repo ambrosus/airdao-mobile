@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { WelcomeScreen } from '@screens/Welcome';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,10 @@ const Component = () => {
 };
 
 describe('WelcomeScreen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByTestId, getByText } = render(<Component />);
     const optionsList = getByTestId('Options_List');

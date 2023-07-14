@@ -4,6 +4,7 @@ import { AddWalletToList } from '@components/templates';
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { ExplorerAccountType } from '@appTypes';
+import clearAllMocks = jest.clearAllMocks;
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
@@ -66,6 +67,10 @@ const Component = () => {
 };
 
 describe('AddWalletToList', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', async () => {
     const { getAllByTestId, getAllByText, getByText } = render(<Component />);
     const addWalletToList = getAllByTestId('AddWalletToList_Container')[0];
@@ -79,5 +84,4 @@ describe('AddWalletToList', () => {
       0
     );
   });
-  // TODO add more tests for this component
 });

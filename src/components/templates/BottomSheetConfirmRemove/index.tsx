@@ -32,8 +32,13 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
     };
 
     return (
-      <BottomSheet ref={localRef} height={375} isNestedSheet={true}>
-        <View testID="BottomSheetConfirmRemove_Container">
+      <BottomSheet
+        ref={localRef}
+        height={375}
+        isNestedSheet={true}
+        testID="BottomSheet_Confirm_Remove"
+      >
+        <View>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>

@@ -4,6 +4,7 @@ import { SearchScreen } from '@screens/Search';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ExplorerAccountType } from '@appTypes';
+import clearAllMocks = jest.clearAllMocks;
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
@@ -106,6 +107,10 @@ const Component = () => {
   );
 };
 describe('SearchScreen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', async () => {
     const { getByTestId, getByText } = render(<Component />);
     const barcodeScanner = getByTestId('Barcode_Scanner');

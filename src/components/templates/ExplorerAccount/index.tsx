@@ -94,7 +94,7 @@ export const ExplorerAccountView = (
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="Explorer_Account_View">
       {nameVisible && (
         <>
           <Spacer value={verticalScale(22)} />
@@ -108,6 +108,7 @@ export const ExplorerAccountView = (
         </>
       )}
       <Row alignItems="center">
+        {/* testID="Copy_To_Clipboard_Button" */}
         <CopyToClipboardButton
           testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}

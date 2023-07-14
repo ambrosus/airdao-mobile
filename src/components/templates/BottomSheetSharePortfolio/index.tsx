@@ -59,8 +59,8 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     };
 
     return (
-      <BottomSheetFloat ref={localRef}>
-        <View testID="share-bottom-sheet" style={styles.container}>
+      <BottomSheetFloat ref={localRef} testID="Share_Portfolio_BottomSheet">
+        <View testID="BottomSheet_Container" style={styles.container}>
           <View style={styles.icon}>
             <BottomSheetSwiperIcon />
           </View>

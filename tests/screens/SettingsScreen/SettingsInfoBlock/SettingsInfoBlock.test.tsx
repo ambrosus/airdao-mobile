@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/react-native';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 const Component = () => {
   return (
@@ -12,6 +13,10 @@ const Component = () => {
 };
 
 describe('SettingsInfoBlock', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders the text inside settings-screen_settings-info-block inside the button', () => {
     const { getByText } = render(<Component />);
     expect(getByText('Help center')).not.toBeNull();

@@ -1,83 +1,110 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import { BezierChart } from '@components/templates';
+import { GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
+import clearAllMocks = jest.clearAllMocks;
 
 describe('BezierChart', () => {
-  const data = [
-    { x: 1, y: 2 },
-    { x: 2, y: 3 },
-    { x: 3, y: 5 },
-    { x: 4, y: 4 },
-    { x: 5, y: 5.5 },
-    { x: 5, y: 6.5 }
-  ];
-  it('renders with custom stroke color', () => {
-    render(<BezierChart data={data} strokeColor={COLORS.jungleGreen} />);
+  afterAll(() => {
+    clearAllMocks();
   });
 
-  it('renders a large dataset', () => {
-    const largeData = [
-      { x: 1, y: 2 },
-      { x: 2, y: 3 },
-      { x: 3, y: 4 },
-      { x: 4, y: 5 },
-      { x: 5, y: 6 },
-      { x: 6, y: 7 },
-      { x: 7, y: 8 },
-      { x: 8, y: 9 },
-      { x: 9, y: 10 },
-      { x: 10, y: 11 },
-      { x: 11, y: 12 },
-      { x: 12, y: 13 },
-      { x: 13, y: 14 },
-      { x: 14, y: 15 },
-      { x: 15, y: 16 },
-      { x: 16, y: 17 },
-      { x: 17, y: 18 },
-      { x: 18, y: 19 },
-      { x: 19, y: 20 },
-      { x: 20, y: 21 },
-      { x: 21, y: 22 },
-      { x: 22, y: 23 },
-      { x: 23, y: 24 },
-      { x: 24, y: 25 },
-      { x: 25, y: 26 },
-      { x: 26, y: 27 },
-      { x: 27, y: 28 },
-      { x: 28, y: 29 },
-      { x: 29, y: 30 },
-      { x: 30, y: 31 },
-      { x: 31, y: 32 },
-      { x: 32, y: 33 },
-      { x: 33, y: 34 },
-      { x: 34, y: 35 },
-      { x: 35, y: 36 },
-      { x: 36, y: 37 },
-      { x: 37, y: 38 },
-      { x: 38, y: 39 },
-      { x: 39, y: 40 },
-      { x: 40, y: 41 },
-      { x: 41, y: 42 },
-      { x: 42, y: 43 },
-      { x: 43, y: 44 },
-      { x: 44, y: 45 },
-      { x: 45, y: 46 },
-      { x: 46, y: 47 },
-      { x: 47, y: 48 },
-      { x: 48, y: 49 },
-      { x: 49, y: 50 }
-    ];
+  const mockedData: GraphPoint[] = [
+    {
+      value: 10,
+      date: new Date('10.07.2023T10:40')
+    },
+    {
+      value: 48,
+      date: new Date('10.07.2023T12:40')
+    },
+    {
+      value: 96,
+      date: new Date('10.07.2023T14:40')
+    },
+    {
+      value: 123,
+      date: new Date('10.07.2023T16:40')
+    },
+    {
+      value: 40,
+      date: new Date('10.07.2023T18:40')
+    }
+  ];
 
-    const tree = render(
+  const onPointSelected = jest.fn();
+  const onIntervalSelected = jest.fn();
+
+  beforeEach(() => {
+    onPointSelected.mockClear();
+    onIntervalSelected.mockClear();
+  });
+
+  it('renders correctly', () => {
+    const { getByTestId } = render(<BezierChart data={mockedData} />);
+    const chart = getByTestId('Bezier_Chart');
+    expect(chart).toBeDefined();
+  });
+
+  it('renders the chart with the correct props', () => {
+    const { getByTestId } = render(
       <BezierChart
-        data={largeData}
-        strokeColor={COLORS.jungleGreen}
-        axisLabelColor={COLORS.sapphireBlue}
-        axisColor={COLORS.silver}
-        height={400}
+        data={mockedData}
+        strokeColor={COLORS.chartGreen}
+        axisLabelColor={COLORS.smokyBlack}
+        axisColor="transparent"
       />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    const chart = getByTestId('Bezier_Chart');
+    expect(chart.props.points).toEqual(mockedData);
+    expect(chart.props.color).toEqual(COLORS.chartGreen);
+  });
+
+  it('allows panning and calls onGestureStart and onGestureEnd callbacks', async () => {
+    const { getByTestId } = render(
+      <BezierChart data={mockedData} onPointSelected={onPointSelected} />
+    );
+    const chart = getByTestId('Bezier_Chart');
+
+    // Pan left
+    fireEvent(chart, 'gesturestart', {
+      nativeEvent: { touches: [{ pageX: 200 }] }
+    });
+    fireEvent(chart, 'gestureend', {
+      nativeEvent: { touches: [{ pageX: 100 }] }
+    });
+    expect(onPointSelected).not.toHaveBeenCalled();
+
+    // Pan right
+    fireEvent(chart, 'gesturestart', {
+      nativeEvent: { touches: [{ pageX: 100 }] }
+    });
+    fireEvent(chart, 'gestureend', {
+      nativeEvent: { touches: [{ pageX: 200 }] }
+    });
+    expect(onPointSelected).not.toHaveBeenCalled();
+  });
+
+  it('renders intervals and calls onIntervalSelected callback', () => {
+    const intervals = [
+      { text: 'Interval 1', value: 'interval1' },
+      { text: 'Interval 2', value: 'interval2' }
+    ];
+    const { getByText } = render(
+      <BezierChart
+        data={mockedData}
+        intervals={intervals}
+        onIntervalSelected={onIntervalSelected}
+      />
+    );
+    const interval1 = getByText('Interval 1');
+    const interval2 = getByText('Interval 2');
+
+    fireEvent.press(interval1);
+    expect(onIntervalSelected).toHaveBeenCalledWith(intervals[0]);
+
+    fireEvent.press(interval2);
+    expect(onIntervalSelected).toHaveBeenCalledWith(intervals[1]);
   });
 });

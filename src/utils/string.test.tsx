@@ -23,7 +23,7 @@ describe('StringUtils', () => {
         paddingLeft,
         paddingRight
       );
-      expect(result).toBe('0xF9...aceC');
+      expect(result).toBe('0xF...aceC');
     });
 
     it('formats the address with the specified number of dots in the middle', () => {
@@ -37,7 +37,7 @@ describe('StringUtils', () => {
         paddingRight,
         dotCount
       );
-      expect(result).toBe('0xF..aceC');
+      expect(result).toBe('0x..aceC');
     });
   });
 

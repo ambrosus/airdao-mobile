@@ -4,6 +4,7 @@ import { WalletItem } from '@components/templates';
 import { ExplorerAccountType } from '@appTypes';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import clearAllMocks = jest.clearAllMocks;
 
 const mockItem = {
   _id: '1',
@@ -43,6 +44,14 @@ const Component = () => {
 };
 
 describe('WalletItem', () => {
+  beforeEach(() => {
+    clearAllMocks();
+  });
+
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('Wallet_Item_View')).toBeTruthy();
@@ -55,13 +64,13 @@ describe('WalletItem', () => {
     expect(getByTestId('Wallet_Item_Name').props.children).toBe('Test Wallet');
   });
 
-  it.skip('renders address indicator when indicatorVisible is true', () => {
+  it.skip('renders address indicator when indicatorVisible is true', async () => {
     const { getByTestId } = render(
       <QueryClientProvider client={queryClient}>
         <WalletItem item={mockItem} indicatorVisible={true} />
       </QueryClientProvider>
     );
-    expect(getByTestId('Wallet_Item_Address_Indicator')).toBeTruthy();
+    await expect(getByTestId('Wallet_Item_Address_Indicator')).toBeDefined();
   });
 
   it('does not render address indicator when indicatorVisible is false', () => {

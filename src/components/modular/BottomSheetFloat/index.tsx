@@ -8,7 +8,7 @@ import { styles } from './styles';
 
 export const BottomSheetFloat = forwardRef<BottomSheetRef, BottomSheetProps>(
   (props, ref) => {
-    const { ...bottomSheetProps } = props;
+    const { testID, ...bottomSheetProps } = props;
 
     return (
       <BottomSheet
@@ -19,6 +19,7 @@ export const BottomSheetFloat = forwardRef<BottomSheetRef, BottomSheetProps>(
           ...(bottomSheetProps.containerStyle || {}),
           ...styles.container
         }}
+        testID={testID}
       />
     );
   }

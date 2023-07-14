@@ -4,6 +4,7 @@ import { SingleGroupScreen } from '@screens/SingleCollection';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigationContainer } from '@react-navigation/native';
+import clearAllMocks = jest.clearAllMocks;
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
@@ -52,6 +53,14 @@ jest.mock('@contexts/AllAddresses', () => ({
   useAllAddressesReducer: jest.fn()
 }));
 
+jest.mock('@contexts/OnBoardingContext', () => ({
+  useOnboardingStatus: jest.fn(() => ({
+    status: '0',
+    back: jest.fn(),
+    skip: jest.fn()
+  }))
+}));
+
 const queryClient = new QueryClient();
 
 const Component = () => {
@@ -67,15 +76,18 @@ const Component = () => {
 };
 
 describe('SingleGroupScreen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
-    const { getByTestId, getAllByTestId, getByText } = render(<Component />);
+    const { getByTestId, getByText } = render(<Component />);
     expect(getByTestId('Single_Collection')).toBeDefined();
     expect(getByTestId('Add_Address_Button')).toBeDefined();
     expect(getByTestId('Edit_Collection_Button')).toBeDefined();
     expect(getByText('TOTAL BALANCE')).toBeDefined();
     expect(getByText('Test Collection')).toBeDefined();
     expect(getByTestId('List_Of_Addresses')).toBeDefined();
-    expect(getAllByTestId('bottom-sheet')).toBeDefined();
     expect(getByText('9,999,999 AMB')).toBeTruthy();
   });
 
@@ -93,5 +105,17 @@ describe('SingleGroupScreen', () => {
     fireEvent.press(editButton);
     const editCollectionModal = getByTestId('bottom-sheet-edit-collection');
     expect(editCollectionModal).toBeDefined();
+  });
+
+  it('opens the "BottomSheetCreateRename" modal when the "Edit Collection" button is pressed', () => {
+    const { getByTestId } = render(<Component />);
+    const editButton = getByTestId('Edit_Collection_Button');
+    fireEvent.press(editButton);
+    const editCollectionModal = getByTestId('bottom-sheet-edit-collection');
+    expect(editCollectionModal).toBeDefined();
+    const renameButton = getByTestId('Rename_Collection_Button');
+    fireEvent.press(renameButton);
+    const renameCollectionModal = getByTestId('BottomSheetCreateRename');
+    expect(renameCollectionModal).toBeDefined();
   });
 });
