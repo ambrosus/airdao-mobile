@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { TransactionDetails } from '../TransactionDetails';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetFloat, TransactionItem } from '@components/modular';
 import { Transaction } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
+import { CommonStackNavigationProp } from '@appTypes/navigation/common';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -17,9 +19,18 @@ export const ExplorerAccountTransactionItem = (
 ): JSX.Element => {
   const { transaction, disabled = false } = props;
   const transactionDetailsModal = useRef<BottomSheetRef>(null);
+  const navigation = useNavigation<CommonStackNavigationProp>();
 
   const showTransactionDetails = () => {
     transactionDetailsModal.current?.show();
+  };
+
+  const navigateToAddress = (address: string) => {
+    transactionDetailsModal.current?.dismiss();
+    // close first, navigate then
+    setTimeout(() => {
+      navigation.push('Address', { address });
+    }, 0);
   };
 
   return (
@@ -31,11 +42,14 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetailsTop}>
           <Spacer value={verticalScale(26.46)} />
           <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            Transaction Details
+            Transaction details
           </Text>
         </View>
         <View style={styles.transactionDetails}>
-          <TransactionDetails transaction={transaction} />
+          <TransactionDetails
+            transaction={transaction}
+            onPressAddress={navigateToAddress}
+          />
         </View>
       </BottomSheetFloat>
     </>

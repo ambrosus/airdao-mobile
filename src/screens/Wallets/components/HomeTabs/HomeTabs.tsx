@@ -88,7 +88,7 @@ export const HomeTabs = () => {
               color={currentIndex === 0 ? COLORS.jetBlack : COLORS.lavenderGray}
               fontSize={currentIndex === 0 ? 20 : 18}
             >
-              Watchlist
+              Addresses
             </Text>
           </Button>
           <Spacer value={scale(16)} horizontal />
@@ -101,7 +101,7 @@ export const HomeTabs = () => {
               color={currentIndex === 1 ? COLORS.jetBlack : COLORS.lavenderGray}
               fontSize={currentIndex === 1 ? 20 : 18}
             >
-              Collections
+              Groups
             </Text>
           </Button>
         </Row>

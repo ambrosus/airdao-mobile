@@ -2,8 +2,8 @@ import messaging, {
   FirebaseMessagingTypes
 } from '@react-native-firebase/messaging';
 import { DeviceEventEmitter } from 'react-native';
-import { NotificationType } from '@models';
-import { DatabaseService } from './database';
+// import { NotificationType } from '@models';
+// import { DatabaseService } from './database';
 import { EVENTS } from '@constants/events';
 
 export class NotificationService {
@@ -21,29 +21,29 @@ export class NotificationService {
     });
   }
 
-  private async handleNotification(
-    message: FirebaseMessagingTypes.RemoteMessage
-  ) {
-    const { notification, messageId } = message;
-    if (notification) {
-      const { body, title } = notification;
-      if (body && title) {
-        const databaseService = new DatabaseService();
-        await databaseService.saveNotification(
-          messageId || '',
-          title as NotificationType,
-          body
-        );
-      }
-    }
-  }
+  // private async handleNotification(
+  //   message: FirebaseMessagingTypes.RemoteMessage
+  // ) {
+  //   const { notification, messageId } = message;
+  //   if (notification) {
+  //     const { body, title } = notification;
+  //     if (body && title) {
+  //       const databaseService = new DatabaseService();
+  //       await databaseService.saveNotification(
+  //         messageId || '',
+  //         title as NotificationType,
+  //         body
+  //       );
+  //     }
+  //   }
+  // }
 
   private async handleForegroundNotification(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     message: FirebaseMessagingTypes.RemoteMessage
   ) {
     // TODO we can show Toast message
-    DeviceEventEmitter.emit(EVENTS.NotificationReceived);
+    DeviceEventEmitter.emit(EVENTS.NotificationReceived, message.data);
     // this.handleNotification.bind(this)(message);
   }
 

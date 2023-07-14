@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, verticalScale } from '@utils/scaling';
@@ -108,7 +108,6 @@ export const ExplorerAccountView = (
         </>
       )}
       <Row alignItems="center">
-        {/* testID="Copy_To_Clipboard_Button" */}
         <CopyToClipboardButton
           testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
@@ -130,72 +129,80 @@ export const ExplorerAccountView = (
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
       <Spacer value={verticalScale(16)} />
-      <Row alignItems="center">
-        <Button
-          style={{
-            ...styles.actionButton,
-            backgroundColor: account.isOnWatchlist
-              ? COLORS.warning
-              : COLORS.mainBlue
-          }}
-          type="circular"
-          onPress={toggleWatchlist}
-          testID="Add_To_Watchlist_Button"
-        >
-          <Row alignItems="center">
-            <Text
-              fontSize={12}
-              color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
-            >
-              {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
-            </Text>
-            {!account.isOnWatchlist && (
-              <>
-                <Spacer value={scale(8)} horizontal />
-                <PlusIcon color={COLORS.white} scale={0.5} />
-              </>
-            )}
-          </Row>
-        </Button>
-        <Spacer value={scale(16)} horizontal />
-        <Button
-          style={{
-            ...styles.actionButton,
-            backgroundColor:
-              listsWithAccount.length > 0 ? COLORS.warning : COLORS.powderWhite
-          }}
-          type="circular"
-          onPress={showAddToList}
-          testID="Add_To_Collection_Button"
-        >
-          <Row alignItems="center">
-            <Text
-              color={
+      <ScrollView
+        horizontal
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+      >
+        <Row alignItems="center">
+          <Button
+            style={{
+              ...styles.actionButton,
+              backgroundColor: account.isOnWatchlist
+                ? COLORS.warning
+                : COLORS.mainBlue
+            }}
+            testID="Add_To_Watchlist_Button"
+            type="circular"
+            onPress={toggleWatchlist}
+          >
+            <Row alignItems="center">
+              <Text
+                fontSize={12}
+                color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
+              >
+                {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
+              </Text>
+              {!account.isOnWatchlist && (
+                <>
+                  <Spacer value={scale(8)} horizontal />
+                  <PlusIcon color={COLORS.white} scale={0.5} />
+                </>
+              )}
+            </Row>
+          </Button>
+          <Spacer value={scale(16)} horizontal />
+          <Button
+            style={{
+              ...styles.actionButton,
+              backgroundColor:
                 listsWithAccount.length > 0
-                  ? COLORS.liver
-                  : COLORS.darkCornflowerBlue
-              }
-              fontSize={12}
-            >
-              {listsWithAccount.length === 0
-                ? 'ADD TO COLLECTION'
-                : listsWithAccount.length === 1
-                ? listsWithAccount[0].name
-                : `Added to ${listsWithAccount.length} collections`}
-            </Text>
-            {listsWithAccount.length === 0 && (
-              <>
-                <Spacer value={scale(8)} horizontal />
-                <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
-              </>
-            )}
-          </Row>
-        </Button>
-      </Row>
+                  ? COLORS.warning
+                  : COLORS.powderWhite
+            }}
+            testID="Add_To_Collection_Button"
+            type="circular"
+            onPress={showAddToList}
+          >
+            <Row alignItems="center">
+              <Text
+                color={
+                  listsWithAccount.length > 0
+                    ? COLORS.liver
+                    : COLORS.darkCornflowerBlue
+                }
+                fontSize={12}
+              >
+                {listsWithAccount.length === 0
+                  ? 'ADD TO GROUP'
+                  : listsWithAccount.length === 1
+                  ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
+                  : `Added to ${listsWithAccount.length} groups`}
+              </Text>
+              {listsWithAccount.length === 0 && (
+                <>
+                  <Spacer value={scale(8)} horizontal />
+                  <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
+                </>
+              )}
+            </Row>
+          </Button>
+        </Row>
+      </ScrollView>
       <BottomSheetWithHeader
         ref={addToListModal}
         height={fullscreenHeight * 0.95}
-        title="Add address to collection"
+        title="Add address to group"
         avoidKeyboard={false}
         swiperIconVisible={true}
       >

@@ -164,10 +164,10 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
                 onScanned('0x9FAec9D8CBd3f131b662e3DC586eb0e9B1663b40')
               }
             >
-              <Text color={COLORS.jungleGreen}>Submit Successfull Address</Text>
+              <Text color={COLORS.jungleGreen}>Submit successfull address</Text>
             </Button>
             <Button onPress={() => onScanned('failing address')}>
-              <Text color={COLORS.crimsonRed}>Submit Failing Address</Text>
+              <Text color={COLORS.crimsonRed}>Submit failing address</Text>
             </Button>
           </View>
         )}

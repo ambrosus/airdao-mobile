@@ -3,7 +3,11 @@ import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { COLORS } from '@constants/colors';
 import { useCurrentRoute } from '@contexts';
 
-const RoutesWithCulturedWhiteBg = ['HomeScreen', 'AMBMarketScreen'];
+const RoutesWithCulturedWhiteBg = [
+  'HomeScreen',
+  'AMBMarketScreen',
+  'WelcomeScreen'
+];
 
 export const StatusBar = () => {
   const currentRoute = useCurrentRoute();

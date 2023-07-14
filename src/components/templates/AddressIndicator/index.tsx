@@ -6,6 +6,7 @@ import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { WatchlistIcon } from '@components/svg/icons';
+import { StringUtils } from '@utils/string';
 
 interface AddressIndicatorProps {
   address: string;
@@ -33,7 +34,7 @@ export function AddressIndicator(props: AddressIndicatorProps): JSX.Element {
           color={COLORS.gray700}
           numberOfLines={1}
         >
-          {listWithWallet.name}
+          {StringUtils.formatAddress(listWithWallet.name, 4, 4)}
         </Text>
       </View>
     );

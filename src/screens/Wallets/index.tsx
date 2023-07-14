@@ -1,27 +1,30 @@
 import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { PortfolioBalance } from './components';
-import { AddIcon } from '@components/svg/icons/AddIcon';
-import { useOnboardingStatus } from '@contexts';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { RefreshControl } from 'react-native-gesture-handler';
+import { OnboardingView } from '@components/templates';
+import { Row, Spacer, Text } from '@components/base';
+import { AddIcon } from '@components/svg/icons';
+import { PortfolioBalance, HomeHeader, HomeTabs } from './components';
+import { useAllAddressesContext, useOnboardingStatus } from '@contexts';
 import { useAMBPrice } from '@hooks';
 import { SearchTabNavigationProp } from '@appTypes';
-import { styles } from './styles';
-import { OnboardingView } from '@components/templates/OnboardingView';
-import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { HomeTabs } from '@screens/Wallets/components/HomeTabs/HomeTabs';
-// import { HomeHighlights } from '@screens/Wallets/components/HomeHighlightsSlider/HomeHighlights';
-import { HomeHeader } from '@screens/Wallets/components/Header';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { styles } from './styles';
 
 export const HomeScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
   const isFocused = useIsFocused();
 
-  const { data: ambTokenData } = useAMBPrice();
+  const {
+    data: ambTokenData,
+    refetch: refetchAMBPrice,
+    refetching: refetchingAMBPrice
+  } = useAMBPrice();
   const { start: startOnboarding } = useOnboardingStatus((v) => v);
+  const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
   const onboardinStarted = useRef(false);
 
   const navigateToSearch = useCallback(() => {
@@ -40,6 +43,11 @@ export const HomeScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
+  const onRefresh = () => {
+    refetchAddresses();
+    if (typeof refetchAMBPrice === 'function') refetchAMBPrice();
+  };
+
   return (
     <SafeAreaView
       edges={['top']}
@@ -51,9 +59,15 @@ export const HomeScreen = () => {
     >
       <HomeHeader />
       <ScrollView
-        bounces={false}
+        bounces={true}
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={Boolean(refetchingAMBPrice)}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <Spacer value={verticalScale(16)} />
         <View style={{ paddingHorizontal: scale(16) }}>

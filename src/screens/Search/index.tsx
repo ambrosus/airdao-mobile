@@ -21,7 +21,7 @@ import {
 import { SearchSort } from './Search.types';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
@@ -35,6 +35,8 @@ export const SearchScreen = () => {
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
+
+  const { top } = useSafeAreaInsets();
 
   const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
   const [addressFromParams, setAddressFromParams] = useState('');
@@ -74,10 +76,7 @@ export const SearchScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={{ flex: 1, paddingTop: verticalScale(12) }}
-    >
+    <View style={{ flex: 1, paddingTop: verticalScale(12), top }}>
       <View testID="Search_Screen" style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
@@ -129,6 +128,6 @@ export const SearchScreen = () => {
           </Animated.View>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

@@ -31,7 +31,7 @@ export const HomeWatchlists = () => {
         return (
           <View key={item._id}>
             <Button onPress={() => navigateToAddressDetails(item)}>
-              <WalletItem item={item} />
+              <WalletItem item={item} indicatorVisible={true} />
             </Button>
             {index !== ITEM_COUNT - 1 && <Spacer value={verticalScale(24)} />}
           </View>

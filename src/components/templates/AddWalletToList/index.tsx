@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
@@ -28,7 +28,9 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   );
 
   const toggleWalletInList = (list: AccountList) => {
-    toggleAddressesInList([wallet], list);
+    setTimeout(() => {
+      toggleAddressesInList([wallet], list);
+    }, 400);
     if (typeof onWalletMove === 'function') onWalletMove(list);
   };
 
@@ -52,9 +54,12 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontFamily="Inter_500Medium"
                 fontWeight="500"
                 color={COLORS.smokyBlack}
+                numberOfLines={1}
+                style={{ flex: 1 }}
               >
                 {list.name}
               </Text>
+              <Spacer horizontal value={scale(24)} />
               <Text
                 fontSize={13}
                 fontWeight="600"
@@ -90,7 +95,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
           <InputWithIcon
             value={searchText}
             onChangeValue={setSearchText}
-            placeholder="Search collections"
+            placeholder="Search groups"
             iconLeft={<SearchIcon color={COLORS.midnight} />}
           />
         </View>

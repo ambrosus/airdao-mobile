@@ -14,7 +14,7 @@ import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -55,7 +55,8 @@ export function AMBMarket(): JSX.Element {
         }}
         contentRight={
           <Button onPress={onSharePress} testID="Share_Button">
-            <ShareIcon color={COLORS.jetBlack} scale={1.4} />
+            <ShareIcon color={COLORS.jetBlack} scale={1.5} />
+            <Spacer horizontal value={scale(20)} />
           </Button>
         }
       />
@@ -111,7 +112,7 @@ export function AMBMarket(): JSX.Element {
       <SharePortfolio
         ref={shareBottomSheet}
         title="AMB Price"
-        bottomSheetTitle="Share AMB Price"
+        bottomSheetTitle="Share AMB price"
         balance={(ambPrice?.priceUSD || 0).toString()}
         currency={'$'}
         currencyPosition={'left'}

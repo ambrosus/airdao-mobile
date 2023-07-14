@@ -19,11 +19,6 @@ export const styles = StyleSheet.create({
     height: moderateScale(36),
     width: moderateScale(36)
   },
-  headerPersonalListBtn: {
-    backgroundColor: COLORS.powderWhite,
-    height: moderateScale(36),
-    width: moderateScale(36)
-  },
   headerWatchListBtn: {
     backgroundColor: COLORS.powderWhite,
     height: moderateScale(36),

@@ -4,13 +4,25 @@ import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   containerStyle: {
-    width: '95%',
+    width: scale(350),
     borderRadius: moderateScale(13),
-    backgroundColor: COLORS.egyptianGreen,
+    backgroundColor: COLORS.green100,
     position: 'absolute',
     alignSelf: 'center',
     paddingVertical: verticalScale(12),
-    paddingLeft: scale(16),
-    paddingRight: scale(20)
-  }
+    paddingHorizontal: scale(16),
+    borderWidth: 1,
+    borderColor: COLORS.green200
+  },
+  statusIcon: {
+    backgroundColor: COLORS.green400,
+    width: moderateScale(24),
+    height: moderateScale(24),
+    borderRadius: moderateScale(12),
+    marginRight: scale(14),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-start'
+  },
+  closeBtn: { alignSelf: 'flex-start', marginLeft: scale(14) }
 });

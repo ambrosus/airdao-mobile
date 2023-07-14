@@ -4,6 +4,7 @@ export type ButtonType = 'text' | 'number';
 export type TextInputProps = {
   value?: string;
   placeholder?: string;
+  focusedStyles?: RNTextInputProps['style'];
   onChangeValue?: (newValue: string) => unknown;
 };
 
@@ -18,6 +19,10 @@ export type InputRef = {
    */
   focus: () => void;
 
+  /**
+   * removes focus from input
+   */
+  blur: () => void;
   /**
    * cleares the input
    */

@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(12),
+    paddingTop: verticalScale(27),
     paddingLeft: scale(16),
     paddingRight: scale(20)
   },

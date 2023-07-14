@@ -5,29 +5,44 @@ import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
+import {
+  DEFAULT_WATCHLIST,
+  DefaultNotificationSettings
+} from '@constants/variables';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
-
   SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
     async function prepare() {
       try {
         DeviceService.setupUniqueDeviceID();
-        await PermissionService.getPermission(Permission.Notifications, {
-          requestAgain: true,
-          openSettings: true
+        const notificationPermissionGranted =
+          await PermissionService.getPermission(Permission.Notifications, {
+            requestAgain: true,
+            openSettings: true
+          });
+        await Cache.setItem(CacheKey.NotificationSettings, {
+          ...DefaultNotificationSettings,
+          priceAlerts: notificationPermissionGranted,
+          transactionAlerts: notificationPermissionGranted
         });
+
         const notificationService = new NotificationService();
         notificationService.setup();
         let notificationTokenSavedToRemoteDB = false;
+        let alreadyWatchedAddresses: string[] = [];
         try {
-          notificationTokenSavedToRemoteDB = Boolean(
-            await API.watcherService.getWatcherInfoOfCurrentUser()
-          );
+          const watcherInfo =
+            await API.watcherService.getWatcherInfoOfCurrentUser();
+          alreadyWatchedAddresses = watcherInfo
+            ? watcherInfo.addresses.map((a) => a.address)
+            : ([] as string[]);
+          notificationTokenSavedToRemoteDB = Boolean(watcherInfo);
         } catch (error) {
+          alreadyWatchedAddresses = [] as string[];
           notificationTokenSavedToRemoteDB = false;
         }
         if (!notificationTokenSavedToRemoteDB) {
@@ -47,6 +62,10 @@ export const useAppInit = () => {
             // ignore
           }
         }
+        const notWatchedDefaultAddresses = DEFAULT_WATCHLIST.filter(
+          (adress) => alreadyWatchedAddresses.indexOf(adress) === -1
+        );
+        API.watcherService.watchAddresses(notWatchedDefaultAddresses);
 
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
@@ -63,6 +82,7 @@ export const useAppInit = () => {
       }
     }
     prepare();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { isAppReady };

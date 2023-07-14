@@ -5,11 +5,12 @@ import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/c
 import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
 import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Watchlists';
 import { useIsFocused } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 const portfolioTabRoutes = [
-  { key: 'first', title: 'Watchlists' },
-  { key: 'second', title: 'Collections' }
+  { key: 'first', title: 'Addresses' },
+  { key: 'second', title: 'Groups' }
 ] as const;
 
 type PortfolioTabRoutes = typeof portfolioTabRoutes;
@@ -43,6 +44,7 @@ type PortfolioScreenProps = {
 };
 
 export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
+  const { top } = useSafeAreaInsets();
   const activeTab = route?.params?.tabs?.activeTab;
   const [index, setIndex] = useState(0);
   const [routes] = useState<PortfolioTabViewRoute[]>(
@@ -58,7 +60,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   }, [activeTab, focused]);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1 }} testID="Portfolio_Screen">
+    <View style={{ flex: 1, top }} testID="Portfolio_Screen">
       <TabView<PortfolioTabViewRoute>
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -71,6 +73,6 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
           />
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };

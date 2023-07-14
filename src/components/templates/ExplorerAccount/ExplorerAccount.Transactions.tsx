@@ -46,7 +46,7 @@ export const AccountTransactions = (
             fontSize={20}
             color={COLORS.jetBlack}
           >
-            Recent Activity
+            Recent activity
           </Text>
         </Row>
       </KeyboardDismissingView>
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingHorizontal: scale(16),
-    paddingBottom: '20%'
+    paddingBottom: '40%'
   }
 });

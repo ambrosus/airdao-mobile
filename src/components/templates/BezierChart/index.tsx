@@ -82,7 +82,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
         testID="Bezier_Chart"
         style={{
           width: '100%',
-          aspectRatio: 4.72
+          aspectRatio: 1.5
         }}
         points={data}
         animated={true}
