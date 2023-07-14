@@ -100,7 +100,10 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   }
   if (!hasPermission) {
     return (
-      <View style={{ flex: 1, paddingTop: topInset }}>
+      <View
+        style={{ flex: 1, paddingTop: topInset }}
+        testID="BarcodeScanner_Container"
+      >
         <Header
           style={{ backgroundColor: 'transparent', zIndex: 1000 }}
           backIconVisible={false}

@@ -28,7 +28,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   };
 
   return (
-    <View style={styles.container} testID="portfolio-balance">
+    <View style={styles.container} testID="Portfolio_Balance">
       <AMBPriceHistory onBadgePress={navigateToAMBScreen} badgeType="button" />
     </View>
   );

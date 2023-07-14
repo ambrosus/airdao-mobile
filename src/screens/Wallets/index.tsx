@@ -55,7 +55,7 @@ export const HomeScreen = () => {
         backgroundColor:
           Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite
       }}
-      testID="Wallets_Screen"
+      testID="Home_Screen"
     >
       <HomeHeader />
       <ScrollView

@@ -99,6 +99,7 @@ export const ToastBody = forwardRef((_, ref) => {
       exiting={(isTopToast ? SlideOutUp : SlideOutDown).duration(
         (options.duration ?? 500) / 2
       )}
+      testID="Toast_Body"
     >
       <Pressable
         disabled={typeof options.onBodyPress !== 'function'}

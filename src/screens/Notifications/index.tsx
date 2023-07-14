@@ -93,7 +93,7 @@ export const Notifications = (): JSX.Element => {
 
   const renderEmpty = () => {
     return (
-      <View style={styles.emptyContainer}>
+      <View style={styles.emptyContainer} testID="Empty_Component">
         <BellIcon />
         <Spacer value={verticalScale(16)} />
         <Text
@@ -125,6 +125,7 @@ export const Notifications = (): JSX.Element => {
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
+        testID="Notifications_List"
       />
       <BottomSheetNotificationSettings ref={settingsModal} />
     </SafeAreaView>

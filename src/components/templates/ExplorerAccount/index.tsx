@@ -94,7 +94,7 @@ export const ExplorerAccountView = (
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="Explorer_Account_View">
       {nameVisible && (
         <>
           <Spacer value={verticalScale(22)} />
@@ -109,6 +109,7 @@ export const ExplorerAccountView = (
       )}
       <Row alignItems="center">
         <CopyToClipboardButton
+          testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
@@ -141,6 +142,7 @@ export const ExplorerAccountView = (
                 ? COLORS.warning
                 : COLORS.mainBlue
             }}
+            testID="Add_To_Watchlist_Button"
             type="circular"
             onPress={toggleWatchlist}
           >
@@ -168,6 +170,7 @@ export const ExplorerAccountView = (
                   ? COLORS.warning
                   : COLORS.powderWhite
             }}
+            testID="Add_To_Collection_Button"
             type="circular"
             onPress={showAddToList}
           >

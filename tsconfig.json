@@ -10,6 +10,7 @@
     "target": "es6",
     "jsx": "react",
     "allowJs": true,
+    "experimentalDecorators": true,
     "paths": {
       "@*": ["./src/*"],
       "@api/*": ["./src/api/*"],

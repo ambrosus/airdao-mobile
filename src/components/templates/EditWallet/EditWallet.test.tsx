@@ -4,6 +4,7 @@ import { EditWallet } from '@components/templates/EditWallet/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ExplorerAccountType } from '@appTypes';
+import clearAllMocks = jest.clearAllMocks;
 
 const mockedListsOfAddressGroup = [
   {
@@ -38,15 +39,6 @@ jest.mock('@contexts/OnBoardingContext', () => ({
   }))
 }));
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
-
 const onNameChangeMock = jest.fn();
 const onIsPersonalAddressChangeMock = jest.fn();
 
@@ -69,6 +61,10 @@ const Component = () => {
 };
 
 describe('EditWallet', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByTestId } = render(<Component />);
     expect(getByTestId('EditWallet_Container')).toBeDefined();

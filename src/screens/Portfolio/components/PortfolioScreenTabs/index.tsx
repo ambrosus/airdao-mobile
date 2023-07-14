@@ -96,7 +96,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={styles.container} testID="Portfolio_Screen_Tabs">
         {Platform.OS === 'ios' ? (
           <Row justifyContent="space-between" alignItems="center">
             <Text
@@ -107,6 +107,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
               Watchlist
             </Text>
             <Button
+              testID="Portfolio_Tabs_Button"
               onPress={portfolioTabsButton}
               style={styles.createNewListButton}
             >
@@ -153,7 +154,11 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             )
           });
           return (
-            <View key={i} style={{ marginRight: scale(16) }}>
+            <View
+              key={i}
+              style={{ marginRight: scale(16) }}
+              testID="Portfolio_Screen_Tab_Item"
+            >
               <PortfolioScreenTabItem
                 onPress={props.onIndexChange}
                 index={i}
