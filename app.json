@@ -73,7 +73,8 @@
             "kotlinVersion": "1.6.10"
           }
         }
-      ]
+      ],
+      ["./plugins/withNotifications.js"]
     ],
     "extra": {
       "eas": {
