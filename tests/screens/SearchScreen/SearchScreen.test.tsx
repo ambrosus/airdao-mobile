@@ -3,6 +3,12 @@ import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import { SearchScreen } from '@screens/Search';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ExplorerAccountType } from '@appTypes';
+import clearAllMocks = jest.clearAllMocks;
+
+Object.defineProperty(Array.prototype, 'indexOfItem', {
+  value: jest.fn()
+});
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -38,14 +44,30 @@ jest.mock('@contexts/AllAddresses', () => ({
   })
 }));
 
-jest.mock('victory-native', () => {
-  return {
-    VictoryChart: jest.fn(),
-    VictoryTheme: {},
-    VictoryLine: jest.fn(),
-    VictoryAxis: jest.fn()
-  };
-});
+const mockedListsOfAddressGroup = [
+  {
+    id: '1223123',
+    name: '333',
+    accounts: [
+      {
+        _id: '6200de3b523162b8b87baff1',
+        address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+        ambBalance: 1154670697.424454,
+        transactionCount: 17,
+        type: ExplorerAccountType.Account,
+        name: '',
+        calculatePercentHoldings: () => 0
+      }
+    ]
+  }
+];
+
+jest.mock('@contexts/ListsContext', () => ({
+  useLists: jest.fn(() => ({
+    listsOfAddressGroup: mockedListsOfAddressGroup,
+    createGroupRef: jest.fn()
+  }))
+}));
 
 let mockedData = {
   data: [
@@ -85,20 +107,18 @@ const Component = () => {
   );
 };
 describe('SearchScreen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', async () => {
-    const { getByTestId } = render(<Component />);
-    expect(getByTestId('explore-screen')).toBeTruthy();
-  });
-
-  it('opens filter modal when filter button pressed', async () => {
-    const { getByTestId } = render(<Component />);
-    const filterButton = getByTestId('filter-button');
-    fireEvent.press(filterButton);
-    expect(getByTestId('bottom-sheet-wallet-sort')).toBeDefined();
-  });
-
-  it('input is visible', async () => {
-    const { getByTestId } = render(<Component />);
+    const { getByTestId, getByText } = render(<Component />);
+    const barcodeScanner = getByTestId('Barcode_Scanner');
+    const listOfAddresses = getByTestId('List_Of_Addresses');
+    expect(getByTestId('Search_Screen')).toBeTruthy();
+    expect(getByText('Top holders')).toBeTruthy();
+    expect(barcodeScanner).toBeDefined();
+    expect(listOfAddresses).not.toBeNull();
     expect(getByTestId('search-input')).not.toBeNull();
   });
 

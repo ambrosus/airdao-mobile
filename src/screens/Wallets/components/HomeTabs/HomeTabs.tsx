@@ -70,7 +70,7 @@ export const HomeTabs = () => {
   // TODO implement nice color animation switch when index changes
 
   return (
-    <View style={styles.homeTabs}>
+    <View style={styles.homeTabs} testID="Home_Tabs">
       <Row
         alignItems="center"
         justifyContent="space-between"
@@ -79,7 +79,10 @@ export const HomeTabs = () => {
         }}
       >
         <Row alignItems="center">
-          <Button onPress={scrollToWatchlist}>
+          <Button
+            onPress={scrollToWatchlist}
+            testID="Scroll_To_Watchlist_Button"
+          >
             <Text
               fontFamily="Inter_700Bold"
               color={currentIndex === 0 ? COLORS.jetBlack : COLORS.lavenderGray}
@@ -89,7 +92,10 @@ export const HomeTabs = () => {
             </Text>
           </Button>
           <Spacer value={scale(16)} horizontal />
-          <Button onPress={scrollToCollections}>
+          <Button
+            onPress={scrollToCollections}
+            testID="Scroll_To_Collections_Button"
+          >
             <Text
               fontFamily="Inter_700Bold"
               color={currentIndex === 1 ? COLORS.jetBlack : COLORS.lavenderGray}
@@ -100,6 +106,7 @@ export const HomeTabs = () => {
           </Button>
         </Row>
         <Button
+          testID="Add_Address_Or_Create_Collection_Button"
           type="circular"
           onPress={handleOnCreateCollectionOrAddAddress}
           style={styles.addButton}
@@ -113,7 +120,7 @@ export const HomeTabs = () => {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        testID="lists-screen"
+        testID="Home_Tabs_Scroll_View"
         onMomentumScrollEnd={(event) => {
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);

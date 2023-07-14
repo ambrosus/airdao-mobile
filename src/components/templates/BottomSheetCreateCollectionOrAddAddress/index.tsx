@@ -20,12 +20,17 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
   return (
-    <BottomSheetFloat ref={localRef} swiperIconVisible>
+    <BottomSheetFloat
+      ref={localRef}
+      swiperIconVisible
+      testID="Create_Collection_Or_Add_Address_BottomSheet"
+    >
       <View
         style={{
           paddingHorizontal: scale(18),
           paddingBottom: verticalScale(24)
         }}
+        testID="BottomSheet_Content"
       >
         <Spacer value={scale(24)} />
         <Button
@@ -36,6 +41,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             width: '90%',
             alignSelf: 'center'
           }}
+          testID="Add_Address_Button"
         >
           <Text
             style={{ marginVertical: 12 }}
@@ -55,6 +61,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             width: '90%',
             alignSelf: 'center'
           }}
+          testID="Create_Collection_Button"
         >
           <Text
             style={{ marginVertical: 12 }}

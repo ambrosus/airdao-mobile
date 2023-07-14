@@ -19,7 +19,7 @@ export const SettingsScreen = () => {
 
   const { top } = useSafeAreaInsets();
   return (
-    <View style={[{ top }, styles.container]} testID="settings-screen">
+    <View style={[{ top }, styles.container]} testID="Settings_Screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />

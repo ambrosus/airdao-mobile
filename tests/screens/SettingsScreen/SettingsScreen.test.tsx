@@ -3,6 +3,7 @@ import { render } from '@testing-library/react-native';
 import { SettingsScreen } from '@screens/Settings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock(
   'react-native-safe-area-context',
@@ -40,8 +41,6 @@ jest.mock('@components/templates', () => {
   };
 });
 
-jest.mock('victory-native', () => ({}));
-
 jest.mock('react-native-share', () => ({}));
 
 jest.mock('@react-navigation/native', () => {
@@ -53,6 +52,11 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
+jest.mock('@hooks', () => ({
+  useForwardedRef: jest.fn(),
+  useFullscreenModalHeight: () => []
+}));
+
 const queryClient = new QueryClient();
 
 describe('SettingsScreen', () => {
@@ -62,6 +66,7 @@ describe('SettingsScreen', () => {
 
   afterAll(() => {
     jest.useRealTimers();
+    clearAllMocks();
   });
 
   it('renders the SettingsBlock and SettingsInfoBlock components', async () => {
@@ -73,9 +78,11 @@ describe('SettingsScreen', () => {
       </SafeAreaProvider>
     );
 
-    const settingsScreen = getByTestId('settings-screen');
-    const settingsBlock = getByTestId('settings-screen_settings-block');
-    const settingsInfoBlock = getByTestId('setting-screen_settings-info-block');
+    const settingsScreen = getByTestId('Settings_Screen');
+    const settingsBlock = getByTestId('Settings_Screen_Settings_Block');
+    const settingsInfoBlock = getByTestId(
+      'Settings_Screen_Settings_Info_Block'
+    );
     expect(settingsBlock).toBeTruthy();
     expect(settingsScreen).toBeTruthy();
     expect(settingsInfoBlock).toBeTruthy();

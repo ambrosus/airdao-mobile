@@ -13,6 +13,7 @@ export interface BottomSheetProps {
   fullscreen?: boolean;
   swiperIconVisible?: boolean;
   onClose?: () => unknown;
+  testID?: string;
 }
 
 export type BottomSheetRef = {

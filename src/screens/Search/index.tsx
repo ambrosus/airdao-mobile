@@ -77,7 +77,7 @@ export const SearchScreen = () => {
 
   return (
     <View style={{ flex: 1, paddingTop: verticalScale(12), top }}>
-      <View testID="explore-screen" style={{ flex: 1 }}>
+      <View testID="Search_Screen" style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}
           initialValue={addressFromParams}
@@ -120,6 +120,7 @@ export const SearchScreen = () => {
                     ListFooterComponent={() =>
                       accountsLoading ? renderSpinner() : <></>
                     }
+                    testID="List_Of_Addresses"
                   />
                 </>
               )

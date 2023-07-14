@@ -18,6 +18,7 @@ import { PercentChange } from '@components/composite';
 import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
 import { MONTH_NAMES } from '@constants/variables';
+import { View } from 'react-native';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
@@ -43,10 +44,9 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const didSetAMBPriceFromAPI = useRef(false);
 
   useEffect(() => {
-    if (ambPriceNow && !didSetAMBPriceFromAPI.current) {
+    if (ambPriceNow) {
       ambPriceNowRef.current = ambPriceNow.priceUSD;
       ambPrice.value = ambPriceNow.priceUSD;
-      didSetAMBPriceFromAPI.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ambPriceNow, didSetAMBPriceFromAPI.current]);
@@ -121,7 +121,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   }, [selectedInterval]);
 
   return (
-    <>
+    <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
       <Row alignItems="center" justifyContent="center">
         <LogoGradient />
         <Spacer horizontal value={scale(10)} />
@@ -134,7 +134,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           AirDAO (AMB)
         </Text>
       </Row>
-      <Row style={styles.balance}>
+      <Row style={styles.balance} testID="Formatted_Price">
         <AnimatedText
           value={formattedPrice}
           animatedProps={priceAnimatedProps}
@@ -150,6 +150,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           style={styles.badge}
           disabled={badgeType !== 'button'}
           onPress={onBadgePress}
+          testID="Badge_Button"
         >
           <Badge
             icon={
@@ -227,6 +228,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           setSelectedInverval(interval.value as CMCInterval)
         }
       />
-    </>
+    </View>
   );
 };

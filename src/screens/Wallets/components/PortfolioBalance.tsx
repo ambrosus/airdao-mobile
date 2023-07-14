@@ -1,34 +1,21 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { AMBPriceHistory } from '@components/templates';
 import { WalletsNavigationProp } from '@appTypes';
-import { useInitialMountEffect } from '@hooks';
 import { shadow } from '@constants/shadow';
 
-interface PortfolioBalanceProps {
-  AMBPrice: number;
-  AMBPriceLast24HourChange: number; // TODO there is actually no percent change coming from API
-}
-
-export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
-  const { AMBPrice } = props;
+export function PortfolioBalance(): JSX.Element {
   const navigation = useNavigation<WalletsNavigationProp>();
-  const ambPrice = useSharedValue(0);
-
-  useInitialMountEffect(() => {
-    ambPrice.value = AMBPrice;
-  }, !Number.isNaN(AMBPrice));
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
   };
 
   return (
-    <View style={styles.container} testID="portfolio-balance">
+    <View style={styles.container} testID="Portfolio_Balance">
       <AMBPriceHistory onBadgePress={navigateToAMBScreen} badgeType="button" />
     </View>
   );

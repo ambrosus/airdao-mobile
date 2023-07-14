@@ -33,8 +33,9 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
       ref={localRef}
       containerStyle={{ paddingBottom: verticalScale(24) }}
       swiperIconVisible
+      testID="BottomSheet_Remove_Address_From_Watchlists"
     >
-      <View testID="BottomSheetConfirmRemove_Container">
+      <View testID="BottomSheet_Content">
         <Text
           style={styles.text}
           fontFamily="Inter_600SemiBold"
@@ -62,6 +63,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           type="base"
           style={styles.bottomSheetCancelButton}
           onPress={() => localRef.current?.dismiss()}
+          testID="Cancel_Button"
         >
           <Text
             fontFamily="Inter_600SemiBold"

@@ -43,7 +43,7 @@ export function AMBMarket(): JSX.Element {
   return (
     <SafeAreaView
       edges={['top']}
-      testID="ambmarket-screen"
+      testID="AMBMarket_Screen"
       style={styles.container}
     >
       <Header
@@ -54,7 +54,7 @@ export function AMBMarket(): JSX.Element {
           shadowColor: COLORS.culturedWhite
         }}
         contentRight={
-          <Button onPress={onSharePress}>
+          <Button onPress={onSharePress} testID="Share_Button">
             <ShareIcon color={COLORS.jetBlack} scale={1.5} />
             <Spacer horizontal value={scale(20)} />
           </Button>

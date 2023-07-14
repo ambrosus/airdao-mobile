@@ -219,7 +219,10 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       }}
       onClose={resetState}
     >
-      <View style={{ alignItems: 'center' }}>
+      <View
+        style={{ alignItems: 'center' }}
+        testID="bottom-sheet-add-new-address"
+      >
         <Spacer value={verticalScale(24)} />
         <Text
           fontFamily="Inter_700Bold"

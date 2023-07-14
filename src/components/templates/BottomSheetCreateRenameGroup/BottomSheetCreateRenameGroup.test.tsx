@@ -3,6 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup/index';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,10 @@ jest.mock('@contexts/OnBoardingContext', () => ({
 }));
 
 describe('BottomSheetCreateRenameGroup', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly when creating a new group', async () => {
     const handleOnCreateGroup = jest.fn();
     const { getByTestId, getByText } = render(
