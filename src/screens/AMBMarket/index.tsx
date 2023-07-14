@@ -112,7 +112,10 @@ export function AMBMarket(): JSX.Element {
         ref={shareBottomSheet}
         title="AMB Price"
         bottomSheetTitle="Share AMB price"
-        balance={(ambPrice?.priceUSD || 0).toString()}
+        balance={NumberUtils.formatNumber(
+          ambPrice?.priceUSD ?? 0,
+          5
+        ).toString()}
         currency={'$'}
         currencyPosition={'left'}
         last24HourChange={ambPrice?.percentChange24H || 0}
