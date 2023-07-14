@@ -3,6 +3,7 @@ import { Platform, ScrollView, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RefreshControl } from 'react-native-gesture-handler';
+import { useQueryClient } from '@tanstack/react-query';
 import { OnboardingView } from '@components/templates';
 import { Row, Spacer, Text } from '@components/base';
 import { AddIcon } from '@components/svg/icons';
@@ -18,11 +19,8 @@ export const HomeScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
   const isFocused = useIsFocused();
 
-  const {
-    data: ambTokenData,
-    refetch: refetchAMBPrice,
-    refetching: refetchingAMBPrice
-  } = useAMBPrice();
+  const { refetching: refetchingAMBPrice } = useAMBPrice();
+  const queryClient = useQueryClient();
   const { start: startOnboarding } = useOnboardingStatus((v) => v);
   const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
   const onboardinStarted = useRef(false);
@@ -45,7 +43,8 @@ export const HomeScreen = () => {
 
   const onRefresh = () => {
     refetchAddresses();
-    if (typeof refetchAMBPrice === 'function') refetchAMBPrice();
+    // if (typeof refetchAMBPrice === 'function') refetchAMBPrice();
+    queryClient.refetchQueries({ queryKey: ['amb-token'], type: 'active' });
   };
 
   return (
@@ -71,10 +70,7 @@ export const HomeScreen = () => {
       >
         <Spacer value={verticalScale(16)} />
         <View style={{ paddingHorizontal: scale(16) }}>
-          <PortfolioBalance
-            AMBPriceLast24HourChange={ambTokenData?.percentChange24H || NaN}
-            AMBPrice={ambTokenData?.priceUSD || NaN}
-          />
+          <PortfolioBalance />
         </View>
         <Spacer value={verticalScale(24)} />
         <View style={styles.homeTabs}>

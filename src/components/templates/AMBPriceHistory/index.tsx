@@ -43,10 +43,9 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const didSetAMBPriceFromAPI = useRef(false);
 
   useEffect(() => {
-    if (ambPriceNow && !didSetAMBPriceFromAPI.current) {
+    if (ambPriceNow) {
       ambPriceNowRef.current = ambPriceNow.priceUSD;
       ambPrice.value = ambPriceNow.priceUSD;
-      didSetAMBPriceFromAPI.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ambPriceNow, didSetAMBPriceFromAPI.current]);
