@@ -152,7 +152,12 @@ export const AddressDetails = (): JSX.Element => {
         ref={shareModal}
         title={StringUtils.formatAddress(finalAccount.address, 7, 4)}
         bottomSheetTitle="Share address performance"
-        balance={NumberUtils.abbreviateNumber(finalAccount.ambBalance)}
+        // balance={NumberUtils.abbreviateNumber(finalAccount.ambBalance)}
+        balance={
+          finalAccount.ambBalance < 1000
+            ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)
+            : NumberUtils.abbreviateNumber(finalAccount.ambBalance)
+        }
         currency={'AMB'}
         currencyPosition={'right'}
         last24HourChange={ambPrice?.percentChange24H || 0}

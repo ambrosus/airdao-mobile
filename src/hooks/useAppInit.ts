@@ -16,57 +16,56 @@ export const useAppInit = () => {
   SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
+    async function prepareNotifications() {
+      const notificationPermissionGranted =
+        await PermissionService.getPermission(Permission.Notifications, {
+          requestAgain: true,
+          openSettings: true
+        });
+      await Cache.setItem(CacheKey.NotificationSettings, {
+        ...DefaultNotificationSettings,
+        priceAlerts: notificationPermissionGranted,
+        transactionAlerts: notificationPermissionGranted
+      });
+      const notificationService = new NotificationService();
+      notificationService.setup();
+      let notificationTokenSavedToRemoteDB = false;
+      let alreadyWatchedAddresses: string[] = [];
+      try {
+        const watcherInfo =
+          await API.watcherService.getWatcherInfoOfCurrentUser();
+        alreadyWatchedAddresses = watcherInfo
+          ? watcherInfo.addresses.map((a) => a.address)
+          : ([] as string[]);
+        notificationTokenSavedToRemoteDB = Boolean(watcherInfo);
+      } catch (error) {
+        alreadyWatchedAddresses = [] as string[];
+        notificationTokenSavedToRemoteDB = false;
+      }
+      if (!notificationTokenSavedToRemoteDB) {
+        try {
+          const watchlist = (
+            ((await Cache.getItem(CacheKey.AllAddresses)) ||
+              []) as CacheableAccount[]
+          ).filter((a) => a.isOnWatchlist);
+          await API.watcherService.createWatcherForCurrentUser();
+          if (watchlist.length > 0) {
+            // save under new push token
+            API.watcherService.watchAddresses(watchlist.map((w) => w.address));
+          }
+        } catch (error) {
+          // ignore
+        }
+      }
+      const notWatchedDefaultAddresses = DEFAULT_WATCHLIST.filter(
+        (adress) => alreadyWatchedAddresses.indexOf(adress) === -1
+      );
+      API.watcherService.watchAddresses(notWatchedDefaultAddresses);
+    }
     async function prepare() {
       try {
+        prepareNotifications();
         DeviceService.setupUniqueDeviceID();
-        const notificationPermissionGranted =
-          await PermissionService.getPermission(Permission.Notifications, {
-            requestAgain: true,
-            openSettings: true
-          });
-        await Cache.setItem(CacheKey.NotificationSettings, {
-          ...DefaultNotificationSettings,
-          priceAlerts: notificationPermissionGranted,
-          transactionAlerts: notificationPermissionGranted
-        });
-
-        const notificationService = new NotificationService();
-        notificationService.setup();
-        let notificationTokenSavedToRemoteDB = false;
-        let alreadyWatchedAddresses: string[] = [];
-        try {
-          const watcherInfo =
-            await API.watcherService.getWatcherInfoOfCurrentUser();
-          alreadyWatchedAddresses = watcherInfo
-            ? watcherInfo.addresses.map((a) => a.address)
-            : ([] as string[]);
-          notificationTokenSavedToRemoteDB = Boolean(watcherInfo);
-        } catch (error) {
-          alreadyWatchedAddresses = [] as string[];
-          notificationTokenSavedToRemoteDB = false;
-        }
-        if (!notificationTokenSavedToRemoteDB) {
-          try {
-            const watchlist = (
-              ((await Cache.getItem(CacheKey.AllAddresses)) ||
-                []) as CacheableAccount[]
-            ).filter((a) => a.isOnWatchlist);
-            await API.watcherService.createWatcherForCurrentUser();
-            if (watchlist.length > 0) {
-              // save under new push token
-              API.watcherService.watchAddresses(
-                watchlist.map((w) => w.address)
-              );
-            }
-          } catch (error) {
-            // ignore
-          }
-        }
-        const notWatchedDefaultAddresses = DEFAULT_WATCHLIST.filter(
-          (adress) => alreadyWatchedAddresses.indexOf(adress) === -1
-        );
-        API.watcherService.watchAddresses(notWatchedDefaultAddresses);
-
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
