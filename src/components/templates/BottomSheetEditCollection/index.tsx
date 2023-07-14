@@ -63,7 +63,12 @@ export const BottomSheetEditCollection = forwardRef<
       {...bottomSheetProps}
     >
       <View style={styles.content} testID="bottom-sheet-edit-collection">
-        <Button type="circular" onPress={showRename} style={styles.actionBtn}>
+        <Button
+          type="circular"
+          onPress={showRename}
+          style={styles.actionBtn}
+          testID="Rename_Collection_Button"
+        >
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"

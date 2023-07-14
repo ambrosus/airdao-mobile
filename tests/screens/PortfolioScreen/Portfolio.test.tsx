@@ -1,15 +1,16 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PortfolioScreen } from '@screens/Portfolio';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import clearAllMocks = jest.clearAllMocks;
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
 });
 
-let mockedData = [
+let mockedAddress = [
   {
     _id: '123123',
     address: '123123123',
@@ -68,7 +69,7 @@ jest.mock('@hooks', () => ({
     error: undefined
   })),
   useWatchlist: jest.fn(() => ({
-    watchlist: mockedData
+    watchlist: mockedAddress
   })),
   useSwipeableDismissListener: jest.fn()
 }));
@@ -104,6 +105,10 @@ const PortfolioCollections = () => {
 };
 
 describe('Portfolio Screen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', async () => {
     const { getByTestId, getAllByTestId, getByText } = render(
       <PortfolioWatchlists />
@@ -113,18 +118,33 @@ describe('Portfolio Screen', () => {
     expect(getByTestId('Portfolio_Screen_Tabs')).toBeTruthy();
     expect(getByTestId('Portfolio_Tabs_Button')).toBeTruthy();
     expect(getAllByTestId('Portfolio_Screen_Tab_Item')).toBeTruthy();
-    expect(getAllByTestId('bottom-sheet')).toBeTruthy();
   });
 
   it('displays the empty list of addresses when there are no addresses added', () => {
-    mockedData = [];
+    mockedListsOfAddressGroup = [
+      {
+        id: '1223123',
+        name: 'Test collection',
+        accounts: [
+          {
+            _id: '6200de3b523162b8b87baff1',
+            address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+            ambBalance: 123.123,
+            transactionCount: 1,
+            type: 'account',
+            name: 'Test address'
+          }
+        ]
+      }
+    ];
+    mockedAddress = [];
     const { getByTestId } = render(<PortfolioWatchlists />);
     const emptyComponent = getByTestId('empty-list');
     expect(emptyComponent).toBeTruthy();
   });
 
   it('displays adress correctly', () => {
-    mockedData = [
+    mockedAddress = [
       {
         _id: '6200de3b523162b8b87baff1',
         address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
@@ -139,17 +159,20 @@ describe('Portfolio Screen', () => {
     expect(getByText('Test address')).toBeTruthy();
     expect(getByText('$142,024,495,783')).toBeTruthy();
     expect(getByText('1,154,670,697 AMB')).toBeTruthy();
-    // TODO add test for PercentChange_Title
   });
 
   it('should open the create new collection modal on press', async () => {
-    const { getByText, getAllByTestId, getByTestId } = render(
+    const { getByText, getByTestId, getAllByTestId } = render(
       <PortfolioCollections />
     );
     expect(getByTestId('Portfolio_Tabs_Button')).not.toBeNull();
-    fireEvent.press(getByText('Create collection'));
+    await act(async () => {
+      await fireEvent.press(getByText('Create collection'));
+    });
     await waitFor(async () => {
-      expect(getAllByTestId('bottom-sheet')).toBeTruthy();
+      await expect(
+        getAllByTestId('Create_Rename_Collection_BottomSheet')
+      ).toBeTruthy();
     });
   });
 

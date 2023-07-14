@@ -4,6 +4,7 @@ import { AMBPriceHistory } from '../AMBPriceHistory';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@hooks', () => ({
   useAMBPrice: jest.fn(() => ({
@@ -34,6 +35,10 @@ const Component = () => {
 };
 
 describe('AMBPriceHistory', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByTestId, getAllByTestId, getByText } = render(<Component />);
     expect(getByTestId('AMB_Price_History')).toBeDefined();
@@ -49,10 +54,12 @@ describe('AMBPriceHistory', () => {
       { timestamp: new Date(), priceUSD: 10 },
       { timestamp: new Date(), priceUSD: 12 }
     ];
+    // @ts-ignore
     useAMBPrice.mockReturnValue({
       data: { priceUSD: mockedPrice },
       isLoading: false
     });
+    // @ts-ignore
     useAMBPriceHistorical.mockReturnValue({
       data: mockedHistoricalPrice,
       isLoading: false
@@ -73,16 +80,15 @@ describe('AMBPriceHistory', () => {
   });
 
   it.skip('updates price and date when point is selected on chart', async () => {
-    const { getByTestId } = render(<Component />);
+    const { getByTestId } = render(<AMBPriceHistory badgeType="view" />);
     const chart = getByTestId('Bezier_Chart');
     fireEvent(chart, 'onPointSelected', {
       date: new Date('2022-01-01').getTime(),
       value: 100
     });
     await waitFor(() => {
-      const formattedPrice =
-        getByTestId('AMB_Price_History').children[1].children[0];
-      expect(formattedPrice.props.children).toBe('$100.000000');
+      const formattedPrice = getByTestId('Formatted_Price');
+      expect(formattedPrice.props.value).toBe('$100.000000');
     });
     expect(getByTestId('Formatted_Date').props.value).toBe(
       'January 01 12:00 AM'
@@ -92,9 +98,8 @@ describe('AMBPriceHistory', () => {
       value: 200
     });
     await waitFor(() => {
-      const formattedPrice =
-        getByTestId('AMB_Price_History').children[1].children[0];
-      expect(formattedPrice.props.children).toBe('$200.000000');
+      const formattedPrice = getByTestId('Formatted_Price');
+      expect(formattedPrice.props.value).toBe('$200.000000');
     });
     expect(getByTestId('Formatted_Date').props.value).toBe(
       'January 02 12:00 AM'

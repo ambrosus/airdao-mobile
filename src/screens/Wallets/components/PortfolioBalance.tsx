@@ -30,7 +30,7 @@ export function PortfolioBalance(props: PortfolioBalanceProps): JSX.Element {
   console.log(chartData[49]);
 
   return (
-    <View style={styles.container} testID="portfolio-balance">
+    <View style={styles.container} testID="Portfolio_Balance">
       <AMBPriceHistory onBadgePress={navigateToAMBScreen} badgeType="button" />
     </View>
   );

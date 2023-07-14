@@ -3,6 +3,7 @@ import { render } from '@testing-library/react-native';
 import { TransactionDetails } from '@components/templates';
 import { Transaction } from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@hooks', () => ({
   useAMBPrice: () => ({ data: { priceUSD: 1 } }),
@@ -46,6 +47,14 @@ const transaction: Transaction = {
 };
 
 describe('TransactionDetails', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
+  beforeAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByText } = render(
       <TransactionDetails transaction={transaction} />

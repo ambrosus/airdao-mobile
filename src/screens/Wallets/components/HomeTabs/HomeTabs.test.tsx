@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import { HomeTabs } from './HomeTabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 let mockedListsOfAddressGroup = [
   {
@@ -138,4 +139,85 @@ describe('HomeTabs', () => {
       expect(scrollView.scrollLeft).toEqual(100);
     }, 500);
   });
+
+  it('displays the empty list of addresses when there are no addresses added', () => {
+    mockedData = [];
+    const { getByTestId } = render(<Component />);
+    const emptyComponent = getByTestId('empty-list');
+    expect(emptyComponent).toBeTruthy();
+  });
+
+  it('displays address correctly', () => {
+    mockedData = [
+      {
+        _id: '6200de3b523162b8b87baff1',
+        address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+        ambBalance: 1154670697.424454,
+        transactionCount: 17,
+        type: 'undefined',
+        name: 'Test address'
+      }
+    ];
+    const { getByText, getByTestId } = render(<Component />);
+    const watchlist = getByTestId('Home_Watchlists');
+    expect(watchlist).toBeTruthy();
+    expect(getByText('Test address')).toBeTruthy();
+    expect(getByText('$142,024,495,783')).toBeTruthy();
+    expect(getByText('1,154,670,697 AMB')).toBeTruthy();
+  });
+
+  it('should open the create new collection modal on press', async () => {
+    const { getByTestId, getAllByTestId } = render(<Component />);
+    const button = getByTestId('Add_Address_Or_Create_Collection_Button');
+    await act(async () => {
+      await fireEvent.press(button);
+    });
+    await waitFor(async () => {
+      await expect(
+        getAllByTestId('Create_Collection_Or_Add_Address_BottomSheet')
+      ).toBeTruthy();
+    });
+  });
+
+  it('displays the empty list of collections when there are no collection', () => {
+    mockedListsOfAddressGroup = [];
+    mockedData = [
+      {
+        _id: '6200de3b523162b8b87baff1',
+        address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+        ambBalance: 1154670697.424454,
+        transactionCount: 17,
+        type: 'undefined',
+        name: 'Test address'
+      }
+    ];
+    const { getByTestId } = render(<Component />);
+    const emptyComponent = getByTestId('empty-list');
+    expect(emptyComponent).toBeTruthy();
+  });
+
+  it('displays collections when there are collections', () => {
+    mockedListsOfAddressGroup = [
+      {
+        id: '1223123',
+        name: 'Test collection',
+        accounts: [
+          {
+            _id: '6200de3b523162b8b87baff1',
+            address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+            ambBalance: 123.123,
+            transactionCount: 1,
+            type: 'account',
+            name: 'Test address'
+          }
+        ]
+      }
+    ];
+    mockedData = [];
+    const { getByTestId, getByText } = render(<Component />);
+    const collections = getByTestId('Home_Collections');
+    expect(collections).toBeTruthy();
+    expect(getByText('Test collection')).toBeTruthy();
+  });
+  clearAllMocks();
 });

@@ -3,6 +3,7 @@ import { render } from '@testing-library/react-native';
 import { SettingsScreen } from '@screens/Settings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock(
   'react-native-safe-area-context',
@@ -65,6 +66,7 @@ describe('SettingsScreen', () => {
 
   afterAll(() => {
     jest.useRealTimers();
+    clearAllMocks();
   });
 
   it('renders the SettingsBlock and SettingsInfoBlock components', async () => {

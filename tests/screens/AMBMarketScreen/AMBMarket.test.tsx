@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { AMBMarket } from '@screens/AMBMarket';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();
 
@@ -61,14 +62,50 @@ const Component = () => {
   );
 };
 describe('AMBMarket', () => {
+  beforeEach(() => {
+    clearAllMocks();
+  });
+
+  afterAll(() => {
+    clearAllMocks();
+  });
+
+  it('displays loading spinner when data is loading', async () => {
+    mockedData = {
+      data: {
+        _id: '98949',
+        id: 10,
+        name: 'token',
+        symbol: 'lslafslkf',
+        circulatingSupply: 100,
+        maxSupply: null,
+        totalSupply: 100000,
+        rank: 9000,
+        percentChange1H: 878,
+        percentChange24H: 5533,
+        percentChange7D: 1213,
+        priceUSD: 100,
+        volumeUSD: 91281820,
+        marketCapUSD: 994
+      },
+      loading: true,
+      error: false
+    };
+    const { getByTestId } = render(<Component />);
+    await waitFor(async () => {
+      await expect(getByTestId('spinner')).toBeDefined();
+    });
+  });
+
   it('renders correctly', async () => {
-    const { getByText, getByTestId } = render(<Component />);
+    const { getByText, getByTestId, getAllByTestId } = render(<Component />);
     expect(getByTestId('AMBMarket_Screen')).toBeDefined();
     const shareButton = getByTestId('Share_Button');
     expect(getByText('Statistics')).toBeDefined();
     expect(shareButton).toBeDefined();
     await waitFor(async () => {
-      expect(await getByText('AirDAO (AMB)'));
+      const title = getAllByTestId('PercentChange_Title')[0];
+      expect(title.props.children[1]).toBe('0.00');
       expect(await getByText('1D'));
       expect(await getByText('1W'));
       expect(await getByText('1M'));
@@ -102,42 +139,7 @@ describe('AMBMarket', () => {
     });
   });
 
-  it('displays loading spinner when data is loading', async () => {
-    mockedData = {
-      data: {
-        _id: '98949',
-        id: 10,
-        name: 'token',
-        symbol: 'lslafslkf',
-        circulatingSupply: 100,
-        maxSupply: null,
-        totalSupply: 100000,
-        rank: 9000,
-        percentChange1H: 878,
-        percentChange24H: 5533,
-        percentChange7D: 1213,
-        priceUSD: 100,
-        volumeUSD: 91281820,
-        marketCapUSD: 994
-      },
-      loading: true,
-      error: false
-    };
-    const { getByTestId } = render(<Component />);
-    await waitFor(async () => {
-      expect(await getByTestId('spinner'));
-    });
-    expect(getByTestId('spinner')).toBeDefined();
-  });
-
-  it('opens share bottom sheet when share button is pressed', () => {
-    const { getByTestId, getAllByTestId } = render(<Component />);
-    const shareButton = getByTestId('Share_Button');
-    fireEvent.press(shareButton);
-    expect(getAllByTestId('bottom-sheet')).toBeDefined();
-  });
-
-  it.skip('should show percent correctly', () => {
+  it('opens share bottom sheet when share button is pressed', async () => {
     mockedData = {
       data: {
         _id: '98949',
@@ -158,10 +160,13 @@ describe('AMBMarket', () => {
       loading: false,
       error: false
     };
-    const { getAllByTestId } = render(<Component />);
-    const title = getAllByTestId('PercentChange_Title')[0];
-    expect(title.props.children[1]).toBe('5,533.00');
+    const { getAllByTestId, getByTestId } = render(<Component />);
+    const shareButton = getByTestId('Share_Button');
+    await act(async () => {
+      await fireEvent.press(shareButton);
+    });
+    await waitFor(async () => {
+      await expect(getAllByTestId('Share_Portfolio_BottomSheet')).toBeDefined();
+    });
   });
 });
-
-// TODO write a working mock for AMBToken

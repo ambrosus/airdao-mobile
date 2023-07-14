@@ -3,6 +3,8 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { AddressDetails } from '@screens/Address';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as Clipboard from 'expo-clipboard';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@contexts/OnBoardingContext', () => ({
   useOnboardingStatus: jest.fn(() => ({
@@ -123,6 +125,10 @@ const Component = () => {
 };
 
 describe('Single Address Screen', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', async () => {
     const { getByTestId, getByText } = render(<Component />);
     expect(getByTestId('Address_Screen')).toBeTruthy();
@@ -132,6 +138,7 @@ describe('Single Address Screen', () => {
     expect(getByTestId('Edit_Button')).toBeTruthy();
     expect(getByTestId('Copy_To_Clipboard_Button')).toBeTruthy();
     expect(getByText('Recent Activity')).toBeTruthy();
+    expect(getByText('Address')).toBeTruthy();
   });
 
   it('Address can be watchlisted', async () => {
@@ -145,32 +152,35 @@ describe('Single Address Screen', () => {
     });
   });
 
-  it.skip('Address can be removed from the watchlist', async () => {
+  it('Button can be called on toggle watchlist', async () => {
     const { getByTestId } = render(<Component />);
     const addToWatchlistButton = getByTestId('Add_To_Watchlist_Button');
     await act(async () => {
       await fireEvent.press(addToWatchlistButton);
     });
-    await waitFor(async () => {
-      await expect(mockRemoveFromWatchlist).toHaveBeenCalled();
-    });
-  }); // TODO fix this test (currently not working cuz address is not watchlisted by default)
+    await expect(mockAddToWatchlist).toHaveBeenCalled();
+  });
 
-  it.skip('Address can be copied to clipboard', async () => {
+  it('Address can be copied to clipboard', async () => {
     const { getByTestId } = render(<Component />);
     const copyToClipboardButton = getByTestId('Copy_To_Clipboard_Button');
+    const setStringAsyncSpy = jest.spyOn(Clipboard, 'setStringAsync');
     await act(async () => {
       await fireEvent.press(copyToClipboardButton);
     });
-    await waitFor(async () => {
-      // add functionality for mocking copying address
-    });
+    expect(setStringAsyncSpy).toHaveBeenCalledWith(
+      '0xF977814e90dA44bFA03b6295A0616a897441aceC'
+    );
   });
 
   it('opens the share modal when Share button is pressed', () => {
-    const { getByTestId } = render(<Component />);
+    const { getByTestId, findByTestId, getByText } = render(<Component />);
     fireEvent.press(getByTestId('Share_Button'));
-    expect(getByTestId('share-bottom-sheet')).toBeDefined();
+    expect(findByTestId('Share_Portfolio_BottomSheet')).toBeDefined();
+    expect(getByText('Share address performance')).toBeTruthy();
+    expect(getByText('1154670697.424454 AMB')).toBeTruthy();
+    expect(getByText('24H Change')).toBeTruthy();
+    expect(getByText('2023-07-13')).toBeTruthy();
   });
 
   it('should open the edit wallet modal on press', () => {

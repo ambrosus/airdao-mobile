@@ -3,6 +3,7 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();
 const Component = () => {
@@ -15,6 +16,10 @@ const Component = () => {
   );
 };
 describe('SettingsBlock component', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('should render the base currency option', () => {
     const { getByText } = render(<Component />);
     expect(getByText('Base currency')).not.toBeNull();

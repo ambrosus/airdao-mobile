@@ -3,6 +3,7 @@ import { render, fireEvent } from '@testing-library/react-native';
 import { useOnboardingStatus } from '@contexts';
 import { OnboardingView } from '@components/templates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@contexts');
 
@@ -28,6 +29,10 @@ describe('OnboardingView', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    clearAllMocks();
   });
 
   it('renders correctly when isToolTipVisible is true', () => {

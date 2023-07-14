@@ -2,8 +2,13 @@ import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { BaseButton } from '../../base/Button/Button.Base';
 import { Text } from 'react-native';
+import clearAllMocks = jest.clearAllMocks;
 
 describe('BaseButton', () => {
+  afterAll(() => {
+    clearAllMocks();
+  });
+
   it('renders correctly', () => {
     const { getByText } = render(
       <BaseButton>

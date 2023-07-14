@@ -25,7 +25,8 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       avoidKeyboard = true,
       fullscreen = false,
       swiperIconVisible = false,
-      onClose
+      onClose,
+      testID
     },
     ref
   ) => {
@@ -68,7 +69,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
             },
             containerStyle
           ]}
-          testID="bottom-sheet-content"
+          testID={testID}
         >
           {swiperIconVisible && (
             <View style={styles.swiper}>
@@ -86,6 +87,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         height,
         borderRadius,
         containerStyle,
+        testID,
         swiperIconVisible,
         children
       ]
@@ -94,7 +96,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const backdropOpacity = isNestedSheet ? 0 : 0.5;
     return (
       <Modal
-        testID="bottom-sheet"
+        testID={testID}
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
