@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Dimensions, Platform, ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import {
   BottomSheet,
   Header,
@@ -57,7 +57,6 @@ export const BottomSheetNotificationSettings = forwardRef<
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
   const { top: topInset } = useSafeAreaInsets();
-
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
     [notificationSettings]
@@ -80,7 +79,7 @@ export const BottomSheetNotificationSettings = forwardRef<
   return (
     <BottomSheet
       containerStyle={styles.bottomSheet}
-      height={Dimensions.get('window').height}
+      height={'100%'}
       ref={localRef}
       {...props}
     >

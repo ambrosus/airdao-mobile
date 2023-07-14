@@ -2,12 +2,12 @@ import { NotificationSettings } from '@appTypes/notification';
 import Config from './config';
 
 export const DefaultNotificationSettings: NotificationSettings = {
-  priceAlerts: false,
+  priceAlerts: true,
   priceThreshold: {
     min: null,
     max: null
   },
-  transactionAlerts: false,
+  transactionAlerts: true,
   transactionThreshold: {
     min: null,
     max: null
