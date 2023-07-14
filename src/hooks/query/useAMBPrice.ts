@@ -8,7 +8,12 @@ import { EVENTS } from '@constants/events';
 
 export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
   const { data, isLoading, isRefetching, error, refetch } =
-    useQuery<AMBTokenDTO>(['amb-token'], API.getAMBTokenData);
+    useQuery<AMBTokenDTO>(['amb-token'], API.getAMBTokenData, {
+      refetchOnReconnect: true,
+      refetchInterval: 5 * 60 * 1e3,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true
+    });
 
   useEffect(() => {
     // TODO fix any
@@ -24,7 +29,6 @@ export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
     return () => notificationListener.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return {
     data: data ? new AMBToken(data) : undefined,
     loading: isLoading,
