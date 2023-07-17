@@ -93,7 +93,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
               Select base currency
             </Text>
           }
-          titlePosition="left"
+          titlePosition="center"
           style={styles.header}
           backIconVisible={true}
           onBackPress={() => localRef.current?.dismiss()}
