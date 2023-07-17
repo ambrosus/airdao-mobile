@@ -127,7 +127,10 @@ export const Notifications = (): JSX.Element => {
         showsVerticalScrollIndicator={false}
         testID="Notifications_List"
       />
-      <BottomSheetNotificationSettings ref={settingsModal} />
+      <BottomSheetNotificationSettings
+        ref={settingsModal}
+        titlePosition="left"
+      />
     </SafeAreaView>
   );
 };
