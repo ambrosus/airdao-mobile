@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { Dimensions, FlatList, Platform } from 'react-native';
+import { FlatList, Platform } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
@@ -78,11 +78,11 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
 
     return (
       <BottomSheet
-        height={Dimensions.get('window').height}
+        height={'100%'}
         ref={localRef}
         containerStyle={styles.bottomSheet}
       >
-        <Spacer value={topInset} />
+        {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           title={
             <Text
@@ -93,7 +93,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
               Select base currency
             </Text>
           }
-          titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
+          titlePosition="left"
           style={styles.header}
           backIconVisible={true}
           onBackPress={() => localRef.current?.dismiss()}

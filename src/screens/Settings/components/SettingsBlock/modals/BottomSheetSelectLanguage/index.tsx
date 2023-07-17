@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { Dimensions, FlatList, Platform } from 'react-native';
+import { FlatList, Platform } from 'react-native';
 import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
 import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -72,10 +72,10 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
     return (
       <BottomSheet
         ref={localRef}
-        height={Dimensions.get('window').height}
+        height={'100%'}
         containerStyle={styles.bottomSheet}
       >
-        <Spacer value={topInset} />
+        {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           titleStyle={styles.headerTitle}
           title={
@@ -87,7 +87,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
               Select language
             </Text>
           }
-          titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
+          titlePosition="left"
           backIconVisible={true}
           style={styles.header}
           onBackPress={() => localRef.current?.dismiss()}
