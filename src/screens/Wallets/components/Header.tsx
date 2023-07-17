@@ -74,6 +74,14 @@ export const HomeHeader = React.memo((): JSX.Element => {
     setLastNotificationTime();
   }, [navigation, setLastNotificationTime]);
 
+  const notificationCount =
+    newNotificationsCount > 99 ? '99+' : newNotificationsCount;
+
+  const newNotificationsCountStyles =
+    notificationCount.toString().length > 2
+      ? moderateScale(25)
+      : moderateScale(18);
+
   const renderContentRight = useMemo(() => {
     return (
       <>
@@ -81,16 +89,26 @@ export const HomeHeader = React.memo((): JSX.Element => {
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color="#393b40" />
           {newNotificationsCount > 0 && (
-            <View style={styles.notificationCountContainer}>
+            <View
+              style={[
+                styles.notificationCountContainer,
+                { width: newNotificationsCountStyles, left: 7 }
+              ]}
+            >
               <Text color="white" fontSize={11} fontFamily="Inter_600SemiBold">
-                {newNotificationsCount}
+                {notificationCount}
               </Text>
             </View>
           )}
         </Button>
       </>
     );
-  }, [navigateToNotifications, newNotificationsCount]);
+  }, [
+    navigateToNotifications,
+    newNotificationsCount,
+    newNotificationsCountStyles,
+    notificationCount
+  ]);
 
   const renderContentLeft = useMemo(() => {
     return (
