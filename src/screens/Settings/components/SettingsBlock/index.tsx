@@ -105,10 +105,7 @@ export const SettingsBlock = () => {
         </Button>
       </View>
       <Spacer value={14} />
-      <BottomSheetNotificationSettings
-        ref={notificationSettingsRef}
-        titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
-      />
+      <BottomSheetNotificationSettings ref={notificationSettingsRef} />
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}
         handleCurrencySave={handleCurrencySave}
