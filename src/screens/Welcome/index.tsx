@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
     height: 52,
     width: 52,
     borderRadius: 26,
-    backgroundColor: COLORS.blue100
+    backgroundColor: COLORS.blue100,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   getStartedButton: {
     marginBottom: verticalScale(44)

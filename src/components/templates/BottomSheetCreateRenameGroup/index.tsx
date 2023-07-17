@@ -14,7 +14,12 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
-import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
+import {
+  BottomSheetFloat,
+  PrimaryButton,
+  Toast,
+  ToastPosition
+} from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -149,10 +154,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 childrenAlwaysVisible
                 helpers={{ next: handleButtonPress }}
               >
-                <Button
+                <PrimaryButton
                   testID="BottomSheetCreateRename_Button"
-                  type="circular"
-                  style={styles.bottomSheetCreateRenameButton}
                   onPress={handleButtonPress}
                 >
                   <Text
@@ -160,9 +163,9 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     fontSize={16}
                     color={COLORS.white}
                   >
-                    {type === 'create' ? 'Create' : 'Rename'}
+                    {type === 'create' ? 'Create' : 'Save'}
                   </Text>
-                </Button>
+                </PrimaryButton>
               </OnboardingView>
               <Spacer value={24} />
               <Button

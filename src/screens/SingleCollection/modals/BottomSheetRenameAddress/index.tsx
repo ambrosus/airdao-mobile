@@ -7,8 +7,8 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
-import { BottomSheetFloat } from '@components/modular';
-import { verticalScale } from '@utils/scaling';
+import { BottomSheetFloat, PrimaryButton } from '@components/modular';
+import { scale, verticalScale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -46,39 +46,39 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           onChangeValue={(value) => setLocalAddressName(value)}
           type="text"
           placeholder="Edit name"
-          placeholderTextColor="black"
+          placeholderTextColor={COLORS.neutral900Alpha[60]}
           style={[styles.bottomSheetInput]}
         />
         <Spacer value={24} />
-        <Button
-          type="base"
-          style={styles.saveButton}
-          onPress={() => {
-            handleOnRename(localAddressName !== address && localAddressName);
-          }}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.white}
+        <View style={{ paddingHorizontal: scale(24) }}>
+          <PrimaryButton
+            onPress={() => {
+              handleOnRename(localAddressName !== address && localAddressName);
+            }}
           >
-            Save
-          </Text>
-        </Button>
-        <Spacer value={24} />
-        <Button
-          type="base"
-          style={styles.cancelButton}
-          onPress={() => localRef.current?.dismiss()}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
-            fontSize={16}
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.white}
+            >
+              Save
+            </Text>
+          </PrimaryButton>
+          <Spacer value={24} />
+          <Button
+            type="base"
+            style={styles.cancelButton}
+            onPress={() => localRef.current?.dismiss()}
           >
-            Cancel
-          </Text>
-        </Button>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.smokyBlack}
+              fontSize={16}
+            >
+              Cancel
+            </Text>
+          </Button>
+        </View>
       </BottomSheetFloat>
     );
   }
