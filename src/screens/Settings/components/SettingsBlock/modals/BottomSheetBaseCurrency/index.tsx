@@ -82,7 +82,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
         ref={localRef}
         containerStyle={styles.bottomSheet}
       >
-        <Spacer value={topInset} />
+        {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           title={
             <Text
@@ -93,7 +93,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
               Select base currency
             </Text>
           }
-          titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
+          titlePosition="left"
           style={styles.header}
           backIconVisible={true}
           onBackPress={() => localRef.current?.dismiss()}

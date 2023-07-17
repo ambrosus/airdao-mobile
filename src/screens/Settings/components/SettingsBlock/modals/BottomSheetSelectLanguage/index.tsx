@@ -75,7 +75,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
         height={Dimensions.get('window').height}
         containerStyle={styles.bottomSheet}
       >
-        <Spacer value={topInset} />
+        {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           titleStyle={styles.headerTitle}
           title={
@@ -87,7 +87,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
               Select language
             </Text>
           }
-          titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
+          titlePosition="left"
           backIconVisible={true}
           style={styles.header}
           onBackPress={() => localRef.current?.dismiss()}
