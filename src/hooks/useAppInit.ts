@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { DeviceService, NotificationService, PermissionService } from '@lib';
-import { CacheableAccount, Permission } from '@appTypes';
+import { DeviceService, NotificationService } from '@lib';
+import { CacheableAccount } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
-import {
-  DEFAULT_WATCHLIST,
-  DefaultNotificationSettings
-} from '@constants/variables';
+import { DEFAULT_WATCHLIST } from '@constants/variables';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -17,16 +14,6 @@ export const useAppInit = () => {
 
   useEffect(() => {
     async function prepareNotifications() {
-      const notificationPermissionGranted =
-        await PermissionService.getPermission(Permission.Notifications, {
-          requestAgain: true,
-          openSettings: true
-        });
-      await Cache.setItem(CacheKey.NotificationSettings, {
-        ...DefaultNotificationSettings,
-        priceAlerts: notificationPermissionGranted,
-        transactionAlerts: notificationPermissionGranted
-      });
       const notificationService = new NotificationService();
       notificationService.setup();
       let notificationTokenSavedToRemoteDB = false;
