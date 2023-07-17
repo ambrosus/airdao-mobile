@@ -107,7 +107,7 @@ export const SettingsBlock = () => {
       <Spacer value={14} />
       <BottomSheetNotificationSettings
         ref={notificationSettingsRef}
-        titlePosition="center"
+        titlePosition={Platform.OS === 'android' ? 'center' : 'left'}
       />
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}
