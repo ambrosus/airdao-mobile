@@ -1,7 +1,7 @@
 export const COLORS = {
   blue100: '#EDF3FF',
   blue300: '#99B8FF',
-  blue500: '#2563EB',
+  blue500: '#457EFF',
   blue600: '#3568DD',
   gray200: '#C2C5CC',
   gray400: '#676B73',
@@ -14,6 +14,10 @@ export const COLORS = {
   neutral700: '#222426',
   neutral800: '#191919',
   neutral900: '#0E0E0E',
+  neutral900Alpha: {
+    5: 'rgba(14, 14, 14, 0.05)',
+    60: 'rgba(14, 14, 14, 0.60)'
+  },
   asphalt: '#a1a6b2',
   black: '#000000',
   jetBlack: '#191919',
