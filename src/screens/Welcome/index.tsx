@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Spacer, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { TabsParamsList } from '@appTypes';
-import { Cache, CacheKey } from '@utils/cache';
+import { Spacer, Text } from '@components/base';
 import {
   BellIconWelcome,
   ListIcon,
   LogoWithNameIcon,
   SwapIcon
 } from '@components/svg/icons';
+import { PrimaryButton } from '@components/modular';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { TabsParamsList } from '@appTypes';
+import { Cache, CacheKey } from '@utils/cache';
 
 interface CardContent {
   icon: React.ReactNode;
@@ -60,32 +60,19 @@ export const WelcomeScreen = () => {
         <Spacer value={verticalScale(68)} />
         {cards.map(renderCard)}
       </View>
-
-      <LinearGradient
-        // Button Linear Gradient
-        colors={[COLORS.blue500, COLORS.blue600]}
+      <PrimaryButton
+        onPress={async () => {
+          await Cache.setItem(CacheKey.IsSecondInit, true);
+          setTimeout(() => {
+            navigation.replace('Tabs', { screen: 'Wallets' });
+          }, 300);
+        }}
         style={styles.getStartedButton}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        locations={[0.5, 1]}
       >
-        <Button
-          onPress={async () => {
-            await Cache.setItem(CacheKey.IsSecondInit, true);
-            setTimeout(() => {
-              navigation.replace('Tabs', { screen: 'Wallets' });
-            }, 300);
-          }}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.white}
-          >
-            Get started
-          </Text>
-        </Button>
-      </LinearGradient>
+        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.white}>
+          Get started
+        </Text>
+      </PrimaryButton>
     </SafeAreaView>
   );
 };
@@ -107,18 +94,9 @@ const styles = StyleSheet.create({
     height: 52,
     width: 52,
     borderRadius: 26,
-    backgroundColor: COLORS.blue100,
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: COLORS.blue100
   },
   getStartedButton: {
-    width: '90%',
-    alignSelf: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.deepBlue,
-    borderRadius: moderateScale(24),
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(12),
     marginBottom: verticalScale(44)
   }
 });
