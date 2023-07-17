@@ -48,9 +48,13 @@ const PercentThresholds: Segment[] = [
   }
 ];
 
+type BottomSheetNotificationSettingsProps = {
+  titlePosition?: 'left' | 'center';
+};
+
 export const BottomSheetNotificationSettings = forwardRef<
   BottomSheetRef,
-  BottomSheetProps
+  BottomSheetProps & BottomSheetNotificationSettingsProps
 >((props, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { data: notificationSettings, save } = useNotificationSettings();
@@ -61,6 +65,8 @@ export const BottomSheetNotificationSettings = forwardRef<
     () => setLocalNotificationSettings(notificationSettings),
     [notificationSettings]
   );
+
+  const { titlePosition = 'left' } = props;
 
   const onSettingsValueChange = (
     key: keyof NotificationSettings,
@@ -94,7 +100,7 @@ export const BottomSheetNotificationSettings = forwardRef<
             Notification settings
           </Text>
         }
-        titlePosition="left"
+        titlePosition={titlePosition}
         backIconVisible={true}
         onBackPress={() => localRef.current?.dismiss()}
         style={styles.header}
