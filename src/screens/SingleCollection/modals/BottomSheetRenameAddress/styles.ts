@@ -35,14 +35,6 @@ export const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: COLORS.charcoal,
-    marginHorizontal: 24,
-    paddingVertical: 16,
-    borderRadius: 25,
-    alignItems: 'center'
-  },
-  saveButton: {
-    backgroundColor: COLORS.deepBlue,
-    marginHorizontal: 24,
     paddingVertical: 16,
     borderRadius: 25,
     alignItems: 'center'

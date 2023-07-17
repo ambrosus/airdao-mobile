@@ -16,7 +16,6 @@ import {
   useWindowDimensions
 } from 'react-native';
 import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
-import { FloatButton } from '@components/base/FloatButton';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -25,6 +24,7 @@ import {
   Segment,
   SegmentedPicker
 } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
 import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
@@ -334,6 +334,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 }}
                 data={watchlist}
                 renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
               />
             </View>
             <View style={{ width: tabWidth }}>
@@ -355,14 +356,33 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         </>
       )}
       {selectionStarted && (
-        <FloatButton
-          title={
-            selectingAddedItems
-              ? `Remove ${selectedAddresses.length} Addresses`
-              : `Add ${selectedAddresses.length} Addresses`
-          }
+        <PrimaryButton
           onPress={submitSelectedAddresses}
-        />
+          style={{
+            position: 'absolute',
+            bottom: verticalScale(32),
+            alignSelf: 'center'
+          }}
+        >
+          <Text
+            color={COLORS.white}
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            fontWeight="600"
+          >
+            {selectingAddedItems
+              ? `Remove ${StringUtils.pluralize(
+                  selectedAddresses.length,
+                  'Address',
+                  'Addresses'
+                )}`
+              : `Add ${StringUtils.pluralize(
+                  selectedAddresses.length,
+                  'Address',
+                  'Addresses'
+                )}`}
+          </Text>
+        </PrimaryButton>
       )}
     </BottomSheet>
   );
