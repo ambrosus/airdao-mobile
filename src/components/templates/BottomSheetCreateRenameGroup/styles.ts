@@ -26,20 +26,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.silver
   },
-  bottomSheetCreateRenameButton: {
-    borderColor: 'white',
-    width: '100%',
-    borderWidth: 1,
-    backgroundColor: COLORS.deepBlue,
-    paddingVertical: 16,
-    borderRadius: 25,
-    alignItems: 'center'
-  },
   bottomSheetCancelButton: {
     borderColor: 'transparent',
     width: '100%',
     borderWidth: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.neutral900Alpha[5],
     paddingVertical: 16,
     borderRadius: 25,
     alignItems: 'center'
