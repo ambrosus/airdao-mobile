@@ -73,7 +73,7 @@ export const SingleGroupScreen = () => {
         centerContainerStyle={{
           maxWidth: '70%',
           alignItems: 'flex-start',
-          paddingLeft: scale(20)
+          paddingLeft: scale(28)
         }}
         style={{
           shadowColor: COLORS.transparent
