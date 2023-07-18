@@ -1,5 +1,17 @@
-import React, { forwardRef, memo, useCallback, useMemo, useRef } from 'react';
-import { DeviceEventEmitter, Pressable, ViewStyle } from 'react-native';
+import React, {
+  forwardRef,
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import {
+  DeviceEventEmitter,
+  Dimensions,
+  Pressable,
+  ViewStyle
+} from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -25,6 +37,9 @@ type Props = {
   wrapperStyles?: ViewStyle;
   swipeable?: boolean;
 };
+
+const screenWidth = Dimensions.get('screen').width;
+
 export const GroupItem = memo(
   forwardRef<Swipeable, Props>(
     ({ group, isFirstItem, wrapperStyles, swipeable }, previousRef) => {
@@ -35,6 +50,7 @@ export const GroupItem = memo(
       const swipeableRef = useRef<Swipeable>(null);
       const navigation = useNavigation<PortfolioNavigationProp>();
       const paddingRightAnimation = useSharedValue(0);
+      const [open, setOpen] = useState<boolean>(false);
       // close swipeable on another swipeable open
       useSwipeableDismissListener(
         'collection-item-opened',
@@ -78,12 +94,16 @@ export const GroupItem = memo(
             previousRef.current?.close();
           }
         }
+        setOpen(true);
         paddingRightAnimation.value = withTiming(16, { duration: 200 });
-      }, [group.id, paddingRightAnimation, previousRef]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [group.id, paddingRightAnimation, previousRef, open]);
 
       const handleSwipeableWillClose = useCallback(() => {
+        setOpen(false);
         paddingRightAnimation.value = withTiming(0, { duration: 200 });
-      }, [paddingRightAnimation]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [paddingRightAnimation, open]);
 
       const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -117,6 +137,21 @@ export const GroupItem = memo(
           onSwipeableWillOpen={handleSwipeableWillOpen}
           onSwipeableWillClose={handleSwipeableWillClose}
           rightThreshold={0}
+          hitSlop={
+            open
+              ? {
+                  right: -(screenWidth * 0.35),
+                  left: 0,
+                  top: 0,
+                  bottom: 0
+                }
+              : {
+                  right: 0,
+                  left: -(screenWidth * 0.65),
+                  top: 0,
+                  bottom: 0
+                }
+          }
         >
           <Pressable onPress={handleItemPress} style={containerStyles}>
             <Animated.View style={[{ ...styles.item }, animatedStyle]}>
