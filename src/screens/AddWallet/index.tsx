@@ -17,7 +17,7 @@ export const AddWalletScreen = () => {
     setFlowType(AddWalletFlowType.CREATE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('CreateWalletScreen');
+    navigation.navigate('CreateWalletStep1');
   };
 
   return (

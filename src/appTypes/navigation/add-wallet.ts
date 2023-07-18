@@ -6,7 +6,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 export type AddWalletStackParamsList = {
   AddWalletScreen: undefined;
   RestoreWalletScreen: undefined;
-  CreateWalletScreen: undefined;
+  CreateWalletStep1: undefined;
+  CreateWalletStep2: undefined;
 };
 
 export type AddWalletStackNavigationProp = CompositeNavigationProp<

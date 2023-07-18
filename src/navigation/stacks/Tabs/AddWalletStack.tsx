@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SettingsScreen } from '@screens/Settings';
 import { AddWalletStackParamsList } from '@appTypes';
 import { AddWalletScreen } from '@screens/AddWallet';
-import { CreateWalletScreen } from '@screens/CreateWallet';
+import { CreateWalletStep1, CreateWalletStep2 } from '@screens/CreateWallet';
 
 const Stack = createNativeStackNavigator<AddWalletStackParamsList>();
 export const AddWalletStack = () => {
@@ -13,7 +13,8 @@ export const AddWalletStack = () => {
       initialRouteName="AddWalletScreen"
     >
       <Stack.Screen name="AddWalletScreen" component={AddWalletScreen} />
-      <Stack.Screen name="CreateWalletScreen" component={CreateWalletScreen} />
+      <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
+      <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
       <Stack.Screen name="RestoreWalletScreen" component={SettingsScreen} />
     </Stack.Navigator>
   );
