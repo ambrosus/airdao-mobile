@@ -13,7 +13,7 @@ import { BottomSheetRef, Header, PercentChange } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { useAMBPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
@@ -123,6 +123,7 @@ export const SingleGroupScreen = () => {
           }
         />
       </View>
+      <Spacer value={verticalScale(16)} />
       <View
         style={{ flex: 1, paddingHorizontal: scale(16) }}
         testID="List_Of_Addresses"
