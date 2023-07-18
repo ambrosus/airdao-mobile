@@ -87,7 +87,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
               Select language
             </Text>
           }
-          titlePosition="left"
+          titlePosition={Platform.select({ ios: 'left', default: 'center' })}
           backIconVisible={true}
           style={styles.header}
           onBackPress={() => localRef.current?.dismiss()}
