@@ -6,11 +6,17 @@ import { Button, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes';
+import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 
 export const AddWalletScreen = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const { setFlowType, setWalletName, setMnemonicLength } =
+    useAddWalletContext();
 
   const onCreatePress = () => {
+    setFlowType(AddWalletFlowType.CREATE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
     navigation.navigate('CreateWalletScreen');
   };
 
