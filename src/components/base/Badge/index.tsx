@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native';
 
 type Props = {
   icon: JSX.Element;
+  color: string;
 };
 export const Badge: FC<Props> = (props) => {
-  const { icon } = props;
+  const { icon, color } = props;
   return (
-    <View style={styles.buttonBackgroundStyle}>
+    <View style={[styles.buttonBackgroundStyle, { backgroundColor: color }]}>
       <View style={styles.buttonStyle}>{icon}</View>
     </View>
   );
@@ -17,8 +18,7 @@ const styles = StyleSheet.create({
   buttonBackgroundStyle: {
     borderRadius: 50,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: ' rgba(47, 43, 67, 0.05)'
+    justifyContent: 'center'
   },
   buttonStyle: {
     padding: 8,

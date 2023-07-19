@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   },
   details: {
     flex: 1,
+    alignItems: 'center',
     paddingVertical: verticalScale(18),
     paddingHorizontal: scale(18)
   },
