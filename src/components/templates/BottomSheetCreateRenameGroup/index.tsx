@@ -100,7 +100,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheetFloat
-          height={350}
+          height={320}
           ref={localRef}
           containerStyle={
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }
