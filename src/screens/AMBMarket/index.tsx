@@ -17,6 +17,7 @@ import { useAMBPrice } from '@hooks/query';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SmallLogoSVG } from '@components/svg/icons/SmallLogo';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>
@@ -109,8 +110,21 @@ export function AMBMarket(): JSX.Element {
       </ScrollView>
       <BottomSheetTrade ref={tradeBottomSheet} />
       <SharePortfolio
+        isAMBStatisticsFlow
         ref={shareBottomSheet}
-        title="AMB Price"
+        title={
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <SmallLogoSVG />
+            <Spacer horizontal value={scale(8)} />
+            <Text
+              fontSize={15}
+              color={COLORS.white}
+              fontFamily="Inter_600SemiBold"
+            >
+              AirDAO (AMB)
+            </Text>
+          </View>
+        }
         bottomSheetTitle="Share AMB price"
         balance={NumberUtils.formatNumber(
           ambPrice?.priceUSD ?? 0,

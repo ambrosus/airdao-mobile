@@ -3,11 +3,11 @@ import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import moment from 'moment';
 import { Row, Spacer, Text } from '@components/base';
-import { LogoSVG, TrendIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
+import { Badge } from '@components/base/Badge';
 
 export interface PortfolioPerformanceProps {
   balance: string;
@@ -15,8 +15,9 @@ export interface PortfolioPerformanceProps {
   currencyPosition: 'left' | 'right';
   last24HourChange?: number;
   txFee?: number;
-  title: string;
+  title: string | JSX.Element;
   timestamp: Date;
+  isAMBStatisticsFlow?: boolean;
 }
 
 export function PortfolioPerformance(
@@ -26,10 +27,10 @@ export function PortfolioPerformance(
     balance,
     currency,
     currencyPosition,
-    last24HourChange,
     txFee,
     title,
-    timestamp
+    timestamp,
+    isAMBStatisticsFlow
   } = props;
 
   return (
@@ -43,16 +44,16 @@ export function PortfolioPerformance(
         <View style={styles.details}>
           {/* title */}
           <Text
-            fontSize={13}
+            fontSize={15}
             fontFamily="Inter_600SemiBold"
             color={COLORS.white}
           >
             {title}
           </Text>
-          <Spacer value={verticalScale(6)} />
+          {!isAMBStatisticsFlow && <Spacer value={verticalScale(4)} />}
           {/* balance */}
           <Text
-            fontSize={22}
+            fontSize={24}
             fontFamily="Mersad_600SemiBold"
             color={COLORS.white}
           >
@@ -84,54 +85,52 @@ export function PortfolioPerformance(
             </>
           )}
           {/* 24hr change */}
-          {Object.hasOwn(props, 'last24HourChange') && (
-            <>
-              <Spacer value={verticalScale(6)} />
-              <Row alignItems="center">
-                <Text
-                  fontSize={11}
-                  color={COLORS.white50}
-                  fontFamily="Inter_600SemiBold"
-                >
-                  24H Change
-                </Text>
-                <Spacer horizontal value={scale(10)} />
+          {Object.hasOwn(props, 'last24HourChange') &&
+            props.last24HourChange !== undefined && (
+              <>
+                <Spacer value={verticalScale(8)} />
                 <Row alignItems="center">
-                  <TrendIcon
-                    color={COLORS.white}
-                    type={(last24HourChange || 0) >= 0 ? 'up' : 'down'}
-                  />
-                  <Spacer horizontal value={scale(5)} />
-                  <Text fontSize={12} color={COLORS.white}>
-                    {last24HourChange!.toFixed(2)}%
-                  </Text>
+                  <Badge
+                    color="#ffffffcc"
+                    icon={
+                      <Row style={{ paddingHorizontal: 4 }}>
+                        <Text
+                          fontSize={12}
+                          color={
+                            props.last24HourChange >= 0
+                              ? COLORS.jungleGreen
+                              : COLORS.crimsonRed
+                          }
+                        >
+                          {`${
+                            props.last24HourChange >= 0 ? '+' : '-'
+                          }${Math.abs(props.last24HourChange).toFixed(2)}%`}
+                        </Text>
+                        <Spacer horizontal value={scale(4)} />
+                        <Text
+                          fontSize={12}
+                          color={COLORS.nero}
+                          fontFamily="Inter_600SemiBold"
+                        >
+                          (24hr)
+                        </Text>
+                      </Row>
+                    }
+                  ></Badge>
                 </Row>
-              </Row>
-            </>
-          )}
+              </>
+            )}
           {/* timestamp */}
           <Spacer value={verticalScale(8)} />
           <Row alignItems="center" justifyContent="space-between">
-            <Text
-              fontSize={11}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.white}
-            >
+            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
               {moment(timestamp).format('YYYY-MM-DD')}
             </Text>
-            <Text
-              fontSize={11}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.white}
-            >
+            <Spacer horizontal value={scale(10)} />
+            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
               {moment(timestamp).format('hh:mm A').toLowerCase()}
             </Text>
           </Row>
-        </View>
-        <View style={styles.logoContainer}>
-          <View style={styles.logo}>
-            <LogoSVG scale={0.5} />
-          </View>
         </View>
       </Row>
     </ImageBackground>
