@@ -10,3 +10,4 @@ export * from './OnboardingContent';
 export * from './Permission';
 export * from './QueryResponse';
 export * from './Sharing';
+export * from './Wallet';
