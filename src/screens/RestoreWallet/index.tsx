@@ -7,8 +7,8 @@ import {
   InputWithIcon
 } from '@components/composite';
 import { Button, InputRef, Row, Spacer, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { Alert, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { verticalScale } from '@utils/scaling';
+import { Alert, useWindowDimensions, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { CloseIcon, ScannerQRIcon } from '@components/svg/icons';
 import { PrimaryButton } from '@components/modular';
@@ -17,6 +17,7 @@ import { etherumAddressRegex } from '@constants/regex';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes';
 import { useAddWalletContext } from '@contexts';
+import { styles } from '@screens/RestoreWallet/styles';
 
 export const RestoreWalletScreen = () => {
   const inputRef = useRef<InputRef>(null);
@@ -42,6 +43,7 @@ export const RestoreWalletScreen = () => {
 
   const navigation = useNavigation<AddWalletStackNavigationProp>();
   const navigateToRestoreWallet = () => {
+    Alert.alert('You have successfully restored your wallet!');
     navigation.navigate('Settings');
   };
 
@@ -86,10 +88,15 @@ export const RestoreWalletScreen = () => {
   };
 
   const onChangeText = (text: string) => {
-    setSearchValue(text);
-    const words = text.split(' ');
-    const removedWords = mnemonicWords.filter((word) => !words.includes(word));
-    setMnemonicWords(removedWords);
+    const newValue = text.charAt(0).toLowerCase() + text.slice(1);
+    setSearchValue(newValue);
+    const words = newValue.split(' ');
+    if (walletMnemonic.includes(newValue)) {
+      const removedWords = mnemonicWords.filter(
+        (word) => !words.includes(word)
+      );
+      setMnemonicWords(removedWords);
+    }
   };
 
   const renderWord = (word: string) => {
@@ -161,12 +168,6 @@ export const RestoreWalletScreen = () => {
           onBlur={() => setShowMnemonic(false)}
         />
         <Spacer value={verticalScale(24)} />
-        {isMnemonicValid && (
-          <PrimaryButton onPress={navigateToRestoreWallet}>
-            Restore wallet
-          </PrimaryButton>
-        )}
-        <Spacer value={verticalScale(16)} />
         <PrimaryButton
           onPress={navigateToRestoreWallet}
           disabled={!isMnemonicValid}
@@ -186,22 +187,3 @@ export const RestoreWalletScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  innerContainer: {
-    paddingHorizontal: scale(16)
-  },
-  words: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    rowGap: scale(16),
-    columnGap: verticalScale(16)
-  },
-  word: {
-    backgroundColor: COLORS.culturedWhite,
-    paddingHorizontal: scale(12),
-    borderRadius: moderateScale(16),
-    paddingVertical: verticalScale(4)
-  }
-});

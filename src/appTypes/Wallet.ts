@@ -1,4 +1,5 @@
 export interface WalletMetadata {
+  pub: string;
   name: string;
   mnemonic: string;
   newMnemonic?: string;
