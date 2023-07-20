@@ -22,6 +22,7 @@ import {
 } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { verticalScale } from '@utils/scaling';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -100,7 +101,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheetFloat
-          height={350}
+          height={Math.min(verticalScale(320), 320)}
           ref={localRef}
           containerStyle={
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }

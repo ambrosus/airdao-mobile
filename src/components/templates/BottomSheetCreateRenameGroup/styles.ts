@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     backgroundColor: COLORS.neutral900Alpha[5],
-    paddingVertical: 16,
+    paddingVertical: 12,
     borderRadius: 25,
     alignItems: 'center'
   }

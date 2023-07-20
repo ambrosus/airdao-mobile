@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+// import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
@@ -6,16 +7,16 @@ import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBloc
 import { scale } from '@utils/scaling';
 // import { Spacer, Text } from '@components/base';
 // import * as Updates from 'expo-updates';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 // import { CopyToClipboardButton } from '@components/composite';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SettingsScreen = () => {
-  const [token, setToken] = useState('');
+  // const [token, setToken] = useState('');
 
-  useEffect(() => {
-    messaging().getToken().then(setToken);
-  }, []);
+  // useEffect(() => {
+  //   messaging().getToken().then(setToken);
+  // }, []);
 
   const { top } = useSafeAreaInsets();
   return (

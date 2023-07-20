@@ -1,27 +1,24 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { EditIcon } from '@components/svg/icons';
+import { Button, Row, Spacer, Text, Badge } from '@components/base';
+import {
+  BottomSheetEditCollection,
+  WalletList,
+  BottomSheetCreateRenameGroup
+} from '@components/templates';
+import { EditIcon, AddIcon } from '@components/svg/icons';
 import { BottomSheetRef, Header, PercentChange } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
-import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { styles } from '@screens/SingleCollection/styles';
-import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { NumberUtils } from '@utils/number';
-import { BottomSheetEditCollection, WalletList } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { Badge } from '@components/base/Badge';
-import { scale } from '@utils/scaling';
-import { AddIcon } from '@components/svg/icons/AddIcon';
-import {
-  CommonStackNavigationProp,
-  CommonStackParamsList
-} from '@appTypes/navigation/common';
-import { FloatButton } from '@components/base/FloatButton';
+import { scale, verticalScale } from '@utils/scaling';
+import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { useAMBPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
+import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
+import { styles } from './styles';
 
 export const SingleGroupScreen = () => {
   const {
@@ -80,19 +77,15 @@ export const SingleGroupScreen = () => {
         }}
         contentRight={
           <>
-            {Platform.OS === 'ios' && (
-              <>
-                <Button
-                  testID="Add_Address_Button"
-                  onPress={showAddAddress}
-                  type="circular"
-                  style={styles.addButton}
-                >
-                  <AddIcon color={COLORS.white} scale={0.8} />
-                </Button>
-                <Spacer horizontal value={scale(32)} />
-              </>
-            )}
+            <Button
+              testID="Add_Address_Button"
+              onPress={showAddAddress}
+              type="circular"
+              style={styles.addButton}
+            >
+              <AddIcon color={COLORS.white} scale={0.8} />
+            </Button>
+            <Spacer horizontal value={scale(32)} />
             <Button
               testID="Edit_Collection_Button"
               onPress={showEditCollection}
@@ -119,6 +112,7 @@ export const SingleGroupScreen = () => {
         </Text>
         <Spacer value={10} />
         <Badge
+          color={COLORS.gray300}
           icon={
             <Row>
               <PercentChange
@@ -130,6 +124,7 @@ export const SingleGroupScreen = () => {
           }
         />
       </View>
+      <Spacer value={verticalScale(16)} />
       <View
         style={{ flex: 1, paddingHorizontal: scale(16) }}
         testID="List_Of_Addresses"
@@ -143,13 +138,6 @@ export const SingleGroupScreen = () => {
           onRefresh={refetchAddresses}
         />
       </View>
-      {Platform.OS === 'android' && (
-        <FloatButton
-          type="circular"
-          onPress={showAddAddress}
-          icon={<AddIcon color={COLORS.white} scale={1.5} />}
-        />
-      )}
       <BottomSheetAddNewAddressToGroup
         ref={addNewAddressToGroupRef}
         collection={selectedList}

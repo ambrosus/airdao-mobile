@@ -5,22 +5,20 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { AddIcon } from '@components/svg/icons/AddIcon';
+import { AddIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
-import { useNavigation } from '@react-navigation/native';
-import { PortfolioScreenTabItem } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem';
-import { PortfolioScreenTabIndicator } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator';
-import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
+import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
+import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
+import { Measure } from './components/types';
 import { TabViewProps, Route } from 'react-native-tab-view';
 import { useLists } from '@contexts';
-import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
+import { BottomSheetCreateRenameGroup } from '@components/templates';
 import { SearchTabNavigationProp } from '@appTypes';
-import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/styles';
-import { PlusIcon } from '@components/svg/icons';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { styles } from './styles';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -33,7 +31,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
-  const bottomTabHeight = useBottomTabBarHeight();
 
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
   const handleOnOpenCreateNewList = useCallback(() => {
@@ -80,12 +77,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     });
   }, [refs]);
 
-  const addAddressOrCreateCollectionButton = () => {
-    if (props.index === 0) {
-      navigateToSearch();
-    } else handleOnOpenCreateNewList();
-  };
-
   const portfolioTabsButton = () => {
     if (props.index === 0) {
       navigateToSearch();
@@ -97,46 +88,32 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   return (
     <>
       <View style={styles.container} testID="Portfolio_Screen_Tabs">
-        {Platform.OS === 'ios' ? (
-          <Row justifyContent="space-between" alignItems="center">
-            <Text
-              fontFamily="Inter_700Bold"
-              fontSize={16}
-              color={COLORS.smokyBlack}
-            >
-              Watchlist
-            </Text>
-            <Button
-              testID="Portfolio_Tabs_Button"
-              onPress={portfolioTabsButton}
-              style={styles.createNewListButton}
-            >
-              <Row>
-                <AddIcon color={COLORS.deepBlue} />
-                <Spacer horizontal value={scale(6.5)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.deepBlue}
-                >
-                  {props.index === 0 ? 'Add address' : 'Create group'}
-                </Text>
-              </Row>
-            </Button>
-          </Row>
-        ) : (
-          <>
-            <Row alignItems="center" justifyContent="center">
+        <Row justifyContent="space-between" alignItems="center">
+          <Text
+            fontFamily="Inter_700Bold"
+            fontSize={16}
+            color={COLORS.smokyBlack}
+          >
+            Watchlist
+          </Text>
+          <Button
+            testID="Portfolio_Tabs_Button"
+            onPress={portfolioTabsButton}
+            style={styles.createNewListButton}
+          >
+            <Row>
+              <AddIcon color={COLORS.deepBlue} />
+              <Spacer horizontal value={scale(6.5)} />
               <Text
-                fontFamily="Inter_700Bold"
-                fontSize={16}
-                color={COLORS.smokyBlack}
+                fontFamily="Inter_500Medium"
+                fontSize={14}
+                color={COLORS.deepBlue}
               >
-                Portfolio
+                {props.index === 0 ? 'Add address' : 'Create group'}
               </Text>
             </Row>
-          </>
-        )}
+          </Button>
+        </Row>
       </View>
       <Spacer value={verticalScale(27)} />
       <View
@@ -178,18 +155,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           />
         )}
       </View>
-      {Platform.OS === 'android' && (
-        <Button
-          type="circular"
-          style={{
-            ...styles.androidButton,
-            bottom: bottomTabHeight + verticalScale(54)
-          }}
-          onPress={addAddressOrCreateCollectionButton}
-        >
-          <PlusIcon color={COLORS.white} />
-        </Button>
-      )}
       <BottomSheetCreateRenameGroup
         type="create"
         handleOnCreateGroup={handleOnCreate}

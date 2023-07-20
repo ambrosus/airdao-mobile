@@ -153,6 +153,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           testID="Badge_Button"
         >
           <Badge
+            color={COLORS.gray300}
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
