@@ -85,8 +85,12 @@ export const BottomSheetEditCollection = forwardRef<
           }}
           onPress={deleteCollection}
         >
-          <Text color={COLORS.crimsonRed}>
-            Delete {StringUtils.formatAddress(collection.name, 10, 0)}
+          <Text
+            color={COLORS.crimsonRed}
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+          >
+            Delete {StringUtils.formatAddress(collection.name, 12, 0)}
           </Text>
         </Button>
       </View>
