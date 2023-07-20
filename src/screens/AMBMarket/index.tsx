@@ -9,7 +9,7 @@ import {
 } from './components';
 import { Button, Separator, Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef, Header } from '@components/composite';
-import { ShareIcon } from '@components/svg/icons';
+import { ShareIcon, SmallLogoSVG } from '@components/svg/icons';
 import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
@@ -17,7 +17,6 @@ import { useAMBPrice } from '@hooks/query';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SmallLogoSVG } from '@components/svg/icons/SmallLogo';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>

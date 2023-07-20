@@ -91,7 +91,7 @@ export function PortfolioPerformance(
                 <Spacer value={verticalScale(8)} />
                 <Row alignItems="center">
                   <Badge
-                    color="#ffffffcc"
+                    color={COLORS.gray100}
                     icon={
                       <Row style={{ paddingHorizontal: 4 }}>
                         <Text
