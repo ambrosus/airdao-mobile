@@ -3,7 +3,7 @@ export interface WalletMetadata {
   mnemonic: string;
   newMnemonic?: string;
   number: number;
-  hash: string;
+  hash?: string;
   createdAt?: number;
 }
 
