@@ -33,9 +33,8 @@ export const CreateWalletStep2 = () => {
       return;
     }
     setLoading(true);
-    Alert.alert('success');
     // TODO fix number
-    WalletUtils.processWallet({
+    await WalletUtils.processWallet({
       number: 0,
       mnemonic: walletMnemonic,
       name: ''

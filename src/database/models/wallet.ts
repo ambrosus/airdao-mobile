@@ -1,26 +1,35 @@
 import { DatabaseTable } from '@appTypes';
-import { Wallet } from '@models/Wallet';
 import { Model } from '@nozbe/watermelondb';
-import { text, date, readonly, field } from '@nozbe/watermelondb/decorators';
+import { text, field } from '@nozbe/watermelondb/decorators';
 
 export class WalletDBModel extends Model {
   static table = DatabaseTable.Wallets;
 
   // define fields
-  @text('name') name?: string;
-  @text('hash') hash?: string;
-  @text('mnemonic') mnemonic?: string;
-  @field('number') number?: number;
-  @readonly @date('created_at') createdAt?: Date;
-
-  hydrate(): Wallet {
-    return {
-      _id: this.id,
-      hash: this.hash || '',
-      name: this.name || '',
-      mnemonic: this.mnemonic || '',
-      number: this.number || 0,
-      createdAt: this.createdAt ? new Date(this.createdAt) : new Date()
-    };
-  }
+  // @ts-ignore
+  @text('name') name: string;
+  // @ts-ignore
+  @text('mnemonic') mnemonic: string;
+  // @ts-ignore
+  @text('hash') hash: string;
+  // @ts-ignore
+  @field('number') number: number;
+  // @ts-ignore
+  @text('cashback') cashback: string;
+  // @ts-ignore
+  @field('is_backed_up') isBackedUp: number;
+  // @ts-ignore
+  @field('is_hide_transaction_for_free') isHideTransactionForFee: number;
+  // @ts-ignore
+  @field('allow_replace_by_fee') allowReplaceByFee: number;
+  // @ts-ignore
+  @field('use_legacy') useLegacy: number;
+  // @ts-ignore
+  @field('use_unconfirmed') useUnconfirmed: number;
+  // @ts-ignore
+  @field('is_hd') isHd: number;
+  // @ts-ignore
+  @field('is_created_here') isCreatedHere: number;
+  // @ts-ignore
+  @field('to_send_status') toSendStatus: number;
 }

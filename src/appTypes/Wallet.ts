@@ -1,11 +1,18 @@
 export interface WalletMetadata {
-  _id?: string;
   name: string;
   mnemonic: string;
-  newMnemonic?: string;
   number: number;
   hash?: string;
-  createdAt?: number;
+  cashback?: string;
+  isBackedUp?: number;
+  isHideTransactionForFee?: number;
+  allowReplaceByFee?: number;
+  useLegacy?: number;
+  useUnconfirmed?: number;
+  isHd?: number;
+  isCreatedHere?: number;
+  toSendStatus?: number;
+  newMnemonic?: string;
 }
 
 export enum WalletInitSource {

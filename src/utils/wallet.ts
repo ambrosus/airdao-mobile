@@ -40,6 +40,7 @@ const processWallet = async (
   }
   const fullWallet: Wallet = new Wallet({ ...data, hash, name: tmpWalletName });
   // TODO save to local db
+  await Wallet.saveWallet(fullWallet);
   try {
   } catch (error) {
     throw error;
