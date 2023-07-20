@@ -1,6 +1,7 @@
 import { WalletMetadata } from '@appTypes';
 
 export class Wallet {
+  _id: string;
   hash: string;
   name: string;
   mnemonic: string;
@@ -8,6 +9,7 @@ export class Wallet {
   createdAt: Date;
 
   constructor(details: WalletMetadata) {
+    this._id = details._id || '';
     this.hash = details.hash || '';
     this.name = details.name;
     this.mnemonic = details.mnemonic;
