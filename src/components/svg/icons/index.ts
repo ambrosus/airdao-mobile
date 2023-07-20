@@ -30,6 +30,7 @@ export * from './Logo';
 export * from './LogoWithName';
 export * from './LogoBig';
 export * from './LogoGradient';
+export * from './SmallLogo';
 export * from './Messages';
 export * from './Notification';
 export * from './Options';

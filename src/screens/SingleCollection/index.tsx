@@ -119,7 +119,7 @@ export const SingleGroupScreen = () => {
         </Text>
         <Spacer value={10} />
         <Badge
-          color="#2f2b430d"
+          color={COLORS.gray300}
           icon={
             <Row>
               <PercentChange
