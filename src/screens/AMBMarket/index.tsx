@@ -9,7 +9,7 @@ import {
 } from './components';
 import { Button, Separator, Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef, Header } from '@components/composite';
-import { ShareIcon } from '@components/svg/icons';
+import { ShareIcon, SmallLogoSVG } from '@components/svg/icons';
 import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
@@ -110,8 +110,21 @@ export function AMBMarket(): JSX.Element {
       </ScrollView>
       <BottomSheetTrade ref={tradeBottomSheet} />
       <SharePortfolio
+        isAMBStatisticsFlow
         ref={shareBottomSheet}
-        title="AMB Price"
+        title={
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <SmallLogoSVG />
+            <Spacer horizontal value={scale(8)} />
+            <Text
+              fontSize={15}
+              color={COLORS.white}
+              fontFamily="Inter_600SemiBold"
+            >
+              AirDAO (AMB)
+            </Text>
+          </View>
+        }
         bottomSheetTitle="Share AMB price"
         balance={NumberUtils.formatNumber(
           ambPrice?.priceUSD ?? 0,
