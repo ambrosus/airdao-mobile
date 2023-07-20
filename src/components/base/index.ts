@@ -1,4 +1,5 @@
 export * from './AnimatedText';
+export * from './Badge';
 export { Button, ButtonType } from './Button';
 export * from './Input';
 export * from './Text';

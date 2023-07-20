@@ -94,7 +94,7 @@ export const BottomSheetNotificationSettings = forwardRef<
             Notification settings
           </Text>
         }
-        titlePosition="left"
+        titlePosition={Platform.select({ ios: 'left', default: 'center' })}
         backIconVisible={true}
         onBackPress={() => localRef.current?.dismiss()}
         style={styles.header}

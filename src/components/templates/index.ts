@@ -7,6 +7,7 @@ export * from './BezierChart';
 export * from './PortfolioPerformance';
 export * from './BottomSheetEditCollection';
 export * from './BottomSheetRemoveAddressFromCollection';
+export * from './BottomSheetCreateRenameGroup';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetAddWalletToList';
 export * from './BottomSheetNotificationSettings';
