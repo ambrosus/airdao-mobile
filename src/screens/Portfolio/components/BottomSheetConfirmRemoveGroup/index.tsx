@@ -32,7 +32,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           fontSize={14}
           color={COLORS.smokyBlack}
         >
-          Remove {StringUtils.formatAddress(item.name, 3, 4)} from groups?
+          Remove {StringUtils.formatAddress(item.name, 12, 0)} from groups?
         </Text>
         <Spacer value={24} />
         <Button
@@ -58,7 +58,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.midnight}
+            color={COLORS.smokyBlack}
             fontSize={16}
           >
             Cancel

@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.charcoal,
     borderRadius: 25,
     marginHorizontal: 24,
-    paddingVertical: 16,
+    paddingVertical: 12,
     alignItems: 'center'
   }
 });
