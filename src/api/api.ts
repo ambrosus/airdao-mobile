@@ -5,6 +5,7 @@ import { AMBToken } from '@models';
 import { watcherService } from './watcher-service';
 // import Config from '@constants/config';
 import { explorerService } from './explorer-service';
+import Config from '@constants/config';
 
 // const cmcApiUrl = Config.CMC_API_URL;
 
@@ -23,7 +24,7 @@ const getAMBPriceHistoricalPricing = async (
 ): Promise<AMBToken[]> => {
   try {
     const res = await axios.get(
-      `https://wallet-api.ambrosus-test.io/api/v1/watcher-historical-prices`
+      `${Config.WALLET_API_URL}/api/v1/watcher-historical-prices`
       // {
       //   headers: {
       //     'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
