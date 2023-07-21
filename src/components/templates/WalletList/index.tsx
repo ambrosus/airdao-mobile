@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo, ScrollViewProps } from 'react-native';
+import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
@@ -7,7 +8,6 @@ import {
   SwipeableWalletItem
 } from '@components/templates/WalletList/components/SwipeableWalletItem';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
-import Animated, { SlideOutRight } from 'react-native-reanimated';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -37,19 +37,26 @@ export function WalletList(props: WalletListProps): JSX.Element {
     onRefresh
   } = props;
 
-  const renderWallet = (args: ListRenderItemInfo<ExplorerAccount>) => {
-    if (typeof renderItem === 'function') return renderItem(args);
-    return (
-      <Animated.View key={args.item.address} exiting={SlideOutRight}>
-        <SwipeableWalletItem
-          item={args.item}
-          idx={args.index}
-          isPortfolioFlow={isPortfolioFlow}
-          removeType={removeType}
-        />
-      </Animated.View>
-    );
-  };
+  const renderWallet = useCallback(
+    (args: ListRenderItemInfo<ExplorerAccount>) => {
+      if (typeof renderItem === 'function') return renderItem(args);
+      return (
+        <Animated.View
+          key={args.item.address}
+          exiting={SlideOutRight}
+          entering={SlideInDown}
+        >
+          <SwipeableWalletItem
+            item={args.item}
+            idx={args.index}
+            isPortfolioFlow={isPortfolioFlow}
+            removeType={removeType}
+          />
+        </Animated.View>
+      );
+    },
+    [isPortfolioFlow, removeType, renderItem]
+  );
 
   return (
     <FlatList
