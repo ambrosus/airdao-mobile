@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-  View,
-  useWindowDimensions
-} from 'react-native';
+import { Alert, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
@@ -27,18 +21,18 @@ import {
   InputWithIcon
 } from '@components/composite';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
-  useTransactionsOfAccount
+  useTransactionsOfAccount,
+  useTransactionDetails
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
-import { useTransactionDetails } from '@hooks/query/useTransactionDetails';
 import { SearchTabNavigationProp } from '@apptypes';
 import { styles } from './styles';
 
@@ -66,6 +60,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     address,
     !initialMount.current &&
       !!address &&
+      searchSubmitted &&
       address.length <= CRYPTO_ADDRESS_MAX_LENGTH
   );
 
@@ -77,6 +72,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     address,
     !initialMount.current &&
       !!address &&
+      searchSubmitted &&
       address.length > CRYPTO_ADDRESS_MAX_LENGTH
   );
 
@@ -134,7 +130,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const onInputSubmit = () => {
     initialMount.current = false;
     setSearchSubmitted(true);
-    // setAddress(e.nativeEvent.text);
   };
 
   const loadMoreTransactions = () => {
@@ -214,10 +209,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
                   <ScannerQRIcon />
                 </Button>
               )}
-
-              <Button onPress={showScanner} testID="Barcode_Scanner">
-                <ScannerQRIcon />
-              </Button>
             </Row>
           }
           placeholder={'Search Address or TX hash'}
@@ -239,7 +230,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       {(error && !!address && !finalAccount) || (hashError && !!address) ? (
         <SearchAddressNoResult />
       ) : null}
-      {finalAccount && explorerInfo ? (
+      {finalAccount && explorerInfo && searchSubmitted ? (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Spacer value={verticalScale(24)} />
           <KeyboardDismissingView>

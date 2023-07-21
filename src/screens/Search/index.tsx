@@ -76,10 +76,7 @@ export const SearchScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={{ flex: 1, paddingTop: verticalScale(12) }}
-    >
+    <View style={{ flex: 1, paddingTop: verticalScale(12), top }}>
       <View testID="Search_Screen" style={{ flex: 1 }}>
         <SearchAddress
           onContentVisibilityChanged={setSearchAddressContentVisible}

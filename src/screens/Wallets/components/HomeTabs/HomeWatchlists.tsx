@@ -3,7 +3,7 @@ import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
 import { Button, Spacer } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
-import { PortfolioNavigationProp, WalletsNavigationProp } from '@appTypes';
+import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { WalletItem } from '@components/templates';
@@ -15,15 +15,14 @@ const ITEM_COUNT = 4;
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
 
-  const navigationToPortfolio = useNavigation<PortfolioNavigationProp>();
-  const navigationToWatchlist = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<PortfolioNavigationProp>();
 
   if (watchlist.length === 0) {
     return <RenderEmpty text="addresses" />;
   }
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {
-    return navigationToWatchlist.navigate('Address', { address: item.address });
+    return navigation.navigate('Address', { address: item.address });
   };
 
   return (

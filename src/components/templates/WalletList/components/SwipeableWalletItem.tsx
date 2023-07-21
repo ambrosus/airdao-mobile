@@ -44,7 +44,6 @@ export const SwipeableWalletItem = memo(
       const navigation = useNavigation<WalletsNavigationProp>();
 
       const paddingRightAnimation = useSharedValue(0);
-
       // close swipeable on another swipeable open
       useSwipeableDismissListener('wallet-item-opened', item._id, swipeRef);
 

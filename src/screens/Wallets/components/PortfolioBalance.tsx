@@ -14,8 +14,6 @@ export function PortfolioBalance(): JSX.Element {
     navigation.navigate('AMBMarketScreen');
   };
 
-  console.log(chartData[49]);
-
   return (
     <View style={styles.container} testID="Portfolio_Balance">
       <AMBPriceHistory onBadgePress={navigateToAMBScreen} badgeType="button" />

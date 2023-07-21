@@ -55,7 +55,8 @@ export function AMBMarket(): JSX.Element {
         }}
         contentRight={
           <Button onPress={onSharePress} testID="Share_Button">
-            <ShareIcon color={COLORS.jetBlack} scale={1.4} />
+            <ShareIcon color={COLORS.jetBlack} scale={1.5} />
+            <Spacer horizontal value={scale(20)} />
           </Button>
         }
       />

@@ -17,6 +17,7 @@ import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
 import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
+import { MONTH_NAMES } from '@constants/variables';
 import { View } from 'react-native';
 
 interface AMBPriceHistoryProps {
