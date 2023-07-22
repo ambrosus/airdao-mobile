@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { WalletMetadata } from '@appTypes';
 
-export class AirDAOStorage {
+export class AirDAOKeysStorage {
   private serviceName = '';
   private serviceWalletsCounter = 0;
   private serviceWallets: { [key: string]: string } = {};
@@ -296,5 +296,5 @@ export class AirDAOStorage {
   }
 }
 
-const singleAirDAOStorage = new AirDAOStorage();
+const singleAirDAOStorage = new AirDAOKeysStorage();
 export default singleAirDAOStorage;
