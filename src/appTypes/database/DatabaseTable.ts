@@ -1,3 +1,3 @@
 export enum DatabaseTable {
-  Notifications = 'notifications'
+  Wallets = 'wallets'
 }

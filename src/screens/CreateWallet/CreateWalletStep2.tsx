@@ -6,6 +6,7 @@ import { Header } from '@components/composite';
 import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { WalletUtils } from '@utils/wallet';
 
 export const CreateWalletStep2 = () => {
   const { walletMnemonic } = useAddWalletContext();
@@ -32,10 +33,14 @@ export const CreateWalletStep2 = () => {
       return;
     }
     setLoading(true);
-    Alert.alert('success');
-    //TODO implement
+    // TODO fix number
+    await WalletUtils.processWallet({
+      number: 0,
+      mnemonic: walletMnemonic,
+      name: ''
+    });
     setLoading(false);
-  }, [walletMnemonicArrayDefault, walletMnemonicSelected]);
+  }, [walletMnemonic, walletMnemonicArrayDefault, walletMnemonicSelected]);
 
   useEffect(() => {
     validateMnemonic();
