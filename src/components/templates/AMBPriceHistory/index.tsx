@@ -22,6 +22,7 @@ import { View } from 'react-native';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
+  defaultInterval?: '1d' | 'weekly' | 'monthly';
   onBadgePress?: () => unknown;
 }
 
@@ -34,10 +35,11 @@ const intervalTimeDiffMap: { [key in CMCInterval]: number } = {
 };
 
 export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
-  const { badgeType, onBadgePress } = props;
+  const { badgeType, defaultInterval = '1d', onBadgePress } = props;
   const { data: ambPriceNow } = useAMBPrice();
   const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
-  const [selectedInterval, setSelectedInverval] = useState<CMCInterval>('1d');
+  const [selectedInterval, setSelectedInverval] =
+    useState<CMCInterval>(defaultInterval);
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
