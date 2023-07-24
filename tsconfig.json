@@ -18,6 +18,7 @@
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
       "@contexts/*": ["./src/contexts/*"],
+      "@crypto/*": ["./crypto/*"],
       "@database/*": ["./src/database/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],

@@ -15,6 +15,7 @@ module.exports = function (api) {
             '@components': './src/components',
             '@constants': './src/constants',
             '@contexts': './src/contexts',
+            '@crypto': './crypto',
             '@database': './src/database',
             '@hooks': './src/hooks',
             '@helpers': './src/helpers',

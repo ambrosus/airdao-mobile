@@ -2,7 +2,7 @@ import { WalletInitSource, WalletMetadata } from '@appTypes';
 import { Wallet } from '@models/Wallet';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
-import AirDAOStorage from '@lib/storage';
+import AirDAOStorage from '@lib/helpers/AirDAOStorage';
 
 const _saveWallet = async (wallet: WalletMetadata) => {
   let storedKey = '';
@@ -24,7 +24,13 @@ const _saveWallet = async (wallet: WalletMetadata) => {
   return storedKey;
 };
 
+const addressToToken = (address: string) => {
+  // any algo could be used to "hide" actual address
+  return Buffer.from(address).toString('base64').slice(3, 11);
+};
+
 const _getWalletName = async () => {
+  // TODO
   return 'AirDAO Wallet';
 };
 
@@ -32,7 +38,7 @@ const processWallet = async (
   data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number'>,
   source = WalletInitSource.GENERATION
 ) => {
-  const hash = await _saveWallet(data);
+  const hash = await _saveWallet(data); // done
   let tmpWalletName = data.name;
 
   if (!tmpWalletName || tmpWalletName === '') {
@@ -47,4 +53,4 @@ const processWallet = async (
   }
 };
 
-export const WalletUtils = { processWallet };
+export const WalletUtils = { processWallet, addressToToken };

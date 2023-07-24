@@ -1,0 +1,66 @@
+{
+  "OPENSEA": {
+    "dappCode" : "OPENSEA",
+    "dappName" : "OpenSea",
+    "dappUrl" : "https://opensea.io/account",
+    "dappNetworks" : ["ETH", "MATIC"],
+    "dappsDomenName": "opensea.io"
+  },
+  "PANCAKE" : {
+    "dappCode" : "PANCAKE",
+    "dappName" : "Pancake Swap",
+    "dappUrl" : "https://pancakeswap.finance/swap",
+    "dappNetworks" : ["BNB_SMART"],
+    "disableInjected" : true,
+    "dappsDomenName": "pancakeswap.finance"
+  },
+  "ETH_LIDO" : {
+    "dappCode" : "ETH_LIDO",
+    "dappName" : "Ethereum Liquid Staking (LIDO)",
+    "dappUrl" : "https://stake.lido.fi",
+    "dappNetworks" : ["ETH"],
+    "disableInjected" : true,
+    "dappsDomenName": "lido.fi"
+  },
+  "MATIC_LIDO" : {
+    "dappCode" : "MATIC_LIDO",
+    "dappName" : "Polygon Liquid Staking (LIDO)",
+    "dappUrl" : "https://polygon.lido.fi",
+    "dappNetworks" : ["MATIC"],
+    "disableInjected" : true,
+    "dappsDomenName": "lido.fi"
+  },
+  "NFTRADE" : {
+    "dappCode" : "NFTRADE",
+    "dappName" : "NFTrade",
+    "dappUrl" : "https://nftrade.com/",
+    "dappNetworks" : ["ETH", "BNB_SMART", "MATIC"],
+    "disableInjected" : true,
+    "dappsDomenName": "nftrade.com"
+  },
+  "JUSTLEND" : {
+    "dappCode": "JUSTLEND",
+    "dappName" : "JustLend",
+    "dappUrl" : "https://justlend.org/#/home",
+    "dappNetworks" : ["TRX"],
+    "dappCoins" : ["TRX", "TRX_USDT"],
+    "dappsDomenName": "justlend.org"
+  },
+  "BTT" : {
+    "dappCode": "BTT",
+    "dappName" : "BitTorrent Chain Wallet",
+    "dappUrl" : "https://wallet.bt.io/staking",
+    "dappNetworks" : ["TRX", "BTTC"],
+    "dappCoins" : ["TRX", "BTT"],
+    "dappsDomenName": "wallet.bt.io"
+  },
+  "EXON" : {
+    "dappCode" : "EXON",
+    "dappName" : "Exon Center",
+    "dappUrl" : "https://app.exoncenter.com/430",
+    "dappNetworks" : ["TRX"],
+    "dappCoins" : ["TRX_EXON"],
+    "dappsDomenName": "app.exoncenter.com"
+  }
+
+}
