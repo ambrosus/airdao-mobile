@@ -23,6 +23,7 @@ import {
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
+import { StringUtils } from '@utils/string';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -67,7 +68,11 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnCreateGroup(localGroupName);
         Toast.show({
           title: '',
-          message: `Way to go! ${localGroupName} list created.`,
+          message: `Way to go! ${StringUtils.formatAddress(
+            localGroupName,
+            16,
+            0
+          )} group created.`,
           type: ToastPosition.Top
         });
       }
@@ -76,7 +81,15 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnRenameGroup(groupId, localGroupName);
         Toast.show({
           title: '',
-          message: `${groupTitle} has been renamed to ${localGroupName}.`,
+          message: `${StringUtils.formatAddress(
+            groupTitle || '',
+            16,
+            0
+          )} has been renamed to ${StringUtils.formatAddress(
+            localGroupName,
+            16,
+            0
+          )}.`,
           type: ToastPosition.Top
         });
       }
