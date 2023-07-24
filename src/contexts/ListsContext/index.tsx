@@ -12,7 +12,7 @@ import {
 import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerAccountDTO } from '@models';
 import { API } from '@api/api';
-import { DEFAULT_WATCHLIST } from '@constants/variables';
+import { MULTISIG_VAULT } from '@constants/variables';
 
 const ListsContext = () => {
   const allAddresses = useAllAddresses();
@@ -171,8 +171,6 @@ const ListsContext = () => {
         listInContext.addresses.removeItem(account.address);
       } else {
         listInContext.addresses.push(account.address);
-        // add to watchlist if not watchlisted
-        if (!newAddress.isOnWatchlist) newAddress.isOnWatchlist = true;
       }
       listOfGroups.forEach((l) => {
         if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
@@ -203,7 +201,7 @@ const ListsContext = () => {
       if (shouldPreGroupBeCreated) {
         const newGroupOfAddresses = await handleOnCreate('MultiSig Vault');
         const res = await Promise.all(
-          DEFAULT_WATCHLIST.map(
+          MULTISIG_VAULT.map(
             async (address) => await API.explorerService.searchAddress(address)
           )
         );

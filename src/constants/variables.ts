@@ -103,5 +103,5 @@ const prodEnvAddresses = [
   '0xb5B563e5ed9A9d4eaad3F498F497943d637920f3'
 ];
 
-export const DEFAULT_WATCHLIST =
+export const MULTISIG_VAULT =
   Config.env === 'prod' ? prodEnvAddresses : testEnvAddresses;
