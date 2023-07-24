@@ -19,6 +19,7 @@ import { useAMBPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { styles } from './styles';
+import { sortListByKey } from '@utils/sort';
 
 export const SingleGroupScreen = () => {
   const {
@@ -130,7 +131,7 @@ export const SingleGroupScreen = () => {
         testID="List_Of_Addresses"
       >
         <WalletList
-          data={accounts}
+          data={sortListByKey(accounts, 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
