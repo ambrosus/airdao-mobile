@@ -6,7 +6,7 @@ import { AccountList } from '@models/AccountList';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
 import { Cache, CacheKey } from '@utils/cache';
 import {
-  useAllAddresses,
+  useAllAddressesContext,
   useAllAddressesReducer
 } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
@@ -15,7 +15,9 @@ import { API } from '@api/api';
 import { DEFAULT_WATCHLIST } from '@constants/variables';
 
 const ListsContext = () => {
-  const allAddresses = useAllAddresses();
+  const { addresses: allAddresses, addressesLoading } = useAllAddressesContext(
+    (v) => v
+  );
   const allAddressesReducer = useAllAddressesReducer();
   // save lists locally
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
@@ -223,8 +225,8 @@ const ListsContext = () => {
   }, []);
 
   return {
-    listsOfAddressGroup: lists,
-    listsOfAddressGroupCacheable: listsOfAddressGroup,
+    listsOfAddressGroup: addressesLoading ? [] : lists,
+    listsOfAddressGroupCacheable: addressesLoading ? [] : listsOfAddressGroup,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,

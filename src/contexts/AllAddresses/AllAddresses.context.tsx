@@ -11,6 +11,7 @@ import { EVENTS } from '@constants/events';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const watchlistedAccounts = allAddresses.filter(
     (address) => address.isOnWatchlist
@@ -123,11 +124,13 @@ const AllAddressesContext = () => {
 
   // fetch all addresses on mount
   const getAddresses = async () => {
+    setLoading(true);
     const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
       []) as CacheableAccount[];
     const populatedAddresses = await populateAddresses(addresses);
     setAllAddresses(populatedAddresses);
     reducer({ type: 'set', payload: populatedAddresses });
+    setLoading(false);
   };
   useEffect(() => {
     getAddresses();
@@ -166,6 +169,7 @@ const AllAddressesContext = () => {
 
   return {
     addresses: allAddresses,
+    addressesLoading: loading,
     reducer,
     refresh: getAddresses
   };
