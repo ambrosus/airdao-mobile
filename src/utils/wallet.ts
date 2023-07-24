@@ -2,7 +2,7 @@ import { WalletInitSource, WalletMetadata } from '@appTypes';
 import { Wallet } from '@models/Wallet';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
-import AirDAOStorage from '@lib/helpers/AirDAOStorage';
+import AirDAOStorage from '@lib/helpers/AirDAOKeysStorage';
 
 const _saveWallet = async (wallet: WalletMetadata) => {
   let storedKey = '';
