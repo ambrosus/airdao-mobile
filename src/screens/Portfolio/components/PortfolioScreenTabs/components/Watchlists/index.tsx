@@ -5,6 +5,7 @@ import React from 'react';
 import { scale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
 import { Spinner } from '@components/base';
+import { sortListByKey } from '@utils/sort';
 
 export const WatchList = () => {
   const { watchlist } = useWatchlist();
@@ -23,7 +24,7 @@ export const WatchList = () => {
         <WalletList
           isPortfolioFlow={true}
           emptyText=""
-          data={watchlist}
+          data={sortListByKey(watchlist, 'ambBalance', 'desc')}
           contentContainerStyle={{ paddingBottom: '40%' }}
           onRefresh={refetchAddresses}
         />
