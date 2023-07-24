@@ -47,9 +47,9 @@ const mockedCurrencyList: CurrencyData[] = [
   // {
   //   currency: 'Chinese Yuan CNY)'
   // },
-  {
-    currency: 'Ethereum (ETH)'
-  },
+  // {
+  //   currency: 'Ethereum (ETH)'
+  // },
   // {
   //   currency: 'Euro (EUR)'
   // },
