@@ -61,10 +61,11 @@ const AllAddressesContext = () => {
         allAddresses.splice(idx, 1, address);
         return allAddresses;
       } else {
-        return addAddress(address);
+        allAddresses.unshift(address);
       }
+      return allAddresses;
     },
-    [addAddress, allAddresses]
+    [allAddresses]
   );
 
   const reducer = useCallback(
