@@ -70,7 +70,9 @@
             "useFrameworks": "static"
           },
           "android": {
-            "kotlinVersion": "1.6.10"
+            "kotlinVersion": "1.6.10",
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
           }
         }
       ],
