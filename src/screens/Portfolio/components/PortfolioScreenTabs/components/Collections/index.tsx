@@ -3,6 +3,7 @@ import React from 'react';
 import { ListsGroups } from '@screens/Portfolio/components/ListsOfAddressGroup';
 import { useAllAddressesContext, useLists } from '@contexts';
 import { Spinner } from '@components/base';
+import { sortListByKey } from '@utils/sort';
 
 export const Collections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
@@ -22,7 +23,11 @@ export const Collections = () => {
         </View>
       ) : (
         <ListsGroups
-          listsOfAddressGroup={listsOfAddressGroup}
+          listsOfAddressGroup={sortListByKey(
+            listsOfAddressGroup,
+            'totalBalance',
+            'desc'
+          )}
           onRefresh={refetchAddresses}
         />
       )}
