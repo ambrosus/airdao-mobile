@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useLists } from '@contexts';
-import { Button, Spacer } from '@components/base';
+import { useAllAddressesContext, useLists } from '@contexts';
+import { Button, Spacer, Spinner } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
@@ -14,12 +14,21 @@ const ITEM_COUNT = 4;
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
+  const { addressesLoading } = useAllAddressesContext((v) => v);
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
   const navigateToCollectionDetails = (group: AccountList) => {
     navigation.navigate('Collection', { group });
   };
+
+  if (addressesLoading) {
+    return (
+      <View style={styles.loading}>
+        <Spinner />
+      </View>
+    );
+  }
 
   if (listsOfAddressGroup.length === 0) {
     return <RenderEmpty text="groups" />;

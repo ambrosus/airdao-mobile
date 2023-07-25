@@ -35,5 +35,10 @@ export const styles = StyleSheet.create({
   homeCollectionsContainer: {
     flex: 1,
     paddingHorizontal: scale(24)
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
