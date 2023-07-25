@@ -120,7 +120,14 @@ export const SingleGroupScreen = () => {
                 fontSize={14}
                 change={ambPriceData?.percentChange24H || 0}
               />
-              <Text> (24hr)</Text>
+              <Text
+                fontFamily="Inter_500Medium"
+                fontSize={14}
+                color={COLORS.smokyBlack}
+              >
+                {' '}
+                (24hr)
+              </Text>
             </Row>
           }
         />
