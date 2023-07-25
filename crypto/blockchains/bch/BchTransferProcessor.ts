@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import DogeTransferProcessor from '../doge/DogeTransferProcessor';
 import BchUnspentsProvider from './providers/BchUnspentsProvider';
 import BchSendProvider from './providers/BchSendProvider';
@@ -10,11 +10,11 @@ import BchTxBuilder from './tx/BchTxBuilder';
 
 export default class BchTransferProcessor
   extends DogeTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   _trezorServerCode = 'BCH_TREZOR_SERVER';
 
-  _builderSettings: BlocksoftBlockchainTypes.BuilderSettings = {
+  _builderSettings: AirDAOBlockchainTypes.BuilderSettings = {
     minOutputDustReadable: 0.000005,
     minChangeDustReadable: 0.00001,
     feeMaxForByteSatoshi: 10000, // for tx builder

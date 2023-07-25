@@ -1,14 +1,14 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import DogeSendProvider from '../../doge/providers/DogeSendProvider';
 
 export default class BchSendProvider
   extends DogeSendProvider
-  implements BlocksoftBlockchainTypes.SendProvider
+  implements AirDAOBlockchainTypes.SendProvider
 {
   _apiPath = 'https://rest.bitcoin.com/v2/rawtransactions/sendRawTransaction/';
 
@@ -31,7 +31,8 @@ export default class BchSendProvider
       if (trezor) {
         return trezor;
       }
-    } catch (e) {
+    } catch (error) {
+      const e = error as unknown as any;
       if (e.message.indexOf('SERVER_RESPONSE_') !== -1) {
         throw e;
       } else {
@@ -41,8 +42,9 @@ export default class BchSendProvider
 
     let res;
     try {
-      res = await BlocksoftAxios.get(this._apiPath + hex);
-    } catch (e) {
+      res = (await BlocksoftAxios.get(this._apiPath + hex)) as any;
+    } catch (error) {
+      const e = error as unknown as any;
       if (e.message.indexOf('dust') !== -1) {
         throw new Error('SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_DUST');
       } else if (

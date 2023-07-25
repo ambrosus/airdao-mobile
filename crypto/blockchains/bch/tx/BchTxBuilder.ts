@@ -1,18 +1,18 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import DogeTxBuilder from '../../doge/tx/DogeTxBuilder';
 import BtcCashUtils from '../ext/BtcCashUtils';
 import bitcoin, { TransactionBuilder } from 'bitcoinjs-lib';
 
 export default class BchTxBuilder
   extends DogeTxBuilder
-  implements BlocksoftBlockchainTypes.TxBuilder
+  implements AirDAOBlockchainTypes.TxBuilder
 {
   _getRawTxValidateKeyPair(
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    data: BlocksoftBlockchainTypes.TransferData
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData
   ): void {
     this.keyPair = false;
     try {
@@ -45,7 +45,7 @@ export default class BchTxBuilder
 
   _getRawTxAddOutput(
     txb: TransactionBuilder,
-    output: BlocksoftBlockchainTypes.OutputTx
+    output: AirDAOBlockchainTypes.OutputTx
   ): void {
     const to = BtcCashUtils.toLegacyAddress(output.to);
     txb.addOutput(to, Number(output.amount));

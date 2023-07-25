@@ -1,5 +1,5 @@
 import './src/prototypes/array';
-import './src/prototypes/buffer';
+import './src/prototypes/global';
 import React from 'react';
 import Navigation from '@navigation/NavigationContainer';
 import { useAppInit } from '@hooks/useAppInit';

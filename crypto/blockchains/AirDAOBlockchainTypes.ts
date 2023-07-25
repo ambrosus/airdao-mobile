@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /**
  * @author Ksu
  * @version 0.20
  */
-import { BlocksoftDictTypes } from '../common/BlocksoftDictTypes';
+import { AirDAODictTypes } from '../common/AirDAODictTypes';
 import { TransactionBuilder } from 'bitcoinjs-lib';
 
-export namespace BlocksoftBlockchainTypes {
+export namespace AirDAOBlockchainTypes {
   export interface TransferProcessor {
     needPrivateForFee(): boolean;
 
@@ -46,8 +47,8 @@ export namespace BlocksoftBlockchainTypes {
     ): Promise<boolean>;
 
     canRBF?(
-      data: BlocksoftBlockchainTypes.DbAccount,
-      dbTransaction: BlocksoftBlockchainTypes.DbTransaction,
+      data: AirDAOBlockchainTypes.DbAccount,
+      dbTransaction: AirDAOBlockchainTypes.DbTransaction,
       source: string
     ): boolean;
   }
@@ -58,7 +59,7 @@ export namespace BlocksoftBlockchainTypes {
     getTx?(
       tx: string,
       address: string,
-      allUnspents: BlocksoftBlockchainTypes.UnspentTx[],
+      allUnspents: AirDAOBlockchainTypes.UnspentTx[],
       walletHash: string
     ): Promise<UnspentTx[]>;
 
@@ -92,33 +93,33 @@ export namespace BlocksoftBlockchainTypes {
 
   export interface TxInputsOutputs {
     getInputsOutputs(
-      data: BlocksoftBlockchainTypes.TransferData,
-      unspents: BlocksoftBlockchainTypes.UnspentTx[],
+      data: AirDAOBlockchainTypes.TransferData,
+      unspents: AirDAOBlockchainTypes.UnspentTx[],
       feeToCount: {
         feeForByte?: string;
         feeForAll?: string;
         autoFeeLimitReadable?: string | number;
       },
-      additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
+      additionalData: AirDAOBlockchainTypes.TransferAdditionalData,
       subtitle: string
-    ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx>;
+    ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx>;
   }
 
   export interface TxBuilder {
     getRawTx(
-      data: BlocksoftBlockchainTypes.TransferData,
-      privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-      preparedInputsOutputs: BlocksoftBlockchainTypes.PreparedInputsOutputsTx
+      data: AirDAOBlockchainTypes.TransferData,
+      privateData: AirDAOBlockchainTypes.TransferPrivateData,
+      preparedInputsOutputs: AirDAOBlockchainTypes.PreparedInputsOutputsTx
     ): Promise<{
       rawTxHex: string;
       nSequence: number;
       txAllowReplaceByFee: boolean;
-      preparedInputsOutputs: BlocksoftBlockchainTypes.PreparedInputsOutputsTx;
+      preparedInputsOutputs: AirDAOBlockchainTypes.PreparedInputsOutputsTx;
     }>;
 
     _getRawTxValidateKeyPair(
-      privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-      data: BlocksoftBlockchainTypes.TransferData
+      privateData: AirDAOBlockchainTypes.TransferPrivateData,
+      data: AirDAOBlockchainTypes.TransferData
     ): void;
 
     _getRawTxAddInput(
@@ -159,7 +160,7 @@ export namespace BlocksoftBlockchainTypes {
   }
 
   export interface CheckTransferHasErrorData {
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
     walletHash: string;
     addressTo: string;
     addressFrom: string;
@@ -175,7 +176,7 @@ export namespace BlocksoftBlockchainTypes {
   }
 
   export interface TransferData {
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
     walletHash: string;
     derivationPath: string;
     addressFrom: string;
@@ -320,8 +321,8 @@ export namespace BlocksoftBlockchainTypes {
   }
 
   export interface PreparedInputsOutputsTx {
-    inputs: BlocksoftBlockchainTypes.UnspentTx[];
-    outputs: BlocksoftBlockchainTypes.OutputTx[];
+    inputs: AirDAOBlockchainTypes.UnspentTx[];
+    outputs: AirDAOBlockchainTypes.OutputTx[];
     multiAddress: [];
     msg: string;
     countedFor?: string;
@@ -338,13 +339,13 @@ export namespace BlocksoftBlockchainTypes {
   }
 
   export interface DbAccount {
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
     walletHash: string;
     address: string;
   }
 
   export interface DbTransaction {
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
     transactionHash: string;
     transactionDirection: string;
     transactionStatus: string;
@@ -355,3 +356,4 @@ export namespace BlocksoftBlockchainTypes {
       gasPrice?: number;
     };
   }
+}
