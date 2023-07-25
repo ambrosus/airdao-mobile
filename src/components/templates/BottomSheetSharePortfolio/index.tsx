@@ -10,12 +10,7 @@ import {
   PortfolioPerformance,
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
-import {
-  BottomSheetSwiperIcon,
-  MessagesIcon,
-  PlusIcon,
-  TwitterIcon
-} from '@components/svg/icons';
+import { MessagesIcon, PlusIcon, TwitterIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
@@ -58,11 +53,12 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     };
 
     return (
-      <BottomSheetFloat ref={localRef} testID="Share_Portfolio_BottomSheet">
+      <BottomSheetFloat
+        ref={localRef}
+        testID="Share_Portfolio_BottomSheet"
+        swiperIconVisible
+      >
         <View testID="BottomSheet_Container" style={styles.container}>
-          <View style={styles.icon}>
-            <BottomSheetSwiperIcon />
-          </View>
           <Spacer value={29} />
           <View style={styles.newListTitle}>
             <Text

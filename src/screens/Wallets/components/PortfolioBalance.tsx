@@ -16,7 +16,11 @@ export function PortfolioBalance(): JSX.Element {
 
   return (
     <View style={styles.container} testID="Portfolio_Balance">
-      <AMBPriceHistory onBadgePress={navigateToAMBScreen} badgeType="button" />
+      <AMBPriceHistory
+        onBadgePress={navigateToAMBScreen}
+        badgeType="button"
+        defaultInterval="monthly"
+      />
     </View>
   );
 }

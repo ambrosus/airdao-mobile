@@ -19,6 +19,7 @@ import { useAMBPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { styles } from './styles';
+import { sortListByKey } from '@utils/sort';
 
 export const SingleGroupScreen = () => {
   const {
@@ -119,7 +120,14 @@ export const SingleGroupScreen = () => {
                 fontSize={14}
                 change={ambPriceData?.percentChange24H || 0}
               />
-              <Text> (24hr)</Text>
+              <Text
+                fontFamily="Inter_500Medium"
+                fontSize={14}
+                color={COLORS.smokyBlack}
+              >
+                {' '}
+                (24hr)
+              </Text>
             </Row>
           }
         />
@@ -130,7 +138,7 @@ export const SingleGroupScreen = () => {
         testID="List_Of_Addresses"
       >
         <WalletList
-          data={accounts}
+          data={sortListByKey(accounts, 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"

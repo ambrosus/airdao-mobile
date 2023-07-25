@@ -6,16 +6,18 @@ import { AccountList } from '@models/AccountList';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
 import { Cache, CacheKey } from '@utils/cache';
 import {
-  useAllAddresses,
+  useAllAddressesContext,
   useAllAddressesReducer
 } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerAccountDTO } from '@models';
 import { API } from '@api/api';
-import { DEFAULT_WATCHLIST } from '@constants/variables';
+import { MULTISIG_VAULT } from '@constants/variables';
 
 const ListsContext = () => {
-  const allAddresses = useAllAddresses();
+  const { addresses: allAddresses, addressesLoading } = useAllAddressesContext(
+    (v) => v
+  );
   const allAddressesReducer = useAllAddressesReducer();
   // save lists locally
   const [listsOfAddressGroup, setListsOfAddressGroup] = useState<
@@ -65,10 +67,8 @@ const ListsContext = () => {
         name: value,
         addresses: []
       };
-      const newGroupsOfAddresses = [
-        ...listsOfAddressGroup,
-        newGroupOfAddresses
-      ];
+      const newGroupsOfAddresses = [...listsOfAddressGroup];
+      newGroupsOfAddresses.unshift(newGroupOfAddresses);
       setListsOfAddressGroup(newGroupsOfAddresses);
       createGroupRef.current?.dismiss();
       return newGroupOfAddresses;
@@ -171,8 +171,6 @@ const ListsContext = () => {
         listInContext.addresses.removeItem(account.address);
       } else {
         listInContext.addresses.push(account.address);
-        // add to watchlist if not watchlisted
-        if (!newAddress.isOnWatchlist) newAddress.isOnWatchlist = true;
       }
       listOfGroups.forEach((l) => {
         if (l.id !== list.id && l.addresses.indexOfItem(account.address) > -1) {
@@ -203,7 +201,7 @@ const ListsContext = () => {
       if (shouldPreGroupBeCreated) {
         const newGroupOfAddresses = await handleOnCreate('MultiSig Vault');
         const res = await Promise.all(
-          DEFAULT_WATCHLIST.map(
+          MULTISIG_VAULT.map(
             async (address) => await API.explorerService.searchAddress(address)
           )
         );
@@ -223,8 +221,8 @@ const ListsContext = () => {
   }, []);
 
   return {
-    listsOfAddressGroup: lists,
-    listsOfAddressGroupCacheable: listsOfAddressGroup,
+    listsOfAddressGroup: addressesLoading ? [] : lists,
+    listsOfAddressGroupCacheable: addressesLoading ? [] : listsOfAddressGroup,
     setListsOfAddressGroup,
     handleOnDelete,
     handleOnCreate,

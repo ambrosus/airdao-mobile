@@ -63,9 +63,7 @@ export const WelcomeScreen = () => {
       <PrimaryButton
         onPress={async () => {
           await Cache.setItem(CacheKey.IsSecondInit, true);
-          setTimeout(() => {
-            navigation.replace('Tabs', { screen: 'Wallets' });
-          }, 300);
+          navigation.replace('Tabs', { screen: 'Wallets' });
         }}
         style={styles.getStartedButton}
       >

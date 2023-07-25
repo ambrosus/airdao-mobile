@@ -12,7 +12,6 @@ import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import {
   BottomSheetFloat,
@@ -23,6 +22,7 @@ import {
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
+import { StringUtils } from '@utils/string';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -67,7 +67,11 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnCreateGroup(localGroupName);
         Toast.show({
           title: '',
-          message: `Way to go! ${localGroupName} list created.`,
+          message: `Way to go! ${StringUtils.formatAddress(
+            localGroupName,
+            16,
+            0
+          )} group created.`,
           type: ToastPosition.Top
         });
       }
@@ -76,7 +80,15 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnRenameGroup(groupId, localGroupName);
         Toast.show({
           title: '',
-          message: `${groupTitle} has been renamed to ${localGroupName}.`,
+          message: `${StringUtils.formatAddress(
+            groupTitle || '',
+            16,
+            0
+          )} has been renamed to ${StringUtils.formatAddress(
+            localGroupName,
+            16,
+            0
+          )}.`,
           type: ToastPosition.Top
         });
       }
@@ -101,19 +113,21 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     return (
       <>
         <BottomSheetFloat
-          height={Math.min(verticalScale(320), 320)}
+          height={
+            Platform.OS === 'ios'
+              ? Math.min(verticalScale(365), 320)
+              : Math.min(verticalScale(380), 330)
+          }
           ref={localRef}
           containerStyle={
             Platform.OS === 'android' && { marginBottom: bottomSafeArea }
           }
           onClose={handleDismiss}
           testID="Create_Rename_Collection_BottomSheet"
+          swiperIconVisible
         >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
-              <View style={styles.icon}>
-                <BottomSheetSwiperIcon />
-              </View>
               <Spacer value={24} />
               <Text
                 testID="BottomSheetCreateRename_Title"

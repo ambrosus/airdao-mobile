@@ -24,5 +24,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start'
   },
-  closeBtn: { alignSelf: 'flex-start', marginLeft: scale(14) }
+  closeBtn: { alignSelf: 'center', marginLeft: scale(14) }
 });
