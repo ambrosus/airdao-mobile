@@ -10,6 +10,7 @@ import { WalletItem } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
+import { sortListByKey } from '@utils/sort';
 
 const ITEM_COUNT = 4;
 
@@ -37,16 +38,18 @@ export const HomeWatchlists = () => {
 
   return (
     <View style={styles.homeWatchlistsContainer} testID="Home_Watchlists">
-      {watchlist.slice(0, ITEM_COUNT).map((item, index) => {
-        return (
-          <View key={item._id}>
-            <Button onPress={() => navigateToAddressDetails(item)}>
-              <WalletItem item={item} indicatorVisible={true} />
-            </Button>
-            {index !== ITEM_COUNT - 1 && <Spacer value={verticalScale(24)} />}
-          </View>
-        );
-      })}
+      {sortListByKey(watchlist, 'ambBalance', 'desc')
+        .slice(0, ITEM_COUNT)
+        .map((item, index) => {
+          return (
+            <View key={item._id}>
+              <Button onPress={() => navigateToAddressDetails(item)}>
+                <WalletItem item={item} indicatorVisible={true} />
+              </Button>
+              {index !== ITEM_COUNT - 1 && <Spacer value={verticalScale(24)} />}
+            </View>
+          );
+        })}
     </View>
   );
 };
