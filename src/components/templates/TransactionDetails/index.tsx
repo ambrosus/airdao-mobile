@@ -34,9 +34,18 @@ export const TransactionDetails = (
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const ambPrice = ambData ? ambData.priceUSD : -1;
-  const totalTransactionAmount = ambData
-    ? NumberUtils.formatNumber(transaction.amount * ambPrice, 0)
-    : -1;
+  let totalTransactionAmount;
+
+  if (ambData) {
+    const result = transaction.amount * ambPrice;
+    totalTransactionAmount =
+      result < 1000
+        ? NumberUtils.formatNumber(result, 2)
+        : NumberUtils.formatNumber(result, 0);
+  } else {
+    totalTransactionAmount = -1;
+  }
+
   const showShareTransaction = () => {
     shareTransactionModal.current?.show();
   };
