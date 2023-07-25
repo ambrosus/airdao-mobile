@@ -67,10 +67,8 @@ const ListsContext = () => {
         name: value,
         addresses: []
       };
-      const newGroupsOfAddresses = [
-        ...listsOfAddressGroup,
-        newGroupOfAddresses
-      ];
+      const newGroupsOfAddresses = [...listsOfAddressGroup];
+      newGroupsOfAddresses.unshift(newGroupOfAddresses);
       setListsOfAddressGroup(newGroupsOfAddresses);
       createGroupRef.current?.dismiss();
       return newGroupOfAddresses;
