@@ -5,7 +5,6 @@ import { Button, Input, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
@@ -27,10 +26,8 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
       <BottomSheetFloat
         ref={localRef}
         containerStyle={{ paddingBottom: verticalScale(24) }}
+        swiperIconVisible
       >
-        <View style={styles.icon}>
-          <BottomSheetSwiperIcon />
-        </View>
         <Spacer value={24} />
         <View style={styles.bottomSheetSubtitle}>
           <Text

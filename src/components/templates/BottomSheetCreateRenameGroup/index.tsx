@@ -12,7 +12,6 @@ import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { BottomSheetSwiperIcon } from '@components/svg/icons';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import {
   BottomSheetFloat,
@@ -125,12 +124,10 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
           }
           onClose={handleDismiss}
           testID="Create_Rename_Collection_BottomSheet"
+          swiperIconVisible
         >
           <View testID="BottomSheetCreateRename" style={styles.container}>
             <View style={styles.content}>
-              <View style={styles.icon}>
-                <BottomSheetSwiperIcon />
-              </View>
               <Spacer value={24} />
               <Text
                 testID="BottomSheetCreateRename_Title"
