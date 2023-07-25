@@ -13,13 +13,14 @@ import { BottomSheetRef } from '@components/composite';
 import { SearchTabNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { useLists } from '@contexts';
+import { useAllAddressesContext, useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
 
 export const HomeTabs = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
   const { handleOnCreate, listsOfAddressGroup } = useLists((v) => v);
   const { watchlist } = useWatchlist();
+  const { addressesLoading } = useAllAddressesContext((v) => v);
 
   const scrollView = useRef<ScrollView>(null);
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
@@ -27,8 +28,11 @@ export const HomeTabs = () => {
   const tabWidth = Dimensions.get('window').width - scale(32);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const seeAllVisible =
-    currentIndex === 0 ? watchlist.length > 0 : listsOfAddressGroup.length > 0;
+  const seeAllVisible = addressesLoading
+    ? false
+    : currentIndex === 0
+    ? watchlist.length > 0
+    : listsOfAddressGroup.length > 0;
 
   const handleOnCreateCollectionOrAddAddress = useCallback(() => {
     createCollectionOrAddAddressRef.current?.show();
