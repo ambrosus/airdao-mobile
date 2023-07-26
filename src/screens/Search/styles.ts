@@ -10,6 +10,6 @@ export const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingTop: verticalScale(12),
-    paddingBottom: '20%'
+    paddingBottom: verticalScale(126)
   }
 });
