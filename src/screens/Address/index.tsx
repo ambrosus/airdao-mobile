@@ -3,7 +3,7 @@ import { Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetRef, Header } from '@components/composite';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { EditIcon, OptionsIcon, ShareIcon } from '@components/svg/icons';
+import { EditIcon, OptionsIcon } from '@components/svg/icons';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
 import {
   ExplorerAccountView,
@@ -90,9 +90,9 @@ export const AddressDetails = (): JSX.Element => {
     editModal.current?.show();
   };
 
-  const shareShareModal = () => {
-    shareModal.current?.show();
-  };
+  // const shareShareModal = () => {
+  //   shareModal.current?.show();
+  // };
 
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
@@ -111,14 +111,14 @@ export const AddressDetails = (): JSX.Element => {
       <Header
         contentRight={
           <Row alignItems="center">
-            <Button
-              style={styles.headerBtn}
-              type="circular"
-              onPress={shareShareModal}
-              testID="Share_Button"
-            >
-              <ShareIcon color={COLORS.smokyBlack} scale={1.1} />
-            </Button>
+            {/*<Button*/}
+            {/*  style={styles.headerBtn}*/}
+            {/*  type="circular"*/}
+            {/*  onPress={shareShareModal}*/}
+            {/*  testID="Share_Button"*/}
+            {/*>*/}
+            {/*  <ShareIcon color={COLORS.smokyBlack} scale={1.1} />*/}
+            {/*</Button>*/}
             <Spacer value={scale(32)} horizontal />
             <Button
               style={styles.headerBtn}
