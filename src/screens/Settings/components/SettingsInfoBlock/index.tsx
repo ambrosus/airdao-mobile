@@ -6,6 +6,7 @@ import { AppStoreIcon, PlayStoreIcon } from '@components/svg/icons';
 import { styles } from './style';
 import { ClearCacheModal } from '@screens/Settings/components/SettingsInfoBlock/ClearCacheModal';
 import { BottomSheetRef } from '@components/composite';
+import { PlatformSpecificUtils } from '@utils/platform';
 
 export const SettingsInfoBlock = () => {
   const clearCacheModalRef = useRef<BottomSheetRef>(null);
@@ -32,7 +33,7 @@ export const SettingsInfoBlock = () => {
           </Row>
         </Button>
         <Spacer value={43} />
-        <Button type="base">
+        <Button type="base" onPress={PlatformSpecificUtils.requestReview}>
           <Row alignItems="center">
             {Platform.select({
               ios: <AppStoreIcon />,
