@@ -31,8 +31,8 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
       const captureOptions: CaptureOptions = {
         fileName: `share_portfolio_${portfolioBalanceProps.timestamp.getTime()}`, // android only
         format: 'jpg',
-        width: 500,
-        height: 300,
+        width: 2000,
+        height: 1200,
         quality: 1.0
       };
       const uri = await captureRef(shareRef, captureOptions);
