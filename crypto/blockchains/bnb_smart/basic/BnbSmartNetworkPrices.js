@@ -5,7 +5,6 @@ import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import config from '@app/config/config';
 
 const CACHE_VALID_TIME = 120000; // 2 minute
 const CACHE_FEES = {
@@ -56,13 +55,6 @@ class BnbSmartNetworkPrices {
         }
       }
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          mainCurrencyCode +
-            ' BnbSmartNetworkPricesProvider.getOnlyFees loaded prev fee as error' +
-            e.message
-        );
-      }
       BlocksoftCryptoLog.log(
         mainCurrencyCode +
           ' BnbSmartNetworkPricesProvider.getOnlyFees loaded prev fee as error' +

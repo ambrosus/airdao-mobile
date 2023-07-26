@@ -3,7 +3,7 @@
  * @version 0.20
  * https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=YourApiKeyToken
  */
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import EthTransferProcessor from '../eth/EthTransferProcessor';
 
 import BnbSmartNetworkPrices from './basic/BnbSmartNetworkPrices';
@@ -11,18 +11,18 @@ import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings'
 
 export default class BnbSmartTransferProcessor
   extends EthTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     if (
       typeof additionalData.gasPrice === 'undefined' ||
       !additionalData.gasPrice
     ) {
-      let minFee = BlocksoftExternalSettings.getStatic(
+      const minFee = BlocksoftExternalSettings.getStatic(
         this._mainCurrencyCode + '_FORCE_PRICE'
       );
       if (typeof minFee !== 'undefined' && minFee > 1) {

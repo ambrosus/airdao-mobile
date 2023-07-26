@@ -1,20 +1,20 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import EthTransferProcessorErc20 from '../eth/EthTransferProcessorErc20';
 import BnbSmartNetworkPrices from './basic/BnbSmartNetworkPrices';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 
 export default class BnbSmartTransferProcessorErc20
   extends EthTransferProcessorErc20
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     if (
       typeof additionalData.gasPrice === 'undefined' ||
       !additionalData.gasPrice
@@ -52,8 +52,8 @@ export default class BnbSmartTransferProcessorErc20
   }
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     // @ts-ignore
     const balance =
       data.addressFrom && data.addressFrom !== ''
@@ -70,8 +70,10 @@ export default class BnbSmartTransferProcessorErc20
       return {
         isOk: false,
         code: 'TOKEN',
-        parentBlockchain: title,
-        parentCurrency: title
+        parentBlockchain:
+          title as AirDAOBlockchainTypes.CheckTransferHasErrorResult['parentBlockchain'],
+        parentCurrency:
+          title as AirDAOBlockchainTypes.CheckTransferHasErrorResult['parentCurrency']
       };
     }
   }
