@@ -4,14 +4,13 @@ import moment from 'moment';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { ShareIcon } from '@components/svg/icons';
 import { Transaction } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
-import { styles } from './styles';
+// import { styles } from './styles';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
@@ -46,9 +45,9 @@ export const TransactionDetails = (
     totalTransactionAmount = -1;
   }
 
-  const showShareTransaction = () => {
-    shareTransactionModal.current?.show();
-  };
+  // const showShareTransaction = () => {
+  //   shareTransactionModal.current?.show();
+  // };
   if (!transaction) return <></>;
   const addressesArePressable = typeof onPressAddress === 'function';
 
@@ -148,19 +147,19 @@ export const TransactionDetails = (
       </JustifiedRow>
       {isShareable && (
         <>
-          <Spacer value={ROW_MARGIN} />
-          <Button
-            type="circular"
-            style={styles.shareBtn}
-            onPress={showShareTransaction}
-            testID="Show_Share_Transaction_Button"
-          >
-            <Row alignItems="center">
-              <ShareIcon color="#000000" />
-              <Spacer value={scale(3.5)} horizontal />
-              <Text>Share transaction</Text>
-            </Row>
-          </Button>
+          {/*<Spacer value={ROW_MARGIN} />*/}
+          {/*<Button*/}
+          {/*  type="circular"*/}
+          {/*  style={styles.shareBtn}*/}
+          {/*  onPress={showShareTransaction}*/}
+          {/*  testID="Show_Share_Transaction_Button"*/}
+          {/*>*/}
+          {/*  <Row alignItems="center">*/}
+          {/*    <ShareIcon color="#000000" />*/}
+          {/*    <Spacer value={scale(3.5)} horizontal />*/}
+          {/*    <Text>Share transaction</Text>*/}
+          {/*  </Row>*/}
+          {/*</Button>*/}
         </>
       )}
 
