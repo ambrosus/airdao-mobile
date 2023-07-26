@@ -4,16 +4,16 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f3f5f7',
-    paddingBottom: verticalScale(126)
+    flexGrow: 1,
+    backgroundColor: COLORS.culturedWhite
   },
   homeTabs: {
     marginHorizontal: scale(16),
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 24
   },
   homeHighlights: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 24,
     marginHorizontal: scale(16),
     paddingBottom: verticalScale(28)

@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RefreshControl } from 'react-native-gesture-handler';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,6 +24,7 @@ export const HomeScreen = () => {
   const queryClient = useQueryClient();
   const { start: startOnboarding } = useOnboardingStatus((v) => v);
   const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
+  const bottomTabBarHeight = useBottomTabBarHeight();
   const onboardinStarted = useRef(false);
 
   const navigateToSearch = useCallback(() => {
@@ -52,14 +54,19 @@ export const HomeScreen = () => {
       edges={['top']}
       style={{
         backgroundColor:
-          Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite
+          Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
+        flex: 1
       }}
       testID="Home_Screen"
     >
       <HomeHeader />
       <ScrollView
         bounces={true}
-        contentContainerStyle={styles.container}
+        scrollEventThrottle={16}
+        contentContainerStyle={[
+          styles.container,
+          { paddingBottom: bottomTabBarHeight + verticalScale(55) }
+        ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
