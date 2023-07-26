@@ -33,7 +33,7 @@ import { Toast, ToastPosition } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
-import { SearchTabNavigationProp } from '@apptypes';
+import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 
 interface SearchAdressProps {
@@ -121,7 +121,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   };
 
   const onInputBlur = () => {
-    if (!account && !loading && !hashData && !isHashLoading) {
+    if (!account && !loading && !hashData && !isHashLoading && !error) {
       onContentVisibilityChanged(false);
     }
     setSearchInputFocused(false);
@@ -185,6 +185,11 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
     navigation.navigate('Address', { address });
   };
 
+  const onChangeText = (text: string) => {
+    setSearchSubmitted(false);
+    setAddress(text);
+  };
+
   return (
     <>
       <KeyboardDismissingView
@@ -215,7 +220,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
-          onChangeText={setAddress}
+          onChangeText={onChangeText}
           onSubmitEditing={onInputSubmit}
         />
       </KeyboardDismissingView>
