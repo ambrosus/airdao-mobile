@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DatabaseTable } from '@appTypes';
 import { database } from './main';
-import { Database as WDB } from '@nozbe/watermelondb';
+import { Q, Database as WDB } from '@nozbe/watermelondb';
+import { Clause } from '@nozbe/watermelondb/QueryDescription';
 
 class Database {
   private db: WDB | undefined;
@@ -19,6 +20,7 @@ class Database {
 
   private async init() {
     this.db = database;
+    this.reset();
   }
 
   getDatabase() {
@@ -45,6 +47,29 @@ class Database {
     } catch (error) {
       // ignore
     }
+  }
+
+  unEscapeString(goodString: string) {
+    if (!goodString) return false;
+    return goodString.replace(/quote/g, "'");
+  }
+
+  escapeString(badString: string) {
+    if (!badString) return false;
+    return badString.replace(/[']/g, 'quote');
+  }
+
+  async query(table: DatabaseTable, ...args: Clause[]) {
+    if (!this.db) this.init();
+    try {
+      return await this.db?.get(table).query(args).fetch();
+    } catch (error) {
+      // TODO ignore
+    }
+  }
+
+  async unsafeRawQuery(table: DatabaseTable, query: string) {
+    return await database.get(table).query(Q.unsafeSqlQuery(query)).fetch();
   }
 }
 

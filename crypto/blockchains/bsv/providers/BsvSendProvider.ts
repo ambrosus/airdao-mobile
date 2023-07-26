@@ -1,15 +1,14 @@
 /**
  * @version 0.5
  */
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import config from '@app/config/config';
 
 export default class BsvSendProvider
   extends DogeSendProvider
-  implements BlocksoftBlockchainTypes.SendProvider
+  implements AirDAOBlockchainTypes.SendProvider
 {
   async sendTx(
     hex: string,
@@ -25,7 +24,7 @@ export default class BsvSendProvider
       logData
     );
 
-    let link = 'https://api.whatsonchain.com/v1/bsv/main/tx/raw';
+    const link = 'https://api.whatsonchain.com/v1/bsv/main/tx/raw';
 
     //logData = await this._check(hex, subtitle, txRBF, logData)
 
@@ -33,12 +32,6 @@ export default class BsvSendProvider
     try {
       res = await BlocksoftAxios.post(link, { txhex: hex });
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + ' BsvSendProvider.sendTx error ',
-          e
-        );
-      }
       if (subtitle.indexOf('rawSend') !== -1) {
         throw e;
       }
@@ -46,13 +39,6 @@ export default class BsvSendProvider
         logData.error = e.message;
         await this._checkError(hex, subtitle, txRBF, logData);
       } catch (e2) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeSendProvider.send proxy error errorTx ' +
-              e.message
-          );
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeSendProvider.send proxy error errorTx ' +
@@ -98,12 +84,6 @@ export default class BsvSendProvider
       }
     }
     if (typeof res.data === 'undefined' || !res.data) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + 'BsvSendProvider.send no txid',
-          res.data
-        );
-      }
       throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
 

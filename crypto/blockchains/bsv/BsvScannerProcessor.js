@@ -2,7 +2,6 @@
  * @version 0.5
  */
 
-import config from '@app/config/config';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
@@ -367,9 +366,6 @@ export default class BsvScannerProcessor {
       }
       return tx;
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log('BsvScannerProcessor _unifyTransaction error ' + e.message);
-      }
       throw e;
     }
   }

@@ -3,6 +3,7 @@ import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import { Database } from '@nozbe/watermelondb';
 import { WalletDBModel } from './models';
 import { schema } from './schemas';
+import { TransactionScannersTmpDBModel } from './models/transaction-scanners-tmp';
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -14,5 +15,5 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [WalletDBModel]
+  modelClasses: [WalletDBModel, TransactionScannersTmpDBModel]
 });
