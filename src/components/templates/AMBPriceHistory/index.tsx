@@ -84,12 +84,15 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
 
   const dateAnimatedProps = useAnimatedProps(() => {
     if (selectedPointDate.value !== -1) {
-      // format data
+      // format date
       const now = new Date();
       const selectedDate = new Date(selectedPointDate.value);
       const isToday = now.toDateString() === selectedDate.toDateString();
       let formattedDate = '';
-      const hours = `0${selectedDate.getHours() % 12}`;
+      const hours =
+        selectedDate.getHours() % 12 >= 10
+          ? selectedDate.getHours() % 12
+          : `0${selectedDate.getHours() % 12}`;
       const meridiem = selectedDate.getHours() > 12 ? 'pm' : 'am';
       const minutes =
         selectedDate.getMinutes() >= 10

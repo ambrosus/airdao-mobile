@@ -6,6 +6,8 @@ import { ExplorerAccount } from '@models/Explorer';
 import { SearchSort } from '@screens/Search/Search.types';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 
+const LIMIT = 20;
+
 export function useExplorerAccounts(
   sort: SearchSort
 ): PaginatedQueryResponse<ExplorerAccount[] | undefined> {
@@ -20,7 +22,7 @@ export function useExplorerAccounts(
     ['explorer-accounts', sort],
     {
       queryFn: ({ pageParam = '' }) => {
-        return API.explorerService.getExplorerAccounts(20, pageParam, sort);
+        return API.explorerService.getExplorerAccounts(LIMIT, pageParam, sort);
       },
       getNextPageParam: (
         lastPage: PaginatedResponseBody<ExplorerAccountDTO[]>
