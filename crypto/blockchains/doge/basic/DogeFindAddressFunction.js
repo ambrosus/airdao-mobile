@@ -19,111 +19,131 @@
  * @returns {Promise<{from: string, to: string, value: number, direction: string}>}
  * @constructor
  */
-import BlocksoftUtils from '../../../common/BlocksoftUtils'
-import BlocksoftBN from '../../../common/BlocksoftBN'
+import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftBN from '../../../common/BlocksoftBN';
 
 export default async function DogeFindAddressFunction(addresses, transaction) {
+  const inputMyBN = new BlocksoftBN(0);
+  const inputOthersBN = new BlocksoftBN(0);
+  const inputOthersAddresses = [];
+  const uniqueTmp = {};
 
-    const inputMyBN = new BlocksoftBN(0)
-    const inputOthersBN = new BlocksoftBN(0)
-    const inputOthersAddresses = []
-    const uniqueTmp = {}
-
-    const address1 = addresses[0]
-    const address2 = typeof addresses[1] !== 'undefined' ? addresses[1] : addresses[0]
-    const address3 = addresses[addresses.length - 1] // three is max now
-    if (transaction.vin) {
-        for (let i = 0, ic = transaction.vin.length; i < ic; i++) {
-            let vinAddress
-            let vinValue = transaction.vin[i].value
-            if (typeof transaction.vin[i].addresses !== 'undefined') {
-                vinAddress = transaction.vin[i].addresses[0]
-            } else if (typeof transaction.vin[i].addr !== 'undefined') {
-                vinAddress = transaction.vin[i].addr
-            } else if (
-                typeof transaction.vin[i].prevout !== 'undefined'
-            ) {
-                if (typeof transaction.vin[i].prevout.scriptpubkey_address !== 'undefined') {
-                    vinAddress = transaction.vin[i].prevout.scriptpubkey_address
-                }
-                if (typeof transaction.vin[i].prevout.value !== 'undefined') {
-                    vinValue = transaction.vin[i].prevout.value
-                }
-            }
-            if (vinAddress === address1 || vinAddress === address2 || vinAddress === address3) {
-                inputMyBN.add(vinValue)
-            } else {
-                if (typeof uniqueTmp[vinAddress] === 'undefined') {
-                    uniqueTmp[vinAddress] = 1
-                    inputOthersAddresses.push(vinAddress)
-                }
-                inputOthersBN.add(vinValue)
-            }
+  const address1 = addresses[0];
+  const address2 =
+    typeof addresses[1] !== 'undefined' ? addresses[1] : addresses[0];
+  const address3 = addresses[addresses.length - 1]; // three is max now
+  if (transaction.vin) {
+    for (let i = 0, ic = transaction.vin.length; i < ic; i++) {
+      let vinAddress;
+      let vinValue = transaction.vin[i].value;
+      if (typeof transaction.vin[i].addresses !== 'undefined') {
+        vinAddress = transaction.vin[i].addresses[0];
+      } else if (typeof transaction.vin[i].addr !== 'undefined') {
+        vinAddress = transaction.vin[i].addr;
+      } else if (typeof transaction.vin[i].prevout !== 'undefined') {
+        if (
+          typeof transaction.vin[i].prevout.scriptpubkey_address !== 'undefined'
+        ) {
+          vinAddress = transaction.vin[i].prevout.scriptpubkey_address;
         }
+        if (typeof transaction.vin[i].prevout.value !== 'undefined') {
+          vinValue = transaction.vin[i].prevout.value;
+        }
+      }
+      if (
+        vinAddress === address1 ||
+        vinAddress === address2 ||
+        vinAddress === address3
+      ) {
+        inputMyBN.add(vinValue);
+      } else {
+        if (typeof uniqueTmp[vinAddress] === 'undefined') {
+          uniqueTmp[vinAddress] = 1;
+          inputOthersAddresses.push(vinAddress);
+        }
+        inputOthersBN.add(vinValue);
+      }
     }
+  }
 
-    const outputMyBN = new BlocksoftBN(0)
-    const outputOthersBN = new BlocksoftBN(0)
-    const outputOthersAddresses = []
-    const uniqueTmp2 = {}
+  const outputMyBN = new BlocksoftBN(0);
+  const outputOthersBN = new BlocksoftBN(0);
+  const outputOthersAddresses = [];
+  const uniqueTmp2 = {};
 
-    if (transaction.vout) {
-        for (let j = 0, jc = transaction.vout.length; j < jc; j++) {
-            let voutAddress
-            const voutValue = transaction.vout[j].value
-            if (typeof transaction.vout[j].addresses !== 'undefined') {
-                voutAddress = transaction.vout[j].addresses[0]
-            } else if (typeof transaction.vout[j].scriptPubKey !== 'undefined' && typeof transaction.vout[j].scriptPubKey.addresses !== 'undefined') {
-                voutAddress = transaction.vout[j].scriptPubKey.addresses[0]
-            } else if (typeof transaction.vout[j].scriptpubkey_address !== 'undefined') {
-                voutAddress = transaction.vout[j].scriptpubkey_address
-            }
-            if (voutAddress === address1 || voutAddress === address2 || voutAddress === address3) {
-                outputMyBN.add(voutValue)
-            } else {
-                if (typeof uniqueTmp2[voutAddress] === 'undefined') {
-                    uniqueTmp2[voutAddress] = 1
-                    outputOthersAddresses.push(voutAddress)
-                }
-                outputOthersBN.add(voutValue)
-            }
+  if (transaction.vout) {
+    for (let j = 0, jc = transaction.vout.length; j < jc; j++) {
+      let voutAddress;
+      const voutValue = transaction.vout[j].value;
+      if (typeof transaction.vout[j].addresses !== 'undefined') {
+        voutAddress = transaction.vout[j].addresses[0];
+      } else if (
+        typeof transaction.vout[j].scriptPubKey !== 'undefined' &&
+        typeof transaction.vout[j].scriptPubKey.addresses !== 'undefined'
+      ) {
+        voutAddress = transaction.vout[j].scriptPubKey.addresses[0];
+      } else if (
+        typeof transaction.vout[j].scriptpubkey_address !== 'undefined'
+      ) {
+        voutAddress = transaction.vout[j].scriptpubkey_address;
+      }
+      if (
+        voutAddress === address1 ||
+        voutAddress === address2 ||
+        voutAddress === address3
+      ) {
+        outputMyBN.add(voutValue);
+      } else {
+        if (typeof uniqueTmp2[voutAddress] === 'undefined') {
+          uniqueTmp2[voutAddress] = 1;
+          outputOthersAddresses.push(voutAddress);
         }
+        outputOthersBN.add(voutValue);
+      }
     }
+  }
 
-    let output
-    if (inputMyBN.get() === '0') { // my only in output
-        output = {
-            direction: 'income',
-            from: inputOthersAddresses.length > 0 ? inputOthersAddresses.join(',') : '',
-            to: '', // address1,
-            value: outputMyBN.get()
-        }
-    } else if (outputMyBN.get() === '0') { // my only in input
-        output = {
-            direction: 'outcome',
-            from: '', // address1,
-            to: outputOthersAddresses.length > 0 ? outputOthersAddresses.join(',') : '',
-            value: (inputOthersBN.get() === '0') ? outputOthersBN.get() : inputMyBN.get()
-        }
-    } else { // both input and output
-        if (outputOthersAddresses.length > 0) {// there are other address
-            output = {
-                direction: 'outcome',
-                from: '', // address1,
-                to:  outputOthersAddresses.join(','),
-                value: outputOthersBN.get()
-            }
-        } else {
-            output = {
-                direction: 'self',
-                from: '', // address1,
-                to: '', // address1,
-                value: inputMyBN.diff(outputMyBN).get()
-            }
-        }
+  let output;
+  if (inputMyBN.get() === '0') {
+    // my only in output
+    output = {
+      direction: 'income',
+      from:
+        inputOthersAddresses.length > 0 ? inputOthersAddresses.join(',') : '',
+      to: '', // address1,
+      value: outputMyBN.get()
+    };
+  } else if (outputMyBN.get() === '0') {
+    // my only in input
+    output = {
+      direction: 'outcome',
+      from: '', // address1,
+      to:
+        outputOthersAddresses.length > 0 ? outputOthersAddresses.join(',') : '',
+      value:
+        inputOthersBN.get() === '0' ? outputOthersBN.get() : inputMyBN.get()
+    };
+  } else {
+    // both input and output
+    if (outputOthersAddresses.length > 0) {
+      // there are other address
+      output = {
+        direction: 'outcome',
+        from: '', // address1,
+        to: outputOthersAddresses.join(','),
+        value: outputOthersBN.get()
+      };
+    } else {
+      output = {
+        direction: 'self',
+        from: '', // address1,
+        to: '', // address1,
+        value: inputMyBN.diff(outputMyBN).get()
+      };
     }
-    output.from = output.from.substr(0, 255)
-    output.to = output.to.substr(0, 255)
+  }
+  output.from = output.from.substr(0, 255);
+  output.to = output.to.substr(0, 255);
 
-    return output
+  return output;
 }
