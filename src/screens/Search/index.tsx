@@ -71,10 +71,10 @@ export const SearchScreen = () => {
     return (
       <View testID="spinner">
         <Spinner />
+        <Spacer value={verticalScale(24)} />
       </View>
     );
   };
-
   return (
     <View style={{ flex: 1, paddingTop: verticalScale(12), top }}>
       <View testID="Search_Screen" style={{ flex: 1 }}>
@@ -115,7 +115,7 @@ export const SearchScreen = () => {
                     ItemSeparatorComponent={() => (
                       <Spacer value={verticalScale(26)} />
                     )}
-                    onEndReachedThreshold={0.75}
+                    onEndReachedThreshold={0.25}
                     onEndReached={loadMoreAccounts}
                     ListFooterComponent={() =>
                       accountsLoading ? renderSpinner() : <></>
