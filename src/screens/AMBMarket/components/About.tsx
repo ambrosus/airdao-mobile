@@ -4,7 +4,6 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
   BrowserIcon,
-  DiscordIcon,
   GitHubIcon,
   TelegramIcon,
   TwitterIcon
@@ -33,11 +32,11 @@ const SOCIAL_LINKS: Link[] = [
     url: 'https://twitter.com/airdao_io/',
     icon: <TwitterIcon />
   },
-  {
-    title: 'Discord',
-    url: 'https://discord.gg/hnftmSjUr8',
-    icon: <DiscordIcon />
-  },
+  // {
+  //   title: 'Discord',
+  //   url: 'https://discord.gg/hnftmSjUr8',
+  //   icon: <DiscordIcon />
+  // },
   {
     title: 'Telegram',
     url: 'https://t.me/airDAO_official',
@@ -85,15 +84,7 @@ export function AMBAbout(): JSX.Element {
         an intuitive, all-in-one interface.
       </Text>
       <Spacer value={verticalScale(16)} />
-      <Row
-        alignItems="center"
-        style={{
-          flex: 1,
-          flexWrap: 'wrap',
-          rowGap: scale(16),
-          columnGap: verticalScale(16)
-        }}
-      >
+      <Row alignItems="center" style={styles.socialButtons}>
         {SOCIAL_LINKS.map((link) => (
           <LinkButton key={link.url} {...link} />
         ))}
@@ -108,5 +99,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     paddingVertical: verticalScale(4),
     gap: 10
+  },
+  socialButtons: {
+    flex: 1,
+    flexWrap: 'wrap',
+    rowGap: scale(16),
+    columnGap: verticalScale(16)
   }
 });
