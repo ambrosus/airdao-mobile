@@ -28,13 +28,13 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
     idx: 3,
     key: 'fullyDilutedMarketCap'
   },
-  volume24H: {
-    title: '24hr volume',
-    body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours.',
-    testID: '24-hour-volume-popupinfo',
-    idx: 5,
-    key: 'volume24H'
-  },
+  // volume24H: {
+  //   title: '24hr volume',
+  //   body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours.',
+  //   testID: '24-hour-volume-popupinfo',
+  //   idx: 5,
+  //   key: 'volume24H'
+  // },
   // cexVol: {
   //   title: 'CEX Vol',
   //   body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours on a centralized exchange (CEX).',
