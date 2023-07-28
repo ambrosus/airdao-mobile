@@ -7,9 +7,9 @@ import {
   AMBAbout,
   AMBMarket as AMBMarketsInfo
 } from './components';
-import { Separator, Spacer, Spinner, Text } from '@components/base';
+import { Button, Separator, Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef, Header } from '@components/composite';
-import { SmallLogoSVG } from '@components/svg/icons';
+import { ShareIcon, SmallLogoSVG } from '@components/svg/icons';
 import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
@@ -31,10 +31,10 @@ export function AMBMarket(): JSX.Element {
 
   const tradeBottomSheet = useRef<BottomSheetRef>(null);
   const shareBottomSheet = useRef<BottomSheetRef>(null);
-  // const onSharePress = () => {
-  //   if (!ambPrice) return;
-  //   shareBottomSheet.current?.show();
-  // };
+  const onSharePress = () => {
+    if (!ambPrice) return;
+    shareBottomSheet.current?.show();
+  };
 
   const renderErrorView = () => {
     return <Text>Could not fetch AMB Price</Text>;
@@ -53,12 +53,12 @@ export function AMBMarket(): JSX.Element {
             Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
           shadowColor: COLORS.culturedWhite
         }}
-        // contentRight={
-        //   <Button onPress={onSharePress} testID="Share_Button">
-        //     <ShareIcon color={COLORS.jetBlack} scale={1.5} />
-        //     <Spacer horizontal value={scale(20)} />
-        //   </Button>
-        // }
+        contentRight={
+          <Button onPress={onSharePress} testID="Share_Button">
+            <ShareIcon color={COLORS.jetBlack} scale={1.5} />
+            <Spacer horizontal value={scale(20)} />
+          </Button>
+        }
       />
       <ScrollView
         bounces={false}

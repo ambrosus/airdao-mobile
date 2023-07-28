@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
-import { View } from 'react-native';
+import { Linking, Platform, Share, View } from 'react-native';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
 import { BottomSheetFloat } from '@components/modular';
 import { BottomSheetRef } from '@components/composite';
@@ -20,7 +20,6 @@ interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
   bottomSheetTitle: string;
 }
-
 export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
   (props, ref) => {
     const { bottomSheetTitle, ...portfolioBalanceProps } = props;
@@ -37,7 +36,32 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
       };
       const uri = await captureRef(shareRef, captureOptions);
       if (type) {
-        ShareUtils.socialShareImage(
+        if (Platform.OS === 'ios') {
+          try {
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onload = () => {
+              try {
+                const base64Image = reader.result as string;
+                const truncatedBase64Image = base64Image.slice(0, 1000);
+                const url = `sms:&body=${truncatedBase64Image}`;
+                Linking.openURL(url);
+              } catch (error) {
+                console.error('Error opening SMS app:', error);
+              }
+            };
+            reader.readAsDataURL(blob);
+          } catch (error) {
+            console.error('Error reading image file:', error);
+          }
+        } else {
+          const base64Image = uri.replace(/^.*\/(.*)$/, '$1');
+          const truncatedBase64Image = base64Image.slice(0, 1000);
+          const url = `sms:?body=${truncatedBase64Image}`;
+          Linking.openURL(url);
+        }
+        await ShareUtils.socialShareImage(
           {
             uri,
             title: `Share on ${type}!`
@@ -45,10 +69,16 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
           type
         );
       } else {
-        ShareUtils.shareImage({
-          uri,
-          title: `Share!`
-        });
+        const message = `Check out my portfolio! ${uri}`;
+        if (message.length <= 1000) {
+          await Share.share({
+            title: 'Share',
+            message,
+            url: uri
+          });
+        } else {
+          console.error('Message too long for SMS');
+        }
       }
     };
 
