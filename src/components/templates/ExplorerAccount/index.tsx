@@ -117,6 +117,7 @@ export const ExplorerAccountView = (
             fontFamily: 'Inter_600SemiBold',
             color: COLORS.slateGrey
           }}
+          style={{ padding: 4 }}
         />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
