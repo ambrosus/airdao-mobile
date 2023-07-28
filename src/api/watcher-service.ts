@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import { NotificationService } from '@lib';
+import { Cache, CacheKey } from '@utils/cache';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
 import { NotificationSettings } from '@appTypes';
+import { DefaultNotificationSettings } from '@constants/variables';
 
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
@@ -32,13 +34,17 @@ const createWatcherForCurrentUser = async () => {
 const watchAddresses = async (addresses: string[]): Promise<void> => {
   const notificationService = new NotificationService();
   const pushToken = await notificationService.getPushToken();
+  const notificationSettings: NotificationSettings =
+    ((await Cache.getItem(
+      CacheKey.NotificationSettings
+    )) as NotificationSettings) || DefaultNotificationSettings;
   if (!addresses || !addresses.length || !pushToken) return;
   try {
     await axios.put(`${watcherAPI}`, {
       addresses,
       // eslint-disable-next-line camelcase
       push_token: pushToken,
-      threshold: 0.5 // TODO remove threshold
+      threshold: notificationSettings.pricePercentThreshold
     });
   } catch (error) {
     throw error;
