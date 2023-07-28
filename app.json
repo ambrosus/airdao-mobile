@@ -14,7 +14,7 @@
     "ios": {
       "appStoreUrl": "https://apps.apple.com/us/app/airdao/id6449670095",
       "icon": "./assets/logo.png",
-      "supportsTablet": true,
+      "supportsTablet": false,
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -79,7 +79,8 @@
           }
         }
       ],
-      ["./plugins/withNotifications.js"]
+      ["./plugins/withNotifications.js"],
+      ["./plugins/withSupportsScreenAndroid.js"]
     ],
     "extra": {
       "eas": {

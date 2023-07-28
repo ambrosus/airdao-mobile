@@ -18,8 +18,8 @@ import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { useAMBPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { styles } from './styles';
 import { sortListByKey } from '@utils/sort';
+import { styles } from './styles';
 
 export const SingleGroupScreen = () => {
   const {
@@ -41,6 +41,7 @@ export const SingleGroupScreen = () => {
   );
 
   const { accounts, name } = selectedList;
+
   const groupTokens = selectedList.totalBalance * (ambPriceData?.priceUSD || 0);
 
   const showAddAddress = useCallback(() => {
@@ -138,7 +139,7 @@ export const SingleGroupScreen = () => {
         testID="List_Of_Addresses"
       >
         <WalletList
-          data={sortListByKey(accounts, 'ambBalance', 'desc')}
+          data={sortListByKey(accounts || [], 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
