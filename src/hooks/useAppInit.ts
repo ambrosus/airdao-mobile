@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { DeviceService, NotificationService } from '@lib';
-import { CacheableAccount } from '@appTypes';
+import { DeviceService, NotificationService, PermissionService } from '@lib';
+import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@utils/cache';
 
@@ -13,6 +13,10 @@ export const useAppInit = () => {
 
   useEffect(() => {
     async function prepareNotifications() {
+      await PermissionService.getPermission(Permission.Notifications, {
+        requestAgain: true,
+        openSettings: true
+      });
       const notificationService = new NotificationService();
       notificationService.setup();
       let notificationTokenSavedToRemoteDB = false;
