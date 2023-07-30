@@ -25,7 +25,7 @@
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
-      "buildNumber": "1.0.19"
+      "buildNumber": "1.0.20"
     },
     "android": {
       "versionCode": 20,
