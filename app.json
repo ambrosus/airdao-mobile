@@ -22,7 +22,7 @@
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
-        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera.",
+        "NSCameraUsageDescription": "You can scan QR code to search addresses.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
       "buildNumber": "1.0.15"
@@ -54,7 +54,7 @@
       [
         "expo-barcode-scanner",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+          "cameraPermission": "You can scan QR code to search addresses."
         }
       ],
       ["@react-native-firebase/app"],
@@ -62,7 +62,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+          "cameraPermission": "You can scan QR code to search addresses."
         }
       ],
       [
