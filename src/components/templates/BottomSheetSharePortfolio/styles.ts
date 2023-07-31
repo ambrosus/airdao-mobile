@@ -16,8 +16,13 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(17)
   },
   shareButtons: {
-    paddingHorizontal: scale(30),
+    // paddingHorizontal: scale(30),
     alignItems: 'center'
+  },
+  shareBtn: {
+    backgroundColor: '#0e0e0e0d',
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16)
   },
   twitterBtn: {
     backgroundColor: '#1d9bf0',
@@ -31,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   lightBtn: {
     backgroundColor: 'rgba(47, 43, 67, 0.05)',
-    width: scale(48),
+    width: '90%',
     height: scale(48)
   },
   shareButton: {

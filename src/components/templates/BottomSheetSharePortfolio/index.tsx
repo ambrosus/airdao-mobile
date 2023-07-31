@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
-import { Linking, Platform, Share, View } from 'react-native';
+import { Platform, Share, View } from 'react-native';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
 import { BottomSheetFloat } from '@components/modular';
 import { BottomSheetRef } from '@components/composite';
@@ -10,7 +10,7 @@ import {
   PortfolioPerformance,
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
-import { MessagesIcon, PlusIcon, TwitterIcon } from '@components/svg/icons';
+import { ShareIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
@@ -36,32 +36,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
       };
       const uri = await captureRef(shareRef, captureOptions);
       if (type) {
-        if (Platform.OS === 'ios') {
-          try {
-            const response = await fetch(uri);
-            const blob = await response.blob();
-            const reader = new FileReader();
-            reader.onload = () => {
-              try {
-                const base64Image = reader.result as string;
-                const truncatedBase64Image = base64Image.slice(0, 1000);
-                const url = `sms:&body=${truncatedBase64Image}`;
-                Linking.openURL(url);
-              } catch (error) {
-                console.error('Error opening SMS app:', error);
-              }
-            };
-            reader.readAsDataURL(blob);
-          } catch (error) {
-            console.error('Error reading image file:', error);
-          }
-        } else {
-          const base64Image = uri.replace(/^.*\/(.*)$/, '$1');
-          const truncatedBase64Image = base64Image.slice(0, 1000);
-          const url = `sms:?body=${truncatedBase64Image}`;
-          Linking.openURL(url);
-        }
-        await ShareUtils.socialShareImage(
+        ShareUtils.socialShareImage(
           {
             uri,
             title: `Share on ${type}!`
@@ -69,16 +44,15 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
           type
         );
       } else {
-        const message = `Check out my portfolio! ${uri}`;
-        if (message.length <= 1000) {
-          await Share.share({
-            title: 'Share',
-            message,
-            url: uri
-          });
-        } else {
-          console.error('Message too long for SMS');
-        }
+        Platform.OS === 'android'
+          ? await ShareUtils.shareImage({
+              uri,
+              title: `Share!`
+            })
+          : await Share.share({
+              title: `Share on ${type}!`,
+              url: uri
+            });
       }
     };
 
@@ -106,47 +80,60 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
               </ViewShot>
             </View>
           </View>
-          <Spacer value={verticalScale(40)} />
+          <Spacer value={verticalScale(24)} />
           <View style={styles.shareButtons}>
-            <Row justifyContent="space-between" alignItems="center">
-              <View style={styles.shareButton}>
-                <Button
-                  testID="SharePortfolio_Twitter_Button"
-                  type="circular"
-                  style={styles.twitterBtn}
-                  onPress={async () => onSharePress(Social.Twitter)}
-                >
-                  <TwitterIcon color="#FFFFFF" />
-                </Button>
-                <Spacer value={verticalScale(8)} />
-                <Text>Twitter</Text>
-              </View>
-              <View
-                style={[styles.shareButton, { marginHorizontal: scale(36) }]}
+            <Row justifyContent="center" alignItems="center">
+              {/*<View style={styles.shareButton}>*/}
+              {/*  <Button*/}
+              {/*    testID="SharePortfolio_Twitter_Button"*/}
+              {/*    type="circular"*/}
+              {/*    style={styles.twitterBtn}*/}
+              {/*    onPress={async () => onSharePress(Social.Twitter)}*/}
+              {/*  >*/}
+              {/*    <TwitterIcon color="#FFFFFF" />*/}
+              {/*  </Button>*/}
+              {/*  <Spacer value={verticalScale(8)} />*/}
+              {/*  <Text>Twitter</Text>*/}
+              {/*</View>*/}
+              {/*<View*/}
+              {/*  style={[styles.shareButton, { marginHorizontal: scale(36) }]}*/}
+              {/*>*/}
+              {/*  <Button*/}
+              {/*    testID="SharePortfolio_Message_Button"*/}
+              {/*    type="circular"*/}
+              {/*    style={styles.messagesBtn}*/}
+              {/*    onPress={() => onSharePress(Social.Sms)}*/}
+              {/*  >*/}
+              {/*    <MessagesIcon color="#FFFFFF" />*/}
+              {/*  </Button>*/}
+              {/*  <Spacer value={verticalScale(8)} />*/}
+              {/*  <Text>Messages</Text>*/}
+              {/*</View>*/}
+              {/*<View style={styles.shareButton}>*/}
+              {/*<Button*/}
+              {/*  testID="SharePortfolio_More_Button"*/}
+              {/*  type="circular"*/}
+              {/*  style={styles.lightBtn}*/}
+              {/*  onPress={() => onSharePress()}*/}
+              {/*>*/}
+              {/*  /!*<PlusIcon color="#222222" />*!/*/}
+              {/*  <Text>Share</Text>*/}
+              {/*</Button>*/}
+              {/*<Spacer value={verticalScale(8)} />*/}
+              {/*<Text>Share</Text>*/}
+              <Button
+                type="circular"
+                style={styles.shareBtn}
+                onPress={() => onSharePress()}
+                testID="SharePortfolio_More_Button"
               >
-                <Button
-                  testID="SharePortfolio_Message_Button"
-                  type="circular"
-                  style={styles.messagesBtn}
-                  onPress={() => onSharePress(Social.Sms)}
-                >
-                  <MessagesIcon color="#FFFFFF" />
-                </Button>
-                <Spacer value={verticalScale(8)} />
-                <Text>Messages</Text>
-              </View>
-              <View style={styles.shareButton}>
-                <Button
-                  testID="SharePortfolio_More_Button"
-                  type="circular"
-                  style={styles.lightBtn}
-                  onPress={() => onSharePress()}
-                >
-                  <PlusIcon color="#222222" />
-                </Button>
-                <Spacer value={verticalScale(8)} />
-                <Text>More</Text>
-              </View>
+                <Row alignItems="center">
+                  <ShareIcon color="#000000" />
+                  <Spacer value={scale(3.5)} horizontal />
+                  <Text>Share</Text>
+                </Row>
+              </Button>
+              {/*</View>*/}
             </Row>
           </View>
         </View>
