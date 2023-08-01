@@ -7,7 +7,6 @@ import BlocksoftUtils from '../../common/BlocksoftUtils';
 import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import { thorify } from 'thorify';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import MarketingEvent from '@app/services/Marketing/MarketingEvent';
 
 const Web3 = require('web3');
 const abi = [
@@ -61,9 +60,7 @@ export default class VetTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: {} = {}
+    data: BlocksoftBlockchainTypes.TransferData
   ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
     const result: BlocksoftBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -3,
@@ -173,7 +170,7 @@ export default class VetTransferProcessor
           privateData.privateKey
         );
       }
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' VetTransferProcessor.sendTx  ' +
@@ -216,7 +213,7 @@ export default class VetTransferProcessor
       };
     }
 
-    let result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    const result = {} as BlocksoftBlockchainTypes.SendTxResult;
     try {
       const send = await BlocksoftAxios.post(
         API_PATH + '/transactions',
@@ -241,7 +238,7 @@ export default class VetTransferProcessor
         throw new Error('SYSTEM_ERROR');
       }
       result.transactionHash = send.data.id;
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' VetTransferProcessor.sendTx  ' +
@@ -258,7 +255,7 @@ export default class VetTransferProcessor
     return result;
   }
 
-  checkError(e, data, txRBF = false) {
+  checkError(e: any, data: any, txRBF = false) {
     if (e.message.indexOf('nonce too low') !== -1) {
       BlocksoftCryptoLog.log(
         'VeChain checkError0.1 ' + e.message + ' for ' + data.addressFrom

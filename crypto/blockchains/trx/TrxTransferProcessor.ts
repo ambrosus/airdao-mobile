@@ -11,8 +11,6 @@ import TrxTronscanProvider from './basic/TrxTronscanProvider';
 import TrxTrongridProvider from './basic/TrxTrongridProvider';
 import TrxSendProvider from '@crypto/blockchains/trx/providers/TrxSendProvider';
 
-import BlocksoftDispatcher from '../BlocksoftDispatcher';
-import config from '@app/config/config';
 import { strings, sublocale } from '@app/services/i18n';
 
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
@@ -20,6 +18,8 @@ import MarketingEvent from '@app/services/Marketing/MarketingEvent';
 import BlocksoftTransactions from '@crypto/actions/BlocksoftTransactions/BlocksoftTransactions';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
+import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
+import config from '@constants/config';
 
 // https://developers.tron.network/docs/parameter-and-return-value-encoding-and-decoding
 const ethers = require('ethers');
@@ -63,7 +63,6 @@ export default class TrxTransferProcessor
   async checkTransferHasError(
     data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
   ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
-    // @ts-ignore
     if (!this._isToken20 || (data.amount && data.amount * 1 > 0)) {
       return { isOk: true };
     }
@@ -194,7 +193,7 @@ export default class TrxTransferProcessor
         };
       }
       return result as BlocksoftBlockchainTypes.FeeRateResult;
-    } catch (e) {
+    } catch (e: any) {
       if (e.message.indexOf('SERVER_RESPONSE_') === 0) {
         throw e;
       }
@@ -344,7 +343,7 @@ export default class TrxTransferProcessor
             );
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         // do nothing
         if (config.debug.cryptoErrors) {
           console.log(
@@ -398,7 +397,7 @@ export default class TrxTransferProcessor
           if (typeof tronData2.freeNetLimit === 'undefined') {
             feeForTx = feeForTx * 1 + 1100000;
           }
-        } catch (e) {
+        } catch (e: any) {
           // do nothing
           if (config.debug.cryptoErrors) {
             console.log(
@@ -419,6 +418,7 @@ export default class TrxTransferProcessor
         let amountForTx = data.amount;
         let selectedTransferAllBalance = data.amount;
         if (this._tokenName === '_') {
+          // tslint:disable-next-line:no-shadowed-variable
           const balance = await BlocksoftBalances.setCurrencyCode('TRX')
             .setAddress(data.addressFrom)
             .getBalance('TrxSendTx');
@@ -431,7 +431,7 @@ export default class TrxTransferProcessor
                 balance.balance,
                 feeForTx
               );
-              let test = BlocksoftUtils.diff(data.amount, feeForTx);
+              const test = BlocksoftUtils.diff(data.amount, feeForTx);
               if (test * 1 > balance.balance * 1) {
                 amountForTx = selectedTransferAllBalance;
               }
@@ -455,7 +455,7 @@ export default class TrxTransferProcessor
                 */
         result.selectedFeeIndex = 0;
       }
-    } catch (e) {
+    } catch (e: any) {
       if (e.message.indexOf('SERVER_RESPONSE_') === 0) {
         throw e;
       }
@@ -485,8 +485,8 @@ export default class TrxTransferProcessor
     // @ts-ignore
     await BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' TrxTransferProcessor.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        ` TrxTransferProcessor.getTransferAllBalance ',
+       ${data.addressFrom + ' => ' + balance}`
     );
     // noinspection EqualityComparisonWithCoercionJS
     if (balance === '0') {
@@ -564,7 +564,9 @@ export default class TrxTransferProcessor
     if (typeof data.blockchainData !== 'undefined' && data.blockchainData) {
       tx = data.blockchainData;
     } else {
-      let link, res, params;
+      let link;
+      let res;
+      let params;
 
       if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
         // {"tokenContract":"41a2726afbecbd8e936000ed684cef5e2f5cf43008","contractMethod":"trxToTokenSwapInput(uint256)","options":{"callValue":"1000000"},"params":[{"type":"uint256","value":"116256"}]}
@@ -573,12 +575,13 @@ export default class TrxTransferProcessor
         const abiCoder = new AbiCoder();
         try {
           ownerAddress = TronUtils.addressToHex(data.addressFrom);
-        } catch (e) {
+        } catch (e: any) {
           e.message +=
             ' inside TronUtils.addressToHex owner_address ' + data.addressFrom;
           throw e;
         }
 
+        // tslint:disable-next-line:no-shadowed-variable
         const link = sendLink + '/wallet/triggersmartcontract';
         const total = data.dexOrderData.length;
         let index = 0;
@@ -591,7 +594,8 @@ export default class TrxTransferProcessor
             const values = [];
             try {
               for (const tmp of order.params) {
-                let type, value;
+                let type;
+                let value;
                 try {
                   type = tmp.type;
                   value = tmp.value;
@@ -628,6 +632,7 @@ export default class TrxTransferProcessor
             }
           }
 
+          // tslint:disable-next-line:no-shadowed-variable
           let params;
           try {
             params = {
@@ -681,7 +686,7 @@ export default class TrxTransferProcessor
                 this._settings.currencyCode +
                   ' TrxTxProcessor.sendSubTx broadcasted'
               );
-            } catch (e) {
+            } catch (e: any) {
               if (config.debug.cryptoErrors) {
                 console.log(
                   this._settings.currencyCode +
@@ -751,7 +756,7 @@ export default class TrxTransferProcessor
                     break;
                   }
                 }
-              } catch (e1) {
+              } catch (e1: any) {
                 if (config.debug.cryptoErrors) {
                   console.log(
                     this._settings.currencyCode +
@@ -784,7 +789,7 @@ export default class TrxTransferProcessor
 
         try {
           toAddress = TronUtils.addressToHex(data.addressTo);
-        } catch (e) {
+        } catch (e: any) {
           e.message +=
             ' inside TronUtils.addressToHex to_address ' + data.addressTo;
           throw e;
@@ -806,7 +811,7 @@ export default class TrxTransferProcessor
 
         try {
           ownerAddress = TronUtils.addressToHex(data.addressFrom);
-        } catch (e) {
+        } catch (e: any) {
           e.message +=
             ' inside TronUtils.addressToHex owner_address ' + data.addressFrom;
           throw e;
@@ -869,7 +874,7 @@ export default class TrxTransferProcessor
               params
             );
             res = await BlocksoftAxios.post(link, params);
-          } catch (e) {
+          } catch (e: any) {
             await BlocksoftCryptoLog.log(
               this._settings.currencyCode +
                 ' TrxTransferProcessor.sendTx result2' +
@@ -985,7 +990,7 @@ export default class TrxTransferProcessor
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode + ' TrxTxProcessor.sendTx broadcasted'
       );
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode + ' TrxTransferProcessor.sendTx error',

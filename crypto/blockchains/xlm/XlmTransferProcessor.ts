@@ -6,28 +6,28 @@
  * https://www.stellar.org/developers/js-stellar-sdk/reference/examples.html
  * https://www.stellar.org/developers/js-stellar-sdk/reference/
  *
-wsl curl -X POST -F "tx=AAAAAgAAAACq+ux8eDBQfPoRzFjOTwHZKnFQjwRw0DSPL62mg02PjAAAAGQCA52cAAAAAQAAAAEAAAAAAAAAAAAAAABgF7+bAAAAAAAAAAEAAAAAAAAAAQAAAABUMjNVlZnxhC4rIKoE2qO/3QIFfy3nqF5/ObsdmmRWaAAAAAAAAAAABfXhAAAAAAAAAAABg02PjAAAAED6lRqsmOkqB8nRkI0tQTUSRAaHs/0mLuy6G58PvXzVQtlQiE2RPm9KC7Dv6c/a/0HS7F5mPXBFVshwtZS5WcgB" "https://horizon.stellar.org/transactions"
- {
-  "type": "https://stellar.org/horizon-errors/transaction_failed",
-  "title": "Transaction Failed",
-  "status": 400,
-  "detail": "The transaction failed when submitted to the stellar network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/guides/concepts/list-of-operations.html",
-  "extras": {
-    "envelope_xdr": "AAAAAgAAAACq+ux8eDBQfPoRzFjOTwHZKnFQjwRw0DSPL62mg02PjAAAAGQCA52cAAAAAQAAAAEAAAAAAAAAAAAAAABgF7+bAAAAAAAAAAEAAAAAAAAAAQAAAABUMjNVlZnxhC4rIKoE2qO/3QIFfy3nqF5/ObsdmmRWaAAAAAAAAAAABfXhAAAAAAAAAAABg02PjAAAAED6lRqsmOkqB8nRkI0tQTUSRAaHs/0mLuy6G58PvXzVQtlQiE2RPm9KC7Dv6c/a/0HS7F5mPXBFVshwtZS5WcgB",
-    "result_codes": {
-      "transaction": "tx_too_late"
-    },
-    "result_xdr": "AAAAAAAAAGT////9AAAAAA=="
-  }
-}
+ * wsl curl -X POST -F "tx=AAAAAgAAAACq+ux8eDBQfPoRzFjOTwHZKnFQjwRw0DSPL62mg02PjAAAAGQCA52cAAAAAQAAAAEAAAAAAAAAAAAAAABgF7+bAAAAAAAAAAEAAAAAAAAAAQAAAABUMjNVlZnxhC4rIKoE2qO/3QIFfy3nqF5/ObsdmmRWaAAAAAAAAAAABfXhAAAAAAAAAAABg02PjAAAAED6lRqsmOkqB8nRkI0tQTUSRAaHs/0mLuy6G58PvXzVQtlQiE2RPm9KC7Dv6c/a/0HS7F5mPXBFVshwtZS5WcgB" "https://horizon.stellar.org/transactions"
+ *  {
+ *   "type": "https://stellar.org/horizon-errors/transaction_failed",
+ *   "title": "Transaction Failed",
+ *   "status": 400,
+ *   "detail": "The transaction failed when submitted to the stellar network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/guides/concepts/list-of-operations.html",
+ *   "extras": {
+ *     "envelope_xdr": "AAAAAgAAAACq+ux8eDBQfPoRzFjOTwHZKnFQjwRw0DSPL62mg02PjAAAAGQCA52cAAAAAQAAAAEAAAAAAAAAAAAAAABgF7+bAAAAAAAAAAEAAAAAAAAAAQAAAABUMjNVlZnxhC4rIKoE2qO/3QIFfy3nqF5/ObsdmmRWaAAAAAAAAAAABfXhAAAAAAAAAAABg02PjAAAAED6lRqsmOkqB8nRkI0tQTUSRAaHs/0mLuy6G58PvXzVQtlQiE2RPm9KC7Dv6c/a/0HS7F5mPXBFVshwtZS5WcgB",
+ *     "result_codes": {
+ *       "transaction": "tx_too_late"
+ *     },
+ *     "result_xdr": "AAAAAAAAAGT////9AAAAAA=="
+ *   }
+ * }
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
-import BlocksoftDispatcher from '../BlocksoftDispatcher';
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 
 import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import { XlmTxSendProvider } from './basic/XlmTxSendProvider';
+import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 
 const FEE_DECIMALS = 7;
 
@@ -150,8 +150,10 @@ export default class XlmTransferProcessor
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' XlmTransferProcessor.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        ' XlmTransferProcessor.getTransferAllBalance ' +
+        data.addressFrom +
+        ' => ' +
+        balance
     );
     // noinspection EqualityComparisonWithCoercionJS
     if (BlocksoftUtils.diff(balance, 1) <= 0) {
@@ -228,7 +230,7 @@ export default class XlmTransferProcessor
     let transaction = false;
     try {
       transaction = await this._provider.getPrepared(data, privateData, uiData);
-    } catch (e) {
+    } catch (e: any) {
       if (e.message.indexOf('destination is invalid') !== -1) {
         throw new Error('SERVER_RESPONSE_BAD_DESTINATION');
       }
@@ -254,7 +256,7 @@ export default class XlmTransferProcessor
     let result = false;
     try {
       result = await this._provider.sendRaw(raw);
-    } catch (e) {
+    } catch (e: any) {
       if (e.message.indexOf('op_no_destination') !== -1) {
         transaction = await this._provider.getPrepared(
           data,

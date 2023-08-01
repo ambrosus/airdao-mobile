@@ -1,7 +1,28 @@
-// https://github.com/iancoleman/bip39/blob/0a23f51792722f094328d695242556c4c0195a8b/src/js/bitcoinjs-extensions.js
-const bitcoin = require('bitcoinjs-lib');
+import * as bitcoin from 'bitcoinjs-lib';
 
-module.exports = {
+export interface NetworkConfig {
+  messagePrefix: string;
+  bech32?: string;
+  bip32: {
+    public: number;
+    private: number;
+  };
+  pubKeyHash: number;
+  scriptHash: number;
+  wif: number;
+  BTCFork?: string;
+}
+
+export interface CoinConfig {
+  network: NetworkConfig;
+  langPrefix: string;
+}
+
+export interface CoinConfigs {
+  [key: string]: CoinConfig;
+}
+
+const coinConfigs: CoinConfigs = {
   mainnet: {
     network: bitcoin.networks.bitcoin,
     langPrefix: 'btc'
@@ -14,7 +35,7 @@ module.exports = {
     network: {
       bech32: 'ltc',
       messagePrefix: '\x19Litecoin Signed Message:\n',
-      pubKeyHash: 0x30, // change to 0x6f
+      pubKeyHash: 0x30,
       scriptHash: 0x32,
       wif: 0xb0,
       bip32: {
@@ -52,15 +73,6 @@ module.exports = {
   },
   bitcoincash: {
     network: {
-      /* messagePrefix: 'unused',
-            bip32: {
-                public: 0x0488b21e,
-                private: 0x0488ade4
-            },
-            pubKeyHash: 0x00,
-            scriptHash: 0x05,
-            wif: 0x80
-            */
       messagePrefix: '\u0018Bitcoin Signed Message:\n',
       bech32: 'bc',
       bip32: { public: 76067358, private: 76066276 },
@@ -101,3 +113,5 @@ module.exports = {
     langPrefix: 'ltc'
   }
 };
+
+export default coinConfigs;

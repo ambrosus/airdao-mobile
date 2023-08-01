@@ -69,7 +69,7 @@ export default class UsdtTxInputsOutputs
       autoFeeLimitReadable?: string | number;
     },
     additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
-    subtitle: string = 'default'
+    subtitle = 'default'
   ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
     let res = await super._getInputsOutputs(
       data,
@@ -79,8 +79,8 @@ export default class UsdtTxInputsOutputs
       subtitle + ' usdted'
     );
     let inputIsFound = false;
-    let newInputs = [];
-    let oldInputs = [];
+    const newInputs = [];
+    const oldInputs = [];
     let addressFromUsdtOutputs = 0;
     let newInputAdded = false;
     for (const input of res.inputs) {
@@ -124,11 +124,9 @@ export default class UsdtTxInputsOutputs
       }
       if (!changeIsFound && newInputAdded.value !== '546') {
         res.outputs.push({
-          // @ts-ignore
           to: data.addressFrom,
           // @ts-ignore
           amount: newInputAdded.value.toString(),
-          // @ts-ignore
           isChange: true
         });
       }
@@ -235,8 +233,7 @@ export default class UsdtTxInputsOutputs
     needOneOutput: boolean,
     addressFrom: string,
     addressTo: string,
-    amount: string,
-    source: string = ''
+    amount: string
   ) {
     const totalOuts = res.outputs.length;
 
@@ -314,7 +311,7 @@ export default class UsdtTxInputsOutputs
     return res;
   }
 
-  _innerToUp(outputs, addressTo) {
+  _innerToUp(outputs: any, addressTo: string) {
     let result = [];
     for (const output of outputs) {
       if (output.to === addressTo) {
@@ -365,6 +362,7 @@ export default class UsdtTxInputsOutputs
         result.push(output);
       }
     }
+    // @ts-ignore
     BlocksoftCryptoLog.log('USDT addressTo upTo', result);
     return result;
   }

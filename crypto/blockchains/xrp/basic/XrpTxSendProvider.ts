@@ -8,12 +8,22 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+<<<<<<< Updated upstream
 import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
 
 import { XrpTxUtils } from './XrpTxUtils';
 
 import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
 import config from '../../../../app/config/config';
+=======
+
+import { XrpTxUtils } from './XrpTxUtils';
+
+// TODO rewrite MarketingEvent file to use it here
+// import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
+import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+import config from '@constants/config';
+>>>>>>> Stashed changes
 
 const RippleAPI = require('ripple-lib').RippleAPI;
 
@@ -76,7 +86,11 @@ export class XrpTxSendProvider {
         // @ts-ignore
         payment.destination.tag = int;
       }
+<<<<<<< Updated upstream
     } catch (e) {
+=======
+    } catch (e: any) {
+>>>>>>> Stashed changes
       // @ts-ignore
       BlocksoftCryptoLog.log(
         'XrpTransferProcessor._getPrepared memo error ' + e.message,
@@ -180,6 +194,10 @@ export class XrpTxSendProvider {
     let result;
     try {
       const signed = this.signTx(data, privateData, txJson);
+<<<<<<< Updated upstream
+=======
+      // @ts-ignore
+>>>>>>> Stashed changes
       BlocksoftCryptoLog.log('XrpTransferProcessor.sendTx signed', signed);
       result = await new Promise((resolve, reject) => {
         api
@@ -188,7 +206,12 @@ export class XrpTxSendProvider {
             // https://xrpl.org/rippleapi-reference.html#submit
             api
               .submit(signed)
+<<<<<<< Updated upstream
               .then((result: { resultCode: ''; resultMessage: '' }) => {
+=======
+              // tslint:disable-next-line:no-shadowed-variable
+              .then((result: string) => {
+>>>>>>> Stashed changes
                 MarketingEvent.logOnlyRealTime(
                   'v20_rippled_success ' +
                     data.addressFrom +
@@ -235,7 +258,11 @@ export class XrpTxSendProvider {
             reject(error);
           });
       });
+<<<<<<< Updated upstream
     } catch (e) {
+=======
+    } catch (e: any) {
+>>>>>>> Stashed changes
       if (config.debug.cryptoErrors) {
         console.log('XrpTransferProcessor.sendTx error ', e);
       }

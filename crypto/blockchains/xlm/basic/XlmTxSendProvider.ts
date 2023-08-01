@@ -8,8 +8,7 @@ import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings
 import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
 
 import { XrpTxUtils } from '../../xrp/basic/XrpTxUtils';
-
-import config from '../../../../app/config/config';
+import config from '@constants/config';
 
 const StellarSdk = require('stellar-sdk');
 
@@ -48,7 +47,7 @@ export class XlmTxSendProvider {
         CACHE_FEES_VALUE = res * 1;
         CACHE_FEES_TIME = now;
       }
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         'XlmSendProvider.getFee error ' + e.message + ' link ' + this._server
       );
@@ -104,7 +103,7 @@ export class XlmTxSendProvider {
           .setTimeout(TX_TIMEOUT)
           .build();
       }
-    } catch (e) {
+    } catch (e: any) {
       await BlocksoftCryptoLog.log(
         'XlmTxSendProvider builder create error ' + e.message
       );
@@ -113,7 +112,7 @@ export class XlmTxSendProvider {
 
     try {
       transaction.sign(StellarSdk.Keypair.fromSecret(privateData.privateKey));
-    } catch (e) {
+    } catch (e: any) {
       await BlocksoftCryptoLog.log('XlmTxSendProvider sign error ' + e.message);
       throw e;
     }
@@ -172,7 +171,7 @@ export class XlmTxSendProvider {
           throw new Error(result.title);
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           'XlmTransferProcessor.sendTx error ' + e.message + ' link ' + link

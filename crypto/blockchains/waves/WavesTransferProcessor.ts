@@ -183,7 +183,7 @@ export default class WavesTransferProcessor
       };
     }
 
-    let result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    const result = {} as BlocksoftBlockchainTypes.SendTxResult;
     try {
       const resp = await new Promise((resolve, reject) => {
         BlocksoftCryptoLog.log(
@@ -247,7 +247,11 @@ export default class WavesTransferProcessor
     return result;
   }
 
-  checkError(e, data, txRBF = false) {
+  checkError(
+    e: any,
+    data: { addressFrom: string; addressTo: string },
+    txRBF = false
+  ) {
     if (
       e.message.indexOf(
         'waves balance to (at least) temporary negative state'

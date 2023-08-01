@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /**
  * @version 0.20
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
@@ -5,6 +6,11 @@
 import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
+=======
+import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+>>>>>>> Stashed changes
 
 export default class XvgUnspentsProvider
   implements BlocksoftBlockchainTypes.UnspentsProvider
@@ -13,17 +19,24 @@ export default class XvgUnspentsProvider
 
   protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
 
+<<<<<<< Updated upstream
   constructor(
     settings: BlocksoftBlockchainTypes.CurrencySettings,
     serverCode: string
   ) {
+=======
+  constructor(settings: BlocksoftBlockchainTypes.CurrencySettings) {
+>>>>>>> Stashed changes
     this._settings = settings;
   }
 
   async getUnspents(
     address: string
   ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
+<<<<<<< Updated upstream
     // @ts-ignore
+=======
+>>>>>>> Stashed changes
     BlocksoftCryptoLog.log(
       this._settings.currencyCode + ' XvgUnspentsProvider.getUnspents started',
       address
@@ -49,6 +62,7 @@ export default class XvgUnspentsProvider
       return [];
     }
     const sortedUnspents = [];
+<<<<<<< Updated upstream
     /**
      * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
      * @param {*} res.data[]
@@ -66,6 +80,8 @@ export default class XvgUnspentsProvider
      * @param {string} res.data[].value 91523000
      * @param {string} res.data[].confirmations -1
      */
+=======
+>>>>>>> Stashed changes
     const already = {};
     let unspent;
     for (unspent of res.data) {

@@ -18,7 +18,7 @@ const networksConstants = require('../../common/ext/networks-constants');
 
 const bs58check = require('bs58check');
 
-const ETH_CACHE = {};
+const ETH_CACHE = {}
 const CACHE = {};
 const CACHE_ROOTS = {};
 
@@ -84,7 +84,7 @@ class BlocksoftKeys {
     return result;
   }
 
-  /**
+    /**
    * @param {string} data.mnemonic
    * @param {string} data.walletHash
    * @param {string|string[]} data.currencyCode = all
@@ -265,9 +265,8 @@ class BlocksoftKeys {
               `BlocksoftKeys ${currencyCode} discoverAddresses currentFromIndex.2 ${currentFromIndex}`
             );
           }
-        }
 
-        let suffixes;
+                let suffixes
         if (currencyCode === 'SOL') {
           suffixes = [
             { type: 'main', suffix: false, after: `'/0'` },
@@ -290,7 +289,7 @@ class BlocksoftKeys {
           hexes = [hexes[0]];
         }
 
-        let hex;
+                let hex
         for (hex of hexes) {
           if (isAlreadyMain) {
             suffixes[0].type = 'second';

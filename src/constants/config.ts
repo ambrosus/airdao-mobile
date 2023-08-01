@@ -6,7 +6,8 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
     env: 'prod',
     debug: {
-      appBuildVersion: '1.0.0'
+      appBuildVersion: '1.0.0',
+      cryptoErrors: true
     }
   },
   stage: {
@@ -15,7 +16,8 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     env: 'stage',
     debug: {
-      appBuildVersion: '1.0.0'
+      appBuildVersion: '1.0.0',
+      cryptoErrors: true
     }
   }
 };

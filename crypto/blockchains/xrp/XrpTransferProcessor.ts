@@ -8,12 +8,21 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
+<<<<<<< Updated upstream
 import BlocksoftDispatcher from '../BlocksoftDispatcher';
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 
 import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+=======
+import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
+
+import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
+import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+import BlocksoftDispatcher from '@lib/blockchains/BlocksoftDispatcher';
+>>>>>>> Stashed changes
 
 const FEE_DECIMALS = 6;
 
@@ -22,7 +31,11 @@ export default class XrpTransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
   private _provider: XrpTxSendProvider;
+<<<<<<< Updated upstream
   private _inited: boolean = false;
+=======
+  private _inited = false;
+>>>>>>> Stashed changes
 
   constructor(settings: { network: string; currencyCode: string }) {
     this._settings = settings;
@@ -106,7 +119,11 @@ export default class XrpTransferProcessor
         this._inited = true;
       }
       txJson = await this._provider.getPrepared(data);
+<<<<<<< Updated upstream
     } catch (e) {
+=======
+    } catch (e: any) {
+>>>>>>> Stashed changes
       if (e.message.indexOf('connect() timed out after') !== -1) {
         return false;
       }
@@ -223,7 +240,11 @@ export default class XrpTransferProcessor
         this._inited = true;
       }
       txJson = await this._provider.getPrepared(data, false);
+<<<<<<< Updated upstream
     } catch (e) {
+=======
+    } catch (e: any) {
+>>>>>>> Stashed changes
       if (e.message.indexOf('connect() timed out after') !== -1) {
         throw new Error('SERVER_RESPONSE_BAD_INTERNET');
       }

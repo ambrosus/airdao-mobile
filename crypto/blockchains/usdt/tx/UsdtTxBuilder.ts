@@ -9,7 +9,7 @@ import { TransactionBuilder, script, opcodes } from 'bitcoinjs-lib';
 
 const USDT_TOKEN_ID = 31;
 
-function toPaddedHexString(num, len) {
+function toPaddedHexString(num: number, len: number) {
   const str = num.toString(16);
   return '0'.repeat(len - str.length) + str;
 }
@@ -21,6 +21,7 @@ function createOmniSimpleSend(amountInUSD: string, propertyID = USDT_TOKEN_ID) {
     '0000', // tx type
     '0000', // version
     toPaddedHexString(propertyID, 8),
+    // @ts-ignore
     toPaddedHexString(Math.floor(amountInUSD * 100000000), 16)
   ].join('');
 

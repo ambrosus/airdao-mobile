@@ -1,20 +1,31 @@
 /**
  * @version 0.20
  */
+<<<<<<< Updated upstream
 import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+=======
+import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+>>>>>>> Stashed changes
 
 export default class XvgSendProvider
   implements BlocksoftBlockchainTypes.SendProvider
 {
   protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
 
+<<<<<<< Updated upstream
   constructor(
     settings: BlocksoftBlockchainTypes.CurrencySettings,
     serverCode: string
   ) {
+=======
+  constructor(settings: BlocksoftBlockchainTypes.CurrencySettings) {
+>>>>>>> Stashed changes
     this._settings = settings;
   }
 
@@ -44,7 +55,11 @@ export default class XvgSendProvider
           ' ok ' +
           hex
       );
+<<<<<<< Updated upstream
     } catch (e) {
+=======
+    } catch (e: any) {
+>>>>>>> Stashed changes
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' XvgSendProvider.sendTx ' +
@@ -79,9 +94,17 @@ export default class XvgSendProvider
         throw e;
       }
     }
+<<<<<<< Updated upstream
     if (typeof res.data.txid === 'undefined' || !res.data.txid) {
       throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
+=======
+    // @ts-ignore
+    if (typeof res.data.txid === 'undefined' || !res.data.txid) {
+      throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
+    }
+    // @ts-ignore
+>>>>>>> Stashed changes
     return { transactionHash: res.data.txid, transactionJson: {} };
   }
 }

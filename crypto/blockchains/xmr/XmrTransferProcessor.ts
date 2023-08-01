@@ -6,10 +6,17 @@ import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
 import XmrSendProvider from './providers/XmrSendProvider';
 import XmrUnspentsProvider from './providers/XmrUnspentsProvider';
+<<<<<<< Updated upstream
 
 import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import config from '../../../app/config/config';
 import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+=======
+import config from '@constants/config';
+
+import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+>>>>>>> Stashed changes
 
 export default class XmrTransferProcessor
   implements BlocksoftBlockchainTypes.TransferProcessor
@@ -129,16 +136,27 @@ export default class XmrTransferProcessor
                   )
             }
           ],
+<<<<<<< Updated upstream
           shouldSweep: data.isTransferAll ? true : false,
+=======
+          shouldSweep: data.isTransferAll,
+>>>>>>> Stashed changes
           address: data.addressFrom,
           privateViewKey: privViewKey,
           privateSpendKey: privSpendKey,
           publicSpendKey: pubSpendKey,
           priority: '' + i,
           nettype: 'MAINNET',
+<<<<<<< Updated upstream
           unspentOuts: unspentOuts,
           randomOutsCb: (numberOfOuts) => {
             const amounts = [];
+=======
+          unspentOuts,
+          randomOutsCb: (numberOfOuts: number) => {
+            const amounts = [];
+            // tslint:disable-next-line:no-shadowed-variable
+>>>>>>> Stashed changes
             for (let i = 0; i < numberOfOuts; i++) {
               amounts.push('0');
             }
@@ -186,7 +204,11 @@ export default class XmrTransferProcessor
           result.fees.push(tmp);
           logFees.push(logTmp);
         }
+<<<<<<< Updated upstream
       } catch (e) {
+=======
+      } catch (e: any) {
+>>>>>>> Stashed changes
         if (e.message.indexOf('pendable balance too low') !== -1) {
           // do nothing
           noBalanceError = true;
@@ -251,6 +273,10 @@ export default class XmrTransferProcessor
         ' finished amount: ' +
         data.amount +
         ' fee: ',
+<<<<<<< Updated upstream
+=======
+      // @ts-ignore
+>>>>>>> Stashed changes
       logFees
     );
 
@@ -269,10 +295,17 @@ export default class XmrTransferProcessor
   ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
 
+<<<<<<< Updated upstream
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' XmrTransferProcessor.getTransferAllBalance ',
+=======
+    BlocksoftCryptoLog.log(
+      this._settings.currencyCode +
+        ' XmrTransferProcessor.getTransferAllBalance ',
+      // @ts-ignore
+>>>>>>> Stashed changes
       data.addressFrom + ' => ' + balance
     );
 
@@ -321,6 +354,10 @@ export default class XmrTransferProcessor
         '=>' +
         data.addressTo +
         ' fee',
+<<<<<<< Updated upstream
+=======
+      // @ts-ignore
+>>>>>>> Stashed changes
       uiData.selectedFee
     );
     let foundFee = uiData?.selectedFee;
@@ -355,9 +392,16 @@ export default class XmrTransferProcessor
             '=>' +
             data.addressTo +
             ' found fee',
+<<<<<<< Updated upstream
           foundFee
         );
       } catch (e) {
+=======
+          // @ts-ignore
+          foundFee
+        );
+      } catch (e: any) {
+>>>>>>> Stashed changes
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' XmrTransferProcessor.sendTx rechecked ' +
@@ -388,6 +432,10 @@ export default class XmrTransferProcessor
       typeof uiData.selectedFee.rawOnly !== 'undefined' &&
       uiData.selectedFee.rawOnly
     ) {
+<<<<<<< Updated upstream
+=======
+      // TODO fix this ts error
+>>>>>>> Stashed changes
       return { rawOnly: uiData.selectedFee.rawOnly, raw: rawTxHex };
     }
 

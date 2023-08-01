@@ -1,6 +1,10 @@
 import * as SecureStore from 'expo-secure-store';
 import KeysUtills from '@utils/keys';
 import config from '@constants/config';
+import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import { bip32 } from 'bitcoinjs-lib';
+import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
+const networksConstants = require('../lib/common/ext/network-constants');
 const bip39 = require('bip39');
 const bip32 = require('bip32');
 const bs58check = require('bs58check');
@@ -22,7 +26,11 @@ type Network = {
   coin: string;
 };
 
+const ETH_CACHE = {};
+const CACHE = {};
+
 class AirDAOKeys {
+  private _bipHex: any;
   private async getRandomBytes(size: number): Promise<string> {
     // TODO implement the function to generate random bytes
     return '';
@@ -104,7 +112,257 @@ class AirDAOKeys {
     return root;
   }
 
-  // TODO discoverAddresses
+  async discoverAddresses(data: any, source: string) {
+    const logData = { ...data };
+    if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
+    let toDiscover = BlocksoftDict.Codes;
+    if (data.currencyCode) {
+      if (typeof data.currencyCode === 'string') {
+        toDiscover = [data.currencyCode];
+      } else {
+        toDiscover = data.currencyCode;
+      }
+    }
+    const fromIndex = data.fromIndex ? data.fromIndex : 0;
+    const toIndex = data.toIndex ? data.toIndex : 10;
+    const fullTree = data.fullTree ? data.fullTree : false;
+    const results = {};
+    const mnemonicCache = data.mnemonic.toLowerCase();
+    let bitcoinRoot = false;
+    let currencyCode;
+    let settings;
+    const seed = await KeysUtills.bip39MnemonicToSeed(
+      data.mnemonic.toLowerCase()
+    );
+    for (currencyCode of toDiscover) {
+      results[currencyCode] = [];
+      try {
+        settings = BlocksoftDict.getCurrencyAllSettings(
+          currencyCode,
+          'BlocksoftKeys'
+        );
+      } catch (e) {
+        // do nothing for now
+        continue;
+      }
+
+      let hexes = [];
+      if (settings.addressCurrencyCode) {
+        hexes.push(this._bipHex[settings.addressCurrencyCode]);
+        if (!this._bipHex[settings.addressCurrencyCode]) {
+          throw new Error(
+            'UNKNOWN_CURRENCY_CODE SETTED ' + settings.addressCurrencyCode
+          );
+        }
+      }
+
+      if (this._bipHex[currencyCode]) {
+        hexes.push(this._bipHex[currencyCode]);
+      } else if (!settings.addressCurrencyCode) {
+        if (
+          settings.extendsProcessor &&
+          this._bipHex[settings.extendsProcessor]
+        ) {
+          hexes.push(this._bipHex[settings.extendsProcessor]);
+        } else {
+          throw new Error(
+            'UNKNOWN_CURRENCY_CODE ' +
+              currencyCode +
+              ' in bipHex AND NO SETTED addressCurrencyCode'
+          );
+        }
+      }
+
+      let isAlreadyMain = false;
+
+      if (!data.fullTree) {
+        hexes = [hexes[0]];
+      }
+
+      const hexesCache =
+        mnemonicCache +
+        '_' +
+        settings.addressProcessor +
+        '_fromINDEX_' +
+        fromIndex +
+        '_' +
+        JSON.stringify(hexes);
+      let hasDerivations = false;
+      if (
+        typeof data.derivations !== 'undefined' &&
+        typeof data.derivations[currencyCode] !== 'undefined' &&
+        data.derivations[currencyCode]
+      ) {
+        hasDerivations = true;
+      }
+      if (typeof CACHE[hexesCache] === 'undefined' || hasDerivations) {
+        // BlocksoftCryptoLog.log(`BlocksoftKeys will discover ${settings.addressProcessor}`)
+        let root = false;
+        if (typeof networksConstants[currencyCode] !== 'undefined') {
+          root = await this.getBip32Cached(
+            data.mnemonic,
+            networksConstants[currencyCode],
+            seed
+          );
+        } else {
+          if (!bitcoinRoot) {
+            bitcoinRoot = await this.getBip32Cached(data.mnemonic);
+          }
+          root = bitcoinRoot;
+        }
+        // BIP32 Extended Private Key to check - uncomment
+        // let childFirst = root.derivePath('m/44\'/2\'/0\'/0')
+        // BlocksoftCryptoLog.log(childFirst.toBase58())
+
+        /**
+         * @type {EthAddressProcessor|BtcAddressProcessor}
+         */
+        const processor = await BlocksoftDispatcher.innerGetAddressProcessor(
+          settings
+        );
+
+        try {
+          await processor.setBasicRoot(root);
+        } catch (e) {
+          e.message += ' while doing ' + JSON.stringify(settings);
+          throw e;
+        }
+        let currentFromIndex = fromIndex;
+        let currentToIndex = toIndex;
+        let currentFullTree = fullTree;
+        if (hasDerivations) {
+          let derivation = { path: '', alreadyShown: 0, walletPubId: 0 };
+          let maxIndex = 0;
+          for (derivation of data.derivations[currencyCode]) {
+            const child = root.derivePath(derivation.path);
+            const tmp = derivation.path.split('/');
+            const result = await processor.getAddress(
+              child.privateKey,
+              {
+                publicKey: child.publicKey,
+                walletHash: data.walletHash,
+                derivationPath: derivation.path
+              },
+              data,
+              seed,
+              'discoverAddresses'
+            );
+            result.basicPrivateKey = child.privateKey.toString('hex');
+            result.basicPublicKey = child.publicKey.toString('hex');
+            result.path = derivation.path;
+            result.alreadyShown = derivation.alreadyShown;
+            result.walletPubId = derivation.walletPubId || 0;
+            result.index = tmp[5];
+            if (maxIndex < result.index) {
+              maxIndex = result.index * 1;
+            }
+            result.type = 'main';
+            results[currencyCode].push(result);
+          }
+          if (maxIndex > 0) {
+            // noinspection PointlessArithmeticExpressionJS
+            currentFromIndex = maxIndex * 1 + 1;
+            currentToIndex = currentFromIndex * 1 + 10;
+            currentFullTree = true;
+          }
+        }
+
+        let suffixes;
+        if (currencyCode === 'SOL') {
+          suffixes = [
+            { type: 'main', suffix: false, after: `'/0'` },
+            { type: 'no_scan', suffix: false, after: `'` }
+          ];
+        } else if (currentFullTree) {
+          suffixes = [
+            { type: 'main', suffix: `0'/0` },
+            { type: 'change', suffix: `0'/1` }
+            // { 'type': 'second', 'suffix': `1'/0` },
+            // { 'type': 'secondchange', 'suffix': `1'/1` }
+          ];
+        } else {
+          suffixes = [{ type: 'main', suffix: `0'/0` }];
+          if (currencyCode === 'BTC_SEGWIT_COMPATIBLE') {
+            suffixes = [
+              { type: 'main', suffix: '0/1' } // heh
+            ];
+          }
+          hexes = [hexes[0]];
+        }
+
+        let hex;
+        for (hex of hexes) {
+          if (isAlreadyMain) {
+            suffixes[0].type = 'second';
+          }
+          isAlreadyMain = true;
+
+          if (currentFromIndex >= 0 && currentToIndex >= 0) {
+            for (
+              let index = currentFromIndex;
+              index < currentToIndex;
+              index++
+            ) {
+              let suffix;
+              for (suffix of suffixes) {
+                const path = suffix.suffix
+                  ? `m/${hex}'/${suffix.suffix}/${index}`
+                  : `m/${hex}'/${index}${suffix.after}`;
+                let privateKey = false;
+                let publicKey = false;
+                if (
+                  currencyCode === 'SOL' ||
+                  currencyCode === 'XLM' ||
+                  currencyCode === 'WAVES' ||
+                  currencyCode === 'ASH'
+                ) {
+                  // @todo move to coin address processor
+                } else {
+                  const child = root.derivePath(path);
+                  privateKey = child.privateKey;
+                  publicKey = child.publicKey;
+                }
+                const result = await processor.getAddress(
+                  privateKey,
+                  {
+                    publicKey,
+                    walletHash: data.walletHash,
+                    derivationPath: path,
+                    derivationIndex: index,
+                    derivationType: suffix.type
+                  },
+                  data,
+                  seed,
+                  'discoverAddresses2'
+                );
+                if (result) {
+                  if (privateKey) {
+                    result.basicPrivateKey = privateKey.toString('hex');
+                    result.basicPublicKey = publicKey.toString('hex');
+                  }
+                  result.path = path;
+                  result.index = index;
+                  result.alreadyShown = 0;
+                  result.type = suffix.type;
+                  results[currencyCode].push(result);
+                }
+              }
+            }
+          }
+        }
+        CACHE[hexesCache] = results[currencyCode];
+        if (currencyCode === 'ETH') {
+          ETH_CACHE[mnemonicCache] = results[currencyCode][0];
+        }
+      } else {
+        results[currencyCode] = CACHE[hexesCache];
+        if (currencyCode === 'USDT') {
+          results[currencyCode] = [results[currencyCode][0]];
+        }
+      }
+    }
+    return results;
+  }
 
   // TODO discoverOne
 

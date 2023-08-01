@@ -96,8 +96,8 @@ export default class UsdtTransferProcessor
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' UsdtTransferProcessor.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        ` UsdtTransferProcessor.getTransferAllBalance
+      ${data.addressFrom + ' => ' + balance}`
     );
     // noinspection EqualityComparisonWithCoercionJS
     if (balance === '0') {
