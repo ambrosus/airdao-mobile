@@ -2,16 +2,14 @@
  * @version 0.52
  */
 
-// eslint-disable-next-line no-unused-vars
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 
 import {
   PublicKey,
   TransactionInstruction,
   Transaction
-} from '@solana/web3.js/src/index';
+} from '@solana/web3.js/src';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import SolTransferProcessor from '@crypto/blockchains/sol/SolTransferProcessor';
 import SolInstructions from '@crypto/blockchains/sol/ext/SolInstructions';
@@ -72,8 +70,8 @@ export default class SolTransferProcessorSpl
     // @ts-ignore
     await BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' SolTransferProcessorSpl.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        ` SolTransferProcessorSpl.getTransferAllBalance,
+      ${data.addressFrom} + ' => ' + ${balance}`
     );
 
     const fees = await this.getFeeRate(data, privateData, additionalData);
@@ -269,7 +267,7 @@ export default class SolTransferProcessorSpl
           programId: SolUtils.getTokenProgramID()
         })
       );
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessorSpl.sendTx  ' +
@@ -324,7 +322,7 @@ export default class SolTransferProcessorSpl
         throw new Error('SYSTEM_ERROR');
       }
       result.transactionHash = sendRes;
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessorSpl.sendTx  ' +

@@ -7,7 +7,8 @@ const envs = {
     env: 'prod',
     debug: {
       appBuildVersion: '1.0.0',
-      cryptoErrors: true
+      cryptoErrors: true,
+      appErrors: false
     }
   },
   stage: {
@@ -17,7 +18,8 @@ const envs = {
     env: 'stage',
     debug: {
       appBuildVersion: '1.0.0',
-      cryptoErrors: true
+      cryptoErrors: true,
+      appErrors: false
     }
   }
 };

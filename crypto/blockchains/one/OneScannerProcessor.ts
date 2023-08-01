@@ -7,12 +7,36 @@ import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings'
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
-import config from '@app/config/config';
+import config from '@constants/config';
+
+interface UnifiedTransaction {
+  transactionHash: string;
+  blockHash: string;
+  blockNumber: number;
+  blockTime: string;
+  blockConfirmations: number;
+  transactionDirection: 'self' | 'outcome' | 'income';
+  addressFrom: string;
+  addressFromBasic: string;
+  addressTo: string;
+  addressToBasic: string;
+  addressAmount: string;
+  transactionStatus: string;
+  inputValue: string;
+  transactionJson: {
+    nonce: string;
+    gas: string;
+    gasPrice: string;
+    transactionIndex: string;
+  };
+  transactionFee: string;
+}
 
 export default class OneScannerProcessor {
-  _blocksToConfirm = 10;
+  private _blocksToConfirm = 10;
+  private _settings: any; // Replace 'any' with the actual type of settings
 
-  constructor(settings) {
+  constructor(settings: any) {
     this._settings = settings;
   }
 
@@ -22,7 +46,11 @@ export default class OneScannerProcessor {
    * @param {string} walletHash
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
-  async getBalanceBlockchain(address, additionalData, walletHash) {
+  async getBalanceBlockchain(
+    address: string,
+    additionalData: any,
+    walletHash: string
+  ): Promise<{ balance: any; unconfirmed: any; provider: string }> {
     const oneAddress = OneUtils.toOneAddress(address);
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
@@ -51,10 +79,11 @@ export default class OneScannerProcessor {
       }
       const balance = BlocksoftUtils.hexToDecimalBigger(res.data.result);
       return {
+        provider: '',
         balance,
         unconfirmed: 0
       };
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode +
@@ -84,7 +113,9 @@ export default class OneScannerProcessor {
    * @param {string} scanData.account.walletHash
    * @return {Promise<[UnifiedTransaction]>}
    */
-  async getTransactionsBlockchain(scanData) {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string; walletHash: string };
+  }): Promise<UnifiedTransaction[]> {
     const { address } = scanData.account;
     const oneAddress = OneUtils.toOneAddress(address);
     BlocksoftCryptoLog.log(
@@ -119,7 +150,7 @@ export default class OneScannerProcessor {
       ) {
         return false;
       }
-      const transactions = [];
+      const transactions: UnifiedTransaction[] = [];
       for (const tx of res.data.result.transactions) {
         const transaction = await this._unifyTransaction(
           address,
@@ -131,7 +162,7 @@ export default class OneScannerProcessor {
         }
       }
       return transactions;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode +
@@ -174,17 +205,37 @@ export default class OneScannerProcessor {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, oneAddress, transaction) {
+  private async _unifyTransaction(
+    address: string,
+    oneAddress: string,
+    transaction: {
+      blockHash: string;
+      blockNumber: string;
+      ethHash: string;
+      from: string;
+      gas: string;
+      gasPrice: string;
+      hash: string;
+      input: string;
+      nonce: string;
+      shardID: string;
+      timestamp: string;
+      to: string;
+      toShardID: string;
+      value: string;
+    }
+  ): Promise<UnifiedTransaction> {
     let formattedTime = transaction.timestamp;
     try {
       formattedTime = BlocksoftUtils.toDate(transaction.timestamp);
-    } catch (e) {
+    } catch (e: any) {
       e.message +=
         ' timestamp error transaction data ' + JSON.stringify(transaction);
       throw e;
     }
 
-    const confirmations = (new Date().getTime() - transaction.timestamp) / 60;
+    const confirmations =
+      (new Date().getTime() - Number(transaction.timestamp)) / 60;
     const addressAmount = transaction.value;
 
     let transactionStatus = 'confirming';
@@ -198,7 +249,7 @@ export default class OneScannerProcessor {
     const isIncome =
       address.toLowerCase() === transaction.to.toLowerCase() ||
       oneAddress.toLowerCase() === transaction.to.toLowerCase();
-    const tx = {
+    const tx: UnifiedTransaction = {
       transactionHash: transaction.ethHash.toLowerCase(),
       blockHash: transaction.blockHash,
       blockNumber: +transaction.blockNumber,
@@ -214,20 +265,19 @@ export default class OneScannerProcessor {
       addressTo: isIncome ? '' : transaction.to,
       addressToBasic: transaction.to,
       addressAmount,
-      transactionStatus: transactionStatus,
-      inputValue: transaction.input
+      transactionStatus,
+      inputValue: transaction.input,
+      transactionJson: {
+        nonce: transaction.nonce,
+        gas: transaction.gas,
+        gasPrice: transaction.gasPrice,
+        transactionIndex: transaction.shardID // Change 'shardID' to the actual transaction index property name
+      },
+      transactionFee: BlocksoftUtils.mul(
+        transaction.gasUsed,
+        transaction.gasPrice
+      ).toString()
     };
-    const additional = {
-      nonce: transaction.nonce,
-      gas: transaction.gas,
-      gasPrice: transaction.gasPrice,
-      transactionIndex: transaction.transactionIndex
-    };
-    tx.transactionJson = additional;
-    tx.transactionFee = BlocksoftUtils.mul(
-      transaction.gasUsed,
-      transaction.gasPrice
-    ).toString();
 
     return tx;
   }

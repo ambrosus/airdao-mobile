@@ -9,11 +9,33 @@ import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import Database from '@app/appstores/DataSource/Database/main';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 
-const SWAPS = require('../dict/swaps');
-export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvider {
-  _token = false;
+const SWAPS: Record<string, string> = require('../dict/swaps');
 
-  setLink(token) {
+interface UnifiedTransaction {
+  transactionHash: string;
+  blockHash: string;
+  blockNumber: string;
+  blockTime: Date;
+  blockConfirmations: number;
+  transactionDirection:
+    | 'income'
+    | 'outcome'
+    | 'self'
+    | 'swap_income'
+    | 'swap_outcome';
+  addressFrom: string;
+  addressTo: string;
+  addressAmount: string;
+  transactionStatus: 'new' | 'success' | 'fail';
+  transactionFee: number;
+  inputValue: string;
+}
+
+export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvider {
+  protected _token: string | false = false;
+  protected _tronscanLink = '';
+
+  setLink(token: string) {
     this._token = token;
     this._tronscanLink =
       'https://apilist.tronscan.org/api/contract/events?sort=-timestamp&count=true&limit=50&contract=' +
@@ -21,37 +43,37 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
       '&address=';
   }
 
-  /**
-   * @param {string} scanData.account.address
-   * @param {Object} transaction
-   * @param {string} transaction.amount 1000000
-   * @param {string} transaction.transferFromAddress 'TUbHxAdhPk9ykkc7SDP5e9zUBEN14K65wk'
-   * @param {string} transaction.data ''
-   * @param {string} transaction.decimals 6
-   * @param {string} transaction.tokenName 'Tether USD'
-   * @param {string} transaction.transferToAddress 'TUoyiQH9wSfYdJRhsXtgmgDvpWipPrQN8a'
-   * @param {string} transaction.block 15847100
-   * @param {string} transaction.id ''
-   * @param {string} transaction.confirmed true
-   * @param {string} transaction.transactionHash '4999b0965c1a5b17cbaa862b9357a32c9b8d096e170f4eecee929159b0b73ad3'
-   * @param {string} transaction.timestamp: 1577796345000
-   * @return {UnifiedTransaction}
-   * @private
-   */
-  async _unifyTransaction(scanData, transaction) {
+  async _unifyTransaction(
+    scanData: { account: { address: string; transactionsScanTime: number } },
+    transaction: {
+      amount?: string;
+      transferFromAddress?: string;
+      data?: string;
+      decimals?: string;
+      tokenName?: string;
+      transferToAddress?: string;
+      block?: string;
+      id?: string;
+      confirmed?: boolean;
+      transactionHash?: string;
+      timestamp?: number;
+    }
+  ): Promise<UnifiedTransaction | false> {
     const address = scanData.account.address.trim();
-    let transactionStatus = 'new';
+    let transactionStatus: 'new' | 'success' | 'fail' = 'new';
     if (transaction.confirmed) {
       transactionStatus = 'success';
-    } else if (transaction.block > 0) {
+    } else if (transaction.block && parseInt(transaction.block) > 0) {
       transactionStatus = 'fail';
     }
 
-    let txTokenName = false;
-    let formattedTime;
+    const txTokenName: string | false = false;
+    let formattedTime: Date;
     try {
-      formattedTime = BlocksoftUtils.toDate(transaction.timestamp / 1000);
-    } catch (e) {
+      formattedTime = BlocksoftUtils.toDate(
+        transaction.timestamp ? transaction.timestamp / 1000 : 0
+      );
+    } catch (e: any) {
       e.message +=
         ' timestamp error transaction data ' + JSON.stringify(transaction);
       throw e;
@@ -64,31 +86,36 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
       );
     }
 
-    const res = {
-      transactionHash: transaction.transactionHash,
+    const res: UnifiedTransaction = {
+      transactionHash: transaction.transactionHash || '',
       blockHash: '',
-      blockNumber: transaction.block,
+      blockNumber: transaction.block || '0',
       blockTime: formattedTime,
-      blockConfirmations: this._lastBlock - transaction.block,
+      blockConfirmations: this._lastBlock
+        ? this._lastBlock - parseInt(transaction.block || '0', 20)
+        : 0,
       transactionDirection:
-        address.toLowerCase() === transaction.transferFromAddress.toLowerCase()
+        address.toLowerCase() ===
+        (transaction.transferFromAddress || '').toLowerCase()
           ? 'outcome'
           : 'income',
       addressFrom:
-        address.toLowerCase() === transaction.transferFromAddress.toLowerCase()
+        address.toLowerCase() ===
+        (transaction.transferFromAddress || '').toLowerCase()
           ? ''
-          : transaction.transferFromAddress,
+          : transaction.transferFromAddress || '',
       addressTo:
-        address.toLowerCase() === transaction.transferToAddress.toLowerCase()
+        address.toLowerCase() ===
+        (transaction.transferToAddress || '').toLowerCase()
           ? ''
-          : transaction.transferToAddress,
+          : transaction.transferToAddress || '',
       addressAmount:
         typeof transaction.amount !== 'undefined'
           ? transaction.amount.toString()
           : '0',
-      transactionStatus: transactionStatus,
+      transactionStatus,
       transactionFee: 0,
-      inputValue: transaction.data
+      inputValue: transaction.data || ''
     };
 
     let needData = false;
@@ -100,12 +127,12 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
       res.addressAmount = '0';
       needData = true;
     }
-    if (typeof SWAPS[res.addressTo] !== 'undefined') {
+    if (SWAPS[res.addressTo] !== undefined) {
       res.addressTo = SWAPS[res.addressTo];
       res.transactionDirection = 'swap_outcome';
       res.addressAmount = '0';
       needData = true;
-    } else if (typeof SWAPS[res.addressFrom] !== 'undefined') {
+    } else if (SWAPS[res.addressFrom] !== undefined) {
       res.addressFrom = SWAPS[res.addressFrom];
       res.transactionDirection = 'swap_income';
       res.addressAmount = '0';
@@ -116,7 +143,8 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
 
     if (needData) {
       const diff =
-        scanData.account.transactionsScanTime - transaction.timestamp / 1000;
+        scanData.account.transactionsScanTime -
+        (transaction.timestamp || 0) / 1000;
       if (diff > 6000) {
         return false;
       }
@@ -127,9 +155,10 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
         'https://apilist.tronscan.org/api/transaction-info?hash=' +
           res.transactionHash
       );
-      res.transactionFee = tmp.data.cost.fee * 1 + tmp.data.cost.energy_fee * 1;
+      res.transactionFee =
+        tmp.data.cost.fee * 1 + tmp.data.cost.energy_fee * 1 || 0;
 
-      if (res.transactionFee * 1 > 0 && res.addressAmount * 1 > 0) {
+      if (res.transactionFee > 0 && res.addressAmount * 1 > 0) {
         const savedTRX = await Database.query(
           ` SELECT * FROM transactions WHERE transaction_hash='${res.transactionHash}' AND currency_code='TRX' `
         );
@@ -142,7 +171,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
               ' fee ' +
               res.transactionFee
           );
-          const saveFee = {
+          const saveFee: UnifiedTransaction = {
             account_id: 0,
             address_amount: 0,
             address_from: res.addressFrom,
@@ -166,7 +195,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
             .insert();
         }
       }
-      if (typeof tmp.data.trc20TransferInfo !== 'undefined') {
+      if (tmp.data.trc20TransferInfo !== undefined) {
         for (const info of tmp.data.trc20TransferInfo) {
           if (info.contract_address !== this._token) continue;
           if (info.from_address === address) {
@@ -177,13 +206,11 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
             }
           } else if (info.to_address === address) {
             res.transactionDirection = 'income';
-            res.addressAmount = info.amount_str;
-          } else {
-            continue;
+            res.addressAmount = info.amount_str || '0';
           }
         }
       }
-      if (res.transactionFee * 1 === 0 || res.addressAmount * 1 === 0) {
+      if (res.transactionFee === 0 || res.addressAmount * 1 === 0) {
         return false;
       }
     } else if (res.addressAmount * 1 === 0) {

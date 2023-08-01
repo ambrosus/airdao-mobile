@@ -4,26 +4,61 @@
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 
-import config from '@app/config/config';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
+import config from '@constants/config';
 
-const CACHE_STAKED = {};
-const CACHE_VOTES = {
+interface Validator {
+  address: string;
+  commission: number;
+  activatedStake: number;
+  name: string;
+  description: string;
+  website: string;
+  index: number;
+}
+
+interface ValidatorData {
+  [address: string]: Validator;
+}
+
+interface CacheVotes {
+  data: Validator[];
+  time: number;
+}
+
+interface CacheStaked {
+  [address: string]: {
+    all: { [subaddress: string]: boolean };
+    active: {
+      amount: number;
+      stakeAddress: string;
+      reserved: number;
+      active: boolean;
+      status: string;
+      order: number;
+      diff: string;
+    }[];
+    rewards: any[];
+  };
+}
+
+const CACHE_STAKED: CacheStaked = {};
+const CACHE_VOTES: CacheVotes = {
   data: [],
   time: 0
 };
-const CACHE_VALID_TIME = 12000000; // 200 minute
+const CACHE_VALID_TIME = 12000000; // 200 minutes
 
-const validatorsConstants = require('@crypto/blockchains/sol/ext/validators');
+const validatorsConstants: Validator[] = require('@crypto/blockchains/sol/ext/validators');
 
-const validators = {
+const validators: { time: number; data: ValidatorData } = {
   time: 0,
   data: {}
 };
 for (const tmp of validatorsConstants) {
-  validators.data[tmp.id] = tmp;
+  validators.data[tmp.address] = tmp;
 }
 
 const init = async () => {
@@ -34,15 +69,15 @@ const init = async () => {
   }
   validators.data = {};
   for (const tmp of res.data) {
-    if (typeof tmp.id === 'undefined') continue;
-    validators.data[tmp.id] = tmp;
+    if (typeof tmp.address === 'undefined') continue;
+    validators.data[tmp.address] = tmp;
   }
   validators.time = new Date().getTime();
 };
 
 export default {
   // https://docs.solana.com/developing/clients/jsonrpc-api#getvoteaccounts
-  async getVoteAddresses() {
+  async getVoteAddresses(): Promise<Validator[]> {
     try {
       const now = new Date().getTime();
       if (CACHE_VOTES.time && now - CACHE_VOTES.time < CACHE_VALID_TIME) {
@@ -69,7 +104,7 @@ export default {
         const address = tmp.votePubkey;
         if (typeof validators.data[address] === 'undefined') continue;
 
-        const validator = {
+        const validator: Validator = {
           address,
           commission: tmp.commission,
           activatedStake: tmp.activatedStake,
@@ -89,7 +124,7 @@ export default {
         CACHE_VOTES.data.push(validator);
       }
       CACHE_VOTES.data.sort((a, b) => {
-        if (a.index * 1 === b.index * 1) {
+        if (a.index === b.index) {
           const diff = a.commission - b.commission;
           if (diff <= 0.1 && diff >= -0.1) {
             return b.activatedStake - a.activatedStake;
@@ -111,16 +146,19 @@ export default {
     return CACHE_VOTES.data;
   },
 
-  checkAccountStaked(address, subaddress) {
+  checkAccountStaked(address: string, subaddress: string): boolean {
     return typeof CACHE_STAKED[address].all[subaddress] !== 'undefined';
   },
 
-  setAccountStaked(address, subaddress) {
+  setAccountStaked(address: string, subaddress: string) {
     CACHE_STAKED[address].all[subaddress] = true;
   },
 
   // https://prod-api.solana.surf/v1/account/3siLSmroYvPHPZCrK5VYR3gmFhQFWefVGGpasXdzSPnn/stake-rewards
-  async getAccountRewards(address, stakedAddresses) {
+  async getAccountRewards(
+    address: string,
+    stakedAddresses: any[]
+  ): Promise<any[]> {
     if (typeof CACHE_STAKED[address] === 'undefined') {
       CACHE_STAKED[address] = {
         all: {},
@@ -130,7 +168,7 @@ export default {
     }
     const askAddresses = [address];
     if (stakedAddresses) {
-      for (let tmp of stakedAddresses) {
+      for (const tmp of stakedAddresses) {
         askAddresses.push(tmp.stakeAddress);
       }
     }
@@ -150,7 +188,6 @@ export default {
 
       /*console.log(`
 
-
            curl ${link} -X POST -H "Content-Type: application/json" -d '${JSON.stringify(data)}'
 
             `)
@@ -168,7 +205,7 @@ export default {
           if (typeof CACHE_STAKED[address].rewards !== 'undefined') {
             count = 100;
           } else {
-            for (let tmp of res.data.result) {
+            for (const tmp of res.data.result) {
               if (
                 tmp &&
                 typeof tmp.amount !== 'undefined' &&
@@ -183,7 +220,7 @@ export default {
             if (typeof CACHE_STAKED[address].rewards !== 'undefined') {
               CACHE_STAKED[address].rewards.amount = 0;
             }
-            for (let tmp of res.data.result) {
+            for (const tmp of res.data.result) {
               if (
                 tmp &&
                 typeof tmp.amount !== 'undefined' &&
@@ -205,13 +242,13 @@ export default {
         'SolStakeUtils.getAccountRewards ' + address + ' error ' + e.message
       );
     }
-    //{"amount": 96096, "apr": 7.044036109546499, "effectiveSlot": 99360012, "epoch": 229, "percentChange": 0.05205832165890872, "postBalance": 184689062, "timestamp": 1633153114},
+    // {"amount": 96096, "apr": 7.044036109546499, "effectiveSlot": 99360012, "epoch": 229, "percentChange": 0.05205832165890872, "postBalance": 184689062, "timestamp": 1633153114},
     return CACHE_STAKED[address].rewards;
   },
 
   // https://docs.solana.com/developing/clients/jsonrpc-api#getprogramaccounts
-  async getAccountStaked(address, isForce = false) {
-    let accountInfo = false;
+  async getAccountStaked(address: string, isForce = false): Promise<any[]> {
+    let accountInfo: any[] = [];
     if (typeof CACHE_STAKED[address] === 'undefined' || isForce) {
       CACHE_STAKED[address] = {
         all: {},
@@ -245,7 +282,6 @@ export default {
 
       /*
             console.log(`
-
 
             curl ${apiPath} -X POST -H "Content-Type: application/json" -d '${JSON.stringify(checkData)}'
 
@@ -294,7 +330,7 @@ export default {
           accountInfo.push(item);
           CACHE_STAKED[address].all[item.stakeAddress] = true;
         }
-      } catch (e) {
+      } catch (e: any) {
         BlocksoftCryptoLog.log(
           'SolStakeUtils getAccountStaked request ' +
             apiPath +
@@ -327,7 +363,7 @@ export default {
               tmp.data.stake.delegation.deactivation_epoch || 0;
             const activationEpoch =
               tmp.data.stake.delegation.activation_epoch || 0;
-            if (currentEpoch && currentEpoch * 1 >= deactivationEpoch * 1) {
+            if (currentEpoch && currentEpoch >= deactivationEpoch * 1) {
               item.order = 1;
               item.active = false;
               item.status = 'inactive';
@@ -356,7 +392,7 @@ export default {
         }
       });
       CACHE_STAKED[address].active = accountInfo;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           'SolStakeUtils.getAccountStaked ' + address + ' error ' + e.message

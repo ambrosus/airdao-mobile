@@ -9,11 +9,18 @@ import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 
 const BALANCE_MAX_TRY = 10;
 
-const CACHE_TRONGRID = {};
+interface CacheData {
+  isMultisig: boolean;
+  time: number;
+  [tokenName: string]: any;
+}
+
+const CACHE_TRONGRID: { [address: string]: CacheData } = {};
+
 const CACHE_VALID_TIME = 3000; // 3 seconds
 
 export default class TrxTrongridProvider {
-  async isMultisigTrongrid(address) {
+  async isMultisigTrongrid(address: string): Promise<boolean> {
     if (typeof CACHE_TRONGRID[address] !== 'undefined') {
       return CACHE_TRONGRID[address].isMultisig;
     }
@@ -27,7 +34,27 @@ export default class TrxTrongridProvider {
    * @param {string} tokenName
    * @returns {Promise<boolean|{unconfirmed: number, frozen: *, frozenEnergy:*, voteTotal: *, balance: *, provider: string}>}
    */
-  async get(address, tokenName, useCache = true) {
+  async get(
+    address: string,
+    tokenName: string,
+    useCache = true
+  ): Promise<
+    | false
+    | {
+        isMultisig: boolean;
+        balance: any;
+        voteTotal: number;
+        frozen?: any; // Make it optional
+        frozenExpireTime?: any; // Make it optional
+        frozenOthers?: any; // Make it optional
+        frozenEnergy?: any; // Make it optional
+        frozenEnergyExpireTime?: any; // Make it optional
+        frozenEnergyOthers?: any; // Make it optional
+        unconfirmed: number;
+        provider: string;
+        time: number;
+      }
+  > {
     const now = new Date().getTime();
     if (
       useCache &&
@@ -36,42 +63,49 @@ export default class TrxTrongridProvider {
     ) {
       if (typeof CACHE_TRONGRID[address][tokenName] !== 'undefined') {
         BlocksoftCryptoLog.log(
-          'TrxTrongridProvider.get from cache',
-          address +
+          `TrxTrongridProvider.get from cache',
+          ${address} +
             ' => ' +
-            tokenName +
+            ${tokenName} +
             ' : ' +
-            CACHE_TRONGRID[address][tokenName]
+            ${CACHE_TRONGRID[address][tokenName]}`
         );
+        // tslint:disable-next-line:no-shadowed-variable
         const voteTotal =
           typeof CACHE_TRONGRID[address].voteTotal !== 'undefined'
             ? CACHE_TRONGRID[address].voteTotal
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozen =
           typeof CACHE_TRONGRID[address][tokenName + 'frozen'] !== 'undefined'
             ? CACHE_TRONGRID[address][tokenName + 'frozen']
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozenExpireTime =
           typeof CACHE_TRONGRID[address][tokenName + 'frozenExpireTime'] !==
           'undefined'
             ? CACHE_TRONGRID[address][tokenName + 'frozenExpireTime']
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozenOthers =
           typeof CACHE_TRONGRID[address][tokenName + 'frozenOthers'] !==
           'undefined'
             ? CACHE_TRONGRID[address][tokenName + 'frozenOthers']
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozenEnergy =
           typeof CACHE_TRONGRID[address][tokenName + 'frozenEnergy'] !==
           'undefined'
             ? CACHE_TRONGRID[address][tokenName + 'frozenEnergy']
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozenEnergyExpireTime =
           typeof CACHE_TRONGRID[address][
             tokenName + 'frozenEnergyExpireTime'
           ] !== 'undefined'
             ? CACHE_TRONGRID[address][tokenName + 'frozenEnergyExpireTime']
             : 0;
+        // tslint:disable-next-line:no-shadowed-variable
         const frozenEnergyOthers =
           typeof CACHE_TRONGRID[address][tokenName + 'frozenEnergyOthers'] !==
           'undefined'
@@ -93,18 +127,16 @@ export default class TrxTrongridProvider {
         };
       } else if (tokenName !== '_') {
         return false;
-        // return { balance: 0, unconfirmed : 0, provider: 'trongrid-cache' }
       }
     }
 
-    // curl -X POST  http://trx.trusteeglobal.com:8091/walletsolidity/getassetissuebyname -d
     const nodeLink = BlocksoftExternalSettings.getStatic('TRX_SOLIDITY_NODE');
     const link = nodeLink + '/walletsolidity/getaccount';
     const params = { address };
     BlocksoftCryptoLog.log(
       'TrxTrongridProvider.get ' + link + ' ' + JSON.stringify(params)
     );
-    const res = await BlocksoftAxios.postWithoutBraking(
+    const res: { data: any } = await BlocksoftAxios.postWithoutBraking(
       link,
       params,
       BALANCE_MAX_TRY
@@ -122,11 +154,12 @@ export default class TrxTrongridProvider {
       }
     }
 
-    CACHE_TRONGRID[address] = {};
-    CACHE_TRONGRID[address].time = now;
+    CACHE_TRONGRID[address] = {
+      isMultisig,
+      time: now
+    };
     CACHE_TRONGRID[address]._ =
       typeof res.data.balance !== 'undefined' ? res.data.balance : 0;
-    CACHE_TRONGRID[address].isMultisig = isMultisig;
     CACHE_TRONGRID[address]._frozen =
       typeof res.data.frozen !== 'undefined' &&
       typeof res.data.frozen[0] !== 'undefined'
@@ -183,7 +216,6 @@ export default class TrxTrongridProvider {
 
     if (typeof CACHE_TRONGRID[address][tokenName] === 'undefined') {
       return false;
-      // return { balance: 0, unconfirmed : 0, provider: 'trongrid' }
     }
 
     const balance = CACHE_TRONGRID[address][tokenName];
@@ -233,15 +265,23 @@ export default class TrxTrongridProvider {
     };
   }
 
-  async getResources(address) {
+  async getResources(address: string): Promise<{
+    leftBand: any;
+    totalBand: any;
+    leftEnergy: any;
+    totalEnergy: any;
+  }> {
     const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
     const link = sendLink + '/wallet/getaccountresource';
-    let leftBand = false;
-    let totalBand = false;
-    let leftEnergy = false;
-    let totalEnergy = false;
+    let leftBand: any = false;
+    let totalBand: any = false;
+    let leftEnergy: any = false;
+    let totalEnergy: any = false;
     try {
-      const res = await BlocksoftAxios.post(link, { address });
+      const res: { data: any } = await BlocksoftAxios.post(link, { address });
+      if (!res || typeof res.data !== 'object') {
+        throw new Error('Invalid response from Trongrid');
+      }
       const tronData = res.data;
       delete tronData.assetNetUsed;
       delete tronData.assetNetLimit;
@@ -277,7 +317,9 @@ export default class TrxTrongridProvider {
       if (typeof tronData.EnergyUsed !== 'undefined' && tronData.EnergyUsed) {
         leftEnergy = leftEnergy - tronData.EnergyUsed * 1;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     return {
       leftBand,
       totalBand,

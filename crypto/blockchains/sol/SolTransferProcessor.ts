@@ -9,21 +9,20 @@ import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalanc
 // eslint-disable-next-line no-unused-vars
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
 
-import config from '@app/config/config';
-
 import {
   PublicKey,
   SystemProgram,
   Transaction,
   StakeProgram,
   Authorized
-} from '@solana/web3.js/src/index';
+} from '@solana/web3.js/src';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import SolTmpDS from '@crypto/blockchains/sol/stores/SolTmpDS';
 import SolStakeUtils from '@crypto/blockchains/sol/ext/SolStakeUtils';
 import { Buffer } from 'buffer';
 import BlocksoftCryptoUtils from '@crypto/common/BlocksoftCryptoUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import config from '@constants/config';
 
 export default class SolTransferProcessor
   implements BlocksoftBlockchainTypes.TransferProcessor
@@ -245,7 +244,7 @@ export default class SolTransferProcessor
             ' build createWithSeed started'
         );
         let start = 0;
-        let lastSeed = await SolTmpDS.getCache(data.addressFrom);
+        const lastSeed = await SolTmpDS.getCache(data.addressFrom);
         if (
           typeof lastSeed !== 'undefined' &&
           lastSeed &&

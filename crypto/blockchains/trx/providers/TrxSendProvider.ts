@@ -1,13 +1,14 @@
 /**
  * @version 0.41
  */
+// @ts-ignore
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import config from '@app/config/config';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import config from '@constants/config';
 
 export default class TrxSendProvider
   extends DogeSendProvider
@@ -42,6 +43,10 @@ export default class TrxSendProvider
     } else {
       throw new Error(msg);
     }
+  }
+
+  isResponseObject(obj: any): obj is { data: any } {
+    return typeof obj === 'object' && obj !== null && 'data' in obj;
   }
 
   async _sendTx(
@@ -82,10 +87,10 @@ export default class TrxSendProvider
       );
     }
 
-    let send = false;
+    let send: any;
     try {
       send = await BlocksoftAxios.post(link, tx);
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode +
@@ -95,70 +100,53 @@ export default class TrxSendProvider
       }
     }
 
-    // @ts-ignore
-    if (!send || typeof send.data === 'undefined' || !send.data) {
-      throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
-    }
-
-    await BlocksoftCryptoLog.log(
-      this._settings.currencyCode +
-        ' TrxSendProvider._sendTx ' +
-        subtitle +
-        ' result ',
-      send.data
-    );
-
-    if (typeof send.data.code !== 'undefined') {
-      if (send.data.code === 'BANDWITH_ERROR') {
-        throw new Error('SERVER_RESPONSE_BANDWITH_ERROR_TRX');
-      } else if (send.data.code === 'SERVER_BUSY') {
-        throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
-      }
-    }
-
-    // @ts-ignore
-    if (typeof send.data.Error !== 'undefined') {
-      await BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' TrxSendProvider._sendTx error ' +
-          send.data.Error
-      );
-      // @ts-ignore
-      throw new Error(send.data.Error);
-    }
-    // @ts-ignore
-    if (typeof send.data.result === 'undefined') {
-      // @ts-ignore
-      if (typeof send.data.message !== 'undefined') {
-        let msg = false;
-        try {
-          // @ts-ignore
-          const buf = Buffer.from(send.data.message, 'hex');
-          // @ts-ignore
-          msg = buf.toString('');
-        } catch (e) {
-          // do nothing
+    // Explicit type check for 'send'
+    if (typeof send !== 'boolean' && send.data) {
+      if (typeof send.data.code !== 'undefined') {
+        if (send.data.code === 'BANDWITH_ERROR') {
+          throw new Error('SERVER_RESPONSE_BANDWITH_ERROR_TRX');
+        } else if (send.data.code === 'SERVER_BUSY') {
+          throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
         }
+      }
+
+      if (typeof send.data.Error !== 'undefined') {
         await BlocksoftCryptoLog.log(
-          this._settings.currencyCode + ' TrxSendProvider._sendTx msg ' + msg
+          this._settings.currencyCode +
+            ' TrxSendProvider._sendTx error ' +
+            send.data.Error
         );
-        if (msg) {
-          // @ts-ignore
-          send.data.decoded = msg;
-          // @ts-ignore
-          this.trxError(msg);
+        throw new Error(send.data.Error);
+      }
+
+      if (typeof send.data.result === 'undefined') {
+        if (typeof send.data.message !== 'undefined') {
+          let msg: string | false = false;
+          try {
+            const buf = Buffer.from(send.data.message, 'hex');
+            // @ts-ignore
+            msg = buf.toString('');
+          } catch (e) {
+            // do nothing
+          }
+          await BlocksoftCryptoLog.log(
+            this._settings.currencyCode + ' TrxSendProvider._sendTx msg ' + msg
+          );
+          if (msg) {
+            send.data.decoded = msg;
+            this.trxError(msg);
+          }
+        }
+        this.trxError('no transaction result ' + JSON.stringify(send.data));
+      } else {
+        if (send.data.result !== true) {
+          this.trxError(
+            'transaction result is false ' + JSON.stringify(send.data)
+          );
         }
       }
-      // @ts-ignore
-      this.trxError('no transaction result ' + JSON.stringify(send.data));
     } else {
-      // @ts-ignore
-      if (send.data.result !== true) {
-        // @ts-ignore
-        this.trxError(
-          'transaction result is false ' + JSON.stringify(send.data)
-        );
-      }
+      throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
 
     return { transactionHash: tx.txID, logData };
@@ -169,7 +157,7 @@ export default class TrxSendProvider
     subtitle: string,
     txRBF: any,
     logData: any
-  ): Promise<{ transactionHash: string; transactionJson: any; logData }> {
+  ): Promise<{ transactionHash: string; transactionJson: any; logData: any }> {
     await BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' TrxSendProvider.sendTx ' +
@@ -178,11 +166,12 @@ export default class TrxSendProvider
       logData
     );
 
-    let send, transactionHash;
+    let send;
+    let transactionHash;
     try {
       send = await this._sendTx(tx, subtitle, txRBF, logData);
       transactionHash = send.transactionHash;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode + ' TrxSendProvider.sendTx error ',
@@ -192,7 +181,7 @@ export default class TrxSendProvider
       try {
         logData.error = e.message;
         await this._checkError(tx.raw_data_hex, subtitle, txRBF, logData);
-      } catch (e2) {
+      } catch (e2: any) {
         if (config.debug.cryptoErrors) {
           console.log(
             this._settings.currencyCode +
@@ -217,7 +206,7 @@ export default class TrxSendProvider
         txRBF,
         logData
       );
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(e.message + ' in _checkSuccess wrapped TRX');
     }
     return { transactionHash, transactionJson: {}, logData };

@@ -8,29 +8,42 @@ import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings'
 
 import SolTmpDS from '@crypto/blockchains/sol/stores/SolTmpDS';
 
-import config from '@app/config/config';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
+import config from '@constants/config';
 
-const CACHE_FROM_DB = {};
-const CACHE_TXS = {};
+interface UnifiedTransaction {
+  transactionHash: string;
+  blockHash: string;
+  blockNumber: number;
+  blockTime: Date;
+  blockConfirmations: number;
+  transactionDirection: 'income' | 'outcome' | 'swap_income' | 'swap_outcome';
+  addressFrom: string;
+  addressTo: string;
+  addressAmount: string;
+  transactionStatus: 'new' | 'success' | 'confirming' | 'fail';
+  transactionFee: number;
+  transactionJson?: { memo: string };
+}
+
+const CACHE_FROM_DB: Record<string, any> = {};
+const CACHE_TXS: Record<string, { data: any; now: number }> = {};
 const CACHE_VALID_TIME = 120000;
 let CACHE_LAST_BLOCK = 0;
 
 export default class SolScannerProcessor {
-  constructor(settings) {
+  private _settings: any;
+  private tokenAddress: string;
+
+  constructor(settings: any) {
     this._settings = settings;
     this.tokenAddress =
       typeof settings.tokenAddress !== 'undefined' ? settings.tokenAddress : '';
   }
 
-  /**
-   * @param {string} address
-   * @return {Promise<{balance, provider}>}
-   * https://docs.solana.com/developing/clients/jsonrpc-api#getaccountinfo
-   * https://docs.solana.com/developing/clients/jsonrpc-api#getconfirmedsignaturesforaddress2
-   * curl https://solana-api.projectserum.com -X POST -H "Content-Type: application/json" -d '{'jsonrpc":"2.0", "id":1, "method":"getBalance", "params":["9mnBdsuL1x24HbU4oeNDBAYVAGg2vVndkRAc18kPNqCJ']}'
-   */
-  async getBalanceBlockchain(address) {
+  async getBalanceBlockchain(
+    address: string
+  ): Promise<{ balance: number; provider: string } | false> {
     address = address.trim();
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
@@ -74,16 +87,12 @@ export default class SolScannerProcessor {
       );
       return false;
     }
-    return { balance, unconfirmed: 0, provider: 'solana-api' };
+    return { balance, provider: 'solana-api' };
   }
 
-  /**
-   * @param  {string} scanData.account.address
-   * @return {Promise<[UnifiedTransaction]>}
-   * https://docs.solana.com/developing/clients/jsonrpc-api#getsignaturesforaddress
-   * curl https://api.mainnet-beta.solana.com  -X POST -H "Content-Type: application/json" -d '{'jsonrpc": "2.0","id": 1,"method": "getConfirmedSignaturesForAddress2","params": ["9mnBdsuL1x24HbU4oeNDBAYVAGg2vVndkRAc18kPNqCJ",{"limit': 1}]}'
-   */
-  async getTransactionsBlockchain(scanData, source) {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string };
+  }): Promise<UnifiedTransaction[] | false> {
     const address = scanData.account.address.trim();
     const lastHashVar = address + this.tokenAddress;
     this._cleanCache();
@@ -96,18 +105,13 @@ export default class SolScannerProcessor {
         jsonrpc: '2.0',
         id: 1,
         method: 'getConfirmedSignaturesForAddress2',
-        params: [
-          address,
-          {
-            limit: 100
-          }
-        ]
+        params: [address, { limit: 100 }]
       };
       if (
         CACHE_FROM_DB[lastHashVar] &&
-        typeof CACHE_FROM_DB[lastHashVar]['last_hash'] !== 'undefined'
+        typeof CACHE_FROM_DB[lastHashVar].last_hash !== 'undefined'
       ) {
-        data.params[1].until = CACHE_FROM_DB[lastHashVar]['last_hash'];
+        data.params[1].until = CACHE_FROM_DB[lastHashVar].last_hash;
       }
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
       const res = await BlocksoftAxios._request(apiPath, 'POST', data);
@@ -126,7 +130,7 @@ export default class SolScannerProcessor {
           address
       );
       return transactions;
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' SolScannerProcessor getTransactionsBlockchain address ' +
@@ -138,8 +142,12 @@ export default class SolScannerProcessor {
     }
   }
 
-  async _unifyTransactions(address, result, lastHashVar) {
-    const transactions = [];
+  private async _unifyTransactions(
+    address: string,
+    result: any[],
+    lastHashVar: string
+  ): Promise<UnifiedTransaction[]> {
+    const transactions: UnifiedTransaction[] = [];
     let lastHash = false;
     let hasError = false;
     for (const tx of result) {
@@ -155,7 +163,7 @@ export default class SolScannerProcessor {
             lastHash = transaction.transactionHash;
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         hasError = true;
         if (e.message.indexOf('request failed') === -1) {
           if (config.debug.appErrors) {
@@ -182,20 +190,18 @@ export default class SolScannerProcessor {
       if (!CACHE_FROM_DB[lastHashVar]) {
         CACHE_FROM_DB[lastHashVar] = { last_hash: lastHash };
         await SolTmpDS.saveCache(lastHashVar, 'last_hash', lastHash);
-      } else if (
-        typeof CACHE_FROM_DB[lastHashVar]['last_hash'] === 'undefined'
-      ) {
-        CACHE_FROM_DB[lastHashVar]['last_hash'] = lastHash;
+      } else if (typeof CACHE_FROM_DB[lastHashVar].last_hash === 'undefined') {
+        CACHE_FROM_DB[lastHashVar].last_hash = lastHash;
         await SolTmpDS.saveCache(lastHashVar, 'last_hash', lastHash);
       } else {
-        CACHE_FROM_DB[lastHashVar]['last_hash'] = lastHash;
+        CACHE_FROM_DB[lastHashVar].last_hash = lastHash;
         await SolTmpDS.updateCache(lastHashVar, 'last_hash', lastHash);
       }
     }
     return transactions;
   }
 
-  _cleanCache() {
+  private _cleanCache() {
     const now = new Date().getTime();
     for (const key in CACHE_TXS) {
       const t = now - CACHE_TXS[key].now;
@@ -205,7 +211,10 @@ export default class SolScannerProcessor {
     }
   }
 
-  async _unifyTransaction(address, transaction) {
+  private async _unifyTransaction(
+    address: string,
+    transaction: any
+  ): Promise<UnifiedTransaction | false> {
     const data = {
       jsonrpc: '2.0',
       id: 1,
@@ -213,7 +222,7 @@ export default class SolScannerProcessor {
       params: [transaction.signature, { encoding: 'jsonParsed' }]
     };
 
-    let additional;
+    let additional: any;
     if (typeof CACHE_TXS[transaction.signature] === 'undefined') {
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
       try {
@@ -226,7 +235,7 @@ export default class SolScannerProcessor {
           data: additional,
           now: new Date().getTime()
         };
-      } catch (e) {
+      } catch (e: any) {
         if (config.debug.cryptoErrors) {
           console.log(
             this._settings.currencyCode +
@@ -244,14 +253,14 @@ export default class SolScannerProcessor {
 
     let addressFrom = false;
     let addressTo = false;
-    let addressAmount = 0;
+    let addressAmount = '0';
     let anyFromAddress = false;
     let anyToAddress = false;
 
-    const indexedPre = {};
-    const indexedPost = {};
-    const indexedCreated = {};
-    const indexedAssociated = {};
+    const indexedPre: Record<string, number> = {};
+    const indexedPost: Record<string, number> = {};
+    const indexedCreated: Record<string, string> = {};
+    const indexedAssociated: Record<string, any> = {};
 
     if (this.tokenAddress) {
       for (const tmp of additional.meta.preTokenBalances) {
@@ -360,12 +369,12 @@ export default class SolScannerProcessor {
     let formattedTime = transaction.blockTime;
     try {
       formattedTime = BlocksoftUtils.toDate(transaction.blockTime);
-    } catch (e) {
+    } catch (e: any) {
       e.message +=
         ' timestamp error transaction2 data ' + JSON.stringify(transaction);
       throw e;
     }
-    let transactionStatus = 'new';
+    let transactionStatus: 'new' | 'success' | 'confirming' | 'fail' = 'new';
     if (transaction.confirmationStatus === 'finalized') {
       transactionStatus = 'success';
     } else if (transaction.confirmationStatus === 'confirmed') {
@@ -375,7 +384,8 @@ export default class SolScannerProcessor {
       transactionStatus = 'fail';
     }
 
-    let transactionDirection = addressFrom === address ? 'outcome' : 'income';
+    let transactionDirection: UnifiedTransaction['transactionDirection'] =
+      addressFrom === address ? 'outcome' : 'income';
     if (!addressFrom && anySigner === addressTo) {
       if (addressAmountPlus) {
         transactionDirection = 'swap_income';
@@ -387,7 +397,7 @@ export default class SolScannerProcessor {
       CACHE_LAST_BLOCK > 0
         ? Math.round(CACHE_LAST_BLOCK - additional.slot * 1)
         : 0;
-    const tx = {
+    const tx: UnifiedTransaction = {
       transactionHash: transaction.signature,
       blockHash: additional.transaction.message.recentBlockhash,
       blockNumber: transaction.slot,

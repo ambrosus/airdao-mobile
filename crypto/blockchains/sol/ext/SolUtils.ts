@@ -7,9 +7,9 @@ import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings'
 import { PublicKey } from '@solana/web3.js/src';
 import { Account } from '@solana/web3.js/src/account';
 
-import config from '@app/config/config';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
+import config from '@constants/config';
 
 const TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 const ASSOCIATED_TOKEN_PROGRAM_ID =
@@ -17,7 +17,7 @@ const ASSOCIATED_TOKEN_PROGRAM_ID =
 const OWNER_VALIDATION_PROGRAM_ID =
   '4MNPdKu9wFMvEeZBMt3Eipfs5ovVWTJb31pEXDJAAxX5';
 
-const CACHE_VALID_TIME = 12000000; // 200 minute
+const CACHE_VALID_TIME = 12000000; // 200 minutes
 
 const CACHE_EPOCH = {
   ts: 0,
@@ -25,19 +25,22 @@ const CACHE_EPOCH = {
 };
 
 export default {
-  getTokenProgramID() {
+  getTokenProgramID(): string {
     return TOKEN_PROGRAM_ID;
   },
 
-  getOwnerValidationProgramId() {
+  getOwnerValidationProgramId(): string {
     return OWNER_VALIDATION_PROGRAM_ID;
   },
 
-  getAssociatedTokenProgramId() {
+  getAssociatedTokenProgramId(): string {
     return ASSOCIATED_TOKEN_PROGRAM_ID;
   },
 
-  async findAssociatedTokenAddress(walletAddress, tokenMintAddress) {
+  async findAssociatedTokenAddress(
+    walletAddress: string,
+    tokenMintAddress: string
+  ): Promise<string> {
     try {
       const seeds = [
         new PublicKey(walletAddress).toBuffer(),
@@ -57,7 +60,7 @@ export default {
     }
   },
 
-  async getAccountInfo(address) {
+  async getAccountInfo(address: string): Promise<any> {
     let accountInfo = false;
     try {
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
@@ -87,7 +90,7 @@ export default {
     return accountInfo;
   },
 
-  isAddressValid(value) {
+  isAddressValid(value: string): boolean {
     new PublicKey(value);
     return true;
   },
@@ -97,7 +100,7 @@ export default {
    * @param raw
    * @returns {Promise<string>}
    */
-  async sendTransaction(raw) {
+  async sendTransaction(raw: string): Promise<string> {
     const sendData = {
       jsonrpc: '2.0',
       id: 1,
@@ -160,7 +163,10 @@ export default {
   /**
    * @returns {Promise<{blockhash: string, feeCalculator: {lamportsPerSignature: number}}>}
    */
-  async getBlockData() {
+  async getBlockData(): Promise<{
+    blockhash: string;
+    feeCalculator: { lamportsPerSignature: number };
+  }> {
     const getRecentBlockhashData = {
       jsonrpc: '2.0',
       id: 1,
@@ -175,7 +181,7 @@ export default {
     return getRecentBlockhashRes.data.result.value;
   },
 
-  async getEpoch() {
+  async getEpoch(): Promise<number> {
     const now = new Date().getTime();
     if (CACHE_EPOCH.ts > 0) {
       if (now - CACHE_EPOCH.ts < CACHE_VALID_TIME) {
@@ -204,11 +210,15 @@ export default {
     return CACHE_EPOCH.value;
   },
 
-  async signTransaction(transaction, walletPrivKey, walletPubKey) {
+  async signTransaction(
+    transaction: any,
+    walletPrivKey: string,
+    walletPubKey: string
+  ): Promise<any> {
     let account = false;
     try {
       account = new Account(Buffer.from(walletPrivKey, 'hex'));
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' while create account';
       throw e;
     }
@@ -216,20 +226,20 @@ export default {
     try {
       const data = await this.getBlockData();
       transaction.recentBlockhash = data.blockhash;
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' while getBlockData';
       throw e;
     }
     try {
       transaction.setSigners(new PublicKey(walletPubKey));
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' while setSigners';
       throw e;
     }
 
     try {
       transaction.partialSign(account);
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' while transaction.partialSign with account';
       throw e;
     }

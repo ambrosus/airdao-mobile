@@ -4,18 +4,35 @@
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
-
 import SolScannerProcessor from '@crypto/blockchains/sol/SolScannerProcessor';
+import { AxiosResponse } from 'axios';
 
-const CACHE_BALANCES = {};
+interface ParsedInfo {
+  state?: string;
+  mint: string;
+  tokenAmount: number;
+}
+
+interface CacheBalances {
+  [address: string]: {
+    [tokenAddress: string]: {
+      amount: number;
+    };
+    time: number;
+  };
+}
+
+const CACHE_BALANCES: CacheBalances = {};
 const CACHE_VALID_TIME = 30000; // 30 seconds
 
 export default class SolScannerProcessorSpl extends SolScannerProcessor {
   /**
    * @param {string} address
-   * @return {Promise<{balance, provider}>}
+   * @return {Promise<{balance: number; provider: string} | false>}
    */
-  async getBalanceBlockchain(address) {
+  async getBalanceBlockchain(
+    address: string
+  ): Promise<{ balance: number; provider: string } | false> {
     address = address.trim();
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
@@ -47,8 +64,13 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
           ]
         };
 
-        const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+        const res: AxiosResponse<any, any> = await BlocksoftAxios._request(
+          apiPath,
+          'POST',
+          data
+        );
         if (
+          res.data === false ||
           typeof res.data.result === 'undefined' ||
           typeof res.data.result.value === 'undefined'
         ) {
@@ -61,13 +83,13 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
             account.account.data.program !== 'spl-token'
           )
             continue;
-          const parsed = account.account.data.parsed.info;
+          const parsed: ParsedInfo = account.account.data.parsed.info;
           if (
-            typeof parsed.state === 'undefined' &&
+            typeof parsed.state === 'undefined' ||
             parsed.state !== 'initialized'
           )
             continue;
-          CACHE_BALANCES[address][parsed.mint] = parsed.tokenAmount; // "amount": "1606300", "decimals": 6, "uiAmount": 1.6063, "uiAmountString": "1.6063"
+          CACHE_BALANCES[address][parsed.mint] = { amount: parsed.tokenAmount }; // "amount": "1606300", "decimals": 6, "uiAmount": 1.6063, "uiAmountString": "1.6063"
         }
         CACHE_BALANCES[address].time = now;
       }
@@ -79,16 +101,15 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
       } else {
         balance = CACHE_BALANCES[address][this.tokenAddress].amount * 1;
       }
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
-          ' SolScannerProcessorSpl getBalanceBlockchain address ' +
-          address +
-          ' error ' +
-          e.message
+          ` SolScannerProcessorSpl getBalanceBlockchain address ` +
+          `${address} ` +
+          ` error ${e.message}`
       );
       return false;
     }
-    return { balance, unconfirmed: 0, provider: 'solana-api' };
+    return { balance, provider: 'solana-api' };
   }
 }

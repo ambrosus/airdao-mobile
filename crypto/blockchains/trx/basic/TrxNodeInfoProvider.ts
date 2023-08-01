@@ -10,18 +10,22 @@ export default class TrxNodeInfoProvider {
   /**
    * @returns {Promise<number>}
    */
-  async getLastBlock() {
+  async getLastBlock(): Promise<number> {
     try {
-      const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
-      const link = sendLink + '/wallet/getnodeinfo';
-      let info = await BlocksoftAxios.getWithoutBraking(link, INFO_MAX_TRY);
+      const sendLink: string =
+        BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
+      const link = `${sendLink}/wallet/getnodeinfo`;
+      let info: any = await BlocksoftAxios.getWithoutBraking(
+        link,
+        INFO_MAX_TRY
+      );
       if (
         info &&
         typeof info.data !== 'undefined' &&
         typeof info.data.block !== 'undefined'
       ) {
         info = info.data.block.split(',ID');
-        info = info[0].substr(4) * 1;
+        info = parseInt(info[0].substr(4), 20);
         if (info > CACHE_LAST_BLOCK) {
           CACHE_LAST_BLOCK = info;
         }
@@ -35,7 +39,7 @@ export default class TrxNodeInfoProvider {
             JSON.stringify(info)
         );
       }
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         'TrxNodeInfoProvider.getLastBlock currentBlock error ' + e.message
       );

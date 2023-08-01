@@ -8,38 +8,64 @@ import Log from '@app/services/Log/Log';
 import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 
+interface Balance {
+  balanceAvailable: number;
+  frozen: number;
+  frozenOthers: number;
+  frozenEnergy: number;
+  frozenEnergyOthers: number;
+  frozenExpireTime: number;
+  frozenEnergyExpireTime: number;
+  prettyBalanceAvailable: string;
+  prettyFrozen: string;
+  prettyFrozenOthers: string;
+  prettyFrozenEnergy: string;
+  prettyFrozenEnergyOthers: string;
+  prettyVote: string;
+  diffLastStakeMinutes: number;
+}
+
+interface UiParams {
+  walletHash: string;
+  address: string;
+  derivationPath: string;
+  cryptoValue: number;
+  type: string;
+  callback: () => void;
+}
+
 const TronStakeUtils = {
-  async getVoteAddresses() {
+  async getVoteAddresses(): Promise<string> {
     return BlocksoftExternalSettings.getStatic('TRX_VOTE_BEST');
   },
 
-  async getPrettyBalance(address) {
+  async getPrettyBalance(address: string): Promise<Balance | false> {
     const balance = await BlocksoftBalances.setCurrencyCode('TRX')
       .setAddress(address)
       .getBalance('TronStakeUtils');
     if (!balance) {
       return false;
     }
-    balance.prettyBalanceAvailable = BlocksoftPrettyNumbers.setCurrencyCode(
+    const prettyBalanceAvailable = BlocksoftPrettyNumbers.setCurrencyCode(
       'TRX'
     ).makePretty(balance.balanceAvailable);
-    balance.prettyFrozen = BlocksoftPrettyNumbers.setCurrencyCode(
+    const prettyFrozen = BlocksoftPrettyNumbers.setCurrencyCode(
       'TRX'
     ).makePretty(balance.frozen);
-    balance.prettyFrozenOthers = BlocksoftPrettyNumbers.setCurrencyCode(
+    const prettyFrozenOthers = BlocksoftPrettyNumbers.setCurrencyCode(
       'TRX'
     ).makePretty(balance.frozenOthers);
-    balance.prettyFrozenEnergy = BlocksoftPrettyNumbers.setCurrencyCode(
+    const prettyFrozenEnergy = BlocksoftPrettyNumbers.setCurrencyCode(
       'TRX'
     ).makePretty(balance.frozenEnergy);
-    balance.prettyFrozenEnergyOthers = BlocksoftPrettyNumbers.setCurrencyCode(
+    const prettyFrozenEnergyOthers = BlocksoftPrettyNumbers.setCurrencyCode(
       'TRX'
     ).makePretty(balance.frozenEnergyOthers);
-    balance.prettyVote = (
-      balance.prettyFrozen * 1 +
-      balance.prettyFrozenOthers * 1 +
-      balance.prettyFrozenEnergy * 1 +
-      balance.prettyFrozenEnergyOthers * 1
+    const prettyVote = (
+      parseFloat(prettyFrozen) +
+      parseFloat(prettyFrozenOthers) +
+      parseFloat(prettyFrozenEnergy) +
+      parseFloat(prettyFrozenEnergyOthers)
     )
       .toString()
       .split('.')[0];
@@ -49,16 +75,29 @@ const TronStakeUtils = {
       balance.frozenEnergyExpireTime > balance.frozenExpireTime
         ? balance.frozenEnergyExpireTime
         : balance.frozenExpireTime;
-    if (maxExpire > 0) {
-      balance.diffLastStakeMinutes =
-        24 * 3 * 60 - (maxExpire - new Date().getTime()) / 60000; // default time = 3 days, so thats how many minutes from last stake
-    } else {
-      balance.diffLastStakeMinutes = -1;
-    }
-    return balance;
+    const diffLastStakeMinutes =
+      maxExpire > 0
+        ? 24 * 3 * 60 - (maxExpire - new Date().getTime()) / 60000
+        : -1;
+
+    return {
+      ...balance,
+      prettyBalanceAvailable,
+      prettyFrozen,
+      prettyFrozenOthers,
+      prettyFrozenEnergy,
+      prettyFrozenEnergyOthers,
+      prettyVote,
+      diffLastStakeMinutes
+    };
   },
 
-  async sendVoteAll(address, derivationPath, walletHash, specialActionNeeded) {
+  async sendVoteAll(
+    address: string,
+    derivationPath: string,
+    walletHash: string,
+    specialActionNeeded: string
+  ): Promise<any> {
     const { prettyVote, diffLastStakeMinutes, voteTotal } =
       await TronStakeUtils.getPrettyBalance(address);
     if (
@@ -82,7 +121,7 @@ const TronStakeUtils = {
         'TronStake.sendVoteAll ' + address + ' skipped vote2'
       );
       return false;
-    } else if (voteTotal * 1 === prettyVote * 1) {
+    } else if (voteTotal * 1 === parseFloat(prettyVote)) {
       if (diffLastStakeMinutes > 100) {
         BlocksoftCryptoLog.log(
           'TronStake.sendVoteAll ' +
@@ -117,7 +156,7 @@ const TronStakeUtils = {
         votes: [
           {
             vote_address: TronUtils.addressToHex(voteAddress),
-            vote_count: prettyVote * 1
+            vote_count: parseFloat(prettyVote)
           }
         ]
       },
@@ -128,14 +167,19 @@ const TronStakeUtils = {
         derivationPath,
         type: 'vote',
         cryptoValue: BlocksoftPrettyNumbers.setCurrencyCode('TRX').makeUnPretty(
-          prettyVote * 1
+          parseFloat(prettyVote)
         ),
         callback: () => {}
       }
     );
   },
 
-  async _send(shortLink, params, langMsg, uiParams) {
+  async _send(
+    shortLink: string,
+    params: any,
+    langMsg: string,
+    uiParams: UiParams
+  ): Promise<any> {
     const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
     const link = sendLink + shortLink;
     const tmp = await BlocksoftAxios.post(link, params);

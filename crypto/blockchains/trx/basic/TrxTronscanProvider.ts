@@ -8,7 +8,15 @@ import BlocksoftAxios from '../../../common/BlocksoftAxios';
 const BALANCE_PATH = 'https://apilist.tronscan.org/api/account?address=';
 const BALANCE_MAX_TRY = 10;
 
-const CACHE_TRONSCAN = {};
+interface TronScanCache {
+  [address: string]: {
+    time: number;
+    voteTotal?: number;
+    [tokenName: string]: number | undefined;
+  };
+}
+
+const CACHE_TRONSCAN: TronScanCache = {};
 const CACHE_VALID_TIME = 3000; // 3 seconds
 
 export default class TrxTronscanProvider {
@@ -18,7 +26,23 @@ export default class TrxTronscanProvider {
    * @param {string} tokenName
    * @returns {Promise<boolean|{unconfirmed: number, frozen: *, frozenEnergy: *, voteTotal: *, balance: *, provider: string}>}
    */
-  async get(address, tokenName, useCache = true) {
+  async get(
+    address: string,
+    tokenName: string,
+    useCache = true
+  ): Promise<
+    | boolean
+    | number
+    | {
+        unconfirmed: number;
+        frozen: number;
+        frozenEnergy: number;
+        voteTotal: number;
+        balance: number;
+        provider: string;
+        time: number;
+      }
+  > {
     const now = new Date().getTime();
     if (
       useCache &&
@@ -27,28 +51,31 @@ export default class TrxTronscanProvider {
     ) {
       if (typeof CACHE_TRONSCAN[address][tokenName] !== 'undefined') {
         BlocksoftCryptoLog.log(
-          'TrxTronscanProvider.get from cache',
-          address +
+          `TrxTronscanProvider.get from cache',
+          ${address} +
             ' => ' +
-            tokenName +
+          {tokenName} +
             ' : ' +
-            CACHE_TRONSCAN[address][tokenName]
+            ${CACHE_TRONSCAN[address][tokenName]}`
         );
-        const frozen =
+        // tslint:disable-next-line:no-shadowed-variable
+        const frozen: number =
           typeof CACHE_TRONSCAN[address][tokenName + 'frozen'] !== 'undefined'
-            ? CACHE_TRONSCAN[address][tokenName + 'frozen']
+            ? CACHE_TRONSCAN[address][tokenName + 'frozen']!
             : 0;
-        const frozenEnergy =
+        // tslint:disable-next-line:no-shadowed-variable
+        const frozenEnergy: number =
           typeof CACHE_TRONSCAN[address][tokenName + 'frozenEnergy'] !==
           'undefined'
-            ? CACHE_TRONSCAN[address][tokenName + 'frozenEnergy']
+            ? CACHE_TRONSCAN[address][tokenName + 'frozenEnergy']!
             : 0;
-        const voteTotal =
+        // tslint:disable-next-line:no-shadowed-variable
+        const voteTotal: number =
           typeof CACHE_TRONSCAN[address].voteTotal !== 'undefined'
-            ? CACHE_TRONSCAN[address].voteTotal
+            ? CACHE_TRONSCAN[address].voteTotal!
             : 0;
         return {
-          balance: CACHE_TRONSCAN[address][tokenName],
+          balance: CACHE_TRONSCAN[address][tokenName]!,
           voteTotal,
           frozen,
           frozenEnergy,
@@ -64,11 +91,12 @@ export default class TrxTronscanProvider {
     const link = BALANCE_PATH + address;
     BlocksoftCryptoLog.log('TrxTronscanProvider.get ' + link);
     const res = await BlocksoftAxios.getWithoutBraking(link, BALANCE_MAX_TRY);
-    if (!res || !res.data) {
+    // @ts-ignore
+    if (!res || !('data' in res)) {
       return false;
     }
 
-    CACHE_TRONSCAN[address] = {};
+    CACHE_TRONSCAN[address] = { time: now };
     CACHE_TRONSCAN[address].time = now;
     CACHE_TRONSCAN[address]._ = res.data.balance;
     CACHE_TRONSCAN[address]._frozen =
@@ -109,18 +137,18 @@ export default class TrxTronscanProvider {
       }
     }
 
-    const balance = CACHE_TRONSCAN[address][tokenName];
-    const frozen =
+    const balance = CACHE_TRONSCAN[address][tokenName]!;
+    const frozen: number =
       typeof CACHE_TRONSCAN[address][tokenName + 'frozen'] !== 'undefined'
-        ? CACHE_TRONSCAN[address][tokenName + 'frozen']
+        ? CACHE_TRONSCAN[address][tokenName + 'frozen']!
         : 0;
-    const frozenEnergy =
+    const frozenEnergy: number =
       typeof CACHE_TRONSCAN[address][tokenName + 'frozenEnergy'] !== 'undefined'
-        ? CACHE_TRONSCAN[address][tokenName + 'frozenEnergy']
+        ? CACHE_TRONSCAN[address][tokenName + 'frozenEnergy']!
         : 0;
-    const voteTotal =
+    const voteTotal: number =
       typeof CACHE_TRONSCAN[address].voteTotal !== 'undefined'
-        ? CACHE_TRONSCAN[address].voteTotal
+        ? CACHE_TRONSCAN[address].voteTotal!
         : 0;
     return {
       balance,

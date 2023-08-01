@@ -9,20 +9,30 @@ import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
 import EthScannerProcessorErc20 from '@crypto/blockchains/eth/EthScannerProcessorErc20';
 
-import config from '@app/config/config';
 import OneTmpDS from './stores/OneTmpDS';
+import config from '@constants/config';
 
-const CACHE_TOKENS = {};
+interface UnifiedTransaction {
+  // TODO
+}
+
+interface CacheTokens {
+  [address: string]: { [tokenAddress: string]: number };
+}
+
+const CACHE_TOKENS: CacheTokens = {};
 
 export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
-  _blocksToConfirm = 10;
+  private _blocksToConfirm = 10;
 
   /**
    * @param {string} scanData.account.address
    * @param {string} scanData.account.walletHash
    * @return {Promise<[UnifiedTransaction]>}
    */
-  async getTransactionsBlockchain(scanData) {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string; walletHash: string };
+  }): Promise<UnifiedTransaction[]> {
     const { address } = scanData.account;
     const oneAddress = OneUtils.toOneAddress(address);
     BlocksoftCryptoLog.log(
@@ -56,9 +66,9 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
         typeof res.data.result === 'undefined' ||
         typeof res.data.result.transactions === 'undefined'
       ) {
-        return false;
+        return [];
       }
-      const transactions = [];
+      const transactions: UnifiedTransaction[] = [];
       let firstTransaction = false;
       for (const tx of res.data.result.transactions) {
         if (
@@ -88,10 +98,10 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
           transactions.push(transaction);
         }
       }
-      CACHE_TOKENS[address][this._tokenAddress] = firstTransaction;
+      CACHE_TOKENS[address][this._tokenAddress] = Number(firstTransaction);
       await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
       return transactions;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode +
@@ -108,7 +118,7 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
           ' error ' +
           e.message
       );
-      return false;
+      return [];
     }
   }
 
@@ -134,7 +144,26 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, oneAddress, transaction) {
+  async _unifyTransaction(
+    address: string,
+    oneAddress: string,
+    transaction: {
+      blockHash: string;
+      blockNumber: string;
+      ethHash: string;
+      from: string;
+      gas: string;
+      gasPrice: string;
+      hash: string;
+      input: string;
+      nonce: string;
+      shardID: string;
+      timestamp: string;
+      to: string;
+      toShardID: string;
+      value: string;
+    }
+  ): Promise<UnifiedTransaction | false> {
     const contractEvents = await this._token.getPastEvents('Transfer', {
       fromBlock: transaction.blockNumber,
       toBlock: transaction.blockNumber
@@ -171,19 +200,21 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
     let formattedTime = transaction.timestamp;
     try {
       formattedTime = BlocksoftUtils.toDate(transaction.timestamp);
-    } catch (e) {
+    } catch (e: any) {
       e.message +=
         ' timestamp error transaction data ' + JSON.stringify(transaction);
       throw e;
     }
 
-    const confirmations = (new Date().getTime() - transaction.timestamp) / 60;
+    const confirmations =
+      // tslint:disable-next-line:radix
+      (new Date().getTime() - parseInt(transaction.timestamp)) / 60;
     let transactionStatus = 'confirming';
     if (confirmations > 2) {
       transactionStatus = 'success';
     }
 
-    const tx = {
+    const tx: UnifiedTransaction = {
       transactionHash: transaction.ethHash.toLowerCase(),
       blockHash: transaction.blockHash,
       blockNumber: +transaction.blockNumber,

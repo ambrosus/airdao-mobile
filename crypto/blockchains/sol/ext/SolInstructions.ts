@@ -3,8 +3,9 @@
  * https://github.com/project-serum/spl-token-wallet/blob/master/src/utils/tokens/instructions.js
  */
 import * as BufferLayout from '@solana/buffer-layout';
-import { PublicKey } from '@solana/web3.js/src';
+import { PublicKey } from '@solana/web3.js';
 
+// @ts-ignore
 const LAYOUT = BufferLayout.union(BufferLayout.u8('instruction'));
 LAYOUT.addVariant(
   0,
@@ -42,36 +43,39 @@ const instructionMaxSpan = Math.max(
 );
 
 class PublicKeyLayout extends BufferLayout.Blob {
-  constructor(property) {
+  constructor(property: string) {
     super(32, property);
   }
 
-  decode(b, offset) {
+  // @ts-ignore
+  decode(b: Buffer, offset: number) {
     return new PublicKey(super.decode(b, offset));
   }
 
-  encode(src, b, offset) {
+  // @ts-ignore
+  encode(src: PublicKey, b: Buffer, offset: number) {
     return super.encode(src.toBuffer(), b, offset);
   }
 }
 
-function publicKeyLayout(property) {
+function publicKeyLayout(property: string) {
   return new PublicKeyLayout(property);
 }
 
 export const OWNER_VALIDATION_LAYOUT = BufferLayout.struct([
+  // @ts-ignore
   publicKeyLayout('account')
 ]);
 
 export default {
-  encodeTokenInstructionData(instruction) {
-    let b = Buffer.alloc(instructionMaxSpan);
-    let span = LAYOUT.encode(instruction, b);
+  encodeTokenInstructionData(instruction: any) {
+    const b = Buffer.alloc(instructionMaxSpan);
+    const span = LAYOUT.encode(instruction, b);
     const res = b.slice(0, span);
     return res;
   },
 
-  encodeOwnerValidationInstruction(instruction) {
+  encodeOwnerValidationInstruction(instruction: any) {
     const b = Buffer.alloc(OWNER_VALIDATION_LAYOUT.span);
     const span = OWNER_VALIDATION_LAYOUT.encode(instruction, b);
     return b.slice(0, span);
