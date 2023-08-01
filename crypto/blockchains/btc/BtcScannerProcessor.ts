@@ -8,16 +8,17 @@ import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 
 import BtcFindAddressFunction from './basic/BtcFindAddressFunction';
-import config from '@app/config/config';
-import Database from '@app/appstores/DataSource/Database';
-import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
+import { Q } from '@nozbe/watermelondb';
+import TransactionFilterTypeDict from '@crypto/TransactionFilterTypeDict';
 
 const CACHE_VALID_TIME = 60000; // 60 seconds
-const CACHE = {};
-const CACHE_WALLET_PUBS = {};
+const CACHE: { [key: string]: any } = {}; // TODO fix any
+const CACHE_WALLET_PUBS: { [key: string]: any } = {}; // TODO fix any
 
 const TIMEOUT_BTC = 60000;
-const PROXY_TXS = 'https://proxy.trustee.deals/btc/getTxs';
+const PROXY_TXS = 'https://proxy.trustee.deals/btc/getTxs'; // TODO we may need to put our BE
 
 export default class BtcScannerProcessor {
   /**
@@ -37,7 +38,9 @@ export default class BtcScannerProcessor {
    */
   _trezorServer = false;
 
-  constructor(settings) {
+  _settings: unknown; // TODO fix type
+
+  constructor(settings: unknown) {
     this._settings = settings;
   }
 
@@ -47,7 +50,11 @@ export default class BtcScannerProcessor {
    * @returns {Promise<boolean|*>}
    * @private
    */
-  async _get(address, additionalData, source = '') {
+  async _get(
+    address: string,
+    additionalData: { addresses: string[] },
+    source = ''
+  ) {
     const now = new Date().getTime();
     if (
       typeof CACHE[address] !== 'undefined' &&
@@ -196,7 +203,13 @@ export default class BtcScannerProcessor {
                     FROM wallet_pub
                     WHERE wallet_hash = '${walletHash}'
                     AND currency_code='BTC'`;
-    const resPub = await Database.query(sqlPub);
+    const resPub = await Database.query(
+      DatabaseTable.WalletPub,
+      Q.and(
+        Q.where('hash', Q.eq(walletHash)),
+        Q.where('currency_code', Q.eq('BTC'))
+      )
+    );
     CACHE_WALLET_PUBS[walletHash] = {};
     if (resPub && resPub.array && resPub.array.length > 0) {
       for (const row of resPub.array) {
@@ -241,13 +254,6 @@ export default class BtcScannerProcessor {
     const withBalances =
       typeof scanData.withBalances !== 'undefined' && scanData.withBalances;
     if (!withBalances) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' BtcScannerProcessor.getAddresses started withoutBalances (KSU!)',
-          address
-        );
-      }
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getAddresses started withoutBalances (KSU!)',
@@ -293,14 +299,6 @@ export default class BtcScannerProcessor {
         }
       }
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' BtcScannerProcessor.getAddresses load from all addresses error ' +
-            e.message,
-          e
-        );
-      }
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getAddresses load from all addresses error ' +
@@ -483,7 +481,37 @@ export default class BtcScannerProcessor {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, addresses, transaction) {
+  async _unifyTransaction(
+    address: string,
+    addresses: string,
+    transaction: {
+      blockHash: string;
+      blockHeight: number;
+      confirmations: number;
+      blockTime: number;
+      value: number;
+      valueIn: number;
+      fees: number;
+      hex: string;
+      txid: string;
+      version: number;
+      vin: {
+        txid: string;
+        sequence: number;
+        n: number;
+        addresses: string[];
+        value: number;
+        hex: string;
+      }[];
+      vout: {
+        value: number;
+        n: number;
+        spent: boolean;
+        hex: string;
+        addresses: string[];
+      }[];
+    }
+  ) {
     let showAddresses = false;
     try {
       showAddresses = await BtcFindAddressFunction(addresses, transaction);

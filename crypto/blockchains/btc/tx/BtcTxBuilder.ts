@@ -1,27 +1,26 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import DogeTxBuilder from '../../doge/tx/DogeTxBuilder';
 import BlocksoftPrivateKeysUtils from '../../../common/BlocksoftPrivateKeysUtils';
 import { ECPair, payments, TransactionBuilder } from 'bitcoinjs-lib';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
-import main from '@app/appstores/DataSource/Database';
 
 export default class BtcTxBuilder
   extends DogeTxBuilder
-  implements BlocksoftBlockchainTypes.TxBuilder
+  implements AirDAOBlockchainTypes.TxBuilder
 {
-  private mnemonic: string = '';
-  private walletHash: string = '';
+  private mnemonic = '';
+  private walletHash = '';
   private keyPairBTC: any = {};
   private p2wpkhBTC: any = {};
   private p2shBTC: any = {};
 
   _getRawTxValidateKeyPair(
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    data: BlocksoftBlockchainTypes.TransferData
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData
   ): void {
     if (this.mnemonic === privateData.privateKey) return;
 
@@ -35,7 +34,7 @@ export default class BtcTxBuilder
   async _getRawTxAddInput(
     txb: TransactionBuilder,
     i: number,
-    input: BlocksoftBlockchainTypes.UnspentTx,
+    input: AirDAOBlockchainTypes.UnspentTx,
     nSequence: number
   ): Promise<void> {
     if (typeof input.address === 'undefined') {
@@ -193,7 +192,7 @@ export default class BtcTxBuilder
   async _getRawTxSign(
     txb: TransactionBuilder,
     i: number,
-    input: BlocksoftBlockchainTypes.UnspentTx
+    input: AirDAOBlockchainTypes.UnspentTx
   ): Promise<void> {
     if (typeof input.address === 'undefined') {
       throw new Error('no address in input ' + JSON.stringify(input));

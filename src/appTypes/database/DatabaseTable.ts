@@ -1,4 +1,6 @@
 export enum DatabaseTable {
+  Accounts = 'accounts',
   TransactionScannersTmp = 'transactions_scanners_tmp',
-  Wallets = 'wallets'
+  Wallets = 'wallets',
+  WalletPub = 'wallet-pub'
 }

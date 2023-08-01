@@ -3,12 +3,18 @@ import { DatabaseTable } from '@appTypes';
 import { database } from './main';
 import { Q, Database as WDB } from '@nozbe/watermelondb';
 import { Clause } from '@nozbe/watermelondb/QueryDescription';
+import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
 
 class Database {
   private db: WDB | undefined;
 
   constructor() {
     this.init();
+  }
+
+  get localStorage(): LocalStorage {
+    if (!this.db) this.init();
+    return this.db!.localStorage;
   }
 
   private async reset() {

@@ -1,23 +1,25 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BtcUnspentsProvider from '../providers/BtcUnspentsProvider';
 import DogeTxInputsOutputs from '../../doge/tx/DogeTxInputsOutputs';
-import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import DaemonCache from '../../../../app/daemons/DaemonCache';
+import DaemonCache from '../../../../src/daemons/DaemonCache';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import { Database } from '@database';
 
 export default class BtcTxInputsOutputs
   extends DogeTxInputsOutputs
-  implements BlocksoftBlockchainTypes.TxInputsOutputs
+  implements AirDAOBlockchainTypes.TxInputsOutputs
 {
-  async _addressForChange(data: BlocksoftBlockchainTypes.TransferData): string {
-    const btcShowTwoAddress = await settingsActions.getSetting(
+  async _addressForChange(
+    data: AirDAOBlockchainTypes.TransferData
+  ): Promise<string> {
+    const btcShowTwoAddress = await Database.localStorage.get(
       'btcShowTwoAddress'
     );
-    const btcLegacyOrSegwit = await settingsActions.getSetting(
+    const btcLegacyOrSegwit = await Database.localStorage.get(
       'btc_legacy_or_segwit'
     );
 
@@ -90,16 +92,16 @@ export default class BtcTxInputsOutputs
   }
 
   async getInputsOutputs(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeToCount: {
       feeForByte?: string;
       feeForAll?: string;
       autoFeeLimitReadable?: string | number;
     },
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
-    subtitle: string = 'default'
-  ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData,
+    subtitle = 'default'
+  ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx> {
     const res = await super._getInputsOutputs(
       data,
       unspents,

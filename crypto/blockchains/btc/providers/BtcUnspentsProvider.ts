@@ -3,19 +3,23 @@
  * https://github.com/trezor/blockbook/blob/master/docs/api.md
  * https://doge1.trezor.io/api/v2/utxo/D5oKvWEibVe74CXLASmhpkRpLoyjgZhm71
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import DogeUnspentsProvider from '../../doge/providers/DogeUnspentsProvider';
 
-import Database from '@app/appstores/DataSource/Database';
+// import Database from '@app/appstores/DataSource/Database';
+import { Database } from '@database';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
-import main from '@app/appstores/DataSource/Database';
+import { Q } from '@nozbe/watermelondb';
+import { DatabaseTable } from '@appTypes';
+import { AccountDBModel } from '@database/models/account';
+import { WalletPubDBModel } from '@database/models/wallet-pub';
 
-const CACHE_FOR_CHANGE = {};
+const CACHE_FOR_CHANGE: { [key: string]: any } = {};
 
 export default class BtcUnspentsProvider
   extends DogeUnspentsProvider
-  implements BlocksoftBlockchainTypes.UnspentsProvider
+  implements AirDAOBlockchainTypes.UnspentsProvider
 {
   static async getCache(walletHash: string, currencyCode = 'BTC') {
     if (typeof CACHE_FOR_CHANGE[walletHash] !== 'undefined') {
@@ -36,22 +40,40 @@ export default class BtcUnspentsProvider
         JSON.stringify(CACHE_FOR_CHANGE[walletHash])
     );
 
-    const sqlPub = `SELECT wallet_pub_value as walletPub
-            FROM wallet_pub
-            WHERE wallet_hash = '${walletHash}
-            AND currency_code='${mainCurrencyCode}'
-        `;
-    const resPub = await Database.query(sqlPub);
-    if (resPub && resPub.array && resPub.array.length > 0) {
-      const sql = `SELECT account.address
-            FROM account
-            WHERE account.wallet_hash = '${walletHash}
-            AND currency_code='${mainCurrencyCode}' AND (already_shown IS NULL OR already_shown=0)
-            AND derivation_type!='main'
-            ORDER BY derivation_index ASC
-        `;
-      const res = await Database.query(sql);
-      for (const row of res.array) {
+    // const sqlPub = `SELECT wallet_pub_value as walletPub
+    //         FROM wallet_pub
+    //         WHERE wallet_hash = '${walletHash}
+    //         AND currency_code='${mainCurrencyCode}'
+    //     `;
+    const resPub = (await Database.query(
+      DatabaseTable.WalletPub,
+      Q.and(
+        Q.where('hash', Q.eq(walletHash)),
+        Q.where('currency_code', Q.eq(mainCurrencyCode))
+      )
+    )) as WalletPubDBModel[];
+    if (resPub && resPub && resPub.length > 0) {
+      // const sql = `SELECT account.address
+      //       FROM account
+      //       WHERE account.wallet_hash = '${walletHash}
+      //       AND currency_code='${mainCurrencyCode}' AND (already_shown IS NULL OR already_shown=0)
+      //       AND derivation_type!='main'
+      //       ORDER BY derivation_index ASC
+      //   `;
+      const res = (await Database.query(
+        DatabaseTable.Accounts,
+        Q.and(
+          Q.where('hash', Q.eq(walletHash)),
+          Q.where('currency_code', Q.eq(mainCurrencyCode)),
+          Q.or(
+            Q.where('already_shown', Q.eq(null)),
+            Q.where('already_shown', Q.eq(0))
+          ),
+          Q.where('derivation_type', Q.notEq('main'))
+        ),
+        Q.sortBy('derivation_index', 'asc')
+      )) as AccountDBModel[];
+      for (const row of res) {
         const prefix =
           row.address.indexOf(segwitPrefix) === 0
             ? segwitPrefix
@@ -90,13 +112,19 @@ export default class BtcUnspentsProvider
         }
       }
     } else {
-      const sql = `SELECT account.address
-            FROM account
-            WHERE account.wallet_hash = '${walletHash}'
-            AND currency_code='${mainCurrencyCode}'
-        `;
-      const res = await Database.query(sql);
-      for (const row of res.array) {
+      // const sql = `SELECT account.address
+      //       FROM account
+      //       WHERE account.wallet_hash = '${walletHash}'
+      //       AND currency_code='${mainCurrencyCode}'
+      //   `;
+      const res = (await Database.query(
+        DatabaseTable.Accounts,
+        Q.and(
+          Q.where('hash', Q.eq(walletHash)),
+          Q.where('currency_code', mainCurrencyCode)
+        )
+      )) as AccountDBModel[];
+      for (const row of res) {
         // @ts-ignore
         await BlocksoftCryptoLog.log(
           currencyCode +
@@ -157,42 +185,45 @@ export default class BtcUnspentsProvider
 
   async getUnspents(
     address: string
-  ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
+  ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     const mainCurrencyCode =
       this._settings.currencyCode === 'LTC' ? 'LTC' : 'BTC';
     const segwitPrefix =
       BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
         .addressPrefix;
 
-    const sqlPub = `SELECT wallet_pub_value as walletPub
-            FROM wallet_pub
-            WHERE wallet_hash = (SELECT wallet_hash FROM account WHERE address='${address}')
+    const sqlPub = `SELECT wallet_pub_value as walletPubValue
+            FROM ${DatabaseTable.WalletPub}
+            WHERE hash = (SELECT hash FROM ${DatabaseTable.Accounts} WHERE address='${address}')
             AND currency_code='${mainCurrencyCode}'
         `;
     const totalUnspents = [];
-    const resPub = await Database.query(sqlPub);
-    if (resPub && resPub.array && resPub.array.length > 0) {
-      for (const row of resPub.array) {
-        const unspents = await super.getUnspents(row.walletPub);
+    // const resPub = await Database.query(sqlPub);
+    const resPub = (await Database.unsafeRawQuery(
+      DatabaseTable.WalletPub,
+      sqlPub
+    )) as WalletPubDBModel[];
+    if (resPub && resPub && resPub.length > 0) {
+      for (const row of resPub) {
+        const unspents = await super.getUnspents(row.walletPubValue);
         if (unspents) {
           for (const unspent of unspents) {
             totalUnspents.push(unspent);
           }
         }
       }
-      const sqlAdditional = `SELECT account.address, account.derivation_path as derivationPath, wallet_hash AS walletHash
-            FROM account
-            WHERE account.wallet_hash = (SELECT wallet_hash FROM account WHERE address='${address}')
+      const sqlAdditional = `SELECT account.address, account.derivation_path as derivationPath, hash
+            FROM ${DatabaseTable.Accounts}
+            WHERE account.hash = (SELECT hash FROM ${DatabaseTable.Accounts} WHERE address='${address}')
             AND account.derivation_path = 'm/49quote/0quote/0/1/0'
             AND currency_code='${mainCurrencyCode}'
             `;
-      const resAdditional = await Database.query(sqlAdditional);
-      if (
-        resAdditional &&
-        resAdditional.array &&
-        resAdditional.array.length > 0
-      ) {
-        for (const row of resAdditional.array) {
+      const resAdditional = (await Database.unsafeRawQuery(
+        DatabaseTable.Accounts,
+        sqlAdditional
+      )) as AccountDBModel[];
+      if (resAdditional && resAdditional && resAdditional.length > 0) {
+        for (const row of resAdditional) {
           const unspents = await super.getUnspents(row.address);
           if (unspents) {
             for (const unspent of unspents) {
@@ -206,20 +237,23 @@ export default class BtcUnspentsProvider
         }
       }
 
-      const sql = `SELECT account.address, account.derivation_path as derivationPath, wallet_hash AS walletHash
+      const sql = `SELECT account.address, account.derivation_path as derivationPath, hash
             FROM account
-            WHERE account.wallet_hash = (SELECT wallet_hash FROM account WHERE address='${address}')
+            WHERE account.hash = (SELECT hash FROM account WHERE address='${address}')
             AND currency_code='${mainCurrencyCode}' AND (already_shown IS NULL OR already_shown=0)
             AND derivation_type!='main'
             ORDER BY derivation_index ASC
         `;
-      const res = await Database.query(sql);
-      for (const row of res.array) {
-        const walletHash = row.walletHash;
+      const res = (await Database.unsafeRawQuery(
+        DatabaseTable.Accounts,
+        sql
+      )) as AccountDBModel[];
+      for (const row of res) {
+        const walletHash = row.hash.hash;
         const prefix =
           row.address.indexOf(segwitPrefix) === 0
             ? segwitPrefix
-            : row.address.substr(0, 1);
+            : row.address.substring(0, 1);
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' ' +
@@ -258,14 +292,17 @@ export default class BtcUnspentsProvider
         }
       }
     } else {
-      const sql = `SELECT account.address, account.derivation_path as derivationPath, wallet_hash AS walletHash
-            FROM account
-            WHERE account.wallet_hash = (SELECT wallet_hash FROM account WHERE address='${address}')
+      const sql = `SELECT account.address, account.derivation_path as derivationPath, hash
+            FROM ${DatabaseTable.Accounts}
+            WHERE account.hash = (SELECT hash FROM ${DatabaseTable.Accounts} WHERE address='${address}')
             AND currency_code='${mainCurrencyCode}'
         `;
-      const res = await Database.query(sql);
-      for (const row of res.array) {
-        const walletHash = row.walletHash;
+      const res = (await Database.unsafeRawQuery(
+        DatabaseTable.Accounts,
+        sql
+      )) as AccountDBModel[];
+      for (const row of res) {
+        const walletHash = row.hash.hash;
         const unspents = await super.getUnspents(row.address);
         // @ts-ignore
         await BlocksoftCryptoLog.log(
