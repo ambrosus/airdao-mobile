@@ -1,16 +1,17 @@
-const ethUtil = require('ethereumjs-util')
-const assert = require('assert')
-const BN = require('bn.js')
+import { addHexPrefix, stripHexPrefix } from 'ethereumjs-util';
+import { strictEqual } from 'assert';
+import BN from 'bn.js';
+import enums from './enums';
 const {
-    ENVIRONMENT_TYPE_POPUP,
-    ENVIRONMENT_TYPE_NOTIFICATION,
-    ENVIRONMENT_TYPE_FULLSCREEN,
-    PLATFORM_FIREFOX,
-    PLATFORM_OPERA,
-    PLATFORM_CHROME,
-    PLATFORM_EDGE,
-    PLATFORM_BRAVE
-} = require('./enums')
+  ENVIRONMENT_TYPE_POPUP,
+  ENVIRONMENT_TYPE_NOTIFICATION,
+  ENVIRONMENT_TYPE_FULLSCREEN,
+  PLATFORM_FIREFOX,
+  PLATFORM_OPERA,
+  PLATFORM_CHROME,
+  PLATFORM_EDGE,
+  PLATFORM_BRAVE
+} = enums;
 
 /**
  * Generates an example stack trace
@@ -19,7 +20,7 @@ const {
  *
  */
 function getStack() {
-    return new Error('Stack trace generator - not an error').stack
+  return new Error('Stack trace generator - not an error').stack;
 }
 
 /**
@@ -32,14 +33,17 @@ function getStack() {
  *
  */
 const getEnvironmentType = (url = window.location.href) => {
-    if (url.match(/popup.html(?:#.*)*$/)) {
-        return ENVIRONMENT_TYPE_POPUP
-    } else if (url.match(/home.html(?:\?.+)*$/) || url.match(/home.html(?:#.*)*$/)) {
-        return ENVIRONMENT_TYPE_FULLSCREEN
-    } else {
-        return ENVIRONMENT_TYPE_NOTIFICATION
-    }
-}
+  if (url.match(/popup.html(?:#.*)*$/)) {
+    return ENVIRONMENT_TYPE_POPUP;
+  } else if (
+    url.match(/home.html(?:\?.+)*$/) ||
+    url.match(/home.html(?:#.*)*$/)
+  ) {
+    return ENVIRONMENT_TYPE_FULLSCREEN;
+  } else {
+    return ENVIRONMENT_TYPE_NOTIFICATION;
+  }
+};
 
 // noinspection JSUnusedLocalSymbols
 /**
@@ -48,23 +52,23 @@ const getEnvironmentType = (url = window.location.href) => {
  * @returns {string} the platform ENUM
  *
  */
-const getPlatform = _ => {
-    const ua = navigator.userAgent
-    if (ua.search('Firefox') !== -1) {
-        return PLATFORM_FIREFOX
+const getPlatform = (_) => {
+  const ua = navigator.userAgent;
+  if (ua.search('Firefox') !== -1) {
+    return PLATFORM_FIREFOX;
+  } else {
+    // noinspection JSUnresolvedVariable
+    if (window && window.chrome && window.chrome.ipcRenderer) {
+      return PLATFORM_BRAVE;
+    } else if (ua.search('Edge') !== -1) {
+      return PLATFORM_EDGE;
+    } else if (ua.search('OPR') !== -1) {
+      return PLATFORM_OPERA;
     } else {
-        // noinspection JSUnresolvedVariable
-        if (window && window.chrome && window.chrome.ipcRenderer) {
-            return PLATFORM_BRAVE
-        } else if (ua.search('Edge') !== -1) {
-            return PLATFORM_EDGE
-        } else if (ua.search('OPR') !== -1) {
-            return PLATFORM_OPERA
-        } else {
-            return PLATFORM_CHROME
-        }
+      return PLATFORM_CHROME;
     }
-}
+  }
+};
 
 /**
  * Checks whether a given balance of ETH, represented as a hex string, is sufficient to pay a value plus a gas fee
@@ -78,19 +82,27 @@ const getPlatform = _ => {
  *
  */
 function sufficientBalance(txParams, hexBalance) {
-    // validate hexBalance is a hex string
-    assert.strictEqual(typeof hexBalance, 'string', 'sufficientBalance - hexBalance is not a hex string')
-    assert.strictEqual(hexBalance.slice(0, 2), '0x', 'sufficientBalance - hexBalance is not a hex string')
+  // validate hexBalance is a hex string
+  strictEqual(
+    typeof hexBalance,
+    'string',
+    'sufficientBalance - hexBalance is not a hex string'
+  );
+  strictEqual(
+    hexBalance.slice(0, 2),
+    '0x',
+    'sufficientBalance - hexBalance is not a hex string'
+  );
 
-    const balance = hexToBn(hexBalance)
-    const value = hexToBn(txParams.value)
-    const gasLimit = hexToBn(txParams.gas)
-    const gasPrice = hexToBn(txParams.gasPrice)
+  const balance = hexToBn(hexBalance);
+  const value = hexToBn(txParams.value);
+  const gasLimit = hexToBn(txParams.gas);
+  const gasPrice = hexToBn(txParams.gasPrice);
 
-    // noinspection JSUnresolvedFunction
-    const maxCost = value.add(gasLimit.mul(gasPrice))
-    // noinspection JSUnresolvedFunction
-    return balance.gte(maxCost)
+  // noinspection JSUnresolvedFunction
+  const maxCost = value.add(gasLimit.mul(gasPrice));
+  // noinspection JSUnresolvedFunction
+  return balance.gte(maxCost);
 }
 
 /**
@@ -101,8 +113,8 @@ function sufficientBalance(txParams, hexBalance) {
  *
  */
 function bnToHex(inputBn) {
-    // noinspection JSCheckFunctionSignatures
-    return ethUtil.addHexPrefix(inputBn.toString(16))
+  // noinspection JSCheckFunctionSignatures
+  return addHexPrefix(inputBn.toString(16));
 }
 
 /**
@@ -113,8 +125,8 @@ function bnToHex(inputBn) {
  *
  */
 function hexToBn(inputHex) {
-    // noinspection JSUnresolvedFunction
-    return new BN(ethUtil.stripHexPrefix(inputHex), 16)
+  // noinspection JSUnresolvedFunction
+  return new BN(stripHexPrefix(inputHex), 16);
 }
 
 /**
@@ -127,33 +139,33 @@ function hexToBn(inputHex) {
  *
  */
 function BnMultiplyByFraction(targetBN, numerator, denominator) {
-    const numBN = new BN(numerator)
-    const denomBN = new BN(denominator)
-    // noinspection JSUnresolvedFunction
-    return targetBN.mul(numBN).div(denomBN)
+  const numBN = new BN(numerator);
+  const denomBN = new BN(denominator);
+  // noinspection JSUnresolvedFunction
+  return targetBN.mul(numBN).div(denomBN);
 }
 
 function applyListeners(listeners, emitter) {
-    Object.keys(listeners).forEach((key) => {
-        emitter.on(key, listeners[key])
-    })
+  Object.keys(listeners).forEach((key) => {
+    emitter.on(key, listeners[key]);
+  });
 }
 
 function removeListeners(listeners, emitter) {
-    Object.keys(listeners).forEach((key) => {
-        emitter.removeListener(key, listeners[key])
-    })
+  Object.keys(listeners).forEach((key) => {
+    emitter.removeListener(key, listeners[key]);
+  });
 }
 
 // noinspection JSUnusedGlobalSymbols
-module.exports = {
-    removeListeners,
-    applyListeners,
-    getPlatform,
-    getStack,
-    getEnvironmentType,
-    sufficientBalance,
-    hexToBn,
-    bnToHex,
-    BnMultiplyByFraction
-}
+export default {
+  removeListeners,
+  applyListeners,
+  getPlatform,
+  getStack,
+  getEnvironmentType,
+  sufficientBalance,
+  hexToBn,
+  bnToHex,
+  BnMultiplyByFraction
+};

@@ -5,8 +5,6 @@ import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
-import config from '../../../../app/config/config';
 import EthRawDS from '../stores/EthRawDS';
 import EthTmpDS from '../stores/EthTmpDS';
 
@@ -31,11 +29,11 @@ class EthNetworkPrices {
     if (mainCurrencyCode !== 'ETH' || isTestnet) {
       return false;
     }
-    const { apiEndpoints } = config.proxy;
-    const baseURL = MarketingEvent.DATA.LOG_TESTER
-      ? apiEndpoints.baseURLTest
-      : apiEndpoints.baseURL;
-    const proxy = baseURL + '/eth/getFees';
+    // const { apiEndpoints } = config.proxy;
+    // const baseURL = MarketingEvent.DATA.LOG_TESTER
+    //   ? apiEndpoints.baseURLTest
+    //   : apiEndpoints.baseURL;
+    // const proxy = baseURL + '/eth/getFees';
     const now = new Date().getTime();
     if (
       CACHE_PROXY_DATA.address === address &&
@@ -56,23 +54,17 @@ class EthNetworkPrices {
     let index = 0;
     do {
       try {
-        checkResult = await BlocksoftAxios.post(
-          proxy,
-          {
-            address,
-            logData,
-            marketingData: MarketingEvent.DATA
-          },
-          20000
-        );
-      } catch (e) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            'EthNetworkPricesProvider.getWithProxy proxy error checkError ' +
-              e.message
-          );
-        }
-      }
+        // TODO
+        // checkResult = await BlocksoftAxios.post(
+        //   proxy,
+        //   {
+        //     address,
+        //     logData,
+        //     marketingData: MarketingEvent.DATA
+        //   },
+        //   20000
+        // );
+      } catch (e) {}
       index++;
     } while (index < 3 && !checkResult);
 
@@ -87,12 +79,6 @@ class EthNetworkPrices {
           typeof checkResult.data.status === 'undefined' ||
           checkResult.data.status === 'error'
         ) {
-          if (config.debug.cryptoErrors) {
-            console.log(
-              'EthNetworkPricesProvider.getWithProxy proxy error checkResult1 ',
-              checkResult
-            );
-          }
           checkResult = false;
         } else if (checkResult.data.status === 'notice') {
           throw new Error(checkResult.data.msg);
@@ -103,20 +89,8 @@ class EthNetworkPrices {
             ' EthNetworkPricesProvider.getWithProxy proxy checkResult2 ',
           checkResult
         );
-        if (config.debug.cryptoErrors) {
-          console.log(
-            'EthNetworkPricesProvider.getWithProxy proxy error checkResult2 ',
-            checkResult
-          );
-        }
       }
     } else {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          'EthNetworkPricesProvider.getWithProxy proxy error checkResultEmpty ',
-          checkResult
-        );
-      }
     }
 
     if (checkResult === false) {
@@ -210,10 +184,6 @@ class EthNetworkPrices {
       logData.resultFeeCacheTime = CACHE_FEES_ETH_TIME;
       logData.resultFee = JSON.stringify(CACHE_FEES_ETH);
       // noinspection ES6MissingAwait
-      MarketingEvent.logEvent(
-        'v20_estimate_fee_' + mainCurrencyCode.toLowerCase() + '_result',
-        logData
-      );
       BlocksoftCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees used cache => ' +
@@ -251,11 +221,6 @@ class EthNetworkPrices {
         );
       }
     } catch (e) {
-      // noinspection ES6MissingAwait
-      MarketingEvent.logEvent('estimate_fee_eth_load_error', {
-        link,
-        data: e.message
-      });
       BlocksoftCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees loaded prev fee as error',
@@ -267,18 +232,6 @@ class EthNetworkPrices {
     try {
       await this._parseLoaded(mainCurrencyCode, CACHE_PREV_DATA, link);
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          mainCurrencyCode +
-            ' EthNetworkPricesProvider.getOnlyFees _parseLoaded error ' +
-            e.message
-        );
-      }
-      // noinspection ES6MissingAwait
-      MarketingEvent.logEvent('estimate_fee_eth_parse_error', {
-        link,
-        data: e.message
-      });
       BlocksoftCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees _parseLoaded error ' +
@@ -288,8 +241,6 @@ class EthNetworkPrices {
     }
     logData.resultFeeCacheTime = CACHE_FEES_ETH_TIME;
     logData.resultFee = JSON.stringify(CACHE_FEES_ETH);
-    MarketingEvent.logEvent('estimate_fee_eth_result', logData);
-
     return this._format();
   }
 

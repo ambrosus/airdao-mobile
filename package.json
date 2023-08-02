@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.21.5",
+    "@metamask/safe-event-emitter": "^3.0.0",
     "@morrowdigital/watermelondb-expo-plugin": "^2.1.2",
     "@neverdull-agency/expo-unlimited-secure-store": "^1.0.10",
     "@nozbe/watermelondb": "^0.26.0",
@@ -51,6 +52,8 @@
     "coinselect": "^3.1.13",
     "create-hash": "^1.2.0",
     "elliptic": "^6.5.4",
+    "ethereumjs-util": "^7.1.5",
+    "ethjs-provider-http": "^0.1.6",
     "expo": "~48.0.18",
     "expo-barcode-scanner": "~12.3.2",
     "expo-build-properties": "~0.6.0",

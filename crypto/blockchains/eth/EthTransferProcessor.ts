@@ -12,24 +12,21 @@ import EthBasic from './basic/EthBasic';
 import EthNetworkPrices from './basic/EthNetworkPrices';
 import EthTxSendProvider from './basic/EthTxSendProvider';
 
-import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
-import BlocksoftDispatcher from '../BlocksoftDispatcher';
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import AirDAODispatcher from '../AirDAODispatcher';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
-import config from '../../../app/config/config';
-import settingsActions from '../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftExternalSettings from '../../common/BlocksoftExternalSettings';
-import { sublocale } from '../../../app/services/i18n';
 import abi721 from './ext/erc721.js';
 import abi1155 from './ext/erc1155';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
+import { Database } from '@database';
 
 export default class EthTransferProcessor
   extends EthBasic
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
-  _useThisBalance: boolean = true;
+  _useThisBalance = true;
 
   needPrivateForFee(): boolean {
     return false;
@@ -40,10 +37,10 @@ export default class EthTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData?: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData?: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     let txRBFed = '';
     let txRBF = false;
 
@@ -123,7 +120,7 @@ export default class EthTransferProcessor
       );
       if (oldGasPrice === false) {
         try {
-          const ethProvider = BlocksoftDispatcher.getScannerProcessor(
+          const ethProvider = AirDAODispatcher.getScannerProcessor(
             data.currencyCode
           );
           const scannedTx = await ethProvider.getTransactionBlockchain(txRBF);
@@ -188,10 +185,10 @@ export default class EthTransferProcessor
       this._mainCurrencyCode,
       data.addressFrom
     );
-    const ethAllowBlockedBalance = await settingsActions.getSetting(
+    const ethAllowBlockedBalance = await Database.localStorage.get(
       'ethAllowBlockedBalance'
     );
-    const ethAllowLongQuery = await settingsActions.getSetting(
+    const ethAllowLongQuery = await Database.localStorage.get(
       'ethAllowLongQuery'
     );
 
@@ -382,11 +379,6 @@ export default class EthTransferProcessor
               gasLimit = BlocksoftUtils.mul(gasLimit, 1.5);
             }
           } catch (e) {
-            if (config.debug.cryptoErrors) {
-              BlocksoftCryptoLog.log(
-                'EthTransferProcessor data.contractCallData error ' + e.message
-              );
-            }
             BlocksoftCryptoLog.log(
               'EthTransferProcessor data.contractCallData error ' + e.message
             );
@@ -496,8 +488,8 @@ export default class EthTransferProcessor
       }
     );
 
-    const result: BlocksoftBlockchainTypes.FeeRateResult =
-      {} as BlocksoftBlockchainTypes.FeeRateResult;
+    const result: AirDAOBlockchainTypes.FeeRateResult =
+      {} as AirDAOBlockchainTypes.FeeRateResult;
     result.fees = [];
 
     let balance = '0';
@@ -523,15 +515,16 @@ export default class EthTransferProcessor
         } else {
           nonceLog += ' from serverCheckNoLog ';
         }
-        if (
-          MarketingEvent.DATA.LOG_TESTER &&
-          typeof proxyPriceCheck.newNonceDEBUG !== 'undefined'
-        ) {
-          nonceForTxBasic = proxyPriceCheck.newNonceDEBUG;
-          nonceLog += ' used newNonceDEBUG';
-        } else {
-          nonceLog += ' used newNonce ';
-        }
+        // if (
+        //   MarketingEvent.DATA.LOG_TESTER &&
+        //   typeof proxyPriceCheck.newNonceDEBUG !== 'undefined'
+        // ) {
+        //   nonceForTxBasic = proxyPriceCheck.newNonceDEBUG;
+        //   nonceLog += ' used newNonceDEBUG';
+        // } else {
+        //   nonceLog += ' used newNonce ';
+        // }
+        nonceLog += ' used newNonce ';
 
         if (nonceForTxBasic === 'maxValue+1') {
           if (maxNonceLocal.maxValue * 1 > -1) {
@@ -633,7 +626,7 @@ export default class EthTransferProcessor
       }
       let fee = BlocksoftUtils.mul(gasPrice[key], gasLimit);
       let amount = data.amount;
-      let needSpeed = gasPrice[key].toString();
+      const needSpeed = gasPrice[key].toString();
       let newGasPrice = needSpeed;
       let changedFeeByBalance = false;
       if (actualCheckBalance) {
@@ -1011,12 +1004,6 @@ export default class EthTransferProcessor
             }
           }
         } catch (e) {
-          if (config.debug.cryptoErrors) {
-            BlocksoftCryptoLog.log(
-              ' EthTransferProcessor.getFees ethAllowBlockedBalance inner error ' +
-                e.message
-            );
-          }
           BlocksoftCryptoLog.log(
             ' EthTransferProcessor.getFees ethAllowBlockedBalance inner error ' +
               e.message
@@ -1056,10 +1043,10 @@ export default class EthTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData?: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData?: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     if (!data.amount || data.amount === '0') {
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode +
@@ -1141,10 +1128,10 @@ export default class EthTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('ETH transaction required privateKey');
     }
@@ -1255,7 +1242,7 @@ export default class EthTransferProcessor
       throw new Error('SERVER_PLEASE_SELECT_FEE');
     }
 
-    const tx: BlocksoftBlockchainTypes.EthTx = {
+    const tx: AirDAOBlockchainTypes.EthTx = {
       from: data.addressFrom,
       to: realAddressToLower,
       gasPrice: finalGasPrice,
@@ -1336,12 +1323,11 @@ export default class EthTransferProcessor
       typeof data.basicAmount !== 'undefined' ? data.basicAmount : data.amount;
     logData.basicToken =
       typeof data.basicToken !== 'undefined' ? data.basicToken : '';
-    logData.pushLocale = sublocale();
-    logData.pushSetting = await settingsActions.getSetting(
-      'transactionsNotifs'
-    );
+    // logData.pushLocale = sublocale();
+    logData.pushLocale = 'en';
+    logData.pushSetting = await Database.localStorage.get('transactionsNotifs');
 
-    let result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    let result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       if (txRBF) {
         let oldNonce =
@@ -1358,7 +1344,7 @@ export default class EthTransferProcessor
         }
         if (oldNonce === false || oldNonce === -1) {
           try {
-            const ethProvider = BlocksoftDispatcher.getScannerProcessor(
+            const ethProvider = AirDAODispatcher.getScannerProcessor(
               data.currencyCode
             );
             const scannedTx = await ethProvider.getTransactionBlockchain(txRBF);
@@ -1430,15 +1416,6 @@ export default class EthTransferProcessor
       try {
         result = await sender.send(tx, privateData, txRBF, logData);
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          BlocksoftCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTransferProcessor.sent while ' +
-              (txRBF ? 'txRbf' : 'usual') +
-              ' sender.send error ' +
-              e.message
-          );
-        }
         throw e;
       }
 
@@ -1469,35 +1446,16 @@ export default class EthTransferProcessor
           JSON.stringify(result.transactionJson)
       );
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.sent error ' +
-            e.message,
-          tx
-        );
-      }
       this.checkError(e, data, txRBF, logData);
     }
     // @ts-ignore
     logData.result = result;
-    // noinspection ES6MissingAwait
-    MarketingEvent.logOnlyRealTime(
-      'v20_eth_tx_success ' +
-        this._settings.currencyCode +
-        ' ' +
-        data.addressFrom +
-        ' => ' +
-        realAddressTo,
-      logData
-    );
-
     return result;
   }
 
   async setMissingTx(
-    data: BlocksoftBlockchainTypes.DbAccount,
-    transaction: BlocksoftBlockchainTypes.DbTransaction
+    data: AirDAOBlockchainTypes.DbAccount,
+    transaction: AirDAOBlockchainTypes.DbTransaction
   ): Promise<boolean> {
     if (
       typeof transaction.transactionJson !== 'undefined' &&
@@ -1517,21 +1475,12 @@ export default class EthTransferProcessor
         'send_' + transaction.transactionHash
       );
     }
-    MarketingEvent.logOnlyRealTime(
-      'v20_eth_tx_set_missing ' +
-        this._settings.currencyCode +
-        ' ' +
-        data.address +
-        ' => ' +
-        transaction.addressTo,
-      transaction
-    );
     return true;
   }
 
   canRBF(
-    data: BlocksoftBlockchainTypes.DbAccount,
-    transaction: BlocksoftBlockchainTypes.DbTransaction,
+    data: AirDAOBlockchainTypes.DbAccount,
+    transaction: AirDAOBlockchainTypes.DbTransaction,
     source: string
   ): boolean {
     if (transaction.transactionDirection === 'income') {

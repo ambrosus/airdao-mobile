@@ -16,7 +16,12 @@ export default class EthScannerProcessorSoul extends EthScannerProcessorErc20 {
    * @returns {Promise<[]>}
    * @private
    */
-  async _unifyTransactions(address, result, isInternal, isTrezor = true) {
+  async _unifyTransactions(
+    address: string,
+    result,
+    isInternal: boolean,
+    isTrezor = true
+  ) {
     const transactions = [];
     const alreadyTransactions = {};
     let count = 0;

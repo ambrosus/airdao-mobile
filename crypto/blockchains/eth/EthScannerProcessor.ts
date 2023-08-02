@@ -10,8 +10,8 @@ import BlocksoftBN from '../../common/BlocksoftBN';
 
 import EthTmpDS from './stores/EthTmpDS';
 import EthRawDS from './stores/EthRawDS';
-import config from '@app/config/config';
 import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+import { BlockchainTransaction } from '@appTypes';
 
 const CACHE_GET_MAX_BLOCK = {
   ETH: { max_block_number: 0, confirmations: 0 },
@@ -216,15 +216,6 @@ export default class EthScannerProcessor extends EthBasic {
         }
       }
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthScannerProcessor.getBalance ' +
-            address +
-            ' error ' +
-            e.message
-        );
-      }
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance ' +
@@ -248,17 +239,6 @@ export default class EthScannerProcessor extends EthBasic {
       time = 'now()';
       return { balance, unconfirmed: 0, provider, time };
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthScannerProcessor.getBalance ' +
-            address +
-            ' ' +
-            this._web3.LINK +
-            ' rpc error ' +
-            e.message
-        );
-      }
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance ' +
@@ -977,7 +957,7 @@ export default class EthScannerProcessor extends EthBasic {
    * @return {UnifiedTransaction}
    * @protected
    */
-  async _unifyTransaction(_address, transaction, isInternal = false) {
+  async _unifyTransaction(_address: string, transaction, isInternal = false) {
     if (typeof transaction.timeStamp === 'undefined') {
       throw new Error(
         ' no transaction.timeStamp error transaction data ' +

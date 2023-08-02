@@ -8,15 +8,15 @@ export class TransactionScannersTmpDBModel extends Model {
 
   // define fields
   // @ts-ignore
-  @text('currency_code') currency_code: string;
+  @text('currency_code') currencyCode: string;
   // @ts-ignore
   @text('address') address: string;
   // @ts-ignore
-  @text('tmp_key') tmp_key: string;
+  @text('tmp_key') tmpKey: string;
   // @ts-ignore
-  @text('tmp_sub_key') tmp_sub_key: string;
+  @text('tmp_sub_key') tmpSubKey: string;
   // @ts-ignore
-  @text('tmp_val') tmp_val: string;
+  @text('tmp_val') tmpVal: string;
   // @ts-ignore
-  @field('created_at') created_at: number;
+  @field('created_at') createdAt: number;
 }

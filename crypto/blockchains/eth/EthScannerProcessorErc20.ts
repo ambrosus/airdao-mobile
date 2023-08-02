@@ -3,9 +3,7 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import EthScannerProcessor from './EthScannerProcessor';
-import config from '@app/config/config';
-
-const abi = require('./ext/erc20');
+import abi from './ext/erc20';
 
 export default class EthScannerProcessorErc20 extends EthScannerProcessor {
   /**
@@ -34,7 +32,7 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
    * @param {string} address
    * @return {Promise<{balance, unconfirmed, provider}>}
    */
-  async getBalanceBlockchain(address) {
+  async getBalanceBlockchain(address: string) {
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' EthScannerProcessorErc20.getBalance started ' +
@@ -99,15 +97,6 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
       time = 'now()';
       return { balance, unconfirmed: 0, provider, time };
     } catch (e) {
-      if (config.debug.appErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthScannerProcessorErc20.getBalance ' +
-            address +
-            ' error ' +
-            e.message
-        );
-      }
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessorErc20.getBalance ' +

@@ -1,16 +1,16 @@
+/* eslint-disable camelcase */
 /**
- * @author Ksu
+ * @author Javid
  * @version 0.32
  */
-import Database from '@app/appstores/DataSource/Database';
-import EthTxSendProvider from '../basic/EthTxSendProvider';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
-import config from '../../../../app/config/config';
+import { DatabaseTable } from '@appTypes';
+import { Database } from '@database';
+import { TransactionRawDBModel } from '@database/models/transactions-raw';
 
-const tableName = 'transactions_raw';
+const tableName = DatabaseTable.TransactionRaw;
 
 class EthRawDS {
   /**
@@ -20,6 +20,7 @@ class EthRawDS {
   _currencyCode = 'ETH';
 
   _trezorServer = 'none';
+  private _infuraProjectId: any; // TODO fix any
 
   async getForAddress(data) {
     try {
@@ -29,7 +30,7 @@ class EthRawDS {
       }
       const sql = `
         SELECT id,
-        transaction_unique_key AS transactionUnique,
+        transaction_unique_key AS transactionUniqueKey,
         transaction_hash AS transactionHash,
         transaction_raw AS transactionRaw,
         transaction_log AS transactionLog,
@@ -42,12 +43,15 @@ class EthRawDS {
         (is_removed=0 OR is_removed IS NULL)
         AND currency_code='${this._currencyCode}'
         AND address='${data.address.toLowerCase()}'`;
-      const result = await Database.query(sql);
-      if (!result || !result.array || result.array.length === 0) {
+      const result = (await Database.unsafeRawQuery(
+        tableName,
+        sql
+      )) as TransactionRawDBModel[];
+      if (!result || !result || result.length === 0) {
         return {};
       }
 
-      const ret = {};
+      const ret: { [key: string]: unknown } = {}; // TODO fix unknown
 
       if (this._trezorServer === 'none') {
         if (this._currencyCode === 'ETH') {
@@ -72,11 +76,11 @@ class EthRawDS {
         }
       }
 
-      const now = new Date().toISOString();
+      const now = new Date().getTime();
 
-      for (const row of result.array) {
+      for (const row of result) {
         try {
-          ret[row.transactionUnique] = row;
+          ret[row.transactionUniqueKey] = row;
           let transactionLog;
           try {
             transactionLog = row.transactionLog
@@ -92,55 +96,42 @@ class EthRawDS {
             (typeof transactionLog.successResult === 'undefined' ||
               !transactionLog.successResult)
           ) {
-            const { apiEndpoints } = config.proxy;
-            const baseURL = MarketingEvent.DATA.LOG_TESTER
-              ? apiEndpoints.baseURLTest
-              : apiEndpoints.baseURL;
-            const successProxy = baseURL + '/send/sendtx';
-            let checkResult = false;
-            try {
-              transactionLog.selectedFee.isRebroadcast = true;
-              checkResult = await BlocksoftAxios.post(successProxy, {
-                raw: row.transactionRaw,
-                txRBF:
-                  typeof transactionLog.txRBF !== 'undefined'
-                    ? transactionLog.txRBF
-                    : false,
-                logData: transactionLog,
-                marketingData: MarketingEvent.DATA
-              });
-              await BlocksoftCryptoLog.log(
-                this._currencyCode + ' EthRawDS.send proxy success result',
-                JSON.parse(JSON.stringify(checkResult))
-              );
-            } catch (e3) {
-              if (config.debug.cryptoErrors) {
-                console.log(
-                  this._currencyCode +
-                    ' EthRawDS.send proxy success error ' +
-                    e3.message
-                );
-              }
-              await BlocksoftCryptoLog.log(
-                this._currencyCode +
-                  ' EthRawDS.send proxy success error ' +
-                  e3.message
-              );
-            }
-            if (checkResult && typeof checkResult.data !== 'undefined') {
-              transactionLog.successResult = checkResult.data;
-            }
-
-            await Database.setTableName('transactions_raw')
-              .setUpdateData({
-                updateObj: {
-                  transactionLog: Database.escapeString(
-                    JSON.stringify(transactionLog)
-                  )
-                },
-                key: { id: row.id }
-              })
-              .update();
+            // const { apiEndpoints } = config.proxy;
+            // const baseURL = MarketingEvent.DATA.LOG_TESTER
+            //   ? apiEndpoints.baseURLTest
+            //   : apiEndpoints.baseURL;
+            // const successProxy = baseURL + '/send/sendtx';
+            // let checkResult = false;
+            // try {
+            //   transactionLog.selectedFee.isRebroadcast = true;
+            //   checkResult = await BlocksoftAxios.post(successProxy, {
+            //     raw: row.transactionRaw,
+            //     txRBF:
+            //       typeof transactionLog.txRBF !== 'undefined'
+            //         ? transactionLog.txRBF
+            //         : false,
+            //     logData: transactionLog,
+            //     marketingData: MarketingEvent.DATA
+            //   });
+            //   await BlocksoftCryptoLog.log(
+            //     this._currencyCode + ' EthRawDS.send proxy success result',
+            //     JSON.parse(JSON.stringify(checkResult))
+            //   );
+            // } catch (e3) {
+            //   await BlocksoftCryptoLog.log(
+            //     this._currencyCode +
+            //       ' EthRawDS.send proxy success error ' +
+            //       e3.message
+            //   );
+            // }
+            // if (checkResult && typeof checkResult.data !== 'undefined') {
+            //   transactionLog.successResult = checkResult.data;
+            // }
+            // await Database.updateModel(tableName, row.id, {
+            //   transactionLog: Database.escapeString(
+            //     JSON.stringify(transactionLog)
+            //   )
+            // });
           }
 
           let broadcastLog = '';
@@ -160,7 +151,8 @@ class EthRawDS {
               broadcastLog = ' broadcasted ok ' + JSON.stringify(broad.data);
               updateObj.is_removed = '1';
               updateObj.removed_at = now;
-            } catch (e) {
+            } catch (err) {
+              const e = err as unknown as any;
               if (
                 e.message.indexOf('transaction underpriced') !== -1 ||
                 e.message.indexOf('already known') !== -1
@@ -173,10 +165,6 @@ class EthRawDS {
               }
             }
             broadcastLog += ' ' + link + '; ';
-            MarketingEvent.logOnlyRealTime(
-              'v20_eth_resend_0 ' + row.transactionHash,
-              { broadcastLog, ...updateObj }
-            );
           }
 
           if (this._currencyCode === 'ETH') {
@@ -191,7 +179,8 @@ class EthRawDS {
               broadcastLog1 = ' broadcasted ok ' + JSON.stringify(broad.data);
               updateObj.is_removed += '1';
               updateObj.removed_at = now;
-            } catch (e) {
+            } catch (err) {
+              const e = err as unknown as any;
               if (
                 e.message.indexOf('transaction underpriced') !== -1 ||
                 e.message.indexOf('already known') !== -1
@@ -204,11 +193,6 @@ class EthRawDS {
               }
             }
             broadcastLog1 += ' ' + link + '; ';
-            MarketingEvent.logOnlyRealTime(
-              'v20_eth_resend_1 ' + row.transactionHash,
-              { broadcastLog1, ...updateObj }
-            );
-
             link = 'https://mainnet.infura.io/v3/' + this._infuraProjectId;
             let broadcastLog2 = '';
             try {
@@ -224,7 +208,8 @@ class EthRawDS {
               broadcastLog2 = ' broadcasted ok ' + JSON.stringify(broad.data);
               updateObj.is_removed += '1';
               updateObj.removed_at = now;
-            } catch (e) {
+            } catch (err) {
+              const e = err as unknown as any;
               if (
                 e.message.indexOf('transaction underpriced') !== -1 ||
                 e.message.indexOf('already known') !== -1
@@ -237,11 +222,6 @@ class EthRawDS {
               }
             }
             broadcastLog2 += ' ' + link + '; ';
-            MarketingEvent.logOnlyRealTime(
-              'v20_eth_resend_2 ' + row.transactionHash,
-              { broadcastLog2, ...updateObj }
-            );
-
             if (updateObj.is_removed === '111') {
               // do ALL!
               updateObj.is_removed = 1;
@@ -280,20 +260,16 @@ class EthRawDS {
             this._currencyCode === 'ETH_ROPSTEN'
           ) {
             updateObj.broadcastLog = broadcastLog;
-
-            await Database.setTableName('transactions_raw')
-              .setUpdateData({
-                updateObj,
-                key: { id: row.id }
-              })
-              .update();
+            await Database.updateModel(tableName, row.id, updateObj);
           }
-        } catch (e) {
+        } catch (err) {
+          const e = err as unknown as any;
           throw new Error(e.message + ' inside row ' + row.transactionHash);
         }
       }
       return ret;
-    } catch (e) {
+    } catch (err) {
+      const e = err as unknown as any;
       throw new Error(e.message + ' on EthRawDS.getAddress');
     }
   }
@@ -302,13 +278,13 @@ class EthRawDS {
     BlocksoftCryptoLog.log('EthRawDS cleanRawHash ', data);
 
     const now = new Date().toISOString();
-    const sql = `UPDATE transactions_raw
+    const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
         WHERE
         (is_removed=0 OR is_removed IS NULL)
         AND (currency_code='ETH' OR currency_code='ETH_ROPSTEN')
         AND transaction_hash='${data.transactionHash}'`;
-    await Database.query(sql);
+    await Database.unsafeRawQuery(tableName, sql);
   }
 
   async cleanRaw(data) {
@@ -319,15 +295,15 @@ class EthRawDS {
         data.currencyCode === 'ETH_ROPSTEN' ? 'ETH_ROPSTEN' : 'ETH';
     }
 
-    const now = new Date().toISOString();
-    const sql = `UPDATE transactions_raw
+    const now = new Date().getTime();
+    const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
         WHERE
         (is_removed=0 OR is_removed IS NULL)
         AND currency_code='${this._currencyCode}'
         AND address='${data.address.toLowerCase()}'
         AND transaction_unique_key='${data.transactionUnique}'`;
-    await Database.query(sql);
+    await Database.unsafeRawQuery(tableName, sql);
   }
 
   async saveRaw(data) {
@@ -335,16 +311,16 @@ class EthRawDS {
       this._currencyCode =
         data.currencyCode === 'ETH_ROPSTEN' ? 'ETH_ROPSTEN' : 'ETH';
     }
-    const now = new Date().toISOString();
+    const now = new Date().getTime();
 
-    const sql = `UPDATE transactions_raw
+    const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
         WHERE
         (is_removed=0 OR is_removed IS NULL)
         AND currency_code='${this._currencyCode}'
         AND address='${data.address.toLowerCase()}'
         AND transaction_unique_key='${data.transactionUnique.toLowerCase()}'`;
-    await Database.query(sql);
+    await Database.unsafeRawQuery(tableName, sql);
 
     const prepared = [
       {
@@ -360,9 +336,7 @@ class EthRawDS {
         is_removed: 0
       }
     ];
-    await Database.setTableName(tableName)
-      .setInsertData({ insertObjs: prepared })
-      .insert();
+    await Database.createModel(tableName, prepared);
   }
 }
 

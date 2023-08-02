@@ -55,6 +55,31 @@ class Database {
     }
   }
 
+  async updateModel(table: DatabaseTable, id: string, updateObj: any) {
+    if (!this.db) this.init();
+    try {
+      const model = await this.db!.get(table).find(id);
+      await model.update((modelToUpdate) => {
+        for (const key in updateObj) {
+          // @ts-ignore
+          modelToUpdate[key] = updateObj[key];
+        }
+      });
+    } catch (error) {
+      // ignore
+    }
+  }
+
+  async deleteModel(table: DatabaseTable, id: string) {
+    if (!this.db) this.init();
+    try {
+      const model = await this.db!.get(table).find(id);
+      if (model) await model.destroyPermanently();
+    } catch (error) {
+      // ignore
+    }
+  }
+
   unEscapeString(goodString: string) {
     if (!goodString) return false;
     return goodString.replace(/quote/g, "'");

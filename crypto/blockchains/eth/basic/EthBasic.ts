@@ -3,9 +3,7 @@
  * https://etherscan.io/apis#accounts
  */
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import MarketingEvent from '@app/services/Marketing/MarketingEvent';
 import { Web3Injected } from '@crypto/services/Web3Injected';
-import config from '@app/config/config';
 
 export default class EthBasic {
   /**
@@ -309,9 +307,6 @@ export default class EthBasic {
   }
 
   checkError(e, data, txRBF = false, logData = {}) {
-    if (config.debug.cryptoErrors) {
-      console.log('EthBasic Error ' + e.message);
-    }
     if (e.message.indexOf('Transaction has been reverted by the EVM') !== -1) {
       BlocksoftCryptoLog.log(
         'EthBasic checkError0.0 ' + e.message + ' for ' + data.addressFrom,
@@ -383,19 +378,6 @@ export default class EthBasic {
       );
       throw new Error('SERVER_RESPONSE_BAD_INTERNET');
     } else {
-      MarketingEvent.logOnlyRealTime(
-        'v20_' +
-          this._mainCurrencyCode.toLowerCase() +
-          '_tx_error ' +
-          this._settings.currencyCode +
-          ' ' +
-          data.addressFrom +
-          ' => ' +
-          data.addressTo +
-          ' ' +
-          e.message,
-        logData
-      );
       throw e;
     }
   }
