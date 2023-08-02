@@ -27,10 +27,10 @@ import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import DogeFindAddressFunction from './basic/DogeFindAddressFunction';
 import BlocksoftExternalSettings from '../../common/BlocksoftExternalSettings';
 import DogeRawDS from './stores/DogeRawDS';
-import EthRawDS from '../eth/stores/EthRawDS';
+import { BlockchainTransaction } from '@appTypes';
 
 const CACHE_VALID_TIME = 30000; // 30 seconds
-const CACHE = {};
+const CACHE: { [key: string]: unknown } = {}; //TODO fix type
 
 const TIMEOUT_DOGE = 60000;
 const PROXY_TXS = 'https://proxy.trustee.deals/btc/getTxs';
@@ -53,20 +53,17 @@ export default class DogeScannerProcessor {
    */
   _trezorServer = false;
 
-  constructor(settings) {
+  _settings: unknown; // TODO fix type
+
+  constructor(settings: unknown) {
     this._settings = settings;
   }
 
-  _addressesForFind(address, jsonData = {}) {
+  _addressesForFind(address: string, jsonData = {}) {
     return [address];
   }
 
-  /**
-   * @param address
-   * @returns {Promise<boolean|*>}
-   * @private
-   */
-  async _get(address, jsonData) {
+  private async _get(address: string, jsonData): Promise<boolean> {
     const now = new Date().getTime();
     if (
       typeof CACHE[address] !== 'undefined' &&
@@ -139,7 +136,7 @@ export default class DogeScannerProcessor {
    * @param {string} address
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
-  async getBalanceBlockchain(address, jsonData = {}) {
+  async getBalanceBlockchain(address: string, jsonData = {}) {
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' DogeScannerProcessor.getBalance started ' +
@@ -162,7 +159,10 @@ export default class DogeScannerProcessor {
    * @param {*} scanData.additional
    * @return {Promise<UnifiedTransaction[]>}
    */
-  async getTransactionsBlockchain(scanData) {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string };
+    additional: unknown; // TODO fix type
+  }) {
     const address = scanData.account.address.trim();
     const jsonData = scanData.additional;
     BlocksoftCryptoLog.log(
@@ -276,7 +276,11 @@ export default class DogeScannerProcessor {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, transaction, jsonData = {}) {
+  async _unifyTransaction(
+    address: string,
+    transaction: BlockchainTransaction,
+    jsonData = {}
+  ) {
     let showAddresses = false;
     try {
       const tmp = this._addressesForFind(address, jsonData);

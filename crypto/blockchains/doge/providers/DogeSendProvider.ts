@@ -2,192 +2,34 @@
  * @version 0.20
  * https://github.com/trezor/blockbook/blob/master/docs/api.md
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import config from '../../../../app/config/config';
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
 
 export default class DogeSendProvider
-  implements BlocksoftBlockchainTypes.SendProvider
+  implements AirDAOBlockchainTypes.SendProvider
 {
-  protected _trezorServerCode: string = '';
+  protected _trezorServerCode = '';
 
-  private _trezorServer: string = '';
+  private _trezorServer = '';
 
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
-
-  private _proxy: string;
-
-  private _errorProxy: string;
-
-  private _successProxy: string;
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
 
   constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
+    settings: AirDAOBlockchainTypes.CurrencySettings,
     serverCode: string
   ) {
     this._settings = settings;
     this._trezorServerCode = serverCode;
-
-    const { apiEndpoints } = config.proxy;
-    const baseURL = MarketingEvent.DATA.LOG_TESTER
-      ? apiEndpoints.baseURLTest
-      : apiEndpoints.baseURL;
-    this._proxy = baseURL + '/send/checktx';
-    this._errorProxy = baseURL + '/send/errortx';
-    this._successProxy = baseURL + '/send/sendtx';
   }
 
   async _check(hex: string, subtitle: string, txRBF: any, logData: any) {
-    let checkResult = false;
-    try {
-      BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' DogeSendProvider.sendTx ' +
-          subtitle +
-          ' proxy checkResult start ' +
-          this._proxy,
-        logData
-      );
-      if (config.debug.cryptoErrors) {
-        console.log(
-          new Date().toISOString() +
-            ' ' +
-            this._settings.currencyCode +
-            ' DogeSendProvider.sendTx ' +
-            subtitle +
-            ' proxy checkResult start ' +
-            this._proxy
-        );
-      }
-      checkResult = await BlocksoftAxios.post(this._proxy, {
-        raw: hex,
-        txRBF,
-        logData,
-        marketingData: MarketingEvent.DATA
-      });
-      if (config.debug.cryptoErrors) {
-        console.log(
-          new Date().toISOString() +
-            ' ' +
-            this._settings.currencyCode +
-            ' DogeSendProvider.sendTx ' +
-            subtitle +
-            ' proxy checkResult end ' +
-            this._proxy
-        );
-      }
-    } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy error checkResult ' +
-            e.message
-        );
-      }
-      BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' DogeSendProvider.send proxy error checkResult ' +
-          e.message
-      );
-    }
-
-    if (checkResult !== false) {
-      if (typeof checkResult.data !== 'undefined') {
-        BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy checkResult1 ',
-          checkResult.data
-        );
-        if (
-          typeof checkResult.data.status === 'undefined' ||
-          checkResult.data.status === 'error'
-        ) {
-          if (config.debug.cryptoErrors) {
-            console.log(
-              this._settings.currencyCode +
-                ' DogeSendProvider.send proxy error checkResult1 ',
-              checkResult
-            );
-          }
-          checkResult = false;
-        } else if (checkResult.data.status === 'notice') {
-          throw new Error(checkResult.data.msg);
-        }
-      } else {
-        BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy checkResult2 ',
-          checkResult
-        );
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeSendProvider.send proxy error checkResult2 ',
-            checkResult
-          );
-        }
-      }
-    } else {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy error checkResultEmpty ',
-          checkResult
-        );
-      }
-    }
-    if (typeof logData === 'undefined' || !logData) {
-      logData = {};
-    }
-    logData.checkResult =
-      checkResult && typeof checkResult.data !== 'undefined' && checkResult.data
-        ? JSON.parse(JSON.stringify(checkResult.data))
-        : false;
-    return logData;
+    return {};
   }
 
   async _checkError(hex: string, subtitle: string, txRBF: any, logData: any) {
-    BlocksoftCryptoLog.log(
-      this._settings.currencyCode +
-        ' DogeSendProvider.send proxy errorTx start ' +
-        this._errorProxy,
-      logData
-    );
-    if (config.debug.cryptoErrors) {
-      console.log(
-        new Date().toISOString() +
-          ' ' +
-          this._settings.currencyCode +
-          ' DogeSendProvider.sendTx ' +
-          subtitle +
-          ' proxy errorTx start ' +
-          this._errorProxy
-      );
-    }
-    const res2 = await BlocksoftAxios.post(this._errorProxy, {
-      raw: hex,
-      txRBF,
-      logData,
-      marketingData: MarketingEvent.DATA
-    });
-    if (config.debug.cryptoErrors) {
-      console.log(
-        new Date().toISOString() +
-          ' ' +
-          this._settings.currencyCode +
-          ' DogeSendProvider.sendTx ' +
-          subtitle +
-          ' proxy errorTx result ',
-        JSON.parse(JSON.stringify(res2.data))
-      );
-    }
-    BlocksoftCryptoLog.log(
-      this._settings.currencyCode + ' DogeSendProvider.send proxy errorTx',
-      typeof res2.data !== 'undefined' ? res2.data : res2
-    );
+    return {};
   }
 
   async _checkSuccess(
@@ -197,109 +39,7 @@ export default class DogeSendProvider
     txRBF: any,
     logData: any
   ) {
-    let checkResult = false;
-    try {
-      logData.txHash = transactionHash;
-      BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' DogeSendProvider.send proxy successTx start ' +
-          this._successProxy,
-        logData
-      );
-      if (config.debug.cryptoErrors) {
-        console.log(
-          new Date().toISOString() +
-            ' ' +
-            this._settings.currencyCode +
-            ' DogeSendProvider.sendTx ' +
-            subtitle +
-            ' proxy successTx start ' +
-            this._successProxy
-        );
-      }
-      checkResult = await BlocksoftAxios.post(this._successProxy, {
-        raw: hex,
-        txRBF,
-        logData,
-        marketingData: MarketingEvent.DATA
-      });
-      if (config.debug.cryptoErrors) {
-        console.log(
-          new Date().toISOString() +
-            ' ' +
-            this._settings.currencyCode +
-            ' DogeSendProvider.sendTx ' +
-            subtitle +
-            ' proxy successTx result ',
-          JSON.parse(JSON.stringify(checkResult.data))
-        );
-      }
-    } catch (e3) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy error successTx ' +
-            e3.message
-        );
-      }
-      BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' DogeSendProvider.send proxy error successTx ' +
-          e3.message
-      );
-    }
-
-    if (checkResult !== false) {
-      if (typeof checkResult.data !== 'undefined') {
-        BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy successResult1 ',
-          checkResult.data
-        );
-        if (
-          typeof checkResult.data.status === 'undefined' ||
-          checkResult.data.status === 'error'
-        ) {
-          if (config.debug.cryptoErrors) {
-            console.log(
-              this._settings.currencyCode +
-                ' DogeSendProvider.send proxy error successResult1 ',
-              checkResult
-            );
-          }
-          checkResult = false;
-        } else if (checkResult.data.status === 'notice') {
-          throw new Error(checkResult.data.msg);
-        }
-      } else {
-        BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy successResult2 ',
-          checkResult
-        );
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeSendProvider.send proxy error successResult2 ',
-            checkResult
-          );
-        }
-      }
-    } else {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' DogeSendProvider.send proxy error successResultEmpty ',
-          checkResult
-        );
-      }
-    }
-    logData.successResult =
-      checkResult && typeof checkResult.data !== 'undefined' && checkResult.data
-        ? JSON.parse(JSON.stringify(checkResult.data))
-        : false;
-    logData.txRBF = txRBF;
-    return logData;
+    return {};
   }
 
   async sendTx(
@@ -333,12 +73,6 @@ export default class DogeSendProvider
     try {
       res = await BlocksoftAxios.post(link, hex);
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + ' DogeSendProvider.sendTx error ',
-          e
-        );
-      }
       if (subtitle.indexOf('rawSend') !== -1) {
         throw e;
       }
@@ -346,13 +80,6 @@ export default class DogeSendProvider
         logData.error = e.message;
         await this._checkError(hex, subtitle, txRBF, logData);
       } catch (e2) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeSendProvider.send proxy error errorTx ' +
-              e.message
-          );
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeSendProvider.send proxy error errorTx ' +
@@ -402,12 +129,6 @@ export default class DogeSendProvider
       }
     }
     if (typeof res.data.result === 'undefined' || !res.data.result) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + 'DogeSendProvider.send no txid',
-          res.data
-        );
-      }
       throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
 

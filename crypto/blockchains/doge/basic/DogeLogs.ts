@@ -1,19 +1,19 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftBN from '../../../common/BlocksoftBN';
 import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
 
 export namespace DogeLogs {
   export const logInputsOutputs = function (
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     preparedInputsOutputs: {
-      inputs: BlocksoftBlockchainTypes.UnspentTx[];
-      outputs: BlocksoftBlockchainTypes.OutputTx[];
+      inputs: AirDAOBlockchainTypes.UnspentTx[];
+      outputs: AirDAOBlockchainTypes.OutputTx[];
       multiAddress: [];
       msg: string;
     },
@@ -99,16 +99,6 @@ export namespace DogeLogs {
       );
     }
     // console.log('btc_info ' + this._settings.currencyCode + ' ' + data.addressFrom  + ' => ' + data.addressTo, logInputsOutputs)
-    // noinspection JSIgnoredPromiseFromCall
-    MarketingEvent.logOnlyRealTime(
-      'v20_doge_info ' +
-        settings.currencyCode +
-        ' ' +
-        data.addressFrom +
-        ' => ' +
-        data.addressTo,
-      logInputsOutputs
-    );
     return logInputsOutputs;
   };
 }

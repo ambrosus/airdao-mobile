@@ -1,12 +1,12 @@
 /**
  * @version 0.20
  **/
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
 
 export default class DogeNetworkPrices
-  implements BlocksoftBlockchainTypes.NetworkPrices
+  implements AirDAOBlockchainTypes.NetworkPrices
 {
   async getNetworkPrices(currencyCode: string): Promise<{
     speed_blocks_2: number;

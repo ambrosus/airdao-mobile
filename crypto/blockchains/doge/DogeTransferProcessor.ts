@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
 
@@ -13,22 +13,18 @@ import DogeSendProvider from './providers/DogeSendProvider';
 import DogeRawDS from './stores/DogeRawDS';
 import { DogeLogs } from './basic/DogeLogs';
 
-import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
-import config from '../../../app/config/config';
-import { err } from 'react-native-svg/lib/typescript/xml';
-import { sublocale } from '../../../app/services/i18n';
-import settingsActions from '../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import { Database } from '@database';
 
-const networksConstants = require('../../common/ext/networks-constants');
+import networksConstants from '../../common/ext/networks-constants';
 const MAX_UNSPENTS = 100;
 
 export default class DogeTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   _trezorServerCode = 'DOGE_TREZOR_SERVER';
 
-  _builderSettings: BlocksoftBlockchainTypes.BuilderSettings = {
+  _builderSettings: AirDAOBlockchainTypes.BuilderSettings = {
     minOutputDustReadable: 0.001,
     minChangeDustReadable: 0.5,
     feeMaxForByteSatoshi: 100000000, // for tx builder
@@ -42,28 +38,28 @@ export default class DogeTransferProcessor
     feeMinTotalReadable: 1
   };
 
-  _initedProviders: boolean = false;
+  _initedProviders = false;
 
-  _settings: BlocksoftBlockchainTypes.CurrencySettings;
+  _settings: AirDAOBlockchainTypes.CurrencySettings;
 
   _langPrefix: string;
 
   // @ts-ignore
-  networkPrices: BlocksoftBlockchainTypes.NetworkPrices;
+  networkPrices: AirDAOBlockchainTypes.NetworkPrices;
 
   // @ts-ignore
-  unspentsProvider: BlocksoftBlockchainTypes.UnspentsProvider;
+  unspentsProvider: AirDAOBlockchainTypes.UnspentsProvider;
 
   // @ts-ignore
-  sendProvider: BlocksoftBlockchainTypes.SendProvider;
+  sendProvider: AirDAOBlockchainTypes.SendProvider;
 
   // @ts-ignore
-  txPrepareInputsOutputs: BlocksoftBlockchainTypes.TxInputsOutputs;
+  txPrepareInputsOutputs: AirDAOBlockchainTypes.TxInputsOutputs;
 
   // @ts-ignore
-  txBuilder: BlocksoftBlockchainTypes.TxBuilder;
+  txBuilder: AirDAOBlockchainTypes.TxBuilder;
 
-  constructor(settings: BlocksoftBlockchainTypes.CurrencySettings) {
+  constructor(settings: AirDAOBlockchainTypes.CurrencySettings) {
     this._settings = settings;
     this._langPrefix = networksConstants[settings.network].langPrefix;
     this.networkPrices = new DogeNetworkPrices();
@@ -96,10 +92,10 @@ export default class DogeTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     this._initProviders();
 
     let isStaticFee =
@@ -258,10 +254,10 @@ export default class DogeTransferProcessor
       );
     }
 
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -1,
-      fees: [] as BlocksoftBlockchainTypes.Fee[]
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+      fees: [] as AirDAOBlockchainTypes.Fee[]
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     const keys = ['speed_blocks_12', 'speed_blocks_6', 'speed_blocks_2'];
     const checkedPrices = {};
@@ -477,33 +473,6 @@ export default class DogeTransferProcessor
           continue;
         }
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeTransferProcessor.getFeeRate_' +
-              key +
-              ' ' +
-              feeForByte +
-              '  getInputsOutputs error',
-            e
-          );
-        }
-        // noinspection ES6MissingAwait
-        MarketingEvent.logOnlyRealTime(
-          'v20_doge_error_getfeerate_' +
-            key +
-            ' ' +
-            feeForByte +
-            ' ' +
-            this._settings.currencyCode +
-            ' ' +
-            data.addressFrom +
-            ' => ' +
-            data.addressTo +
-            ' ' +
-            e.message,
-          unspents
-        );
         throw e;
       }
 
@@ -650,53 +619,11 @@ export default class DogeTransferProcessor
           }
         } while (doBuild);
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeTransferProcessor.getRawTx error ' +
-              e.message
-          );
-          /*
-                    console.log('')
-                    console.log('')
-                    if (preparedInputsOutputs.inputs) {
-                        let i = 0
-                        for (let input of preparedInputsOutputs.inputs) {
-                            console.log('ERR inputs [' + i + ']', JSON.parse(JSON.stringify(input)))
-                            i++
-                        }
-                    }
-                    if (preparedInputsOutputs.outputs) {
-                        let i = 0
-                        for (let output of preparedInputsOutputs.outputs) {
-                            console.log('ERR outputs [' + i + ']', JSON.parse(JSON.stringify(output)))
-                            i++
-                        }
-                    }
-                    console.log('ERR fee msg ', preparedInputsOutputs.msg)
-                    console.log('ERR diffInOutS', logInputsOutputs.diffInOut)
-                    console.log('ERR diffInOutR', logInputsOutputs.diffInOutReadable)
-                    console.log('---------------------')
-                    console.log('')
-                    */
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTransferProcessor.getRawTx error ' +
             e.message
         );
-        MarketingEvent.logOnlyRealTime(
-          'v20_doge_error_tx_builder_fees ' +
-            this._settings.currencyCode +
-            ' ' +
-            data.addressFrom +
-            ' => ' +
-            data.addressTo +
-            ' ' +
-            e.message.toString(),
-          logInputsOutputs
-        );
-
         if (e.message.indexOf('Transaction has absurd fees') !== -1) {
           isError = 'SERVER_RESPONSE_TOO_BIG_FEE_PER_BYTE_FOR_TRANSACTION';
           continue;
@@ -774,10 +701,10 @@ export default class DogeTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     data.isTransferAll = true;
     const result = await this.getFeeRate(data, privateData, additionalData);
     // @ts-ignore
@@ -799,10 +726,10 @@ export default class DogeTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (
       typeof uiData.selectedFee.blockchainData === 'undefined' &&
       typeof uiData.selectedFee.feeForTx === 'undefined'
@@ -854,10 +781,8 @@ export default class DogeTransferProcessor
     logData.from = data.addressFrom;
     logData.basicAddressTo = data.addressTo;
     logData.basicAmount = data.amount;
-    logData.pushLocale = sublocale();
-    logData.pushSetting = await settingsActions.getSetting(
-      'transactionsNotifs'
-    );
+    logData.pushLocale = 'en'; // TODO
+    logData.pushSetting = await Database.localStorage.get('transactionsNotifs');
 
     if (
       typeof uiData !== 'undefined' &&
@@ -871,7 +796,7 @@ export default class DogeTransferProcessor
       };
     }
 
-    let result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    let result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       result = await this.sendProvider.sendTx(
         uiData.selectedFee.blockchainData.rawTxHex,
@@ -880,28 +805,10 @@ export default class DogeTransferProcessor
         logData
       );
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + ' DogeTransferProcessor.sent error',
-          e
-        );
-      }
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sent error ' +
           e.message
-      );
-      // noinspection ES6MissingAwait
-      MarketingEvent.logOnlyRealTime(
-        'v20_doge_tx_error ' +
-          this._settings.currencyCode +
-          ' ' +
-          data.addressFrom +
-          ' => ' +
-          data.addressTo +
-          ' ' +
-          e.message,
-        logData
       );
       throw e;
     }
@@ -974,54 +881,17 @@ export default class DogeTransferProcessor
           JSON.stringify(result.transactionJson)
       );
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' DogeTransferProcessor.sent error additional',
-          e,
-          uiData
-        );
-      }
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sent error additional' +
           e.message
-      );
-      // noinspection ES6MissingAwait
-      MarketingEvent.logOnlyRealTime(
-        'v20_doge_tx_error2 ' +
-          this._settings.currencyCode +
-          ' ' +
-          data.addressFrom +
-          ' => ' +
-          data.addressTo +
-          ' ' +
-          e.message,
-        logData
-      );
-    }
-    // noinspection ES6MissingAwait
-    MarketingEvent.logOnlyRealTime(
-      'v20_doge_tx_success ' +
-        this._settings.currencyCode +
-        ' ' +
-        data.addressFrom +
-        ' => ' +
-        data.addressTo,
-      logData
-    );
-
-    if (config.debug.cryptoErrors) {
-      console.log(
-        this._settings.currencyCode + ' DogeTransferProcessor.sendTx result',
-        JSON.parse(JSON.stringify(result))
       );
     }
     return result;
   }
 
   async sendRawTx(
-    data: BlocksoftBlockchainTypes.DbAccount,
+    data: AirDAOBlockchainTypes.DbAccount,
     rawTxHex: string,
     txRBF: any,
     logData: any
@@ -1037,29 +907,20 @@ export default class DogeTransferProcessor
   }
 
   async setMissingTx(
-    data: BlocksoftBlockchainTypes.DbAccount,
-    transaction: BlocksoftBlockchainTypes.DbTransaction
+    data: AirDAOBlockchainTypes.DbAccount,
+    transaction: AirDAOBlockchainTypes.DbTransaction
   ): Promise<boolean> {
     DogeRawDS.cleanRaw({
       address: data.address,
       transactionHash: transaction.transactionHash,
       currencyCode: this._settings.currencyCode
     });
-    MarketingEvent.logOnlyRealTime(
-      'v20_doge_tx_set_missing ' +
-        this._settings.currencyCode +
-        ' ' +
-        data.address +
-        ' => ' +
-        transaction.addressTo,
-      transaction
-    );
     return true;
   }
 
   canRBF(
-    data: BlocksoftBlockchainTypes.DbAccount,
-    transaction: BlocksoftBlockchainTypes.DbTransaction
+    data: AirDAOBlockchainTypes.DbAccount,
+    transaction: AirDAOBlockchainTypes.DbTransaction
   ): boolean {
     if (transaction.transactionDirection === 'income') {
       return true;

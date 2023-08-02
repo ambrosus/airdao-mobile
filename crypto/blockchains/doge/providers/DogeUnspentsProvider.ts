@@ -3,23 +3,23 @@
  * https://github.com/trezor/blockbook/blob/master/docs/api.md
  * https://doge1.trezor.io/api/v2/utxo/D5oKvWEibVe74CXLASmhpkRpLoyjgZhm71
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
 import DogeRawDS from '../stores/DogeRawDS';
 
 export default class DogeUnspentsProvider
-  implements BlocksoftBlockchainTypes.UnspentsProvider
+  implements AirDAOBlockchainTypes.UnspentsProvider
 {
-  private _trezorServerCode: string = '';
+  private _trezorServerCode = '';
 
-  private _trezorServer: string = '';
+  private _trezorServer = '';
 
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
 
   constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
+    settings: AirDAOBlockchainTypes.CurrencySettings,
     serverCode: string
   ) {
     this._settings = settings;
@@ -28,7 +28,7 @@ export default class DogeUnspentsProvider
 
   async getUnspents(
     address: string
-  ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
+  ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
@@ -89,9 +89,9 @@ export default class DogeUnspentsProvider
   async getTx(
     tx: string,
     address: string,
-    allUnspents: BlocksoftBlockchainTypes.UnspentTx[],
+    allUnspents: AirDAOBlockchainTypes.UnspentTx[],
     walletHash: string
-  ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
+  ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     BlocksoftCryptoLog.log(
       this._settings.currencyCode + ' DogeUnspentsProvider.getTx started ' + tx
     );

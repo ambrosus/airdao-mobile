@@ -1,11 +1,11 @@
-import Database from '@app/appstores/DataSource/Database';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import { BlocksoftTransfer } from '../../../actions/BlocksoftTransfer/BlocksoftTransfer';
-import config from '../../../../app/config/config';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
+import { Q } from '@nozbe/watermelondb';
+import { TransactionRawDBModel } from '@database/models/transactions-raw';
 
-const tableName = 'transactions_raw';
+const tableName = DatabaseTable.TransactionRaw;
 
 class DogeRawDS {
   _trezorServer = 'none';
@@ -154,15 +154,15 @@ class DogeRawDS {
         data.address.toLowerCase() + '_' + data.transactionHash;
     }
     BlocksoftCryptoLog.log('DogeRawDS cleanRaw ', data);
-    const now = new Date().toISOString();
-    const sql = `UPDATE transactions_raw
+    const now = new Date().getTime();
+    const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
         WHERE
         (is_removed=0 OR is_removed IS NULL)
         AND currency_code='${data.currencyCode}'
         AND address='${data.address.toLowerCase()}'
         AND transaction_unique_key='${data.transactionUnique}'`;
-    await Database.query(sql);
+    await Database.unsafeRawQuery(tableName, sql);
   }
 
   async saveRaw(data) {
@@ -170,16 +170,16 @@ class DogeRawDS {
       data.transactionUnique =
         data.address.toLowerCase() + '_' + data.transactionHash;
     }
-    const now = new Date().toISOString();
+    const now = new Date().getTime();
 
-    const sql = `UPDATE transactions_raw
+    const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
         WHERE
         (is_removed=0 OR is_removed IS NULL)
         AND currency_code='${data.currencyCode}'
         AND address='${data.address.toLowerCase()}'
         AND transaction_unique_key='${data.transactionUnique}'`;
-    await Database.query(sql);
+    await Database.unsafeRawQuery(tableName, sql);
 
     const prepared = [
       {
@@ -196,13 +196,11 @@ class DogeRawDS {
         JSON.stringify(data.transactionLog)
       );
     }
-    await Database.setTableName(tableName)
-      .setInsertData({ insertObjs: prepared })
-      .insert();
+    await Database.createModel(tableName, prepared);
   }
 
   async savePrefixed(data, prefix) {
-    const now = new Date().toISOString();
+    const now = new Date().getTime();
 
     const prepared = [
       {
@@ -220,9 +218,7 @@ class DogeRawDS {
         JSON.stringify(data.transactionLog)
       );
     }
-    await Database.setTableName(tableName)
-      .setInsertData({ insertObjs: prepared })
-      .insert();
+    await Database.createModel(tableName, prepared);
   }
 
   async getPrefixed(data, prefix) {
@@ -230,17 +226,19 @@ class DogeRawDS {
             FROM ${tableName}
             WHERE currency_code='${data.currencyCode}'
             AND transaction_unique_key='${prefix}_${data.transactionHash}' LIMIT 1`;
-    const res = await Database.query(sql);
+    const res = (await Database.unsafeRawQuery(
+      tableName,
+      sql
+    )) as TransactionRawDBModel[];
     if (
       !res ||
-      !res.array ||
-      typeof res.array[0] === 'undefined' ||
-      typeof res.array[0].transactionRaw === 'undefined'
+      typeof res[0] === 'undefined' ||
+      typeof res[0].transactionRaw === 'undefined'
     ) {
       return false;
     }
     try {
-      const str = Database.unEscapeString(res.array[0].transactionRaw);
+      const str = Database.unEscapeString(res[0].transactionRaw) || '';
       return JSON.parse(str);
     } catch (e) {
       BlocksoftCryptoLog.err('DogeRawDS getInputs error ' + e.message);

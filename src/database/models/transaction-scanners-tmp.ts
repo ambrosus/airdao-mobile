@@ -8,7 +8,7 @@ export class TransactionScannersTmpDBModel extends Model {
 
   // define fields
   // @ts-ignore
-  @text('currency_code') name: string;
+  @text('currency_code') currency_code: string;
   // @ts-ignore
   @text('address') address: string;
   // @ts-ignore

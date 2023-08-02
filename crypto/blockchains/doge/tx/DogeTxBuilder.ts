@@ -1,31 +1,27 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import { TransactionBuilder, ECPair, payments } from 'bitcoinjs-lib';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import config from '../../../../app/config/config';
 
-const networksConstants = require('../../../common/ext/networks-constants');
+import networksConstants from '../../../common/ext/networks-constants';
 
 const MAX_SEQ = 4294967294; // 0xfffffffe // no replace by fee
 const MIN_SEQ = 4294960000; // for RBF
 
-export default class DogeTxBuilder
-  implements BlocksoftBlockchainTypes.TxBuilder
-{
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
-  private _builderSettings: BlocksoftBlockchainTypes.BuilderSettings;
+export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
+  private _builderSettings: AirDAOBlockchainTypes.BuilderSettings;
   protected _bitcoinNetwork: any;
   private _feeMaxForByteSatoshi: number | any;
 
   protected keyPair: any;
 
   constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
-    builderSettings: BlocksoftBlockchainTypes.BuilderSettings
+    settings: AirDAOBlockchainTypes.CurrencySettings,
+    builderSettings: AirDAOBlockchainTypes.BuilderSettings
   ) {
     this._settings = settings;
     this._builderSettings = builderSettings;
@@ -52,8 +48,8 @@ export default class DogeTxBuilder
   }
 
   _getRawTxValidateKeyPair(
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    data: BlocksoftBlockchainTypes.TransferData
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData
   ): void {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('DogeTxBuilder.getRawTx requires privateKey');
@@ -85,7 +81,7 @@ export default class DogeTxBuilder
   async _getRawTxAddInput(
     txb: TransactionBuilder,
     i: number,
-    input: BlocksoftBlockchainTypes.UnspentTx,
+    input: AirDAOBlockchainTypes.UnspentTx,
     nSequence: number
   ): Promise<void> {
     if (typeof input.vout === 'undefined') {
@@ -100,7 +96,7 @@ export default class DogeTxBuilder
   async _getRawTxSign(
     txb: TransactionBuilder,
     i: number,
-    input: BlocksoftBlockchainTypes.UnspentTx
+    input: AirDAOBlockchainTypes.UnspentTx
   ): Promise<void> {
     await BlocksoftCryptoLog.log('DogeTxBuilder.getRawTx sign', input);
     // @ts-ignore
@@ -109,7 +105,7 @@ export default class DogeTxBuilder
 
   _getRawTxAddOutput(
     txb: TransactionBuilder,
-    output: BlocksoftBlockchainTypes.OutputTx
+    output: AirDAOBlockchainTypes.OutputTx
   ): void {
     // @ts-ignore
     const amount = Math.round(output.amount * 1);
@@ -121,14 +117,14 @@ export default class DogeTxBuilder
   }
 
   async getRawTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    preparedInputsOutputs: BlocksoftBlockchainTypes.PreparedInputsOutputsTx
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    preparedInputsOutputs: AirDAOBlockchainTypes.PreparedInputsOutputsTx
   ): Promise<{
     rawTxHex: string;
     nSequence: number;
     txAllowReplaceByFee: boolean;
-    preparedInputsOutputs: BlocksoftBlockchainTypes.PreparedInputsOutputsTx;
+    preparedInputsOutputs: AirDAOBlockchainTypes.PreparedInputsOutputsTx;
   }> {
     await this._reInit();
 
@@ -212,14 +208,6 @@ export default class DogeTxBuilder
           input
         );
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeTxBuilder.getRawTx input add error ',
-            e,
-            JSON.parse(JSON.stringify(input))
-          );
-        }
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx input add error ',
@@ -243,14 +231,6 @@ export default class DogeTxBuilder
           output
         );
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' DogeTxBuilder.getRawTx output add error ',
-            e,
-            JSON.parse(JSON.stringify(output))
-          );
-        }
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx output add error ',
@@ -271,23 +251,6 @@ export default class DogeTxBuilder
           this._settings.currencyCode + ' DogeTxBuilder.getRawTx sign added'
         );
       } catch (e) {
-        if (config.debug.cryptoErrors) {
-          if (e.message.indexOf('Transaction needs outputs') !== -1) {
-            console.log(
-              this._settings.currencyCode +
-                ' DogeTxBuilder.getRawTx input sign error ' +
-                e.message,
-              JSON.parse(JSON.stringify(preparedInputsOutputs))
-            );
-          } else {
-            console.log(
-              this._settings.currencyCode +
-                ' DogeTxBuilder.getRawTx input sign error ',
-              e,
-              JSON.parse(JSON.stringify(input))
-            );
-          }
-        }
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx input sign error ',

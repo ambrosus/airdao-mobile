@@ -6,6 +6,7 @@ import { schema } from './schemas';
 import { TransactionScannersTmpDBModel } from './models/transaction-scanners-tmp';
 import { WalletPubDBModel } from './models/wallet-pub';
 import { AccountDBModel } from './models/account';
+import { TransactionRawDBModel } from './models/transactions-raw';
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -19,6 +20,7 @@ export const database = new Database({
   adapter,
   modelClasses: [
     AccountDBModel,
+    TransactionRawDBModel,
     TransactionScannersTmpDBModel,
     WalletDBModel,
     WalletPubDBModel

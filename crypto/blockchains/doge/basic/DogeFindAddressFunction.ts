@@ -19,10 +19,13 @@
  * @returns {Promise<{from: string, to: string, value: number, direction: string}>}
  * @constructor
  */
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import BlocksoftBN from '../../../common/BlocksoftBN';
+import { BlockchainTransaction } from '@appTypes';
 
-export default async function DogeFindAddressFunction(addresses, transaction) {
+export default async function DogeFindAddressFunction(
+  addresses: string[],
+  transaction: BlockchainTransaction
+): Promise<{ from: string; to: string; value: number; direction: string }> {
   const inputMyBN = new BlocksoftBN(0);
   const inputOthersBN = new BlocksoftBN(0);
   const inputOthersAddresses = [];
