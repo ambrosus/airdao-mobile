@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native';
 
-import CoinBlocksoftDict from '@crypto/assets/coinBlocksoftDict.json';
+import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
 
 const { RNFastCrypto } = NativeModules;
 
@@ -32,7 +32,7 @@ const Codes = [
   'ETH_DAI',
   'FIO' // add code here for autocreation the wallet address with the currency
 ];
-const Currencies = CoinBlocksoftDict;
+const Currencies = CoinAirDAODict;
 
 const CurrenciesForTests = {
   BTC_SEGWIT: {

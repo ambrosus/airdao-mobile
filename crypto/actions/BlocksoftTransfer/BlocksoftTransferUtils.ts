@@ -2,25 +2,25 @@
  * @author Ksu
  * @version 0.20
  */
-import { BlocksoftDictTypes } from '../../common/AirDAODictTypes';
+import { AirDAODictTypes } from '../../common/AirDAODictTypes';
 import { BlocksoftTransferDispatcher } from '../../blockchains/BlocksoftTransferDispatcher';
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
 export namespace BlocksoftTransferUtils {
   export const getAddressToForTransferAll = function (data: {
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
     address: string;
   }): string {
-    if (data.currencyCode === BlocksoftDictTypes.Code.BTC_TEST) {
+    if (data.currencyCode === AirDAODictTypes.Code.BTC_TEST) {
       return 'mjojEgUSi68PqNHoAyjhVkwdqQyLv9dTfV';
     }
-    if (data.currencyCode === BlocksoftDictTypes.Code.XRP) {
+    if (data.currencyCode === AirDAODictTypes.Code.XRP) {
       const tmp1 = 'rEAgA9B8U8RCkwn6MprHqE1ZfXoeGQxz4P';
       const tmp2 = 'rnyWPfJ7dk2X15N7jqwmqo3Nspu1oYiRZ3';
       return data.address === tmp1 ? tmp2 : tmp1;
     }
-    if (data.currencyCode === BlocksoftDictTypes.Code.XLM) {
+    if (data.currencyCode === AirDAODictTypes.Code.XLM) {
       const tmp1 = 'GCVPV3D4PAYFA7H2CHGFRTSPAHMSU4KQR4CHBUBUR4X23JUDJWHYZDYZ';
       const tmp2 = 'GAQA5FITDUZW36J6VFXAH4YDNTTDEGRNWIXHIOR3FNN4DVJCXCNHUR4E';
       return data.address === tmp1 ? tmp2 : tmp1;
@@ -44,9 +44,9 @@ export namespace BlocksoftTransferUtils {
     balance: string;
     unconfirmed: string | boolean;
     balanceStaked: string;
-    currencyCode: BlocksoftDictTypes.Code;
+    currencyCode: AirDAODictTypes.Code;
   }): string {
-    if (data.currencyCode === BlocksoftDictTypes.Code.TRX) {
+    if (data.currencyCode === AirDAODictTypes.Code.TRX) {
       if (data.balanceStaked && data.balanceStaked !== '') {
         return BlocksoftUtils.diff(data.balance, data.balanceStaked);
       }
@@ -58,17 +58,17 @@ export namespace BlocksoftTransferUtils {
     if (data.unconfirmed * 1 < 0) {
       return data.balance;
     }
-    if (data.currencyCode === BlocksoftDictTypes.Code.XRP) {
+    if (data.currencyCode === AirDAODictTypes.Code.XRP) {
       return data.balance;
     }
     if (
-      data.currencyCode === BlocksoftDictTypes.Code.ETH ||
+      data.currencyCode === AirDAODictTypes.Code.ETH ||
       data.currencyCode.indexOf('ETH_') === 0
     ) {
       return data.balance;
     }
     if (
-      data.currencyCode === BlocksoftDictTypes.Code.TRX ||
+      data.currencyCode === AirDAODictTypes.Code.TRX ||
       data.currencyCode.indexOf('TRX_') === 0
     ) {
       return data.balance;

@@ -10,7 +10,7 @@ import store from '../../store';
 import accountDS from '../../appstores/DataSource/Account/Account';
 import walletPubDS from '../../appstores/DataSource/Wallet/WalletPub';
 
-import BlocksoftDict from '../../../crypto/common/BlocksoftDict';
+import AirDAODict from '../../../crypto/common/AirDAODict';
 import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
@@ -140,7 +140,7 @@ class UpdateAccountListDaemon extends Update {
 
             if (
               tmpCurrency.address.indexOf(
-                BlocksoftDict.Currencies[tmpCurrency.currencyCode].addressPrefix
+                AirDAODict.Currencies[tmpCurrency.currencyCode].addressPrefix
               ) === 0
             ) {
               if (
@@ -154,7 +154,7 @@ class UpdateAccountListDaemon extends Update {
               }
             } else if (
               tmpCurrency.address.indexOf(
-                BlocksoftDict.CurrenciesForTests[
+                AirDAODict.CurrenciesForTests[
                   tmpCurrency.currencyCode + '_SEGWIT'
                 ].addressPrefix
               ) === 0
@@ -441,13 +441,13 @@ class UpdateAccountListDaemon extends Update {
           }
 
           if (
-            typeof BlocksoftDict.CurrenciesForTests[
+            typeof AirDAODict.CurrenciesForTests[
               tmpCurrency.currencyCode + '_SEGWIT'
             ] !== 'undefined'
           ) {
             if (
               tmpCurrency.address.indexOf(
-                BlocksoftDict.Currencies[tmpCurrency.currencyCode].addressPrefix
+                AirDAODict.Currencies[tmpCurrency.currencyCode].addressPrefix
               ) === 0
             ) {
               reformatted[tmpCurrency.walletHash][
@@ -455,7 +455,7 @@ class UpdateAccountListDaemon extends Update {
               ].legacy = tmpCurrency.address;
             } else if (
               tmpCurrency.address.indexOf(
-                BlocksoftDict.CurrenciesForTests[
+                AirDAODict.CurrenciesForTests[
                   tmpCurrency.currencyCode + '_SEGWIT'
                 ].addressPrefix
               ) === 0
@@ -636,12 +636,12 @@ class UpdateAccountListDaemon extends Update {
           );
           const account = reformatted[tmpWalletHash][currencyCode];
 
-          const extendCurrencyCode = BlocksoftDict.getCurrencyAllSettings(
+          const extendCurrencyCode = AirDAODict.getCurrencyAllSettings(
             account.currencyCode
           );
           account.feesCurrencyCode =
             extendCurrencyCode.feesCurrencyCode || account.currencyCode;
-          const extendedFeesCode = BlocksoftDict.getCurrencyAllSettings(
+          const extendedFeesCode = AirDAODict.getCurrencyAllSettings(
             account.feesCurrencyCode
           );
           account.feesCurrencySymbol =

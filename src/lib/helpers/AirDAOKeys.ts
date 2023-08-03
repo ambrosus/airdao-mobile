@@ -3,7 +3,7 @@
  * @version 0.5
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 import BlocksoftKeysUtils from '@crypto/actions/BlocksoftKeys/BlocksoftKeysUtils';
 
 import * as BlocksoftRandom from 'react-native-blocksoft-random';
@@ -104,7 +104,7 @@ class BlocksoftKeys {
       JSON.stringify(logData).substring(0, 200)
     );
 
-    let toDiscover = BlocksoftDict.Codes;
+    let toDiscover = AirDAODict.Codes;
     if (data.currencyCode) {
       if (typeof data.currencyCode === 'string') {
         toDiscover = [data.currencyCode];
@@ -128,7 +128,7 @@ class BlocksoftKeys {
     for (currencyCode of toDiscover) {
       results[currencyCode] = [];
       try {
-        settings = BlocksoftDict.getCurrencyAllSettings(
+        settings = AirDAODict.getCurrencyAllSettings(
           currencyCode,
           'BlocksoftKeys'
         );

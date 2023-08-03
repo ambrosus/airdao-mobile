@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.5
  */
-import BlocksoftDict from '../common/BlocksoftDict';
+import AirDAODict from '../common/AirDAODict';
 
 import BchAddressProcessor from './bch/BchAddressProcessor';
 import BchScannerProcessor from './bch/BchScannerProcessor';
@@ -77,7 +77,7 @@ class BlocksoftDispatcher {
    */
   getAddressProcessor(currencyCode) {
     const currencyDictSettings =
-      BlocksoftDict.getCurrencyAllSettings(currencyCode);
+      AirDAODict.getCurrencyAllSettings(currencyCode);
     return this.innerGetAddressProcessor(currencyDictSettings);
   }
 
@@ -129,7 +129,7 @@ class BlocksoftDispatcher {
    */
   getScannerProcessor(currencyCode) {
     const currencyDictSettings =
-      BlocksoftDict.getCurrencyAllSettings(currencyCode);
+      AirDAODict.getCurrencyAllSettings(currencyCode);
     switch (currencyDictSettings.scannerProcessor) {
       case 'BCH':
         return new BchScannerProcessor(currencyDictSettings);
@@ -301,7 +301,7 @@ class BlocksoftDispatcher {
    */
   getSecretsProcessor(currencyCode) {
     const currencyDictSettings =
-      BlocksoftDict.getCurrencyAllSettings(currencyCode);
+      AirDAODict.getCurrencyAllSettings(currencyCode);
     if (currencyDictSettings.currencyCode !== 'XMR') {
       throw new Error(
         'Unknown secretsProcessor ' + currencyDictSettings.currencyCode

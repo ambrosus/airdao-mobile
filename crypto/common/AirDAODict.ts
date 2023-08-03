@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
 
-import Database from '@app/appstores/DataSource/Database';
-
-import CoinBlocksoftDict from '@crypto/assets/coinBlocksoftDict.json';
+import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
 
 const { RNFastCrypto } = NativeModules;
 
@@ -34,7 +34,7 @@ const Codes = [
   'ETH_DAI',
   'FIO' // add code here for autocreation the wallet address with the currency
 ];
-const Currencies = CoinBlocksoftDict;
+const Currencies = CoinAirDAODict;
 
 const CurrenciesForTests = {
   BTC_SEGWIT: {
@@ -98,26 +98,25 @@ if (typeof RNFastCrypto === 'undefined') {
   delete Currencies['XMR'];
 }
 
-/**
- * @param {int} currencyObject.id
- * @param {int} currencyObject.isHidden
- * @param {string} currencyObject.tokenJson
- * @param {string} currencyObject.tokenDecimals 18
- * @param {string} currencyObject.tokenAddress '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07'
- * @param {string} currencyObject.tokenType 'ETH_ERC_20'
- * @param {string} currencyObject.currencyName 'OMG Token'
- * @param {string} currencyObject.currencySymbol 'OMG'
- * @param {string} currencyObject.currencyCode 'OMG'
- */
-function addAndUnifyCustomCurrency(currencyObject) {
+function addAndUnifyCustomCurrency(currencyObject: {
+  id: string;
+  isHidden: number;
+  tokenJSON: string;
+  tokenDecimals: string;
+  tokenAddress: string;
+  tokenType: string;
+  currencyName: string;
+  currencySymbol: string;
+  currencyCode: string;
+}) {
   const tmp = {
     currencyName: currencyObject.currencyName,
     currencyCode: 'CUSTOM_' + currencyObject.currencyCode,
     currencySymbol: currencyObject.currencySymbol,
     ratesCurrencyCode: currencyObject.currencyCode,
-    decimals: currencyObject.tokenDecimals
+    decimals: currencyObject.tokenDecimals,
+    currencyType: 'custom'
   };
-  tmp.currencyType = 'custom';
   if (currencyObject.tokenType === 'BNB_SMART_20') {
     tmp.currencyCode = 'CUSTOM_BNB_SMART_20_' + currencyObject.currencyCode;
     if (tmp.ratesCurrencyCode.substr(0, 1) === 'B') {
@@ -205,11 +204,18 @@ function getCurrencyAllSettings(currencyCodeOrObject, source = '') {
     return false;
   }
   if (currencyCode === 'ETH_LAND') {
-    Database.query(`DELETE FROM account WHERE currency_code='ETH_LAND'`);
-    Database.query(
-      `DELETE FROM account_balance WHERE currency_code='ETH_LAND'`
+    Database.unsafeRawQuery(
+      DatabaseTable.Accounts,
+      `DELETE FROM ${DatabaseTable.Accounts} WHERE currency_code='ETH_LAND'`
     );
-    Database.query(`DELETE FROM currency WHERE currency_code='ETH_LAND'`);
+    Database.unsafeRawQuery(
+      DatabaseTable.AccountBalances,
+      `DELETE FROM ${DatabaseTable.AccountBalances} WHERE currency_code='ETH_LAND'`
+    );
+    Database.unsafeRawQuery(
+      DatabaseTable.Currencies,
+      `DELETE FROM ${DatabaseTable.Currencies} WHERE currency_code='ETH_LAND'`
+    );
   }
 
   if (typeof currencyCodeOrObject.currencyCode !== 'undefined') {

@@ -6,7 +6,7 @@ import DogeTxBuilder from '../../doge/tx/DogeTxBuilder';
 import BlocksoftPrivateKeysUtils from '../../../common/AirDAOPrivateKeysUtils';
 import { ECPair, payments, TransactionBuilder } from 'bitcoinjs-lib';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 
 export default class BtcTxBuilder
   extends DogeTxBuilder
@@ -54,15 +54,13 @@ export default class BtcTxBuilder
       this._settings.currencyCode === 'LTC' ? 'LTC' : 'BTC';
 
     const segwitPrefix =
-      BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
-        .addressPrefix;
+      AirDAODict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT'].addressPrefix;
     const segwitCompatiblePrefix =
-      typeof BlocksoftDict.CurrenciesForTests[
+      typeof AirDAODict.CurrenciesForTests[
         mainCurrencyCode + '_SEGWIT_COMPATIBLE'
       ] !== 'undefined'
-        ? BlocksoftDict.CurrenciesForTests[
-            mainCurrencyCode + '_SEGWIT_COMPATIBLE'
-          ].addressPrefix
+        ? AirDAODict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT_COMPATIBLE']
+            .addressPrefix
         : false;
 
     if (typeof this.keyPairBTC[input.address] === 'undefined') {
@@ -71,7 +69,7 @@ export default class BtcTxBuilder
         currencyCode += '_SEGWIT';
         if (!input.derivationPath || input.derivationPath === 'false') {
           input.derivationPath =
-            BlocksoftDict.CurrenciesForTests[currencyCode].defaultPath;
+            AirDAODict.CurrenciesForTests[currencyCode].defaultPath;
         }
       } else if (
         segwitCompatiblePrefix &&
@@ -80,11 +78,11 @@ export default class BtcTxBuilder
         currencyCode += '_SEGWIT_COMPATIBLE';
         if (!input.derivationPath || input.derivationPath === 'false') {
           input.derivationPath =
-            BlocksoftDict.CurrenciesForTests[currencyCode].defaultPath;
+            AirDAODict.CurrenciesForTests[currencyCode].defaultPath;
         }
       } else if (!input.derivationPath || input.derivationPath === 'false') {
         input.derivationPath =
-          BlocksoftDict.CurrenciesForTests[mainCurrencyCode].defaultPath;
+          AirDAODict.CurrenciesForTests[mainCurrencyCode].defaultPath;
       }
       const discoverFor = {
         mnemonic: this.mnemonic,

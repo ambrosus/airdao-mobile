@@ -4,7 +4,7 @@
  */
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftDict from '../../common/BlocksoftDict';
+import AirDAODict from '../../common/AirDAODict';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 class BlocksoftBalances {
@@ -45,7 +45,7 @@ class BlocksoftBalances {
       this._processor[currencyCode] =
         BlocksoftDispatcher.getScannerProcessor(currencyCode);
       this._allSettings[currencyCode] =
-        BlocksoftDict.getCurrencyAllSettings(currencyCode);
+        AirDAODict.getCurrencyAllSettings(currencyCode);
     }
     this._currencySettings = this._allSettings[currencyCode];
     return this;

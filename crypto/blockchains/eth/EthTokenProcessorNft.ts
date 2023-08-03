@@ -5,7 +5,7 @@ import EthBasic from './basic/EthBasic';
 import EthNftOpensea from '@crypto/blockchains/eth/apis/EthNftOpensea';
 import EthNftMatic from '@crypto/blockchains/eth/apis/EthNftMatic';
 import abi from './ext/erc721.js';
-import BlocksoftDictNfts from '@crypto/common/BlocksoftDictNfts';
+import AirDAODictNfts from '@crypto/common/AirDAODictNfts';
 
 export default class EthTokenProcessorNft extends EthBasic {
   /**
@@ -13,7 +13,7 @@ export default class EthTokenProcessorNft extends EthBasic {
    * @param data.tokenBlockchainCode
    */
   async getListBlockchain(data) {
-    const settings = BlocksoftDictNfts.NftsIndexed[data.tokenBlockchainCode];
+    const settings = AirDAODictNfts.NftsIndexed[data.tokenBlockchainCode];
     if (
       typeof settings !== 'undefined' &&
       typeof settings.apiType !== 'undefined' &&

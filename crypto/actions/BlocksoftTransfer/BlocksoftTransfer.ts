@@ -6,14 +6,14 @@ import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
 import { BlocksoftTransferDispatcher } from '../../blockchains/BlocksoftTransferDispatcher';
 import { BlocksoftTransferPrivate } from './BlocksoftTransferPrivate';
-import { BlocksoftDictTypes } from '../../common/AirDAODictTypes';
+import { AirDAODictTypes } from '../../common/AirDAODictTypes';
 
-import CoinBlocksoftDict from '@crypto/assets/coinBlocksoftDict.json';
+import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
 
 import config from '../../../app/config/config';
 
 type DataCache = {
-  [key in BlocksoftDictTypes.Code]: {
+  [key in AirDAODictTypes.Code]: {
     key: string;
     memo: string | boolean;
     time: number;
@@ -105,8 +105,8 @@ export namespace BlocksoftTransfer {
   ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
-      for (const key in CoinBlocksoftDict) {
-        const tmp = CoinBlocksoftDict[key];
+      for (const key in CoinAirDAODict) {
+        const tmp = CoinAirDAODict[key];
         if (
           typeof tmp.canBeDestination !== 'undefined' &&
           tmp.canBeDestination
@@ -208,8 +208,8 @@ export namespace BlocksoftTransfer {
 
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
-      for (const key in CoinBlocksoftDict) {
-        const tmp = CoinBlocksoftDict[key];
+      for (const key in CoinAirDAODict) {
+        const tmp = CoinAirDAODict[key];
         if (
           typeof tmp.canBeDestination !== 'undefined' &&
           tmp.canBeDestination

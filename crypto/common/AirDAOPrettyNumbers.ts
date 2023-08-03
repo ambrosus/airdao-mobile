@@ -1,4 +1,4 @@
-import BlocksoftDict from './BlocksoftDict';
+import AirDAODict from './AirDAODict';
 import AirDAOUtils from './AirDAOUtils';
 
 class AirDAOPrettyNumbers {
@@ -10,12 +10,12 @@ class AirDAOPrettyNumbers {
    * @return {AirDAOPrettyNumbers}
    */
   setCurrencyCode(currencyCode: string): AirDAOPrettyNumbers {
-    const settings = BlocksoftDict.getCurrencyAllSettings(currencyCode);
+    const settings = AirDAODict.getCurrencyAllSettings(currencyCode);
     if (settings.prettyNumberProcessor) {
       this._processorCode = settings.prettyNumberProcessor;
     } else {
       throw new Error(
-        `BlocksoftDict.getCurrencyAllSettings no settings.prettyNumberProcessor for ${currencyCode}`
+        `AirDAODict.getCurrencyAllSettings no settings.prettyNumberProcessor for ${currencyCode}`
       );
     }
     if (
@@ -25,7 +25,7 @@ class AirDAOPrettyNumbers {
       this._decimals = settings.decimals;
     } else {
       throw new Error(
-        `BlocksoftDict.getCurrencyAllSettings no settings.decimals for ${currencyCode}`
+        `AirDAODict.getCurrencyAllSettings no settings.decimals for ${currencyCode}`
       );
     }
 

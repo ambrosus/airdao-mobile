@@ -44,6 +44,10 @@ class Database {
               // @ts-ignore
               newModel[key] = model[key];
             }
+            // assign hash to id in Wallets table
+            if (table === DatabaseTable.Wallets) {
+              newModel._raw.id = model.hash;
+            }
             return newModel;
           });
         } catch (error) {

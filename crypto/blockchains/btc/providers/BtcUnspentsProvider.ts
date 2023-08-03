@@ -9,7 +9,7 @@ import DogeUnspentsProvider from '../../doge/providers/DogeUnspentsProvider';
 // import Database from '@app/appstores/DataSource/Database';
 import { Database } from '@database';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 import { Q } from '@nozbe/watermelondb';
 import { DatabaseTable } from '@appTypes';
 import { AccountDBModel } from '@database/models/account';
@@ -27,8 +27,7 @@ export default class BtcUnspentsProvider
     }
     const mainCurrencyCode = currencyCode === 'LTC' ? 'LTC' : 'BTC';
     const segwitPrefix =
-      BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
-        .addressPrefix;
+      AirDAODict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT'].addressPrefix;
 
     AirDAOCryptoLog.log(
       currencyCode +
@@ -189,8 +188,7 @@ export default class BtcUnspentsProvider
     const mainCurrencyCode =
       this._settings.currencyCode === 'LTC' ? 'LTC' : 'BTC';
     const segwitPrefix =
-      BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
-        .addressPrefix;
+      AirDAODict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT'].addressPrefix;
 
     const sqlPub = `SELECT wallet_pub_value as walletPubValue
             FROM ${DatabaseTable.WalletPub}

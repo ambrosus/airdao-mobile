@@ -8,7 +8,7 @@ import * as Keychain from 'react-native-keychain';
 
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import config from '@app/config/config';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 
 export class BlocksoftKeysStorage {
   /**
@@ -308,7 +308,7 @@ export class BlocksoftKeysStorage {
   }
 
   getAddressCacheKey(walletHash, discoverPath, currencyCode) {
-    const settings = BlocksoftDict.getCurrencyAllSettings(currencyCode);
+    const settings = AirDAODict.getCurrencyAllSettings(currencyCode);
     if (
       typeof settings.addressCurrencyCode !== 'undefined' &&
       typeof settings.tokenBlockchain !== 'undefined' &&

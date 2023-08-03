@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import KeysUtills from '@utils/keys';
 import config from '@constants/config';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 import { bip32 } from 'bitcoinjs-lib';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 const networksConstants = require('../lib/common/ext/network-constants');
@@ -115,7 +115,7 @@ class AirDAOKeys {
   async discoverAddresses(data: any, source: string) {
     const logData = { ...data };
     if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
-    let toDiscover = BlocksoftDict.Codes;
+    let toDiscover = AirDAODict.Codes;
     if (data.currencyCode) {
       if (typeof data.currencyCode === 'string') {
         toDiscover = [data.currencyCode];
@@ -137,7 +137,7 @@ class AirDAOKeys {
     for (currencyCode of toDiscover) {
       results[currencyCode] = [];
       try {
-        settings = BlocksoftDict.getCurrencyAllSettings(
+        settings = AirDAODict.getCurrencyAllSettings(
           currencyCode,
           'BlocksoftKeys'
         );

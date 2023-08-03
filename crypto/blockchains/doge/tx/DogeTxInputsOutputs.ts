@@ -5,7 +5,7 @@ import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftBN from '../../../common/AirDAOBN';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 
 // @ts-ignore
 import coinSelect from 'coinselect';
@@ -142,12 +142,11 @@ export default class DogeTxInputsOutputs
     const isRequired: any = {};
     let isAllRequired = true;
     const segwitPrefix =
-      typeof BlocksoftDict.CurrenciesForTests[
+      typeof AirDAODict.CurrenciesForTests[
         this._settings.currencyCode + '_SEGWIT'
       ] !== 'undefined'
-        ? BlocksoftDict.CurrenciesForTests[
-            this._settings.currencyCode + '_SEGWIT'
-          ].addressPrefix
+        ? AirDAODict.CurrenciesForTests[this._settings.currencyCode + '_SEGWIT']
+            .addressPrefix
         : false;
     for (const unspent of unspents) {
       const input = {

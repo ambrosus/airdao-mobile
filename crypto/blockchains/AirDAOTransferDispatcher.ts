@@ -3,7 +3,7 @@
  * @author Ksu
  * @version 0.20
  */
-import AirDAODict from '../common/BlocksoftDict';
+import AirDAODict from '../common/AirDAODict';
 import { AirDAODictTypes } from '../common/AirDAODictTypes';
 
 import BchTransferProcessor from './bch/BchTransferProcessor';

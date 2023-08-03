@@ -6,7 +6,7 @@ import BtcUnspentsProvider from '../providers/BtcUnspentsProvider';
 import DogeTxInputsOutputs from '../../doge/tx/DogeTxInputsOutputs';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import DaemonCache from '../../../../src/daemons/DaemonCache';
-import BlocksoftDict from '@crypto/common/BlocksoftDict';
+import AirDAODict from '@crypto/common/AirDAODict';
 import { Database } from '@database';
 
 export default class BtcTxInputsOutputs
@@ -25,11 +25,9 @@ export default class BtcTxInputsOutputs
 
     const mainCurrencyCode =
       this._settings.currencyCode === 'LTC' ? 'LTC' : 'BTC';
-    const legacyPrefix =
-      BlocksoftDict.Currencies[mainCurrencyCode].addressPrefix;
+    const legacyPrefix = AirDAODict.Currencies[mainCurrencyCode].addressPrefix;
     const segwitPrefix =
-      BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
-        .addressPrefix;
+      AirDAODict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT'].addressPrefix;
 
     let needFindSegwit = true;
     if (btcShowTwoAddress === '1' || data.useLegacy === 1) {
