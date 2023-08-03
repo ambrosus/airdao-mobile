@@ -1,4 +1,4 @@
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { getFioBalance, getTransactions } from './FioUtils.jts';
 
 export default class FioScannerProcessor {
@@ -41,7 +41,7 @@ export default class FioScannerProcessor {
     additionalData,
     walletHash: string
   ) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' FioScannerProcessor.getBalance (cache) started ' +
         address +
@@ -62,7 +62,7 @@ export default class FioScannerProcessor {
     additionalData,
     walletHash: string
   ) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' FioScannerProcessor.getBalance started ' +
         address +
@@ -86,7 +86,7 @@ export default class FioScannerProcessor {
   }) {
     const address = scanData.account.address.trim();
     const walletHash = scanData.account.walletHash;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' FioScannerProcessor.getTransactionsBlockchain started ' +
         address +

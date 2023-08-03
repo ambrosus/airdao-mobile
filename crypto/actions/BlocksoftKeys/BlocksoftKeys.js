@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.5
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 import BlocksoftKeysUtils from '@crypto/actions/BlocksoftKeys/BlocksoftKeysUtils';
 
@@ -38,7 +38,7 @@ class BlocksoftKeys {
    * @return {Promise<{mnemonic: string, hash: string}>}
    */
   async newMnemonic(size = 256) {
-    BlocksoftCryptoLog.log(`BlocksoftKeys newMnemonic called`);
+    AirDAOCryptoLog.log(`BlocksoftKeys newMnemonic called`);
 
     /* let mnemonic = false
         if (USE_TON) {
@@ -50,7 +50,7 @@ class BlocksoftKeys {
                     mnemonic = testMnemonic
                     break
                 }
-                BlocksoftCryptoLog.log('step ' + i + ' not valid ton ' + testMnemonic)
+                AirDAOCryptoLog.log('step ' + i + ' not valid ton ' + testMnemonic)
             }
             if (!mnemonic) {
                 throw new Error('TON Mnemonic is not validating')
@@ -64,7 +64,7 @@ class BlocksoftKeys {
     random = Buffer.from(random, 'base64');
     const mnemonic = bip39.entropyToMnemonic(random);
     const hash = BlocksoftKeysUtils.hashMnemonic(mnemonic);
-    BlocksoftCryptoLog.log(`BlocksoftKeys newMnemonic finished`);
+    AirDAOCryptoLog.log(`BlocksoftKeys newMnemonic finished`);
     return { mnemonic, hash };
   }
 
@@ -73,7 +73,7 @@ class BlocksoftKeys {
    * @return {Promise<boolean>}
    */
   async validateMnemonic(mnemonic) {
-    BlocksoftCryptoLog.log(`BlocksoftKeys validateMnemonic called`);
+    AirDAOCryptoLog.log(`BlocksoftKeys validateMnemonic called`);
     if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
       throw new Error(strings('settings.walletList.scamImport'));
     }
@@ -99,7 +99,7 @@ class BlocksoftKeys {
     const logData = { ...data };
     if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `BlocksoftKeys discoverAddresses called from ${source}`,
       JSON.stringify(logData).substring(0, 200)
     );
@@ -187,7 +187,7 @@ class BlocksoftKeys {
         hasDerivations = true;
       }
       if (typeof CACHE[hexesCache] === 'undefined' || hasDerivations) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `BlocksoftKeys will discover ${settings.addressProcessor}`
         );
         let root = false;
@@ -205,7 +205,7 @@ class BlocksoftKeys {
         }
         // BIP32 Extended Private Key to check - uncomment
         // let childFirst = root.derivePath('m/44\'/2\'/0\'/0')
-        // BlocksoftCryptoLog.log(childFirst.toBase58())
+        // AirDAOCryptoLog.log(childFirst.toBase58())
 
         /**
          * @type {EthAddressProcessor|BtcAddressProcessor}
@@ -224,7 +224,7 @@ class BlocksoftKeys {
         let currentToIndex = toIndex;
         let currentFullTree = fullTree;
 
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `BlocksoftKeys discoverAddresses ${currencyCode} currentFromIndex.1 ${currentFromIndex}`
         );
         if (hasDerivations) {
@@ -261,7 +261,7 @@ class BlocksoftKeys {
             currentFromIndex = maxIndex * 1 + 1;
             currentToIndex = currentFromIndex * 1 + 10;
             currentFullTree = true;
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               `BlocksoftKeys ${currencyCode} discoverAddresses currentFromIndex.2 ${currentFromIndex}`
             );
           }
@@ -355,7 +355,7 @@ class BlocksoftKeys {
           ETH_CACHE[mnemonicCache] = results[currencyCode][0];
         }
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `BlocksoftKeys will be from cache ${settings.addressProcessor}`
         );
         results[currencyCode] = CACHE[hexesCache];
@@ -364,12 +364,12 @@ class BlocksoftKeys {
         }
       }
     }
-    BlocksoftCryptoLog.log(`BlocksoftKeys discoverAddresses finished`);
+    AirDAOCryptoLog.log(`BlocksoftKeys discoverAddresses finished`);
     return results;
   }
 
   async getSeedCached(mnemonic) {
-    BlocksoftCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed started`);
+    AirDAOCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed started`);
     const mnemonicCache = mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] === 'undefined') {
       CACHE[mnemonicCache] = await BlocksoftKeysUtils.bip39MnemonicToSeed(
@@ -377,7 +377,7 @@ class BlocksoftKeys {
       );
     }
     const seed = CACHE[mnemonicCache]; // will be rechecked on saving
-    BlocksoftCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed ended`);
+    AirDAOCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed ended`);
     return seed;
   }
 
@@ -458,17 +458,17 @@ class BlocksoftKeys {
       path = `m/49'/0'/0'`;
       version = 0x049d7cb2;
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftKeys.discoverXpub derive started ' + JSON.stringify(path)
     );
     const rootWallet = root.derivePath(path);
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftKeys.discoverXpub derived, bs58 started ' + JSON.stringify(path)
     );
     const res = bs58check.encode(
       serialize(rootWallet, version, rootWallet.publicKey)
     );
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftKeys.discoverXpub res ' + JSON.stringify(path),
       res
     );

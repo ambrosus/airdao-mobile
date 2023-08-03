@@ -8,7 +8,7 @@ import DogeUnspentsProvider from '../../doge/providers/DogeUnspentsProvider';
 
 // import Database from '@app/appstores/DataSource/Database';
 import { Database } from '@database';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 import { Q } from '@nozbe/watermelondb';
 import { DatabaseTable } from '@appTypes';
@@ -30,7 +30,7 @@ export default class BtcUnspentsProvider
       BlocksoftDict.CurrenciesForTests[mainCurrencyCode + '_SEGWIT']
         .addressPrefix;
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       currencyCode +
         ' ' +
         mainCurrencyCode +
@@ -78,7 +78,7 @@ export default class BtcUnspentsProvider
           row.address.indexOf(segwitPrefix) === 0
             ? segwitPrefix
             : row.address.substr(0, 1);
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           currencyCode +
             ' ' +
             mainCurrencyCode +
@@ -98,7 +98,7 @@ export default class BtcUnspentsProvider
           // @ts-ignore
           CACHE_FOR_CHANGE[walletHash][prefix] = row.address;
           // @ts-ignore
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             currencyCode +
               ' ' +
               mainCurrencyCode +
@@ -126,7 +126,7 @@ export default class BtcUnspentsProvider
       )) as AccountDBModel[];
       for (const row of res) {
         // @ts-ignore
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           currencyCode +
             '/' +
             mainCurrencyCode +
@@ -172,7 +172,7 @@ export default class BtcUnspentsProvider
     // @ts-ignore
     let found = '';
     for (const key in CACHE_FOR_CHANGE[walletHash]) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'CACHE_FOR_CHANGE[walletHash][key]',
         key + '_' + CACHE_FOR_CHANGE[walletHash][key]
       );
@@ -254,7 +254,7 @@ export default class BtcUnspentsProvider
           row.address.indexOf(segwitPrefix) === 0
             ? segwitPrefix
             : row.address.substring(0, 1);
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' ' +
             mainCurrencyCode +
@@ -276,7 +276,7 @@ export default class BtcUnspentsProvider
           // @ts-ignore
           CACHE_FOR_CHANGE[walletHash][prefix] = row.address;
           // @ts-ignore
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' ' +
               mainCurrencyCode +
@@ -305,7 +305,7 @@ export default class BtcUnspentsProvider
         const walletHash = row.hash.hash;
         const unspents = await super.getUnspents(row.address);
         // @ts-ignore
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             '/' +
             mainCurrencyCode +
@@ -339,7 +339,7 @@ export default class BtcUnspentsProvider
     }
     // @ts-ignore
     if (totalUnspents.length > 10) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' ' +
           mainCurrencyCode +
@@ -350,7 +350,7 @@ export default class BtcUnspentsProvider
         totalUnspents.slice(0, 10)
       );
     } else {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' ' +
           mainCurrencyCode +

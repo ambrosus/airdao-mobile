@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import TrxNodeInfoProvider from './TrxNodeInfoProvider';
@@ -53,7 +53,7 @@ export default class TrxTransactionsProvider {
       now - CACHE_OF_TRANSACTIONS[address].time < CACHE_VALID_TIME
     ) {
       if (typeof CACHE_OF_TRANSACTIONS[address][tokenName] !== 'undefined') {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           ` TrxTransactionsProvider.get from cache',
           ${address} + ' => ' + ${tokenName}`
         );
@@ -85,7 +85,7 @@ export default class TrxTransactionsProvider {
       try {
         tmp = await this._unifyTransaction(scanData, tx, tokenName);
       } catch (e: any) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'TrxTransactionsProvider.get unify error ' +
             e.message +
             ' tx ' +
@@ -245,7 +245,7 @@ export default class TrxTransactionsProvider {
           // freeze = 11, vote = 4, claim = 13
         } else {
           // noinspection ES6MissingAwait
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'TrxTransactionsProvider._unifyTransaction buggy tx ' +
               JSON.stringify(transaction)
           );

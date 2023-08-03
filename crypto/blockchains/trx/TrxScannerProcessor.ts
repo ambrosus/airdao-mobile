@@ -7,7 +7,7 @@ import TrxTronscanProvider from './basic/TrxTronscanProvider';
 import TrxTrongridProvider from './basic/TrxTrongridProvider';
 import TrxTransactionsProvider from './basic/TrxTransactionsProvider';
 import TrxTransactionsTrc20Provider from './basic/TrxTransactionsTrc20Provider';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import Database from '@app/appstores/DataSource/Database/main';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
@@ -68,7 +68,7 @@ export default class TrxScannerProcessor {
     source: string
   ): Promise<TronBalanceResult> {
     address = address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._tokenName +
         ' TrxScannerProcessor getBalanceBlockchain address ' +
         address +
@@ -91,7 +91,7 @@ export default class TrxScannerProcessor {
         this._tokenName,
         source === 'AccountScreen'
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._tokenName +
           ' TrxScannerProcessor getBalanceBlockchain address ' +
           address +
@@ -121,7 +121,7 @@ export default class TrxScannerProcessor {
             typeof tmp.data !== 'undefined' &&
             typeof tmp.data.constant_result !== 'undefined'
           ) {
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               this._tokenName +
                 ' TrxScannerProcessor getBalanceBlockchain address ' +
                 address +
@@ -143,7 +143,7 @@ export default class TrxScannerProcessor {
             };
           }
         } catch (e: any) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._tokenName +
               ' TrxScannerProcessor getBalanceBlockchain address ' +
               address +
@@ -159,7 +159,7 @@ export default class TrxScannerProcessor {
           source === 'AccountScreen'
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._tokenName +
           ' TrxScannerProcessor getBalanceBlockchain address ' +
           address +
@@ -176,7 +176,7 @@ export default class TrxScannerProcessor {
         '_',
         source === 'AccountScreen'
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._tokenName +
           ' TrxScannerProcessor getBalanceBlockchain address ' +
           address +
@@ -187,7 +187,7 @@ export default class TrxScannerProcessor {
       );
 
       if (subresult) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._tokenName +
             ' TrxScannerProcessor getBalanceBlockchain address ' +
             address +
@@ -222,7 +222,7 @@ export default class TrxScannerProcessor {
 
   async getResourcesBlockchain(address: string): Promise<any> {
     address = address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._tokenName +
         ' TrxScannerProcessor getResourcesBlockchain address ' +
         address
@@ -400,7 +400,7 @@ export default class TrxScannerProcessor {
           specialActionNeeded
         } = unique[address];
         if (confirmations < 20) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' TrxScannerProcessor.getTransactionsPendingBlockchain vote all skipped by ' +
               confirmations +
@@ -410,7 +410,7 @@ export default class TrxScannerProcessor {
           continue;
         }
 
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' TrxScannerProcessor.getTransactionsPendingBlockchain vote all inited for ' +
             address +
@@ -430,7 +430,7 @@ export default class TrxScannerProcessor {
                     UPDATE transactions SET special_action_needed='' WHERE special_action_needed='vote' OR special_action_needed='vote_after_unfreeze'
                     AND address_from_basic='${address}'
                     `);
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' TrxScannerProcessor.getTransactionsPendingBlockchain vote all finished for ' +
                 address
@@ -446,7 +446,7 @@ export default class TrxScannerProcessor {
                 e.message
             );
           }
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' TrxScannerProcessor.getTransactionsPendingBlockchain vote all error for ' +
               address +

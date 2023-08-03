@@ -4,7 +4,7 @@
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BtcUnspentsProvider from '../providers/BtcUnspentsProvider';
 import DogeTxInputsOutputs from '../../doge/tx/DogeTxInputsOutputs';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import DaemonCache from '../../../../src/daemons/DaemonCache';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 import { Database } from '@database';
@@ -44,7 +44,7 @@ export default class BtcTxInputsOutputs
       // console.log('will legacy 2')
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcTxInputsOutputs needFindSegwit ' + JSON.stringify(needFindSegwit)
     );
     try {
@@ -52,7 +52,7 @@ export default class BtcTxInputsOutputs
         data.walletHash,
         this._settings.currencyCode
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BtcTxInputsOutputs CACHE_FOR_CHANGE ' + data.walletHash,
         CACHE_FOR_CHANGE
       );
@@ -64,7 +64,7 @@ export default class BtcTxInputsOutputs
         addressForChange = CACHE_FOR_CHANGE[legacyPrefix];
       }
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' ' +
           mainCurrencyCode +
@@ -79,7 +79,7 @@ export default class BtcTxInputsOutputs
         return addressForChange;
       }
     } catch (e) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         this._settings.currencyCode +
           ' ' +
           mainCurrencyCode +
@@ -141,7 +141,7 @@ export default class BtcTxInputsOutputs
         usdtUsed++;
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtxTxInputsOutputs for ' +
         tmp.address +
         ' usdtUsed ' +

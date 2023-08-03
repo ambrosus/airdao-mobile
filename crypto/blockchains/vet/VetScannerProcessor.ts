@@ -2,7 +2,7 @@
  * @version 0.5
  * https://docs.vechain.org/thor/get-started/api.html
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
@@ -45,7 +45,7 @@ export default class VetScannerProcessor {
       typeof res.data === 'undefined' ||
       typeof res.data.balance === 'undefined'
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' VeChain ScannerProcessor getBalanceBlockchain ' +
           link +
@@ -76,7 +76,7 @@ export default class VetScannerProcessor {
     { balance: string; unconfirmed: number; provider: string } | false
   > {
     address = address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' VeChain ScannerProcessor getBalanceBlockchain address ' +
         address
@@ -92,7 +92,7 @@ export default class VetScannerProcessor {
       const balance = BlocksoftUtils.hexToDecimalBigger(hex);
       return { balance, unconfirmed: 0, provider: 'vethor-node.vechain.com' };
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' VeChain ScannerProcessor getBalanceBlockchain address ' +
           address +
@@ -131,7 +131,7 @@ export default class VetScannerProcessor {
           }
         }
       } catch (e: any) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'VetScannerProcessor.getTransactions lastBlock ' + e.message
         );
       }
@@ -159,7 +159,7 @@ export default class VetScannerProcessor {
       if (!result.data || result.data.length === 0) return false;
 
       const transactions = await this._unifyTransactions(address, result.data);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VetScannerProcessor.getTransactions finished ' + address
       );
       return transactions;
@@ -189,7 +189,7 @@ export default class VetScannerProcessor {
         address,
         result.data
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VetScannerProcessor.getTransactions finished ' + tokenHex
       );
       return transactions;

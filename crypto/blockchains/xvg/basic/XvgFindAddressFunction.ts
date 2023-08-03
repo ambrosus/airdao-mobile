@@ -1,4 +1,4 @@
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 
 interface TransactionIO {
   address: string;

@@ -3,7 +3,7 @@
  * @version 0.20
  **/
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -51,7 +51,7 @@ export default class BtcNetworkPrices
     speed_blocks_6: number;
     speed_blocks_12: number;
   }> {
-    BlocksoftCryptoLog.log('BtcNetworkPricesProvider ' + currencyCode);
+    AirDAOCryptoLog.log('BtcNetworkPricesProvider ' + currencyCode);
     const logData = {
       currencyCode,
       source: 'fromCache',
@@ -61,7 +61,7 @@ export default class BtcNetworkPrices
     const now = new Date().getTime();
     if (CACHE_FEES_BTC && now - CACHE_FEES_BTC_TIME < CACHE_VALID_TIME) {
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BtcNetworkPricesProvider ' +
           currencyCode +
           ' used cache ' +
@@ -70,7 +70,7 @@ export default class BtcNetworkPrices
       return CACHE_FEES_BTC;
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcNetworkPricesProvider ' + currencyCode + ' no cache load'
     );
 
@@ -97,7 +97,7 @@ export default class BtcNetworkPrices
         }
       } catch (e) {}
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BtcNetworkPricesProvider lastBlock ' +
           lastBlock +
           ' mempool ' +
@@ -130,7 +130,7 @@ export default class BtcNetworkPrices
       }
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log('BtcNetworkPricesProvider CACHE_FEES', {
+    AirDAOCryptoLog.log('BtcNetworkPricesProvider CACHE_FEES', {
       CACHE_PREV_DATA,
       CACHE_PREV_PREV_DATA,
       ...logData
@@ -144,18 +144,18 @@ export default class BtcNetworkPrices
           if (cachedWithTime.fastestFee < CACHE_PREV_PREV_DATA.fastestFee) {
             cachedWithTime.fastestFee = CACHE_PREV_PREV_DATA.fastestFee;
             // @ts-ignore
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BtcNetworkPricesProvider change as block 1 minute ago and fastest no ok - used prev ',
               CACHE_PREV_PREV_DATA
             );
           } else if (CACHE_PREV_DATA.mempoolSize < 10000) {
             cachedWithTime.fastestFee = cachedWithTime.fastestFee * 1.5;
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BtcNetworkPricesProvider change as block 1 minute ago and fastest no ok - mempool is small'
             );
           } else {
             cachedWithTime.fastestFee = cachedWithTime.fastestFee * 3;
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BtcNetworkPricesProvider change as block 1 minute ago and fastest no ok - mempool is ok'
             );
           }
@@ -164,7 +164,7 @@ export default class BtcNetworkPrices
           if (cachedWithTime.fastestFee < CACHE_PREV_PREV_DATA.fastestFee) {
             cachedWithTime.fastestFee = CACHE_PREV_PREV_DATA.fastestFee;
             // @ts-ignore
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BtcNetworkPricesProvider change as block 5 minute ago and fastest no ok - used prev ',
               CACHE_PREV_PREV_DATA
             );
@@ -258,7 +258,7 @@ export default class BtcNetworkPrices
 
     CACHE_FEES_BTC_TIME = new Date().getTime();
     if (CACHE_FEES_BTC.speed_blocks_2 > 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BtcNetworkPricesProvider ' + currencyCode + ' new cache fees',
         CACHE_FEES_BTC
       );
@@ -287,7 +287,7 @@ function addMultiply(blocks, fee, externalSettings) {
   ) {
     CACHE_FEES_BTC[key] =
       BlocksoftUtils.mul(fee, externalSettings.BTC_MULTI_V3) * 1;
-    BlocksoftCryptoLog.log('BtcNetworkPricesProvider addMultiply result', {
+    AirDAOCryptoLog.log('BtcNetworkPricesProvider addMultiply result', {
       blocks,
       fee,
       mul: externalSettings.BTC_MULTI_V3,

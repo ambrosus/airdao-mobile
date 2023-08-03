@@ -4,7 +4,7 @@
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
 import DogeUnspentsProvider from '@crypto/blockchains/doge/providers/DogeUnspentsProvider';
 import BtcCashUtils from '@crypto/blockchains/bch/ext/BtcCashUtils';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 export default class BsvUnspentsProvider
@@ -29,7 +29,7 @@ export default class BsvUnspentsProvider
     address: string
   ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BsvUnspentsProvider.getUnspents started ' +
         address

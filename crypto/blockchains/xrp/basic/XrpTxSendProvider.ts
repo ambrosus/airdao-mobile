@@ -6,7 +6,7 @@
  * https://xrpl.org/rippleapi-reference.html#sign
  * https://xrpl.org/rippleapi-reference.html#submit
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { XrpTxUtils } from './XrpTxUtils';
 // @ts-ignore
@@ -24,15 +24,15 @@ export class XrpTxSendProvider {
       server: BlocksoftExternalSettings.getStatic('XRP_SERVER')
     }); // Public rippled server
     this._api.on('error', (errorCode: string, errorMessage: string) => {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'XrpTransferProcessor constructor' + errorCode + ': ' + errorMessage
       );
     });
     this._api.on('connected', () => {
-      BlocksoftCryptoLog.log('connected');
+      AirDAOCryptoLog.log('connected');
     });
     this._api.on('disconnected', () => {
-      BlocksoftCryptoLog.log('disconnected');
+      AirDAOCryptoLog.log('disconnected');
     });
   }
 
@@ -78,13 +78,13 @@ export class XrpTxSendProvider {
       }
     } catch (e: any) {
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `XrpTransferProcessor._getPrepared memo error + ${e.message},
         ${data}`
       );
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `XrpTransferProcessor._getPrepared payment,
       ${payment}`
     );
@@ -108,7 +108,7 @@ export class XrpTxSendProvider {
                 );
               }
               const txJson = prepared.txJSON;
-              BlocksoftCryptoLog.log(
+              AirDAOCryptoLog.log(
                 'XrpTxSendProvider._getPrepared prepared',
                 txJson
               );
@@ -125,7 +125,7 @@ export class XrpTxSendProvider {
                   msg: error.toString()
                 }
               );
-              BlocksoftCryptoLog.log(
+              AirDAOCryptoLog.log(
                 'XrpTxSendProvider._getPrepared error ' + error.toString()
               );
               reject(error);
@@ -142,7 +142,7 @@ export class XrpTxSendProvider {
               msg: error.toString()
             }
           );
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'XrpTxSendProvider._getPrepared connect error ' + error.toString()
           );
           reject(error);
@@ -181,7 +181,7 @@ export class XrpTxSendProvider {
     try {
       const signed = this.signTx(data, privateData, txJson);
       // @ts-ignore
-      BlocksoftCryptoLog.log('XrpTransferProcessor.sendTx signed', signed);
+      AirDAOCryptoLog.log('XrpTransferProcessor.sendTx signed', signed);
       result = await new Promise((resolve, reject) => {
         api
           .connect()
@@ -214,7 +214,7 @@ export class XrpTxSendProvider {
                     msg: error.toString()
                   }
                 );
-                BlocksoftCryptoLog.log(
+                AirDAOCryptoLog.log(
                   'XrpTransferProcessor.submit error ' + error.toString()
                 );
                 reject(error);
@@ -231,7 +231,7 @@ export class XrpTxSendProvider {
                 msg: error.toString()
               }
             );
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'XrpTransferProcessor.sendTx connect error ' + error.toString()
             );
             reject(error);
@@ -248,9 +248,7 @@ export class XrpTxSendProvider {
           msg: e.toString()
         }
       );
-      BlocksoftCryptoLog.log(
-        'XrpTransferProcessor.send2 error ' + e.toString()
-      );
+      AirDAOCryptoLog.log('XrpTransferProcessor.send2 error ' + e.toString());
       if (typeof e.resultMessage !== 'undefined') {
         throw new Error(e.resultMessage.toString());
       } else if (typeof e.message !== 'undefined') {

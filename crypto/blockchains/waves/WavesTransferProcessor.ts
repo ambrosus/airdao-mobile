@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
 import { transfer, broadcast } from '@waves/waves-transactions/src/index';
@@ -76,7 +76,7 @@ export default class WavesTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         `' WavesTransferProcessor.getTransferAllBalance ',
       ${data.addressFrom} + ' => ' + ${balance}`
@@ -125,7 +125,7 @@ export default class WavesTransferProcessor
       apiPath = await BlocksoftExternalSettings.get('WAVES_SERVER');
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' WavesTransferProcessor.sendTx started ' +
         data.addressFrom +
@@ -146,7 +146,7 @@ export default class WavesTransferProcessor
       }
       signedData = transfer(money, { privateKey: privateData.privateKey });
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' WavesTransferProcessor.sendTx ' +
           data.addressFrom +
@@ -159,7 +159,7 @@ export default class WavesTransferProcessor
       );
       throw new Error(e.message);
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' WavesTransferProcessor.sendTx ' +
         data.addressFrom +
@@ -189,7 +189,7 @@ export default class WavesTransferProcessor
     const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       const resp = await new Promise((resolve, reject) => {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' WavesTransferProcessor.sendTx ' +
             data.addressFrom +
@@ -209,7 +209,7 @@ export default class WavesTransferProcessor
             reject(e);
           });
       });
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' WavesTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -235,7 +235,7 @@ export default class WavesTransferProcessor
             e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' WavesTransferProcessor.sendTx  ' +
           data.addressFrom +

@@ -21,7 +21,7 @@
  *   }
  * }
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 // @ts-ignore
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
@@ -90,7 +90,7 @@ export default class XlmTransferProcessor
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' XlmTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -101,7 +101,7 @@ export default class XlmTransferProcessor
       return result;
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XlmTransferProcessor.getFeeRate ' +
         data.addressFrom +
@@ -119,7 +119,7 @@ export default class XlmTransferProcessor
     // @ts-ignore
     const fee = BlocksoftUtils.toUnified(getFee, FEE_DECIMALS);
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XlmTransferProcessor.getFeeRate ' +
         data.addressFrom +
@@ -149,7 +149,7 @@ export default class XlmTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XlmTransferProcessor.getTransferAllBalance ' +
         data.addressFrom +
@@ -237,11 +237,11 @@ export default class XlmTransferProcessor
       }
       throw e;
     }
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' XlmTransferProcessor.sendTx prepared'
     );
     let raw = transaction.toEnvelope().toXDR('base64');
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' XlmTransferProcessor.sendTx base64',
       raw
     );
@@ -265,12 +265,12 @@ export default class XlmTransferProcessor
           uiData,
           'create_account'
         );
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' XlmTransferProcessor.sendTx prepared create account'
         );
         raw = transaction.toEnvelope().toXDR('base64');
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' XlmTransferProcessor.sendTx base64 create account',
           raw

@@ -1,5 +1,5 @@
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import XrpTmpDS from '@crypto/blockchains/xrp/stores/XrpTmpDS';
 
 const CACHE_VALID_TIME = 60000; // 1 minute
@@ -56,7 +56,7 @@ export default class XrpDataRippleProvider {
   async getTransactionsBlockchain(scanData, source = '') {
     const address = scanData.account.address.trim();
     const action = 'payments';
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.DataRipple.getTransactions ' +
         action +
         ' started ' +
@@ -94,7 +94,7 @@ export default class XrpDataRippleProvider {
       res.data[action],
       action
     );
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.DataRipple.getTransactions ' +
         action +
         ' finished ' +
@@ -201,7 +201,7 @@ export default class XrpDataRippleProvider {
 
   async _getLedger(index) {
     const now = new Date().getTime();
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.DataRipple._getLedger started ' + index
     );
     const link = `${API_PATH}/ledgers/${index}`;
@@ -218,7 +218,7 @@ export default class XrpDataRippleProvider {
           typeof res.data !== 'undefined' &&
           typeof res.data.ledger !== 'undefined'
         ) {
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             'XrpScannerProcessor.DataRipple._getLedger updated for index ' +
               index +
               ' ' +

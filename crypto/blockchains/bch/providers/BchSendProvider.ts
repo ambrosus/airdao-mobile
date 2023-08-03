@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import DogeSendProvider from '../../doge/providers/DogeSendProvider';
 
@@ -18,7 +18,7 @@ export default class BchSendProvider
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BchSendProvider.sendTx ' +
         subtitle +

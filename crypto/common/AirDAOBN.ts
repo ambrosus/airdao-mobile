@@ -1,24 +1,24 @@
 import { BigNumber } from 'bignumber.js';
 import BlocksoftUtils from './AirDAOUtils';
 
-class BlocksoftBN {
+class AirDAOBN {
   innerBN = false;
-
+ ̰
   constructor(val) {
-    // console.log('BlocksoftBN construct', JSON.stringify(val))
+    // console.log('AirDAOBN construct', JSON.stringify(val))
     if (typeof val.innerBN !== 'undefined') {
       try {
         // noinspection JSCheckFunctionSignatures,JSUnresolvedVariable
         this.innerBN = new BigNumber(val.innerBN.toString());
       } catch (e) {
-        throw new Error(e.message + ' while BlocksoftBN.constructor ' + val);
+        throw new Error(e.message + ' while AirDAOBN.constructor ' + val);
       }
     } else {
       try {
         // noinspection JSCheckFunctionSignatures,JSUnresolvedVariable
         this.innerBN = new BigNumber(val);
       } catch (e) {
-        throw new Error(e.message + ' while BlocksoftBN.constructor ' + val);
+        throw new Error(e.message + ' while AirDAOBN.constructor ' + val);
       }
     }
   }
@@ -36,7 +36,7 @@ class BlocksoftBN {
   }
 
   add(val) {
-    // console.log('BlocksoftBN add ', JSON.stringify(val))
+    // console.log('AirDAOBN add ', JSON.stringify(val))
     if (
       typeof val === 'undefined' ||
       !val ||
@@ -52,7 +52,7 @@ class BlocksoftBN {
         val2 = val.innerBN;
       } else {
         throw new Error(
-          'BlocksoftBN.add unsupported type ' +
+          'AirDAOBN.add unsupported type ' +
             typeof val +
             ' ' +
             JSON.stringify(val)
@@ -63,19 +63,19 @@ class BlocksoftBN {
         val = BlocksoftUtils.fromENumber(val);
         val2 = BigNumber(val);
       } catch (e) {
-        throw new Error(e.message + ' while BlocksoftBN.add transform ' + val);
+        throw new Error(e.message + ' while AirDAOBN.add transform ' + val);
       }
     }
     try {
       this.innerBN = this.innerBN.plus(val2);
     } catch (e) {
-      throw new Error(e.message + ' while BlocksoftBN.add ' + val);
+      throw new Error(e.message + ' while AirDAOBN.add ' + val);
     }
     return this;
   }
 
   diff(val) {
-    // console.log('BlocksoftBN diff ', JSON.stringify(val))
+    // console.log('AirDAOBN diff ', JSON.stringify(val))
     if (typeof val === 'undefined' || !val || val.toString() === '0') {
       return this;
     }
@@ -85,7 +85,7 @@ class BlocksoftBN {
         val2 = val.innerBN;
       } else {
         throw new Error(
-          'BlocksoftBN.diff unsupported type ' +
+          'AirDAOBN.diff unsupported type ' +
             typeof val +
             ' ' +
             JSON.stringify(val)
@@ -96,16 +96,16 @@ class BlocksoftBN {
         val = BlocksoftUtils.fromENumber(val);
         val2 = BigNumber(val);
       } catch (e) {
-        throw new Error(e.message + ' while BlocksoftBN.diff transform ' + val);
+        throw new Error(e.message + ' while AirDAOBN.diff transform ' + val);
       }
     }
     try {
       this.innerBN = this.innerBN.minus(val2);
     } catch (e) {
-      throw new Error(e.message + ' while BlocksoftBN.minus ' + val);
+      throw new Error(e.message + ' while AirDAOBN.minus ' + val);
     }
     return this;
   }
 }
 
-export default BlocksoftBN;
+export default AirDAOBN;

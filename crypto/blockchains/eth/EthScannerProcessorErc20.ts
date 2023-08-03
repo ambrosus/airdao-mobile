@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthScannerProcessor from './EthScannerProcessor';
 import abi from './ext/erc20';
 
@@ -33,7 +33,7 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
    * @return {Promise<{balance, unconfirmed, provider}>}
    */
   async getBalanceBlockchain(address: string) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthScannerProcessorErc20.getBalance started ' +
         address
@@ -54,7 +54,7 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
       if (this._trezorServerCode) {
         const res = await this._get(address);
         if (!res || typeof res.data === 'undefined') return false;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthScannerProcessorErc20.getBalance loaded from ' +
             res.provider +
@@ -84,7 +84,7 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
         }
       }
       balance = await this._token.methods.balanceOf(address).call();
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessorErc20.getBalance ' +
           address +
@@ -97,7 +97,7 @@ export default class EthScannerProcessorErc20 extends EthScannerProcessor {
       time = 'now()';
       return { balance, unconfirmed: 0, provider, time };
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessorErc20.getBalance ' +
           address +

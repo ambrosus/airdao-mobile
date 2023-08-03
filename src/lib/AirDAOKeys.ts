@@ -196,7 +196,7 @@ class AirDAOKeys {
         hasDerivations = true;
       }
       if (typeof CACHE[hexesCache] === 'undefined' || hasDerivations) {
-        // BlocksoftCryptoLog.log(`BlocksoftKeys will discover ${settings.addressProcessor}`)
+        // AirDAOCryptoLog.log(`BlocksoftKeys will discover ${settings.addressProcessor}`)
         let root = false;
         if (typeof networksConstants[currencyCode] !== 'undefined') {
           root = await this.getBip32Cached(
@@ -212,7 +212,7 @@ class AirDAOKeys {
         }
         // BIP32 Extended Private Key to check - uncomment
         // let childFirst = root.derivePath('m/44\'/2\'/0\'/0')
-        // BlocksoftCryptoLog.log(childFirst.toBase58())
+        // AirDAOCryptoLog.log(childFirst.toBase58())
 
         /**
          * @type {EthAddressProcessor|BtcAddressProcessor}

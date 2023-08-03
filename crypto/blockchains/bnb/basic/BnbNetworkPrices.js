@@ -5,7 +5,7 @@
  * https://dex.binance.org/api/v1/fees
  * https://docs.binance.org/api-reference/dex-api/paths.html#apiv1fees
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -24,7 +24,7 @@ class BnbNetworkPrices {
       return CACHE_FEES;
     }
 
-    BlocksoftCryptoLog.log('BnbNetworkPricesProvider.getFees no cache load');
+    AirDAOCryptoLog.log('BnbNetworkPricesProvider.getFees no cache load');
 
     const apiServer = await BlocksoftExternalSettings.getStatic('BNB_SERVER');
     const link = `${apiServer}/api/v1/fees`;
@@ -50,7 +50,7 @@ class BnbNetworkPrices {
         }
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BnbNetworkPricesProvider.getOnlyFees loaded prev fee as error' +
           e.message
       );

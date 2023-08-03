@@ -3,7 +3,7 @@
  */
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import BtcTxBuilder from '../../btc/tx/BtcTxBuilder';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 import { TransactionBuilder, script, opcodes } from 'bitcoinjs-lib';
 
@@ -15,7 +15,7 @@ function toPaddedHexString(num: number, len: number) {
 }
 
 function createOmniSimpleSend(amountInUSD: string, propertyID = USDT_TOKEN_ID) {
-  BlocksoftCryptoLog.log('UsdtTxBuilder.createOmniSimpleSend started');
+  AirDAOCryptoLog.log('UsdtTxBuilder.createOmniSimpleSend started');
   const simpleSend = [
     '6f6d6e69', // omni
     '0000', // tx type

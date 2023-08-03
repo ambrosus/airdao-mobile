@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import SolScannerProcessor from '@crypto/blockchains/sol/SolScannerProcessor';
@@ -34,7 +34,7 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
     address: string
   ): Promise<{ balance: number; provider: string } | false> {
     address = address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' SolScannerProcessorSpl getBalanceBlockchain address ' +
         address
@@ -103,7 +103,7 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
         balance = CACHE_BALANCES[address][this.tokenAddress].amount;
       }
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ` SolScannerProcessorSpl getBalanceBlockchain address ` +
           `${address} ` +

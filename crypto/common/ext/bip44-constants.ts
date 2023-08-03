@@ -3,44 +3,43 @@
  * Format for each row:
  * [ constant, coinSymbol, coinName ]
  */
-module.exports = [
+export default [
+  [`44'/0`, 'BTC', 'Bitcoin'],
+  [`44'/1`, 'BTC_TEST', 'Testnet (all coins)'],
+  [`84'/0`, 'BTC_SEGWIT', 'Bitcoin'],
+  [`49'/0`, 'BTC_SEGWIT_COMPATIBLE', 'Bitcoin'],
+  [`44'/0`, 'USDT', 'USDT Omni'], // actual = 200
+  [`44'/279553`, 'BTC_LIGHT', 'Bitcoin Light'],
 
-    [ `44'/0`, "BTC", "Bitcoin" ],
-    [ `44'/1`, "BTC_TEST", "Testnet (all coins)" ],
-    [ `84'/0`, "BTC_SEGWIT", "Bitcoin" ],
-    [ `49'/0`, "BTC_SEGWIT_COMPATIBLE", "Bitcoin" ],
-    [ `44'/0`, "USDT", "USDT Omni" ], // actual = 200
-    [ `44'/279553`, "BTC_LIGHT", "Bitcoin Light" ],
+  [`44'/145`, 'BCH', 'Bitcoin Cash'],
+  [`44'/156`, 'BTG', 'Bitcoin Gold'],
+  [`44'/236`, 'BSV', 'Bitcoin SV'],
 
-    [ `44'/145`, "BCH", "Bitcoin Cash" ],
-    [ `44'/156`, "BTG", "Bitcoin Gold" ],
-    [ `44'/236`, "BSV", "Bitcoin SV" ],
+  [`44'/60`, 'ETH', 'Ether'],
+  [`44'/61`, 'ETC', 'Ether Classic'],
+  [`44'/1`, 'ETH_ROPSTEN', 'Ropsten Ether'],
+  [`44'/1`, 'ETH_RINKEBY', 'Rinkeby Ether'],
 
-    [ `44'/60`, "ETH", "Ether" ],
-    [ `44'/61`, "ETC", "Ether Classic" ],
-    [ `44'/1`, "ETH_ROPSTEN", "Ropsten Ether" ],
-    [ `44'/1`, "ETH_RINKEBY", "Rinkeby Ether" ],
+  [`44'/2`, 'LTC', 'Litecoin'],
+  [`84'/2`, 'LTC_SEGWIT', 'Litecoin'],
+  [`44'/3`, 'DOGE', 'Dogecoin'],
+  [`44'/77`, 'XVG', 'Verge'],
+  [`44'/195`, 'TRX', 'Tron'],
 
-    [ `44'/2`, "LTC", "Litecoin" ],
-    [ `84'/2`, "LTC_SEGWIT", "Litecoin" ],
-    [ `44'/3`, "DOGE", "Dogecoin" ],
-    [ `44'/77`, "XVG", "Verge" ],
-    [ `44'/195`, "TRX", "Tron" ],
+  [`44'/144`, 'XRP', 'Ripple'],
+  [`44'/148`, 'XLM', 'Stellar'],
+  [`44'/128`, 'XMR', 'Monero'],
 
-    [ `44'/144`, "XRP", "Ripple" ],
-    [ `44'/148`, "XLM", "Stellar" ],
-    [ `44'/128`, "XMR", "Monero" ],
+  [`44'/235`, 'FIO', 'FIO'],
 
-    [ `44'/235`, "FIO", "FIO" ],
+  [`44'/714`, 'BNB', 'BNB'],
+  [`44'/818`, 'VET', 'VET'],
 
-    [ `44'/714`, "BNB", "BNB" ],
-    [ `44'/818`, "VET", "VET" ],
+  [`44'/501`, 'SOL', 'SOL'],
+  [`44'/5741564`, 'WAVES', 'Waves'],
+  [`44'/5741564`, 'ASH', 'Ash']
 
-    [ `44'/501`, "SOL", "SOL" ],
-    [ `44'/5741564`, "WAVES", "Waves" ],
-    [ `44'/5741564`, "ASH", "Ash" ],
-
-    /*
+  /*
     [ 0x80000004, "RDD", "Reddcoin" ],
     [ 0x80000005, "DASH", "Dash (ex Darkcoin)" ],
     [ 0x80000006, "PPC", "Peercoin" ],
@@ -513,4 +512,4 @@ module.exports = [
     [ 0x857ab1e1, "kUSD", "kUSD" ],
     [ 0x85f5e0fe, "FLUID", "Fluid Chains" ],
     [ 0x85f5e0ff, "QKC", "QuarkChain" ] */
-]
+];

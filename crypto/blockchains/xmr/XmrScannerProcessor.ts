@@ -5,7 +5,7 @@
 
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftPrivateKeysUtils from '@crypto/common/AirDAOPrivateKeysUtils';
 
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
@@ -58,7 +58,7 @@ export default class XmrScannerProcessor {
     additionalData: { derivationIndex: any; publicSpendKey: string },
     walletHash: string
   ) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XMR XmrScannerProcessor._get ' + walletHash + ' ' + address
     );
     const now = new Date().getTime();
@@ -109,7 +109,7 @@ export default class XmrScannerProcessor {
 
     let res = false;
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           `' XmrScannerProcessor._get start ' +
           ${link} +
@@ -118,7 +118,7 @@ export default class XmrScannerProcessor {
       );
       res = await BlocksoftAxios.post(link + 'get_address_info', linkParams);
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           `' XmrScannerProcessor._get error ' +
           ${e.message},
@@ -154,7 +154,7 @@ export default class XmrScannerProcessor {
             linkParamsLogin
           ); // login needed
         } catch (e: any) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               `' XmrScannerProcessor._get login error ' +
               ${e.message},
@@ -201,7 +201,7 @@ export default class XmrScannerProcessor {
             e.message
         );
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'XMR XmrScannerProcessor._get MoneroUtilsParser.parseAddressInfo error ' +
           e.message
       );
@@ -231,7 +231,7 @@ export default class XmrScannerProcessor {
             e.message
         );
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'XMR XmrScannerProcessor._get MoneroUtilsParser.parseAddressTransactions error ' +
           e.message
       );

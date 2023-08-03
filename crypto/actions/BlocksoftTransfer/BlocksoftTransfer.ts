@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.20
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
 import { BlocksoftTransferDispatcher } from '../../blockchains/BlocksoftTransferDispatcher';
 import { BlocksoftTransferPrivate } from './BlocksoftTransferPrivate';
@@ -42,7 +42,7 @@ export namespace BlocksoftTransfer {
     data.isTransferAll = true;
     let transferAllCount;
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance started ${data.addressFrom} `
       );
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
@@ -61,7 +61,7 @@ export namespace BlocksoftTransfer {
         data.currencyCode
       ).getTransferAllBalance(data, privateData, additionalDataTmp);
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance got ${data.addressFrom} result is ok`
       );
       if (config.debug.sendLogs) {
@@ -76,7 +76,7 @@ export namespace BlocksoftTransfer {
         e.message.indexOf('UI_') === -1
       ) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance ` +
             e.message
         );
@@ -138,7 +138,7 @@ export namespace BlocksoftTransfer {
     data.derivationPath = data.derivationPath.replace(/quote/g, "'");
     let feesCount;
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getFeeRate started ${data.addressFrom} `
       );
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
@@ -165,15 +165,13 @@ export namespace BlocksoftTransfer {
         console.log('BlocksoftTransfer.getFeeRate error ', e);
       }
       if (typeof e.message === 'undefined') {
-        await BlocksoftCryptoLog.log(
-          'BlocksoftTransfer.getFeeRate strange error'
-        );
+        await AirDAOCryptoLog.log('BlocksoftTransfer.getFeeRate strange error');
       } else if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
       ) {
         // noinspection ES6MissingAwait
-        await BlocksoftCryptoLog.err(
+        await AirDAOCryptoLog.err(
           `${data.currencyCode} BlocksoftTransfer.getFeeRate error ` +
             data.addressFrom +
             ' => ' +
@@ -190,7 +188,7 @@ export namespace BlocksoftTransfer {
             e.message
         );
       } else {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           'BlocksoftTransfer.getFeeRate inner error ' + e.message
         );
         throw e;
@@ -292,7 +290,7 @@ export namespace BlocksoftTransfer {
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
       ) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `${data.currencyCode} BlocksoftTransfer.sendTx error ` + e.message
         );
       }
@@ -301,7 +299,7 @@ export namespace BlocksoftTransfer {
 
     let txResult;
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendTx started ${data.addressFrom} `
       );
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
@@ -312,7 +310,7 @@ export namespace BlocksoftTransfer {
         additionalData
       );
       txResult = await processor.sendTx(data, privateData, uiData);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendTx got ${data.addressFrom} result is ok`
       );
       if (
@@ -341,7 +339,7 @@ export namespace BlocksoftTransfer {
         e.message.indexOf('connect() timed') === -1
       ) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           `${data.currencyCode} BlocksoftTransfer.sendTx ` + e.message
         );
       }
@@ -358,7 +356,7 @@ export namespace BlocksoftTransfer {
         (data.currencyCode === 'TRX' ||
           data.currencyCode.indexOf('TRX_') !== -1)
       ) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `${data.currencyCode} BlocksoftTransfer.sendTx ` + e.message
         );
       } else {
@@ -376,7 +374,7 @@ export namespace BlocksoftTransfer {
   ): Promise<string> {
     let txResult = '';
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendRawTx started ${data.address} `
       );
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
@@ -386,7 +384,7 @@ export namespace BlocksoftTransfer {
         return 'none';
       }
       txResult = await processor.sendRawTx(data, rawTxHex, txRBF, logData);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendRawTx got ${data.address} result is ok`
       );
     } catch (e) {
@@ -396,7 +394,7 @@ export namespace BlocksoftTransfer {
           e
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendRawTx error ` + e.message
       );
       throw e;
@@ -410,7 +408,7 @@ export namespace BlocksoftTransfer {
   ): Promise<boolean> {
     let txResult = false;
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.setMissing started ${data.address} `
       );
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
@@ -420,11 +418,11 @@ export namespace BlocksoftTransfer {
         return false;
       }
       txResult = await processor.setMissingTx(data, dbTransaction);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.setMissing got ${data.address} result is ok`
       );
     } catch (e) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         `${data.currencyCode} BlocksoftTransfer.setMissing error ` + e.message
       );
     }
@@ -438,7 +436,7 @@ export namespace BlocksoftTransfer {
   ): boolean {
     let txResult = false;
     try {
-      // BlocksoftCryptoLog.log(`BlocksoftTransfer.canRBF ${data.currencyCode} from ${source} started ${data.address} `)
+      // AirDAOCryptoLog.log(`BlocksoftTransfer.canRBF ${data.currencyCode} from ${source} started ${data.address} `)
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
         typeof data.currencyCode !== 'undefined'
           ? data.currencyCode
@@ -448,9 +446,9 @@ export namespace BlocksoftTransfer {
         return false;
       }
       txResult = processor.canRBF(data, dbTransaction, source);
-      // BlocksoftCryptoLog.log(`BlocksoftTransfer.canRBF ${data.currencyCode} from ${source} got ${data.address} result is ${JSON.stringify(txResult)}`)
+      // AirDAOCryptoLog.log(`BlocksoftTransfer.canRBF ${data.currencyCode} from ${source} got ${data.address} result is ${JSON.stringify(txResult)}`)
     } catch (e) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         `${data.currencyCode} BlocksoftTransfer.canRBF error from ${source} ` +
           e.message
       );
@@ -461,7 +459,7 @@ export namespace BlocksoftTransfer {
   export const checkSendAllModal = function (data: { currencyCode: any }) {
     let checkSendAllModalResult = false;
     try {
-      // BlocksoftCryptoLog.log(`BlocksoftTransfer.checkSendAllModal ${data.currencyCode} started `)
+      // AirDAOCryptoLog.log(`BlocksoftTransfer.checkSendAllModal ${data.currencyCode} started `)
       const processor = BlocksoftTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -469,9 +467,9 @@ export namespace BlocksoftTransfer {
         return false;
       }
       checkSendAllModalResult = processor.checkSendAllModal(data);
-      // BlocksoftCryptoLog.log(`BlocksoftTransfer.checkSendAllModal ${data.currencyCode} got result is ok ` + JSON.stringify(checkSendAllModalResult))
+      // AirDAOCryptoLog.log(`BlocksoftTransfer.checkSendAllModal ${data.currencyCode} got result is ok ` + JSON.stringify(checkSendAllModalResult))
     } catch (e) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         `${data.currencyCode} BlocksoftTransfer.checkSendAllModal error ` +
           e.message
       );

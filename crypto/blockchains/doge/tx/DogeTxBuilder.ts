@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import { TransactionBuilder, ECPair, payments } from 'bitcoinjs-lib';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -37,7 +37,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
       fromExt && fromExt * 1 > 0
         ? fromExt * 1
         : this._builderSettings.feeMaxForByteSatoshi;
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'DogeTxBuilder.getRawTx ' +
         this._settings.currencyCode +
         ' _feeMaxForByteSatoshi ' +
@@ -98,7 +98,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
     i: number,
     input: AirDAOBlockchainTypes.UnspentTx
   ): Promise<void> {
-    await BlocksoftCryptoLog.log('DogeTxBuilder.getRawTx sign', input);
+    await AirDAOCryptoLog.log('DogeTxBuilder.getRawTx sign', input);
     // @ts-ignore
     txb.sign(i, this.keyPair, null, null, input.value * 1);
   }
@@ -129,7 +129,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
     await this._reInit();
 
     this._getRawTxValidateKeyPair(privateData, data);
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeTxBuilder.getRawTx validated address private key'
     );
@@ -144,7 +144,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
       if (data.allowReplaceByFee) {
         nSequence = MIN_SEQ;
         txAllowReplaceByFee = true;
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx allow RBF ' +
             nSequence
@@ -152,7 +152,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
       } else {
         nSequence = MAX_SEQ;
         txAllowReplaceByFee = false;
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx no RBF ' +
             nSequence
@@ -165,7 +165,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
       if (nSequence >= MAX_SEQ) {
         nSequence = MAX_SEQ;
         txAllowReplaceByFee = false;
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx no RBF by old nSeq ' +
             data.transactionJson.nSequence +
@@ -173,7 +173,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
             nSequence
         );
       } else {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx allow RBF by old nSeq ' +
             data.transactionJson.nSequence +
@@ -187,7 +187,7 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
       this._bitcoinNetwork,
       this._feeMaxForByteSatoshi
     );
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeTxBuilder.getRawTx started max4Bytes ' +
         this._feeMaxForByteSatoshi
@@ -203,12 +203,12 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
         // @ts-ignore
         log.inputs.push({ txid: input.txid, vout: input.vout, nSequence });
         // @ts-ignore
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' DogeTxBuilder.getRawTx input added',
           input
         );
       } catch (e) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx input add error ',
           input
@@ -226,12 +226,12 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
         // @ts-ignore
         log.outputs.push({ addressTo: output.to, amount: output.amount });
         // @ts-ignore
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' DogeTxBuilder.getRawTx output added ',
           output
         );
       } catch (e) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx output add error ',
           output
@@ -243,15 +243,15 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
     for (let i = 0, ic = preparedInputsOutputs.inputs.length; i < ic; i++) {
       const input = preparedInputsOutputs.inputs[i];
       try {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' DogeTxBuilder.getRawTx sign adding'
         );
         await this._getRawTxSign(txb, i, input);
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' DogeTxBuilder.getRawTx sign added'
         );
       } catch (e) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTxBuilder.getRawTx input sign error ',
           input
@@ -267,13 +267,13 @@ export default class DogeTxBuilder implements AirDAOBlockchainTypes.TxBuilder {
     let rawTxHex;
     try {
       rawTxHex = txb.build().toHex();
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTxBuilder.getRawTx size ' +
           rawTxHex.length
       );
       // @ts-ignore
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode + ' DogeTxBuilder.getRawTx hex',
         rawTxHex
       );

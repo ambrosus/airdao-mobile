@@ -4,7 +4,7 @@
  */
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
 import BlocksoftPrivateKeysUtils from '../../common/AirDAOPrivateKeysUtils';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftKeysStorage from '../BlocksoftKeysStorage/BlocksoftKeysStorage';
 
 export namespace BlocksoftTransferPrivate {
@@ -61,7 +61,7 @@ export namespace BlocksoftTransferPrivate {
     privateData.privateKey = result.privateKey;
     // @ts-ignore
     privateData.addedData = result.addedData;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `${data.currencyCode} BlocksoftTransferPrivate.initTransferPrivate finished for ${data.addressFrom}`
     );
     return privateData;

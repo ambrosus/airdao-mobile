@@ -3,7 +3,7 @@
  * https://docs.binance.org/api-reference/dex-api/paths.html#apiv1transactions
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
 
@@ -37,7 +37,7 @@ export default class BnbScannerProcessor {
         }
       }
     } else {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'BnbScannerProcessor.getBalanceBlockchain ' +
           address +
           ' no actual balance ' +
@@ -60,10 +60,7 @@ export default class BnbScannerProcessor {
    */
   async getTransactionsBlockchain(scanData) {
     const address = scanData.account.address.trim();
-    BlocksoftCryptoLog.log(
-      'BnbScannerProcessor.getTransactions started',
-      address
-    );
+    AirDAOCryptoLog.log('BnbScannerProcessor.getTransactions started', address);
 
     const apiServer = await BlocksoftExternalSettings.getStatic('BNB_SERVER');
 
@@ -82,7 +79,7 @@ export default class BnbScannerProcessor {
     }
 
     const transactions = await this._unifyTransactions(address, res.data.tx);
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BnbScannerProcessor.getTransactions finished',
       address
     );

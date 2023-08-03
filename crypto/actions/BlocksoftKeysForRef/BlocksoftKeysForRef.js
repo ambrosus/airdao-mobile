@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftKeysForRefServerSide from './BlocksoftKeysForRefServerSide';
 import BlocksoftKeys from '../BlocksoftKeys/BlocksoftKeys';
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
@@ -22,14 +22,14 @@ class BlocksoftKeysForRef {
     if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
     if (typeof CACHE[mnemonicCache] !== 'undefined')
       return CACHE[mnemonicCache];
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `BlocksoftKeysForRef discoverPublicAndPrivate called ` +
         JSON.stringify(logData)
     );
 
     let result = BlocksoftKeys.getEthCached(mnemonicCache);
     if (!result) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftKeysForRef discoverPublicAndPrivate no cache ` +
           JSON.stringify(logData)
       );
@@ -48,7 +48,7 @@ class BlocksoftKeysForRef {
       if (index === 0) {
         BlocksoftKeys.setEthCached(data.mnemonic, result);
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftKeysForRef discoverPublicAndPrivate finished no cache ` +
           JSON.stringify(logData)
       );
@@ -57,7 +57,7 @@ class BlocksoftKeysForRef {
     result.cashbackToken = BlocksoftKeysForRefServerSide.addressToToken(
       result.address
     );
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `BlocksoftKeysForRef discoverPublicAndPrivate finished ` +
         JSON.stringify(logData)
     );

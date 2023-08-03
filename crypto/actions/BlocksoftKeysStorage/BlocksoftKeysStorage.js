@@ -6,7 +6,7 @@
 import 'react-native';
 import * as Keychain from 'react-native-keychain';
 
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import config from '@app/config/config';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 
@@ -260,7 +260,7 @@ export class BlocksoftKeysStorage {
 
     const logData = { ...newMnemonic };
     if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
-    BlocksoftCryptoLog.log('BlocksoftKeysStorage saveMnemonic', logData);
+    AirDAOCryptoLog.log('BlocksoftKeysStorage saveMnemonic', logData);
 
     if (!newMnemonic.hash) {
       throw new Error('unique hash required ' + JSON.stringify(newMnemonic));

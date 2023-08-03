@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import XrpTmpDS from './stores/XrpTmpDS';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 import XrpDataRippleProvider from '@crypto/blockchains/xrp/basic/XrpDataRippleProvider';
@@ -66,7 +66,7 @@ export default class XrpScannerProcessor {
   async getTransactionsBlockchain(scanData, source = '') {
     await this.init();
     const address = scanData.account.address.trim();
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.getTransactions started ' + address
     );
 
@@ -86,7 +86,7 @@ export default class XrpScannerProcessor {
       }
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.getTransactions finished ' + address
     );
     return transactions;

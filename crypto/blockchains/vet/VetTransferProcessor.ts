@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import { thorify } from 'thorify';
@@ -100,7 +100,7 @@ export default class VetTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         `' VetTransferProcessor.getTransferAllBalance ',
       ${data.addressFrom} + ' => ' + ${balance}`
@@ -171,7 +171,7 @@ export default class VetTransferProcessor
         );
       }
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' VetTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -184,7 +184,7 @@ export default class VetTransferProcessor
       );
       throw new Error(e.message);
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' VetTransferProcessor.sendTx  ' +
         data.addressFrom +
@@ -220,7 +220,7 @@ export default class VetTransferProcessor
         { raw: signedData.rawTransaction },
         false
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' VetTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -239,7 +239,7 @@ export default class VetTransferProcessor
       }
       result.transactionHash = send.data.id;
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' VetTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -257,7 +257,7 @@ export default class VetTransferProcessor
 
   checkError(e: any, data: any, txRBF = false) {
     if (e.message.indexOf('nonce too low') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VeChain checkError0.1 ' + e.message + ' for ' + data.addressFrom
       );
       let e2;
@@ -268,7 +268,7 @@ export default class VetTransferProcessor
       }
       throw e2;
     } else if (e.message.indexOf('insufficient funds') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VeChain checkError0.3 ' + e.message + ' for ' + data.addressFrom
       );
       if (
@@ -281,17 +281,17 @@ export default class VetTransferProcessor
         throw new Error('SERVER_RESPONSE_NOT_ENOUGH_FEE');
       }
     } else if (e.message.indexOf('underpriced') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VeChain checkError0.4 ' + e.message + ' for ' + data.addressFrom
       );
       throw new Error('SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE');
     } else if (e.message.indexOf('already known') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VeChain checkError0.5 ' + e.message + ' for ' + data.addressFrom
       );
       throw new Error('SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE');
     } else if (e.message.indexOf('insufficient energy') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'VeChain checkError0.6 ' + e.message + ' for ' + data.addressFrom
       );
       throw new Error('SERVER_RESPONSE_ENERGY_ERROR_VET');

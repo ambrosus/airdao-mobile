@@ -3,7 +3,7 @@
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 const API_PATH = 'https://api.opensea.io/api/v1/';
 const API_TEST_PATH = 'https://testnets-api.opensea.io/api/v1/';
@@ -89,7 +89,7 @@ export default async function (data) {
             one.desc.length > 20 ? one.desc.substring(0, 20) + '...' : one.desc;
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensea name error ' + e.message
         );
       }
@@ -108,7 +108,7 @@ export default async function (data) {
           one.contractSchema = tmp.asset_contract.schema_name;
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensea contract error ' + e.message
         );
       }
@@ -124,7 +124,7 @@ export default async function (data) {
           usdTotal = usdTotal + tmp.last_sale.payment_token.usd_price * 1;
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensealast_sale error ' + e.message,
           JSON.stringify(tmp)
         );
@@ -149,7 +149,7 @@ export default async function (data) {
           }
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensea collection error ' + e.message
         );
       }

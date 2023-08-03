@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
 import XmrSendProvider from './providers/XmrSendProvider';
 import XmrUnspentsProvider from './providers/XmrUnspentsProvider';
@@ -41,7 +41,7 @@ export default class XmrTransferProcessor
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' XmrTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -64,7 +64,7 @@ export default class XmrTransferProcessor
     const privViewKey = keys[1];
     const pubSpendKey = data.accountJson.publicSpendKey;
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XmrTransferProcessor.getFeeRate  newSender ' +
         data.addressFrom +
@@ -103,7 +103,7 @@ export default class XmrTransferProcessor
 
     for (let i = 1; i <= 4; i++) {
       try {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' XmrTransferProcessor.getFeeRate ' +
             data.addressFrom +
@@ -199,25 +199,25 @@ export default class XmrTransferProcessor
               'An error occurred while getting decoy outputs'
             ) !== -1
           ) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' XmrTransferProcessor error will go out bad decoy'
             );
             throw new Error('SERVER_RESPONSE_BAD_CODE');
           } else if (e.message.indexOf('decode address') !== -1) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' XmrTransferProcessor error will go out'
             );
             throw new Error('SERVER_RESPONSE_BAD_DESTINATION');
           } else if (e.message.indexOf('Not enough spendables') !== -1) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' XmrTransferProcessor error not enough'
             );
             throw new Error('SERVER_RESPONSE_NO_RESPONSE_XMR');
           } else {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               this._settings.currencyCode +
                 ' XmrTransferProcessor.getFeeRate ' +
                 data.addressFrom +
@@ -241,7 +241,7 @@ export default class XmrTransferProcessor
     }
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         `' XmrTransferProcessor.getFeeRate ' +
         ${data.addressFrom} +
@@ -268,7 +268,7 @@ export default class XmrTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         `' XmrTransferProcessor.getTransferAllBalance ',
       ${data.addressFrom + ' => ' + balance}`
@@ -312,7 +312,7 @@ export default class XmrTransferProcessor
       throw new Error('XMR transaction required selectedFee');
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         `' XmrTransferProcessor.sendTx started ' +
         ${data.addressFrom} +
@@ -324,7 +324,7 @@ export default class XmrTransferProcessor
     let foundFee = uiData?.selectedFee;
     if (data.addressTo !== uiData.selectedFee.addressToTx) {
       try {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' XmrTransferProcessor.sendTx rechecked ' +
             data.addressFrom +
@@ -346,7 +346,7 @@ export default class XmrTransferProcessor
             foundFee = fee;
           }
         }
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             `' XmrTransferProcessor.sendTx rechecked ' +
             ${data.addressFrom} +
@@ -356,7 +356,7 @@ export default class XmrTransferProcessor
           ${foundFee}`
         );
       } catch (e: any) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' XmrTransferProcessor.sendTx rechecked ' +
             data.addressFrom +
@@ -400,7 +400,7 @@ export default class XmrTransferProcessor
     });
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' XmrTransferProcessor.sendTx result',
       send
     );

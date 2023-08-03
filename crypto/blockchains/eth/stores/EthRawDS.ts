@@ -5,7 +5,7 @@
  */
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import { DatabaseTable } from '@appTypes';
 import { Database } from '@database';
 import { TransactionRawDBModel } from '@database/models/transactions-raw';
@@ -113,12 +113,12 @@ class EthRawDS {
             //     logData: transactionLog,
             //     marketingData: MarketingEvent.DATA
             //   });
-            //   await BlocksoftCryptoLog.log(
+            //   await AirDAOCryptoLog.log(
             //     this._currencyCode + ' EthRawDS.send proxy success result',
             //     JSON.parse(JSON.stringify(checkResult))
             //   );
             // } catch (e3) {
-            //   await BlocksoftCryptoLog.log(
+            //   await AirDAOCryptoLog.log(
             //     this._currencyCode +
             //       ' EthRawDS.send proxy success error ' +
             //       e3.message
@@ -275,7 +275,7 @@ class EthRawDS {
   }
 
   async cleanRawHash(data) {
-    BlocksoftCryptoLog.log('EthRawDS cleanRawHash ', data);
+    AirDAOCryptoLog.log('EthRawDS cleanRawHash ', data);
 
     const now = new Date().toISOString();
     const sql = `UPDATE ${tableName}
@@ -288,7 +288,7 @@ class EthRawDS {
   }
 
   async cleanRaw(data) {
-    BlocksoftCryptoLog.log('EthRawDS cleanRaw ', data);
+    AirDAOCryptoLog.log('EthRawDS cleanRaw ', data);
 
     if (typeof data.currencyCode !== 'undefined') {
       this._currencyCode =

@@ -3,7 +3,7 @@
  */
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 
 export default class BsvSendProvider
@@ -16,7 +16,7 @@ export default class BsvSendProvider
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BsvSendProvider.sendTx ' +
         subtitle +
@@ -39,7 +39,7 @@ export default class BsvSendProvider
         logData.error = e.message;
         await this._checkError(hex, subtitle, txRBF, logData);
       } catch (e2) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeSendProvider.send proxy error errorTx ' +
             e2.message

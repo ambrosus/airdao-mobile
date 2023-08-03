@@ -2,7 +2,7 @@
  * @version 0.5
  * https://etherscan.io/apis#accounts
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import { Web3Injected } from '@crypto/services/Web3Injected';
 
 export default class EthBasic {
@@ -308,13 +308,13 @@ export default class EthBasic {
 
   checkError(e, data, txRBF = false, logData = {}) {
     if (e.message.indexOf('Transaction has been reverted by the EVM') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.0 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
       throw new Error('SERVER_RESPONSE_REVERTED_BY_EVM');
     } else if (e.message.indexOf('nonce too low') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.1 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
@@ -331,7 +331,7 @@ export default class EthBasic {
       e2.logData = { nonce };
       throw e2;
     } else if (e.message.indexOf('gas required exceeds allowance') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.2 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
@@ -344,7 +344,7 @@ export default class EthBasic {
         throw new Error('SERVER_RESPONSE_TOO_MUCH_GAS_ETH_ERC20');
       }
     } else if (e.message.indexOf('insufficient funds') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.3 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
@@ -358,13 +358,13 @@ export default class EthBasic {
         throw new Error('SERVER_RESPONSE_NOT_ENOUGH_FEE');
       }
     } else if (e.message.indexOf('underpriced') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.4 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
       throw new Error('SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE');
     } else if (e.message.indexOf('already known') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.5 ' + e.message + ' for ' + data.addressFrom,
         logData
       );
@@ -372,7 +372,7 @@ export default class EthBasic {
         'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE_FOR_REPLACEMENT'
       );
     } else if (e.message.indexOf('infura') !== -1) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthBasic checkError0.6 ' + e.message + ' for ' + data.addressFrom,
         logData
       );

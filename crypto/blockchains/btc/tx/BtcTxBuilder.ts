@@ -5,7 +5,7 @@ import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import DogeTxBuilder from '../../doge/tx/DogeTxBuilder';
 import BlocksoftPrivateKeysUtils from '../../../common/AirDAOPrivateKeysUtils';
 import { ECPair, payments, TransactionBuilder } from 'bitcoinjs-lib';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 
 export default class BtcTxBuilder
@@ -199,7 +199,7 @@ export default class BtcTxBuilder
     }
     if (typeof this.p2wpkhBTC[input.address] === 'undefined') {
       // @ts-ignore
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode + ' BtcTxBuilder.getRawTx sign usual',
         input
       );
@@ -207,7 +207,7 @@ export default class BtcTxBuilder
       txb.sign(i, this.keyPairBTC[input.address], null, null, input.value * 1);
     } else if (typeof this.p2shBTC[input.address] === 'undefined') {
       // @ts-ignore
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode + ' BtcTxBuilder.getRawTx sign segwit',
         input
       );
@@ -215,7 +215,7 @@ export default class BtcTxBuilder
       txb.sign(i, this.keyPairBTC[input.address], null, null, input.value * 1);
     } else {
       // @ts-ignore
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcTxBuilder.getRawTx sign segwit compatible',
         input

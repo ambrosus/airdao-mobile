@@ -3,7 +3,7 @@
  */
 
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 import {
   PublicKey,
@@ -68,7 +68,7 @@ export default class SolTransferProcessorSpl
   ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ` SolTransferProcessorSpl.getTransferAllBalance,
       ${data.addressFrom} + ' => ' + ${balance}`
@@ -224,7 +224,7 @@ export default class SolTransferProcessorSpl
       };
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' SolTransferProcessorSpl.sendTx  ' +
         data.addressFrom +
@@ -268,7 +268,7 @@ export default class SolTransferProcessorSpl
         })
       );
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessorSpl.sendTx  ' +
           data.addressFrom +
@@ -290,7 +290,7 @@ export default class SolTransferProcessorSpl
 
     // @ts-ignore
     const signedData = tx.serialize().toString('base64');
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' SolTransferProcessorSpl.sendTx  ' +
         data.addressFrom +
@@ -304,7 +304,7 @@ export default class SolTransferProcessorSpl
     const result = {} as BlocksoftBlockchainTypes.SendTxResult;
     try {
       const sendRes = await SolUtils.sendTransaction(signedData);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessorSpl.sendTx  ' +
           data.addressFrom +
@@ -323,7 +323,7 @@ export default class SolTransferProcessorSpl
       }
       result.transactionHash = sendRes;
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessorSpl.sendTx  ' +
           data.addressFrom +

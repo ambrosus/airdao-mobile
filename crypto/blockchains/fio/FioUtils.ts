@@ -1,4 +1,4 @@
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { getFioSdk } from './FioSdkWrapper';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import { Fio } from '@fioprotocol/fiojs';
@@ -135,7 +135,7 @@ export const getSentFioRequests = async (
   offset = 0
 ) => {
   try {
-    BlocksoftCryptoLog.log(`FIO getSentFioRequests started ${fioPublicKey}`);
+    AirDAOCryptoLog.log(`FIO getSentFioRequests started ${fioPublicKey}`);
     const response = await getFioSdk().getSentFioRequests(limit, offset);
     const requests = response['requests'] || [];
     return requests.sort(
@@ -153,7 +153,7 @@ export const getPendingFioRequests = async (
   offset = 0
 ) => {
   try {
-    BlocksoftCryptoLog.log(`FIO getPendingFioRequests started ${fioPublicKey}`);
+    AirDAOCryptoLog.log(`FIO getPendingFioRequests started ${fioPublicKey}`);
     const response = await getFioSdk().getPendingFioRequests(limit, offset);
     const requests = response['requests'] || [];
     return requests.sort(
@@ -191,7 +191,7 @@ export const addCryptoPublicAddress = async ({
     );
     const isOK = response['status'] === 'OK';
     if (!isOK) {
-      await BlocksoftCryptoLog.log('FIO addPublicAddress error', response);
+      await AirDAOCryptoLog.log('FIO addPublicAddress error', response);
     }
     return isOK;
   } catch (e) {
@@ -218,7 +218,7 @@ export const addCryptoPublicAddresses = async ({
       );
 
       if (response['status'] !== 'OK') {
-        await BlocksoftCryptoLog.log('FIO addPublicAddress error', response);
+        await AirDAOCryptoLog.log('FIO addPublicAddress error', response);
         isOK = false;
       }
     } catch (e) {
@@ -249,7 +249,7 @@ export const removeCryptoPublicAddresses = async ({
       );
 
       if (response['status'] !== 'OK') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           'FIO removeCryptoPublicAddresses error',
           response
         );
@@ -283,7 +283,7 @@ export const requestFunds = async ({
   memo
 }) => {
   try {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `FIO requestFunds started ${payerFioAddress} -> ${payeeFioAddress} ${amount} ${tokenCode} (${chainCode})`
     );
     const { fee = 0 } = await getFioSdk().getFeeForNewFundsRequest(
@@ -304,7 +304,7 @@ export const requestFunds = async ({
       null
     );
 
-    await BlocksoftCryptoLog.log('FIO requestFunds result', response);
+    await AirDAOCryptoLog.log('FIO requestFunds result', response);
     return response;
   } catch (e) {
     formatError('FIO requestFunds', e);
@@ -436,12 +436,12 @@ const formatError = (title, e) => {
     e.message.indexOf('Error 404') === -1 &&
     e.message.indexOf('Network request failed') === -1
   ) {
-    BlocksoftCryptoLog.err(title + ' error ' + e.message, e.json || false);
+    AirDAOCryptoLog.err(title + ' error ' + e.message, e.json || false);
   } else {
     const msg =
       title + ' 404 notice ' + e.message + ' ' + JSON.stringify(e.json);
     if (msg.indexOf('No FIO Requests') === -1) {
-      BlocksoftCryptoLog.log(msg);
+      AirDAOCryptoLog.log(msg);
     }
   }
 };

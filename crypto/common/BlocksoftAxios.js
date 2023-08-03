@@ -1,7 +1,7 @@
 /**
  * @version 0.43
  */
-import BlocksoftCryptoLog from './BlocksoftCryptoLog';
+import AirDAOCryptoLog from './AirDAOCryptoLog';
 
 import axios from 'axios';
 import config from '@app/config/config';
@@ -63,7 +63,7 @@ class BlocksoftAxios {
         CACHE_ERRORS_BY_LINKS[link].time = now;
         throw e;
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BlocksoftAxios.getWithoutBraking try ' +
           JSON.stringify(CACHE_ERRORS_BY_LINKS[link]) +
           ' error ' +
@@ -99,7 +99,7 @@ class BlocksoftAxios {
         CACHE_ERRORS_BY_LINKS[link].time = now;
         throw e;
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BlocksoftAxios.postWithoutBraking try ' +
           JSON.stringify(CACHE_ERRORS_BY_LINKS[link]) +
           ' error ' +
@@ -143,14 +143,14 @@ class BlocksoftAxios {
         tmpInner.status !== 201 &&
         tmpInner.status !== 202
       ) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.post fetch result ' + JSON.stringify(tmpInner)
         );
       } else {
         tmp = { data: await tmpInner.json() };
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BlocksoftAxios.postWithHeaders fetch result error ' + e.message
       );
     }
@@ -183,7 +183,7 @@ class BlocksoftAxios {
         tmpInner.status !== 201 &&
         tmpInner.status !== 202
       ) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.get fetch result ' + JSON.stringify(tmpInner)
         );
       } else {
@@ -232,7 +232,7 @@ class BlocksoftAxios {
           tmpInner.status !== 201 &&
           tmpInner.status !== 202
         ) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'BlocksoftAxios.post fetch result ' + JSON.stringify(tmpInner)
           );
           doOld = true;
@@ -240,7 +240,7 @@ class BlocksoftAxios {
           tmp = { data: await tmpInner.json() };
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.post fetch result error ' + e.message
         );
         doOld = true;
@@ -284,7 +284,7 @@ class BlocksoftAxios {
           antiCycle++;
         } while (tryOneMore && antiCycle < 3);
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.get fetch result error ' + e.message
         );
         doOld = true;
@@ -382,7 +382,7 @@ class BlocksoftAxios {
           CACHE_STARTED[cacheMD].time +
           ' diff ' +
           (now - CACHE_STARTED[cacheMD].time);
-        BlocksoftCryptoLog.log('PREV CALL WILL BE CANCELED ' + timeMsg);
+        AirDAOCryptoLog.log('PREV CALL WILL BE CANCELED ' + timeMsg);
         await CACHE_STARTED_CANCEL[cacheMD].cancel(
           'PREV CALL CANCELED ' + timeMsg
         );
@@ -437,9 +437,9 @@ class BlocksoftAxios {
                 txt = JSON.stringify(tmp.data).substr(0, 300)
             }
             if (txt.length > 100) {
-                BlocksoftCryptoLog.log('BlocksoftAxios.' + method + ' finish ' + link, txt) // separate line for txt
+                AirDAOCryptoLog.log('BlocksoftAxios.' + method + ' finish ' + link, txt) // separate line for txt
             } else {
-                BlocksoftCryptoLog.log('BlocksoftAxios.' + method + ' finish ' + link + ' ' + JSON.stringify(txt))
+                AirDAOCryptoLog.log('BlocksoftAxios.' + method + ' finish ' + link + ' ' + JSON.stringify(txt))
             }
              */
 
@@ -486,7 +486,7 @@ class BlocksoftAxios {
       ) {
         if (link.indexOf('trustee.deals') !== -1) {
           // noinspection ES6MissingAwait
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'BlocksoftAxios.' +
               method +
               ' ' +
@@ -512,7 +512,7 @@ class BlocksoftAxios {
             }
           }
           // noinspection ES6MissingAwait
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'BlocksoftAxios.' +
               method +
               ' ' +
@@ -528,7 +528,7 @@ class BlocksoftAxios {
         e.message.indexOf('loudflare') !== -1
       ) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.' +
             method +
             ' ' +
@@ -539,7 +539,7 @@ class BlocksoftAxios {
         customError.code = 'ERROR_NOTICE';
       } else if (link.indexOf('/api/v2/sendtx/') !== -1) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.' +
             method +
             ' ' +
@@ -551,7 +551,7 @@ class BlocksoftAxios {
         customError.code = 'ERROR_NOTICE';
       } else if (e.message.indexOf('account not found') !== -1) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.' + method + ' ' + link + ' ' + e.message
         ); // just nothing found
         return false;
@@ -562,7 +562,7 @@ class BlocksoftAxios {
             link.indexOf('trustee.deals') !== -1 ||
             link.indexOf('https://api.mainnet-beta.solana.com') !== -1
           ) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BlocksoftAxios.' +
                 method +
                 ' ' +
@@ -573,7 +573,7 @@ class BlocksoftAxios {
                 JSON.stringify(data)
             );
           } else {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               'BlocksoftAxios.' +
                 method +
                 ' ' +
@@ -584,7 +584,7 @@ class BlocksoftAxios {
             );
           }
         } else {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'BlocksoftAxios.' +
               method +
               ' ' +
@@ -596,7 +596,7 @@ class BlocksoftAxios {
         }
         customError.code = 'ERROR_SYSTEM';
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BlocksoftAxios.' +
             method +
             ' ' +

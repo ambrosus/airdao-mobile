@@ -3,7 +3,7 @@
  * @version 0.20
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import EthTmpDS from './stores/EthTmpDS';
 
@@ -54,7 +54,7 @@ export default class EthTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate remove started ' +
           data.transactionRemoveByFee
@@ -65,7 +65,7 @@ export default class EthTransferProcessor
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate resend started ' +
           data.transactionReplaceByFee
@@ -73,7 +73,7 @@ export default class EthTransferProcessor
       txRBF = data.transactionReplaceByFee;
       txRBFed = 'RBFed';
     } else if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate dex ' +
           data.addressFrom +
@@ -81,7 +81,7 @@ export default class EthTransferProcessor
       );
     } else {
       const realAddressToLower = realAddressTo.toLowerCase();
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -111,7 +111,7 @@ export default class EthTransferProcessor
         typeof data.transactionJson.nonce !== 'undefined'
           ? data.transactionJson.nonce
           : false;
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -127,7 +127,7 @@ export default class EthTransferProcessor
           if (scannedTx) {
             oldGasPrice = scannedTx.gasPrice;
             oldNonce = scannedTx.nonce;
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' EthTransferProcessor.getFeeRate ' +
                 data.addressFrom +
@@ -136,7 +136,7 @@ export default class EthTransferProcessor
             );
           }
           if (!oldGasPrice) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' EthTransferProcessor.getFeeRate ' +
                 txRBFed +
@@ -145,7 +145,7 @@ export default class EthTransferProcessor
             );
           }
         } catch (e) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTransferProcessor.getFeeRate ' +
               txRBFed +
@@ -163,7 +163,7 @@ export default class EthTransferProcessor
     ) {
       oldNonce = additionalData.nonceForTx;
       nonceLog += ' customFeeNonce ' + oldNonce;
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -171,7 +171,7 @@ export default class EthTransferProcessor
           additionalData.nonceForTx
       );
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -257,7 +257,7 @@ export default class EthTransferProcessor
       ) {
         maxNonceLocal = proxyPriceCheck.maxNonceLocal;
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -322,7 +322,7 @@ export default class EthTransferProcessor
             ],
             id: 1
           };
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTransferProcessor.getFeeRate estimatedGas for WalletConnect start'
           );
@@ -341,7 +341,7 @@ export default class EthTransferProcessor
           } else {
             gasLimit = 500000;
           }
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTransferProcessor.getFeeRate estimatedGas for WalletConnect result ' +
               gasLimit
@@ -379,7 +379,7 @@ export default class EthTransferProcessor
               gasLimit = BlocksoftUtils.mul(gasLimit, 1.5);
             }
           } catch (e) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'EthTransferProcessor data.contractCallData error ' + e.message
             );
             // do nothing
@@ -403,7 +403,7 @@ export default class EthTransferProcessor
                   realAddressTo,
                   data.amount
                 ); // it doesn't matter what the price of gas is, just a required parameter
-                BlocksoftCryptoLog.log(
+                AirDAOCryptoLog.log(
                   this._settings.currencyCode +
                     ' EthTransferProcessor.getFeeRate estimatedGas ' +
                     gasLimit
@@ -446,7 +446,7 @@ export default class EthTransferProcessor
         }
       } else {
         gasLimit = additionalData.gasLimit;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.getFeeRate preestimatedGas ' +
             gasLimit
@@ -479,7 +479,7 @@ export default class EthTransferProcessor
     }
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTransferProcessor.getFeeRate prefinished',
       {
@@ -557,7 +557,7 @@ export default class EthTransferProcessor
           ' with basic ' +
           nonceForTxBasic +
           nonceLog;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.getFeeRate ' +
             data.addressFrom +
@@ -573,7 +573,7 @@ export default class EthTransferProcessor
           ' replaced by basic ' +
           nonceForTxBasic +
           nonceLog;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.getFeeRate ' +
             data.addressFrom +
@@ -594,7 +594,7 @@ export default class EthTransferProcessor
           (await this._web3.eth.getBalance(data.addressFrom));
         // @ts-ignore
         if (!balance || balance * 1 === 0) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTxProcessor.getFeeRate balanceFromWeb3 is empty ' +
               balance
@@ -682,7 +682,7 @@ export default class EthTransferProcessor
             ? BlocksoftUtils.toGwei(newGasPrice).toString()
             : newGasPrice;
       } catch (e) {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           'EthTxProcessor.getFeeRate newGasPrice to gwei error ' + e.message
         );
       }
@@ -706,7 +706,7 @@ export default class EthTransferProcessor
       if (!changedFeeByBalance || diff * 1 < 1000) {
         feesOK[titles[index]] = tmp.gasPrice;
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTxProcessor.getFeeRate skipped feesOk ' +
             titles[index] +
             '  as diff ' +
@@ -722,7 +722,7 @@ export default class EthTransferProcessor
         newGasPrice !== prevGasPrice
       ) {
         prevGasPrice = tmp.gasPrice;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTxProcessor.getFeeRate added feeForTx ' +
             titles[index] +
             ' ' +
@@ -734,7 +734,7 @@ export default class EthTransferProcessor
         );
         result.fees.push(tmp);
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTxProcessor.getFeeRate skipped feeForTx ' +
             titles[index] +
             ' ' +
@@ -819,7 +819,7 @@ export default class EthTransferProcessor
                 ? BlocksoftUtils.toGwei(newGasPrice).toString()
                 : newGasPrice;
           } catch (e) {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               'EthTxProcessor.getFeeRate newGasPrice2 to gwei error ' +
                 e.message
             );
@@ -841,7 +841,7 @@ export default class EthTransferProcessor
           };
           // @ts-ignore
           prevGasPrice = tmp.gasPrice;
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'EthTxProcessor.getFeeRate feeForTx rbfFaster ' +
               tmp.feeForTx +
               ' with gasPrice ' +
@@ -902,7 +902,7 @@ export default class EthTransferProcessor
       try {
         gweiFee = fee !== '0' ? BlocksoftUtils.toGwei(fee).toString() : fee;
       } catch (e) {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           'EthTxProcessor.getFeeRate fee to gwei error ' + e.message
         );
       }
@@ -921,7 +921,7 @@ export default class EthTransferProcessor
         isTransferAll: data.isTransferAll
       };
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthTxProcessor.getFeeRate feeForTx ' +
           titles[index] +
           ' ' +
@@ -942,7 +942,7 @@ export default class EthTransferProcessor
 
     if (!skippedByOld) {
       if (typeof feesOK['eth_speed_fast'] === 'undefined') {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTxProcessor.getFeeRate showSmallFeeNotice reason ' +
             JSON.stringify(feesOK)
         );
@@ -959,7 +959,7 @@ export default class EthTransferProcessor
         maxNonceLocal.amountBlocked &&
         typeof maxNonceLocal.amountBlocked[this._settings.currencyCode] !==
           'undefined';
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFees ethAllowBlockedBalance ' +
           ethAllowBlockedBalance +
@@ -979,7 +979,7 @@ export default class EthTransferProcessor
             maxNonceLocal.amountBlocked[this._settings.currencyCode]
           ).toString();
           const diffAmount = BlocksoftUtils.diff(diff, data.amount).toString();
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTransferProcessor.getFees balance ' +
               result.countedForBasicBalance +
@@ -1004,7 +1004,7 @@ export default class EthTransferProcessor
             }
           }
         } catch (e) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             ' EthTransferProcessor.getFees ethAllowBlockedBalance inner error ' +
               e.message
           );
@@ -1014,7 +1014,7 @@ export default class EthTransferProcessor
         'ETH_LONG_QUERY'
       );
       check = maxNonceLocal.queryLength * 1 >= LONG_QUERY * 1;
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFees ethAllowLongQuery ' +
           ethAllowLongQuery +
@@ -1048,7 +1048,7 @@ export default class EthTransferProcessor
     additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     if (!data.amount || data.amount === '0') {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getTransferAllBalance ' +
           data.addressFrom +
@@ -1062,7 +1062,7 @@ export default class EthTransferProcessor
       } catch (e) {
         this.checkError(e, data);
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getTransferAllBalance ' +
           data.addressFrom +
@@ -1070,7 +1070,7 @@ export default class EthTransferProcessor
           data.amount
       );
     } else {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getTransferAllBalance ' +
           data.addressFrom +
@@ -1110,7 +1110,7 @@ export default class EthTransferProcessor
           fees.fees[fees.selectedFeeIndex].amountForTx
         );
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.getTransferAllBalance ' +
             data.addressFrom +
@@ -1139,7 +1139,7 @@ export default class EthTransferProcessor
       throw new Error('ETH transaction required addressTo');
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTransferProcessor sendTx started',
       JSON.parse(JSON.stringify(data))
     );
@@ -1155,7 +1155,7 @@ export default class EthTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sendTx started ' +
           data.transactionRemoveByFee
@@ -1166,7 +1166,7 @@ export default class EthTransferProcessor
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sendTx resend started ' +
           data.transactionReplaceByFee
@@ -1174,7 +1174,7 @@ export default class EthTransferProcessor
       txRBF = data.transactionReplaceByFee;
       txRBFed = 'RBFed';
     } else if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sendTx dex ' +
           data.addressFrom +
@@ -1182,7 +1182,7 @@ export default class EthTransferProcessor
       );
       txRBFed = 'dexSend';
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sendTx ' +
           data.addressFrom +
@@ -1224,7 +1224,7 @@ export default class EthTransferProcessor
     }
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTransferProcessor.sendTx ' +
         txRBFed +
@@ -1352,7 +1352,7 @@ export default class EthTransferProcessor
               oldNonce = scannedTx.nonce;
             }
           } catch (e) {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               this._settings.currencyCode +
                 ' EthTransferProcessor.sent rbf not loaded nonce for ' +
                 txRBF +
@@ -1362,7 +1362,7 @@ export default class EthTransferProcessor
             throw new Error('System error: not loaded nonce for ' + txRBF);
           }
           if (oldNonce === false || oldNonce === -1) {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               this._settings.currencyCode +
                 ' EthTransferProcessor.sent rbf no nonce for ' +
                 txRBF
@@ -1392,7 +1392,7 @@ export default class EthTransferProcessor
               ? logData.selectedFee.nonceLog
               : '');
         }
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.sent ' +
             data.addressFrom +
@@ -1438,7 +1438,7 @@ export default class EthTransferProcessor
         result.transactionJson.txData = tx.data;
         await EthTmpDS.getCache(this._mainCurrencyCode, data.addressFrom);
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sent ' +
           data.addressFrom +
@@ -1462,7 +1462,7 @@ export default class EthTransferProcessor
       transaction.transactionJson &&
       typeof transaction.transactionJson.nonce !== 'undefined'
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferPRocessor.setMissingTx remove nonce ' +
           transaction.transactionJson.nonce +
@@ -1484,7 +1484,7 @@ export default class EthTransferProcessor
     source: string
   ): boolean {
     if (transaction.transactionDirection === 'income') {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'EthTransferProcessor.canRBF ' +
           transaction.transactionHash +
           ' false by income'
@@ -1493,7 +1493,7 @@ export default class EthTransferProcessor
     }
     if (typeof transaction.transactionJson !== 'undefined') {
       if (typeof transaction.transactionJson.delegatedNonce !== 'undefined') {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTransferProcessor.canRBF ' +
             transaction.transactionHash +
             ' false by delegated'
@@ -1505,7 +1505,7 @@ export default class EthTransferProcessor
                 if (max.success > -1) {
                     // @ts-ignore
                     if (transaction.transactionJson.nonce * 1 > max.success * 1) return true
-                    BlocksoftCryptoLog.log('EthTransferProcessor.canRBF  ' + transaction.transactionHash + ' false by maxSuccess',
+                    AirDAOCryptoLog.log('EthTransferProcessor.canRBF  ' + transaction.transactionHash + ' false by maxSuccess',
                         {'nonce' : transaction.transactionJson.nonce, 'max' : max.success})
                     return false
                 }

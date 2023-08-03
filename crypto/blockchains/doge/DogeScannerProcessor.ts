@@ -22,7 +22,7 @@
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import DogeFindAddressFunction from './basic/DogeFindAddressFunction';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
@@ -137,7 +137,7 @@ export default class DogeScannerProcessor {
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
   async getBalanceBlockchain(address: string, jsonData = {}) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeScannerProcessor.getBalance started ' +
         address
@@ -165,7 +165,7 @@ export default class DogeScannerProcessor {
   }) {
     const address = scanData.account.address.trim();
     const jsonData = scanData.additional;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeScannerProcessor.getTransactions started ' +
         address
@@ -178,7 +178,7 @@ export default class DogeScannerProcessor {
 
     let res = await this._get(address, jsonData);
     if (!res || typeof res.data === 'undefined') return [];
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeScannerProcessor.getTransactions loaded from ' +
         res.provider +
@@ -238,7 +238,7 @@ export default class DogeScannerProcessor {
         }
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeScannerProcessor.getTransactions finished ' +
         address +

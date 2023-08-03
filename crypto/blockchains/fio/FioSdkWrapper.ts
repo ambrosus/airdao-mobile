@@ -6,7 +6,7 @@ import { FIOSDK } from '@fioprotocol/fiosdk';
 
 import BlocksoftKeysStorage from '@crypto/actions/BlocksoftKeysStorage/BlocksoftKeysStorage';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 const fetchJson = async (uri, opts = {}) => {
   // eslint-disable-next-line no-undef
@@ -43,7 +43,7 @@ export class FioSdkWrapper {
       const link = BlocksoftExternalSettings.getStatic('FIO_BASE_URL');
       this.sdk = new FIOSDK(fioKey, publicKey, link, fetchJson);
       this.walletHash = walletHash;
-      BlocksoftCryptoLog.log(`FioSdkWrapper.inited for ${walletHash}`);
+      AirDAOCryptoLog.log(`FioSdkWrapper.inited for ${walletHash}`);
     } catch (e) {}
     return true;
   }

@@ -4,7 +4,7 @@
 // @ts-ignore
 import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 interface SendParams {
   address: string;
@@ -80,7 +80,7 @@ export default class XmrSendProvider {
         );
       }
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `'XmrSendProvider node ${this._link},' +
         ${resNode.data}`
       );

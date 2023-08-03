@@ -1,7 +1,7 @@
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import XrpTmpDS from '@crypto/blockchains/xrp/stores/XrpTmpDS';
 import { AxiosResponse } from 'axios';
 
@@ -263,7 +263,7 @@ export default class XrpDataScanProvider {
 
   async _getLedger(index: string | number): Promise<any> {
     const now = new Date().getTime();
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       'XrpScannerProcessor.DataScan._getLedger started ' + index
     );
     const link = BlocksoftExternalSettings.getStatic('XRP_SCANNER_SERVER');
@@ -290,7 +290,7 @@ export default class XrpDataScanProvider {
           typeof res.data.result !== 'undefined' &&
           typeof res.data.result.ledger !== 'undefined'
         ) {
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             'XrpScannerProcessor.DataScan._getLedger updated for index ' +
               index +
               ' ' +

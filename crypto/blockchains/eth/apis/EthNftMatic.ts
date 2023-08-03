@@ -3,7 +3,7 @@
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 const API_PATH = 'https://microscanners.trustee.deals/getAllNfts/';
 
@@ -70,7 +70,7 @@ export default async function (data) {
             one.desc.length > 20 ? one.desc.substring(0, 20) + '...' : one.desc;
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftMatic name error ' + e.message
         );
       }

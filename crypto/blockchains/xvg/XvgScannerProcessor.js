@@ -4,7 +4,7 @@
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/balance
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import XvgTmpDS from './stores/XvgTmpDS';
 import XvgFindAddressFunction from './basic/XvgFindAddressFunction';
@@ -48,11 +48,11 @@ export default class XvgScannerProcessor {
    */
   async getTransactionsBlockchain(scanData, source = '') {
     const address = scanData.account.address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XvgScannerProcessor.getTransactions started ' + address
     );
     const link = `${API_PATH}/address/${address}/txs`;
-    BlocksoftCryptoLog.log('XvgScannerProcessor.getTransactions call ' + link);
+    AirDAOCryptoLog.log('XvgScannerProcessor.getTransactions call ' + link);
     let tmp = await BlocksoftAxios.get(link);
     if (tmp.status < 200 || tmp.status >= 300) {
       throw new Error('not valid server response status ' + link);
@@ -89,7 +89,7 @@ export default class XvgScannerProcessor {
               already[tmp2.outcoming.transactionHash] = 1;
               if (tmp2.outcoming.addressTo === '?') {
                 tmp2.outcoming.addressTo = 'self';
-                BlocksoftCryptoLog.log(
+                AirDAOCryptoLog.log(
                   'XvgScannerProcessor.getTransactions consider as self ' +
                     tmp2.outcoming.transactionHash
                 );
@@ -119,7 +119,7 @@ export default class XvgScannerProcessor {
         }
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XvgScannerProcessor.getTransactions finished ' +
         address +
         ' total: ' +
@@ -151,7 +151,7 @@ export default class XvgScannerProcessor {
     let tmp;
 
     const link = `${API_PATH}/tx/${transaction.transactionHash}/coins`;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XvgScannerProcessor._unifyTransactionStep2 call for outputs should be ' +
         link
     );
@@ -162,7 +162,7 @@ export default class XvgScannerProcessor {
     ) {
       tmp = CACHE_FROM_DB[transaction.transactionHash + '_coins'];
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'XvgScannerProcessor._unifyTransactionStep2 called ' + link
       );
       tmp = await BlocksoftAxios.get(link);
@@ -186,7 +186,7 @@ export default class XvgScannerProcessor {
     transaction.addressAmount = output.value;
 
     const link2 = `${API_PATH}/tx/${transaction.transactionHash}`;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XvgScannerProcessor._unifyTransactionStep2 call for details ' + link2
     );
     let tmp2 = await BlocksoftAxios.get(link2);
@@ -209,7 +209,7 @@ export default class XvgScannerProcessor {
       XvgTmpDS.saveCache(address, transaction.transactionHash, 'data', tmp2);
       CACHE_FROM_DB[transaction.transactionHash + '_data'] = 1; // no need all - just mark
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XvgScannerProcessor._unifyTransactionStep2 call for details result ',
       transaction
     );

@@ -5,7 +5,7 @@
  * https://rest.bitcoin.com/v2/address/utxo/bitcoincash:qz6qh4304stgwpqxp6gwsucma30fewp7z5cs4yuvdf
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BtcCashUtils from '../ext/BtcCashUtils';
 import DogeUnspentsProvider from '../../doge/providers/DogeUnspentsProvider';
@@ -28,7 +28,7 @@ export default class BchUnspentsProvider
       // do nothing
     }
     // TODO check if log is necessary @ts-ignore
-    // BlocksoftCryptoLog.log(
+    // AirDAOCryptoLog.log(
     //   this._settings.currencyCode + ' BchUnspentsProvider.getUnspents started',
     //   address
     // );
@@ -36,7 +36,7 @@ export default class BchUnspentsProvider
     const link = this._apiPath + address;
     const res = (await BlocksoftAxios.getWithoutBraking(link)) as any;
     if (!res || !res.data || typeof res.data === 'undefined') {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BchUnspentsProvider.getUnspents nothing loaded for address ' +
           address +

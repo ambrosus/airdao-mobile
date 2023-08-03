@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthScannerProcessor from '@crypto/blockchains/eth/EthScannerProcessor';
 
 interface UnifiedTransaction {
@@ -21,7 +21,7 @@ export default class MetisScannerProcessor extends EthScannerProcessor {
     account: { address: string };
   }): Promise<UnifiedTransaction[]> {
     const address = scanData.account.address;
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' MetisScannerProcessor.getTransactions started ' +
         address

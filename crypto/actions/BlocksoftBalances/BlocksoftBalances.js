@@ -3,7 +3,7 @@
  * @version 0.5
  */
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftDict from '../../common/BlocksoftDict';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
@@ -79,7 +79,7 @@ class BlocksoftBalances {
    * @return {Promise<{balance:*, frozen: *, frozenEnergy: *, balanceAvailable: *, balanceStaked: *, provider:*, unconfirmed:*, addresses : *, balanceScanBlock : *}>}
    */
   async getBalance(source) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftBalances.getBalance ' +
         this._data.currencyCode +
         ' ' +
@@ -112,7 +112,7 @@ class BlocksoftBalances {
       e.code = 'ERROR_SYSTEM';
       throw e;
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftBalances.getBalance ' +
         this._data.currencyCode +
         ' ' +
@@ -154,7 +154,7 @@ class BlocksoftBalances {
       e.code = 'ERROR_SYSTEM';
       throw e;
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftBalances.getResources ' +
         this._data.currencyCode +
         ' ' +
@@ -182,7 +182,7 @@ class BlocksoftBalances {
       e.code = 'ERROR_SYSTEM';
       throw e;
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BlocksoftBalances.isMultisigBlockchain ' +
         this._data.currencyCode +
         ' ' +

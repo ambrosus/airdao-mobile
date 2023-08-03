@@ -6,7 +6,7 @@ import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import Log from '@app/services/Log/Log';
 import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 interface Balance {
   balanceAvailable: number;
@@ -104,11 +104,11 @@ const TronStakeUtils = {
       diffLastStakeMinutes === -1 &&
       specialActionNeeded === 'vote_after_unfreeze'
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TronStake.sendVoteAll ' + address + ' continue ' + diffLastStakeMinutes
       );
     } else if (!diffLastStakeMinutes || diffLastStakeMinutes < 3) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TronStake.sendVoteAll ' +
           address +
           ' skipped vote1 by ' +
@@ -117,13 +117,13 @@ const TronStakeUtils = {
       return false;
     }
     if (!prettyVote || typeof prettyVote === 'undefined') {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TronStake.sendVoteAll ' + address + ' skipped vote2'
       );
       return false;
     } else if (voteTotal * 1 === parseFloat(prettyVote)) {
       if (diffLastStakeMinutes > 100) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'TronStake.sendVoteAll ' +
             address +
             ' skipped vote3 ' +
@@ -133,13 +133,13 @@ const TronStakeUtils = {
         );
         return true; // all done
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TronStake.sendVoteAll ' + address + ' skipped vote4 ' + voteTotal
       );
       return false;
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'TronStake.sendVoteAll ' +
         address +
         ' started vote ' +

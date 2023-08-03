@@ -3,7 +3,7 @@
  */
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 interface TransactionData {
   data: any;
@@ -36,7 +36,7 @@ export default class WavesTransactionsProvider {
         CACHE_VALID_TIME
     ) {
       if (CACHE_OF_TRANSACTIONS[mainCurrencyCode][address]) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `WavesTransactionsProvider.get from cache ${address} => ${mainCurrencyCode}`
         );
         return CACHE_OF_TRANSACTIONS[mainCurrencyCode][address].data;

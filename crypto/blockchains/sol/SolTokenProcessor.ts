@@ -3,7 +3,7 @@
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import { AxiosResponse } from 'axios';
 
 interface TokenDetails {
@@ -101,7 +101,7 @@ export default class SolTokenProcessor {
       }
       decimals = response.data.result.value.data.parsed.info.decimals;
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'SolTokenProcessor getTokenDetails tokenAddress ' +
           tokenAddress +
           ' error ' +

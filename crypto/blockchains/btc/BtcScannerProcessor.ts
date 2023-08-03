@@ -4,7 +4,7 @@
 
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import BtcFindAddressFunction from './basic/BtcFindAddressFunction';
@@ -63,7 +63,7 @@ export default class BtcScannerProcessor {
       CACHE[address].provider = 'trezor-cache';
       return CACHE[address];
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcScannerProcessor._get ' + address + ' from ' + source + ' started'
     );
 
@@ -225,7 +225,7 @@ export default class BtcScannerProcessor {
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
   async getBalanceBlockchain(address, data, walletHash, source = '') {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BtcScannerProcessor.getBalance started ' +
         address
@@ -254,13 +254,13 @@ export default class BtcScannerProcessor {
     const withBalances =
       typeof scanData.withBalances !== 'undefined' && scanData.withBalances;
     if (!withBalances) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getAddresses started withoutBalances (KSU!)',
         address
       );
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getAddresses started withBalances',
         address
@@ -299,7 +299,7 @@ export default class BtcScannerProcessor {
         }
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getAddresses load from all addresses error ' +
           e.message
@@ -318,7 +318,7 @@ export default class BtcScannerProcessor {
     const address = scanData.account.address.trim();
     const data = scanData.additional;
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BtcScannerProcessor.getTransactions started ' +
         address
@@ -375,13 +375,13 @@ export default class BtcScannerProcessor {
           e
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcScannerProcessor.getTransactions load from all addresses error ' +
           e.message
       );
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BtcScannerProcessor.getTransactions loaded from ' +
         res.provider +
@@ -442,7 +442,7 @@ export default class BtcScannerProcessor {
         transactions.push(transaction);
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BtcScannerProcessor.getTransactions finished ' +
         address +

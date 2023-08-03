@@ -19,7 +19,7 @@ import {
   setSelectedAccount,
   setSelectedAccountTransactions
 } from '../../appstores/Stores/Main/MainStoreActions';
-import BlocksoftBN from '../../../crypto/common/BlocksoftBN';
+import BlocksoftBN from '../../../crypto/common/AirDAOBN';
 import MarketingEvent from '../../services/Marketing/MarketingEvent';
 import { BlocksoftTransferUtils } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransferUtils';
 import walletActions from '@app/appstores/Stores/Wallet/WalletActions';

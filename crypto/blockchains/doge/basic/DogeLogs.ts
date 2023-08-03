@@ -3,9 +3,9 @@
  * @version 0.20
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 export namespace DogeLogs {
   export const logInputsOutputs = function (
@@ -88,12 +88,12 @@ export namespace DogeLogs {
       typeof data.feeForTx.feeForByte === 'undefined' ||
       data.feeForTx.feeForByte < 0
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         title + ' preparedInputsOutputs with autofee ',
         logInputsOutputs
       );
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         title + ' preparedInputsOutputs with fee ' + data.feeForTx.feeForTx,
         logInputsOutputs
       );

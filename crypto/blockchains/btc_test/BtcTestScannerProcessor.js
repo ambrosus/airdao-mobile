@@ -2,7 +2,7 @@
  * @version 0.52
  * https://github.com/Blockstream/esplora/blob/master/API.md
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import DogeFindAddressFunction from '@crypto/blockchains/doge/basic/DogeFindAddressFunction';
@@ -16,7 +16,7 @@ export default class BtcTestScannerProcessor {
    * @return {Promise<{int:balance, int:provider}>}
    */
   async getBalanceBlockchain(address) {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcTestScannerProcessor.getBalance started ' + address
     );
     const res = await BlocksoftAxios.getWithoutBraking(
@@ -45,7 +45,7 @@ export default class BtcTestScannerProcessor {
    */
   async getTransactionsBlockchain(scanData) {
     const address = scanData.account.address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcTestScannerProcessor.getTransactions started ' + address
     );
     const res = await BlocksoftAxios.getWithoutBraking(
@@ -60,7 +60,7 @@ export default class BtcTestScannerProcessor {
       const transaction = await this._unifyTransaction(address, tx);
       transactions.push(transaction);
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BtcTestScannerProcessor.getTransactions finished ' +
         address +
         ' total: ' +

@@ -8,7 +8,7 @@
 import * as payment from '@mymonero/mymonero-paymentid-utils';
 // import * as parser from '@mymonero/mymonero-response-parser-utils/ResponseParser'
 import * as parser from './vendor/ResponseParser';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import config from '@constants/config';
 
 const MyMoneroCoreBridgeRN = require('react-native-mymonero-core/src/index');
@@ -105,7 +105,7 @@ export default {
         }
         return res;
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'MoneroUtilsParser.generate_key_image ' + e.message
         );
         throw new Error('MoneroUtilsParser.generate_key_image ' + e.message);
@@ -180,7 +180,7 @@ export default {
       const ret = JSON.parse(retString);
       // check for any errors passed back from WebAssembly
       if (ret.err_msg) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'MoneroUtilsParser ret.err_msg error ' + ret.err_msg
         );
         return false;
@@ -201,7 +201,7 @@ export default {
         return randomOuts;
       };
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'MoneroUtilsParser ret?.amounts?.length ' + ret?.amounts?.length
       );
 

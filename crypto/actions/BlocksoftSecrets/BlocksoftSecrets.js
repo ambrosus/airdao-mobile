@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.11
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 
 class BlocksoftSecrets {
@@ -33,16 +33,12 @@ class BlocksoftSecrets {
 
     let res = '';
     try {
-      BlocksoftCryptoLog.log(
-        `BlocksoftSecrets.getWords ${currencyCode} started`
-      );
+      AirDAOCryptoLog.log(`BlocksoftSecrets.getWords ${currencyCode} started`);
       res = await this._processor[currencyCode].getWords(params);
-      BlocksoftCryptoLog.log(
-        `BlocksoftSecrets.getWords ${currencyCode} finished`
-      );
+      AirDAOCryptoLog.log(`BlocksoftSecrets.getWords ${currencyCode} finished`);
     } catch (e) {
       // noinspection ES6MissingAwait
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         `BlocksoftSecrets.getWords ${currencyCode} error ` + e.message,
         e.data ? e.data : e
       );

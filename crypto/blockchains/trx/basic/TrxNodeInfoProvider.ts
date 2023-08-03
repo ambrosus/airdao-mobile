@@ -1,5 +1,5 @@
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 const INFO_MAX_TRY = 50; // max tries before error appear in axios get
@@ -29,18 +29,18 @@ export default class TrxNodeInfoProvider {
         if (info > CACHE_LAST_BLOCK) {
           CACHE_LAST_BLOCK = info;
         }
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'TrxNodeInfoProvider.getLastBlock currentBlock ' +
             JSON.stringify(info)
         );
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'TrxNodeInfoProvider.getLastBlock currentBlock warning ' +
             JSON.stringify(info)
         );
       }
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TrxNodeInfoProvider.getLastBlock currentBlock error ' + e.message
       );
     }

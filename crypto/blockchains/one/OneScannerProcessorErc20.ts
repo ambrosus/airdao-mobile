@@ -2,7 +2,7 @@
  * https://docs.harmony.one/home/developers/api/methods/account-methods/hmy_getbalance
  * https://docs.harmony.one/home/developers/api/methods/transaction-related-methods/hmy_gettransactionshistory#api-v2
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
@@ -25,7 +25,7 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
   }) {
     const { address } = scanData.account;
     const oneAddress = OneUtils.toOneAddress(address);
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' OneScannerProcessorErc20.getTransactionsBlockchain started ' +
         address +
@@ -92,7 +92,7 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
       await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
       return transactions;
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' OneScannerProcessorErc20.getTransactionsBlockchain address ' +
           address +

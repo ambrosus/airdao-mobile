@@ -2,7 +2,7 @@
  * @version 0.20
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
@@ -20,7 +20,7 @@ export default class XvgUnspentsProvider
   async getUnspents(
     address: string
   ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ` XvgUnspentsProvider.getUnspents started',
       ${address}`
@@ -29,7 +29,7 @@ export default class XvgUnspentsProvider
     const link = this._apiPath + address + '/txs/?unspent=true';
     const res = await BlocksoftAxios.getWithoutBraking(link);
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ` XvgUnspentsProvider.getUnspents link',
       ${link}`
@@ -37,7 +37,7 @@ export default class XvgUnspentsProvider
 
     if (!res || typeof res === 'boolean' || !('data' in res)) {
       // Check if 'data' exists in 'res'
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           `' XvgUnspentsProvider.getUnspents nothing loaded for address ' +
         ${address} +

@@ -1,4 +1,4 @@
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import { BlocksoftTransfer } from '../../../actions/BlocksoftTransfer/BlocksoftTransfer';
 import { Database } from '@database';
 import { DatabaseTable } from '@appTypes';
@@ -153,7 +153,7 @@ class DogeRawDS {
       data.transactionUnique =
         data.address.toLowerCase() + '_' + data.transactionHash;
     }
-    BlocksoftCryptoLog.log('DogeRawDS cleanRaw ', data);
+    AirDAOCryptoLog.log('DogeRawDS cleanRaw ', data);
     const now = new Date().getTime();
     const sql = `UPDATE ${tableName}
         SET is_removed=1, removed_at = '${now}'
@@ -241,7 +241,7 @@ class DogeRawDS {
       const str = Database.unEscapeString(res[0].transactionRaw) || '';
       return JSON.parse(str);
     } catch (e) {
-      BlocksoftCryptoLog.err('DogeRawDS getInputs error ' + e.message);
+      AirDAOCryptoLog.err('DogeRawDS getInputs error ' + e.message);
       return false;
     }
   }

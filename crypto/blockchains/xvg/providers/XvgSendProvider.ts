@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
@@ -20,7 +20,7 @@ export default class XvgSendProvider
     subtitle: string
   ): Promise<{ transactionHash: string; transactionJson: any }> {
     const link = BlocksoftExternalSettings.getStatic('XVG_SEND_LINK');
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XvgSendProvider.sendTx ' +
         subtitle +
@@ -32,7 +32,7 @@ export default class XvgSendProvider
     let res;
     try {
       res = await BlocksoftAxios.post(link, { rawTx: hex });
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' XvgSendProvider.sendTx ' +
           subtitle +
@@ -42,7 +42,7 @@ export default class XvgSendProvider
           hex
       );
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' XvgSendProvider.sendTx ' +
           subtitle +

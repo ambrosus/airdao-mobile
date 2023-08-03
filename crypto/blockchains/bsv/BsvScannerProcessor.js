@@ -3,7 +3,7 @@
  */
 
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import BsvTmpDS from '@crypto/blockchains/bsv/stores/BsvTmpDS';
@@ -80,7 +80,7 @@ export default class BsvScannerProcessor {
         throw new Error(e.message + ' in BsvTmpDS.getCache');
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BsvScannerProcessor.getTransactions started ' + address
     );
     const linkTxs = `${API_PATH}/address/${address}/history`;
@@ -99,7 +99,7 @@ export default class BsvScannerProcessor {
       if (row.height * 1 > 0) {
         basicTxs.push(row);
       } else {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BsvScannerProcessor.getTransactions strange one ' +
             JSON.stringify(row)
         );
@@ -124,7 +124,7 @@ export default class BsvScannerProcessor {
     }
 
     if (bulkTxs.length > 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BsvScannerProcessor.getTransactions will ask ' +
           JSON.stringify(bulkTxs)
       );
@@ -152,7 +152,7 @@ export default class BsvScannerProcessor {
       transactions = await this._unifyTransactions(address, [], otherTxs);
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'BsvScannerProcessor.getTransactions finished ' + address
     );
     return transactions;
@@ -165,7 +165,7 @@ export default class BsvScannerProcessor {
         if (typeof CACHE_TXS[vin.txid] === 'undefined') {
           vins.push(vin.txid);
           if (vins.length > 19) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BsvScannerProcessor.getTransactions will ask vins ' +
                 JSON.stringify(vins)
             );
@@ -183,7 +183,7 @@ export default class BsvScannerProcessor {
       }
     }
     if (vins && vins.length > 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'BsvScannerProcessor.getTransactions will ask vins1 ' +
           JSON.stringify(vins)
       );
@@ -272,7 +272,7 @@ export default class BsvScannerProcessor {
         }
       }
       if (vins && vins.length > 0) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'BsvScannerProcessor.getTransactions will ask vins2 ' +
             JSON.stringify(vins)
         );
@@ -293,7 +293,7 @@ export default class BsvScannerProcessor {
       let othersAddressOut = false;
       for (let vin of transaction.vin) {
         if (typeof CACHE_TXS[vin.txid] === 'undefined') {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'BsvScannerProcessor _unifyTransaction error cant find vin ' +
               vin.txid +
               ' for tx ' +
@@ -317,7 +317,7 @@ export default class BsvScannerProcessor {
             }
           }
           if (!found) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               'BsvScannerProcessor _unifyTransaction error cant find vin ' +
                 vin.txid +
                 ' n ' +

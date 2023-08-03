@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
@@ -30,7 +30,7 @@ class BnbSmartNetworkPrices {
     }
     const tmp = etherscanApiPath.split('/');
     const feesApiPath = `https://${tmp[2]}/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode + ' BnbSmartNetworkPricesProvider.getFees no cache load'
     );
     try {
@@ -55,7 +55,7 @@ class BnbSmartNetworkPrices {
         }
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' BnbSmartNetworkPricesProvider.getOnlyFees loaded prev fee as error' +
           e.message

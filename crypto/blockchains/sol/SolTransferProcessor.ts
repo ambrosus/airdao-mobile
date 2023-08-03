@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
@@ -73,7 +73,7 @@ export default class SolTransferProcessor
     try {
       const beachPath =
         'https://public-api.solanabeach.io/v1/account/' + address + '?';
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.getTransferAllBalance address ' +
           address +
@@ -81,7 +81,7 @@ export default class SolTransferProcessor
           beachPath
       );
       const res = await BlocksoftAxios.get(beachPath);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.getTransferAllBalance address ' +
           address +
@@ -104,7 +104,7 @@ export default class SolTransferProcessor
         }
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.getTransferAllBalance address ' +
           address +
@@ -114,7 +114,7 @@ export default class SolTransferProcessor
     }
 
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' SolTransferProcessor.getTransferAllBalance ',
       data.addressFrom + ' => ' + balance
@@ -201,7 +201,7 @@ export default class SolTransferProcessor
           );
         }
       } else if (data.addressTo === 'STAKE') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' SolTransferProcessor.sendTx  ' +
             data.addressFrom +
@@ -216,7 +216,7 @@ export default class SolTransferProcessor
         if (typeof validator === 'undefined' || !validator) {
           throw new Error('no validator field');
         }
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' SolTransferProcessor.sendTx  ' +
             data.addressFrom +
@@ -231,7 +231,7 @@ export default class SolTransferProcessor
         // https://explorer.solana.com/tx/2ffmtkj3Yj51ZWCEHG6jb6s78F73eoiQdqURV7z65kSVLiPcm8Y9NE45FgfgwbddJD8kfgCiTpmrEu7J8WKpAQeE
         await SolStakeUtils.getAccountStaked(data.addressFrom);
 
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' SolTransferProcessor.sendTx  ' +
             data.addressFrom +
@@ -261,7 +261,7 @@ export default class SolTransferProcessor
                             StakeProgram.programId
                         )
                     } catch (e1) {
-                        await BlocksoftCryptoLog.log(this._settings.currencyCode + ' SolTransferProcessor.sendTx  ' + data.addressFrom + ' => ' + data.addressTo + ' ' + data.amount + ' build createWithSeed error ' + e1.message)
+                        await AirDAOCryptoLog.log(this._settings.currencyCode + ' SolTransferProcessor.sendTx  ' + data.addressFrom + ' => ' + data.addressTo + ' ' + data.amount + ' build createWithSeed error ' + e1.message)
                     }*/
 
           const buffer = Buffer.concat([
@@ -286,7 +286,7 @@ export default class SolTransferProcessor
             break;
           }
         }
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' SolTransferProcessor.sendTx  ' +
             data.addressFrom +
@@ -301,7 +301,7 @@ export default class SolTransferProcessor
           throw new Error('Stake address seed is not found');
         }
 
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' SolTransferProcessor.sendTx  ' +
             data.addressFrom +
@@ -359,7 +359,7 @@ export default class SolTransferProcessor
         );
         console.log(e);
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -390,7 +390,7 @@ export default class SolTransferProcessor
       return { rawOnly: uiData.selectedFee.rawOnly, raw: signedData };
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' SolTransferProcessor.sendTx  ' +
         data.addressFrom +
@@ -404,7 +404,7 @@ export default class SolTransferProcessor
     const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       const sendRes = await SolUtils.sendTransaction(signedData);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.sendTx  ' +
           data.addressFrom +
@@ -442,7 +442,7 @@ export default class SolTransferProcessor
         );
         console.log(e);
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.sendTx  ' +
           data.addressFrom +

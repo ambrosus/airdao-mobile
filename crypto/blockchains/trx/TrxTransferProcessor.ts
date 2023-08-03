@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import TronUtils from './ext/TronUtils';
@@ -112,7 +112,7 @@ export default class TrxTransferProcessor
   ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const addressHexTo = TronUtils.addressToHex(data.addressTo);
     if (TronUtils.addressHexToStr(addressHexTo) !== data.addressTo) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'TrxTransferProcessor.getFeeRateOld check address ' +
           data.addressTo +
           ' hex ' +
@@ -160,7 +160,7 @@ export default class TrxTransferProcessor
           res
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' TrxTransferProcessor.getFeeRate ' +
           link +
@@ -204,7 +204,7 @@ export default class TrxTransferProcessor
             e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' TrxTransferProcessor.getFeeRate new error ' +
           e.message
@@ -233,7 +233,7 @@ export default class TrxTransferProcessor
         const res = await BlocksoftBalances.setCurrencyCode('TRX')
           .setAddress(data.addressFrom)
           .getResources('TrxSendTx');
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' TrxTransferProcessor.getFeeRate result resources from ' +
             data.addressFrom,
@@ -328,7 +328,7 @@ export default class TrxTransferProcessor
                 energyFee;
             }
           }
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' TrxTransferProcessor.getFeeRate feeForTx ' +
               feeForTx +
@@ -352,7 +352,7 @@ export default class TrxTransferProcessor
               e.message
           );
         }
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' TrxTransferProcessor.getFeeRate addressFrom data error ' +
             e.message
@@ -386,7 +386,7 @@ export default class TrxTransferProcessor
           const tronData2 = res2.data;
           delete tronData2.assetNetUsed;
           delete tronData2.assetNetLimit;
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' TrxTransferProcessor.getFeeRate result ' +
               link +
@@ -406,7 +406,7 @@ export default class TrxTransferProcessor
                 e.message
             );
           }
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' TrxTransferProcessor.getFeeRate addressTo data error ' +
               e.message
@@ -466,7 +466,7 @@ export default class TrxTransferProcessor
             e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' TrxTransferProcessor.getFeeRate error ' +
           e.message
@@ -483,7 +483,7 @@ export default class TrxTransferProcessor
     data.isTransferAll = true;
     const balance = data.amount;
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ` TrxTransferProcessor.getTransferAllBalance ',
        ${data.addressFrom + ' => ' + balance}`
@@ -539,7 +539,7 @@ export default class TrxTransferProcessor
       throw new Error('SERVER_RESPONSE_NOT_ENOUGH_FEE');
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' TrxTransferProcessor.sendTx started ' +
         data.addressFrom +
@@ -666,7 +666,7 @@ export default class TrxTransferProcessor
             res = await BlocksoftAxios.post(link, params);
 
             tx = res.data.transaction;
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               this._settings.currencyCode + ' TrxTxProcessor.sendSubTx tx',
               tx
             );
@@ -677,7 +677,7 @@ export default class TrxTransferProcessor
                 Buffer.from(privateData.privateKey, 'hex')
               )
             ];
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               this._settings.currencyCode + ' TrxTxProcessor.sendSubTx signed',
               tx
             );
@@ -690,7 +690,7 @@ export default class TrxTransferProcessor
                 false,
                 logData
               );
-              await BlocksoftCryptoLog.log(
+              await AirDAOCryptoLog.log(
                 this._settings.currencyCode +
                   ' TrxTxProcessor.sendSubTx broadcasted'
               );
@@ -703,7 +703,7 @@ export default class TrxTransferProcessor
                   uiData
                 );
               }
-              BlocksoftCryptoLog.log(
+              AirDAOCryptoLog.log(
                 this._settings.currencyCode +
                   ' TrxTransferProcessor.sendSubTx  error ' +
                   e.message
@@ -740,7 +740,7 @@ export default class TrxTransferProcessor
                     typeof recheck.data.receipt.result !== undefined
                   ) {
                     // @ts-ignore
-                    BlocksoftCryptoLog.log(
+                    AirDAOCryptoLog.log(
                       this._settings.currencyCode +
                         ' TrxTransferProcessor.sendSubTx recheck ',
                       {
@@ -772,7 +772,7 @@ export default class TrxTransferProcessor
                     e1
                   );
                 }
-                BlocksoftCryptoLog.log(
+                AirDAOCryptoLog.log(
                   this._settings.currencyCode +
                     ' TRX transaction recheck error ' +
                     e1.message
@@ -804,7 +804,7 @@ export default class TrxTransferProcessor
         }
 
         if (TronUtils.addressHexToStr(toAddress) !== data.addressTo) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'TrxTransferProcessor.sendTx heck address ' +
               data.addressTo +
               ' hex ' +
@@ -842,7 +842,7 @@ export default class TrxTransferProcessor
             ),
             call_value: 0
           };
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             this._settings.currencyCode +
               `' TrxTransferProcessor.sendTx inited1' +
               ${data.addressFrom} +
@@ -870,7 +870,7 @@ export default class TrxTransferProcessor
           }
 
           try {
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 `' TrxTransferProcessor.sendTx inited2' +
               ${data.addressFrom} +
@@ -882,7 +882,7 @@ export default class TrxTransferProcessor
             );
             res = await BlocksoftAxios.post(link, params);
           } catch (e: any) {
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' TrxTransferProcessor.sendTx result2' +
                 data.addressFrom +
@@ -907,7 +907,7 @@ export default class TrxTransferProcessor
 
       // @ts-ignore
       if (typeof res.data.Error !== 'undefined') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             `' TrxTransferProcessor.sendTx error ' +
             ${data.addressFrom} +
@@ -963,7 +963,7 @@ export default class TrxTransferProcessor
       }
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' TrxTxProcessor.sendTx token ' +
         this._tokenName +
@@ -986,7 +986,7 @@ export default class TrxTransferProcessor
       return { rawOnly: uiData.selectedFee.rawOnly, raw: JSON.stringify(tx) };
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' TrxTxProcessor.sendTx signed',
       tx
     );
@@ -994,7 +994,7 @@ export default class TrxTransferProcessor
     let result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       result = await this.sendProvider.sendTx(tx, '', false, logData);
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode + ' TrxTxProcessor.sendTx broadcasted'
       );
     } catch (e: any) {
@@ -1005,7 +1005,7 @@ export default class TrxTransferProcessor
           uiData
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' TrxTransferProcessor.sendTx error ' +
           e.message

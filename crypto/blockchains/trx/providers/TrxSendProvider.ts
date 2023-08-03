@@ -4,7 +4,7 @@
 // @ts-ignore
 import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
@@ -55,7 +55,7 @@ export default class TrxSendProvider
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; logData: any }> {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' TrxSendProvider._sendTx ' +
         subtitle +
@@ -77,7 +77,7 @@ export default class TrxSendProvider
     }
     logData = await this._check(tx.raw_data_hex, subtitle, txRBF, logData);
     if (config.debug.cryptoErrors) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         new Date().toISOString() +
           ' ' +
           this._settings.currencyCode +
@@ -111,7 +111,7 @@ export default class TrxSendProvider
       }
 
       if (typeof send.data.Error !== 'undefined') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' TrxSendProvider._sendTx error ' +
             send.data.Error
@@ -129,7 +129,7 @@ export default class TrxSendProvider
           } catch (e) {
             // do nothing
           }
-          await BlocksoftCryptoLog.log(
+          await AirDAOCryptoLog.log(
             this._settings.currencyCode + ' TrxSendProvider._sendTx msg ' + msg
           );
           if (msg) {
@@ -158,7 +158,7 @@ export default class TrxSendProvider
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any; logData: any }> {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' TrxSendProvider.sendTx ' +
         subtitle +
@@ -189,7 +189,7 @@ export default class TrxSendProvider
               e.message
           );
         }
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' TrxSendProvider.send proxy error errorTx ' +
             e2.message

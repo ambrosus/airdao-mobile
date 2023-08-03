@@ -3,9 +3,9 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BtcTxInputsOutputs from '../../btc/tx/BtcTxInputsOutputs';
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 // @ts-ignore
 import DaemonCache from '../../../../app/daemons/DaemonCache';
 
@@ -138,7 +138,7 @@ export default class UsdtTxInputsOutputs
     let needOneOutput = false;
     if (tmp.balance > 0) {
       const diff = BlocksoftUtils.diff(tmp.balance, data.amount);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'USDT addressFromUsdtOutputs = ' +
           addressFromUsdtOutputs +
           ' balance ' +
@@ -195,7 +195,7 @@ export default class UsdtTxInputsOutputs
       newRes.countedFor = 'USDT';
       return newRes;
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'UsdtTxInputsOutputs ' +
           data.addressFrom +
           ' => ' +
@@ -214,7 +214,7 @@ export default class UsdtTxInputsOutputs
         data.addressTo,
         data.amount
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'UsdtTxInputsOutputs ' +
           data.addressFrom +
           ' => ' +
@@ -362,7 +362,7 @@ export default class UsdtTxInputsOutputs
       }
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log('USDT addressTo upTo', result);
+    AirDAOCryptoLog.log('USDT addressTo upTo', result);
     return result;
   }
 }

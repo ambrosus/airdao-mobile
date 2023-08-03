@@ -5,7 +5,7 @@
 import EthTransferProcessor from './EthTransferProcessor';
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import abi from './ext/erc20.js';
@@ -64,7 +64,7 @@ export default class EthTransferProcessorErc20
     }
 
     if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.getFeeRate dex ' +
           data.addressFrom +
@@ -78,7 +78,7 @@ export default class EthTransferProcessorErc20
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxProcessorErc20.getFeeRate removeByFee no token ' +
           this._tokenAddress
@@ -87,7 +87,7 @@ export default class EthTransferProcessorErc20
       return super.getFeeRate(tmpData, privateData, additionalData);
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTxProcessorErc20.getFeeRate estimateGas started token ' +
         this._tokenAddress
@@ -104,7 +104,7 @@ export default class EthTransferProcessorErc20
         const tmp2 = '0xf1Cff704c6E6ce459e3E1544a9533cCcBDAD7B99';
         firstAddressTo = data.addressFrom === tmp1 ? tmp2 : tmp1;
         // @ts-ignore
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas addressToChanged ' +
             basicAddressTo +
@@ -130,7 +130,7 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error1 ' +
             e.message
@@ -148,7 +148,7 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error2 ' +
             e.message
@@ -168,7 +168,7 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error3 ' +
             e.message
@@ -200,7 +200,7 @@ export default class EthTransferProcessorErc20
       this.checkError(e, data);
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTxProcessorErc20.getFeeRate estimateGas finished ' +
         estimatedGas
@@ -219,7 +219,7 @@ export default class EthTransferProcessorErc20
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const tmpData = { ...data };
     if (!tmpData.amount || tmpData.amount === '0') {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessorErc20.getTransferAllBalance ' +
           data.addressFrom +
@@ -235,7 +235,7 @@ export default class EthTransferProcessorErc20
       } catch (e) {
         this.checkError(e, data);
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessorErc20.getTransferAllBalance ' +
           data.addressFrom +
@@ -245,7 +245,7 @@ export default class EthTransferProcessorErc20
           tmpData.amount
       );
     } else {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessorErc20.getTransferAllBalance ' +
           data.addressFrom +
@@ -270,7 +270,7 @@ export default class EthTransferProcessorErc20
     uiData: AirDAOBlockchainTypes.TransferUiData
   ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTransferProcessor.sendTx dex ' +
           data.addressFrom +
@@ -283,7 +283,7 @@ export default class EthTransferProcessorErc20
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxProcessorErc20.sendTx removeByFee no token ' +
           this._tokenAddress
@@ -292,7 +292,7 @@ export default class EthTransferProcessorErc20
       return super.sendTx(tmpData, privateData, uiData);
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTxProcessorErc20.sendTx started token ' +
         this._tokenAddress
@@ -310,7 +310,7 @@ export default class EthTransferProcessorErc20
       this.checkError(e, data);
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'EthTxProcessorErc20 encodeABI finished',
       tmpData.blockchainData
     );

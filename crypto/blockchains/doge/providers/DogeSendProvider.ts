@@ -3,7 +3,7 @@
  * https://github.com/trezor/blockbook/blob/master/docs/api.md
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -48,7 +48,7 @@ export default class DogeSendProvider
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeSendProvider.sendTx ' +
         subtitle +
@@ -80,7 +80,7 @@ export default class DogeSendProvider
         logData.error = e.message;
         await this._checkError(hex, subtitle, txRBF, logData);
       } catch (e2) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeSendProvider.send proxy error errorTx ' +
             e2.message

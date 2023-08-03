@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
@@ -38,7 +38,7 @@ export default class WavesScannerProcessor {
       this._apiPath = await BlocksoftExternalSettings.get('WAVES_SERVER');
     }
     address = address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `${this._settings.currencyCode} WavesScannerProcessor getBalanceBlockchain address ${address}`
     );
 
@@ -54,7 +54,7 @@ export default class WavesScannerProcessor {
         provider: 'wavesnodes.com'
       };
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `${
           this._settings.currencyCode
         } WavesProcessor getBalanceBlockchain address ${address} balance ${JSON.stringify(

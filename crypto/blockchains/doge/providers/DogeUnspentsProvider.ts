@@ -4,7 +4,7 @@
  * https://doge1.trezor.io/api/v2/utxo/D5oKvWEibVe74CXLASmhpkRpLoyjgZhm71
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import DogeRawDS from '../stores/DogeRawDS';
@@ -30,7 +30,7 @@ export default class DogeUnspentsProvider
     address: string
   ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeUnspentsProvider.getUnspents started ' +
         address
@@ -53,7 +53,7 @@ export default class DogeUnspentsProvider
         this._trezorServerCode,
         this._trezorServer
       );
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeUnspentsProvider.getUnspents nothing loaded for address ' +
           address +
@@ -92,7 +92,7 @@ export default class DogeUnspentsProvider
     allUnspents: AirDAOBlockchainTypes.UnspentTx[],
     walletHash: string
   ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' DogeUnspentsProvider.getTx started ' + tx
     );
 
@@ -105,7 +105,7 @@ export default class DogeUnspentsProvider
       currencyCode: this._settings.currencyCode,
       transactionHash: tx
     });
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' DogeUnspentsProvider.getTx inputs ' + tx,
       saved
     );
@@ -120,7 +120,7 @@ export default class DogeUnspentsProvider
       const res = await BlocksoftAxios.getWithoutBraking(link);
       // @ts-ignore
       if (!res || typeof res.data === 'undefined' || !res.data) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeUnspentsProvider.getTx no tx ' +
             tx
@@ -175,7 +175,7 @@ export default class DogeUnspentsProvider
             res2.data.vout
           ) {
             // @ts-ignore
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' DogeUnspentsProvider.getTx loading output data ' +
                 JSON.stringify(unspent) +
@@ -207,7 +207,7 @@ export default class DogeUnspentsProvider
             }
           }
         } else {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' DogeUnspentsProvider.getTx loading output data ' +
               JSON.stringify(unspent) +
@@ -215,7 +215,7 @@ export default class DogeUnspentsProvider
           );
         }
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeUnspentsProvider.getTx while loading output data ' +
             JSON.stringify(unspent)
@@ -265,7 +265,7 @@ export default class DogeUnspentsProvider
     }
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' DogeUnspentsProvider.getTx found ' + tx,
       sortedUnspents
     );

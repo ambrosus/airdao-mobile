@@ -6,7 +6,7 @@
  * https://xrpl.org/rippleapi-reference.html#sign
  * https://xrpl.org/rippleapi-reference.html#submit
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
@@ -78,7 +78,7 @@ export default class XrpTransferProcessor
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' XrpTransferProcessor.getFeeRate ' +
           data.addressFrom +
@@ -89,7 +89,7 @@ export default class XrpTransferProcessor
       return result;
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XrpTransferProcessor.getFeeRate ' +
         data.addressFrom +
@@ -125,7 +125,7 @@ export default class XrpTransferProcessor
     // @ts-ignore
     const fee = BlocksoftUtils.toUnified(txJson.Fee, FEE_DECIMALS);
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XrpTransferProcessor.getFeeRate ' +
         data.addressFrom +
@@ -156,7 +156,7 @@ export default class XrpTransferProcessor
     const balance = data.amount;
 
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' XrpTransferProcessor.getTransferAllBalance ',
       data.addressFrom + ' => ' + balance
@@ -236,7 +236,7 @@ export default class XrpTransferProcessor
 
     // https://xrpl.org/rippleapi-reference.html#preparepayment
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' XrpTransferProcessor.sendTx prepared',
       txJson
     );
@@ -247,7 +247,7 @@ export default class XrpTransferProcessor
         const tmp = JSON.parse(data.accountJson);
         data.accountJson = tmp;
       } catch (e) {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           this._settings.currencyCode +
             ' XrpTransferProcessor.sendTx no accountJson ' +
             JSON.stringify(data.accountJson)
@@ -255,7 +255,7 @@ export default class XrpTransferProcessor
       }
     }
     if (typeof data.accountJson.publicKey === 'undefined') {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         this._settings.currencyCode +
           ' XrpTransferProcessor.sendTx no publicKey ' +
           JSON.stringify(data.accountJson)
@@ -286,7 +286,7 @@ export default class XrpTransferProcessor
       }
     );
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' XrpTransferProcessor.sendTx result',
       result
     );

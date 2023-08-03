@@ -4,7 +4,7 @@
 // @ts-ignore
 import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 interface ApiResponse {
   data: any;
@@ -52,7 +52,7 @@ export default class XmrUnspentsProvider {
       let res: ApiResponse;
       if (typeof this._cache[key] === 'undefined') {
         // @ts-ignore
-        BlocksoftCryptoLog.log('XmrUnspentsProvider Xmr._getUnspents', key);
+        AirDAOCryptoLog.log('XmrUnspentsProvider Xmr._getUnspents', key);
         /*
                 const linkParams = {
                     address: params.address,
@@ -68,7 +68,7 @@ export default class XmrUnspentsProvider {
           this._link + 'get_unspent_outs',
           params
         );
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'XmrUnspentsProvider Xmr._getUnspents res ' +
             JSON.stringify(res.data).substr(0, 200)
         );
@@ -96,10 +96,7 @@ export default class XmrUnspentsProvider {
     fn?: (err: Error | null, data: any) => void
   ): Promise<any> {
     try {
-      BlocksoftCryptoLog.log(
-        'XmrUnspentsProvider Xmr._getRandomOutputs',
-        params
-      );
+      AirDAOCryptoLog.log('XmrUnspentsProvider Xmr._getRandomOutputs', params);
 
       /*
             const amounts = usingOuts.map(o => (o.rct ? '0' : o.amount.toString()))
@@ -114,7 +111,7 @@ export default class XmrUnspentsProvider {
         this._link + 'get_random_outs',
         params
       );
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'XmrUnspentsProvider Xmr._getRandomOutputs res ' +
           JSON.stringify(res.data).substr(0, 200)
       );

@@ -2,7 +2,7 @@
  * @version 0.5
  * https://github.com/tronscan/tronscan-frontend/wiki/TRONSCAN-API
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 
 const BALANCE_PATH = 'https://apilist.tronscan.org/api/account?address=';
@@ -50,7 +50,7 @@ export default class TrxTronscanProvider {
       now - CACHE_TRONSCAN[address].time < CACHE_VALID_TIME
     ) {
       if (typeof CACHE_TRONSCAN[address][tokenName] !== 'undefined') {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `TrxTronscanProvider.get from cache',
           ${address} +
             ' => ' +
@@ -89,7 +89,7 @@ export default class TrxTronscanProvider {
     }
 
     const link = BALANCE_PATH + address;
-    BlocksoftCryptoLog.log('TrxTronscanProvider.get ' + link);
+    AirDAOCryptoLog.log('TrxTronscanProvider.get ' + link);
     const res = await BlocksoftAxios.getWithoutBraking(link, BALANCE_MAX_TRY);
     // @ts-ignore
     if (!res || !('data' in res)) {

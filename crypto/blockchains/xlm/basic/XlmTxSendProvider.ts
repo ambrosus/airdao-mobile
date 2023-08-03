@@ -3,7 +3,7 @@
  * https://developers.stellar.org/docs/tutorials/send-and-receive-payments/
  * https://www.stellar.org/developers/horizon/reference/endpoints/transactions-create.html
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { XrpTxUtils } from '../../xrp/basic/XrpTxUtils';
 import config from '@constants/config';
@@ -38,7 +38,7 @@ export class XlmTxSendProvider {
       return CACHE_FEES_VALUE;
     }
 
-    BlocksoftCryptoLog.log('XlmSendProvider.getFee link ' + this._server);
+    AirDAOCryptoLog.log('XlmSendProvider.getFee link ' + this._server);
     let res = CACHE_FEES_VALUE;
     try {
       res = await this._api.fetchBaseFee();
@@ -47,7 +47,7 @@ export class XlmTxSendProvider {
         CACHE_FEES_TIME = now;
       }
     } catch (e: any) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'XlmSendProvider.getFee error ' + e.message + ' link ' + this._server
       );
       res = CACHE_FEES_VALUE;
@@ -103,7 +103,7 @@ export class XlmTxSendProvider {
           .build();
       }
     } catch (e: any) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'XlmTxSendProvider builder create error ' + e.message
       );
       throw e;
@@ -112,7 +112,7 @@ export class XlmTxSendProvider {
     try {
       transaction.sign(StellarSdk.Keypair.fromSecret(privateData.privateKey));
     } catch (e: any) {
-      await BlocksoftCryptoLog.log('XlmTxSendProvider sign error ' + e.message);
+      await AirDAOCryptoLog.log('XlmTxSendProvider sign error ' + e.message);
       throw e;
     }
     return transaction;
@@ -121,7 +121,7 @@ export class XlmTxSendProvider {
   async sendRaw(raw: string) {
     let result = false;
     const link = BlocksoftExternalSettings.getStatic('XLM_SEND_LINK');
-    BlocksoftCryptoLog.log('XlmSendProvider.sendRaw ' + link + ' raw ' + raw);
+    AirDAOCryptoLog.log('XlmSendProvider.sendRaw ' + link + ' raw ' + raw);
     try {
       // console.log(`curl -X POST -F "tx=${raw}" "https://horizon.stellar.org/transactions"`)
 
@@ -149,7 +149,7 @@ export class XlmTxSendProvider {
               JSON.stringify(result.extras.result_codes)
           );
         }
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           'XlmTransferProcessor.sendTx result.extras.result_codes ' +
             JSON.stringify(result.extras.result_codes)
         );
@@ -176,7 +176,7 @@ export class XlmTxSendProvider {
           'XlmTransferProcessor.sendTx error ' + e.message + ' link ' + link
         );
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'XlmTransferProcessor.sendTx error ' + e.message + ' link ' + link
       );
       if (
@@ -191,7 +191,7 @@ export class XlmTxSendProvider {
         throw e;
       }
     }
-    await BlocksoftCryptoLog.log('XlmTransferProcessor.sendTx result ', result);
+    await AirDAOCryptoLog.log('XlmTransferProcessor.sendTx result ', result);
     return result;
   }
 }

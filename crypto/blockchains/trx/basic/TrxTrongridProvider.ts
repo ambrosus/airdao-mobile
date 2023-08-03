@@ -2,7 +2,7 @@
  * @version 0.5
  * https://github.com/tronscan/tronscan-frontend/wiki/TRONSCAN-API
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
@@ -62,7 +62,7 @@ export default class TrxTrongridProvider {
       now - CACHE_TRONGRID[address].time < CACHE_VALID_TIME
     ) {
       if (typeof CACHE_TRONGRID[address][tokenName] !== 'undefined') {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           `TrxTrongridProvider.get from cache',
           ${address} +
             ' => ' +
@@ -133,7 +133,7 @@ export default class TrxTrongridProvider {
     const nodeLink = BlocksoftExternalSettings.getStatic('TRX_SOLIDITY_NODE');
     const link = nodeLink + '/walletsolidity/getaccount';
     const params = { address };
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'TrxTrongridProvider.get ' + link + ' ' + JSON.stringify(params)
     );
     const res: { data: any } = await BlocksoftAxios.postWithoutBraking(
@@ -285,7 +285,7 @@ export default class TrxTrongridProvider {
       const tronData = res.data;
       delete tronData.assetNetUsed;
       delete tronData.assetNetLimit;
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'TrxTrongridProvider.assets result ' + link + ' from ' + address,
         tronData
       );

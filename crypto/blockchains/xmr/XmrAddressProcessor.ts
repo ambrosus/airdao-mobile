@@ -11,7 +11,7 @@ import MoneroUtils from './ext/MoneroUtils';
 import MoneroMnemonic from './ext/MoneroMnemonic';
 import { soliditySha3 } from 'web3-utils';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftSecrets from '@crypto/actions/BlocksoftSecrets/BlocksoftSecrets';
 import config from '@constants/config';
 
@@ -170,7 +170,7 @@ export default class XmrAddressProcessor {
         throw new Error('no data');
       }
     } catch (e: any) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         'XmrAddressProcessor !!!mymonero error!!! ' + e.message,
         JSON.stringify({
           linkParamsLogin,

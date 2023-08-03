@@ -3,7 +3,7 @@
  * https://docs.binance.org/smart-chain/developer/create-wallet.html
  * https://docs.binance.org/guides/concepts/encoding/amino-example.html#transfer
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import { BnbTxSendProvider } from './basic/BnbTxSendProvider';
@@ -57,7 +57,7 @@ export default class BnbTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BnbTransferProcessor.getTransferAllBalance ',
       data.addressFrom + ' => ' + balance
@@ -104,7 +104,7 @@ export default class BnbTransferProcessor
       throw new Error('BNB transaction required addressTo');
     }
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' BnbTransferProcessor.sendTx start'
     );
 
@@ -115,7 +115,7 @@ export default class BnbTransferProcessor
       throw new Error(e.message + ' in BNB getPrepared');
     }
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' BnbTransferProcessor.sendTx tx',
       transaction
     );
@@ -126,7 +126,7 @@ export default class BnbTransferProcessor
     } catch (e) {
       throw new Error(e.message + ' in BNB serializeTx');
     }
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' BnbTransferProcessor.sendTx raw',
       raw
     );
@@ -149,7 +149,7 @@ export default class BnbTransferProcessor
         throw e;
       }
     }
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' BnbTransferProcessor.sendTx result',
       result
     );
@@ -172,7 +172,7 @@ export default class BnbTransferProcessor
         !result[0].ok ||
         !result[0].hash
       ) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' BnbTransferProcessor.sendTx result',
           result
         );

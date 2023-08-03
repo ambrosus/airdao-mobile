@@ -4,7 +4,7 @@ import {
   TransactionScannersTmpDBModel,
   TransactionsDBModel
 } from '@database';
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 import { DatabaseTable } from '@appTypes';
 
 const tableName = DatabaseTable.TransactionScannersTmp;

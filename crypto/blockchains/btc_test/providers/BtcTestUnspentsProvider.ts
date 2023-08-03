@@ -3,7 +3,7 @@
  */
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 
 const API_PATH = 'https://blockstream.info/testnet/api/';
@@ -28,7 +28,7 @@ export default class BtcTestUnspentsProvider
     address: string
   ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' BtcTestUnspentsProvider.getUnspents started',
       address
@@ -38,7 +38,7 @@ export default class BtcTestUnspentsProvider
     const res = await BlocksoftAxios.getWithoutBraking(link);
 
     if (!res || typeof res.data === 'undefined') {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' BtcTestUnspentsProvider.getUnspents nothing loaded for address ' +
           address +

@@ -3,7 +3,7 @@
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 
 const USDT_API = 'https://microscanners.trustee.deals/usdt'; // https://microscanners.trustee.deals/usdt/1CmAoxq8BTxANRDwheJUpaGy6ngWNYX85
@@ -114,19 +114,17 @@ export default class UsdtScannerProcessor {
     | false
   > {
     if (typeof address === 'object') {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'UsdtScannerProcessor.getBalance started MASS ' +
           JSON.stringify(address)
       );
       return this._getMass(address);
     }
 
-    BlocksoftCryptoLog.log(
-      'UsdtScannerProcessor.getBalance started ' + address
-    );
+    AirDAOCryptoLog.log('UsdtScannerProcessor.getBalance started ' + address);
     const tmp = await this._get(address);
     if (typeof tmp === 'undefined' || !tmp || typeof tmp.data === 'undefined') {
-      BlocksoftCryptoLog.log('UsdtScannerProcessor.getBalance bad tmp ', tmp);
+      AirDAOCryptoLog.log('UsdtScannerProcessor.getBalance bad tmp ', tmp);
       return false;
     }
     if (
@@ -134,14 +132,14 @@ export default class UsdtScannerProcessor {
       typeof tmp.data.balance === 'undefined' ||
       tmp.data.balance === false
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'UsdtScannerProcessor.getBalance bad tmp.data ',
         tmp.data
       );
       return false;
     }
     const balance: number = tmp.data.balance;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       `UsdtScannerProcessor.getBalance finished
       ${address + ' => ' + balance}`
     );
@@ -163,19 +161,16 @@ export default class UsdtScannerProcessor {
     source = ''
   ): Promise<UnifiedTransaction[]> {
     const address = scanData.account.address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'UsdtScannerProcessor.getTransactions started ' + address
     );
     let tmp = await this._get(address);
     if (!tmp || typeof tmp.data === 'undefined') {
-      BlocksoftCryptoLog.log(
-        'UsdtScannerProcessor.getTransactions bad tmp ',
-        tmp
-      );
+      AirDAOCryptoLog.log('UsdtScannerProcessor.getTransactions bad tmp ', tmp);
       return [];
     }
     if (!tmp.data) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'UsdtScannerProcessor.getTransactions bad tmp.data ',
         tmp.data
       );
@@ -237,7 +232,7 @@ export default class UsdtScannerProcessor {
         });
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'UsdtScannerProcessor.getTransactions finished ' +
         address +
         ' total: ' +

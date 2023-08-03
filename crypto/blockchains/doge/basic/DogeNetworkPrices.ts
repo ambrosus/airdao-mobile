@@ -2,7 +2,7 @@
  * @version 0.20
  **/
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 export default class DogeNetworkPrices
@@ -13,7 +13,7 @@ export default class DogeNetworkPrices
     speed_blocks_6: number;
     speed_blocks_12: number;
   }> {
-    BlocksoftCryptoLog.log(currencyCode + ' DogeNetworkPricesProvider ');
+    AirDAOCryptoLog.log(currencyCode + ' DogeNetworkPricesProvider ');
 
     const externalSettings = await BlocksoftExternalSettings.getAll(
       'DOGE.getNetworkPrices'

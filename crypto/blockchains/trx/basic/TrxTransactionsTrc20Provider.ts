@@ -4,7 +4,7 @@
  */
 import TrxTransactionsProvider from './TrxTransactionsProvider';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import Database from '@app/appstores/DataSource/Database/main';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
@@ -80,7 +80,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
     }
     if (typeof transaction.amount === 'undefined') {
       // noinspection ES6MissingAwait
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         'TrxTransactionsTrc20Provider._unifyTransaction buggy tx ' +
           JSON.stringify(transaction)
       );
@@ -163,7 +163,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
           ` SELECT * FROM transactions WHERE transaction_hash='${res.transactionHash}' AND currency_code='TRX' `
         );
         if (!savedTRX || !savedTRX.array || savedTRX.array.length === 0) {
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             'TrxTransactionsTrc20Provider._unifyTransaction added fee for ' +
               res.transactionHash +
               ' amount ' +

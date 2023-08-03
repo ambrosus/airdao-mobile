@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
@@ -39,14 +39,14 @@ class EthNetworkPrices {
       CACHE_PROXY_DATA.address === address &&
       now - CACHE_PROXY_TIME < CACHE_PROXY_VALID_TIME
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         mainCurrencyCode + ' EthNetworkPricesProvider.getWithProxy from cache',
         logData
       );
       return CACHE_PROXY_DATA.result;
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider.getWithProxy started',
       logData
     );
@@ -70,7 +70,7 @@ class EthNetworkPrices {
 
     if (checkResult !== false) {
       if (typeof checkResult.data !== 'undefined') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getWithProxy proxy checkResult1 ',
           checkResult.data
@@ -84,7 +84,7 @@ class EthNetworkPrices {
           throw new Error(checkResult.data.msg);
         }
       } else {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getWithProxy proxy checkResult2 ',
           checkResult
@@ -184,7 +184,7 @@ class EthNetworkPrices {
       logData.resultFeeCacheTime = CACHE_FEES_ETH_TIME;
       logData.resultFee = JSON.stringify(CACHE_FEES_ETH);
       // noinspection ES6MissingAwait
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees used cache => ' +
           JSON.stringify(CACHE_FEES_ETH)
@@ -192,7 +192,7 @@ class EthNetworkPrices {
       return this._format();
     }
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider.getOnlyFees no cache load'
     );
 
@@ -206,7 +206,7 @@ class EthNetworkPrices {
         }
         logData.resultFeeSource = 'reloaded';
         CACHE_PREV_DATA = tmp.data;
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getOnlyFees loaded new fee',
           CACHE_PREV_DATA
@@ -214,14 +214,14 @@ class EthNetworkPrices {
       } else {
         logData.resultFeeSource = 'fromLoadCache';
         link = 'prev';
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getOnlyFees loaded prev fee as no fastest',
           CACHE_PREV_DATA
         );
       }
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees loaded prev fee as error',
         CACHE_PREV_DATA
@@ -232,7 +232,7 @@ class EthNetworkPrices {
     try {
       await this._parseLoaded(mainCurrencyCode, CACHE_PREV_DATA, link);
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees _parseLoaded error ' +
           e.message
@@ -312,7 +312,7 @@ function addMultiply(mainCurrencyCode, blocks, fee, externalSettings) {
     externalSettings['ETH_CURRENT_PRICE_' + blocks] > 0
   ) {
     CACHE_FEES_ETH[blocks] = externalSettings['ETH_CURRENT_PRICE_' + blocks];
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider current price result',
       {
         blocks,
@@ -329,7 +329,7 @@ function addMultiply(mainCurrencyCode, blocks, fee, externalSettings) {
       fee,
       externalSettings['ETH_MULTI_' + blocks]
     );
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode +
         ' EthNetworkPricesProvider addMultiply' +
         blocks +
@@ -347,7 +347,7 @@ function addMultiply(mainCurrencyCode, blocks, fee, externalSettings) {
   ) {
     CACHE_FEES_ETH[blocks] =
       BlocksoftUtils.mul(fee, externalSettings.ETH_MULTI) * 1;
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider addMultiply result',
       {
         blocks,

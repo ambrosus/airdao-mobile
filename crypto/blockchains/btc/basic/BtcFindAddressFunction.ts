@@ -19,7 +19,7 @@
  * @returns {Promise<{from: string, to: string, value: number, direction: string}>}
  * @constructor
  */
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 
 export default async function BtcFindAddressFunction(
   indexedAddresses: string[],

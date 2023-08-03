@@ -2,7 +2,7 @@
  * @author Ksu
  * @version 0.5
  */
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 
 class BlocksoftInvoice {
@@ -74,18 +74,18 @@ class BlocksoftInvoice {
     }
     let res = '';
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftInvoice.createInvoice ${currencyCode} started`,
         this._data
       );
       res = await this._processor[currencyCode].createInvoice(this._data);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftInvoice.createInvoice ${currencyCode} finished`,
         res
       );
     } catch (e) {
       // noinspection ES6MissingAwait
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         `BlocksoftInvoice.createInvoice ${currencyCode} error ` + e.message,
         e.data ? e.data : e
       );
@@ -102,19 +102,19 @@ class BlocksoftInvoice {
     }
     let res = '';
     try {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftInvoice.checkInvoice ${currencyCode} started`,
         this._data
       );
       res = await this._processor[currencyCode].checkInvoice(hash, this._data);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `BlocksoftInvoice.checkInvoice ${currencyCode} finished`,
         res
       );
     } catch (e) {
       if (e.message.indexOf('not a valid invoice') === -1) {
         // noinspection ES6MissingAwait
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           `BlocksoftInvoice.checkInvoice ${currencyCode} error ` + e.message,
           e.data ? e.data : e
         );

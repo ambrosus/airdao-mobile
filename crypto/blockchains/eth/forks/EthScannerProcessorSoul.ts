@@ -2,9 +2,9 @@
  * @version 0.5
  */
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 import EthScannerProcessorErc20 from '../EthScannerProcessorErc20';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 export default class EthScannerProcessorSoul extends EthScannerProcessorErc20 {
   /**
@@ -39,7 +39,7 @@ export default class EthScannerProcessorSoul extends EthScannerProcessorErc20 {
           transaction = await this._unifyTransaction(address, tx, isInternal);
         }
       } catch (e) {
-        BlocksoftCryptoLog.error(
+        AirDAOCryptoLog.error(
           'EthScannerProcessorSoul._unifyTransaction error ' +
             e.message +
             ' on ' +

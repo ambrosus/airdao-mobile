@@ -3,7 +3,7 @@
  */
 import BlocksoftKeysStorage from '@crypto/actions/BlocksoftKeysStorage/BlocksoftKeysStorage';
 import BlocksoftKeys from '@crypto/actions/BlocksoftKeys/BlocksoftKeys';
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import config from '@constants/config';
 
 const CACHE: { [key: string]: any } = {};
@@ -37,7 +37,7 @@ export default {
         ? discoverFor.path
         : discoverFor.derivationPath;
     if (path === 'false' || !path) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'BlocksoftTransferPrivateKeysDiscover private key not discovered as path = false from ' +
           source
       );
@@ -47,7 +47,7 @@ export default {
       path.replace(/[']/g, 'quote'),
       discoverFor.currencyCode
     );
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       `'BlocksoftTransferPrivateKeysDiscover.getPrivateKey actually inited ',
       ${{ address: discoverFor.addressToCheck, path, discoverForKey }}`
     );
@@ -66,7 +66,7 @@ export default {
         typeof discoverFor.mnemonic === 'undefined' ||
         !discoverFor.mnemonic
       ) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           'BlocksoftTransferPrivateKeysDiscover.getPrivateKey actually redo mnemonic ' +
             discoverFor.walletHash
         ),
@@ -80,7 +80,7 @@ export default {
         discoverFor.addressToCheck &&
         discoverFor.addressToCheck !== result.address
       ) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           'BlocksoftTransferPrivateKeysDiscover private key discovered is not for address you path=' +
             discoverFor.derivationPath +
             ' set ' +
@@ -115,7 +115,7 @@ export default {
           clone.derivationPath = path;
           const result2 = await BlocksoftKeys.discoverOne(clone);
           if (discoverFor.addressToCheck === result2.address) {
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               'BlocksoftTransferPrivateKeysDiscover private key rediscovered FOUND address path=' +
                 clone.derivationPath +
                 '  set ' +
@@ -129,7 +129,7 @@ export default {
             tmpFound = true;
             break;
           } else {
-            await BlocksoftCryptoLog.log(
+            await AirDAOCryptoLog.log(
               'BlocksoftTransferPrivateKeysDiscover private key rediscovered is not for address path=' +
                 clone.derivationPath +
                 '  set ' +

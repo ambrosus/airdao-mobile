@@ -1,5 +1,5 @@
 import BlocksoftAxios from './BlocksoftAxios';
-import BlocksoftCryptoLog from './BlocksoftCryptoLog';
+import AirDAOCryptoLog from './AirDAOCryptoLog';
 // @ts-ignore
 import ApiProxy from '../../app/services/Api/ApiProxy';
 import config from '@constants/config';
@@ -279,7 +279,7 @@ class AirDAOExternalSettings {
       typeof cached.currentServerValue === 'undefined' ||
       !cached.currentServerValue
     ) {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         'BlocksoftExternalSettings.getTrezorServer ' +
           key +
           ' setInvalid error with currentServer ' +
@@ -305,7 +305,7 @@ class AirDAOExternalSettings {
         ) {
           return cached.currentServerValue;
         }
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           'BlocksoftExternalSettings.getTrezorServer ' +
             key +
             ' from ' +
@@ -339,7 +339,7 @@ class AirDAOExternalSettings {
             }
             allServers[server] = tmp;
           } else {
-            BlocksoftCryptoLog.err(
+            AirDAOCryptoLog.err(
               'BlocksoftExternalSettings.getTrezorServer ' +
                 key +
                 ' from ' +
@@ -386,7 +386,7 @@ class AirDAOExternalSettings {
       currentServerIndex: 0
     };
     if ((typeof currentServer === 'string' || true) && currentServer) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         `'BlocksoftExternalSettings.getTrezorServer ' +
                 ${key} +
                 ' from ' +
@@ -396,7 +396,7 @@ class AirDAOExternalSettings {
       );
       return currentServer;
     } else {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         'BlocksoftExternalSettings.getTrezorServer ' +
           key +
           ' from ' +

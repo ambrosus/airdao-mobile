@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -311,12 +311,12 @@ export class BnbTxSendProvider {
         }
       }
     } catch (e) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         'BnbTransferProcessor.sendTx error ' + e.message
       );
       throw e;
     }
-    await BlocksoftCryptoLog.log('BnbTransferProcessor.sendTx result ', result);
+    await AirDAOCryptoLog.log('BnbTransferProcessor.sendTx result ', result);
     return result;
   }
 }

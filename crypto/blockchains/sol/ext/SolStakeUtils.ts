@@ -4,7 +4,7 @@
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import config from '@constants/config';
@@ -139,9 +139,7 @@ export default {
       if (config.debug.cryptoErrors) {
         console.log('SolStakeUtils.getVoteAddresses error ' + e.message);
       }
-      BlocksoftCryptoLog.log(
-        'SolStakeUtils.getVoteAddresses  error ' + e.message
-      );
+      AirDAOCryptoLog.log('SolStakeUtils.getVoteAddresses  error ' + e.message);
     }
     return CACHE_VOTES.data;
   },
@@ -238,7 +236,7 @@ export default {
           'SolStakeUtils.getAccountRewards ' + address + ' error ' + e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'SolStakeUtils.getAccountRewards ' + address + ' error ' + e.message
       );
     }
@@ -331,7 +329,7 @@ export default {
           CACHE_STAKED[address].all[item.stakeAddress] = true;
         }
       } catch (e: any) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           'SolStakeUtils getAccountStaked request ' +
             apiPath +
             ' error ' +
@@ -398,7 +396,7 @@ export default {
           'SolStakeUtils.getAccountStaked ' + address + ' error ' + e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'SolStakeUtils.getAccountStaked ' + address + ' error ' + e.message
       );
       return CACHE_STAKED[address].active;

@@ -7,7 +7,7 @@ import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import { PublicKey } from '@solana/web3.js/src';
 import { Account } from '@solana/web3.js/src/account';
 
-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 // @ts-ignore
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
 import config from '@constants/config';
@@ -90,7 +90,7 @@ export default {
           'SolUtils.getAccountInfo ' + address + ' error ' + e.message
         );
       }
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         'SolUtils.getAccountInfo ' + address + ' error ' + e.message
       );
     }
@@ -162,7 +162,7 @@ export default {
         }
         return sendRes2.data.result;
       } catch (e) {
-        await BlocksoftCryptoLog.log(e);
+        await AirDAOCryptoLog.log(e);
       }
     }
 
@@ -215,7 +215,7 @@ export default {
       }
       CACHE_EPOCH.ts = now;
     } catch (e: any) {
-      BlocksoftCryptoLog.log('SolUtils.getEpoch error ' + e.message);
+      AirDAOCryptoLog.log('SolUtils.getEpoch error ' + e.message);
       // nothing
     }
     return CACHE_EPOCH.value;

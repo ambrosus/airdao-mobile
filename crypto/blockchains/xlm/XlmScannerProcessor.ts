@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import config from '@constants/config';
 
@@ -84,7 +84,7 @@ export default class XlmScannerProcessor {
     account: { address: string };
   }): Promise<UnifiedTransaction[] | false> {
     const address = scanData.account.address.trim();
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XlmScannerProcessor.getTransactions started ' + address
     );
     const linkTxs = `${API_PATH}/accounts/${address}/transactions?order=desc&limit=50`;
@@ -163,7 +163,7 @@ export default class XlmScannerProcessor {
       res.data._embedded.records,
       basicTxs
     );
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       'XlmScannerProcessor.getTransactions finished ' + address
     );
     return transactions;

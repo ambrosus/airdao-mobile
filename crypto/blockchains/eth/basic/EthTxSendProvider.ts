@@ -3,7 +3,7 @@
  * @version 0.32
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import EthTmpDS from '../stores/EthTmpDS';
 import EthRawDS from '../stores/EthRawDS';
@@ -41,7 +41,7 @@ export default class EthTxSendProvider {
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSign started',
       logData
     );
@@ -79,7 +79,7 @@ export default class EthTxSendProvider {
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx started',
       logData
     );
@@ -87,11 +87,11 @@ export default class EthTxSendProvider {
     const rawTransaction = await this.sign(tx, privateData, txRBF, logData);
 
     // @ts-ignore
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx signed',
       tx
     );
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx hex',
       rawTransaction
     );
@@ -124,7 +124,7 @@ export default class EthTxSendProvider {
     // const successProxy = baseURL + '/send/sendtx';
     let checkResult = false;
     try {
-      // await BlocksoftCryptoLog.log(
+      // await AirDAOCryptoLog.log(
       //   this._settings.currencyCode +
       //     ' EthTxSendProvider.send proxy checkResult start ' +
       //     proxy,
@@ -137,7 +137,7 @@ export default class EthTxSendProvider {
       //   marketingData: MarketingEvent.DATA
       // });
     } catch (e) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxSendProvider.send proxy error checkResult ' +
           e.message
@@ -146,7 +146,7 @@ export default class EthTxSendProvider {
 
     if (checkResult !== false) {
       if (typeof checkResult.data !== 'undefined') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy checkResult1 ',
           checkResult.data
@@ -160,7 +160,7 @@ export default class EthTxSendProvider {
           throw new Error(checkResult.data.msg);
         }
       } else {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy checkResult2 ',
           checkResult
@@ -173,7 +173,7 @@ export default class EthTxSendProvider {
         ? JSON.parse(JSON.stringify(checkResult.data))
         : false;
 
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider.send will send'
     );
     let result;
@@ -187,7 +187,7 @@ export default class EthTxSendProvider {
         /**
          * curl http://matic.trusteeglobal.com:8545 -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["0x..."],"id":83}'
          */
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send sendSignedTransaction to ' +
             this._web3.LINK,
@@ -200,7 +200,7 @@ export default class EthTxSendProvider {
           params: [rawTransaction],
           id: 1
         });
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send sendSignedTransaction to ' +
             this._web3.LINK +
@@ -232,7 +232,7 @@ export default class EthTxSendProvider {
          * "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
          * "status": true, "to": "0xf1cff704c6e6ce459e3e1544a9533cccbdad7b99", "transactionHash": "0x1fa5646517b625d422863e6c27082104e1697543a6f912421527bb171c6173f2", "transactionIndex": 95}
          */
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send sendSignedTransaction ',
           rawTransaction
@@ -249,21 +249,21 @@ export default class EthTxSendProvider {
         };
       } else {
         sendLink = link;
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode + ' EthTxSendProvider.send post ',
           rawTransaction
         );
         result = await BlocksoftAxios.post(sendLink, rawTransaction);
       }
       // @ts-ignore
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode + ' EthTxSendProvider.send result ',
         typeof result !== 'undefined' && result ? result.data : 'NO RESULT'
       );
     } catch (e) {
       try {
         // logData.error = e.message;
-        // await BlocksoftCryptoLog.log(
+        // await AirDAOCryptoLog.log(
         //   this._settings.currencyCode +
         //     ' EthTxSendProvider.send proxy errorTx start ' +
         //     errorProxy,
@@ -275,13 +275,13 @@ export default class EthTxSendProvider {
         //   logData,
         //   marketingData: MarketingEvent.DATA
         // });
-        // await BlocksoftCryptoLog.log(
+        // await AirDAOCryptoLog.log(
         //   this._settings.currencyCode + ' EthTxSendProvider.send proxy errorTx',
         //   typeof res2.data !== 'undefined' ? res2.data : res2
         // );
         // throw new Error('res2.data : ' + res2.data);
       } catch (e2) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy error errorTx ' +
             e2.message
@@ -345,7 +345,7 @@ export default class EthTxSendProvider {
     checkResult = false;
     try {
       // logData.txHash = transactionHash;
-      // await BlocksoftCryptoLog.log(
+      // await AirDAOCryptoLog.log(
       //   this._settings.currencyCode +
       //     ' EthTxSendProvider.send proxy successTx start ' +
       //     successProxy,
@@ -358,7 +358,7 @@ export default class EthTxSendProvider {
       //   marketingData: MarketingEvent.DATA
       // });
     } catch (e3) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxSendProvider.send proxy error successTx ' +
           e3.message
@@ -367,7 +367,7 @@ export default class EthTxSendProvider {
 
     if (checkResult !== false) {
       if (typeof checkResult.data !== 'undefined') {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy successResult1 ',
           checkResult.data
@@ -381,7 +381,7 @@ export default class EthTxSendProvider {
           throw new Error(checkResult.data.msg);
         }
       } else {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy successResult2 ',
           checkResult
@@ -417,7 +417,7 @@ export default class EthTxSendProvider {
       transactionLog: logData
     });
 
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthTxSendProvider.send save nonce ' +
         nonce +

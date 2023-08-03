@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import DogeNetworkPrices from './basic/DogeNetworkPrices';
@@ -117,7 +117,7 @@ export default class DogeTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate remove started ' +
           data.addressFrom +
@@ -131,7 +131,7 @@ export default class DogeTransferProcessor
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate resend started ' +
           data.addressFrom +
@@ -145,7 +145,7 @@ export default class DogeTransferProcessor
       typeof data.transactionSpeedUp !== 'undefined' &&
       data.transactionSpeedUp
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate speedup started ' +
           data.addressFrom +
@@ -155,7 +155,7 @@ export default class DogeTransferProcessor
       transactionSpeedUp = data.transactionSpeedUp;
       txRBF = transactionSpeedUp;
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate started ' +
           data.addressFrom +
@@ -240,14 +240,14 @@ export default class DogeTransferProcessor
         return BlocksoftUtils.diff(b.value, a.value) * 1;
       });
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate unspents sorted',
         unspents
       );
     } else {
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.getFeeRate unspents no need to sort',
         unspents
@@ -376,7 +376,7 @@ export default class DogeTransferProcessor
                   feeStaticReadable.feeForAllInputs
               )
             );
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' DogeTransferProcessor.getFeeRate_' +
                 key +
@@ -431,7 +431,7 @@ export default class DogeTransferProcessor
             logInputsOutputs.diffInOutReadable * 1 <
             this._builderSettings.feeMinTotalReadable
           ) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' DogeTransferProcessor.getFeeRate_' +
                 key +
@@ -458,7 +458,7 @@ export default class DogeTransferProcessor
           }
         }
         // @ts-ignore
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTransferProcessor.getFeeRate_' +
             key +
@@ -505,7 +505,7 @@ export default class DogeTransferProcessor
               actualFeeForByte.toString() !== feeForByte.toString();
           }
           if (!actualFeeRebuild && needAutoCorrect) {
-            BlocksoftCryptoLog.log(
+            AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' DogeTransferProcessor.getFeeRate will correct as ' +
                 actualFeeForByte.toString() +
@@ -547,7 +547,7 @@ export default class DogeTransferProcessor
                 );
               }
 
-              BlocksoftCryptoLog.log(
+              AirDAOCryptoLog.log(
                 this._settings.currencyCode +
                   ' DogeTransferProcessor.getFeeRate diff ' +
                   diff +
@@ -589,7 +589,7 @@ export default class DogeTransferProcessor
                   }
                 }
               }
-              BlocksoftCryptoLog.log(
+              AirDAOCryptoLog.log(
                 this._settings.currencyCode +
                   ' DogeTransferProcessor.getFeeRate foundToMore ' +
                   JSON.stringify(foundToMore)
@@ -619,7 +619,7 @@ export default class DogeTransferProcessor
           }
         } while (doBuild);
       } catch (e) {
-        BlocksoftCryptoLog.log(
+        AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' DogeTransferProcessor.getRawTx error ' +
             e.message
@@ -692,7 +692,7 @@ export default class DogeTransferProcessor
         logResult.fees.push(logFee);
       }
     }
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeTransferProcessor.getFees ' +
         JSON.stringify(logResult)
@@ -750,7 +750,7 @@ export default class DogeTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sendTx remove started ' +
           data.transactionRemoveByFee
@@ -761,7 +761,7 @@ export default class DogeTransferProcessor
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sendTx resend started ' +
           data.transactionReplaceByFee
@@ -769,7 +769,7 @@ export default class DogeTransferProcessor
       txRBF = data.transactionReplaceByFee;
       txRBFed = 'RBFed';
     } else {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode + ' DogeTransferProcessor.sendTx started'
       );
       txRBFed = 'usualSend';
@@ -805,7 +805,7 @@ export default class DogeTransferProcessor
         logData
       );
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sent error ' +
           e.message
@@ -851,12 +851,12 @@ export default class DogeTransferProcessor
         transactionRaw,
         transactionLog
       });
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode + ' DogeTransferProcessor.sendTx hex ',
         uiData.selectedFee.blockchainData.rawTxHex
       );
       // @ts-ignore
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode + ' DogeTransferProcessor.sendTx result ',
         result
       );
@@ -873,7 +873,7 @@ export default class DogeTransferProcessor
         transactionRaw: JSON.stringify(result.transactionJson)
       });
 
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sent ' +
           data.addressFrom +
@@ -881,7 +881,7 @@ export default class DogeTransferProcessor
           JSON.stringify(result.transactionJson)
       );
     } catch (e) {
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' DogeTransferProcessor.sent error additional' +
           e.message

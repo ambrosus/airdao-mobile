@@ -8,7 +8,7 @@ import UsdtTxInputsOutputs from './tx/UsdtTxInputsOutputs';
 import UsdtTxBuilder from './tx/UsdtTxBuilder';
 import BtcNetworkPrices from '../btc/basic/BtcNetworkPrices';
 import BtcTransferProcessor from '../btc/BtcTransferProcessor';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 // @ts-ignore
 import DaemonCache from '../../../app/daemons/DaemonCache';
 
@@ -78,7 +78,7 @@ export default class UsdtTransferProcessor
     const tmpData = { ...data };
     tmpData.isTransferAll = false;
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode + ' UsdtTxProcessor.getFeeRate started'
     );
     const result = await super.getFeeRate(tmpData, privateData, additionalData);
@@ -95,7 +95,7 @@ export default class UsdtTransferProcessor
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ` UsdtTransferProcessor.getTransferAllBalance
       ${data.addressFrom + ' => ' + balance}`

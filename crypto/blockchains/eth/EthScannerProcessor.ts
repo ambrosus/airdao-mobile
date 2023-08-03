@@ -3,10 +3,10 @@
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
-import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthBasic from './basic/EthBasic';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
-import BlocksoftBN from '../../common/BlocksoftBN';
+import BlocksoftBN from '../../common/AirDAOBN';
 
 import EthTmpDS from './stores/EthTmpDS';
 import EthRawDS from './stores/EthRawDS';
@@ -86,7 +86,7 @@ export default class EthScannerProcessor extends EthBasic {
     }
 
     if (typeof this._trezorServer === 'undefined') {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         this._settings.currencyCode +
           ' EthScannerProcessor._get empty trezorServer'
       );
@@ -124,7 +124,7 @@ export default class EthScannerProcessor extends EthBasic {
         this._settings.currencyCode + ' ETH.Scanner._get'
       );
       if (typeof this._trezorServer === 'undefined') {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           this._settings.currencyCode +
             ' EthScannerProcessor._get empty trezorServer2'
         );
@@ -154,7 +154,7 @@ export default class EthScannerProcessor extends EthBasic {
     const data = res.data;
     data.totalTokens = 0;
     data.formattedTokens = {};
-    //await  BlocksoftCryptoLog.log('EthScannerProcessor._get ERC20 tokens ' + JSON.stringify(data.tokens))
+    //await  AirDAOCryptoLog.log('EthScannerProcessor._get ERC20 tokens ' + JSON.stringify(data.tokens))
     if (typeof data.tokens !== 'undefined') {
       let token;
       for (token of data.tokens) {
@@ -179,7 +179,7 @@ export default class EthScannerProcessor extends EthBasic {
    * @return {Promise<{balance, unconfirmed, provider}>}
    */
   async getBalanceBlockchain(address) {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthScannerProcessor.getBalance started ' +
         address
@@ -216,7 +216,7 @@ export default class EthScannerProcessor extends EthBasic {
         }
       }
     } catch (e) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance ' +
           address +
@@ -228,7 +228,7 @@ export default class EthScannerProcessor extends EthBasic {
 
     try {
       balance = await this._web3.eth.getBalance(address);
-      BlocksoftCryptoLog.log(
+      AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance ' +
           address +
@@ -239,7 +239,7 @@ export default class EthScannerProcessor extends EthBasic {
       time = 'now()';
       return { balance, unconfirmed: 0, provider, time };
     } catch (e) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance ' +
           address +
@@ -258,7 +258,7 @@ export default class EthScannerProcessor extends EthBasic {
    */
   async getTransactionsBlockchain(scanData) {
     const address = scanData.account.address;
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthScannerProcessor.getTransactions started ' +
         address
@@ -278,7 +278,7 @@ export default class EthScannerProcessor extends EthBasic {
 
     let transactions;
     if (res && typeof res.data !== 'undefined' && res.data) {
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getBalance loaded from ' +
           res.provider +
@@ -289,7 +289,7 @@ export default class EthScannerProcessor extends EthBasic {
         this._tokenAddress &&
         typeof res.data.formattedTokens[this._tokenAddress] === 'undefined'
       ) {
-        await BlocksoftCryptoLog.log(
+        await AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthScannerProcessor.getTransactions skipped token ' +
             this._tokenAddress +
@@ -298,7 +298,7 @@ export default class EthScannerProcessor extends EthBasic {
         );
         return false;
       }
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getTransactions trezor unify started ' +
           address
@@ -310,7 +310,7 @@ export default class EthScannerProcessor extends EthBasic {
         true,
         {}
       );
-      await BlocksoftCryptoLog.log(
+      await AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' EthScannerProcessor.getTransactions trezor finished ' +
           address
@@ -327,7 +327,7 @@ export default class EthScannerProcessor extends EthBasic {
       );
     } else {
       if (!this._etherscanApiPath) {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           this._settings.currencyCode +
             ' EthScannerProcessor.getTransactions no _etherscanApiPath'
         );
@@ -395,7 +395,7 @@ export default class EthScannerProcessor extends EthBasic {
     ) {
       return [];
     }
-    await BlocksoftCryptoLog.log(logTitle + ' started ', link);
+    await AirDAOCryptoLog.log(logTitle + ' started ', link);
     const list = tmp.data.data[0].transactionLists;
     for (const tx of list) {
       const transaction = await this._unifyTransactionOklink(address, tx);
@@ -403,7 +403,7 @@ export default class EthScannerProcessor extends EthBasic {
         transactions[transaction.transactionHash] = transaction;
       }
     }
-    await BlocksoftCryptoLog.log(logTitle + ' finished ' + address);
+    await AirDAOCryptoLog.log(logTitle + ' finished ' + address);
     return transactions;
   }
 
@@ -414,7 +414,7 @@ export default class EthScannerProcessor extends EthBasic {
     isInternal,
     transactions = {}
   ) {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       logTitle + ' started ' + JSON.stringify(isInternal),
       link
     );
@@ -444,7 +444,7 @@ export default class EthScannerProcessor extends EthBasic {
       false,
       transactions
     );
-    await BlocksoftCryptoLog.log(logTitle + ' finished ' + address);
+    await AirDAOCryptoLog.log(logTitle + ' finished ' + address);
     return transactions;
   }
 
@@ -453,7 +453,7 @@ export default class EthScannerProcessor extends EthBasic {
    * @return {Promise<[UnifiedTransaction]>}
    */
   async getTransactionBlockchain(txHash) {
-    await BlocksoftCryptoLog.log(
+    await AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' EthScannerProcessor.getTransaction started ' +
         txHash
@@ -465,7 +465,7 @@ export default class EthScannerProcessor extends EthBasic {
     );
 
     if (typeof this._trezorServer === 'undefined') {
-      BlocksoftCryptoLog.err(
+      AirDAOCryptoLog.err(
         this._settings.currencyCode +
           ' EthScannerProcessor.getTransaction empty trezorServer'
       );
@@ -492,7 +492,7 @@ export default class EthScannerProcessor extends EthBasic {
         this._settings.currencyCode + ' ETH.Scanner._get'
       );
       if (typeof this._trezorServer === 'undefined') {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           this._settings.currencyCode +
             ' EthScannerProcessor._get empty trezorServer2'
         );
@@ -612,7 +612,7 @@ export default class EthScannerProcessor extends EthBasic {
           }
         }
       } catch (e) {
-        BlocksoftCryptoLog.err(
+        AirDAOCryptoLog.err(
           this._settings.currencyCode +
             ' EthScannerProcessor._unifyTransaction error ' +
             e.message +

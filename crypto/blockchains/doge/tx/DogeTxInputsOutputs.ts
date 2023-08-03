@@ -2,9 +2,9 @@
  * @version 0.20
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
-import BlocksoftBN from '../../../common/BlocksoftBN';
+import BlocksoftBN from '../../../common/AirDAOBN';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 
 // @ts-ignore
@@ -74,7 +74,7 @@ export default class DogeTxInputsOutputs
       }
     }
     // @ts-ignore
-    BlocksoftCryptoLog.log(
+    AirDAOCryptoLog.log(
       this._settings.currencyCode +
         ' DogeTxInputsOutputs.getInputsOutputs _coinSelectTargets',
       {
@@ -391,7 +391,7 @@ export default class DogeTxInputsOutputs
         if (diff * 1 < 0) {
           // skip as dust
           // @ts-ignore
-          BlocksoftCryptoLog.log(
+          AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' DogeTxInputsOutputs unspent skipped as dust ' +
               this._minOutputDust +
