@@ -22,7 +22,7 @@
  * }
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 // @ts-ignore
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 

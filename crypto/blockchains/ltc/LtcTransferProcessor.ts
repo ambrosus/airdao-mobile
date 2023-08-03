@@ -3,12 +3,12 @@
  */
 
 import BtcTransferProcessor from '@crypto/blockchains/btc/BtcTransferProcessor';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import DogeNetworkPrices from '@crypto/blockchains/doge/basic/DogeNetworkPrices';
 import BtcUnspentsProvider from '@crypto/blockchains/btc/providers/BtcUnspentsProvider';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
 import BtcTxInputsOutputs from '@crypto/blockchains/btc/tx/BtcTxInputsOutputs';
 import BtcTxBuilder from '@crypto/blockchains/btc/tx/BtcTxBuilder';
-import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class LtcTransferProcessor
   extends BtcTransferProcessor

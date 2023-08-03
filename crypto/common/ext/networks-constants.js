@@ -1,7 +1,7 @@
 // https://github.com/iancoleman/bip39/blob/0a23f51792722f094328d695242556c4c0195a8b/src/js/bitcoinjs-extensions.js
-const bitcoin = require('bitcoinjs-lib');
+import bitcoin from 'bitcoinjs-lib';
 
-module.exports = {
+export default {
   mainnet: {
     network: bitcoin.networks.bitcoin,
     langPrefix: 'btc'

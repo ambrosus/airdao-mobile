@@ -3,7 +3,7 @@
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 import config from '@constants/config';
 
 const API_PATH = 'https://horizon.stellar.org';

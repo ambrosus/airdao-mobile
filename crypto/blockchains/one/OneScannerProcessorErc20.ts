@@ -3,60 +3,34 @@
  * https://docs.harmony.one/home/developers/api/methods/transaction-related-methods/hmy_gettransactionshistory#api-v2
  */
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import EthScannerProcessorErc20 from '@crypto/blockchains/eth/EthScannerProcessorErc20';
-
 import OneTmpDS from './stores/OneTmpDS';
-import config from '@constants/config';
 
-interface UnifiedTransaction {
-  transactionHash: string;
-  blockHash: string;
-  blockNumber: number;
-  blockTime: string;
-  blockConfirmations: number;
-  transactionDirection: string;
-  addressFrom: string;
-  addressFromBasic: string;
-  addressTo: string;
-  addressToBasic: string;
-  addressAmount: number;
-  transactionStatus: string;
-  inputValue: string;
-  transactionJson?: {
-    nonce: string;
-    gas: string;
-    gasPrice: string;
-    transactionIndex: string;
-  };
-  transactionFee?: string;
-}
-
-interface CacheTokens {
-  [address: string]: { [tokenAddress: string]: number };
-}
-
-const CACHE_TOKENS: CacheTokens = {};
+const CACHE_TOKENS = {};
 
 export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
-  private _blocksToConfirm = 10;
+  _blocksToConfirm = 10;
 
   /**
    * @param {string} scanData.account.address
    * @param {string} scanData.account.walletHash
    * @return {Promise<[UnifiedTransaction]>}
    */
-  // @ts-ignore
   async getTransactionsBlockchain(scanData: {
     account: { address: string; walletHash: string };
-  }): Promise<UnifiedTransaction[]> {
+  }) {
     const { address } = scanData.account;
     const oneAddress = OneUtils.toOneAddress(address);
     BlocksoftCryptoLog.log(
-      `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain started ${address} ${oneAddress}`
+      this._settings.currencyCode +
+        ' OneScannerProcessorErc20.getTransactionsBlockchain started ' +
+        address +
+        ' ' +
+        oneAddress
     );
     try {
       CACHE_TOKENS[address] = await OneTmpDS.getCache(address);
@@ -78,15 +52,14 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
       };
       const res = await BlocksoftAxios._request(apiPath, 'POST', data);
       if (
-        !res ||
-        !res.data ||
-        !res.data.result ||
-        !res.data.result.transactions
+        typeof res.data === 'undefined' ||
+        typeof res.data.result === 'undefined' ||
+        typeof res.data.result.transactions === 'undefined'
       ) {
-        return [];
+        return false;
       }
-      const transactions: UnifiedTransaction[] = [];
-      let firstTransaction: number | false = false;
+      const transactions = [];
+      let firstTransaction = false;
       for (const tx of res.data.result.transactions) {
         if (
           typeof CACHE_TOKENS[address] !== 'undefined' &&
@@ -115,21 +88,18 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
           transactions.push(transaction);
         }
       }
-      if (firstTransaction !== false) {
-        CACHE_TOKENS[address][this._tokenAddress] = Number(firstTransaction);
-        await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
-      }
+      CACHE_TOKENS[address][this._tokenAddress] = firstTransaction;
+      await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
       return transactions;
-    } catch (e: any) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain address ${address} error ${e.message}`
-        );
-      }
+    } catch (e) {
       BlocksoftCryptoLog.log(
-        `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain address ${address} error ${e.message}`
+        this._settings.currencyCode +
+          ' OneScannerProcessorErc20.getTransactionsBlockchain address ' +
+          address +
+          ' error ' +
+          e.message
       );
-      return [];
+      return false;
     }
   }
 
@@ -155,28 +125,7 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  // @ts-ignore
-  async _unifyTransaction(
-    address: string,
-    oneAddress: string,
-    transaction: {
-      transactionIndex: string;
-      blockHash: string;
-      blockNumber: string;
-      ethHash: string;
-      from: string;
-      gas: string;
-      gasPrice: string;
-      hash: string;
-      input: string;
-      nonce: string;
-      shardID: string;
-      timestamp: string;
-      to: string;
-      toShardID: string;
-      value: string;
-    }
-  ): Promise<UnifiedTransaction | false> {
+  async _unifyTransaction(address: string, oneAddress: string, transaction) {
     const contractEvents = await this._token.getPastEvents('Transfer', {
       fromBlock: transaction.blockNumber,
       toBlock: transaction.blockNumber
@@ -213,44 +162,43 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
     let formattedTime = transaction.timestamp;
     try {
       formattedTime = BlocksoftUtils.toDate(transaction.timestamp);
-    } catch (e: any) {
+    } catch (e) {
       e.message +=
         ' timestamp error transaction data ' + JSON.stringify(transaction);
       throw e;
     }
 
-    const confirmations =
-      // tslint:disable-next-line:radix
-      (new Date().getTime() - parseInt(transaction.timestamp)) / 60;
+    const confirmations = (new Date().getTime() - transaction.timestamp) / 60;
     let transactionStatus = 'confirming';
     if (confirmations > 2) {
       transactionStatus = 'success';
     }
 
-    const tx: UnifiedTransaction = {
+    const tx = {
       transactionHash: transaction.ethHash.toLowerCase(),
       blockHash: transaction.blockHash,
       blockNumber: +transaction.blockNumber,
       blockTime: formattedTime,
       blockConfirmations: confirmations,
       transactionDirection:
-        addressAmount <= 0 ? (foundEventTo ? 'outcome' : 'self') : 'income',
+        addressAmount * 1 <= 0 ? (foundEventTo ? 'outcome' : 'self') : 'income',
       addressFrom: foundEventFrom ? transaction.from : '',
       addressFromBasic: transaction.from.toLowerCase(),
       addressTo: foundEventTo ? transaction.to : '',
       addressToBasic: transaction.to,
       addressAmount,
-      transactionStatus,
+      transactionStatus: transactionStatus,
       inputValue: transaction.input
     };
-    tx.transactionJson = {
+    const additional = {
       nonce: transaction.nonce,
       gas: transaction.gas,
       gasPrice: transaction.gasPrice,
       transactionIndex: transaction.transactionIndex
     };
+    tx.transactionJson = additional;
     tx.transactionFee = BlocksoftUtils.mul(
-      transaction.gas,
+      transaction.gasUsed,
       transaction.gasPrice
     ).toString();
 

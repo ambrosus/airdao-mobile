@@ -7,7 +7,7 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 const CACHE_VALID_TIME = 60000; // 1 minute
 let CACHE_FEES = {

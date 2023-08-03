@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
@@ -9,12 +9,12 @@ import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 const API_PATH = 'https://blockstream.info/testnet/api/';
 
 export default class BtcTestUnspentsProvider
-  implements BlocksoftBlockchainTypes.UnspentsProvider
+  implements AirDAOBlockchainTypes.UnspentsProvider
 {
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
 
   constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
+    settings: AirDAOBlockchainTypes.CurrencySettings,
     serverCode: string
   ) {
     this._settings = settings;
@@ -26,7 +26,7 @@ export default class BtcTestUnspentsProvider
    */
   async getUnspents(
     address: string
-  ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
+  ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +

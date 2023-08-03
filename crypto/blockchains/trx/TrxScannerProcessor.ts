@@ -10,9 +10,9 @@ import TrxTransactionsTrc20Provider from './basic/TrxTransactionsTrc20Provider';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import Database from '@app/appstores/DataSource/Database/main';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import transactionDS from '@app/appstores/DataSource/Transaction/Transaction';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TronStakeUtils from '@crypto/blockchains/trx/ext/TronStakeUtils';
 import config from '@constants/config';
 

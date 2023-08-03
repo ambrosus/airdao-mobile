@@ -3,6 +3,7 @@
  */
 
 import BtcScannerProcessor from '../btc/BtcScannerProcessor';
+
 // @ts-ignore
 export default class LtcScannerProcessor extends BtcScannerProcessor {
   /**

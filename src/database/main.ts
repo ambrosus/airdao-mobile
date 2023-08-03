@@ -1,9 +1,15 @@
 import { Platform } from 'react-native';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import { Database } from '@nozbe/watermelondb';
-import { WalletDBModel } from './models';
+import {
+  TransactionsDBModel,
+  WalletDBModel,
+  AccountDBModel,
+  WalletPubDBModel,
+  TransactionRawDBModel,
+  TransactionScannersTmpDBModel
+} from './models';
 import { schema } from './schemas';
-import { TransactionScannersTmpDBModel } from './models/transaction-scanners-tmp';
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -15,5 +21,12 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [WalletDBModel, TransactionScannersTmpDBModel]
+  modelClasses: [
+    AccountDBModel,
+    TransactionsDBModel,
+    TransactionRawDBModel,
+    TransactionScannersTmpDBModel,
+    WalletDBModel,
+    WalletPubDBModel
+  ]
 });

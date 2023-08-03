@@ -6,7 +6,7 @@ import MoneroUtilsParser from './ext/MoneroUtilsParser';
 import XmrSendProvider from './providers/XmrSendProvider';
 import XmrUnspentsProvider from './providers/XmrUnspentsProvider';
 import config from '@constants/config';
-import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class XmrTransferProcessor

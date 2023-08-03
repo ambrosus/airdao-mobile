@@ -4,7 +4,7 @@
  * https://www.stellar.org/developers/horizon/reference/endpoints/transactions-create.html
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { XrpTxUtils } from '../../xrp/basic/XrpTxUtils';
 import config from '@constants/config';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';

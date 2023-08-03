@@ -2,7 +2,7 @@
  * @version 0.52
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import { PublicKey } from '@solana/web3.js/src';
 import { Account } from '@solana/web3.js/src/account';

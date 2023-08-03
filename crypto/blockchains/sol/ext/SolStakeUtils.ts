@@ -2,10 +2,10 @@
  * @version 0.52
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import config from '@constants/config';
 

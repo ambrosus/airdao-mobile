@@ -7,11 +7,11 @@
  * https://xrpl.org/rippleapi-reference.html#submit
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 

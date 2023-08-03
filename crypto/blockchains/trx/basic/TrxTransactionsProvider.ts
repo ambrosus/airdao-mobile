@@ -3,7 +3,7 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 import TrxNodeInfoProvider from './TrxNodeInfoProvider';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 

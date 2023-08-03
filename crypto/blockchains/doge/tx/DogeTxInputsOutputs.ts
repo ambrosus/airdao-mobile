@@ -1,20 +1,22 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftBN from '../../../common/BlocksoftBN';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftDict from '@crypto/common/BlocksoftDict';
 
-const coinSelect = require('coinselect');
-const coinSplit = require('coinselect/split');
+// @ts-ignore
+import coinSelect from 'coinselect';
+// @ts-ignore
+import coinSplit from 'coinselect/split';
 
 export default class DogeTxInputsOutputs
-  implements BlocksoftBlockchainTypes.TxInputsOutputs
+  implements AirDAOBlockchainTypes.TxInputsOutputs
 {
-  private _builderSettings: BlocksoftBlockchainTypes.BuilderSettings;
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
+  private _builderSettings: AirDAOBlockchainTypes.BuilderSettings;
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
   private _minOutputDust: any;
   private _minChangeDust: any;
 
@@ -24,8 +26,8 @@ export default class DogeTxInputsOutputs
   SIZE_FOR_BC = 75;
 
   constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
-    builderSettings: BlocksoftBlockchainTypes.BuilderSettings
+    settings: AirDAOBlockchainTypes.CurrencySettings,
+    builderSettings: AirDAOBlockchainTypes.BuilderSettings
   ) {
     this._settings = settings;
     this._builderSettings = builderSettings;
@@ -40,8 +42,8 @@ export default class DogeTxInputsOutputs
   }
 
   _coinSelectTargets(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeForByte: string,
     multiAddress: string[],
     subtitle: string
@@ -86,13 +88,13 @@ export default class DogeTxInputsOutputs
     return targets;
   }
 
-  _addressForChange(data: BlocksoftBlockchainTypes.TransferData): string {
+  _addressForChange(data: AirDAOBlockchainTypes.TransferData): string {
     return data.addressFrom;
   }
 
   _usualTargets(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[]
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[]
   ) {
     const multiAddress = [];
     const basicWishedAmountBN = new BlocksoftBN(data.amount);
@@ -130,15 +132,15 @@ export default class DogeTxInputsOutputs
   }
 
   async _coinSelect(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeForByte: string,
     multiAddress: string[],
     subtitle: string
-  ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
+  ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx> {
     const utxos = [];
     const isRequired: any = {};
-    let isAllRequired: boolean = true;
+    let isAllRequired = true;
     const segwitPrefix =
       typeof BlocksoftDict.CurrenciesForTests[
         this._settings.currencyCode + '_SEGWIT'
@@ -317,16 +319,16 @@ export default class DogeTxInputsOutputs
   }
 
   async getInputsOutputs(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeToCount: {
       feeForByte?: string;
       feeForAll?: string;
       autoFeeLimitReadable?: string | number;
     },
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
-    subtitle: string = 'default'
-  ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData,
+    subtitle = 'default'
+  ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx> {
     return this._getInputsOutputs(
       data,
       unspents,
@@ -337,16 +339,16 @@ export default class DogeTxInputsOutputs
   }
 
   async _getInputsOutputs(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeToCount: {
       feeForByte?: string;
       feeForAll?: string;
       autoFeeLimitReadable?: string | number;
     },
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
-    subtitle: string = 'default'
-  ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData,
+    subtitle = 'default'
+  ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx> {
     if (typeof data.addressFrom === 'undefined') {
       throw new Error(
         'DogeTxInputsOutputs.getInputsOutputs requires addressFrom'
@@ -419,6 +421,7 @@ export default class DogeTxInputsOutputs
       totalBalanceBN.add(unspent.value);
     }
 
+    // eslint-disable-next-line prefer-const
     let { multiAddress, wishedAmountBN, outputs } = this._usualTargets(
       data,
       unspents
@@ -687,7 +690,7 @@ export default class DogeTxInputsOutputs
         to: addressForChange,
         amount: leftForChangeDiff.toString(),
         isChange: true
-      } as BlocksoftBlockchainTypes.OutputTx);
+      } as AirDAOBlockchainTypes.OutputTx);
     }
     return {
       inputs,

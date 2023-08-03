@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import BlocksoftUtils from './BlocksoftUtils';
+import BlocksoftUtils from './AirDAOUtils';
 
 class BlocksoftBN {
   innerBN = false;

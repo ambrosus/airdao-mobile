@@ -1,6 +1,6 @@
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import XrpTmpDS from './stores/XrpTmpDS';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import XrpDataRippleProvider from '@crypto/blockchains/xrp/basic/XrpDataRippleProvider';
 import XrpDataScanProvider from '@crypto/blockchains/xrp/basic/XrpDataScanProvider';
 

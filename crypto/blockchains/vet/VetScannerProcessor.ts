@@ -4,7 +4,7 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
 const API_PATH = 'https://sync-mainnet.vechain.org';
 const CACHE_VALID_TIME = 30000; // 30 seconds

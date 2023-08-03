@@ -3,7 +3,7 @@
  * https://github.com/tronscan/tronscan-frontend/wiki/TRONSCAN-API
  */
 import TrxTransactionsProvider from './TrxTransactionsProvider';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import Database from '@app/appstores/DataSource/Database/main';

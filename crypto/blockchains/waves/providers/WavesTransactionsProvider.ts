@@ -1,7 +1,7 @@
 /**
  * @version 0.50
  */
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 

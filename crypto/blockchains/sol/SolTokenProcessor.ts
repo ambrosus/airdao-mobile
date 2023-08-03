@@ -2,7 +2,7 @@
  * @version 0.52
  */
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import { AxiosResponse } from 'axios';
 

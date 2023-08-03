@@ -3,7 +3,7 @@
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import TronUtils from './ext/TronUtils';
 import TrxTronscanProvider from './basic/TrxTronscanProvider';
@@ -15,7 +15,7 @@ import { strings, sublocale } from '@app/services/i18n';
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
 import MarketingEvent from '@app/services/Marketing/MarketingEvent';
 import BlocksoftTransactions from '@crypto/actions/BlocksoftTransactions/BlocksoftTransactions';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 import config from '@constants/config';

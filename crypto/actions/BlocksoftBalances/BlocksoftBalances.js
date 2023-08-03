@@ -5,7 +5,7 @@
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftDict from '../../common/BlocksoftDict';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 class BlocksoftBalances {
   /**

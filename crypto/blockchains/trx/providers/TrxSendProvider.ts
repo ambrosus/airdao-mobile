@@ -7,7 +7,7 @@ import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvide
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import config from '@constants/config';
 
 export default class TrxSendProvider

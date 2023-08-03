@@ -4,7 +4,7 @@
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BtcTxInputsOutputs from '../../btc/tx/BtcTxInputsOutputs';
 import BlocksoftBN from '../../../common/BlocksoftBN';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 // @ts-ignore
 import DaemonCache from '../../../../app/daemons/DaemonCache';

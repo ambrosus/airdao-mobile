@@ -2,8 +2,8 @@
  * @version 0.52
  */
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 
 import {

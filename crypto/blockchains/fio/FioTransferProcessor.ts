@@ -2,12 +2,12 @@
  * @version 0.20
  */
 import { getFioSdk } from './FioSdkWrapper';
-import { getFioBalance, transferTokens } from './FioUtils';
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import { getFioBalance, transferTokens } from './FioUtils.jts';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 
 export default class FioTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: any;
 
@@ -24,12 +24,12 @@ export default class FioTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const { fee = 0 } = await getFioSdk().getFee('transfer_tokens_pub_key');
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: 0,
       shouldShowFees: false,
       fees: [
@@ -39,15 +39,15 @@ export default class FioTransferProcessor
           amountForTx: data.amount
         }
       ]
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
     return result;
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: any = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const { fee = 0 } = await getFioSdk().getFee('transfer_tokens_pub_key');
     const balance = await getFioBalance(data.addressFrom);
     if (balance === 0) {
@@ -69,7 +69,7 @@ export default class FioTransferProcessor
       };
     }
 
-    const result: BlocksoftBlockchainTypes.TransferAllBalanceResult = {
+    const result: AirDAOBlockchainTypes.TransferAllBalanceResult = {
       selectedFeeIndex: 0,
       fees: [
         {
@@ -79,15 +79,15 @@ export default class FioTransferProcessor
         }
       ],
       selectedTransferAllBalance: diff
-    } as BlocksoftBlockchainTypes.TransferAllBalanceResult;
+    } as AirDAOBlockchainTypes.TransferAllBalanceResult;
     return result;
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (
       typeof uiData !== 'undefined' &&
       typeof uiData.selectedFee !== 'undefined' &&

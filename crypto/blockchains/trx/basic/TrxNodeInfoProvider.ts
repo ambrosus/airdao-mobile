@@ -1,6 +1,6 @@
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 const INFO_MAX_TRY = 50; // max tries before error appear in axios get
 

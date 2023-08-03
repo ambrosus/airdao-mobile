@@ -3,7 +3,7 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class XvgSendProvider

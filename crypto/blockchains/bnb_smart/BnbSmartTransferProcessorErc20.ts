@@ -4,7 +4,7 @@
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import EthTransferProcessorErc20 from '../eth/EthTransferProcessorErc20';
 import BnbSmartNetworkPrices from './basic/BnbSmartNetworkPrices';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 export default class BnbSmartTransferProcessorErc20
   extends EthTransferProcessorErc20
@@ -19,7 +19,7 @@ export default class BnbSmartTransferProcessorErc20
       typeof additionalData.gasPrice === 'undefined' ||
       !additionalData.gasPrice
     ) {
-      let minFee = BlocksoftExternalSettings.getStatic(
+      const minFee = BlocksoftExternalSettings.getStatic(
         this._mainCurrencyCode + '_FORCE_PRICE_ERC20'
       );
       if (typeof minFee !== 'undefined' && minFee > 1) {

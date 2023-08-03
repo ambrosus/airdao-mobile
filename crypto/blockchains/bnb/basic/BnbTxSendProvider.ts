@@ -3,8 +3,8 @@
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 const elliptic = require('elliptic');
 const ec = new elliptic.ec('secp256k1');

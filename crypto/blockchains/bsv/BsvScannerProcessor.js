@@ -4,8 +4,8 @@
 
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
-import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
+import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import BsvTmpDS from '@crypto/blockchains/bsv/stores/BsvTmpDS';
 
 const API_PATH = 'https://api.whatsonchain.com/v1/bsv/main';

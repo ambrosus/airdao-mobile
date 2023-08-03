@@ -3,7 +3,7 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 import WavesTransactionsProvider from '@crypto/blockchains/waves/providers/WavesTransactionsProvider';
 

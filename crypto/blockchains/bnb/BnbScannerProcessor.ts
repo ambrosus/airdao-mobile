@@ -4,8 +4,8 @@
  */
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
-import BlocksoftExternalSettings from '../../common/BlocksoftExternalSettings';
+import BlocksoftUtils from '../../common/AirDAOUtils';
+import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
 
 export default class BnbScannerProcessor {
   /**

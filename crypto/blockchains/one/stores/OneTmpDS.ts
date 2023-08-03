@@ -1,35 +1,40 @@
-// @ts-ignore
-import Database from '@app/appstores/DataSource/Database';
+/* eslint-disable camelcase */
+import { DatabaseTable } from '@appTypes';
+import { Database, TransactionScannersTmpDBModel } from '@database';
 
-const tableName = 'transactions_scanners_tmp';
+const tableName = DatabaseTable.TransactionScannersTmp;
 
 class OneTmpDS {
   /**
    * @type {string}
    * @private
    */
-  private _currencyCode = 'ONE';
+  _currencyCode = 'ONE';
 
-  async getCache(address: string): Promise<{ [key: string]: any }> {
-    const res = await Database.query(`
-                SELECT tmp_key, tmp_sub_key, tmp_val
+  async getCache(address: string) {
+    const res = (await Database.unsafeRawQuery(
+      tableName,
+      `
+                SELECT tmp_key AS tmpKey, tmp_sub_key AS tmpSubKey, tmp_val AS tmpVal
                 FROM ${tableName}
                 WHERE currency_code='${this._currencyCode}'
                 AND address='${address}'
                 AND tmp_key='last_tx'
-                `);
-    const tmp: { [key: string]: any } = {};
-    if (res.array) {
+                `
+    )) as TransactionScannersTmpDBModel[];
+    const tmp = {};
+    if (res) {
       let row;
-      for (row of res.array) {
-        tmp[row.tmp_sub_key] = row.tmp_val;
+      for (row of res) {
+        // @ts-ignore
+        tmp[row.tmpSubKey] = row.tmpVal;
       }
     }
     return tmp;
   }
 
-  async saveCache(address: string, subKey: string, value: any): Promise<void> {
-    const now = new Date().toISOString();
+  async saveCache(address: string, subKey: string, value: string) {
+    const now = new Date().getTime();
     const prepared = [
       {
         currency_code: this._currencyCode,
@@ -40,9 +45,7 @@ class OneTmpDS {
         created_at: now
       }
     ];
-    await Database.setTableName(tableName)
-      .setInsertData({ insertObjs: prepared })
-      .insert();
+    await Database.createModel(tableName, prepared);
   }
 }
 

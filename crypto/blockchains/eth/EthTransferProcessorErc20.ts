@@ -3,19 +3,16 @@
  * @version 0.20
  */
 import EthTransferProcessor from './EthTransferProcessor';
-import config from '@app/config/config';
-import MarketingEvent from '@app/services/Marketing/MarketingEvent';
-
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
-const abi = require('./ext/erc20.js');
+import abi from './ext/erc20.js';
 
 export default class EthTransferProcessorErc20
   extends EthTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   constructor(settings: { network?: string; tokenAddress: any }) {
     super(settings);
@@ -26,12 +23,12 @@ export default class EthTransferProcessorErc20
   }
 
   _token: any = false;
-  _tokenAddress: string = '';
-  _useThisBalance: boolean = false;
+  _tokenAddress = '';
+  _useThisBalance = false;
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     // @ts-ignore
     const balance =
       data.addressFrom && data.addressFrom !== ''
@@ -55,10 +52,10 @@ export default class EthTransferProcessorErc20
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData?: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData?: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     if (this.checkWeb3CurrentServerUpdated()) {
       this._token = new this._web3.eth.Contract(
         abi.ERC20,
@@ -133,13 +130,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxProcessorErc20.getFeeRate estimateGas error1 ' +
-              e.message
-          );
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error1 ' +
@@ -158,13 +148,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxProcessorErc20.getFeeRate estimateGas error2 ' +
-              e.message
-          );
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error2 ' +
@@ -185,13 +168,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxProcessorErc20.getFeeRate estimateGas error3 ' +
-              e.message
-          );
-        }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxProcessorErc20.getFeeRate estimateGas error3 ' +
@@ -220,21 +196,6 @@ export default class EthTransferProcessorErc20
       if (estimatedGas < minGas) {
         estimatedGas = minGas;
       }
-      MarketingEvent.logOnlyRealTime(
-        eventTitle +
-          this._settings.currencyCode +
-          ' ' +
-          data.addressFrom +
-          ' => ' +
-          data.addressTo,
-        {
-          amount: data.amount + '',
-          estimatedGas,
-          serverEstimatedGas,
-          serverEstimatedGas2,
-          serverEstimatedGas3
-        }
-      );
     } catch (e) {
       this.checkError(e, data);
     }
@@ -252,10 +213,10 @@ export default class EthTransferProcessorErc20
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData?: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData?: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const tmpData = { ...data };
     if (!tmpData.amount || tmpData.amount === '0') {
       await BlocksoftCryptoLog.log(
@@ -304,10 +265,10 @@ export default class EthTransferProcessorErc20
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +

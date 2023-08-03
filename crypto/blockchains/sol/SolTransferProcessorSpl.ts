@@ -13,7 +13,7 @@ import {
 import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import SolTransferProcessor from '@crypto/blockchains/sol/SolTransferProcessor';
 import SolInstructions from '@crypto/blockchains/sol/ext/SolInstructions';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 export default class SolTransferProcessorSpl
   extends SolTransferProcessor

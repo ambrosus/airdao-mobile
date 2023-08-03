@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import { thorify } from 'thorify';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';

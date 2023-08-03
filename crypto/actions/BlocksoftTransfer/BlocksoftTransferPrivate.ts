@@ -3,7 +3,7 @@
  * @version 0.20
  */
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
-import BlocksoftPrivateKeysUtils from '../../common/BlocksoftPrivateKeysUtils';
+import BlocksoftPrivateKeysUtils from '../../common/AirDAOPrivateKeysUtils';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftKeysStorage from '../BlocksoftKeysStorage/BlocksoftKeysStorage';
 

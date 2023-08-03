@@ -7,7 +7,7 @@ import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import EthTransferProcessor from '../eth/EthTransferProcessor';
 
 import BnbSmartNetworkPrices from './basic/BnbSmartNetworkPrices';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 export default class BnbSmartTransferProcessor
   extends EthTransferProcessor

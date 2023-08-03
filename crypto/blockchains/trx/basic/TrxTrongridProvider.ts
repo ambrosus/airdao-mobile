@@ -4,7 +4,7 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 
 const BALANCE_MAX_TRY = 10;

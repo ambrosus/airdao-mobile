@@ -1,5 +1,5 @@
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
-import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
+import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 

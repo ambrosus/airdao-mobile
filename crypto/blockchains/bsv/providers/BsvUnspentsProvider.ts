@@ -5,7 +5,7 @@ import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchai
 import DogeUnspentsProvider from '@crypto/blockchains/doge/providers/DogeUnspentsProvider';
 import BtcCashUtils from '@crypto/blockchains/bch/ext/BtcCashUtils';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 export default class BsvUnspentsProvider
   extends DogeUnspentsProvider
@@ -34,7 +34,7 @@ export default class BsvUnspentsProvider
         ' BsvUnspentsProvider.getUnspents started ' +
         address
     );
-    let link =
+    const link =
       'https://api.whatsonchain.com/v1/bsv/main/address/' +
       address +
       '/unspent';
@@ -44,8 +44,8 @@ export default class BsvUnspentsProvider
       return [];
     }
     const sortedUnspents = [];
-    for (let unspent of res.data) {
-      let unspentFormatted = {
+    for (const unspent of res.data) {
+      const unspentFormatted = {
         confirmations: unspent.height,
         height: unspent.height,
         derivationPath: false,

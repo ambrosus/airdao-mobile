@@ -3,8 +3,8 @@
  */
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import SolTmpDS from '@crypto/blockchains/sol/stores/SolTmpDS';
 

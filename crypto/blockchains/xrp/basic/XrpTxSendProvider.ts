@@ -7,7 +7,7 @@
  * https://xrpl.org/rippleapi-reference.html#submit
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import { XrpTxUtils } from './XrpTxUtils';
 // @ts-ignore
 import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent'; // TODO import

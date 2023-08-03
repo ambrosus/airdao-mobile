@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';

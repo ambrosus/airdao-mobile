@@ -3,10 +3,10 @@
  * https://api.mymonero.com:8443/get_address_info
  */
 
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-import BlocksoftPrivateKeysUtils from '@crypto/common/BlocksoftPrivateKeysUtils';
+import BlocksoftPrivateKeysUtils from '@crypto/common/AirDAOPrivateKeysUtils';
 
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
 

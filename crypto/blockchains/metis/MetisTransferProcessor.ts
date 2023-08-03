@@ -1,8 +1,12 @@
+/**
+ * @author Ksu
+ * @version 0.43
+ */
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import EthTransferProcessor from '@crypto/blockchains/eth/EthTransferProcessor';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
 export default class MetisTransferProcessor
   extends EthTransferProcessor
@@ -11,7 +15,7 @@ export default class MetisTransferProcessor
   async getFeeRate(
     data: AirDAOBlockchainTypes.TransferData,
     privateData: AirDAOBlockchainTypes.TransferPrivateData,
-    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+    additionalData: {} = {}
   ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     if (
       typeof additionalData.gasPrice === 'undefined' ||
@@ -23,7 +27,7 @@ export default class MetisTransferProcessor
       additionalData.gasPriceTitle = 'speed_blocks_2';
     }
 
-    let value = '0x0';
+    let value = 0;
     try {
       if (data.amount.indexOf('0x') === 0) {
         value = data.amount;
@@ -40,7 +44,7 @@ export default class MetisTransferProcessor
         {
           from: data.addressFrom,
           to: data.addressTo,
-          value,
+          value: value,
           data: '0x'
         }
       ],
@@ -51,13 +55,12 @@ export default class MetisTransferProcessor
       params
     );
 
-    if (typeof tmp !== undefined && typeof tmp.data !== undefined) {
-      if (typeof tmp.data.result !== undefined) {
-        // @ts-ignore
+    if (typeof tmp !== 'undefined' && typeof tmp.data !== 'undefined') {
+      if (typeof tmp.data.result !== 'undefined') {
         additionalData.gasLimit = BlocksoftUtils.hexToDecimalWalletConnect(
           tmp.data.result
         );
-      } else if (typeof tmp.data.error !== undefined) {
+      } else if (typeof tmp.data.error !== 'undefined') {
         throw new Error(tmp.data.error.message);
       }
     }

@@ -1,13 +1,13 @@
+/* eslint-disable camelcase */
 /**
  * @version 0.20
  **/
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 
 const ESTIMATE_PATH = 'https://mempool.space/api/v1/fees/recommended';
 
@@ -41,7 +41,7 @@ let CACHE_PREV_PREV_DATA = {
 };
 
 export default class BtcNetworkPrices
-  implements BlocksoftBlockchainTypes.NetworkPrices
+  implements AirDAOBlockchainTypes.NetworkPrices
 {
   private _trezorServerCode = 'BTC_TREZOR_SERVER';
   private _trezorServer: any;
@@ -60,8 +60,6 @@ export default class BtcNetworkPrices
     };
     const now = new Date().getTime();
     if (CACHE_FEES_BTC && now - CACHE_FEES_BTC_TIME < CACHE_VALID_TIME) {
-      // noinspection ES6MissingAwait
-      MarketingEvent.logEvent('estimate_fee_btc_result', logData);
       // @ts-ignore
       BlocksoftCryptoLog.log(
         'BtcNetworkPricesProvider ' +
@@ -128,12 +126,6 @@ export default class BtcNetworkPrices
           link = 'prev';
         }
       } catch (e) {
-        // noinspection ES6MissingAwait
-        MarketingEvent.logEvent('estimate_fee_btc_load_error', {
-          currencyCode,
-          link,
-          data: e.toString()
-        });
         // do nothing
       }
     }
@@ -181,16 +173,8 @@ export default class BtcNetworkPrices
       }
       await this._parseLoaded(currencyCode, cachedWithTime, link);
     } catch (e) {
-      // noinspection ES6MissingAwait
-      MarketingEvent.logEvent('estimate_fee_btc_parse_error', {
-        currencyCode,
-        link,
-        data: e.toString()
-      });
       // do nothing
     }
-    // noinspection ES6MissingAwait
-    MarketingEvent.logEvent('estimate_fee_btc_result', logData);
     return CACHE_FEES_BTC;
   }
 
@@ -280,12 +264,6 @@ export default class BtcNetworkPrices
       );
     } else {
       // noinspection ES6MissingAwait
-      MarketingEvent.logEvent('estimate_fee_btc_error', {
-        currencyCode,
-        link,
-        json,
-        externalSettings
-      });
     }
   }
 }

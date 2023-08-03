@@ -1,20 +1,21 @@
 /**
  * @harmony-js/crypto/src/bech32.ts
  * https://github.com/harmony-one/sdk/blob/master/packages/harmony-crypto/src/bech32.ts
- * import { toBech32 } from "@harmony-js/crypto";
- * console.log("Using account: " + toBech32("0xxxxx", "one1"));
+ * const { toBech32 } = require("@harmony-js/crypto");
+ * console.log("Using account: " + toBech32("0xxxxx", "one1"))
  */
 
 const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
 
-const polymod = (values: number[]): number => {
+const polymod = (values) => {
   let chk = 1;
+  // tslint:disable-next-line
   for (let p = 0; p < values.length; ++p) {
-    const top = chk >>> 25;
+    const top = chk >> 25;
     chk = ((chk & 0x1ffffff) << 5) ^ values[p];
     for (let i = 0; i < 5; ++i) {
-      if ((top >>> i) & 1) {
+      if ((top >> i) & 1) {
         chk ^= GENERATOR[i];
       }
     }
@@ -22,51 +23,50 @@ const polymod = (values: number[]): number => {
   return chk;
 };
 
-const hrpExpand = (hrp: string): Buffer => {
+const hrpExpand = (hrp: string) => {
   const ret = [];
-  for (let p = 0; p < hrp.length; ++p) {
-    ret.push(hrp.charCodeAt(p) >>> 5);
+  let p;
+  for (p = 0; p < hrp.length; ++p) {
+    ret.push(hrp.charCodeAt(p) >> 5);
   }
   ret.push(0);
-  for (let p = 0; p < hrp.length; ++p) {
+  for (p = 0; p < hrp.length; ++p) {
     ret.push(hrp.charCodeAt(p) & 31);
   }
   return Buffer.from(ret);
 };
 
-function createChecksum(hrp: string, data: Buffer): Buffer {
+function createChecksum(hrp: string, data) {
   const values = Buffer.concat([
-    hrpExpand(hrp),
+    Buffer.from(hrpExpand(hrp)),
     data,
     Buffer.from([0, 0, 0, 0, 0, 0])
   ]);
-  const mod = polymod(Array.from(values)) ^ 1;
+  // var values = hrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
+  const mod = polymod(values) ^ 1;
   const ret = [];
   for (let p = 0; p < 6; ++p) {
-    ret.push((mod >>> (5 * (5 - p))) & 31);
+    ret.push((mod >> (5 * (5 - p))) & 31);
   }
   return Buffer.from(ret);
 }
 
-const bech32Encode = (hrp: string, data: Buffer): string => {
+const bech32Encode = (hrp: string, data) => {
   const combined = Buffer.concat([data, createChecksum(hrp, data)]);
   let ret = hrp + '1';
+  // tslint:disable-next-line
   for (let p = 0; p < combined.length; ++p) {
     ret += CHARSET.charAt(combined[p]);
   }
   return ret;
 };
 
-const convertBits = (
-  data: Buffer,
-  fromWidth: number,
-  toWidth: number,
-  pad = true
-): Buffer | null => {
+const convertBits = (data, fromWidth: number, toWidth: number, pad = true) => {
   let acc = 0;
   let bits = 0;
   const ret = [];
   const maxv = (1 << toWidth) - 1;
+  // tslint:disable-next-line
   for (let p = 0; p < data.length; ++p) {
     const value = data[p];
     if (value < 0 || value >> fromWidth !== 0) {
@@ -76,7 +76,7 @@ const convertBits = (
     bits += fromWidth;
     while (bits >= toWidth) {
       bits -= toWidth;
-      ret.push((acc >>> bits) & maxv);
+      ret.push((acc >> bits) & maxv);
     }
   }
 
@@ -91,12 +91,11 @@ const convertBits = (
   return Buffer.from(ret);
 };
 
-const bech32Decode = (
-  bechString: string
-): { hrp: string; data: Buffer } | null => {
+const bech32Decode = (bechString: string) => {
+  let p;
   let hasLower = false;
   let hasUpper = false;
-  for (let p = 0; p < bechString.length; ++p) {
+  for (p = 0; p < bechString.length; ++p) {
     if (bechString.charCodeAt(p) < 33 || bechString.charCodeAt(p) > 126) {
       return null;
     }
@@ -117,7 +116,7 @@ const bech32Decode = (
   }
   const hrp = bechString.substring(0, pos);
   const data = [];
-  for (let p = pos + 1; p < bechString.length; ++p) {
+  for (p = pos + 1; p < bechString.length; ++p) {
     const d = CHARSET.indexOf(bechString.charAt(p));
     if (d === -1) {
       return null;
@@ -129,7 +128,7 @@ const bech32Decode = (
     if (!verifyChecksum(hrp, Buffer.from(data))) {
       return null;
     }
-  } catch (e: any) {
+  } catch (e) {
     e.message += ' in verifyChecksum';
     throw e;
   }
@@ -137,11 +136,11 @@ const bech32Decode = (
   return { hrp, data: Buffer.from(data.slice(0, data.length - 6)) };
 };
 
-function verifyChecksum(hrp: string, data: Buffer): boolean {
+function verifyChecksum(hrp: string, data) {
   return polymod(Buffer.concat([hrpExpand(hrp), data])) === 1;
 }
 
-const toChecksumAddress = (address: string): string => {
+const toChecksumAddress = (address: string) => {
   if (typeof address !== 'string' || !address.match(/^0x[0-9A-Fa-f]{40}$/)) {
     throw new Error('invalid address ' + address);
   }
@@ -168,8 +167,8 @@ const toChecksumAddress = (address: string): string => {
   return '0x' + chars.join('');
 };
 
-const bech32Util = {
-  isOneAddress(address: string): boolean {
+export default {
+  isOneAddress(address: string) {
     if (
       typeof address === 'undefined' ||
       typeof address.match === 'undefined'
@@ -178,13 +177,13 @@ const bech32Util = {
     }
     try {
       return !!address.match(/^one1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}/);
-    } catch (e: any) {
+    } catch (e) {
       e.message += ' in match - address ' + JSON.stringify(address);
       throw e;
     }
   },
 
-  toOneAddress(address: string, useHRP = 'one'): string {
+  toOneAddress(address: string, useHRP = 'one') {
     if (address.indexOf('one') === 0) {
       return address;
     }
@@ -200,11 +199,11 @@ const bech32Util = {
     return bech32Encode(useHRP, addrBz);
   },
 
-  fromOneAddress(address: string, useHRP = 'one'): string {
+  fromOneAddress(address: string, useHRP = 'one') {
     let res;
     try {
       res = bech32Decode(address);
-    } catch (e: any) {
+    } catch (e) {
       e.message += ' in bech32Decode - address ' + JSON.stringify(address);
       throw e;
     }
@@ -228,11 +227,9 @@ const bech32Util = {
     try {
       const tmp = toChecksumAddress('0x' + buf.toString('hex'));
       return tmp;
-    } catch (e: any) {
+    } catch (e) {
       e.message += ' in toChecksumAddress';
       throw e;
     }
   }
 };
-
-export default bech32Util;

@@ -4,7 +4,7 @@
  */
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
-import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
+import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import DogeFindAddressFunction from '@crypto/blockchains/doge/basic/DogeFindAddressFunction';
 
 const API_PATH = 'https://blockstream.info/testnet/api/';

@@ -7,7 +7,7 @@ import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import { BnbTxSendProvider } from './basic/BnbTxSendProvider';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 import BnbNetworkPrices from './basic/BnbNetworkPrices';
 
 export default class BnbTransferProcessor

@@ -2,15 +2,13 @@
  * @author Ksu
  * @version 0.32
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 import EthTmpDS from '../stores/EthTmpDS';
 import EthRawDS from '../stores/EthRawDS';
-import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
+import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import config from '../../../../app/config/config';
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
 
 export default class EthTxSendProvider {
   private _web3: any;
@@ -37,8 +35,8 @@ export default class EthTxSendProvider {
   }
 
   async sign(
-    tx: BlocksoftBlockchainTypes.EthTx,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    tx: AirDAOBlockchainTypes.EthTx,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
@@ -75,8 +73,8 @@ export default class EthTxSendProvider {
   }
 
   async send(
-    tx: BlocksoftBlockchainTypes.EthTx,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    tx: AirDAOBlockchainTypes.EthTx,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
@@ -117,35 +115,28 @@ export default class EthTxSendProvider {
       }
     }
 
-    const { apiEndpoints } = config.proxy;
-    const baseURL = MarketingEvent.DATA.LOG_TESTER
-      ? apiEndpoints.baseURLTest
-      : apiEndpoints.baseURL;
-    const proxy = baseURL + '/send/checktx';
-    const errorProxy = baseURL + '/send/errortx';
-    const successProxy = baseURL + '/send/sendtx';
+    // const { apiEndpoints } = config.proxy;
+    // const baseURL = MarketingEvent.DATA.LOG_TESTER
+    //   ? apiEndpoints.baseURLTest
+    //   : apiEndpoints.baseURL;
+    // const proxy = baseURL + '/send/checktx';
+    // const errorProxy = baseURL + '/send/errortx';
+    // const successProxy = baseURL + '/send/sendtx';
     let checkResult = false;
     try {
-      await BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTxSendProvider.send proxy checkResult start ' +
-          proxy,
-        logData
-      );
-      checkResult = await BlocksoftAxios.post(proxy, {
-        raw: rawTransaction,
-        txRBF,
-        logData,
-        marketingData: MarketingEvent.DATA
-      });
+      // await BlocksoftCryptoLog.log(
+      //   this._settings.currencyCode +
+      //     ' EthTxSendProvider.send proxy checkResult start ' +
+      //     proxy,
+      //   logData
+      // );
+      // checkResult = await BlocksoftAxios.post(proxy, {
+      //   raw: rawTransaction,
+      //   txRBF,
+      //   logData,
+      //   marketingData: MarketingEvent.DATA
+      // });
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy error checkResult ' +
-            e.message
-        );
-      }
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxSendProvider.send proxy error checkResult ' +
@@ -164,13 +155,6 @@ export default class EthTxSendProvider {
           typeof checkResult.data.status === 'undefined' ||
           checkResult.data.status === 'error'
         ) {
-          if (config.debug.cryptoErrors) {
-            console.log(
-              this._settings.currencyCode +
-                ' EthTxSendProvider.send proxy error checkResult1 ',
-              JSON.parse(JSON.stringify(checkResult.data))
-            );
-          }
           checkResult = false;
         } else if (checkResult.data.status === 'notice') {
           throw new Error(checkResult.data.msg);
@@ -181,22 +165,8 @@ export default class EthTxSendProvider {
             ' EthTxSendProvider.send proxy checkResult2 ',
           checkResult
         );
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxSendProvider.send proxy error checkResult2 ',
-            JSON.parse(JSON.stringify(checkResult.data))
-          );
-        }
       }
     } else {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy error checkResultEmpty ',
-          JSON.stringify(checkResult.data)
-        );
-      }
     }
     logData.checkResult =
       checkResult && typeof checkResult.data !== 'undefined' && checkResult.data
@@ -291,52 +261,26 @@ export default class EthTxSendProvider {
         typeof result !== 'undefined' && result ? result.data : 'NO RESULT'
       );
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' ' +
-            this._mainCurrencyCode +
-            ' EthTxSendProvider.send trezor ' +
-            sendLink +
-            ' error ' +
-            e.message,
-          JSON.parse(JSON.stringify(logData))
-        );
-      }
       try {
-        logData.error = e.message;
-        await BlocksoftCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy errorTx start ' +
-            errorProxy,
-          logData
-        );
-        const res2 = await BlocksoftAxios.post(errorProxy, {
-          raw: rawTransaction,
-          txRBF,
-          logData,
-          marketingData: MarketingEvent.DATA
-        });
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxSendProvider.send proxy errorTx result',
-            JSON.parse(JSON.stringify(res2.data))
-          );
-        }
-        await BlocksoftCryptoLog.log(
-          this._settings.currencyCode + ' EthTxSendProvider.send proxy errorTx',
-          typeof res2.data !== 'undefined' ? res2.data : res2
-        );
-        throw new Error('res2.data : ' + res2.data);
+        // logData.error = e.message;
+        // await BlocksoftCryptoLog.log(
+        //   this._settings.currencyCode +
+        //     ' EthTxSendProvider.send proxy errorTx start ' +
+        //     errorProxy,
+        //   logData
+        // );
+        // const res2 = await BlocksoftAxios.post(errorProxy, {
+        //   raw: rawTransaction,
+        //   txRBF,
+        //   logData,
+        //   marketingData: MarketingEvent.DATA
+        // });
+        // await BlocksoftCryptoLog.log(
+        //   this._settings.currencyCode + ' EthTxSendProvider.send proxy errorTx',
+        //   typeof res2.data !== 'undefined' ? res2.data : res2
+        // );
+        // throw new Error('res2.data : ' + res2.data);
       } catch (e2) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxSendProvider.send proxy error errorTx ' +
-              e.message
-          );
-        }
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' EthTxSendProvider.send proxy error errorTx ' +
@@ -400,34 +344,20 @@ export default class EthTxSendProvider {
 
     checkResult = false;
     try {
-      logData.txHash = transactionHash;
-      await BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTxSendProvider.send proxy successTx start ' +
-          successProxy,
-        logData
-      );
-      checkResult = await BlocksoftAxios.post(successProxy, {
-        raw: rawTransaction,
-        txRBF,
-        logData,
-        marketingData: MarketingEvent.DATA
-      });
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy successTx result ',
-          JSON.parse(JSON.stringify(checkResult.data))
-        );
-      }
+      // logData.txHash = transactionHash;
+      // await BlocksoftCryptoLog.log(
+      //   this._settings.currencyCode +
+      //     ' EthTxSendProvider.send proxy successTx start ' +
+      //     successProxy,
+      //   logData
+      // );
+      // checkResult = await BlocksoftAxios.post(successProxy, {
+      //   raw: rawTransaction,
+      //   txRBF,
+      //   logData,
+      //   marketingData: MarketingEvent.DATA
+      // });
     } catch (e3) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy error successTx ' +
-            e3.message
-        );
-      }
       await BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' EthTxSendProvider.send proxy error successTx ' +
@@ -446,13 +376,6 @@ export default class EthTxSendProvider {
           typeof checkResult.data.status === 'undefined' ||
           checkResult.data.status === 'error'
         ) {
-          if (config.debug.cryptoErrors) {
-            console.log(
-              this._settings.currencyCode +
-                ' EthTxSendProvider.send proxy error successResult1 ',
-              checkResult
-            );
-          }
           checkResult = false;
         } else if (checkResult.data.status === 'notice') {
           throw new Error(checkResult.data.msg);
@@ -463,22 +386,8 @@ export default class EthTxSendProvider {
             ' EthTxSendProvider.send proxy successResult2 ',
           checkResult
         );
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' EthTxSendProvider.send proxy error successResult2 ',
-            checkResult
-          );
-        }
       }
     } else {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode +
-            ' EthTxSendProvider.send proxy error successResultEmpty ',
-          checkResult
-        );
-      }
     }
     logData.successResult =
       checkResult && typeof checkResult.data !== 'undefined' && checkResult.data

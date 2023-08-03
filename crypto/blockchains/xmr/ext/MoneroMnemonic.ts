@@ -1,5 +1,5 @@
 import MoneroDict from './MoneroDict';
-import BlocksoftUtils from '../../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../../common/AirDAOUtils';
 
 const crc32 = require('buffer-crc32');
 

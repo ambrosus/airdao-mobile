@@ -1,18 +1,17 @@
 /**
  * @version 0.52
  */
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
-import config from '@app/config/config';
 
 const API_URL = 'https://api.blockchair.com/bitcoin/testnet/push/transaction';
 
 export default class BtcTestSendProvider
   extends DogeSendProvider
-  implements BlocksoftBlockchainTypes.SendProvider
+  implements AirDAOBlockchainTypes.SendProvider
 {
   async sendTx(
     hex: string,
@@ -34,23 +33,10 @@ export default class BtcTestSendProvider
     try {
       res = await BlocksoftAxios.post(API_URL, { data: hex });
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          this._settings.currencyCode + ' BtcTestSendProvider.sendTx error ',
-          e
-        );
-      }
       try {
         logData.error = e.message;
         // await this._checkError(hex, subtitle, txRBF, logData)
       } catch (e2) {
-        if (config.debug.cryptoErrors) {
-          console.log(
-            this._settings.currencyCode +
-              ' BtcTestSendProvider.send proxy error errorTx ' +
-              e.message
-          );
-        }
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' BtcTestSendProvider.send proxy error errorTx ' +
@@ -100,13 +86,6 @@ export default class BtcTestSendProvider
       }
     }
     if (txid === '') {
-      if (config.debug.cryptoErrors) {
-        // @ts-ignore
-        console.log(
-          this._settings.currencyCode + ' BtcTestSendProvider.send no txid',
-          res.data
-        );
-      }
       throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
 

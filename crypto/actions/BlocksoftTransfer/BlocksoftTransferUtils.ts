@@ -5,7 +5,7 @@
 import { BlocksoftDictTypes } from '../../common/AirDAODictTypes';
 import { BlocksoftTransferDispatcher } from '../../blockchains/BlocksoftTransferDispatcher';
 import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
-import BlocksoftUtils from '../../common/BlocksoftUtils';
+import BlocksoftUtils from '../../common/AirDAOUtils';
 
 export namespace BlocksoftTransferUtils {
   export const getAddressToForTransferAll = function (data: {
