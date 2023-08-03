@@ -17,6 +17,11 @@ interface TokenDetails {
   description?: string;
   coingeckoId?: string;
   provider: string;
+  symbol?: string;
+  name?: string;
+  decimals?: number;
+  logoURI?: string;
+  website?: string;
 }
 
 export default class SolTokenProcessor {
@@ -41,18 +46,19 @@ export default class SolTokenProcessor {
       }
     }
     if (tmp) {
-      return {
+      const tokenDetails: TokenDetails = {
         currencyCodePrefix: 'CUSTOM_SOL_',
-        currencyCode: tmp.symbol,
-        currencyName: tmp.name,
+        currencyCode: tmp.symbol || '',
+        currencyName: tmp.name || '',
         tokenType: 'SOL',
         tokenAddress,
-        tokenDecimals: tmp.decimals,
-        icon: tmp.logoURI,
-        description: tmp.website,
-        coingeckoId: tmp.coingeckoId,
+        tokenDecimals: tmp.decimals || 0,
+        icon: tmp.logoURI || '',
+        description: tmp.website || '',
+        coingeckoId: tmp.coingeckoId || '',
         provider: 'sol'
       };
+      return tokenDetails;
     }
 
     let decimals = 6;

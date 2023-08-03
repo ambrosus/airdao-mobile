@@ -96,7 +96,7 @@ export default class WavesScannerProcessorErc20 extends WavesScannerProcessor {
     const transactionFee =
       transaction.feeAsset && transaction.feeAssetId ? 0 : transaction.fee;
 
-    let transactionDirection = false;
+    let transactionDirection: string = false;
     let transactionFilterType = TransactionFilterTypeDict.USUAL;
 
     if (typeof transaction.order1 !== 'undefined') {

@@ -61,16 +61,13 @@ export default class XrpScannerProcessor {
     return { balance, unconfirmed: 0, provider };
   }
 
-  async getTransactionsBlockchain(
-    scanData: {
-      account: {
-        address: string;
-        walletHash: string;
-      };
-      additional: any;
-    },
-    source = ''
-  ): Promise<UnifiedTransaction[] | false> {
+  async getTransactionsBlockchain(scanData: {
+    account: {
+      address: string;
+      walletHash: string;
+    };
+    additional: any;
+  }): Promise<UnifiedTransaction[] | false> {
     await this.init();
     const address = scanData.account.address.trim();
     await BlocksoftCryptoLog.log(

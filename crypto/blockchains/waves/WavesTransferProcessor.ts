@@ -4,26 +4,29 @@
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
 
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
-
 import { transfer, broadcast } from '@waves/waves-transactions/src/index';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
-import config from '@app/config/config';
 import MarketingEvent from '@app/services/Marketing/MarketingEvent';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
+import config from '@constants/config';
 
 export default class WavesTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
 
-  private _tokenAddress: string;
+  private _tokenAddress: string | boolean;
 
   private _mainCurrencyCode: string;
 
-  constructor(settings: { network: string; currencyCode: string }) {
+  constructor(settings: {
+    tokenAddress: string;
+    network: string;
+    currencyCode: string;
+  }) {
     this._settings = settings;
     this._tokenAddress =
-      typeof settings.tokenAddress !== 'undefined'
+      typeof settings.tokenAddress !== undefined
         ? settings.tokenAddress
         : false;
 
@@ -45,14 +48,14 @@ export default class WavesTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -3,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     result.fees = [
       {
@@ -67,16 +70,16 @@ export default class WavesTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' WavesTransferProcessor.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        `' WavesTransferProcessor.getTransferAllBalance ',
+      ${data.addressFrom} + ' => ' + ${balance}`
     );
 
     const res = await this.getFeeRate(data, privateData, additionalData);
@@ -102,10 +105,10 @@ export default class WavesTransferProcessor
    * @param uiData
    */
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('WAVES transaction required privateKey');
     }
@@ -114,7 +117,7 @@ export default class WavesTransferProcessor
     }
 
     let addressTo = data.addressTo;
-    let apiPath;
+    let apiPath: any;
     if (this._mainCurrencyCode === 'ASH') {
       apiPath = await BlocksoftExternalSettings.get('ASH_SERVER');
       addressTo = addressTo.replace('Æx', '');
@@ -142,7 +145,7 @@ export default class WavesTransferProcessor
         money.assetId = this._tokenAddress;
       }
       signedData = transfer(money, { privateKey: privateData.privateKey });
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' WavesTransferProcessor.sendTx ' +
@@ -183,7 +186,7 @@ export default class WavesTransferProcessor
       };
     }
 
-    const result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       const resp = await new Promise((resolve, reject) => {
         BlocksoftCryptoLog.log(
@@ -198,10 +201,11 @@ export default class WavesTransferProcessor
             JSON.stringify(apiPath)
         );
         broadcast(signedData, apiPath)
-          .then((resp) => {
+          // tslint:disable-next-line:no-shadowed-variable
+          .then((resp: unknown) => {
             resolve(resp);
           })
-          .catch((e) => {
+          .catch((e: any) => {
             reject(e);
           });
       });
@@ -217,7 +221,7 @@ export default class WavesTransferProcessor
           resp
       );
       result.transactionHash = signedData.id;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           this._settings.currencyCode +
@@ -242,16 +246,12 @@ export default class WavesTransferProcessor
           ' send error ' +
           e.message
       );
-      this.checkError(e, data, false);
+      this.checkError(e, data);
     }
     return result;
   }
 
-  checkError(
-    e: any,
-    data: { addressFrom: string; addressTo: string },
-    txRBF = false
-  ) {
+  checkError(e: any, data: { addressFrom: string; addressTo: string }) {
     if (
       e.message.indexOf(
         'waves balance to (at least) temporary negative state'

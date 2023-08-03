@@ -8,22 +8,11 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-<<<<<<< Updated upstream
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
-
 import { XrpTxUtils } from './XrpTxUtils';
-
-import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
-import config from '../../../../app/config/config';
-=======
-
-import { XrpTxUtils } from './XrpTxUtils';
-
-// TODO rewrite MarketingEvent file to use it here
-// import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent';
-import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
+// @ts-ignore
+import MarketingEvent from '../../../../app/services/Marketing/MarketingEvent'; // TODO import
 import config from '@constants/config';
->>>>>>> Stashed changes
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 const RippleAPI = require('ripple-lib').RippleAPI;
 
@@ -39,14 +28,15 @@ export class XrpTxSendProvider {
         'XrpTransferProcessor constructor' + errorCode + ': ' + errorMessage
       );
     });
-    this._api.on('connected', () => {});
-    this._api.on('disconnected', () => {});
+    this._api.on('connected', () => {
+      BlocksoftCryptoLog.log('connected');
+    });
+    this._api.on('disconnected', () => {
+      BlocksoftCryptoLog.log('disconnected');
+    });
   }
 
-  async getPrepared(
-    data: BlocksoftBlockchainTypes.TransferData,
-    toObject = true
-  ) {
+  async getPrepared(data: AirDAOBlockchainTypes.TransferData, toObject = true) {
     const payment = {
       source: {
         address: data.addressFrom,
@@ -86,21 +76,17 @@ export class XrpTxSendProvider {
         // @ts-ignore
         payment.destination.tag = int;
       }
-<<<<<<< Updated upstream
-    } catch (e) {
-=======
     } catch (e: any) {
->>>>>>> Stashed changes
       // @ts-ignore
       BlocksoftCryptoLog.log(
-        'XrpTransferProcessor._getPrepared memo error ' + e.message,
-        data
+        `XrpTransferProcessor._getPrepared memo error + ${e.message},
+        ${data}`
       );
     }
     // @ts-ignore
     BlocksoftCryptoLog.log(
-      'XrpTransferProcessor._getPrepared payment',
-      payment
+      `XrpTransferProcessor._getPrepared payment,
+      ${payment}`
     );
 
     const api = this._api;
@@ -165,8 +151,8 @@ export class XrpTxSendProvider {
   }
 
   signTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     txJson: any
   ): Promise<string> {
     const api = this._api;
@@ -179,8 +165,8 @@ export class XrpTxSendProvider {
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     txJson: any
   ): Promise<{
     resultCode: string;
@@ -194,10 +180,7 @@ export class XrpTxSendProvider {
     let result;
     try {
       const signed = this.signTx(data, privateData, txJson);
-<<<<<<< Updated upstream
-=======
       // @ts-ignore
->>>>>>> Stashed changes
       BlocksoftCryptoLog.log('XrpTransferProcessor.sendTx signed', signed);
       result = await new Promise((resolve, reject) => {
         api
@@ -206,12 +189,8 @@ export class XrpTxSendProvider {
             // https://xrpl.org/rippleapi-reference.html#submit
             api
               .submit(signed)
-<<<<<<< Updated upstream
-              .then((result: { resultCode: ''; resultMessage: '' }) => {
-=======
               // tslint:disable-next-line:no-shadowed-variable
-              .then((result: string) => {
->>>>>>> Stashed changes
+              .then((result: { resultCode: ''; resultMessage: '' }) => {
                 MarketingEvent.logOnlyRealTime(
                   'v20_rippled_success ' +
                     data.addressFrom +
@@ -258,11 +237,7 @@ export class XrpTxSendProvider {
             reject(error);
           });
       });
-<<<<<<< Updated upstream
-    } catch (e) {
-=======
     } catch (e: any) {
->>>>>>> Stashed changes
       if (config.debug.cryptoErrors) {
         console.log('XrpTransferProcessor.sendTx error ', e);
       }

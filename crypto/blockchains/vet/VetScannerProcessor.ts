@@ -111,10 +111,9 @@ export default class VetScannerProcessor {
    * @param  {string} scanData.account.address
    * @return {Promise<[UnifiedTransaction]>}
    */
-  async getTransactionsBlockchain(
-    scanData: { account: { address: string } },
-    source: any
-  ): Promise<any | false> {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string };
+  }): Promise<any | false> {
     const address = scanData.account.address.trim();
 
     if (this._settings.currencyCode === 'VET') {

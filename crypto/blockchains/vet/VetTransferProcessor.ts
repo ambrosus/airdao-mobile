@@ -4,9 +4,9 @@
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
 
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import { thorify } from 'thorify';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 const Web3 = require('web3');
 const abi = [
@@ -39,7 +39,7 @@ const tokenAddress = '0x0000000000000000000000000000456e65726779';
 const API_PATH = 'https://sync-mainnet.vechain.org';
 
 export default class VetTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
   private _web3: any;
@@ -60,12 +60,12 @@ export default class VetTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+    data: AirDAOBlockchainTypes.TransferData
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -3,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     if (this._settings.currencyCode === 'VET') {
       // @todo
@@ -94,16 +94,16 @@ export default class VetTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
     await BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' VetTransferProcessor.getTransferAllBalance ',
-      data.addressFrom + ' => ' + balance
+        `' VetTransferProcessor.getTransferAllBalance ',
+      ${data.addressFrom} + ' => ' + ${balance}`
     );
 
     const fees = await this.getFeeRate(data, privateData, additionalData);
@@ -131,10 +131,10 @@ export default class VetTransferProcessor
    * @param uiData
    */
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('VET transaction required privateKey');
     }
@@ -196,7 +196,7 @@ export default class VetTransferProcessor
     );
     if (
       !signedData ||
-      typeof signedData.rawTransaction === 'undefined' ||
+      typeof signedData.rawTransaction === undefined ||
       !signedData.rawTransaction
     ) {
       throw new Error('SYSTEM_ERROR');
@@ -213,7 +213,7 @@ export default class VetTransferProcessor
       };
     }
 
-    const result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       const send = await BlocksoftAxios.post(
         API_PATH + '/transactions',

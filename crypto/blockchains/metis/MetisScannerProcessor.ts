@@ -2,22 +2,32 @@
  * @version 0.5
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-
 import EthScannerProcessor from '@crypto/blockchains/eth/EthScannerProcessor';
+
+interface UnifiedTransaction {
+  hash: string;
+  from: string;
+  to: string;
+  value: string;
+}
 
 export default class MetisScannerProcessor extends EthScannerProcessor {
   /**
    * @param {string} scanData.account.address
    * @return {Promise<[UnifiedTransaction]>}
    */
-  async getTransactionsBlockchain(scanData) {
+  // @ts-ignore
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string };
+  }): Promise<UnifiedTransaction[]> {
     const address = scanData.account.address;
     await BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' MetisScannerProcessor.getTransactions started ' +
         address
     );
-    const transactions = await super.getTransactionsBlockchain(scanData);
+    const transactions: UnifiedTransaction[] =
+      await super.getTransactionsBlockchain(scanData);
 
     // https://andromeda-explorer.metis.io/token/0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000/token-transfers
     // actual deposits and withdrawals done as erc20 token transfer
@@ -35,6 +45,7 @@ export default class MetisScannerProcessor extends EthScannerProcessor {
     );
     if (depositTransactions) {
       for (const transactionHash in depositTransactions) {
+        // @ts-ignore
         transactions.push(depositTransactions[transactionHash]);
       }
     }

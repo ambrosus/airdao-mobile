@@ -77,7 +77,7 @@ export default class SolScannerProcessor {
         CACHE_LAST_BLOCK = res.data.result.context.slot * 1;
       }
       balance = res.data.result.value;
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
           ' SolScannerProcessor getBalanceBlockchain address ' +

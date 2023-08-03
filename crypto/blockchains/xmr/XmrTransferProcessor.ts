@@ -2,24 +2,15 @@
  * @version 0.20
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
 import XmrSendProvider from './providers/XmrSendProvider';
 import XmrUnspentsProvider from './providers/XmrUnspentsProvider';
-<<<<<<< Updated upstream
-
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
-import config from '../../../app/config/config';
-import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
-=======
 import config from '@constants/config';
-
 import BlocksoftPrettyNumbers from '@crypto/common/BlocksoftPrettyNumbers';
-import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
->>>>>>> Stashed changes
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class XmrTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private sendProvider: XmrSendProvider;
   private unspentsProvider: XmrUnspentsProvider;
@@ -40,13 +31,13 @@ export default class XmrTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -1
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
@@ -136,27 +127,17 @@ export default class XmrTransferProcessor
                   )
             }
           ],
-<<<<<<< Updated upstream
-          shouldSweep: data.isTransferAll ? true : false,
-=======
           shouldSweep: data.isTransferAll,
->>>>>>> Stashed changes
           address: data.addressFrom,
           privateViewKey: privViewKey,
           privateSpendKey: privSpendKey,
           publicSpendKey: pubSpendKey,
           priority: '' + i,
           nettype: 'MAINNET',
-<<<<<<< Updated upstream
-          unspentOuts: unspentOuts,
-          randomOutsCb: (numberOfOuts) => {
-            const amounts = [];
-=======
           unspentOuts,
           randomOutsCb: (numberOfOuts: number) => {
             const amounts = [];
             // tslint:disable-next-line:no-shadowed-variable
->>>>>>> Stashed changes
             for (let i = 0; i < numberOfOuts; i++) {
               amounts.push('0');
             }
@@ -180,7 +161,7 @@ export default class XmrTransferProcessor
               usingOuts: fee.using_outs,
               simplePriority: i
             }
-          } as BlocksoftBlockchainTypes.Fee;
+          } as AirDAOBlockchainTypes.Fee;
 
           const logTmp = {
             langMsg: 'xmr_speed_' + i,
@@ -204,11 +185,7 @@ export default class XmrTransferProcessor
           result.fees.push(tmp);
           logFees.push(logTmp);
         }
-<<<<<<< Updated upstream
-      } catch (e) {
-=======
       } catch (e: any) {
->>>>>>> Stashed changes
         if (e.message.indexOf('pendable balance too low') !== -1) {
           // do nothing
           noBalanceError = true;
@@ -266,18 +243,14 @@ export default class XmrTransferProcessor
     // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' XmrTransferProcessor.getFeeRate ' +
-        data.addressFrom +
+        `' XmrTransferProcessor.getFeeRate ' +
+        ${data.addressFrom} +
         ' => ' +
-        data.addressTo +
+        ${data.addressTo} +
         ' finished amount: ' +
-        data.amount +
+      ${data.amount} +
         ' fee: ',
-<<<<<<< Updated upstream
-=======
-      // @ts-ignore
->>>>>>> Stashed changes
-      logFees
+      ${logFees}`
     );
 
     if (result.fees.length < 3) {
@@ -289,24 +262,16 @@ export default class XmrTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
 
-<<<<<<< Updated upstream
-    // @ts-ignore
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' XmrTransferProcessor.getTransferAllBalance ',
-=======
-    BlocksoftCryptoLog.log(
-      this._settings.currencyCode +
-        ' XmrTransferProcessor.getTransferAllBalance ',
-      // @ts-ignore
->>>>>>> Stashed changes
-      data.addressFrom + ' => ' + balance
+        `' XmrTransferProcessor.getTransferAllBalance ',
+      ${data.addressFrom + ' => ' + balance}`
     );
 
     data.isTransferAll = true;
@@ -332,10 +297,10 @@ export default class XmrTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('XMR transaction required privateKey');
     }
@@ -349,16 +314,12 @@ export default class XmrTransferProcessor
 
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
-        ' XmrTransferProcessor.sendTx started ' +
-        data.addressFrom +
+        `' XmrTransferProcessor.sendTx started ' +
+        ${data.addressFrom} +
         '=>' +
-        data.addressTo +
+        ${data.addressTo} +
         ' fee',
-<<<<<<< Updated upstream
-=======
-      // @ts-ignore
->>>>>>> Stashed changes
-      uiData.selectedFee
+      ${uiData.selectedFee}`
     );
     let foundFee = uiData?.selectedFee;
     if (data.addressTo !== uiData.selectedFee.addressToTx) {
@@ -387,21 +348,14 @@ export default class XmrTransferProcessor
         }
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
-            ' XmrTransferProcessor.sendTx rechecked ' +
-            data.addressFrom +
+            `' XmrTransferProcessor.sendTx rechecked ' +
+            ${data.addressFrom} +
             '=>' +
-            data.addressTo +
+            ${data.addressTo} +
             ' found fee',
-<<<<<<< Updated upstream
-          foundFee
-        );
-      } catch (e) {
-=======
-          // @ts-ignore
-          foundFee
+          ${foundFee}`
         );
       } catch (e: any) {
->>>>>>> Stashed changes
         BlocksoftCryptoLog.log(
           this._settings.currencyCode +
             ' XmrTransferProcessor.sendTx rechecked ' +
@@ -432,10 +386,7 @@ export default class XmrTransferProcessor
       typeof uiData.selectedFee.rawOnly !== 'undefined' &&
       uiData.selectedFee.rawOnly
     ) {
-<<<<<<< Updated upstream
-=======
       // TODO fix this ts error
->>>>>>> Stashed changes
       return { rawOnly: uiData.selectedFee.rawOnly, raw: rawTxHex };
     }
 

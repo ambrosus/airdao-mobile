@@ -5,10 +5,9 @@
  */
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftExternalSettings from '../../../common/BlocksoftExternalSettings';
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
-
 import { XrpTxUtils } from '../../xrp/basic/XrpTxUtils';
 import config from '@constants/config';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 const StellarSdk = require('stellar-sdk');
 
@@ -57,9 +56,9 @@ export class XlmTxSendProvider {
   }
 
   async getPrepared(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData,
     type = 'usual'
   ) {
     const account = await this._api.loadAccount(data.addressFrom);
@@ -141,8 +140,8 @@ export class XlmTxSendProvider {
       result = await response.json();
       if (
         result &&
-        typeof result.extras !== 'undefined' &&
-        typeof result.extras.result_codes !== 'undefined'
+        typeof result.extras !== undefined &&
+        typeof result.extras.result_codes !== undefined
       ) {
         if (config.debug.cryptoErrors) {
           console.log(
@@ -155,14 +154,14 @@ export class XlmTxSendProvider {
             JSON.stringify(result.extras.result_codes)
         );
 
-        if (typeof result.extras.result_codes.operations !== 'undefined') {
+        if (typeof result.extras.result_codes.operations !== undefined) {
           throw new Error(result.extras.result_codes.operations[0] + ' ' + raw);
         }
-        if (typeof result.extras.result_codes.transaction !== 'undefined') {
+        if (typeof result.extras.result_codes.transaction !== undefined) {
           throw new Error(result.extras.result_codes.transaction + ' ' + raw);
         }
       }
-      if (typeof result.status !== 'undefined') {
+      if (typeof result.status !== undefined) {
         if (
           result.status === 406 ||
           result.status === 400 ||

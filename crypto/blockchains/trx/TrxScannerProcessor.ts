@@ -77,9 +77,9 @@ export default class TrxScannerProcessor {
     );
     let addressHex = address;
     if (address.substr(0, 1) === 'T') {
-      addressHex = await TronUtils.addressToHex(address);
+      addressHex = TronUtils.addressToHex(address);
     } else {
-      address = await TronUtils.addressHexToStr(addressHex);
+      address = TronUtils.addressHexToStr(addressHex);
     }
     const useTronscan =
       BlocksoftExternalSettings.getStatic('TRX_USE_TRONSCAN') * 1 > 0;
@@ -108,7 +108,7 @@ export default class TrxScannerProcessor {
         try {
           const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
           const params = {
-            contract_address: await TronUtils.addressToHex(this._tokenName),
+            contract_address: TronUtils.addressToHex(this._tokenName),
             function_selector: 'balanceOf(address)',
             parameter: '0000000000000000000000' + addressHex,
             owner_address: addressHex
@@ -121,7 +121,7 @@ export default class TrxScannerProcessor {
             typeof tmp.data !== 'undefined' &&
             typeof tmp.data.constant_result !== 'undefined'
           ) {
-            BlocksoftCryptoLog.log(
+            await BlocksoftCryptoLog.log(
               this._tokenName +
                 ' TrxScannerProcessor getBalanceBlockchain address ' +
                 address +
@@ -170,7 +170,7 @@ export default class TrxScannerProcessor {
       );
     }
 
-    if (result === false && this._tokenName !== '_') {
+    if (!result && this._tokenName !== '_') {
       subresult = await this._tronscanProvider.get(
         address,
         '_',
@@ -351,7 +351,7 @@ export default class TrxScannerProcessor {
         const recheck = await BlocksoftAxios.post(linkRecheck, {
           value: row.transactionHash
         });
-        if (typeof recheck.data !== 'undefined') {
+        if (typeof recheck.data !== undefined) {
           const isSuccess = await this._unifyFromReceipt(
             recheck.data,
             row,
@@ -362,7 +362,7 @@ export default class TrxScannerProcessor {
           }
           if (isSuccess && row.specialActionNeeded && row.addressFromBasic) {
             row.confirmations = lastBlock - recheck.data.blockNumber;
-            if (typeof unique[row.addressFromBasic] === 'undefined') {
+            if (typeof unique[row.addressFromBasic] === undefined) {
               unique[row.addressFromBasic] = row;
             } else {
               if (
@@ -436,7 +436,7 @@ export default class TrxScannerProcessor {
                 address
             );
           }
-        } catch (e) {
+        } catch (e: any) {
           if (config.debug.cryptoErrors) {
             console.log(
               this._settings.currencyCode +
@@ -478,13 +478,13 @@ export default class TrxScannerProcessor {
 
     let transactionStatus = 'success';
     if (
-      typeof transaction.result !== 'undefined' &&
+      typeof transaction.result !== undefined &&
       transaction.result === 'FAILED'
     ) {
       transactionStatus = 'fail';
       if (
-        typeof transaction.receipt !== 'undefined' &&
-        typeof transaction.receipt.result !== 'undefined'
+        typeof transaction.receipt !== undefined &&
+        typeof transaction.receipt.result !== undefined
       ) {
         if (transaction.receipt.result === 'OUT_OF_ENERGY') {
           transactionStatus = 'out_of_energy';

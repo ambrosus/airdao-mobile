@@ -3,17 +3,17 @@ import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
 import XrpTmpDS from '@crypto/blockchains/xrp/stores/XrpTmpDS';
 
 const CACHE_VALID_TIME = 60000;
-let CACHE_BLOCK_DATA = {};
+let CACHE_BLOCK_DATA: { [index: string]: { data: any; time: number } } = {};
 
 const API_PATH = 'https://data.ripple.com/v2';
 export default class XrpDataRippleProvider {
-  setCache(tmp) {
+  setCache(tmp: { [index: string]: { data: any; time: number } }) {
     CACHE_BLOCK_DATA = tmp;
   }
 
   async getBalanceBlockchain(address: string) {
     const link = `${API_PATH}/accounts/${address}/balances`;
-    let res = false;
+    let res: any = false;
     let balance = 0;
 
     try {
@@ -44,10 +44,13 @@ export default class XrpDataRippleProvider {
         return false;
       }
     }
-    return { balance: balance, unconfirmed: 0, provider: 'ripple.com' };
+    return { balance, unconfirmed: 0, provider: 'ripple.com' };
   }
 
-  async getTransactionsBlockchain(scanData) {
+  async getTransactionsBlockchain(scanData: {
+    account: any;
+    additional?: any;
+  }) {
     const address = scanData.account.address.trim();
     const action = 'payments';
     await BlocksoftCryptoLog.log(
@@ -57,7 +60,7 @@ export default class XrpDataRippleProvider {
         address
     );
     const link = `${API_PATH}/accounts/${address}/payments`;
-    let res = false;
+    let res: any = false;
     try {
       res = await BlocksoftAxios.getWithoutBraking(link);
     } catch (e: any) {
@@ -97,7 +100,7 @@ export default class XrpDataRippleProvider {
     return transactions;
   }
 
-  async _unifyTransactions(address: string, result: string) {
+  async _unifyTransactions(address: string, result: any, action: string) {
     const transactions = [];
     let tx;
     for (tx of result) {
@@ -109,8 +112,9 @@ export default class XrpDataRippleProvider {
     return transactions;
   }
 
-  async _unifyPayment(address: string, transaction) {
-    let direction, amount;
+  async _unifyPayment(address: string, transaction: any) {
+    let direction;
+    let amount;
 
     if (transaction.currency === 'XRP') {
       if (transaction.source_currency === 'XRP') {
@@ -167,7 +171,7 @@ export default class XrpDataRippleProvider {
       transactionStatus: transactionStatus,
       transactionFee: transaction.transaction_cost
     };
-    if (typeof transaction.destination_tag !== 'undefined') {
+    if (typeof transaction.destination_tag !== undefined) {
       tx.transactionJson = { memo: transaction.destination_tag };
     }
     return tx;
@@ -179,7 +183,7 @@ export default class XrpDataRippleProvider {
       'XrpScannerProcessor.DataRipple._getLedger started ' + index
     );
     const link = `${API_PATH}/ledgers/${index}`;
-    let res = false;
+    let res: any = false;
     if (
       typeof CACHE_BLOCK_DATA[index] === 'undefined' ||
       (now - CACHE_BLOCK_DATA[index].time > CACHE_VALID_TIME &&

@@ -23,16 +23,17 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
+// @ts-ignore
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 import { XlmTxSendProvider } from './basic/XlmTxSendProvider';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 const FEE_DECIMALS = 7;
 
 export default class XlmTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
   private _provider: XlmTxSendProvider;
@@ -51,8 +52,8 @@ export default class XlmTransferProcessor
   }
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     // @ts-ignore
     if (data.amount && data.amount * 1 > 20) {
       return { isOk: true };
@@ -78,14 +79,14 @@ export default class XlmTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -1,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
@@ -132,7 +133,7 @@ export default class XlmTransferProcessor
     result.fees = [
       {
         langMsg: 'xrp_speed_one',
-        feeForTx: fee,
+        feeForTx: fee.toString(),
         amountForTx: data.amount,
         blockchainData: getFee
       }
@@ -142,10 +143,10 @@ export default class XlmTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
     BlocksoftCryptoLog.log(
@@ -200,10 +201,10 @@ export default class XlmTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('XLM transaction required privateKey');
     }
@@ -250,7 +251,7 @@ export default class XlmTransferProcessor
       typeof uiData.selectedFee.rawOnly !== 'undefined' &&
       uiData.selectedFee.rawOnly
     ) {
-      return { rawOnly: uiData.selectedFee.rawOnly, raw };
+      return { raw: uiData.selectedFee.raw };
     }
 
     let result = false;

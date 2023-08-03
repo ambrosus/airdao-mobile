@@ -173,7 +173,7 @@ export default {
         retString = await MY_MONERO.core.Module.prepareTx(
           JSON.stringify(args, null, '')
         );
-      } catch (e) {
+      } catch (e: any) {
         throw Error(' MY_MONERO.core.Module.prepareTx error ' + e.message);
       }
 
@@ -188,8 +188,9 @@ export default {
 
       const _getRandomOuts = async (
         numberOfOuts: number,
-        randomOutsCb: Function
+        randomOutsCb: (numberOfOuts: number) => void
       ) => {
+        // tslint:disable-next-line:no-shadowed-variable
         const randomOuts = await randomOutsCb(numberOfOuts);
         if (
           typeof randomOuts.amount_outs === 'undefined' ||

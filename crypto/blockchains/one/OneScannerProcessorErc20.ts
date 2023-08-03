@@ -13,7 +13,26 @@ import OneTmpDS from './stores/OneTmpDS';
 import config from '@constants/config';
 
 interface UnifiedTransaction {
-  // TODO
+  transactionHash: string;
+  blockHash: string;
+  blockNumber: number;
+  blockTime: string;
+  blockConfirmations: number;
+  transactionDirection: string;
+  addressFrom: string;
+  addressFromBasic: string;
+  addressTo: string;
+  addressToBasic: string;
+  addressAmount: number;
+  transactionStatus: string;
+  inputValue: string;
+  transactionJson?: {
+    nonce: string;
+    gas: string;
+    gasPrice: string;
+    transactionIndex: string;
+  };
+  transactionFee?: string;
 }
 
 interface CacheTokens {
@@ -30,17 +49,14 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
    * @param {string} scanData.account.walletHash
    * @return {Promise<[UnifiedTransaction]>}
    */
+  // @ts-ignore
   async getTransactionsBlockchain(scanData: {
     account: { address: string; walletHash: string };
   }): Promise<UnifiedTransaction[]> {
     const { address } = scanData.account;
     const oneAddress = OneUtils.toOneAddress(address);
     BlocksoftCryptoLog.log(
-      this._settings.currencyCode +
-        ' OneScannerProcessorErc20.getTransactionsBlockchain started ' +
-        address +
-        ' ' +
-        oneAddress
+      `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain started ${address} ${oneAddress}`
     );
     try {
       CACHE_TOKENS[address] = await OneTmpDS.getCache(address);
@@ -62,14 +78,15 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
       };
       const res = await BlocksoftAxios._request(apiPath, 'POST', data);
       if (
-        typeof res.data === 'undefined' ||
-        typeof res.data.result === 'undefined' ||
-        typeof res.data.result.transactions === 'undefined'
+        !res ||
+        !res.data ||
+        !res.data.result ||
+        !res.data.result.transactions
       ) {
         return [];
       }
       const transactions: UnifiedTransaction[] = [];
-      let firstTransaction = false;
+      let firstTransaction: number | false = false;
       for (const tx of res.data.result.transactions) {
         if (
           typeof CACHE_TOKENS[address] !== 'undefined' &&
@@ -98,25 +115,19 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
           transactions.push(transaction);
         }
       }
-      CACHE_TOKENS[address][this._tokenAddress] = Number(firstTransaction);
-      await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
+      if (firstTransaction !== false) {
+        CACHE_TOKENS[address][this._tokenAddress] = Number(firstTransaction);
+        await OneTmpDS.saveCache(address, this._tokenAddress, firstTransaction);
+      }
       return transactions;
     } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
-          this._settings.currencyCode +
-            ' OneScannerProcessorErc20.getTransactionsBlockchain address ' +
-            address +
-            ' error ' +
-            e.message
+          `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain address ${address} error ${e.message}`
         );
       }
       BlocksoftCryptoLog.log(
-        this._settings.currencyCode +
-          ' OneScannerProcessorErc20.getTransactionsBlockchain address ' +
-          address +
-          ' error ' +
-          e.message
+        `${this._settings.currencyCode} OneScannerProcessorErc20.getTransactionsBlockchain address ${address} error ${e.message}`
       );
       return [];
     }
@@ -144,10 +155,12 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
+  // @ts-ignore
   async _unifyTransaction(
     address: string,
     oneAddress: string,
     transaction: {
+      transactionIndex: string;
       blockHash: string;
       blockNumber: string;
       ethHash: string;
@@ -221,24 +234,23 @@ export default class OneScannerProcessorErc20 extends EthScannerProcessorErc20 {
       blockTime: formattedTime,
       blockConfirmations: confirmations,
       transactionDirection:
-        addressAmount * 1 <= 0 ? (foundEventTo ? 'outcome' : 'self') : 'income',
+        addressAmount <= 0 ? (foundEventTo ? 'outcome' : 'self') : 'income',
       addressFrom: foundEventFrom ? transaction.from : '',
       addressFromBasic: transaction.from.toLowerCase(),
       addressTo: foundEventTo ? transaction.to : '',
       addressToBasic: transaction.to,
       addressAmount,
-      transactionStatus: transactionStatus,
+      transactionStatus,
       inputValue: transaction.input
     };
-    const additional = {
+    tx.transactionJson = {
       nonce: transaction.nonce,
       gas: transaction.gas,
       gasPrice: transaction.gasPrice,
       transactionIndex: transaction.transactionIndex
     };
-    tx.transactionJson = additional;
     tx.transactionFee = BlocksoftUtils.mul(
-      transaction.gasUsed,
+      transaction.gas,
       transaction.gasPrice
     ).toString();
 

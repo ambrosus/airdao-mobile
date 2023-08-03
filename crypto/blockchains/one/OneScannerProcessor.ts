@@ -34,7 +34,7 @@ interface UnifiedTransaction {
 
 export default class OneScannerProcessor {
   private _blocksToConfirm = 10;
-  private _settings: any; // Replace 'any' with the actual type of settings
+  private _settings: any;
 
   constructor(settings: any) {
     this._settings = settings;
@@ -68,19 +68,24 @@ export default class OneScannerProcessor {
         params: [oneAddress, 'latest']
       };
       const res = await BlocksoftAxios._request(apiPath, 'POST', data);
-      if (typeof res.data === 'undefined') {
-        return false;
+
+      if (res !== false && res.data !== undefined) {
+        if (res.data.error !== undefined) {
+          throw new Error(JSON.stringify(res.data.error));
+        }
+        if (res.data.result !== undefined) {
+          const balance = BlocksoftUtils.hexToDecimalBigger(res.data.result);
+          return {
+            provider: '',
+            balance,
+            unconfirmed: 0
+          };
+        }
       }
-      if (typeof res.data.error !== 'undefined') {
-        throw new Error(JSON.stringify(res.data.error));
-      }
-      if (typeof res.data.result === 'undefined') {
-        return false;
-      }
-      const balance = BlocksoftUtils.hexToDecimalBigger(res.data.result);
+
       return {
         provider: '',
-        balance,
+        balance: 0,
         unconfirmed: 0
       };
     } catch (e: any) {
@@ -104,7 +109,11 @@ export default class OneScannerProcessor {
           ' error ' +
           e.message
       );
-      return false;
+      return {
+        provider: '',
+        balance: 0,
+        unconfirmed: 0
+      };
     }
   }
 
@@ -144,24 +153,26 @@ export default class OneScannerProcessor {
       };
       const res = await BlocksoftAxios._request(apiPath, 'POST', data);
       if (
-        typeof res.data === 'undefined' ||
-        typeof res.data.result === 'undefined' ||
-        typeof res.data.result.transactions === 'undefined'
+        res !== false &&
+        res.data !== undefined &&
+        res.data.result !== undefined &&
+        res.data.result.transactions !== undefined
       ) {
-        return false;
-      }
-      const transactions: UnifiedTransaction[] = [];
-      for (const tx of res.data.result.transactions) {
-        const transaction = await this._unifyTransaction(
-          address,
-          oneAddress,
-          tx
-        );
-        if (transaction) {
-          transactions.push(transaction);
+        const transactions: UnifiedTransaction[] = [];
+        for (const tx of res.data.result.transactions) {
+          const transaction = await this._unifyTransaction(
+            address,
+            oneAddress,
+            tx
+          );
+          if (transaction) {
+            transactions.push(transaction);
+          }
         }
+        return transactions;
+      } else {
+        return [];
       }
-      return transactions;
     } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
@@ -179,7 +190,7 @@ export default class OneScannerProcessor {
           ' error ' +
           e.message
       );
-      return false;
+      return [];
     }
   }
 
@@ -271,10 +282,10 @@ export default class OneScannerProcessor {
         nonce: transaction.nonce,
         gas: transaction.gas,
         gasPrice: transaction.gasPrice,
-        transactionIndex: transaction.shardID // Change 'shardID' to the actual transaction index property name
+        transactionIndex: transaction.shardID
       },
       transactionFee: BlocksoftUtils.mul(
-        transaction.gasUsed,
+        transaction.gas,
         transaction.gasPrice
       ).toString()
     };

@@ -42,7 +42,7 @@ export default class DogeTransferProcessor
     feeMinTotalReadable: 1
   };
 
-  _initedProviders: boolean = false;
+  _initedProviders = false;
 
   _settings: BlocksoftBlockchainTypes.CurrencySettings;
 
@@ -322,8 +322,8 @@ export default class DogeTransferProcessor
       prevFeeForByte = feeForByte;
     }
 
-    let uniqueFees = {};
-    let allFees = {};
+    const uniqueFees = {};
+    const allFees = {};
     let isError = false;
     for (const key of keys) {
       // @ts-ignore

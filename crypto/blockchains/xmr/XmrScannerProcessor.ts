@@ -29,11 +29,15 @@ export default class XmrScannerProcessor {
 
   _maxBlockNumber = 500000000;
 
-  constructor(settings) {
+  constructor(settings: any) {
     this._settings = settings;
   }
 
-  async _getCache(address, additionalData, walletHash) {
+  async _getCache(
+    address: string | number,
+    additionalData: any,
+    walletHash: any
+  ) {
     if (typeof CACHE[address] !== 'undefined') {
       CACHE[address].provider = 'mymonero-cache-all';
       return CACHE[address];
@@ -49,7 +53,11 @@ export default class XmrScannerProcessor {
    * @returns {Promise<boolean|*>}
    * @private
    */
-  async _get(address, additionalData, walletHash) {
+  async _get(
+    address: string,
+    additionalData: { derivationIndex: any; publicSpendKey: string },
+    walletHash: string
+  ) {
     BlocksoftCryptoLog.log(
       'XMR XmrScannerProcessor._get ' + walletHash + ' ' + address
     );
@@ -103,18 +111,18 @@ export default class XmrScannerProcessor {
     try {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
-          ' XmrScannerProcessor._get start ' +
-          link +
+          `' XmrScannerProcessor._get start ' +
+          ${link} +
           'get_address_info',
-        JSON.stringify(linkParams)
+        ${JSON.stringify(linkParams)}`
       );
       res = await BlocksoftAxios.post(link + 'get_address_info', linkParams);
     } catch (e: any) {
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
-          ' XmrScannerProcessor._get error ' +
-          e.message,
-        JSON.stringify(linkParams)
+          `' XmrScannerProcessor._get error ' +
+          ${e.message},
+        ${JSON.stringify(linkParams)}`
       );
       if (
         CACHE_SHOWN_ERROR === 0 &&
@@ -148,9 +156,9 @@ export default class XmrScannerProcessor {
         } catch (e: any) {
           BlocksoftCryptoLog.log(
             this._settings.currencyCode +
-              ' XmrScannerProcessor._get login error ' +
-              e.message,
-            linkParamsLogin
+              `' XmrScannerProcessor._get login error ' +
+              ${e.message},
+            ${linkParamsLogin}`
           );
           if (
             CACHE_SHOWN_ERROR === 0 &&
@@ -186,7 +194,7 @@ export default class XmrScannerProcessor {
         additionalData.publicSpendKey,
         spendKey
       );
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           'XMR XmrScannerProcessor._get MoneroUtilsParser.parseAddressInfo error ' +
@@ -262,7 +270,11 @@ export default class XmrScannerProcessor {
    * @param {string} walletHash
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
-  async getBalanceBlockchain(address, additionalData, walletHash) {
+  async getBalanceBlockchain(
+    address: string,
+    additionalData: { derivationIndex: any; publicSpendKey: string },
+    walletHash: string
+  ) {
     if (address === 'invalidRecheck1') {
       return { balance: 0, unconfirmed: 0, provider: 'error' };
     }
@@ -284,7 +296,10 @@ export default class XmrScannerProcessor {
    * @param {string} scanData.account.walletHash
    * @return {Promise<UnifiedTransaction[]>}
    */
-  async getTransactionsBlockchain(scanData, source = '') {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string; walletHash: any };
+    additional: any;
+  }) {
     const address = scanData.account.address.trim();
     if (address === 'invalidRecheck1') {
       return [];
@@ -334,9 +349,23 @@ export default class XmrScannerProcessor {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, lastBlock, transaction) {
+  async _unifyTransaction(
+    address: string,
+    lastBlock: number,
+    transaction: {
+      confirmations: number;
+      height: number;
+      unlock_time: number;
+      total_received: string;
+      total_sent: string;
+      timestamp: any;
+      hash: any;
+      id: any;
+      fee: any;
+    }
+  ) {
     let transactionStatus = 'new';
-    transaction.confirmations = lastBlock * 1 - transaction.height * 1;
+    transaction.confirmations = lastBlock - transaction.height;
     // if (transaction.mempool === false) {
     if (transaction.confirmations >= this._blocksToConfirm) {
       transactionStatus = 'success';
@@ -346,7 +375,7 @@ export default class XmrScannerProcessor {
     // }
 
     if (typeof transaction.unlock_time !== 'undefined') {
-      const unlockTime = transaction.unlock_time * 1;
+      const unlockTime = transaction.unlock_time;
       if (unlockTime > 0) {
         if (unlockTime < this._maxBlockNumber) {
           // then unlock time is block height

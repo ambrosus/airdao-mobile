@@ -8,7 +8,7 @@
 import { soliditySha3 } from 'web3-utils';
 // @ts-ignore
 import * as elliptic from 'elliptic';
-const Ed25519 = elliptic.eddsa('ed25519');
+const Ed25519 = new elliptic.eddsa('ed25519');
 
 /** Monero base58 is not like Bitcoin base58, bytes are converted in 8-byte blocks.
  *  https://docs.rs/base58-monero/0.2.0/base58_monero/

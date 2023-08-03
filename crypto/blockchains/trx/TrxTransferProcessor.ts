@@ -4,7 +4,6 @@
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
 
 import TronUtils from './ext/TronUtils';
 import TrxTronscanProvider from './basic/TrxTronscanProvider';
@@ -20,6 +19,7 @@ import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings'
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 import config from '@constants/config';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 // https://developers.tron.network/docs/parameter-and-return-value-encoding-and-decoding
 const ethers = require('ethers');
@@ -28,7 +28,7 @@ const AbiCoder = ethers.utils.AbiCoder;
 const PROXY_FEE = 'https://proxy.trustee.deals/trx/countFee';
 
 export default class TrxTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: any;
   private _tronscanProvider: TrxTronscanProvider;
@@ -61,8 +61,8 @@ export default class TrxTransferProcessor
   }
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     if (!this._isToken20 || (data.amount && data.amount * 1 > 0)) {
       return { isOk: true };
     }
@@ -106,10 +106,10 @@ export default class TrxTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const addressHexTo = TronUtils.addressToHex(data.addressTo);
     if (TronUtils.addressHexToStr(addressHexTo) !== data.addressTo) {
       BlocksoftCryptoLog.log(
@@ -167,7 +167,7 @@ export default class TrxTransferProcessor
           ' res ',
         res
       );
-      if (typeof res.feeForTx === 'undefined') {
+      if (typeof res.feeForTx === undefined) {
         throw new Error('no res?.feeForTx');
       }
 
@@ -192,7 +192,7 @@ export default class TrxTransferProcessor
           shouldShowFees: false
         };
       }
-      return result as BlocksoftBlockchainTypes.FeeRateResult;
+      return result as unknown as AirDAOBlockchainTypes.FeeRateResult;
     } catch (e: any) {
       if (e.message.indexOf('SERVER_RESPONSE_') === 0) {
         throw e;
@@ -214,15 +214,15 @@ export default class TrxTransferProcessor
   }
 
   async getFeeRateOld(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const addressHexTo = TronUtils.addressToHex(data.addressTo);
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -3,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
     const link = sendLink + '/wallet/getaccountresource'; // http://trx.trusteeglobal.com:8090/wallet
@@ -291,7 +291,7 @@ export default class TrxTransferProcessor
           );
           const fullPriceEnergy = energyForTx * priceForEnergy;
           if (res.leftEnergy <= 0) {
-            feeForTx = feeForTx * 1 + fullPriceEnergy;
+            feeForTx = feeForTx + fullPriceEnergy;
             feeLog +=
               ' res.leftEnergy<=0 energyFee=' +
               energyForTx +
@@ -309,7 +309,7 @@ export default class TrxTransferProcessor
                   fullPriceEnergy,
                   BlocksoftUtils.div(diffE / energyForTx)
                 ) * 1;
-              feeForTx = feeForTx * 1 + energyFee;
+              feeForTx = feeForTx + energyFee;
               feeLog +=
                 ' fullPriceEnergy=' +
                 energyForTx +
@@ -371,7 +371,7 @@ export default class TrxTransferProcessor
       } else if (this._tokenName === '_') {
         if (
           !balance ||
-          balance.balanceAvailable <= feeForTx * 1 + data.amount * 1
+          balance.balanceAvailable <= feeForTx + data.amount * 1
         ) {
           isErrorFee = true;
           // throw new Error('SERVER_RESPONSE_NOT_ENOUGH_FEE')
@@ -395,7 +395,7 @@ export default class TrxTransferProcessor
             tronData2
           );
           if (typeof tronData2.freeNetLimit === 'undefined') {
-            feeForTx = feeForTx * 1 + 1100000;
+            feeForTx = feeForTx + 1100000;
           }
         } catch (e: any) {
           // do nothing
@@ -424,8 +424,8 @@ export default class TrxTransferProcessor
             .getBalance('TrxSendTx');
           if (balance && typeof balance.balance !== 'undefined') {
             if (balance.balance === 0) {
-              amountForTx = 0;
-              selectedTransferAllBalance = 0;
+              amountForTx = String(0);
+              selectedTransferAllBalance = String(0);
             } else {
               selectedTransferAllBalance = BlocksoftUtils.diff(
                 balance.balance,
@@ -476,10 +476,10 @@ export default class TrxTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     data.isTransferAll = true;
     const balance = data.amount;
     // @ts-ignore
@@ -521,10 +521,10 @@ export default class TrxTransferProcessor
    * https://developers.tron.network/docs/trc20-introduction#section-8usdt-transfer
    */
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('TRX transaction required privateKey');
     }
@@ -547,7 +547,16 @@ export default class TrxTransferProcessor
         data.addressTo
     );
 
-    const logData = {};
+    const logData = {
+      currencyCode: strings,
+      selectedFee: strings,
+      from: strings,
+      basicAddressTo: strings,
+      basicAmount: strings,
+      pushSetting: strings,
+      pushLocale: undefined,
+      basicToken: strings
+    };
     logData.currencyCode = this._settings.currencyCode;
     logData.selectedFee = uiData.selectedFee;
     logData.from = data.addressFrom;
@@ -614,7 +623,7 @@ export default class TrxTransferProcessor
                   }
                   types.push(type);
                   values.push(value);
-                } catch (e) {
+                } catch (e: any) {
                   throw new Error(
                     e.message +
                       ' type ' +
@@ -639,19 +648,18 @@ export default class TrxTransferProcessor
               owner_address: ownerAddress,
               contract_address: order.tokenContract,
               function_selector: order.contractMethod,
-              // @ts-ignore
               parameter,
               fee_limit: BlocksoftExternalSettings.getStatic(
                 'TRX_TRC20_MAX_LIMIT'
               )
             };
             if (
-              typeof order.options !== 'undefined' &&
-              typeof order.options.callValue !== 'undefined'
+              typeof order.options !== undefined &&
+              typeof order.options.callValue !== undefined
             ) {
               params.call_value = order.options.callValue * 1;
             }
-          } catch (e1) {
+          } catch (e1: any) {
             throw new Error(e1.message + ' in params build');
           }
           if (index < total) {
@@ -674,7 +682,7 @@ export default class TrxTransferProcessor
               tx
             );
 
-            let resultSub = {} as BlocksoftBlockchainTypes.SendTxResult;
+            let resultSub = {} as AirDAOBlockchainTypes.SendTxResult;
             try {
               resultSub = await this.sendProvider.sendTx(
                 tx,
@@ -724,12 +732,12 @@ export default class TrxTransferProcessor
                 const recheck = await BlocksoftAxios.post(linkRecheck, {
                   value: tx.txID
                 });
-                if (typeof recheck.data !== 'undefined') {
+                if (typeof recheck.data !== undefined) {
                   if (
-                    typeof recheck.data.id !== 'undefined' &&
-                    typeof recheck.data.blockNumber !== 'undefined' &&
-                    typeof recheck.data.receipt !== 'undefined' &&
-                    typeof recheck.data.receipt.result !== 'undefined'
+                    typeof recheck.data.id !== undefined &&
+                    typeof recheck.data.blockNumber !== undefined &&
+                    typeof recheck.data.receipt !== undefined &&
+                    typeof recheck.data.receipt.result !== undefined
                   ) {
                     // @ts-ignore
                     BlocksoftCryptoLog.log(
@@ -836,20 +844,19 @@ export default class TrxTransferProcessor
           };
           await BlocksoftCryptoLog.log(
             this._settings.currencyCode +
-              ' TrxTransferProcessor.sendTx inited1' +
-              data.addressFrom +
+              `' TrxTransferProcessor.sendTx inited1' +
+              ${data.addressFrom} +
               ' => ' +
-              data.addressTo +
+              ${data.addressTo} +
               ' ' +
-              link,
-            params
+              ${link},
+            ${params}`
           );
           res = await BlocksoftAxios.post(link, params);
         } else {
           params = {
             owner_address: ownerAddress,
             to_address: toAddress,
-            // @ts-ignore
             amount: BlocksoftUtils.round(data.amount) * 1
           };
 
@@ -865,13 +872,13 @@ export default class TrxTransferProcessor
           try {
             await BlocksoftCryptoLog.log(
               this._settings.currencyCode +
-                ' TrxTransferProcessor.sendTx inited2 ' +
-                data.addressFrom +
-                ' => ' +
-                data.addressTo +
-                ' ' +
-                link,
-              params
+                `' TrxTransferProcessor.sendTx inited2' +
+              ${data.addressFrom} +
+              ' => ' +
+              ${data.addressTo} +
+              ' ' +
+              ${link},
+            ${params}`
             );
             res = await BlocksoftAxios.post(link, params);
           } catch (e: any) {
@@ -902,12 +909,12 @@ export default class TrxTransferProcessor
       if (typeof res.data.Error !== 'undefined') {
         await BlocksoftCryptoLog.log(
           this._settings.currencyCode +
-            ' TrxTransferProcessor.sendTx error ' +
-            data.addressFrom +
+            `' TrxTransferProcessor.sendTx error ' +
+            ${data.addressFrom} +
             ' => ' +
-            data.addressTo +
+            ${data.addressTo} +
             ' ',
-          res.data
+          ${res.data}`
         );
         // @ts-ignore
         this.sendProvider.trxError(res.data.Error.message || res.data.Error);
@@ -940,9 +947,9 @@ export default class TrxTransferProcessor
         tx = res.data.transaction;
       } else {
         // @ts-ignore
-        if (typeof res.data.txID === 'undefined') {
+        if (typeof res.data.txID === undefined) {
           // @ts-ignore
-          if (typeof res.data.result.message !== 'undefined') {
+          if (typeof res.data.result.message !== undefined) {
             // @ts-ignore
             res.data.result.message = BlocksoftUtils.hexToUtf(
               '0x' + res.data.result.message
@@ -984,7 +991,7 @@ export default class TrxTransferProcessor
       tx
     );
 
-    let result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    let result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       result = await this.sendProvider.sendTx(tx, '', false, logData);
       await BlocksoftCryptoLog.log(

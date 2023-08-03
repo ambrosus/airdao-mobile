@@ -64,6 +64,7 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
           ]
         };
 
+        // @ts-ignore
         const res: AxiosResponse<any, any> = await BlocksoftAxios._request(
           apiPath,
           'POST',
@@ -99,7 +100,7 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
       ) {
         balance = 0;
       } else {
-        balance = CACHE_BALANCES[address][this.tokenAddress].amount * 1;
+        balance = CACHE_BALANCES[address][this.tokenAddress].amount;
       }
     } catch (e: any) {
       BlocksoftCryptoLog.log(

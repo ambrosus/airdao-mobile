@@ -1,3 +1,6 @@
+// @ts-ignore
+import Database from '@app/appstores/DataSource/Database'; // TODO import
+
 const tableName = 'transactions_scanners_tmp';
 
 class XrpTmpDS {
@@ -45,7 +48,7 @@ class XrpTmpDS {
     return tmp;
   }
 
-  async saveCache(value) {
+  async saveCache(value: {}) {
     const tmp = Database.escapeString(JSON.stringify(value));
     const now = new Date().toISOString();
     if (this._isSaved) {

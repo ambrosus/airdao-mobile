@@ -1,8 +1,4 @@
-/**
- * @author Ksu
- * @version 0.43
- */
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import EthTransferProcessor from '@crypto/blockchains/eth/EthTransferProcessor';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
@@ -10,13 +6,13 @@ import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
 
 export default class MetisTransferProcessor
   extends EthTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     if (
       typeof additionalData.gasPrice === 'undefined' ||
       !additionalData.gasPrice
@@ -27,7 +23,7 @@ export default class MetisTransferProcessor
       additionalData.gasPriceTitle = 'speed_blocks_2';
     }
 
-    let value = 0;
+    let value = '0x0';
     try {
       if (data.amount.indexOf('0x') === 0) {
         value = data.amount;
@@ -44,7 +40,7 @@ export default class MetisTransferProcessor
         {
           from: data.addressFrom,
           to: data.addressTo,
-          value: value,
+          value,
           data: '0x'
         }
       ],
@@ -55,12 +51,13 @@ export default class MetisTransferProcessor
       params
     );
 
-    if (typeof tmp !== 'undefined' && typeof tmp.data !== 'undefined') {
-      if (typeof tmp.data.result !== 'undefined') {
+    if (typeof tmp !== undefined && typeof tmp.data !== undefined) {
+      if (typeof tmp.data.result !== undefined) {
+        // @ts-ignore
         additionalData.gasLimit = BlocksoftUtils.hexToDecimalWalletConnect(
           tmp.data.result
         );
-      } else if (typeof tmp.data.error !== 'undefined') {
+      } else if (typeof tmp.data.error !== undefined) {
         throw new Error(tmp.data.error.message);
       }
     }
@@ -68,8 +65,8 @@ export default class MetisTransferProcessor
   }
 
   canRBF(
-    data: BlocksoftBlockchainTypes.DbAccount,
-    transaction: BlocksoftBlockchainTypes.DbTransaction,
+    data: AirDAOBlockchainTypes.DbAccount,
+    transaction: AirDAOBlockchainTypes.DbTransaction,
     source: string
   ): boolean {
     return false;

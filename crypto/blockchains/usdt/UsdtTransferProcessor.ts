@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import BtcUnspentsProvider from '../btc/providers/BtcUnspentsProvider';
 import DogeSendProvider from '../doge/providers/DogeSendProvider';
 import UsdtTxInputsOutputs from './tx/UsdtTxInputsOutputs';
@@ -9,15 +9,16 @@ import UsdtTxBuilder from './tx/UsdtTxBuilder';
 import BtcNetworkPrices from '../btc/basic/BtcNetworkPrices';
 import BtcTransferProcessor from '../btc/BtcTransferProcessor';
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
+// @ts-ignore
 import DaemonCache from '../../../app/daemons/DaemonCache';
 
 export default class UsdtTransferProcessor
   extends BtcTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   _trezorServerCode = 'BTC_TREZOR_SERVER';
 
-  _builderSettings: BlocksoftBlockchainTypes.BuilderSettings = {
+  _builderSettings: AirDAOBlockchainTypes.BuilderSettings = {
     minOutputDustReadable: 0.000001,
     minChangeDustReadable: 0.000001,
     feeMaxForByteSatoshi: 1000, // for tx builder
@@ -49,8 +50,8 @@ export default class UsdtTransferProcessor
   }
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     // @ts-ignore
     const tmp = await DaemonCache.getCacheAccount(data.walletHash, 'BTC');
     if (tmp.balance * 1 > 0) {
@@ -70,10 +71,10 @@ export default class UsdtTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const tmpData = { ...data };
     tmpData.isTransferAll = false;
     // @ts-ignore
@@ -88,10 +89,10 @@ export default class UsdtTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
     // @ts-ignore
     BlocksoftCryptoLog.log(
@@ -126,10 +127,10 @@ export default class UsdtTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     const result = await super.sendTx(data, privateData, uiData);
     result.transactionFeeCurrencyCode = 'BTC';
     return result;

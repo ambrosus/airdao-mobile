@@ -1,14 +1,20 @@
 /**
  * @version 0.11
  */
+// @ts-ignore
 import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+
+interface ApiResponse {
+  data: any;
+}
 
 export default class XmrUnspentsProvider {
   private _settings: any;
   private _link: string | false;
   private _cache: { [key: string]: any };
+  private _serverUrl: string | undefined;
 
   constructor(settings: any) {
     this._settings = settings;
@@ -19,20 +25,22 @@ export default class XmrUnspentsProvider {
   init(): void {
     if (this._link) return;
     this._serverUrl = settingsActions.getSettingStatic('xmrServer');
-    if (!this._serverUrl || this._serverUrl === 'false') {
+    if (!this._serverUrl) {
       this._serverUrl = 'api.mymonero.com:8443';
     }
 
-    let link = this._serverUrl.trim();
-    if (link.substr(0, 4).toLowerCase() !== 'http') {
-      link = 'https://' + this._serverUrl;
-    }
-    if (link[link.length - 1] !== '/') {
-      link = link + '/';
-    }
+    if (typeof this._serverUrl === 'string') {
+      let link = this._serverUrl.trim();
+      if (link.substr(0, 4).toLowerCase() !== 'http') {
+        link = 'https://' + this._serverUrl;
+      }
+      if (link[link.length - 1] !== '/') {
+        link = link + '/';
+      }
 
-    this._link = link;
-    this._cache = {};
+      this._link = link;
+      this._cache = {};
+    }
   }
 
   async _getUnspents(
@@ -41,8 +49,9 @@ export default class XmrUnspentsProvider {
   ): Promise<any> {
     try {
       const key = JSON.stringify(params);
-      let res: { data: any } = { data: {} };
+      let res: ApiResponse;
       if (typeof this._cache[key] === 'undefined') {
+        // @ts-ignore
         BlocksoftCryptoLog.log('XmrUnspentsProvider Xmr._getUnspents', key);
         /*
                 const linkParams = {
@@ -54,6 +63,7 @@ export default class XmrUnspentsProvider {
                     dust_threshold: '2000000000'
                 }
                 */
+        // @ts-ignore
         res = await BlocksoftAxios.post(
           this._link + 'get_unspent_outs',
           params
@@ -99,7 +109,8 @@ export default class XmrUnspentsProvider {
             }
             */
 
-      const res = await BlocksoftAxios.post(
+      // @ts-ignore
+      const res: ApiResponse = await BlocksoftAxios.post(
         this._link + 'get_random_outs',
         params
       );
@@ -109,19 +120,19 @@ export default class XmrUnspentsProvider {
       );
 
       if (
-        typeof res.data === 'undefined' ||
-        !typeof res.data ||
-        typeof res.data.amount_outs === 'undefined' ||
-        !res.data.amount_outs ||
-        res.data.amount_outs.length === 0
+        typeof res === 'object' &&
+        res.data &&
+        typeof res.data.amount_outs !== 'undefined' &&
+        res.data.amount_outs &&
+        res.data.amount_outs.length > 0
       ) {
-        throw new Error('SERVER_RESPONSE_NO_RESPONSE_XMR');
-      }
-
-      if (typeof fn === 'undefined' || !fn) {
-        return res.data;
+        if (typeof fn === 'undefined' || !fn) {
+          return res.data;
+        } else {
+          fn(null, res.data);
+        }
       } else {
-        fn(null, res.data);
+        throw new Error('SERVER_RESPONSE_NO_RESPONSE_XMR');
       }
     } catch (e: any) {
       if (e.message.indexOf('SERVER_RESPONSE') === -1) {

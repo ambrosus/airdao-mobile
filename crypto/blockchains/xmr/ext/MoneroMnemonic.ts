@@ -38,7 +38,8 @@ const secret_spend_key_to_words = (
       }
     }
 
-    const moneroDict: MoneroDictionary = MoneroDict as MoneroDictionary;
+    const moneroDict: MoneroDictionary =
+      MoneroDict as unknown as MoneroDictionary;
     const moneroWords: DictionaryWord[] = moneroDict.monero_words_english;
 
     const w1 = w0 % moneroWords.length;

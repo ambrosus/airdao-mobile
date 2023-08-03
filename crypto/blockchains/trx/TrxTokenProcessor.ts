@@ -17,6 +17,22 @@ interface TokenDetails {
   provider: string;
 }
 
+interface TronscanResponse {
+  data: {
+    symbol: string;
+    name: string;
+    contract_address: string;
+    decimals: number;
+    icon_url: string;
+    token_desc: string;
+    abbr: string;
+    tokenID: string;
+    precision: number;
+    imgUrl: string;
+    description: string;
+  }[];
+}
+
 export default class TrxTokenProcessor {
   private _tokenTronscanPath20: string;
   private _tokenTronscanPath10: string;
@@ -34,7 +50,7 @@ export default class TrxTokenProcessor {
    */
   async getTokenDetails(tokenAddress: string): Promise<TokenDetails | boolean> {
     if (tokenAddress[0] === 'T') {
-      const res = await BlocksoftAxios.get<TokenDetails[]>(
+      const res = await BlocksoftAxios.get<TronscanResponse>(
         this._tokenTronscanPath20 + tokenAddress
       );
       if (typeof res.data[0] !== 'undefined') {
@@ -52,7 +68,7 @@ export default class TrxTokenProcessor {
         };
       }
     } else {
-      const res = await BlocksoftAxios.get<TokenDetails[]>(
+      const res = await BlocksoftAxios.get<TronscanResponse>(
         this._tokenTronscanPath10 + tokenAddress
       );
       if (typeof res.data[0] !== 'undefined') {

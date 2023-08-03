@@ -1,23 +1,24 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import BtcTxInputsOutputs from '../../btc/tx/BtcTxInputsOutputs';
 import BlocksoftBN from '../../../common/BlocksoftBN';
 import BlocksoftUtils from '../../../common/BlocksoftUtils';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
+// @ts-ignore
 import DaemonCache from '../../../../app/daemons/DaemonCache';
 
 export default class UsdtTxInputsOutputs
   extends BtcTxInputsOutputs
-  implements BlocksoftBlockchainTypes.TxInputsOutputs
+  implements AirDAOBlockchainTypes.TxInputsOutputs
 {
   DUST_FIRST_TRY = 546;
   SIZE_FOR_BASIC = 442;
 
   _coinSelectTargets(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeForByte: string,
     multiAddress: string[],
     subtitle: string
@@ -34,8 +35,8 @@ export default class UsdtTxInputsOutputs
   }
 
   _usualTargets(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[]
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[]
   ) {
     const basicWishedAmountBN = new BlocksoftBN(0);
     const wishedAmountBN = new BlocksoftBN(basicWishedAmountBN);
@@ -56,21 +57,21 @@ export default class UsdtTxInputsOutputs
     };
   }
 
-  _addressForChange(data: BlocksoftBlockchainTypes.TransferData): string {
+  _addressForChange(data: AirDAOBlockchainTypes.TransferData): string {
     return data.addressFrom;
   }
 
   async getInputsOutputs(
-    data: BlocksoftBlockchainTypes.TransferData,
-    unspents: BlocksoftBlockchainTypes.UnspentTx[],
+    data: AirDAOBlockchainTypes.TransferData,
+    unspents: AirDAOBlockchainTypes.UnspentTx[],
     feeToCount: {
       feeForByte?: string;
       feeForAll?: string;
       autoFeeLimitReadable?: string | number;
     },
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData,
     subtitle = 'default'
-  ): Promise<BlocksoftBlockchainTypes.PreparedInputsOutputsTx> {
+  ): Promise<AirDAOBlockchainTypes.PreparedInputsOutputsTx> {
     let res = await super._getInputsOutputs(
       data,
       unspents,
@@ -125,7 +126,6 @@ export default class UsdtTxInputsOutputs
       if (!changeIsFound && newInputAdded.value !== '546') {
         res.outputs.push({
           to: data.addressFrom,
-          // @ts-ignore
           amount: newInputAdded.value.toString(),
           isChange: true
         });
@@ -212,8 +212,7 @@ export default class UsdtTxInputsOutputs
         needOneOutput,
         data.addressFrom,
         data.addressTo,
-        data.amount,
-        'getInputsOutputs ' + subtitle
+        data.amount
       );
       BlocksoftCryptoLog.log(
         'UsdtTxInputsOutputs ' +

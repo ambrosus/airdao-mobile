@@ -6,9 +6,6 @@ import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 
-// eslint-disable-next-line no-unused-vars
-import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchainTypes';
-
 import {
   PublicKey,
   SystemProgram,
@@ -23,9 +20,10 @@ import { Buffer } from 'buffer';
 import BlocksoftCryptoUtils from '@crypto/common/BlocksoftCryptoUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import config from '@constants/config';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class SolTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
 
@@ -42,14 +40,14 @@ export default class SolTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -3,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     const feeForTx = BlocksoftExternalSettings.getStatic('SOL_PRICE');
     result.fees = [
@@ -65,10 +63,10 @@ export default class SolTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const address = data.addressFrom.trim();
     let rent = 0;
     let balance = data.amount;
@@ -142,10 +140,10 @@ export default class SolTransferProcessor
    * @param uiData
    */
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('SOL transaction required privateKey (derivedSeed)');
     }
@@ -403,7 +401,7 @@ export default class SolTransferProcessor
       signedData
     );
 
-    const result = {} as BlocksoftBlockchainTypes.SendTxResult;
+    const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
       const sendRes = await SolUtils.sendTransaction(signedData);
       BlocksoftCryptoLog.log(

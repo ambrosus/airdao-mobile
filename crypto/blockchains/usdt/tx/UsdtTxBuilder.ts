@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import BtcTxBuilder from '../../btc/tx/BtcTxBuilder';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 
@@ -30,11 +30,11 @@ function createOmniSimpleSend(amountInUSD: string, propertyID = USDT_TOKEN_ID) {
 
 export default class UsdtTxBuilder
   extends BtcTxBuilder
-  implements BlocksoftBlockchainTypes.TxBuilder
+  implements AirDAOBlockchainTypes.TxBuilder
 {
   _getRawTxAddOutput(
     txb: TransactionBuilder,
-    output: BlocksoftBlockchainTypes.OutputTx
+    output: AirDAOBlockchainTypes.OutputTx
   ): void {
     if (
       typeof output.tokenAmount !== 'undefined' &&

@@ -1,68 +1,57 @@
-<<<<<<< Updated upstream
 /**
  * @version 0.20
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
  */
-import { BlocksoftBlockchainTypes } from '../../BlocksoftBlockchainTypes';
 import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
 import BlocksoftAxios from '../../../common/BlocksoftAxios';
-=======
-import BlocksoftCryptoLog from '../../../common/BlocksoftCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
-import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
->>>>>>> Stashed changes
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class XvgUnspentsProvider
-  implements BlocksoftBlockchainTypes.UnspentsProvider
+  implements AirDAOBlockchainTypes.UnspentsProvider
 {
   _apiPath = 'https://api.vergecurrency.network/node/api/XVG/mainnet/address/';
 
-  protected _settings: BlocksoftBlockchainTypes.CurrencySettings;
+  protected _settings: AirDAOBlockchainTypes.CurrencySettings;
 
-<<<<<<< Updated upstream
-  constructor(
-    settings: BlocksoftBlockchainTypes.CurrencySettings,
-    serverCode: string
-  ) {
-=======
-  constructor(settings: BlocksoftBlockchainTypes.CurrencySettings) {
->>>>>>> Stashed changes
+  constructor(settings: AirDAOBlockchainTypes.CurrencySettings) {
     this._settings = settings;
   }
 
   async getUnspents(
     address: string
-  ): Promise<BlocksoftBlockchainTypes.UnspentTx[]> {
-<<<<<<< Updated upstream
-    // @ts-ignore
-=======
->>>>>>> Stashed changes
+  ): Promise<AirDAOBlockchainTypes.UnspentTx[]> {
     BlocksoftCryptoLog.log(
-      this._settings.currencyCode + ' XvgUnspentsProvider.getUnspents started',
-      address
+      this._settings.currencyCode +
+        ` XvgUnspentsProvider.getUnspents started',
+      ${address}`
     );
 
     const link = this._apiPath + address + '/txs/?unspent=true';
     const res = await BlocksoftAxios.getWithoutBraking(link);
+
     BlocksoftCryptoLog.log(
-      this._settings.currencyCode + ' XvgUnspentsProvider.getUnspents link',
-      link
+      this._settings.currencyCode +
+        ` XvgUnspentsProvider.getUnspents link',
+      ${link}`
     );
-    if (!res || typeof res.data === 'undefined') {
+
+    if (!res || typeof res === 'boolean' || !('data' in res)) {
+      // Check if 'data' exists in 'res'
       BlocksoftCryptoLog.log(
         this._settings.currencyCode +
-          ' XvgUnspentsProvider.getUnspents nothing loaded for address ' +
-          address +
-          ' link ' +
-          link
+          `' XvgUnspentsProvider.getUnspents nothing loaded for address ' +
+        ${address} +
+        ' link ' +
+        ${link}`
       );
       throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
     }
+
     if (!res.data || typeof res.data[0] === 'undefined') {
       return [];
     }
-    const sortedUnspents = [];
-<<<<<<< Updated upstream
+
+    const sortedUnspents: AirDAOBlockchainTypes.UnspentTx[] = [];
     /**
      * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
      * @param {*} res.data[]
@@ -80,9 +69,7 @@ export default class XvgUnspentsProvider
      * @param {string} res.data[].value 91523000
      * @param {string} res.data[].confirmations -1
      */
-=======
->>>>>>> Stashed changes
-    const already = {};
+    const already: { [key: string]: number } = {};
     let unspent;
     for (unspent of res.data) {
       if (

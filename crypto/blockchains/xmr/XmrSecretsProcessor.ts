@@ -50,26 +50,21 @@ export default class XmrSecretsProcessor {
 
     const secretViewKey = MoneroUtils.hash_to_scalar(secretSpendKey);
 
+    // @ts-ignore
     const words = MoneroMnemonic.secret_spend_key_to_words(secretSpendKey);
 
     const publicSpendKey = MoneroUtils.secret_key_to_public_key(secretSpendKey);
 
     const publicViewKey = MoneroUtils.secret_key_to_public_key(secretViewKey);
-
-    const address = MoneroUtils.pub_keys_to_address(
-      0,
-      publicSpendKey,
-      publicViewKey
-    );
-
+    MoneroUtils.pub_keys_to_address(0, publicSpendKey, publicViewKey);
     /*console.log({
-            secretSpendKey,
-            secretViewKey,
-            words,
-            publicViewKey: publicViewKey.toString('hex'),
-            publicSpendKey: publicSpendKey.toString('hex'),
-            address
-        })*/
+                secretSpendKey,
+                secretViewKey,
+                words,
+                publicViewKey: publicViewKey.toString('hex'),
+                publicSpendKey: publicSpendKey.toString('hex'),
+                address
+            })*/
 
     return words;
   }

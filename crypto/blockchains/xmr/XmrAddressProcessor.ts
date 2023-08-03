@@ -50,7 +50,7 @@ export default class XmrAddressProcessor {
       mymoneroError: number;
     };
   }> {
-    let walletMnemonic = false;
+    let walletMnemonic: boolean | { hash: any } = false;
     try {
       walletMnemonic = await BlocksoftSecrets.getWords({
         currencyCode: 'XMR',
@@ -102,10 +102,14 @@ export default class XmrAddressProcessor {
     } else {
       privateKey = Buffer.from(privateKey);
     }
-    const keyPair = bitcoin.ECPair.fromPrivateKey(privateKey, { network: BTC });
+    const keyPair = bitcoin.ECPair.fromPrivateKey(privateKey as Buffer, {
+      network: BTC
+    });
     const rawPrivateKey = keyPair.privateKey;
+    // @ts-ignore
     const rawSecretSpendKey = soliditySha3(rawPrivateKey);
     const rawSecretSpendKeyBuffer = Buffer.from(
+      // @ts-ignore
       rawSecretSpendKey.substr(2),
       'hex'
     );
@@ -149,18 +153,19 @@ export default class XmrAddressProcessor {
     try {
       linkParamsLogin = {
         address,
+        // @ts-ignore
         view_key: MoneroUtils.normString(secretViewKey.toString('hex')),
         create_account: true,
         generated_locally: true
       };
-      const resLogin = await BlocksoftAxios.post(
+      const resLogin = (await BlocksoftAxios.post(
         'https://api.mymonero.com:8443/login',
         linkParamsLogin
-      );
+      )) as unknown as { data: any };
       if (
-        typeof resLogin.data === 'undefined' ||
+        resLogin.data === undefined ||
         !resLogin.data ||
-        typeof resLogin.data.new_address === 'undefined'
+        resLogin.data.new_address === undefined
       ) {
         throw new Error('no data');
       }

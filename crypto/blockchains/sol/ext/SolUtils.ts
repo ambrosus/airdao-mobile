@@ -8,8 +8,10 @@ import { PublicKey } from '@solana/web3.js/src';
 import { Account } from '@solana/web3.js/src/account';
 
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
+// @ts-ignore
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
 import config from '@constants/config';
+import { AxiosResponse } from 'axios';
 
 const TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 const ASSOCIATED_TOKEN_PROGRAM_ID =
@@ -52,7 +54,7 @@ export default {
         new PublicKey(ASSOCIATED_TOKEN_PROGRAM_ID)
       );
       return res[0].toBase58();
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log('SolUtils.findAssociatedTokenAddress ' + e.message);
       }
@@ -75,9 +77,14 @@ export default {
           }
         ]
       };
-      const res = await BlocksoftAxios._request(apiPath, 'POST', checkData);
+      // @ts-ignore
+      const res: AxiosResponse<any, any> = await BlocksoftAxios._request(
+        apiPath,
+        'POST',
+        checkData
+      );
       accountInfo = res.data.result.value;
-    } catch (e) {
+    } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(
           'SolUtils.getAccountInfo ' + address + ' error ' + e.message
@@ -91,6 +98,7 @@ export default {
   },
 
   isAddressValid(value: string): boolean {
+    // tslint:disable-next-line:no-unused-expression
     new PublicKey(value);
     return true;
   },
@@ -113,14 +121,14 @@ export default {
       ]
     };
     const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
-    const apiPath_2 = BlocksoftExternalSettings.getStatic('SOL_SERVER_2');
-    let try_2 = false;
-    let sendRes;
+    const apiPath2 = BlocksoftExternalSettings.getStatic('SOL_SERVER_2');
+    let try2 = false;
+    let sendRes: any = null; // Initialize with 'null'
     try {
       sendRes = await BlocksoftAxios._request(apiPath, 'POST', sendData);
       if (!sendRes || typeof sendRes.data === 'undefined') {
-        if (apiPath_2) {
-          try_2 = true;
+        if (apiPath2) {
+          try2 = true;
         } else {
           throw new Error('SERVER_RESPONSE_BAD_INTERNET');
         }
@@ -130,34 +138,35 @@ export default {
         typeof sendRes.data.error.message !== 'undefined'
       ) {
         if (sendRes.data.error.message === 'Node is unhealthy') {
-          try_2 = true;
+          try2 = true;
         } else {
           throw new Error(sendRes.data.error.message);
         }
       }
     } catch (e) {
-      try_2 = true;
+      try2 = true;
     }
 
-    if (try_2 && apiPath_2 && apiPath_2 !== apiPath) {
-      const sendRes_2 = await BlocksoftAxios._request(
-        apiPath_2,
-        'POST',
-        sendData
-      );
-      if (!sendRes_2 || typeof sendRes_2.data === 'undefined') {
-        throw new Error('SERVER_RESPONSE_BAD_INTERNET');
+    if (try2 && apiPath2 && apiPath2 !== apiPath) {
+      let sendRes2: any = null; // Initialize with 'null'
+      try {
+        sendRes2 = await BlocksoftAxios._request(apiPath2, 'POST', sendData);
+        if (!sendRes2 || typeof sendRes2.data === 'undefined') {
+          throw new Error('SERVER_RESPONSE_BAD_INTERNET');
+        }
+        if (
+          typeof sendRes2.data.error !== 'undefined' &&
+          typeof sendRes2.data.error.message !== 'undefined'
+        ) {
+          throw new Error(sendRes2.data.error.message);
+        }
+        return sendRes2.data.result;
+      } catch (e) {
+        await BlocksoftCryptoLog.log(e);
       }
-      if (
-        typeof sendRes_2.data.error !== 'undefined' &&
-        typeof sendRes_2.data.error.message !== 'undefined'
-      ) {
-        throw new Error(sendRes_2.data.error.message);
-      }
-      return sendRes_2.data.result;
     }
 
-    return sendRes.data.result;
+    return sendRes?.data?.result || '';
   },
 
   /**
@@ -178,6 +187,7 @@ export default {
       'POST',
       getRecentBlockhashData
     );
+    // @ts-ignore
     return getRecentBlockhashRes.data.result.value;
   },
 
@@ -197,13 +207,14 @@ export default {
     const getEpoch = { jsonrpc: '2.0', id: 1, method: 'getEpochInfo' };
     try {
       const resEpoch = await BlocksoftAxios._request(apiPath, 'POST', getEpoch);
+      // @ts-ignore
       const tmp = resEpoch.data.result.epoch * 1;
       if (tmp > 0 && tmp !== CACHE_EPOCH.value) {
         CACHE_EPOCH.value = tmp;
         settingsActions.setSettings('SOL_epoch', tmp);
       }
       CACHE_EPOCH.ts = now;
-    } catch (e) {
+    } catch (e: any) {
       BlocksoftCryptoLog.log('SolUtils.getEpoch error ' + e.message);
       // nothing
     }
@@ -215,7 +226,7 @@ export default {
     walletPrivKey: string,
     walletPubKey: string
   ): Promise<any> {
-    let account = false;
+    let account: Account | boolean = false;
     try {
       account = new Account(Buffer.from(walletPrivKey, 'hex'));
     } catch (e: any) {
@@ -238,7 +249,7 @@ export default {
     }
 
     try {
-      transaction.partialSign(account);
+      transaction.partialSign(account as Account);
     } catch (e: any) {
       e.message += ' while transaction.partialSign with account';
       throw e;

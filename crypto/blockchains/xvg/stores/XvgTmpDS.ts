@@ -1,3 +1,5 @@
+// TODO add Database
+// @ts-ignore
 import Database from '@app/appstores/DataSource/Database';
 
 const tableName = ' transactions_scanners_tmp';
@@ -5,7 +7,7 @@ const tableName = ' transactions_scanners_tmp';
 class XvgTmpDS {
   _currencyCode = 'XVG';
 
-  async getCache(address) {
+  async getCache(address: any) {
     const res = await Database.query(`
                 SELECT tmp_key, tmp_sub_key, tmp_val
                 FROM ${tableName}
@@ -21,13 +23,14 @@ class XvgTmpDS {
         if (row.tmp_sub_key !== 'data') {
           val = JSON.parse(Database.unEscapeString(row.tmp_val));
         }
+        // @ts-ignore
         tmp[row.tmp_key + '_' + row.tmp_sub_key] = val;
       }
     }
     return tmp;
   }
 
-  async saveCache(address, key, subKey, value) {
+  async saveCache(address: any, key: any, subKey: string, value: boolean) {
     const now = new Date().toISOString();
     const prepared = [
       {

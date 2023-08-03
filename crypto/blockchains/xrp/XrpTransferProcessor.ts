@@ -8,34 +8,21 @@
  */
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import BlocksoftUtils from '../../common/BlocksoftUtils';
-<<<<<<< Updated upstream
-import BlocksoftDispatcher from '../BlocksoftDispatcher';
+import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
 import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
 
-import { BlocksoftBlockchainTypes } from '../BlocksoftBlockchainTypes';
-import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
-=======
-import MarketingEvent from '../../../app/services/Marketing/MarketingEvent';
-
-import { XrpTxSendProvider } from './basic/XrpTxSendProvider';
-import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
-import { BlocksoftBlockchainTypes } from '@lib/blockchains/BlocksoftBlockchainTypes';
-import BlocksoftDispatcher from '@lib/blockchains/BlocksoftDispatcher';
->>>>>>> Stashed changes
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
+import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 
 const FEE_DECIMALS = 6;
 
 export default class XrpTransferProcessor
-  implements BlocksoftBlockchainTypes.TransferProcessor
+  implements AirDAOBlockchainTypes.TransferProcessor
 {
   private _settings: { network: string; currencyCode: string };
-  private _provider: XrpTxSendProvider;
-<<<<<<< Updated upstream
-  private _inited: boolean = false;
-=======
+  private _provider: XrpTxSendProvider | undefined;
   private _inited = false;
->>>>>>> Stashed changes
 
   constructor(settings: { network: string; currencyCode: string }) {
     this._settings = settings;
@@ -50,8 +37,8 @@ export default class XrpTransferProcessor
   }
 
   async checkTransferHasError(
-    data: BlocksoftBlockchainTypes.CheckTransferHasErrorData
-  ): Promise<BlocksoftBlockchainTypes.CheckTransferHasErrorResult> {
+    data: AirDAOBlockchainTypes.CheckTransferHasErrorData
+  ): Promise<AirDAOBlockchainTypes.CheckTransferHasErrorResult> {
     // @ts-ignore
     if (
       data.amount &&
@@ -80,14 +67,14 @@ export default class XrpTransferProcessor
   }
 
   async getFeeRate(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
     additionalData: {} = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
-    const result: BlocksoftBlockchainTypes.FeeRateResult = {
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
+    const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -1,
       shouldShowFees: false
-    } as BlocksoftBlockchainTypes.FeeRateResult;
+    } as AirDAOBlockchainTypes.FeeRateResult;
 
     // @ts-ignore
     if (data.amount * 1 <= 0) {
@@ -119,14 +106,7 @@ export default class XrpTransferProcessor
         this._inited = true;
       }
       txJson = await this._provider.getPrepared(data);
-<<<<<<< Updated upstream
-    } catch (e) {
-=======
     } catch (e: any) {
->>>>>>> Stashed changes
-      if (e.message.indexOf('connect() timed out after') !== -1) {
-        return false;
-      }
       if (e.message.indexOf('Account not found') !== -1) {
         return false;
       }
@@ -169,10 +149,10 @@ export default class XrpTransferProcessor
   }
 
   async getTransferAllBalance(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const balance = data.amount;
 
     // @ts-ignore
@@ -222,10 +202,10 @@ export default class XrpTransferProcessor
   }
 
   async sendTx(
-    data: BlocksoftBlockchainTypes.TransferData,
-    privateData: BlocksoftBlockchainTypes.TransferPrivateData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    privateData: AirDAOBlockchainTypes.TransferPrivateData,
+    uiData: AirDAOBlockchainTypes.TransferUiData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('XRP transaction required privateKey');
     }
@@ -240,14 +220,7 @@ export default class XrpTransferProcessor
         this._inited = true;
       }
       txJson = await this._provider.getPrepared(data, false);
-<<<<<<< Updated upstream
-    } catch (e) {
-=======
     } catch (e: any) {
->>>>>>> Stashed changes
-      if (e.message.indexOf('connect() timed out after') !== -1) {
-        throw new Error('SERVER_RESPONSE_BAD_INTERNET');
-      }
       if (e.message.indexOf('Account not found') !== -1) {
         throw new Error('SERVER_RESPONSE_BAD_INTERNET');
       }
