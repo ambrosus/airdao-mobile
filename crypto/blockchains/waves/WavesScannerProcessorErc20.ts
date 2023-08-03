@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import WavesScannerProcessor from '@crypto/blockchains/waves/WavesScannerProcessor';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
@@ -46,7 +46,7 @@ export default class WavesScannerProcessorErc20 extends WavesScannerProcessor {
     );
 
     const link = `${this._apiPath}/assets/balance/${address}/${this._tokenAddress}`;
-    const res = await BlocksoftAxios.get(link);
+    const res = await AirDAOAxios.get(link);
     if (!res) {
       return false;
     }

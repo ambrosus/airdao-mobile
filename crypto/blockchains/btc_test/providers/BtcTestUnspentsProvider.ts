@@ -4,7 +4,7 @@
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 
 const API_PATH = 'https://blockstream.info/testnet/api/';
 
@@ -35,7 +35,7 @@ export default class BtcTestUnspentsProvider
     );
 
     const link = API_PATH + `address/${address}/utxo`;
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
 
     if (!res || typeof res.data === 'undefined') {
       AirDAOCryptoLog.log(

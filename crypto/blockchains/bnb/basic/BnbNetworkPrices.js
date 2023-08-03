@@ -6,7 +6,7 @@
  * https://docs.binance.org/api-reference/dex-api/paths.html#apiv1fees
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 const CACHE_VALID_TIME = 60000; // 1 minute
@@ -30,7 +30,7 @@ class BnbNetworkPrices {
     const link = `${apiServer}/api/v1/fees`;
 
     try {
-      const tmp = await BlocksoftAxios.getWithoutBraking(link, 2);
+      const tmp = await AirDAOAxios.getWithoutBraking(link, 2);
       if (tmp.data) {
         // {"fee": 1000000, "fee_for": 1, "msg_type": "transferOwnership"}]
         const result = {};

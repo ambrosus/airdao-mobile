@@ -4,7 +4,7 @@
  * @version 0.32
  */
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import { DatabaseTable } from '@appTypes';
 import { Database } from '@database';
@@ -104,7 +104,7 @@ class EthRawDS {
             // let checkResult = false;
             // try {
             //   transactionLog.selectedFee.isRebroadcast = true;
-            //   checkResult = await BlocksoftAxios.post(successProxy, {
+            //   checkResult = await AirDAOAxios.post(successProxy, {
             //     raw: row.transactionRaw,
             //     txRBF:
             //       typeof transactionLog.txRBF !== 'undefined'
@@ -147,7 +147,7 @@ class EthRawDS {
           ) {
             link = this._trezorServer + '/api/v2/sendtx/';
             try {
-              broad = await BlocksoftAxios.post(link, row.transactionRaw);
+              broad = await AirDAOAxios.post(link, row.transactionRaw);
               broadcastLog = ' broadcasted ok ' + JSON.stringify(broad.data);
               updateObj.is_removed = '1';
               updateObj.removed_at = now;
@@ -172,7 +172,7 @@ class EthRawDS {
               'https://api.etherscan.io/api?module=proxy&action=eth_sendRawTransaction&apikey=YourApiKeyToken&hex=';
             let broadcastLog1 = '';
             try {
-              broad = await BlocksoftAxios.get(link + row.transactionRaw);
+              broad = await AirDAOAxios.get(link + row.transactionRaw);
               if (typeof broad.data.error !== 'undefined') {
                 throw new Error(JSON.stringify(broad.data.error));
               }
@@ -196,7 +196,7 @@ class EthRawDS {
             link = 'https://mainnet.infura.io/v3/' + this._infuraProjectId;
             let broadcastLog2 = '';
             try {
-              broad = await BlocksoftAxios.post(link, {
+              broad = await AirDAOAxios.post(link, {
                 jsonrpc: '2.0',
                 method: 'eth_sendRawTransaction',
                 params: [row.transactionRaw],

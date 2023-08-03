@@ -1,6 +1,6 @@
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { getFioSdk } from './FioSdkWrapper';
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import { Fio } from '@fioprotocol/fiojs';
 import { FIOSDK } from '@fioprotocol/fiosdk/src/FIOSDK';
 import _ from 'lodash';
@@ -322,7 +322,7 @@ export const getTransactions = async (publicKey) => {
   try {
     const link = BlocksoftExternalSettings.getStatic('FIO_HISTORY_URL');
     const accountHash = Fio.accountHash(publicKey);
-    const response = await BlocksoftAxios.post(link + 'get_actions', {
+    const response = await AirDAOAxios.post(link + 'get_actions', {
       account_name: accountHash,
       pos: -1
     });

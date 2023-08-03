@@ -2,7 +2,7 @@
  * @version 0.11
  */
 import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 export default class XmrUnspentsProvider {
@@ -47,10 +47,7 @@ export default class XmrUnspentsProvider {
                     dust_threshold: '2000000000'
                 }
                 */
-        res = await BlocksoftAxios.post(
-          this._link + 'get_unspent_outs',
-          params
-        );
+        res = await AirDAOAxios.post(this._link + 'get_unspent_outs', params);
         AirDAOCryptoLog.log(
           'XmrUnspentsProvider Xmr._getUnspents res ' +
             JSON.stringify(res.data).substr(0, 200)
@@ -87,7 +84,7 @@ export default class XmrUnspentsProvider {
             }
             */
 
-      const res = await BlocksoftAxios.post(
+      const res = await AirDAOAxios.post(
         this._link + 'get_random_outs',
         params
       );

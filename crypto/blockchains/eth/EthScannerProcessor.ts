@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthBasic from './basic/EthBasic';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
@@ -112,7 +112,7 @@ export default class EthScannerProcessor extends EthBasic {
 
     let link =
       this._trezorServer + '/api/v2/address/' + address + '?details=txs';
-    let res = await BlocksoftAxios.getWithoutBraking(link);
+    let res = await AirDAOAxios.getWithoutBraking(link);
 
     if (!res || !res.data) {
       BlocksoftExternalSettings.setTrezorServerInvalid(
@@ -134,7 +134,7 @@ export default class EthScannerProcessor extends EthBasic {
         );
       }
       link = this._trezorServer + '/api/v2/address/' + address + '?details=txs';
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
       if (!res || !res.data) {
         BlocksoftExternalSettings.setTrezorServerInvalid(
           this._trezorServerCode,
@@ -385,7 +385,7 @@ export default class EthScannerProcessor extends EthBasic {
     const link =
       'https://www.oklink.com/api/v5/explorer/address/transaction-list?chainShortName=ethw&address=' +
       address;
-    const tmp = await BlocksoftAxios.getWithHeaders(link, {
+    const tmp = await AirDAOAxios.getWithHeaders(link, {
       'Ok-Access-Key': key
     });
     if (
@@ -418,7 +418,7 @@ export default class EthScannerProcessor extends EthBasic {
       logTitle + ' started ' + JSON.stringify(isInternal),
       link
     );
-    const tmp = await BlocksoftAxios.getWithoutBraking(link);
+    const tmp = await AirDAOAxios.getWithoutBraking(link);
     if (
       !tmp ||
       typeof tmp.data === 'undefined' ||
@@ -480,7 +480,7 @@ export default class EthScannerProcessor extends EthBasic {
     }
 
     let link = this._trezorServer + '/api/v2/tx-specific/' + txHash;
-    let res = await BlocksoftAxios.getWithoutBraking(link);
+    let res = await AirDAOAxios.getWithoutBraking(link);
 
     if (!res || !res.data) {
       BlocksoftExternalSettings.setTrezorServerInvalid(
@@ -502,7 +502,7 @@ export default class EthScannerProcessor extends EthBasic {
         );
       }
       link = this._trezorServer + '/api/v2/tx-specific/' + txHash;
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
       if (!res || !res.data) {
         BlocksoftExternalSettings.setTrezorServerInvalid(
           this._trezorServerCode,

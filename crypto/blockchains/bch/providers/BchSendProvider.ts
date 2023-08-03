@@ -3,7 +3,7 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import DogeSendProvider from '../../doge/providers/DogeSendProvider';
 
 export default class BchSendProvider
@@ -42,7 +42,7 @@ export default class BchSendProvider
 
     let res;
     try {
-      res = (await BlocksoftAxios.get(this._apiPath + hex)) as any;
+      res = (await AirDAOAxios.get(this._apiPath + hex)) as any;
     } catch (error) {
       const e = error as unknown as any;
       if (e.message.indexOf('dust') !== -1) {

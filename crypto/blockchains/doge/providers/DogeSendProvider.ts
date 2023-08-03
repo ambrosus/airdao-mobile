@@ -4,7 +4,7 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 export default class DogeSendProvider
@@ -71,7 +71,7 @@ export default class DogeSendProvider
 
     let res;
     try {
-      res = await BlocksoftAxios.post(link, hex);
+      res = await AirDAOAxios.post(link, hex);
     } catch (e) {
       if (subtitle.indexOf('rawSend') !== -1) {
         throw e;

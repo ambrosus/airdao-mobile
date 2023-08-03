@@ -3,7 +3,7 @@
  * https://github.com/Blockstream/esplora/blob/master/API.md
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import DogeFindAddressFunction from '@crypto/blockchains/doge/basic/DogeFindAddressFunction';
 
@@ -19,7 +19,7 @@ export default class BtcTestScannerProcessor {
     AirDAOCryptoLog.log(
       'BtcTestScannerProcessor.getBalance started ' + address
     );
-    const res = await BlocksoftAxios.getWithoutBraking(
+    const res = await AirDAOAxios.getWithoutBraking(
       API_PATH + 'address/' + address
     );
     // console.log('res', res.data.chain_stats.funded_txo_sum) // spent_txo_sum
@@ -48,7 +48,7 @@ export default class BtcTestScannerProcessor {
     AirDAOCryptoLog.log(
       'BtcTestScannerProcessor.getTransactions started ' + address
     );
-    const res = await BlocksoftAxios.getWithoutBraking(
+    const res = await AirDAOAxios.getWithoutBraking(
       API_PATH + 'address/' + address + '/txs'
     );
     if (!res || typeof res.data === 'undefined' || !res.data) {

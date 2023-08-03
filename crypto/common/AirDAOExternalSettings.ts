@@ -1,4 +1,4 @@
-import BlocksoftAxios from './BlocksoftAxios';
+import AirDAOAxios from './AirDAOAxios';
 import AirDAOCryptoLog from './AirDAOCryptoLog';
 // @ts-ignore
 import ApiProxy from '../../app/services/Api/ApiProxy';
@@ -330,7 +330,7 @@ class AirDAOExternalSettings {
         if (!currentServer) {
           currentServer = server;
         }
-        const current = await BlocksoftAxios.getWithoutBraking(server + '/api');
+        const current = await AirDAOAxios.getWithoutBraking(server + '/api');
         if (current && typeof current === 'object' && 'data' in current) {
           if (typeof current.data.blockbook.bestHeight !== 'undefined') {
             const tmp = current.data.blockbook.bestHeight;

@@ -3,7 +3,7 @@
  */
 
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
@@ -83,7 +83,7 @@ export default class BtcScannerProcessor {
         address +
         '&type=xpub&currencyCode=' +
         this._settings['currencyCode'];
-      res = await BlocksoftAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
+      res = await AirDAOAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
       if (
         res &&
         typeof res.data !== 'undefined' &&
@@ -98,7 +98,7 @@ export default class BtcScannerProcessor {
           address +
           '?details=txs&gap=9999&tokens=used&pageSize=40';
         try {
-          res = await BlocksoftAxios._request(
+          res = await AirDAOAxios._request(
             link,
             'get',
             false,
@@ -129,7 +129,7 @@ export default class BtcScannerProcessor {
         address +
         '&currencyCode=' +
         this._settings['currencyCode'];
-      res = await BlocksoftAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
+      res = await AirDAOAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
       if (
         res &&
         typeof res.data !== 'undefined' &&
@@ -143,7 +143,7 @@ export default class BtcScannerProcessor {
           '/api/v2/address/' +
           address +
           '?details=txs&gap=9999&pageSize=80';
-        res = await BlocksoftAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
+        res = await AirDAOAxios.getWithoutBraking(link, 5, TIMEOUT_BTC);
       }
     }
 

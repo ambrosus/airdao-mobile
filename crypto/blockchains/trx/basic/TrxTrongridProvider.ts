@@ -3,7 +3,7 @@
  * https://github.com/tronscan/tronscan-frontend/wiki/TRONSCAN-API
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 
@@ -136,7 +136,7 @@ export default class TrxTrongridProvider {
     AirDAOCryptoLog.log(
       'TrxTrongridProvider.get ' + link + ' ' + JSON.stringify(params)
     );
-    const res: { data: any } = await BlocksoftAxios.postWithoutBraking(
+    const res: { data: any } = await AirDAOAxios.postWithoutBraking(
       link,
       params,
       BALANCE_MAX_TRY
@@ -278,7 +278,7 @@ export default class TrxTrongridProvider {
     let leftEnergy: any = false;
     let totalEnergy: any = false;
     try {
-      const res: { data: any } = await BlocksoftAxios.post(link, { address });
+      const res: { data: any } = await AirDAOAxios.post(link, { address });
       if (!res || typeof res.data !== 'object') {
         throw new Error('Invalid response from Trongrid');
       }

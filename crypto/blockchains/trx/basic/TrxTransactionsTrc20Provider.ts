@@ -5,7 +5,7 @@
 import TrxTransactionsProvider from './TrxTransactionsProvider';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import Database from '@app/appstores/DataSource/Database/main';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 
@@ -151,7 +151,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
     }
 
     if (needData) {
-      const tmp = await BlocksoftAxios.get(
+      const tmp = await AirDAOAxios.get(
         'https://apilist.tronscan.org/api/transaction-info?hash=' +
           res.transactionHash
       );

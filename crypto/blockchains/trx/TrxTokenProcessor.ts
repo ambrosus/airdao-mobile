@@ -3,7 +3,7 @@
  * https://apilist.tronscan.org/api/contract?contract=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
  * [ { address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', balance: 7208332710, verify_status: 0, balanceInUsd: 0, trxCount: 758742, date_created: 1555400628000, creator: [Object] } ] }
  */
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 
 interface TokenDetails {
   currencyCodePrefix: string;
@@ -50,7 +50,7 @@ export default class TrxTokenProcessor {
    */
   async getTokenDetails(tokenAddress: string): Promise<TokenDetails | boolean> {
     if (tokenAddress[0] === 'T') {
-      const res = await BlocksoftAxios.get<TronscanResponse>(
+      const res = await AirDAOAxios.get<TronscanResponse>(
         this._tokenTronscanPath20 + tokenAddress
       );
       if (typeof res.data[0] !== 'undefined') {
@@ -68,7 +68,7 @@ export default class TrxTokenProcessor {
         };
       }
     } else {
-      const res = await BlocksoftAxios.get<TronscanResponse>(
+      const res = await AirDAOAxios.get<TronscanResponse>(
         this._tokenTronscanPath10 + tokenAddress
       );
       if (typeof res.data[0] !== 'undefined') {

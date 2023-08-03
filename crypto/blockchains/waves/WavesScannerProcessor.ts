@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 import WavesTransactionsProvider from '@crypto/blockchains/waves/providers/WavesTransactionsProvider';
@@ -43,7 +43,7 @@ export default class WavesScannerProcessor {
     );
 
     const link = `${this._apiPath}/addresses/balance/details/${address}`;
-    const res = await BlocksoftAxios.get(link);
+    const res = await AirDAOAxios.get(link);
     if (!res) {
       return false;
     }

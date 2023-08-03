@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
@@ -81,7 +81,7 @@ export class BnbTxSendProvider {
     type = 'usual'
   ) {
     const apiServer = await BlocksoftExternalSettings.getStatic('BNB_SERVER');
-    const res = await BlocksoftAxios.getWithoutBraking(
+    const res = await AirDAOAxios.getWithoutBraking(
       apiServer + '/api/v1/account/' + data.addressFrom
     );
     if (!res.data) {

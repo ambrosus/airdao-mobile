@@ -3,7 +3,7 @@
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/txs/?unspent=true
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 export default class XvgUnspentsProvider
@@ -27,7 +27,7 @@ export default class XvgUnspentsProvider
     );
 
     const link = this._apiPath + address + '/txs/?unspent=true';
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
 
     AirDAOCryptoLog.log(
       this._settings.currencyCode +

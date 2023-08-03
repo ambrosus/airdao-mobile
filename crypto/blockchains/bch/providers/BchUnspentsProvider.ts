@@ -6,7 +6,7 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BtcCashUtils from '../ext/BtcCashUtils';
 import DogeUnspentsProvider from '../../doge/providers/DogeUnspentsProvider';
 
@@ -34,7 +34,7 @@ export default class BchUnspentsProvider
     // );
     address = BtcCashUtils.fromLegacyAddress(address);
     const link = this._apiPath + address;
-    const res = (await BlocksoftAxios.getWithoutBraking(link)) as any;
+    const res = (await AirDAOAxios.getWithoutBraking(link)) as any;
     if (!res || !res.data || typeof res.data === 'undefined') {
       AirDAOCryptoLog.log(
         this._settings.currencyCode +

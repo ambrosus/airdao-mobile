@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import TrxNodeInfoProvider from './TrxNodeInfoProvider';
 import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
@@ -61,7 +61,7 @@ export default class TrxTransactionsProvider {
       }
     }
 
-    const res = await BlocksoftAxios.getWithoutBraking(
+    const res = await AirDAOAxios.getWithoutBraking(
       this._tronscanLink + address,
       TXS_MAX_TRY
     );

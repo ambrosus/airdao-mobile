@@ -2,7 +2,7 @@
  * @version 0.52
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
@@ -62,7 +62,7 @@ export default class SolScannerProcessor {
         method: 'getBalance',
         params: [address]
       };
-      const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+      const res = await AirDAOAxios._request(apiPath, 'POST', data);
 
       if (
         typeof res.data.result === 'undefined' ||
@@ -114,7 +114,7 @@ export default class SolScannerProcessor {
         data.params[1].until = CACHE_FROM_DB[lastHashVar].last_hash;
       }
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
-      const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+      const res = await AirDAOAxios._request(apiPath, 'POST', data);
       if (typeof res.data.result === 'undefined' || !res.data.result) {
         return false;
       }
@@ -226,7 +226,7 @@ export default class SolScannerProcessor {
     if (typeof CACHE_TXS[transaction.signature] === 'undefined') {
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
       try {
-        const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+        const res = await AirDAOAxios._request(apiPath, 'POST', data);
         if (typeof res.data.result === 'undefined' || !res.data.result) {
           return false;
         }

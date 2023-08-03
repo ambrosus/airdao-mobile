@@ -1,4 +1,4 @@
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import XrpTmpDS from '@crypto/blockchains/xrp/stores/XrpTmpDS';
 
@@ -17,7 +17,7 @@ export default class XrpDataRippleProvider {
     let balance = 0;
 
     try {
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
       if (
         res &&
         typeof res.data !== 'undefined' &&
@@ -65,7 +65,7 @@ export default class XrpDataRippleProvider {
     const link = `${API_PATH}/accounts/${address}/payments`;
     let res = false;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
     } catch (e) {
       if (
         e.message.indexOf('account not found') === -1 &&
@@ -212,7 +212,7 @@ export default class XrpDataRippleProvider {
         CACHE_BLOCK_DATA[index].data.transactionConfirmations < 100)
     ) {
       try {
-        res = await BlocksoftAxios.getWithoutBraking(link);
+        res = await AirDAOAxios.getWithoutBraking(link);
         if (
           res.data &&
           typeof res.data !== 'undefined' &&

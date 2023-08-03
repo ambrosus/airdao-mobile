@@ -3,7 +3,7 @@
  * https://docs.vechain.org/thor/get-started/api.html
  */
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
 const API_PATH = 'https://sync-mainnet.vechain.org';
@@ -39,7 +39,7 @@ export default class VetScannerProcessor {
     }
 
     const link = API_PATH + '/accounts/' + address;
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     if (
       !res ||
       typeof res.data === 'undefined' ||
@@ -119,7 +119,7 @@ export default class VetScannerProcessor {
     if (this._settings.currencyCode === 'VET') {
       try {
         const linkNumber = API_PATH + '/blocks/best';
-        const resultNumber = await BlocksoftAxios.get(linkNumber);
+        const resultNumber = await AirDAOAxios.get(linkNumber);
         if (
           resultNumber &&
           typeof resultNumber.data !== 'undefined' &&
@@ -137,7 +137,7 @@ export default class VetScannerProcessor {
       }
 
       const link = API_PATH + '/logs/transfer';
-      const result = await BlocksoftAxios.post(link, {
+      const result = await AirDAOAxios.post(link, {
         options: {
           offset: 0,
           limit: 100
@@ -167,7 +167,7 @@ export default class VetScannerProcessor {
       const link = API_PATH + '/logs/event';
       const tokenHex =
         '0x000000000000000000000000' + address.toLowerCase().substr(2);
-      const result = await BlocksoftAxios.post(link, {
+      const result = await AirDAOAxios.post(link, {
         options: {
           offset: 0,
           limit: 100

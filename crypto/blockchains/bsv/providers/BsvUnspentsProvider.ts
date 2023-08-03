@@ -6,7 +6,7 @@ import DogeUnspentsProvider from '@crypto/blockchains/doge/providers/DogeUnspent
 import BtcCashUtils from '@crypto/blockchains/bch/ext/BtcCashUtils';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 export default class BsvUnspentsProvider
   extends DogeUnspentsProvider
   implements BlocksoftBlockchainTypes.UnspentsProvider
@@ -39,7 +39,7 @@ export default class BsvUnspentsProvider
       address +
       '/unspent';
 
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     if (!res.data || typeof res.data[0] === 'undefined') {
       return [];
     }

@@ -21,7 +21,7 @@
  * @property {*} transactionJson
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import DogeFindAddressFunction from './basic/DogeFindAddressFunction';
@@ -88,7 +88,7 @@ export default class DogeScannerProcessor {
         address +
         '&currencyCode=' +
         this._settings['currencyCode'];
-      res = await BlocksoftAxios.getWithoutBraking(link, 5, TIMEOUT_DOGE);
+      res = await AirDAOAxios.getWithoutBraking(link, 5, TIMEOUT_DOGE);
     }
     if (
       res &&
@@ -107,7 +107,7 @@ export default class DogeScannerProcessor {
         '/api/v2/address/' +
         address +
         '?details=txs&pageSize=40';
-      res = await BlocksoftAxios.getWithoutBraking(link, 5, TIMEOUT_DOGE);
+      res = await AirDAOAxios.getWithoutBraking(link, 5, TIMEOUT_DOGE);
     }
 
     if (!res || !res.data) {

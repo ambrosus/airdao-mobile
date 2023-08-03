@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import { AxiosResponse } from 'axios';
@@ -32,7 +32,7 @@ export default class SolTokenProcessor {
   async getTokenDetails(tokenAddress: string): Promise<TokenDetails | boolean> {
     const link = await BlocksoftExternalSettings.get('SOL_TOKENS_LIST');
     // @ts-ignore
-    const res: AxiosResponse<any> = await BlocksoftAxios.get(link);
+    const res: AxiosResponse<any> = await AirDAOAxios.get(link);
     if (!res || typeof res.data.tokens === 'undefined' || !res.data.tokens) {
       return false;
     }
@@ -75,7 +75,7 @@ export default class SolTokenProcessor {
           }
         ]
       };
-      const response = await BlocksoftAxios._request(apiPath, 'POST', data);
+      const response = await AirDAOAxios._request(apiPath, 'POST', data);
       if (
         response &&
         response.data &&

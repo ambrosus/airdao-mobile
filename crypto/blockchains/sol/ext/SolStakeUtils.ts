@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
@@ -63,7 +63,7 @@ for (const tmp of validatorsConstants) {
 
 const init = async () => {
   const link = await BlocksoftExternalSettings.get('SOL_VALIDATORS_LIST');
-  const res = await BlocksoftAxios.get(link);
+  const res = await AirDAOAxios.get(link);
   if (!res.data || typeof res.data[0] === 'undefined' || !res.data[0]) {
     return false;
   }
@@ -89,7 +89,7 @@ export default {
 
       const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
       const getVote = { jsonrpc: '2.0', id: 1, method: 'getVoteAccounts' };
-      const resVote = await BlocksoftAxios._request(apiPath, 'POST', getVote);
+      const resVote = await AirDAOAxios._request(apiPath, 'POST', getVote);
       if (
         !resVote ||
         typeof resVote.data === 'undefined' ||
@@ -191,7 +191,7 @@ export default {
             `)
              */
 
-      const res = await BlocksoftAxios.post(link, data);
+      const res = await AirDAOAxios.post(link, data);
       if (
         res.data &&
         typeof res.data.result !== 'undefined' &&
@@ -288,7 +288,7 @@ export default {
       let res;
       accountInfo = [];
       try {
-        res = await BlocksoftAxios._request(apiPath, 'POST', checkData);
+        res = await AirDAOAxios._request(apiPath, 'POST', checkData);
 
         for (const tmp of res.data.result) {
           const parsed = tmp.account.data.parsed;
@@ -340,7 +340,7 @@ export default {
           'https://prod-api.solana.surf/v1/account/' +
           address +
           '/stakes?limit=10&offset=0';
-        const res2 = await BlocksoftAxios.get(apiPath2);
+        const res2 = await AirDAOAxios.get(apiPath2);
 
         for (const tmp of res2.data.data) {
           const item = {

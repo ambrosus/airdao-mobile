@@ -3,7 +3,7 @@ import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import Log from '@app/services/Log/Log';
 import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
@@ -182,7 +182,7 @@ const TronStakeUtils = {
   ): Promise<any> {
     const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
     const link = sendLink + shortLink;
-    const tmp = await BlocksoftAxios.post(link, params);
+    const tmp = await AirDAOAxios.post(link, params);
     let blockchainData;
 
     if (typeof tmp.data !== 'undefined') {

@@ -4,7 +4,7 @@
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
@@ -43,7 +43,7 @@ export default class OneScannerProcessor {
         method: 'hmy_getBalance',
         params: [oneAddress, 'latest']
       };
-      const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+      const res = await AirDAOAxios._request(apiPath, 'POST', data);
       if (typeof res.data === 'undefined') {
         return false;
       }
@@ -106,7 +106,7 @@ export default class OneScannerProcessor {
           }
         ]
       };
-      const res = await BlocksoftAxios._request(apiPath, 'POST', data);
+      const res = await AirDAOAxios._request(apiPath, 'POST', data);
       if (
         typeof res.data === 'undefined' ||
         typeof res.data.result === 'undefined' ||

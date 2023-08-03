@@ -18,7 +18,7 @@ import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
 import abi721 from './ext/erc721.js';
 import abi1155 from './ext/erc1155';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import OneUtils from '@crypto/blockchains/one/ext/OneUtils';
 import { Database } from '@database';
 
@@ -326,7 +326,7 @@ export default class EthTransferProcessor
             this._settings.currencyCode +
               ' EthTransferProcessor.getFeeRate estimatedGas for WalletConnect start'
           );
-          const tmp = await BlocksoftAxios.postWithoutBraking(
+          const tmp = await AirDAOAxios.postWithoutBraking(
             this._web3.LINK,
             params
           );

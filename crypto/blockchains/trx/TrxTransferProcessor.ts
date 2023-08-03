@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
@@ -146,7 +146,7 @@ export default class TrxTransferProcessor
         (data.isTransferAll ? 1 : 0);
       let res = false;
       try {
-        res = await BlocksoftAxios.get(link);
+        res = await AirDAOAxios.get(link);
       } catch (e) {
         throw new Error('no proxy fee for ' + link);
       }
@@ -380,7 +380,7 @@ export default class TrxTransferProcessor
 
       if (typeof data.dexOrderData === 'undefined' || !data.dexOrderData) {
         try {
-          const res2 = await BlocksoftAxios.post(link, {
+          const res2 = await AirDAOAxios.post(link, {
             address: addressHexTo
           });
           const tronData2 = res2.data;
@@ -663,7 +663,7 @@ export default class TrxTransferProcessor
             throw new Error(e1.message + ' in params build');
           }
           if (index < total) {
-            res = await BlocksoftAxios.post(link, params);
+            res = await AirDAOAxios.post(link, params);
 
             tx = res.data.transaction;
             await AirDAOCryptoLog.log(
@@ -729,7 +729,7 @@ export default class TrxTransferProcessor
             do {
               checks++;
               try {
-                const recheck = await BlocksoftAxios.post(linkRecheck, {
+                const recheck = await AirDAOAxios.post(linkRecheck, {
                   value: tx.txID
                 });
                 if (typeof recheck.data !== undefined) {
@@ -780,7 +780,7 @@ export default class TrxTransferProcessor
               }
             } while (checks < 100 && !mined);
           } else {
-            res = await BlocksoftAxios.post(link, params);
+            res = await AirDAOAxios.post(link, params);
           }
         }
       } else {
@@ -852,7 +852,7 @@ export default class TrxTransferProcessor
               ${link},
             ${params}`
           );
-          res = await BlocksoftAxios.post(link, params);
+          res = await AirDAOAxios.post(link, params);
         } else {
           params = {
             owner_address: ownerAddress,
@@ -880,7 +880,7 @@ export default class TrxTransferProcessor
               ${link},
             ${params}`
             );
-            res = await BlocksoftAxios.post(link, params);
+            res = await AirDAOAxios.post(link, params);
           } catch (e: any) {
             await AirDAOCryptoLog.log(
               this._settings.currencyCode +

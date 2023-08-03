@@ -4,7 +4,7 @@
  **/
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
 import BlocksoftUtils from '../../../common/AirDAOUtils';
@@ -88,7 +88,7 @@ export default class BtcNetworkPrices
 
       let tmp = false;
       try {
-        tmp = await BlocksoftAxios.getWithoutBraking(linkTrezor);
+        tmp = await AirDAOAxios.getWithoutBraking(linkTrezor);
         if (tmp && tmp.data) {
           lastBlock = tmp.data.blockbook.bestHeight;
           mempoolSize = tmp.data.blockbook.mempoolSize;
@@ -110,7 +110,7 @@ export default class BtcNetworkPrices
 
       tmp = false;
       try {
-        tmp = await BlocksoftAxios.getWithoutBraking(link);
+        tmp = await AirDAOAxios.getWithoutBraking(link);
         if (tmp && tmp.data) {
           logData.source = 'reloaded';
           if (lastBlock > CACHE_PREV_DATA.lastBlock) {

@@ -1,7 +1,7 @@
 /**
  * @version 0.50
  */
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
@@ -23,7 +23,7 @@ export default async function (data) {
   }
   if (!data.address) return false;
   link += 'assets?order_direction=desc&owner=' + data.address;
-  const result = await BlocksoftAxios.getWithoutBraking(link);
+  const result = await AirDAOAxios.getWithoutBraking(link);
 
   /**
    * @var tmp.id

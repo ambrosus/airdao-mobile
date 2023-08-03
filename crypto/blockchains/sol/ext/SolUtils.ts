@@ -1,7 +1,7 @@
 /**
  * @version 0.52
  */
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import { PublicKey } from '@solana/web3.js/src';
@@ -78,7 +78,7 @@ export default {
         ]
       };
       // @ts-ignore
-      const res: AxiosResponse<any, any> = await BlocksoftAxios._request(
+      const res: AxiosResponse<any, any> = await AirDAOAxios._request(
         apiPath,
         'POST',
         checkData
@@ -125,7 +125,7 @@ export default {
     let try2 = false;
     let sendRes: any = null; // Initialize with 'null'
     try {
-      sendRes = await BlocksoftAxios._request(apiPath, 'POST', sendData);
+      sendRes = await AirDAOAxios._request(apiPath, 'POST', sendData);
       if (!sendRes || typeof sendRes.data === 'undefined') {
         if (apiPath2) {
           try2 = true;
@@ -150,7 +150,7 @@ export default {
     if (try2 && apiPath2 && apiPath2 !== apiPath) {
       let sendRes2: any = null; // Initialize with 'null'
       try {
-        sendRes2 = await BlocksoftAxios._request(apiPath2, 'POST', sendData);
+        sendRes2 = await AirDAOAxios._request(apiPath2, 'POST', sendData);
         if (!sendRes2 || typeof sendRes2.data === 'undefined') {
           throw new Error('SERVER_RESPONSE_BAD_INTERNET');
         }
@@ -182,7 +182,7 @@ export default {
       method: 'getRecentBlockhash'
     };
     const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
-    const getRecentBlockhashRes = await BlocksoftAxios._request(
+    const getRecentBlockhashRes = await AirDAOAxios._request(
       apiPath,
       'POST',
       getRecentBlockhashData
@@ -206,7 +206,7 @@ export default {
     const apiPath = BlocksoftExternalSettings.getStatic('SOL_SERVER');
     const getEpoch = { jsonrpc: '2.0', id: 1, method: 'getEpochInfo' };
     try {
-      const resEpoch = await BlocksoftAxios._request(apiPath, 'POST', getEpoch);
+      const resEpoch = await AirDAOAxios._request(apiPath, 'POST', getEpoch);
       // @ts-ignore
       const tmp = resEpoch.data.result.epoch * 1;
       if (tmp > 0 && tmp !== CACHE_EPOCH.value) {

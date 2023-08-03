@@ -4,7 +4,7 @@
  */
 
 import BlocksoftUtils from '@crypto/common/BlocksoftUtils';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftPrivateKeysUtils from '@crypto/common/BlocksoftPrivateKeysUtils';
 
@@ -108,7 +108,7 @@ export default class XmrScannerProcessor {
           'get_address_info',
         JSON.stringify(linkParams)
       );
-      res = await BlocksoftAxios.post(link + 'get_address_info', linkParams);
+      res = await AirDAOAxios.post(link + 'get_address_info', linkParams);
     } catch (e) {
       AirDAOCryptoLog.log(
         this._settings.currencyCode +
@@ -141,7 +141,7 @@ export default class XmrScannerProcessor {
           generated_locally: true
         };
         try {
-          await BlocksoftAxios.post(
+          await AirDAOAxios.post(
             'https://api.mymonero.com:8443/login',
             linkParamsLogin
           ); // login needed
@@ -199,7 +199,7 @@ export default class XmrScannerProcessor {
       );
     }
 
-    const res2 = await BlocksoftAxios.postWithoutBraking(
+    const res2 = await AirDAOAxios.postWithoutBraking(
       link + 'get_address_txs',
       linkParams
     );

@@ -1,7 +1,7 @@
 /**
  * @version 0.50
  */
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
@@ -24,7 +24,7 @@ export default async function (data) {
     data.tokenBlockchainCode +
     '&tokens=' +
     data.customAssets.join(',');
-  const result = await BlocksoftAxios.get(link);
+  const result = await AirDAOAxios.get(link);
 
   /**
    * @var tmp.animation_url

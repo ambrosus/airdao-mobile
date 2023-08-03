@@ -3,7 +3,7 @@
  * https://github.com/tronscan/tronscan-frontend/wiki/TRONSCAN-API
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 
 const BALANCE_PATH = 'https://apilist.tronscan.org/api/account?address=';
 const BALANCE_MAX_TRY = 10;
@@ -90,7 +90,7 @@ export default class TrxTronscanProvider {
 
     const link = BALANCE_PATH + address;
     AirDAOCryptoLog.log('TrxTronscanProvider.get ' + link);
-    const res = await BlocksoftAxios.getWithoutBraking(link, BALANCE_MAX_TRY);
+    const res = await AirDAOAxios.getWithoutBraking(link, BALANCE_MAX_TRY);
     // @ts-ignore
     if (!res || !('data' in res)) {
       return false;

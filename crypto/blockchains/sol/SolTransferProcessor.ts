@@ -18,7 +18,7 @@ import SolTmpDS from '@crypto/blockchains/sol/stores/SolTmpDS';
 import SolStakeUtils from '@crypto/blockchains/sol/ext/SolStakeUtils';
 import { Buffer } from 'buffer';
 import AirDAOCryptoUtils from '@crypto/common/AirDAOCryptoUtils';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import config from '@constants/config';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
@@ -80,7 +80,7 @@ export default class SolTransferProcessor
           ' beach link ' +
           beachPath
       );
-      const res = await BlocksoftAxios.get(beachPath);
+      const res = await AirDAOAxios.get(beachPath);
       AirDAOCryptoLog.log(
         this._settings.currencyCode +
           ' SolTransferProcessor.getTransferAllBalance address ' +

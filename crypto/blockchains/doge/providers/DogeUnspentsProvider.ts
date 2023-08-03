@@ -5,7 +5,7 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import DogeRawDS from '../stores/DogeRawDS';
 
@@ -46,7 +46,7 @@ export default class DogeUnspentsProvider
       link = this._trezorServer + '/api/v2/utxo/' + address + '?gap=9999';
     }
 
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     // @ts-ignore
     if (!res || typeof res.data === 'undefined') {
       await BlocksoftExternalSettings.setTrezorServerInvalid(
@@ -117,7 +117,7 @@ export default class DogeUnspentsProvider
       }
     } else {
       const link = this._trezorServer + '/api/v2/tx/' + tx;
-      const res = await BlocksoftAxios.getWithoutBraking(link);
+      const res = await AirDAOAxios.getWithoutBraking(link);
       // @ts-ignore
       if (!res || typeof res.data === 'undefined' || !res.data) {
         AirDAOCryptoLog.log(
@@ -155,7 +155,7 @@ export default class DogeUnspentsProvider
 
       try {
         const link2 = this._trezorServer + '/api/v2/tx/' + unspent.txid;
-        const res2 = await BlocksoftAxios.getWithoutBraking(link2);
+        const res2 = await AirDAOAxios.getWithoutBraking(link2);
         // @ts-ignore
         if (res2 && typeof res2.data !== 'undefined' && res2.data) {
           // @ts-ignore

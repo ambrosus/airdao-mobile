@@ -2,7 +2,7 @@
  * @version 0.20
  * https://docs.binance.org/api-reference/dex-api/paths.html#apiv1transactions
  */
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
@@ -20,7 +20,7 @@ export default class BnbScannerProcessor {
     const link = `${apiServer}/api/v1/account/${address}`;
     let balance = 0;
     let frozen = 0;
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     // "balances":[{"free":"0.00100000","frozen":"0.00000000","locked":"0.00000000","symbol":"BNB"}]
     if (
       res &&
@@ -73,7 +73,7 @@ export default class BnbScannerProcessor {
         '&startTime=' + (scanData.account.balanceScanTime - 86400) * 1000; // 1 day
     }
 
-    const res = await BlocksoftAxios.getWithoutBraking(linkTxs);
+    const res = await AirDAOAxios.getWithoutBraking(linkTxs);
     if (!res || typeof res.data === 'undefined' || !res.data) {
       return false;
     }

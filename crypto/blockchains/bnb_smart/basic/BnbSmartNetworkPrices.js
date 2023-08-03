@@ -2,7 +2,7 @@
  * @version 0.20
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 
@@ -34,7 +34,7 @@ class BnbSmartNetworkPrices {
       mainCurrencyCode + ' BnbSmartNetworkPricesProvider.getFees no cache load'
     );
     try {
-      const res = await BlocksoftAxios.getWithoutBraking(feesApiPath);
+      const res = await AirDAOAxios.getWithoutBraking(feesApiPath);
       if (
         res &&
         typeof res.data !== 'undefined' &&

@@ -2,7 +2,7 @@
  * @version 0.52
  */
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import SolScannerProcessor from '@crypto/blockchains/sol/SolScannerProcessor';
 import { AxiosResponse } from 'axios';
@@ -65,7 +65,7 @@ export default class SolScannerProcessorSpl extends SolScannerProcessor {
         };
 
         // @ts-ignore
-        const res: AxiosResponse<any, any> = await BlocksoftAxios._request(
+        const res: AxiosResponse<any, any> = await AirDAOAxios._request(
           apiPath,
           'POST',
           data

@@ -5,7 +5,7 @@ import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 
 import { thorify } from 'thorify';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 const Web3 = require('web3');
@@ -215,7 +215,7 @@ export default class VetTransferProcessor
 
     const result = {} as AirDAOBlockchainTypes.SendTxResult;
     try {
-      const send = await BlocksoftAxios.post(
+      const send = await AirDAOAxios.post(
         API_PATH + '/transactions',
         { raw: signedData.rawTransaction },
         false

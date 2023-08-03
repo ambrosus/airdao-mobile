@@ -1,7 +1,7 @@
 /**
  * @version 0.20
  */
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import config from '@constants/config';
@@ -39,7 +39,7 @@ export default class XlmScannerProcessor {
     let res: any = false;
     let balance = 0;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
       if (
         res &&
         typeof res.data !== 'undefined' &&
@@ -90,7 +90,7 @@ export default class XlmScannerProcessor {
     const linkTxs = `${API_PATH}/accounts/${address}/transactions?order=desc&limit=50`;
     let res: any = false;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(linkTxs);
+      res = await AirDAOAxios.getWithoutBraking(linkTxs);
     } catch (e: any) {
       if (
         e.message.indexOf('account not found') === -1 &&
@@ -129,7 +129,7 @@ export default class XlmScannerProcessor {
     const link = `${API_PATH}/accounts/${address}/payments?order=desc&limit=50`;
     res = false;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
     } catch (e: any) {
       if (
         e.message.indexOf('account not found') === -1 &&

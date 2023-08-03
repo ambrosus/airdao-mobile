@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import BlocksoftUtils from '../../common/AirDAOUtils';
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
 
@@ -47,7 +47,7 @@ export default class UsdtScannerProcessor {
       return CACHE[address];
     }
     const link = `${USDT_API}/${address}`;
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     if (!res || typeof res.data === 'undefined' || !res.data) {
       return false;
     }
@@ -87,7 +87,7 @@ export default class UsdtScannerProcessor {
 
     // mass ask
     const link = `${USDT_API_MASS}`;
-    const res = await BlocksoftAxios.postWithoutBraking(link, address);
+    const res = await AirDAOAxios.postWithoutBraking(link, address);
 
     if (!res || typeof res.data === 'undefined') {
       return false;

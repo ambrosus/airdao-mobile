@@ -1,5 +1,5 @@
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import XrpTmpDS from '@crypto/blockchains/xrp/stores/XrpTmpDS';
@@ -40,7 +40,7 @@ export default class XrpDataScanProvider {
 
       // @ts-ignore
       // tslint:disable-next-line:no-shadowed-variable
-      const res: AxiosResponse<any> = await BlocksoftAxios.postWithoutBraking(
+      const res: AxiosResponse<any> = await AirDAOAxios.postWithoutBraking(
         link,
         data
       );
@@ -113,7 +113,7 @@ export default class XrpDataScanProvider {
 
       // @ts-ignore
       // tslint:disable-next-line:no-shadowed-variable
-      const res: AxiosResponse<any> = await BlocksoftAxios.postWithoutBraking(
+      const res: AxiosResponse<any> = await AirDAOAxios.postWithoutBraking(
         link,
         data
       );
@@ -283,7 +283,7 @@ export default class XrpDataScanProvider {
             }
           ]
         };
-        res = await BlocksoftAxios.postWithoutBraking(link, data);
+        res = await AirDAOAxios.postWithoutBraking(link, data);
         if (
           res.data &&
           typeof res.data !== 'undefined' &&

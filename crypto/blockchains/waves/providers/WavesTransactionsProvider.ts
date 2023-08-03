@@ -2,7 +2,7 @@
  * @version 0.50
  */
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 interface TransactionData {
@@ -44,7 +44,7 @@ export default class WavesTransactionsProvider {
     }
 
     const link = `${_apiPath}/transactions/address/${address}/limit/100`;
-    const res = await BlocksoftAxios.get(link);
+    const res = await AirDAOAxios.get(link);
 
     if (!res || !res.data || typeof res.data[0] === 'undefined') {
       return false;

@@ -1,4 +1,4 @@
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
@@ -15,10 +15,7 @@ export default class TrxNodeInfoProvider {
       const sendLink: string =
         BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
       const link = `${sendLink}/wallet/getnodeinfo`;
-      let info: any = await BlocksoftAxios.getWithoutBraking(
-        link,
-        INFO_MAX_TRY
-      );
+      let info: any = await AirDAOAxios.getWithoutBraking(link, INFO_MAX_TRY);
       if (
         info &&
         typeof info.data !== 'undefined' &&

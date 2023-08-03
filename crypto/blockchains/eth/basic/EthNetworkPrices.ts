@@ -2,7 +2,7 @@
  * @version 0.5
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
 import EthRawDS from '../stores/EthRawDS';
@@ -55,7 +55,7 @@ class EthNetworkPrices {
     do {
       try {
         // TODO
-        // checkResult = await BlocksoftAxios.post(
+        // checkResult = await AirDAOAxios.post(
         //   proxy,
         //   {
         //     address,
@@ -199,7 +199,7 @@ class EthNetworkPrices {
     let link = `${ESTIMATE_PATH}`;
     let tmp = false;
     try {
-      tmp = await BlocksoftAxios.getWithoutBraking(link, ESTIMATE_MAX_TRY);
+      tmp = await AirDAOAxios.getWithoutBraking(link, ESTIMATE_MAX_TRY);
       if (tmp.data && tmp.data.fastest) {
         if (typeof tmp.data.gasPriceRange !== 'undefined') {
           delete tmp.data.gasPriceRange;

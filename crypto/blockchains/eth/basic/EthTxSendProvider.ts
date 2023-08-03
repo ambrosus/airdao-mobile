@@ -8,7 +8,7 @@ import BlocksoftUtils from '../../../common/AirDAOUtils';
 import EthTmpDS from '../stores/EthTmpDS';
 import EthRawDS from '../stores/EthRawDS';
 import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 
 export default class EthTxSendProvider {
   private _web3: any;
@@ -130,7 +130,7 @@ export default class EthTxSendProvider {
       //     proxy,
       //   logData
       // );
-      // checkResult = await BlocksoftAxios.post(proxy, {
+      // checkResult = await AirDAOAxios.post(proxy, {
       //   raw: rawTransaction,
       //   txRBF,
       //   logData,
@@ -194,7 +194,7 @@ export default class EthTxSendProvider {
           rawTransaction
         );
         sendLink = this._web3.LINK;
-        const tmp = await BlocksoftAxios.postWithoutBraking(sendLink, {
+        const tmp = await AirDAOAxios.postWithoutBraking(sendLink, {
           jsonrpc: '2.0',
           method: 'eth_sendRawTransaction',
           params: [rawTransaction],
@@ -253,7 +253,7 @@ export default class EthTxSendProvider {
           this._settings.currencyCode + ' EthTxSendProvider.send post ',
           rawTransaction
         );
-        result = await BlocksoftAxios.post(sendLink, rawTransaction);
+        result = await AirDAOAxios.post(sendLink, rawTransaction);
       }
       // @ts-ignore
       await AirDAOCryptoLog.log(
@@ -269,7 +269,7 @@ export default class EthTxSendProvider {
         //     errorProxy,
         //   logData
         // );
-        // const res2 = await BlocksoftAxios.post(errorProxy, {
+        // const res2 = await AirDAOAxios.post(errorProxy, {
         //   raw: rawTransaction,
         //   txRBF,
         //   logData,
@@ -351,7 +351,7 @@ export default class EthTxSendProvider {
       //     successProxy,
       //   logData
       // );
-      // checkResult = await BlocksoftAxios.post(successProxy, {
+      // checkResult = await AirDAOAxios.post(successProxy, {
       //   raw: rawTransaction,
       //   txRBF,
       //   logData,

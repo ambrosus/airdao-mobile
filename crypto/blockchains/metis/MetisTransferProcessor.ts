@@ -5,7 +5,7 @@
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import EthTransferProcessor from '@crypto/blockchains/eth/EthTransferProcessor';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 
 export default class MetisTransferProcessor
@@ -50,7 +50,7 @@ export default class MetisTransferProcessor
       ],
       id: 1
     };
-    const tmp = await BlocksoftAxios.post(
+    const tmp = await AirDAOAxios.post(
       BlocksoftExternalSettings.getStatic('METIS_SERVER'),
       params
     );

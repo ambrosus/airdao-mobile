@@ -3,7 +3,7 @@
  * https://github.com/bitpay/bitcore/blob/master/packages/bitcore-node/docs/api-documentation.md
  * https://api.vergecurrency.network/node/api/XVG/mainnet/address/DL5LtSf7wztH45VuYunL8oaQHtJbKLCHyw/balance
  */
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import XvgTmpDS from './stores/XvgTmpDS';
@@ -27,7 +27,7 @@ export default class XvgScannerProcessor {
    */
   async getBalanceBlockchain(address) {
     const link = `${API_PATH}/address/${address}/balance`;
-    const res = await BlocksoftAxios.getWithoutBraking(link);
+    const res = await AirDAOAxios.getWithoutBraking(link);
     if (!res || !res.data) {
       return false;
     }
@@ -53,7 +53,7 @@ export default class XvgScannerProcessor {
     );
     const link = `${API_PATH}/address/${address}/txs`;
     AirDAOCryptoLog.log('XvgScannerProcessor.getTransactions call ' + link);
-    let tmp = await BlocksoftAxios.get(link);
+    let tmp = await AirDAOAxios.get(link);
     if (tmp.status < 200 || tmp.status >= 300) {
       throw new Error('not valid server response status ' + link);
     }
@@ -165,7 +165,7 @@ export default class XvgScannerProcessor {
       AirDAOCryptoLog.log(
         'XvgScannerProcessor._unifyTransactionStep2 called ' + link
       );
-      tmp = await BlocksoftAxios.get(link);
+      tmp = await AirDAOAxios.get(link);
       tmp = tmp.data;
       // noinspection ES6MissingAwait
       XvgTmpDS.saveCache(address, transaction.transactionHash, 'coins', tmp);
@@ -189,7 +189,7 @@ export default class XvgScannerProcessor {
     AirDAOCryptoLog.log(
       'XvgScannerProcessor._unifyTransactionStep2 call for details ' + link2
     );
-    let tmp2 = await BlocksoftAxios.get(link2);
+    let tmp2 = await AirDAOAxios.get(link2);
     tmp2 = tmp2.data;
     transaction.blockHash = tmp2.blockHash;
     transaction.blockTime = tmp2.blockTimeNormalized;

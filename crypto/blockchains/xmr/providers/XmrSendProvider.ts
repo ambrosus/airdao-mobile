@@ -3,7 +3,7 @@
  */
 // @ts-ignore
 import settingsActions from '../../../../app/appstores/Stores/Settings/SettingsActions';
-import BlocksoftAxios from '../../../common/BlocksoftAxios';
+import AirDAOAxios from '../../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 
 interface SendParams {
@@ -12,7 +12,7 @@ interface SendParams {
   tx: string;
 }
 
-interface BlocksoftAxiosResponse {
+interface AirDAOAxiosResponse {
   data: {
     message: string;
     double_spend?: boolean;
@@ -60,24 +60,21 @@ export default class XmrSendProvider {
     await this._init();
 
     try {
-      let resNode: BlocksoftAxiosResponse;
+      let resNode: AirDAOAxiosResponse;
 
       if (this._link?.includes('mymonero.com')) {
         // @ts-ignore
-        resNode = await BlocksoftAxios.post(this._link + 'submit_raw_tx', {
+        resNode = await AirDAOAxios.post(this._link + 'submit_raw_tx', {
           address: params.address,
           view_key: params.privViewKey,
           tx: params.tx
         });
       } else {
         // @ts-ignore
-        resNode = await BlocksoftAxios.post(
-          this._link + 'send_raw_transaction',
-          {
-            tx_as_hex: params.tx,
-            do_not_relay: false
-          }
-        );
+        resNode = await AirDAOAxios.post(this._link + 'send_raw_transaction', {
+          tx_as_hex: params.tx,
+          do_not_relay: false
+        });
       }
 
       AirDAOCryptoLog.log(

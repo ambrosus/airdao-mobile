@@ -6,7 +6,7 @@ import { BlocksoftBlockchainTypes } from '@crypto/blockchains/BlocksoftBlockchai
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import config from '@constants/config';
 
@@ -89,7 +89,7 @@ export default class TrxSendProvider
 
     let send: any;
     try {
-      send = await BlocksoftAxios.post(link, tx);
+      send = await AirDAOAxios.post(link, tx);
     } catch (e: any) {
       if (config.debug.cryptoErrors) {
         console.log(

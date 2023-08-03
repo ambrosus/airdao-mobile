@@ -9,7 +9,7 @@ import TrxTransactionsProvider from './basic/TrxTransactionsProvider';
 import TrxTransactionsTrc20Provider from './basic/TrxTransactionsTrc20Provider';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import Database from '@app/appstores/DataSource/Database/main';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import transactionDS from '@app/appstores/DataSource/Transaction/Transaction';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
@@ -113,7 +113,7 @@ export default class TrxScannerProcessor {
             parameter: '0000000000000000000000' + addressHex,
             owner_address: addressHex
           };
-          const tmp = await BlocksoftAxios.post(
+          const tmp = await AirDAOAxios.post(
             sendLink + '/wallet/triggerconstantcontract',
             params
           );
@@ -325,7 +325,7 @@ export default class TrxScannerProcessor {
       needUpdateBalance = 0;
       try {
         const link2 = sendLink + '/wallet/getnowblock';
-        const block = await BlocksoftAxios.get(link2);
+        const block = await AirDAOAxios.get(link2);
         if (
           typeof block !== 'undefined' &&
           block &&
@@ -348,7 +348,7 @@ export default class TrxScannerProcessor {
     for (const row of res.array) {
       const linkRecheck = sendLink + '/wallet/gettransactioninfobyid';
       try {
-        const recheck = await BlocksoftAxios.post(linkRecheck, {
+        const recheck = await AirDAOAxios.post(linkRecheck, {
           value: row.transactionHash
         });
         if (typeof recheck.data !== undefined) {

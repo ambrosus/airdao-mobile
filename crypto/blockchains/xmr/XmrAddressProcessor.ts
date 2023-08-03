@@ -10,7 +10,7 @@
 import MoneroUtils from './ext/MoneroUtils';
 import MoneroMnemonic from './ext/MoneroMnemonic';
 import { soliditySha3 } from 'web3-utils';
-import BlocksoftAxios from '../../common/BlocksoftAxios';
+import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import BlocksoftSecrets from '@crypto/actions/BlocksoftSecrets/BlocksoftSecrets';
 import config from '@constants/config';
@@ -158,7 +158,7 @@ export default class XmrAddressProcessor {
         create_account: true,
         generated_locally: true
       };
-      const resLogin = (await BlocksoftAxios.post(
+      const resLogin = (await AirDAOAxios.post(
         'https://api.mymonero.com:8443/login',
         linkParamsLogin
       )) as unknown as { data: any };

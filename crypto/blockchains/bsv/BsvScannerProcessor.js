@@ -2,7 +2,7 @@
  * @version 0.5
  */
 
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
@@ -29,7 +29,7 @@ export default class BsvScannerProcessor {
     let res = false;
     let balance = 0;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(link);
+      res = await AirDAOAxios.getWithoutBraking(link);
       if (
         res &&
         typeof res.data !== 'undefined' &&
@@ -86,7 +86,7 @@ export default class BsvScannerProcessor {
     const linkTxs = `${API_PATH}/address/${address}/history`;
     let res = false;
     try {
-      res = await BlocksoftAxios.getWithoutBraking(linkTxs);
+      res = await AirDAOAxios.getWithoutBraking(linkTxs);
     } catch (e) {
       throw e;
     }
@@ -130,7 +130,7 @@ export default class BsvScannerProcessor {
       );
       res = false;
       try {
-        res = await BlocksoftAxios.post(API_PATH + '/txs', { txids: bulkTxs });
+        res = await AirDAOAxios.post(API_PATH + '/txs', { txids: bulkTxs });
       } catch (e) {
         throw e;
       }
@@ -169,7 +169,7 @@ export default class BsvScannerProcessor {
               'BsvScannerProcessor.getTransactions will ask vins ' +
                 JSON.stringify(vins)
             );
-            const res = await BlocksoftAxios.post(API_PATH + '/txs', {
+            const res = await AirDAOAxios.post(API_PATH + '/txs', {
               txids: vins
             });
             if (res && typeof res.data !== 'undefined' && res.data) {
@@ -187,7 +187,7 @@ export default class BsvScannerProcessor {
         'BsvScannerProcessor.getTransactions will ask vins1 ' +
           JSON.stringify(vins)
       );
-      const res = await BlocksoftAxios.post(API_PATH + '/txs', { txids: vins });
+      const res = await AirDAOAxios.post(API_PATH + '/txs', { txids: vins });
       if (res && typeof res.data !== 'undefined' && res.data) {
         for (const tx of res.data) {
           await this._saveTxToCache(tx);
@@ -276,7 +276,7 @@ export default class BsvScannerProcessor {
           'BsvScannerProcessor.getTransactions will ask vins2 ' +
             JSON.stringify(vins)
         );
-        const res = await BlocksoftAxios.post(API_PATH + '/txs', {
+        const res = await AirDAOAxios.post(API_PATH + '/txs', {
           txids: vins
         });
         if (res && typeof res.data !== 'undefined' && res.data) {

@@ -4,7 +4,7 @@
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
+import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import DogeSendProvider from '@crypto/blockchains/doge/providers/DogeSendProvider';
 
 const API_URL = 'https://api.blockchair.com/bitcoin/testnet/push/transaction';
@@ -31,7 +31,7 @@ export default class BtcTestSendProvider
 
     let res;
     try {
-      res = await BlocksoftAxios.post(API_URL, { data: hex });
+      res = await AirDAOAxios.post(API_URL, { data: hex });
     } catch (e) {
       try {
         logData.error = e.message;
