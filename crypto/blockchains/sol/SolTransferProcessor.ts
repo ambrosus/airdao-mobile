@@ -17,7 +17,7 @@ import SolUtils from '@crypto/blockchains/sol/ext/SolUtils';
 import SolTmpDS from '@crypto/blockchains/sol/stores/SolTmpDS';
 import SolStakeUtils from '@crypto/blockchains/sol/ext/SolStakeUtils';
 import { Buffer } from 'buffer';
-import BlocksoftCryptoUtils from '@crypto/common/BlocksoftCryptoUtils';
+import AirDAOCryptoUtils from '@crypto/common/AirDAOCryptoUtils';
 import BlocksoftAxios from '@crypto/common/BlocksoftAxios';
 import config from '@constants/config';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
@@ -270,7 +270,7 @@ export default class SolTransferProcessor
             StakeProgram.programId.toBuffer()
           ]);
           const hash = Buffer.from(
-            await BlocksoftCryptoUtils.sha256(buffer.toString('hex')),
+            await AirDAOCryptoUtils.sha256(buffer.toString('hex')),
             'hex'
           );
           const stakeAccount = new PublicKey(Buffer.from(hash, 'hex'));
