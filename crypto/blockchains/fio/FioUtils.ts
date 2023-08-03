@@ -1,13 +1,17 @@
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
 import { getFioSdk } from './FioSdkWrapper';
-import config from '../../../app/config/config';
 import BlocksoftAxios from '../../common/BlocksoftAxios';
 import { Fio } from '@fioprotocol/fiojs';
 import { FIOSDK } from '@fioprotocol/fiosdk/src/FIOSDK';
-import chunk from 'lodash/chunk';
+import _ from 'lodash';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 
-export const resolveChainCode = (currencyCode, currencySymbol) => {
+const chunk = _.chunk;
+
+export const resolveChainCode = (
+  currencyCode: string,
+  currencySymbol: string
+) => {
   let chainCode = currencyCode;
   if (typeof currencyCode !== 'undefined' && currencyCode !== currencySymbol) {
     const tmp = currencyCode.split('_');
@@ -18,7 +22,7 @@ export const resolveChainCode = (currencyCode, currencySymbol) => {
   return chainCode;
 };
 
-export const resolveChainToken = (currencyCode, extend) => {
+export const resolveChainToken = (currencyCode: string, extend) => {
   if (extend.currencyCode === 'BNB_SMART') {
     return 'SMART';
   }
@@ -30,7 +34,7 @@ export const resolveChainToken = (currencyCode, extend) => {
   return extend.currencySymbol;
 };
 
-export const resolveCryptoCodes = (currencyCode) => {
+export const resolveCryptoCodes = (currencyCode: string) => {
   let chainCode = currencyCode;
   let currencySymbol = currencyCode;
   const tmp = currencyCode.split('_');
@@ -44,7 +48,7 @@ export const resolveCryptoCodes = (currencyCode) => {
   };
 };
 
-export const isFioAddressValid = (address) => {
+export const isFioAddressValid = (address: string) => {
   if (address) {
     try {
       FIOSDK.isFioAddressValid(address);
@@ -54,7 +58,7 @@ export const isFioAddressValid = (address) => {
   return false;
 };
 
-export const isFioAddressRegistered = async (address) => {
+export const isFioAddressRegistered = async (address: string) => {
   if (!isFioAddressValid(address)) {
     return false;
   }
@@ -68,7 +72,11 @@ export const isFioAddressRegistered = async (address) => {
   }
 };
 
-export const getPubAddress = async (fioAddress, chainCode, tokenCode) => {
+export const getPubAddress = async (
+  fioAddress: string,
+  chainCode: string,
+  tokenCode: string
+) => {
   try {
     const response = await getFioSdk().getPublicAddress(
       fioAddress,
@@ -424,9 +432,6 @@ export const getFioObtData = async (tokenCode, offset = 0, limit = 100) => {
 };
 
 const formatError = (title, e) => {
-  if (config.debug.fioErrors) {
-    console.log(title + ' error', e.json, e);
-  }
   if (
     e.message.indexOf('Error 404') === -1 &&
     e.message.indexOf('Network request failed') === -1

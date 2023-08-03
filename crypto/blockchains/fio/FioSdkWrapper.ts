@@ -1,13 +1,12 @@
 /**
  * @version 0.77
  */
+// @ts-ignore
 import { FIOSDK } from '@fioprotocol/fiosdk';
 
 import BlocksoftKeysStorage from '@crypto/actions/BlocksoftKeysStorage/BlocksoftKeysStorage';
 import BlocksoftExternalSettings from '@crypto/common/BlocksoftExternalSettings';
 import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog';
-
-import config from '@app/config/config';
 
 const fetchJson = async (uri, opts = {}) => {
   // eslint-disable-next-line no-undef
@@ -45,11 +44,7 @@ export class FioSdkWrapper {
       this.sdk = new FIOSDK(fioKey, publicKey, link, fetchJson);
       this.walletHash = walletHash;
       BlocksoftCryptoLog.log(`FioSdkWrapper.inited for ${walletHash}`);
-    } catch (e) {
-      if (config.debug.fioErrors) {
-        console.log('FioSdkWrapper.init error');
-      }
-    }
+    } catch (e) {}
     return true;
   }
 }

@@ -1,5 +1,5 @@
 import BlocksoftCryptoLog from '../../common/BlocksoftCryptoLog';
-import { getFioBalance, getTransactions } from './FioUtils';
+import { getFioBalance, getTransactions } from './FioUtils.jts';
 
 export default class FioScannerProcessor {
   /**
@@ -36,7 +36,11 @@ export default class FioScannerProcessor {
    * @param {string} walletHash
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
-  async getBalanceBlockchainCache(address, additionalData, walletHash) {
+  async getBalanceBlockchainCache(
+    address: string,
+    additionalData,
+    walletHash: string
+  ) {
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' FioScannerProcessor.getBalance (cache) started ' +
@@ -53,7 +57,11 @@ export default class FioScannerProcessor {
    * @param {string} walletHash
    * @return {Promise<{balance:*, unconfirmed:*, provider:string}>}
    */
-  async getBalanceBlockchain(address, additionalData, walletHash) {
+  async getBalanceBlockchain(
+    address: string,
+    additionalData,
+    walletHash: string
+  ) {
     BlocksoftCryptoLog.log(
       this._settings.currencyCode +
         ' FioScannerProcessor.getBalance started ' +
@@ -73,7 +81,9 @@ export default class FioScannerProcessor {
    * @param {string} scanData.account.walletHash
    * @return {Promise<[UnifiedTransaction]>}
    */
-  async getTransactionsBlockchain(scanData) {
+  async getTransactionsBlockchain(scanData: {
+    account: { address: string; walletHash: string };
+  }) {
     const address = scanData.account.address.trim();
     const walletHash = scanData.account.walletHash;
     BlocksoftCryptoLog.log(
@@ -121,7 +131,7 @@ export default class FioScannerProcessor {
    * @return  {Promise<UnifiedTransaction>}
    * @private
    */
-  async _unifyTransaction(address, lastBlock, transaction) {
+  async _unifyTransaction(address: string, lastBlock: string, transaction) {
     const txData = transaction.action_trace?.act?.data;
     if (
       !txData?.payee_public_key ||
