@@ -37,7 +37,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@shopify/react-native-skia": "0.1.183",
-    "@solana/web3.js": "git+https://git@github.com/trustee-wallet/solana-web3.js.git",
+    "@solana/web3.js": "^1.78.2",
     "@tanstack/react-query": "^4.28.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react-native": "^12.1.1",
@@ -54,8 +54,8 @@
     "bn.js": "^5.2.1",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
-    "coinselect": "^3.1.13",
     "buffer-crc32": "^0.2.13",
+    "coinselect": "^3.1.13",
     "create-hash": "^1.2.0",
     "elliptic": "^6.5.4",
     "ethereumjs-util": "^7.1.5",
@@ -104,10 +104,12 @@
     "react-native-view-shot": "3.5.0",
     "react-native-walkthrough-tooltip": "^1.5.0",
     "ripple-lib": "^1.10.1",
+    "stellar-sdk": "^10.4.1",
+    "thorify": "^1.6.2",
+    "tiny-secp256k1": "^2.2.3",
     "use-context-selector": "^1.4.1",
     "web3": "^4.0.3",
-    "web3-utils": "^4.0.3",
-    "tiny-secp256k1": "^2.2.3"
+    "web3-utils": "^4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

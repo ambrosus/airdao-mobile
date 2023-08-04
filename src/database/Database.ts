@@ -7,6 +7,7 @@ import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
 
 class Database {
   private db: WDB | undefined;
+  private tableName: string | undefined;
 
   constructor() {
     this.init();
@@ -102,6 +103,25 @@ class Database {
   async unsafeRawQuery(table: DatabaseTable, query: string) {
     return await database.get(table).query(Q.unsafeSqlQuery(query)).fetch();
   }
+
+  // setTableName(tableName: string) {
+  //   this.tableName = tableName;
+  // }
+  //
+  // async performTableOperation(
+  //   tableName: DatabaseTable,
+  //   operation: (table: any) => void
+  // ) {
+  //   if (!this.db) this.init();
+  //   try {
+  //     await this.db!.write(async () => {
+  //       const table = this.db!.get(tableName);
+  //       operation(table);
+  //     });
+  //   } catch (error) {
+  //     console.log(error); // TODO handle errors
+  //   }
+  // }
 }
 
 export default new Database();
