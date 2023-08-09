@@ -10,9 +10,8 @@ import BlocksoftPrivateKeysUtils from '@crypto/common/AirDAOPrivateKeysUtils';
 
 import MoneroUtilsParser from './ext/MoneroUtilsParser';
 
-import { showModal } from '@app/appstores/Stores/Modal/ModalActions';
-import { strings } from '@app/services/i18n';
 import config from '@constants/config';
+import { Toast, ToastPosition } from '@components/modular';
 
 const CACHE_VALID_TIME = 30000;
 const CACHE = {};
@@ -128,11 +127,16 @@ export default class XmrScannerProcessor {
         CACHE_SHOWN_ERROR === 0 &&
         e.message.indexOf('invalid address and/or view key') !== -1
       ) {
-        showModal({
-          type: 'INFO_MODAL',
-          icon: false,
-          title: strings('modal.walletLog.sorry'),
-          description: strings('settings.walletList.needReinstallXMR')
+        // showModal({
+        //   type: 'INFO_MODAL',
+        //   icon: false,
+        //   title: strings('modal.walletLog.sorry'),
+        //   description: strings('settings.walletList.needReinstallXMR')
+        // });
+        Toast.show({
+          message: 'Need reinstall XMR',
+          title: 'Sorry',
+          type: ToastPosition.Top
         });
         CACHE_SHOWN_ERROR++;
         if (CACHE_SHOWN_ERROR > 100) {
@@ -164,11 +168,16 @@ export default class XmrScannerProcessor {
             CACHE_SHOWN_ERROR === 0 &&
             e.message.indexOf('invalid address and/or view key') !== -1
           ) {
-            showModal({
-              type: 'INFO_MODAL',
-              icon: false,
-              title: strings('modal.walletLog.sorry'),
-              description: strings('settings.walletList.needReinstallXMR')
+            // showModal({
+            //   type: 'INFO_MODAL',
+            //   icon: false,
+            //   title: strings('modal.walletLog.sorry'),
+            //   description: strings('settings.walletList.needReinstallXMR')
+            // });
+            Toast.show({
+              message: 'Need reinstall XMR',
+              title: 'Sorry',
+              type: ToastPosition.Top
             });
             CACHE_SHOWN_ERROR++;
             if (CACHE_SHOWN_ERROR > 100) {

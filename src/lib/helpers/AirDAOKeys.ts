@@ -1,21 +1,19 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
- * @author Ksu
+ * @author Javid
  * @version 0.5
  */
-import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import AirDAODict from '@crypto/common/AirDAODict';
-import BlocksoftKeysUtils from '@crypto/actions/BlocksoftKeys/BlocksoftKeysUtils';
-
-import * as BlocksoftRandom from 'react-native-blocksoft-random';
-import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
+// @ts-ignore
 import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
-import { strings } from '@app/services/i18n';
+import AirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
+import networksConstants from '@crypto/common/ext/networks-constants';
+import bip44Constants from '@crypto/common/ext/bip44-constants';
+import { getRandomBytes } from 'expo-crypto';
+import KeysUtills from '@utils/keys';
 
 const bip32 = require('bip32');
 const bip39 = require('bip39');
-const bip44Constants = require('../../common/ext/bip44-constants');
-const networksConstants = require('../../common/ext/networks-constants');
-
 const bs58check = require('bs58check');
 
 const ETH_CACHE = {};
@@ -23,13 +21,15 @@ const CACHE = {};
 const CACHE_ROOTS = {};
 
 class BlocksoftKeys {
+  _bipHex: { [key: string]: string };
+  _getRandomBytesFunction;
   constructor() {
     this._bipHex = {};
     let currency;
     for (currency of bip44Constants) {
       this._bipHex[currency[1]] = currency[0];
     }
-    this._getRandomBytesFunction = BlocksoftRandom.getRandomBytes;
+    this._getRandomBytesFunction = getRandomBytes;
   }
 
   /**
@@ -38,8 +38,6 @@ class BlocksoftKeys {
    * @return {Promise<{mnemonic: string, hash: string}>}
    */
   async newMnemonic(size = 256) {
-    AirDAOCryptoLog.log(`BlocksoftKeys newMnemonic called`);
-
     /* let mnemonic = false
         if (USE_TON) {
             for (let i = 0; i < 10000; i++) {
@@ -50,7 +48,6 @@ class BlocksoftKeys {
                     mnemonic = testMnemonic
                     break
                 }
-                AirDAOCryptoLog.log('step ' + i + ' not valid ton ' + testMnemonic)
             }
             if (!mnemonic) {
                 throw new Error('TON Mnemonic is not validating')
@@ -63,8 +60,7 @@ class BlocksoftKeys {
     let random = await this._getRandomBytesFunction(size / 8);
     random = Buffer.from(random, 'base64');
     const mnemonic = bip39.entropyToMnemonic(random);
-    const hash = BlocksoftKeysUtils.hashMnemonic(mnemonic);
-    AirDAOCryptoLog.log(`BlocksoftKeys newMnemonic finished`);
+    const hash = KeysUtills.hashMnemonic(mnemonic);
     return { mnemonic, hash };
   }
 
@@ -72,10 +68,9 @@ class BlocksoftKeys {
    * @param {string} mnemonic
    * @return {Promise<boolean>}
    */
-  async validateMnemonic(mnemonic) {
-    AirDAOCryptoLog.log(`BlocksoftKeys validateMnemonic called`);
+  async validateMnemonic(mnemonic: string): Promise<boolean> {
     if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
-      throw new Error(strings('settings.walletList.scamImport'));
+      throw new Error('Scam import error');
     }
     const result = await bip39.validateMnemonic(mnemonic);
     if (!result) {
@@ -95,21 +90,36 @@ class BlocksoftKeys {
    * @param {array} data.derivations.BTC_SEGWIT
    * @return {Promise<{currencyCode:[{address, privateKey, path, index, type}]}>}
    */
-  async discoverAddresses(data, source) {
+  async discoverAddresses(
+    data: {
+      mnemonic: string;
+      walletHash: string;
+      currencyCode: string[][] | string[];
+      fromIndex: number;
+      toIndex: number;
+      fullTree: boolean;
+    },
+    source
+  ): Promise<{
+    currencyCode: [
+      {
+        address: string;
+        privateKey: string;
+        path: string;
+        index: number;
+        type: string;
+      }
+    ];
+  }> {
     const logData = { ...data };
     if (typeof logData.mnemonic !== 'undefined') logData.mnemonic = '***';
-
-    AirDAOCryptoLog.log(
-      `BlocksoftKeys discoverAddresses called from ${source}`,
-      JSON.stringify(logData).substring(0, 200)
-    );
 
     let toDiscover = AirDAODict.Codes;
     if (data.currencyCode) {
       if (typeof data.currencyCode === 'string') {
         toDiscover = [data.currencyCode];
       } else {
-        toDiscover = data.currencyCode;
+        toDiscover = data.currencyCode as string[];
       }
     }
     const fromIndex = data.fromIndex ? data.fromIndex : 0;
@@ -122,7 +132,7 @@ class BlocksoftKeys {
     let bitcoinRoot = false;
     let currencyCode;
     let settings;
-    const seed = await BlocksoftKeysUtils.bip39MnemonicToSeed(
+    const seed = await KeysUtills.bip39MnemonicToSeed(
       data.mnemonic.toLowerCase()
     );
     for (currencyCode of toDiscover) {
@@ -187,9 +197,6 @@ class BlocksoftKeys {
         hasDerivations = true;
       }
       if (typeof CACHE[hexesCache] === 'undefined' || hasDerivations) {
-        AirDAOCryptoLog.log(
-          `BlocksoftKeys will discover ${settings.addressProcessor}`
-        );
         let root = false;
         if (typeof networksConstants[currencyCode] !== 'undefined') {
           root = await this.getBip32Cached(
@@ -205,12 +212,11 @@ class BlocksoftKeys {
         }
         // BIP32 Extended Private Key to check - uncomment
         // let childFirst = root.derivePath('m/44\'/2\'/0\'/0')
-        // AirDAOCryptoLog.log(childFirst.toBase58())
 
         /**
          * @type {EthAddressProcessor|BtcAddressProcessor}
          */
-        const processor = await BlocksoftDispatcher.innerGetAddressProcessor(
+        const processor = await AirDAODispatcher.innerGetAddressProcessor(
           settings
         );
 
@@ -224,9 +230,6 @@ class BlocksoftKeys {
         let currentToIndex = toIndex;
         let currentFullTree = fullTree;
 
-        AirDAOCryptoLog.log(
-          `BlocksoftKeys discoverAddresses ${currencyCode} currentFromIndex.1 ${currentFromIndex}`
-        );
         if (hasDerivations) {
           let derivation = { path: '', alreadyShown: 0, walletPubId: 0 };
           let maxIndex = 0;
@@ -261,9 +264,6 @@ class BlocksoftKeys {
             currentFromIndex = maxIndex * 1 + 1;
             currentToIndex = currentFromIndex * 1 + 10;
             currentFullTree = true;
-            AirDAOCryptoLog.log(
-              `BlocksoftKeys ${currencyCode} discoverAddresses currentFromIndex.2 ${currentFromIndex}`
-            );
           }
         }
 
@@ -355,29 +355,23 @@ class BlocksoftKeys {
           ETH_CACHE[mnemonicCache] = results[currencyCode][0];
         }
       } else {
-        AirDAOCryptoLog.log(
-          `BlocksoftKeys will be from cache ${settings.addressProcessor}`
-        );
         results[currencyCode] = CACHE[hexesCache];
         if (currencyCode === 'USDT') {
           results[currencyCode] = [results[currencyCode][0]];
         }
       }
     }
-    AirDAOCryptoLog.log(`BlocksoftKeys discoverAddresses finished`);
     return results;
   }
 
   async getSeedCached(mnemonic) {
-    AirDAOCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed started`);
     const mnemonicCache = mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] === 'undefined') {
-      CACHE[mnemonicCache] = await BlocksoftKeysUtils.bip39MnemonicToSeed(
+      CACHE[mnemonicCache] = await KeysUtills.bip39MnemonicToSeed(
         mnemonic.toLowerCase()
       );
     }
     const seed = CACHE[mnemonicCache]; // will be rechecked on saving
-    AirDAOCryptoLog.log(`BlocksoftKeys bip39MnemonicToSeed ended`);
     return seed;
   }
 
@@ -413,7 +407,7 @@ class BlocksoftKeys {
    * @return {Promise<{address, privateKey}>}
    */
   async discoverOne(data) {
-    const seed = await BlocksoftKeysUtils.bip39MnemonicToSeed(
+    const seed = await KeysUtills.bip39MnemonicToSeed(
       data.mnemonic.toLowerCase()
     );
     const root = bip32.fromSeed(seed);
@@ -421,7 +415,7 @@ class BlocksoftKeys {
     /**
      * @type {EthAddressProcessor|BtcAddressProcessor}
      */
-    const processor = await BlocksoftDispatcher.getAddressProcessor(
+    const processor = await AirDAODispatcher.getAddressProcessor(
       data.currencyCode
     );
     processor.setBasicRoot(root);
@@ -445,7 +439,7 @@ class BlocksoftKeys {
    * @return {Promise<{address, privateKey}>}
    */
   async discoverXpub(data) {
-    const seed = await BlocksoftKeysUtils.bip39MnemonicToSeed(
+    const seed = await KeysUtills.bip39MnemonicToSeed(
       data.mnemonic.toLowerCase()
     );
     const root = bip32.fromSeed(seed);
@@ -458,19 +452,9 @@ class BlocksoftKeys {
       path = `m/49'/0'/0'`;
       version = 0x049d7cb2;
     }
-    AirDAOCryptoLog.log(
-      'BlocksoftKeys.discoverXpub derive started ' + JSON.stringify(path)
-    );
     const rootWallet = root.derivePath(path);
-    AirDAOCryptoLog.log(
-      'BlocksoftKeys.discoverXpub derived, bs58 started ' + JSON.stringify(path)
-    );
     const res = bs58check.encode(
       serialize(rootWallet, version, rootWallet.publicKey)
-    );
-    AirDAOCryptoLog.log(
-      'BlocksoftKeys.discoverXpub res ' + JSON.stringify(path),
-      res
     );
     return res;
   }

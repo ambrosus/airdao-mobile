@@ -1,30 +1,34 @@
 // TODO add Database
 // @ts-ignore
-import Database from '@app/appstores/DataSource/Database';
+// import Database from '@app/appstores/DataSource/Database';
 
-const tableName = ' transactions_scanners_tmp';
+import { DatabaseTable } from '@appTypes';
+import { Database, TransactionScannersTmpDBModel } from '@database';
+
+const tableName = DatabaseTable.TransactionScannersTmp;
 
 class XvgTmpDS {
   _currencyCode = 'XVG';
 
   async getCache(address: any) {
-    const res = await Database.query(`
-                SELECT tmp_key, tmp_sub_key, tmp_val
+    const res = (await Database.unsafeRawQuery(
+      tableName,
+      `
+                SELECT tmp_key as tmpKey, tmp_sub_key as tmpSubKey, tmp_val as tmpVal
                 FROM ${tableName}
                 WHERE currency_code='${this._currencyCode}'
                 AND address='${address}'
                 AND (tmp_sub_key='coins' OR tmp_sub_key='data')
-                `);
+                `
+    )) as TransactionScannersTmpDBModel[];
     const tmp = {};
-    if (res.array) {
-      let row;
-      for (row of res.array) {
+    if (res) {
+      for (const row of res) {
         let val = 1;
-        if (row.tmp_sub_key !== 'data') {
+        if (row.tmpSubKey !== 'data') {
           val = JSON.parse(Database.unEscapeString(row.tmp_val));
         }
-        // @ts-ignore
-        tmp[row.tmp_key + '_' + row.tmp_sub_key] = val;
+        tmp[row.tmpKey + '_' + row.tmpSubKey] = val;
       }
     }
     return tmp;
@@ -42,9 +46,7 @@ class XvgTmpDS {
         created_at: now
       }
     ];
-    await Database.setTableName(tableName)
-      .setInsertData({ insertObjs: prepared })
-      .insert();
+    Database.createModel(tableName, prepared);
   }
 }
 

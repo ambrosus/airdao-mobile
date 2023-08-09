@@ -4,7 +4,7 @@ import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalanc
 import TronUtils from '@crypto/blockchains/trx/ext/TronUtils';
 
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
-import Log from '@app/services/Log/Log';
+// import Log from '@app/services/Log/Log';
 import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
@@ -189,11 +189,11 @@ const TronStakeUtils = {
       if (typeof tmp.data.raw_data_hex !== 'undefined') {
         blockchainData = tmp.data;
       } else {
-        Log.log('TronStakeUtils._send no rawHex ' + link, params, tmp.data);
+        // Log.log('TronStakeUtils._send no rawHex ' + link, params, tmp.data);
         throw new Error(JSON.stringify(tmp.data));
       }
     } else {
-      Log.log('TronStakeUtils rawHex empty data ' + link, params);
+      // Log.log('TronStakeUtils rawHex empty data ' + link, params);
       throw new Error('Empty data');
     }
 

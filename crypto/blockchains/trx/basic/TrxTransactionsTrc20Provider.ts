@@ -4,12 +4,11 @@
  */
 import TrxTransactionsProvider from './TrxTransactionsProvider';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
-import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
-import Database from '@app/appstores/DataSource/Database/main';
-import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
-
-const SWAPS: Record<string, string> = require('../dict/swaps');
+import { Database, TransactionsDBModel } from '@database';
+import { DatabaseTable } from '@appTypes';
+import TransactionFilterTypeDict from '@crypto/TransactionFilterTypeDict';
+import SWAPS from '../dict/swaps';
 
 interface UnifiedTransaction {
   transactionHash: string;
@@ -78,13 +77,13 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
         ' timestamp error transaction data ' + JSON.stringify(transaction);
       throw e;
     }
-    if (typeof transaction.amount === 'undefined') {
-      // noinspection ES6MissingAwait
-      AirDAOCryptoLog.err(
-        'TrxTransactionsTrc20Provider._unifyTransaction buggy tx ' +
-          JSON.stringify(transaction)
-      );
-    }
+    // if (typeof transaction.amount === 'undefined') {
+    //   // noinspection ES6MissingAwait
+    //   AirDAOCryptoLog.err(
+    //     'TrxTransactionsTrc20Provider._unifyTransaction buggy tx ' +
+    //       JSON.stringify(transaction)
+    //   );
+    // }
 
     const res: UnifiedTransaction = {
       transactionHash: transaction.transactionHash || '',
@@ -159,18 +158,19 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
         tmp.data.cost.fee * 1 + tmp.data.cost.energy_fee * 1 || 0;
 
       if (res.transactionFee > 0 && res.addressAmount * 1 > 0) {
-        const savedTRX = await Database.query(
-          ` SELECT * FROM transactions WHERE transaction_hash='${res.transactionHash}' AND currency_code='TRX' `
-        );
-        if (!savedTRX || !savedTRX.array || savedTRX.array.length === 0) {
-          AirDAOCryptoLog.log(
-            'TrxTransactionsTrc20Provider._unifyTransaction added fee for ' +
-              res.transactionHash +
-              ' amount ' +
-              res.addressAmount +
-              ' fee ' +
-              res.transactionFee
-          );
+        const savedTRX = (await Database.unsafeRawQuery(
+          DatabaseTable.Transactions,
+          ` SELECT * FROM ${DatabaseTable.Transactions} WHERE transaction_hash='${res.transactionHash}' AND currency_code='TRX' `
+        )) as TransactionsDBModel[];
+        if (!savedTRX || savedTRX.length === 0) {
+          // AirDAOCryptoLog.log(
+          //   'TrxTransactionsTrc20Provider._unifyTransaction added fee for ' +
+          //     res.transactionHash +
+          //     ' amount ' +
+          //     res.addressAmount +
+          //     ' fee ' +
+          //     res.transactionFee
+          // );
           const saveFee: UnifiedTransaction = {
             account_id: 0,
             address_amount: 0,
@@ -190,9 +190,7 @@ export default class TrxTransactionsTrc20Provider extends TrxTransactionsProvide
             transactions_scan_time: new Date().getTime(),
             wallet_hash: scanData.account.walletHash
           };
-          await Database.setTableName('transactions')
-            .setInsertData({ insertObjs: [saveFee] })
-            .insert();
+          await Database.createModel(DatabaseTable.Transactions, saveFee);
         }
       }
       if (tmp.data.trc20TransferInfo !== undefined) {

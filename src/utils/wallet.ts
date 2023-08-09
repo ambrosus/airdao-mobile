@@ -3,6 +3,7 @@ import { Wallet } from '@models/Wallet';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
 import AirDAOStorage from '@lib/helpers/AirDAOKeysStorage';
+import { CashBackUtils } from './cashback';
 
 const _saveWallet = async (wallet: WalletMetadata) => {
   let storedKey = '';
@@ -45,8 +46,11 @@ const processWallet = async (
     tmpWalletName = await _getWalletName();
   }
   const fullWallet: Wallet = new Wallet({ ...data, hash, name: tmpWalletName });
+  console.log({ fullWallet });
+  const { cashbackToken } = await CashBackUtils.getByHash(hash);
+  console.log({ cashbackToken });
   // TODO save to local db
-  await Wallet.saveWallet(fullWallet);
+  // await Wallet.saveWallet(fullWallet);
   try {
   } catch (error) {
     throw error;

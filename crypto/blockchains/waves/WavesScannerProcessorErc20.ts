@@ -5,8 +5,9 @@ import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import WavesScannerProcessor from '@crypto/blockchains/waves/WavesScannerProcessor';
-import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
+// import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
+import TransactionFilterTypeDict from '@crypto/TransactionFilterTypeDict';
 
 interface WavesScannerProcessorErc20Settings {
   currencyCode: string;

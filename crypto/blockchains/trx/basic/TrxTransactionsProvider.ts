@@ -5,7 +5,7 @@ import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import AirDAOAxios from '../../../common/AirDAOAxios';
 import BlocksoftUtils from '../../../common/AirDAOUtils';
 import TrxNodeInfoProvider from './TrxNodeInfoProvider';
-import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
+import TransactionFilterTypeDict from '@crypto/TransactionFilterTypeDict';
 
 const TXS_MAX_TRY = 10;
 

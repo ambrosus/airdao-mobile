@@ -1,7 +1,7 @@
 import AirDAOAxios from './AirDAOAxios';
 import AirDAOCryptoLog from './AirDAOCryptoLog';
 // @ts-ignore
-import ApiProxy from '../../app/services/Api/ApiProxy';
+// import ApiProxy from '../../app/services/Api/ApiProxy';
 import config from '@constants/config';
 
 const MAX_CACHE_VALID_TIME = 6000000; // 100 minutes
@@ -218,10 +218,12 @@ class AirDAOExternalSettings {
       return;
     }
     try {
-      const tmp = await ApiProxy.getAll({
-        source: 'BlocksoftExternalSettings._get ' + source,
-        onlyFees: true
-      });
+      // TODO implement fees
+      // const tmp = await ApiProxy.getAll({
+      //   source: 'BlocksoftExternalSettings._get ' + source,
+      //   onlyFees: true
+      // });
+      let tmp;
 
       CACHE_TIME = now;
       if (tmp && typeof tmp === 'object' && 'fees' in tmp && tmp.fees) {

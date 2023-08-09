@@ -238,35 +238,35 @@ class AirDAODispatcher {
           network: 'mainnet',
           tokenBlockchain: 'BNB'
         });
-      case 'MATIC_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'MATIC'
-        });
-      case 'FTM_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'FTM'
-        });
-      case 'VLX_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'VLX'
-        });
-      case 'ONE_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'ONE'
-        });
-      case 'METIS_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'METIS'
-        });
-      case 'TRX':
-        return new TrxTokenProcessor();
-      case 'SOL':
-        return new SolTokenProcessor();
+      // case 'MATIC_ERC_20':
+      //   return new EthTokenProcessorErc20({
+      //     network: 'mainnet',
+      //     tokenBlockchain: 'MATIC'
+      //   });
+      // case 'FTM_ERC_20':
+      //   return new EthTokenProcessorErc20({
+      //     network: 'mainnet',
+      //     tokenBlockchain: 'FTM'
+      //   });
+      // case 'VLX_ERC_20':
+      //   return new EthTokenProcessorErc20({
+      //     network: 'mainnet',
+      //     tokenBlockchain: 'VLX'
+      //   });
+      // case 'ONE_ERC_20':
+      //   return new EthTokenProcessorErc20({
+      //     network: 'mainnet',
+      //     tokenBlockchain: 'ONE'
+      //   });
+      // case 'METIS_ERC_20':
+      //   return new EthTokenProcessorErc20({
+      //     network: 'mainnet',
+      //     tokenBlockchain: 'METIS'
+      //   });
+      // case 'TRX':
+      //   return new TrxTokenProcessor();
+      // case 'SOL':
+      //   return new SolTokenProcessor();
       default:
         throw new Error('Unknown tokenProcessor ' + tokenType);
     }

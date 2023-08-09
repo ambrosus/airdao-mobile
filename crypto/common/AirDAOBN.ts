@@ -3,7 +3,6 @@ import BlocksoftUtils from './AirDAOUtils';
 
 class AirDAOBN {
   innerBN = false;
- ̰
   constructor(val) {
     // console.log('AirDAOBN construct', JSON.stringify(val))
     if (typeof val.innerBN !== 'undefined') {

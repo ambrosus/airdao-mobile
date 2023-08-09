@@ -1,6 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import { DEFAULT_WORDS } from '@constants/words';
-import { createHmac } from 'crypto';
+import createHmac from 'create-hmac';
 
 interface CreateHmacPDFK2Sizes {
   [key: string]: number;

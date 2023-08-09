@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   TTnSHzUoho1CU6zFYVzVSCKq8EX8ZddkVv: 'JUSTSWAP-WTRX-TRX',
   TJmTeYk5zmg8pNPGYbDb2psadwVLYDDYDr: 'JUSTSWAP-DICE-TRX',
   TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE: 'JUSTSWAP-USDT-TRX',

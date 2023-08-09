@@ -8,13 +8,13 @@ import TrxTrongridProvider from './basic/TrxTrongridProvider';
 import TrxTransactionsProvider from './basic/TrxTransactionsProvider';
 import TrxTransactionsTrc20Provider from './basic/TrxTransactionsTrc20Provider';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import Database from '@app/appstores/DataSource/Database/main';
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftUtils from '@crypto/common/AirDAOUtils';
-import transactionDS from '@app/appstores/DataSource/Transaction/Transaction';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import TronStakeUtils from '@crypto/blockchains/trx/ext/TronStakeUtils';
 import config from '@constants/config';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
 
 let CACHE_PENDING_TXS = false;
 
@@ -270,11 +270,14 @@ export default class TrxScannerProcessor {
       scanData.specialActionNeeded &&
       typeof scanData.account.address !== 'undefined'
     ) {
-      await Database.query(`
-                    UPDATE transactions SET special_action_needed=''
+      await Database.unsafeRawQuery(
+        DatabaseTable.Transactions,
+        `
+                    UPDATE ${DatabaseTable.Transactions} SET special_action_needed=''
                     WHERE special_action_needed='${scanData.specialActionNeeded}'
                     AND address_from_basic='${scanData.account.address}'
-                    `);
+                    `
+      );
     }
     return false;
   }
@@ -308,7 +311,8 @@ export default class TrxScannerProcessor {
             ORDER BY created_at DESC
             LIMIT 10
         `;
-    const res = await Database.query(sql);
+    // TODO check left join
+    const res = await Database.unsafeRawQuery(DatabaseTable.Transactions, sql);
     if (
       !res ||
       typeof res.array === 'undefined' ||
@@ -426,10 +430,13 @@ export default class TrxScannerProcessor {
               specialActionNeeded
             )
           ) {
-            await Database.query(`
+            await Database.unsafeRawQuery(
+              DatabaseTable.Transactions,
+              `
                     UPDATE transactions SET special_action_needed='' WHERE special_action_needed='vote' OR special_action_needed='vote_after_unfreeze'
                     AND address_from_basic='${address}'
-                    `);
+                    `
+            );
             AirDAOCryptoLog.log(
               this._settings.currencyCode +
                 ' TrxScannerProcessor.getTransactionsPendingBlockchain vote all finished for ' +
@@ -500,22 +507,23 @@ export default class TrxScannerProcessor {
       throw e;
     }
 
-    await transactionDS.saveTransaction(
-      {
-        blockNumber: transaction.blockNumber,
-        blockTime: formattedTime,
-        blockConfirmations: lastBlock - transaction.blockNumber,
-        transactionStatus,
-        transactionsScanLog:
-          new Date().toISOString() +
-          ' RECEIPT RECHECK ' +
-          JSON.stringify(transaction) +
-          ' ' +
-          row.transactionsScanLog
-      },
-      row.id,
-      'receipt'
-    );
+    // TODO implement this
+    // await transactionDS.saveTransaction(
+    //   {
+    //     blockNumber: transaction.blockNumber,
+    //     blockTime: formattedTime,
+    //     blockConfirmations: lastBlock - transaction.blockNumber,
+    //     transactionStatus,
+    //     transactionsScanLog:
+    //       new Date().toISOString() +
+    //       ' RECEIPT RECHECK ' +
+    //       JSON.stringify(transaction) +
+    //       ' ' +
+    //       row.transactionsScanLog
+    //   },
+    //   row.id,
+    //   'receipt'
+    // );
     return transactionStatus === 'success';
   }
 }

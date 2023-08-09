@@ -4,8 +4,9 @@
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
-import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
+// import TransactionFilterTypeDict from '@appV2/dicts/transactionFilterTypeDict';
 import WavesTransactionsProvider from '@crypto/blockchains/waves/providers/WavesTransactionsProvider';
+// import TransactionFilterTypeDict from '@crypto/TransactionFilterTypeDict';
 
 export default class WavesScannerProcessor {
   private _settings: any;
@@ -140,7 +141,7 @@ export default class WavesScannerProcessor {
       senderPublicKey: transaction.senderPublicKey,
       signature: transaction.signature
     };
-    unifiedTransaction.status = TransactionFilterTypeDict.CRYPTO_STATUS_PENDING; // pending
+    // unifiedTransaction.status = TransactionFilterTypeDict.CRYPTO_STATUS_PENDING; // pending
 
     return unifiedTransaction;
   }

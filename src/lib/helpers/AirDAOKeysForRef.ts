@@ -3,15 +3,15 @@
  * @version 0.5
  */
 import AirDAOKeys from './AirDAOKeys';
-import BlocksoftDispatcher from './AirDAODispatcher';
 import { WalletUtils } from '@utils/wallet';
+import AirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
 
 const CACHE: { [key: string]: any } = {};
 
 class AirDAOKeysForRef {
   async discoverPublicAndPrivate(data: {
     mnemonic: string;
-    index: number;
+    index?: number;
   }): Promise<{
     currencyCode: {
       address: string;
@@ -34,7 +34,7 @@ class AirDAOKeysForRef {
       const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
 
-      const processor = await BlocksoftDispatcher.getAddressProcessor('ETH');
+      const processor = await AirDAODispatcher.getAddressProcessor('ETH');
       result = await processor.getAddress(child.privateKey);
       result.index = index;
       result.path = path;
@@ -49,7 +49,7 @@ class AirDAOKeysForRef {
   }
 
   async signDataForApi(msg: string, privateKey: string) {
-    const processor = await BlocksoftDispatcher.getAddressProcessor('ETH');
+    const processor = await AirDAODispatcher.getAddressProcessor('ETH');
     if (privateKey.substring(0, 2) !== '0x') {
       privateKey = '0x' + privateKey;
     }

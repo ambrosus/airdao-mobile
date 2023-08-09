@@ -4,7 +4,7 @@
 import BlocksoftUtils from '../../common/AirDAOUtils';
 import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
+import AirDAODispatcher from '../AirDAODispatcher';
 
 const USDT_API = 'https://microscanners.trustee.deals/usdt'; // https://microscanners.trustee.deals/usdt/1CmAoxq8BTxANRDwheJUpaGy6ngWNYX85
 const USDT_API_MASS = 'https://microscanners.trustee.deals/balanceMass';
@@ -201,10 +201,9 @@ export default class UsdtScannerProcessor {
     let btcTxs: UnifiedTransaction[] | false = false;
     try {
       if (!this._btcProvider) {
-        this._btcProvider =
-          (await new BlocksoftDispatcher().getScannerProcessor({
-            currencyCode: 'BTC'
-          })) as BtcScannerProcessor;
+        this._btcProvider = (await new AirDAODispatcher().getScannerProcessor({
+          currencyCode: 'BTC'
+        })) as BtcScannerProcessor;
       }
       btcTxs = await this._btcProvider.getTransactionsBlockchain(
         scanData,

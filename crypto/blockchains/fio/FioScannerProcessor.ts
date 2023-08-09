@@ -1,5 +1,5 @@
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import { getFioBalance, getTransactions } from './FioUtils.jts';
+import { getFioBalance, getTransactions } from './FioUtils';
 
 export default class FioScannerProcessor {
   /**

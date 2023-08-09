@@ -2,7 +2,6 @@ import { BigNumber } from 'bignumber.js';
 // @ts-ignore
 import { hexToBn, bnToHex } from '../blockchains/eth/ext/estimateGas/util';
 // @ts-ignore
-import Log from '../../app/services/Log/Log';
 import BigIntXmr from '@crypto/blockchains/xmr/ext/vendor/biginteger';
 import Web3 from 'web3';
 import { EtherUnits } from 'web3-utils';
@@ -325,7 +324,6 @@ class AirDAOUtils {
       newVal = Web3.utils.fromWei(tmp[0], 'gwei');
     } catch (e: any) {
       e.message = JSON.stringify(val) + ' ' + e.message;
-      Log.err('BlocksoftUtils.toGwei error ' + e.message);
     }
     return newVal;
   }

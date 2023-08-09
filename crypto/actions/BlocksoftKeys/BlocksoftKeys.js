@@ -6,15 +6,16 @@ import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import AirDAODict from '@crypto/common/AirDAODict';
 import BlocksoftKeysUtils from '@crypto/actions/BlocksoftKeys/BlocksoftKeysUtils';
 
-import * as BlocksoftRandom from 'react-native-blocksoft-random';
+import * as Crypto from 'expo-crypto';
 import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
-import { strings } from '@app/services/i18n';
+import bip44Constants from '@crypto/common/ext/bip44-constants';
+import networksConstants from '@crypto/common/ext/networks-constants';
 
 const bip32 = require('bip32');
 const bip39 = require('bip39');
-const bip44Constants = require('../../common/ext/bip44-constants');
-const networksConstants = require('../../common/ext/networks-constants');
+// const bip44Constants = require('../../common/ext/bip44-constants');
+// const networksConstants = require('../../common/ext/networks-constants');
 
 const bs58check = require('bs58check');
 
@@ -29,7 +30,7 @@ class BlocksoftKeys {
     for (currency of bip44Constants) {
       this._bipHex[currency[1]] = currency[0];
     }
-    this._getRandomBytesFunction = BlocksoftRandom.getRandomBytes;
+    this._getRandomBytesFunction = Crypto.getRandomBytesAsync;
   }
 
   /**
@@ -75,7 +76,7 @@ class BlocksoftKeys {
   async validateMnemonic(mnemonic) {
     AirDAOCryptoLog.log(`BlocksoftKeys validateMnemonic called`);
     if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
-      throw new Error(strings('settings.walletList.scamImport'));
+      throw new Error('Scam error');
     }
     const result = await bip39.validateMnemonic(mnemonic);
     if (!result) {
