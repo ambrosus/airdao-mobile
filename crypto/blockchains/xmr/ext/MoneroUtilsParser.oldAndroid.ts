@@ -5,7 +5,7 @@
  */
 
 export default {
-  checkDestination(value) {
+  checkDestination(value: any) {
     return false;
   },
 
@@ -18,21 +18,21 @@ export default {
   },
 
   async parseAddressInfo(
-    address,
-    data,
-    privViewKey,
-    pubSpendKey,
-    privSpendKey
+    address: string,
+    data: {},
+    privViewKey: string,
+    pubSpendKey: string,
+    privSpendKey: string
   ) {
     return false;
   },
 
   async parseAddressTransactions(
-    address,
-    data,
-    privViewKey,
-    pubSpendKey,
-    privSpendKey
+    address: string,
+    data: {},
+    privViewKey: string,
+    pubSpendKey: string,
+    privSpendKey: string
   ) {
     return false;
   }

@@ -42,9 +42,9 @@ export namespace AirDAOTransferDispatcher {
   const CACHE_PROCESSORS: AirDAOTransferDispatcherDict =
     {} as AirDAOTransferDispatcherDict;
 
-  export const getTransferProcessor = function (
+  export const getTransferProcessor = (
     currencyCode: AirDAODictTypes.Code
-  ): AirDAOBlockchainTypes.TransferProcessor {
+  ): AirDAOBlockchainTypes.TransferProcessor => {
     const currencyDictSettings =
       AirDAODict.getCurrencyAllSettings(currencyCode);
     if (typeof CACHE_PROCESSORS[currencyCode] !== 'undefined') {

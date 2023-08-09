@@ -15,6 +15,7 @@ interface MoneroDictionary {
   monero_words_english_prefix_len: number;
 }
 
+// tslint:disable-next-line:variable-name
 const secret_spend_key_to_words = (
   secretSpendKeyBufferOrHex: SecretSpendKey,
   walletHash: string
@@ -71,6 +72,7 @@ const secret_spend_key_to_words = (
   const crc32Decimal = BlocksoftUtils.hexToDecimal(
     '0x' + crc32Res.toString('hex')
   );
+  // @ts-ignore
   seed.push(seed[crc32Decimal % 24]);
 
   return seed.join(' ');

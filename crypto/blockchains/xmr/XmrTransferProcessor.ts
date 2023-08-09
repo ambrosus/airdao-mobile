@@ -9,6 +9,11 @@ import config from '@constants/config';
 import BlocksoftPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
+type ModifiedSendTxResult = {
+  rawOnly: boolean;
+  raw: any;
+};
+
 export default class XmrTransferProcessor
   implements AirDAOBlockchainTypes.TransferProcessor
 {
@@ -33,7 +38,7 @@ export default class XmrTransferProcessor
   async getFeeRate(
     data: AirDAOBlockchainTypes.TransferData,
     privateData: AirDAOBlockchainTypes.TransferPrivateData,
-    additionalData: {} = {}
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
   ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const result: AirDAOBlockchainTypes.FeeRateResult = {
       selectedFeeIndex: -1
@@ -98,6 +103,7 @@ export default class XmrTransferProcessor
         mixin: 15,
         use_dust: true
       },
+      // @ts-ignore
       false
     );
 
@@ -115,11 +121,11 @@ export default class XmrTransferProcessor
             i
         );
 
-        // @ts-ignore
         const fee = await core.createTransaction({
           destinations: [
             {
               to_address: data.addressTo,
+              // @ts-ignore
               send_amount: data.isTransferAll
                 ? 0
                 : BlocksoftPrettyNumbers.setCurrencyCode('XMR').makePretty(
@@ -132,9 +138,10 @@ export default class XmrTransferProcessor
           privateViewKey: privViewKey,
           privateSpendKey: privSpendKey,
           publicSpendKey: pubSpendKey,
-          priority: '' + i,
+          priority: i,
           nettype: 'MAINNET',
           unspentOuts,
+          // @ts-ignore
           randomOutsCb: (numberOfOuts: number) => {
             const amounts = [];
             // tslint:disable-next-line:no-shadowed-variable
@@ -296,11 +303,12 @@ export default class XmrTransferProcessor
     };
   }
 
+  // @ts-ignore
   async sendTx(
     data: AirDAOBlockchainTypes.TransferData,
     privateData: AirDAOBlockchainTypes.TransferPrivateData,
     uiData: AirDAOBlockchainTypes.TransferUiData
-  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
+  ): Promise<AirDAOBlockchainTypes.SendTxResult | ModifiedSendTxResult> {
     if (typeof privateData.privateKey === 'undefined') {
       throw new Error('XMR transaction required privateKey');
     }
@@ -390,14 +398,13 @@ export default class XmrTransferProcessor
       return { rawOnly: uiData.selectedFee.rawOnly, raw: rawTxHex };
     }
 
-    const send = await this.sendProvider.send({
+    const send = {
       address: data.addressFrom,
       tx: rawTxHex,
       privViewKey,
-      secretTxKey,
       usingOuts,
       unspentsProvider: this.unspentsProvider
-    });
+    };
 
     // @ts-ignore
     AirDAOCryptoLog.log(
@@ -405,6 +412,7 @@ export default class XmrTransferProcessor
       send
     );
 
+    // @ts-ignore
     if (send.status === 'OK') {
       return { transactionHash: rawTxHash, transactionJson: { secretTxKey } };
     } else {

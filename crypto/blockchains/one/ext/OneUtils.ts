@@ -8,7 +8,7 @@
 const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
 
-const polymod = (values) => {
+const polymod = (values: string | any[] | Buffer) => {
   let chk = 1;
   // tslint:disable-next-line
   for (let p = 0; p < values.length; ++p) {
@@ -36,7 +36,7 @@ const hrpExpand = (hrp: string) => {
   return Buffer.from(ret);
 };
 
-function createChecksum(hrp: string, data) {
+function createChecksum(hrp: string, data: Uint8Array) {
   const values = Buffer.concat([
     Buffer.from(hrpExpand(hrp)),
     data,
@@ -51,7 +51,7 @@ function createChecksum(hrp: string, data) {
   return Buffer.from(ret);
 }
 
-const bech32Encode = (hrp: string, data) => {
+const bech32Encode = (hrp: string, data: Buffer | Uint8Array) => {
   const combined = Buffer.concat([data, createChecksum(hrp, data)]);
   let ret = hrp + '1';
   // tslint:disable-next-line
@@ -61,7 +61,12 @@ const bech32Encode = (hrp: string, data) => {
   return ret;
 };
 
-const convertBits = (data, fromWidth: number, toWidth: number, pad = true) => {
+const convertBits = (
+  data: string | any[] | Buffer,
+  fromWidth: number,
+  toWidth: number,
+  pad = true
+) => {
   let acc = 0;
   let bits = 0;
   const ret = [];
@@ -128,7 +133,7 @@ const bech32Decode = (bechString: string) => {
     if (!verifyChecksum(hrp, Buffer.from(data))) {
       return null;
     }
-  } catch (e) {
+  } catch (e: any) {
     e.message += ' in verifyChecksum';
     throw e;
   }
@@ -136,12 +141,12 @@ const bech32Decode = (bechString: string) => {
   return { hrp, data: Buffer.from(data.slice(0, data.length - 6)) };
 };
 
-function verifyChecksum(hrp: string, data) {
+function verifyChecksum(hrp: string, data: Buffer | Uint8Array) {
   return polymod(Buffer.concat([hrpExpand(hrp), data])) === 1;
 }
 
 const toChecksumAddress = (address: string) => {
-  if (typeof address !== 'string' || !address.match(/^0x[0-9A-Fa-f]{40}$/)) {
+  if (!address.match(/^0x[0-9A-Fa-f]{40}$/)) {
     throw new Error('invalid address ' + address);
   }
 
@@ -177,7 +182,7 @@ export default {
     }
     try {
       return !!address.match(/^one1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}/);
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' in match - address ' + JSON.stringify(address);
       throw e;
     }
@@ -203,7 +208,7 @@ export default {
     let res;
     try {
       res = bech32Decode(address);
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' in bech32Decode - address ' + JSON.stringify(address);
       throw e;
     }
@@ -227,7 +232,7 @@ export default {
     try {
       const tmp = toChecksumAddress('0x' + buf.toString('hex'));
       return tmp;
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' in toChecksumAddress';
       throw e;
     }

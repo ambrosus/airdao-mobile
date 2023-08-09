@@ -46,15 +46,23 @@ export default class WavesTransactionsProvider {
     const link = `${_apiPath}/transactions/address/${address}/limit/100`;
     const res = await AirDAOAxios.get(link);
 
-    if (!res || !res.data || typeof res.data[0] === 'undefined') {
+    // @ts-ignore
+    if (!res || typeof res.data === 'undefined') {
+      return false;
+    }
+
+    // @ts-ignore
+    const data = res.data[0] as { data: any };
+
+    if (!data) {
       return false;
     }
 
     CACHE_OF_TRANSACTIONS[mainCurrencyCode][address] = {
-      data: res.data[0],
+      data: data.data,
       time: now
     };
 
-    return res.data[0];
+    return data.data;
   }
 }
