@@ -24,7 +24,10 @@ module.exports = function (api) {
             '@navigation': './src/navigation',
             '@screens': './src/screens',
             '@theme': './src/theme',
-            '@utils': './src/utils'
+            '@utils': './src/utils',
+            'crypto': 'react-native-quick-crypto',
+            'stream': 'stream-browserify',
+            'buffer': '@craftzdog/react-native-buffer'
           },
           extensions: ['.ts', '.tsx']
         }
