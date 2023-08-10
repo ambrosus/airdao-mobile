@@ -7,6 +7,7 @@ import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
+import { useIgnoreInitialMountEffect } from '@hooks';
 
 export const CreateWalletStep2 = () => {
   const { walletMnemonic } = useAddWalletContext();
@@ -20,6 +21,11 @@ export const CreateWalletStep2 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [walletMnemonicArrayDefault.length]
   );
+  console.log({
+    walletMnemonic,
+    walletMnemonicArrayDefault: walletMnemonicArrayDefault.length,
+    walletMnemonicSelected: walletMnemonicSelected.length
+  });
 
   const validateMnemonic = useCallback(async () => {
     if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
@@ -29,22 +35,24 @@ export const CreateWalletStep2 = () => {
       JSON.stringify(walletMnemonicSelected) !==
       JSON.stringify(walletMnemonicArrayDefault)
     ) {
-      Alert.alert('Failed');
-      return;
+      // Alert.alert('Failed');
+      // return;
     }
-    setLoading(true);
+    console.log('here');
+    // setLoading(true);
     // TODO fix number
     await WalletUtils.processWallet({
       number: 0,
       mnemonic: walletMnemonic,
       name: ''
     });
-    setLoading(false);
+    // setLoading(false);
   }, [walletMnemonic, walletMnemonicArrayDefault, walletMnemonicSelected]);
 
   useEffect(() => {
+    console.log('here');
     validateMnemonic();
-  }, [validateMnemonic, walletMnemonicSelected]);
+  }, [walletMnemonicSelected, validateMnemonic]);
 
   const renderWord = (word: string) => {
     const selectedIdx = walletMnemonicSelected.indexOf(word);

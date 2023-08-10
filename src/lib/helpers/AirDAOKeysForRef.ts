@@ -24,22 +24,23 @@ class AirDAOKeysForRef {
     const mnemonicCache = data.mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] !== 'undefined')
       return CACHE[mnemonicCache];
-    let result = AirDAOKeys.getEthCached(mnemonicCache);
+    // let result = AirDAOKeys.getEthCached(mnemonicCache);
+    let result;
     if (!result) {
       let index = 0;
       if (typeof data.index !== 'undefined') {
         index = data.index;
       }
-      const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
+      // const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
+      let root;
       const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
-
       const processor = await AirDAODispatcher.getAddressProcessor('ETH');
       result = await processor.getAddress(child.privateKey);
       result.index = index;
       result.path = path;
       if (index === 0) {
-        AirDAOKeys.setEthCached(data.mnemonic, result);
+        // AirDAOKeys.setEthCached(data.mnemonic, result);
       }
     }
     // noinspection JSPrimitiveTypeWrapperUsage

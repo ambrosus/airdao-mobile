@@ -1,0 +1,55 @@
+diff --git a/node_modules/bitcoinjs-lib/src/transaction.js b/node_modules/bitcoinjs-lib/src/transaction.js
+index 994202c..d311cbc 100644
+--- a/node_modules/bitcoinjs-lib/src/transaction.js
++++ b/node_modules/bitcoinjs-lib/src/transaction.js
+@@ -1,5 +1,5 @@
+ 'use strict';
+-import BlocksoftCryptoLog from '../../../crypto/common/BlocksoftCryptoLog'
++// import BlocksoftCryptoLog from '../../../crypto/common/BlocksoftCryptoLog'
+ 
+ Object.defineProperty(exports, '__esModule', { value: true });
+ const bufferutils = require('./bufferutils');
+@@ -50,7 +50,7 @@ class Transaction {
+     this._IS_BTC_FORK = false;
+     this.ins = [];
+     this.outs = [];
+-    BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - started as js - time ' + this.time)
++    // BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - started as js - time ' + this.time)
+   }
+   setVerge(_val) {
+     this._IS_VERGE = _val;
+@@ -451,10 +451,10 @@ class Transaction {
+     }
+     writeInt32(this.version);
+     if (this._IS_VERGE) {
+-      BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - verge added - ' + this.time);
++      // BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - verge added - ' + this.time);
+       writeInt32(this.time);
+     } else {
+-      BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - not verge ');
++      // BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - not verge ');
+     }
+     const hasWitnesses = _ALLOW_WITNESS && this.hasWitnesses();
+     if (hasWitnesses) {
+diff --git a/node_modules/bitcoinjs-lib/src/transaction_builder.js b/node_modules/bitcoinjs-lib/src/transaction_builder.js
+index e5f3572..311df6a 100644
+--- a/node_modules/bitcoinjs-lib/src/transaction_builder.js
++++ b/node_modules/bitcoinjs-lib/src/transaction_builder.js
+@@ -1,7 +1,7 @@
+ 'use strict';
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog'
++// import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog'
+ 
+ const baddress = require('./address');
+ const bufferutils_1 = require('./bufferutils');
+@@ -60,7 +60,7 @@ class TransactionBuilder {
+     this.__TX = new transaction_1.Transaction();
+     this.__TX.version = 2;
+     this.__USE_LOW_R = false;
+-    BlocksoftCryptoLog.log('TransactionBuilder recheck - started as js')
++    // BlocksoftCryptoLog.log('TransactionBuilder recheck - started as js')
+   }
+   static fromTransaction(transaction, network) {
+     const txb = new TransactionBuilder(network);

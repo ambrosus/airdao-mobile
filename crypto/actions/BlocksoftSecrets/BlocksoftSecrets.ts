@@ -3,7 +3,7 @@
  * @version 0.11
  */
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
+import AirDAODispatcher from '../../blockchains/AirDAODispatcher';
 
 class BlocksoftSecrets {
   /**
@@ -28,7 +28,7 @@ class BlocksoftSecrets {
        * @type {XmrSecretsProcessor}
        */
       this._processor[currencyCode] =
-        BlocksoftDispatcher.getSecretsProcessor(currencyCode);
+        AirDAODispatcher.getSecretsProcessor(currencyCode);
     }
 
     let res = '';

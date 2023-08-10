@@ -2,15 +2,16 @@
  * @version 0.11
  * https://github.com/Coinomi/bip39-coinomi/releases
  */
-import BlocksoftKeys from '../../actions/BlocksoftKeys/BlocksoftKeys';
+// import AirDAOKeys from '../../actions/AirDAOKeys/AirDAOKeys';
+import AirDAOKeys from '@lib/helpers/AirDAOKeys';
 
 import { soliditySha3 } from 'web3-utils';
 import MoneroUtils from './ext/MoneroUtils';
 import MoneroMnemonic from './ext/MoneroMnemonic';
+import networksConstants from '@crypto/common/ext/networks-constants';
 
 const bip32 = require('bip32');
 const bitcoin = require('bitcoinjs-lib');
-const networksConstants = require('../../common/ext/networks-constants');
 
 const BTC = networksConstants.mainnet.network;
 
@@ -19,7 +20,7 @@ export default class XmrSecretsProcessor {
    * @param {string} data.mnemonic
    */
   async getWords(data: { mnemonic: string }) {
-    const seed = await BlocksoftKeys.getSeedCached(data.mnemonic);
+    const seed = await AirDAOKeys.getSeedCached(data.mnemonic);
     const seedHex = seed.toString('hex');
     if (seedHex.length < 128) {
       throw new Error('bad seedHex');

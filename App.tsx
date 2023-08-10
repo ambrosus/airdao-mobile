@@ -1,3 +1,4 @@
+import 'fast-text-encoding';
 import './src/prototypes/array';
 import './src/prototypes/global';
 import React from 'react';
