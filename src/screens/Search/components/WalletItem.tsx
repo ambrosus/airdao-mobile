@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { AddressIndicator } from '@components/templates';
+import { useTranslation } from 'react-i18next';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
@@ -23,6 +24,7 @@ export const ExplorerWalletItem = (
   const { address, transactionCount, ambBalance } = item;
   const { listsOfAddressGroup } = useLists((v) => v);
   const { watchlist } = useWatchlist();
+  const { t } = useTranslation();
   const listWithAddress = listsOfAddressGroup.filter(
     (list) => list.accounts.indexOfItem(item, 'address') > -1
   );
@@ -72,18 +74,19 @@ export const ExplorerWalletItem = (
           color={COLORS.smokyBlack50}
           fontFamily="Inter_500Medium"
         >
-          Holding{' '}
+          {t('single.address.holding')}
           {NumberUtils.formatNumber(
             item.calculatePercentHoldings(totalSupply),
             2
-          )}
-          % of supply
+          )}{' '}
+          {t('single.address.supply')}
         </Text>
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
           color={COLORS.smokyBlack50}
         >
+          {/* TODO add localisation here, key is "transactions" */}
           {StringUtils.pluralize(transactionCount, 'Transaction')}
         </Text>
       </Row>

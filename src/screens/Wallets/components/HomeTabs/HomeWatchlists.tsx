@@ -11,17 +11,19 @@ import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
 import { sortListByKey } from '@utils/sort';
+import { useTranslation } from 'react-i18next';
 
 const ITEM_COUNT = 4;
 
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
   const { addressesLoading } = useAllAddressesContext((v) => v);
+  const { t } = useTranslation();
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
   if (watchlist.length === 0) {
-    return <RenderEmpty text="addresses" />;
+    return <RenderEmpty text={t('addresses.text')} />;
   }
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {

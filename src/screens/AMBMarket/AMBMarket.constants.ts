@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 export type InfoKey =
   | 'maxSupply'
   | 'totalSupply'
@@ -13,17 +15,18 @@ export interface AMBMarketItem {
   idx: number;
   key: InfoKey;
 }
+
 export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   marketCap: {
-    title: 'Market cap',
-    body: "A measure of the total value of a cryptocurrency's circulating supply, calculated by multiplying the current price by the number of coins in circulation.",
+    title: t('market.cap'),
+    body: t('market.cap.popup'),
     testID: 'market-cap-popupinfo',
     idx: 2,
     key: 'marketCap'
   },
   fullyDilutedMarketCap: {
-    title: 'Fully diluted market cap',
-    body: "A measure of the total value of a cryptocurrency's circulating supply, calculated by multiplying the current price by the number of coins in circulation.",
+    title: t('fully.diluted.market.cap'),
+    body: t('fully.diluted.market.cap.popup'),
     testID: 'diluted-cap-popupinfo',
     idx: 3,
     key: 'fullyDilutedMarketCap'
@@ -46,22 +49,22 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   //   testID: 'dex-volume-popupinfo'
   // },
   circulatingSupply: {
-    title: 'Circulating supply',
-    body: 'The amount of coins that are circulating in the market and are in public hands. It is analogous to the flowing shares in the stock market.',
+    title: t('circulating.supply'),
+    body: t('circulating.supply.popup'),
     testID: 'circulation-popupinfo',
     idx: 4,
     key: 'circulatingSupply'
   },
   maxSupply: {
-    title: 'Max supply',
-    body: 'The maximum amount of coins that will ever exist in the lifetime of the cryptocurrency, indicating the limit of its potential supply.',
+    title: t('max.supply'),
+    body: t('max.supply.popup'),
     testID: 'max-supply-popupinfo',
     idx: 0,
     key: 'maxSupply'
   },
   totalSupply: {
-    title: 'Total supply',
-    body: 'The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.',
+    title: t('total.supply'),
+    body: t('total.supply.popup'),
     testID: 'total-supply-popupinfo',
     idx: 1,
     key: 'totalSupply'

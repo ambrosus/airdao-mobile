@@ -9,12 +9,14 @@ import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { verticalScale } from '@utils/scaling';
 import { AccountList } from '@models';
 import { CollectionItem } from '@components/modular';
+import { useTranslation } from 'react-i18next';
 
 const ITEM_COUNT = 4;
 
 export const HomeCollections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
   const { addressesLoading } = useAllAddressesContext((v) => v);
+  const { t } = useTranslation();
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
@@ -31,7 +33,7 @@ export const HomeCollections = () => {
   }
 
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="groups" />;
+    return <RenderEmpty text={t('groups')} />;
   }
 
   return (

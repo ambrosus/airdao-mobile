@@ -11,6 +11,7 @@ import {
 } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
 import { COLORS } from '@constants/colors';
+import { useTranslation } from 'react-i18next';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -24,6 +25,7 @@ export const AccountTransactions = (
 ): JSX.Element => {
   const { transactions, loading, showTransactionDetailsOnPress, onEndReached } =
     props;
+  const { t } = useTranslation();
 
   const renderTransaction = (
     args: ListRenderItemInfo<Transaction>
@@ -46,7 +48,7 @@ export const AccountTransactions = (
             fontSize={20}
             color={COLORS.jetBlack}
           >
-            Recent activity
+            {t('recent.activity')}
           </Text>
         </Row>
       </KeyboardDismissingView>

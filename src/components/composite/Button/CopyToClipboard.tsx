@@ -6,6 +6,7 @@ import { ClipboardFilledIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
 import { Toast, ToastPosition } from '@components/modular/Toast';
 import { BaseButtonProps } from '@components/base/Button';
+import { useTranslation } from 'react-i18next';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -18,9 +19,13 @@ export const CopyToClipboardButton = (
   props: CopyToClipboardButtonProps
 ): JSX.Element => {
   const { textToDisplay, textToCopy, textProps, ...buttonProps } = props;
+  const { t } = useTranslation();
 
   const onPress = async () => {
-    Toast.show({ message: 'Copied to Clipboard', type: ToastPosition.Bottom });
+    Toast.show({
+      message: t('copied.to.clipboard'),
+      type: ToastPosition.Bottom
+    });
     await Clipboard.setStringAsync(textToCopy || textToDisplay);
   };
 

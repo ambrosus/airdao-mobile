@@ -8,6 +8,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -21,6 +22,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
       address || ''
     );
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const { t } = useTranslation();
 
     return (
       <BottomSheetFloat
@@ -35,14 +37,14 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             fontSize={16}
             color={COLORS.nero}
           >
-            Rename address
+            {t('rename.address')}
           </Text>
         </View>
         <Input
           value={localAddressName}
           onChangeValue={(value) => setLocalAddressName(value)}
           type="text"
-          placeholder="Edit name"
+          placeholder={t('edit.name')}
           placeholderTextColor={COLORS.neutral900Alpha[60]}
           style={[styles.bottomSheetInput]}
         />
@@ -58,7 +60,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
               fontSize={16}
               color={COLORS.white}
             >
-              Save
+              {t('save.btn')}
             </Text>
           </PrimaryButton>
           <Spacer value={24} />
@@ -72,7 +74,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
               color={COLORS.smokyBlack}
               fontSize={16}
             >
-              Cancel
+              {t('cancel.btn')}
             </Text>
           </Button>
         </View>

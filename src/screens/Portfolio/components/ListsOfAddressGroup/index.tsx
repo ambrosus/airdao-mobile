@@ -6,17 +6,19 @@ import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles
 import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { verticalScale } from '@utils/scaling';
 import { Spacer } from '@components/base';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
   onRefresh?: () => void;
 };
 export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
+  const { t } = useTranslation();
   if (listsOfAddressGroup.length === 0) {
     return (
       <>
         <Spacer value={20} />
-        <RenderEmpty text="groups" />
+        <RenderEmpty text={t('groups')} />
       </>
     );
   }
