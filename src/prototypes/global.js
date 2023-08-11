@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // Inject node globals into React Native global scope.
-import * as ExpoCrypto from 'expo-crypto';
+import Crypto from 'react-native-quick-crypto';
+
 global.Buffer = require('buffer').Buffer;
 global.process = require('process');
 
@@ -17,10 +18,12 @@ if (typeof atob === 'undefined') {
 }
 
 if (typeof global.crypto !== 'object') {
-  global.crypto = {};
+  global.crypto = Crypto;
 }
 
+if (typeof window !== 'undefined') {
+  window.crypto = Crypto;
+}
 if (typeof global.crypto.getRandomValues !== 'function') {
-  global.crypto.getRandomValues = (array) =>
-    ExpoCrypto.getRandomBytes(array.byteLength);
+  global.crypto.getRandomValues = Crypto.getRandomValues;
 }

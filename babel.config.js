@@ -27,7 +27,9 @@ module.exports = function (api) {
             '@utils': './src/utils',
             'crypto': 'react-native-quick-crypto',
             'stream': 'stream-browserify',
-            'buffer': '@craftzdog/react-native-buffer'
+            'buffer': '@craftzdog/react-native-buffer',
+            'http': '@tradle/react-native-http',
+            'https': 'https-browserify'
           },
           extensions: ['.ts', '.tsx']
         }
