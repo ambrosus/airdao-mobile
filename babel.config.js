@@ -29,7 +29,8 @@ module.exports = function (api) {
             'stream': 'stream-browserify',
             'buffer': '@craftzdog/react-native-buffer',
             'http': '@tradle/react-native-http',
-            'https': 'https-browserify'
+            'https': 'https-browserify',
+            'os': 'react-native-os'
           },
           extensions: ['.ts', '.tsx']
         }
