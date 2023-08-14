@@ -1,6 +1,6 @@
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import AirDAOKeysForRefStorage from '@lib/helpers/AirDAOKeysForRefStorage';
-import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
+import AirDAOKeysForRef from '../lib/helpers/AirDAOKeysForRef';
 
 const getByHash = async (tmpHash: string) => {
   let tmpPublicAndPrivateResult =
@@ -26,17 +26,19 @@ const getByHash = async (tmpHash: string) => {
         mnemonic
       }
     );
-    console.log({ tmpPublicAndPrivateResult });
+    console.log(tmpPublicAndPrivateResult, 'dasd');
   } catch (error) {
-    console.log({ error });
+    console.log(error, 'error here');
   }
   // // await Log.log('SRV/CashBack getByHash done discoverPublic ' + tmpHash + ' => ' + tmpPublicAndPrivateResult.cashbackToken)
-  // try {
-  //   await AirDAOKeysForRefStorage.setPublicAndPrivateResultForHash(
-  //     tmpHash,
-  //     tmpPublicAndPrivateResult
-  //   );
-  // } catch (e) {}
+  try {
+    await AirDAOKeysForRefStorage.setPublicAndPrivateResultForHash(
+      tmpHash,
+      tmpPublicAndPrivateResult
+    );
+  } catch (e: any) {
+    console.log(e);
+  }
   return tmpPublicAndPrivateResult;
 };
 

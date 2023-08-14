@@ -4,7 +4,7 @@
  */
 import AirDAOKeys from './AirDAOKeys';
 import { WalletUtils } from '@utils/wallet';
-import AirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
+import AirDAODispatcher from '../../../crypto/blockchains/AirDAODispatcher';
 
 const CACHE: { [key: string]: any } = {};
 
@@ -24,15 +24,14 @@ class AirDAOKeysForRef {
     const mnemonicCache = data.mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] !== 'undefined')
       return CACHE[mnemonicCache];
-    // let result = AirDAOKeys.getEthCached(mnemonicCache);
-    let result;
+    let result = AirDAOKeys.getEthCached(mnemonicCache);
+    // let result;
     if (!result) {
       let index = 0;
       if (typeof data.index !== 'undefined') {
         index = data.index;
       }
-      // const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
-      let root;
+      const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
       const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
       const processor = await AirDAODispatcher.getAddressProcessor('ETH');
@@ -40,12 +39,13 @@ class AirDAOKeysForRef {
       result.index = index;
       result.path = path;
       if (index === 0) {
-        // AirDAOKeys.setEthCached(data.mnemonic, result);
+        AirDAOKeys.setEthCached(data.mnemonic, result);
       }
     }
     // noinspection JSPrimitiveTypeWrapperUsage
     result.cashbackToken = WalletUtils.addressToToken(result.address);
     CACHE[mnemonicCache] = result;
+    console.log(result, 'result');
     return result;
   }
 

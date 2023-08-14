@@ -45,13 +45,19 @@ const processWallet = async (
   if (!tmpWalletName || tmpWalletName === '') {
     tmpWalletName = await _getWalletName();
   }
-  const fullWallet: Wallet = new Wallet({ ...data, hash, name: tmpWalletName });
-  console.log({ fullWallet });
+  const fullWallet: Wallet = new Wallet({
+    pub: '',
+    hash,
+    ...data,
+    name: tmpWalletName
+  });
+  // console.log({ fullWallet });
   const { cashbackToken } = await CashBackUtils.getByHash(hash);
-  console.log({ cashbackToken });
+  console.log({ cashbackToken }, 'cashbackToken');
   // TODO save to local db
-  // await Wallet.saveWallet(fullWallet);
+  await Wallet.saveWallet(fullWallet);
   try {
+    // console.log(fullWallet);
   } catch (error) {
     throw error;
   }

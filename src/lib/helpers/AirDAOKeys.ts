@@ -19,8 +19,11 @@ const bs58check = require('bs58check');
 const ETH_CACHE = {};
 const CACHE = {};
 const CACHE_ROOTS = {};
-
+interface CacheRoots {
+  [key: string]: any;
+}
 class BlocksoftKeys {
+  private CACHE_ROOTS: CacheRoots = {};
   _bipHex: { [key: string]: string };
   _getRandomBytesFunction;
   constructor() {
@@ -131,7 +134,7 @@ class BlocksoftKeys {
     const mnemonicCache = data.mnemonic.toLowerCase();
     let bitcoinRoot = false;
     let currencyCode;
-    let settings;
+    let settings: any;
     const seed = await KeysUtills.bip39MnemonicToSeed(
       data.mnemonic.toLowerCase()
     );
@@ -375,17 +378,18 @@ class BlocksoftKeys {
     return seed;
   }
 
-  async getBip32Cached(mnemonic, network = false, seed = false) {
+  async getBip32Cached(mnemonic: string, network = false, seed = false) {
     const mnemonicCache = mnemonic.toLowerCase() + '_' + (network || 'btc');
-    if (typeof CACHE_ROOTS[mnemonicCache] === 'undefined') {
+    if (typeof this.CACHE_ROOTS[mnemonicCache] === 'undefined') {
       if (!seed) {
         seed = await this.getSeedCached(mnemonic);
       }
-      CACHE_ROOTS[mnemonicCache] = network
+      const root = network
         ? bip32.fromSeed(seed, network)
         : bip32.fromSeed(seed);
+      this.CACHE_ROOTS[mnemonicCache] = root;
     }
-    return CACHE_ROOTS[mnemonicCache];
+    return this.CACHE_ROOTS[mnemonicCache];
   }
 
   getEthCached(mnemonicCache) {

@@ -38,7 +38,7 @@ export const CreateWalletStep2 = () => {
       // Alert.alert('Failed');
       // return;
     }
-    console.log('here');
+    // console.log('here');
     // setLoading(true);
     // TODO fix number
     await WalletUtils.processWallet({
@@ -50,7 +50,7 @@ export const CreateWalletStep2 = () => {
   }, [walletMnemonic, walletMnemonicArrayDefault, walletMnemonicSelected]);
 
   useEffect(() => {
-    console.log('here');
+    // console.log('here');
     validateMnemonic();
   }, [walletMnemonicSelected, validateMnemonic]);
 
