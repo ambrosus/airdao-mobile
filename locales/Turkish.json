@@ -26,6 +26,7 @@
 
   "search.address.input": "Adres veya işlem arayın",
   "top.holders": "En büyük sahipler",
+  "top.holders.capitalize": "En Büyük Sahipler",
   "single.address.holding": "Sahip olmak ",
   "single.address.supply": "% arzın",
   "transactions": "İşlemler",
@@ -39,6 +40,9 @@
   "invalid.qr.code.msg": "Geçersiz QR kod",
   "scan.again.msg": "Tekrar tarama yapın",
   "toast.address.watchlisted.msg": "Harika gidiyorsunuz! Adres izleme listesine eklendi.",
+  "toast.way.to.go": "Harika iş!",
+  "toast.group.created": "grup oluşturuldu.",
+  "toast.has.been.renamed": "şu şekilde yeniden adlandırıldı",
   "toast.tap.to.rename.msg": "Adresi yeniden adlandırmak için tıklayın",
   "no.account.info": "Hesap bilgileri yüklenemedi",
   "no.matches": "Üzgünüm! Hiç eşleşme bulunamadı",
@@ -87,6 +91,8 @@
   "move.to.another.group": "Başka bir gruba taşıyın",
   "remove.address.from.group": "Gruptan kaldırın",
   "confirm.remove.address.from.watchlist": "Bu adresi izleme listesinden kaldırmak istediğinize emin misiniz?",
+  "remove.btn": "Kaldırın",
+  "add": "Ekleyin",
 
   "see.all.btn": "Tümünü gör",
   "info": "bilgi",
