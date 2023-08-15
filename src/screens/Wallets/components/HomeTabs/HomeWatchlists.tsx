@@ -5,25 +5,22 @@ import { Button, Spacer, Spinner } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
-import { RenderEmpty } from '@components/templates/RenderEmpty';
-import { WalletItem } from '@components/templates';
+import { WalletItem, LocalizedRenderEmpty } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
 import { sortListByKey } from '@utils/sort';
-import { useTranslation } from 'react-i18next';
 
 const ITEM_COUNT = 4;
 
 export const HomeWatchlists = () => {
   const { watchlist } = useWatchlist();
   const { addressesLoading } = useAllAddressesContext((v) => v);
-  const { t } = useTranslation();
 
   const navigation = useNavigation<PortfolioNavigationProp>();
 
   if (watchlist.length === 0) {
-    return <RenderEmpty text={t('addresses.text')} />;
+    return <LocalizedRenderEmpty text={'no-addresses-yet'} />;
   }
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {

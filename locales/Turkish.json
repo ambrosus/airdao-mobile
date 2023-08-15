@@ -123,5 +123,7 @@
   "yesterday": "Yarın",
   "groups": "gruplar",
   "no": "Hayır",
-  "yet": "henüz"
+  "yet": "henüz",
+  "no-addresses-yet": "Henüz adres yok",
+  "no-groups-yet": "Henüz grup yok"
 }

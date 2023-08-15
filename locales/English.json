@@ -124,5 +124,7 @@
   "yesterday": "Yesterday",
   "groups": "groups",
   "no": "No",
-  "yet": "yet"
+  "yet": "yet",
+  "no-addresses-yet": "No addresses yet",
+  "no-groups-yet": "No groups yet"
 }
