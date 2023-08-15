@@ -51,7 +51,7 @@
     "base-x": "^4.0.0",
     "bech32": "^2.0.0",
     "bignumber.js": "^9.1.1",
-    "bip32": "^4.0.0",
+    "bip32": "^2.0.4",
     "bip39": "^3.1.0",
     "bitcoinjs-lib": "git+https://git@github.com/trustee-wallet/bitcoinjs-lib",
     "bn.js": "^5.2.1",

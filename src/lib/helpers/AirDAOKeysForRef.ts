@@ -45,7 +45,6 @@ class AirDAOKeysForRef {
     // noinspection JSPrimitiveTypeWrapperUsage
     result.cashbackToken = WalletUtils.addressToToken(result.address);
     CACHE[mnemonicCache] = result;
-    console.log(result, 'result');
     return result;
   }
 

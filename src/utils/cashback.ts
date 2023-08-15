@@ -28,7 +28,7 @@ const getByHash = async (tmpHash: string) => {
     );
     console.log(tmpPublicAndPrivateResult, 'dasd');
   } catch (error) {
-    console.log(error, 'error here');
+    // ignore
   }
   // // await Log.log('SRV/CashBack getByHash done discoverPublic ' + tmpHash + ' => ' + tmpPublicAndPrivateResult.cashbackToken)
   try {

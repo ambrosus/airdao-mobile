@@ -21,11 +21,6 @@ export const CreateWalletStep2 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [walletMnemonicArrayDefault.length]
   );
-  console.log({
-    walletMnemonic,
-    walletMnemonicArrayDefault: walletMnemonicArrayDefault.length,
-    walletMnemonicSelected: walletMnemonicSelected.length
-  });
 
   const validateMnemonic = useCallback(async () => {
     if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
