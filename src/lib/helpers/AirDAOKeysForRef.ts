@@ -28,13 +28,27 @@ class AirDAOKeysForRef {
     // let result;
     if (!result) {
       let index = 0;
+      const network = 'AMB';
       if (typeof data.index !== 'undefined') {
         index = data.index;
       }
       const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
-      const path = `m/44'/16718'/${index}'/0/0`;
+      let path;
+      if (network === 'AMB') {
+        path = `m/44'/16718'/${index}'/0/0`;
+      } else if (network === 'ETH') {
+        path = `m/44'/60'/${index}'/0/0`;
+      }
       const child = root.derivePath(path);
-      const processor = await AirDAODispatcher.getAddressProcessor('AMB');
+      let processor;
+      if (!processor) {
+        throw new Error('Processor not initialized');
+      }
+      if (network === 'AMB') {
+        processor = await AirDAODispatcher.getAddressProcessor('AMB');
+      } else if (network === 'ETH') {
+        processor = await AirDAODispatcher.getAddressProcessor('ETH');
+      }
       result = await processor.getAddress(child.privateKey);
       result.index = index;
       result.path = path;
