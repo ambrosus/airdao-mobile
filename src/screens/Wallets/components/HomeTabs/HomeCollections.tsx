@@ -31,7 +31,7 @@ export const HomeCollections = () => {
   }
 
   if (listsOfAddressGroup.length === 0) {
-    return <LocalizedRenderEmpty text={'no-groups-yet'} />;
+    return <LocalizedRenderEmpty text={'no.groups.yet'} />;
   }
 
   return (

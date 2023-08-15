@@ -1,5 +1,3 @@
-import { t } from 'i18next';
-
 export type InfoKey =
   | 'maxSupply'
   | 'totalSupply'
@@ -18,15 +16,15 @@ export interface AMBMarketItem {
 
 export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   marketCap: {
-    title: t('market.cap'),
-    body: t('market.cap.popup'),
+    title: 'market.cap',
+    body: 'market.cap.popup',
     testID: 'market-cap-popupinfo',
     idx: 2,
     key: 'marketCap'
   },
   fullyDilutedMarketCap: {
-    title: t('fully.diluted.market.cap'),
-    body: t('fully.diluted.market.cap.popup'),
+    title: 'fully.diluted.market.cap',
+    body: 'fully.diluted.market.cap.popup',
     testID: 'diluted-cap-popupinfo',
     idx: 3,
     key: 'fullyDilutedMarketCap'
@@ -49,22 +47,22 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   //   testID: 'dex-volume-popupinfo'
   // },
   circulatingSupply: {
-    title: t('circulating.supply'),
-    body: t('circulating.supply.popup'),
+    title: 'circulating.supply',
+    body: 'circulating.supply.popup',
     testID: 'circulation-popupinfo',
     idx: 4,
     key: 'circulatingSupply'
   },
   maxSupply: {
-    title: t('max.supply'),
-    body: t('max.supply.popup'),
+    title: 'max.supply',
+    body: 'max.supply.popup',
     testID: 'max-supply-popupinfo',
     idx: 0,
     key: 'maxSupply'
   },
   totalSupply: {
-    title: t('total.supply'),
-    body: t('total.supply.popup'),
+    title: 'total.supply',
+    body: 'total.supply.popup',
     testID: 'total-supply-popupinfo',
     idx: 1,
     key: 'totalSupply'

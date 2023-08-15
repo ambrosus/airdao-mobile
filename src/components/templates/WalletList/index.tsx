@@ -70,7 +70,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
-      ListEmptyComponent={<LocalizedRenderEmpty text={'no-addresses-yet'} />}
+      ListEmptyComponent={<LocalizedRenderEmpty text={'no.addresses.yet'} />}
       showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
       refreshing={false} // TODO

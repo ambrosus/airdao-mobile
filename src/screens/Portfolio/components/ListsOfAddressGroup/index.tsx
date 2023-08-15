@@ -16,7 +16,7 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
     return (
       <>
         <Spacer value={20} />
-        <LocalizedRenderEmpty text={'no-groups-yet'} />
+        <LocalizedRenderEmpty text={'no.groups.yet'} />
       </>
     );
   }

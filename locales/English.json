@@ -125,6 +125,10 @@
   "groups": "groups",
   "no": "No",
   "yet": "yet",
-  "no-addresses-yet": "No addresses yet",
-  "no-groups-yet": "No groups yet"
+  "no.addresses.yet": "No addresses yet",
+  "no.groups.yet": "No groups yet",
+
+  "chart.timeframe.daily": "1D",
+  "chart.timeframe.weekly": "1W",
+  "chart.timeframe.monthly": "1M"
 }

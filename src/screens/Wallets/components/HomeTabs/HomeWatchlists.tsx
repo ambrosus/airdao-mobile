@@ -20,7 +20,7 @@ export const HomeWatchlists = () => {
   const navigation = useNavigation<PortfolioNavigationProp>();
 
   if (watchlist.length === 0) {
-    return <LocalizedRenderEmpty text={'no-addresses-yet'} />;
+    return <LocalizedRenderEmpty text={'no.addresses.yet'} />;
   }
 
   const navigateToAddressDetails = (item: ExplorerAccount) => {

@@ -95,7 +95,7 @@
   "add": "Ekleyin",
 
   "see.all.btn": "Tümünü gör",
-  "info": "bilgi",
+  "info": "Bilgi",
   "max.supply": "Maksimum arz",
   "max.supply.popup": "Kripto paranın ömrü boyunca var olabilecek en yüksek jeton miktarı, potansiyel arzının sınırını gösterir. .",
   "total.supply": "Toplam arz",
@@ -124,6 +124,10 @@
   "groups": "gruplar",
   "no": "Hayır",
   "yet": "henüz",
-  "no-addresses-yet": "Henüz adres yok",
-  "no-groups-yet": "Henüz grup yok"
+  "no.addresses.yet": "Henüz adres yok",
+  "no.groups.yet": "Henüz grup yok",
+
+  "chart.timeframe.daily": "1G",
+  "chart.timeframe.weekly": "1H",
+  "chart.timeframe.monthly": "1A"
 }
