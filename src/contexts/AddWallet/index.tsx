@@ -8,9 +8,12 @@ const AddWalletContext = (): AddWalletContextState => {
   );
   const [walletHash, setWalletHash] = useState('');
   const [walletName, setWalletName] = useState('');
+  const [network, setNetwork] = useState('ETH');
   const [walletMnemonic, setWalletMnemonic] = useState('');
   const [mnemonicLength, setMnemonicLength] = useState(0);
   return {
+    network,
+    setNetwork,
     flowType,
     setFlowType,
     walletHash,

@@ -7,7 +7,6 @@ import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
-import { useIgnoreInitialMountEffect } from '@hooks';
 
 export const CreateWalletStep2 = () => {
   const { walletMnemonic } = useAddWalletContext();
