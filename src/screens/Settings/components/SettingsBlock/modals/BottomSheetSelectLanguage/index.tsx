@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
-import useLocalization from '@contexts/Localizations/Localizations.context';
+import useLocalization from '@contexts/Localizations';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
