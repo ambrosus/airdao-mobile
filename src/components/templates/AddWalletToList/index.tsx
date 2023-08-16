@@ -10,6 +10,7 @@ import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useLists } from '@contexts/ListsContext';
+import { useTranslation } from 'react-i18next';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -20,6 +21,7 @@ export interface AddWalletToListProps {
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   const { wallet, lists, onWalletMove } = props;
   const { toggleAddressesInList } = useLists((v) => v);
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
     () =>
@@ -76,7 +78,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
               fontFamily="Inter_500Medium"
               color={COLORS.smokyBlack50}
             >
-              {list.accountCount} Addresses
+              {list.accountCount} {t('addresses')}
             </Text>
           </View>
         </Row>
@@ -95,7 +97,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
           <InputWithIcon
             value={searchText}
             onChangeValue={setSearchText}
-            placeholder="Search groups"
+            placeholder={t('search.groups.input')}
             iconLeft={<SearchIcon color={COLORS.midnight} />}
           />
         </View>

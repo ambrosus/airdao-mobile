@@ -5,7 +5,7 @@ import { Button, Spacer, Spinner } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
 import { PortfolioNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallets/components/HomeTabs/styles';
-import { RenderEmpty } from '@components/templates/RenderEmpty';
+import { LocalizedRenderEmpty } from '@components/templates';
 import { verticalScale } from '@utils/scaling';
 import { AccountList } from '@models';
 import { CollectionItem } from '@components/modular';
@@ -31,7 +31,7 @@ export const HomeCollections = () => {
   }
 
   if (listsOfAddressGroup.length === 0) {
-    return <RenderEmpty text="groups" />;
+    return <LocalizedRenderEmpty text={'no.groups.yet'} />;
   }
 
   return (
