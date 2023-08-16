@@ -34,7 +34,7 @@ class AirDAOKeysForRef {
       const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
       const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
-      const processor = await AirDAODispatcher.getAddressProcessor('ETH');
+      const processor = await AirDAODispatcher.getAddressProcessor('AMB');
       result = await processor.getAddress(child.privateKey);
       result.index = index;
       result.path = path;
@@ -49,7 +49,7 @@ class AirDAOKeysForRef {
   }
 
   async signDataForApi(msg: string, privateKey: string) {
-    const processor = await AirDAODispatcher.getAddressProcessor('ETH');
+    const processor = await AirDAODispatcher.getAddressProcessor('AMB');
     if (privateKey.substring(0, 2) !== '0x') {
       privateKey = '0x' + privateKey;
     }
