@@ -19,9 +19,9 @@ export const CreateWalletStep1 = () => {
   const walletMnemonicArray = walletMnemonic.split(' ');
 
   const init = async () => {
+    setNetwork('AMB');
     setLoading(true);
     // create mnemonic
-    // tslint:disable-next-line:no-shadowed-variable
     const walletMnemonic = (
       await MnemonicUtils.generateNewMnemonic(mnemonicLength)
     ).mnemonic;
@@ -46,12 +46,7 @@ export const CreateWalletStep1 = () => {
     );
   };
 
-  const onNextPress = (network: string) => {
-    if (network === 'AMB') {
-      setNetwork('AMB');
-    } else {
-      setNetwork('ETH');
-    }
+  const onNextPress = () => {
     navigation.navigate('CreateWalletStep2');
   };
 
@@ -79,16 +74,8 @@ export const CreateWalletStep1 = () => {
             </View>
           </Row>
         )}
-        <PrimaryButton onPress={() => onNextPress('ETH')}>
-          <Text color={COLORS.white} fontFamily="Inter_600SemiBold">
-            Create ETH wallet
-          </Text>
-        </PrimaryButton>
-        <Spacer value={verticalScale(24)} />
-        <PrimaryButton onPress={() => onNextPress('AMB')}>
-          <Text color={COLORS.white} fontFamily="Inter_600SemiBold">
-            Create AMB wallet
-          </Text>
+        <PrimaryButton onPress={onNextPress}>
+          <Text color={COLORS.white}>Next</Text>
         </PrimaryButton>
       </View>
     </SafeAreaView>
