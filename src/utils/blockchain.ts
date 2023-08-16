@@ -1,6 +1,8 @@
 import { NativeModules } from 'react-native';
 
 import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
 
 const { RNFastCrypto } = NativeModules;
 
@@ -203,11 +205,18 @@ function getCurrencyAllSettings(currencyCodeOrObject, source = '') {
     return false;
   }
   if (currencyCode === 'ETH_LAND') {
-    Database.query(`DELETE FROM account WHERE currency_code='ETH_LAND'`);
-    Database.query(
+    Database.unsafeRawQuery(
+      DatabaseTable.Accounts,
+      `DELETE FROM account WHERE currency_code='ETH_LAND'`
+    );
+    Database.unsafeRawQuery(
+      DatabaseTable.AccountBalances,
       `DELETE FROM account_balance WHERE currency_code='ETH_LAND'`
     );
-    Database.query(`DELETE FROM currency WHERE currency_code='ETH_LAND'`);
+    Database.unsafeRawQuery(
+      DatabaseTable.Currencies,
+      `DELETE FROM currency WHERE currency_code='ETH_LAND'`
+    );
   }
 
   if (typeof currencyCodeOrObject.currencyCode !== 'undefined') {
