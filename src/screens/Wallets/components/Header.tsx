@@ -19,6 +19,7 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
 import { COLORS } from '@constants/colors';
+import { useTranslation } from 'react-i18next';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<WalletsNavigationProp>();
@@ -27,6 +28,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const scanned = useRef(false);
   const { data: notifications } = useNotificationsQuery();
   const newNotificationsCount = useNewNotificationsCount();
+  const { t } = useTranslation();
 
   const openScanner = () => {
     scanner.current?.show();
@@ -47,9 +49,9 @@ export const HomeHeader = React.memo((): JSX.Element => {
         });
       } else if (!scanned.current) {
         scanned.current = true;
-        Alert.alert('Invalid QR code', '', [
+        Alert.alert(t('invalid.qr.code.msg'), '', [
           {
-            text: 'Scan again',
+            text: t('scan.again.msg'),
             onPress: () => {
               scanned.current = false;
             }
@@ -57,7 +59,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
         ]);
       }
     },
-    [navigation]
+    [navigation, t]
   );
 
   const setLastNotificationTime = useCallback(() => {

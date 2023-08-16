@@ -17,6 +17,7 @@ import { COLORS } from '@constants/colors';
 import { BellIcon } from '@components/svg/icons';
 import { useNotificationsQuery } from '@hooks/query';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 interface NotificationSection {
   title: string;
@@ -36,6 +37,7 @@ export const Notifications = (): JSX.Element => {
   // }, [notifications]);
 
   const settingsModal = useRef<BottomSheetRef>(null);
+  const { t } = useTranslation();
 
   const sectionizedNotificaitons: NotificationSection[] = React.useMemo(() => {
     const sectionMap = new Map<string, Notification[]>();
@@ -51,12 +53,16 @@ export const Notifications = (): JSX.Element => {
       const today = moment().format(DAY_FORMAT);
       const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
       const title =
-        date === today ? 'Today' : date === yesterday ? 'Yesterday' : date;
+        date === today
+          ? t('today')
+          : date === yesterday
+          ? t('yesterday')
+          : date;
       sections.push({ title, data: notifications, index });
       index++;
     }
     return sections;
-  }, [notifications]);
+  }, [notifications, t]);
 
   const showSettingsModal = () => {
     settingsModal.current?.show();
@@ -102,7 +108,9 @@ export const Notifications = (): JSX.Element => {
           fontSize={15}
           fontFamily="Inter_400Regular"
         >
-          You have no notifications right now.{'\n'} Come back later.
+          {t('no.notifications.text')}
+          {'\n'}
+          {t('no.notifications.come.back.later.text')}.
         </Text>
       </View>
     );
