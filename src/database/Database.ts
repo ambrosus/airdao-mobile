@@ -27,7 +27,6 @@ class Database {
 
   private async init() {
     this.db = database;
-    this.reset();
   }
 
   getDatabase() {
