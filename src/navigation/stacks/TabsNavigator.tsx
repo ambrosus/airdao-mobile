@@ -1,11 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TabsParamsList } from '@appTypes/navigation/tabs';
 import { PortfolioStack } from './Tabs/PortfolioStack';
+import TabBar from '@navigation/components/TabBar';
 import SettingsStack from './Tabs/SettingsStack';
+import WalletStack from './Tabs/WalletStack';
 import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
-import TabBar from '@navigation/components/TabBar';
-import { TabsParamsList } from '@appTypes/navigation/tabs';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
@@ -33,7 +34,16 @@ export const TabsNavigator = () => {
         component={SearchStack}
         options={{ tabBarLabel: 'Explore' }}
       />
-      <BottomTabs.Screen name="Settings" component={SettingsStack} />
+      <BottomTabs.Screen
+        name="Settings"
+        component={SettingsStack}
+        options={{ tabBarLabel: 'Settings' }}
+      />
+      <BottomTabs.Screen
+        name="Wallet"
+        component={WalletStack}
+        options={{ tabBarLabel: 'Wallet' }}
+      />
     </BottomTabs.Navigator>
   );
 };

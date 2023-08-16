@@ -5,6 +5,7 @@ import AirDAOKeysForRef from '../lib/helpers/AirDAOKeysForRef';
 const getByHash = async (tmpHash: string) => {
   let tmpPublicAndPrivateResult =
     await AirDAOKeysForRefStorage.getPublicAndPrivateResultForHash(tmpHash);
+  let result;
   if (
     tmpPublicAndPrivateResult &&
     typeof tmpPublicAndPrivateResult.cashbackToken !== 'undefined'
@@ -26,6 +27,7 @@ const getByHash = async (tmpHash: string) => {
         mnemonic
       }
     );
+    result = JSON.parse(JSON.stringify(tmpPublicAndPrivateResult));
     console.log(tmpPublicAndPrivateResult, 'dasd');
   } catch (error) {
     // ignore
@@ -39,7 +41,11 @@ const getByHash = async (tmpHash: string) => {
   } catch (e: any) {
     console.log(e);
   }
-  return tmpPublicAndPrivateResult;
+  const { cashbackToken } = tmpPublicAndPrivateResult;
+  return {
+    cashbackToken,
+    tmpPublicAndPrivateResult: result
+  };
 };
 
 export const CashBackUtils = { getByHash };

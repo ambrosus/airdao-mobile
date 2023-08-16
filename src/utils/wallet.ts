@@ -52,8 +52,7 @@ const processWallet = async (
     name: tmpWalletName
   });
   // console.log({ fullWallet });
-  const { cashbackToken } = await CashBackUtils.getByHash(hash);
-  console.log({ cashbackToken }, 'cashbackToken');
+  const { tmpPublicAndPrivateResult } = await CashBackUtils.getByHash(hash);
   // TODO save to local db
   await Wallet.saveWallet(fullWallet);
   try {
@@ -61,6 +60,8 @@ const processWallet = async (
   } catch (error) {
     throw error;
   }
+  const { address } = tmpPublicAndPrivateResult;
+  return { address };
 };
 
 export const WalletUtils = { processWallet, addressToToken };

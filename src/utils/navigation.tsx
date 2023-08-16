@@ -2,7 +2,8 @@ const TabVisibleRoutes = [
   'HomeScreen',
   'PortfolioScreen',
   'SearchScreen',
-  'SettingsScreen'
+  'SettingsScreen',
+  'WalletScreen'
 ];
 
 const getTabBarVisibility = (route: string): boolean => {

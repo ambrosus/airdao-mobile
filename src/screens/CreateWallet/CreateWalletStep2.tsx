@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { Header } from '@components/composite';
+import { CopyToClipboardButton, Header } from '@components/composite';
 import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
-import { useIgnoreInitialMountEffect } from '@hooks';
+import { StringUtils } from '@utils/string';
 
 export const CreateWalletStep2 = () => {
   const { walletMnemonic } = useAddWalletContext();
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     string[]
   >([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [addressToCopy, setAddressToCopy] = useState<string>('');
   const walletMnemonicArrayDefault = walletMnemonic.split(' ');
   const walletMnemonicRandomSorted = useMemo(
     () => walletMnemonicArrayDefault.sort(() => 0.5 - Math.random()),
@@ -36,12 +37,13 @@ export const CreateWalletStep2 = () => {
     // console.log('here');
     // setLoading(true);
     // TODO fix number
-    await WalletUtils.processWallet({
+    const { address } = await WalletUtils.processWallet({
       number: 0,
       mnemonic: walletMnemonic,
       name: ''
     });
-    // setLoading(false);
+    console.log(address);
+    setAddressToCopy(address);
   }, [walletMnemonic, walletMnemonicArrayDefault, walletMnemonicSelected]);
 
   useEffect(() => {
@@ -84,6 +86,19 @@ export const CreateWalletStep2 = () => {
               .map(renderWord)}
           </Row>
         )}
+        <Spacer value={verticalScale(24)} />
+        {addressToCopy.length > 0 && (
+          <CopyToClipboardButton
+            textToDisplay={StringUtils.formatAddress(addressToCopy, 11, 5)}
+            textToCopy={addressToCopy}
+            textProps={{
+              fontSize: 13,
+              fontFamily: 'Inter_600SemiBold',
+              color: COLORS.slateGrey
+            }}
+          />
+        )}
+        <Spacer value={verticalScale(24)} />
       </View>
     </SafeAreaView>
   );
