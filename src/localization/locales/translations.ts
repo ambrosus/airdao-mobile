@@ -5,8 +5,8 @@ type Translations = {
 };
 
 const translations: Translations = {
-  English: require('./English.json'),
-  Turkish: require('./Turkish.json')
+  English: require('../locales/English.json'),
+  Turkish: require('../locales/Turkish.json')
 };
 
 export const translate = (key: string, locale: string): string => {
