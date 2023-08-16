@@ -49,7 +49,8 @@ export const CreateWalletStep2 = () => {
   useEffect(() => {
     // console.log('here');
     validateMnemonic();
-  }, [walletMnemonicSelected, validateMnemonic]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletMnemonicSelected]);
 
   const renderWord = (word: string) => {
     const selectedIdx = walletMnemonicSelected.indexOf(word);

@@ -13,13 +13,11 @@ class AirDAOKeysForRef {
     mnemonic: string;
     index?: number;
   }): Promise<{
-    currencyCode: {
-      address: string;
-      privateKey: string;
-      path: string;
-      index: number;
-      type: unknown; // TODO
-    }[];
+    address: string;
+    privateKey: string;
+    path: string;
+    index: number;
+    type: unknown; // TODO
   }> {
     const mnemonicCache = data.mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] !== 'undefined')

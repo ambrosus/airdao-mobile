@@ -15,7 +15,6 @@ const getByHash = async (tmpHash: string) => {
   }
   // await Log.log('SRV/CashBack getByHash need to discoverPublic', tmpHash)
   const mnemonic = await AirDAOKeysStorage.getWalletMnemonic(tmpHash);
-  console.log({ mnemonic });
 
   if (!mnemonic) {
     return false;
@@ -28,7 +27,6 @@ const getByHash = async (tmpHash: string) => {
       }
     );
     result = JSON.parse(JSON.stringify(tmpPublicAndPrivateResult));
-    console.log(tmpPublicAndPrivateResult, 'dasd');
   } catch (error) {
     // ignore
   }
@@ -38,9 +36,7 @@ const getByHash = async (tmpHash: string) => {
       tmpHash,
       tmpPublicAndPrivateResult
     );
-  } catch (e: any) {
-    console.log(e);
-  }
+  } catch (e: any) {}
   const { cashbackToken } = tmpPublicAndPrivateResult;
   return {
     cashbackToken,

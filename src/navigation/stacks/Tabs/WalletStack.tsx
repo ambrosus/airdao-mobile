@@ -9,6 +9,7 @@ import {
 } from '@screens/Wallet/CreateWallet';
 import { RestoreWalletScreen } from '@screens/Wallet/RestoreWallet';
 import { getCommonStack } from '@navigation/stacks/CommonStack';
+import { WalletAccount } from '@screens/Wallet/Account';
 
 const Stack = createNativeStackNavigator<WalletStackParamsList>();
 export const WalletStack = () => {
@@ -18,6 +19,7 @@ export const WalletStack = () => {
       initialRouteName="WalletScreen"
     >
       <Stack.Screen name="WalletScreen" component={WalletScreen} />
+      <Stack.Screen name="WalletAccount" component={WalletAccount} />
       <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
       <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
       <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
