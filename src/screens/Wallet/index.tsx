@@ -1,12 +1,12 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes';
 import { AddWalletFlowType, useAddWalletContext } from '@contexts';
-import { styles } from '@screens/WalletScreen/styles';
+import { styles } from '@screens/Wallet/styles';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';
 import { View } from 'react-native';
@@ -15,6 +15,7 @@ export const WalletScreen = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
   const { setFlowType, setWalletName, setMnemonicLength } =
     useAddWalletContext();
+  const { top } = useSafeAreaInsets();
 
   const onCreatePress = () => {
     setFlowType(AddWalletFlowType.CREATE_WALLET);
@@ -31,7 +32,7 @@ export const WalletScreen = () => {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
+    <View style={[{ top }, styles.container]}>
       <Header
         title="Add Wallet"
         backIconVisible={false}
@@ -51,6 +52,6 @@ export const WalletScreen = () => {
           </Text>
         </PrimaryButton>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
