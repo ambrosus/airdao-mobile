@@ -8,6 +8,8 @@ import { styles } from '@screens/Settings/components/SettingsBlock/modals/style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
+import useLocalization from '@contexts/Localizations';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -32,16 +34,16 @@ type LanguageData = {
 const mockedLanguages: LanguageData[] = [
   {
     language: 'English'
-  }
+  },
   // {
   //   language: 'Arabic'
   // },
   // {
   //   language: 'Spanish'
   // },
-  // {
-  //   language: 'Turkish'
-  // },
+  {
+    language: 'Turkish'
+  }
   // {
   //   language: 'Hindi'
   // },
@@ -59,14 +61,19 @@ const mockedLanguages: LanguageData[] = [
 export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
   ({ selectedLanguage, handleLanguageSave }, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [modalActiveLanguage, setModalActiveLanguage] = useState<Language>(
       selectedLanguage || ''
     );
     const { top: topInset } = useSafeAreaInsets();
+    const { changeCurrentLanguage, currentLanguage } = useLocalization();
+
+    const { t } = useTranslation();
 
     const onLanguagePress = (value: Language) => {
       setModalActiveLanguage(value);
       handleLanguageSave(value);
+      changeCurrentLanguage(value);
     };
 
     return (
@@ -84,7 +91,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
               fontSize={scale(16)}
               color={COLORS.smokyBlack}
             >
-              Select language
+              {t('select.language')}
             </Text>
           }
           titlePosition={Platform.select({ ios: 'left', default: 'center' })}
@@ -101,7 +108,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
           renderItem={({ item, index }) => {
             return (
               <SettingsModalItem
-                modalActiveItem={modalActiveLanguage}
+                modalActiveItem={currentLanguage}
                 item={item.language}
                 handleItemPress={onLanguagePress}
                 key={index}

@@ -8,6 +8,7 @@ import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -20,6 +21,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
 >(({ item }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { removeFromWatchlist } = useWatchlist();
+  const { t } = useTranslation();
 
   const handleRemoveAddressFromWatchlist = useCallback(() => {
     removeFromWatchlist(item);
@@ -42,7 +44,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           fontSize={14}
           color={COLORS.smokyBlack}
         >
-          Remove this address from watchlist?
+          {t('confirm.remove.address.from.watchlist')}
         </Text>
         <Spacer value={24} />
         <Button
@@ -55,7 +57,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
             fontSize={16}
             color={COLORS.crimsonRed}
           >
-            Remove
+            {t('remove.btn')}
           </Text>
         </Button>
         <Spacer value={24} />
@@ -70,7 +72,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
             color={COLORS.smokyBlack}
             fontSize={16}
           >
-            Cancel
+            {t('cancel.btn')}
           </Text>
         </Button>
       </View>

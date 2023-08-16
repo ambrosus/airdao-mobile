@@ -25,12 +25,14 @@ import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
+import { useTranslation } from 'react-i18next';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Address'>>();
   const { address } = params;
   const initialMount = useRef(true);
+  const { t } = useTranslation();
   const {
     data: account,
     loading: accountLoading,
@@ -74,7 +76,7 @@ export const AddressDetails = (): JSX.Element => {
       <SafeAreaView edges={['top']} style={styles.container}>
         <Header />
         <View style={styles.center}>
-          <Text>Error Occurred</Text>
+          <Text>{t('error.loading.account')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -97,8 +99,12 @@ export const AddressDetails = (): JSX.Element => {
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
     const toastMessage = isOnWatchlist
-      ? `${finalAccount.name || 'The address'} is now on your Watchlists!`
-      : `You removed ${finalAccount.name || 'the address'} from Watchlists!`;
+      ? `${finalAccount.name || t('toast.the.address.upper.case')} ${t(
+          'toast.now.on.watchlist.msg'
+        )}`
+      : `${t('toast.you.removed')}${
+          finalAccount.name || t('toast.the.message.lower.case')
+        } ${t('toast.from.watchlist')}`;
     Toast.show({ message: toastMessage, type: ToastPosition.Top, title: '' });
   };
 
@@ -151,8 +157,7 @@ export const AddressDetails = (): JSX.Element => {
       <SharePortfolio
         ref={shareModal}
         title={StringUtils.formatAddress(finalAccount.address, 7, 4)}
-        bottomSheetTitle="Share address performance"
-        // balance={NumberUtils.abbreviateNumber(finalAccount.ambBalance)}
+        bottomSheetTitle={t('share.address.performance')}
         balance={
           finalAccount.ambBalance < 1000
             ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)
