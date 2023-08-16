@@ -1,19 +1,20 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { ListRenderItemInfo, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import {
-  AccountTransactions,
-  ExplorerAccountTransactionItem
-} from '@components/templates';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { AccountTransactions } from '@components/templates';
 import { CopyToClipboardButton, Header } from '@components/composite';
-import { WalletStackParamsList } from '@appTypes';
-import { Row, Spacer, Spinner, Text } from '@components/base';
+import { NumberInput } from '@components/base/Input/Input.number';
+import { PrimaryButton } from '@components/modular';
+import { Input, Row, Spacer, Spinner, Text } from '@components/base';
+import { AddWalletStackNavigationProp, WalletStackParamsList } from '@appTypes';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 import { API } from '@api/api';
 import { ExplorerAccount, Transaction } from '@models';
 import { StringUtils } from '@utils/string';
 import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { etherumAddressRegex } from '@constants/regex';
 
 const Layout = (props: PropsWithChildren) => {
   const route = useRoute<RouteProp<WalletStackParamsList, 'WalletAccount'>>();
@@ -29,6 +30,7 @@ const Layout = (props: PropsWithChildren) => {
 const LIMIT = 25;
 
 export const WalletAccount = () => {
+  const navigation = useNavigation<AddWalletStackNavigationProp>();
   const route = useRoute<RouteProp<WalletStackParamsList, 'WalletAccount'>>();
   const { wallet } = route.params;
 
@@ -38,6 +40,10 @@ export const WalletAccount = () => {
   const transactionsRef = useRef(transactions);
   const [accountInfoLoading, setAccountInfoLoading] = useState(false);
   const [transactionsLoading, setTransactionsLoading] = useState(false);
+
+  // state for money sending
+  const [amountToSend, setAmountToSend] = useState('');
+  const [addressToSend, setAddressToSend] = useState('');
 
   const getTransactions = async (address: string) => {
     if (transactions.length > 0 && transactions.length < LIMIT) return;
@@ -86,6 +92,23 @@ export const WalletAccount = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const sendMoney = async () => {
+    const intAmount = parseFloat(amountToSend);
+    if (Number.isNaN(intAmount)) {
+      return;
+    }
+    if (!addressToSend.match(etherumAddressRegex)) {
+      // TODO
+      Alert.alert('Check destination address');
+      return;
+    }
+    navigation.navigate('ReceiptScreen', {
+      amount: intAmount,
+      currencyCode: 'AMB',
+      destination: addressToSend
+    });
+  };
+
   if (!wallet) {
     return (
       <SafeAreaView>
@@ -110,17 +133,6 @@ export const WalletAccount = () => {
     );
   }
 
-  const renderTransaction = (
-    args: ListRenderItemInfo<Transaction>
-  ): JSX.Element => {
-    return (
-      <ExplorerAccountTransactionItem
-        transaction={args.item}
-        // disabled={showTransactionDetailsOnPress}
-      />
-    );
-  };
-
   return (
     <Layout>
       <View style={{ paddingHorizontal: scale(16) }}>
@@ -136,6 +148,24 @@ export const WalletAccount = () => {
           <Text>AMB Balance</Text>
           <Text>{account.ambBalance} AMB</Text>
         </Row>
+        <Spacer value={verticalScale(16)} />
+        <Text title>Send money</Text>
+        <Spacer value={verticalScale(12)} />
+        <NumberInput
+          value={amountToSend}
+          onChangeValue={setAmountToSend}
+          placeholder="Amount"
+        />
+        <Spacer value={verticalScale(12)} />
+        <Input
+          value={addressToSend}
+          onChangeValue={setAddressToSend}
+          placeholder="Destination address"
+        />
+        <Spacer value={verticalScale(12)} />
+        <PrimaryButton onPress={sendMoney}>
+          <Text color={COLORS.white}>Send</Text>
+        </PrimaryButton>
         <Spacer value={verticalScale(16)} />
         <AccountTransactions
           transactions={transactions}
