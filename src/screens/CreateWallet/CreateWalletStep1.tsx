@@ -14,12 +14,11 @@ import { COLORS } from '@constants/colors';
 export const CreateWalletStep1 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
   const [loading, setLoading] = useState(false);
-  const { walletMnemonic, mnemonicLength, setWalletMnemonic, setNetwork } =
+  const { walletMnemonic, mnemonicLength, setWalletMnemonic } =
     useAddWalletContext();
   const walletMnemonicArray = walletMnemonic.split(' ');
 
   const init = async () => {
-    setNetwork('AMB');
     setLoading(true);
     // create mnemonic
     const walletMnemonic = (

@@ -32,9 +32,9 @@ class AirDAOKeysForRef {
         index = data.index;
       }
       const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
-      const path = `m/44'/16718'/${index}'/0/0`;
+      const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
-      const processor = await AirDAODispatcher.getAddressProcessor('AMB');
+      const processor = await AirDAODispatcher.getAddressProcessor('ETH');
       result = await processor.getAddress(child.privateKey);
       result.index = index;
       result.path = path;

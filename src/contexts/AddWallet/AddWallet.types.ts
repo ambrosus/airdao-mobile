@@ -4,8 +4,6 @@ export enum AddWalletFlowType {
 }
 
 export interface AddWalletContextState {
-  network: string;
-  setNetwork: React.Dispatch<React.SetStateAction<string>>;
   flowType: AddWalletFlowType;
   setFlowType: React.Dispatch<React.SetStateAction<AddWalletFlowType>>;
   walletHash: string;

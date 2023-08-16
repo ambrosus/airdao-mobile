@@ -18,12 +18,10 @@ const _saveWallet = async (wallet: WalletMetadata) => {
 
     const checkKey = await AirDAOStorage.isMnemonicAlreadySaved(prepared);
     if (checkKey) {
-      // TODO
+      // @misha should we do something or ui is enough
     }
     storedKey = await AirDAOStorage.saveMnemonic(prepared);
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
   return storedKey;
 };
 
@@ -59,7 +57,7 @@ const processWallet = async (
   // TODO save to local db
   await Wallet.saveWallet(fullWallet);
   try {
-    console.log(fullWallet);
+    // console.log(fullWallet);
   } catch (error) {
     throw error;
   }

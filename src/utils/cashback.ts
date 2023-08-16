@@ -26,6 +26,7 @@ const getByHash = async (tmpHash: string) => {
         mnemonic
       }
     );
+    console.log(tmpPublicAndPrivateResult, 'dasd');
   } catch (error) {
     // ignore
   }

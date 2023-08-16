@@ -16,7 +16,6 @@ export default class EthAddressProcessor extends EthBasic {
     privateKey = '0x' + privateKey.toString('hex');
     // noinspection JSUnresolvedVariable
     const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
-    console.log(account.address, 'account.address');
     return { address: account.address, privateKey, addedData: false };
   }
 
