@@ -83,9 +83,10 @@ export default class EthTxSendProvider {
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx started',
       logData
     );
-
+    console.log({ tx, privateData, txRBF });
     const rawTransaction = await this.sign(tx, privateData, txRBF, logData);
-
+    console.log({ rawTransaction });
+    return;
     // @ts-ignore
     await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx signed',

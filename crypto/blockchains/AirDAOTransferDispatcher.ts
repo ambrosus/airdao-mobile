@@ -55,36 +55,36 @@ export namespace AirDAOTransferDispatcher {
       transferProcessor = currencyDictSettings.transferProcessor;
     }
     switch (transferProcessor) {
-      case 'BCH':
-        CACHE_PROCESSORS[currencyCode] = new BchTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BSV':
-        CACHE_PROCESSORS[currencyCode] = new BsvTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BTC':
-        CACHE_PROCESSORS[currencyCode] = new BtcTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BTC_TEST':
-        CACHE_PROCESSORS[currencyCode] = new BtcTestTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BTG':
-        CACHE_PROCESSORS[currencyCode] = new BtgTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'DOGE':
-        CACHE_PROCESSORS[currencyCode] = new DogeTransferProcessor(
-          currencyDictSettings
-        );
-        break;
+      // case 'BCH':
+      //   CACHE_PROCESSORS[currencyCode] = new BchTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BSV':
+      //   CACHE_PROCESSORS[currencyCode] = new BsvTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BTC':
+      //   CACHE_PROCESSORS[currencyCode] = new BtcTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BTC_TEST':
+      //   CACHE_PROCESSORS[currencyCode] = new BtcTestTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BTG':
+      //   CACHE_PROCESSORS[currencyCode] = new BtgTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'DOGE':
+      //   CACHE_PROCESSORS[currencyCode] = new DogeTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
       case 'ETH':
         CACHE_PROCESSORS[currencyCode] = new EthTransferProcessor(
           currencyDictSettings
@@ -95,91 +95,91 @@ export namespace AirDAOTransferDispatcher {
           currencyDictSettings
         );
         break;
-      case 'ETC':
-        CACHE_PROCESSORS[currencyCode] = new EtcTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BNB_SMART_20':
-        CACHE_PROCESSORS[currencyCode] = new BnbSmartTransferProcessorErc20(
-          currencyDictSettings
-        );
-        break;
-      case 'LTC':
-        CACHE_PROCESSORS[currencyCode] = new LtcTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'TRX':
-        CACHE_PROCESSORS[currencyCode] = new TrxTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'USDT':
-        CACHE_PROCESSORS[currencyCode] = new UsdtTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'XRP':
-        CACHE_PROCESSORS[currencyCode] = new XrpTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'XLM':
-        CACHE_PROCESSORS[currencyCode] = new XlmTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'XVG':
-        CACHE_PROCESSORS[currencyCode] = new XvgTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'XMR':
-        CACHE_PROCESSORS[currencyCode] = new XmrTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'FIO':
-        CACHE_PROCESSORS[currencyCode] = new FioTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BNB':
-        CACHE_PROCESSORS[currencyCode] = new BnbTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'BNB_SMART':
-        CACHE_PROCESSORS[currencyCode] = new BnbSmartTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'VET':
-        CACHE_PROCESSORS[currencyCode] = new VetTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'SOL':
-        CACHE_PROCESSORS[currencyCode] = new SolTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'SOL_SPL':
-        CACHE_PROCESSORS[currencyCode] = new SolTransferProcessorSpl(
-          currencyDictSettings
-        );
-        break;
-      case 'METIS':
-        CACHE_PROCESSORS[currencyCode] = new MetisTransferProcessor(
-          currencyDictSettings
-        );
-        break;
-      case 'WAVES':
-        CACHE_PROCESSORS[currencyCode] = new WavesTransferProcessor(
-          currencyDictSettings
-        );
-        break;
+      // case 'ETC':
+      //   CACHE_PROCESSORS[currencyCode] = new EtcTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BNB_SMART_20':
+      //   CACHE_PROCESSORS[currencyCode] = new BnbSmartTransferProcessorErc20(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'LTC':
+      //   CACHE_PROCESSORS[currencyCode] = new LtcTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'TRX':
+      //   CACHE_PROCESSORS[currencyCode] = new TrxTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'USDT':
+      //   CACHE_PROCESSORS[currencyCode] = new UsdtTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'XRP':
+      //   CACHE_PROCESSORS[currencyCode] = new XrpTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'XLM':
+      //   CACHE_PROCESSORS[currencyCode] = new XlmTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'XVG':
+      //   CACHE_PROCESSORS[currencyCode] = new XvgTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'XMR':
+      //   CACHE_PROCESSORS[currencyCode] = new XmrTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'FIO':
+      //   CACHE_PROCESSORS[currencyCode] = new FioTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BNB':
+      //   CACHE_PROCESSORS[currencyCode] = new BnbTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'BNB_SMART':
+      //   CACHE_PROCESSORS[currencyCode] = new BnbSmartTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'VET':
+      //   CACHE_PROCESSORS[currencyCode] = new VetTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'SOL':
+      //   CACHE_PROCESSORS[currencyCode] = new SolTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'SOL_SPL':
+      //   CACHE_PROCESSORS[currencyCode] = new SolTransferProcessorSpl(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'METIS':
+      //   CACHE_PROCESSORS[currencyCode] = new MetisTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
+      // case 'WAVES':
+      //   CACHE_PROCESSORS[currencyCode] = new WavesTransferProcessor(
+      //     currencyDictSettings
+      //   );
+      //   break;
       default:
         throw new Error('Unknown transferProcessor ' + transferProcessor);
     }

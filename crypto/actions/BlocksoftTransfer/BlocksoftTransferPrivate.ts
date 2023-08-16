@@ -1,36 +1,37 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /**
  * @author Ksu
  * @version 0.20
  */
-import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
+import { AirDAOBlockchainTypes } from '../../blockchains/AirDAOBlockchainTypes';
 import BlocksoftPrivateKeysUtils from '../../common/AirDAOPrivateKeysUtils';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import BlocksoftKeysStorage from '../BlocksoftKeysStorage/BlocksoftKeysStorage';
+import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 
 export namespace BlocksoftTransferPrivate {
   const CACHE_PRIVATE: any = {};
 
   const initTransferPrivateBTC = async function (
-    data: BlocksoftBlockchainTypes.TransferData,
+    data: AirDAOBlockchainTypes.TransferData,
     mnemonic: string
-  ): Promise<BlocksoftBlockchainTypes.TransferPrivateData> {
+  ): Promise<AirDAOBlockchainTypes.TransferPrivateData> {
     const privateData = {
       privateKey: mnemonic
-    } as BlocksoftBlockchainTypes.TransferPrivateData;
+    } as AirDAOBlockchainTypes.TransferPrivateData;
     return privateData;
   };
   export const initTransferPrivate = async function (
-    data: BlocksoftBlockchainTypes.TransferData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData
-  ): Promise<BlocksoftBlockchainTypes.TransferPrivateData> {
-    const privateData = {} as BlocksoftBlockchainTypes.TransferPrivateData;
+    data: AirDAOBlockchainTypes.TransferData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData
+  ): Promise<AirDAOBlockchainTypes.TransferPrivateData> {
+    const privateData = {} as AirDAOBlockchainTypes.TransferPrivateData;
     let mnemonic =
       typeof additionalData !== 'undefined' &&
       typeof additionalData.mnemonic !== 'undefined'
         ? additionalData.mnemonic
         : CACHE_PRIVATE[data.walletHash];
     if (!mnemonic) {
-      mnemonic = await BlocksoftKeysStorage.getWalletMnemonic(
+      mnemonic = await AirDAOKeysStorage.getWalletMnemonic(
         data.walletHash,
         'initTransferPrivate'
       );

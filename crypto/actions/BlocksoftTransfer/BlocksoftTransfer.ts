@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /**
  * @author Ksu
  * @version 0.20
  */
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
-import { BlocksoftBlockchainTypes } from '../../blockchains/BlocksoftBlockchainTypes';
-import { BlocksoftTransferDispatcher } from '../../blockchains/BlocksoftTransferDispatcher';
+import { AirDAOBlockchainTypes } from '../../blockchains/AirDAOBlockchainTypes';
+import { AirDAOTransferDispatcher } from '../../blockchains/AirDAOTransferDispatcher';
 import { BlocksoftTransferPrivate } from './BlocksoftTransferPrivate';
 import { AirDAODictTypes } from '../../common/AirDAODictTypes';
 
 import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
-
-import config from '../../../app/config/config';
 
 type DataCache = {
   [key in AirDAODictTypes.Code]: {
@@ -26,16 +25,9 @@ const CACHE_DOUBLE_BSE = {};
 
 export namespace BlocksoftTransfer {
   export const getTransferAllBalance = async function (
-    data: BlocksoftBlockchainTypes.TransferData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.TransferAllBalanceResult> {
-    if (config.debug.sendLogs) {
-      console.log(
-        `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance`,
-        JSON.parse(JSON.stringify(data)),
-        JSON.parse(JSON.stringify(additionalData))
-      );
-    }
+    data: AirDAOBlockchainTypes.TransferData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     if (typeof data.derivationPath !== 'undefined' && data.derivationPath) {
       data.derivationPath = data.derivationPath.replace(/quote/g, "'");
     }
@@ -45,11 +37,11 @@ export namespace BlocksoftTransfer {
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance started ${data.addressFrom} `
       );
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       const additionalDataTmp = { ...additionalData };
-      let privateData = {} as BlocksoftBlockchainTypes.TransferPrivateData;
+      let privateData = {} as AirDAOBlockchainTypes.TransferPrivateData;
       if (processor.needPrivateForFee()) {
         privateData = await BlocksoftTransferPrivate.initTransferPrivate(
           data,
@@ -57,19 +49,13 @@ export namespace BlocksoftTransfer {
         );
       }
       additionalDataTmp.mnemonic = '***';
-      transferAllCount = await BlocksoftTransferDispatcher.getTransferProcessor(
+      transferAllCount = await AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       ).getTransferAllBalance(data, privateData, additionalDataTmp);
 
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance got ${data.addressFrom} result is ok`
       );
-      if (config.debug.sendLogs) {
-        console.log(
-          `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance result`,
-          JSON.parse(JSON.stringify(transferAllCount))
-        );
-      }
     } catch (e) {
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
@@ -87,12 +73,6 @@ export namespace BlocksoftTransfer {
             e.message
         );
       } else {
-        if (config.debug.appErrors) {
-          console.log(
-            `${data.currencyCode} BlocksoftTransfer.getTransferAllBalance error ` +
-              e.message
-          );
-        }
         throw e;
       }
     }
@@ -100,9 +80,9 @@ export namespace BlocksoftTransfer {
   };
 
   export const getFeeRate = async function (
-    data: BlocksoftBlockchainTypes.TransferData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData = {}
-  ): Promise<BlocksoftBlockchainTypes.FeeRateResult> {
+    data: AirDAOBlockchainTypes.TransferData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
+  ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
       for (const key in CoinAirDAODict) {
@@ -122,13 +102,6 @@ export namespace BlocksoftTransfer {
       }
     }
 
-    if (config.debug.sendLogs) {
-      console.log(
-        'BlocksoftTransfer.getFeeRate',
-        JSON.parse(JSON.stringify(data)),
-        JSON.parse(JSON.stringify(additionalData))
-      );
-    }
     if (typeof data.derivationPath === 'undefined' || !data.derivationPath) {
       throw new Error(
         'BlocksoftTransfer.getFeeRate requires derivationPath ' +
@@ -141,12 +114,12 @@ export namespace BlocksoftTransfer {
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.getFeeRate started ${data.addressFrom} `
       );
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       const additionalDataTmp = { ...additionalData };
 
-      let privateData = {} as BlocksoftBlockchainTypes.TransferPrivateData;
+      let privateData = {} as AirDAOBlockchainTypes.TransferPrivateData;
       if (processor.needPrivateForFee()) {
         privateData = await BlocksoftTransferPrivate.initTransferPrivate(
           data,
@@ -161,9 +134,6 @@ export namespace BlocksoftTransfer {
       );
       feesCount.countedTime = new Date().getTime();
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log('BlocksoftTransfer.getFeeRate error ', e);
-      }
       if (typeof e.message === 'undefined') {
         await AirDAOCryptoLog.log('BlocksoftTransfer.getFeeRate strange error');
       } else if (
@@ -198,14 +168,11 @@ export namespace BlocksoftTransfer {
   };
 
   export const sendTx = async function (
-    data: BlocksoftBlockchainTypes.TransferData,
-    uiData: BlocksoftBlockchainTypes.TransferUiData,
-    additionalData: BlocksoftBlockchainTypes.TransferAdditionalData
-  ): Promise<BlocksoftBlockchainTypes.SendTxResult> {
-    if (config.debug.sendLogs) {
-      console.log('BlocksoftTransfer.sendTx', data, uiData);
-    }
-
+    data: AirDAOBlockchainTypes.TransferData,
+    uiData: AirDAOBlockchainTypes.TransferUiData,
+    additionalData: AirDAOBlockchainTypes.TransferAdditionalData
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
+    console.log('here 1', { data, uiData, additionalData });
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
       for (const key in CoinAirDAODict) {
@@ -224,6 +191,7 @@ export namespace BlocksoftTransfer {
         }
       }
     }
+    console.log('here 2');
 
     data.derivationPath = data.derivationPath.replace(/quote/g, "'");
 
@@ -279,13 +247,6 @@ export namespace BlocksoftTransfer {
         }
       }
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          `${data.currencyCode} BlocksoftTransfer.sendTx check double error ` +
-            e.message,
-          e
-        );
-      }
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
@@ -302,7 +263,7 @@ export namespace BlocksoftTransfer {
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendTx started ${data.addressFrom} `
       );
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       const privateData = await BlocksoftTransferPrivate.initTransferPrivate(
@@ -330,9 +291,6 @@ export namespace BlocksoftTransfer {
       }
       // if (typeof uiData.selectedFee !== 'undefined')
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log('BlocksoftTransfer.sendTx error ' + e.message, e);
-      }
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1 &&
@@ -367,7 +325,7 @@ export namespace BlocksoftTransfer {
   };
 
   export const sendRawTx = async function (
-    data: BlocksoftBlockchainTypes.DbAccount,
+    data: AirDAOBlockchainTypes.DbAccount,
     rawTxHex: string,
     txRBF: any,
     logData: any
@@ -377,7 +335,7 @@ export namespace BlocksoftTransfer {
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendRawTx started ${data.address} `
       );
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       if (typeof processor.sendRawTx === 'undefined') {
@@ -388,12 +346,6 @@ export namespace BlocksoftTransfer {
         `${data.currencyCode} BlocksoftTransfer.sendRawTx got ${data.address} result is ok`
       );
     } catch (e) {
-      if (config.debug.cryptoErrors) {
-        console.log(
-          `${data.currencyCode} BlocksoftTransfer.sendRawTx error `,
-          e
-        );
-      }
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.sendRawTx error ` + e.message
       );
@@ -403,15 +355,15 @@ export namespace BlocksoftTransfer {
   };
 
   export const setMissingTx = async function (
-    data: BlocksoftBlockchainTypes.DbAccount,
-    dbTransaction: BlocksoftBlockchainTypes.DbTransaction
+    data: AirDAOBlockchainTypes.DbAccount,
+    dbTransaction: AirDAOBlockchainTypes.DbTransaction
   ): Promise<boolean> {
     let txResult = false;
     try {
       AirDAOCryptoLog.log(
         `${data.currencyCode} BlocksoftTransfer.setMissing started ${data.address} `
       );
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       if (typeof processor.setMissingTx === 'undefined') {
@@ -430,14 +382,14 @@ export namespace BlocksoftTransfer {
   };
 
   export const canRBF = function (
-    data: BlocksoftBlockchainTypes.DbAccount,
-    dbTransaction: BlocksoftBlockchainTypes.DbTransaction,
+    data: AirDAOBlockchainTypes.DbAccount,
+    dbTransaction: AirDAOBlockchainTypes.DbTransaction,
     source: string
   ): boolean {
     let txResult = false;
     try {
       // AirDAOCryptoLog.log(`BlocksoftTransfer.canRBF ${data.currencyCode} from ${source} started ${data.address} `)
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         typeof data.currencyCode !== 'undefined'
           ? data.currencyCode
           : dbTransaction.currencyCode
@@ -460,7 +412,7 @@ export namespace BlocksoftTransfer {
     let checkSendAllModalResult = false;
     try {
       // AirDAOCryptoLog.log(`BlocksoftTransfer.checkSendAllModal ${data.currencyCode} started `)
-      const processor = BlocksoftTransferDispatcher.getTransferProcessor(
+      const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
       if (typeof processor.checkSendAllModal === 'undefined') {

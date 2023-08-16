@@ -71,6 +71,7 @@ export const WalletAccount = () => {
       const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
         mnemonic: wallet.mnemonic
       });
+      console.log({ info });
       if (info) {
         const { address } = info;
         // @ts-ignore
@@ -88,7 +89,9 @@ export const WalletAccount = () => {
   };
 
   useEffect(() => {
-    getWalletInfo();
+    setTimeout(() => {
+      getWalletInfo(); // delay the call
+    }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,10 +105,16 @@ export const WalletAccount = () => {
       Alert.alert('Check destination address');
       return;
     }
+    if (!account) {
+      // TODO handle
+      return;
+    }
     navigation.navigate('ReceiptScreen', {
       amount: intAmount,
       currencyCode: 'AMB',
-      destination: addressToSend
+      destination: addressToSend,
+      origin: account.address,
+      hash: wallet.hash
     });
   };
 
