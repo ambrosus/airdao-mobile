@@ -20,7 +20,6 @@ import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { sortListByKey } from '@utils/sort';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 export const SingleGroupScreen = () => {
   const {
@@ -30,7 +29,6 @@ export const SingleGroupScreen = () => {
   } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
   const navigation = useNavigation<CommonStackNavigationProp>();
   const { data: ambPriceData } = useAMBPrice();
-  const { t } = useTranslation();
 
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
@@ -108,7 +106,7 @@ export const SingleGroupScreen = () => {
           fontFamily="Inter_600SemiBold"
           fontSize={12}
         >
-          {t('total.balance')}
+          TOTAL BALANCE
         </Text>
         <Spacer value={10} />
         <Text fontFamily="Inter_700Bold" fontSize={30} color={COLORS.nero}>

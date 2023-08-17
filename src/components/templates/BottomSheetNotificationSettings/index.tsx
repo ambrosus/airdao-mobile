@@ -18,7 +18,6 @@ import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -58,8 +57,6 @@ export const BottomSheetNotificationSettings = forwardRef<
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
   const { top: topInset } = useSafeAreaInsets();
-  const { t } = useTranslation();
-
   useEffect(
     () => setLocalNotificationSettings(notificationSettings),
     [notificationSettings]
@@ -94,7 +91,7 @@ export const BottomSheetNotificationSettings = forwardRef<
             fontSize={16}
             color={COLORS.smokyBlack}
           >
-            {t('notification.settings')}
+            Notification settings
           </Text>
         }
         titlePosition={Platform.select({ ios: 'left', default: 'center' })}
@@ -111,7 +108,7 @@ export const BottomSheetNotificationSettings = forwardRef<
         <View style={styles.container}>
           {/* Price alerts */}
           <Row alignItems="center" justifyContent="space-between">
-            <Title>{t('price.alerts.switch')}</Title>
+            <Title>Price alerts</Title>
             <Switch
               onValueChange={() =>
                 onSettingsValueChange(
@@ -125,14 +122,14 @@ export const BottomSheetNotificationSettings = forwardRef<
           </Row>
           {/* Percentage Change */}
           <Spacer value={verticalScale(35)} />
-          <Title>{t('price.alerts.treshold')}</Title>
+          <Title>Price alerts threshold</Title>
           <Spacer value={verticalScale(8)} />
           <Text
             fontSize={12}
             fontFamily="Inter_500Medium"
             color={COLORS.davysGray}
           >
-            {t('price.alerts.treshold.text')}
+            Set 24hr price change amount to receive notifications.
           </Text>
           <Spacer value={verticalScale(8)} />
           <SegmentedPicker
@@ -154,14 +151,14 @@ export const BottomSheetNotificationSettings = forwardRef<
           {/* Transaction Alerts */}
           <Row justifyContent="space-between" alignItems="center">
             <View>
-              <Title>{t('transaction.alerts.switch')}</Title>
+              <Title>Transaction alerts</Title>
               <Spacer value={verticalScale(8)} />
               <Text
                 fontSize={12}
                 fontFamily="Inter_500Medium"
                 color={COLORS.davysGray}
               >
-                {t('transaction.alerts.switch.text')}
+                Get notified of transactions in your watchlist.
               </Text>
             </View>
             <Switch
