@@ -5,7 +5,6 @@ import { Header } from '@components/composite';
 import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { moderateScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 
 interface NotificationsHeaderProps {
   onSettingsPress: () => unknown;
@@ -15,7 +14,6 @@ export const NotificationsHeader = (
   props: NotificationsHeaderProps
 ): JSX.Element => {
   const { onSettingsPress = () => null } = props;
-  const { t } = useTranslation();
 
   const renderContentRight = () => {
     return (
@@ -35,7 +33,7 @@ export const NotificationsHeader = (
   return (
     <Header
       titleStyle={styles.headerTitle}
-      title={t('notifications.tab')}
+      title="Notifications"
       titlePosition="left"
       contentRight={renderContentRight()}
     />

@@ -17,7 +17,6 @@ import { useAMBPrice } from '@hooks/query';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>
@@ -27,7 +26,6 @@ const BodyTitle = ({ title }: { title: string }) => (
 
 export function AMBMarket(): JSX.Element {
   const { data: ambPrice, loading, error } = useAMBPrice();
-  const { t } = useTranslation();
   const marketCap =
     (ambPrice?.circulatingSupply || 0) * (ambPrice?.priceUSD || 0);
 
@@ -39,7 +37,7 @@ export function AMBMarket(): JSX.Element {
   // };
 
   const renderErrorView = () => {
-    return <Text>{t('could.not.fetch.statistics')}</Text>;
+    return <Text>Could not fetch AMB Price</Text>;
   };
 
   return (
@@ -49,7 +47,7 @@ export function AMBMarket(): JSX.Element {
       style={styles.container}
     >
       <Header
-        title={t('statistics.tab')}
+        title="Statistics"
         style={{
           backgroundColor:
             Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
@@ -78,7 +76,7 @@ export function AMBMarket(): JSX.Element {
             <Spacer value={verticalScale(16)} />
             <AMBPriceInfo />
             <View style={styles.body}>
-              <BodyTitle title={t('info')} />
+              <BodyTitle title="Info" />
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
                 maxSupply={NumberUtils.formatNumber(6500000000, 0)}
@@ -97,13 +95,13 @@ export function AMBMarket(): JSX.Element {
               />
               <Separator />
               <Spacer value={verticalScale(24)} />
-              <BodyTitle title={t('about')} />
+              <BodyTitle title="About" />
               <Spacer value={verticalScale(16)} />
               <AMBAbout />
               <Spacer value={verticalScale(24)} />
               <Separator />
               <Spacer value={verticalScale(24)} />
-              <BodyTitle title={t('market')} />
+              <BodyTitle title="Market" />
               <Spacer value={verticalScale(16)} />
               <AMBMarketsInfo />
             </View>

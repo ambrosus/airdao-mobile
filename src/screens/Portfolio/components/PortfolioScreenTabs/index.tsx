@@ -19,7 +19,6 @@ import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates';
 import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -32,7 +31,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
-  const { t } = useTranslation();
 
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
   const handleOnOpenCreateNewList = useCallback(() => {
@@ -96,7 +94,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             fontSize={16}
             color={COLORS.smokyBlack}
           >
-            {t('watchlist.tab')}
+            Watchlist
           </Text>
           <Button
             testID="Portfolio_Tabs_Button"
@@ -111,7 +109,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
                 fontSize={14}
                 color={COLORS.deepBlue}
               >
-                {props.index === 0 ? t('add.address.btn') : t('create.group')}
+                {props.index === 0 ? 'Add address' : 'Create group'}
               </Text>
             </Row>
           </Button>

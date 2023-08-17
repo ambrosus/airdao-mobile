@@ -9,7 +9,6 @@ import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
 import { useLists } from '@contexts';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -22,7 +21,6 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
 >(({ wallet }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { toggleAddressesInList, listsOfAddressGroup } = useLists((v) => v);
-  const { t } = useTranslation();
   const collection = listsOfAddressGroup.find(
     (list) =>
       list.accounts.findIndex((account) => account._id === wallet._id) > -1
@@ -42,7 +40,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           color={COLORS.smokyBlack}
           numberOfLines={1}
         >
-          {t('remove.address.from.group.select')} {collection?.name}?
+          Remove this address from {collection?.name}?
         </Text>
         <Spacer value={24} />
         <Button
@@ -60,7 +58,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
             fontSize={16}
             color={COLORS.crimsonRed}
           >
-            {t('remove.btn')}
+            Remove
           </Text>
         </Button>
         <Spacer value={24} />
@@ -74,7 +72,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
             color={COLORS.smokyBlack}
             fontSize={16}
           >
-            {t('cancel.btn')}
+            Cancel
           </Text>
         </Button>
       </View>

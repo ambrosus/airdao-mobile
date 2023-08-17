@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import {
   AMBMarketItem,
   AMBMarketItemsInfo,
@@ -17,7 +16,6 @@ type AMBDetailedInfoProps = {
 
 export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
   const [visiblePopUpKey, setVisiblePopUpKey] = useState('');
-  const { t } = useTranslation();
   const renderRow = (row: AMBMarketItem) => {
     return (
       <Row
@@ -33,13 +31,13 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
               color={COLORS.slateGrey}
               fontFamily="Inter_500Medium"
             >
-              {t(row.title)}
+              {row.title}
             </Text>
             <Spacer value={scale(7)} horizontal />
             <PopUpInfo
               testID={row.testID}
-              body={t(row.body)}
-              title={t(row.title)}
+              body={row.body}
+              title={row.title}
               isVisible={visiblePopUpKey === row.key ? true : undefined}
               onBackdropPress={() => setVisiblePopUpKey('')}
             />

@@ -8,7 +8,6 @@ import { BottomSheetFloat, TransactionItem } from '@components/modular';
 import { Transaction } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp } from '@appTypes/navigation/common';
-import { useTranslation } from 'react-i18next';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -21,7 +20,6 @@ export const ExplorerAccountTransactionItem = (
   const { transaction, disabled = false } = props;
   const transactionDetailsModal = useRef<BottomSheetRef>(null);
   const navigation = useNavigation<CommonStackNavigationProp>();
-  const { t } = useTranslation();
 
   const showTransactionDetails = () => {
     transactionDetailsModal.current?.show();
@@ -44,7 +42,7 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetailsTop}>
           <Spacer value={verticalScale(26.46)} />
           <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            {t('transaction.details')}
+            Transaction details
           </Text>
         </View>
         <View style={styles.transactionDetails}>

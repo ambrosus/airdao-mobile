@@ -18,4 +18,3 @@ export * from './BarcodeScanner';
 export * from './TransactionDetails';
 export * from './StatusBar';
 export * from './OnboardingView';
-export * from './LocalizedRenderEmpty';
