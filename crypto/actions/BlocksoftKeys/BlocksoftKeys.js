@@ -7,7 +7,7 @@ import AirDAODict from '@crypto/common/AirDAODict';
 import BlocksoftKeysUtils from '@crypto/actions/BlocksoftKeys/BlocksoftKeysUtils';
 
 import * as Crypto from 'expo-crypto';
-import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
+// import BlocksoftDispatcher from '../../blockchains/BlocksoftDispatcher';
 import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
 import bip44Constants from '@crypto/common/ext/bip44-constants';
 import networksConstants from '@crypto/common/ext/networks-constants';

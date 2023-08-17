@@ -63,6 +63,7 @@
     "elliptic": "^6.5.4",
     "ethereumjs-util": "^7.1.5",
     "ethjs-provider-http": "^0.1.6",
+    "ethjs-query": "^0.3.8",
     "events": "^3.3.0",
     "expo": "~48.0.18",
     "expo-barcode-scanner": "~12.3.2",

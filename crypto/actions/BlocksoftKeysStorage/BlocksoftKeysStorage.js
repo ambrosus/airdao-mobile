@@ -4,11 +4,11 @@
  * @docs https://www.npmjs.com/package/react-native-keychain
  */
 import 'react-native';
-import * as Keychain from 'react-native-keychain';
+// import * as Keychain from 'react-native-keychain';
 
-import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
-import config from '@app/config/config';
-import AirDAODict from '@crypto/common/AirDAODict';
+// import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
+// import config from '@app/config/config';
+// import AirDAODict from '@crypto/common/AirDAODict';
 
 export class BlocksoftKeysStorage {
   /**
