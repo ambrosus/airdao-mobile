@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
@@ -18,8 +16,9 @@ import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
 import { BezierChart } from '../BezierChart';
-import { MONTH_NAMES } from '@constants/variables';
 import { styles } from './styles';
+import { MONTH_NAMES } from '@constants/variables';
+import { View } from 'react-native';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
@@ -45,7 +44,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
   const didSetAMBPriceFromAPI = useRef(false);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (ambPriceNow) {
@@ -206,15 +204,15 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           //   value: '1h'
           // },
           {
-            text: t('chart.timeframe.daily'),
+            text: '1D',
             value: '1d'
           },
           {
-            text: t('chart.timeframe.weekly'),
+            text: '1W',
             value: 'weekly'
           },
           {
-            text: t('chart.timeframe.monthly'),
+            text: '1M',
             value: 'monthly'
           }
         ]}

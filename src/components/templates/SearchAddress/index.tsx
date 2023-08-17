@@ -35,7 +35,6 @@ import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 interface SearchAdressProps {
   initialValue?: string;
@@ -48,7 +47,6 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const { initialValue, onContentVisibilityChanged = () => null } = props;
   const navigation = useNavigation<SearchTabNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
-  const { t } = useTranslation();
   const { data: explorerInfo } = useExplorerInfo();
   const [address, setAddress] = useState('');
   const [searchSubmitted, setSearchSubmitted] = useState(false);
@@ -110,8 +108,8 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const toggleWatchlist = async (isOnWatchlist: boolean) => {
     if (isOnWatchlist) {
       Toast.show({
-        title: t('toast.address.watchlisted.msg'),
-        message: t('toast.tap.to.rename.msg'),
+        title: 'Way to go! Address watchlisted.',
+        message: 'Tap to rename Address',
         type: ToastPosition.Top,
         onBodyPress: editModal.current?.show
       });
@@ -160,9 +158,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert(t('invalid.qr.code.msg'), '', [
+      Alert.alert('Invalid QR code', '', [
         {
-          text: t('scan.again.msg'),
+          text: 'Scan again',
           onPress: () => {
             scanned.current = false;
           }
@@ -218,7 +216,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               )}
             </Row>
           }
-          placeholder={t('search.address.input')}
+          placeholder={'Search Address or TX hash'}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
@@ -266,7 +264,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             fontSize={20}
             color={COLORS.neutral800}
           >
-            {t('transaction.details')}
+            Transaction details
           </Text>
           <Spacer value={verticalScale(24)} />
           <TransactionDetails
