@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+// TODO
 export const SettingsScreen = () => {
   const { top } = useSafeAreaInsets();
   return (
