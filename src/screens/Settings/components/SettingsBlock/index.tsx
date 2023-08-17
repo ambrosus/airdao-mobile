@@ -17,10 +17,7 @@ import {
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { styles } from '@screens/Settings/components/SettingsBlock/style';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
-
 export const SettingsBlock = () => {
-  const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('English');
   const [selectedCurrency, setSelectedCurrency] =
     useState<Currency>('US Dollars (USD)');
@@ -61,9 +58,7 @@ export const SettingsBlock = () => {
           >
             <Row alignItems="center" style={styles.infoTextContainer}>
               <CurrencyIcon />
-              <Text style={styles.optionInfoText}>
-                {t('base.currency.modal')}
-              </Text>
+              <Text style={styles.optionInfoText}>Base currency</Text>
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
               <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
@@ -82,7 +77,7 @@ export const SettingsBlock = () => {
           >
             <Row alignItems="center" style={styles.infoTextContainer}>
               <LanguageIcon />
-              <Text style={styles.optionInfoText}>{t('language.modal')}</Text>
+              <Text style={styles.optionInfoText}>Language</Text>
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
               <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
@@ -101,9 +96,7 @@ export const SettingsBlock = () => {
           >
             <Row alignItems="center" style={styles.infoTextContainer}>
               <DarkNotificationIcon />
-              <Text style={styles.optionInfoText}>
-                {t('notification.settings.modal')}
-              </Text>
+              <Text style={styles.optionInfoText}>Notification settings</Text>
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
               <ChevronRightIcon color={COLORS.smokyBlack} />

@@ -3,7 +3,7 @@ import { FlatList, View } from 'react-native';
 import { GroupItem } from '@screens/Portfolio/components/ListsOfAddressGroup/components/GroupItem';
 import { AccountList } from '@models/AccountList';
 import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
-import { LocalizedRenderEmpty } from '@components/templates';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 import { verticalScale } from '@utils/scaling';
 import { Spacer } from '@components/base';
 
@@ -16,7 +16,7 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
     return (
       <>
         <Spacer value={20} />
-        <LocalizedRenderEmpty text={'no.groups.yet'} />
+        <RenderEmpty text="groups" />
       </>
     );
   }

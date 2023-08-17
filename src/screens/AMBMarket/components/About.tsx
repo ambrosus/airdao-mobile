@@ -9,7 +9,6 @@ import {
   TwitterIcon
 } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 
 interface Link {
   title: string;
@@ -76,11 +75,13 @@ const LinkButton = ({
 };
 
 export function AMBAbout(): JSX.Element {
-  const { t } = useTranslation();
   return (
     <View>
       <Text fontSize={12} fontFamily="Inter_500Medium" color={COLORS.slateGrey}>
-        {t('statistics.text')}
+        AirDAO is a community-governed layer one blockchain and ecosystem of
+        web3 dApps, powered by its native token, AMB. AirDAO brings the benefits
+        of Web3 to a global audience with a suite of powerful DeFi products in
+        an intuitive, all-in-one interface.
       </Text>
       <Spacer value={verticalScale(16)} />
       <Row alignItems="center" style={styles.socialButtons}>

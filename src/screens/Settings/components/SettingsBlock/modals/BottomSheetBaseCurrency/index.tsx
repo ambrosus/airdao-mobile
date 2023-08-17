@@ -8,7 +8,6 @@ import { styles } from '@screens/Settings/components/SettingsBlock/modals/style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -71,7 +70,6 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
       selectedCurrency || ''
     );
     const { top: topInset } = useSafeAreaInsets();
-    const { t } = useTranslation();
 
     const onCurrencyPress = (value: Currency) => {
       setModalActiveCurrency(value);
@@ -92,7 +90,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
               fontSize={scale(16)}
               color={COLORS.smokyBlack}
             >
-              {t('select.base.currency')}
+              Select base currency
             </Text>
           }
           titlePosition={Platform.select({ ios: 'left', default: 'center' })}
