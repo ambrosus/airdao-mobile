@@ -7,33 +7,7 @@ import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/com
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-
-const portfolioTabRoutes = [
-  { key: 'first', title: 'Addresses' },
-  { key: 'second', title: 'Groups' }
-] as const;
-
-type PortfolioTabRoutes = typeof portfolioTabRoutes;
-
-type PortfolioTabViewRoute = {
-  key: PortfolioTabRoutes[number]['key'];
-  title: PortfolioTabRoutes[number]['title'];
-};
-
-type RenderSceneProps = Parameters<
-  TabViewProps<PortfolioTabViewRoute>['renderScene']
->[0];
-
-const renderScene = ({ route }: RenderSceneProps) => {
-  switch (route.key) {
-    case 'first':
-      return <WatchList />;
-    case 'second':
-      return <Collections />;
-    default:
-      return null;
-  }
-};
+import { useTranslation } from 'react-i18next';
 
 type PortfolioScreenProps = {
   route: {
@@ -44,6 +18,34 @@ type PortfolioScreenProps = {
 };
 
 export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
+  const { t } = useTranslation();
+  const portfolioTabRoutes = [
+    { key: 'first', title: t('addresses') },
+    { key: 'second', title: t('groups.capitalize') }
+  ] as const;
+
+  type PortfolioTabRoutes = typeof portfolioTabRoutes;
+
+  type PortfolioTabViewRoute = {
+    key: PortfolioTabRoutes[number]['key'];
+    title: PortfolioTabRoutes[number]['title'];
+  };
+
+  type RenderSceneProps = Parameters<
+    TabViewProps<PortfolioTabViewRoute>['renderScene']
+  >[0];
+
+  // tslint:disable-next-line:no-shadowed-variable
+  const renderScene = ({ route }: RenderSceneProps) => {
+    switch (route.key) {
+      case 'first':
+        return <WatchList />;
+      case 'second':
+        return <Collections />;
+      default:
+        return null;
+    }
+  };
   const { top } = useSafeAreaInsets();
   const activeTab = route?.params?.tabs?.activeTab;
   const [index, setIndex] = useState(0);

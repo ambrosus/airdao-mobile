@@ -10,6 +10,7 @@ import { StringUtils } from '@utils/string';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
+import { useTranslation } from 'react-i18next';
 // import { styles } from './styles';
 
 interface TransactionDetailsProps {
@@ -32,6 +33,7 @@ export const TransactionDetails = (
   const { transaction, isShareable = true, onPressAddress } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
+  const { t } = useTranslation();
   const ambPrice = ambData ? ambData.priceUSD : -1;
   let totalTransactionAmount;
 
@@ -67,7 +69,7 @@ export const TransactionDetails = (
     <View testID="Transaction_Details">
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          Method
+          {t('method')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
           {transaction.type}
@@ -76,7 +78,7 @@ export const TransactionDetails = (
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          Amount
+          {t('amount')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
           {NumberUtils.formatNumber(transaction.amount, 0)} AMB
@@ -88,7 +90,7 @@ export const TransactionDetails = (
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-              From
+              {t('from')}
             </Text>
             <Button
               disabled={!addressesArePressable}
@@ -110,7 +112,7 @@ export const TransactionDetails = (
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
             <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-              To
+              {t('to')}
             </Text>
             <Button
               disabled={!addressesArePressable}
@@ -139,7 +141,7 @@ export const TransactionDetails = (
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
         <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          Time
+          {t('time')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
           {moment(transaction.timestamp).fromNow()}

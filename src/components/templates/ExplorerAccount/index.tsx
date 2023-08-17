@@ -8,13 +8,14 @@ import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
-import { PlusIcon } from '@components/svg/icons';
+// import { PlusIcon } from '@components/svg/icons';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { AddWalletToList } from '../AddWalletToList';
 import { BottomSheetWithHeader } from '@components/modular';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useWatchlist } from '@hooks';
+import { useTranslation } from 'react-i18next';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -30,6 +31,7 @@ export const ExplorerAccountView = (
   const { listsOfAddressGroup } = useLists((v) => v);
   const fullscreenHeight = useFullscreenModalHeight();
   const { addToWatchlist, removeFromWatchlist } = useWatchlist();
+  const { t } = useTranslation();
 
   const { data } = useAMBPrice();
   const ambPriceUSD = data?.priceUSD || 0;
@@ -76,7 +78,8 @@ export const ExplorerAccountView = (
                 fontSize={13}
                 fontWeight="400"
               >
-                Added to {listsWithAccount[0].name}
+                {t('address.added.to.group')}
+                {listsWithAccount[0].name}
               </Text>
             ) : (
               <Text
@@ -85,7 +88,9 @@ export const ExplorerAccountView = (
                 fontSize={13}
                 fontWeight="400"
               >
-                Added to {listsWithAccount.length} lists
+                {t('address.added.to.group')}
+                {listsWithAccount.length}
+                {t('groups.count')}
               </Text>
             ))}
         </Row>
@@ -152,14 +157,16 @@ export const ExplorerAccountView = (
                 fontSize={12}
                 color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
               >
-                {account.isOnWatchlist ? 'WATCHLISTED' : 'ADD TO WATCHLIST'}
+                {account.isOnWatchlist
+                  ? t('watchlisted.address')
+                  : t('watchlist.address.btn')}
               </Text>
-              {!account.isOnWatchlist && (
-                <>
-                  <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.white} scale={0.5} />
-                </>
-              )}
+              {/*{!account.isOnWatchlist && (*/}
+              {/*  <>*/}
+              {/*    <Spacer value={scale(8)} horizontal />*/}
+              {/*    <PlusIcon color={COLORS.white} scale={0.5} />*/}
+              {/*  </>*/}
+              {/*)}*/}
             </Row>
           </Button>
           <Spacer value={scale(16)} horizontal />
@@ -185,17 +192,19 @@ export const ExplorerAccountView = (
                 fontSize={12}
               >
                 {listsWithAccount.length === 0
-                  ? 'ADD TO GROUP'
+                  ? t('add.address.to.group.upper.case')
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
-                  : `Added to ${listsWithAccount.length} groups`}
+                  : `${t('address.added.to.group')} ${
+                      listsWithAccount.length
+                    } ${t('groups.count')}`}
               </Text>
-              {listsWithAccount.length === 0 && (
-                <>
-                  <Spacer value={scale(8)} horizontal />
-                  <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />
-                </>
-              )}
+              {/*{listsWithAccount.length === 0 && (*/}
+              {/*  <>*/}
+              {/*    <Spacer value={scale(8)} horizontal />*/}
+              {/*    <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />*/}
+              {/*  </>*/}
+              {/*)}*/}
             </Row>
           </Button>
         </Row>
@@ -203,7 +212,7 @@ export const ExplorerAccountView = (
       <BottomSheetWithHeader
         ref={addToListModal}
         height={fullscreenHeight * 0.95}
-        title="Add address to group"
+        title={t('add.address.to.group')}
         avoidKeyboard={false}
         swiperIconVisible={true}
       >
