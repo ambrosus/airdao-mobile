@@ -10,7 +10,7 @@ import { scale } from '@utils/scaling';
 // import messaging from '@react-native-firebase/messaging';
 // import { CopyToClipboardButton } from '@components/composite';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+// TODO
 export const SettingsScreen = () => {
   // const [token, setToken] = useState('');
 
