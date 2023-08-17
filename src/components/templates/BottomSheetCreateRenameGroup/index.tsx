@@ -23,6 +23,7 @@ import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -43,6 +44,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     } = props;
 
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const { t } = useTranslation();
     const nameInput = useRef<InputRef>(null);
     const [localGroupName, setLocalGroupName] = useState<string>('');
 
@@ -67,11 +69,11 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnCreateGroup(localGroupName);
         Toast.show({
           title: '',
-          message: `Way to go! ${StringUtils.formatAddress(
+          message: `${t('toast.way.to.go')} ${StringUtils.formatAddress(
             localGroupName,
             16,
             0
-          )} group created.`,
+          )} ${t('toast.group.created')}`,
           type: ToastPosition.Top
         });
       }
@@ -80,15 +82,9 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         handleOnRenameGroup(groupId, localGroupName);
         Toast.show({
           title: '',
-          message: `${StringUtils.formatAddress(
-            groupTitle || '',
-            16,
-            0
-          )} has been renamed to ${StringUtils.formatAddress(
-            localGroupName,
-            16,
-            0
-          )}.`,
+          message: `${StringUtils.formatAddress(groupTitle || '', 16, 0)} ${t(
+            'toast.has.been.renamed'
+          )} ${StringUtils.formatAddress(localGroupName, 16, 0)}.`,
           type: ToastPosition.Top
         });
       }
@@ -101,7 +97,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       handleOnCreateGroup,
       handleOnRenameGroup,
       localGroupName,
-      localRef
+      localRef,
+      t
     ]);
 
     const bottomSafeArea = useSafeAreaInsets().bottom - 10;
@@ -136,7 +133,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 fontSize={16}
                 color={COLORS.smokyBlack}
               >
-                {type === 'create' ? ' Create group' : 'Rename group'}
+                {type === 'create' ? t('create.group') : t('rename.group')}
               </Text>
               <Spacer value={8} />
               <OnboardingView
@@ -153,8 +150,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   type="text"
                   placeholder={
                     emptyPlaceholder
-                      ? 'This field is required'
-                      : 'Enter group name'
+                      ? t('field.required')
+                      : t('group.name.input')
                   }
                   placeholderTextColor={
                     emptyPlaceholder ? COLORS.crimsonRed : COLORS.midnight
@@ -178,7 +175,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     fontSize={16}
                     color={COLORS.white}
                   >
-                    {type === 'create' ? 'Create' : 'Save'}
+                    {type === 'create' ? t('create.btn') : t('save.btn')}
                   </Text>
                 </PrimaryButton>
               </OnboardingView>
@@ -198,7 +195,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   color={COLORS.nero}
                   fontSize={16}
                 >
-                  Cancel
+                  {t('cancel.btn')}
                 </Text>
               </Button>
             </View>

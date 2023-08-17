@@ -4,8 +4,10 @@ import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, verticalScale } from '@utils/scaling';
 import { NoMatch } from '@components/svg/icons/NoMatch';
+import { useTranslation } from 'react-i18next';
 
 export function SearchAddressNoResult(): JSX.Element {
+  const { t } = useTranslation();
   return (
     <View style={styles.error}>
       <NoMatch />
@@ -16,7 +18,7 @@ export function SearchAddressNoResult(): JSX.Element {
         fontWeight="600"
         fontFamily="Inter_600SemiBold"
       >
-        Oops! No matches found
+        {t('no.matches')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
@@ -26,7 +28,7 @@ export function SearchAddressNoResult(): JSX.Element {
         color={COLORS.davysGray}
         fontFamily="Inter_400Regular"
       >
-        Please check for any typos or try a different address
+        {t('check.typos')}
       </Text>
     </View>
   );

@@ -38,24 +38,12 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   collection: AccountList;
 };
-
-const AddressSources: Segment[] = [
-  {
-    title: 'Watchlist',
-    value: 0,
-    id: 'watchlist'
-  },
-  {
-    title: 'Top Holders',
-    value: 1,
-    id: 'topHolders'
-  }
-];
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
@@ -69,6 +57,21 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     fetchNextPage: fetchMoreTopHolders
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchValue, setSearchValue] = useState<string>('');
+  const { t } = useTranslation();
+
+  const AddressSources: Segment[] = [
+    {
+      title: t('watchlist.tab'),
+      value: 0,
+      id: 'watchlist'
+    },
+    {
+      title: t('top.holders.capitalize'),
+      value: 1,
+      id: 'topHolders'
+    }
+  ];
+
   const {
     data: searchedAccount,
     loading: searchLoading,
@@ -186,9 +189,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert('Invalid QR code', '', [
+      Alert.alert(t('invalid.qr.code.msg'), '', [
         {
-          text: 'Scan again',
+          text: t('scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -228,7 +231,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           fontFamily="Inter_700Bold"
           fontSize={18}
           color={COLORS.nero}
-        >{`Add address to ${StringUtils.formatAddress(
+        >{`${t('add.address.to.selected.group')} ${StringUtils.formatAddress(
           collection.name,
           10,
           0
@@ -256,7 +259,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }
           type="text"
           style={{ width: '65%', height: 50 }}
-          placeholder="Search public address"
+          placeholder={t('search.public.address.input')}
           placeholderTextColor="#2f2b4399"
           value={searchValue}
           onChangeText={setSearchValue}
@@ -371,15 +374,15 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             fontWeight="600"
           >
             {selectingAddedItems
-              ? `Remove ${StringUtils.pluralize(
+              ? `${t('remove.btn')} ${StringUtils.pluralize(
                   selectedAddresses.length,
-                  'Address',
-                  'Addresses'
+                  t('address'),
+                  t('addresses')
                 )}`
-              : `Add ${StringUtils.pluralize(
+              : `${t('add')} ${StringUtils.pluralize(
                   selectedAddresses.length,
-                  'Address',
-                  'Addresses'
+                  t('address'),
+                  t('addresses')
                 )}`}
           </Text>
         </PrimaryButton>

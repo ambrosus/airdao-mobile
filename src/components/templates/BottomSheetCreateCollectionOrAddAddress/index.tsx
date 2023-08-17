@@ -6,6 +6,7 @@ import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { useForwardedRef } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -18,6 +19,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
   Props
 >(({ handleCreateCollectionPress, handleOnAddNewAddress }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const { t } = useTranslation();
 
   return (
     <BottomSheetFloat
@@ -42,7 +44,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.white}
           >
-            Add address
+            {t('add.address.btn')}
           </Text>
         </PrimaryButton>
         <Spacer value={scale(24)} />
@@ -60,7 +62,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.smokyBlack}
           >
-            Create group
+            {t('create.group')}
           </Text>
         </Button>
       </View>
