@@ -6,12 +6,10 @@ import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
 import TabBar from '@navigation/components/TabBar';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
-import { useTranslation } from 'react-i18next';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
 export const TabsNavigator = () => {
-  const { t } = useTranslation();
   return (
     <BottomTabs.Navigator
       initialRouteName="Wallets"
@@ -23,23 +21,19 @@ export const TabsNavigator = () => {
       <BottomTabs.Screen
         name="Wallets"
         component={HomeStack}
-        options={{ tabBarLabel: t('overview.tab') }}
+        options={{ tabBarLabel: 'Overview' }}
       />
       <BottomTabs.Screen
         name="Portfolio"
         component={PortfolioStack}
-        options={{ tabBarLabel: t('watchlist.tab') }}
+        options={{ tabBarLabel: 'Watchlist' }}
       />
       <BottomTabs.Screen
         name="Search"
         component={SearchStack}
-        options={{ tabBarLabel: t('explore.tab') }}
+        options={{ tabBarLabel: 'Explore' }}
       />
-      <BottomTabs.Screen
-        name="Settings"
-        component={SettingsStack}
-        options={{ tabBarLabel: t('settings.tab') }}
-      />
+      <BottomTabs.Screen name="Settings" component={SettingsStack} />
     </BottomTabs.Navigator>
   );
 };

@@ -5,10 +5,8 @@ import { HelpIcon } from '@components/svg/icons/Help';
 import { AppStoreIcon, PlayStoreIcon } from '@components/svg/icons';
 import { PlatformSpecificUtils } from '@utils/platform';
 import { styles } from './style';
-import { useTranslation } from 'react-i18next';
 
 export const SettingsInfoBlock = () => {
-  const { t } = useTranslation();
   const openLink = () => {
     Linking.openURL('https://airdao.academy/faqs');
   };
@@ -19,7 +17,7 @@ export const SettingsInfoBlock = () => {
       <Button type="base" onPress={openLink}>
         <Row alignItems="center">
           <HelpIcon />
-          <Text style={styles.infoTextContainer}>{t('help.centerBtn')}</Text>
+          <Text style={styles.infoTextContainer}>Help center</Text>
         </Row>
       </Button>
       <Spacer value={43} />
@@ -31,8 +29,8 @@ export const SettingsInfoBlock = () => {
           })}
           <Text style={styles.infoTextContainer}>
             {Platform.select({
-              ios: t('rate.btn.ios'),
-              android: t('rate.btn.android')
+              ios: 'Rate us on the App Store',
+              android: 'Rate us on the Play Store'
             })}
           </Text>
         </Row>

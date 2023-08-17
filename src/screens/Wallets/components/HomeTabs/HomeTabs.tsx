@@ -15,14 +15,12 @@ import { useNavigation } from '@react-navigation/native';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useAllAddressesContext, useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
-import { useTranslation } from 'react-i18next';
 
 export const HomeTabs = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
   const { handleOnCreate, listsOfAddressGroup } = useLists((v) => v);
   const { watchlist } = useWatchlist();
   const { addressesLoading } = useAllAddressesContext((v) => v);
-  const { t } = useTranslation();
 
   const scrollView = useRef<ScrollView>(null);
   const createCollectionOrAddAddressRef = useRef<BottomSheetRef>(null);
@@ -94,7 +92,7 @@ export const HomeTabs = () => {
               color={currentIndex === 0 ? COLORS.jetBlack : COLORS.lavenderGray}
               fontSize={currentIndex === 0 ? 20 : 18}
             >
-              {t('addresses')}
+              Addresses
             </Text>
           </Button>
           <Spacer value={scale(16)} horizontal />
@@ -107,7 +105,7 @@ export const HomeTabs = () => {
               color={currentIndex === 1 ? COLORS.jetBlack : COLORS.lavenderGray}
               fontSize={currentIndex === 1 ? 20 : 18}
             >
-              {t('groups.capitalize')}
+              Groups
             </Text>
           </Button>
         </Row>
@@ -159,7 +157,7 @@ export const HomeTabs = () => {
               fontSize={16}
               color={COLORS.deepBlue}
             >
-              {t('see.all.btn')}
+              See all
             </Text>
           </Button>
         </Animated.View>
