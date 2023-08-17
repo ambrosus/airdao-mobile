@@ -18,6 +18,7 @@ export const COLORS = {
     5: 'rgba(14, 14, 14, 0.05)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
+  neutralGray: 'rgba(14, 14, 14, 0.05)',
   asphalt: '#a1a6b2',
   black: '#000000',
   jetBlack: '#191919',

@@ -44,7 +44,7 @@ export const WalletScreen = () => {
     setFlowType(AddWalletFlowType.CREATE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('CreateWalletStep1');
+    navigation.navigate('CreateWalletStep0');
   };
 
   // const onRestorePress = () => {

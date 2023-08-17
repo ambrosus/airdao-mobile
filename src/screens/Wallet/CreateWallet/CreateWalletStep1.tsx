@@ -10,6 +10,7 @@ import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
+import { WarningIcon } from '@components/svg/icons/Warning';
 
 export const CreateWalletStep1 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -21,6 +22,7 @@ export const CreateWalletStep1 = () => {
   const init = async () => {
     setLoading(true);
     // create mnemonic
+    // tslint:disable-next-line:no-shadowed-variable
     const walletMnemonic = (
       await MnemonicUtils.generateNewMnemonic(mnemonicLength)
     ).mnemonic;
@@ -35,13 +37,22 @@ export const CreateWalletStep1 = () => {
 
   const renderWord = (word: string, index: number) => {
     return (
-      <Row key={word}>
-        <Text>{index + 1}.</Text>
-        <Text>
-          {'  '}
-          {word}
-        </Text>
-      </Row>
+      <>
+        <Row key={word}>
+          <View style={{ backgroundColor: '#E6E6E6', borderRadius: 48 }}>
+            <Text
+              align="center"
+              fontFamily="Inter_600SemiBold"
+              fontSize={14}
+              color={COLORS.nero}
+              style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
+            >
+              {index + 1} {word}
+            </Text>
+          </View>
+        </Row>
+        <Spacer value={verticalScale(20)} />
+      </>
     );
   };
 
@@ -49,32 +60,64 @@ export const CreateWalletStep1 = () => {
     navigation.navigate('CreateWalletStep2');
   };
 
-  const halfArrayNum = Math.ceil(walletMnemonicArray.length / 2);
+  const wordsPerColumn = 4;
+  const numColumns = Math.ceil(walletMnemonicArray.length / wordsPerColumn);
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-      <Header title="Create Wallet" />
+      <Header style={{ shadowColor: 'transparent' }} />
+      <Text
+        align="center"
+        fontSize={24}
+        fontFamily="Inter_700Bold"
+        color={COLORS.nero}
+      >
+        Your recovery phrase
+      </Text>
+      <Spacer value={verticalScale(12)} />
+      <Text
+        align="center"
+        fontSize={15}
+        fontFamily="Inter_500Medium"
+        color={COLORS.nero}
+      >
+        Make sure to write it down as shown. You will verify this later.
+      </Text>
       {loading && (
         <View style={styles.loading}>
           <Spinner size="large" />
         </View>
       )}
-      <Spacer value={verticalScale(24)} />
+      <Spacer value={verticalScale(40)} />
       <View style={styles.innerContainer}>
         {Array.isArray(walletMnemonicArray) && (
           <Row flex={1}>
-            <View style={styles.column}>
-              {walletMnemonicArray.slice(0, halfArrayNum).map(renderWord)}
-            </View>
-            <View style={styles.column}>
-              {walletMnemonicArray
-                .slice(halfArrayNum)
-                .map((word, idx) => renderWord(word, idx + halfArrayNum))}
-            </View>
+            {Array.from({ length: numColumns }, (_, columnIndex) => (
+              <View style={styles.column} key={columnIndex}>
+                {walletMnemonicArray
+                  .slice(
+                    columnIndex * wordsPerColumn,
+                    (columnIndex + 1) * wordsPerColumn
+                  )
+                  .map((word, idx) =>
+                    renderWord(word, idx + columnIndex * wordsPerColumn)
+                  )}
+              </View>
+            ))}
           </Row>
         )}
+        <View style={styles.warningContainer}>
+          <View style={styles.warning}>
+            <WarningIcon />
+            <Spacer horizontal value={scale(12)} />
+            <Text>
+              Never share recovery phrase with {'\n'} anyone, keep it safe!
+            </Text>
+          </View>
+        </View>
+        <Spacer value={verticalScale(34)} />
         <PrimaryButton onPress={onNextPress}>
-          <Text color={COLORS.white}>Next</Text>
+          <Text color={COLORS.white}>Verify phrase</Text>
         </PrimaryButton>
       </View>
     </SafeAreaView>
@@ -96,5 +139,17 @@ const styles = StyleSheet.create({
   },
   column: {
     flex: 1
+  },
+  warningContainer: {
+    backgroundColor: '#fffbb5',
+    borderRadius: 13,
+    borderWidth: 0.2,
+    borderColor: '#ffac23'
+  },
+  warning: {
+    marginVertical: scale(12),
+    marginHorizontal: scale(16),
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
