@@ -22,12 +22,10 @@ import { SearchSort } from './Search.types';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
   const { data: infoData } = useExplorerInfo();
-  const { t } = useTranslation();
   const {
     data: accounts,
     loading: accountsLoading,
@@ -98,12 +96,12 @@ export const SearchScreen = () => {
                 fontSize={20}
                 color={COLORS.smokyBlack}
               >
-                {t('top.holders')}
+                Top holders
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
             {accountsError ? (
-              <Text>{t('no.account.info')}</Text>
+              <Text>Could not load accounts info</Text>
             ) : (
               infoData &&
               accounts && (

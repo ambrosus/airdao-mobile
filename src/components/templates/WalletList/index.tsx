@@ -7,7 +7,7 @@ import {
   SwipeableWalletItemProps,
   SwipeableWalletItem
 } from '@components/templates/WalletList/components/SwipeableWalletItem';
-import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
+import { RenderEmpty } from '@components/templates/RenderEmpty';
 
 interface EmptyWalletListProps {
   emptyText: string;
@@ -70,7 +70,7 @@ export function WalletList(props: WalletListProps): JSX.Element {
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
-      ListEmptyComponent={<LocalizedRenderEmpty text={'no.addresses.yet'} />}
+      ListEmptyComponent={<RenderEmpty text="addresses" />}
       showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
       refreshing={false} // TODO
