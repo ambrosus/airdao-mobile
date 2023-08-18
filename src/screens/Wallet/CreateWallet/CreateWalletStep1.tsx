@@ -39,11 +39,17 @@ export const CreateWalletStep1 = () => {
     return (
       <>
         <Row key={word}>
-          <View style={{ backgroundColor: '#E6E6E6', borderRadius: 48 }}>
+          <View
+            style={{
+              backgroundColor: '#E6E6E6',
+              borderRadius: 48,
+              width: scale(100)
+            }}
+          >
             <Text
               align="center"
               fontFamily="Inter_600SemiBold"
-              fontSize={14}
+              fontSize={12}
               color={COLORS.nero}
               style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
             >

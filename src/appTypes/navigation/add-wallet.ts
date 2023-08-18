@@ -8,6 +8,7 @@ export type WalletStackParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
+  SuccessBackupComplete: undefined;
   ReceiptScreen: {
     amount: number;
     currencyCode: string;

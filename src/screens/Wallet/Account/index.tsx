@@ -60,6 +60,7 @@ export const WalletAccount = () => {
         )
       );
     } catch (error) {
+      console.log(error, 'error loading acc transactions');
     } finally {
       setTransactionsLoading(false);
     }
@@ -106,7 +107,7 @@ export const WalletAccount = () => {
       return;
     }
     if (!account) {
-      // TODO handle
+      console.log('there is no account!', account);
       return;
     }
     navigation.navigate('ReceiptScreen', {
@@ -141,6 +142,8 @@ export const WalletAccount = () => {
       </Layout>
     );
   }
+
+  // console.log(account.ambBalance, 'account.ambBalance');
 
   return (
     <Layout>

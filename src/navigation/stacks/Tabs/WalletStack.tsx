@@ -12,6 +12,7 @@ import { getCommonStack } from '@navigation/stacks/CommonStack';
 import { WalletAccount } from '@screens/Wallet/Account';
 import { ReceiptScreen } from '@screens/Wallet/Receipt';
 import { SendCryptoProvider } from '@contexts/SendCrypto/SendCrypto.context';
+import { SuccessBackupComplete } from '@screens/Wallet/CreateWallet/components/SuccessBackupComplete';
 
 const Stack = createNativeStackNavigator<WalletStackParamsList>();
 export const WalletStack = () => {
@@ -27,6 +28,10 @@ export const WalletStack = () => {
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
+        <Stack.Screen
+          name="SuccessBackupComplete"
+          component={SuccessBackupComplete}
+        />
         <Stack.Screen
           name="RestoreWalletScreen"
           component={RestoreWalletScreen}

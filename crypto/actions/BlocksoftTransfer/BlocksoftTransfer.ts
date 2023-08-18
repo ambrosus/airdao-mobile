@@ -167,11 +167,11 @@ export namespace BlocksoftTransfer {
     return feesCount;
   };
 
-  export const sendTx = async function (
+  export const sendTx = async (
     data: AirDAOBlockchainTypes.TransferData,
     uiData: AirDAOBlockchainTypes.TransferUiData,
     additionalData: AirDAOBlockchainTypes.TransferAdditionalData
-  ): Promise<AirDAOBlockchainTypes.SendTxResult> {
+  ): Promise<AirDAOBlockchainTypes.SendTxResult> => {
     console.log('here 1', { data, uiData, additionalData });
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
@@ -246,7 +246,7 @@ export namespace BlocksoftTransfer {
           }
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
@@ -290,7 +290,7 @@ export namespace BlocksoftTransfer {
         CACHE_DOUBLE_BSE[bseOrderId] = true;
       }
       // if (typeof uiData.selectedFee !== 'undefined')
-    } catch (e) {
+    } catch (e: any) {
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1 &&

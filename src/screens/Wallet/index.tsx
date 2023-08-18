@@ -32,7 +32,7 @@ export const WalletScreen = () => {
         setWallets(mappedWallets);
       }
     } catch (error) {
-      // TODO
+      console.log('there was an error fetching wallets');
     }
   };
 
@@ -79,7 +79,7 @@ export const WalletScreen = () => {
       <View style={{ paddingHorizontal: scale(16) }}>
         <PrimaryButton onPress={onCreatePress}>
           <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
-            Create address
+            Create new wallet
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(24)} />

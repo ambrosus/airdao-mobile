@@ -201,6 +201,8 @@ export namespace AirDAOBlockchainTypes {
 
     accountJson?: any;
     transactionJson?: any;
+
+    walletConnectData?: any;
   }
 
   export interface TransferPrivateData {

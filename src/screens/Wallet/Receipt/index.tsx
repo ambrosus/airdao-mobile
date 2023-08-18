@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { API } from '@api/api';
 import { WalletStackParamsList } from '@appTypes';
-import { Row, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
@@ -14,6 +14,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
+import { COLORS } from '@constants/colors';
 
 export const ReceiptScreen = () => {
   const route = useRoute<RouteProp<WalletStackParamsList, 'ReceiptScreen'>>();
@@ -25,13 +26,13 @@ export const ReceiptScreen = () => {
   const init = async () => {
     const _walletInDB = await WalletDBModel.getByHash(hash);
     if (!_walletInDB) {
-      // TODO show error
+      console.log(!_walletInDB, 'there is no wallet in the DB');
       return;
     }
     wallet.current = Wallet.fromDBModel(_walletInDB);
     const _account = await API.explorerService.searchAddress(origin);
     if (!_account) {
-      // TODO show error
+      console.log(!_account, '!_account');
       return;
     }
     account.current = new ExplorerAccount(_account);
@@ -67,7 +68,6 @@ export const ReceiptScreen = () => {
           allowReplaceByFee: Boolean(wallet.current.allowReplaceByFee),
           useLegacy: wallet.current.useLegacy,
           isHd: Boolean(wallet.current.isHd),
-
           accountBalanceRaw: account.current.ambBalance.toString(),
           isTransferAll: false
         },
@@ -83,7 +83,7 @@ export const ReceiptScreen = () => {
         {}
       );
     } catch (error) {
-      console.log({ error });
+      console.log({ error }, 'there was an error sending tx');
     } finally {
       setSending(false);
     }
@@ -91,7 +91,7 @@ export const ReceiptScreen = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Receipt" />
+      <Header title="Receipt" style={{ shadowColor: 'transparent' }} />
       <View
         style={{ paddingHorizontal: scale(16), marginTop: verticalScale(24) }}
       >
@@ -105,8 +105,16 @@ export const ReceiptScreen = () => {
           <Text>Destination:</Text>
           <Text>{StringUtils.formatAddress(destination, 9, 6)}</Text>
         </Row>
+        <Spacer value={verticalScale(24)} />
         <PrimaryButton onPress={sendCrypto}>
-          <Text>Send</Text>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.white}
+          >
+            Send
+          </Text>
         </PrimaryButton>
       </View>
     </SafeAreaView>
