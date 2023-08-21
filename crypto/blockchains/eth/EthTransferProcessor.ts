@@ -977,17 +977,19 @@ export default class EthTransferProcessor
             maxNonceLocal.amountBlocked[this._settings.currencyCode]
           ).toString();
           const diffAmount = BlocksoftUtils.diff(diff, data.amount).toString();
-          AirDAOCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTransferProcessor.getFees balance ' +
-              result.countedForBasicBalance +
-              ' - blocked ' +
-              maxNonceLocal.amountBlocked[this._settings.currencyCode] +
-              ' = left Balance ' +
-              diff +
-              ' => left Amount ' +
-              diffAmount
-          );
+          if (typeof maxNonceLocal !== 'boolean') {
+            AirDAOCryptoLog.log(
+              this._settings.currencyCode +
+                ' EthTransferProcessor.getFees balance ' +
+                result.countedForBasicBalance +
+                ' - blocked ' +
+                maxNonceLocal.amountBlocked[this._settings.currencyCode] +
+                ' = left Balance ' +
+                diff +
+                ' => left Amount ' +
+                diffAmount
+            );
+          }
           if (diff.indexOf('-') !== -1) {
             result.showBlockedBalanceNotice = new Date().getTime();
             result.showBlockedBalanceFree =
@@ -1012,21 +1014,23 @@ export default class EthTransferProcessor
         'ETH_LONG_QUERY'
       );
       check = maxNonceLocal.queryLength * 1 >= LONG_QUERY * 1;
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFees ethAllowLongQuery ' +
-          ethAllowLongQuery +
-          ' Query scanned ' +
-          maxNonceLocal.maxScanned +
-          ' success ' +
-          maxNonceLocal.maxSuccess +
-          ' length ' +
-          maxNonceLocal.queryLength +
-          ' txs ' +
-          JSON.stringify(maxNonceLocal.queryTxs) +
-          ' => ' +
-          (check ? 'true' : 'false')
-      );
+      if (typeof maxNonceLocal !== 'boolean') {
+        await AirDAOCryptoLog.log(
+          this._settings.currencyCode +
+            ' EthTransferProcessor.getFees ethAllowLongQuery ' +
+            ethAllowLongQuery +
+            ' Query scanned ' +
+            maxNonceLocal.maxScanned +
+            ' success ' +
+            maxNonceLocal.maxSuccess +
+            ' length ' +
+            maxNonceLocal.queryLength +
+            ' txs ' +
+            JSON.stringify(maxNonceLocal.queryTxs) +
+            ' => ' +
+            (check ? 'true' : 'false')
+        );
+      }
       if (check) {
         result.showLongQueryNotice = new Date().getTime();
         result.showLongQueryNoticeTxs = maxNonceLocal.queryTxs;
@@ -1107,7 +1111,7 @@ export default class EthTransferProcessor
         fees.selectedTransferAllBalanceETH = BlocksoftUtils.toEther(
           fees.fees[fees.selectedFeeIndex].amountForTx
         );
-      } catch (e) {
+      } catch (e: any) {
         AirDAOCryptoLog.log(
           this._settings.currencyCode +
             ' EthTransferProcessor.getTransferAllBalance ' +
@@ -1241,6 +1245,7 @@ export default class EthTransferProcessor
     }
 
     const tx: AirDAOBlockchainTypes.EthTx = {
+      chainId: '',
       from: data.addressFrom,
       to: realAddressToLower,
       gasPrice: finalGasPrice,
@@ -1349,7 +1354,7 @@ export default class EthTransferProcessor
             if (scannedTx) {
               oldNonce = scannedTx.nonce;
             }
-          } catch (e) {
+          } catch (e: any) {
             AirDAOCryptoLog.err(
               this._settings.currencyCode +
                 ' EthTransferProcessor.sent rbf not loaded nonce for ' +

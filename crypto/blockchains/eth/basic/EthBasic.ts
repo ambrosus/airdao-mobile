@@ -66,7 +66,7 @@ export default class EthBasic {
     tokenBlockchain: any;
     tokenBlockchainCode?: string;
     currencyCode?: any;
-    tokenAddress: string;
+    tokenAddress?: string;
   };
 
   /**

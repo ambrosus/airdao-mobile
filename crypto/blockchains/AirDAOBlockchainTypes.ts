@@ -157,6 +157,7 @@ export namespace AirDAOBlockchainTypes {
     blockchainData?: any;
     rawOnly?: boolean;
     bseOrderId?: string;
+    totalFeePlusAmountETH?: string;
   }
 
   export interface CheckTransferHasErrorData {
@@ -259,6 +260,8 @@ export namespace AirDAOBlockchainTypes {
     showBlockedBalanceNotice?: number;
     showBlockedBalanceFree?: number | any;
     countedTime: number;
+
+    selectedTransferAllBalanceETH?: string;
   }
 
   export interface SendTxResult {
@@ -331,7 +334,6 @@ export namespace AirDAOBlockchainTypes {
   }
 
   export interface EthTx {
-    chainId: string;
     from: string;
     to: string;
     gasPrice: number;
@@ -339,6 +341,7 @@ export namespace AirDAOBlockchainTypes {
     value: string;
     nonce?: number;
     data?: string;
+    chainId: string;
   }
 
   export interface DbAccount {
