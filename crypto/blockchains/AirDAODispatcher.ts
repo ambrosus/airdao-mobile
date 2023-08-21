@@ -326,5 +326,5 @@ class AirDAODispatcher {
   }
 }
 
-const singleBlocksoftDispatcher = new AirDAODispatcher();
-export default singleBlocksoftDispatcher;
+const singleAirDAODispatcher = new AirDAODispatcher();
+export default singleAirDAODispatcher;

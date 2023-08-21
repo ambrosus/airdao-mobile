@@ -43,7 +43,6 @@ export default class EthTransferProcessor
   ): Promise<AirDAOBlockchainTypes.FeeRateResult> {
     let txRBFed = '';
     let txRBF = false;
-
     this.checkWeb3CurrentServerUpdated();
 
     let realAddressTo = data.addressTo;
@@ -96,7 +95,6 @@ export default class EthTransferProcessor
         throw new Error('SERVER_RESPONSE_BAD_DESTINATION');
       }
     }
-
     let oldGasPrice = -1;
     let oldNonce = -1;
     let nonceLog = '';
@@ -111,13 +109,13 @@ export default class EthTransferProcessor
         typeof data.transactionJson.nonce !== 'undefined'
           ? data.transactionJson.nonce
           : false;
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate ' +
-          data.addressFrom +
-          ' rbf preset nonceForTx ' +
-          oldNonce
-      );
+      // AirDAOCryptoLog.log(
+      //   this._settings.currencyCode +
+      //     ' EthTransferProcessor.getFeeRate ' +
+      //     data.addressFrom +
+      //     ' rbf preset nonceForTx ' +
+      //     oldNonce
+      // );
       if (oldGasPrice === false) {
         try {
           const ethProvider = AirDAODispatcher.getScannerProcessor(
@@ -1415,7 +1413,9 @@ export default class EthTransferProcessor
 
       try {
         result = await sender.send(tx, privateData, txRBF, logData);
+        console.log({ result });
       } catch (e) {
+        console.log({ error: e });
         throw e;
       }
 

@@ -1,8 +1,8 @@
 /**
  * @version 0.52
  */
-import BlocksoftKeysStorage from '@crypto/actions/BlocksoftKeysStorage/BlocksoftKeysStorage';
-import BlocksoftKeys from '@crypto/actions/BlocksoftKeys/BlocksoftKeys';
+import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
+import AirDAOKeys from '@lib/helpers/AirDAOKeys';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import config from '@constants/config';
 
@@ -42,7 +42,7 @@ export default {
           source
       );
     }
-    const discoverForKey = BlocksoftKeysStorage.getAddressCacheKey(
+    const discoverForKey = AirDAOKeysStorage.getAddressCacheKey(
       discoverFor.walletHash,
       path.replace(/[']/g, 'quote'),
       discoverFor.currencyCode
@@ -55,7 +55,7 @@ export default {
     if (result) {
       return result;
     }
-    result = await BlocksoftKeysStorage.getAddressCache(discoverForKey);
+    result = await AirDAOKeysStorage.getAddressCache(discoverForKey);
     if (result) {
       CACHE[discoverForKey] = result;
       return result;
@@ -70,12 +70,12 @@ export default {
           'BlocksoftTransferPrivateKeysDiscover.getPrivateKey actually redo mnemonic ' +
             discoverFor.walletHash
         ),
-          (discoverFor.mnemonic = BlocksoftKeysStorage.getWalletMnemonic(
+          (discoverFor.mnemonic = AirDAOKeysStorage.getWalletMnemonic(
             discoverFor.walletHash,
             'getPrivateKey'
           ));
       }
-      result = await BlocksoftKeys.discoverOne(discoverFor);
+      result = await AirDAOKeys.discoverOne(discoverFor);
       if (
         discoverFor.addressToCheck &&
         discoverFor.addressToCheck !== result.address
@@ -113,7 +113,7 @@ export default {
         for (const path of tmpPath) {
           const clone = JSON.parse(JSON.stringify(discoverFor));
           clone.derivationPath = path;
-          const result2 = await BlocksoftKeys.discoverOne(clone);
+          const result2 = await AirDAOKeys.discoverOne(clone);
           if (discoverFor.addressToCheck === result2.address) {
             await AirDAOCryptoLog.log(
               'BlocksoftTransferPrivateKeysDiscover private key rediscovered FOUND address path=' +
@@ -145,7 +145,7 @@ export default {
           throw new Error('invalid address');
         }
       }
-      await BlocksoftKeysStorage.setAddressCache(discoverForKey, result);
+      await AirDAOKeysStorage.setAddressCache(discoverForKey, result);
     } catch (e: any) {
       if (config.debug.appErrors) {
         console.log(

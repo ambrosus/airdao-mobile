@@ -307,6 +307,7 @@ export default class EthBasic {
   }
 
   checkError(e, data, txRBF = false, logData = {}) {
+    console.log('check errro ', { e });
     if (e.message.indexOf('Transaction has been reverted by the EVM') !== -1) {
       AirDAOCryptoLog.log(
         'EthBasic checkError0.0 ' + e.message + ' for ' + data.addressFrom,

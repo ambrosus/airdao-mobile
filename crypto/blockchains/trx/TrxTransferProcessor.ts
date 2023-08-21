@@ -13,13 +13,13 @@ import TrxSendProvider from '@crypto/blockchains/trx/providers/TrxSendProvider';
 import { strings, sublocale } from '@app/services/i18n';
 
 import settingsActions from '@app/appstores/Stores/Settings/SettingsActions';
-import MarketingEvent from '@app/services/Marketing/MarketingEvent';
 import BlocksoftTransactions from '@crypto/actions/BlocksoftTransactions/BlocksoftTransactions';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import BlocksoftBalances from '@crypto/actions/BlocksoftBalances/BlocksoftBalances';
-import BlocksoftDispatcher from '@lib/BlocksoftDispatcher';
+import AirDAODispatcher from '../AirDAODispatcher';
 import config from '@constants/config';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
+import { Database } from '@database';
 
 // https://developers.tron.network/docs/parameter-and-return-value-encoding-and-decoding
 const ethers = require('ethers');
@@ -69,7 +69,7 @@ export default class TrxTransferProcessor
     /**
      * @type {TrxScannerProcessor}
      */
-    const balanceProvider = BlocksoftDispatcher.getScannerProcessor(
+    const balanceProvider = AirDAODispatcher.getScannerProcessor(
       this._settings.currencyCode
     );
     const balanceRaw = await balanceProvider.getBalanceBlockchain(
@@ -83,7 +83,7 @@ export default class TrxTransferProcessor
       return { isOk: true };
     }
 
-    const balanceProviderBasic = BlocksoftDispatcher.getScannerProcessor('TRX');
+    const balanceProviderBasic = AirDAODispatcher.getScannerProcessor('TRX');
     const balanceRawBasic = await balanceProviderBasic.getBalanceBlockchain(
       data.addressTo
     );
@@ -488,7 +488,6 @@ export default class TrxTransferProcessor
         ` TrxTransferProcessor.getTransferAllBalance ',
        ${data.addressFrom + ' => ' + balance}`
     );
-    // noinspection EqualityComparisonWithCoercionJS
     if (balance === '0') {
       return {
         selectedTransferAllBalance: '0',
@@ -563,9 +562,7 @@ export default class TrxTransferProcessor
     logData.basicAddressTo = data.addressTo;
     logData.basicAmount = data.amount;
     logData.pushLocale = sublocale();
-    logData.pushSetting = await settingsActions.getSetting(
-      'transactionsNotifs'
-    );
+    logData.pushSetting = await Database.localStorage.get('transactionsNotifs');
     logData.basicToken = this._tokenName;
 
     const sendLink = BlocksoftExternalSettings.getStatic('TRX_SEND_LINK');
@@ -709,17 +706,6 @@ export default class TrxTransferProcessor
                   e.message
               );
               // noinspection ES6MissingAwait
-              MarketingEvent.logOnlyRealTime(
-                'v20_trx_tx_sub_error ' +
-                  this._settings.currencyCode +
-                  ' ' +
-                  data.addressFrom +
-                  ' => ' +
-                  data.addressTo +
-                  ' ' +
-                  e.message,
-                logData
-              );
               throw e;
             }
 
@@ -1010,31 +996,8 @@ export default class TrxTransferProcessor
           ' TrxTransferProcessor.sendTx error ' +
           e.message
       );
-      // noinspection ES6MissingAwait
-      MarketingEvent.logOnlyRealTime(
-        'v20_trx_tx_error ' +
-          this._settings.currencyCode +
-          ' ' +
-          data.addressFrom +
-          ' => ' +
-          data.addressTo +
-          ' ' +
-          e.message,
-        logData
-      );
       throw e;
     }
-    // noinspection ES6MissingAwait
-    MarketingEvent.logOnlyRealTime(
-      'v20_trx_tx_success ' +
-        this._settings.currencyCode +
-        ' ' +
-        data.addressFrom +
-        ' => ' +
-        data.addressTo,
-      logData
-    );
-
     await BlocksoftTransactions.resetTransactionsPending(
       { account: { currencyCode: 'TRX' } },
       'AccountRunPending'

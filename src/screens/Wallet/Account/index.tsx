@@ -38,29 +38,38 @@ export const WalletAccount = () => {
   const [account, setAccount] = useState<ExplorerAccount | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const transactionsRef = useRef(transactions);
+  const nextPageExistsForTransactions = useRef(true);
   const [accountInfoLoading, setAccountInfoLoading] = useState(false);
   const [transactionsLoading, setTransactionsLoading] = useState(false);
-
   // state for money sending
   const [amountToSend, setAmountToSend] = useState('');
   const [addressToSend, setAddressToSend] = useState('');
 
   const getTransactions = async (address: string) => {
-    if (transactions.length > 0 && transactions.length < LIMIT) return;
+    if (
+      (transactionsRef.current.length > 0 &&
+        transactionsRef.current.length < LIMIT) ||
+      !nextPageExistsForTransactions.current
+    ) {
+      return;
+    }
     setTransactionsLoading(true);
     try {
-      const transactions = await API.explorerService.getTransactionsOfAccount(
-        address,
-        (transactionsRef.current.length % LIMIT) + 1,
-        LIMIT
-      );
+      const newTransactions =
+        await API.explorerService.getTransactionsOfAccount(
+          address,
+          (transactionsRef.current.length % LIMIT) + 1,
+          LIMIT
+        );
+      if (newTransactions.data.length < LIMIT)
+        nextPageExistsForTransactions.current = false;
       setTransactions(
-        transactions.data.map(
+        newTransactions.data.map(
           (transactionDTO) => new Transaction(transactionDTO)
         )
       );
     } catch (error) {
-      console.log(error, 'error loading acc transactions');
+      // TODO handle
     } finally {
       setTransactionsLoading(false);
     }
@@ -72,7 +81,6 @@ export const WalletAccount = () => {
       const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
         mnemonic: wallet.mnemonic
       });
-      console.log({ info });
       if (info) {
         const { address } = info;
         // @ts-ignore

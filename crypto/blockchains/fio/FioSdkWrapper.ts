@@ -4,7 +4,7 @@
 // @ts-ignore
 import { FIOSDK } from '@fioprotocol/fiosdk';
 
-import BlocksoftKeysStorage from '@crypto/actions/BlocksoftKeysStorage/BlocksoftKeysStorage';
+import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
@@ -19,7 +19,7 @@ export class FioSdkWrapper {
   async init(walletHash, source) {
     if (this.walletHash === walletHash) return false;
     try {
-      const res = await BlocksoftKeysStorage.getAddressCache(
+      const res = await AirDAOKeysStorage.getAddressCache(
         walletHash + 'SpecialFio'
       );
       let publicKey, fioKey;
@@ -27,7 +27,7 @@ export class FioSdkWrapper {
         publicKey = res.address;
         fioKey = res.privateKey;
       } else {
-        const mnemonic = await BlocksoftKeysStorage.getWalletMnemonic(
+        const mnemonic = await AirDAOKeysStorage.getWalletMnemonic(
           walletHash,
           source + ' setSelectedWallet init for Fio'
         );
@@ -35,7 +35,7 @@ export class FioSdkWrapper {
         fioKey = tmp.fioKey;
         tmp = FIOSDK.derivedPublicKey(fioKey);
         publicKey = tmp.publicKey;
-        await BlocksoftKeysStorage.setAddressCache(walletHash + 'SpecialFio', {
+        await AirDAOKeysStorage.setAddressCache(walletHash + 'SpecialFio', {
           address: publicKey,
           privateKey: fioKey
         });

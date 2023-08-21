@@ -1,10 +1,10 @@
-import { NativeModules } from 'react-native';
+// import { NativeModules } from 'react-native';
 
 import CoinAirDAODict from '@crypto/assets/coinAirDAODict.json';
 import { Database } from '@database';
 import { DatabaseTable } from '@appTypes';
 
-const { RNFastCrypto } = NativeModules;
+// const { RNFastCrypto } = NativeModules;
 
 const VisibleCodes = [
   'CASHBACK',
@@ -94,9 +94,9 @@ const CurrenciesForTests = {
   }
 };
 
-if (typeof RNFastCrypto === 'undefined') {
-  delete Currencies['XMR'];
-}
+// if (typeof RNFastCrypto === 'undefined') {
+//   delete Currencies['XMR'];
+// }
 
 function addAndUnifyCustomCurrency(currencyObject: {
   id: string;
