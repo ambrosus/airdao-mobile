@@ -10,6 +10,7 @@ import { AccountList } from '@models';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { styles } from './styles';
 import { StringUtils } from '@utils/string';
+import { useTranslation } from 'react-i18next';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {
   collection: AccountList;
@@ -25,6 +26,7 @@ export const BottomSheetEditCollection = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { handleOnRename, handleOnDelete } = useLists((v) => v);
   const renameCollectionModalRef = useRef<BottomSheetRef>(null);
+  const { t } = useTranslation();
 
   const dismissThis = useCallback(() => {
     setTimeout(() => {
@@ -74,7 +76,7 @@ export const BottomSheetEditCollection = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.smokyBlack}
           >
-            Rename group
+            {t('rename.group')}
           </Text>
         </Button>
         <Button
@@ -90,7 +92,8 @@ export const BottomSheetEditCollection = forwardRef<
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            Delete {StringUtils.formatAddress(collection.name, 12, 0)}
+            {t('delete.btn')}{' '}
+            {StringUtils.formatAddress(collection.name, 12, 0)}
           </Text>
         </Button>
       </View>

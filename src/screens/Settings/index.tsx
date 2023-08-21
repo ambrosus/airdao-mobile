@@ -5,39 +5,15 @@ import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale } from '@utils/scaling';
-// import { Spacer, Text } from '@components/base';
-// import * as Updates from 'expo-updates';
-// import messaging from '@react-native-firebase/messaging';
-// import { CopyToClipboardButton } from '@components/composite';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// TODO
+
 export const SettingsScreen = () => {
-  // const [token, setToken] = useState('');
-
-  // useEffect(() => {
-  //   messaging().getToken().then(setToken);
-  // }, []);
-
   const { top } = useSafeAreaInsets();
   return (
     <View style={[{ top }, styles.container]} testID="Settings_Screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
-      {/* <Spacer value={100} />
-      <View style={{ paddingHorizontal: 50 }}>
-        <CopyToClipboardButton textToDisplay={token} />
-      </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          paddingBottom: 72
-        }}
-      >
-        <Text>Channel: {Updates.channel}</Text>
-        <Text fontSize={12}>AirDAO Testing Build: v1.0.0.16</Text>
-      </View> */}
     </View>
   );
 };

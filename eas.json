@@ -12,7 +12,10 @@
       }
     },
     "stage": {
-      "channel": "stage"
+      "channel": "stage",
+      "android": {
+        "buildType": "apk"
+      }
     },
     "prod": {
       "channel": "main"

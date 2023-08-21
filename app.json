@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
