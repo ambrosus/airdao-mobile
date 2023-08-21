@@ -60,7 +60,7 @@ export default class EthTxSendProvider {
         tx,
         privateData.privateKey
       );
-    } catch (e) {
+    } catch (e: any) {
       console.log({ e });
       throw new Error(
         this._settings.currencyCode +
@@ -77,7 +77,6 @@ export default class EthTxSendProvider {
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
-    // @ts-ignore
     await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx started',
       logData

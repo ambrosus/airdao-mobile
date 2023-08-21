@@ -331,6 +331,7 @@ export namespace AirDAOBlockchainTypes {
   }
 
   export interface EthTx {
+    chainId: string;
     from: string;
     to: string;
     gasPrice: number;

@@ -2,6 +2,7 @@
  * @version 0.5
  * https://etherscan.io/apis#accounts
  */
+import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import { Web3Injected } from '@crypto/services/Web3Injected';
 
@@ -60,11 +61,66 @@ export default class EthBasic {
    */
   _delegateAddress;
 
+  protected _settings: {
+    network: any;
+    tokenBlockchain: any;
+    tokenBlockchainCode?: string;
+    currencyCode?: any;
+    tokenAddress: string;
+  };
+
+  /**
+   * @type {boolean}
+   * @public
+   */
+  _etherscanApiPathDeposits;
+
+  /**
+   * @type {boolean}
+   * @public
+   */
+  _isTestnet;
+
+  /**
+   * @type {string}
+   * @public
+   */
+  _etherscanApiPathForFee;
+
+  /**
+   * @type {string}
+   * @public
+   */
+  _mainCurrencyCode;
+
+  /**
+   * @type {string}
+   * @public
+   */
+  _mainTokenType;
+
+  /**
+   * @type {string}
+   * @public
+   */
+  _mainTokenBlockchain;
+
+  /**
+   * @type {number}
+   * @public
+   */
+  _mainChainId;
+
   /**
    * @param {string} settings.network
    * @param {string} settings.currencyCode
    */
-  constructor(settings) {
+  constructor(settings: {
+    network: any;
+    tokenBlockchain: any;
+    tokenBlockchainCode?: string;
+    currencyCode?: any;
+  }) {
     if (typeof settings === 'undefined' || !settings) {
       throw new Error('EthNetworked requires settings');
     }
@@ -88,7 +144,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = `https://api.bscscan.com/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'BNB';
       this._mainTokenType = 'BNB_SMART_20';
@@ -118,7 +174,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = false;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._oklinkAPI = 'e11964ac-cfb9-406f-b2c5-3db76f91aebd';
 
@@ -137,7 +193,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = false;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'VLX';
       this._mainTokenType = 'VLX_ERC_20';
@@ -154,7 +210,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = false;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'ONE';
       this._mainTokenType = 'ONE_ERC_20';
@@ -171,7 +227,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = false;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'METIS';
       this._mainTokenType = 'METIS_ERC_20';
@@ -186,7 +242,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = `https://api.optimistic.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'OPTIMISM';
       this._mainTokenType = 'OPTI_ERC_20';
@@ -216,7 +272,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = `https://api.polygonscan.com/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'MATIC';
       this._mainTokenType = 'MATIC_ERC_20';
@@ -233,7 +289,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = false; // invalid now `https://api.ftmscan.com/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'FTM';
       this._mainTokenType = 'FTM_ERC_20';
@@ -250,7 +306,7 @@ export default class EthBasic {
       this._etherscanApiPathForFee = `https://api.bttcscan.com/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken`;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'BTTC';
       this._mainTokenType = 'BTTC_ERC_20';
@@ -262,7 +318,7 @@ export default class EthBasic {
       this._etherscanApiPathInternal = false;
 
       this._trezorServer = false;
-      this._trezorServerCode = false;
+      this._trezorServerCode = '';
 
       this._mainCurrencyCode = 'RSK';
       this._mainTokenType = 'RSK_ERC_20';
@@ -284,7 +340,7 @@ export default class EthBasic {
         this._isTestnet = true;
       } else {
         this._trezorServer = false;
-        this._trezorServerCode = false;
+        this._trezorServerCode = '';
         this._isTestnet = true;
       }
 
@@ -306,18 +362,26 @@ export default class EthBasic {
     return !(this._web3.LINK === oldWeb3Link);
   }
 
-  checkError(e, data, txRBF = false, logData = {}) {
+  checkError(
+    e: any,
+    data: AirDAOBlockchainTypes.TransferData,
+    txRBF = false,
+    logData = {
+      setNonce: undefined,
+      nonce: undefined
+    }
+  ) {
     console.log('check errro ', { e });
     if (e.message.indexOf('Transaction has been reverted by the EVM') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.0 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `'EthBasic checkError0.0 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       throw new Error('SERVER_RESPONSE_REVERTED_BY_EVM');
     } else if (e.message.indexOf('nonce too low') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.1 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.1 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       let e2;
       if (txRBF) {
@@ -333,8 +397,8 @@ export default class EthBasic {
       throw e2;
     } else if (e.message.indexOf('gas required exceeds allowance') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.2 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.2 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       if (
         this._settings.tokenAddress === 'undefined' ||
@@ -346,12 +410,13 @@ export default class EthBasic {
       }
     } else if (e.message.indexOf('insufficient funds') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.3 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.3 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       if (
         (this._settings.currencyCode === 'ETH' ||
           this._settings.currencyCode === 'BNB_SMART') &&
+        // @ts-ignore
         data.amount * 1 > 0
       ) {
         throw new Error('SERVER_RESPONSE_NOTHING_LEFT_FOR_FEE');
@@ -360,22 +425,22 @@ export default class EthBasic {
       }
     } else if (e.message.indexOf('underpriced') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.4 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.4 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       throw new Error('SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE');
     } else if (e.message.indexOf('already known') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.5 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.5 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       throw new Error(
         'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_AS_FEE_FOR_REPLACEMENT'
       );
     } else if (e.message.indexOf('infura') !== -1) {
       AirDAOCryptoLog.log(
-        'EthBasic checkError0.6 ' + e.message + ' for ' + data.addressFrom,
-        logData
+        `EthBasic checkError0.6 ' + ${e.message} + ' for ' + ${data.addressFrom},
+        ${logData}`
       );
       throw new Error('SERVER_RESPONSE_BAD_INTERNET');
     } else {

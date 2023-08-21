@@ -16,8 +16,8 @@
 const MAX_MESSAGE = 2000;
 const FULL_MAX_MESSAGE = 20000;
 
-let LOGS_TXT = '';
-let FULL_LOGS_TXT = '';
+const LOGS_TXT = '';
+const FULL_LOGS_TXT = '';
 
 class AirDAOCryptoLog {
   constructor() {

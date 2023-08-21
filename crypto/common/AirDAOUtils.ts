@@ -4,7 +4,8 @@ import { hexToBn, bnToHex } from '../blockchains/eth/ext/estimateGas/util';
 // @ts-ignore
 import BigIntXmr from '@crypto/blockchains/xmr/ext/vendor/biginteger';
 import Web3 from 'web3';
-import { EtherUnits } from 'web3-utils';
+import EtherUnits from 'web3-utils';
+import BN from 'bn.js';
 
 class AirDAOUtils {
   static cutZeros(val: any): string {
@@ -261,7 +262,7 @@ class AirDAOUtils {
     return cutted || '0';
   }
 
-  static toWei(val: any, from = 'ether'): string {
+  static toWei(val: any, from = 'ether'): BN {
     if (typeof val === 'undefined') {
       throw new Error('toWei val is undefined');
     }
@@ -271,36 +272,38 @@ class AirDAOUtils {
     }
     const parts = val.toString().split('.');
     if (typeof parts[1] === 'undefined' || parts[1] === '' || !parts[1]) {
-      return Web3.utils.toWei(
-        val,
-        from as
-          | 'noether'
-          | 'wei'
-          | 'kwei'
-          | 'Kwei'
-          | 'babbage'
-          | 'femtoether'
-          | 'mwei'
-          | 'Mwei'
-          | 'lovelace'
-          | 'picoether'
-          | 'gwei'
-          | 'Gwei'
-          | 'shannon'
-          | 'nanoether'
-          | 'nano'
-          | 'szabo'
-          | 'microether'
-          | 'micro'
-          | 'finney'
-          | 'milliether'
-          | 'milli'
-          | 'ether'
-          | 'kether'
-          | 'grand'
-          | 'mether'
-          | 'gether'
-          | 'tether'
+      return new BN(
+        Web3.utils.toWei(
+          val,
+          from as
+            | 'noether'
+            | 'wei'
+            | 'kwei'
+            | 'Kwei'
+            | 'babbage'
+            | 'femtoether'
+            | 'mwei'
+            | 'Mwei'
+            | 'lovelace'
+            | 'picoether'
+            | 'gwei'
+            | 'Gwei'
+            | 'shannon'
+            | 'nanoether'
+            | 'nano'
+            | 'szabo'
+            | 'microether'
+            | 'micro'
+            | 'finney'
+            | 'milliether'
+            | 'milli'
+            | 'ether'
+            | 'kether'
+            | 'grand'
+            | 'mether'
+            | 'gether'
+            | 'tether'
+        )
       );
     }
 
@@ -309,7 +312,8 @@ class AirDAOUtils {
       decimals = 9;
     }
     const newVal = parts[0] + '.' + parts[1].substring(0, decimals);
-    return Web3.utils.toWei(newVal, from as EtherUnits);
+    // @ts-ignore // TODO fix this
+    return new BN(Web3.utils.toWei(newVal, from as EtherUnits));
   }
 
   static toGwei(val: any): string {

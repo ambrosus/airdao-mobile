@@ -52,7 +52,8 @@ export class Wallet {
       useUnconfirmed: model.useUnconfirmed,
       isHd: model.isHd,
       isCreatedHere: model.isCreatedHere,
-      toSendStatus: model.toSendStatus
+      toSendStatus: model.toSendStatus,
+      pub: model.pub
     });
   }
 }

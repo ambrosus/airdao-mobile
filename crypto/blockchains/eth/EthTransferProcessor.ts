@@ -116,7 +116,7 @@ export default class EthTransferProcessor
       //     ' rbf preset nonceForTx ' +
       //     oldNonce
       // );
-      if (oldGasPrice === false) {
+      if (!oldGasPrice) {
         try {
           const ethProvider = AirDAODispatcher.getScannerProcessor(
             data.currencyCode
@@ -142,7 +142,7 @@ export default class EthTransferProcessor
                 txRBF
             );
           }
-        } catch (e) {
+        } catch (e: any) {
           AirDAOCryptoLog.log(
             this._settings.currencyCode +
               ' EthTransferProcessor.getFeeRate ' +
@@ -257,10 +257,10 @@ export default class EthTransferProcessor
       }
       AirDAOCryptoLog.log(
         this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate ' +
-          data.addressFrom +
+          `' EthTransferProcessor.getFeeRate ' +
+          ${data.addressFrom} +
           ' proxyPriceCheck',
-        proxyPriceCheck
+        ${proxyPriceCheck}`
       );
     }
 
@@ -376,7 +376,7 @@ export default class EthTransferProcessor
             if (gasLimit) {
               gasLimit = BlocksoftUtils.mul(gasLimit, 1.5);
             }
-          } catch (e) {
+          } catch (e: any) {
             AirDAOCryptoLog.log(
               'EthTransferProcessor data.contractCallData error ' + e.message
             );
