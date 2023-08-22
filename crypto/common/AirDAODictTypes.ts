@@ -5,6 +5,7 @@
  */
 export namespace AirDAODictTypes {
   export enum Code {
+    AMB = 'AMB',
     BTC = 'BTC',
     BTC_SEGWIT = 'BTC_SEGWIT',
     BTC_SEGWIT_COMPATIBLE = 'BTC_SEGWIT_COMPATIBLE',

@@ -51,9 +51,9 @@ export namespace AirDAOTransferDispatcher {
       return CACHE_PROCESSORS[currencyCode];
     }
     let transferProcessor = currencyCode;
-    if (typeof currencyDictSettings.transferProcessor !== 'undefined') {
-      transferProcessor = currencyDictSettings.transferProcessor;
-    }
+    // if (typeof x.transferProcessor !== 'undefined') {
+    //   transferProcessor = currencyDictSettings.transferProcessor;
+    // }
     switch (transferProcessor) {
       // case 'BCH':
       //   CACHE_PROCESSORS[currencyCode] = new BchTransferProcessor(
@@ -85,6 +85,12 @@ export namespace AirDAOTransferDispatcher {
       //     currencyDictSettings
       //   );
       //   break;
+      case 'AMB':
+        console.log('here');
+        CACHE_PROCESSORS[currencyCode] = new EthTransferProcessor(
+          currencyDictSettings
+        );
+        break;
       case 'ETH':
         CACHE_PROCESSORS[currencyCode] = new EthTransferProcessor(
           currencyDictSettings

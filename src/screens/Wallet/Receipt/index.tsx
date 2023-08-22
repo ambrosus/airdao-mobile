@@ -58,7 +58,7 @@ export const ReceiptScreen = () => {
       });
       await BlocksoftTransfer.sendTx(
         {
-          currencyCode: AirDAODictTypes.Code.ETH,
+          currencyCode: AirDAODictTypes.Code.AMB,
           walletHash: hash,
           derivationPath: info.path,
           addressFrom: origin,
