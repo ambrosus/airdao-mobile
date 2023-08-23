@@ -81,9 +81,6 @@ export default class EthTxSendProvider {
       this._settings.currencyCode + ' EthTxSendProvider._innerSendTx started',
       logData
     );
-    delete tx.gasPrice;
-    tx.gas = 21000;
-    tx.value = '100000000000000000';
     const rawTransaction = await this.sign(tx, privateData, txRBF, logData);
     const sendLink = this._web3.LINK;
     const tmp = await this._web3.eth.sendSignedTransaction(rawTransaction);
