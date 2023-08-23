@@ -37,19 +37,19 @@ import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
 //   VLX: {}
 // };
 
-const CACHE_VALID_TIME = 30000; // 30 seconds
-const CACHE = {
-  ETH: {},
-  BNB: {},
-  ETC: {},
-  AMB: {},
-  MATIC: {},
-  FTM: {},
-  RSK: {},
-  OPTIMISM: {},
-  METIS: {},
-  VLX: {}
-};
+// const CACHE_VALID_TIME = 30000; // 30 seconds
+// const CACHE = {
+//   ETH: {},
+//   BNB: {},
+//   ETC: {},
+//   AMB: {},
+//   MATIC: {},
+//   FTM: {},
+//   RSK: {},
+//   OPTIMISM: {},
+//   METIS: {},
+//   VLX: {}
+// };
 
 export default class EthScannerProcessor extends EthBasic {
   /**
@@ -70,108 +70,108 @@ export default class EthScannerProcessor extends EthBasic {
    * @private
    * @param _address
    */
-  async _get(_address: string) {
-    const address = _address.toLowerCase();
-
-    try {
-      this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
-        this._trezorServerCode,
-        'ETH.Scanner._get'
-      );
-    } catch (e: any) {
-      throw new Error(
-        e.message + ' while getTrezorServer ' + this._trezorServerCode
-      );
-    }
-
-    if (typeof this._trezorServer === 'undefined') {
-      AirDAOCryptoLog.err(
-        this._settings.currencyCode +
-          ' EthScannerProcessor._get empty trezorServer'
-      );
-      throw new Error(
-        this._settings.currencyCode +
-          ' EthScannerProcessor._get empty trezorServer'
-      );
-    }
-
-    if (!this._trezorServer) {
-      return false;
-    }
-
-    const now = new Date().getTime();
-    if (
-      typeof CACHE[this._mainCurrencyCode] !== 'undefined' &&
-      typeof CACHE[this._mainCurrencyCode][address] !== 'undefined' &&
-      now - CACHE[this._mainCurrencyCode][address].time < CACHE_VALID_TIME
-    ) {
-      CACHE[this._mainCurrencyCode][address].provider = 'trezor-cache';
-      return CACHE[this._mainCurrencyCode][address];
-    }
-
-    let link =
-      this._trezorServer + '/api/v2/address/' + address + '?details=txs';
-    let res = await AirDAOAxios.getWithoutBraking(link);
-
-    if (!res || !res.data) {
-      BlocksoftExternalSettings.setTrezorServerInvalid(
-        this._trezorServerCode,
-        this._trezorServer
-      );
-      this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
-        this._trezorServerCode,
-        this._settings.currencyCode + ' ETH.Scanner._get'
-      );
-      if (typeof this._trezorServer === 'undefined') {
-        AirDAOCryptoLog.err(
-          this._settings.currencyCode +
-            ' EthScannerProcessor._get empty trezorServer2'
-        );
-        throw new Error(
-          this._settings.currencyCode +
-            ' EthScannerProcessor._get empty trezorServer2'
-        );
-      }
-      link = this._trezorServer + '/api/v2/address/' + address + '?details=txs';
-      res = await AirDAOAxios.getWithoutBraking(link);
-      if (!res || !res.data) {
-        BlocksoftExternalSettings.setTrezorServerInvalid(
-          this._trezorServerCode,
-          this._trezorServer
-        );
-        return false;
-      }
-    }
-
-    if (typeof res.data.balance === 'undefined') {
-      throw new Error(
-        this._settings.currencyCode +
-          ' EthScannerProcessor._get nothing loaded for address ' +
-          link
-      );
-    }
-    const data = res.data;
-    data.totalTokens = 0;
-    data.formattedTokens = {};
-    // await  AirDAOCryptoLog.log('EthScannerProcessor._get ERC20 tokens ' + JSON.stringify(data.tokens))
-    if (typeof data.tokens !== 'undefined') {
-      let token;
-      for (token of data.tokens) {
-        data.formattedTokens[token.contract.toLowerCase()] = token;
-      }
-    }
-    if (typeof CACHE[this._mainCurrencyCode][address] !== 'undefined') {
-      if (CACHE[this._mainCurrencyCode][address].data.nonce > res.data.nonce) {
-        return false;
-      }
-    }
-    CACHE[this._mainCurrencyCode][address] = {
-      data,
-      provider: 'trezor',
-      time: now
-    };
-    return CACHE[this._mainCurrencyCode][address];
-  }
+  // async _get(_address: string) {
+  //   const address = _address.toLowerCase();
+  //
+  //   try {
+  //     this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
+  //       this._trezorServerCode,
+  //       'ETH.Scanner._get'
+  //     );
+  //   } catch (e: any) {
+  //     throw new Error(
+  //       e.message + ' while getTrezorServer ' + this._trezorServerCode
+  //     );
+  //   }
+  //
+  //   if (typeof this._trezorServer === 'undefined') {
+  //     AirDAOCryptoLog.err(
+  //       this._settings.currencyCode +
+  //         ' EthScannerProcessor._get empty trezorServer'
+  //     );
+  //     throw new Error(
+  //       this._settings.currencyCode +
+  //         ' EthScannerProcessor._get empty trezorServer'
+  //     );
+  //   }
+  //
+  //   if (!this._trezorServer) {
+  //     return false;
+  //   }
+  //
+  //   const now = new Date().getTime();
+  //   if (
+  //     typeof CACHE[this._mainCurrencyCode] !== 'undefined' &&
+  //     typeof CACHE[this._mainCurrencyCode][address] !== 'undefined' &&
+  //     now - CACHE[this._mainCurrencyCode][address].time < CACHE_VALID_TIME
+  //   ) {
+  //     CACHE[this._mainCurrencyCode][address].provider = 'trezor-cache';
+  //     return CACHE[this._mainCurrencyCode][address];
+  //   }
+  //
+  //   let link =
+  //     this._trezorServer + '/api/v2/address/' + address + '?details=txs';
+  //   let res = await AirDAOAxios.getWithoutBraking(link);
+  //
+  //   if (!res || !res.data) {
+  //     BlocksoftExternalSettings.setTrezorServerInvalid(
+  //       this._trezorServerCode,
+  //       this._trezorServer
+  //     );
+  //     this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
+  //       this._trezorServerCode,
+  //       this._settings.currencyCode + ' ETH.Scanner._get'
+  //     );
+  //     if (typeof this._trezorServer === 'undefined') {
+  //       AirDAOCryptoLog.err(
+  //         this._settings.currencyCode +
+  //           ' EthScannerProcessor._get empty trezorServer2'
+  //       );
+  //       throw new Error(
+  //         this._settings.currencyCode +
+  //           ' EthScannerProcessor._get empty trezorServer2'
+  //       );
+  //     }
+  //     link = this._trezorServer + '/api/v2/address/' + address + '?details=txs';
+  //     res = await AirDAOAxios.getWithoutBraking(link);
+  //     if (!res || !res.data) {
+  //       BlocksoftExternalSettings.setTrezorServerInvalid(
+  //         this._trezorServerCode,
+  //         this._trezorServer
+  //       );
+  //       return false;
+  //     }
+  //   }
+  //
+  //   if (typeof res.data.balance === 'undefined') {
+  //     throw new Error(
+  //       this._settings.currencyCode +
+  //         ' EthScannerProcessor._get nothing loaded for address ' +
+  //         link
+  //     );
+  //   }
+  //   const data = res.data;
+  //   data.totalTokens = 0;
+  //   data.formattedTokens = {};
+  //   // await  AirDAOCryptoLog.log('EthScannerProcessor._get ERC20 tokens ' + JSON.stringify(data.tokens))
+  //   if (typeof data.tokens !== 'undefined') {
+  //     let token;
+  //     for (token of data.tokens) {
+  //       data.formattedTokens[token.contract.toLowerCase()] = token;
+  //     }
+  //   }
+  //   if (typeof CACHE[this._mainCurrencyCode][address] !== 'undefined') {
+  //     if (CACHE[this._mainCurrencyCode][address].data.nonce > res.data.nonce) {
+  //       return false;
+  //     }
+  //   }
+  //   CACHE[this._mainCurrencyCode][address] = {
+  //     data,
+  //     provider: 'trezor',
+  //     time: now
+  //   };
+  //   return CACHE[this._mainCurrencyCode][address];
+  // }
 
   /**
    * @param {string} address
