@@ -1,43 +1,50 @@
-import { WalletInitSource, WalletMetadata } from '@appTypes';
 import { Wallet } from '@models/Wallet';
+import { WalletMetadata } from '@appTypes';
+import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
-import AirDAOStorage from '@lib/helpers/AirDAOKeysStorage';
 import { CashBackUtils } from './cashback';
 
-const _saveWallet = async (wallet: WalletMetadata) => {
+const _saveWallet = async (
+  wallet: Pick<
+    WalletMetadata,
+    'newMnemonic' | 'mnemonic' | 'name' | 'number' | 'pub'
+  >
+) => {
   let storedKey = '';
   try {
     const prepared = {
       mnemonic: wallet.newMnemonic ? wallet.newMnemonic : wallet.mnemonic,
-      hash: '?'
+      hash: '?',
+      number: wallet.number,
+      pub: wallet.pub,
+      name: wallet.name
     };
 
     prepared.mnemonic = MnemonicUtils.recheckMnemonic(prepared.mnemonic);
     prepared.hash = await Crypto.hashMnemonic(prepared.mnemonic);
 
-    const checkKey = await AirDAOStorage.isMnemonicAlreadySaved(prepared);
+    const checkKey = await AirDAOKeysStorage.isMnemonicAlreadySaved(prepared);
     if (checkKey) {
-      // @misha should we do something or ui is enough
+      // // TODO
     }
-    storedKey = await AirDAOStorage.saveMnemonic(prepared);
+    storedKey = await AirDAOKeysStorage.saveMnemonic(prepared);
   } catch (e) {}
   return storedKey;
 };
 
-const addressToToken = (address: string) => {
-  // any algo could be used to "hide" actual address
-  return Buffer.from(address).toString('base64').slice(3, 11);
+const _getWalletNumber = async () => {
+  const count = (await AirDAOKeysStorage.getWallets()).length || 0;
+  return count + 1;
 };
 
 const _getWalletName = async () => {
-  // TODO
-  return 'AirDAO Wallet';
+  const idx = await _getWalletNumber();
+  return 'AirDAO Wallet #' + idx;
 };
 
 const processWallet = async (
-  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number'>,
-  source = WalletInitSource.GENERATION
+  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number' | 'pub'>
 ) => {
   const hash = await _saveWallet(data); // done
   let tmpWalletName = data.name;
@@ -45,20 +52,19 @@ const processWallet = async (
   if (!tmpWalletName || tmpWalletName === '') {
     tmpWalletName = await _getWalletName();
   }
+  const number = await _getWalletNumber();
   const fullWallet: Wallet = new Wallet({
-    pub: '',
     hash,
     ...data,
-    name: tmpWalletName
+    pub: data.pub || '',
+    name: tmpWalletName,
+    number
   });
-  // console.log({ fullWallet });
   const { tmpPublicAndPrivateResult, cashbackToken } =
     await CashBackUtils.getByHash(hash);
-  // TODO save to local db
   fullWallet.cashback = cashbackToken;
   await Wallet.saveWallet(fullWallet);
   try {
-    // console.log(fullWallet);
   } catch (error) {
     throw error;
   }
@@ -66,4 +72,4 @@ const processWallet = async (
   return { address };
 };
 
-export const WalletUtils = { processWallet, addressToToken };
+export const WalletUtils = { processWallet };

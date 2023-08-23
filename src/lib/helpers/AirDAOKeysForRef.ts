@@ -3,8 +3,8 @@
  * @version 0.5
  */
 import AirDAOKeys from './AirDAOKeys';
-import { WalletUtils } from '@utils/wallet';
 import AirDAODispatcher from '../../../crypto/blockchains/AirDAODispatcher';
+import { AddressUtils } from '@utils/address';
 
 const CACHE: { [key: string]: any } = {};
 
@@ -40,8 +40,7 @@ class AirDAOKeysForRef {
         AirDAOKeys.setEthCached(data.mnemonic, result);
       }
     }
-    // noinspection JSPrimitiveTypeWrapperUsage
-    result.cashbackToken = WalletUtils.addressToToken(result.address);
+    result.cashbackToken = AddressUtils.addressToToken(result.address);
     CACHE[mnemonicCache] = result;
     return result;
   }

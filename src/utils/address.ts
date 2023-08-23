@@ -10,4 +10,9 @@ const watchChangesOfAddress = async (address: ExplorerAccount) => {
   API.watcherService.watchAddresses([address.address]);
 };
 
-export const AddressUtils = { watchChangesOfAddress };
+const addressToToken = (address: string) => {
+  // any algo could be used to "hide" actual address
+  return Buffer.from(address).toString('base64').slice(3, 11);
+};
+
+export const AddressUtils = { watchChangesOfAddress, addressToToken };
