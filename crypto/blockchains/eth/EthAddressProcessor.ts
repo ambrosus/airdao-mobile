@@ -12,9 +12,7 @@ export default class EthAddressProcessor extends EthBasic {
    * @returns {Promise<{privateKey: string, address: string, addedData: *}>}
    */
   async getAddress(privateKey: string | Buffer, data = {}) {
-    // noinspection JSCheckFunctionSignatures
     privateKey = '0x' + privateKey.toString('hex');
-    // noinspection JSUnresolvedVariable
     const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
     return { address: account.address, privateKey, addedData: false };
   }
@@ -30,11 +28,9 @@ export default class EthAddressProcessor extends EthBasic {
     s: string;
     signature: string;
   }> {
-    // noinspection JSUnresolvedVariable
     if (privateKey.substr(0, 2) !== '0x') {
       privateKey = '0x' + privateKey;
     }
-    // noinspection JSUnresolvedVariable
     const signData = await this._web3.eth.accounts.sign(msg, privateKey);
     return signData;
   }

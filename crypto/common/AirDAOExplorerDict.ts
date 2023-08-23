@@ -1,20 +1,20 @@
 const CurrenciesExplorer = {
-  BTC: [
-    {
-      currencyCode: 'BTC',
-      tokenBlockchain: 'BITCOIN',
-      explorerName: 'Blockchair',
-      explorerLink: 'https://blockchair.com/bitcoin/address/',
-      explorerTxLink: 'https://blockchair.com/bitcoin/transaction/'
-    },
-    {
-      currencyCode: 'BTC',
-      tokenBlockchain: 'BITCOIN',
-      explorerName: 'Blockchain.com',
-      explorerLink: 'https://www.blockchain.com/btc/address/',
-      explorerTxLink: 'https://www.blockchain.com/btc/tx/'
-    }
-  ],
+  // BTC: [
+  //   {
+  //     currencyCode: 'BTC',
+  //     tokenBlockchain: 'BITCOIN',
+  //     explorerName: 'Blockchair',
+  //     explorerLink: 'https://blockchair.com/bitcoin/address/',
+  //     explorerTxLink: 'https://blockchair.com/bitcoin/transaction/'
+  //   },
+  //   {
+  //     currencyCode: 'BTC',
+  //     tokenBlockchain: 'BITCOIN',
+  //     explorerName: 'Blockchain.com',
+  //     explorerLink: 'https://www.blockchain.com/btc/address/',
+  //     explorerTxLink: 'https://www.blockchain.com/btc/tx/'
+  //   }
+  // ],
   ETH: [
     {
       currencyCode: 'ETH',

@@ -2,7 +2,6 @@
  * @version 0.50
  */
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
-import BlocksoftUtils from '@crypto/common/AirDAOUtils';
 import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 
 const API_PATH = 'https://microscanners.trustee.deals/getAllNfts/';

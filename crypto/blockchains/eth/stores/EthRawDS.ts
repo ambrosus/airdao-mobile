@@ -22,7 +22,7 @@ class EthRawDS {
   _trezorServer = 'none';
   private _infuraProjectId: any; // TODO fix any
 
-  async getForAddress(data) {
+  async getForAddress(data: { address: any; currencyCode: any; }) {
     try {
       if (typeof data.currencyCode !== 'undefined') {
         this._currencyCode =
@@ -306,7 +306,14 @@ class EthRawDS {
     await Database.unsafeRawQuery(tableName, sql);
   }
 
-  async saveRaw(data) {
+  async saveRaw(data: {
+    address: any;
+    currencyCode: any;
+    transactionUnique: any;
+    transactionHash: any;
+    transactionRaw: any;
+    transactionLog: any;
+  }) {
     if (typeof data.currencyCode !== 'undefined') {
       this._currencyCode =
         data.currencyCode === 'ETH_ROPSTEN' ? 'ETH_ROPSTEN' : 'ETH';

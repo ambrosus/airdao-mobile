@@ -107,96 +107,96 @@ class AirDAOAxios {
     return tmp;
   }
 
-  async postWithHeaders(
-    link: string,
-    data: any,
-    addHeaders: { [key: string]: string },
-    errSend = true,
-    timeOut = false
-  ) {
-    let tmp = false;
-    try {
-      const headers: { [key: string]: string } = {
-        'upgrade-insecure-requests': '1',
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36'
-      };
-      const dataPrep = JSON.stringify(data);
-      headers['Content-Type'] = 'application/json';
-      headers['Accept'] = 'application/json';
-      for (const key in addHeaders) {
-        headers[key] = addHeaders[key];
-      }
+  // async postWithHeaders(
+  //   link: string,
+  //   data: any,
+  //   addHeaders: { [key: string]: string },
+  //   errSend = true,
+  //   timeOut = false
+  // ) {
+  //   let tmp = false;
+  //   try {
+  //     const headers: { [key: string]: string } = {
+  //       'upgrade-insecure-requests': '1',
+  //       'user-agent':
+  //         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36'
+  //     };
+  //     const dataPrep = JSON.stringify(data);
+  //     headers['Content-Type'] = 'application/json';
+  //     headers['Accept'] = 'application/json';
+  //     for (const key in addHeaders) {
+  //       headers[key] = addHeaders[key];
+  //     }
+  //
+  //     const tmpInner = await fetch(link, {
+  //       method: 'POST',
+  //       credentials: 'same-origin',
+  //       mode: 'same-origin',
+  //       redirect: 'follow',
+  //       headers,
+  //       body: dataPrep
+  //     });
+  //     if (
+  //       tmpInner.status !== 200 &&
+  //       tmpInner.status !== 201 &&
+  //       tmpInner.status !== 202
+  //     ) {
+  //       AirDAOCryptoLog.log(
+  //         'AirDAOAxios.post fetch result ' + JSON.stringify(tmpInner)
+  //       );
+  //     } else {
+  //       tmp = { data: await tmpInner.json() };
+  //     }
+  //   } catch (e) {
+  //     AirDAOCryptoLog.log(
+  //       'AirDAOAxios.postWithHeaders fetch result error ' + e.message
+  //     );
+  //   }
+  //   return tmp;
+  // }
 
-      const tmpInner = await fetch(link, {
-        method: 'POST',
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        redirect: 'follow',
-        headers,
-        body: dataPrep
-      });
-      if (
-        tmpInner.status !== 200 &&
-        tmpInner.status !== 201 &&
-        tmpInner.status !== 202
-      ) {
-        AirDAOCryptoLog.log(
-          'AirDAOAxios.post fetch result ' + JSON.stringify(tmpInner)
-        );
-      } else {
-        tmp = { data: await tmpInner.json() };
-      }
-    } catch (e) {
-      AirDAOCryptoLog.log(
-        'AirDAOAxios.postWithHeaders fetch result error ' + e.message
-      );
-    }
-    return tmp;
-  }
-
-  async getWithHeaders(
-    link: string,
-    addHeaders: { [key: string]: string },
-    errSend = true,
-    timeOut = false
-  ) {
-    let tmp = false;
-    try {
-      const headers: { [key: string]: string } = {
-        'upgrade-insecure-requests': '1',
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36'
-      };
-      headers['Content-Type'] = 'application/json';
-      headers['Accept'] = 'application/json';
-      for (const key in addHeaders) {
-        headers[key] = addHeaders[key];
-      }
-
-      const tmpInner = await fetch(link, {
-        method: 'GET',
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        redirect: 'follow',
-        headers
-      });
-      if (
-        tmpInner.status !== 200 &&
-        tmpInner.status !== 201 &&
-        tmpInner.status !== 202
-      ) {
-        AirDAOCryptoLog.log(
-          'AirDAOAxios.get fetch result ' + JSON.stringify(tmpInner)
-        );
-      } else {
-        tmp = { data: await tmpInner.json() };
-      }
-    } catch (e) {
-      // TODO ignore
-    }
-    return tmp;
-  }
+  // async getWithHeaders(
+  //   link: string,
+  //   addHeaders: { [key: string]: string },
+  //   errSend = true,
+  //   timeOut = false
+  // ) {
+  //   let tmp = false;
+  //   try {
+  //     const headers: { [key: string]: string } = {
+  //       'upgrade-insecure-requests': '1',
+  //       'user-agent':
+  //         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36'
+  //     };
+  //     headers['Content-Type'] = 'application/json';
+  //     headers['Accept'] = 'application/json';
+  //     for (const key in addHeaders) {
+  //       headers[key] = addHeaders[key];
+  //     }
+  //
+  //     const tmpInner = await fetch(link, {
+  //       method: 'GET',
+  //       credentials: 'same-origin',
+  //       mode: 'same-origin',
+  //       redirect: 'follow',
+  //       headers
+  //     });
+  //     if (
+  //       tmpInner.status !== 200 &&
+  //       tmpInner.status !== 201 &&
+  //       tmpInner.status !== 202
+  //     ) {
+  //       AirDAOCryptoLog.log(
+  //         'AirDAOAxios.get fetch result ' + JSON.stringify(tmpInner)
+  //       );
+  //     } else {
+  //       tmp = { data: await tmpInner.json() };
+  //     }
+  //   } catch (e) {
+  //     // TODO ignore
+  //   }
+  //   return tmp;
+  // }
 
   async post(link: string, data: any, errSend = true, timeOut = false) {
     let tmp = false;
@@ -299,7 +299,7 @@ class AirDAOAxios {
     return !(domain.indexOf('trustee') === -1);
   }
 
-  async _cookie(link, method) {
+  async _cookie(link: string, method: string) {
     const tmp = link.split('/');
     const domain = tmp[0] + '/' + tmp[1] + '/' + tmp[2];
     const domainShort = tmp[2];
@@ -330,7 +330,7 @@ class AirDAOAxios {
   }
 
   async _request(
-    link,
+    link: string,
     method = 'get',
     data = {},
     emptyIsBad = false,
@@ -441,7 +441,7 @@ class AirDAOAxios {
              */
 
       CACHE_TIMEOUT_ERRORS = 0;
-    } catch (e) {
+    } catch (e: any) {
       if (typeof CACHE_STARTED[cacheMD] !== 'undefined') {
         delete CACHE_STARTED[cacheMD];
       }
@@ -489,7 +489,7 @@ class AirDAOAxios {
         } else {
           if (e.message.indexOf('timeout') !== -1) {
             CACHE_TIMEOUT_ERRORS++;
-            let now = new Date().getTime();
+            const now = new Date().getTime();
             if (
               CACHE_TIMEOUT_ERRORS > 10 &&
               now - CACHE_TIMEOUT_ERROR_SHOWN > 60000

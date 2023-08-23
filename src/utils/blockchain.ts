@@ -95,7 +95,8 @@ const CurrenciesForTests = {
 };
 
 if (typeof RNFastCrypto === 'undefined') {
-  delete Currencies['XMR'];
+  // @ts-ignore
+  delete Currencies.XMR;
 }
 
 /**
@@ -109,97 +110,101 @@ if (typeof RNFastCrypto === 'undefined') {
  * @param {string} currencyObject.currencySymbol 'OMG'
  * @param {string} currencyObject.currencyCode 'OMG'
  */
-function addAndUnifyCustomCurrency(currencyObject) {
-  const tmp = {
-    currencyName: currencyObject.currencyName,
-    currencyCode: 'CUSTOM_' + currencyObject.currencyCode,
-    currencySymbol: currencyObject.currencySymbol,
-    ratesCurrencyCode: currencyObject.currencyCode,
-    decimals: currencyObject.tokenDecimals
-  };
-  tmp.currencyType = 'custom';
-  if (currencyObject.tokenType === 'BNB_SMART_20') {
-    tmp.currencyCode = 'CUSTOM_BNB_SMART_20_' + currencyObject.currencyCode;
-    if (tmp.ratesCurrencyCode.substr(0, 1) === 'B') {
-      const subRate = tmp.ratesCurrencyCode.substr(1);
-      if (typeof Currencies[subRate] !== 'undefined') {
-        tmp.ratesCurrencyCode = subRate;
-      }
-    }
-    tmp.extendsProcessor = 'BNB_SMART_CAKE';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'BNB';
-    tmp.currencyExplorerLink =
-      'https://bscscan.com/token/' + currencyObject.tokenAddress + '?a=';
-  } else if (currencyObject.tokenType === 'MATIC_ERC_20') {
-    tmp.currencyCode = 'CUSTOM_MATIC_ERC_20_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'MATIC_USDT';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'MATIC';
-    tmp.currencyExplorerLink =
-      'https://polygonscan.com/token/' + currencyObject.tokenAddress + '?a=';
-  } else if (currencyObject.tokenType === 'FTM_ERC_20') {
-    tmp.currencyCode = 'CUSTOM_FTM_ERC_20_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'FTM_USDC';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'FTM';
-    tmp.currencyExplorerLink =
-      'https://ftmscan.com/token/' + currencyObject.tokenAddress + '?a=';
-  } else if (currencyObject.tokenType === 'VLX_ERC_20') {
-    tmp.currencyCode = 'CUSTOM_VLX_ERC_20_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'VLX_USDT';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'VLX';
-    tmp.currencyExplorerLink =
-      'https://evmexplorer.velas.com/tokens/' + currencyObject.tokenAddress;
-  } else if (currencyObject.tokenType === 'ONE_ERC_20') {
-    tmp.currencyCode = 'CUSTOM_ONE_ERC_20_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'ONE_USDC';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'ONE';
-    tmp.currencyExplorerLink =
-      'https://explorer.harmony.one/address/' + currencyObject.tokenAddress;
-  } else if (currencyObject.tokenType === 'SOL') {
-    tmp.currencyCode = 'CUSTOM_SOL_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'SOL_RAY';
-    tmp.addressUiChecker = 'SOL';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'SOLANA';
-  } else if (currencyObject.tokenType === 'ETH_ERC_20') {
-    tmp.extendsProcessor = 'ETH_TRUE_USD';
-    tmp.addressUiChecker = 'ETH';
-    tmp.tokenAddress = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'ETHEREUM';
-    tmp.currencyExplorerLink =
-      'https://etherscan.io/token/' + currencyObject.tokenAddress + '?a=';
-  } else if (currencyObject.tokenType === 'TRX') {
-    tmp.currencyCode = 'CUSTOM_TRX_' + currencyObject.currencyCode;
-    tmp.extendsProcessor = 'TRX_USDT';
-    tmp.addressUiChecker = 'TRX';
-    tmp.currencyIcon = 'TRX';
-    tmp.tokenName = currencyObject.tokenAddress;
-    tmp.tokenBlockchain = 'TRON';
-    tmp.currencyExplorerLink = 'https://tronscan.org/#/address/';
-    tmp.currencyExplorerTxLink = 'https://tronscan.org/#/transaction/';
-    if (tmp.tokenName.substr(0, 1) !== 'T') {
-      this.skipParentBalanceCheck = true;
-    }
-  } else {
-    return false;
-  }
 
-  Currencies[tmp.currencyCode] = tmp;
-  return tmp;
-}
+// function addAndUnifyCustomCurrency(currencyObject) {
+//   const tmp = {
+//     currencyName: currencyObject.currencyName,
+//     currencyCode: 'CUSTOM_' + currencyObject.currencyCode,
+//     currencySymbol: currencyObject.currencySymbol,
+//     ratesCurrencyCode: currencyObject.currencyCode,
+//     decimals: currencyObject.tokenDecimals
+//   };
+//   tmp.currencyType = 'custom';
+//   if (currencyObject.tokenType === 'BNB_SMART_20') {
+//     tmp.currencyCode = 'CUSTOM_BNB_SMART_20_' + currencyObject.currencyCode;
+//     if (tmp.ratesCurrencyCode.substr(0, 1) === 'B') {
+//       const subRate = tmp.ratesCurrencyCode.substr(1);
+//       if (typeof Currencies[subRate] !== 'undefined') {
+//         tmp.ratesCurrencyCode = subRate;
+//       }
+//     }
+//     tmp.extendsProcessor = 'BNB_SMART_CAKE';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'BNB';
+//     tmp.currencyExplorerLink =
+//       'https://bscscan.com/token/' + currencyObject.tokenAddress + '?a=';
+//   } else if (currencyObject.tokenType === 'MATIC_ERC_20') {
+//     tmp.currencyCode = 'CUSTOM_MATIC_ERC_20_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'MATIC_USDT';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'MATIC';
+//     tmp.currencyExplorerLink =
+//       'https://polygonscan.com/token/' + currencyObject.tokenAddress + '?a=';
+//   } else if (currencyObject.tokenType === 'FTM_ERC_20') {
+//     tmp.currencyCode = 'CUSTOM_FTM_ERC_20_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'FTM_USDC';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'FTM';
+//     tmp.currencyExplorerLink =
+//       'https://ftmscan.com/token/' + currencyObject.tokenAddress + '?a=';
+//   } else if (currencyObject.tokenType === 'VLX_ERC_20') {
+//     tmp.currencyCode = 'CUSTOM_VLX_ERC_20_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'VLX_USDT';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'VLX';
+//     tmp.currencyExplorerLink =
+//       'https://evmexplorer.velas.com/tokens/' + currencyObject.tokenAddress;
+//   } else if (currencyObject.tokenType === 'ONE_ERC_20') {
+//     tmp.currencyCode = 'CUSTOM_ONE_ERC_20_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'ONE_USDC';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'ONE';
+//     tmp.currencyExplorerLink =
+//       'https://explorer.harmony.one/address/' + currencyObject.tokenAddress;
+//   } else if (currencyObject.tokenType === 'SOL') {
+//     tmp.currencyCode = 'CUSTOM_SOL_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'SOL_RAY';
+//     tmp.addressUiChecker = 'SOL';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'SOLANA';
+//   } else if (currencyObject.tokenType === 'ETH_ERC_20') {
+//     tmp.extendsProcessor = 'ETH_TRUE_USD';
+//     tmp.addressUiChecker = 'ETH';
+//     tmp.tokenAddress = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'ETHEREUM';
+//     tmp.currencyExplorerLink =
+//       'https://etherscan.io/token/' + currencyObject.tokenAddress + '?a=';
+//   } else if (currencyObject.tokenType === 'TRX') {
+//     tmp.currencyCode = 'CUSTOM_TRX_' + currencyObject.currencyCode;
+//     tmp.extendsProcessor = 'TRX_USDT';
+//     tmp.addressUiChecker = 'TRX';
+//     tmp.currencyIcon = 'TRX';
+//     tmp.tokenName = currencyObject.tokenAddress;
+//     tmp.tokenBlockchain = 'TRON';
+//     tmp.currencyExplorerLink = 'https://tronscan.org/#/address/';
+//     tmp.currencyExplorerTxLink = 'https://tronscan.org/#/transaction/';
+//     if (tmp.tokenName.substr(0, 1) !== 'T') {
+//       this.skipParentBalanceCheck = true;
+//     }
+//   } else {
+//     return false;
+//   }
+//
+//   Currencies[tmp.currencyCode] = tmp;
+//   return tmp;
+// }
 
 const ALL_SETTINGS = {};
 
-function getCurrencyAllSettings(currencyCodeOrObject, source = '') {
+function getCurrencyAllSettings(
+  currencyCodeOrObject: { currencyCode: any },
+  source = ''
+) {
   let currencyCode = currencyCodeOrObject;
   if (typeof currencyCode === 'undefined' || !currencyCode) {
     return false;
@@ -259,6 +264,6 @@ export const BlockchainUtils = {
   Codes,
   Currencies,
   CurrenciesForTests,
-  getCurrencyAllSettings,
-  addAndUnifyCustomCurrency
+  getCurrencyAllSettings
+  // addAndUnifyCustomCurrency
 };

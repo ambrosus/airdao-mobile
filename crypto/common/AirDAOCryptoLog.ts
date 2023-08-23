@@ -13,28 +13,37 @@
 
 // const DEBUG = config.debug.cryptoLogs // set true to see usual logs in console
 
-const MAX_MESSAGE = 2000;
-const FULL_MAX_MESSAGE = 20000;
+// const MAX_MESSAGE = 2000;
+// const FULL_MAX_MESSAGE = 20000;
 
-const LOGS_TXT = '';
-const FULL_LOGS_TXT = '';
+// const LOGS_TXT = '';
+// const FULL_LOGS_TXT = '';
 
 class AirDAOCryptoLog {
+  private _txtOrObj: string | undefined;
+  private _txtOrObj2: boolean | undefined;
+  private _txtOrObj3: boolean | undefined;
+  private _errorObjectOrText: string | undefined;
+  private _errorObject2: string | undefined;
+  private _errorTitle: string | undefined;
   constructor() {
     // this.FS = new FileSystem({ fileEncoding: 'utf8', fileName: 'CryptoLog', fileExtension: 'txt' })
     // this.DATA = {}
     // this.DATA.LOG_VERSION = false
   }
 
-  async _reinitTgMessage(testerMode, obj, msg) {
-    // for (const key in obj) {
-    //     this.DATA[key] = obj[key]
-    // }
-    // // noinspection JSIgnoredPromiseFromCall
-    // await this.FS.checkOverflow()
-  }
+  // async _reinitTgMessage(testerMode, obj, msg) {
+  //   // for (const key in obj) {
+  //   //     this.DATA[key] = obj[key]
+  //   // }
+  //   // // noinspection JSIgnoredPromiseFromCall
+  //   // await this.FS.checkOverflow()
+  // }
 
-  async log(txtOrObj, txtOrObj2 = false, txtOrObj3 = false) {
+  async log(txtOrObj: string, txtOrObj2 = false, txtOrObj3 = false) {
+    this._txtOrObj = txtOrObj;
+    this._txtOrObj2 = txtOrObj2;
+    this._txtOrObj3 = txtOrObj3;
     return true;
     // if (settingsActions.getSettingStatic('loggingCode') === 'none') {
     //     return
@@ -92,7 +101,14 @@ class AirDAOCryptoLog {
     // return true
   }
 
-  async err(errorObjectOrText, errorObject2 = '', errorTitle = 'ERROR') {
+  async err(
+    errorObjectOrText: string,
+    errorObject2 = '',
+    errorTitle = 'ERROR'
+  ) {
+    this._errorObjectOrText = errorObjectOrText;
+    this._errorObject2 = errorObject2;
+    this._errorTitle = errorTitle;
     // const now = new Date()
     // const date = now.toISOString().replace(/T/, ' ').replace(/\..+/, '')
     // let line = ''

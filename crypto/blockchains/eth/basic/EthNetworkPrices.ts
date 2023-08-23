@@ -25,7 +25,13 @@ let CACHE_PROXY_DATA = {
 };
 let CACHE_PROXY_TIME = 0;
 class EthNetworkPrices {
-  async getWithProxy(mainCurrencyCode, isTestnet, address, logData = {}) {
+  private _mainCurrencyCode: string | undefined;
+  async getWithProxy(
+    mainCurrencyCode: string,
+    isTestnet: boolean,
+    address: string,
+    logData = {}
+  ) {
     if (mainCurrencyCode !== 'ETH' || isTestnet) {
       return false;
     }
@@ -41,6 +47,7 @@ class EthNetworkPrices {
     ) {
       AirDAOCryptoLog.log(
         mainCurrencyCode + ' EthNetworkPricesProvider.getWithProxy from cache',
+        // @ts-ignore
         logData
       );
       return CACHE_PROXY_DATA.result;
@@ -48,6 +55,7 @@ class EthNetworkPrices {
 
     AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider.getWithProxy started',
+      // @ts-ignore
       logData
     );
     let checkResult = false;
@@ -64,11 +72,13 @@ class EthNetworkPrices {
         //   },
         //   20000
         // );
-      } catch (e) {}
+      } catch (e) {
+        console.log({ e });
+      }
       index++;
     } while (index < 3 && !checkResult);
 
-    if (checkResult !== false) {
+    if (checkResult) {
       if (typeof checkResult.data !== 'undefined') {
         await AirDAOCryptoLog.log(
           mainCurrencyCode +
@@ -91,9 +101,10 @@ class EthNetworkPrices {
         );
       }
     } else {
+      // TODO
     }
 
-    if (checkResult === false) {
+    if (!checkResult) {
       return {
         gasPrice: await this.getOnlyFees(
           mainCurrencyCode,
@@ -107,6 +118,7 @@ class EthNetworkPrices {
     const result = checkResult.data;
     if (typeof result.gasPrice !== 'undefined') {
       for (const key in result.gasPrice) {
+        // @ts-ignore
         result.gasPrice[key] = BlocksoftUtils.div(
           BlocksoftUtils.toWei(result.gasPrice[key], 'gwei'),
           MAGIC_TX_DIVIDER
@@ -177,7 +189,16 @@ class EthNetworkPrices {
     return result;
   }
 
-  async getOnlyFees(mainCurrencyCode, isTestnet, address, logData = {}) {
+  async getOnlyFees(
+    mainCurrencyCode: string,
+    isTestnet: boolean,
+    address: string,
+    logData = {
+      resultFeeSource: '',
+      resultFee: '',
+      resultFeeCacheTime: CACHE_FEES_ETH_TIME
+    }
+  ) {
     logData.resultFeeSource = 'fromCache';
     const now = new Date().getTime();
     if (CACHE_FEES_ETH && now - CACHE_FEES_ETH_TIME < CACHE_VALID_TIME) {
@@ -209,6 +230,7 @@ class EthNetworkPrices {
         AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getOnlyFees loaded new fee',
+          // @ts-ignore
           CACHE_PREV_DATA
         );
       } else {
@@ -217,6 +239,7 @@ class EthNetworkPrices {
         AirDAOCryptoLog.log(
           mainCurrencyCode +
             ' EthNetworkPricesProvider.getOnlyFees loaded prev fee as no fastest',
+          // @ts-ignore
           CACHE_PREV_DATA
         );
       }
@@ -224,6 +247,7 @@ class EthNetworkPrices {
       AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees loaded prev fee as error',
+        // @ts-ignore
         CACHE_PREV_DATA
       );
       // do nothing
@@ -231,7 +255,7 @@ class EthNetworkPrices {
 
     try {
       await this._parseLoaded(mainCurrencyCode, CACHE_PREV_DATA, link);
-    } catch (e) {
+    } catch (e: any) {
       AirDAOCryptoLog.log(
         mainCurrencyCode +
           ' EthNetworkPricesProvider.getOnlyFees _parseLoaded error ' +
@@ -246,8 +270,11 @@ class EthNetworkPrices {
 
   _format() {
     return {
+      // @ts-ignore
       speed_blocks_2: CACHE_FEES_ETH[2],
+      // @ts-ignore
       speed_blocks_6: CACHE_FEES_ETH[6],
+      // @ts-ignore
       speed_blocks_12: CACHE_FEES_ETH[12]
     };
   }
@@ -258,7 +285,10 @@ class EthNetworkPrices {
    * @param {int} json.fastest
    * @private
    */
-  async _parseLoaded(mainCurrencyCode, json) {
+  async _parseLoaded(
+    mainCurrencyCode: string,
+    json: { fastest: any; safeLow: any; average: any }
+  ) {
     CACHE_FEES_ETH = {};
 
     const externalSettings = await BlocksoftExternalSettings.getAll(
@@ -297,7 +327,7 @@ class EthNetworkPrices {
         BlocksoftUtils.toWei(CACHE_FEES_ETH[2], 'gwei'),
         MAGIC_TX_DIVIDER
       ); // in gwei to wei + magic
-    } catch (e) {
+    } catch (e: any) {
       e.message += ' in EthPrice Magic divider';
       throw e;
     }
@@ -306,7 +336,13 @@ class EthNetworkPrices {
   }
 }
 
-function addMultiply(mainCurrencyCode, blocks, fee, externalSettings) {
+function addMultiply(
+  mainCurrencyCode: string,
+  blocks: string | number,
+  fee: number,
+  // @ts-ignore
+  externalSettings
+) {
   if (
     typeof externalSettings['ETH_CURRENT_PRICE_' + blocks] !== 'undefined' &&
     externalSettings['ETH_CURRENT_PRICE_' + blocks] > 0

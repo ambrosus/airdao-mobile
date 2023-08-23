@@ -86,7 +86,7 @@ class EthTmpDS {
 
     const amountBN = {};
     let queryLength = 0;
-    let queryTxs = [];
+    const queryTxs = [];
     for (const txHash in forBalances) {
       const tmps = (await Database.unsafeRawQuery(
         DatabaseTable.Transactions,
@@ -164,38 +164,43 @@ class EthTmpDS {
         }
       }
     }
-    CACHE_TMP[address]['maxValue'] = maxValue;
-    CACHE_TMP[address]['maxScanned'] = maxScanned;
-    CACHE_TMP[address]['maxSuccess'] =
+    CACHE_TMP[address].maxValue = maxValue;
+    CACHE_TMP[address].maxScanned = maxScanned;
+    CACHE_TMP[address].maxSuccess =
       maxSuccess > maxScanned ? maxSuccess : maxScanned;
-    CACHE_TMP[address]['amountBlocked'] = {};
-    CACHE_TMP[address]['queryLength'] = queryLength;
-    CACHE_TMP[address]['queryTxs'] = queryTxs;
+    CACHE_TMP[address].amountBlocked = {};
+    CACHE_TMP[address].queryLength = queryLength;
+    CACHE_TMP[address].queryTxs = queryTxs;
     for (const key in amountBN) {
-      CACHE_TMP[address]['amountBlocked'][key] = amountBN[key].toString();
+      // @ts-ignore
+      CACHE_TMP[address].amountBlocked[key] = amountBN[key].toString();
     }
     return CACHE_TMP[address];
   }
 
-  async getMaxNonce(mainCurrencyCode, scanAddress) {
+  async getMaxNonce(mainCurrencyCode: string, scanAddress: string) {
     if (mainCurrencyCode !== 'ETH') {
       return false;
     }
     const address = scanAddress.toLowerCase();
     // if (typeof CACHE_TMP[address] === 'undefined' || typeof CACHE_TMP[address]['maxValue'] === 'undefined') {
     await this.getCache(mainCurrencyCode, address);
-    //}
+    // }
     return {
-      maxValue: CACHE_TMP[address]['maxValue'],
-      maxScanned: CACHE_TMP[address]['maxScanned'],
-      maxSuccess: CACHE_TMP[address]['maxSuccess'],
-      amountBlocked: CACHE_TMP[address]['amountBlocked'],
-      queryLength: CACHE_TMP[address]['queryLength'],
-      queryTxs: CACHE_TMP[address]['queryTxs']
+      maxValue: CACHE_TMP[address].maxValue,
+      maxScanned: CACHE_TMP[address].maxScanned,
+      maxSuccess: CACHE_TMP[address].maxSuccess,
+      amountBlocked: CACHE_TMP[address].amountBlocked,
+      queryLength: CACHE_TMP[address].queryLength,
+      queryTxs: CACHE_TMP[address].queryTxs
     };
   }
 
-  async removeNonce(mainCurrencyCode, scanAddress, key) {
+  async removeNonce(
+    mainCurrencyCode: string,
+    scanAddress: string,
+    key: string
+  ) {
     if (mainCurrencyCode !== 'ETH') {
       return false;
     }
@@ -208,7 +213,12 @@ class EthTmpDS {
     await this.getCache(mainCurrencyCode, address);
   }
 
-  async saveNonce(mainCurrencyCode, scanAddress, key, value) {
+  async saveNonce(
+    mainCurrencyCode: string | undefined,
+    scanAddress: string,
+    key: string,
+    value: number
+  ) {
     if (mainCurrencyCode !== 'ETH') {
       return false;
     }
@@ -222,6 +232,7 @@ class EthTmpDS {
       `SELECT tmp_val AS tmpVal FROM ${tableName} ${where}`
     )) as TransactionScannersTmpDBModel[];
     if (res && res && res.length > 0) {
+      // @ts-ignore
       if (res[0].tmpVal * 1 >= value) {
         return true;
       }

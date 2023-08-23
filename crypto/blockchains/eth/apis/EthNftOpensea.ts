@@ -14,7 +14,11 @@ const API_TEST_PATH = 'https://testnets-api.opensea.io/api/v1/';
  * @param data.address
  * @param data.tokenBlockchainCode
  */
-export default async function (data) {
+export default async function (data: {
+  tokenBlockchainCode: string;
+  address: string;
+  tokenBlockchain: any;
+}) {
   let link;
   if (data.tokenBlockchainCode === 'ETH_RINKEBY') {
     link = API_TEST_PATH;
@@ -42,7 +46,7 @@ export default async function (data) {
    * @var tmp.asset_contract.schema_name ERC721
    */
   const formatted = [];
-  const collections = [];
+  const collections: never[] = [];
   let usdTotal = 0;
 
   if (
@@ -88,7 +92,7 @@ export default async function (data) {
           one.subTitle =
             one.desc.length > 20 ? one.desc.substring(0, 20) + '...' : one.desc;
         }
-      } catch (e) {
+      } catch (e: any) {
         AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensea name error ' + e.message
         );
@@ -107,7 +111,7 @@ export default async function (data) {
         ) {
           one.contractSchema = tmp.asset_contract.schema_name;
         }
-      } catch (e) {
+      } catch (e: any) {
         AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensea contract error ' + e.message
         );
@@ -123,9 +127,10 @@ export default async function (data) {
           one.usdValue = tmp.last_sale.payment_token.usd_price;
           usdTotal = usdTotal + tmp.last_sale.payment_token.usd_price * 1;
         }
-      } catch (e) {
+      } catch (e: any) {
         AirDAOCryptoLog.log(
           'EthTokenProcessorNft EthNftOpensealast_sale error ' + e.message,
+          // @ts-ignore
           JSON.stringify(tmp)
         );
       }
@@ -158,7 +163,7 @@ export default async function (data) {
     }
   }
 
-  const formattedCollections = [];
+  const formattedCollections: never[] = [];
   if (collections) {
     for (const key in collections) {
       formattedCollections.push(collections[key]);

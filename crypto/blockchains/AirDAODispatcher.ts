@@ -5,71 +5,50 @@
 
 // import BchAddressProcessor from '@crypto/blockchains/bch/BchAddressProcessor';
 // import BchScannerProcessor from '@crypto/blockchains/bch/BchScannerProcessor';
-
 // import BsvScannerProcessor from '@crypto/blockchains/bsv/BsvScannerProcessor';
-
 // import BtcAddressProcessor from '@crypto/blockchains/btc/address/BtcAddressProcessor';
 // import BtcScannerProcessor from '@crypto/blockchains/btc/BtcScannerProcessor';
-
 // import BtcSegwitCompatibleAddressProcessor from '@crypto/blockchains/btc/address/BtcSegwitCompatibleAddressProcessor';
 // import BtcSegwitAddressProcessor from '@crypto/blockchains/btc/address/BtcSegwitAddressProcessor';
-
 // import BtcTestScannerProcessor from '@crypto/blockchains/btc_test/BtcTestScannerProcessor';
-
 // import BtgScannerProcessor from '@crypto/blockchains/btg/BtgScannerProcessor';
-
 // import DogeScannerProcessor from '@crypto/blockchains/doge/DogeScannerProcessor';
-
 import EthAddressProcessor from '@crypto/blockchains/eth/EthAddressProcessor';
 import EthScannerProcessor from '@crypto/blockchains/eth/EthScannerProcessor';
 import EthScannerProcessorErc20 from '@crypto/blockchains/eth/EthScannerProcessorErc20';
 import { BlockchainUtils } from '@utils/blockchain';
 // import EthScannerProcessorSoul from '@crypto/blockchains/eth/forks/EthScannerProcessorSoul';
-import EthTokenProcessorErc20 from '@crypto/blockchains/eth/EthTokenProcessorErc20';
-
+// import EthTokenProcessorErc20 from '@crypto/blockchains/eth/EthTokenProcessorErc20';
 // import LtcScannerProcessor from '@crypto/blockchains/ltc/LtcScannerProcessor';
-
 // import TrxAddressProcessor from '@crypto/blockchains/trx/TrxAddressProcessor';
 // import TrxScannerProcessor from '@crypto/blockchains/trx/TrxScannerProcessor';
 // import TrxTokenProcessor from '@crypto/blockchains/trx/TrxTokenProcessor';
-
 // import UsdtScannerProcessor from '@crypto/blockchains/usdt/UsdtScannerProcessor';
-
 // import XrpAddressProcessor from '@crypto/blockchains/xrp/XrpAddressProcessor';
 // import XrpScannerProcessor from '@crypto/blockchains/xrp/XrpScannerProcessor';
-
 // import XlmAddressProcessor from '@crypto/blockchains/xlm/XlmAddressProcessor';
 // import XlmScannerProcessor from '@crypto/blockchains/xlm/XlmScannerProcessor';
-
 // import XvgScannerProcessor from '@crypto/blockchains/xvg/XvgScannerProcessor';
-
 // import XmrAddressProcessor from '@crypto/blockchains/xmr/XmrAddressProcessor';
 // import XmrScannerProcessor from '@crypto/blockchains/xmr/XmrScannerProcessor';
 // import XmrSecretsProcessor from '@crypto/blockchains/xmr/XmrSecretsProcessor';
 // import FioAddressProcessor from '@crypto/blockchains/fio/FioAddressProcessor';
 // import FioScannerProcessor from '@crypto/blockchains/fio/FioScannerProcessor';
-
 // import BnbAddressProcessor from '@crypto/blockchains/bnb/BnbAddressProcessor';
 // import BnbScannerProcessor from '@crypto/blockchains/bnb/BnbScannerProcessor';
 // import { BlockchainUtils } from '@utils/blockchain';
-
 // import VetScannerProcessor from '@crypto/blockchains/vet/VetScannerProcessor';
-
 // import SolAddressProcessor from '@crypto/blockchains/sol/SolAddressProcessor';
 // import SolScannerProcessor from '@crypto/blockchains/sol/SolScannerProcessor';
-
 // import WavesAddressProcessor from '@crypto/blockchains/waves/WavesAddressProcessor';
 // import WavesScannerProcessor from '@crypto/blockchains/waves/WavesScannerProcessor';
-
 // import SolScannerProcessorSpl from '@crypto/blockchains/sol/SolScannerProcessorSpl';
 // import SolTokenProcessor from '@crypto/blockchains/sol/SolTokenProcessor';
-import EthTokenProcessorNft from '@crypto/blockchains/eth/EthTokenProcessorNft';
+// import EthTokenProcessorNft from '@crypto/blockchains/eth/EthTokenProcessorNft';
 // import AshAddressProcessor from '@crypto/blockchains/ash/AshAddressProcessor';
-
 // import MetisScannerProcessor from '@crypto/blockchains/metis/MetisScannerProcessor';
 // import OneScannerProcessor from '@crypto/blockchains/one/OneScannerProcessor';
 // import OneScannerProcessorErc20 from '@crypto/blockchains/one/OneScannerProcessorErc20';
-
 // import WavesScannerProcessorErc20 from '@crypto/blockchains/waves/WavesScannerProcessorErc20';
 
 class AirDAODispatcher {
@@ -218,101 +197,101 @@ class AirDAODispatcher {
   }
 
   // TODO enum tokenType
-  getTokenProcessor(tokenType: string): EthTokenProcessorErc20 {
-    switch (tokenType) {
-      case 'ETH_ERC_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'ETHEREUM'
-        });
-      case 'BNB_SMART_20':
-        return new EthTokenProcessorErc20({
-          network: 'mainnet',
-          tokenBlockchain: 'BNB'
-        });
-      // case 'MATIC_ERC_20':
-      //   return new EthTokenProcessorErc20({
-      //     network: 'mainnet',
-      //     tokenBlockchain: 'MATIC'
-      //   });
-      // case 'FTM_ERC_20':
-      //   return new EthTokenProcessorErc20({
-      //     network: 'mainnet',
-      //     tokenBlockchain: 'FTM'
-      //   });
-      // case 'VLX_ERC_20':
-      //   return new EthTokenProcessorErc20({
-      //     network: 'mainnet',
-      //     tokenBlockchain: 'VLX'
-      //   });
-      // case 'ONE_ERC_20':
-      //   return new EthTokenProcessorErc20({
-      //     network: 'mainnet',
-      //     tokenBlockchain: 'ONE'
-      //   });
-      // case 'METIS_ERC_20':
-      //   return new EthTokenProcessorErc20({
-      //     network: 'mainnet',
-      //     tokenBlockchain: 'METIS'
-      //   });
-      // case 'TRX':
-      //   return new TrxTokenProcessor();
-      // case 'SOL':
-      //   return new SolTokenProcessor();
-      default:
-        throw new Error('Unknown tokenProcessor ' + tokenType);
-    }
-  }
+  // getTokenProcessor(tokenType: string): EthTokenProcessorErc20 {
+  //   switch (tokenType) {
+  //     case 'ETH_ERC_20':
+  //       return new EthTokenProcessorErc20({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'ETHEREUM'
+  //       });
+  //     case 'BNB_SMART_20':
+  //       return new EthTokenProcessorErc20({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'BNB'
+  //       });
+  //     // case 'MATIC_ERC_20':
+  //     //   return new EthTokenProcessorErc20({
+  //     //     network: 'mainnet',
+  //     //     tokenBlockchain: 'MATIC'
+  //     //   });
+  //     // case 'FTM_ERC_20':
+  //     //   return new EthTokenProcessorErc20({
+  //     //     network: 'mainnet',
+  //     //     tokenBlockchain: 'FTM'
+  //     //   });
+  //     // case 'VLX_ERC_20':
+  //     //   return new EthTokenProcessorErc20({
+  //     //     network: 'mainnet',
+  //     //     tokenBlockchain: 'VLX'
+  //     //   });
+  //     // case 'ONE_ERC_20':
+  //     //   return new EthTokenProcessorErc20({
+  //     //     network: 'mainnet',
+  //     //     tokenBlockchain: 'ONE'
+  //     //   });
+  //     // case 'METIS_ERC_20':
+  //     //   return new EthTokenProcessorErc20({
+  //     //     network: 'mainnet',
+  //     //     tokenBlockchain: 'METIS'
+  //     //   });
+  //     // case 'TRX':
+  //     //   return new TrxTokenProcessor();
+  //     // case 'SOL':
+  //     //   return new SolTokenProcessor();
+  //     default:
+  //       throw new Error('Unknown tokenProcessor ' + tokenType);
+  //   }
+  // }
 
   // TODO enum tokenBlockchainCode
-  getTokenNftsProcessor(tokenBlockchainCode: string) {
-    switch (tokenBlockchainCode) {
-      case 'ETH':
-      case 'NFT_ETH':
-        return new EthTokenProcessorNft({
-          network: 'mainnet',
-          tokenBlockchain: 'ETHEREUM',
-          tokenBlockchainCode: 'ETH'
-        });
-      case 'ETH_RINKEBY':
-      case 'NFT_RINKEBY':
-        return new EthTokenProcessorNft({
-          network: 'rinkeby',
-          tokenBlockchain: 'RINKEBY',
-          tokenBlockchainCode: 'ETH_RINKEBY'
-        });
-      case 'MATIC':
-      case 'NFT_MATIC':
-        return new EthTokenProcessorNft({
-          network: 'mainnet',
-          tokenBlockchain: 'MATIC',
-          tokenBlockchainCode: 'MATIC'
-        });
-      case 'BNB':
-      case 'NFT_BNB':
-        return new EthTokenProcessorNft({
-          network: 'mainnet',
-          tokenBlockchain: 'BNB',
-          tokenBlockchainCode: 'BNB'
-        });
-      case 'ONE':
-      case 'NFT_ONE':
-        return new EthTokenProcessorNft({
-          network: 'mainnet',
-          tokenBlockchain: 'ONE',
-          tokenBlockchainCode: 'ONE'
-        });
-      case 'ETH_ROPSTEN':
-      case 'NFT_ROPSTEN':
-        return new EthTokenProcessorNft({
-          network: 'ropsten',
-          tokenBlockchain: 'ROPSTEN',
-          tokenBlockchainCode: 'ETH_ROPSTEN'
-        });
-      default:
-        throw new Error('Unknown NFT tokenProcessor ' + tokenBlockchainCode);
-    }
-  }
+  // getTokenNftsProcessor(tokenBlockchainCode: string) {
+  //   switch (tokenBlockchainCode) {
+  //     case 'ETH':
+  //     case 'NFT_ETH':
+  //       return new EthTokenProcessorNft({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'ETHEREUM',
+  //         tokenBlockchainCode: 'ETH'
+  //       });
+  //     case 'ETH_RINKEBY':
+  //     case 'NFT_RINKEBY':
+  //       return new EthTokenProcessorNft({
+  //         network: 'rinkeby',
+  //         tokenBlockchain: 'RINKEBY',
+  //         tokenBlockchainCode: 'ETH_RINKEBY'
+  //       });
+  //     case 'MATIC':
+  //     case 'NFT_MATIC':
+  //       return new EthTokenProcessorNft({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'MATIC',
+  //         tokenBlockchainCode: 'MATIC'
+  //       });
+  //     case 'BNB':
+  //     case 'NFT_BNB':
+  //       return new EthTokenProcessorNft({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'BNB',
+  //         tokenBlockchainCode: 'BNB'
+  //       });
+  //     case 'ONE':
+  //     case 'NFT_ONE':
+  //       return new EthTokenProcessorNft({
+  //         network: 'mainnet',
+  //         tokenBlockchain: 'ONE',
+  //         tokenBlockchainCode: 'ONE'
+  //       });
+  //     case 'ETH_ROPSTEN':
+  //     case 'NFT_ROPSTEN':
+  //       return new EthTokenProcessorNft({
+  //         network: 'ropsten',
+  //         tokenBlockchain: 'ROPSTEN',
+  //         tokenBlockchainCode: 'ETH_ROPSTEN'
+  //       });
+  //     default:
+  //       throw new Error('Unknown NFT tokenProcessor ' + tokenBlockchainCode);
+  //   }
+  // }
 
   // getSecretsProcessor(currencyCode: string): XmrSecretsProcessor {
   //   const currencyDictSettings =
