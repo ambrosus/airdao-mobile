@@ -96,9 +96,7 @@ export namespace AirDAOTransferDispatcher {
         );
         break;
       case 'ETC':
-        CACHE_PROCESSORS[currencyCode] = new EtcTransferProcessor(
-          currencyDictSettings
-        );
+        CACHE_PROCESSORS[currencyCode] = new currencyDictSettings();
         break;
       // case 'BNB_SMART_20':
       //   CACHE_PROCESSORS[currencyCode] = new BnbSmartTransferProcessorErc20(

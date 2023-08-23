@@ -76,7 +76,7 @@ const SendCryptoContext = (): {
     }
   };
 
-  return { state, reducer: reducer };
+  return { state, reducer };
 };
 
 export const [SendCryptoProvider, useSendCryptoContext] =

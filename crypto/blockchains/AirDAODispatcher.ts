@@ -45,7 +45,7 @@ import EthTokenProcessorErc20 from '@crypto/blockchains/eth/EthTokenProcessorErc
 
 // import XmrAddressProcessor from '@crypto/blockchains/xmr/XmrAddressProcessor';
 // import XmrScannerProcessor from '@crypto/blockchains/xmr/XmrScannerProcessor';
-import XmrSecretsProcessor from '@crypto/blockchains/xmr/XmrSecretsProcessor';
+// import XmrSecretsProcessor from '@crypto/blockchains/xmr/XmrSecretsProcessor';
 // import FioAddressProcessor from '@crypto/blockchains/fio/FioAddressProcessor';
 // import FioScannerProcessor from '@crypto/blockchains/fio/FioScannerProcessor';
 
@@ -314,16 +314,16 @@ class AirDAODispatcher {
     }
   }
 
-  getSecretsProcessor(currencyCode: string): XmrSecretsProcessor {
-    const currencyDictSettings =
-      BlockchainUtils.getCurrencyAllSettings(currencyCode);
-    if (currencyDictSettings.currencyCode !== 'XMR') {
-      throw new Error(
-        'Unknown secretsProcessor ' + currencyDictSettings.currencyCode
-      );
-    }
-    return new XmrSecretsProcessor();
-  }
+  // getSecretsProcessor(currencyCode: string): XmrSecretsProcessor {
+  //   const currencyDictSettings =
+  //     BlockchainUtils.getCurrencyAllSettings(currencyCode);
+  //   if (currencyDictSettings.currencyCode !== 'XMR') {
+  //     throw new Error(
+  //       'Unknown secretsProcessor ' + currencyDictSettings.currencyCode
+  //     );
+  //   }
+  //   return new XmrSecretsProcessor();
+  // }
 }
 
 const singleAirDAODispatcher = new AirDAODispatcher();

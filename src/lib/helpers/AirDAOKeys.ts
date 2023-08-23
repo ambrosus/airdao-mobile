@@ -5,7 +5,7 @@
  */
 import AirDAODict from '@crypto/common/AirDAODict';
 // @ts-ignore
-import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
+// import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
 import AirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
 import networksConstants from '@crypto/common/ext/networks-constants';
 import bip44Constants from '@crypto/common/ext/bip44-constants';
@@ -22,7 +22,7 @@ const CACHE_ROOTS = {};
 interface CacheRoots {
   [key: string]: any;
 }
-class BlocksoftKeys {
+class AirDAOKeys {
   private CACHE_ROOTS: CacheRoots = {};
   _bipHex: { [key: string]: string };
   _getRandomBytesFunction;
@@ -71,16 +71,16 @@ class BlocksoftKeys {
    * @param {string} mnemonic
    * @return {Promise<boolean>}
    */
-  async validateMnemonic(mnemonic: string): Promise<boolean> {
-    if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
-      throw new Error('Scam import error');
-    }
-    const result = await bip39.validateMnemonic(mnemonic);
-    if (!result) {
-      throw new Error('invalid mnemonic for bip39');
-    }
-    return result;
-  }
+  // async validateMnemonic(mnemonic: string): Promise<boolean> {
+  //   if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
+  //     throw new Error('Scam import error');
+  //   }
+  //   const result = await bip39.validateMnemonic(mnemonic);
+  //   if (!result) {
+  //     throw new Error('invalid mnemonic for bip39');
+  //   }
+  //   return result;
+  // }
 
   /**
    * @param {string} data.mnemonic
@@ -143,7 +143,7 @@ class BlocksoftKeys {
       try {
         settings = AirDAODict.getCurrencyAllSettings(
           currencyCode,
-          'BlocksoftKeys'
+          'AirDAOKeys'
         );
       } catch (e) {
         // do nothing for now
@@ -481,5 +481,5 @@ function serialize(hdkey, version, key, LEN = 78) {
   return buffer;
 }
 
-const singleBlocksoftKeys = new BlocksoftKeys();
+const singleBlocksoftKeys = new AirDAOKeys();
 export default singleBlocksoftKeys;

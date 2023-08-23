@@ -38,19 +38,16 @@ export default class EthTxSendProvider {
     txRBF: any,
     logData: any
   ): Promise<{ transactionHash: string; transactionJson: any }> {
-    // @ts-ignore
     await AirDAOCryptoLog.log(
       this._settings.currencyCode + ' EthTxSendProvider._innerSign started',
       logData
     );
-    // noinspection JSUnresolvedVariable
     if (privateData.privateKey.substr(0, 2) !== '0x') {
       privateData.privateKey = '0x' + privateData.privateKey;
     }
     if (tx.value.toString().substr(0, 1) === '-') {
       throw new Error('SERVER_RESPONSE_NOTHING_LEFT_FOR_FEE');
     }
-    // noinspection JSUnresolvedVariable
     if (this._mainChainId) {
       tx.chainId = this._mainChainId;
     }
