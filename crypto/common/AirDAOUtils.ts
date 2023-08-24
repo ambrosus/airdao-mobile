@@ -8,24 +8,6 @@ import EtherUnits from 'web3-utils';
 import BN from 'bn.js';
 
 class AirDAOUtils {
-  static cutZeros(val: any): string {
-    const tmp = val.toString().split('.');
-    if (typeof tmp[1] === 'undefined' || !tmp[1]) return tmp[0];
-
-    let firstNonZero = -1;
-    let i = tmp[1].length - 1;
-    do {
-      const char = tmp[1][i];
-      if (char !== '0') {
-        firstNonZero = i;
-      }
-      i--;
-    } while (firstNonZero === -1 && i >= 0);
-    const last = tmp[1].substr(0, firstNonZero + 1);
-    if (!last || last === '') return tmp[0];
-    return tmp[0] + '.' + last;
-  }
-
   static round(val: any): string {
     const tmp = val.toString().split('.');
     return tmp[0].replace(' ', '');
@@ -203,10 +185,6 @@ class AirDAOUtils {
     return this.fromUnified(val, 8);
   }
 
-  static toBtc(val: any): string {
-    return this.toUnified(val, 8);
-  }
-
   static toUnified(val: any, decimals = 8): string {
     if (typeof val === 'undefined' || val === 'undefined' || !val) {
       return '0';
@@ -347,27 +325,6 @@ class AirDAOUtils {
     return newVal;
   }
 
-  static toDate(timeStamp: number, multiply = true): string {
-    if (timeStamp.toString().indexOf('T') !== -1) {
-      return timeStamp.toString();
-    } else if (timeStamp && timeStamp > 0) {
-      if (multiply) {
-        timeStamp = timeStamp * 1000;
-      }
-      return new Date(timeStamp).toISOString();
-    } else {
-      return new Date().toISOString();
-    }
-  }
-
-  static hexToUtf(hex: string): string {
-    return Web3.utils.hexToUtf8(hex);
-  }
-
-  static utfToHex(str: string): string {
-    return Web3.utils.utf8ToHex(str);
-  }
-
   static hexToDecimal(hex: string): bigint | number | string {
     if (hex.toString().indexOf('0x') === 0) {
       return Web3.utils.hexToNumber(hex);
@@ -394,10 +351,6 @@ class AirDAOUtils {
       str = '0'.repeat(len - str.length) + str;
     }
     return str;
-  }
-
-  static hexToDecimalBigger(hex: string): string {
-    return BigIntXmr.BigInteger(hex).toString();
   }
 }
 
