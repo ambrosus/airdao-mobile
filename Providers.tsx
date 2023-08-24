@@ -4,10 +4,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListsContextProvider } from '@contexts/ListsContext';
 import {
+  AddWalletProvider,
   AllAddressesProvider,
   OnboardingContextProvider,
   LocalizationProvider
 } from '@contexts';
+import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider';
+import { Database } from '@database';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,12 @@ const WrappedLocalizationProvider: React.FC = ({ children }: any) => (
   <LocalizationProvider>{children}</LocalizationProvider>
 );
 
+const LocalDBProvider: React.FC = ({ children }: any) => (
+  <DatabaseProvider database={Database.getDatabase()}>
+    {children}
+  </DatabaseProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
@@ -33,10 +42,12 @@ const independentProviders = [
  */
 const providers = [
   ...independentProviders,
+  LocalDBProvider,
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
-  OnboardingContextProvider
+  OnboardingContextProvider,
+  AddWalletProvider
 ];
 
 export const Providers = combineComponents(...providers);

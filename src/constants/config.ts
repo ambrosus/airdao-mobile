@@ -4,13 +4,23 @@ const envs = {
     CMC_API_URL: 'https://sandbox-api.coinmarketcap.com',
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
-    env: 'prod'
+    env: 'prod',
+    debug: {
+      appBuildVersion: '1.0.0',
+      cryptoErrors: true,
+      appErrors: false
+    }
   },
   stage: {
     CMC_API_URL: 'https://sandbox-api.coinmarketcap.com',
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
-    env: 'stage'
+    env: 'stage',
+    debug: {
+      appBuildVersion: '1.0.0',
+      cryptoErrors: true,
+      appErrors: false
+    }
   }
 };
 

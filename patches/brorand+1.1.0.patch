@@ -1,0 +1,57 @@
+diff --git a/node_modules/brorand/index.js b/node_modules/brorand/index.js
+index 9a0fff4..0327a10 100644
+--- a/node_modules/brorand/index.js
++++ b/node_modules/brorand/index.js
+@@ -1,8 +1,8 @@
++import crypto from 'react-native-quick-crypto';
+ var r;
+ 
+ module.exports = function rand(len) {
+-  if (!r)
+-    r = new Rand(null);
++  if (!r) r = new Rand(null);
+ 
+   return r.generate(len);
+ };
+@@ -18,12 +18,10 @@ Rand.prototype.generate = function generate(len) {
+ 
+ // Emulate crypto API using randy
+ Rand.prototype._rand = function _rand(n) {
+-  if (this.rand.getBytes)
+-    return this.rand.getBytes(n);
++  if (this.rand.getBytes) return this.rand.getBytes(n);
+ 
+   var res = new Uint8Array(n);
+-  for (var i = 0; i < res.length; i++)
+-    res[i] = this.rand.getByte();
++  for (var i = 0; i < res.length; i++) res[i] = this.rand.getByte();
+   return res;
+ };
+ 
+@@ -43,23 +41,21 @@ if (typeof self === 'object') {
+       return arr;
+     };
+ 
+-  // Safari's WebWorkers do not have `crypto`
++    // Safari's WebWorkers do not have `crypto`
+   } else if (typeof window === 'object') {
+     // Old junk
+-    Rand.prototype._rand = function() {
++    Rand.prototype._rand = function () {
+       throw new Error('Not implemented yet');
+     };
+   }
+ } else {
+   // Node.js or Web worker with no crypto support
+   try {
+-    var crypto = require('crypto');
+     if (typeof crypto.randomBytes !== 'function')
+       throw new Error('Not supported');
+ 
+     Rand.prototype._rand = function _rand(n) {
+       return crypto.randomBytes(n);
+     };
+-  } catch (e) {
+-  }
++  } catch (e) {}
+ }

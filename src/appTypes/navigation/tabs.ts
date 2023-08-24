@@ -8,6 +8,7 @@ export type TabsParamsList = {
   Search: NavigatorScreenParams<SearchTabParamsList>;
   Portfolio: NavigatorScreenParams<PortfolioParamsPortfolio>;
   Settings: undefined;
+  Wallet: undefined;
   Tabs: { screen: string };
 };
 

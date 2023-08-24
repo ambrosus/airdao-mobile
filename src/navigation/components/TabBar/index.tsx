@@ -15,10 +15,11 @@ import {
   ExploreTabIcon,
   WatchlistTabIcon,
   OverviewTabIcon,
-  SettingsTabIcon
+  SettingsTabIcon,
+  WalletTabIcon
 } from '@components/svg/BottomTabIcons';
 
-type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
+type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets' | 'Wallet';
 const tabs = {
   Wallets: {
     inactiveIcon: <OverviewTabIcon color={COLORS.gray200} />,
@@ -35,6 +36,10 @@ const tabs = {
   Settings: {
     inactiveIcon: <SettingsTabIcon color={COLORS.gray200} />,
     activeIcon: <SettingsTabIcon color={COLORS.mainBlue} />
+  },
+  Wallet: {
+    inactiveIcon: <WalletTabIcon color={COLORS.gray200} />,
+    activeIcon: <WalletTabIcon color={COLORS.mainBlue} />
   }
 };
 

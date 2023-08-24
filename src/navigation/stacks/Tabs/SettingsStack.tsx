@@ -1,12 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SettingsScreen } from '@screens/Settings';
+import { SettingsTabParamsList } from '@appTypes';
 
-export type ExploresParamsList = {
-  SettingsScreen: undefined;
-};
-
-const Stack = createNativeStackNavigator<ExploresParamsList>();
+const Stack = createNativeStackNavigator<SettingsTabParamsList>();
 export const SettingsStack = () => {
   return (
     <Stack.Navigator

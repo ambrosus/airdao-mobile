@@ -1,3 +1,4 @@
+export * from './blockchain';
 export * from './CacheableAccount';
 export * from './CacheableAccountList';
 export * from './coinmarketcap';
@@ -10,3 +11,4 @@ export * from './OnboardingContent';
 export * from './Permission';
 export * from './QueryResponse';
 export * from './Sharing';
+export * from './Wallet';

@@ -3,16 +3,20 @@ import { StyleSheet, View } from 'react-native';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // TODO
+import { Spacer } from '@components/base';
+
 export const SettingsScreen = () => {
   const { top } = useSafeAreaInsets();
+
   return (
     <View style={[{ top }, styles.container]} testID="Settings_Screen">
       <SettingsBlock />
       <View style={styles.separator} />
       <SettingsInfoBlock />
+      <Spacer value={verticalScale(24)} />
     </View>
   );
 };

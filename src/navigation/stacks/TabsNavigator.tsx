@@ -1,12 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TabsParamsList } from '@appTypes/navigation/tabs';
 import { PortfolioStack } from './Tabs/PortfolioStack';
+import TabBar from '@navigation/components/TabBar';
 import SettingsStack from './Tabs/SettingsStack';
+import WalletStack from './Tabs/WalletStack';
 import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
-import TabBar from '@navigation/components/TabBar';
-import { TabsParamsList } from '@appTypes/navigation/tabs';
-import { useTranslation } from 'react-i18next';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
@@ -39,6 +40,16 @@ export const TabsNavigator = () => {
         name="Settings"
         component={SettingsStack}
         options={{ tabBarLabel: t('settings.tab') }}
+      />
+      <BottomTabs.Screen
+        name="Settings"
+        component={SettingsStack}
+        options={{ tabBarLabel: 'Settings' }}
+      />
+      <BottomTabs.Screen
+        name="Wallet"
+        component={WalletStack}
+        options={{ tabBarLabel: 'Wallet' }}
       />
     </BottomTabs.Navigator>
   );

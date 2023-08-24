@@ -66,6 +66,12 @@
         }
       ],
       [
+        "@morrowdigital/watermelondb-expo-plugin",
+        {
+          "databases": ["airdao_dev.db"]
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "ios": {

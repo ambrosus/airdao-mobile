@@ -20,6 +20,7 @@ export interface GradientButtonProps extends React.PropsWithChildren {
   };
   testID?: string;
   style?: ButtonProps['style'];
+  disabled?: boolean;
 }
 
 export const GradientButton = (props: GradientButtonProps) => {
@@ -31,6 +32,7 @@ export const GradientButton = (props: GradientButtonProps) => {
     children,
     style = {},
     testID,
+    disabled,
     onPress
   } = props;
   return (
@@ -39,6 +41,7 @@ export const GradientButton = (props: GradientButtonProps) => {
       // eslint-disable-next-line @typescript-eslint/ban-types
       style={{ ...styles.container, ...(style as {}) }}
       testID={testID}
+      disabled={disabled}
     >
       <LinearGradient
         colors={colors}
