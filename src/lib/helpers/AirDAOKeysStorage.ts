@@ -1,5 +1,4 @@
 import * as SecureStore from 'expo-secure-store';
-import { WalletMetadata } from '@appTypes';
 
 class AirDAOKeysStorage {
   private serviceName = '';
@@ -23,22 +22,19 @@ class AirDAOKeysStorage {
     await this.init();
   }
 
-  private async getKeyValue(key: string): Promise<WalletMetadata | false> {
+  private async getKeyValue(key: string): Promise<any> {
     try {
       const sanitizedKey = this.sanitizeKey(this.serviceName + '_' + key);
       const credentials = await SecureStore.getItemAsync(sanitizedKey);
       if (!credentials) return false;
-      return JSON.parse(credentials) as WalletMetadata;
+      return JSON.parse(credentials);
     } catch (e) {
       console.error('AirDAOStorage getKeyValue error ', e);
       return false;
     }
   }
 
-  private async setKeyValue(
-    key: string,
-    data: WalletMetadata
-  ): Promise<boolean> {
+  private async setKeyValue(key: string, data: any): Promise<boolean> {
     try {
       const sanitizedKey = this.sanitizeKey(this.serviceName + '_' + key);
       await SecureStore.setItemAsync(sanitizedKey, JSON.stringify(data));
@@ -191,7 +187,6 @@ class AirDAOKeysStorage {
   async saveMnemonic(newMnemonic: {
     mnemonic: string;
     hash: string;
-    pub: string;
     name: string;
     number: number;
   }) {
@@ -217,13 +212,7 @@ class AirDAOKeysStorage {
 
     await this.setKeyValue(unique, newMnemonic);
     await this.setKeyValue('wallet_' + this.serviceWalletsCounter, newMnemonic);
-    await this.setKeyValue('wallets_counter', {
-      pub: '',
-      hash: '',
-      mnemonic: '',
-      name: '',
-      number: this.serviceWalletsCounter
-    });
+    await this.setKeyValue('wallets_counter', this.serviceWalletsCounter || 1);
     this.serviceWallets[unique] = newMnemonic.mnemonic;
     this.serviceWallets[this.serviceWalletsCounter - 1] = newMnemonic.mnemonic;
 
@@ -244,8 +233,8 @@ class AirDAOKeysStorage {
   async getAddressCache(hashOrId: string) {
     try {
       const res = await this.getKeyValue('ar4_' + hashOrId);
-      if (!res || !res.mnemonic || res.pub === res.mnemonic) return false;
-      return { address: res.pub, privateKey: res.mnemonic };
+      if (!res || !res.mnemonic || res.address === res.mnemonic) return false;
+      return { address: res.address, privateKey: res.mnemonic };
     } catch (e) {
       return false;
     }
@@ -256,7 +245,6 @@ class AirDAOKeysStorage {
     res: {
       address: string;
       privateKey: string;
-      pub: string;
       name: string;
       mnemonic: string;
       number: number;
@@ -266,27 +254,11 @@ class AirDAOKeysStorage {
     if (typeof res.privateKey === 'undefined' || !res.privateKey) {
       return false;
     }
-    return this.setKeyValue('ar4_' + hashOrId, res);
+    return this.setKeyValue('ar4_' + hashOrId, res.address);
   }
 
-  // async getLoginCache(hashOrId: string) {
-  //   const res = await this.getKeyValue('login_' + hashOrId);
-  //   if (!res) return false;
-  //   return { login: res.pub, pass: res.mnemonic };
-  // }
-  //
-  // async setLoginCache(hashOrId: string, res: { login: string; pass: string }) {
-  //   return this.setKeyValue('login_' + hashOrId, res);
-  // }
-
-  async setSettingValue(hashOrId: string, value: number) {
-    return this.setKeyValue('setting_' + hashOrId, {
-      pub: '',
-      hash: hashOrId,
-      number: value,
-      mnemonic: '',
-      name: ''
-    });
+  async setSettingValue(hashOrId: string) {
+    return this.setKeyValue('setting_' + hashOrId, hashOrId);
   }
 
   async getSettingValue(hashOrId: string) {

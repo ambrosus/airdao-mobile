@@ -6,10 +6,7 @@ import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
 
 const _saveWallet = async (
-  wallet: Pick<
-    WalletMetadata,
-    'newMnemonic' | 'mnemonic' | 'name' | 'number' | 'pub'
-  >
+  wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
 ) => {
   let storedKey = '';
   try {
@@ -17,7 +14,6 @@ const _saveWallet = async (
       mnemonic: wallet.newMnemonic ? wallet.newMnemonic : wallet.mnemonic,
       hash: '?',
       number: wallet.number,
-      pub: wallet.pub,
       name: wallet.name
     };
 
@@ -44,7 +40,7 @@ const _getWalletName = async () => {
 };
 
 const processWallet = async (
-  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number' | 'pub'>
+  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number'>
 ) => {
   const hash = await _saveWallet(data); // done
   let tmpWalletName = data.name;
@@ -56,7 +52,6 @@ const processWallet = async (
   const fullWallet: Wallet = new Wallet({
     hash,
     ...data,
-    pub: data.pub || '',
     name: tmpWalletName,
     number
   });
