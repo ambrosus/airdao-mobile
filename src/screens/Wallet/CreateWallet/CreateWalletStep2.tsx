@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
@@ -10,6 +10,7 @@ import { WalletUtils } from '@utils/wallet';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
+import { styles } from '@screens/Wallet/CreateWallet/styles';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -244,53 +245,3 @@ export const CreateWalletStep2 = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  createWalletStep2Container: {
-    flex: 1
-  },
-  header: {
-    shadowColor: 'transparent'
-  },
-  word: {
-    backgroundColor: '#E6E6E6',
-    borderRadius: 48
-  },
-  innerContainer: {
-    flex: 1,
-    paddingHorizontal: scale(16),
-    alignItems: 'center',
-    alignSelf: 'center'
-  },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  words: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    rowGap: scale(16),
-    columnGap: verticalScale(16),
-    flexDirection: 'row'
-  },
-  mnemoicContainer: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderRadius: 16,
-    borderColor: COLORS.gray100,
-    borderWidth: 2,
-    backgroundColor: COLORS.charcoal,
-    width: '90%',
-    height: verticalScale(232),
-    paddingHorizontal: scale(20),
-    paddingVertical: verticalScale(20)
-  },
-  column: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '33%'
-  }
-});
