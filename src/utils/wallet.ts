@@ -1,15 +1,13 @@
 import { Wallet } from '@models/Wallet';
-import { WalletMetadata } from '@appTypes';
+import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
+import { Database } from '@database';
 
 const _saveWallet = async (
-  wallet: Pick<
-    WalletMetadata,
-    'newMnemonic' | 'mnemonic' | 'name' | 'number' | 'pub'
-  >
+  wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
 ) => {
   let storedKey = '';
   try {
@@ -17,7 +15,6 @@ const _saveWallet = async (
       mnemonic: wallet.newMnemonic ? wallet.newMnemonic : wallet.mnemonic,
       hash: '?',
       number: wallet.number,
-      pub: wallet.pub,
       name: wallet.name
     };
 
@@ -34,7 +31,7 @@ const _saveWallet = async (
 };
 
 const _getWalletNumber = async () => {
-  const count = (await AirDAOKeysStorage.getWallets()).length || 0;
+  const count = (await Database.getCount(DatabaseTable.Wallets)) || 0;
   return count + 1;
 };
 
@@ -44,7 +41,7 @@ const _getWalletName = async () => {
 };
 
 const processWallet = async (
-  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number' | 'pub'>
+  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number'>
 ) => {
   const hash = await _saveWallet(data); // done
   let tmpWalletName = data.name;
@@ -56,7 +53,6 @@ const processWallet = async (
   const fullWallet: Wallet = new Wallet({
     hash,
     ...data,
-    pub: data.pub || '',
     name: tmpWalletName,
     number
   });
