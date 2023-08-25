@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
@@ -34,31 +34,6 @@ export const CreateWalletStep2 = () => {
         JSON.stringify(walletMnemonicArrayDefault)
     );
   };
-
-  const validateMnemonic = useCallback(async () => {
-    if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
-      return false;
-    }
-    if (
-      JSON.stringify(walletMnemonicSelected) !==
-      JSON.stringify(walletMnemonicArrayDefault)
-    ) {
-      // Alert.alert('Failed');
-    }
-    // TODO fix number
-    // @ts-ignore
-    const { address } = await WalletUtils.processWallet({
-      number: 0,
-      mnemonic: walletMnemonic,
-      name: ''
-    });
-    console.log(address);
-  }, [walletMnemonic, walletMnemonicArrayDefault, walletMnemonicSelected]);
-
-  useEffect(() => {
-    validateMnemonic();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletMnemonicSelected]);
 
   const numColumns = Math.ceil(walletMnemonicArrayDefault.length / 4);
 
@@ -143,9 +118,44 @@ export const CreateWalletStep2 = () => {
     [walletMnemonicSelected, walletMnemonicArrayDefault]
   );
 
-  const navigateToWalletScreen = () => {
-    navigation.navigate('SuccessBackupComplete');
-  };
+  const handleVerifyPress = useCallback(async () => {
+    if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
+      return;
+    }
+    const isMnemonicValid =
+      JSON.stringify(walletMnemonicSelected) ===
+      JSON.stringify(walletMnemonicArrayDefault);
+
+    if (!isMnemonicValid) {
+      return;
+    }
+
+    const isOrderCorrect = walletMnemonicSelected.every(
+      (word, index) => word === walletMnemonicArrayDefault[index]
+    );
+
+    if (!isOrderCorrect) {
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      const { address } = await WalletUtils.processWallet({
+        number: 0,
+        mnemonic: walletMnemonic,
+        name: ''
+      });
+      console.log(address);
+      navigation.navigate('SuccessBackupComplete');
+    } catch (error) {
+      console.log(error, 'error');
+    }
+  }, [
+    navigation,
+    walletMnemonic,
+    walletMnemonicArrayDefault,
+    walletMnemonicSelected
+  ]);
 
   return (
     <SafeAreaView edges={['top']} style={styles.createWalletStep2Container}>
@@ -211,7 +221,7 @@ export const CreateWalletStep2 = () => {
       </View>
       <Button
         disabled={!isMnemonicCorrect}
-        onPress={navigateToWalletScreen}
+        onPress={handleVerifyPress}
         type="circular"
         style={{
           backgroundColor: isMnemonicCorrect

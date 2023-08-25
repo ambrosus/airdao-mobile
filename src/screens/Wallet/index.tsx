@@ -31,7 +31,6 @@ export const WalletScreen = () => {
           Wallet.fromDBModel(dbWallet)
         );
         setWallets(mappedWallets);
-        console.log(mappedWallets, 'mappedWallets', wallets, 'wallets');
       }
     } catch (error) {
       console.log('there was an error fetching wallets');
