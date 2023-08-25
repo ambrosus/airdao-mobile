@@ -5,7 +5,7 @@ import BlocksoftUtils from '../../common/AirDAOUtils';
 import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthBasic from './basic/EthBasic';
-import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
+import AirDAOExternalSettings from '../../common/AirDAOExternalSettings';
 
 export default class EthScannerProcessor extends EthBasic {
   /**
@@ -19,7 +19,7 @@ export default class EthScannerProcessor extends EthBasic {
         txHash
     );
 
-    this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
+    this._trezorServer = await AirDAOExternalSettings.getTrezorServer(
       this._trezorServerCode,
       this._settings.currencyCode + ' ETH.Scanner.getTransaction'
     );
@@ -43,11 +43,11 @@ export default class EthScannerProcessor extends EthBasic {
     let res = await AirDAOAxios.getWithoutBraking(link);
 
     if (!res || !res.data) {
-      BlocksoftExternalSettings.setTrezorServerInvalid(
+      AirDAOExternalSettings.setTrezorServerInvalid(
         this._trezorServerCode,
         this._trezorServer
       );
-      this._trezorServer = await BlocksoftExternalSettings.getTrezorServer(
+      this._trezorServer = await AirDAOExternalSettings.getTrezorServer(
         this._trezorServerCode,
         this._settings.currencyCode + ' ETH.Scanner._get'
       );
@@ -64,7 +64,7 @@ export default class EthScannerProcessor extends EthBasic {
       link = this._trezorServer + '/api/v2/tx-specific/' + txHash;
       res = await AirDAOAxios.getWithoutBraking(link);
       if (!res || !res.data) {
-        BlocksoftExternalSettings.setTrezorServerInvalid(
+        AirDAOExternalSettings.setTrezorServerInvalid(
           this._trezorServerCode,
           this._trezorServer
         );
