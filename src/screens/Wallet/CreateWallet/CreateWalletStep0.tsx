@@ -10,12 +10,14 @@ import { useNavigation } from '@react-navigation/native';
 import { RecoveryPhraseModal } from '@screens/Wallet/CreateWallet/components/RecoveryPhraseModal';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
+import { useTranslation } from 'react-i18next';
 
 export const CreateWalletStep0 = () => {
   const { top } = useSafeAreaInsets();
   const [selected, setSelected] = useState<boolean>(false);
   const navigation = useNavigation<AddWalletStackNavigationProp>();
   const recoveryPhraseModalRef = useRef<BottomSheetRef>(null);
+  const { t } = useTranslation();
 
   const onContinuePress = () => {
     navigation.navigate('CreateWalletStep1');
@@ -36,7 +38,7 @@ export const CreateWalletStep0 = () => {
               fontSize={16}
               color={COLORS.nero}
             >
-              Create new wallet
+              {t('create.new.wallet')}
             </Text>
           }
           style={styles.header}
@@ -47,7 +49,7 @@ export const CreateWalletStep0 = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.nero}
         >
-          Backup your wallet
+          {t('backup.your.wallet')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <View style={{ flexDirection: 'row' }}>
@@ -57,7 +59,7 @@ export const CreateWalletStep0 = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.nero}
           >
-            Your wallet will be backed up with a{' '}
+            {t('backup.wallet.text')}{' '}
           </Text>
           <Button onPress={showRecoveryModal}>
             <Text
@@ -66,7 +68,7 @@ export const CreateWalletStep0 = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.blue600}
             >
-              recovery phrase
+              {t('backup.wallet.popup')}
             </Text>
           </Button>
         </View>
@@ -77,7 +79,7 @@ export const CreateWalletStep0 = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.nero}
         >
-          Make sure you have a pen and paper ready so you can write it down.
+          {t('make.sure.to.write.down')}
         </Text>
         <Spacer value={verticalScale(64)} />
         <View style={{ alignSelf: 'center' }}>
@@ -95,8 +97,7 @@ export const CreateWalletStep0 = () => {
           />
           <Spacer horizontal value={scale(12)} />
           <Text fontSize={15} fontFamily="Inter_500Medium" color={COLORS.nero}>
-            I understand that if I lose my recovery phrase, AirDAO cannot
-            restore it.
+            {t('checkbox.text')}
           </Text>
         </Row>
         <Spacer value={verticalScale(32)} />
@@ -114,7 +115,7 @@ export const CreateWalletStep0 = () => {
             color={selected ? COLORS.white : '#0E0E0E4D'}
             style={{ marginVertical: scale(12) }}
           >
-            Continue
+            {t('continue.btn')}
           </Text>
         </Button>
       </View>

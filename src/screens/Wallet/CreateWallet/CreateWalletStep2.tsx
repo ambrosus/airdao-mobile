@@ -9,11 +9,12 @@ import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
+import { useTranslation } from 'react-i18next';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
   const { walletMnemonic } = useAddWalletContext();
-
+  const { t } = useTranslation();
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     string[]
   >([]);
@@ -26,10 +27,6 @@ export const CreateWalletStep2 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [walletMnemonicArrayDefault.length]
   );
-
-  const navigateToWalletScreen = () => {
-    navigation.navigate('SuccessBackupComplete');
-  };
 
   const validateMnemonicOrder = () => {
     setIsMnemonicCorrect(
@@ -146,6 +143,10 @@ export const CreateWalletStep2 = () => {
     [walletMnemonicSelected, walletMnemonicArrayDefault]
   );
 
+  const navigateToWalletScreen = () => {
+    navigation.navigate('SuccessBackupComplete');
+  };
+
   return (
     <SafeAreaView edges={['top']} style={styles.createWalletStep2Container}>
       <Header style={styles.header} />
@@ -155,7 +156,7 @@ export const CreateWalletStep2 = () => {
         fontFamily="Inter_700Bold"
         color={COLORS.nero}
       >
-        Let’s double check
+        {t('double.check')}
       </Text>
       <Spacer value={verticalScale(12)} />
       <Text
@@ -164,7 +165,7 @@ export const CreateWalletStep2 = () => {
         fontFamily="Inter_500Medium"
         color={COLORS.nero}
       >
-        Tap the words in the correct order
+        {t('tap.words.in.correct.order')}
       </Text>
       <Spacer value={verticalScale(24)} />
       <View style={styles.mnemoicContainer}>
@@ -227,7 +228,7 @@ export const CreateWalletStep2 = () => {
           color={isMnemonicCorrect ? COLORS.white : '#0E0E0E4D'}
           style={{ marginVertical: scale(12) }}
         >
-          Verify
+          {t('verify.btn')}
         </Text>
       </Button>
     </SafeAreaView>

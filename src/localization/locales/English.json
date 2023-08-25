@@ -130,5 +130,25 @@
 
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
-  "chart.timeframe.monthly": "1M"
+  "chart.timeframe.monthly": "1M",
+
+  "create.new.wallet": "Create new wallet",
+  "backup.your.wallet": "Backup your wallet",
+  "backup.wallet.text": "Your wallet will be backed up with a",
+  "backup.wallet.popup": "recovery phrase",
+  "make.sure.to.write.down": "Make sure you have a pen and paper ready so you can write it down.",
+  "checkbox.text": "I understand that if I lose my recovery phrase, AirDAO cannot restore it.",
+  "continue.btn": "Continue",
+  "your.recovery.phrase": "Your recovery phrase",
+  "verify.text": "Make sure to write it down as shown. You will verify this later.",
+  "verification.alert": "Never share recovery phrase with \n anyone, keep it safe!",
+  "verify.phrase": "Verify phrase",
+  "double.check": "Let’s double check",
+  "tap.words.in.correct.order": "Tap the words in the correct order",
+  "verify.btn": "Verify",
+  "recovery.phrase.modal.header": "What is a recovery phrase?",
+  "recovery.phrase.modal.text": "Your recovery phrase is a set of 12 random words, and it's the only way to get into your wallet if you lose your device.",
+  "backup.complete": "Nice move! Backup complete.",
+  "backup.complete.text": "You backed up your wallet. Now let’s setup your wallet’s security.",
+  "setup.security.btn": "Setup security"
 }
