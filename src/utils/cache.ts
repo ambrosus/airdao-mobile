@@ -15,7 +15,8 @@ export enum CacheKey {
   Watchlist = 'watchlist',
   LastNotificationTimestamp = 'last_notification_timestamp',
   PreCreatedGroupWasCreated = 'pre_created_group_was_created',
-  SendInputType = 'send_input_type'
+  SendInputType = 'send_input_type',
+  SelectedWallet = 'selected_wallet'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {

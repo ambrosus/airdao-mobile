@@ -1,5 +1,6 @@
 export * from './useAMBPrice';
 export * from './useAMBPriceHistorical';
+export * from './useCryptoAccountFromHash';
 export * from './useExplorerInfo';
 export * from './useExplorerAccounts';
 export * from './useNotifications';
