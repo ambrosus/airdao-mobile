@@ -7,9 +7,9 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { ElipseIcon } from '@components/svg/icons/Elipse';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes';
 import { RecoveryPhraseModal } from '@screens/Wallet/CreateWallet/components/RecoveryPhraseModal';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
+import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 
 export const CreateWalletStep0 = () => {
   const { top } = useSafeAreaInsets();

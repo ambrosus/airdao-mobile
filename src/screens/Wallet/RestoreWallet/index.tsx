@@ -15,9 +15,9 @@ import { PrimaryButton } from '@components/modular';
 import { BarcodeScanner } from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes';
 import { useAddWalletContext } from '@contexts';
 import { styles } from './styles';
+import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 
 export const RestoreWalletScreen = () => {
   const inputRef = useRef<InputRef>(null);

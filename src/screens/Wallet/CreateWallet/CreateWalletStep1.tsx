@@ -8,9 +8,9 @@ import { useAddWalletContext } from '@contexts';
 import { verticalScale, scale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { WarningIcon } from '@components/svg/icons/Warning';
+import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 
 export const CreateWalletStep1 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -37,8 +37,8 @@ export const CreateWalletStep1 = () => {
 
   const renderWord = (word: string, index: number) => {
     return (
-      <>
-        <Row key={word}>
+      <React.Fragment key={index}>
+        <Row key={index}>
           <View
             style={{
               backgroundColor: '#E6E6E6',
@@ -57,8 +57,8 @@ export const CreateWalletStep1 = () => {
             </Text>
           </View>
         </Row>
-        <Spacer value={verticalScale(20)} />
-      </>
+        <Spacer value={verticalScale(20)} key={`spacer-${index}`} />
+      </React.Fragment>
     );
   };
 
@@ -117,7 +117,7 @@ export const CreateWalletStep1 = () => {
             <WarningIcon />
             <Spacer horizontal value={scale(12)} />
             <Text>
-              Never share recovery phrase with {'\n'} anyone, keep it safe!
+              Never share recovery phrase with {'\n'}anyone, keep it safe!
             </Text>
           </View>
         </View>

@@ -5,7 +5,7 @@ import {
   BottomSheetRef,
   Header
 } from '@components/composite';
-import { Row, Text } from '@components/base';
+import { Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';

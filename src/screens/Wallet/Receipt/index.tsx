@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { API } from '@api/api';
-import { WalletStackParamsList } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
@@ -15,6 +14,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
 import { COLORS } from '@constants/colors';
+import { WalletStackParamsList } from '@appTypes/navigation/add-wallet';
 
 export const ReceiptScreen = () => {
   const route = useRoute<RouteProp<WalletStackParamsList, 'ReceiptScreen'>>();
