@@ -16,7 +16,6 @@ export class Wallet {
   isHd: number;
   isCreatedHere: number;
   toSendStatus: number;
-  pub: string;
 
   constructor(details: WalletMetadata) {
     this.hash = details.hash || 'empty_hash';
@@ -33,7 +32,6 @@ export class Wallet {
     this.isHd = details.isHd || 0;
     this.isCreatedHere = details.isCreatedHere || 0;
     this.toSendStatus = details.toSendStatus || 0;
-    this.pub = details.pub || '';
   }
 
   static async saveWallet(wallet: WalletMetadata) {
@@ -54,8 +52,7 @@ export class Wallet {
       useUnconfirmed: model.useUnconfirmed,
       isHd: model.isHd,
       isCreatedHere: model.isCreatedHere,
-      toSendStatus: model.toSendStatus,
-      pub: model.pub
+      toSendStatus: model.toSendStatus
     });
   }
 }
