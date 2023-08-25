@@ -42,11 +42,6 @@ export const TabsNavigator = () => {
         options={{ tabBarLabel: t('settings.tab') }}
       />
       <BottomTabs.Screen
-        name="Settings"
-        component={SettingsStack}
-        options={{ tabBarLabel: 'Settings' }}
-      />
-      <BottomTabs.Screen
         name="Wallet"
         component={WalletStack}
         options={{ tabBarLabel: 'Wallet' }}
