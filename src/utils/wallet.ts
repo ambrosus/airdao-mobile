@@ -1,9 +1,10 @@
 import { Wallet } from '@models/Wallet';
-import { WalletMetadata } from '@appTypes';
+import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
+import { Database } from '@database';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -30,7 +31,7 @@ const _saveWallet = async (
 };
 
 const _getWalletNumber = async () => {
-  const count = (await AirDAOKeysStorage.getWallets()).length || 0;
+  const count = (await Database.getCount(DatabaseTable.Wallets)) || 0;
   return count + 1;
 };
 
