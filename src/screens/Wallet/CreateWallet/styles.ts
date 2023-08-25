@@ -50,6 +50,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
     paddingVertical: verticalScale(20)
   },
+  mnemoicContainerColumn: {
+    width: '33%',
+    alignItems: 'center',
+    flex: 1
+  },
   column: {
     flex: 1,
     alignItems: 'center',

@@ -132,6 +132,7 @@
   "chart.timeframe.weekly": "1W",
   "chart.timeframe.monthly": "1M",
 
+  "add.wallet": "Add Wallet",
   "create.new.wallet": "Create new wallet",
   "backup.your.wallet": "Backup your wallet",
   "backup.wallet.text": "Your wallet will be backed up with a",

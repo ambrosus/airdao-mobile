@@ -209,14 +209,7 @@ export const CreateWalletStep2 = () => {
         {Array.isArray(walletMnemonicSelected) && (
           <Row style={styles.words}>
             {Array.from({ length: numColumns }, (_, columnIndex) => (
-              <View
-                key={columnIndex}
-                style={{
-                  width: '33%',
-                  alignItems: 'center',
-                  flex: 1
-                }}
-              >
+              <View key={columnIndex} style={styles.mnemoicContainerColumn}>
                 {walletMnemonicSelected
                   .slice(columnIndex * 4, (columnIndex + 1) * 4)
                   .map((word, wordIndex) =>
