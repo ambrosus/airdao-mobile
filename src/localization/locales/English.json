@@ -135,5 +135,14 @@
   "errors": {
     "loading-account": "Could not fetch crypto address details!",
     "loading-wallet-from-db": "Error occured while retrieving wallet from device storage!"
+  },
+
+  "account": {
+    "actions": {
+      "swap": "Swap",
+      "send": "Send",
+      "receive": "Receive",
+      "stake": "Stake"
+    }
   }
 }

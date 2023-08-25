@@ -134,5 +134,14 @@
   "errors": {
     "loading-account": "Kripto adres bilgileri çekilemedi!",
     "loading-wallet-from-db": "Cihaz belleğinden cüzdan bilgisi çekilirken hata oluştu!"
+  },
+
+  "account": {
+    "actions": {
+      "swap": "Swap",
+      "send": "Send",
+      "receive": "Receive",
+      "stake": "Stake"
+    }
   }
 }
