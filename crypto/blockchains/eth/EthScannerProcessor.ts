@@ -8,6 +8,14 @@ import EthBasic from './basic/EthBasic';
 import AirDAOExternalSettings from '../../common/AirDAOExternalSettings';
 
 export default class EthScannerProcessor extends EthBasic {
+  async getBalance(address: string): Promise<string> {
+    try {
+      const balance = await this._web3.eth.getBalance(address);
+      return balance;
+    } catch (error) {
+      throw error;
+    }
+  }
   /**
    * @param {string} txHash
    * @return {Promise<[UnifiedTransaction]>}

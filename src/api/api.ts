@@ -5,6 +5,7 @@ import { AMBToken } from '@models';
 import { watcherService } from './watcher-service';
 // import Config from '@constants/config';
 import { explorerService } from './explorer-service';
+import { cryptoService } from './crypto-service';
 import Config from '@constants/config';
 
 // const cmcApiUrl = Config.CMC_API_URL;
@@ -47,5 +48,6 @@ export const API = {
   getAMBTokenData,
   getAMBPriceHistoricalPricing,
   explorerService,
-  watcherService
+  watcherService,
+  cryptoService
 };
