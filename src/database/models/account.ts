@@ -30,8 +30,6 @@ export class AccountDBModel extends Model {
   // @ts-ignore
   @field('is_main') isMain: number;
   // @ts-ignore
-  @field('is_main') isMain: number;
-  // @ts-ignore
   @field('transactions_scan_time') transactionsScanTime: number;
   // @ts-ignore
   @text('transactions_scan_log') transactionsScanLog: string;

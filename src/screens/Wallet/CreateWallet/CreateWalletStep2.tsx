@@ -11,6 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
+import { Database } from '@database';
+import { DatabaseTable } from '@appTypes';
+import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -127,15 +130,11 @@ export const CreateWalletStep2 = () => {
       JSON.stringify(walletMnemonicSelected) ===
       JSON.stringify(walletMnemonicArrayDefault);
 
-    if (!isMnemonicValid) {
-      return;
-    }
-
     const isOrderCorrect = walletMnemonicSelected.every(
       (word, index) => word === walletMnemonicArrayDefault[index]
     );
 
-    if (!isOrderCorrect) {
+    if (!isMnemonicValid && !isOrderCorrect) {
       return;
     }
 
@@ -146,7 +145,34 @@ export const CreateWalletStep2 = () => {
         mnemonic: walletMnemonic,
         name: ''
       });
-      console.log(address);
+
+      const account = await AirDAOKeysForRef.discoverPublicAndPrivate({
+        mnemonic: walletMnemonic
+      });
+
+      console.log(account, 'account here 1');
+      const accountInfo = {
+        address,
+        name: '',
+        derivationPath: '',
+        derivationIndex: 0,
+        derivationType: '',
+        alreadyShown: 0,
+        walletPubId: 0,
+        status: 0,
+        isMain: 0,
+        transactionsScanTime: 0,
+        transactionsScanLog: '',
+        transactionsScanError: '',
+        changesLog: '',
+        currencyCode: 'AMB'
+      };
+
+      await Database.createModel(DatabaseTable.Accounts, accountInfo);
+
+      console.log(accountInfo, 'accountInfo here 2');
+
+      console.log(address, 'address here 3');
       navigation.navigate('SuccessBackupComplete');
     } catch (error) {
       console.log(error, 'error');
