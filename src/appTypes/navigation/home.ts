@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 
-export type HomeParamsList = {
+export type WalletStackParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
@@ -13,5 +13,5 @@ export type HomeParamsList = {
 
 export type HomeNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
-  NativeStackNavigationProp<HomeParamsList>
+  NativeStackNavigationProp<WalletStackParamsList>
 >;
