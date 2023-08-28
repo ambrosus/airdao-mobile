@@ -16,4 +16,5 @@ export interface TransactionDTO {
   from_id: ExplorerAccountDTO;
   to_id: ExplorerAccountDTO;
   hash: string;
+  status: string;
 }

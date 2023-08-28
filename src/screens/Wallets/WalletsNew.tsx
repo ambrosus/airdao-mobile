@@ -9,7 +9,9 @@ import {
 } from '@hooks';
 import { HomeHeader } from './components';
 import { styles } from './styles';
-import { Spinner } from '@components/base';
+import { Spacer, Spinner } from '@components/base';
+import { verticalScale } from '@utils/scaling';
+import { WalletTransactionsAndAssets } from '@components/templates/WalletTransactionsAndAssets/WalletTransactionsAndAssets';
 
 export const HomeScreen = () => {
   const selectedWalletHash = useSelectedWalletHash();
@@ -22,13 +24,17 @@ export const HomeScreen = () => {
       <HomeHeader />
       {accountLoading && <Spinner />}
       {account && (
-        <View style={styles.accountCard}>
-          <WalletCard
-            address={account.address}
-            ambBalance={account.ambBalance}
-            usdBalance={usdPrice}
-          />
-        </View>
+        <>
+          <View style={styles.accountCard}>
+            <WalletCard
+              address={account.address}
+              ambBalance={account.ambBalance}
+              usdBalance={usdPrice}
+            />
+          </View>
+          <Spacer value={verticalScale(24)} />
+          <WalletTransactionsAndAssets address={account.address} />
+        </>
       )}
     </SafeAreaView>
   );

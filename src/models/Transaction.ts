@@ -11,6 +11,7 @@ export class Transaction {
   hash: string;
   from: ExplorerAccount | null;
   to: ExplorerAccount | null;
+  status: string;
 
   constructor(details: TransactionDTO) {
     this._id = details._id;
@@ -21,5 +22,6 @@ export class Transaction {
     this.hash = details.hash;
     this.from = details.from_id ? new ExplorerAccount(details.from_id) : null;
     this.to = details.to_id ? new ExplorerAccount(details.to_id) : null;
+    this.status = details.status;
   }
 }
