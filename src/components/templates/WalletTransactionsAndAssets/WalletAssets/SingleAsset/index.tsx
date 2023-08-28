@@ -6,7 +6,7 @@ import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
 import { ExplorerAccount } from '@models';
-import { useUSDPrice } from '@hooks';
+import { useExplorerInfo, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 
 interface SingleAssetProps {
@@ -16,6 +16,7 @@ interface SingleAssetProps {
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { asset } = props;
   const usdPrice = useUSDPrice(asset?.ambBalance || 0);
+  const { data: infoData } = useExplorerInfo();
 
   return (
     <View style={styles.container}>
@@ -53,8 +54,11 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.nero}
             >
-              % 0.00
-              {/*{asset.percentChange}*/}
+              %
+              {NumberUtils.formatNumber(
+                asset.calculatePercentHoldings(infoData?.totalSupply || 1),
+                2
+              )}
             </Text>
           </Row>
         </View>
