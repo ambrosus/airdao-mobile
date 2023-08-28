@@ -130,5 +130,10 @@
 
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
-  "chart.timeframe.monthly": "1M"
+  "chart.timeframe.monthly": "1M",
+
+  "errors": {
+    "loading-account": "Could not fetch crypto address details!",
+    "loading-wallet-from-db": "Error occured while retrieving wallet from device storage!"
+  }
 }

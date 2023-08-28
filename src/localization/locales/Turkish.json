@@ -129,5 +129,10 @@
 
   "chart.timeframe.daily": "1G",
   "chart.timeframe.weekly": "1H",
-  "chart.timeframe.monthly": "1A"
+  "chart.timeframe.monthly": "1A",
+
+  "errors": {
+    "loading-account": "Kripto adres bilgileri çekilemedi!",
+    "loading-wallet-from-db": "Cihaz belleğinden cüzdan bilgisi çekilirken hata oluştu!"
+  }
 }

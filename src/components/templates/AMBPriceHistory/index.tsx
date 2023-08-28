@@ -11,7 +11,7 @@ import Animated, {
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon, LogoGradient } from '@components/svg/icons';
+import { ChevronRightIcon, LogoGradientCircular } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
@@ -130,7 +130,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   return (
     <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
       <Row alignItems="center" justifyContent="center">
-        <LogoGradient />
+        <LogoGradientCircular />
         <Spacer horizontal value={scale(10)} />
         <Text
           align="center"

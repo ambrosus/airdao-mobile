@@ -9,3 +9,4 @@ export * from './useAppState';
 export * from './useCachePurifier';
 export * from './useInitialMountEffect';
 export * from './useSwipeableDismissListener';
+export * from './useUSDPrice';

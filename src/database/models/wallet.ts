@@ -33,8 +33,6 @@ export class WalletDBModel extends Model {
   @field('is_created_here') isCreatedHere: number;
   // @ts-ignore
   @field('to_send_status') toSendStatus: number;
-  // @ts-ignore
-  @field('pub') pub: string;
 
   static async getByHash(hash: string): Promise<WalletDBModel | null> {
     const walletInDB = (await Database.query(
