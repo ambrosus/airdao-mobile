@@ -8,14 +8,16 @@ import { styles } from '@components/templates/WalletTransactionsAndAssets/Wallet
 import { ExplorerAccount } from '@models';
 import { useExplorerInfo, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { Wallet } from '@models/Wallet';
 
 interface SingleAssetProps {
-  asset: ExplorerAccount;
+  asset: Wallet;
+  account?: ExplorerAccount;
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { asset } = props;
-  const usdPrice = useUSDPrice(asset?.ambBalance || 0);
+  const { account } = props;
+  const usdPrice = useUSDPrice(account?.ambBalance || 0);
   const { data: infoData } = useExplorerInfo();
 
   return (
@@ -47,7 +49,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.gray400}
             >
-              {NumberUtils.formatNumber(asset.ambBalance, 2)} AMB
+              {NumberUtils.formatNumber(account?.ambBalance, 2)} AMB
             </Text>
             <Text
               fontFamily="Inter_400Regular"
@@ -56,7 +58,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             >
               %
               {NumberUtils.formatNumber(
-                asset.calculatePercentHoldings(infoData?.totalSupply || 1),
+                account?.calculatePercentHoldings(infoData?.totalSupply || 1),
                 2
               )}
             </Text>

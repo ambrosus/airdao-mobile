@@ -2,19 +2,18 @@ import React from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Spinner } from '@components/base';
 import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
-import { ExplorerAccount } from '@models';
 import { LocalizedRenderEmpty } from '@components/templates';
+import { Wallet } from '@models/Wallet';
 
 interface WalletAssetsProps {
-  assets: ExplorerAccount[];
+  assets: Wallet[];
   loading?: boolean;
 }
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const { assets, loading } = props;
-  const renderAssets = (
-    args: ListRenderItemInfo<ExplorerAccount>
-  ): JSX.Element => {
+
+  const renderAssets = (args: ListRenderItemInfo<Wallet>): JSX.Element => {
     return <SingleAsset asset={args.item} />;
   };
 

@@ -8,7 +8,6 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/styles';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import {
@@ -19,6 +18,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { SingleTransaction } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions/SingleTransaction';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
+import { Database, WalletDBModel } from '@database';
+import { DatabaseTable } from '@appTypes';
+import { Wallet } from '@models/Wallet';
 
 interface WalletTransactionsAndAssetsProps {
   address: string;
@@ -32,7 +34,9 @@ export const WalletTransactionsAndAssets = (
   const selectedWalletHash = useSelectedWalletHash();
   const { data: account, loading: accountLoading } =
     useCryptoAccountFromHash(selectedWalletHash);
+
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [wallets, setWallets] = useState<Wallet[]>([]);
 
   const { t } = useTranslation();
 
@@ -63,6 +67,26 @@ export const WalletTransactionsAndAssets = (
       duration: 0
     });
   }, [currentIndex, indicatorPosition, tabWidth]);
+
+  const fetchLocalWallets = async () => {
+    try {
+      const _wallets = (await Database.query(
+        DatabaseTable.Wallets
+      )) as WalletDBModel[];
+      if (_wallets) {
+        const mappedWallets = _wallets.map((dbWallet) =>
+          Wallet.fromDBModel(dbWallet)
+        );
+        setWallets(mappedWallets);
+      }
+    } catch (error) {
+      console.log('there was an error fetching wallets');
+    }
+  };
+
+  useEffect(() => {
+    fetchLocalWallets();
+  }, []);
 
   const scrollToTransactions = () => {
     scrollView.current?.scrollTo({ x: 0, animated: true });
@@ -128,8 +152,7 @@ export const WalletTransactionsAndAssets = (
         }}
       >
         <View style={{ width: tabWidth }}>
-          <SingleAsset asset={account} />
-          {/*<WalletAssets assets={account} loading={accountLoading} />*/}
+          <WalletAssets assets={wallets} loading={accountLoading} />
         </View>
         <View style={{ width: tabWidth }}>
           <WalletTransactions
