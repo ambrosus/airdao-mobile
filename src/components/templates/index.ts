@@ -19,3 +19,4 @@ export * from './TransactionDetails';
 export * from './StatusBar';
 export * from './OnboardingView';
 export * from './LocalizedRenderEmpty';
+export * from './WalletTransactionsAndAssets';

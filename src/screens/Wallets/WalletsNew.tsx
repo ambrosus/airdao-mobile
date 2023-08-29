@@ -11,7 +11,7 @@ import { HomeHeader } from './components';
 import { styles } from './styles';
 import { Spacer, Spinner } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import { WalletTransactionsAndAssets } from '@components/templates/WalletTransactionsAndAssets/WalletTransactionsAndAssets';
+import { WalletTransactionsAndAssets } from '@components/templates';
 
 export const HomeScreen = () => {
   const selectedWalletHash = useSelectedWalletHash();
