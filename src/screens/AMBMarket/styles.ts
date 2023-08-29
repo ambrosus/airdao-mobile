@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(25)
   },
   shareBtn: {
-    backgroundColor: '#2f2b430d'
+    backgroundColor: COLORS.gray300
   },
   body: {
     backgroundColor: COLORS.white,

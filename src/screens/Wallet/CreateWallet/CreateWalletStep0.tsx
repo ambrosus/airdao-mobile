@@ -111,7 +111,7 @@ export const CreateWalletStep0 = () => {
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={selected ? COLORS.white : '#0E0E0E4D'}
+            color={selected ? COLORS.white : COLORS.neutral600}
             style={{ marginVertical: scale(12) }}
           >
             Continue

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { moderateScale, scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   tabLeftTitle: {
@@ -11,13 +12,13 @@ export const styles = StyleSheet.create({
     paddingRight: scale(55)
   },
   tabsIndicator: {
-    backgroundColor: '#0e0e0e99',
+    backgroundColor: COLORS.midnight,
     height: 0.5
   },
   notificationsBadge: {
-    backgroundColor: '#fbf2cb',
+    backgroundColor: COLORS.lightYellow,
     borderWidth: 1,
-    borderColor: '#c8811a',
+    borderColor: COLORS.orange,
     right: 0,
     borderRadius: scale(20),
     width: moderateScale(23),

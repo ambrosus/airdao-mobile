@@ -22,7 +22,7 @@ export const WalletTransactions = (
 
   return (
     <View>
-      {!transactions ? (
+      {transactions ? (
         <FlatList
           data={transactions}
           renderItem={renderTransactions}

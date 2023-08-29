@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -8,11 +8,15 @@ import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
 import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { useExplorerInfo, useUSDPrice } from '@hooks';
+import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
+import { Transaction } from '@models';
+import { API } from '@api/api';
+
+const LIMIT = 25;
 
 export const AssetScreen = () => {
   const {
@@ -20,8 +24,46 @@ export const AssetScreen = () => {
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
   const navigation = useNavigation<WalletsNavigationProp>();
   const usdPrice = useUSDPrice(asset?.ambBalance || 0);
-  const { data: infoData } = useExplorerInfo();
   const { t } = useTranslation();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactionsLoading, setTransactionsLoading] = useState(false);
+  const nextPageExistsForTransactions = useRef(true);
+  const transactionsRef = useRef(transactions);
+
+  const getTransactions = async (address: string) => {
+    if (
+      (transactionsRef.current.length > 0 &&
+        transactionsRef.current.length < LIMIT) ||
+      !nextPageExistsForTransactions.current
+    ) {
+      return;
+    }
+    setTransactionsLoading(true);
+    try {
+      const newTransactions =
+        await API.explorerService.getTransactionsOfAccount(
+          address,
+          (transactionsRef.current.length % LIMIT) + 1,
+          LIMIT
+        );
+      if (newTransactions.data.length < LIMIT)
+        nextPageExistsForTransactions.current = false;
+      setTransactions(
+        newTransactions.data.map(
+          (transactionDTO) => new Transaction(transactionDTO)
+        )
+      );
+    } catch (error) {
+      // TODO handle
+    } finally {
+      setTransactionsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTransactions(asset.address);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
@@ -74,7 +116,7 @@ export const AssetScreen = () => {
                 ${NumberUtils.formatNumber(usdPrice, 2)}
               </Text>
             }
-            color="#2F2B430D"
+            color={COLORS.gray300}
           />
         </Row>
         <Row>
@@ -91,10 +133,13 @@ export const AssetScreen = () => {
       <Spacer value={verticalScale(16)} />
       <View style={{ paddingHorizontal: scale(17) }}>
         <Text fontFamily="Inter_700Bold" fontSize={20} color={COLORS.nero}>
-          Transactions
+          {t('transactions')}
         </Text>
       </View>
-      {/*<WalletTransactions transactions={} loading={} />*/}
+      <WalletTransactions
+        transactions={transactions}
+        loading={transactionsLoading}
+      />
     </SafeAreaView>
   );
 };
