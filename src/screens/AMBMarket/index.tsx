@@ -7,9 +7,9 @@ import {
   AMBAbout,
   AMBMarket as AMBMarketsInfo
 } from './components';
-import { Separator, Spacer, Spinner, Text } from '@components/base';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef, Header } from '@components/composite';
-import { SmallLogoSVG } from '@components/svg/icons';
+import { LogoGradientCircular, SmallLogoSVG } from '@components/svg/icons';
 import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
@@ -20,7 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 const BodyTitle = ({ title }: { title: string }) => (
-  <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.jetBlack}>
+  <Text fontSize={20} fontFamily="Inter_700Bold" color="#A1A6B2">
     {title}
   </Text>
 );
@@ -49,7 +49,21 @@ export function AMBMarket(): JSX.Element {
       style={styles.container}
     >
       <Header
-        title={t('statistics.tab')}
+        title={
+          <>
+            <Row alignItems="center">
+              <LogoGradientCircular />
+              <Spacer horizontal value={scale(4)} />
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color={COLORS.nero}
+              >
+                AirDAO (AMB)
+              </Text>
+            </Row>
+          </>
+        }
         style={{
           backgroundColor:
             Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
@@ -75,10 +89,21 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
-            <Spacer value={verticalScale(16)} />
             <AMBPriceInfo />
+            <View
+              style={{
+                width: '90%',
+                height: 1,
+                backgroundColor: COLORS.separator,
+                alignSelf: 'center'
+              }}
+            />
             <View style={styles.body}>
-              <BodyTitle title={t('info')} />
+              <BodyTitle title={t('about.airdao')} />
+              <Spacer value={verticalScale(16)} />
+              <AMBAbout />
+              <Spacer value={verticalScale(32)} />
+              <BodyTitle title={t('stats')} />
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
                 maxSupply={NumberUtils.formatNumber(6500000000, 0)}
@@ -95,15 +120,8 @@ export function AMBMarket(): JSX.Element {
                   '$' + NumberUtils.formatNumber(ambPrice.volumeUSD || 0, 0)
                 }
               />
-              <Separator />
-              <Spacer value={verticalScale(24)} />
-              <BodyTitle title={t('about')} />
-              <Spacer value={verticalScale(16)} />
-              <AMBAbout />
-              <Spacer value={verticalScale(24)} />
-              <Separator />
-              <Spacer value={verticalScale(24)} />
-              <BodyTitle title={t('market')} />
+              <Spacer value={verticalScale(8)} />
+              <BodyTitle title={t('markets')} />
               <Spacer value={verticalScale(16)} />
               <AMBMarketsInfo />
             </View>

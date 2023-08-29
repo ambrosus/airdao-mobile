@@ -129,18 +129,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
 
   return (
     <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
-      <Row alignItems="center" justifyContent="center">
-        <LogoGradientCircular />
-        <Spacer horizontal value={scale(10)} />
-        <Text
-          align="center"
-          fontFamily="Inter_600SemiBold"
-          fontSize={15}
-          color={COLORS.smokyBlack}
-        >
-          AirDAO (AMB)
-        </Text>
-      </Row>
       <Row style={styles.balance} testID="Formatted_Price">
         <AnimatedText
           value={formattedPrice}
@@ -160,7 +148,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           testID="Badge_Button"
         >
           <Badge
-            color={COLORS.gray300}
+            color="transparent"
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange

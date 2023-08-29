@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   balance: {
-    marginTop: verticalScale(17),
     alignSelf: 'center'
   },
   balanceAction: {

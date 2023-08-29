@@ -129,6 +129,13 @@
   "no.groups.yet": "No groups yet",
 
   "my.assets": "My assets",
+  "add.wallet": "Add wallet",
+  "create.new.wallet": "Create new wallet",
+  "import.existing.wallet": "Import existing wallet",
+  "about.airdao": "About AirDAO",
+  "stats": "Stats",
+  "markets": "Markets",
+  "your.balance": "Your balance",
 
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",

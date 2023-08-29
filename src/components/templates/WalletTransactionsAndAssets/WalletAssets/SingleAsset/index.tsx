@@ -5,10 +5,9 @@ import { AssetLogo } from '@components/svg/icons/Asset';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
-import { ExplorerAccount } from '@models';
 import { useExplorerInfo, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
-import { Wallet } from '@models/Wallet';
+import { ExplorerAccount, Wallet } from '@models';
 
 interface SingleAssetProps {
   asset: Wallet;
@@ -49,6 +48,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.gray400}
             >
+              {/* @ts-ignore */}
               {NumberUtils.formatNumber(account?.ambBalance, 2)} AMB
             </Text>
             <Text
@@ -58,6 +58,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             >
               %
               {NumberUtils.formatNumber(
+                // @ts-ignore
                 account?.calculatePercentHoldings(infoData?.totalSupply || 1),
                 2
               )}

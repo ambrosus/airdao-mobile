@@ -8,11 +8,14 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { NotificationIcon, ScannerIcon } from '@components/svg/icons';
+import { AddIcon, NotificationIcon, ScannerIcon } from '@components/svg/icons';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { Button, Spacer, Text } from '@components/base';
 import { WalletsNavigationProp } from '@appTypes/navigation';
-import { BarcodeScanner } from '@components/templates';
+import {
+  BarcodeScanner,
+  BottomSheetWalletCreateOrImport
+} from '@components/templates';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useNotificationsQuery } from '@hooks';
@@ -25,6 +28,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<WalletsNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
+  const walletImportCreate = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const { data: notifications } = useNotificationsQuery();
   const newNotificationsCount = useNewNotificationsCount();
@@ -87,7 +91,30 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const renderContentRight = useMemo(() => {
     return (
       <>
-        <Spacer horizontal value={scale(20)} />
+        <View style={{ bottom: scale(3) }}>
+          <OnboardingView
+            thisStep={12}
+            childrenAlwaysVisible
+            tooltipPlacement="bottom"
+            helpers={{ next: openScanner }}
+            removeAndroidStatusBarHeight
+          >
+            <Button
+              onPress={() => {
+                openScanner();
+              }}
+            >
+              <ScannerIcon color="#393b40" />
+            </Button>
+          </OnboardingView>
+          <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
+            <BarcodeScanner
+              onScanned={onQRCodeScanned}
+              onClose={closeScanner}
+            />
+          </BottomSheet>
+        </View>
+        <Spacer horizontal value={scale(25)} />
         <Button onPress={navigateToNotifications}>
           <NotificationIcon color="#393b40" />
           {newNotificationsCount > 0 && (
@@ -106,36 +133,32 @@ export const HomeHeader = React.memo((): JSX.Element => {
       </>
     );
   }, [
+    WINDOW_HEIGHT,
     navigateToNotifications,
     newNotificationsCount,
     newNotificationsCountStyles,
-    notificationCount
+    notificationCount,
+    onQRCodeScanned
   ]);
+
+  const openWalletImportCreateModal = useCallback(() => {
+    walletImportCreate.current?.show();
+  }, []);
 
   const renderContentLeft = useMemo(() => {
     return (
       <>
-        <OnboardingView
-          thisStep={12}
-          childrenAlwaysVisible
-          tooltipPlacement="bottom"
-          helpers={{ next: openScanner }}
-          removeAndroidStatusBarHeight
+        <Button
+          onPress={() => openWalletImportCreateModal()}
+          type="circular"
+          style={styles.addOrImportWalletButton}
         >
-          <Button
-            onPress={() => {
-              openScanner();
-            }}
-          >
-            <ScannerIcon color="#393b40" />
-          </Button>
-        </OnboardingView>
-        <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
-          <BarcodeScanner onScanned={onQRCodeScanned} onClose={closeScanner} />
-        </BottomSheet>
+          <AddIcon color={COLORS.nero} />
+        </Button>
+        <BottomSheetWalletCreateOrImport ref={walletImportCreate} />
       </>
     );
-  }, [WINDOW_HEIGHT, onQRCodeScanned]);
+  }, [openWalletImportCreateModal]);
 
   const headerStyles = useMemo(() => {
     return { ...styles.container };
@@ -167,5 +190,10 @@ const styles = StyleSheet.create({
     height: moderateScale(18),
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  addOrImportWalletButton: {
+    backgroundColor: COLORS.charcoal,
+    width: scale(38),
+    height: scale(38)
   }
 });

@@ -6,7 +6,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { View } from 'react-native';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes';
+import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 
 export const SuccessBackupComplete = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
