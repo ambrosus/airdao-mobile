@@ -16,7 +16,6 @@ import {
   useTransactionsOfAccount
 } from '@hooks';
 import { useTranslation } from 'react-i18next';
-import { SingleTransaction } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions/SingleTransaction';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
 import { Database, WalletDBModel } from '@database';
 import { DatabaseTable } from '@appTypes';
@@ -152,14 +151,18 @@ export const WalletTransactionsAndAssets = (
         }}
       >
         <View style={{ width: tabWidth }}>
-          <WalletAssets assets={wallets} loading={accountLoading} />
+          <WalletAssets
+            assets={wallets}
+            loading={accountLoading}
+            account={account}
+            transactions={transactions}
+          />
         </View>
         <View style={{ width: tabWidth }}>
           <WalletTransactions
             transactions={transactions}
             loading={transactionsLoading}
           />
-          {/*<SingleTransaction />*/}
         </View>
       </ScrollView>
     </View>

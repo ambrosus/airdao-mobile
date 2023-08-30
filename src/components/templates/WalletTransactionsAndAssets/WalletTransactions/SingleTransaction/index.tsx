@@ -7,7 +7,8 @@ import { styles } from '@components/templates/WalletTransactionsAndAssets/Wallet
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
-import { useExplorerInfo, useUSDPrice } from '@hooks';
+import { useUSDPrice } from '@hooks';
+import { StringUtils } from '@utils/string';
 
 interface SingleTransactionProps {
   transaction: Transaction;
@@ -18,7 +19,6 @@ export const SingleTransaction = (
 ): JSX.Element => {
   const { transaction } = props;
   const usdPrice = useUSDPrice(transaction?.amount || 0);
-  const { data: infoData } = useExplorerInfo();
 
   return (
     <View style={styles.container}>
@@ -33,15 +33,13 @@ export const SingleTransaction = (
               color={COLORS.nero}
             >
               {transaction.status}
-              {/*Pending...*/}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
               fontSize={16}
               color={COLORS.nero}
             >
-              {/*-100 AMB*/}
-              {transaction.amount}
+              -{NumberUtils.formatNumber(transaction.amount, 3)} AMB
             </Text>
           </Row>
           <Spacer horizontal value={scale(8)} />
@@ -51,7 +49,8 @@ export const SingleTransaction = (
               fontSize={14}
               color={COLORS.gray400}
             >
-              {/* TODO fix to: */}
+              {/*@ts-ignore*/}
+              To: {StringUtils.formatAddress(transaction.to?.address, 6, 5)}
             </Text>
             <Text
               fontFamily="Inter_400Regular"

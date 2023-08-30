@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  ListRenderItemInfo,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Spinner } from '@components/base';
 import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
 import { LocalizedRenderEmpty } from '@components/templates';
@@ -16,22 +11,22 @@ import { ExplorerAccount } from '@models';
 interface WalletAssetsProps {
   assets: Wallet[];
   loading?: boolean;
+  account: ExplorerAccount;
 }
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
-  const { assets, loading } = props;
+  const { assets, loading, account } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
 
-  const navigateToAssetScreen = (asset: ExplorerAccount) => {
-    navigation.navigate('AssetScreen', { asset });
+  // tslint:disable-next-line:no-shadowed-variable
+  const navigateToAssetScreen = (account: ExplorerAccount) => {
+    navigation.navigate('AssetScreen', { account });
   };
 
-  const renderAssets = (args: ListRenderItemInfo<Wallet>): JSX.Element => {
-    const { item } = args;
-
+  const renderAssets = (): JSX.Element => {
     return (
-      <TouchableOpacity onPress={() => navigateToAssetScreen(item)}>
-        <SingleAsset asset={item} />
+      <TouchableOpacity onPress={() => navigateToAssetScreen(account)}>
+        <SingleAsset account={account} />
       </TouchableOpacity>
     );
   };
@@ -43,6 +38,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           data={assets}
           renderItem={renderAssets}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <LocalizedRenderEmpty text="No assets yet" />
