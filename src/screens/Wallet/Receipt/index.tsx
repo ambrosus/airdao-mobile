@@ -5,7 +5,7 @@ import { WalletStackParamsList } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
-import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
+import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { WalletDBModel } from '@database';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
@@ -56,7 +56,7 @@ export const ReceiptScreen = () => {
       const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
         mnemonic: wallet.current.mnemonic
       });
-      await BlocksoftTransfer.sendTx(
+      await AirDAOTransfer.sendTx(
         {
           currencyCode: AirDAODictTypes.Code.AMB,
           walletHash: hash,

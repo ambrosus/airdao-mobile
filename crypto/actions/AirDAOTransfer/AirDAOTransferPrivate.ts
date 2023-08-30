@@ -8,7 +8,7 @@ import BlocksoftPrivateKeysUtils from '../../common/AirDAOPrivateKeysUtils';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 
-export namespace BlocksoftTransferPrivate {
+export namespace AirDAOTransferPrivate {
   const CACHE_PRIVATE: any = {};
 
   const initTransferPrivateBTC = async function (
@@ -63,7 +63,7 @@ export namespace BlocksoftTransferPrivate {
     // @ts-ignore
     privateData.addedData = result.addedData;
     AirDAOCryptoLog.log(
-      `${data.currencyCode} BlocksoftTransferPrivate.initTransferPrivate finished for ${data.addressFrom}`
+      `${data.currencyCode} AirDAOTransferPrivate.initTransferPrivate finished for ${data.addressFrom}`
     );
     return privateData;
   };

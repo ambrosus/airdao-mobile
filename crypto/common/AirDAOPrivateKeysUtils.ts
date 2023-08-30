@@ -38,7 +38,7 @@ export default {
         : discoverFor.derivationPath;
     if (path === 'false' || !path) {
       await AirDAOCryptoLog.log(
-        'BlocksoftTransferPrivateKeysDiscover private key not discovered as path = false from ' +
+        'AirDAOTransferPrivateKeysDiscover private key not discovered as path = false from ' +
           source
       );
     }
@@ -48,7 +48,7 @@ export default {
       discoverFor.currencyCode
     );
     await AirDAOCryptoLog.log(
-      `'BlocksoftTransferPrivateKeysDiscover.getPrivateKey actually inited ',
+      `'AirDAOTransferPrivateKeysDiscover.getPrivateKey actually inited ',
       ${{ address: discoverFor.addressToCheck, path, discoverForKey }}`
     );
     let result = CACHE[discoverForKey];
@@ -67,7 +67,7 @@ export default {
         !discoverFor.mnemonic
       ) {
         await AirDAOCryptoLog.log(
-          'BlocksoftTransferPrivateKeysDiscover.getPrivateKey actually redo mnemonic ' +
+          'AirDAOTransferPrivateKeysDiscover.getPrivateKey actually redo mnemonic ' +
             discoverFor.walletHash
         ),
           (discoverFor.mnemonic = AirDAOKeysStorage.getWalletMnemonic(
@@ -81,7 +81,7 @@ export default {
         discoverFor.addressToCheck !== result.address
       ) {
         await AirDAOCryptoLog.log(
-          'BlocksoftTransferPrivateKeysDiscover private key discovered is not for address you path=' +
+          'AirDAOTransferPrivateKeysDiscover private key discovered is not for address you path=' +
             discoverFor.derivationPath +
             ' set ' +
             result.address +
@@ -116,7 +116,7 @@ export default {
           const result2 = await AirDAOKeys.discoverOne(clone);
           if (discoverFor.addressToCheck === result2.address) {
             await AirDAOCryptoLog.log(
-              'BlocksoftTransferPrivateKeysDiscover private key rediscovered FOUND address path=' +
+              'AirDAOTransferPrivateKeysDiscover private key rediscovered FOUND address path=' +
                 clone.derivationPath +
                 '  set ' +
                 result2.address +
@@ -130,7 +130,7 @@ export default {
             break;
           } else {
             await AirDAOCryptoLog.log(
-              'BlocksoftTransferPrivateKeysDiscover private key rediscovered is not for address path=' +
+              'AirDAOTransferPrivateKeysDiscover private key rediscovered is not for address path=' +
                 clone.derivationPath +
                 '  set ' +
                 result2.address +
@@ -149,7 +149,7 @@ export default {
     } catch (e: any) {
       if (config.debug.appErrors) {
         console.log(
-          'BlocksoftTransferPrivateKeysDiscover private key error ' +
+          'AirDAOTransferPrivateKeysDiscover private key error ' +
             e.message +
             ' from ' +
             source,
@@ -164,7 +164,7 @@ export default {
         clone.mnemonic = '***';
       }
       throw new Error(
-        'BlocksoftTransferPrivateKeysDiscover private key error ' +
+        'AirDAOTransferPrivateKeysDiscover private key error ' +
           msg +
           ' from ' +
           source +
