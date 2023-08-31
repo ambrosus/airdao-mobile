@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeParamsList, WalletsNavigationProp } from '@appTypes';
@@ -8,39 +8,46 @@ import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
 import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { useExplorerInfo, useTransactionsOfAccount, useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
+import { API } from '@api/api';
+import { Transaction } from '@models';
+import { useUSDPrice } from '@hooks';
+import { NumberUtils } from '@utils/number';
 
 export const AssetScreen = () => {
   const {
-    params: { account }
+    params: { tokenInfo }
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
   const navigation = useNavigation<WalletsNavigationProp>();
-  const usdPrice = useUSDPrice(account.ambBalance || 0);
   const { t } = useTranslation();
-  const { data: infoData } = useExplorerInfo();
+  const { top } = useSafeAreaInsets();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
 
-  const initialMount = useRef(true);
-  const TRANSACTION_LIMIT = 20;
-  const { data: transactions, loading: transactionsLoading } =
-    useTransactionsOfAccount(
-      account.address,
-      1,
-      TRANSACTION_LIMIT,
-      '',
-      !initialMount.current
-    );
-  initialMount.current = false;
+  const fetchTransactions = async () => {
+    try {
+      const response = await API.explorerService.getTokenTransactionsV2(
+        '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
+        tokenInfo.address
+      );
+      setTransactions(response.data);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
   };
 
   return (
-    <SafeAreaView>
+    <View style={{ top }}>
       <Header
         title={
           <>
@@ -52,7 +59,7 @@ export const AssetScreen = () => {
                 fontSize={15}
                 color={COLORS.nero}
               >
-                AirDAO (AMB)
+                {tokenInfo.name}
               </Text>
             </Row>
           </>
@@ -73,7 +80,10 @@ export const AssetScreen = () => {
         </Text>
         <Row alignItems="center">
           <Text fontFamily="Mersad_600SemiBold" fontSize={24} color="#191919">
-            {account.ambBalance} AMB
+            {tokenInfo.balance.ether < 1000
+              ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
+              : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
+            AMB
           </Text>
           <Spacer horizontal value={scale(8)} />
           <Badge
@@ -91,11 +101,7 @@ export const AssetScreen = () => {
         </Row>
         <Row>
           <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
-            {NumberUtils.formatNumber(
-              account.calculatePercentHoldings(infoData?.totalSupply || 1),
-              2
-            )}
-            %
+            %0.00
           </Text>
           {/* TODO */}
           <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
@@ -104,17 +110,12 @@ export const AssetScreen = () => {
         </Row>
       </View>
       <Spacer value={verticalScale(16)} />
-      <Text align="center">Buttons</Text>
-      <Spacer value={verticalScale(16)} />
       <View style={{ paddingHorizontal: scale(17) }}>
         <Text fontFamily="Inter_700Bold" fontSize={20} color={COLORS.nero}>
           {t('transactions')}
         </Text>
       </View>
-      <WalletTransactions
-        transactions={transactions}
-        loading={transactionsLoading}
-      />
-    </SafeAreaView>
+      <WalletTransactions transactions={transactions} />
+    </View>
   );
 };

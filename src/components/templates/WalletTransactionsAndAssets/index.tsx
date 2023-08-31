@@ -17,9 +17,7 @@ import {
 } from '@hooks';
 import { useTranslation } from 'react-i18next';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
-import { Database, WalletDBModel } from '@database';
-import { DatabaseTable } from '@appTypes';
-import { Wallet } from '@models/Wallet';
+import { API } from '@api/api';
 
 interface WalletTransactionsAndAssetsProps {
   address: string;
@@ -31,11 +29,10 @@ export const WalletTransactionsAndAssets = (
   const { address } = props;
   const scrollView = useRef<ScrollView>(null);
   const selectedWalletHash = useSelectedWalletHash();
-  const { data: account, loading: accountLoading } =
+  const { loading: accountLoading } =
     useCryptoAccountFromHash(selectedWalletHash);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [wallets, setWallets] = useState<Wallet[]>([]);
 
   const { t } = useTranslation();
 
@@ -67,26 +64,6 @@ export const WalletTransactionsAndAssets = (
     });
   }, [currentIndex, indicatorPosition, tabWidth]);
 
-  const fetchLocalWallets = async () => {
-    try {
-      const _wallets = (await Database.query(
-        DatabaseTable.Wallets
-      )) as WalletDBModel[];
-      if (_wallets) {
-        const mappedWallets = _wallets.map((dbWallet) =>
-          Wallet.fromDBModel(dbWallet)
-        );
-        setWallets(mappedWallets);
-      }
-    } catch (error) {
-      console.log('there was an error fetching wallets');
-    }
-  };
-
-  useEffect(() => {
-    fetchLocalWallets();
-  }, []);
-
   const scrollToTransactions = () => {
     scrollView.current?.scrollTo({ x: 0, animated: true });
     setCurrentIndex(0);
@@ -98,6 +75,30 @@ export const WalletTransactionsAndAssets = (
     setCurrentIndex(1);
     indicatorPosition.value = withTiming(tabWidth / 2);
   };
+
+  const [tokens, setTokens] = useState<
+    {
+      address: string;
+      name: string;
+      balance: { wei: string; ether: number };
+    }[]
+  >([]);
+
+  const fetchTokens = async () => {
+    try {
+      const walletWithTokens = '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696';
+      const walletTokens = await API.explorerService.searchWalletV2(
+        walletWithTokens
+      );
+      setTokens(walletTokens);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTokens();
+  }, []);
 
   return (
     <View>
@@ -151,17 +152,12 @@ export const WalletTransactionsAndAssets = (
         }}
       >
         <View style={{ width: tabWidth }}>
-          <WalletAssets
-            assets={wallets}
-            loading={accountLoading}
-            account={account}
-            transactions={transactions}
-          />
+          <WalletAssets tokens={tokens} loading={accountLoading} />
         </View>
         <View style={{ width: tabWidth }}>
           <WalletTransactions
             transactions={transactions}
-            loading={transactionsLoading}
+            // loading={transactionsLoading}
           />
         </View>
       </ScrollView>

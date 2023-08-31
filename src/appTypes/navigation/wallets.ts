@@ -3,14 +3,17 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
-import { ExplorerAccount } from '@models';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
   AssetScreen: {
-    account: ExplorerAccount;
+    tokenInfo: {
+      name: string;
+      address: string;
+      balance: { wei: string; ether: number };
+    };
   };
 } & CommonStackParamsList;
 

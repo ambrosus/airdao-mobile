@@ -3,40 +3,56 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Spinner } from '@components/base';
 import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
 import { LocalizedRenderEmpty } from '@components/templates';
-import { Wallet } from '@models/Wallet';
-import { useNavigation } from '@react-navigation/native';
 import { WalletsNavigationProp } from '@appTypes';
-import { ExplorerAccount } from '@models';
+import { useNavigation } from '@react-navigation/native';
 
 interface WalletAssetsProps {
-  assets: Wallet[];
+  tokens: {
+    name: string;
+    address: string;
+    balance: { wei: string; ether: number };
+  }[];
   loading?: boolean;
-  account: ExplorerAccount;
 }
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
-  const { assets, loading, account } = props;
+  const { tokens, loading } = props;
   const navigation = useNavigation<WalletsNavigationProp>();
 
-  // tslint:disable-next-line:no-shadowed-variable
-  const navigateToAssetScreen = (account: ExplorerAccount) => {
-    navigation.navigate('AssetScreen', { account });
+  const navigateToAssetScreen = (tokenInfo: {
+    name: string;
+    address: string;
+    balance: { wei: string; ether: number };
+  }) => {
+    navigation.navigate('AssetScreen', { tokenInfo });
   };
 
-  const renderAssets = (): JSX.Element => {
+  const renderToken = ({
+    item
+  }: {
+    item: {
+      name: string;
+      address: string;
+      balance: { wei: string; ether: number };
+    };
+  }) => {
     return (
-      <TouchableOpacity onPress={() => navigateToAssetScreen(account)}>
-        <SingleAsset account={account} />
+      <TouchableOpacity onPress={() => navigateToAssetScreen(item)}>
+        <SingleAsset
+          address={item.address}
+          name={item.name}
+          balance={item.balance}
+        />
       </TouchableOpacity>
     );
   };
 
   return (
-    <View>
-      {assets ? (
+    <View style={{ flex: 1 }}>
+      {tokens && tokens.length > 0 ? (
         <FlatList
-          data={assets}
-          renderItem={renderAssets}
+          data={tokens}
+          renderItem={renderToken}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           showsVerticalScrollIndicator={false}
         />

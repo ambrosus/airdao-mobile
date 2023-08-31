@@ -8,6 +8,7 @@ export interface TransactionDTO {
   value: {
     wei: string;
     ether: number;
+    symbol: string;
   };
   gasCost: {
     wei: string;

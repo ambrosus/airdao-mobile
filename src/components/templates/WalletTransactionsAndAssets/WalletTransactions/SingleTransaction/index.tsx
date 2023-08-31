@@ -18,7 +18,7 @@ export const SingleTransaction = (
   props: SingleTransactionProps
 ): JSX.Element => {
   const { transaction } = props;
-  const usdPrice = useUSDPrice(transaction?.amount || 0);
+  const usdPrice = useUSDPrice(transaction?.amount || transaction.value.ether);
 
   return (
     <View style={styles.container}>
@@ -39,7 +39,12 @@ export const SingleTransaction = (
               fontSize={16}
               color={COLORS.nero}
             >
-              -{NumberUtils.formatNumber(transaction.amount, 3)} AMB
+              -
+              {NumberUtils.formatNumber(
+                transaction.amount || transaction.value.ether,
+                2
+              )}{' '}
+              AMB
             </Text>
           </Row>
           <Spacer horizontal value={scale(8)} />
@@ -49,15 +54,20 @@ export const SingleTransaction = (
               fontSize={14}
               color={COLORS.gray400}
             >
-              {/*@ts-ignore*/}
-              To: {StringUtils.formatAddress(transaction.to?.address, 6, 5)}
+              To:{' '}
+              {StringUtils.formatAddress(
+                // @ts-ignore
+                transaction.to?.address || transaction.to,
+                6,
+                5
+              )}
             </Text>
             <Text
               fontFamily="Inter_400Regular"
               fontSize={14}
               color={COLORS.gray400}
             >
-              ${NumberUtils.formatNumber(usdPrice, 2)}
+              ${NumberUtils.formatNumber(usdPrice, usdPrice > 1 ? 2 : 4)}
             </Text>
           </Row>
         </View>

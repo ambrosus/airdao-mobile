@@ -7,13 +7,13 @@ import { LocalizedRenderEmpty } from '@components/templates';
 
 interface WalletTransactionsProps {
   transactions: Transaction[];
-  loading: boolean;
+  // loading: boolean;
 }
 
 export const WalletTransactions = (
   props: WalletTransactionsProps
 ): JSX.Element => {
-  const { transactions, loading } = props;
+  const { transactions } = props;
   const renderTransactions = (
     args: ListRenderItemInfo<Transaction>
   ): JSX.Element => {
@@ -26,7 +26,10 @@ export const WalletTransactions = (
         <FlatList
           data={transactions}
           renderItem={renderTransactions}
-          ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          contentContainerStyle={{ paddingBottom: 60 }}
+          // ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          ListFooterComponent={<View style={{ height: 400 }} />}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <LocalizedRenderEmpty text="No transactions yet" />

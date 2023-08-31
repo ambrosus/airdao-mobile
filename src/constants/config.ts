@@ -24,11 +24,11 @@ const envs = {
   }
 };
 
-let Config = envs.prod;
-if (Updates.channel === 'main') {
-  Config = envs.prod;
-} else if (Updates.channel === 'stage') {
-  Config = envs.stage;
-}
+const Config = envs.prod;
+// if (Updates.channel === 'main') {
+//   Config = envs.prod;
+// } else if (Updates.channel === 'stage') {
+//   Config = envs.stage;
+// }
 
 export default Config;

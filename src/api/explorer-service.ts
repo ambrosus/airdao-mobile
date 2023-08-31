@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { ExplorerAccountDTO, ExplorerInfoDTO } from '@models';
+import { ExplorerAccountDTO, ExplorerInfoDTO, Transaction } from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
@@ -86,10 +86,52 @@ const getTransactionsOfAccount = async (
   }
 };
 
+const searchWalletV2 = async (
+  wallet: string
+): Promise<
+  {
+    address: string;
+    name: string;
+    balance: { wei: string; ether: number };
+  }[]
+> => {
+  try {
+    // TODO move api to constance
+    const apiUrl = `https://explorer-v2-api.ambrosus-test.io/v2/addresses/${wallet}/all`;
+    const response = await axios.get(apiUrl);
+    const tokensData = response.data.tokens;
+    return tokensData;
+  } catch (error) {
+    // TODO handle error
+    throw error;
+  }
+};
+
+const getTokenTransactionsV2 = async (
+  address: string,
+  tokenAddress: string,
+  page?: number
+): Promise<PaginatedResponseBody<Transaction[]>> => {
+  try {
+    if (!address) return { data: [], next: null };
+    const apiUrl = `https://explorer-v2-api.ambrosus-test.io/v2/addresses/${address}/tokens/${tokenAddress}`;
+    const response = await axios.get(apiUrl);
+    return {
+      data: response.data.data,
+      // @ts-ignore
+      next: response.data.pagination.hasNext ? (page + 1).toString() : null
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const explorerService = {
   getExplorerInfo,
   getExplorerAccounts,
   searchAddress,
   getTransactionsOfAccount,
-  getTransactionDetails
+  getTransactionDetails,
+  searchWalletV2,
+  getTokenTransactionsV2
 };

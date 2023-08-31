@@ -5,18 +5,18 @@ import { AssetLogo } from '@components/svg/icons/Asset';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
-import { useExplorerInfo, useUSDPrice } from '@hooks';
+import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
-import { ExplorerAccount } from '@models';
 
 interface SingleAssetProps {
-  account: ExplorerAccount;
+  address: string;
+  name: string;
+  balance: { wei: string; ether: number };
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { account } = props;
-  const usdPrice = useUSDPrice(account?.ambBalance || 0);
-  const { data: infoData } = useExplorerInfo();
+  const { name, balance } = props;
+  const usdPrice = useUSDPrice(balance.ether);
 
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.nero}
             >
-              AirDAO
+              {name || 'NULL'}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
@@ -47,18 +47,15 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.gray400}
             >
-              {NumberUtils.formatNumber(account?.ambBalance, 2)} AMB
+              {NumberUtils.formatNumber(balance.ether, 2)} AMB
             </Text>
             <Text
               fontFamily="Inter_400Regular"
               fontSize={14}
               color={COLORS.nero}
             >
-              %
-              {NumberUtils.formatNumber(
-                account?.calculatePercentHoldings(infoData?.totalSupply || 1),
-                2
-              )}
+              {/* TODO fix % */}
+              %0.00
             </Text>
           </Row>
         </View>
