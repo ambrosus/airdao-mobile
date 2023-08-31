@@ -62,37 +62,11 @@ export default {
     }
 
     try {
-      if (
-        typeof discoverFor.mnemonic === 'undefined' ||
-        !discoverFor.mnemonic
-      ) {
-        await AirDAOCryptoLog.log(
-          'AirDAOTransferPrivateKeysDiscover.getPrivateKey actually redo mnemonic ' +
-            discoverFor.walletHash
-        ),
-          (discoverFor.mnemonic = AirDAOKeysStorage.getWalletMnemonic(
-            discoverFor.walletHash,
-            'getPrivateKey'
-          ));
-      }
       result = await AirDAOKeys.discoverOne(discoverFor);
       if (
         discoverFor.addressToCheck &&
         discoverFor.addressToCheck !== result.address
       ) {
-        await AirDAOCryptoLog.log(
-          'AirDAOTransferPrivateKeysDiscover private key discovered is not for address you path=' +
-            discoverFor.derivationPath +
-            ' set ' +
-            result.address +
-            '!=' +
-            discoverFor.addressToCheck +
-            ' key=' +
-            discoverForKey +
-            ' from ' +
-            source
-        );
-
         const tmpPath = [
           `m/84'/0'/0'/0/0`,
           `m/84'/0'/0'/0/1`,
@@ -115,30 +89,9 @@ export default {
           clone.derivationPath = path;
           const result2 = await AirDAOKeys.discoverOne(clone);
           if (discoverFor.addressToCheck === result2.address) {
-            await AirDAOCryptoLog.log(
-              'AirDAOTransferPrivateKeysDiscover private key rediscovered FOUND address path=' +
-                clone.derivationPath +
-                '  set ' +
-                result2.address +
-                '=' +
-                discoverFor.addressToCheck +
-                ' from ' +
-                source
-            );
             result = result2;
             tmpFound = true;
             break;
-          } else {
-            await AirDAOCryptoLog.log(
-              'AirDAOTransferPrivateKeysDiscover private key rediscovered is not for address path=' +
-                clone.derivationPath +
-                '  set ' +
-                result2.address +
-                '!=' +
-                discoverFor.addressToCheck +
-                ' from ' +
-                source
-            );
           }
         }
         if (!tmpFound) {

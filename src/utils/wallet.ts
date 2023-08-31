@@ -9,6 +9,7 @@ import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOUtils from '@crypto/common/AirDAOUtils';
 import { Q } from '@nozbe/watermelondb';
+import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -87,11 +88,14 @@ const sendTx = async (
   if (wallets.length > 0) {
     const wallet = wallets[0];
     try {
+      const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
+        mnemonic: wallet.mnemonic
+      });
       await AirDAOTransfer.sendTx(
         {
           currencyCode,
           walletHash: walletHash,
-          derivationPath: 'm/44/60/0/0/0',
+          derivationPath: info.path,
           addressFrom: from,
           addressTo: to,
           amount: AirDAOUtils.toWei(etherAmount).toString(),

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -16,6 +16,7 @@ interface ConfirmTransactionProps {
   usdAmount: number;
   currency: string;
   estimatedFee: number;
+  loading: boolean;
   onSendPress: () => unknown;
 }
 
@@ -39,6 +40,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
     usdAmount,
     currency,
     estimatedFee,
+    loading,
     onSendPress
   } = props;
   const { t } = useTranslation();
@@ -112,10 +114,14 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
         </Row>
       </Row>
       <Spacer value={verticalScale(40)} />
-      <PrimaryButton onPress={onSendPress}>
-        <Text color={COLORS.white} fontSize={16}>
-          {t('send.funds.send.now')}
-        </Text>
+      <PrimaryButton onPress={onSendPress} disabled={loading}>
+        {loading ? (
+          <Spinner color={COLORS.white} />
+        ) : (
+          <Text color={COLORS.white} fontSize={16}>
+            {t('send.funds.send.now')}
+          </Text>
+        )}
       </PrimaryButton>
     </View>
   );

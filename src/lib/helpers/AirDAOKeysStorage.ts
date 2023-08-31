@@ -52,10 +52,8 @@ class AirDAOKeysStorage {
     if (this.serviceWasInitialized) {
       return true;
     }
-
     const count = await this.getKeyValue('wallets_counter');
-
-    this.serviceWalletsCounter = count && count.number ? count.number : 0;
+    this.serviceWalletsCounter = count;
     this.serviceWallets = {};
     this.publicWallets = [];
     this.publicSelectedWallet = false;
@@ -212,7 +210,7 @@ class AirDAOKeysStorage {
 
     await this.setKeyValue(unique, newMnemonic);
     await this.setKeyValue('wallet_' + this.serviceWalletsCounter, newMnemonic);
-    await this.setKeyValue('wallets_counter', this.serviceWalletsCounter || 1);
+    await this.setKeyValue('wallets_counter', this.serviceWalletsCounter);
     this.serviceWallets[unique] = newMnemonic.mnemonic;
     this.serviceWallets[this.serviceWalletsCounter - 1] = newMnemonic.mnemonic;
 

@@ -172,7 +172,6 @@ export namespace AirDAOTransfer {
     uiData: AirDAOBlockchainTypes.TransferUiData,
     additionalData: AirDAOBlockchainTypes.TransferAdditionalData
   ): Promise<AirDAOBlockchainTypes.SendTxResult> => {
-    console.log('here 1', { data, uiData, additionalData });
     const lower = data.addressTo.toLowerCase();
     if (!data?.walletConnectData?.data) {
       for (const key in CoinAirDAODict) {
@@ -191,7 +190,6 @@ export namespace AirDAOTransfer {
         }
       }
     }
-    console.log('here 2');
 
     data.derivationPath = data.derivationPath.replace(/quote/g, "'");
 

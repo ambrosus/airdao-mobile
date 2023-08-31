@@ -49,6 +49,7 @@ export const SendFunds = () => {
   const [destinationAddress, setDestinationAddress] = useState('');
   const [amountInCrypto, setAmountInCrypto] = useState('0');
   const [amountInUSD, setAmountInUSD] = useState('0');
+  const [sendLoading, setSendLoading] = useState(false);
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
@@ -104,6 +105,7 @@ export const SendFunds = () => {
   const sendTx = async () => {
     if (account) {
       try {
+        setSendLoading(true);
         await WalletUtils.sendTx(
           walletHash,
           token,
@@ -121,6 +123,8 @@ export const SendFunds = () => {
         });
       } catch (error) {
         Alert.alert('Transfer failed');
+      } finally {
+        setSendLoading(false);
       }
     }
   };
@@ -234,6 +238,7 @@ export const SendFunds = () => {
                   currency={token}
                   estimatedFee={estimatedFee}
                   onSendPress={sendTx}
+                  loading={sendLoading}
                 />
               </BottomSheet>
             </>
