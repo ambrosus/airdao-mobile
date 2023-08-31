@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { API } from '@api/api';
-import { WalletStackParamsList } from '@appTypes';
+import { HomeStackParamsList } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
@@ -17,7 +17,7 @@ import { ExplorerAccount } from '@models';
 import { COLORS } from '@constants/colors';
 
 export const ReceiptScreen = () => {
-  const route = useRoute<RouteProp<WalletStackParamsList, 'ReceiptScreen'>>();
+  const route = useRoute<RouteProp<HomeStackParamsList, 'ReceiptScreen'>>();
   const { amount, currencyCode, hash, destination, origin } = route.params;
   const [sending, setSending] = useState(false);
   const wallet = useRef<Wallet | null>(null);
