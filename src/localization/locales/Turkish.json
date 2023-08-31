@@ -143,5 +143,16 @@
       "receive": "Receive",
       "stake": "Stake"
     }
-  }
+  },
+
+  "send.funds": {
+    "balance": "Bakiye",
+    "estimated.fee": "Tahmini ücret",
+    "invalid.address": "Lütfen geçerli bir adres girin",
+    "review.transaction": "İşlemi İncele",
+    "send.now": "Gönder",
+    "transfer.fee": "Tahmini transfer ücreti",
+    "use.max": "Hepsini kullan"
+  },
+  "transaction.in.progress": "Transfer gerçekleştiriliyor!"
 }

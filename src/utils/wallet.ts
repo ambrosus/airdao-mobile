@@ -4,7 +4,11 @@ import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
-import { Database } from '@database';
+import { Database, WalletDBModel } from '@database';
+import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import AirDAOUtils from '@crypto/common/AirDAOUtils';
+import { Q } from '@nozbe/watermelondb';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -68,4 +72,51 @@ const processWallet = async (
   return { address };
 };
 
-export const WalletUtils = { processWallet };
+const sendTx = async (
+  walletHash: string,
+  currencyCode: AirDAODictTypes.Code,
+  from: string,
+  to: string,
+  etherAmount: number,
+  accountBalanceRaw: string
+) => {
+  const wallets = (await Database.query(
+    DatabaseTable.Wallets,
+    Q.where('hash', Q.eq(walletHash))
+  )) as WalletDBModel[];
+  if (wallets.length > 0) {
+    const wallet = wallets[0];
+    try {
+      await AirDAOTransfer.sendTx(
+        {
+          currencyCode,
+          walletHash: walletHash,
+          derivationPath: 'm/44/60/0/0/0',
+          addressFrom: from,
+          addressTo: to,
+          amount: AirDAOUtils.toWei(etherAmount).toString(),
+          useOnlyConfirmed: Boolean(wallet.useUnconfirmed),
+          allowReplaceByFee: Boolean(wallet.allowReplaceByFee),
+          useLegacy: wallet.useLegacy,
+          isHd: Boolean(wallet.isHd),
+          accountBalanceRaw,
+          isTransferAll: false
+        },
+        {
+          uiErrorConfirmed: true,
+          selectedFee: {
+            langMsg: '',
+            feeForTx: '',
+            amountForTx: ''
+          }
+        }, // TODO fix selected fee
+        // CACHE_DATA.additionalData
+        {}
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+export const WalletUtils = { processWallet, sendTx };

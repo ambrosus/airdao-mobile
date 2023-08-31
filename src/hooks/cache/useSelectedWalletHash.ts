@@ -8,21 +8,25 @@ export const useSelectedWalletHash = (): string => {
   const [selectedWalletHash, setSelectedWalletHash] = useState('');
 
   const getSelectedWallet = async () => {
-    const _selectedWalletHash = (await Cache.getItem(
-      CacheKey.SelectedWallet
-    )) as string;
-    if (!_selectedWalletHash) {
-      const allWallets = (await Database.query(
-        DatabaseTable.Wallets
-      )) as WalletDBModel[];
-      const len = allWallets?.length || 0;
-      if (allWallets && len > 0) {
-        const hash = allWallets[len - 1].hash;
-        setSelectedWalletHash(hash);
-        Cache.setItem(CacheKey.SelectedWallet, hash);
+    try {
+      const _selectedWalletHash = (await Cache.getItem(
+        CacheKey.SelectedWallet
+      )) as string;
+      if (!_selectedWalletHash) {
+        const allWallets = (await Database.query(
+          DatabaseTable.Wallets
+        )) as WalletDBModel[];
+        const len = allWallets?.length || 0;
+        if (len > 0) {
+          const hash = allWallets[len - 1].hash;
+          setSelectedWalletHash(hash);
+          await Cache.setItem(CacheKey.SelectedWallet, hash);
+        }
       }
+      setSelectedWalletHash(_selectedWalletHash);
+    } catch (error) {
+      // TODO
     }
-    setSelectedWalletHash(_selectedWalletHash);
   };
 
   useFocusEffect(() => {
