@@ -139,12 +139,12 @@
   "account": {
     "actions": {
       "swap": "Swap",
-      "send": "Send",
-      "receive": "Receive",
+      "send": "Gönder",
+      "receive": "Al",
       "stake": "Stake"
     }
   },
-
+  "receive.funds": "Receive funds",
   "send.funds": {
     "balance": "Bakiye",
     "estimated.fee": "Tahmini ücret",
@@ -154,5 +154,6 @@
     "transfer.fee": "Tahmini transfer ücreti",
     "use.max": "Hepsini kullan"
   },
+  "share": "Paylaş",
   "transaction.in.progress": "Transfer gerçekleştiriliyor!"
 }

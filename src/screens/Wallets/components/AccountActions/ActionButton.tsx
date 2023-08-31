@@ -18,7 +18,7 @@ export const AccountActionButton = (props: AccountActionButtonProps) => {
   const textColor = isActive ? COLORS.smokyBlack : COLORS.neutral300;
   const iconColor = textColor;
   return (
-    <Button onPress={onPress} disabled={!isActive}>
+    <Button onPress={onPress} disabled={!isActive} style={styles.container}>
       <View style={styles.icon}>
         <Icon color={iconColor} />
       </View>
@@ -29,6 +29,10 @@ export const AccountActionButton = (props: AccountActionButtonProps) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   icon: {
     backgroundColor: COLORS.smokyBlack5,
     justifyContent: 'center',

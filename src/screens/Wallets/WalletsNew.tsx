@@ -33,7 +33,7 @@ export const HomeScreen = () => {
             />
           </View>
           <Spacer value={verticalScale(32)} />
-          <AccountActions />
+          <AccountActions address={account.address} />
         </View>
       )}
     </SafeAreaView>

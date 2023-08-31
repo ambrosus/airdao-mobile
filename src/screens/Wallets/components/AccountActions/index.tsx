@@ -6,7 +6,11 @@ import { Send } from './Send';
 import { Receive } from './Receive';
 import { Staking } from './Staking';
 
-export const AccountActions = () => {
+interface AccountActionsProps {
+  address: string;
+}
+export const AccountActions = (props: AccountActionsProps) => {
+  const { address } = props;
   return (
     <Row
       alignItems="center"
@@ -15,7 +19,7 @@ export const AccountActions = () => {
     >
       <Swap />
       <Send />
-      <Receive />
+      <Receive address={address} />
       <Staking />
     </Row>
   );
