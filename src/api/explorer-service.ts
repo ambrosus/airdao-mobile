@@ -8,6 +8,7 @@ import Config from '@constants/config';
 import { SearchSort } from '@screens/Search/Search.types';
 
 const exploreApiUrl = Config.EXPLORER_API_URL;
+const explorerapiV2Url = Config.EXPLORER_API_V2_URL;
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
@@ -97,7 +98,7 @@ const searchWalletV2 = async (
 > => {
   try {
     // TODO move api to constance
-    const apiUrl = `https://explorer-v2-api.ambrosus-test.io/v2/addresses/${wallet}/all`;
+    const apiUrl = `${explorerapiV2Url}/addresses/${wallet}/all`;
     const response = await axios.get(apiUrl);
     const tokensData = response.data.tokens;
     return tokensData;
@@ -114,7 +115,7 @@ const getTokenTransactionsV2 = async (
 ): Promise<PaginatedResponseBody<Transaction[]>> => {
   try {
     if (!address) return { data: [], next: null };
-    const apiUrl = `https://explorer-v2-api.ambrosus-test.io/v2/addresses/${address}/tokens/${tokenAddress}`;
+    const apiUrl = `${explorerapiV2Url}/addresses/${address}/tokens/${tokenAddress}`;
     const response = await axios.get(apiUrl);
     return {
       data: response.data.data,

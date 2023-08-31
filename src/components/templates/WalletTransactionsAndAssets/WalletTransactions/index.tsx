@@ -7,13 +7,14 @@ import { LocalizedRenderEmpty } from '@components/templates';
 
 interface WalletTransactionsProps {
   transactions: Transaction[];
-  // loading: boolean;
+  // loading: boolean;z
 }
 
 export const WalletTransactions = (
   props: WalletTransactionsProps
 ): JSX.Element => {
   const { transactions } = props;
+
   const renderTransactions = (
     args: ListRenderItemInfo<Transaction>
   ): JSX.Element => {
