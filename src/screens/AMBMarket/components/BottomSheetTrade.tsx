@@ -9,6 +9,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RightArrowIcon, BottomSheetSwiperIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 interface Platform {
   title: string;
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(52)
   },
   row: {
-    backgroundColor: '#2f2b430d',
+    backgroundColor: COLORS.gray300,
     width: '90%',
     marginBottom: verticalScale(48),
     paddingVertical: verticalScale(12)

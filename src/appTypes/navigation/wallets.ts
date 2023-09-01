@@ -8,6 +8,13 @@ export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
+  AssetScreen: {
+    tokenInfo: {
+      name: string;
+      address: string;
+      balance: { wei: string; ether: number };
+    };
+  };
   SendFunds: undefined;
 } & CommonStackParamsList;
 

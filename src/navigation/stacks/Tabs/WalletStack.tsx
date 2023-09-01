@@ -17,6 +17,7 @@ import { SuccessBackupComplete } from '@screens/Wallet/CreateWallet/components/S
 const Stack = createNativeStackNavigator<HomeStackParamsList>();
 export const WalletStack = () => {
   return (
+    // @ts-ignore
     <SendCryptoProvider>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}

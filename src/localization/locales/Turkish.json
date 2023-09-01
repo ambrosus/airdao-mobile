@@ -127,6 +127,15 @@
   "no.addresses.yet": "Henüz adres yok",
   "no.groups.yet": "Henüz grup yok",
 
+  "my.assets": "",
+  "add.wallet": "",
+  "create.new.wallet": "",
+  "import.existing.wallet": "",
+  "about.airdao": "",
+  "stats": "",
+  "markets": "",
+  "your.balance": "",
+
   "chart.timeframe.daily": "1G",
   "chart.timeframe.weekly": "1H",
   "chart.timeframe.monthly": "1A",

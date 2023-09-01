@@ -79,7 +79,7 @@ export function AMBAbout(): JSX.Element {
   const { t } = useTranslation();
   return (
     <View>
-      <Text fontSize={12} fontFamily="Inter_500Medium" color={COLORS.slateGrey}>
+      <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.slateGrey}>
         {t('statistics.text')}
       </Text>
       <Spacer value={verticalScale(16)} />
