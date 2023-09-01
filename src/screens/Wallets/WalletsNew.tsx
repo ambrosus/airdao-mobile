@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WalletTransactionsAndAssets } from '@components/templates';
@@ -7,13 +7,12 @@ import { Spacer, Spinner } from '@components/base';
 import {
   useCryptoAccountFromHash,
   useSelectedWalletHash,
+  useTokensAndTransactions,
   useUSDPrice
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { AccountActions, HomeHeader } from './components';
 import { styles } from './styles';
-import { API } from '@api/api';
-import { Transaction, TokenDTO } from '@models';
 
 export const HomeScreen = () => {
   const selectedWalletHash = useSelectedWalletHash();
@@ -21,26 +20,8 @@ export const HomeScreen = () => {
     useCryptoAccountFromHash(selectedWalletHash);
   const usdPrice = useUSDPrice(account?.ambBalance || 0);
 
-  const [tokens, setTokens] = useState<TokenDTO[]>([]);
-
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  const fetchTokensAndTransactions = async () => {
-    try {
-      const walletWithTokens = '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696';
-      const { tokens, transactions } = await API.explorerService.searchWalletV2(
-        walletWithTokens
-      );
-      setTokens(tokens);
-      setTransactions(transactions);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTokensAndTransactions();
-  }, []);
+  const { data: tokensAndTransactions, loading: tokensAndTransactionsLoading } =
+    useTokensAndTransactions('0x4fB246FAf8FAc198f8e5B524E74ABC6755956696');
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen">
@@ -61,8 +42,10 @@ export const HomeScreen = () => {
             <AccountActions address={account.address} />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
-              transactions={transactions}
-              tokens={tokens}
+              transactions={tokensAndTransactions?.transactions}
+              tokens={tokensAndTransactions?.tokens}
+              tokensLoading={tokensAndTransactionsLoading}
+              transactionsLoading={tokensAndTransactionsLoading}
             />
           </View>
         </>

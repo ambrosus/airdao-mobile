@@ -10,29 +10,28 @@ import Animated, {
 } from 'react-native-reanimated';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/styles';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
-import { useCryptoAccountFromHash, useSelectedWalletHash } from '@hooks';
 import { useTranslation } from 'react-i18next';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
 import { Transaction } from '@models';
 
 interface WalletTransactionsAndAssetsProps {
-  transactions: Transaction[];
-  tokens: {
-    address: string;
-    name: string;
-    balance: { wei: string; ether: number };
-  }[];
+  transactions: Transaction[] | undefined;
+  tokens:
+    | {
+        address: string;
+        name: string;
+        balance: { wei: string; ether: number };
+      }[]
+    | undefined;
+  transactionsLoading: boolean;
+  tokensLoading: boolean;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { tokens, transactions } = props;
+  const { tokens, transactions, tokensLoading, transactionsLoading } = props;
   const scrollView = useRef<ScrollView>(null);
-  const selectedWalletHash = useSelectedWalletHash();
-  const { loading: accountLoading } =
-    useCryptoAccountFromHash(selectedWalletHash);
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { t } = useTranslation();
@@ -117,10 +116,13 @@ export const WalletTransactionsAndAssets = (
         }}
       >
         <View style={{ width: tabWidth }}>
-          <WalletAssets tokens={tokens} loading={accountLoading} />
+          <WalletAssets tokens={tokens} loading={tokensLoading} />
         </View>
         <View style={{ width: tabWidth }}>
-          <WalletTransactions transactions={transactions} />
+          <WalletTransactions
+            transactions={transactions}
+            loading={transactionsLoading}
+          />
         </View>
       </ScrollView>
     </View>

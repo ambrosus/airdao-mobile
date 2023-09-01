@@ -7,14 +7,14 @@ import { LocalizedRenderEmpty } from '@components/templates';
 import { verticalScale } from '@utils/scaling';
 
 interface WalletTransactionsProps {
-  transactions: Transaction[];
-  // loading: boolean;z
+  transactions: Transaction[] | undefined;
+  loading?: boolean;
 }
 
 export const WalletTransactions = (
   props: WalletTransactionsProps
 ): JSX.Element => {
-  const { transactions } = props;
+  const { transactions, loading } = props;
 
   const renderTransactions = (
     args: ListRenderItemInfo<Transaction>
@@ -28,7 +28,7 @@ export const WalletTransactions = (
         <FlatList
           data={transactions}
           renderItem={renderTransactions}
-          // ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           contentContainerStyle={{
             flexGrow: 1,
             paddingBottom: verticalScale(1200)

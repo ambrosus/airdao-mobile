@@ -8,3 +8,4 @@ export * from './useNotifications';
 export * from './useSearchAccount';
 export * from './useTransactionsOfAddress';
 export * from './useTransactionDetails';
+export * from './useTokensAndTransactions';

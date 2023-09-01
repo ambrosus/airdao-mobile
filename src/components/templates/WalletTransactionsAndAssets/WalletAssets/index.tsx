@@ -1,19 +1,21 @@
 import React from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Spinner } from '@components/base';
 import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
 import { LocalizedRenderEmpty } from '@components/templates';
 import { WalletsNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
 import { verticalScale } from '@utils/scaling';
+import { Spinner } from '@components/base';
 
 interface WalletAssetsProps {
-  tokens: {
-    name: string;
-    address: string;
-    balance: { wei: string; ether: number };
-  }[];
-  loading?: boolean;
+  tokens:
+    | {
+        name: string;
+        address: string;
+        balance: { wei: string; ether: number };
+      }[]
+    | undefined;
+  loading: boolean;
 }
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
