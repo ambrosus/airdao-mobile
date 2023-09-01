@@ -32,7 +32,7 @@ export const ToastBody = forwardRef((_, ref) => {
   const DISTANCE_FROM_EDGE = verticalScale(16);
   const defaultOptions: ToastOptions = useMemo(
     () => ({
-      text: 'Y',
+      text: '',
       subtext: '',
       type: ToastType.Success,
       position: ToastPosition.Top,
@@ -43,7 +43,7 @@ export const ToastBody = forwardRef((_, ref) => {
     []
   );
 
-  const [toastVisible, setToastVisible] = useState(true);
+  const [toastVisible, setToastVisible] = useState(false);
   const [options, setOptions] = React.useState<ToastOptions>(defaultOptions);
   const timerRef = useRef<any>(null); // TODO change any
 
