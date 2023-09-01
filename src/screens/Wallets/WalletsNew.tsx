@@ -13,7 +13,7 @@ import { verticalScale } from '@utils/scaling';
 import { AccountActions, HomeHeader } from './components';
 import { styles } from './styles';
 import { API } from '@api/api';
-import { Transaction } from '@models';
+import { Transaction, TokenDTO } from '@models';
 
 export const HomeScreen = () => {
   const selectedWalletHash = useSelectedWalletHash();
@@ -21,13 +21,7 @@ export const HomeScreen = () => {
     useCryptoAccountFromHash(selectedWalletHash);
   const usdPrice = useUSDPrice(account?.ambBalance || 0);
 
-  const [tokens, setTokens] = useState<
-    {
-      address: string;
-      name: string;
-      balance: { wei: string; ether: number };
-    }[]
-  >([]);
+  const [tokens, setTokens] = useState<TokenDTO[]>([]);
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
