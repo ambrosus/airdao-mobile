@@ -30,8 +30,7 @@ export const WalletTransactions = (
           renderItem={renderTransactions}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           contentContainerStyle={{
-            flexGrow: 1,
-            paddingBottom: verticalScale(1200)
+            paddingBottom: 100
           }}
           showsVerticalScrollIndicator={false}
         />

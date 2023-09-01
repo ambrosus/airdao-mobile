@@ -115,7 +115,9 @@ export const AssetScreen = () => {
           {t('transactions')}
         </Text>
       </View>
-      <WalletTransactions transactions={transactions} />
+      <View style={{ height: '80%' }}>
+        <WalletTransactions transactions={transactions} />
+      </View>
     </View>
   );
 };

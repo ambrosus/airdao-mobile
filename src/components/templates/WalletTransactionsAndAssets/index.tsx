@@ -118,7 +118,7 @@ export const WalletTransactionsAndAssets = (
         <View style={{ width: tabWidth }}>
           <WalletAssets tokens={tokens} loading={tokensLoading} />
         </View>
-        <View style={{ width: tabWidth }}>
+        <View style={{ width: tabWidth, height: '60%' }}>
           <WalletTransactions
             transactions={transactions}
             loading={transactionsLoading}
