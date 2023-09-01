@@ -5,6 +5,7 @@ export * from './WalletList';
 export * from './WalletItem';
 export * from './BezierChart';
 export * from './PortfolioPerformance';
+export * from './ReceiveFunds';
 export * from './BottomSheetEditCollection';
 export * from './BottomSheetRemoveAddressFromCollection';
 export * from './BottomSheetCreateRenameGroup';

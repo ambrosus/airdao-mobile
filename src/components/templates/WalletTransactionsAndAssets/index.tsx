@@ -134,7 +134,7 @@ export const WalletTransactionsAndAssets = (
               left: 0,
               width: tabWidth / 2,
               height: 2,
-              backgroundColor: 'blue'
+              backgroundColor: COLORS.blue500
             },
             indicatorStyle
           ]}

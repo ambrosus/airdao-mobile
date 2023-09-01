@@ -7,6 +7,7 @@ import { CopyToClipboardButton, Header } from '@components/composite';
 import { NumberInput } from '@components/base/Input/Input.number';
 import { PrimaryButton } from '@components/modular';
 import { Input, Row, Spacer, Spinner, Text } from '@components/base';
+import { AddWalletStackNavigationProp, HomeStackParamsList } from '@appTypes';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 import { API } from '@api/api';
 import { ExplorerAccount, Transaction } from '@models';
@@ -14,13 +15,9 @@ import { StringUtils } from '@utils/string';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { etherumAddressRegex } from '@constants/regex';
-import {
-  AddWalletStackNavigationProp,
-  WalletStackParamsList
-} from '@appTypes/navigation/add-wallet';
 
 const Layout = (props: PropsWithChildren) => {
-  const route = useRoute<RouteProp<WalletStackParamsList, 'WalletAccount'>>();
+  const route = useRoute<RouteProp<HomeStackParamsList, 'WalletAccount'>>();
   const { wallet } = route.params;
   return (
     <SafeAreaView>
@@ -34,7 +31,7 @@ const LIMIT = 25;
 
 export const WalletAccount = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
-  const route = useRoute<RouteProp<WalletStackParamsList, 'WalletAccount'>>();
+  const route = useRoute<RouteProp<HomeStackParamsList, 'WalletAccount'>>();
   const { wallet } = route.params;
 
   const [error, setError] = useState('');

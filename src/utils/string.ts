@@ -34,4 +34,20 @@ const pluralize = (count: number, str: string, pluralForm?: string): string => {
   return count + ' ' + finalForm;
 };
 
-export const StringUtils = { formatAddress, pluralize };
+const removeNonNumericCharacters = (str: string): string => {
+  if (!str) return '';
+  return str.replace(/[^.\d]+/g, '');
+};
+
+const formatNumberInput = (str: string): string => {
+  let numericChars = removeNonNumericCharacters(str);
+  if (numericChars[0] === '.') numericChars = '0' + numericChars;
+  return numericChars;
+};
+
+export const StringUtils = {
+  formatAddress,
+  pluralize,
+  removeNonNumericCharacters,
+  formatNumberInput
+};

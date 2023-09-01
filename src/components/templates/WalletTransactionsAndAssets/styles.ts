@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     paddingRight: scale(55)
   },
   tabsIndicator: {
-    backgroundColor: COLORS.midnight,
+    backgroundColor: COLORS.alphaBlack10,
     height: 0.5
   },
   notificationsBadge: {

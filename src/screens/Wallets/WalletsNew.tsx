@@ -1,17 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { WalletTransactionsAndAssets } from '@components/templates';
 import { WalletCard } from '@components/modular';
+import { Spacer, Spinner } from '@components/base';
 import {
   useCryptoAccountFromHash,
   useSelectedWalletHash,
   useUSDPrice
 } from '@hooks';
-import { HomeHeader } from './components';
-import { styles } from './styles';
-import { Spacer, Spinner } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import { WalletTransactionsAndAssets } from '@components/templates';
+import { AccountActions, HomeHeader } from './components';
+import { styles } from './styles';
 
 export const HomeScreen = () => {
   const selectedWalletHash = useSelectedWalletHash();
@@ -22,18 +22,23 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen">
       <HomeHeader />
+      <Spacer value={verticalScale(24)} />
       {accountLoading && <Spinner />}
       {account && (
         <>
-          <View style={styles.accountCard}>
-            <WalletCard
-              address={account.address}
-              ambBalance={account.ambBalance}
-              usdBalance={usdPrice}
-            />
+          <View>
+            <View style={styles.accountCard}>
+              <WalletCard
+                address={account.address}
+                ambBalance={account.ambBalance}
+                usdBalance={usdPrice}
+              />
+            </View>
+            <Spacer value={verticalScale(24)} />
+            <AccountActions address={account.address} />
+            <Spacer value={verticalScale(32)} />
+            <WalletTransactionsAndAssets address={account.address} />
           </View>
-          <Spacer value={verticalScale(24)} />
-          <WalletTransactionsAndAssets address={account.address} />
         </>
       )}
     </SafeAreaView>

@@ -6,26 +6,26 @@ import {
   useWindowDimensions,
   Platform
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { AddIcon, NotificationIcon, ScannerIcon } from '@components/svg/icons';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { Button, Spacer, Text } from '@components/base';
-import { WalletsNavigationProp } from '@appTypes/navigation';
 import {
   BarcodeScanner,
   BottomSheetWalletCreateOrImport
 } from '@components/templates';
+import { HomeNavigationProp } from '@appTypes/navigation';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@utils/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
 
 export const HomeHeader = React.memo((): JSX.Element => {
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
   const walletImportCreate = useRef<BottomSheetRef>(null);

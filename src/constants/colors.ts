@@ -1,4 +1,6 @@
 export const COLORS = {
+  alphaBlack5: '#0e0e0e0d',
+  alphaBlack10: '#0e0e0e1a',
   blue100: '#EDF3FF',
   blue300: '#99B8FF',
   blue500: '#457EFF',
@@ -13,6 +15,9 @@ export const COLORS = {
   green100: '#C3FBE5',
   green200: '#73E5B7',
   green400: '#159F80',
+  neutral100: '#E6E6E6',
+  neutral300: '#a1a6b2',
+  neutral400: '#676B73',
   neutral600: '#0E0E0E4D',
   neutral700: '#222426',
   neutral800: '#191919',

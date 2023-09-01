@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { API } from '@api/api';
-import { WalletStackParamsList } from '@appTypes';
+import { HomeStackParamsList } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
-import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
+import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { WalletDBModel } from '@database';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
@@ -17,7 +17,7 @@ import { ExplorerAccount } from '@models';
 import { COLORS } from '@constants/colors';
 
 export const ReceiptScreen = () => {
-  const route = useRoute<RouteProp<WalletStackParamsList, 'ReceiptScreen'>>();
+  const route = useRoute<RouteProp<HomeStackParamsList, 'ReceiptScreen'>>();
   const { amount, currencyCode, hash, destination, origin } = route.params;
   const [sending, setSending] = useState(false);
   const wallet = useRef<Wallet | null>(null);
@@ -56,7 +56,7 @@ export const ReceiptScreen = () => {
       const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
         mnemonic: wallet.current.mnemonic
       });
-      await BlocksoftTransfer.sendTx(
+      await AirDAOTransfer.sendTx(
         {
           currencyCode: AirDAODictTypes.Code.AMB,
           walletHash: hash,

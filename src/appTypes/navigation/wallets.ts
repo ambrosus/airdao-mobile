@@ -15,9 +15,10 @@ export type HomeParamsList = {
       balance: { wei: string; ether: number };
     };
   };
+  SendFunds: undefined;
 } & CommonStackParamsList;
 
-export type WalletsNavigationProp = CompositeNavigationProp<
+export type HomeNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
   NativeStackNavigationProp<HomeParamsList>
 >;

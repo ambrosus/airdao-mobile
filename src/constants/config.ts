@@ -10,6 +10,12 @@ const envs = {
       appBuildVersion: '1.0.0',
       cryptoErrors: true,
       appErrors: false
+    },
+    walletActions: {
+      swap: false,
+      send: true,
+      receive: true,
+      stake: false
     }
   },
   stage: {
@@ -22,6 +28,12 @@ const envs = {
       appBuildVersion: '1.0.0',
       cryptoErrors: true,
       appErrors: false
+    },
+    walletActions: {
+      swap: false,
+      send: true,
+      receive: true,
+      stake: false
     }
   }
 };

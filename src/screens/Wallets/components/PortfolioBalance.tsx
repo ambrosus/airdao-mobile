@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { AMBPriceHistory } from '@components/templates';
-import { WalletsNavigationProp } from '@appTypes';
+import { HomeNavigationProp } from '@appTypes';
 import { shadow } from '@constants/shadow';
 
 export function PortfolioBalance(): JSX.Element {
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');

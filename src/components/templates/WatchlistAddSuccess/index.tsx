@@ -9,7 +9,7 @@ import { useForwardedRef } from '@hooks';
 import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import { useAllAddresses } from '@contexts';
 import { useNavigation } from '@react-navigation/native';
-import { WalletsNavigationProp } from '@appTypes';
+import { HomeNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { OnboardingView } from '../OnboardingView';
 import { styles } from './styles';
@@ -28,7 +28,7 @@ export const WatchlistAddSuccess = (
   const wallet = allAddresses.find((w) => w.address === address);
   const editModal = useForwardedRef<BottomSheetRef>(null);
 
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
 
   // onboarding registration
   const showEdit = async () => {
