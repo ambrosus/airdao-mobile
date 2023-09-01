@@ -41,7 +41,7 @@ export const CreateWalletStep1 = () => {
         <Row key={word}>
           <View
             style={{
-              backgroundColor: '#E6E6E6',
+              backgroundColor: COLORS.gray100,
               borderRadius: 48,
               width: scale(100)
             }}
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   warningContainer: {
-    backgroundColor: '#fffbb5',
+    backgroundColor: COLORS.lemon,
     borderRadius: 13,
     borderWidth: 0.2,
     borderColor: '#ffac23'

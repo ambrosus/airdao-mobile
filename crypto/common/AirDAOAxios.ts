@@ -5,7 +5,7 @@ import AirDAOCryptoLog from './AirDAOCryptoLog';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import CookieManager from '@react-native-cookies/cookies';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition } from '@components/modular/Toast';
 
 const CancelToken =
   axios && typeof axios.CancelToken !== 'undefined'

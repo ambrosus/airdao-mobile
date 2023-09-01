@@ -9,7 +9,7 @@ import Animated, {
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
-import { WalletsNavigationProp } from '@appTypes';
+import { HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/WalletList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
@@ -41,7 +41,7 @@ export const SwipeableWalletItem = memo(
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
       const [open, setOpen] = useState<boolean>(false);
 
-      const navigation = useNavigation<WalletsNavigationProp>();
+      const navigation = useNavigation<HomeNavigationProp>();
 
       const paddingRightAnimation = useSharedValue(0);
       // close swipeable on another swipeable open

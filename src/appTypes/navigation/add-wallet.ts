@@ -4,7 +4,7 @@ import { TabsParamsList } from './tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Wallet } from '@models/Wallet';
 
-export type WalletStackParamsList = {
+export type HomeStackParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
@@ -23,5 +23,5 @@ export type WalletStackParamsList = {
 
 export type AddWalletStackNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabsParamsList, 'Wallet'>,
-  NativeStackNavigationProp<WalletStackParamsList>
+  NativeStackNavigationProp<HomeStackParamsList>
 >;

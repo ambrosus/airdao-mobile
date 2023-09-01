@@ -128,7 +128,44 @@
   "no.addresses.yet": "No addresses yet",
   "no.groups.yet": "No groups yet",
 
+  "my.assets": "My assets",
+  "add.wallet": "Add wallet",
+  "create.new.wallet": "Create new wallet",
+  "import.existing.wallet": "Import existing wallet",
+  "about.airdao": "About AirDAO",
+  "stats": "Stats",
+  "markets": "Markets",
+  "your.balance": "Your balance",
+
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
-  "chart.timeframe.monthly": "1M"
+  "chart.timeframe.monthly": "1M",
+
+  "errors": {
+    "loading-account": "Could not fetch crypto address details!",
+    "loading-wallet-from-db": "Error occured while retrieving wallet from device storage!"
+  },
+
+  "account": {
+    "actions": {
+      "swap": "Swap",
+      "send": "Send",
+      "receive": "Receive",
+      "stake": "Stake"
+    }
+  },
+
+  "receive.funds": "Receive funds",
+  "send.funds": {
+    "balance": "Balance",
+    "estimated.fee": "Estimated fee",
+    "invalid.address": "Please enter a valid address",
+    "ready.to.send": "Ready to send?",
+    "send.now": "Send now",
+    "review.transaction": "Review Transaction",
+    "transfer.fee": "Estimated transfer fee",
+    "use.max": "Use max"
+  },
+  "share": "Share",
+  "transaction.in.progress": "Transaction in progress!"
 }

@@ -3,7 +3,12 @@ import React from 'react';
 import { ActivityIndicator, ActivityIndicatorProps } from 'react-native';
 
 export function Spinner(
-  props: Pick<ActivityIndicatorProps, 'size'>
+  props: Pick<ActivityIndicatorProps, 'size' | 'color'>
 ): JSX.Element {
-  return <ActivityIndicator size={props.size || 'small'} color={COLORS.grey} />;
+  return (
+    <ActivityIndicator
+      size={props.size || 'small'}
+      color={props.color || COLORS.grey}
+    />
+  );
 }

@@ -1,9 +1,15 @@
 import { Wallet } from '@models/Wallet';
-import { WalletMetadata } from '@appTypes';
+import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 import { Crypto } from './crypto';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
+import { Database, WalletDBModel } from '@database';
+import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import AirDAOUtils from '@crypto/common/AirDAOUtils';
+import { Q } from '@nozbe/watermelondb';
+import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -30,7 +36,7 @@ const _saveWallet = async (
 };
 
 const _getWalletNumber = async () => {
-  const count = (await AirDAOKeysStorage.getWallets()).length || 0;
+  const count = (await Database.getCount(DatabaseTable.Wallets)) || 0;
   return count + 1;
 };
 
@@ -67,4 +73,54 @@ const processWallet = async (
   return { address };
 };
 
-export const WalletUtils = { processWallet };
+const sendTx = async (
+  walletHash: string,
+  currencyCode: AirDAODictTypes.Code,
+  from: string,
+  to: string,
+  etherAmount: number,
+  accountBalanceRaw: string
+) => {
+  const wallets = (await Database.query(
+    DatabaseTable.Wallets,
+    Q.where('hash', Q.eq(walletHash))
+  )) as WalletDBModel[];
+  if (wallets.length > 0) {
+    const wallet = wallets[0];
+    try {
+      const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
+        mnemonic: wallet.mnemonic
+      });
+      await AirDAOTransfer.sendTx(
+        {
+          currencyCode,
+          walletHash: walletHash,
+          derivationPath: info.path,
+          addressFrom: from,
+          addressTo: to,
+          amount: AirDAOUtils.toWei(etherAmount).toString(),
+          useOnlyConfirmed: Boolean(wallet.useUnconfirmed),
+          allowReplaceByFee: Boolean(wallet.allowReplaceByFee),
+          useLegacy: wallet.useLegacy,
+          isHd: Boolean(wallet.isHd),
+          accountBalanceRaw,
+          isTransferAll: false
+        },
+        {
+          uiErrorConfirmed: true,
+          selectedFee: {
+            langMsg: '',
+            feeForTx: '',
+            amountForTx: ''
+          }
+        }, // TODO fix selected fee
+        // CACHE_DATA.additionalData
+        {}
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+export const WalletUtils = { processWallet, sendTx };

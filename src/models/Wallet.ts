@@ -16,14 +16,12 @@ export class Wallet {
   isHd: number;
   isCreatedHere: number;
   toSendStatus: number;
-  pub: string;
 
   constructor(details: WalletMetadata) {
     this.hash = details.hash || 'empty_hash';
     this.name = details.name;
     this.mnemonic = details.mnemonic;
     this.number = details.number;
-    // @ilya I have no idea what below fields correspond
     this.cashback = details.cashback || 'empty_cashback';
     this.isBackedUp = details.isBackedUp || 0;
     this.isHideTransactionForFee = details.isHideTransactionForFee || 1;
@@ -33,7 +31,6 @@ export class Wallet {
     this.isHd = details.isHd || 0;
     this.isCreatedHere = details.isCreatedHere || 0;
     this.toSendStatus = details.toSendStatus || 0;
-    this.pub = details.pub || '';
   }
 
   static async saveWallet(wallet: WalletMetadata) {
@@ -54,8 +51,7 @@ export class Wallet {
       useUnconfirmed: model.useUnconfirmed,
       isHd: model.isHd,
       isCreatedHere: model.isCreatedHere,
-      toSendStatus: model.toSendStatus,
-      pub: model.pub
+      toSendStatus: model.toSendStatus
     });
   }
 }

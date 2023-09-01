@@ -4,3 +4,4 @@ export * from './Transaction';
 export * from './Explorer';
 export * from './Notification';
 export * from './AccountList';
+export * from './Wallet';

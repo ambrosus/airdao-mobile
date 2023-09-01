@@ -83,7 +83,7 @@ export const CreateWalletStep2 = () => {
         <Button
           key={word}
           style={{
-            backgroundColor: '#E6E6E6',
+            backgroundColor: COLORS.gray100,
             borderRadius: 48
           }}
           onPress={onPress}
@@ -186,7 +186,7 @@ export const CreateWalletStep2 = () => {
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={addressToCopy.length > 0 ? COLORS.white : '#0E0E0E4D'}
+          color={addressToCopy.length > 0 ? COLORS.white : COLORS.neutral600}
           style={{ marginVertical: scale(12) }}
         >
           Verify

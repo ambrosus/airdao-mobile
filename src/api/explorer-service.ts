@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { ExplorerAccountDTO, ExplorerInfoDTO } from '@models';
+import { ExplorerAccountDTO, ExplorerInfoDTO, Transaction } from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
@@ -8,6 +8,7 @@ import Config from '@constants/config';
 import { SearchSort } from '@screens/Search/Search.types';
 
 const exploreApiUrl = Config.EXPLORER_API_URL;
+const explorerapiV2Url = Config.EXPLORER_API_V2_URL;
 
 const getExplorerAccountTypeFromResponseMeta = (
   search: string
@@ -86,10 +87,53 @@ const getTransactionsOfAccount = async (
   }
 };
 
+const searchWalletV2 = async (
+  wallet: string
+): Promise<{
+  tokens: {
+    address: string;
+    name: string;
+    balance: { wei: string; ether: number };
+  }[];
+  transactions: Transaction[];
+}> => {
+  try {
+    const apiUrl = `${explorerapiV2Url}/addresses/${wallet}/all`;
+    const response = await axios.get(apiUrl);
+    const tokens = response.data.tokens;
+    const transactions = response.data.data;
+    return { tokens, transactions };
+  } catch (error) {
+    // TODO handle error
+    throw error;
+  }
+};
+
+const getTokenTransactionsV2 = async (
+  address: string,
+  tokenAddress: string,
+  page?: number
+): Promise<PaginatedResponseBody<Transaction[]>> => {
+  try {
+    if (!address) return { data: [], next: null };
+    const apiUrl = `${explorerapiV2Url}/addresses/${address}/tokens/${tokenAddress}`;
+    const response = await axios.get(apiUrl);
+    return {
+      data: response.data.data,
+      // @ts-ignore
+      next: response.data.pagination.hasNext ? (page + 1).toString() : null
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const explorerService = {
   getExplorerInfo,
   getExplorerAccounts,
   searchAddress,
   getTransactionsOfAccount,
-  getTransactionDetails
+  getTransactionDetails,
+  searchWalletV2,
+  getTokenTransactionsV2
 };

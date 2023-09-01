@@ -2,13 +2,13 @@
 /**
  * @version 0.41
  */
-import { BlocksoftTransfer } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransfer';
+import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAOBlockchainTypes } from '@crypto/blockchains/AirDAOBlockchainTypes';
 
 // import store from '@app/store';
 // import config from '@app/config/config';
 // import Log from '@app/services/Log/Log';
-import { BlocksoftTransferUtils } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransferUtils';
+import { BlocksoftTransferUtils } from '@crypto/actions/AirDAOTransfer/BlocksoftTransferUtils';
 // import { showModal } from '@app/appstores/Stores/Modal/ModalActions';
 // import { strings } from '@app/services/i18n';
 import AirDAODict from '@crypto/common/AirDAODict';
@@ -108,7 +108,7 @@ export namespace SendActionsBlockchainWrapper {
     let newCountedFeesData = {};
     try {
       newCountedFeesData = { ...CACHE_DATA.countedFeesData };
-      const countedFees = await BlocksoftTransfer.getFeeRate(
+      const countedFees = await AirDAOTransfer.getFeeRate(
         newCountedFeesData,
         CACHE_DATA.additionalData
           ? { ...newFee, ...CACHE_DATA.additionalData }
@@ -192,13 +192,13 @@ export namespace SendActionsBlockchainWrapper {
         };
       } else {
         try {
-          countedFees = await BlocksoftTransfer.getFeeRate(
+          countedFees = await AirDAOTransfer.getFeeRate(
             newCountedFeesData,
             CACHE_DATA.additionalData ? CACHE_DATA.additionalData : {}
           );
         } catch (e) {
           if (e.message.indexOf('SERVER') === -1) {
-            e.message += ' while BlocksoftTransfer.getFeeRate';
+            e.message += ' while AirDAOTransfer.getFeeRate';
           }
           throw e;
         }
@@ -321,7 +321,7 @@ export namespace SendActionsBlockchainWrapper {
           addressTo: newCountedFeesData.addressTo
         };
       }
-      const countedFees = await BlocksoftTransfer.getTransferAllBalance(
+      const countedFees = await AirDAOTransfer.getTransferAllBalance(
         newCountedFeesData,
         CACHE_DATA.additionalData ? CACHE_DATA.additionalData : {}
       );
@@ -435,7 +435,7 @@ export namespace SendActionsBlockchainWrapper {
 
     selectedFee.rawOnly = rawOnly || false;
 
-    return BlocksoftTransfer.sendTx(
+    return AirDAOTransfer.sendTx(
       newCountedFeesData,
       { uiErrorConfirmed, selectedFee, transactionFilterType },
       CACHE_DATA.additionalData
