@@ -103,6 +103,15 @@ class Database {
     }
   }
 
+  async getCount(table: DatabaseTable, ...args: Clause[]) {
+    if (!this.db) this.init();
+    try {
+      return await this.db?.get(table).query(args).fetchCount();
+    } catch (error) {
+      // TODO ignore
+    }
+  }
+
   async unsafeRawQuery(table: DatabaseTable, query: string) {
     return await database.get(table).query(Q.unsafeSqlQuery(query)).fetch();
   }

@@ -4,7 +4,7 @@
 // import NavStore from '@app/components/navigation/NavStore';
 
 import AirDAOPrettyNumbers from '@crypto/common/AirDAOPrettyNumbers';
-import { BlocksoftTransferUtils } from '@crypto/actions/BlocksoftTransfer/BlocksoftTransferUtils';
+import { BlocksoftTransferUtils } from '@crypto/actions/AirDAOTransfer/BlocksoftTransferUtils';
 import {
   getFeeRate,
   SendActionsBlockchainWrapper

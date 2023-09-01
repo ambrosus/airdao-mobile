@@ -37,7 +37,7 @@ export const useCryptoAccountFromHash = (
         });
         if (_account) {
           const balance = await API.cryptoService.getBalanceOfAddress(
-            '0xb2E8A153bdbB5Ad7fc9c2e7F92BFA6908665664C'
+            _account.address
           );
           const explorerAccount = new ExplorerAccount({
             _id: _account.address,

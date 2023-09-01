@@ -134,5 +134,26 @@
   "errors": {
     "loading-account": "Kripto adres bilgileri çekilemedi!",
     "loading-wallet-from-db": "Cihaz belleğinden cüzdan bilgisi çekilirken hata oluştu!"
-  }
+  },
+
+  "account": {
+    "actions": {
+      "swap": "Swap",
+      "send": "Gönder",
+      "receive": "Al",
+      "stake": "Stake"
+    }
+  },
+  "receive.funds": "Receive funds",
+  "send.funds": {
+    "balance": "Bakiye",
+    "estimated.fee": "Tahmini ücret",
+    "invalid.address": "Lütfen geçerli bir adres girin",
+    "review.transaction": "İşlemi İncele",
+    "send.now": "Gönder",
+    "transfer.fee": "Tahmini transfer ücreti",
+    "use.max": "Hepsini kullan"
+  },
+  "share": "Paylaş",
+  "transaction.in.progress": "Transfer gerçekleştiriliyor!"
 }

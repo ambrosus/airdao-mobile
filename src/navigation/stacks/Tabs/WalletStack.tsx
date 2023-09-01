@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { WalletStackParamsList } from '@appTypes';
+import { HomeStackParamsList } from '@appTypes';
 import { WalletScreen } from '@screens/Wallet';
 import {
   CreateWalletStep1,
@@ -14,7 +14,7 @@ import { ReceiptScreen } from '@screens/Wallet/Receipt';
 import { SendCryptoProvider } from '@contexts/SendCrypto/SendCrypto.context';
 import { SuccessBackupComplete } from '@screens/Wallet/CreateWallet/components/SuccessBackupComplete';
 
-const Stack = createNativeStackNavigator<WalletStackParamsList>();
+const Stack = createNativeStackNavigator<HomeStackParamsList>();
 export const WalletStack = () => {
   return (
     <SendCryptoProvider>
