@@ -2,10 +2,10 @@ import React from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
 import { LocalizedRenderEmpty } from '@components/templates';
-import { WalletsNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
-import { verticalScale } from '@utils/scaling';
 import { Spinner } from '@components/base';
+import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
 
 interface WalletAssetsProps {
   tokens:
@@ -20,7 +20,9 @@ interface WalletAssetsProps {
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const { tokens, loading } = props;
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
+
+  const { t } = useTranslation();
 
   const navigateToAssetScreen = (tokenInfo: {
     name: string;
@@ -59,12 +61,11 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            flexGrow: 1,
-            paddingBottom: verticalScale(1200)
+            paddingBottom: 100
           }}
         />
       ) : (
-        <LocalizedRenderEmpty text="No assets yet" />
+        <LocalizedRenderEmpty text={t('no.assets.yet')} />
       )}
     </View>
   );

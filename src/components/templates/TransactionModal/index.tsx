@@ -11,6 +11,7 @@ import { NumberUtils } from '@utils/number';
 import { useUSDPrice } from '@hooks';
 import { AssetLogo } from '@components/svg/icons/Asset';
 import { styles } from '@components/templates/TransactionModal/styles';
+import { useTranslation } from 'react-i18next';
 
 interface TransactionModalProps {
   status: string;
@@ -26,8 +27,11 @@ export const TransactionModal = ({
   const usdPrice = useUSDPrice(transaction?.amount || transaction.value.ether);
   const usdFee = useUSDPrice(transaction.fee);
 
+  const { t } = useTranslation();
+
   const timeDiff = useMemo(
-    () => moment(transaction.timestamp).fromNow(),
+    // @ts-ignore
+    () => moment(transaction.timestamp * 1000).fromNow(),
     [transaction.timestamp]
   );
 
@@ -45,7 +49,9 @@ export const TransactionModal = ({
         fontSize={20}
         color={COLORS.nero}
       >
-        {status === 'SUCCESS' ? 'Sent' : 'Transaction in progress'}
+        {status === 'SUCCESS'
+          ? t('transaction.modal.sent')
+          : t('transaction.modal.sending')}
       </Text>
       <Spacer value={verticalScale(16)} />
       {status !== 'SUCCESS' && (
@@ -56,7 +62,7 @@ export const TransactionModal = ({
             fontSize={14}
             color={COLORS.nero}
           >
-            You will receive a notification when the transaction is complete
+            {t('transaction.modal.title')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <Spinner />
@@ -72,7 +78,7 @@ export const TransactionModal = ({
                 fontSize={16}
                 color={COLORS.asphalt}
               >
-                Date
+                {t('transaction.modal.date')}
               </Text>
               <Text
                 fontFamily="Inter_500Medium"
@@ -91,7 +97,9 @@ export const TransactionModal = ({
             fontSize={16}
             color={COLORS.asphalt}
           >
-            {status !== 'SUCCESS' ? 'From' : 'Status'}
+            {status !== 'SUCCESS'
+              ? t('transaction.modal.from')
+              : t('transaction.modal.status')}
           </Text>
           {status !== 'SUCCESS' ? (
             <Text
@@ -111,7 +119,7 @@ export const TransactionModal = ({
                 fontFamily="Inter_500Medium"
                 fontSize={14}
               >
-                Completed
+                {t('transaction.modal.completed')}
               </Text>
             </Button>
           )}
@@ -123,7 +131,9 @@ export const TransactionModal = ({
             fontSize={16}
             color={COLORS.asphalt}
           >
-            {status !== 'SUCCESS' ? 'Sending to' : 'Recipient'}
+            {status !== 'SUCCESS'
+              ? t('transaction.modal.sending.to')
+              : t('transaction.modal.recipient')}
           </Text>
           <Text
             fontFamily="Inter_500Medium"
@@ -140,7 +150,7 @@ export const TransactionModal = ({
             fontSize={16}
             color={COLORS.asphalt}
           >
-            Amount
+            {t('transaction.modal.amount')}
           </Text>
           <Row alignItems="center">
             <Text
@@ -148,11 +158,15 @@ export const TransactionModal = ({
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {NumberUtils.formatNumber(
-                transaction.amount || transaction.value.ether,
-                2
-              )}{' '}
-              AMB{' '}
+              {transaction.amount || transaction.value.ether >= 100000
+                ? NumberUtils.abbreviateNumber(
+                    transaction.amount || transaction.value.ether
+                  )
+                : NumberUtils.formatNumber(
+                    transaction.amount || transaction.value.ether,
+                    2
+                  )}
+              {} AMB{' '}
             </Text>
             <Text
               fontFamily="Inter_500Medium"
@@ -170,7 +184,7 @@ export const TransactionModal = ({
             fontSize={16}
             color={COLORS.asphalt}
           >
-            Estimated fee
+            {t('transaction.modal.estimated.fee')}
           </Text>
           <Row alignItems="center">
             <View style={{ marginRight: scale(-8) }}>
@@ -207,7 +221,7 @@ export const TransactionModal = ({
                 fontSize={16}
                 color={COLORS.nero}
               >
-                View on explorer
+                {t('transaction.modal.buttons.explorer')}
               </Text>
             </Button>
             <Spacer value={verticalScale(16)} />
@@ -221,7 +235,7 @@ export const TransactionModal = ({
                 fontSize={16}
                 color={COLORS.nero}
               >
-                Share
+                {t('transaction.modal.buttons.share')}
               </Text>
             </Button>
           </>
@@ -232,7 +246,7 @@ export const TransactionModal = ({
               fontSize={16}
               color={COLORS.white}
             >
-              Ok, got it
+              {t('transaction.modal.confirm')}
             </Text>
           </PrimaryButton>
         )}

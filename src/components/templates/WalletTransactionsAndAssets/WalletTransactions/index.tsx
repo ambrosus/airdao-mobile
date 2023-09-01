@@ -4,7 +4,7 @@ import { Spinner } from '@components/base';
 import { Transaction } from '@models';
 import { SingleTransaction } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions/SingleTransaction';
 import { LocalizedRenderEmpty } from '@components/templates';
-import { verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 interface WalletTransactionsProps {
   transactions: Transaction[] | undefined;
@@ -15,6 +15,8 @@ export const WalletTransactions = (
   props: WalletTransactionsProps
 ): JSX.Element => {
   const { transactions, loading } = props;
+
+  const { t } = useTranslation();
 
   const renderTransactions = (
     args: ListRenderItemInfo<Transaction>
@@ -35,7 +37,7 @@ export const WalletTransactions = (
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        <LocalizedRenderEmpty text="No transactions yet" />
+        <LocalizedRenderEmpty text={t('no.transactions.yet')} />
       )}
     </View>
   );

@@ -60,5 +60,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '33%'
+  },
+  mnemoicLogo: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.lightSilver,
+    borderRadius: 100,
+    width: scale(193),
+    height: verticalScale(192)
   }
 });

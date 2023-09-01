@@ -115,7 +115,7 @@ export const WalletTransactionsAndAssets = (
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
       >
-        <View style={{ width: tabWidth }}>
+        <View style={{ width: tabWidth, height: '60%' }}>
           <WalletAssets tokens={tokens} loading={tokensLoading} />
         </View>
         <View style={{ width: tabWidth, height: '60%' }}>

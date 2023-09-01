@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { HomeParamsList, WalletsNavigationProp } from '@appTypes';
+import { HomeParamsList, HomeNavigationProp } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
@@ -20,7 +20,7 @@ export const AssetScreen = () => {
   const {
     params: { tokenInfo }
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -29,7 +29,7 @@ export const AssetScreen = () => {
   const fetchTransactions = async () => {
     try {
       const response = await API.explorerService.getTokenTransactionsV2(
-        '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
+        '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
         tokenInfo.address
       );
       setTransactions(response.data);

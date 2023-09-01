@@ -21,7 +21,7 @@ export const HomeScreen = () => {
   const usdPrice = useUSDPrice(account?.ambBalance || 0);
 
   const { data: tokensAndTransactions, loading: tokensAndTransactionsLoading } =
-    useTokensAndTransactions('0x4fB246FAf8FAc198f8e5B524E74ABC6755956696');
+    useTokensAndTransactions('0xb017DcCC473499C83f1b553bE564f3CeAf002254');
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen">

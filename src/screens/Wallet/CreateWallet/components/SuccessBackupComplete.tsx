@@ -8,6 +8,7 @@ import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
+import { SuccessIcon } from '@components/svg/icons';
 
 export const SuccessBackupComplete = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -18,6 +19,7 @@ export const SuccessBackupComplete = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        <SuccessIcon />
         <Text
           align="center"
           fontSize={24}
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

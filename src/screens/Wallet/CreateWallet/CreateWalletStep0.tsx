@@ -5,12 +5,12 @@ import { BottomSheetRef, CheckBox, Header } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { ElipseIcon } from '@components/svg/icons/Elipse';
 import { useNavigation } from '@react-navigation/native';
 import { RecoveryPhraseModal } from '@screens/Wallet/CreateWallet/components/RecoveryPhraseModal';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
+import { MnemoicIcon } from '@components/svg/icons';
 
 export const CreateWalletStep0 = () => {
   const { top } = useSafeAreaInsets();
@@ -67,12 +67,12 @@ export const CreateWalletStep0 = () => {
               fontSize={15}
               fontFamily="Inter_500Medium"
               color={COLORS.blue600}
+              style={{ textDecorationLine: 'underline' }}
             >
               {t('backup.wallet.popup')}
             </Text>
           </Button>
         </View>
-        <Spacer value={verticalScale(12)} />
         <Text
           align="center"
           fontSize={15}
@@ -82,11 +82,11 @@ export const CreateWalletStep0 = () => {
           {t('make.sure.to.write.down')}
         </Text>
         <Spacer value={verticalScale(64)} />
-        <View style={{ alignSelf: 'center' }}>
-          <ElipseIcon />
+        <View style={styles.mnemoicLogo}>
+          <MnemoicIcon />
         </View>
       </View>
-      <View style={{ marginBottom: verticalScale(100) }}>
+      <View style={{ marginBottom: verticalScale(120) }}>
         <Row>
           <CheckBox
             fillColor={COLORS.sapphireBlue}
