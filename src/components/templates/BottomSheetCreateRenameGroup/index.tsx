@@ -17,7 +17,8 @@ import {
   BottomSheetFloat,
   PrimaryButton,
   Toast,
-  ToastPosition
+  ToastPosition,
+  ToastType
 } from '@components/modular';
 import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -68,24 +69,24 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
         Toast.show({
-          title: '',
-          message: `${t('toast.way.to.go')} ${StringUtils.formatAddress(
+          text: `${t('toast.way.to.go')} ${StringUtils.formatAddress(
             localGroupName,
             16,
             0
           )} ${t('toast.group.created')}`,
-          type: ToastPosition.Top
+          position: ToastPosition.Top,
+          type: ToastType.Success
         });
       }
 
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
         Toast.show({
-          title: '',
-          message: `${StringUtils.formatAddress(groupTitle || '', 16, 0)} ${t(
+          text: `${StringUtils.formatAddress(groupTitle || '', 16, 0)} ${t(
             'toast.has.been.renamed'
           )} ${StringUtils.formatAddress(localGroupName, 16, 0)}.`,
-          type: ToastPosition.Top
+          position: ToastPosition.Top,
+          type: ToastType.Success
         });
       }
 

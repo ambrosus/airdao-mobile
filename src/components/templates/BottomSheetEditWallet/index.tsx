@@ -1,7 +1,12 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
+import {
+  BottomSheetFloat,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -80,9 +85,9 @@ export const BottomSheetEditWallet = forwardRef<
       toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
-        title: '',
-        message: t('toast.Successfully.removed.wallet.from.group'),
-        type: ToastPosition.Top
+        text: t('toast.Successfully.removed.wallet.from.group'),
+        position: ToastPosition.Top,
+        type: ToastType.Success
       });
     }
   }, [dismissThis, listsWithCurrentWallet, t, toggleAddressesInList, wallet]);

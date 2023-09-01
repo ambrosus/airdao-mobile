@@ -29,7 +29,7 @@ import {
   useTransactionDetails
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
@@ -110,9 +110,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const toggleWatchlist = async (isOnWatchlist: boolean) => {
     if (isOnWatchlist) {
       Toast.show({
-        title: t('toast.address.watchlisted.msg'),
-        message: t('toast.tap.to.rename.msg'),
-        type: ToastPosition.Top,
+        text: t('toast.address.watchlisted.msg'),
+        subtext: t('toast.tap.to.rename.msg'),
+        position: ToastPosition.Top,
+        type: ToastType.Success,
         onBodyPress: editModal.current?.show
       });
     }

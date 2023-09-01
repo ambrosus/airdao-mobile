@@ -23,7 +23,12 @@ import {
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { PrimaryButton, Toast, ToastPosition } from '@components/modular';
+import {
+  PrimaryButton,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
@@ -117,9 +122,9 @@ export const SendFunds = () => {
         hideReviewModal();
         navigation.replace('HomeScreen');
         Toast.show({
-          type: ToastPosition.Top,
-          title: t('transaction.in.progress'),
-          message: ''
+          position: ToastPosition.Top,
+          type: ToastType.Success,
+          text: t('transaction.in.progress')
         });
       } catch (error) {
         Alert.alert('Transfer failed');
