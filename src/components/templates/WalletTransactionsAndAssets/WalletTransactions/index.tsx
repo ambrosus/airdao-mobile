@@ -4,6 +4,7 @@ import { Spinner } from '@components/base';
 import { Transaction } from '@models';
 import { SingleTransaction } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions/SingleTransaction';
 import { LocalizedRenderEmpty } from '@components/templates';
+import { verticalScale } from '@utils/scaling';
 
 interface WalletTransactionsProps {
   transactions: Transaction[];
@@ -27,9 +28,11 @@ export const WalletTransactions = (
         <FlatList
           data={transactions}
           renderItem={renderTransactions}
-          contentContainerStyle={{ paddingBottom: 60 }}
           // ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
-          ListFooterComponent={<View style={{ height: 400 }} />}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: verticalScale(1200)
+          }}
           showsVerticalScrollIndicator={false}
         />
       ) : (

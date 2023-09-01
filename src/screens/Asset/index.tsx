@@ -99,15 +99,15 @@ export const AssetScreen = () => {
             color={COLORS.gray300}
           />
         </Row>
-        <Row>
-          <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
-            %0.00
-          </Text>
-          {/* TODO */}
-          <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
-            ($10.98)
-          </Text>
-        </Row>
+        {/*<Row>*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>*/}
+        {/*    %0.00*/}
+        {/*  </Text>*/}
+        {/*  /!* TODO *!/*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>*/}
+        {/*    ($10.98)*/}
+        {/*  </Text>*/}
+        {/*</Row>*/}
       </View>
       <Spacer value={verticalScale(16)} />
       <View style={{ paddingHorizontal: scale(17) }}>

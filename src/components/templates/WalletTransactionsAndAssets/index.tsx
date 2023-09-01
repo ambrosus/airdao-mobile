@@ -10,23 +10,24 @@ import Animated, {
 } from 'react-native-reanimated';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/styles';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
-import {
-  useCryptoAccountFromHash,
-  useSelectedWalletHash,
-  useTransactionsOfAccount
-} from '@hooks';
+import { useCryptoAccountFromHash, useSelectedWalletHash } from '@hooks';
 import { useTranslation } from 'react-i18next';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
-import { API } from '@api/api';
+import { Transaction } from '@models';
 
 interface WalletTransactionsAndAssetsProps {
-  address: string;
+  transactions: Transaction[];
+  tokens: {
+    address: string;
+    name: string;
+    balance: { wei: string; ether: number };
+  }[];
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { address } = props;
+  const { tokens, transactions } = props;
   const scrollView = useRef<ScrollView>(null);
   const selectedWalletHash = useSelectedWalletHash();
   const { loading: accountLoading } =
@@ -35,18 +36,6 @@ export const WalletTransactionsAndAssets = (
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { t } = useTranslation();
-
-  const initialMount = useRef(true);
-  const TRANSACTION_LIMIT = 20;
-  const { data: transactions, loading: transactionsLoading } =
-    useTransactionsOfAccount(
-      address,
-      1,
-      TRANSACTION_LIMIT,
-      '',
-      !initialMount.current
-    );
-  initialMount.current = false;
 
   const tabWidth = Dimensions.get('window').width;
 
@@ -75,30 +64,6 @@ export const WalletTransactionsAndAssets = (
     setCurrentIndex(1);
     indicatorPosition.value = withTiming(tabWidth / 2);
   };
-
-  const [tokens, setTokens] = useState<
-    {
-      address: string;
-      name: string;
-      balance: { wei: string; ether: number };
-    }[]
-  >([]);
-
-  const fetchTokens = async () => {
-    try {
-      const walletWithTokens = '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696';
-      const walletTokens = await API.explorerService.searchWalletV2(
-        walletWithTokens
-      );
-      setTokens(walletTokens);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTokens();
-  }, []);
 
   return (
     <View>
@@ -155,10 +120,7 @@ export const WalletTransactionsAndAssets = (
           <WalletAssets tokens={tokens} loading={accountLoading} />
         </View>
         <View style={{ width: tabWidth }}>
-          <WalletTransactions
-            transactions={transactions}
-            // loading={transactionsLoading}
-          />
+          <WalletTransactions transactions={transactions} />
         </View>
       </ScrollView>
     </View>

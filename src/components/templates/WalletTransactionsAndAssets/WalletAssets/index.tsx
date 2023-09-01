@@ -5,6 +5,7 @@ import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/W
 import { LocalizedRenderEmpty } from '@components/templates';
 import { WalletsNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
+import { verticalScale } from '@utils/scaling';
 
 interface WalletAssetsProps {
   tokens: {
@@ -55,6 +56,10 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           renderItem={renderToken}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: verticalScale(1200)
+          }}
         />
       ) : (
         <LocalizedRenderEmpty text="No assets yet" />
