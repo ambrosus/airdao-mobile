@@ -5,6 +5,7 @@ import { Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
+import { DatabaseTable } from '@appTypes';
 import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 import { styles } from '@screens/Wallet/styles';
 import { COLORS } from '@constants/colors';
@@ -12,7 +13,7 @@ import { PrimaryButton } from '@components/modular';
 import { Database, WalletDBModel } from '@database';
 import { Wallet } from '@models/Wallet';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
-import { DatabaseTable } from '@appTypes';
+import { useTranslation } from 'react-i18next';
 
 export const WalletScreen = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
@@ -20,6 +21,7 @@ export const WalletScreen = () => {
     useAddWalletContext();
   const { top } = useSafeAreaInsets();
   const [wallets, setWallets] = useState<Wallet[]>([]);
+  const { t } = useTranslation();
 
   const fetchLocalWallets = async () => {
     try {
@@ -72,7 +74,7 @@ export const WalletScreen = () => {
   return (
     <View style={[{ top }, styles.container]}>
       <Header
-        title="Add Wallet"
+        title={t('add.wallet')}
         backIconVisible={false}
         style={styles.header}
       />
@@ -80,7 +82,7 @@ export const WalletScreen = () => {
       <View style={{ paddingHorizontal: scale(16) }}>
         <PrimaryButton onPress={onCreatePress}>
           <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
-            Create new wallet
+            {t('create.new.wallet')}
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(24)} />

@@ -3,32 +3,28 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
+import { useTranslation } from 'react-i18next';
 
 export const SuccessBackupComplete = () => {
   const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const { t } = useTranslation();
   const navigateToSetUpSecurity = () => {
     navigation.navigate('WalletScreen');
   };
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: scale(16)
-      }}
-    >
-      <View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
         <Text
           align="center"
           fontSize={24}
           fontFamily="Inter_700Bold"
           color={COLORS.nero}
         >
-          Nice move! Backup complete.
+          {t('backup.complete')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -37,10 +33,9 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.nero}
         >
-          You backed up your wallet. Now let’s setup your wallet’s security.
+          {t('backup.complete.text')}
         </Text>
       </View>
-      <Spacer value={verticalScale(16)} />
       <PrimaryButton onPress={navigateToSetUpSecurity}>
         <Text
           align="center"
@@ -48,9 +43,21 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.white}
         >
-          Setup security
+          {t('setup.security.btn')}
         </Text>
       </PrimaryButton>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: scale(16)
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});
