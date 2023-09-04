@@ -15,7 +15,7 @@ import { AccountActions, HomeHeader } from './components';
 import { styles } from './styles';
 
 export const HomeScreen = () => {
-  const selectedWalletHash = useSelectedWalletHash();
+  const { data: selectedWalletHash } = useSelectedWalletHash();
   const { data: account, loading: accountLoading } =
     useCryptoAccountFromHash(selectedWalletHash);
   const usdPrice = useUSDPrice(account?.ambBalance || 0);

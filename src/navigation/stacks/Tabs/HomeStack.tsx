@@ -7,12 +7,13 @@ import { Notifications } from '@screens/Notifications';
 import { getCommonStack } from '../CommonStack';
 import { AssetScreen } from '@screens/Asset';
 import { SendFunds } from '@screens/SendFunds';
+import { NoWalletScreen } from '@screens/NoWallet';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="NoWallet"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -20,6 +21,7 @@ export const HomeStack = () => {
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="AssetScreen" component={AssetScreen} />
       <Stack.Screen name="SendFunds" component={SendFunds} />
+      <Stack.Screen name="NoWallet" component={NoWalletScreen} />
       {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );

@@ -16,6 +16,7 @@ export type HomeParamsList = {
     };
     walletAccount: string;
   };
+  NoWallet: undefined;
   SendFunds: undefined;
 } & CommonStackParamsList;
 

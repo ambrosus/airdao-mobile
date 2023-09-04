@@ -153,7 +153,7 @@
     "buttons": {
       "explorer": "",
       "share": "",
-      "confirm":""
+      "confirm": ""
     }
   },
 
@@ -203,5 +203,7 @@
   "recovery.phrase.modal.text": "Kurtarma cümleniz, 12 rastgele kelimenin bir kümesidir ve cihazınızı kaybederseniz cüzdanınıza girmenin tek yoludur.",
   "backup.complete": "Harika! Yedekleme tamamlandı.",
   "backup.complete.text": "Cüzdanınızı yedeklediniz. Şimdi cüzdanınızın güvenliğini kurmaya geçelim.",
-  "setup.security.btn": "Güvenlik kurulumu"
+  "setup.security.btn": "Güvenlik kurulumu",
+  "airdao.wallet": "AirDAO Cüzdan",
+  "no.wallet.description": "AirDAO Cüzdan ile sınırsız fırsatlara dal."
 }
