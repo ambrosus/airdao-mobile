@@ -6,4 +6,3 @@ export * from './search';
 export * from './settings';
 export * from './tabs';
 export * from './wallets';
-export * from './add-wallet';

@@ -5,18 +5,17 @@ import { Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
-import { DatabaseTable } from '@appTypes';
+import { DatabaseTable, HomeNavigationProp } from '@appTypes';
 import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 import { styles } from '@screens/Wallet/styles';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';
 import { Database, WalletDBModel } from '@database';
 import { Wallet } from '@models/Wallet';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 
 export const WalletScreen = () => {
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { setFlowType, setWalletName, setMnemonicLength } =
     useAddWalletContext();
   const { top } = useSafeAreaInsets();

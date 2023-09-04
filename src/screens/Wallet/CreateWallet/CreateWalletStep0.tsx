@@ -8,14 +8,14 @@ import { scale, verticalScale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { RecoveryPhraseModal } from '@screens/Wallet/CreateWallet/components/RecoveryPhraseModal';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 import { MnemoicIcon } from '@components/svg/icons';
+import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep0 = () => {
   const { top } = useSafeAreaInsets();
   const [selected, setSelected] = useState<boolean>(false);
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const recoveryPhraseModalRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
 

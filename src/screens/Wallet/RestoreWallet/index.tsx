@@ -6,13 +6,13 @@ import { scale, verticalScale } from '@utils/scaling';
 import { View, Alert } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 import { TextInput } from '@components/base/Input/Input.text';
+import { HomeNavigationProp } from '@appTypes';
 
 export const RestoreWalletScreen = () => {
   const { top } = useSafeAreaInsets();
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
 
   const [mnemonicWords, setMnemonicWords] = useState([
