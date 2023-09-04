@@ -2,7 +2,7 @@ import React from 'react';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { Path, Svg } from 'react-native-svg';
 
-export function AssetLogo(props: IconProps) {
+export function AirDAOTokenLogo(props: IconProps) {
   const { scale = 1 } = props;
   const width = 41;
   const height = 40;

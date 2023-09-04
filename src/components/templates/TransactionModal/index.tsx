@@ -9,7 +9,7 @@ import moment from 'moment/moment';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 import { useUSDPrice } from '@hooks';
-import { AssetLogo } from '@components/svg/icons/Asset';
+import { AirDAOTokenLogo } from '@components/svg/icons/AirDAOTokenLogo';
 import { styles } from '@components/templates/TransactionModal/styles';
 import { useTranslation } from 'react-i18next';
 
@@ -188,7 +188,7 @@ export const TransactionModal = ({
           </Text>
           <Row alignItems="center">
             <View style={{ marginRight: scale(-8) }}>
-              <AssetLogo scale={0.4} />
+              <AirDAOTokenLogo scale={0.4} />
             </View>
             <Text
               fontFamily="Inter_600SemiBold"
