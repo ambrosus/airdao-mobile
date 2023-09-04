@@ -122,6 +122,7 @@ export const SendFunds = () => {
           message: ''
         });
       } catch (error) {
+        console.log(error, 'error');
         Alert.alert('Transfer failed');
       } finally {
         setSendLoading(false);

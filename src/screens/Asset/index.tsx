@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -11,36 +11,24 @@ import { scale, verticalScale } from '@utils/scaling';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
-import { API } from '@api/api';
-import { Transaction } from '@models';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 
 export const AssetScreen = () => {
   const {
-    params: { tokenInfo }
+    params: { tokenInfo, walletAccount }
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await API.explorerService.getTokenTransactionsV2(
-        '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
-        tokenInfo.address
-      );
-      setTransactions(response.data);
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
+  const {
+    data: transactions,
+    loading,
+    error
+  } = useTransactionsOfToken(walletAccount, tokenInfo.address);
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
@@ -59,17 +47,19 @@ export const AssetScreen = () => {
                 fontSize={15}
                 color={COLORS.nero}
               >
-                {tokenInfo.name}
+                {tokenInfo.name || 'NULL'}
               </Text>
             </Row>
           </>
         }
         contentRight={
-          <>
-            <Button onPress={navigateToAMBScreen}>
-              <StatisticsLogo />
-            </Button>
-          </>
+          tokenInfo.name === 'AMB' && (
+            <>
+              <Button onPress={navigateToAMBScreen}>
+                <StatisticsLogo />
+              </Button>
+            </>
+          )
         }
         style={{ shadowColor: 'transparent' }}
       />
@@ -116,7 +106,11 @@ export const AssetScreen = () => {
         </Text>
       </View>
       <View style={{ height: '80%' }}>
-        <WalletTransactions transactions={transactions} />
+        <WalletTransactions
+          loading={loading}
+          transactions={transactions}
+          error={error}
+        />
       </View>
     </View>
   );

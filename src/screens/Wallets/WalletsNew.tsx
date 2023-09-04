@@ -20,8 +20,11 @@ export const HomeScreen = () => {
     useCryptoAccountFromHash(selectedWalletHash);
   const usdPrice = useUSDPrice(account?.ambBalance || 0);
 
-  const { data: tokensAndTransactions, loading: tokensAndTransactionsLoading } =
-    useTokensAndTransactions('0xb017DcCC473499C83f1b553bE564f3CeAf002254');
+  const {
+    data: tokensAndTransactions,
+    loading,
+    error
+  } = useTokensAndTransactions(account?.address);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen">
@@ -42,10 +45,11 @@ export const HomeScreen = () => {
             <AccountActions address={account.address} />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
+              account={account.address}
               transactions={tokensAndTransactions?.transactions}
               tokens={tokensAndTransactions?.tokens}
-              tokensLoading={tokensAndTransactionsLoading}
-              transactionsLoading={tokensAndTransactionsLoading}
+              loading={loading}
+              error={error}
             />
           </View>
         </>

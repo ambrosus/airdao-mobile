@@ -5,8 +5,9 @@ import { AssetLogo } from '@components/svg/icons/Asset';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
-import { useUSDPrice } from '@hooks';
+import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { PercentChange } from '@components/composite';
 
 interface SingleAssetProps {
   address: string;
@@ -17,6 +18,7 @@ interface SingleAssetProps {
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { name, balance } = props;
   const usdPrice = useUSDPrice(balance.ether);
+  const { data: ambTokenData } = useAMBPrice();
 
   return (
     <View style={styles.container}>
@@ -54,8 +56,11 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.nero}
             >
-              {/* TODO fix % */}
-              %0.00
+              {name === 'AMB' ? (
+                <PercentChange change={ambTokenData?.percentChange24H || 0} />
+              ) : (
+                '%0.00'
+              )}
             </Text>
           </Row>
         </View>

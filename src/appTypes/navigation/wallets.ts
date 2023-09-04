@@ -14,6 +14,7 @@ export type HomeParamsList = {
       address: string;
       balance: { wei: string; ether: number };
     };
+    walletAccount: string;
   };
   SendFunds: undefined;
 } & CommonStackParamsList;

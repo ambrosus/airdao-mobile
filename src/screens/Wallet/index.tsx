@@ -50,12 +50,12 @@ export const WalletScreen = () => {
     navigation.navigate('CreateWalletStep0');
   };
 
-  // const onRestorePress = () => {
-  //   setFlowType(AddWalletFlowType.RESTORE_WALLET);
-  //   setWalletName('');
-  //   setMnemonicLength(128);
-  //   navigation.navigate('RestoreWalletScreen');
-  // };
+  const onRestorePress = () => {
+    setFlowType(AddWalletFlowType.RESTORE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
+    navigation.navigate('RestoreWalletScreen');
+  };
 
   const renderWallet = (args: ListRenderItemInfo<Wallet>) => {
     const { item, index } = args;
@@ -86,12 +86,13 @@ export const WalletScreen = () => {
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(24)} />
-        {/* <PrimaryButton onPress={onRestorePress}>
+        <PrimaryButton onPress={onRestorePress}>
           <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
             Restore address
           </Text>
-        </PrimaryButton> */}
+        </PrimaryButton>
       </View>
+      <Spacer value={verticalScale(24)} />
       <FlatList
         data={wallets}
         keyExtractor={(w) => w.hash}

@@ -4,7 +4,7 @@ import { API } from '@api/api';
 import { Transaction, TokenDTO } from '@models';
 
 export function useTokensAndTransactions(
-  walletAddress: string
+  walletAddress: string | undefined
 ): QueryResponse<
   { tokens: TokenDTO[]; transactions: Transaction[] } | undefined
 > {

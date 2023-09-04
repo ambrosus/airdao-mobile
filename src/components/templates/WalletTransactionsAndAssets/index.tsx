@@ -23,14 +23,15 @@ interface WalletTransactionsAndAssetsProps {
         balance: { wei: string; ether: number };
       }[]
     | undefined;
-  transactionsLoading: boolean;
-  tokensLoading: boolean;
+  loading: boolean;
+  error: boolean;
+  account: string;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { tokens, transactions, tokensLoading, transactionsLoading } = props;
+  const { tokens, transactions, loading, account, error } = props;
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -116,12 +117,18 @@ export const WalletTransactionsAndAssets = (
         }}
       >
         <View style={{ width: tabWidth, height: '60%' }}>
-          <WalletAssets tokens={tokens} loading={tokensLoading} />
+          <WalletAssets
+            tokens={tokens}
+            loading={loading}
+            account={account}
+            error={error}
+          />
         </View>
         <View style={{ width: tabWidth, height: '60%' }}>
           <WalletTransactions
             transactions={transactions}
-            loading={transactionsLoading}
+            loading={loading}
+            error={error}
           />
         </View>
       </ScrollView>

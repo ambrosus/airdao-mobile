@@ -88,7 +88,7 @@ const getTransactionsOfAccount = async (
 };
 
 const searchWalletV2 = async (
-  wallet: string
+  wallet: string | undefined
 ): Promise<{
   tokens: {
     address: string;

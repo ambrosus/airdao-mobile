@@ -8,13 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 interface WalletTransactionsProps {
   transactions: Transaction[] | undefined;
-  loading?: boolean;
+  loading: boolean;
+  error?: boolean;
 }
 
 export const WalletTransactions = (
   props: WalletTransactionsProps
 ): JSX.Element => {
-  const { transactions, loading } = props;
+  const { transactions, loading, error } = props;
 
   const { t } = useTranslation();
 
@@ -26,7 +27,9 @@ export const WalletTransactions = (
 
   return (
     <View>
-      {transactions ? (
+      {error ? (
+        <LocalizedRenderEmpty text={t('no.transactions.yet')} />
+      ) : transactions ? (
         <FlatList
           data={transactions}
           renderItem={renderTransactions}
