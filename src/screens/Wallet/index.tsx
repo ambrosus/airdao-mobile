@@ -74,7 +74,7 @@ export const WalletScreen = () => {
     <View style={[{ top }, styles.container]}>
       <Header
         title={t('add.wallet')}
-        backIconVisible={false}
+        backIconVisible={true}
         style={styles.header}
       />
       <Spacer value={verticalScale(24)} />
