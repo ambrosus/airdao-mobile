@@ -14,16 +14,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import {
   ExploreTabIcon,
   WatchlistTabIcon,
-  OverviewTabIcon,
   SettingsTabIcon,
   WalletTabIcon
 } from '@components/svg/BottomTabIcons';
 
-type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets' | 'Wallet';
+type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <OverviewTabIcon color={COLORS.gray200} />,
-    activeIcon: <OverviewTabIcon color={COLORS.mainBlue} />
+    inactiveIcon: <WalletTabIcon color={COLORS.gray200} />,
+    activeIcon: <WalletTabIcon color={COLORS.mainBlue} />
   },
   Portfolio: {
     inactiveIcon: <WatchlistTabIcon color={COLORS.gray200} />,
@@ -36,15 +35,11 @@ const tabs = {
   Settings: {
     inactiveIcon: <SettingsTabIcon color={COLORS.gray200} />,
     activeIcon: <SettingsTabIcon color={COLORS.mainBlue} />
-  },
-  Wallet: {
-    inactiveIcon: <WalletTabIcon color={COLORS.gray200} />,
-    activeIcon: <WalletTabIcon color={COLORS.mainBlue} />
   }
 };
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
-  const bottomSafeArea = useSafeAreaInsets().bottom - 15;
+  const bottomSafeArea = useSafeAreaInsets().bottom - 12;
   const currentRoute = useCurrentRoute();
   const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
   const [isReady, setIsReady] = useState(false);
@@ -134,10 +129,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     backgroundColor: COLORS.white,
-    paddingVertical: 8,
     opacity: 2,
     borderTopWidth: 0.25,
-    borderTopColor: COLORS.silver
+    borderTopColor: COLORS.gray200
   },
   mainItemContainer: {
     flex: 1,

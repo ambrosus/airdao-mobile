@@ -6,12 +6,12 @@ import { scale, verticalScale } from '@utils/scaling';
 import { View, StyleSheet } from 'react-native';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 import { SuccessIcon } from '@components/svg/icons';
+import { HomeNavigationProp } from '@appTypes';
 
 export const SuccessBackupComplete = () => {
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const navigateToSetUpSecurity = () => {
     navigation.navigate('WalletScreen');

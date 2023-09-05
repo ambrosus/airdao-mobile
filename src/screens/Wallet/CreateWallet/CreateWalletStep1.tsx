@@ -10,11 +10,11 @@ import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
 import { WarningIcon } from '@components/svg/icons/Warning';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep1 = () => {
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const [loading, setLoading] = useState(false);
   const { walletMnemonic, mnemonicLength, setWalletMnemonic } =
     useAddWalletContext();

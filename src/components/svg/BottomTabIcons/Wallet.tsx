@@ -4,8 +4,8 @@ import { IconProps } from '@components/svg/icons';
 
 export function WalletTabIcon(props: IconProps) {
   const { scale = 1, color = '#457EFF' } = props;
-  const width = 24;
-  const height = 24;
+  const width = 28;
+  const height = 28;
   return (
     <Svg
       width={width}

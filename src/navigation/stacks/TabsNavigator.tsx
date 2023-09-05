@@ -5,7 +5,6 @@ import { TabsParamsList } from '@appTypes/navigation/tabs';
 import { PortfolioStack } from './Tabs/PortfolioStack';
 import TabBar from '@navigation/components/TabBar';
 import SettingsStack from './Tabs/SettingsStack';
-import WalletStack from './Tabs/WalletStack';
 import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
 
@@ -24,7 +23,7 @@ export const TabsNavigator = () => {
       <BottomTabs.Screen
         name="Wallets"
         component={HomeStack}
-        options={{ tabBarLabel: t('overview.tab') }}
+        options={{ tabBarLabel: t('wallets.tab') }}
       />
       <BottomTabs.Screen
         name="Portfolio"
@@ -40,11 +39,6 @@ export const TabsNavigator = () => {
         name="Settings"
         component={SettingsStack}
         options={{ tabBarLabel: t('settings.tab') }}
-      />
-      <BottomTabs.Screen
-        name="Wallet"
-        component={WalletStack}
-        options={{ tabBarLabel: 'Wallet' }}
       />
     </BottomTabs.Navigator>
   );
