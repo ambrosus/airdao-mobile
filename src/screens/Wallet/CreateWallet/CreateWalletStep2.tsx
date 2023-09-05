@@ -7,13 +7,13 @@ import { useAddWalletContext } from '@contexts';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
-import { AddWalletStackNavigationProp } from '@appTypes/navigation/add-wallet';
 import { useTranslation } from 'react-i18next';
 import { styles } from '@screens/Wallet/CreateWallet/styles';
 import { AccountUtils } from '@utils/account';
+import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep2 = () => {
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { walletMnemonic } = useAddWalletContext();
   const { t } = useTranslation();
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<

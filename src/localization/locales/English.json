@@ -8,6 +8,7 @@
   "Russian": "Russian",
   "Chinese": "Chinese",
 
+  "wallets.tab": "Wallets",
   "overview.tab": "Overview",
   "watchlist.tab": "Watchlist",
   "explore.tab": "Explore",
@@ -154,7 +155,7 @@
     "buttons": {
       "explorer": "View on explorer",
       "share": "Share",
-      "confirm":"Ok, got it"
+      "confirm": "Ok, got it"
     }
   },
 
@@ -206,5 +207,13 @@
   "recovery.phrase.modal.text": "Your recovery phrase is a set of 12 random words, and it's the only way to get into your wallet if you lose your device.",
   "backup.complete": "Nice move! Backup complete.",
   "backup.complete.text": "You backed up your wallet. Now let’s setup your wallet’s security.",
-  "setup.security.btn": "Setup security"
+  "setup.security.btn": "Setup security",
+  "airdao.wallet": "AirDAO Wallet",
+  "no.wallet.description": "Tap into endless possibiliies with AirDAO Wallet.",
+  "no.wallet.send.receive": "Send and receive",
+  "no.wallet.send.receive.description": "Safely send and receive funds with just a few taps.",
+  "no.wallet.address.tracking": "Address tracking",
+  "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
+  "no.wallet.stay.informed": "Stay informed",
+  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity."
 }

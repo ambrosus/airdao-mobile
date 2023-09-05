@@ -15,6 +15,7 @@ export const COLORS = {
   green100: '#C3FBE5',
   green200: '#73E5B7',
   green400: '#159F80',
+  neutral0: '#FFFFFF',
   neutral100: '#E6E6E6',
   neutral300: '#a1a6b2',
   neutral400: '#676B73',
@@ -27,6 +28,7 @@ export const COLORS = {
     60: 'rgba(14, 14, 14, 0.60)'
   },
   neutralGray: 'rgba(14, 14, 14, 0.05)',
+  yellow500: '#ff7a00',
   asphalt: '#a1a6b2',
   black: '#000000',
   jetBlack: '#191919',
