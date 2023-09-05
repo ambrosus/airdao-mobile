@@ -18,5 +18,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(12),
     borderRadius: moderateScale(16),
     paddingVertical: verticalScale(4)
+  },
+  loadingContainer: {
+    flex: 1,
+    alignSelf: 'center',
+    justifyContent: 'center'
   }
 });
