@@ -45,7 +45,7 @@ export const HomeScreen = () => {
             <AccountActions address={account.address} />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
-              account={account.address}
+              account={account}
               transactions={tokensAndTransactions?.transactions}
               tokens={tokensAndTransactions?.tokens}
               loading={loading}

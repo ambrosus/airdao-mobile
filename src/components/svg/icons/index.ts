@@ -63,3 +63,4 @@ export * from './BUSD';
 export * from './USDCoin';
 export * from './Tether';
 export * from './Ethereum';
+export * from './UndefinedToken';

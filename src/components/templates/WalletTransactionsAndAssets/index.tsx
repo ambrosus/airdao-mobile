@@ -12,10 +12,11 @@ import { styles } from '@components/templates/WalletTransactionsAndAssets/styles
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { useTranslation } from 'react-i18next';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
-import { Transaction } from '@models';
+import { ExplorerAccount, Transaction } from '@models';
 
 interface WalletTransactionsAndAssetsProps {
   transactions: Transaction[] | undefined;
+  account: ExplorerAccount;
   tokens:
     | {
         address: string;
@@ -25,7 +26,6 @@ interface WalletTransactionsAndAssetsProps {
     | undefined;
   loading: boolean;
   error: boolean;
-  account: string;
 }
 
 export const WalletTransactionsAndAssets = (

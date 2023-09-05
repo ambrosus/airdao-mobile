@@ -11,7 +11,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
-import { useUSDPrice } from '@hooks';
+import { useTokensAndTransactions, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 
@@ -23,6 +23,9 @@ export const AssetScreen = () => {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
+
+  const { data: tokensAndTransactions } =
+    useTokensAndTransactions(walletAccount);
 
   const {
     data: transactions,
@@ -108,7 +111,7 @@ export const AssetScreen = () => {
       <View style={{ height: '80%' }}>
         <WalletTransactions
           loading={loading}
-          transactions={transactions}
+          transactions={transactions || tokensAndTransactions?.transactions}
           error={error}
         />
       </View>

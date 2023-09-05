@@ -38,7 +38,7 @@ const envs = {
   }
 };
 
-let Config = envs.stage;
+let Config = envs.prod;
 if (Updates.channel === 'main') {
   Config = envs.prod;
 } else if (Updates.channel === 'stage') {
