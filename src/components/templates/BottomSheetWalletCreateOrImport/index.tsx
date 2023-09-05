@@ -27,6 +27,11 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
     localRef.current?.dismiss();
   };
 
+  const navigateToImportWallet = () => {
+    navigation.navigate('RestoreWalletScreen');
+    localRef.current?.dismiss();
+  };
+
   return (
     <BottomSheet ref={localRef} swiperIconVisible height={verticalScale(225)}>
       <View style={{ paddingHorizontal: scale(16) }}>
@@ -46,7 +51,11 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(16)} />
-        <Button type="circular" style={{ backgroundColor: COLORS.charcoal }}>
+        <Button
+          type="circular"
+          style={{ backgroundColor: COLORS.charcoal }}
+          onPress={navigateToImportWallet}
+        >
           <Text
             align="center"
             fontFamily="Inter_500Medium"
