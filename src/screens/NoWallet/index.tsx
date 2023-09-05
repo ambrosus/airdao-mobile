@@ -18,6 +18,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { NoWalletLoading, StepCircle } from './components';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 interface StepInfo {
   image: ImageSourcePropType;
@@ -28,18 +29,18 @@ interface StepInfo {
 const steps: StepInfo[] = [
   {
     image: require('@assets/images/send-receive.png'),
-    title: 'Send and Receive',
-    description: 'Safely send and receive funds with just a few taps.'
+    title: 'no.wallet.send.receive',
+    description: 'no.wallet.send.receive.description'
   },
   {
-    image: require('@assets/images/send-receive.png'),
-    title: 'Address Tracking',
-    description: 'Stay in the know with real-time address tracking.'
+    image: require('@assets/images/address-tracking.png'),
+    title: 'no.wallet.address.tracking',
+    description: 'no.wallet.address.tracking.description'
   },
   {
-    image: require('@assets/images/send-receive.png'),
-    title: 'Stay informed',
-    description: 'Get updates for transactions and important wallet activity.'
+    image: require('@assets/images/stay-informed.png'),
+    title: 'no.wallet.stay.informed',
+    description: 'no.wallet.stay.informed.description'
   }
 ];
 
@@ -48,10 +49,11 @@ export const NoWalletScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const [currentStep, setCurrentStep] = useState(0);
   const { width: WINDOW_WIDTH } = useWindowDimensions();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!loading && hash) {
-      navigation.navigate('HomeScreen');
+      // navigation.navigate('HomeScreen');
     }
   }, [loading, hash, navigation]);
 
@@ -64,40 +66,50 @@ export const NoWalletScreen = () => {
   const renderStep = (step: StepInfo) => {
     return (
       <View style={styles.stepContainer} key={step.title}>
-        <Image source={step.image} blurRadius={0} />
-        <Text
-          fontSize={20}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral900}
-        >
-          {step.title}
-        </Text>
-        <Text
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral900}
-          align="center"
-        >
-          {step.description}
-        </Text>
+        <Image
+          source={step.image}
+          blurRadius={0}
+          style={{ width: '100%' }}
+          resizeMode="cover"
+        />
+        <Spacer value={verticalScale(42)} />
+        <View style={{ paddingHorizontal: scale(20) }}>
+          <Text
+            fontSize={20}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral900}
+            align="center"
+          >
+            {t(step.title)}
+          </Text>
+          <Spacer value={verticalScale(8)} />
+          <Text
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral900}
+            align="center"
+          >
+            {t(step.description)}
+          </Text>
+        </View>
       </View>
     );
   };
 
   const navigateToNewWallet = () => {
-    // TODO
+    navigation.navigate('CreateWalletStep0');
   };
 
   const navigateToImportWallet = () => {
-    // TODO
+    navigation.navigate('RestoreWalletScreen');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {loading && <NoWalletLoading />}
       {!loading && (
-        <ScrollView style={styles.container}>
-          <View>
+        <View style={styles.container}>
+          <View style={{ flex: 5 }}>
             <ScrollView
               bounces={false}
               onMomentumScrollEnd={onScrollEndDrag}
@@ -107,17 +119,17 @@ export const NoWalletScreen = () => {
             >
               {steps.map(renderStep)}
             </ScrollView>
+            <Spacer value={verticalScale(24)} />
+            <Row
+              alignItems="center"
+              justifyContent="center"
+              style={{ columnGap: scale(16) }}
+            >
+              <StepCircle step={0} currentStep={currentStep} />
+              <StepCircle step={1} currentStep={currentStep} />
+              <StepCircle step={2} currentStep={currentStep} />
+            </Row>
           </View>
-          <Spacer value={verticalScale(24)} />
-          <Row
-            alignItems="center"
-            justifyContent="center"
-            style={{ columnGap: scale(16) }}
-          >
-            <StepCircle step={0} currentStep={currentStep} />
-            <StepCircle step={1} currentStep={currentStep} />
-            <StepCircle step={2} currentStep={currentStep} />
-          </Row>
           <Spacer value={verticalScale(24)} />
           <View style={styles.buttons}>
             <PrimaryButton onPress={navigateToNewWallet}>
@@ -140,7 +152,7 @@ export const NoWalletScreen = () => {
               </Text>
             </SecondaryButton>
           </View>
-        </ScrollView>
+        </View>
       )}
     </SafeAreaView>
   );

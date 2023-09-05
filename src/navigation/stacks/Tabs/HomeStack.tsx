@@ -23,9 +23,10 @@ import { NoWalletScreen } from '@screens/NoWallet';
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
   return (
+    // @ts-ignore
     <SendCryptoProvider>
       <Stack.Navigator
-        initialRouteName="HomeScreen"
+        initialRouteName="NoWallet"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="HomeScreen" component={HomeScreen} />

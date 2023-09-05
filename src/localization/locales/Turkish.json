@@ -206,5 +206,11 @@
   "backup.complete.text": "Cüzdanınızı yedeklediniz. Şimdi cüzdanınızın güvenliğini kurmaya geçelim.",
   "setup.security.btn": "Güvenlik kurulumu",
   "airdao.wallet": "AirDAO Cüzdan",
-  "no.wallet.description": "AirDAO Cüzdan ile sınırsız fırsatlara dal."
+  "no.wallet.description": "AirDAO Cüzdan ile sınırsız fırsatlara dal.",
+  "no.wallet.send.receive": "Gönder ve al",
+  "no.wallet.send.receive.description": "Sadece birkaç dokunuşla güvenli bir şekilde para gönderip alın.",
+  "no.wallet.address.tracking": "Adres takibi",
+  "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
+  "no.wallet.stay.informed": "Haberdar olun",
+  "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın."
 }
