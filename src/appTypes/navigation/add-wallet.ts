@@ -23,6 +23,6 @@ export type HomeStackParamsList = {
 };
 
 export type AddWalletStackNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Wallet'>,
+  BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
   NativeStackNavigationProp<HomeStackParamsList>
 >;

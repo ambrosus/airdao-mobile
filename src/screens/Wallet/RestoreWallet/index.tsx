@@ -11,15 +11,15 @@ import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TextInput } from '@components/base/Input/Input.text';
-import { AddWalletStackNavigationProp } from '@appTypes';
 import { styles } from '@screens/Wallet/RestoreWallet/styles';
 import { AccountUtils } from '@utils/account';
+import { HomeNavigationProp } from '@appTypes';
 
 const bip39 = require('bip39');
 
 export const RestoreWalletScreen = () => {
   const { top } = useSafeAreaInsets();
-  const navigation = useNavigation<AddWalletStackNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
 
   const [mnemonicWords, setMnemonicWords] = useState([
