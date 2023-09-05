@@ -23,6 +23,7 @@ export type HomeParamsList = {
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
   SuccessBackupComplete: undefined;
+  SuccessImport: undefined;
   ReceiptScreen: {
     amount: number;
     currencyCode: string;

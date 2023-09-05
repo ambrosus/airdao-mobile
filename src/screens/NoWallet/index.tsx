@@ -19,6 +19,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { NoWalletLoading, StepCircle } from './components';
 import { styles } from './styles';
 import { useTranslation } from 'react-i18next';
+import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 
 interface StepInfo {
   image: ImageSourcePropType;
@@ -45,6 +46,8 @@ const steps: StepInfo[] = [
 ];
 
 export const NoWalletScreen = () => {
+  const { setFlowType, setWalletName, setMnemonicLength } =
+    useAddWalletContext();
   const { data: hash, loading } = useSelectedWalletHash();
   const navigation = useNavigation<HomeNavigationProp>();
   const [currentStep, setCurrentStep] = useState(0);
@@ -97,10 +100,16 @@ export const NoWalletScreen = () => {
   };
 
   const navigateToNewWallet = () => {
+    setFlowType(AddWalletFlowType.CREATE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
     navigation.navigate('CreateWalletStep0');
   };
 
   const navigateToImportWallet = () => {
+    setFlowType(AddWalletFlowType.RESTORE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
     navigation.navigate('RestoreWalletScreen');
   };
 
