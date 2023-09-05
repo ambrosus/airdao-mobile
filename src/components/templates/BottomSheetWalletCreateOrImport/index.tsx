@@ -23,7 +23,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const { t } = useTranslation();
 
   const navigateToWalletCreate = () => {
-    navigation.navigate('WalletScreen');
+    navigation.navigate('CreateWalletStep0');
     localRef.current?.dismiss();
   };
 

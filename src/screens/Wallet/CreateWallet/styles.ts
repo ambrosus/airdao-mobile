@@ -3,12 +3,10 @@ import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  header: {
-    shadowColor: 'transparent'
-  },
   container: {
     flex: 1,
-    paddingHorizontal: scale(18),
+    width: '90%',
+    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
