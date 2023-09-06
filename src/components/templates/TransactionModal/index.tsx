@@ -25,7 +25,6 @@ export const TransactionModal = ({
   transaction
 }: TransactionModalProps) => {
   const usdPrice = useUSDPrice(transaction?.amount || transaction.value.ether);
-  const usdFee = useUSDPrice(transaction.fee);
 
   const { t } = useTranslation();
 
@@ -195,14 +194,7 @@ export const TransactionModal = ({
               fontSize={14}
               color={COLORS.neutral800}
             >
-              {isNaN(transaction.fee) ? '0 AMB ' : `${transaction.fee} AMB`}
-            </Text>
-            <Text
-              fontFamily="Inter_500Medium"
-              fontSize={14}
-              color={COLORS.slateGrey}
-            >
-              ${isNaN(usdFee) ? '0' : NumberUtils.formatNumber(usdFee, 2)}
+              {NumberUtils.formatNumber(transaction.gasCost?.ether, 5)} AMB
             </Text>
           </Row>
         </Row>
