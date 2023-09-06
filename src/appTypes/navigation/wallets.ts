@@ -17,7 +17,6 @@ export type HomeParamsList = {
     };
     walletAccount: string;
   };
-  NoWallet: undefined;
   SendFunds: undefined;
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;

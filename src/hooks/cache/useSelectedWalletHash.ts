@@ -4,7 +4,7 @@ import { Database, WalletDBModel } from '@database';
 import { Cache, CacheKey } from '@utils/cache';
 
 export const useSelectedWalletHash = (): QueryResponse<string> => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedWalletHash, setSelectedWalletHash] = useState('');
 
   const getSelectedWallet = async () => {

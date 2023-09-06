@@ -18,7 +18,6 @@ import {
 import { RestoreWalletScreen } from '@screens/Wallet/RestoreWallet';
 import { SuccessBackupComplete } from '@screens/Wallet/CreateWallet/components';
 import { SendCryptoProvider } from '@contexts/SendCrypto/SendCrypto.context';
-import { NoWalletScreen } from '@screens/NoWallet';
 import { SuccessImport } from '@screens/Wallet/CreateWallet/components/SuccessImport';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
@@ -27,7 +26,7 @@ export const HomeStack = () => {
     // @ts-ignore
     <SendCryptoProvider>
       <Stack.Navigator
-        initialRouteName="NoWallet"
+        initialRouteName="HomeScreen"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -41,7 +40,6 @@ export const HomeStack = () => {
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
-        <Stack.Screen name="NoWallet" component={NoWalletScreen} />
         <Stack.Screen
           name="SuccessBackupComplete"
           component={SuccessBackupComplete}

@@ -2,8 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { TabsNavigator } from './TabsNavigator';
 import AppInitialization from './AppInit';
-import { WelcomeScreen } from '@screens/Welcome';
 import { RootStackParamsList } from '@appTypes';
+import { NoWalletScreen } from '@screens/NoWallet';
 
 export const RootStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamsList>();
@@ -19,7 +19,7 @@ export const RootStack = () => {
       />
       <Stack.Screen
         name="WelcomeScreen"
-        component={WelcomeScreen}
+        component={NoWalletScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Tabs" component={TabsNavigator} />
