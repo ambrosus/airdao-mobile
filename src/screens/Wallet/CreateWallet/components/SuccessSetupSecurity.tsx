@@ -1,20 +1,20 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { View, StyleSheet } from 'react-native';
+import { Spacer, Text } from '@components/base';
+import { SuccessIcon } from '@components/svg/icons';
+import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { SuccessIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 
-export const SuccessBackupComplete = () => {
+export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
+
   const navigateToSetUpSecurity = () => {
-    navigation.navigate('SetupPasscode');
+    navigation.navigate('HomeScreen');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -26,7 +26,7 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.nero}
         >
-          {t('backup.complete')}
+          Security Enabled!
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -35,17 +35,22 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.nero}
         >
-          {t('backup.complete.text')}
+          Your wallet is now protected. Go to{' '}
+          <Text fontFamily="Inter_600SemiBold">Settings{'>'}Security</Text> to
+          manage your wallet security.
         </Text>
       </View>
-      <PrimaryButton onPress={navigateToSetUpSecurity}>
+      <PrimaryButton
+        onPress={navigateToSetUpSecurity}
+        style={{ paddingHorizontal: scale(16) }}
+      >
         <Text
           align="center"
           fontSize={16}
           fontFamily="Inter_500Medium"
           color={COLORS.white}
         >
-          {t('setup.security.btn')}
+          Start using wallet
         </Text>
       </PrimaryButton>
     </SafeAreaView>
@@ -54,13 +59,12 @@ export const SuccessBackupComplete = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: scale(16)
+    flex: 1
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: scale(27)
   }
 });

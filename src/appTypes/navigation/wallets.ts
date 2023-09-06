@@ -21,8 +21,11 @@ export type HomeParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
+  SetupPasscode: undefined;
+  ConfirmPasscode: { passcode: string[] };
   SuccessBackupComplete: undefined;
   SuccessImport: undefined;
+  SuccessSetupSecurity: undefined;
   ReceiptScreen: {
     amount: number;
     currencyCode: string;
