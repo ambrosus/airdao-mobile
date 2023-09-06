@@ -56,7 +56,7 @@ export const NoWalletScreen = () => {
 
   useEffect(() => {
     if (!loading && hash) {
-      // navigation.navigate('HomeScreen');
+      navigation.navigate('HomeScreen');
     }
   }, [loading, hash, navigation]);
 
