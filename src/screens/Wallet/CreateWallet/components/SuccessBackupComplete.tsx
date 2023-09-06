@@ -14,7 +14,7 @@ export const SuccessBackupComplete = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const navigateToSetUpSecurity = () => {
-    navigation.navigate('WalletScreen');
+    navigation.navigate('HomeScreen');
   };
   return (
     <SafeAreaView style={styles.container}>
