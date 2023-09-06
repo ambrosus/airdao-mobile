@@ -13,6 +13,7 @@ import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
+import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
   BottomSheetRef,
@@ -21,13 +22,21 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
+  const { setFlowType, setWalletName, setMnemonicLength } =
+    useAddWalletContext();
 
   const navigateToWalletCreate = () => {
+    setFlowType(AddWalletFlowType.CREATE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
     navigation.navigate('CreateWalletStep0');
     localRef.current?.dismiss();
   };
 
   const navigateToImportWallet = () => {
+    setFlowType(AddWalletFlowType.RESTORE_WALLET);
+    setWalletName('');
+    setMnemonicLength(128);
     navigation.navigate('RestoreWalletScreen');
     localRef.current?.dismiss();
   };

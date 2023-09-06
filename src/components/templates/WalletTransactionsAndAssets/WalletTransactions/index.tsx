@@ -27,24 +27,19 @@ export const WalletTransactions = (
 
   return (
     <View>
-      {
-        // error ? (
-        //     <LocalizedRenderEmpty text={t('no.transactions.yet')} />
-        //   ) :
-        transactions ? (
-          <FlatList
-            data={transactions}
-            renderItem={renderTransactions}
-            ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
-            contentContainerStyle={{
-              paddingBottom: 100
-            }}
-            showsVerticalScrollIndicator={false}
-          />
-        ) : (
-          <LocalizedRenderEmpty text={t('no.transactions.yet')} />
-        )
-      }
+      {!transactions && error ? (
+        <LocalizedRenderEmpty text={t('no.transactions.yet')} />
+      ) : (
+        <FlatList
+          data={transactions}
+          renderItem={renderTransactions}
+          ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          contentContainerStyle={{
+            paddingBottom: 100
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
