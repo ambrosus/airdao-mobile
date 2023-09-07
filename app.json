@@ -23,7 +23,8 @@
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
+        "NSFaceIDUsageDescription": "Allow AirDAO to access FaceID"
       },
       "buildNumber": "1.0.3"
     },
@@ -51,6 +52,12 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow AirDAO to use Face ID."
+        }
+      ],
       [
         "expo-barcode-scanner",
         {

@@ -8,6 +8,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { useTranslation } from 'react-i18next';
 import { Passcode } from '@components/base/Passcode/Passcode';
+import { database } from '@database/main';
 
 export const ConfirmPasscode = () => {
   const { top } = useSafeAreaInsets();
@@ -24,6 +25,7 @@ export const ConfirmPasscode = () => {
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
+      await database.localStorage.set('Passcode', passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');
@@ -34,8 +36,6 @@ export const ConfirmPasscode = () => {
   const onPasscodeChange = (passcode: string[]) => {
     setPasscode(passcode);
   };
-
-  // TODO save passcode to localdb
 
   return (
     <KeyboardAvoidingView

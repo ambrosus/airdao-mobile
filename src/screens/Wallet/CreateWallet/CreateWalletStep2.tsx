@@ -150,7 +150,7 @@ export const CreateWalletStep2 = () => {
 
   return (
     <SafeAreaView edges={['top']} style={styles.createWalletStep2Container}>
-      <Header style={styles.header} />
+      <Header style={{ shadowColor: 'transparent' }} />
       <Text
         align="center"
         fontSize={24}
