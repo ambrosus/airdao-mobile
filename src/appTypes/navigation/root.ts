@@ -1,6 +1,10 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  NavigatorScreenParams
+} from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 export type RootStackParamsList = {
   AppInit: undefined;
@@ -8,4 +12,7 @@ export type RootStackParamsList = {
   WelcomeScreen: undefined;
 };
 
-export type RootNavigationProp = NativeStackNavigationProp<RootStackParamsList>;
+export type RootNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
+  NativeStackNavigationProp<RootStackParamsList>
+>;

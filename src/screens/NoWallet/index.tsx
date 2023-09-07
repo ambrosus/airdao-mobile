@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { Row, Spacer, Text } from '@components/base';
-import { HomeNavigationProp } from '@appTypes';
+import { RootNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { AddWalletFlowType, useAddWalletContext } from '@contexts';
@@ -21,7 +21,7 @@ import { styles } from './styles';
 export const NoWalletScreen = () => {
   const { setFlowType, setWalletName, setMnemonicLength } =
     useAddWalletContext();
-  const navigation = useNavigation<HomeNavigationProp>();
+  const navigation = useNavigation<RootNavigationProp>();
   const [currentStep, setCurrentStep] = useState(0);
   const { width: WINDOW_WIDTH } = useWindowDimensions();
 
@@ -39,14 +39,20 @@ export const NoWalletScreen = () => {
     setFlowType(AddWalletFlowType.CREATE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('CreateWalletStep0');
+    navigation.navigate('Tabs', {
+      screen: 'Wallets',
+      params: { screen: 'CreateWalletStep0' }
+    });
   };
 
   const navigateToImportWallet = () => {
     setFlowType(AddWalletFlowType.RESTORE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('RestoreWalletScreen');
+    navigation.navigate('Tabs', {
+      screen: 'Wallets',
+      params: { screen: 'RestoreWalletScreen' }
+    });
   };
 
   return (
