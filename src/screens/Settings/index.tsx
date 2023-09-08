@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SettingsBlock } from '@screens/Settings/components/SettingsBlock';
 import { COLORS } from '@constants/colors';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
 import { scale, verticalScale } from '@utils/scaling';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Row, Spacer, Switch, Text } from '@components/base';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { database } from '@database/main';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SettingsScreen = () => {
   const { top } = useSafeAreaInsets();
-  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
+  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
 
   const toggleFaceIDAuthentication = async () => {
     try {
       if (isFaceIDEnabled) {
-        await LocalAuthentication.cancelAuthenticate();
+        await database.localStorage.set('FaceID', false);
+        setIsFaceIDEnabled(false);
       } else {
         const hasHardware = await LocalAuthentication.hasHardwareAsync();
         const isEnrolled = await LocalAuthentication.isEnrolledAsync();
@@ -25,6 +27,7 @@ export const SettingsScreen = () => {
             promptMessage: 'Authenticate with Face ID'
           });
           if (result.success) {
+            await database.localStorage.set('FaceID', true);
             setIsFaceIDEnabled(true);
           }
         } else {
@@ -32,9 +35,17 @@ export const SettingsScreen = () => {
         }
       }
     } catch (error) {
-      console.error('Error toggling Face ID:', error);
+      console.error('Face ID error:', error);
     }
   };
+
+  useEffect(() => {
+    const checkFaceIDStatus = async () => {
+      const storedFaceID = await database.localStorage.get('FaceID');
+      setIsFaceIDEnabled(!!storedFaceID);
+    };
+    checkFaceIDStatus();
+  }, []);
 
   return (
     <View style={[{ top }, styles.container]} testID="Settings_Screen">

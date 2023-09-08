@@ -7,7 +7,8 @@ import {
   AddWalletProvider,
   AllAddressesProvider,
   OnboardingContextProvider,
-  LocalizationProvider
+  LocalizationProvider,
+  PasscodeProvider
 } from '@contexts';
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider';
 import { Database } from '@database';
@@ -32,6 +33,10 @@ const LocalDBProvider: React.FC = ({ children }: any) => (
   </DatabaseProvider>
 );
 
+const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
+  <PasscodeProvider>{children}</PasscodeProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
@@ -46,6 +51,7 @@ const providers = [
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
+  WrappedPasscodeProvider,
   OnboardingContextProvider,
   AddWalletProvider
 ];
