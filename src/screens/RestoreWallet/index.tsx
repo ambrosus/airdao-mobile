@@ -3,19 +3,17 @@ import {
   SafeAreaView,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import { Header } from '@components/composite';
-import { Button, Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { Alert, View } from 'react-native';
-import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { TextInput } from '@components/base/Input/Input.text';
-import { styles } from '@screens/Wallet/RestoreWallet/styles';
+import { Header } from '@components/composite';
+import { Button, Input, Spacer, Spinner, Text } from '@components/base';
+import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 import { AccountUtils } from '@utils/account';
 import { HomeNavigationProp } from '@appTypes';
-
-const bip39 = require('bip39');
+import { MnemonicUtils } from '@utils/mnemonics';
+import { styles } from './styles';
 
 export const RestoreWalletScreen = () => {
   const { top } = useSafeAreaInsets();
@@ -55,7 +53,8 @@ export const RestoreWalletScreen = () => {
     for (let i = 0; i < 12; i += 2) {
       wordInputs.push(
         <View key={i} style={{ flexDirection: 'row' }}>
-          <TextInput
+          <Input
+            type="text"
             autoCapitalize="none"
             style={{
               flex: 1,
@@ -66,7 +65,8 @@ export const RestoreWalletScreen = () => {
             onChangeText={(text) => handleWordChange(i, text)}
           />
           <Spacer horizontal value={scale(16)} />
-          <TextInput
+          <Input
+            type="text"
             autoCapitalize="none"
             style={{
               flex: 1,
@@ -83,22 +83,19 @@ export const RestoreWalletScreen = () => {
     return wordInputs;
   };
 
-  const isValidMnemonic = (mnemonicPhrase: string) => {
-    return bip39.validateMnemonic(mnemonicPhrase);
-  };
-
   const navigateToRestoreWallet = async () => {
     if (isButtonEnabled) {
       setIsLoading(true);
       try {
         const mnemonicPhrase = mnemonicWords.join(' ');
-        if (!isValidMnemonic(mnemonicPhrase)) {
+        if (!MnemonicUtils.isValidMnemonic(mnemonicPhrase)) {
           Alert.alert('Invalid mnemonic phrase');
         } else {
           await AccountUtils.addAccountInfoToDatabase(mnemonicPhrase);
           navigation.navigate('SuccessImport');
         }
       } catch (error) {
+        // TODO add localization
         Alert.alert(
           'Error',
           // @ts-ignore

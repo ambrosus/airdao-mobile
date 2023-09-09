@@ -29,7 +29,7 @@ const addAccountInfoToDatabase = async (walletMnemonic: string) => {
 
     await Database.createModel(DatabaseTable.Accounts, accountInfo);
   } catch (error) {
-    console.log(error, 'error');
+    // ignore
   }
 };
 export const AccountUtils = { addAccountInfoToDatabase };

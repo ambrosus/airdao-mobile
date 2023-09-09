@@ -8,7 +8,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from '@screens/Wallet/CreateWallet/styles';
+import { styles } from '@screens/CreateWallet/styles';
 import { AccountUtils } from '@utils/account';
 import { HomeNavigationProp } from '@appTypes';
 
@@ -41,7 +41,7 @@ export const CreateWalletStep2 = () => {
   let globalWordIndex = 0;
 
   const renderWord = useMemo(
-    () => (word: string, flow: 'inner' | 'mnemonic', index: number) => {
+    () => (word: string, flow: 'inner' | 'mnemonic') => {
       globalWordIndex++;
       const selectedIdx = walletMnemonicSelected.indexOf(word);
       const isCorrect =
@@ -139,7 +139,7 @@ export const CreateWalletStep2 = () => {
       await AccountUtils.addAccountInfoToDatabase(walletMnemonic);
       navigation.navigate('SuccessBackupComplete');
     } catch (error) {
-      console.log(error, 'error');
+      // TODO ignore
     }
   }, [
     navigation,
@@ -150,7 +150,7 @@ export const CreateWalletStep2 = () => {
 
   return (
     <SafeAreaView edges={['top']} style={styles.createWalletStep2Container}>
-      <Header style={styles.header} />
+      <Header />
       <Text
         align="center"
         fontSize={24}
@@ -176,9 +176,7 @@ export const CreateWalletStep2 = () => {
               <View key={columnIndex} style={styles.mnemoicContainerColumn}>
                 {walletMnemonicSelected
                   .slice(columnIndex * 4, (columnIndex + 1) * 4)
-                  .map((word, wordIndex) =>
-                    renderWord(word, 'mnemonic', wordIndex)
-                  )}
+                  .map((word) => renderWord(word, 'mnemonic'))}
               </View>
             ))}
           </Row>
@@ -194,9 +192,7 @@ export const CreateWalletStep2 = () => {
               <View key={columnIndex} style={styles.column}>
                 {walletMnemonicRandomSorted
                   .slice(columnIndex * 4, (columnIndex + 1) * 4)
-                  .map((word, wordIndex) =>
-                    renderWord(word, 'inner', wordIndex)
-                  )}
+                  .map((word) => renderWord(word, 'inner'))}
               </View>
             ))}
           </Row>

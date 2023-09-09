@@ -11,14 +11,14 @@ import Animated, {
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon, LogoGradientCircular } from '@components/svg/icons';
+import { ChevronRightIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
-import { BezierChart } from '../BezierChart';
 import { MONTH_NAMES } from '@constants/variables';
+import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
 
 interface AMBPriceHistoryProps {

@@ -7,18 +7,15 @@ import { Notifications } from '@screens/Notifications';
 import { getCommonStack } from '../CommonStack';
 import { AssetScreen } from '@screens/Asset';
 import { SendFunds } from '@screens/SendFunds';
-import { WalletScreen } from '@screens/Wallet';
-import { ReceiptScreen } from '@screens/Wallet/Receipt';
-import { WalletAccount } from '@screens/Wallet/Account';
 import {
   CreateWalletStep0,
   CreateWalletStep1,
   CreateWalletStep2
-} from '@screens/Wallet/CreateWallet';
-import { RestoreWalletScreen } from '@screens/Wallet/RestoreWallet';
-import { SuccessBackupComplete } from '@screens/Wallet/CreateWallet/components';
-import { SendCryptoProvider } from '@contexts/SendCrypto/SendCrypto.context';
-import { SuccessImport } from '@screens/Wallet/CreateWallet/components/SuccessImport';
+} from '@screens/CreateWallet';
+import { RestoreWalletScreen } from '@screens/RestoreWallet';
+import { SuccessBackupComplete } from '@screens/CreateWallet/components';
+import { SendCryptoProvider } from '@contexts';
+import { SuccessImport } from '@screens/CreateWallet/components/SuccessImport';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -34,9 +31,6 @@ export const HomeStack = () => {
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
         <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="WalletScreen" component={WalletScreen} />
-        <Stack.Screen name="ReceiptScreen" component={ReceiptScreen} />
-        <Stack.Screen name="WalletAccount" component={WalletAccount} />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />

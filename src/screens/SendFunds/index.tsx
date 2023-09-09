@@ -46,7 +46,9 @@ export const SendFunds = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
 
-  const [destinationAddress, setDestinationAddress] = useState('');
+  const [destinationAddress, setDestinationAddress] = useState(
+    '0xb2E8A153bdbB5Ad7fc9c2e7F92BFA6908665664C'
+  );
   const [amountInCrypto, setAmountInCrypto] = useState('0');
   const [amountInUSD, setAmountInUSD] = useState('0');
   const [sendLoading, setSendLoading] = useState(false);
@@ -122,7 +124,7 @@ export const SendFunds = () => {
           message: ''
         });
       } catch (error) {
-        console.log(error, 'error');
+        // TODO handle
         Alert.alert('Transfer failed');
       } finally {
         setSendLoading(false);
