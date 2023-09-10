@@ -1,6 +1,7 @@
 import React, {
   createContext,
   FC,
+  ForwardedRef,
   useContext,
   useEffect,
   useRef,
@@ -9,12 +10,12 @@ import React, {
 import * as LocalAuthentication from 'expo-local-authentication';
 import { database } from '@database/main';
 import { PasscodeModal } from '@components/templates/PasscodeModal';
-import { AppState, View } from 'react-native';
-import { useAppState } from '@hooks';
+import { AppState, Modal, View } from 'react-native';
+import { useAppState, useForwardedRef } from '@hooks';
+import { BottomSheetRef } from '@components/composite';
 
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
-  authenticate: () => Promise<boolean>;
 }
 
 const PasscodeContext = createContext<IPasscodeContext | undefined>(undefined);
@@ -23,16 +24,22 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
+  const [accessed, setAccessed] = useState<boolean>(false);
   const appState = useRef(AppState.currentState);
+  const passcodeRef: ForwardedRef<BottomSheetRef> = useForwardedRef(null);
+
   const authenticate = async () => {
     try {
       const { success } = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Authenticate with Face ID'
       });
-      return success;
+      setAccessed(success);
+      // if (success) {
+      //   passcodeRef.current?.dismiss();
+      // }
     } catch (error) {
       console.error('Authentication error:', error);
-      return false;
+      setAccessed(false);
     }
   };
 
@@ -57,20 +64,39 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    if (isFaceIDEnabled) {
-      authenticate();
+    if (!accessed && focused === 'active') {
+      if (isFaceIDEnabled) {
+        (async () => {
+          await authenticate();
+        })();
+      }
+      // else {
+      //   passcodeRef.current?.show();
+      // }
     }
-  }, [isFaceIDEnabled]);
+  }, [accessed, focused, isFaceIDEnabled, passcodeRef]);
+
+  useEffect(() => {
+    if (focused === 'background') {
+      setAccessed(false);
+    }
+  }, [focused]);
+
+  // useEffect(() => {
+  //   if (accessed) {
+  //     passcodeRef.current?.dismiss();
+  //   }
+  // }, [accessed, passcodeRef]);
 
   return (
-    <PasscodeContext.Provider value={{ isFaceIDEnabled, authenticate }}>
-      <View style={{ flex: 1 }}>
-        {focused === 'background' && isFaceIDEnabled ? (
-          <PasscodeModal />
-        ) : (
-          children
-        )}
-      </View>
+    <PasscodeContext.Provider value={{ isFaceIDEnabled }}>
+      {/*{isFaceIDEnabled && focused === 'background' && accessed ? (*/}
+      {/*  <PasscodeModal />*/}
+      {/*) : (*/}
+      {/*  <View style={{ flex: 1 }}>*/}
+      {children}
+      {/*</View>*/}
+      {/*)}*/}
     </PasscodeContext.Provider>
   );
 };

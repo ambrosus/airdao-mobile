@@ -1,10 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
+import { Dimensions, Modal, ModalProps, View } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { Passcode } from '@components/base/Passcode/Passcode';
+import { useForwardedRef } from '@hooks';
+import { database } from '@database/main';
+import {
+  BottomSheet,
+  BottomSheetProps,
+  BottomSheetRef
+} from '@components/composite';
 
 export const PasscodeModal = () => {
+  // = forwardRef<BottomSheetRef, BottomSheetProps>(
+  // (props, ref) => {
+  //   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
+
   useEffect(() => {
     const authenticate = async () => {
       try {
@@ -20,11 +33,24 @@ export const PasscodeModal = () => {
     authenticate();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const storedFaceID = await database.localStorage.get('FaceID');
+      setIsFaceIDEnabled(storedFaceID === 'false' || storedFaceID === 'true');
+    })();
+  }, []);
+
   return (
-    <View style={{ backgroundColor: COLORS.white, flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.white
+      }}
+    >
       <Text align="center" style={{ paddingTop: 200 }}>
         FaceID or Passcode
       </Text>
+      {isFaceIDEnabled && <Passcode onPasscodeChange={() => null} />}
     </View>
   );
 };
