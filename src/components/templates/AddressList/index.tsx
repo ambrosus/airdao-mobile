@@ -6,15 +6,15 @@ import { ExplorerAccount } from '@models/Explorer';
 import {
   SwipeableWalletItemProps,
   SwipeableWalletItem
-} from '@components/templates/WalletList/components/SwipeableWalletItem';
+} from './components/SwipeableWalletItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
-interface EmptyWalletListProps {
+interface EmptyAddressListProps {
   emptyText: string;
 }
 
-interface WalletListProps
-  extends EmptyWalletListProps,
+interface AddressListProps
+  extends EmptyAddressListProps,
     Pick<SwipeableWalletItemProps, 'removeType'> {
   data: ExplorerAccount[];
   isPortfolioFlow?: boolean;
@@ -26,7 +26,7 @@ interface WalletListProps
   onRefresh?: () => void;
 }
 
-export function WalletList(props: WalletListProps): JSX.Element {
+export function AddressList(props: AddressListProps): JSX.Element {
   const {
     data,
     isPortfolioFlow = false,

@@ -4,6 +4,12 @@ import { TabsParamsList } from './tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type SettingsTabParamsList = {
+  About: undefined;
+  AppPreferences: undefined;
+  HelpCenter: undefined;
+  ManageWallets: undefined;
+  NotificationSettings: undefined;
+  SecuritySettings: undefined;
   SettingsScreen: undefined;
 };
 

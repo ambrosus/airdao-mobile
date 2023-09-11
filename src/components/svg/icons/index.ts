@@ -21,7 +21,7 @@ export * from './Discord';
 export * from './DownArrow';
 export * from './Edit';
 export * from './Empty';
-export * from './EmptyWalletListPlaceholder';
+export * from './EmptyAddressListPlaceholder';
 export * from './EyeVisible';
 export * from './EyeInvisible';
 export * from './Filter';

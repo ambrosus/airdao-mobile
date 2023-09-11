@@ -2,8 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';
+import { SettingsTabNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { SETTINGS_MENU_ITEMS } from './Settings.constants';
@@ -13,9 +15,13 @@ import { styles } from './styles';
 const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
   const { item } = props;
   const { t } = useTranslation();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
+  const navigateToRoute = () => {
+    navigation.navigate(item.route);
+  };
 
   return (
-    <Button style={styles.menutItem}>
+    <Button style={styles.menutItem} onPress={navigateToRoute}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}

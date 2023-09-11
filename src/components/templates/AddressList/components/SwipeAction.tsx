@@ -1,6 +1,6 @@
 import React from 'react';
 import { Animated, Pressable } from 'react-native';
-import { styles } from '@components/templates/WalletList/styles';
+import { styles } from '@components/templates/AddressList/styles';
 import { Button } from '@components/base';
 import { EditIcon, TrashIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';

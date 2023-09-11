@@ -11,7 +11,7 @@ import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
-import { styles } from '@components/templates/WalletList/styles';
+import { styles } from '@components/templates/AddressList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';

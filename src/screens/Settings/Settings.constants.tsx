@@ -13,7 +13,7 @@ import { COLORS } from '@constants/colors';
 export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
   {
     title: 'settings.manage.wallet',
-    route: 'ManageWallet',
+    route: 'ManageWallets',
     icon: <WalletTabIcon color={COLORS.blue600} />
   },
   {

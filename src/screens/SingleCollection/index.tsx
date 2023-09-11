@@ -5,7 +5,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Row, Spacer, Text, Badge } from '@components/base';
 import {
   BottomSheetEditCollection,
-  WalletList,
+  AddressList,
   BottomSheetCreateRenameGroup
 } from '@components/templates';
 import { EditIcon, AddIcon } from '@components/svg/icons';
@@ -140,7 +140,7 @@ export const SingleGroupScreen = () => {
         style={{ flex: 1, paddingHorizontal: scale(16) }}
         testID="List_Of_Addresses"
       >
-        <WalletList
+        <AddressList
           data={sortListByKey(accounts || [], 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}

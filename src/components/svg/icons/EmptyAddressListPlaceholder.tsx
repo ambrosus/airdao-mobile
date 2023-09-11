@@ -2,7 +2,7 @@ import React from 'react';
 import Svg, { Rect } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
-export function EmptyWalletListPlaceholderIcon(props: IconProps) {
+export function EmptyAddressListPlaceholderIcon(props: IconProps) {
   const { scale = 1, color = '#0E0E0E' } = props;
   const width = 178,
     height = 67;
