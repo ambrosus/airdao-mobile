@@ -1,4 +1,5 @@
 export * from './Icon.types';
+export * from './About';
 export * from './AddIcon';
 export * from './AirDAOLogo';
 export * from './AppStore';
@@ -25,7 +26,9 @@ export * from './EyeVisible';
 export * from './EyeInvisible';
 export * from './Filter';
 export * from './GitHub';
+export * from './Help';
 export * from './List';
+export * from './Lock';
 export * from './Logo';
 export * from './LogoWithName';
 export * from './LogoBig';

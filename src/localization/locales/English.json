@@ -218,5 +218,12 @@
   "no.wallet.address.tracking": "Address tracking",
   "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
   "no.wallet.stay.informed": "Stay informed",
-  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity."
+  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
+
+  "settings.manage.wallet": "Manage Wallet",
+  "settings.security": "Security",
+  "settings.preferences": "Preferences",
+  "settings.notifications": "Notifications",
+  "settings.help": "Help Center",
+  "settings.about": "About"
 }

@@ -212,5 +212,12 @@
   "no.wallet.address.tracking": "Adres takibi",
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.stay.informed": "Haberdar olun",
-  "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın."
+  "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın.",
+
+  "settings.manage.wallet": "Cüzdan Yönetimi",
+  "settings.security": "Güvenlik",
+  "settings.preferences": "Tercihler",
+  "settings.notifications": "Bildirim Ayarları",
+  "settings.help": "Yardım Merkezi",
+  "settings.about": "Hakkında"
 }
