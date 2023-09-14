@@ -230,6 +230,10 @@
   "settings.preferences.currency": "Currency",
   "settings.preferences.language": "Language",
 
+  "settings.about.terms": "Terms of service",
+  "settings.about.privacy": "Privacy policy",
+  "settings.about.rate": "Rate us",
+
   "singleWallet.name": "Name",
   "singleWallet.copy": "Copy to clipboard",
   "singleWallet.save": "Save changes"

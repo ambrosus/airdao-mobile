@@ -224,6 +224,10 @@
   "settings.preferences.currency": "Para birimi",
   "settings.preferences.language": "Dil",
 
+  "settings.about.terms": "Kullanım koşulları",
+  "settings.about.privacy": "Gizlilik politikası",
+  "settings.about.rate": "Bizi değerlendir",
+
   "singleWallet.name": "Cüzdan ismi",
   "singleWallet.copy": "Kopyala",
   "singleWallet.save": "Kaydet"
