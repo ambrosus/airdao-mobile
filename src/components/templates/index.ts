@@ -1,7 +1,7 @@
 export * from './AddressIndicator';
 export * from './AddWalletToList';
 export * from './AMBPriceHistory';
-export * from './WalletList';
+export * from './AddressList';
 export * from './WalletItem';
 export * from './BezierChart';
 export * from './PortfolioPerformance';
@@ -11,7 +11,7 @@ export * from './BottomSheetRemoveAddressFromCollection';
 export * from './BottomSheetCreateRenameGroup';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetAddWalletToList';
-export * from './BottomSheetNotificationSettings';
+export * from './NotificationSettings';
 export * from './WatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';

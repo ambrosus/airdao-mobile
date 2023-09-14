@@ -8,7 +8,8 @@ import { API } from '@api/api';
 import { useTranslation } from 'react-i18next';
 
 export const useCryptoAccountFromHash = (
-  hash: string
+  hash: string,
+  enabled = true
 ): QueryResponse<ExplorerAccount | null> => {
   const [account, setAccount] = useState<ExplorerAccount | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export const useCryptoAccountFromHash = (
     } catch (error) {
       // TODO change text
       setError(t('errors.loading-wallet-from-db'));
-      setLoading(true);
+      setLoading(false);
       return;
     }
     if (wallets?.length > 0) {
@@ -68,8 +69,8 @@ export const useCryptoAccountFromHash = (
   }, [hash, t]);
 
   useEffect(() => {
-    if (hash) getAccount();
-  }, [getAccount, hash]);
+    if (hash && enabled) getAccount();
+  }, [getAccount, hash, enabled]);
 
   return { data: account, loading, error };
 };

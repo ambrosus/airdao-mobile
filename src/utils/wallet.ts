@@ -10,6 +10,7 @@ import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOUtils from '@crypto/common/AirDAOUtils';
 import { Q } from '@nozbe/watermelondb';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
+import { Cache, CacheKey } from './cache';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -123,4 +124,8 @@ const sendTx = async (
   }
 };
 
-export const WalletUtils = { processWallet, sendTx };
+const changeSelectedWallet = async (hash: string) => {
+  await Cache.setItem(CacheKey.SelectedWallet, hash);
+};
+
+export const WalletUtils = { processWallet, sendTx, changeSelectedWallet };

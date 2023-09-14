@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { BackIcon } from '@components/svg/icons';
 import { Button, Row, Text } from '@components/base';
 import { HeaderProps } from './Header.types';
@@ -35,11 +35,11 @@ export function Header(props: HeaderProps): JSX.Element {
     if (typeof title === 'string') {
       return (
         <Text
-          style={Platform.OS === 'android' && titleStyle}
+          style={titleStyle}
           fontFamily="Inter_700Bold"
           fontSize={20}
           fontWeight="700"
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral800}
         >
           {title}
         </Text>

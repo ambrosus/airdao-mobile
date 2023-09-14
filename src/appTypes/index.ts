@@ -1,4 +1,5 @@
 export * from './blockchain';
+export * from './AppPreferences';
 export * from './CacheableAccount';
 export * from './CacheableAccountList';
 export * from './coinmarketcap';
