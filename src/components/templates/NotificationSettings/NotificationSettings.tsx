@@ -1,5 +1,5 @@
 import React from 'react';
-import { BottomSheetNotificationSettings } from '@components/templates';
+import { NotificationSettingsView } from './index';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render } from '@testing-library/react-native';
@@ -22,20 +22,20 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <BottomSheetNotificationSettings />
+        <NotificationSettingsView />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
 
-describe('BottomSheetNotificationSettings', () => {
+describe('NotificationSettings', () => {
   afterAll(() => {
     clearAllMocks();
   });
 
   it('renders correctly', () => {
     const { getByTestId } = render(<Component />);
-    const settingsModal = getByTestId('BottomSheetNotiSettings_Container');
+    const settingsModal = getByTestId('NotificationSettings_Container');
     expect(settingsModal).toBeTruthy();
   });
 

@@ -1,24 +1,13 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
-import {
-  BottomSheet,
-  Header,
-  SegmentedPicker,
-  Segment
-} from '@components/composite';
-import {
-  BottomSheetProps,
-  BottomSheetRef
-} from '@components/composite/BottomSheet/BottomSheet.types';
-import { useForwardedRef } from '@hooks/useForwardedRef';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { SegmentedPicker, Segment } from '@components/composite';
 import { Row, Spacer, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -49,15 +38,12 @@ const PercentThresholds: Segment[] = [
   }
 ];
 
-export const BottomSheetNotificationSettings = forwardRef<
-  BottomSheetRef,
-  BottomSheetProps
->((props, ref) => {
-  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+// TODO implement watchlists switch https://www.figma.com/file/IQTwaJxVxOXTb8x2cfaxfT/MOBILE-APP-V2.0?type=design&node-id=842-12274&mode=dev
+
+export const NotificationSettingsView = () => {
   const { data: notificationSettings, save } = useNotificationSettings();
   const [localNotificationSettings, setLocalNotificationSettings] =
     useState<NotificationSettings>(notificationSettings);
-  const { top: topInset } = useSafeAreaInsets();
   const { t } = useTranslation();
 
   useEffect(
@@ -80,30 +66,9 @@ export const BottomSheetNotificationSettings = forwardRef<
   };
 
   return (
-    <BottomSheet
-      containerStyle={styles.bottomSheet}
-      height={'100%'}
-      ref={localRef}
-      {...props}
-    >
-      {Platform.OS === 'ios' && <Spacer value={topInset} />}
-      <Header
-        title={
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.smokyBlack}
-          >
-            {t('notification.settings')}
-          </Text>
-        }
-        titlePosition={Platform.select({ ios: 'left', default: 'center' })}
-        backIconVisible={true}
-        onBackPress={() => localRef.current?.dismiss()}
-        style={styles.header}
-      />
+    <View>
       <ScrollView
-        testID="BottomSheetNotiSettings_Container"
+        testID="NotiSettings_Container"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -119,12 +84,12 @@ export const BottomSheetNotificationSettings = forwardRef<
                   !localNotificationSettings.priceAlerts
                 )
               }
-              testID="BottomSheetNotiSettings_Price_Switch"
+              testID="NotiSettings_Price_Switch"
               value={localNotificationSettings.priceAlerts}
             />
           </Row>
           {/* Percentage Change */}
-          <Spacer value={verticalScale(35)} />
+          <Spacer value={verticalScale(32)} />
           <Title>{t('price.alerts.treshold')}</Title>
           <Spacer value={verticalScale(8)} />
           <Text
@@ -176,6 +141,6 @@ export const BottomSheetNotificationSettings = forwardRef<
           </Row>
         </View>
       </ScrollView>
-    </BottomSheet>
+    </View>
   );
-});
+};

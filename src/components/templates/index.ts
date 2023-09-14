@@ -11,7 +11,7 @@ export * from './BottomSheetRemoveAddressFromCollection';
 export * from './BottomSheetCreateRenameGroup';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetAddWalletToList';
-export * from './BottomSheetNotificationSettings';
+export * from './NotificationSettings';
 export * from './WatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
