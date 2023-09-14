@@ -18,7 +18,10 @@ const AppInitialization = () => {
     if (!loading) {
       SplashScreen.hideAsync();
       if (hash) {
-        navigation.replace('Tabs', { screen: 'Wallets' });
+        navigation.replace('Tabs', {
+          screen: 'Wallets',
+          params: { screen: 'HomeScreen' }
+        });
       } else {
         navigation.replace('WelcomeScreen');
       }

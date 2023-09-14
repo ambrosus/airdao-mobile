@@ -1,6 +1,7 @@
 export const COLORS = {
   alphaBlack5: '#0e0e0e0d',
   alphaBlack10: '#0e0e0e1a',
+  alphaBlack30: '#0e0e0e4d',
   blue100: '#EDF3FF',
   blue300: '#99B8FF',
   blue500: '#457EFF',

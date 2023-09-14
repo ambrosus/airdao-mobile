@@ -1,7 +1,8 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { TabsParamsList } from './tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { WalletDBModel } from '@database';
+import { TabsParamsList } from './tabs';
 
 export type SettingsTabParamsList = {
   About: undefined;
@@ -11,6 +12,7 @@ export type SettingsTabParamsList = {
   NotificationSettings: undefined;
   SecuritySettings: undefined;
   SettingsScreen: undefined;
+  SingleWallet: { wallet: WalletDBModel };
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<

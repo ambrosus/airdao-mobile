@@ -225,5 +225,9 @@
   "settings.preferences": "Preferences",
   "settings.notifications": "Notifications",
   "settings.help": "Help Center",
-  "settings.about": "About"
+  "settings.about": "About",
+
+  "singleWallet.name": "Name",
+  "singleWallet.copy": "Copy to clipboard",
+  "singleWallet.save": "Save changes"
 }

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Alert, FlatList, ListRenderItemInfo } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation
+} from '@react-navigation/native';
 import { WalletDBModel } from '@database';
 import { useAllWallets } from '@hooks/database';
 import { Button, Spacer } from '@components/base';
@@ -11,9 +15,17 @@ import { WalletUtils } from '@utils/wallet';
 import { WalletItem } from './Wallet';
 
 export const AllWallets = () => {
-  const { data: allWallets } = useAllWallets();
+  const allWalletsQueryInfo = useAllWallets();
+  const allWallets = allWalletsQueryInfo.data;
   const { data: selectedWalletHash } = useSelectedWalletHash();
   const navigation = useNavigation<SettingsTabNavigationProp>();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (allWalletsQueryInfo.refetch) allWalletsQueryInfo.refetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [allWalletsQueryInfo.refetch])
+  );
 
   const changeSelectedWallet = (hash: string) => {
     WalletUtils.changeSelectedWallet(hash);
@@ -28,7 +40,7 @@ export const AllWallets = () => {
   const renderWallet = (args: ListRenderItemInfo<WalletDBModel>) => {
     const onPress = () => {
       // TODO navigate to EditWallet
-      navigation.navigate('About');
+      navigation.navigate('SingleWallet', { wallet: args.item });
     };
     const onLongPress = () => {
       // TODO

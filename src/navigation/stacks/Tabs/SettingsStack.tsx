@@ -7,7 +7,8 @@ import {
   NotificationSettingsScreen,
   SecuritySettingsScreen,
   SettingsScreen,
-  ManageWalletsScreen
+  ManageWalletsScreen,
+  SingleWalletScreen
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
 
@@ -31,6 +32,7 @@ export const SettingsStack = () => {
         component={SecuritySettingsScreen}
       />
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <Stack.Screen name="SingleWallet" component={SingleWalletScreen} />
     </Stack.Navigator>
   );
 };

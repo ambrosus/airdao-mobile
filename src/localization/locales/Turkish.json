@@ -219,5 +219,9 @@
   "settings.preferences": "Tercihler",
   "settings.notifications": "Bildirim Ayarları",
   "settings.help": "Yardım Merkezi",
-  "settings.about": "Hakkında"
+  "settings.about": "Hakkında",
+
+  "singleWallet.name": "Cüzdan ismi",
+  "singleWallet.copy": "Kopyala",
+  "singleWallet.save": "Kaydet"
 }
