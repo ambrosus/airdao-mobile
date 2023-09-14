@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { scale } from '@utils/scaling';
 import { SETTINGS_MENU_ITEMS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
+import Config from '@constants/config';
 
 const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
   const { item } = props;
@@ -20,8 +21,24 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
     navigation.navigate(item.route);
   };
 
+  const openHelpCenter = () => {
+    Linking.openURL(Config.AIRDAO_FAQ_URL);
+  };
+
+  const onPress = () => {
+    switch (item.key) {
+      case 'helpCenter': {
+        openHelpCenter();
+        break;
+      }
+      default: {
+        navigateToRoute();
+      }
+    }
+  };
+
   return (
-    <Button style={styles.menutItem} onPress={navigateToRoute}>
+    <Button style={styles.menutItem} onPress={onPress}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}

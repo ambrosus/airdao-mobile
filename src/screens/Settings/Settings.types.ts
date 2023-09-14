@@ -1,8 +1,8 @@
-import { SettingsTabParamsList } from '@appTypes';
 import { ReactNode } from 'react';
 
 export interface SettingsMenuItem {
+  key: string;
   title: string;
-  route: keyof SettingsTabParamsList;
+  route: any;
   icon: ReactNode;
 }

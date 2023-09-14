@@ -16,7 +16,8 @@ const envs = {
       send: true,
       receive: true,
       stake: false
-    }
+    },
+    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs'
   },
   stage: {
     CMC_API_URL: 'https://sandbox-api.coinmarketcap.com',
@@ -34,7 +35,8 @@ const envs = {
       send: true,
       receive: true,
       stake: false
-    }
+    },
+    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs'
   }
 };
 
