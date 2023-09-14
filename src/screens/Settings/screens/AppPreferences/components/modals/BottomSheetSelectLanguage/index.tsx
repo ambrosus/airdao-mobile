@@ -1,31 +1,22 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import { FlatList, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { FlatList, Platform } from 'react-native';
-import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
-import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 import useLocalization from '@contexts/Localizations';
+import { Language } from '@appTypes';
+import { styles } from '../style';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   handleLanguageSave: (value: Language) => void;
   selectedLanguage: Language;
 };
-
-export type Language =
-  | 'English'
-  | 'Arabic'
-  | 'Spanish'
-  | 'Turkish'
-  | 'Chinese'
-  | 'Russian'
-  | 'Portuguese'
-  | 'Hindi';
 
 type LanguageData = {
   language: Language;

@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { Language } from '@screens/Settings/components/SettingsBlock/modals/BottomSheetSelectLanguage';
-import { Currency } from '@screens/Settings/components/SettingsBlock/modals/BottomSheetBaseCurrency';
 import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { scale } from '@utils/scaling';
+import { Currency, Language } from '@appTypes';
 
 type Props = {
   item: Language | Currency;

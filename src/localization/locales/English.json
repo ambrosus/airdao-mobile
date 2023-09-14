@@ -227,6 +227,9 @@
   "settings.help": "Help Center",
   "settings.about": "About",
 
+  "settings.preferences.currency": "Currency",
+  "settings.preferences.language": "Language",
+
   "singleWallet.name": "Name",
   "singleWallet.copy": "Copy to clipboard",
   "singleWallet.save": "Save changes"

@@ -8,7 +8,7 @@ import React, {
 import * as SecureStore from 'expo-secure-store';
 import i18n from '../../localization/i18n';
 import dayjs from 'dayjs';
-import { Language } from '@screens/Settings/components/SettingsBlock/modals/BottomSheetSelectLanguage';
+import { Language } from '@screens/Settings/screens/AppPreferences/components/modals/BottomSheetSelectLanguage';
 
 interface ILanguageContext {
   changeCurrentLanguage: (language: Language) => Promise<void>;

@@ -9,11 +9,11 @@ import { BottomSheetRef } from '@components/composite';
 import {
   BottomSheetSelectBaseCurrency,
   Currency
-} from '@screens/Settings/components/SettingsBlock/modals/BottomSheetBaseCurrency';
+} from '@screens/Settings/screens/AppPreferences/components/modals/BottomSheetBaseCurrency';
 import {
   BottomSheetSelectLanguage,
   Language
-} from '@screens/Settings/components/SettingsBlock/modals/BottomSheetSelectLanguage';
+} from '@screens/Settings/screens/AppPreferences/components/modals/BottomSheetSelectLanguage';
 import { BottomSheetNotificationSettings } from '@components/templates';
 import { styles } from '@screens/Settings/components/SettingsBlock/style';
 import { COLORS } from '@constants/colors';

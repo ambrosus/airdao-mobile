@@ -3,30 +3,19 @@ import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { FlatList, Platform } from 'react-native';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { SettingsModalItem } from '@screens/Settings/components/SettingsBlock/components/SettingsModalItem';
-import { styles } from '@screens/Settings/components/SettingsBlock/modals/style';
+import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import { Currency } from '@appTypes';
+import { styles } from '../style';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
   handleCurrencySave: (value: Currency) => void;
   selectedCurrency: Currency;
 };
-
-export type Currency =
-  | 'Australian Dollar (AUD)'
-  | 'Bitcoin (BTC)'
-  | 'British Pound Sterling (GBP)'
-  | 'Canadian Dollar (CAD)'
-  | 'Chinese Yuan CNY)'
-  | 'Ethereum (ETH)'
-  | 'Euro (EUR)'
-  | 'Japanese Yen (JPY)'
-  | 'US Dollars (USD)'
-  | 'Satoshi (SATS)';
 
 type CurrencyData = {
   currency: Currency;

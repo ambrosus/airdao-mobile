@@ -221,6 +221,9 @@
   "settings.help": "Yardım Merkezi",
   "settings.about": "Hakkında",
 
+  "settings.preferences.currency": "Para birimi",
+  "settings.preferences.language": "Dil",
+
   "singleWallet.name": "Cüzdan ismi",
   "singleWallet.copy": "Kopyala",
   "singleWallet.save": "Kaydet"
