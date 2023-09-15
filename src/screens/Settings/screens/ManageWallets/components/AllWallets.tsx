@@ -1,23 +1,16 @@
 import React from 'react';
-import { Alert, FlatList, ListRenderItemInfo } from 'react-native';
-import {
-  CommonActions,
-  useFocusEffect,
-  useNavigation
-} from '@react-navigation/native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { WalletDBModel } from '@database';
 import { useAllWallets } from '@hooks/database';
 import { Button, Spacer } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
-import { useSelectedWalletHash } from '@hooks';
 import { SettingsTabNavigationProp } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
 import { WalletItem } from './Wallet';
 
 export const AllWallets = () => {
   const allWalletsQueryInfo = useAllWallets();
   const allWallets = allWalletsQueryInfo.data;
-  const { data: selectedWalletHash } = useSelectedWalletHash();
   const navigation = useNavigation<SettingsTabNavigationProp>();
 
   useFocusEffect(
@@ -27,45 +20,13 @@ export const AllWallets = () => {
     }, [allWalletsQueryInfo.refetch])
   );
 
-  const changeSelectedWallet = (hash: string) => {
-    WalletUtils.changeSelectedWallet(hash);
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'Wallets' }]
-      })
-    );
-  };
-
   const renderWallet = (args: ListRenderItemInfo<WalletDBModel>) => {
     const onPress = () => {
-      // TODO navigate to EditWallet
       navigation.navigate('SingleWallet', { wallet: args.item });
     };
-    const onLongPress = () => {
-      // TODO
-      Alert.alert(
-        `Are you sure to change default wallet to ${args.item.name}`,
-        'This will reload the application',
-        [
-          {
-            text: 'Confirm',
-            onPress: () => changeSelectedWallet(args.item.hash)
-          },
-          {
-            text: 'Cancel',
-            style: 'cancel'
-          }
-        ]
-      );
-    };
-    const isSelectedWallet = selectedWalletHash === args.item.hash;
     return (
-      <Button
-        onPress={onPress}
-        onLongPress={isSelectedWallet ? undefined : onLongPress}
-      >
-        <WalletItem wallet={args.item} isSelectedWallet={isSelectedWallet} />
+      <Button onPress={onPress}>
+        <WalletItem wallet={args.item} isSelectedWallet={false} />
       </Button>
     );
   };

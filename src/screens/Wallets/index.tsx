@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -13,6 +13,7 @@ import { ExplorerAccount } from '@models';
 import { PaginationCircles } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { AccountActions, HomeHeader } from './components';
+import { WalletUtils } from '@utils/wallet';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -35,6 +36,12 @@ export const HomeScreen = () => {
     loading,
     error
   } = useTokensAndTransactions(account?.address);
+
+  useEffect(() => {
+    if (accounts.length > 0) {
+      WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+    }
+  }, [accounts, scrollIdx]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
