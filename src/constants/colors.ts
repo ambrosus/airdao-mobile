@@ -2,10 +2,17 @@ export const COLORS = {
   alphaBlack5: '#0e0e0e0d',
   alphaBlack10: '#0e0e0e1a',
   alphaBlack30: '#0e0e0e4d',
+  alphaBlack50: '#0e0e0e80',
+  alphaWhite50: '#ffffff80',
   blue100: '#EDF3FF',
+  blue200: '#C9D9FF',
   blue300: '#99B8FF',
+  blue400: '#7DA3F9',
   blue500: '#457EFF',
   blue600: '#3568DD',
+  blue700: '#1A3D8D',
+  blue800: '#061B4A',
+  blue900: '#071430',
   gray100: '#E6E6E6',
   gray200: '#C2C5CC',
   gray300: '#2F2B430D',
@@ -39,6 +46,15 @@ export const COLORS = {
   success700: '#095357',
   success800: '#0D3137',
   success900: '#08222A',
+  purple100: '#EFECF8',
+  purple200: '#D4C9FA',
+  purple300: '#B49BF9',
+  purple400: '#966CF0',
+  purple500: '#743DE5',
+  purple600: '#6121D7',
+  purple700: '#3A2786',
+  purple800: '#211847',
+  purple900: '#11102D',
   neutralGray: 'rgba(14, 14, 14, 0.05)',
   yellow500: '#ff7a00',
   asphalt: '#a1a6b2',
@@ -96,3 +112,24 @@ export const COLORS = {
   linkWater: '#c2c5cc',
   pinkRed: '#ffd9cd'
 };
+
+export const CreditCardBg = [
+  COLORS.blue600,
+  COLORS.blue200,
+  COLORS.neutral700,
+  COLORS.purple500
+];
+
+export const CreditCardAddressColor = [
+  COLORS.alphaWhite50,
+  COLORS.alphaBlack50,
+  COLORS.alphaWhite50,
+  COLORS.alphaWhite50
+];
+
+export const CreditCardBalanceColor = [
+  COLORS.neutral0,
+  COLORS.neutral800,
+  COLORS.neutral0,
+  COLORS.neutral0
+];

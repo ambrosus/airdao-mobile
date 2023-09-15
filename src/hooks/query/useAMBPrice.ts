@@ -10,7 +10,7 @@ export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
   const { data, isLoading, isRefetching, error, refetch } =
     useQuery<AMBTokenDTO>(['amb-token'], API.getAMBTokenData, {
       refetchOnReconnect: true,
-      refetchInterval: 5 * 60 * 1e3,
+      refetchInterval: 5 * 60 * 1e3, // 5 mins
       refetchOnMount: true,
       refetchOnWindowFocus: true
     });
