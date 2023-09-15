@@ -115,8 +115,9 @@ export const WalletTransactionsAndAssets = (
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: '100%' }}
       >
-        <View style={{ width: tabWidth, height: '60%' }}>
+        <View style={{ width: tabWidth }}>
           <WalletAssets
             tokens={tokens}
             loading={loading}
@@ -124,7 +125,7 @@ export const WalletTransactionsAndAssets = (
             error={error}
           />
         </View>
-        <View style={{ width: tabWidth, height: '60%' }}>
+        <View style={{ width: tabWidth, height: '100%' }}>
           <WalletTransactions
             transactions={transactions}
             loading={loading}

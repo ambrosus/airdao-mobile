@@ -10,7 +10,7 @@ import { Header } from '@components/composite';
 import { Button, Input, Spacer, Spinner, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { AccountUtils } from '@utils/account';
+import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { styles } from './styles';
@@ -91,7 +91,7 @@ export const RestoreWalletScreen = () => {
         if (!MnemonicUtils.isValidMnemonic(mnemonicPhrase)) {
           Alert.alert('Invalid mnemonic phrase');
         } else {
-          await AccountUtils.addAccountInfoToDatabase(mnemonicPhrase);
+          await WalletUtils.processWallet(mnemonicPhrase);
           navigation.navigate('SuccessImport');
         }
       } catch (error) {

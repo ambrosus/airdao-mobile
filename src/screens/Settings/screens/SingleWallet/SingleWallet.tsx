@@ -21,6 +21,7 @@ import {
 import { useCryptoAccountFromHash, useDelayedMount } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
+import { WalletUtils } from '@utils/wallet';
 import { styles } from './styles';
 
 export const SingleWalletScreen = () => {
@@ -46,9 +47,8 @@ export const SingleWalletScreen = () => {
       wallet: wallet
     });
   };
-
   const deleteWallet = async () => {
-    await Database.deleteModel(DatabaseTable.Wallets, wallet.id);
+    await WalletUtils.deleteWalletWithAccounts(wallet.hash);
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

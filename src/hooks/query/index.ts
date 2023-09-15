@@ -1,5 +1,6 @@
 export * from './useAMBPrice';
 export * from './useAMBPriceHistorical';
+export * from './useBalanceOfAddress';
 export * from './useCryptoAccountFromHash';
 export * from './useEstimatedTransferFee';
 export * from './useExplorerInfo';

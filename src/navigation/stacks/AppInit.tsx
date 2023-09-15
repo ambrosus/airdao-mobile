@@ -15,8 +15,11 @@ const AppInitialization = () => {
   const navigation = useNavigation<RootNavigationProp>();
 
   useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
+  useEffect(() => {
     if (!loading) {
-      SplashScreen.hideAsync();
       if (hash) {
         navigation.replace('Tabs', {
           screen: 'Wallets',
@@ -26,7 +29,7 @@ const AppInitialization = () => {
         navigation.replace('WelcomeScreen');
       }
     }
-  }, [loading, hash, navigation]);
+  }, [hash, navigation, loading]);
 
   return (
     <View style={styles.container}>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DatabaseTable } from '@appTypes';
 import { database } from './main';
-import { Q, Database as WDB } from '@nozbe/watermelondb';
+import { Model, Q, Database as WDB } from '@nozbe/watermelondb';
 import { Clause } from '@nozbe/watermelondb/QueryDescription';
 import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
 
@@ -51,11 +51,11 @@ class Database {
             return newModel;
           });
         } catch (error) {
-          // ignore
+          throw error;
         }
       });
     } catch (error) {
-      // ignore
+      throw error;
     }
   }
 
@@ -63,8 +63,8 @@ class Database {
     if (!this.db) this.init();
     try {
       const model = await this.db!.get(table).find(id);
-      await this.db?.write(async () => {
-        await model.update((modelToUpdate) => {
+      return await this.db?.write(async () => {
+        return await model.update((modelToUpdate) => {
           for (const key in updateObj) {
             // @ts-ignore
             modelToUpdate[key] = updateObj[key];
@@ -72,7 +72,7 @@ class Database {
         });
       });
     } catch (error) {
-      // ignore
+      throw error;
     }
   }
 
@@ -87,7 +87,18 @@ class Database {
       }
     } catch (error) {
       // ignore
+      throw error;
     }
+  }
+
+  async deleteMultiple(models: Model[]) {
+    if (!this.db) this.init();
+    // @ts-ignore
+    await this.db.action(async () => {
+      for (const model of models) {
+        await model.destroyPermanently();
+      }
+    });
   }
 
   unEscapeString(goodString: string) {
@@ -120,6 +131,28 @@ class Database {
 
   async unsafeRawQuery(table: DatabaseTable, query: string) {
     return await database.get(table).query(Q.unsafeSqlQuery(query)).fetch();
+  }
+
+  async updateRelation<T1 extends Model, T2 extends Model>(
+    model1: T1,
+    model2: T2,
+    key: keyof T1
+  ) {
+    try {
+      if (!this.db) this.init();
+      return this.db?.write(async () => {
+        try {
+          return await model1.update((acc) => {
+            // @ts-ignore
+            acc[key].id = model2.id;
+          });
+        } catch (error) {
+          throw error;
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   // setTableName(tableName: string) {
