@@ -57,7 +57,7 @@ export function AMBMarket(): JSX.Element {
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 AirDAO (AMB)
               </Text>
@@ -66,12 +66,12 @@ export function AMBMarket(): JSX.Element {
         }
         style={{
           backgroundColor:
-            Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
+            Platform.OS === 'ios' ? COLORS.neutral0 : COLORS.culturedWhite,
           shadowColor: COLORS.culturedWhite
         }}
         // contentRight={
         //   <Button onPress={onSharePress} testID="Share_Button">
-        //     <ShareIcon color={COLORS.jetBlack} scale={1.5} />
+        //     <ShareIcon color={COLORS.neutral800} scale={1.5} />
         //     <Spacer horizontal value={scale(20)} />
         //   </Button>
         // }
@@ -138,7 +138,7 @@ export function AMBMarket(): JSX.Element {
             <Spacer horizontal value={scale(8)} />
             <Text
               fontSize={15}
-              color={COLORS.white}
+              color={COLORS.neutral0}
               fontFamily="Inter_600SemiBold"
             >
               AirDAO (AMB)

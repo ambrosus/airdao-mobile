@@ -131,7 +131,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 style={styles.newListTitle}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {type === 'create' ? t('create.group') : t('rename.group')}
               </Text>
@@ -154,7 +154,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                       : t('group.name.input')
                   }
                   placeholderTextColor={
-                    emptyPlaceholder ? COLORS.crimsonRed : COLORS.midnight
+                    emptyPlaceholder ? COLORS.error400 : COLORS.midnight
                   }
                   style={[styles.bottomSheetInput]}
                 />
@@ -173,7 +173,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   <Text
                     fontFamily="Inter_600SemiBold"
                     fontSize={16}
-                    color={COLORS.white}
+                    color={COLORS.neutral0}
                   >
                     {type === 'create' ? t('create.btn') : t('save.btn')}
                   </Text>
@@ -192,7 +192,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
               >
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.nero}
+                  color={COLORS.neutral800}
                   fontSize={16}
                 >
                   {t('cancel.btn')}

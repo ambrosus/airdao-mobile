@@ -25,7 +25,7 @@ export const SuccessImport = () => {
           align="center"
           fontSize={24}
           fontFamily="Inter_700Bold"
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >
           {t('import.successful')}
         </Text>
@@ -34,7 +34,7 @@ export const SuccessImport = () => {
           align="center"
           fontSize={16}
           fontFamily="Inter_500Medium"
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >
           {t('import.successful.text')}
         </Text>
@@ -44,7 +44,7 @@ export const SuccessImport = () => {
           align="center"
           fontSize={16}
           fontFamily="Inter_500Medium"
-          color={COLORS.white}
+          color={COLORS.neutral0}
         >
           {t('start.using.wallet.btn')}
         </Text>

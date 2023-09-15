@@ -79,7 +79,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_700Bold"
               fontSize={scale(16)}
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
             >
               {t('select.base.currency')}
             </Text>

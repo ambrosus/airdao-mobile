@@ -57,13 +57,14 @@ export const CreateWalletStep2 = () => {
         validateMnemonicOrder();
       };
 
-      const buttonTextColorInner = selectedIdx !== -1 ? '#A1A6B2' : COLORS.nero;
+      const buttonTextColorInner =
+        selectedIdx !== -1 ? '#A1A6B2' : COLORS.neutral800;
 
       const buttonTextColorMnemonic = isCorrect
-        ? COLORS.jungleGreen
+        ? COLORS.success400
         : walletMnemonicSelected.includes(word)
-        ? COLORS.crimsonRed
-        : COLORS.nero;
+        ? COLORS.error400
+        : COLORS.neutral800;
 
       let countDisplay = null;
 
@@ -73,7 +74,7 @@ export const CreateWalletStep2 = () => {
             align="center"
             fontFamily="Inter_600SemiBold"
             fontSize={12}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
             key={`count-display-${globalWordIndex}`}
           >
             {globalWordIndex}.
@@ -89,7 +90,7 @@ export const CreateWalletStep2 = () => {
               backgroundColor:
                 selectedIdx !== -1 && flow === 'mnemonic'
                   ? 'transparent'
-                  : '#E6E6E6',
+                  : COLORS.neutral100,
               borderRadius: 48,
               width: scale(98)
             }}
@@ -155,7 +156,7 @@ export const CreateWalletStep2 = () => {
         align="center"
         fontSize={24}
         fontFamily="Inter_700Bold"
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         {t('double.check')}
       </Text>
@@ -164,7 +165,7 @@ export const CreateWalletStep2 = () => {
         align="center"
         fontSize={15}
         fontFamily="Inter_500Medium"
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         {t('tap.words.in.correct.order')}
       </Text>
@@ -205,8 +206,8 @@ export const CreateWalletStep2 = () => {
         type="circular"
         style={{
           backgroundColor: isMnemonicCorrect
-            ? COLORS.mainBlue
-            : COLORS.neutralGray,
+            ? COLORS.brand600
+            : COLORS.alphaBlack5,
           marginBottom: scale(44),
           width: '90%',
           alignSelf: 'center'
@@ -215,7 +216,7 @@ export const CreateWalletStep2 = () => {
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={isMnemonicCorrect ? COLORS.white : COLORS.neutral600}
+          color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
           style={{ marginVertical: scale(12) }}
         >
           {t('verify.btn')}

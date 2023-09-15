@@ -55,7 +55,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontSize={14}
                 fontFamily="Inter_500Medium"
                 fontWeight="500"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
                 numberOfLines={1}
                 style={{ flex: 1 }}
               >
@@ -66,7 +66,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontSize={13}
                 fontWeight="600"
                 fontFamily="Mersad_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 ${NumberUtils.formatNumber(list.totalBalance, 2)}
               </Text>
@@ -76,7 +76,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
               fontSize={12}
               fontWeight="500"
               fontFamily="Inter_500Medium"
-              color={COLORS.smokyBlack50}
+              color={COLORS.alphaBlack50}
             >
               {list.accountCount} {t('addresses')}
             </Text>

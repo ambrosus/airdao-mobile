@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   qrCode: {
     alignSelf: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     padding: moderateScale(18),
     borderRadius: moderateScale(24),
     borderWidth: 2,

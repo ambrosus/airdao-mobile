@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function TrashIcon(props: IconProps) {
-  const { scale = 1, color = '#000000' } = props;
+  const { scale = 1, color = COLORS.black } = props;
   const width = 21;
   const height = 21;
   return (

@@ -15,36 +15,36 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     key: 'manageWallets',
     title: 'settings.manage.wallet',
     route: 'ManageWallets',
-    icon: <WalletTabIcon color={COLORS.blue600} />
+    icon: <WalletTabIcon color={COLORS.brand600} />
   },
   {
     key: 'securitySettings',
     title: 'settings.security',
     route: 'SecuritySettings',
-    icon: <LockIcon color={COLORS.blue600} />
+    icon: <LockIcon color={COLORS.brand600} />
   },
   {
     key: 'appPreferences',
     title: 'settings.preferences',
     route: 'AppPreferences',
-    icon: <SettingsFilledIcon color={COLORS.blue600} />
+    icon: <SettingsFilledIcon color={COLORS.brand600} />
   },
   {
     key: 'notificationSettings',
     title: 'settings.notifications',
     route: 'NotificationSettings',
-    icon: <NotificationIcon color={COLORS.blue600} />
+    icon: <NotificationIcon color={COLORS.brand600} />
   },
   {
     key: 'helpCenter',
     title: 'settings.help',
     route: 'HelpCenter',
-    icon: <HelpIcon color={COLORS.blue600} />
+    icon: <HelpIcon color={COLORS.brand600} />
   },
   {
     key: 'about',
     title: 'settings.about',
     route: 'About',
-    icon: <AboutIcon color={COLORS.blue600} />
+    icon: <AboutIcon color={COLORS.brand600} />
   }
 ];

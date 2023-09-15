@@ -5,11 +5,11 @@ import { COLORS } from '@constants/colors';
 export const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
-    borderColor: COLORS.charcoal,
+    borderColor: COLORS.alphaBlack5,
     borderTopWidth: 0
   },
   item: {
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.neutral0
   },
   emptyContainer: {
     paddingTop: verticalScale(20),
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     width: scale(200)
   },
   rightActions: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: scale(130)

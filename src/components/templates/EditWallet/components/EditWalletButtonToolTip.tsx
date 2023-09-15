@@ -33,12 +33,12 @@ export const EditWalletButtonToolTip = (): JSX.Element => {
         }}
       >
         <Row alignItems="center">
-          <PlusIcon color={COLORS.deepBlue} />
+          <PlusIcon color={COLORS.brand500} />
           <Text
             style={{ left: 10.5 }}
             title
             fontFamily="Inter_600SemiBold"
-            color={COLORS.deepBlue}
+            color={COLORS.brand500}
           >
             Create new list
           </Text>

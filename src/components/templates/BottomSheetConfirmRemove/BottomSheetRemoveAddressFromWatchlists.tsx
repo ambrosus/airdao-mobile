@@ -42,7 +42,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {t('confirm.remove.address.from.watchlist')}
         </Text>
@@ -55,7 +55,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
           >
             {t('remove.btn')}
           </Text>
@@ -69,7 +69,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
             fontSize={16}
           >
             {t('cancel.btn')}

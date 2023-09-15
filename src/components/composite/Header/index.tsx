@@ -53,7 +53,7 @@ export function Header(props: HeaderProps): JSX.Element {
       <>
         {backIconVisible && (
           <Button onPress={_onBackPress}>
-            <BackIcon color={COLORS.smokyBlack} />
+            <BackIcon color={COLORS.neutral900} />
           </Button>
         )}
         {titlePosition === 'left' && (

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function TrackAMBIcon(props: IconProps) {
-  const { scale = 1, color = '#3568DD' } = props;
+  const { scale = 1, color = COLORS.brand600 } = props;
   const width = 26;
   const height = 26;
   return (

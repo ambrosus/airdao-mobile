@@ -20,7 +20,11 @@ export const RecoveryPhraseModal = forwardRef<BottomSheetRef, BottomSheetProps>(
       <BottomSheet swiperIconVisible ref={localRef} height={scale(175)}>
         <Header
           title={
-            <Text fontFamily="Inter_700Bold" fontSize={20} color={COLORS.nero}>
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={20}
+              color={COLORS.neutral800}
+            >
               {t('recovery.phrase.modal.header')}
             </Text>
           }

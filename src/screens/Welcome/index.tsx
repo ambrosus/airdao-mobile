@@ -67,7 +67,11 @@ export const WelcomeScreen = () => {
         }}
         style={styles.getStartedButton}
       >
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.white}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral0}
+        >
           Get started
         </Text>
       </PrimaryButton>
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.culturedWhite
   },
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     paddingVertical: verticalScale(16),
     borderRadius: moderateScale(24),
     alignItems: 'center'
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
     height: 52,
     width: 52,
     borderRadius: 26,
-    backgroundColor: COLORS.blue100,
+    backgroundColor: COLORS.brand100,
     alignItems: 'center',
     justifyContent: 'center'
   },

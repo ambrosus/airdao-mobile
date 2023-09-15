@@ -4,7 +4,7 @@ import { GradientButton, GradientButtonProps } from './Gradient';
 
 export const PrimaryButton = (props: GradientButtonProps) => {
   const {
-    colors = [COLORS.blue500, COLORS.blue600],
+    colors = [COLORS.brand500, COLORS.brand600],
     start = { x: 0.5, y: 0 },
     end = { x: 0.5, y: 1 },
     locations = [0, 1],

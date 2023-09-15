@@ -14,7 +14,7 @@ const Title = ({ children }: { children: React.ReactNode }) => (
     title
     fontFamily="Inter_600SemiBold"
     fontSize={16}
-    color={COLORS.smokyBlack}
+    color={COLORS.neutral900}
   >
     {children}
   </Text>
@@ -95,7 +95,7 @@ export const NotificationSettingsView = () => {
           <Text
             fontSize={12}
             fontFamily="Inter_500Medium"
-            color={COLORS.davysGray}
+            color={COLORS.neutral500}
           >
             {t('price.alerts.treshold.text')}
           </Text>
@@ -124,7 +124,7 @@ export const NotificationSettingsView = () => {
               <Text
                 fontSize={12}
                 fontFamily="Inter_500Medium"
-                color={COLORS.davysGray}
+                color={COLORS.neutral500}
               >
                 {t('transaction.alerts.switch.text')}
               </Text>

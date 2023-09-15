@@ -29,9 +29,9 @@ export const WalletCard = (props: WalletCardProps) => {
     usdBalance,
     addressLeftPadding = 5,
     addressRightPadding = 6,
-    backgroundColor = COLORS.blue600,
-    addressTextColor = COLORS.white50,
-    priceTextColor = COLORS.white,
+    backgroundColor = COLORS.brand600,
+    addressTextColor = COLORS.alphaWhite50,
+    priceTextColor = COLORS.neutral0,
     balanceLoading = false,
     change24HR
   } = props;

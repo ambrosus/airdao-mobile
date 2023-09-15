@@ -9,6 +9,7 @@ import Svg, {
   Stop
 } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function SmallLogoSVG(props: IconProps) {
   const { scale = 1, color = '#000' } = props;
@@ -38,8 +39,8 @@ export function SmallLogoSVG(props: IconProps) {
           y2="9.39455"
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#3568DD" />
-          <Stop offset="1" stopColor="#7DA3F9" />
+          <Stop stopColor={COLORS.brand600} />
+          <Stop offset="1" stopColor={COLORS.brand400} />
         </LinearGradient>
         <Mask
           id="a"

@@ -26,7 +26,7 @@ export const AppPreferencesMenuItem = (props: AppPreference) => {
         <Text
           fontSize={14}
           fontFamily="Inter_600SemiBold"
-          color={COLORS.blue600}
+          color={COLORS.brand600}
         >
           {value}
         </Text>

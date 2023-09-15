@@ -47,7 +47,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             style={styles.text}
             fontFamily="Inter_600SemiBold"
             fontSize={20}
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             Are you sure want to remove selected {address} from Whales?
           </Text>
@@ -63,7 +63,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.crimsonRed}
+              color={COLORS.error400}
             >
               Remove
             </Text>
@@ -76,7 +76,7 @@ export const BottomSheetConfirmRemove = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
               fontSize={16}
             >
               Cancel

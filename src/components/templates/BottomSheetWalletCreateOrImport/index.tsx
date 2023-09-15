@@ -49,27 +49,31 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
           align="center"
           fontFamily="Inter_700Bold"
           fontSize={20}
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >
           {t('add.wallet')}
         </Text>
         <Spacer value={verticalScale(16)} />
         <PrimaryButton onPress={navigateToWalletCreate}>
-          <Text fontFamily="Inter_500Medium" fontSize={16} color={COLORS.white}>
+          <Text
+            fontFamily="Inter_500Medium"
+            fontSize={16}
+            color={COLORS.neutral0}
+          >
             {t('create.new.wallet')}
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(16)} />
         <Button
           type="circular"
-          style={{ backgroundColor: COLORS.charcoal }}
+          style={{ backgroundColor: COLORS.alphaBlack5 }}
           onPress={navigateToImportWallet}
         >
           <Text
             align="center"
             fontFamily="Inter_500Medium"
             fontSize={16}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
             style={{ marginVertical: scale(12) }}
           >
             {t('import.existing.wallet')}

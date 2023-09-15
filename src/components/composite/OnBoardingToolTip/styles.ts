@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     margin: 12
   },
   buttonRight: {
-    backgroundColor: COLORS.powderWhite,
+    backgroundColor: COLORS.brand100,
     borderRadius: 25,
     alignSelf: 'flex-start'
   },
@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     marginVertical: 6
   },
   buttonLeft: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     borderRadius: 25,
     alignItems: 'center',
     marginBottom: 15

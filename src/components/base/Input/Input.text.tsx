@@ -54,14 +54,14 @@ export const TextInput = React.forwardRef<InputRef, InputProps>(
 const defaultStyles = StyleSheet.create({
   container: {
     ...shadow,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(82),
-    color: '#000000',
+    color: COLORS.black,
     padding: 0,
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16)
   },
   focusedStyle: {
-    borderColor: COLORS.blue300
+    borderColor: COLORS.brand300
   }
 });

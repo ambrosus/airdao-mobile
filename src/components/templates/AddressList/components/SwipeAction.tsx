@@ -33,10 +33,10 @@ export const SwipeAction: React.FC<Props> = ({
         ]}
       >
         <Button onPress={showEdit} style={styles.rightActionsButton}>
-          <EditIcon scale={1.5} color={COLORS.electricBlue} />
+          <EditIcon scale={1.5} color={COLORS.brand500} />
         </Button>
         <Button onPress={handleConfirmRemove} style={styles.rightActionsButton}>
-          <TrashIcon color={COLORS.crimsonRed} />
+          <TrashIcon color={COLORS.error400} />
         </Button>
       </Animated.View>
     </Pressable>

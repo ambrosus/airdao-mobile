@@ -12,13 +12,13 @@ export const styles = StyleSheet.create({
   input: {
     ...shadow,
     width: '100%',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.neutral0
   },
   newListButton: {
     borderWidth: 1,
     borderColor: 'white',
     width: '100%',
-    backgroundColor: COLORS.powderWhite,
+    backgroundColor: COLORS.brand100,
     paddingVertical: verticalScale(12)
   },
   separator: {

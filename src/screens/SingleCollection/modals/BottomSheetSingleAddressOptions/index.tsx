@@ -75,13 +75,21 @@ export const BottomSheetSingleAddressOptions = forwardRef<
       </View>
       <Spacer value={24} />
       <Button style={styles.renameButton} onPress={handleOnOpenRenameAddress}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral800}
+        >
           Rename Address
         </Text>
       </Button>
       <Spacer value={24} />
       <Button onPress={handleOSingleAddressMove} style={styles.moveButton}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color={COLORS.nero}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral800}
+        >
           Move to another group
         </Text>
       </Button>
@@ -90,7 +98,7 @@ export const BottomSheetSingleAddressOptions = forwardRef<
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={16}
-          color={COLORS.crimsonRed}
+          color={COLORS.error400}
         >
           Remove from group
         </Text>

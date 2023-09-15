@@ -66,7 +66,7 @@ const LinkButton = ({
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.raisinBlack}
+          color={COLORS.neutral700}
         >
           {title}
         </Text>
@@ -79,7 +79,11 @@ export function AMBAbout(): JSX.Element {
   const { t } = useTranslation();
   return (
     <View>
-      <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.slateGrey}>
+      <Text
+        fontSize={14}
+        fontFamily="Inter_500Medium"
+        color={COLORS.neutral400}
+      >
         {t('statistics.text')}
       </Text>
       <Spacer value={verticalScale(16)} />
@@ -94,7 +98,7 @@ export function AMBAbout(): JSX.Element {
 
 const styles = StyleSheet.create({
   linkBtn: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     paddingHorizontal: scale(10),
     paddingVertical: verticalScale(4),
     gap: 10

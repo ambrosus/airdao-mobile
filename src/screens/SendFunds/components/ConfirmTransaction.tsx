@@ -116,9 +116,9 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       <Spacer value={verticalScale(40)} />
       <PrimaryButton onPress={onSendPress} disabled={loading}>
         {loading ? (
-          <Spinner color={COLORS.white} />
+          <Spinner color={COLORS.neutral0} />
         ) : (
-          <Text color={COLORS.white} fontSize={16}>
+          <Text color={COLORS.neutral0} fontSize={16}>
             {t('send.funds.send.now')}
           </Text>
         )}

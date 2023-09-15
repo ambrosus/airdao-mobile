@@ -107,7 +107,7 @@ export const ToastBody = forwardRef((_, ref) => {
       >
         <Row alignItems="center" justifyContent="space-between">
           <View style={styles.statusIcon}>
-            <CheckIcon color={COLORS.white} scale={0.8} />
+            <CheckIcon color={COLORS.neutral0} scale={0.8} />
           </View>
           <View style={{ flex: 1 }}>
             {Boolean(options.title) && (

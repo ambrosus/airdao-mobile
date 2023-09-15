@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     position: 'absolute',
     alignSelf: 'center',
 
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     padding: moderateScale(6)
   },
   logoInner: {
-    backgroundColor: COLORS.blue600,
+    backgroundColor: COLORS.brand600,
     height: '100%',
     width: '100%',
     borderRadius: verticalScale(10),

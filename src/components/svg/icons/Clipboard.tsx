@@ -1,9 +1,10 @@
 import React from 'react';
 import Svg, { G, Path, Defs, ClipPath } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function ClipboardIcon(props: IconProps) {
-  const { scale = 1, color = '#646464' } = props;
+  const { scale = 1, color = COLORS.gray500 } = props;
   const width = 20,
     height = 21;
   return (

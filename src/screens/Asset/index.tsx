@@ -48,7 +48,7 @@ export const AssetScreen = () => {
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 {tokenInfo.name || 'NULL'}
               </Text>
@@ -72,7 +72,11 @@ export const AssetScreen = () => {
           {t('your.balance')}
         </Text>
         <Row alignItems="center">
-          <Text fontFamily="Mersad_600SemiBold" fontSize={24} color="#191919">
+          <Text
+            fontFamily="Mersad_600SemiBold"
+            fontSize={24}
+            color={COLORS.neutral800}
+          >
             {tokenInfo.balance.ether < 1000
               ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
               : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
@@ -84,7 +88,7 @@ export const AssetScreen = () => {
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={12}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 ${NumberUtils.formatNumber(usdPrice, 2)}
               </Text>
@@ -93,18 +97,22 @@ export const AssetScreen = () => {
           />
         </Row>
         {/*<Row>*/}
-        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
         {/*    %0.00*/}
         {/*  </Text>*/}
         {/*  /!* TODO *!/*/}
-        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
         {/*    ($10.98)*/}
         {/*  </Text>*/}
         {/*</Row>*/}
       </View>
       <Spacer value={verticalScale(16)} />
       <View style={{ paddingHorizontal: scale(17) }}>
-        <Text fontFamily="Inter_700Bold" fontSize={20} color={COLORS.nero}>
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          color={COLORS.neutral800}
+        >
           {t('transactions')}
         </Text>
       </View>

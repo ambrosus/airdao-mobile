@@ -1,13 +1,14 @@
 import React from 'react';
 import { Rect, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function EmptyListsIcon(props: IconProps) {
   const { scale = 1 } = props;
   const width = 178,
     height = 81;
-  const color1 = '#0e0e0e1a',
-    color2 = '#0e0e0e0d';
+  const color1 = COLORS.alphaBlack10,
+    color2 = COLORS.alphaBlack5;
   return (
     <Svg
       width={width}

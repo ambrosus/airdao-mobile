@@ -108,7 +108,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                 style={{ paddingRight: 8 }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {idsOfSelectedAddresses.length} selected
               </Text>
@@ -128,7 +128,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                 <MoveIcon />
               </Button>
               <Button onPress={handleDeleteAddress}>
-                <TrashIcon color={COLORS.lightPink} />
+                <TrashIcon color={COLORS.error300} />
               </Button>
             </Row>
           </Row>
@@ -153,7 +153,7 @@ export const BottomSheetLongPressAddressSelection = forwardRef<
                     }}
                     type="square"
                     fillColor={COLORS.sapphireBlue}
-                    color={COLORS.white}
+                    color={COLORS.neutral0}
                     value={idsOfSelectedAddresses.includes(item.address)}
                   />
                 </View>

@@ -35,7 +35,7 @@ export const CreateWalletStep0 = () => {
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
             {t('create.new.wallet')}
           </Text>
@@ -48,7 +48,7 @@ export const CreateWalletStep0 = () => {
             align="center"
             fontSize={24}
             fontFamily="Inter_700Bold"
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
             {t('backup.your.wallet')}
           </Text>
@@ -58,7 +58,7 @@ export const CreateWalletStep0 = () => {
               align="center"
               fontSize={16}
               fontFamily="Inter_500Medium"
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               {t('backup.wallet.text')}{' '}
               <Text
@@ -66,7 +66,7 @@ export const CreateWalletStep0 = () => {
                 onPress={showRecoveryModal}
                 fontSize={16}
                 fontFamily="Inter_500Medium"
-                color={COLORS.blue600}
+                color={COLORS.brand600}
                 style={{ textDecorationLine: 'underline' }}
               >
                 {t('backup.wallet.popup')}
@@ -75,7 +75,7 @@ export const CreateWalletStep0 = () => {
                 align="center"
                 fontSize={15}
                 fontFamily="Inter_500Medium"
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 {' '}
                 {t('make.sure.to.write.down')}
@@ -96,7 +96,7 @@ export const CreateWalletStep0 = () => {
           <Row>
             <CheckBox
               fillColor={COLORS.sapphireBlue}
-              color={COLORS.white}
+              color={COLORS.neutral0}
               type="square"
               onValueChange={setSelected}
               value={selected}
@@ -105,7 +105,7 @@ export const CreateWalletStep0 = () => {
             <Text
               fontSize={16}
               fontFamily="Inter_500Medium"
-              color={COLORS.nero}
+              color={COLORS.neutral800}
               style={{ maxWidth: scale(330) }}
             >
               {t('checkbox.text')}
@@ -117,13 +117,13 @@ export const CreateWalletStep0 = () => {
             onPress={onContinuePress}
             type="circular"
             style={{
-              backgroundColor: selected ? COLORS.mainBlue : COLORS.neutralGray
+              backgroundColor: selected ? COLORS.brand600 : COLORS.alphaBlack5
             }}
           >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={selected ? COLORS.white : COLORS.neutral600}
+              color={selected ? COLORS.neutral0 : COLORS.neutral600}
               style={{ marginVertical: scale(12) }}
             >
               {t('continue.btn')}

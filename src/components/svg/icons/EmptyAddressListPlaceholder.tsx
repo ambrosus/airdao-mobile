@@ -1,9 +1,10 @@
 import React from 'react';
 import Svg, { Rect } from 'react-native-svg';
+import { COLORS } from '@constants/colors';
 import { IconProps } from './Icon.types';
 
 export function EmptyAddressListPlaceholderIcon(props: IconProps) {
-  const { scale = 1, color = '#0E0E0E' } = props;
+  const { scale = 1, color = COLORS.neutral900 } = props;
   const width = 178,
     height = 67;
   return (

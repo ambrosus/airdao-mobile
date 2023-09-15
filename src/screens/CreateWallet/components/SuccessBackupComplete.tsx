@@ -24,7 +24,7 @@ export const SuccessBackupComplete = () => {
           align="center"
           fontSize={24}
           fontFamily="Inter_700Bold"
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >
           {t('backup.complete')}
         </Text>
@@ -33,7 +33,7 @@ export const SuccessBackupComplete = () => {
           align="center"
           fontSize={16}
           fontFamily="Inter_500Medium"
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >
           {t('backup.complete.text')}
         </Text>
@@ -43,7 +43,7 @@ export const SuccessBackupComplete = () => {
           align="center"
           fontSize={16}
           fontFamily="Inter_500Medium"
-          color={COLORS.white}
+          color={COLORS.neutral0}
         >
           {t('setup.security.btn')}
         </Text>

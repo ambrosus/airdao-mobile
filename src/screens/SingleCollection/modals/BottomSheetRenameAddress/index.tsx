@@ -35,7 +35,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
             {t('rename.address')}
           </Text>
@@ -58,7 +58,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.neutral0}
             >
               {t('save.btn')}
             </Text>
@@ -71,7 +71,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
               fontSize={16}
             >
               {t('cancel.btn')}

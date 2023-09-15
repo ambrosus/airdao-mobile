@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   word: {
-    backgroundColor: '#E6E6E6',
+    backgroundColor: COLORS.neutral100,
     borderRadius: 48
   },
   innerContainer: {
@@ -40,9 +40,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: 16,
-    borderColor: COLORS.gray100,
+    borderColor: COLORS.neutral100,
     borderWidth: 2,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     width: '90%',
     height: verticalScale(232),
     paddingHorizontal: scale(20),

@@ -61,7 +61,7 @@ export const RestoreWalletScreen = () => {
               marginBottom: verticalScale(16)
             }}
             placeholder={`${i + 1}.`}
-            placeholderTextColor={COLORS.nero}
+            placeholderTextColor={COLORS.neutral800}
             onChangeText={(text) => handleWordChange(i, text)}
           />
           <Spacer horizontal value={scale(16)} />
@@ -73,7 +73,7 @@ export const RestoreWalletScreen = () => {
               marginBottom: verticalScale(16)
             }}
             placeholder={`${i + 2}.`}
-            placeholderTextColor={COLORS.nero}
+            placeholderTextColor={COLORS.neutral800}
             onChangeText={(text) => handleWordChange(i + 1, text)}
           />
         </View>
@@ -115,7 +115,7 @@ export const RestoreWalletScreen = () => {
             align="center"
             fontSize={20}
             fontFamily="Inter_700Bold"
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
             Importing your wallet from {'\n'} backup
           </Text>
@@ -130,7 +130,7 @@ export const RestoreWalletScreen = () => {
                 <Text
                   fontFamily="Inter_600SemiBold"
                   fontSize={16}
-                  color={COLORS.nero}
+                  color={COLORS.neutral800}
                 >
                   Import existing wallet
                 </Text>
@@ -143,14 +143,14 @@ export const RestoreWalletScreen = () => {
               align="center"
               fontFamily="Inter_700Bold"
               fontSize={24}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               Enter recovery phrase
             </Text>
             <Spacer value={verticalScale(8)} />
             <View style={{ paddingHorizontal: scale(16) }}>
               <Text
-                color={COLORS.nero}
+                color={COLORS.neutral800}
                 fontFamily="Inter_500Medium"
                 fontSize={15}
                 style={{ textAlign: 'center' }}
@@ -170,14 +170,14 @@ export const RestoreWalletScreen = () => {
               bottom: verticalScale(120),
               marginHorizontal: scale(16),
               backgroundColor: isButtonEnabled
-                ? COLORS.mainBlue
-                : COLORS.neutralGray
+                ? COLORS.brand600
+                : COLORS.alphaBlack5
             }}
           >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={isButtonEnabled ? COLORS.white : COLORS.neutral600}
+              color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
               style={{ marginVertical: scale(12) }}
             >
               {t('continue.btn')}

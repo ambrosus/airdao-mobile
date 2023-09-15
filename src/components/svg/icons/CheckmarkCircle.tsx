@@ -4,7 +4,7 @@ import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
 export function CheckmarkCircleIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.deepBlue } = props;
+  const { scale = 1, color = COLORS.brand500 } = props;
   const width = 20,
     height = 20;
   return (

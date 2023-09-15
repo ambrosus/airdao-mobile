@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 10
   },
   searchBar: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     paddingBottom: verticalScale(12)
   },
   list: {

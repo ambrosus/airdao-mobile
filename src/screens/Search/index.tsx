@@ -96,7 +96,7 @@ export const SearchScreen = () => {
                 fontFamily="Inter_700Bold"
                 fontWeight="700"
                 fontSize={20}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {t('top.holders')}
               </Text>

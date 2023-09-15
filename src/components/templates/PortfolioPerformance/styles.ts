@@ -19,10 +19,10 @@ export const styles = StyleSheet.create({
   logoContainer: {
     width: scale(102),
     height: scale(102),
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     borderRadius: 200,
     borderWidth: 1,
-    borderColor: COLORS.white,
+    borderColor: COLORS.neutral0,
     transform: [{ scale: 2 }, { translateX: scale(40) }],
     alignItems: 'flex-start',
     flex: 1

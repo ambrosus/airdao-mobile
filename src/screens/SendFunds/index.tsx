@@ -134,7 +134,7 @@ export const SendFunds = () => {
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
         title={t('account.actions.send')}
-        style={{ shadowColor: COLORS.white }}
+        style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <KeyboardDismissingView style={styles.container}>
@@ -153,7 +153,7 @@ export const SendFunds = () => {
                 {destinationAddress.length > 0 &&
                   !destinationAddress.match(etherumAddressRegex) && (
                     <View style={styles.addressError}>
-                      <Text fontSize={12} color={COLORS.crimsonRed}>
+                      <Text fontSize={12} color={COLORS.error400}>
                         {t('send.funds.invalid.address')}
                       </Text>
                     </View>
@@ -221,7 +221,7 @@ export const SendFunds = () => {
                   onPress={showReviewModal}
                 >
                   <Text
-                    color={COLORS.white}
+                    color={COLORS.neutral0}
                     fontSize={16}
                     fontFamily="Inter_500Medium"
                     fontWeight="500"

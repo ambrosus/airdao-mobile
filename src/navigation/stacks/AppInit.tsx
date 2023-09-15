@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   logo: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.blue500,
+    backgroundColor: COLORS.brand500,
     borderRadius: verticalScale(36),
     height: verticalScale(132),
     width: verticalScale(132)

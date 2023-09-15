@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import clearAllMocks = jest.clearAllMocks;
+import { COLORS } from '@constants/colors';
 
 jest.mock('react-native-modal', () => {
   return ({ children }: { children: React.ReactNode }) => <>{children}</>;
@@ -69,12 +70,12 @@ describe('NotificationSettings', () => {
       justifyContent: 'center',
       alignItems: 'center',
       paddingVertical: 15.694117647058823,
-      shadowColor: '#000000',
+      shadowColor: COLORS.black,
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.18,
       shadowRadius: 1,
       elevation: 1,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: COLORS.neutral0,
       borderRadius: 56.57142857142857,
       opacity: 1
     });

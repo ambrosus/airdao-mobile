@@ -43,7 +43,7 @@ export const CreateWalletStep1 = () => {
         <Row key={index}>
           <View
             style={{
-              backgroundColor: COLORS.gray100,
+              backgroundColor: COLORS.neutral100,
               borderRadius: 48,
               width: scale(102)
             }}
@@ -52,7 +52,7 @@ export const CreateWalletStep1 = () => {
               align="center"
               fontFamily="Inter_600SemiBold"
               fontSize={12}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
               style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
             >
               {index + 1} {word}
@@ -78,7 +78,7 @@ export const CreateWalletStep1 = () => {
         align="center"
         fontSize={24}
         fontFamily="Inter_700Bold"
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         {t('your.recovery.phrase')}
       </Text>
@@ -87,7 +87,7 @@ export const CreateWalletStep1 = () => {
         align="center"
         fontSize={15}
         fontFamily="Inter_500Medium"
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         {t('verify.text')}
       </Text>
@@ -123,7 +123,7 @@ export const CreateWalletStep1 = () => {
         </View>
         <Spacer value={verticalScale(34)} />
         <PrimaryButton onPress={onNextPress}>
-          <Text color={COLORS.white}>{t('verify.phrase')}</Text>
+          <Text color={COLORS.neutral0}>{t('verify.phrase')}</Text>
         </PrimaryButton>
       </View>
     </SafeAreaView>

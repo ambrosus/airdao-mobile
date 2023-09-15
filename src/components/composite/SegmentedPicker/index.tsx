@@ -69,7 +69,7 @@ export const SegmentedPicker = (props: SegmentedPickerProps): JSX.Element => {
         <Text
           style={
             selected
-              ? { color: COLORS.electricBlue, ...styles.segmentText?.selected }
+              ? { color: COLORS.brand500, ...styles.segmentText?.selected }
               : { ...styles.segmentText?.unselected }
           }
         >

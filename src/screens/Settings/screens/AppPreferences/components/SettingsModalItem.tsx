@@ -18,7 +18,7 @@ export const SettingsModalItem: FC<Props> = ({
   handleItemPress
 }) => {
   const isActive = modalActiveItem === item;
-  const textColor = isActive ? COLORS.nero : COLORS.slateGrey;
+  const textColor = isActive ? COLORS.neutral800 : COLORS.neutral400;
 
   return (
     <TouchableOpacity

@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   },
   separator: {
     backgroundColor: '#2f2b431a',
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(12),
     paddingVertical: verticalScale(8),
     borderRadius: moderateScale(82),
-    backgroundColor: '#FFFFFF'
+    backgroundColor: COLORS.neutral0
   },
   bottomSheet: {
     borderTopLeftRadius: 0,

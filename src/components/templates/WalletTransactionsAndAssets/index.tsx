@@ -71,7 +71,7 @@ export const WalletTransactionsAndAssets = (
         <Button onPress={scrollToTransactions} style={styles.tabLeftTitle}>
           <Text
             fontFamily="Inter_500Medium"
-            color={currentIndex === 0 ? COLORS.blue500 : COLORS.midnight}
+            color={currentIndex === 0 ? COLORS.brand500 : COLORS.midnight}
             fontSize={16}
           >
             {t('my.assets')}
@@ -81,7 +81,7 @@ export const WalletTransactionsAndAssets = (
           <Button onPress={scrollToAssets} style={styles.tabRightTitle}>
             <Text
               fontFamily="Inter_500Medium"
-              color={currentIndex === 0 ? COLORS.midnight : COLORS.blue500}
+              color={currentIndex === 0 ? COLORS.midnight : COLORS.brand500}
               fontSize={16}
             >
               {t('transactions')}
@@ -99,7 +99,7 @@ export const WalletTransactionsAndAssets = (
               left: 0,
               width: tabWidth / 2,
               height: 2,
-              backgroundColor: COLORS.blue500
+              backgroundColor: COLORS.brand500
             },
             indicatorStyle
           ]}

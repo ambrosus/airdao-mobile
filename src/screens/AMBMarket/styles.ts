@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.neutral0
   },
   scrollView: {
     flexGrow: 1,
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.gray300
   },
   body: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(24),
     paddingHorizontal: scale(24),
     marginTop: verticalScale(25)

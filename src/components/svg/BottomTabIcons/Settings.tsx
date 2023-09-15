@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 
 export function SettingsTabIcon(props: IconProps) {
-  const { scale = 1, color = '#457EFF' } = props;
+  const { scale = 1, color = COLORS.brand500 } = props;
   const width = 29;
   const height = 28;
   return (

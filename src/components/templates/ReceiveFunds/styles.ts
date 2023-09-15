@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   qrCode: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     padding: moderateScale(18),
     borderRadius: moderateScale(24),
     borderWidth: 2,

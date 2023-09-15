@@ -46,7 +46,7 @@ export const TransactionModal = ({
         align="center"
         fontFamily="Inter_700Bold"
         fontSize={20}
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         {status === 'SUCCESS'
           ? t('transaction.modal.sent')
@@ -59,7 +59,7 @@ export const TransactionModal = ({
             align="center"
             fontFamily="Inter_400Regular"
             fontSize={14}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
             {t('transaction.modal.title')}
           </Text>
@@ -75,7 +75,7 @@ export const TransactionModal = ({
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.asphalt}
+                color={COLORS.neutral300}
               >
                 {t('transaction.modal.date')}
               </Text>
@@ -94,7 +94,7 @@ export const TransactionModal = ({
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.asphalt}
+            color={COLORS.neutral300}
           >
             {status !== 'SUCCESS'
               ? t('transaction.modal.from')
@@ -128,7 +128,7 @@ export const TransactionModal = ({
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.asphalt}
+            color={COLORS.neutral300}
           >
             {status !== 'SUCCESS'
               ? t('transaction.modal.sending.to')
@@ -147,7 +147,7 @@ export const TransactionModal = ({
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.asphalt}
+            color={COLORS.neutral300}
           >
             {t('transaction.modal.amount')}
           </Text>
@@ -170,7 +170,7 @@ export const TransactionModal = ({
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
-              color={COLORS.slateGrey}
+              color={COLORS.neutral400}
             >
               ${NumberUtils.formatNumber(usdPrice, usdPrice > 1 ? 2 : 4)}
             </Text>
@@ -181,7 +181,7 @@ export const TransactionModal = ({
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.asphalt}
+            color={COLORS.neutral300}
           >
             {t('transaction.modal.estimated.fee')}
           </Text>
@@ -205,13 +205,13 @@ export const TransactionModal = ({
           <>
             <Button
               type="circular"
-              style={{ backgroundColor: COLORS.smokyBlack5 }}
+              style={{ backgroundColor: COLORS.alphaBlack5 }}
             >
               <Text
                 style={{ marginVertical: verticalScale(12) }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 {t('transaction.modal.buttons.explorer')}
               </Text>
@@ -219,13 +219,13 @@ export const TransactionModal = ({
             <Spacer value={verticalScale(16)} />
             <Button
               type="circular"
-              style={{ backgroundColor: COLORS.smokyBlack5 }}
+              style={{ backgroundColor: COLORS.alphaBlack5 }}
             >
               <Text
                 style={{ marginVertical: verticalScale(12) }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 {t('transaction.modal.buttons.share')}
               </Text>
@@ -236,7 +236,7 @@ export const TransactionModal = ({
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.neutral0}
             >
               {t('transaction.modal.confirm')}
             </Text>

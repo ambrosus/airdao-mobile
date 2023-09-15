@@ -46,7 +46,7 @@ export const AccountTransactions = (
           <Text
             fontFamily="Inter_700Bold"
             fontSize={20}
-            color={COLORS.jetBlack}
+            color={COLORS.neutral800}
           >
             {t('recent.activity')}
           </Text>

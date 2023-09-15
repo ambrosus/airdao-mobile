@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   tabTitleText: {
-    color: COLORS.nero,
+    color: COLORS.neutral800,
     fontSize: 20,
     fontFamily: 'Inter_700Bold'
   }

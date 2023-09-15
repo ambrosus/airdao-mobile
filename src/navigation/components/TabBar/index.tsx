@@ -21,20 +21,20 @@ import {
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <WalletTabIcon color={COLORS.gray200} />,
-    activeIcon: <WalletTabIcon color={COLORS.mainBlue} />
+    inactiveIcon: <WalletTabIcon color={COLORS.neutral200} />,
+    activeIcon: <WalletTabIcon color={COLORS.brand600} />
   },
   Portfolio: {
-    inactiveIcon: <WatchlistTabIcon color={COLORS.gray200} />,
-    activeIcon: <WatchlistTabIcon color={COLORS.mainBlue} />
+    inactiveIcon: <WatchlistTabIcon color={COLORS.neutral200} />,
+    activeIcon: <WatchlistTabIcon color={COLORS.brand600} />
   },
   Search: {
-    inactiveIcon: <ExploreTabIcon color={COLORS.gray200} />,
-    activeIcon: <ExploreTabIcon color={COLORS.mainBlue} />
+    inactiveIcon: <ExploreTabIcon color={COLORS.neutral200} />,
+    activeIcon: <ExploreTabIcon color={COLORS.brand600} />
   },
   Settings: {
-    inactiveIcon: <SettingsTabIcon color={COLORS.gray200} />,
-    activeIcon: <SettingsTabIcon color={COLORS.mainBlue} />
+    inactiveIcon: <SettingsTabIcon color={COLORS.neutral200} />,
+    activeIcon: <SettingsTabIcon color={COLORS.brand600} />
   }
 };
 
@@ -109,7 +109,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               style={[
                 styles.labelStyle,
                 {
-                  color: isFocused ? COLORS.mainBlue : '#676b73',
+                  color: isFocused ? COLORS.brand600 : '#676b73',
                   opacity: isFocused ? 1 : 0.7
                 }
               ]}
@@ -128,10 +128,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     opacity: 2,
     borderTopWidth: 0.25,
-    borderTopColor: COLORS.gray200
+    borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {
     flex: 1,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     borderRadius: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     opacity: 0.94
   },
   labelStyle: {

@@ -89,7 +89,7 @@ export const Notifications = (): JSX.Element => {
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={12}
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
           {info.section.title.toUpperCase()}
         </Text>
@@ -105,7 +105,7 @@ export const Notifications = (): JSX.Element => {
         <Spacer value={verticalScale(16)} />
         <Text
           align="center"
-          color={COLORS.davysGray}
+          color={COLORS.neutral500}
           fontSize={15}
           fontFamily="Inter_400Regular"
         >

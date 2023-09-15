@@ -133,14 +133,14 @@ export const SingleWalletScreen = () => {
             style={{
               ...styles.saveButton,
               backgroundColor: saveButtonEnabled
-                ? COLORS.blue600
+                ? COLORS.brand600
                 : COLORS.alphaBlack5
             }}
           >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={saveButtonEnabled ? COLORS.white : COLORS.alphaBlack30}
+              color={saveButtonEnabled ? COLORS.neutral0 : COLORS.alphaBlack30}
             >
               {t('singleWallet.save')}
             </Text>

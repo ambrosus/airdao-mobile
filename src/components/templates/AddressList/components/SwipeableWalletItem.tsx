@@ -64,7 +64,7 @@ export const SwipeableWalletItem = memo(
       const stylesForPortfolio = isPortfolioFlow
         ? {
             paddingVertical: 16,
-            borderColor: COLORS.charcoal,
+            borderColor: COLORS.alphaBlack5,
             borderBottomWidth: 1,
             borderTopWidth: idx === 0 ? 1 : 0
           }

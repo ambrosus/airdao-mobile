@@ -67,7 +67,7 @@ export const SettingsBlock = () => {
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
               <Text style={styles.optionButtonText}>{selectedCurrency}</Text>
-              <ChevronRightIcon color={COLORS.smokyBlack} />
+              <ChevronRightIcon color={COLORS.neutral900} />
             </Row>
           </Row>
         </Button>
@@ -86,7 +86,7 @@ export const SettingsBlock = () => {
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
               <Text style={styles.optionButtonText}>{selectedLanguage}</Text>
-              <ChevronRightIcon color={COLORS.smokyBlack} />
+              <ChevronRightIcon color={COLORS.neutral900} />
             </Row>
           </Row>
         </Button>
@@ -106,7 +106,7 @@ export const SettingsBlock = () => {
               </Text>
             </Row>
             <Row style={styles.infoTextContainer} alignItems="center">
-              <ChevronRightIcon color={COLORS.smokyBlack} />
+              <ChevronRightIcon color={COLORS.neutral900} />
             </Row>
           </Row>
         </Button>
