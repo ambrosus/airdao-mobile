@@ -18,7 +18,7 @@ import {
   SettingsTabNavigationProp,
   SettingsTabParamsList
 } from '@appTypes';
-import { useCryptoAccountFromHash, useDelayedMount } from '@hooks';
+import { useExplorerAccountFromHash } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
 import { WalletUtils } from '@utils/wallet';
@@ -26,14 +26,10 @@ import { styles } from './styles';
 
 export const SingleWalletScreen = () => {
   const { t } = useTranslation();
-  const initialMount = useDelayedMount(0);
   const route = useRoute<RouteProp<SettingsTabParamsList, 'SingleWallet'>>();
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const { wallet } = route.params;
-  const { data: account } = useCryptoAccountFromHash(
-    wallet.hash,
-    !initialMount
-  );
+  const { data: account } = useExplorerAccountFromHash(wallet.hash);
   const [walletName, setWalletName] = useState(wallet.name);
   const saveButtonEnabled = walletName !== wallet.name;
 
@@ -82,7 +78,13 @@ export const SingleWalletScreen = () => {
         title={wallet?.name || 'Wallet'}
         contentRight={
           <Button onPress={promptWalletDeletion}>
-            <Text>Remove</Text>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_500Medium"
+              color={COLORS.error400}
+            >
+              Remove
+            </Text>
           </Button>
         }
       />
