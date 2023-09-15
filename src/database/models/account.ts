@@ -12,7 +12,7 @@ export class AccountDBModel extends Model {
   // @ts-ignore
   @text('address') address: string;
   // @ts-ignore
-  @relation(DatabaseTable.Wallets, 'hash') hash: WalletDBModel;
+  @relation(DatabaseTable.Wallets, 'hash') wallet: WalletDBModel;
   // @ts-ignore
   @text('name') name: string;
   // @ts-ignore

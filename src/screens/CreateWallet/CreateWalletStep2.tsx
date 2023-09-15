@@ -9,7 +9,7 @@ import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from '@screens/CreateWallet/styles';
-import { AccountUtils } from '@utils/account';
+import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep2 = () => {
@@ -136,7 +136,7 @@ export const CreateWalletStep2 = () => {
     }
 
     try {
-      await AccountUtils.addAccountInfoToDatabase(walletMnemonic);
+      await WalletUtils.processWallet(walletMnemonic);
       navigation.navigate('SuccessBackupComplete');
     } catch (error) {
       // TODO ignore
