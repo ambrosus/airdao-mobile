@@ -23,19 +23,21 @@ export const HomeScreen = () => {
     selectedAccount?.address || ''
   );
 
-  const account = selectedAccount
+  const selectedAccountWithBalance = selectedAccount
     ? ExplorerAccount.fromDBModel(selectedAccount)
     : null;
 
-  if (account) {
-    account.ambBalance = Number(selectedAccountBalance.ether);
+  if (selectedAccountWithBalance) {
+    selectedAccountWithBalance.ambBalance = Number(
+      selectedAccountBalance.ether
+    );
   }
 
   const {
     data: tokensAndTransactions,
     loading,
     error
-  } = useTokensAndTransactions(account?.address);
+  } = useTokensAndTransactions(selectedAccountWithBalance?.address);
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -57,7 +59,7 @@ export const HomeScreen = () => {
               <Spacer value={scale(16)} horizontal />
             ),
             contentContainerStyle: {
-              paddingHorizontal: scale(16)
+              paddingHorizontal: accounts?.length > 1 ? scale(16) : scale(38)
             },
             style: {
               flexGrow: 0,
@@ -78,13 +80,13 @@ export const HomeScreen = () => {
             />
           </View>
         )}
-        {account && (
+        {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions address={account.address} />
+            <AccountActions address={selectedAccountWithBalance.address} />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
-              account={account}
+              account={selectedAccountWithBalance}
               transactions={tokensAndTransactions?.transactions}
               tokens={tokensAndTransactions?.tokens}
               loading={loading}
