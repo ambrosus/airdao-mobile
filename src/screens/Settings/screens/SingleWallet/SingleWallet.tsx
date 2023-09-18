@@ -6,7 +6,6 @@ import {
   useNavigation,
   useRoute
 } from '@react-navigation/native';
-import * as Clipboard from 'expo-clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
@@ -27,8 +26,9 @@ import { useExplorerAccountFromHash } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
 import { WalletUtils } from '@utils/wallet';
-import { styles } from './styles';
+import { Clipboard } from '@utils/clipboard';
 import { API } from '@api/api';
+import { styles } from './styles';
 
 export const SingleWalletScreen = () => {
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ export const SingleWalletScreen = () => {
       type: ToastType.Success,
       position: ToastPosition.Bottom
     });
-    await Clipboard.setStringAsync(account?.address || '');
+    await Clipboard.copyToClipboard(account?.address || '');
   };
 
   return (

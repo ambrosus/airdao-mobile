@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
-    borderWidth: 1
+    borderWidth: 1,
+    zIndex: 1000
   },
   statusIcon: {
     width: moderateScale(24),

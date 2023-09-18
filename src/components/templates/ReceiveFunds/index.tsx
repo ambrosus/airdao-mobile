@@ -5,7 +5,13 @@ import { Button, Spacer, Text } from '@components/base';
 import { moderateScale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
-import { QRCodeWithLogo } from '@components/modular';
+import {
+  QRCodeWithLogo,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
+import { Clipboard } from '@utils/clipboard';
 
 interface ReceiveFundsProps {
   address: string;
@@ -13,6 +19,15 @@ interface ReceiveFundsProps {
 export const ReceiveFunds = (props: ReceiveFundsProps) => {
   const { address } = props;
   const { t } = useTranslation();
+
+  const copyAddress = () => {
+    Toast.show({
+      text: t('copied.to.clipboard'),
+      type: ToastType.Success,
+      position: ToastPosition.Top
+    });
+    Clipboard.copyToClipboard(address);
+  };
 
   return (
     <View style={styles.container}>
@@ -22,14 +37,16 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
       <View style={styles.qrCode}>
         <QRCodeWithLogo value={address} size={moderateScale(200)} />
       </View>
-      <Text
-        fontSize={18}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
-        align="center"
-      >
-        {address}
-      </Text>
+      <Button activeOpacity={1} onLongPress={copyAddress}>
+        <Text
+          fontSize={18}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
+          align="center"
+        >
+          {address}
+        </Text>
+      </Button>
       <Spacer value={verticalScale(16)} />
       <Button style={styles.shareBtn}>
         <Text
