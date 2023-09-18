@@ -145,7 +145,7 @@ export const ExplorerAccountView = (
             style={{
               ...styles.actionButton,
               backgroundColor: account.isOnWatchlist
-                ? COLORS.warning
+                ? COLORS.warning200
                 : COLORS.brand600
             }}
             testID="Add_To_Watchlist_Button"
@@ -174,7 +174,9 @@ export const ExplorerAccountView = (
             style={{
               ...styles.actionButton,
               backgroundColor:
-                listsWithAccount.length > 0 ? COLORS.warning : COLORS.brand100
+                listsWithAccount.length > 0
+                  ? COLORS.warning200
+                  : COLORS.brand100
             }}
             testID="Add_To_Collection_Button"
             type="circular"
