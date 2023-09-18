@@ -1,7 +1,7 @@
 import { Wallet } from '@models/Wallet';
 import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
-import { Database, WalletDBModel, WalletDB } from '@database';
+import { Database, WalletDBModel, WalletDB, AccountDB } from '@database';
 import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOUtils from '@crypto/common/AirDAOUtils';
@@ -135,7 +135,7 @@ const changeSelectedWallet = async (hash: string) => {
 };
 
 const deleteWalletWithAccounts = async (hash: string) => {
-  // await AccountDB.deleteAccountsOfWallet(hash);
+  await AccountDB.deleteAccountsOfWallet(hash);
   await WalletDB.deleteWallet(hash);
   // delete active wallet
   const activeWalletHash = await Cache.getItem(CacheKey.SelectedWallet);

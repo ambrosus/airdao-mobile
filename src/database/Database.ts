@@ -18,11 +18,18 @@ class Database {
     return this.db!.localStorage;
   }
 
+  // DEV ONLY
   private async reset() {
-    if (!this.db) this.init();
-    await this.db?.write(async () => {
-      await this.db?.unsafeResetDatabase();
-    });
+    if (__DEV__) {
+      if (!this.db) this.init();
+      try {
+        await this.db?.write(async () => {
+          await this.db?.unsafeResetDatabase();
+        });
+      } catch (error) {
+        // ignore
+      }
+    }
   }
 
   private async init() {
@@ -94,11 +101,15 @@ class Database {
   async deleteMultiple(models: Model[]) {
     if (!this.db) this.init();
     // @ts-ignore
-    await this.db.action(async () => {
-      for (const model of models) {
-        await model.destroyPermanently();
-      }
-    });
+    try {
+      await this.db?.write(async () => {
+        for (const model of models) {
+          await model.destroyPermanently();
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   unEscapeString(goodString: string) {
