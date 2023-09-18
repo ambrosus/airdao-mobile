@@ -236,5 +236,6 @@
 
   "singleWallet.name": "Name",
   "singleWallet.copy": "Copy to clipboard",
-  "singleWallet.save": "Save changes"
+  "singleWallet.save": "Save changes",
+  "singleWallet.remove": "Remove"
 }
