@@ -7,13 +7,13 @@ export const styles = StyleSheet.create({
   container: {
     ...shadow,
     paddingHorizontal: scale(16),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(82),
     borderWidth: 1,
     borderColor: '#2f2b431a'
   },
   focusedStyle: {
-    borderColor: COLORS.blue300
+    borderColor: COLORS.brand300
   },
   input: {
     flex: 1,

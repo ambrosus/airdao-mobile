@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function AddAddressIcon(props: IconProps) {
-  const { scale = 1, color = '#3568DD' } = props;
+  const { scale = 1, color = COLORS.brand600 } = props;
   const width = 28;
   const height = 28;
   return (

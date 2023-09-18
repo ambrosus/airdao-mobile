@@ -16,7 +16,7 @@ describe('RotationAnimation', () => {
   it('renders the component with default props', () => {
     const { getByTestId } = render(
       <RotationAnimation>
-        <ChevronDownIcon color={COLORS.smokyBlack} />
+        <ChevronDownIcon color={COLORS.neutral900} />
       </RotationAnimation>
     );
     expect(getByTestId('AnimatedView')).toBeTruthy();

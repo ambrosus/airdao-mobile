@@ -104,7 +104,7 @@ export const BottomSheetEditWallet = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {t('rename.address')}
           </Text>
@@ -119,7 +119,7 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {t('move.to.another.group')}
               </Text>
@@ -128,11 +128,11 @@ export const BottomSheetEditWallet = forwardRef<
               type="circular"
               style={{
                 ...styles.actionBtn,
-                backgroundColor: COLORS.pinkRed
+                backgroundColor: COLORS.error100
               }}
               onPress={removeFromCollection}
             >
-              <Text color={COLORS.crimsonRed}>
+              <Text color={COLORS.error400}>
                 {t('remove.address.from.group')}
               </Text>
             </Button>
@@ -156,7 +156,7 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {t('add.address.to.group.lower.case')}
               </Text>

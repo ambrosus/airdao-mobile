@@ -14,8 +14,15 @@ export type HomeParamsList = {
       address: string;
       balance: { wei: string; ether: number };
     };
+    walletAccount: string;
   };
   SendFunds: undefined;
+  CreateWalletStep0: undefined;
+  CreateWalletStep1: undefined;
+  CreateWalletStep2: undefined;
+  SuccessBackupComplete: undefined;
+  SuccessImport: undefined;
+  RestoreWalletScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

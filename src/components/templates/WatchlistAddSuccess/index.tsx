@@ -55,15 +55,15 @@ export const WatchlistAddSuccess = (
         <Checkmark
           size={scale(96)}
           iconScale={4}
-          fillColor={COLORS.jungleGreen}
-          iconColor={COLORS.white}
+          fillColor={COLORS.success400}
+          iconColor={COLORS.neutral0}
         />
         <Spacer value={verticalScale(49)} />
         <Text
           align="center"
           fontSize={17}
           fontWeight="600"
-          color="#000000"
+          color={COLORS.black}
           fontFamily="Inter_700Bold"
         >
           You are on a roll!
@@ -95,7 +95,7 @@ export const WatchlistAddSuccess = (
           }}
         >
           <Button onPress={showEdit} type="circular" style={styles.editButton}>
-            <Text title color="#FFFFFF" fontFamily="Inter_600SemiBold">
+            <Text title color={COLORS.neutral0} fontFamily="Inter_600SemiBold">
               Edit Address
             </Text>
           </Button>
@@ -115,13 +115,13 @@ export const WatchlistAddSuccess = (
             type="circular"
             style={{
               ...styles.button,
-              backgroundColor: COLORS.charcoal
+              backgroundColor: COLORS.alphaBlack5
             }}
           >
             <Text
               title
               fontFamily="Inter_600SemiBold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
             >
               Done
             </Text>

@@ -17,6 +17,10 @@ export class Transaction {
     ether: number;
     symbol: string;
   };
+  gasCost?: {
+    ether: number;
+    wei: string;
+  };
 
   constructor(details: TransactionDTO) {
     this._id = details._id;
@@ -29,5 +33,6 @@ export class Transaction {
     this.to = details.to_id ? new ExplorerAccount(details.to_id) : null;
     this.status = details.status;
     this.value = details.value;
+    this.gasCost = details.gasCost;
   }
 }

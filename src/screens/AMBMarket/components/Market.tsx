@@ -56,13 +56,13 @@ export function AMBMarket(): JSX.Element {
             <Text
               fontSize={14}
               fontFamily="Inter_600SemiBold"
-              color={COLORS.jetBlack}
+              color={COLORS.neutral800}
             >
               {item.title}
             </Text>
           </Row>
           <View style={{ transform: [{ rotate: '315deg' }] }}>
-            <RightArrowIcon color={COLORS.frenchSkyBlue} scale={1.25} />
+            <RightArrowIcon color={COLORS.brand400} scale={1.25} />
           </View>
         </Row>
       </Button>

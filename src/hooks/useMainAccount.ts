@@ -1,9 +1,20 @@
+import { ExplorerAccount } from '@models';
 import { useSelectedWalletHash } from './cache';
-import { useCryptoAccountFromHash } from './query';
+import { useAccountByWalletHash } from './database';
+import { useBalanceOfAddress } from './query';
 
 export const useMainAccount = () => {
-  const hash = useSelectedWalletHash();
-  const { data: account, loading: accountLoading } =
-    useCryptoAccountFromHash(hash);
-  return { account, accountLoading };
+  const { data: hash } = useSelectedWalletHash();
+  const { data: mainAccount, loading } = useAccountByWalletHash(hash);
+
+  const { data: mainAccountBalance } = useBalanceOfAddress(
+    mainAccount?.address || ''
+  );
+
+  const account = mainAccount ? ExplorerAccount.fromDBModel(mainAccount) : null;
+
+  if (account) {
+    account.ambBalance = Number(mainAccountBalance.ether);
+  }
+  return { account, accountLoading: loading };
 };

@@ -1,9 +1,10 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function ScannerQRIcon(props: IconProps) {
-  const { scale = 1, color = '#222426' } = props;
+  const { scale = 1, color = COLORS.neutral700 } = props;
   const width = 20,
     height = 20;
   return (

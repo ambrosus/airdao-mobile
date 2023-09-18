@@ -4,9 +4,9 @@ import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
 export function CheckmarkCircleIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.teal400 } = props;
-  const width = 24,
-    height = 24;
+  const { scale = 1, color = COLORS.brand500 } = props;
+  const width = 20,
+    height = 20;
   return (
     <Svg
       width={width}

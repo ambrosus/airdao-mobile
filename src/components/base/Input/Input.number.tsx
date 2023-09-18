@@ -1,11 +1,12 @@
 import React from 'react';
 import { InputProps, InputRef } from './Input.types';
 import { TextInput } from './Input.text';
+import { COLORS } from '@constants/colors';
 
 export const NumberInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
     const { value, style = {}, onChangeValue, ...restProps } = props;
-    const styles = [{ color: '#000000', padding: 0 }, style];
+    const styles = [{ color: COLORS.black, padding: 0 }, style];
 
     return (
       <TextInput

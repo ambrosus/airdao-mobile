@@ -31,7 +31,7 @@ export const ClearCacheModal = forwardRef<BottomSheetRef, Props>(({}, ref) => {
         align="center"
         fontFamily="Inter_700Bold"
         fontSize={20}
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
         Press to clear cache, then close (from background too) and open app
       </Text>
@@ -40,7 +40,7 @@ export const ClearCacheModal = forwardRef<BottomSheetRef, Props>(({}, ref) => {
         type="circular"
         onPress={clearAll}
         style={{
-          backgroundColor: COLORS.deepBlue,
+          backgroundColor: COLORS.brand500,
           paddingVertical: 16,
           width: '90%'
         }}

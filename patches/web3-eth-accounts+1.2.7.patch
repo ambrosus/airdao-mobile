@@ -1,0 +1,19 @@
+diff --git a/node_modules/web3-eth-accounts/src/index.js b/node_modules/web3-eth-accounts/src/index.js
+index ab57380..db2ebba 100644
+--- a/node_modules/web3-eth-accounts/src/index.js
++++ b/node_modules/web3-eth-accounts/src/index.js
+@@ -25,10 +25,10 @@
+ var _ = require('underscore');
+ var core = require('web3-core');
+ var Method = require('web3-core-method');
+-var Account = require('eth-lib/lib/account');
+-var Hash = require('eth-lib/lib/hash');
+-var RLP = require('eth-lib/lib/rlp');// jshint ignore:line
+-var Bytes = require('eth-lib/lib/bytes');// jshint ignore:line
++var Account = require('../../eth-lib/lib/account');
++var Hash = require('../../eth-lib/lib/hash');
++var RLP = require('../../eth-lib/lib/rlp');// jshint ignore:line
++var Bytes = require('../../eth-lib/lib/bytes');// jshint ignore:line
+ var cryp = (typeof global === 'undefined') ? require('crypto-browserify') : require('crypto');
+ var scrypt = require('@web3-js/scrypt-shim');
+ var uuid = require('uuid');

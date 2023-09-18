@@ -25,7 +25,7 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { AccountList } from '@models/AccountList';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/BottomSheetConfirmRemoveGroup';
 import { PortfolioNavigationProp } from '@appTypes/navigation';
-import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
+import { SwipeAction } from '@components/templates/AddressList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
 import { useSwipeableDismissListener } from '@hooks';
 import { EVENTS } from '@constants/events';

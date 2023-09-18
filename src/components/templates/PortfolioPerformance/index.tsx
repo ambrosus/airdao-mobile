@@ -46,7 +46,7 @@ export function PortfolioPerformance(
           <Text
             fontSize={15}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.white}
+            color={COLORS.neutral0}
           >
             {title}
           </Text>
@@ -55,7 +55,7 @@ export function PortfolioPerformance(
           <Text
             fontSize={24}
             fontFamily="Mersad_600SemiBold"
-            color={COLORS.white}
+            color={COLORS.neutral0}
           >
             {currencyPosition === 'left' ? currency : ''}
             {balance}
@@ -68,14 +68,14 @@ export function PortfolioPerformance(
               <Row alignItems="center">
                 <Text
                   fontSize={11}
-                  color={COLORS.white50}
+                  color={COLORS.alphaWhite50}
                   fontFamily="Inter_600SemiBold"
                 >
                   TxFee
                 </Text>
                 <Spacer horizontal value={scale(8)} />
                 <Text
-                  color={COLORS.white}
+                  color={COLORS.neutral0}
                   fontSize={11}
                   fontFamily="Inter_600SemiBold"
                 >
@@ -91,15 +91,15 @@ export function PortfolioPerformance(
                 <Spacer value={verticalScale(8)} />
                 <Row alignItems="center">
                   <Badge
-                    color={COLORS.gray100}
+                    color={COLORS.neutral100}
                     icon={
                       <Row style={{ paddingHorizontal: 4 }}>
                         <Text
                           fontSize={12}
                           color={
                             props.last24HourChange >= 0
-                              ? COLORS.jungleGreen
-                              : COLORS.crimsonRed
+                              ? COLORS.success400
+                              : COLORS.error400
                           }
                         >
                           {`${
@@ -109,7 +109,7 @@ export function PortfolioPerformance(
                         <Spacer horizontal value={scale(4)} />
                         <Text
                           fontSize={12}
-                          color={COLORS.nero}
+                          color={COLORS.neutral800}
                           fontFamily="Inter_600SemiBold"
                         >
                           (24hr)
@@ -123,11 +123,19 @@ export function PortfolioPerformance(
           {/* timestamp */}
           <Spacer value={verticalScale(8)} />
           <Row alignItems="center" justifyContent="space-between">
-            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral100}
+            >
               {moment(timestamp).format('YYYY-MM-DD')}
             </Text>
             <Spacer horizontal value={scale(10)} />
-            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral100}
+            >
               {moment(timestamp).format('hh:mm A').toLowerCase()}
             </Text>
           </Row>

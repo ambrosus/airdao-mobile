@@ -73,7 +73,7 @@ export const BottomSheetFilter = forwardRef<
                 <Text
                   title
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.jungleGreen}
+                  color={COLORS.success400}
                 >
                   Done
                 </Text>
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(52),
     paddingLeft: scale(16),
     paddingRight: scale(24),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.neutral0,
     height: '100%'
   },
   header: {
@@ -231,11 +231,11 @@ const styles = StyleSheet.create({
   datePicker: {
     paddingTop: verticalScale(18),
     height: '100%',
-    backgroundColor: '#FFFFFF'
+    backgroundColor: COLORS.neutral0
   },
   headerTitle: {
     fontFamily: 'Inter_500Medium',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   }
 });

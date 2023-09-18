@@ -11,11 +11,12 @@ import {
   fontWeightMapping
 } from './Text.constants';
 import { FontSizeKey, TextProps } from './Text.types';
+import { COLORS } from '@constants/colors';
 
 export function Text(props: TextProps): JSX.Element {
   const {
     style: propsStyle,
-    color = '#000000',
+    color = COLORS.black,
     fontSize,
     opacity = 1,
     fontWeight = 'normal',

@@ -1,11 +1,12 @@
 import React from 'react';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { Path, Svg } from 'react-native-svg';
+import { COLORS } from '@constants/colors';
 
 export function CloseIcon(props: IconProps) {
-  const { scale = 1, color = '#000000' } = props;
-  const width = 20,
-    height = 20;
+  const { scale = 1, color = COLORS.black } = props;
+  const width = 17,
+    height = 16;
   return (
     <Svg
       width={width}

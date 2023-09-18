@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { Transaction } from '@models';
-import { AssetLogo } from '@components/svg/icons/Asset';
+import { AirDAOTokenLogo } from '@components/svg/icons/AirDAOTokenLogo';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -37,21 +37,21 @@ export const SingleTransaction = (
       <Button onPress={showTransactionDetails}>
         <View style={styles.container}>
           <Row>
-            <AssetLogo />
+            <AirDAOTokenLogo />
             <Spacer horizontal value={scale(8)} />
             <View style={styles.item}>
               <Row justifyContent="space-between">
                 <Text
                   fontFamily="Inter_500Medium"
                   fontSize={16}
-                  color={COLORS.nero}
+                  color={COLORS.neutral800}
                 >
                   {transaction.status}
                 </Text>
                 <Text
                   fontFamily="Mersad_600SemiBold"
                   fontSize={16}
-                  color={COLORS.nero}
+                  color={COLORS.neutral800}
                 >
                   -
                   {NumberUtils.formatNumber(
@@ -66,7 +66,7 @@ export const SingleTransaction = (
                 <Text
                   fontFamily="Inter_500Medium"
                   fontSize={14}
-                  color={COLORS.gray400}
+                  color={COLORS.neutral400}
                 >
                   To:{' '}
                   {StringUtils.formatAddress(
@@ -79,7 +79,7 @@ export const SingleTransaction = (
                 <Text
                   fontFamily="Inter_400Regular"
                   fontSize={14}
-                  color={COLORS.gray400}
+                  color={COLORS.neutral400}
                 >
                   ${NumberUtils.formatNumber(usdPrice, usdPrice > 1 ? 2 : 4)}
                 </Text>

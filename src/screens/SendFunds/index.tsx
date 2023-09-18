@@ -44,7 +44,7 @@ import { styles } from './styles';
 
 export const SendFunds = () => {
   const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
-  const walletHash = useSelectedWalletHash();
+  const { data: walletHash } = useSelectedWalletHash();
   const { account, accountLoading } = useMainAccount();
   const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass token name inside to handle different crypto tokens under Ambrosus Network
   const ambPrice = ambPriceInfo?.priceUSD || 0;
@@ -127,6 +127,7 @@ export const SendFunds = () => {
           text: t('transaction.in.progress')
         });
       } catch (error) {
+        // TODO handle
         Alert.alert('Transfer failed');
       } finally {
         setSendLoading(false);
@@ -138,7 +139,7 @@ export const SendFunds = () => {
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
         title={t('account.actions.send')}
-        style={{ shadowColor: COLORS.white }}
+        style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <KeyboardDismissingView style={styles.container}>
@@ -157,7 +158,7 @@ export const SendFunds = () => {
                 {destinationAddress.length > 0 &&
                   !destinationAddress.match(etherumAddressRegex) && (
                     <View style={styles.addressError}>
-                      <Text fontSize={12} color={COLORS.crimsonRed}>
+                      <Text fontSize={12} color={COLORS.error400}>
                         {t('send.funds.invalid.address')}
                       </Text>
                     </View>
@@ -225,7 +226,7 @@ export const SendFunds = () => {
                   onPress={showReviewModal}
                 >
                   <Text
-                    color={COLORS.white}
+                    color={COLORS.neutral0}
                     fontSize={16}
                     fontFamily="Inter_500Medium"
                     fontWeight="500"

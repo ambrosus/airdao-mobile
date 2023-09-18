@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { DatabaseTable } from '@appTypes';
+import { useEffect, useState } from 'react';
+import { DatabaseTable, QueryResponse } from '@appTypes';
 import { Database, WalletDBModel } from '@database';
 import { Cache, CacheKey } from '@utils/cache';
 
-export const useSelectedWalletHash = (): string => {
+export const useSelectedWalletHash = (): QueryResponse<string> => {
+  const [loading, setLoading] = useState(true);
   const [selectedWalletHash, setSelectedWalletHash] = useState('');
 
   const getSelectedWallet = async () => {
     try {
+      setLoading(true);
       const _selectedWalletHash = (await Cache.getItem(
         CacheKey.SelectedWallet
       )) as string;
@@ -26,12 +27,18 @@ export const useSelectedWalletHash = (): string => {
       setSelectedWalletHash(_selectedWalletHash);
     } catch (error) {
       // TODO
+    } finally {
+      setLoading(false);
     }
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     getSelectedWallet();
-  });
+  }, []);
 
-  return selectedWalletHash || '';
+  return {
+    data: selectedWalletHash,
+    loading,
+    error: null
+  };
 };

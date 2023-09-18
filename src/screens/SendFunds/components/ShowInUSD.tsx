@@ -36,7 +36,7 @@ export const ShowInUSD = (props: ShowInUSDProps) => {
       </Text>
       <Spacer value={scale(4)} horizontal />
       <View style={{ transform: [{ rotate: '90deg' }] }}>
-        <SwapIcon color={COLORS.blue600} />
+        <SwapIcon color={COLORS.brand600} />
       </View>
     </Row>
   );

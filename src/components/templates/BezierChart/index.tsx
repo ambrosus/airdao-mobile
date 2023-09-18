@@ -49,8 +49,8 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
         <Text
           color={
             selectedInterval?.value === interval.value
-              ? COLORS.mainBlue
-              : COLORS.asphalt
+              ? COLORS.brand600
+              : COLORS.neutral300
           }
           fontSize={13}
           fontFamily="Inter_600SemiBold"

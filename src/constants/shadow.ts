@@ -1,5 +1,7 @@
+import { COLORS } from './colors';
+
 export const shadow = {
-  shadowColor: '#000000',
+  shadowColor: COLORS.black,
   shadowOffset: {
     width: 0,
     height: 1

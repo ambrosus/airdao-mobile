@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     width: 52,
     height: 52,
-    backgroundColor: '#EDF3FF'
+    backgroundColor: COLORS.brand100
   },
   optionsContainer: {
     paddingRight: 60,
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     borderRadius: 24,
     paddingHorizontal: 16,
     marginBottom: 30

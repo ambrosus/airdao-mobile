@@ -5,7 +5,7 @@
 
 import EthAddressProcessor from '@crypto/blockchains/eth/EthAddressProcessor';
 import EthScannerProcessor from '@crypto/blockchains/eth/EthScannerProcessor';
-import EthScannerProcessorErc20 from '@crypto/blockchains/eth/EthScannerProcessorErc20';
+// import EthScannerProcessorErc20 from '@crypto/blockchains/eth/EthScannerProcessorErc20';
 import { BlockchainUtils } from '@utils/blockchain';
 
 class AirDAODispatcher {
@@ -28,16 +28,14 @@ class AirDAODispatcher {
     }
   }
 
-  getScannerProcessor(
-    currencyCode: string
-  ): EthScannerProcessor | EthScannerProcessorErc20 {
+  getScannerProcessor(currencyCode: string): EthScannerProcessor {
     const currencyDictSettings =
       BlockchainUtils.getCurrencyAllSettings(currencyCode);
     switch (currencyDictSettings.scannerProcessor) {
       case 'ETH':
         return new EthScannerProcessor(currencyDictSettings);
-      case 'ETH_ERC_20':
-        return new EthScannerProcessorErc20(currencyDictSettings);
+      // case 'ETH_ERC_20':
+      //   return new EthScannerProcessorErc20(currencyDictSettings);
       default:
         throw new Error(
           'Unknown scannerProcessor ' + currencyDictSettings.scannerProcessor

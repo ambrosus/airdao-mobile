@@ -28,7 +28,7 @@ export const AddressItemWithCheckbox = ({
             type="square"
             value={idsOfSelectedAddresses.includes(address)}
             fillColor={COLORS.sapphireBlue}
-            color={COLORS.white}
+            color={COLORS.neutral0}
           />
         </View>
         <WalletItem item={item} />

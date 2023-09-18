@@ -4,7 +4,7 @@ import { ClipPath, Defs, G, Path, Svg } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
 
 export function SendIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.smokyBlack } = props;
+  const { scale = 1, color = COLORS.neutral900 } = props;
   const width = 20,
     height = 20;
   return (

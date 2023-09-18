@@ -30,7 +30,7 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
           <Row alignItems="center">
             <Text
               fontSize={14}
-              color={COLORS.slateGrey}
+              color={COLORS.neutral400}
               fontFamily="Inter_500Medium"
             >
               {t(row.title)}
@@ -47,7 +47,7 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
         </Button>
         <Text
           fontSize={13}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           fontFamily="Mersad_600SemiBold"
         >
           {props[row.key]}

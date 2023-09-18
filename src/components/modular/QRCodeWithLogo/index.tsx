@@ -11,7 +11,7 @@ export const QRCodeWithLogo = (props: QRCodeProps) => {
       <QRCode {...props} />
       <View style={styles.logo}>
         <View style={styles.logoInner}>
-          <LogoBigSVG color={COLORS.white} scale={0.75} />
+          <LogoBigSVG color={COLORS.neutral0} scale={0.75} />
         </View>
       </View>
     </View>

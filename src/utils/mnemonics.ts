@@ -29,4 +29,12 @@ const recheckMnemonic = (mnemonic: string): string => {
   return checked.join(' ');
 };
 
-export const MnemonicUtils = { generateNewMnemonic, recheckMnemonic };
+const isValidMnemonic = (mnemonic: string): boolean => {
+  return bip39.validateMnemonic(mnemonic);
+};
+
+export const MnemonicUtils = {
+  generateNewMnemonic,
+  recheckMnemonic,
+  isValidMnemonic
+};

@@ -53,7 +53,7 @@ export const BottomSheetTrade = forwardRef<BottomSheetRef, BottomSheetProps>(
             <Text fontFamily="Inter_600SemiBold">{item.title}</Text>
             <Spacer horizontal value={scale(12)} />
             <View style={{ transform: [{ rotate: '315deg' }] }}>
-              <RightArrowIcon color="#000000" />
+              <RightArrowIcon color={COLORS.black} />
             </View>
           </Row>
         </Button>

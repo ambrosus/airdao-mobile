@@ -104,7 +104,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
 
   return (
     <View style={styles.container} testID="EditWallet_Container">
-      <Text title color="#222222" fontFamily="Inter_600SemiBold">
+      <Text title color={COLORS.gray800} fontFamily="Inter_600SemiBold">
         Address name
       </Text>
       <Spacer value={verticalScale(8)} />
@@ -155,7 +155,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
                 type="square"
                 value={isPersonalAddress}
                 fillColor={COLORS.sapphireBlue}
-                color={COLORS.white}
+                color={COLORS.neutral0}
               />
               <Spacer horizontal value={12} />
               <Text
@@ -170,7 +170,7 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           <Spacer value={12} />
           <Text
             fontWeight="400"
-            color="#646464"
+            color={COLORS.gray500}
             fontSize={12}
             fontFamily="Inter_600SemiBold"
           >
@@ -243,12 +243,12 @@ export const EditWallet = (props: EditWalletProps): JSX.Element => {
           }}
         >
           <Row alignItems="center">
-            <PlusIcon color={COLORS.deepBlue} />
+            <PlusIcon color={COLORS.brand500} />
             <Text
               style={{ left: 10.5 }}
               title
               fontFamily="Inter_600SemiBold"
-              color={COLORS.deepBlue}
+              color={COLORS.brand500}
             >
               Create new list
             </Text>

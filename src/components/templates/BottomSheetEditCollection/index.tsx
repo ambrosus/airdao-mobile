@@ -74,7 +74,7 @@ export const BottomSheetEditCollection = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {t('rename.group')}
           </Text>
@@ -83,12 +83,12 @@ export const BottomSheetEditCollection = forwardRef<
           type="circular"
           style={{
             ...styles.actionBtn,
-            backgroundColor: COLORS.pinkRed
+            backgroundColor: COLORS.error100
           }}
           onPress={deleteCollection}
         >
           <Text
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >

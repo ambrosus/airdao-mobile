@@ -1,13 +1,14 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 interface TrendIconProps extends IconProps {
   type?: 'up' | 'down';
 }
 
 export function TrendIcon(props: TrendIconProps) {
-  const { scale = 1, color = '#FFFFFF', type = 'up' } = props;
+  const { scale = 1, color = COLORS.neutral0, type = 'up' } = props;
   const width = 13,
     height = 9;
   const upPath =

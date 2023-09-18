@@ -4,7 +4,7 @@ import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
 export function ListIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.blue600 } = props;
+  const { scale = 1, color = COLORS.brand600 } = props;
   const width = 28;
   const height = 22;
   return (

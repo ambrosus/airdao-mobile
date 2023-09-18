@@ -143,8 +143,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           {selectionStarted && (
             <Row>
               <CheckBox
-                fillColor={COLORS.blue500}
-                color={COLORS.white}
+                fillColor={COLORS.brand500}
+                color={COLORS.neutral0}
                 type="square"
                 value={selected}
               />
@@ -230,7 +230,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         <Text
           fontFamily="Inter_700Bold"
           fontSize={18}
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >{`${t('add.address.to.selected.group')} ${StringUtils.formatAddress(
           collection.name,
           10,
@@ -368,7 +368,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }}
         >
           <Text
-            color={COLORS.white}
+            color={COLORS.neutral0}
             fontSize={16}
             fontFamily="Inter_600SemiBold"
             fontWeight="600"

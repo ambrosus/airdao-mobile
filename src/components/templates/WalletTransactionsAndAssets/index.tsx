@@ -10,43 +10,32 @@ import Animated, {
 } from 'react-native-reanimated';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/styles';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
-import {
-  useCryptoAccountFromHash,
-  useSelectedWalletHash,
-  useTransactionsOfAccount
-} from '@hooks';
 import { useTranslation } from 'react-i18next';
 import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
-import { API } from '@api/api';
+import { ExplorerAccount, Transaction } from '@models';
 
 interface WalletTransactionsAndAssetsProps {
-  address: string;
+  transactions: Transaction[] | undefined;
+  account: ExplorerAccount;
+  tokens:
+    | {
+        address: string;
+        name: string;
+        balance: { wei: string; ether: number };
+      }[]
+    | undefined;
+  loading: boolean;
+  error: boolean;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { address } = props;
+  const { tokens, transactions, loading, account, error } = props;
   const scrollView = useRef<ScrollView>(null);
-  const selectedWalletHash = useSelectedWalletHash();
-  const { loading: accountLoading } =
-    useCryptoAccountFromHash(selectedWalletHash);
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { t } = useTranslation();
-
-  const initialMount = useRef(true);
-  const TRANSACTION_LIMIT = 20;
-  const { data: transactions, loading: transactionsLoading } =
-    useTransactionsOfAccount(
-      address,
-      1,
-      TRANSACTION_LIMIT,
-      '',
-      !initialMount.current
-    );
-  initialMount.current = false;
 
   const tabWidth = Dimensions.get('window').width;
 
@@ -76,37 +65,13 @@ export const WalletTransactionsAndAssets = (
     indicatorPosition.value = withTiming(tabWidth / 2);
   };
 
-  const [tokens, setTokens] = useState<
-    {
-      address: string;
-      name: string;
-      balance: { wei: string; ether: number };
-    }[]
-  >([]);
-
-  const fetchTokens = async () => {
-    try {
-      const walletWithTokens = '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696';
-      const walletTokens = await API.explorerService.searchWalletV2(
-        walletWithTokens
-      );
-      setTokens(walletTokens);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTokens();
-  }, []);
-
   return (
     <View>
       <Row alignItems="center" justifyContent="space-between">
         <Button onPress={scrollToTransactions} style={styles.tabLeftTitle}>
           <Text
             fontFamily="Inter_500Medium"
-            color={currentIndex === 0 ? COLORS.blue500 : COLORS.midnight}
+            color={currentIndex === 0 ? COLORS.brand500 : COLORS.midnight}
             fontSize={16}
           >
             {t('my.assets')}
@@ -116,7 +81,7 @@ export const WalletTransactionsAndAssets = (
           <Button onPress={scrollToAssets} style={styles.tabRightTitle}>
             <Text
               fontFamily="Inter_500Medium"
-              color={currentIndex === 0 ? COLORS.midnight : COLORS.blue500}
+              color={currentIndex === 0 ? COLORS.midnight : COLORS.brand500}
               fontSize={16}
             >
               {t('transactions')}
@@ -134,7 +99,7 @@ export const WalletTransactionsAndAssets = (
               left: 0,
               width: tabWidth / 2,
               height: 2,
-              backgroundColor: COLORS.blue500
+              backgroundColor: COLORS.brand500
             },
             indicatorStyle
           ]}
@@ -150,14 +115,21 @@ export const WalletTransactionsAndAssets = (
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: '100%' }}
       >
         <View style={{ width: tabWidth }}>
-          <WalletAssets tokens={tokens} loading={accountLoading} />
+          <WalletAssets
+            tokens={tokens}
+            loading={loading}
+            account={account}
+            error={error}
+          />
         </View>
-        <View style={{ width: tabWidth }}>
+        <View style={{ width: tabWidth, height: '100%' }}>
           <WalletTransactions
             transactions={transactions}
-            // loading={transactionsLoading}
+            loading={loading}
+            error={error}
           />
         </View>
       </ScrollView>

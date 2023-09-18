@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 
 export function OverviewInactiveIcon(props: IconProps) {
-  const { scale = 1, color = '#C2C5CC' } = props;
+  const { scale = 1, color = COLORS.neutral200 } = props;
   const width = 24;
   const height = 24;
   return (

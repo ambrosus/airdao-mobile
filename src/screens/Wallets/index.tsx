@@ -1,115 +1,98 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RefreshControl } from 'react-native-gesture-handler';
-import { useQueryClient } from '@tanstack/react-query';
-import { OnboardingView } from '@components/templates';
-import { Row, Spacer, Text } from '@components/base';
-import { AddIcon } from '@components/svg/icons';
-import { PortfolioBalance, HomeHeader, HomeTabs } from './components';
-import { useAllAddressesContext, useOnboardingStatus } from '@contexts';
-import { useAMBPrice } from '@hooks';
-import { SearchTabNavigationProp } from '@appTypes';
+import {
+  PaginatedAccountList,
+  WalletTransactionsAndAssets
+} from '@components/templates';
+import { Spacer } from '@components/base';
+import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
+import { useAllAccounts } from '@hooks/database';
+import { ExplorerAccount } from '@models';
+import { PaginationCircles } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
+import { AccountActions, HomeHeader } from './components';
+import { WalletUtils } from '@utils/wallet';
 
 export const HomeScreen = () => {
-  const navigation = useNavigation<SearchTabNavigationProp>();
-  const isFocused = useIsFocused();
+  const { data: accounts } = useAllAccounts();
+  const [scrollIdx, setScrollIdx] = useState(0);
+  const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
+  const { data: selectedAccountBalance } = useBalanceOfAddress(
+    selectedAccount?.address || ''
+  );
 
-  const { refetching: refetchingAMBPrice } = useAMBPrice();
-  const queryClient = useQueryClient();
-  const { start: startOnboarding } = useOnboardingStatus((v) => v);
-  const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
-  const bottomTabBarHeight = useBottomTabBarHeight();
-  const onboardinStarted = useRef(false);
+  const account = selectedAccount
+    ? ExplorerAccount.fromDBModel(selectedAccount)
+    : null;
 
-  const navigateToSearch = useCallback(() => {
-    navigation.navigate('Search', { screen: 'SearchScreen' });
-  }, [navigation]);
+  if (account) {
+    account.ambBalance = Number(selectedAccountBalance.ether);
+  }
 
-  useLayoutEffect(() => {
-    if (isFocused) {
-      setTimeout(() => {
-        if (!onboardinStarted.current) {
-          onboardinStarted.current = true;
-          startOnboarding();
-        }
-      }, 1000);
+  const {
+    data: tokensAndTransactions,
+    loading,
+    error
+  } = useTokensAndTransactions(account?.address);
+
+  useEffect(() => {
+    if (accounts.length > 0) {
+      WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
-
-  const onRefresh = () => {
-    refetchAddresses();
-    // if (typeof refetchAMBPrice === 'function') refetchAMBPrice();
-    queryClient.refetchQueries({ queryKey: ['amb-token'], type: 'active' });
-  };
+  }, [accounts, scrollIdx]);
 
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={{
-        backgroundColor:
-          Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
-        flex: 1
-      }}
-      testID="Home_Screen"
-    >
+    <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
       <HomeHeader />
-      <ScrollView
-        bounces={true}
-        scrollEventThrottle={16}
-        contentContainerStyle={[
-          styles.container,
-          { paddingBottom: bottomTabBarHeight + verticalScale(55) }
-        ]}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={Boolean(refetchingAMBPrice)}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-        <Spacer value={verticalScale(16)} />
-        <View style={{ paddingHorizontal: scale(16) }}>
-          <PortfolioBalance />
-        </View>
-        <Spacer value={verticalScale(24)} />
-        <View style={styles.homeTabs}>
-          <HomeTabs />
-        </View>
-        {/*<Spacer value={scale(24)} />*/}
-        {/*<View style={styles.homeHighlights}>*/}
-        {/*  <HomeHighlights />*/}
-        {/*</View>*/}
-      </ScrollView>
-      <OnboardingView
-        type="float"
-        thisStep={1}
-        tooltipPlacement="top"
-        helpers={{
-          next: navigateToSearch
-        }}
-        removeAndroidStatusBarHeight
-      >
-        <Row
-          alignItems="center"
-          justifyContent="center"
-          style={styles.addAddressBtn}
-          testID="onboarding-float-button"
-        >
-          <AddIcon />
-          <Spacer horizontal value={scale(10.5)} />
-          <Text title fontFamily="Inter_600SemiBold" color={COLORS.white}>
-            Add an Address
-          </Text>
-        </Row>
-      </OnboardingView>
+      <Spacer value={verticalScale(24)} />
+      <View style={{ flex: 1 }}>
+        <PaginatedAccountList
+          accounts={accounts}
+          horizontal={true}
+          type="credit-card"
+          listProps={{
+            ItemSeparatorComponent: () => (
+              <Spacer value={scale(16)} horizontal />
+            ),
+            contentContainerStyle: {
+              paddingHorizontal: scale(16)
+            },
+            style: {
+              flexGrow: 0,
+              minHeight: verticalScale(172)
+            }
+          }}
+          onScrolIndexChange={setScrollIdx}
+        />
+        {accounts.length > 1 && (
+          <View style={{ alignSelf: 'center', marginTop: verticalScale(16) }}>
+            <PaginationCircles
+              totalCount={accounts.length}
+              activeColor={COLORS.neutral500}
+              passiveColor={COLORS.neutral100}
+              activeIndex={scrollIdx}
+              size={verticalScale(10)}
+              gap={scale(16)}
+            />
+          </View>
+        )}
+        {account && (
+          <>
+            <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
+            <AccountActions address={account.address} />
+            <Spacer value={verticalScale(32)} />
+            <WalletTransactionsAndAssets
+              account={account}
+              transactions={tokensAndTransactions?.transactions}
+              tokens={tokensAndTransactions?.tokens}
+              loading={loading}
+              error={error}
+            />
+          </>
+        )}
+      </View>
     </SafeAreaView>
   );
 };

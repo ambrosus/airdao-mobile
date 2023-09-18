@@ -50,7 +50,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
           <Text
             fontSize={14}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {type}
           </Text>
@@ -60,13 +60,13 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
               width: moderateScale(4),
               height: moderateScale(4),
               borderRadius: moderateScale(2),
-              backgroundColor: COLORS.slateGrey
+              backgroundColor: COLORS.neutral400
             }}
           />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontSize={14}
-            color={COLORS.slateGrey}
+            color={COLORS.neutral400}
             fontFamily="Inter_600SemiBold"
           >
             {moment(createdAt).fromNow()}
@@ -76,7 +76,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.davysGray}
+          color={COLORS.neutral500}
         >
           {body}
         </Text>

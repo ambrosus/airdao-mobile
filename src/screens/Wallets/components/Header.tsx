@@ -153,7 +153,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
           type="circular"
           style={styles.addOrImportWalletButton}
         >
-          <AddIcon color={COLORS.nero} />
+          <AddIcon color={COLORS.neutral800} />
         </Button>
         <BottomSheetWalletCreateOrImport ref={walletImportCreate} />
       </>
@@ -177,12 +177,12 @@ export const HomeHeader = React.memo((): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor:
-      Platform.OS === 'ios' ? COLORS.white : COLORS.culturedWhite,
+      Platform.OS === 'ios' ? COLORS.neutral0 : COLORS.culturedWhite,
     shadowColor: COLORS.culturedWhite
   },
   notificationCountContainer: {
     position: 'absolute',
-    backgroundColor: '#ff7a00',
+    backgroundColor: COLORS.yellow500,
     right: 0,
     top: -verticalScale(4),
     borderRadius: scale(9),
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   addOrImportWalletButton: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     width: scale(38),
     height: scale(38)
   }

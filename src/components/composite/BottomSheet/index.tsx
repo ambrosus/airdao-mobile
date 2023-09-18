@@ -63,7 +63,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
                     ? 0
                     : keyboardHeight)
                 : height,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: COLORS.neutral0,
               borderTopRightRadius: borderRadius,
               borderTopLeftRadius: borderRadius
             },
@@ -73,7 +73,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         >
           {swiperIconVisible && (
             <View style={styles.swiper}>
-              <Separator height={4} color={COLORS.lavenderGray} />
+              <Separator height={4} color={COLORS.neutral200} />
             </View>
           )}
           {children}

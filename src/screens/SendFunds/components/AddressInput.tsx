@@ -58,7 +58,7 @@ export const AddressInput = (props: AddressInputProps) => {
         ref={inputRef}
         iconRight={
           <Button onPress={showScanner}>
-            <ScannerIcon color={COLORS.blue600} />
+            <ScannerIcon color={COLORS.brand600} />
           </Button>
         }
         value={address}

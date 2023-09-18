@@ -1,6 +1,6 @@
 import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
-import { WalletList } from '@components/templates';
+import { AddressList } from '@components/templates';
 import React from 'react';
 import { scale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
@@ -21,7 +21,7 @@ export const WatchList = () => {
           <Spinner />
         </View>
       ) : (
-        <WalletList
+        <AddressList
           isPortfolioFlow={true}
           emptyText=""
           data={sortListByKey(watchlist, 'ambBalance', 'desc')}

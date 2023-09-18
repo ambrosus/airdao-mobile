@@ -48,7 +48,7 @@ export const ExplorerWalletItem = (
           <Text
             fontSize={14}
             fontFamily="Inter_500Medium"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {StringUtils.formatAddress(address, leftPadding, rightPadding)}
           </Text>
@@ -62,7 +62,7 @@ export const ExplorerWalletItem = (
         <Text
           fontSize={13}
           fontFamily="Mersad_600SemiBold"
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {NumberUtils.formatNumber(ambBalance, 0)} AMB
         </Text>
@@ -71,7 +71,7 @@ export const ExplorerWalletItem = (
       <Row alignItems="center" justifyContent="space-between">
         <Text
           fontSize={12}
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
           fontFamily="Inter_500Medium"
         >
           {t('single.address.holding')}
@@ -84,7 +84,7 @@ export const ExplorerWalletItem = (
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
           {/* TODO add localisation here, key is "transactions" */}
           {StringUtils.pluralize(transactionCount, 'Transaction')}

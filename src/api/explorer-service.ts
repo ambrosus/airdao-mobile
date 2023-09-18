@@ -88,20 +88,21 @@ const getTransactionsOfAccount = async (
 };
 
 const searchWalletV2 = async (
-  wallet: string
-): Promise<
-  {
+  wallet: string | undefined
+): Promise<{
+  tokens: {
     address: string;
     name: string;
     balance: { wei: string; ether: number };
-  }[]
-> => {
+  }[];
+  transactions: Transaction[];
+}> => {
   try {
-    // TODO move api to constance
     const apiUrl = `${explorerapiV2Url}/addresses/${wallet}/all`;
     const response = await axios.get(apiUrl);
-    const tokensData = response.data.tokens;
-    return tokensData;
+    const tokens = response.data.tokens;
+    const transactions = response.data.data;
+    return { tokens, transactions };
   } catch (error) {
     // TODO handle error
     throw error;

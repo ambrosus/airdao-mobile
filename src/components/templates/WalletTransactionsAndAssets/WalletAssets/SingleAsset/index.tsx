@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { AssetLogo } from '@components/svg/icons/Asset';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
-import { useUSDPrice } from '@hooks';
+import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { PercentChange } from '@components/composite';
+import {
+  EthereumLogo,
+  AirDAOTokenLogo,
+  TetherLogo,
+  BUSDLogo,
+  USDCoinLogo,
+  UndefinedTokenLogo
+} from '@components/svg/icons';
 
 interface SingleAssetProps {
   address: string;
@@ -17,25 +25,45 @@ interface SingleAssetProps {
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { name, balance } = props;
   const usdPrice = useUSDPrice(balance.ether);
+  const { data: ambTokenData } = useAMBPrice();
+
+  const logoComponent = useMemo(() => {
+    switch (name) {
+      case 'AirDAO':
+        return <AirDAOTokenLogo />;
+      case 'Ethereum':
+        return <EthereumLogo />;
+      case 'BUSD':
+        return <BUSDLogo />;
+      case 'USDCoin':
+        return <USDCoinLogo />;
+      case 'Tether':
+        return <TetherLogo />;
+      case '':
+        return <UndefinedTokenLogo />;
+      default:
+        return <AirDAOTokenLogo />;
+    }
+  }, [name]);
 
   return (
     <View style={styles.container}>
       <Row>
-        <AssetLogo />
+        {logoComponent}
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
           <Row justifyContent="space-between">
             <Text
               fontFamily="Inter_500Medium"
               fontSize={16}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               {name || 'NULL'}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
               fontSize={16}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               ${NumberUtils.formatNumber(usdPrice, 2)}
             </Text>
@@ -45,17 +73,25 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
-              color={COLORS.gray400}
+              color={COLORS.neutral400}
             >
               {NumberUtils.formatNumber(balance.ether, 2)} AMB
             </Text>
             <Text
               fontFamily="Inter_400Regular"
               fontSize={14}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
-              {/* TODO fix % */}
-              %0.00
+              {name === 'AMB' ? (
+                <View style={{ paddingTop: verticalScale(3) }}>
+                  <PercentChange
+                    change={ambTokenData?.percentChange24H || 0}
+                    fontSize={14}
+                  />
+                </View>
+              ) : (
+                ''
+              )}
             </Text>
           </Row>
         </View>

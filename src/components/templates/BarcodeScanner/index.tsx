@@ -109,7 +109,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
           backIconVisible={false}
           contentLeft={
             <Button testID="BarcodeScanner_Close_Button" onPress={onClose}>
-              <CloseIcon color={COLORS.jetBlack} />
+              <CloseIcon color={COLORS.neutral800} />
             </Button>
           }
         />
@@ -122,7 +122,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
             type="circular"
             onPress={getCameraPermissions}
           >
-            <Text fontFamily="Inter_600SemiBold" color={COLORS.white}>
+            <Text fontFamily="Inter_600SemiBold" color={COLORS.neutral0}>
               Give permission
             </Text>
           </Button>
@@ -151,10 +151,10 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
               onPress={onClose}
               style={{ zIndex: 1000 }}
             >
-              <CloseIcon color="#FFFFFF" />
+              <CloseIcon color={COLORS.neutral0} />
             </Button>
           }
-          title={<Text color="#FFFFFF">Scan QR code</Text>}
+          title={<Text color={COLORS.neutral0}>Scan QR code</Text>}
           titlePosition="center"
         />
         {__DEV__ && (
@@ -164,10 +164,10 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
                 onScanned('0x9FAec9D8CBd3f131b662e3DC586eb0e9B1663b40')
               }
             >
-              <Text color={COLORS.jungleGreen}>Submit successfull address</Text>
+              <Text color={COLORS.success400}>Submit successfull address</Text>
             </Button>
             <Button onPress={() => onScanned('failing address')}>
-              <Text color={COLORS.crimsonRed}>Submit failing address</Text>
+              <Text color={COLORS.error400}>Submit failing address</Text>
             </Button>
           </View>
         )}

@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   bottomAddToListButton: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     borderRadius: 25,
     width: '90%'
   },
@@ -33,13 +33,13 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter_500Medium',
     fontSize: 16,
     paddingVertical: 16,
-    color: COLORS.white
+    color: COLORS.neutral0
   },
   bottomTrackNewAddressButtonText: {
     fontFamily: 'Inter_500Medium',
     fontSize: 16,
     paddingVertical: 16,
-    color: COLORS.deepBlue
+    color: COLORS.brand500
   },
   bottomTrackNewAddressButton: {
     alignItems: 'center',

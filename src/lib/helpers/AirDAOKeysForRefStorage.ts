@@ -9,7 +9,6 @@ class AirDAOKeysForRefStorage {
 
   async getPublicAndPrivateResultForHash(hash: string): Promise<any> {
     const res = await SecureStore.getItemAsync('cd_' + hash);
-    console.log({ res });
     if (!res) return false;
     return JSON.parse(res);
   }

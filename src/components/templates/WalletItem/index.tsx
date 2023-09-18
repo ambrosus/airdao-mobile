@@ -26,7 +26,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={13}
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
             testID="Wallet_Item_Name"
           >
             {StringUtils.formatAddress(item.name, 4, 4) ||
@@ -45,7 +45,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
         <Text
           fontFamily="Mersad_600SemiBold"
           fontSize={13}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           testID="Wallet_Item_Balance"
         >
           $
@@ -58,7 +58,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
       <Row justifyContent="space-between" testID="Wallet_Item_Row2">
         <Text
           fontFamily="Inter_500Medium"
-          color="#0e0e0e80"
+          color={COLORS.alphaBlack50}
           fontSize={12}
           testID="Wallet_Item_AMB"
         >

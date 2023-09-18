@@ -8,6 +8,7 @@
   "Russian": "Russian",
   "Chinese": "Chinese",
 
+  "wallets.tab": "Wallets",
   "overview.tab": "Overview",
   "watchlist.tab": "Watchlist",
   "explore.tab": "Explore",
@@ -136,6 +137,27 @@
   "stats": "Stats",
   "markets": "Markets",
   "your.balance": "Your balance",
+  "no.assets.yet": "No assets yet",
+  "no.transactions.yet": "No transactions yet",
+
+  "transaction.modal": {
+    "sent": "Sent",
+    "sending": "Transaction in progress",
+    "title": "You will receive a notification when the transaction is complete",
+    "date": "Date",
+    "from": "From",
+    "status": "Status",
+    "completed": "Completed",
+    "sending.to": "Sending to",
+    "recipient": "Recipient",
+    "amount": "Amount",
+    "estimated.fee": "Estimated fee",
+    "buttons": {
+      "explorer": "View on explorer",
+      "share": "Share",
+      "confirm": "Ok, got it"
+    }
+  },
 
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
@@ -167,5 +189,52 @@
     "use.max": "Use max"
   },
   "share": "Share",
-  "transaction.in.progress": "Transaction in progress!"
+  "transaction.in.progress": "Transaction in progress!",
+  "backup.your.wallet": "Backup your wallet",
+  "backup.wallet.text": "Your wallet will be backed up with a",
+  "backup.wallet.popup": "recovery phrase.",
+  "make.sure.to.write.down": "Make sure you have a pen and paper ready so you can write it down.",
+  "checkbox.text": "I understand that if I lose my recovery phrase, AirDAO cannot restore it.",
+  "continue.btn": "Continue",
+  "your.recovery.phrase": "Your recovery phrase",
+  "verify.text": "Make sure to write it down as shown. You will verify this later.",
+  "verification.alert": "Never share recovery phrase with \n anyone, keep it safe!",
+  "verify.phrase": "Verify phrase",
+  "double.check": "Let’s double check",
+  "tap.words.in.correct.order": "Tap the words in the correct order",
+  "verify.btn": "Verify",
+  "recovery.phrase.modal.header": "What is a recovery phrase?",
+  "recovery.phrase.modal.text": "Your recovery phrase is a set of 12 random words, and it's the only way to get into your wallet if you lose your device.",
+  "backup.complete": "Nice move! Backup complete.",
+  "backup.complete.text": "You backed up your wallet. Now let’s setup your wallet’s security.",
+  "import.successful": "Wallet import successful!",
+  "import.successful.text": "Your wallet has been successfully imported. You can now access your funds.",
+  "start.using.wallet.btn": "Start using wallet",
+  "setup.security.btn": "Setup security",
+  "airdao.wallet": "AirDAO Wallet",
+  "no.wallet.description": "Tap into endless possibiliies with AirDAO Wallet.",
+  "no.wallet.send.receive": "Send and receive",
+  "no.wallet.send.receive.description": "Safely send and receive funds with just a few taps.",
+  "no.wallet.address.tracking": "Address tracking",
+  "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
+  "no.wallet.stay.informed": "Stay informed",
+  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
+
+  "settings.manage.wallet": "Manage Wallets",
+  "settings.security": "Security",
+  "settings.preferences": "Preferences",
+  "settings.notifications": "Notifications",
+  "settings.help": "Help Center",
+  "settings.about": "About",
+
+  "settings.preferences.currency": "Currency",
+  "settings.preferences.language": "Language",
+
+  "settings.about.terms": "Terms of service",
+  "settings.about.privacy": "Privacy policy",
+  "settings.about.rate": "Rate us",
+
+  "singleWallet.name": "Name",
+  "singleWallet.copy": "Copy to clipboard",
+  "singleWallet.save": "Save changes"
 }

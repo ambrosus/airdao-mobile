@@ -9,7 +9,9 @@ import moment from 'moment/moment';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 import { useUSDPrice } from '@hooks';
-import { AssetLogo } from '@components/svg/icons/Asset';
+import { AirDAOTokenLogo } from '@components/svg/icons/AirDAOTokenLogo';
+import { styles } from '@components/templates/TransactionModal/styles';
+import { useTranslation } from 'react-i18next';
 
 interface TransactionModalProps {
   status: string;
@@ -23,10 +25,12 @@ export const TransactionModal = ({
   transaction
 }: TransactionModalProps) => {
   const usdPrice = useUSDPrice(transaction?.amount || transaction.value.ether);
-  const usdFee = useUSDPrice(transaction.fee);
+
+  const { t } = useTranslation();
 
   const timeDiff = useMemo(
-    () => moment(transaction.timestamp).fromNow(),
+    // @ts-ignore
+    () => moment(transaction.timestamp * 1000).fromNow(),
     [transaction.timestamp]
   );
 
@@ -42,9 +46,11 @@ export const TransactionModal = ({
         align="center"
         fontFamily="Inter_700Bold"
         fontSize={20}
-        color={COLORS.nero}
+        color={COLORS.neutral800}
       >
-        {status === 'SUCCESS' ? 'Sent' : 'Transaction in progress'}
+        {status === 'SUCCESS'
+          ? t('transaction.modal.sent')
+          : t('transaction.modal.sending')}
       </Text>
       <Spacer value={verticalScale(16)} />
       {status !== 'SUCCESS' && (
@@ -53,9 +59,9 @@ export const TransactionModal = ({
             align="center"
             fontFamily="Inter_400Regular"
             fontSize={14}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
-            You will receive a notification when the transaction is complete
+            {t('transaction.modal.title')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <Spinner />
@@ -69,9 +75,9 @@ export const TransactionModal = ({
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color="#A1A6B2"
+                color={COLORS.neutral300}
               >
-                Date
+                {t('transaction.modal.date')}
               </Text>
               <Text
                 fontFamily="Inter_500Medium"
@@ -85,8 +91,14 @@ export const TransactionModal = ({
           </>
         )}
         <Row justifyContent="space-between">
-          <Text fontFamily="Inter_600SemiBold" fontSize={16} color="#A1A6B2">
-            {status !== 'SUCCESS' ? 'From' : 'Status'}
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral300}
+          >
+            {status !== 'SUCCESS'
+              ? t('transaction.modal.from')
+              : t('transaction.modal.status')}
           </Text>
           {status !== 'SUCCESS' ? (
             <Text
@@ -97,26 +109,30 @@ export const TransactionModal = ({
               {StringUtils.formatAddress(transaction.from, 5, 6)}
             </Text>
           ) : (
-            <Button
-              type="circular"
-              disabled
-              style={{ backgroundColor: '#d9f9e6' }}
-            >
+            <Button type="circular" disabled style={styles.completed}>
+              <View style={styles.completedCircle} />
+              <Spacer horizontal value={scale(4)} />
               <Text
-                style={{ marginHorizontal: 8 }}
-                color="#2f9461"
+                style={{ marginRight: 8 }}
+                color={COLORS.completedStatus}
                 fontFamily="Inter_500Medium"
                 fontSize={14}
               >
-                Completed
+                {t('transaction.modal.completed')}
               </Text>
             </Button>
           )}
         </Row>
         <Spacer value={verticalScale(16)} />
         <Row justifyContent="space-between">
-          <Text fontFamily="Inter_600SemiBold" fontSize={16} color="#A1A6B2">
-            {status !== 'SUCCESS' ? 'Sending to' : 'Recipient'}
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral300}
+          >
+            {status !== 'SUCCESS'
+              ? t('transaction.modal.sending.to')
+              : t('transaction.modal.recipient')}
           </Text>
           <Text
             fontFamily="Inter_500Medium"
@@ -128,8 +144,12 @@ export const TransactionModal = ({
         </Row>
         <Spacer value={verticalScale(16)} />
         <Row justifyContent="space-between">
-          <Text fontFamily="Inter_600SemiBold" fontSize={16} color="#A1A6B2">
-            Amount
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral300}
+          >
+            {t('transaction.modal.amount')}
           </Text>
           <Row alignItems="center">
             <Text
@@ -137,33 +157,44 @@ export const TransactionModal = ({
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {NumberUtils.formatNumber(
-                transaction.amount || transaction.value.ether,
-                2
-              )}{' '}
-              AMB{' '}
+              {transaction.amount || transaction.value.ether >= 100000
+                ? NumberUtils.abbreviateNumber(
+                    transaction.amount || transaction.value.ether
+                  )
+                : NumberUtils.formatNumber(
+                    transaction.amount || transaction.value.ether,
+                    2
+                  )}
+              {} AMB{' '}
             </Text>
-            <Text fontFamily="Inter_500Medium" fontSize={14} color="#676B73">
+            <Text
+              fontFamily="Inter_500Medium"
+              fontSize={14}
+              color={COLORS.neutral400}
+            >
               ${NumberUtils.formatNumber(usdPrice, usdPrice > 1 ? 2 : 4)}
             </Text>
           </Row>
         </Row>
         <Spacer value={verticalScale(8)} />
         <Row justifyContent="space-between" alignItems="center">
-          <Text fontFamily="Inter_600SemiBold" fontSize={16} color="#A1A6B2">
-            Estimated fee
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral300}
+          >
+            {t('transaction.modal.estimated.fee')}
           </Text>
           <Row alignItems="center">
-            <AssetLogo scale={0.4} />
+            <View style={{ marginRight: scale(-8) }}>
+              <AirDAOTokenLogo scale={0.4} />
+            </View>
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={14}
               color={COLORS.neutral800}
             >
-              {transaction.fee} AMB{' '}
-            </Text>
-            <Text fontFamily="Inter_500Medium" fontSize={14} color="#676B73">
-              ${NumberUtils.formatNumber(usdFee, 2 || 0)}
+              {NumberUtils.formatNumber(transaction.gasCost?.ether, 5)} AMB
             </Text>
           </Row>
         </Row>
@@ -172,25 +203,31 @@ export const TransactionModal = ({
       <View>
         {status === 'SUCCESS' ? (
           <>
-            <Button type="circular" style={{ backgroundColor: '#0E0E0E0D' }}>
+            <Button
+              type="circular"
+              style={{ backgroundColor: COLORS.alphaBlack5 }}
+            >
               <Text
                 style={{ marginVertical: verticalScale(12) }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
-                View on explorer
+                {t('transaction.modal.buttons.explorer')}
               </Text>
             </Button>
             <Spacer value={verticalScale(16)} />
-            <Button type="circular" style={{ backgroundColor: '#0E0E0E0D' }}>
+            <Button
+              type="circular"
+              style={{ backgroundColor: COLORS.alphaBlack5 }}
+            >
               <Text
                 style={{ marginVertical: verticalScale(12) }}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
-                Share
+                {t('transaction.modal.buttons.share')}
               </Text>
             </Button>
           </>
@@ -199,9 +236,9 @@ export const TransactionModal = ({
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.neutral0}
             >
-              Ok, got it
+              {t('transaction.modal.confirm')}
             </Text>
           </PrimaryButton>
         )}

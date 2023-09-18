@@ -39,7 +39,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           numberOfLines={1}
         >
           {t('remove.address.from.group.select')} {collection?.name}?
@@ -58,7 +58,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
           >
             {t('remove.btn')}
           </Text>
@@ -71,7 +71,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
             fontSize={16}
           >
             {t('cancel.btn')}

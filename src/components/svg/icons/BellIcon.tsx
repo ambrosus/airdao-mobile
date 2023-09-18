@@ -1,9 +1,10 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function BellIcon(props: IconProps) {
-  const { scale = 1, color = '#E6E6E6' } = props;
+  const { scale = 1, color = COLORS.neutral100 } = props;
   const width = 41;
   const height = 40;
   return (

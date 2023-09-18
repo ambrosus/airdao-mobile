@@ -205,12 +205,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           testID="search-input"
           ref={inputRef}
           maxLength={68}
-          iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
+          iconLeft={<SearchIcon color={COLORS.alphaBlack50} />}
           iconRight={
             <Row alignItems="center">
               {address.length > 0 ? (
                 <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                  <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
+                  <CloseIcon color={COLORS.alphaBlack50} scale={0.75} />
                 </Button>
               ) : (
                 <Button onPress={showScanner}>

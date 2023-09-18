@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { HomeParamsList, WalletsNavigationProp } from '@appTypes';
+import { HomeParamsList, HomeNavigationProp } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
@@ -11,36 +11,27 @@ import { scale, verticalScale } from '@utils/scaling';
 import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
-import { API } from '@api/api';
-import { Transaction } from '@models';
-import { useUSDPrice } from '@hooks';
+import { useTokensAndTransactions, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 
 export const AssetScreen = () => {
   const {
-    params: { tokenInfo }
+    params: { tokenInfo, walletAccount }
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
-  const navigation = useNavigation<WalletsNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await API.explorerService.getTokenTransactionsV2(
-        '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
-        tokenInfo.address
-      );
-      setTransactions(response.data);
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-    }
-  };
+  const { data: tokensAndTransactions } =
+    useTokensAndTransactions(walletAccount);
 
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
+  const {
+    data: transactions,
+    loading,
+    error
+  } = useTransactionsOfToken(walletAccount, tokenInfo.address);
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
@@ -57,19 +48,21 @@ export const AssetScreen = () => {
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
-                {tokenInfo.name}
+                {tokenInfo.name || 'NULL'}
               </Text>
             </Row>
           </>
         }
         contentRight={
-          <>
-            <Button onPress={navigateToAMBScreen}>
-              <StatisticsLogo />
-            </Button>
-          </>
+          tokenInfo.name === 'AMB' && (
+            <>
+              <Button onPress={navigateToAMBScreen}>
+                <StatisticsLogo />
+              </Button>
+            </>
+          )
         }
         style={{ shadowColor: 'transparent' }}
       />
@@ -79,7 +72,11 @@ export const AssetScreen = () => {
           {t('your.balance')}
         </Text>
         <Row alignItems="center">
-          <Text fontFamily="Mersad_600SemiBold" fontSize={24} color="#191919">
+          <Text
+            fontFamily="Mersad_600SemiBold"
+            fontSize={24}
+            color={COLORS.neutral800}
+          >
             {tokenInfo.balance.ether < 1000
               ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
               : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
@@ -91,7 +88,7 @@ export const AssetScreen = () => {
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={12}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 ${NumberUtils.formatNumber(usdPrice, 2)}
               </Text>
@@ -99,23 +96,33 @@ export const AssetScreen = () => {
             color={COLORS.gray300}
           />
         </Row>
-        <Row>
-          <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
-            %0.00
-          </Text>
-          {/* TODO */}
-          <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.nero}>
-            ($10.98)
-          </Text>
-        </Row>
+        {/*<Row>*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
+        {/*    %0.00*/}
+        {/*  </Text>*/}
+        {/*  /!* TODO *!/*/}
+        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
+        {/*    ($10.98)*/}
+        {/*  </Text>*/}
+        {/*</Row>*/}
       </View>
       <Spacer value={verticalScale(16)} />
       <View style={{ paddingHorizontal: scale(17) }}>
-        <Text fontFamily="Inter_700Bold" fontSize={20} color={COLORS.nero}>
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          color={COLORS.neutral800}
+        >
           {t('transactions')}
         </Text>
       </View>
-      <WalletTransactions transactions={transactions} />
+      <View style={{ height: '80%' }}>
+        <WalletTransactions
+          loading={loading}
+          transactions={transactions || tokensAndTransactions?.transactions}
+          error={error}
+        />
+      </View>
     </View>
   );
 };

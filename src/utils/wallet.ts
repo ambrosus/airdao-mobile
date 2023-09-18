@@ -1,15 +1,17 @@
 import { Wallet } from '@models/Wallet';
 import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
-import { Crypto } from './crypto';
-import { MnemonicUtils } from './mnemonics';
-import { CashBackUtils } from './cashback';
-import { Database, WalletDBModel } from '@database';
+import { Database, WalletDBModel, WalletDB } from '@database';
 import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOUtils from '@crypto/common/AirDAOUtils';
 import { Q } from '@nozbe/watermelondb';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
+import { MnemonicUtils } from './mnemonics';
+import { CashBackUtils } from './cashback';
+import { Cache, CacheKey } from './cache';
+import { AccountUtils } from './account';
+import { Crypto } from './crypto';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -45,32 +47,34 @@ const _getWalletName = async () => {
   return 'AirDAO Wallet #' + idx;
 };
 
-const processWallet = async (
-  data: Pick<WalletMetadata, 'mnemonic' | 'name' | 'number'>
-) => {
-  const hash = await _saveWallet(data); // done
-  let tmpWalletName = data.name;
-
-  if (!tmpWalletName || tmpWalletName === '') {
-    tmpWalletName = await _getWalletName();
-  }
+const processWallet = async (mnemonic: string) => {
   const number = await _getWalletNumber();
+  const name = await _getWalletName();
+  const hash = await _saveWallet({ mnemonic, name, number }); // done
   const fullWallet: Wallet = new Wallet({
     hash,
-    ...data,
-    name: tmpWalletName,
+    mnemonic,
+    name,
     number
   });
-  const { tmpPublicAndPrivateResult, cashbackToken } =
-    await CashBackUtils.getByHash(hash);
+  // get wallet info from network
+  const { cashbackToken } = await CashBackUtils.getByHash(hash);
   fullWallet.cashback = cashbackToken;
-  await Wallet.saveWallet(fullWallet);
-  try {
-  } catch (error) {
-    throw error;
-  }
-  const { address } = tmpPublicAndPrivateResult;
-  return { address };
+  const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
+    mnemonic: mnemonic
+  });
+  // create wallet in db
+  await WalletDB.createWallet(fullWallet);
+  // create account in db
+  const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
+  await AccountUtils.createAccountInDB(
+    _account.address,
+    fullWallet.hash,
+    _account.path,
+    _account.index,
+    currencyCode
+  );
+  return { hash };
 };
 
 const sendTx = async (
@@ -123,4 +127,23 @@ const sendTx = async (
   }
 };
 
-export const WalletUtils = { processWallet, sendTx };
+const changeSelectedWallet = async (hash: string) => {
+  await Cache.setItem(CacheKey.SelectedWallet, hash);
+};
+
+const deleteWalletWithAccounts = async (hash: string) => {
+  // await AccountDB.deleteAccountsOfWallet(hash);
+  await WalletDB.deleteWallet(hash);
+  // delete active wallet
+  const activeWalletHash = await Cache.getItem(CacheKey.SelectedWallet);
+  if (activeWalletHash === hash) {
+    await Cache.deleteItem(CacheKey.SelectedWallet);
+  }
+};
+
+export const WalletUtils = {
+  processWallet,
+  sendTx,
+  changeSelectedWallet,
+  deleteWalletWithAccounts
+};
