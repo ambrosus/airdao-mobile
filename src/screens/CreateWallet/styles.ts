@@ -63,9 +63,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.lightSilver,
-    borderRadius: 100,
-    width: scale(193),
+    backgroundColor: COLORS.neutral100,
+    borderRadius: verticalScale(96),
+    width: verticalScale(192),
     height: verticalScale(192)
   }
 });
