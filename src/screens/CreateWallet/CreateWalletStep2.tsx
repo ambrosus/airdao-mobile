@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
@@ -17,105 +17,117 @@ export const CreateWalletStep2 = () => {
   const { walletMnemonic } = useAddWalletContext();
   const { t } = useTranslation();
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
-    string[]
+    { word: string; index: number }[]
   >([]);
-  const [loading] = useState<boolean>(false);
-  const [isMnemonicCorrect, setIsMnemonicCorrect] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const walletMnemonicArrayDefault = walletMnemonic.split(' ');
+  const walletMnemonicSelectedWordsOnly = walletMnemonicSelected.map(
+    ({ word }) => word
+  );
+
+  const walletMnemonicArrayDefault = walletMnemonic
+    .split(' ')
+    .map((word, index) => ({ word, index }));
+
   const walletMnemonicRandomSorted = useMemo(
-    () => walletMnemonicArrayDefault.sort(() => 0.5 - Math.random()),
+    () => walletMnemonicArrayDefault.sort(() => 0.5 - Math.random()), // sort not-in-place
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [walletMnemonicArrayDefault.length]
   );
 
-  const validateMnemonicOrder = () => {
-    setIsMnemonicCorrect(
-      JSON.stringify(walletMnemonicSelected) ===
-        JSON.stringify(walletMnemonicArrayDefault)
-    );
-  };
+  const isMnemonicCorrect = useMemo(
+    () => walletMnemonicSelectedWordsOnly.join(' ') === walletMnemonic,
+    [walletMnemonic, walletMnemonicSelectedWordsOnly]
+  );
 
   const numColumns = Math.ceil(walletMnemonicArrayDefault.length / 4);
 
   let globalWordIndex = 0;
 
   const renderWord = useMemo(
-    () => (word: string, flow: 'inner' | 'mnemonic') => {
-      globalWordIndex++;
-      const selectedIdx = walletMnemonicSelected.indexOf(word);
-      const isCorrect =
-        walletMnemonicArrayDefault.indexOf(word) === selectedIdx;
-
-      const onPress = () => {
-        if (selectedIdx > -1) {
-          walletMnemonicSelected.splice(selectedIdx, 1);
-        } else {
-          walletMnemonicSelected.push(word);
-        }
-        setWalletMnemonicSelected([...walletMnemonicSelected]);
-        validateMnemonicOrder();
-      };
-
-      const buttonTextColorInner =
-        selectedIdx !== -1 ? '#A1A6B2' : COLORS.neutral800;
-
-      const buttonTextColorMnemonic = isCorrect
-        ? COLORS.success400
-        : walletMnemonicSelected.includes(word)
-        ? COLORS.error400
-        : COLORS.neutral800;
-
-      let countDisplay = null;
-
-      if (flow === 'mnemonic' && selectedIdx !== -1) {
-        countDisplay = (
-          <Text
-            align="center"
-            fontFamily="Inter_600SemiBold"
-            fontSize={12}
-            color={COLORS.neutral800}
-            key={`count-display-${globalWordIndex}`}
-          >
-            {globalWordIndex}.
-          </Text>
+    () =>
+      (word: { word: string; index: number }, flow: 'inner' | 'mnemonic') => {
+        globalWordIndex++;
+        // compare words by content and their index in the original array, required for the cases when duplicate words occur in mnemonics
+        const selectedIdx = walletMnemonicSelected.findIndex(
+          ({ word: _word, index }) => _word === word.word && index == word.index
         );
-      }
+        const isCorrect =
+          selectedIdx == -1
+            ? false
+            : walletMnemonicArrayDefault[selectedIdx].word == word.word;
 
-      return (
-        <React.Fragment key={`word-${globalWordIndex}`}>
-          <Button
-            key={word}
-            style={{
-              backgroundColor:
-                selectedIdx !== -1 && flow === 'mnemonic'
-                  ? 'transparent'
-                  : COLORS.neutral100,
-              borderRadius: 48,
-              width: scale(98)
-            }}
-            onPress={onPress}
-            disabled={selectedIdx !== -1 && flow === 'inner'}
-          >
+        const onPress = () => {
+          if (selectedIdx > -1) {
+            walletMnemonicSelected.splice(selectedIdx, 1);
+          } else {
+            walletMnemonicSelected.push(word);
+          }
+          setWalletMnemonicSelected([...walletMnemonicSelected]);
+        };
+
+        const buttonTextColorInner =
+          selectedIdx !== -1 ? '#A1A6B2' : COLORS.neutral800;
+
+        const buttonTextColorMnemonic = isCorrect
+          ? COLORS.success400
+          : walletMnemonicSelected.includes(word)
+          ? COLORS.error400
+          : COLORS.neutral800;
+
+        let countDisplay = null;
+
+        if (flow === 'mnemonic' && selectedIdx !== -1) {
+          countDisplay = (
             <Text
               align="center"
               fontFamily="Inter_600SemiBold"
               fontSize={12}
-              color={
-                flow === 'mnemonic'
-                  ? buttonTextColorMnemonic
-                  : buttonTextColorInner
-              }
-              style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
+              color={COLORS.neutral800}
+              key={`count-display-${globalWordIndex}`}
             >
-              {countDisplay} {''}
-              {word}
+              {globalWordIndex}.
             </Text>
-          </Button>
-          <Spacer value={verticalScale(20)} />
-        </React.Fragment>
-      );
-    },
+          );
+        }
+
+        return (
+          <React.Fragment key={`word-${globalWordIndex}`}>
+            <Button
+              key={word.word}
+              style={{
+                backgroundColor:
+                  selectedIdx !== -1 && flow === 'mnemonic'
+                    ? 'transparent'
+                    : COLORS.neutral100,
+                borderRadius: 48,
+                width: scale(98)
+              }}
+              onPress={onPress}
+              disabled={selectedIdx !== -1 && flow === 'inner'}
+            >
+              <Text
+                align="center"
+                fontFamily="Inter_600SemiBold"
+                fontSize={12}
+                color={
+                  flow === 'mnemonic'
+                    ? buttonTextColorMnemonic
+                    : buttonTextColorInner
+                }
+                style={{
+                  marginHorizontal: scale(15),
+                  marginVertical: scale(8)
+                }}
+              >
+                {countDisplay} {''}
+                {word.word}
+              </Text>
+            </Button>
+            <Spacer value={verticalScale(20)} />
+          </React.Fragment>
+        );
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [walletMnemonicSelected, walletMnemonicArrayDefault]
   );
@@ -124,29 +136,26 @@ export const CreateWalletStep2 = () => {
     if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
       return;
     }
-    const isMnemonicValid =
-      JSON.stringify(walletMnemonicSelected) ===
-      JSON.stringify(walletMnemonicArrayDefault);
-
-    const isOrderCorrect = walletMnemonicSelected.every(
-      (word, index) => word === walletMnemonicArrayDefault[index]
-    );
-
-    if (!isMnemonicValid && !isOrderCorrect) {
+    if (!isMnemonicCorrect) {
       return;
     }
 
     try {
+      setLoading(true);
       await WalletUtils.processWallet(walletMnemonic);
       navigation.navigate('SuccessBackupComplete');
     } catch (error) {
-      // TODO ignore
+      // TODO translate
+      Alert.alert('Error occured', 'Could not create wallet!');
+    } finally {
+      setLoading(false);
     }
   }, [
+    isMnemonicCorrect,
     navigation,
     walletMnemonic,
-    walletMnemonicArrayDefault,
-    walletMnemonicSelected
+    walletMnemonicArrayDefault.length,
+    walletMnemonicSelected.length
   ]);
 
   return (
@@ -201,7 +210,7 @@ export const CreateWalletStep2 = () => {
         <Spacer value={verticalScale(12)} />
       </View>
       <Button
-        disabled={!isMnemonicCorrect}
+        disabled={!isMnemonicCorrect || loading}
         onPress={handleVerifyPress}
         type="circular"
         style={{
@@ -210,17 +219,21 @@ export const CreateWalletStep2 = () => {
             : COLORS.alphaBlack5,
           marginBottom: scale(44),
           width: '90%',
-          alignSelf: 'center'
+          alignSelf: 'center',
+          paddingVertical: verticalScale(12)
         }}
       >
-        <Text
-          fontSize={16}
-          fontFamily="Inter_600SemiBold"
-          color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
-          style={{ marginVertical: scale(12) }}
-        >
-          {t('verify.btn')}
-        </Text>
+        {loading ? (
+          <Spinner color={COLORS.neutral600} />
+        ) : (
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
+          >
+            {t('verify.btn')}
+          </Text>
+        )}
       </Button>
     </SafeAreaView>
   );
