@@ -12,6 +12,7 @@ import { CashBackUtils } from './cashback';
 import { Cache, CacheKey } from './cache';
 import { AccountUtils } from './account';
 import { Crypto } from './crypto';
+import { API } from '@api/api';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
@@ -74,6 +75,8 @@ const processWallet = async (mnemonic: string) => {
     _account.index,
     currencyCode
   );
+  // subscribe to notifications
+  API.watcherService.watchAddresses([_account.address]);
   return { hash };
 };
 

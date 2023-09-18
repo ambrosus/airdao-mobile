@@ -12,7 +12,12 @@ import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
 import { Button, Input, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import { QRCodeWithLogo, Toast, ToastPosition } from '@components/modular';
+import {
+  QRCodeWithLogo,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
 import {
   DatabaseTable,
   SettingsTabNavigationProp,
@@ -23,6 +28,7 @@ import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
 import { WalletUtils } from '@utils/wallet';
 import { styles } from './styles';
+import { API } from '@api/api';
 
 export const SingleWalletScreen = () => {
   const { t } = useTranslation();
@@ -45,6 +51,9 @@ export const SingleWalletScreen = () => {
   };
   const deleteWallet = async () => {
     await WalletUtils.deleteWalletWithAccounts(wallet.hash);
+    if (account?.address) {
+      API.watcherService.removeWatcherForAddresses([account.address]);
+    }
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -60,14 +69,19 @@ export const SingleWalletScreen = () => {
         text: 'Delete',
         style: 'destructive',
         onPress: deleteWallet
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel'
       }
     ]);
   };
 
   const copyToClipboard = async () => {
     Toast.show({
-      message: t('copied.to.clipboard'),
-      type: ToastPosition.Bottom
+      text: t('copied.to.clipboard'),
+      type: ToastType.Success,
+      position: ToastPosition.Bottom
     });
     await Clipboard.setStringAsync(account?.address || '');
   };
@@ -83,7 +97,7 @@ export const SingleWalletScreen = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.error400}
             >
-              Remove
+              {t('singleWallet.remove')}
             </Text>
           </Button>
         }

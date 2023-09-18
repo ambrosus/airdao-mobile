@@ -230,5 +230,6 @@
 
   "singleWallet.name": "Cüzdan ismi",
   "singleWallet.copy": "Kopyala",
-  "singleWallet.save": "Kaydet"
+  "singleWallet.save": "Kaydet",
+  "singleWallet.remove": "Sil"
 }
