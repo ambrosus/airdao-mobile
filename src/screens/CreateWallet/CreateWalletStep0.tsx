@@ -93,7 +93,7 @@ export const CreateWalletStep0 = () => {
             width: '100%'
           }}
         >
-          <Row>
+          <Row alignItems="center">
             <CheckBox
               fillColor={COLORS.sapphireBlue}
               color={COLORS.neutral0}
