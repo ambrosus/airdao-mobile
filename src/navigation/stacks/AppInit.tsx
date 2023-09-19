@@ -6,12 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { useSelectedWalletHash } from '@hooks';
 import { RootNavigationProp } from '@appTypes';
+import { useAllWallets } from '@hooks/database';
 
 const AppInitialization = () => {
   const { t } = useTranslation();
-  const { data: hash, loading } = useSelectedWalletHash();
+  const { data: allWallets, loading } = useAllWallets();
   const navigation = useNavigation<RootNavigationProp>();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const AppInitialization = () => {
 
   useEffect(() => {
     if (!loading) {
-      if (hash) {
+      if (allWallets.length > 0) {
         navigation.replace('Tabs', {
           screen: 'Wallets',
           params: { screen: 'HomeScreen' }
@@ -29,7 +29,7 @@ const AppInitialization = () => {
         navigation.replace('WelcomeScreen');
       }
     }
-  }, [hash, navigation, loading]);
+  }, [allWallets, navigation, loading]);
 
   return (
     <View style={styles.container}>
