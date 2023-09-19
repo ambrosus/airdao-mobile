@@ -1,14 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { BottomSheetRef, CheckBox, Header } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { useNavigation } from '@react-navigation/native';
-import { RecoveryPhraseModal } from '@screens/CreateWallet/components/RecoveryPhraseModal';
+import { RecoveryPhraseModal } from './/components/RecoveryPhraseModal';
 import { styles } from '@screens/CreateWallet/styles';
-import { useTranslation } from 'react-i18next';
 import { MnemoicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 
