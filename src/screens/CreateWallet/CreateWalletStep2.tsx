@@ -102,9 +102,8 @@ export const CreateWalletStep2 = () => {
                     : COLORS.neutral100,
                 borderRadius: 48,
                 width: '100%',
-                paddingHorizontal: scale(16),
+                minWidth: scale(98),
                 paddingVertical: verticalScale(flow == 'inner' ? 8 : 0),
-                marginBottom: verticalScale(20),
                 height: flow === 'mnemonic' ? verticalScale(20) : 'auto'
               }}
               onPress={onPress}
@@ -119,10 +118,6 @@ export const CreateWalletStep2 = () => {
                     ? buttonTextColorMnemonic
                     : buttonTextColorInner
                 }
-                style={{
-                  marginHorizontal: scale(15),
-                  marginVertical: scale(8)
-                }}
               >
                 {countDisplay} {''}
                 {word.word}
