@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as Crypto from 'expo-crypto';
 import { DEFAULT_WORDS } from '@constants/words';
+// @ts-ignore
 import createHmac from 'create-hmac';
+const bip39 = require('bip39');
 
 interface CreateHmacPDFK2Sizes {
   [key: string]: number;
@@ -102,9 +105,14 @@ class KeysUtills {
     }
 
     const saltBuffer = Buffer.from(salt(password || ''), 'utf8');
-
-    const tmp2 = KeysUtills._pbkdf2(mnemonic, saltBuffer, 2048, 64, 'sha512');
-    return Buffer.from(tmp2);
+    const mnemonicBuffer = Buffer.from(mnemonic || '', 'utf8');
+    try {
+      const tmp2 = await bip39.mnemonicToSeedSync(mnemonic);
+      return Buffer.from(tmp2);
+    } catch (e) {
+      // @ts-ignore
+      return this._pbkdf2(mnemonicBuffer, saltBuffer, 2048, 64, 'sha512');
+    }
   }
 }
 

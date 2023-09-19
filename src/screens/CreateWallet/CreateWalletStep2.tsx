@@ -92,7 +92,11 @@ export const CreateWalletStep2 = () => {
                   ? 'transparent'
                   : COLORS.neutral100,
               borderRadius: 48,
-              width: scale(98)
+              width: '100%',
+              paddingHorizontal: scale(16),
+              paddingVertical: verticalScale(flow == 'inner' ? 8 : 0),
+              marginBottom: verticalScale(20),
+              height: flow === 'mnemonic' ? verticalScale(20) : 'auto'
             }}
             onPress={onPress}
             disabled={selectedIdx !== -1 && flow === 'inner'}
@@ -100,19 +104,17 @@ export const CreateWalletStep2 = () => {
             <Text
               align="center"
               fontFamily="Inter_600SemiBold"
-              fontSize={12}
+              fontSize={14}
               color={
                 flow === 'mnemonic'
                   ? buttonTextColorMnemonic
                   : buttonTextColorInner
               }
-              style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
             >
               {countDisplay} {''}
               {word}
             </Text>
           </Button>
-          <Spacer value={verticalScale(20)} />
         </React.Fragment>
       );
     },
@@ -151,7 +153,7 @@ export const CreateWalletStep2 = () => {
 
   return (
     <SafeAreaView edges={['top']} style={styles.createWalletStep2Container}>
-      <Header />
+      <Header style={{ shadowColor: COLORS.transparent }} />
       <Text
         align="center"
         fontSize={24}
@@ -186,7 +188,6 @@ export const CreateWalletStep2 = () => {
       <Spacer value={verticalScale(24)} />
       {loading && <Spinner size="large" />}
       <View style={styles.innerContainer}>
-        <Spacer value={verticalScale(36)} />
         {Array.isArray(walletMnemonicRandomSorted) && (
           <Row style={styles.words}>
             {Array.from({ length: numColumns }, (_, columnIndex) => (
@@ -198,7 +199,6 @@ export const CreateWalletStep2 = () => {
             ))}
           </Row>
         )}
-        <Spacer value={verticalScale(12)} />
       </View>
       <Button
         disabled={!isMnemonicCorrect}
