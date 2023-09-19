@@ -32,8 +32,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    rowGap: scale(16),
-    columnGap: verticalScale(16),
+    rowGap: scale(20),
+    columnGap: verticalScale(20),
     flexDirection: 'row'
   },
   mnemoicContainer: {
@@ -44,9 +44,9 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: COLORS.alphaBlack5,
     width: '90%',
-    height: verticalScale(232),
-    paddingHorizontal: scale(20),
-    paddingVertical: verticalScale(20)
+    height: verticalScale(172),
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(16)
   },
   mnemoicContainerColumn: {
     width: '33%',
