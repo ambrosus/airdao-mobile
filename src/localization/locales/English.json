@@ -220,6 +220,11 @@
   "no.wallet.stay.informed": "Stay informed",
   "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
 
+  "restore.wallet.loading": "Importing your wallet from {'\n'} backup",
+  "restore.wallet.header": "Import existing wallet",
+  "restore.wallet.title": "Enter recovery phrase",
+  "restore.wallet.description": "Enter the recovery phrase associated with your existing wallet.",
+
   "settings.manage.wallet": "Manage Wallets",
   "settings.security": "Security",
   "settings.preferences": "Preferences",
