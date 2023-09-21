@@ -86,8 +86,7 @@ export const ExplorerWalletItem = (
           fontFamily="Inter_500Medium"
           color={COLORS.alphaBlack50}
         >
-          {/* TODO add localisation here, key is "transactions" */}
-          {StringUtils.pluralize(transactionCount, 'Transaction')}
+          {t('common.transaction', { count: transactionCount })}
         </Text>
       </Row>
     </View>

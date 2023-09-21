@@ -11,10 +11,15 @@ import {
 import { Currency, Language } from '@appTypes';
 import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
+import useLocalization from '@contexts/Localizations';
+import { LocalizationUtils } from '@utils/localization';
 
 export const AppPreferencesScreen = () => {
   const { t } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>('English');
+  const { currentLanguage } = useLocalization();
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(
+    LocalizationUtils.languageFromCode(currentLanguage)
+  );
   const [selectedCurrency, setSelectedCurrency] =
     useState<Currency>('US Dollars (USD)');
   const selectBaseCurrencyRef = useRef<BottomSheetRef>(null);
@@ -42,7 +47,7 @@ export const AppPreferencesScreen = () => {
         title={t('settings.preferences')}
         style={{ backgroundColor: 'transparent' }}
       />
-      <Spacer value={verticalScale(14)} />
+      <Spacer value={verticalScale(8)} />
       <Button onPress={showCurrencySelection}>
         <AppPreferencesMenuItem
           title={t('settings.preferences.currency')}
@@ -52,7 +57,7 @@ export const AppPreferencesScreen = () => {
       <Button onPress={showLanguageSelection}>
         <AppPreferencesMenuItem
           title={t('settings.preferences.language')}
-          value={selectedLanguage}
+          value={t(selectedLanguage)}
         />
       </Button>
       <BottomSheetSelectBaseCurrency

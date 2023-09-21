@@ -8,37 +8,38 @@ import React, {
 import * as SecureStore from 'expo-secure-store';
 import i18n from '../../localization/i18n';
 import dayjs from 'dayjs';
-import { Language } from '@appTypes';
+import { Language, LanguageCode } from '@appTypes';
+import { LocalizationUtils } from '@utils/localization';
 
 interface ILanguageContext {
   changeCurrentLanguage: (language: Language) => Promise<void>;
-  currentLanguage: Language;
+  currentLanguage: LanguageCode;
 }
 
 const LocalizationContext = createContext<ILanguageContext>({
   changeCurrentLanguage: async () => undefined,
-  currentLanguage: 'English'
+  currentLanguage: 'en'
 });
 
 export const LocalizationProvider: FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [currentLanguage, setLanguage] = useState<Language>('English');
+  const [currentLanguage, setLanguage] = useState<LanguageCode>('en');
 
   useEffect(() => {
     SecureStore.getItemAsync('Localization').then((res) => {
       if (typeof res === 'string') {
-        setLanguage(res as Language);
+        setLanguage(LocalizationUtils.languageToCode(res as Language));
       } else {
         // TODO set default language as device default language
-        SecureStore.setItemAsync('Localization', 'English');
-        setLanguage('English');
+        SecureStore.setItemAsync('Localization', 'en');
+        setLanguage('en');
       }
     });
   }, [currentLanguage]);
 
   const changeCurrentLanguage = async (newLanguage: Language) => {
-    setLanguage(newLanguage);
+    setLanguage(LocalizationUtils.languageToCode(newLanguage));
     await SecureStore.setItemAsync('Localization', newLanguage);
   };
 

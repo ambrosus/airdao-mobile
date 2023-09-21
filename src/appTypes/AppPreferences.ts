@@ -19,3 +19,13 @@ export type Language =
   | 'Russian'
   | 'Portuguese'
   | 'Hindi';
+
+export type LanguageCode =
+  | 'en'
+  | 'ar'
+  | 'es'
+  | 'tr'
+  | 'zh'
+  | 'ru'
+  | 'pt'
+  | 'hi';

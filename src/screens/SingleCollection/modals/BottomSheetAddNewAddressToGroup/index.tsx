@@ -15,6 +15,7 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
 import {
   BottomSheet,
@@ -38,7 +39,6 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -373,17 +373,12 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             fontFamily="Inter_600SemiBold"
             fontWeight="600"
           >
-            {selectingAddedItems
-              ? `${t('remove.btn')} ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  t('address'),
-                  t('addresses')
-                )}`
-              : `${t('add')} ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  t('address'),
-                  t('addresses')
-                )}`}
+            {`${t(selectingAddedItems ? 'remove.btn' : 'add')} ${t(
+              'common.address',
+              {
+                count: selectedAddresses.length
+              }
+            )}`}
           </Text>
         </PrimaryButton>
       )}

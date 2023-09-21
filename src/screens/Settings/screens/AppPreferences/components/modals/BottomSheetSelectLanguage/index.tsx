@@ -10,6 +10,7 @@ import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import useLocalization from '@contexts/Localizations';
 import { Language } from '@appTypes';
+import { LocalizationUtils } from '@utils/localization';
 import { styles } from '../style';
 
 type Props = {
@@ -99,7 +100,9 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
           renderItem={({ item, index }) => {
             return (
               <SettingsModalItem
-                modalActiveItem={currentLanguage}
+                modalActiveItem={LocalizationUtils.languageFromCode(
+                  currentLanguage
+                )}
                 item={item.language}
                 handleItemPress={onLanguagePress}
                 key={index}

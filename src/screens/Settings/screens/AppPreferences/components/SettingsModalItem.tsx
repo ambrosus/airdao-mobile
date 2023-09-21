@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 import { scale } from '@utils/scaling';
 import { Currency, Language } from '@appTypes';
 
@@ -17,6 +18,7 @@ export const SettingsModalItem: FC<Props> = ({
   modalActiveItem,
   handleItemPress
 }) => {
+  const { t } = useTranslation();
   const isActive = modalActiveItem === item;
   const textColor = isActive ? COLORS.neutral800 : COLORS.neutral400;
 
@@ -37,7 +39,7 @@ export const SettingsModalItem: FC<Props> = ({
           color={textColor}
           style={styles.itemTitle}
         >
-          {item}
+          {t(item)}
         </Text>
       </Row>
     </TouchableOpacity>
