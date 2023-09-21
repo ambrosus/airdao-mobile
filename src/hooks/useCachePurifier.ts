@@ -10,7 +10,7 @@ import { ExplorerAccount } from '@models/Explorer';
 export const useCachePurifier = () => {
   const allAddresses = useAllAddresses();
   const { listsOfAddressGroup } = useLists((v) => v);
-  const appstate = useAppState();
+  const { appState } = useAppState();
 
   const purifyAccounts = useCallback(async () => {
     // set lists
@@ -42,10 +42,10 @@ export const useCachePurifier = () => {
   }, [purifyAccounts]);
 
   useEffect(() => {
-    if (appstate.match(/inactive|background/)) {
+    if (appState.match(/inactive|background/)) {
       purifyCache();
     }
-  }, [appstate, purifyCache]);
+  }, [appState, purifyCache]);
 
   return null;
 };

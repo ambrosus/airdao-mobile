@@ -1,102 +1,71 @@
 import React, {
   createContext,
   FC,
-  ForwardedRef,
   useContext,
   useEffect,
   useRef,
   useState
 } from 'react';
-import * as LocalAuthentication from 'expo-local-authentication';
 import { database } from '@database/main';
-import { PasscodeModal } from '@components/templates/PasscodeModal';
-import { AppState, Modal, View } from 'react-native';
-import { useAppState, useForwardedRef } from '@hooks';
+import {
+  FaceIDModal,
+  PasscodeModal
+} from '@components/templates/PasscodeModal';
 import { BottomSheetRef } from '@components/composite';
+import { useAppState } from '@hooks';
 
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
+  isPasscodeEnabled: boolean;
 }
 
 const PasscodeContext = createContext<IPasscodeContext | undefined>(undefined);
 
 export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   children
+}: {
+  children: React.ReactNode;
 }) => {
-  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
-  const [accessed, setAccessed] = useState<boolean>(false);
-  const appState = useRef(AppState.currentState);
-  const passcodeRef: ForwardedRef<BottomSheetRef> = useForwardedRef(null);
+  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
+  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
+  const passcodeModalRef = useRef<BottomSheetRef>(null);
+  const faceIDModalRef = useRef<BottomSheetRef>(null);
 
-  const authenticate = async () => {
-    try {
-      const { success } = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Authenticate with Face ID'
-      });
-      setAccessed(success);
-      // if (success) {
-      //   passcodeRef.current?.dismiss();
-      // }
-    } catch (error) {
-      console.error('Authentication error:', error);
-      setAccessed(false);
-    }
-  };
-
-  const focused = useAppState();
-
-  const checkFaceIDStatus = async () => {
-    const storedFaceID = await database.localStorage.get('FaceID');
-    setIsFaceIDEnabled(!!storedFaceID);
-  };
+  const { prevState } = useAppState();
 
   useEffect(() => {
-    AppState.addEventListener('change', (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        checkFaceIDStatus();
-      }
-
-      appState.current = nextAppState;
+    Promise.all([
+      database.localStorage.get('Passcode'),
+      database.localStorage.get('FaceID')
+    ]).then(([passcodeRes, faceIDRes]) => {
+      setIsPasscodeEnabled(!!passcodeRes);
+      setIsFaceIDEnabled(!!faceIDRes);
     });
   }, []);
 
   useEffect(() => {
-    if (!accessed && focused === 'active') {
+    if (prevState === 'background') {
       if (isFaceIDEnabled) {
-        (async () => {
-          await authenticate();
-        })();
+        faceIDModalRef.current?.show();
       }
-      // else {
-      //   passcodeRef.current?.show();
-      // }
+      if (isPasscodeEnabled) {
+        passcodeModalRef.current?.show();
+      }
     }
-  }, [accessed, focused, isFaceIDEnabled, passcodeRef]);
-
-  useEffect(() => {
-    if (focused === 'background') {
-      setAccessed(false);
-    }
-  }, [focused]);
-
-  // useEffect(() => {
-  //   if (accessed) {
-  //     passcodeRef.current?.dismiss();
-  //   }
-  // }, [accessed, passcodeRef]);
+  }, [isFaceIDEnabled, isPasscodeEnabled, prevState]);
 
   return (
-    <PasscodeContext.Provider value={{ isFaceIDEnabled }}>
-      {/*{isFaceIDEnabled && focused === 'background' && accessed ? (*/}
-      {/*  <PasscodeModal />*/}
-      {/*) : (*/}
-      {/*  <View style={{ flex: 1 }}>*/}
+    <PasscodeContext.Provider value={{ isPasscodeEnabled, isFaceIDEnabled }}>
       {children}
-      {/*</View>*/}
-      {/*)}*/}
+      {isPasscodeEnabled && !isFaceIDEnabled && (
+        <PasscodeModal
+          ref={passcodeModalRef}
+          isPasscodeEnabled={isPasscodeEnabled}
+        />
+      )}
+      {isFaceIDEnabled && (
+        <FaceIDModal ref={faceIDModalRef} isFaceIDEnabled={isFaceIDEnabled} />
+      )}
     </PasscodeContext.Provider>
   );
 };

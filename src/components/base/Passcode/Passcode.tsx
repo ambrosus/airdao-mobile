@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const Passcode = ({
@@ -58,10 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     borderBottomWidth: 2,
     borderColor: 'black',
-    width: 200,
-    height: 30,
+    width: scale(220),
+    height: verticalScale(60),
     opacity: 0,
-    position: 'absolute'
+    position: 'absolute',
+    zIndex: 10
   },
   circlesContainer: {
     flexDirection: 'row',

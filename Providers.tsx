@@ -40,7 +40,8 @@ const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
-  WrappedLocalizationProvider
+  WrappedLocalizationProvider,
+  WrappedPasscodeProvider
 ];
 /**
  * The order of the providers matters
