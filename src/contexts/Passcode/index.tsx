@@ -31,17 +31,18 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   const passcodeModalRef = useRef<BottomSheetRef>(null);
   const faceIDModalRef = useRef<BottomSheetRef>(null);
 
-  const { prevState } = useAppState();
+  const { prevState, appState } = useAppState();
 
   useEffect(() => {
     Promise.all([
       database.localStorage.get('Passcode'),
       database.localStorage.get('FaceID')
     ]).then(([passcodeRes, faceIDRes]) => {
+      console.log(passcodeRes, 'passcodeRes');
       setIsPasscodeEnabled(!!passcodeRes);
       setIsFaceIDEnabled(!!faceIDRes);
     });
-  }, []);
+  }, [appState]);
 
   useEffect(() => {
     if (prevState === 'background') {
