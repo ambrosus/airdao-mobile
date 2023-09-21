@@ -45,7 +45,7 @@ export const ToastBody = forwardRef((_, ref) => {
 
   const [toastVisible, setToastVisible] = useState(false);
   const [options, setOptions] = React.useState<ToastOptions>(defaultOptions);
-  const timerRef = useRef<any>(null); // TODO change any
+  const timerRef = useRef<NodeJS.Timer | null>(null);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
