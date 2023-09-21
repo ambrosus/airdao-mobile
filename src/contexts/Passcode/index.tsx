@@ -39,7 +39,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       database.localStorage.get('Passcode'),
       database.localStorage.get('FaceID')
     ]).then(([passcodeRes, faceIDRes]) => {
-      console.log(passcodeRes, 'passcodeRes');
       setIsPasscodeEnabled(!!passcodeRes);
       setIsFaceIDEnabled(!!faceIDRes);
     });

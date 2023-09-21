@@ -61,6 +61,7 @@ export const PasscodeModal = forwardRef<
     >
       {isPasscodeEnabled && (
         <KeyboardAvoidingView
+          enabled
           behavior="padding"
           style={{
             top,
