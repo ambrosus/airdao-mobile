@@ -4,7 +4,10 @@ import messaging, {
 // import { NotificationType } from '@models';
 // import { DatabaseService } from './database';
 import { AirDAOEventDispatcher } from './event-dispatcher';
-import { AirDAOEventType } from '@appTypes';
+import {
+  AirDAOEventType,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
 
 export class NotificationService {
   constructor(listener?: (newToken: string) => unknown) {
@@ -45,7 +48,7 @@ export class NotificationService {
     // TODO we can show Toast message
     AirDAOEventDispatcher.dispatch(
       AirDAOEventType.NotificationReceived,
-      message.data as any // TODO
+      message.data as AirDAONotificationReceiveEventPayload
     );
     // this.handleNotification.bind(this)(message);
   }

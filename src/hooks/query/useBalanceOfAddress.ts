@@ -24,7 +24,6 @@ export function useBalanceOfAddress(
   );
 
   useEffect(() => {
-    // TODO fix any
     const onUserMadeTransaction = (
       data: AirDAOFundsSentFromAppEventPayload
     ) => {

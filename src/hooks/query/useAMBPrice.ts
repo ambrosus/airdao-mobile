@@ -19,7 +19,6 @@ export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
     });
 
   useEffect(() => {
-    // TODO fix any
     const onNewNotificationReceive = (
       data: AirDAONotificationReceiveEventPayload
     ) => {

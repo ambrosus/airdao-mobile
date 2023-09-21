@@ -165,25 +165,6 @@ class Database {
       throw error;
     }
   }
-
-  // setTableName(tableName: string) {
-  //   this.tableName = tableName;
-  // }
-  //
-  // async performTableOperation(
-  //   tableName: DatabaseTable,
-  //   operation: (table: any) => void
-  // ) {
-  //   if (!this.db) this.init();
-  //   try {
-  //     await this.db!.write(async () => {
-  //       const table = this.db!.get(tableName);
-  //       operation(table);
-  //     });
-  //   } catch (error) {
-  //     console.log(error); // TODO handle errors
-  //   }
-  // }
 }
 
 export default new Database();

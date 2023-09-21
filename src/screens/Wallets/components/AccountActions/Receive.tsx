@@ -17,7 +17,6 @@ export const Receive = (props: ReceiveProps) => {
   const receiveFundsModal = useRef<BottomSheetRef>(null);
 
   const showReceiveFunds = () => {
-    // TODO
     receiveFundsModal.current?.show();
   };
 

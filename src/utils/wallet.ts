@@ -31,7 +31,7 @@ const _saveWallet = async (
 
     const checkKey = await AirDAOKeysStorage.isMnemonicAlreadySaved(prepared);
     if (checkKey) {
-      // // TODO
+      // TODO
     }
     storedKey = await AirDAOKeysStorage.saveMnemonic(prepared);
   } catch (e) {}
