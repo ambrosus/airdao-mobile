@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import {
   BottomSheet,
@@ -8,7 +8,8 @@ import {
 import { useForwardedRef } from '@hooks';
 import { styles } from '@components/templates/PasscodeModal/styles';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { Text } from '@components/base';
+import { Spacer, Text } from '@components/base';
+import { verticalScale } from '@utils/scaling';
 
 interface PasscodeModalProps {
   isFaceIDEnabled: boolean;
@@ -71,6 +72,7 @@ export const FaceIDModal = forwardRef<
     >
       {/* Comment out to see without button */}
       <View style={styles.container}>
+        <Spacer value={verticalScale(24)} />
         {props.isFaceIDEnabled && (
           <TouchableOpacity
             onPress={handleAuthentication}

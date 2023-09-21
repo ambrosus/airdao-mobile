@@ -13,6 +13,7 @@ import {
 } from '@components/templates/PasscodeModal';
 import { BottomSheetRef } from '@components/composite';
 import { useAppState } from '@hooks';
+import { View } from 'react-native';
 
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
@@ -57,7 +58,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   return (
     <PasscodeContext.Provider value={{ isPasscodeEnabled, isFaceIDEnabled }}>
-      {children}
       {isPasscodeEnabled && !isFaceIDEnabled && (
         <PasscodeModal
           ref={passcodeModalRef}
@@ -67,6 +67,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       {isFaceIDEnabled && (
         <FaceIDModal ref={faceIDModalRef} isFaceIDEnabled={isFaceIDEnabled} />
       )}
+      <View style={{ flex: 1 }}>{children}</View>
     </PasscodeContext.Provider>
   );
 };

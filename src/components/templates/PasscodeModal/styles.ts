@@ -5,13 +5,11 @@ import { scale, verticalScale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   content: {
     backgroundColor: COLORS.white,
-    flex: 1,
     paddingTop: 300,
     alignItems: 'center'
   },
   container: {
-    backgroundColor: COLORS.white,
-    flex: 1
+    backgroundColor: COLORS.white
   },
   button: {
     paddingTop: verticalScale(24),
