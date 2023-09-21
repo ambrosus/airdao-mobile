@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { DeviceEventEmitter } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventType, AirDAOFundsSentFromAppEventPayload } from '@appTypes';
+import { AirDAOEventDispatcher } from '@lib';
 
 export function useBalanceOfAddress(
   address: string
@@ -25,16 +25,19 @@ export function useBalanceOfAddress(
 
   useEffect(() => {
     // TODO fix any
-    const onUserMadeTransaction = (data: any) => {
-      if (data.address == address) {
+    const onUserMadeTransaction = (
+      data: AirDAOFundsSentFromAppEventPayload
+    ) => {
+      if (data.from == address || data.to === address) {
         refetch();
       }
     };
-    const notificationListener = DeviceEventEmitter.addListener(
-      EVENTS.FundsSentFromApp,
-      onUserMadeTransaction
+    const localTransactionListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.FundsSentFromApp,
+      (payload) =>
+        onUserMadeTransaction(payload as AirDAOFundsSentFromAppEventPayload)
     );
-    return () => notificationListener.remove();
+    return () => localTransactionListenter.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
   return {

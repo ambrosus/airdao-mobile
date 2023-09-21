@@ -1,5 +1,5 @@
 import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
-import { DeviceEventEmitter, Dimensions, Pressable } from 'react-native';
+import { Dimensions, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -9,16 +9,16 @@ import Animated, {
 import { WalletItem } from '@components/templates/WalletItem';
 import { ExplorerAccount } from '@models';
 import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
+import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/AddressList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { COLORS } from '@constants/colors';
-import { SwipeAction } from './SwipeAction';
 import { useSwipeableDismissListener } from '@hooks';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventDispatcher } from '@lib';
+import { SwipeAction } from './SwipeAction';
 
 export type SwipeableWalletItemProps = {
   item: ExplorerAccount;
@@ -76,7 +76,10 @@ export const SwipeableWalletItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
-        DeviceEventEmitter.emit(EVENTS.WalletItemOpened, item._id);
+        AirDAOEventDispatcher.dispatch(
+          AirDAOEventType.WalletItemOpened,
+          item._id
+        );
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&

@@ -29,7 +29,7 @@ import {
   ToastPosition,
   ToastType
 } from '@components/modular';
-import { HomeNavigationProp } from '@appTypes';
+import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { WalletUtils } from '@utils/wallet';
@@ -41,6 +41,7 @@ import {
   UseMax
 } from './components';
 import { styles } from './styles';
+import { AirDAOEventDispatcher } from '@lib';
 
 export const SendFunds = () => {
   const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
@@ -121,6 +122,10 @@ export const SendFunds = () => {
         );
         hideReviewModal();
         navigation.replace('HomeScreen');
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
+          from: account.address,
+          to: destinationAddress
+        });
         Toast.show({
           position: ToastPosition.Top,
           type: ToastType.Success,

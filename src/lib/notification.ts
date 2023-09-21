@@ -1,10 +1,10 @@
 import messaging, {
   FirebaseMessagingTypes
 } from '@react-native-firebase/messaging';
-import { DeviceEventEmitter } from 'react-native';
 // import { NotificationType } from '@models';
 // import { DatabaseService } from './database';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventDispatcher } from './event-dispatcher';
+import { AirDAOEventType } from '@appTypes';
 
 export class NotificationService {
   constructor(listener?: (newToken: string) => unknown) {
@@ -43,7 +43,10 @@ export class NotificationService {
     message: FirebaseMessagingTypes.RemoteMessage
   ) {
     // TODO we can show Toast message
-    DeviceEventEmitter.emit(EVENTS.NotificationReceived, message.data);
+    AirDAOEventDispatcher.dispatch(
+      AirDAOEventType.NotificationReceived,
+      message.data as any // TODO
+    );
     // this.handleNotification.bind(this)(message);
   }
 

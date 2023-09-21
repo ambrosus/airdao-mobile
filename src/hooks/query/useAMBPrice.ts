@@ -1,10 +1,13 @@
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
 import { AMBToken, AMBTokenDTO } from '@models/index';
-import { useEffect } from 'react';
-import { DeviceEventEmitter } from 'react-native';
-import { EVENTS } from '@constants/events';
+import {
+  AirDAOEventType,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
+import { AirDAOEventDispatcher } from '@lib';
 
 export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
   const { data, isLoading, isRefetching, error, refetch } =
@@ -17,16 +20,21 @@ export function useAMBPrice(): QueryResponse<AMBToken | undefined> {
 
   useEffect(() => {
     // TODO fix any
-    const onNewNotificationReceive = (data: any) => {
+    const onNewNotificationReceive = (
+      data: AirDAONotificationReceiveEventPayload
+    ) => {
       if (data.type == 'transaction-alert') {
         refetch();
       }
     };
-    const notificationListener = DeviceEventEmitter.addListener(
-      EVENTS.NotificationReceived,
-      onNewNotificationReceive
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
+      (payload) =>
+        onNewNotificationReceive(
+          payload as AirDAONotificationReceiveEventPayload
+        )
     );
-    return () => notificationListener.remove();
+    return () => notificationListenter.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return {
