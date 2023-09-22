@@ -117,7 +117,7 @@ export const RestoreWalletScreen = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            Importing your wallet from {'\n'} backup
+            {t('importing.wallet.loader')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <Spinner />
@@ -132,7 +132,7 @@ export const RestoreWalletScreen = () => {
                   fontSize={16}
                   color={COLORS.neutral800}
                 >
-                  Import existing wallet
+                  {t('import.existing.wallet')}
                 </Text>
               }
               titlePosition="left"
@@ -145,7 +145,7 @@ export const RestoreWalletScreen = () => {
               fontSize={24}
               color={COLORS.neutral800}
             >
-              Enter recovery phrase
+              {t('enter.recovery.phrase')}
             </Text>
             <Spacer value={verticalScale(8)} />
             <View style={{ paddingHorizontal: scale(16) }}>
@@ -155,7 +155,7 @@ export const RestoreWalletScreen = () => {
                 fontSize={15}
                 style={{ textAlign: 'center' }}
               >
-                Enter the recovery phrase associated with your existing wallet.
+                {t('enter.recovery.phrase.text')}
               </Text>
               <Spacer value={verticalScale(16)} />
               {renderWords()}

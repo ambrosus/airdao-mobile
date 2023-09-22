@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -9,18 +9,32 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { SuccessIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
+import { database } from '@database/main';
 
 export const SuccessBackupComplete = () => {
-  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
+  const navigation = useNavigation<HomeNavigationProp>();
+  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
+
+  useEffect(() => {
+    Promise.all([database.localStorage.get('Passcode')]).then(
+      ([passcodeRes]) => {
+        setIsPasscodeEnabled(!!passcodeRes);
+      }
+    );
+  }, []);
+
   const navigateToSetUpSecurity = () => {
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{ name: 'HomeScreen' }]
-    //   })
-    // );
-    navigation.navigate('SetupPasscode');
+    if (isPasscodeEnabled) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'HomeScreen' }]
+        })
+      );
+    } else {
+      navigation.navigate('SetupPasscode');
+    }
   };
   return (
     <SafeAreaView style={styles.container}>

@@ -243,6 +243,9 @@
   "singleWallet.save": "Save changes",
   "singleWallet.remove": "Remove",
 
+  "importing.wallet.loader": "Importing your wallet from \n backup",
+  "enter.recovery.phrase": "Enter recovery phrase",
+  "enter.recovery.phrase.text": "Enter the recovery phrase associated with your existing wallet.",
   "enter.your.passcode": "Enter your passcode",
   "sign.in.with.face.id": "Sign in with Face ID",
   "security.enabled": "Security Enabled!",
