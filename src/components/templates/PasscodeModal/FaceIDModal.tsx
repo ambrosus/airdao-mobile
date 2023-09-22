@@ -28,6 +28,7 @@ export const FaceIDModal = forwardRef<
           fallbackLabel: 'Fallback'
         });
         if (result.success) {
+          console.log(1);
           localRef.current?.dismiss();
         } else {
           console.log('Authentication failed');
@@ -38,6 +39,11 @@ export const FaceIDModal = forwardRef<
     };
     if (props.isFaceIDEnabled && prevState === 'background') {
       authenticateWithFaceID();
+    }
+    if (props.isFaceIDEnabled && prevState === null) {
+      setTimeout(() => {
+        authenticateWithFaceID();
+      }, 1200);
     }
   }, [props.isFaceIDEnabled, localRef, prevState]);
 

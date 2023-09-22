@@ -52,6 +52,17 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       if (isPasscodeEnabled) {
         passcodeModalRef.current?.show();
       }
+    } else if (prevState === null) {
+      if (isFaceIDEnabled) {
+        setTimeout(() => {
+          faceIDModalRef.current?.show();
+        }, 1000);
+      }
+      if (isPasscodeEnabled) {
+        setTimeout(() => {
+          passcodeModalRef.current?.show();
+        }, 1000);
+      }
     }
   }, [isFaceIDEnabled, isPasscodeEnabled, prevState]);
 
