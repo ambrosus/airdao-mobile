@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     height: 8,
     width: 8,
     borderRadius: 25,
-    backgroundColor: COLORS.jungleGreen,
+    backgroundColor: COLORS.success400,
     marginLeft: 8
   }
 });

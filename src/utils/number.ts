@@ -23,7 +23,8 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
 };
 
 const addSignToNumber = (num: number): string => {
-  return (num > 0 ? '+' : '-') + num;
+  const shouldAddMinus = num.toString() && num.toString()[0] !== '-';
+  return (num > 0 ? '+' : shouldAddMinus ? '-' : '') + num;
 };
 
 const abbreviateNumber = (num: number): string => {

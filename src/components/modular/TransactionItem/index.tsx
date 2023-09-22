@@ -23,14 +23,14 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {transaction.type}
         </Text>
         <Text
           fontSize={13}
           fontFamily="Mersad_600SemiBold"
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {transaction.amount} AMB
         </Text>
@@ -40,14 +40,14 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
           {timeDiff}
         </Text>
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
           {transaction.fee} TxFee
         </Text>

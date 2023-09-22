@@ -23,8 +23,13 @@ import {
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { PrimaryButton, Toast, ToastPosition } from '@components/modular';
-import { HomeNavigationProp } from '@appTypes';
+import {
+  PrimaryButton,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
+import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { WalletUtils } from '@utils/wallet';
@@ -36,6 +41,7 @@ import {
   UseMax
 } from './components';
 import { styles } from './styles';
+import { AirDAOEventDispatcher } from '@lib';
 
 export const SendFunds = () => {
   const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
@@ -116,13 +122,17 @@ export const SendFunds = () => {
         );
         hideReviewModal();
         navigation.replace('HomeScreen');
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
+          from: account.address,
+          to: destinationAddress
+        });
         Toast.show({
-          type: ToastPosition.Top,
-          title: t('transaction.in.progress'),
-          message: ''
+          position: ToastPosition.Top,
+          type: ToastType.Success,
+          text: t('transaction.in.progress')
         });
       } catch (error) {
-        console.log(error, 'error');
+        // TODO handle
         Alert.alert('Transfer failed');
       } finally {
         setSendLoading(false);
@@ -134,7 +144,7 @@ export const SendFunds = () => {
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
         title={t('account.actions.send')}
-        style={{ shadowColor: COLORS.white }}
+        style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <KeyboardDismissingView style={styles.container}>
@@ -153,7 +163,7 @@ export const SendFunds = () => {
                 {destinationAddress.length > 0 &&
                   !destinationAddress.match(etherumAddressRegex) && (
                     <View style={styles.addressError}>
-                      <Text fontSize={12} color={COLORS.crimsonRed}>
+                      <Text fontSize={12} color={COLORS.error400}>
                         {t('send.funds.invalid.address')}
                       </Text>
                     </View>
@@ -221,7 +231,7 @@ export const SendFunds = () => {
                   onPress={showReviewModal}
                 >
                   <Text
-                    color={COLORS.white}
+                    color={COLORS.neutral0}
                     fontSize={16}
                     fontFamily="Inter_500Medium"
                     fontWeight="500"

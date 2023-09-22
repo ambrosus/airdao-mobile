@@ -1,12 +1,5 @@
 import React from 'react';
-import Svg, {
-  Defs,
-  G,
-  LinearGradient,
-  Path,
-  Stop,
-  SvgUri
-} from 'react-native-svg';
+import Svg, { G, Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
@@ -14,7 +7,7 @@ export function USDCoinLogo(props: IconProps) {
   const { scale = 1, color = '#2775C9' } = props;
   const width = 39;
   const height = 38;
-  const color2 = COLORS.white;
+  const color2 = COLORS.neutral0;
   return (
     <Svg
       width={width}

@@ -7,6 +7,7 @@ import Svg, {
   Stop
 } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function LogoGradientCircular(props: IconProps) {
   const { scale = 1 } = props;
@@ -41,8 +42,8 @@ export function LogoGradientCircular(props: IconProps) {
           y2={8.038}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#3568DD" />
-          <Stop offset={1} stopColor="#7DA3F9" />
+          <Stop stopColor={COLORS.brand600} />
+          <Stop offset={1} stopColor={COLORS.brand400} />
         </LinearGradient>
       </Defs>
     </Svg>

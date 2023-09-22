@@ -94,7 +94,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           <Text
             fontFamily="Inter_700Bold"
             fontSize={16}
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {t('watchlist.tab')}
           </Text>
@@ -104,12 +104,12 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             style={styles.createNewListButton}
           >
             <Row>
-              <AddIcon color={COLORS.deepBlue} />
+              <AddIcon color={COLORS.brand500} />
               <Spacer horizontal value={scale(6.5)} />
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
-                color={COLORS.deepBlue}
+                color={COLORS.brand500}
               >
                 {props.index === 0 ? t('add.address.btn') : t('create.group')}
               </Text>

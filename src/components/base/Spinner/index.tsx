@@ -8,7 +8,7 @@ export function Spinner(
   return (
     <ActivityIndicator
       size={props.size || 'small'}
-      color={props.color || COLORS.grey}
+      color={props.color || COLORS.gray500}
     />
   );
 }

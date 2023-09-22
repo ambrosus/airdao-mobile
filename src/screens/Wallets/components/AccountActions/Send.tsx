@@ -11,7 +11,6 @@ export const Send = () => {
   const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToSendScreen = () => {
-    // TODO
     navigation.navigate('SendFunds');
   };
 

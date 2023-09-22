@@ -6,12 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import {
-  DeviceEventEmitter,
-  Dimensions,
-  Pressable,
-  ViewStyle
-} from 'react-native';
+import { Dimensions, Pressable, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -25,10 +20,11 @@ import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetC
 import { AccountList } from '@models/AccountList';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Portfolio/components/BottomSheetConfirmRemoveGroup';
 import { PortfolioNavigationProp } from '@appTypes/navigation';
-import { SwipeAction } from '@components/templates/WalletList/components/SwipeAction';
+import { SwipeAction } from '@components/templates/AddressList/components/SwipeAction';
 import { CollectionItem } from '@components/modular';
 import { useSwipeableDismissListener } from '@hooks';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventDispatcher } from '@lib';
+import { AirDAOEventType } from '@appTypes';
 import { styles } from './styles';
 
 type Props = {
@@ -83,7 +79,10 @@ export const GroupItem = memo(
       }, []);
 
       const handleSwipeableWillOpen = useCallback(() => {
-        DeviceEventEmitter.emit(EVENTS.CollectionItemOpened, group.id);
+        AirDAOEventDispatcher.dispatch(
+          AirDAOEventType.CollectionItemOpened,
+          group.id
+        );
         clearTimeout(timeoutRef.current ?? undefined);
         if (
           previousRef &&

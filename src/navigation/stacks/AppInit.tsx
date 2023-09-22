@@ -6,24 +6,30 @@ import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { useSelectedWalletHash } from '@hooks';
 import { RootNavigationProp } from '@appTypes';
+import { useAllWallets } from '@hooks/database';
 
 const AppInitialization = () => {
   const { t } = useTranslation();
-  const { data: hash, loading } = useSelectedWalletHash();
+  const { data: allWallets, loading } = useAllWallets();
   const navigation = useNavigation<RootNavigationProp>();
 
   useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
+  useEffect(() => {
     if (!loading) {
-      SplashScreen.hideAsync();
-      if (hash) {
-        navigation.replace('Tabs', { screen: 'Wallets' });
+      if (allWallets.length > 0) {
+        navigation.replace('Tabs', {
+          screen: 'Wallets',
+          params: { screen: 'HomeScreen' }
+        });
       } else {
         navigation.replace('WelcomeScreen');
       }
     }
-  }, [loading, hash, navigation]);
+  }, [allWallets, navigation, loading]);
 
   return (
     <View style={styles.container}>
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   logo: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.blue500,
+    backgroundColor: COLORS.brand500,
     borderRadius: verticalScale(36),
     height: verticalScale(132),
     width: verticalScale(132)

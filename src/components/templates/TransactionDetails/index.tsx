@@ -68,7 +68,11 @@ export const TransactionDetails = (
   return (
     <View testID="Transaction_Details">
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={13}
+          color={COLORS.gray500}
+        >
           {t('method')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
@@ -77,7 +81,11 @@ export const TransactionDetails = (
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={13}
+          color={COLORS.gray500}
+        >
           {t('amount')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>
@@ -89,7 +97,11 @@ export const TransactionDetails = (
         <>
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
-            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={13}
+              color={COLORS.gray500}
+            >
               {t('from')}
             </Text>
             <Button
@@ -97,7 +109,7 @@ export const TransactionDetails = (
               onPress={onPressSendingAddress}
             >
               <Text
-                color={COLORS.mainBlue}
+                color={COLORS.brand600}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
               >
@@ -111,7 +123,11 @@ export const TransactionDetails = (
         <>
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
-            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={13}
+              color={COLORS.gray500}
+            >
               {t('to')}
             </Text>
             <Button
@@ -119,7 +135,7 @@ export const TransactionDetails = (
               onPress={onPressReceivingAddress}
             >
               <Text
-                color={COLORS.mainBlue}
+                color={COLORS.brand600}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
               >
@@ -131,16 +147,28 @@ export const TransactionDetails = (
       )}
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={13}
+          color={COLORS.gray500}
+        >
           TxFee
         </Text>
-        <Text color="#222222" fontFamily="Inter_600SemiBold" fontSize={16}>
+        <Text
+          color={COLORS.gray800}
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+        >
           {transaction.fee}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={13}
+          color={COLORS.gray500}
+        >
           {t('time')}
         </Text>
         <Text fontFamily="Inter_600SemiBold" fontSize={16}>

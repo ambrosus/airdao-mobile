@@ -46,13 +46,13 @@ export function SelectionDot({
         cx={circleX}
         cy={circleY}
         r={outerCircleRadius}
-        color={COLORS.chartSelectionLightGreen}
+        color={COLORS.success200}
       />
       <Circle
         cx={circleX}
         cy={circleY}
         r={innerCircleRadius}
-        color={COLORS.chartSelectionDarkGreen}
+        color={COLORS.success500}
       />
     </Group>
   );

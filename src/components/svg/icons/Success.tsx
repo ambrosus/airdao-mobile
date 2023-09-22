@@ -1,9 +1,10 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function SuccessIcon(props: IconProps) {
-  const { scale = 1, color = '#2DBA8D' } = props;
+  const { scale = 1, color = COLORS.success300 } = props;
   const width = 88;
   const height = 89;
   return (

@@ -15,6 +15,7 @@ import {
   View,
   useWindowDimensions
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
 import {
   BottomSheet,
@@ -38,7 +39,6 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -143,8 +143,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           {selectionStarted && (
             <Row>
               <CheckBox
-                fillColor={COLORS.blue500}
-                color={COLORS.white}
+                fillColor={COLORS.brand500}
+                color={COLORS.neutral0}
                 type="square"
                 value={selected}
               />
@@ -230,7 +230,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         <Text
           fontFamily="Inter_700Bold"
           fontSize={18}
-          color={COLORS.nero}
+          color={COLORS.neutral800}
         >{`${t('add.address.to.selected.group')} ${StringUtils.formatAddress(
           collection.name,
           10,
@@ -368,22 +368,17 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }}
         >
           <Text
-            color={COLORS.white}
+            color={COLORS.neutral0}
             fontSize={16}
             fontFamily="Inter_600SemiBold"
             fontWeight="600"
           >
-            {selectingAddedItems
-              ? `${t('remove.btn')} ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  t('address'),
-                  t('addresses')
-                )}`
-              : `${t('add')} ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  t('address'),
-                  t('addresses')
-                )}`}
+            {`${t(selectingAddedItems ? 'remove.btn' : 'add')} ${t(
+              'common.address',
+              {
+                count: selectedAddresses.length
+              }
+            )}`}
           </Text>
         </PrimaryButton>
       )}

@@ -1,3 +1,4 @@
+import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
     paddingBottom: verticalScale(77)
   },
   shareBtn: {
-    backgroundColor: '#0e0e0e0d',
+    backgroundColor: COLORS.alphaBlack5,
     paddingVertical: verticalScale(12.5)
   }
 });

@@ -15,7 +15,7 @@ export const StatusBar = () => {
   const backgroundColor = useMemo(() => {
     if (RoutesWithCulturedWhiteBg.includes(currentRoute))
       return COLORS.culturedWhite;
-    return COLORS.white;
+    return COLORS.neutral0;
   }, [currentRoute]);
 
   return <ExpoStatusBar style="dark" backgroundColor={backgroundColor} />;

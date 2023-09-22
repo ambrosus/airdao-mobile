@@ -1,20 +1,20 @@
-import { Database } from '@database';
-import { DatabaseTable } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { AccountDB } from '@database';
 
-const addAccountInfoToDatabase = async (walletMnemonic: string) => {
+const createAccountInDB = async (
+  address: string,
+  walletHash: string,
+  derivationPath: string,
+  index: number,
+  currencyCode: AirDAODictTypes.Code
+) => {
   try {
-    const { address } = await WalletUtils.processWallet({
-      number: 0,
-      mnemonic: walletMnemonic,
-      name: ''
-    });
-
-    const accountInfo = {
+    const account = {
       address,
+      walletHash,
       name: '',
-      derivationPath: 'm/44/60/0/0/0',
-      derivationIndex: 0,
+      derivationPath,
+      derivationIndex: index,
       derivationType: '',
       alreadyShown: 0,
       walletPubId: 0,
@@ -24,12 +24,11 @@ const addAccountInfoToDatabase = async (walletMnemonic: string) => {
       transactionsScanLog: '',
       transactionsScanError: '',
       changesLog: '',
-      currencyCode: 'AMB'
+      currencyCode
     };
-
-    await Database.createModel(DatabaseTable.Accounts, accountInfo);
+    await AccountDB.createAccount(account, true);
   } catch (error) {
-    console.log(error, 'error');
+    throw error;
   }
 };
-export const AccountUtils = { addAccountInfoToDatabase };
+export const AccountUtils = { createAccountInDB };

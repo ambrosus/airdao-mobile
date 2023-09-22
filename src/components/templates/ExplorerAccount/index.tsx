@@ -120,7 +120,7 @@ export const ExplorerAccountView = (
           textProps={{
             fontSize: 13,
             fontFamily: 'Inter_600SemiBold',
-            color: COLORS.slateGrey
+            color: COLORS.neutral400
           }}
           style={{ padding: 4 }}
         />
@@ -130,7 +130,7 @@ export const ExplorerAccountView = (
       <Text
         fontFamily="Mersad_600SemiBold"
         fontSize={30}
-        color={COLORS.jetBlack}
+        color={COLORS.neutral800}
       >
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
@@ -145,8 +145,8 @@ export const ExplorerAccountView = (
             style={{
               ...styles.actionButton,
               backgroundColor: account.isOnWatchlist
-                ? COLORS.warning
-                : COLORS.mainBlue
+                ? COLORS.warning200
+                : COLORS.brand600
             }}
             testID="Add_To_Watchlist_Button"
             type="circular"
@@ -155,7 +155,7 @@ export const ExplorerAccountView = (
             <Row alignItems="center">
               <Text
                 fontSize={12}
-                color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
+                color={account.isOnWatchlist ? COLORS.liver : COLORS.neutral0}
               >
                 {account.isOnWatchlist
                   ? t('watchlisted.address')
@@ -164,7 +164,7 @@ export const ExplorerAccountView = (
               {/*{!account.isOnWatchlist && (*/}
               {/*  <>*/}
               {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.white} scale={0.5} />*/}
+              {/*    <PlusIcon color={COLORS.neutral0} scale={0.5} />*/}
               {/*  </>*/}
               {/*)}*/}
             </Row>
@@ -175,8 +175,8 @@ export const ExplorerAccountView = (
               ...styles.actionButton,
               backgroundColor:
                 listsWithAccount.length > 0
-                  ? COLORS.warning
-                  : COLORS.powderWhite
+                  ? COLORS.warning200
+                  : COLORS.brand100
             }}
             testID="Add_To_Collection_Button"
             type="circular"
@@ -185,9 +185,7 @@ export const ExplorerAccountView = (
             <Row alignItems="center">
               <Text
                 color={
-                  listsWithAccount.length > 0
-                    ? COLORS.liver
-                    : COLORS.darkCornflowerBlue
+                  listsWithAccount.length > 0 ? COLORS.liver : COLORS.brand700
                 }
                 fontSize={12}
               >
@@ -202,7 +200,7 @@ export const ExplorerAccountView = (
               {/*{listsWithAccount.length === 0 && (*/}
               {/*  <>*/}
               {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />*/}
+              {/*    <PlusIcon color={COLORS.brand700} scale={0.5} />*/}
               {/*  </>*/}
               {/*)}*/}
             </Row>

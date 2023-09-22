@@ -1,9 +1,10 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function TradeIcon(props: IconProps) {
-  const { scale = 1, color = '#FFFFFF' } = props;
+  const { scale = 1, color = COLORS.neutral0 } = props;
   const width = 15,
     height = 14;
   return (

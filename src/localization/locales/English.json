@@ -1,11 +1,11 @@
 {
-  "english": "English",
-  "turkish": "Turkish",
-  "Arabic": "Arabic",
-  "Spanish": "Spanish",
-  "Hindi": "Hindi",
-  "Portuguese": "Portuguese",
-  "Russian": "Russian",
+  "English": "English",
+  "Turkish": "Türkçe",
+  "Arabic": "العربية",
+  "Spanish": "Español",
+  "Hindi": "हिन्दी",
+  "Portuguese": "Português",
+  "Russian": "Русский",
   "Chinese": "Chinese",
 
   "wallets.tab": "Wallets",
@@ -24,6 +24,11 @@
   "help.centerBtn": "Help center",
   "rate.btn.ios": "Rate us on the App Store",
   "rate.btn.android": "Rate us on the Play Store",
+
+  "common.address": "Address",
+  "common.address_plural": "Addresses",
+  "common.transaction": "Transaction",
+  "common.transaction_plural": "Transactions",
 
   "search.address.input": "Search Address or TX hash",
   "top.holders": "Top holders",
@@ -74,8 +79,6 @@
   "search.groups.input": "Search groups",
   "toast.Successfully.removed.wallet.from.group": "Successfully removed wallet from group!",
 
-  "addresses": "Addresses",
-  "address": "Address",
   "groups.capitalize": "Groups",
   "add.address.btn": "Add address",
   "create.group": "Create group",
@@ -212,11 +215,31 @@
   "start.using.wallet.btn": "Start using wallet",
   "setup.security.btn": "Setup security",
   "airdao.wallet": "AirDAO Wallet",
+
   "no.wallet.description": "Tap into endless possibiliies with AirDAO Wallet.",
   "no.wallet.send.receive": "Send and receive",
   "no.wallet.send.receive.description": "Safely send and receive funds with just a few taps.",
   "no.wallet.address.tracking": "Address tracking",
   "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
   "no.wallet.stay.informed": "Stay informed",
-  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity."
+  "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
+
+  "settings.manage.wallet": "Manage Wallets",
+  "settings.security": "Security",
+  "settings.preferences": "Preferences",
+  "settings.notifications": "Notifications",
+  "settings.help": "Help Center",
+  "settings.about": "About",
+
+  "settings.preferences.currency": "Currency",
+  "settings.preferences.language": "Language",
+
+  "settings.about.terms": "Terms of service",
+  "settings.about.privacy": "Privacy policy",
+  "settings.about.rate": "Rate us",
+
+  "singleWallet.name": "Name",
+  "singleWallet.copy": "Copy to clipboard",
+  "singleWallet.save": "Save changes",
+  "singleWallet.remove": "Remove"
 }

@@ -38,7 +38,7 @@ export const BottomSheetSingleCollectionOption = forwardRef<
         style={styles.text}
         fontFamily="Inter_600SemiBold"
         fontSize={20}
-        color={COLORS.smokyBlack}
+        color={COLORS.neutral900}
       >
         {type === 'rename'
           ? `Edit ${item.name}`
@@ -54,7 +54,7 @@ export const BottomSheetSingleCollectionOption = forwardRef<
           style={styles.cancelButtonText}
           fontFamily="Inter_600SemiBold"
           fontSize={16}
-          color={COLORS.white}
+          color={COLORS.neutral0}
         >
           {type === 'rename' ? 'Rename' : 'Delete'}
         </Text>
@@ -69,7 +69,7 @@ export const BottomSheetSingleCollectionOption = forwardRef<
           style={styles.cancelButtonText}
           fontFamily="Inter_600SemiBold"
           fontSize={16}
-          color={COLORS.crimsonRed}
+          color={COLORS.error400}
         >
           Delete List
         </Text>

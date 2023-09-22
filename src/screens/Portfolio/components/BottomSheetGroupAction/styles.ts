@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   bottomSheetRenameButton: {
     marginHorizontal: 16,
     borderRadius: 25,
-    backgroundColor: COLORS.deepBlue
+    backgroundColor: COLORS.brand500
   },
   bottomSheetDeleteButton: {
     marginHorizontal: 16,

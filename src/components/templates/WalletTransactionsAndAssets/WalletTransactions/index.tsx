@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 import { Spinner } from '@components/base';
 import { Transaction } from '@models';
 import { SingleTransaction } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions/SingleTransaction';
@@ -26,7 +26,7 @@ export const WalletTransactions = (
   };
 
   return (
-    <View>
+    <>
       {!transactions && error ? (
         <LocalizedRenderEmpty text={t('no.transactions.yet')} />
       ) : (
@@ -40,6 +40,6 @@ export const WalletTransactions = (
           showsVerticalScrollIndicator={false}
         />
       )}
-    </View>
+    </>
   );
 };

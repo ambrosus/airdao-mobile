@@ -7,7 +7,7 @@ export function EthereumLogo(props: IconProps) {
   const { scale = 1, color = '#328332' } = props;
   const width = 33;
   const height = 33;
-  const color2 = COLORS.white;
+  const color2 = COLORS.neutral0;
   return (
     <Svg
       width={width}

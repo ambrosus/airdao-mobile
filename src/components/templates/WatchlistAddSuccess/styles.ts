@@ -22,14 +22,14 @@ export const styles = StyleSheet.create({
   button: {
     paddingVertical: verticalScale(12),
     width: '100%',
-    backgroundColor: COLORS.deepBlue
+    backgroundColor: COLORS.brand500
   },
   editButton: {
     paddingVertical: verticalScale(12),
     width: '100%',
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: COLORS.neutral0
   },
   closeButton: {
     position: 'absolute',

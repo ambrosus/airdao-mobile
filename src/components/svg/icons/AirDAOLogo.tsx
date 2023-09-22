@@ -1,6 +1,7 @@
 import React from 'react';
 import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
 export function AirDAOLogo(props: IconProps) {
   const { scale = 1 } = props;
@@ -29,8 +30,8 @@ export function AirDAOLogo(props: IconProps) {
           y2="7.34124"
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#3568DD" />
-          <Stop offset="1" stopColor="#7DA3F9" />
+          <Stop stopColor={COLORS.brand600} />
+          <Stop offset="1" stopColor={COLORS.brand400} />
         </LinearGradient>
       </Defs>
     </Svg>

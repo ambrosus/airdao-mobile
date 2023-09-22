@@ -4,6 +4,7 @@ export * from './useAppFocused';
 export * from './useAppInit';
 export * from './useAppState';
 export * from './useCachePurifier';
+export * from './useDelayedMount';
 export * from './useForwardedRef';
 export * from './useFullscreenModalHeight';
 export * from './useInitialMountEffect';

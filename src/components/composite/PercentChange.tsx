@@ -18,7 +18,7 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
       <Text
         fontSize={fontSize}
         fontWeight={fontWeight}
-        color={color || change >= 0 ? COLORS.jungleGreen : COLORS.crimsonRed}
+        color={color || change >= 0 ? COLORS.success400 : COLORS.error400}
         testID="PercentChange_Title"
       >
         {' '}

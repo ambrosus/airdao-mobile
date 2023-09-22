@@ -15,7 +15,7 @@ export interface AccountActionButtonProps {
 export const AccountActionButton = (props: AccountActionButtonProps) => {
   const { Icon, text, isActive, onPress } = props;
 
-  const textColor = isActive ? COLORS.smokyBlack : COLORS.neutral300;
+  const textColor = isActive ? COLORS.neutral900 : COLORS.neutral300;
   const iconColor = textColor;
   return (
     <Button onPress={onPress} disabled={!isActive} style={styles.container}>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   icon: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: moderateScale(48),

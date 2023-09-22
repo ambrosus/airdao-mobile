@@ -56,14 +56,14 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             <Text
               fontFamily="Inter_500Medium"
               fontSize={16}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               {name || 'NULL'}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
               fontSize={16}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               ${NumberUtils.formatNumber(usdPrice, 2)}
             </Text>
@@ -73,14 +73,14 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
-              color={COLORS.gray400}
+              color={COLORS.neutral400}
             >
               {NumberUtils.formatNumber(balance.ether, 2)} AMB
             </Text>
             <Text
               fontFamily="Inter_400Regular"
               fontSize={14}
-              color={COLORS.nero}
+              color={COLORS.neutral800}
             >
               {name === 'AMB' ? (
                 <View style={{ paddingTop: verticalScale(3) }}>

@@ -1,7 +1,12 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
+import {
+  BottomSheetFloat,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -80,9 +85,9 @@ export const BottomSheetEditWallet = forwardRef<
       toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
-        title: '',
-        message: t('toast.Successfully.removed.wallet.from.group'),
-        type: ToastPosition.Top
+        text: t('toast.Successfully.removed.wallet.from.group'),
+        position: ToastPosition.Top,
+        type: ToastType.Success
       });
     }
   }, [dismissThis, listsWithCurrentWallet, t, toggleAddressesInList, wallet]);
@@ -99,7 +104,7 @@ export const BottomSheetEditWallet = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {t('rename.address')}
           </Text>
@@ -114,7 +119,7 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {t('move.to.another.group')}
               </Text>
@@ -123,11 +128,11 @@ export const BottomSheetEditWallet = forwardRef<
               type="circular"
               style={{
                 ...styles.actionBtn,
-                backgroundColor: COLORS.pinkRed
+                backgroundColor: COLORS.error100
               }}
               onPress={removeFromCollection}
             >
-              <Text color={COLORS.crimsonRed}>
+              <Text color={COLORS.error400}>
                 {t('remove.address.from.group')}
               </Text>
             </Button>
@@ -151,7 +156,7 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {t('add.address.to.group.lower.case')}
               </Text>

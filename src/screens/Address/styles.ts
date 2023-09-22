@@ -15,12 +15,12 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16)
   },
   headerBtn: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     height: moderateScale(36),
     width: moderateScale(36)
   },
   headerWatchListBtn: {
-    backgroundColor: COLORS.powderWhite,
+    backgroundColor: COLORS.brand100,
     height: moderateScale(36),
     width: moderateScale(36)
   }

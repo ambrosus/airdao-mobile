@@ -1,12 +1,12 @@
 {
-  "english": "İngilizce",
-  "turkish": "Türkçe",
-  "Arabic": "Arapça",
-  "Spanish": "İspanyolca",
-  "Hindi": "Hintçe",
-  "Portuguese": "Portekizce",
-  "Russian": "Rusça",
-  "Chinese": "Çince",
+  "English": "English",
+  "Turkish": "Türkçe",
+  "Arabic": "العربية",
+  "Spanish": "Español",
+  "Hindi": "हिन्दी",
+  "Portuguese": "Português",
+  "Russian": "Русский",
+  "Chinese": "Chinese",
 
   "wallets.tab": "",
   "overview.tab": "Genel bakış",
@@ -24,6 +24,11 @@
   "help.centerBtn": "Yardım merkezi",
   "rate.btn.ios": "Bizi App Store’da değerlendirin",
   "rate.btn.android": "Bizi Play Store’da değerlendirin",
+
+  "common.address": "Adres",
+  "common.address_plural": "Adresler",
+  "common.transaction": "İşlem",
+  "common.transaction_plural": "İşlemler",
 
   "search.address.input": "Adres veya işlem arayın",
   "top.holders": "En büyük sahipler",
@@ -74,8 +79,8 @@
   "search.groups.input": "Grupları Arayın",
   "toast.Successfully.removed.wallet.from.group": "Cüzdanı başarıyla gruptan kaldırdınız!",
 
-  "addresses": "Adresler",
-  "address": "Adres",
+  "address_one": "Adres",
+  "address_other": "Adresler",
   "groups.capitalize": "Gruplar",
   "add.address.btn": "Adres Ekleyin",
   "create.group": "Grup oluşturun",
@@ -212,5 +217,24 @@
   "no.wallet.address.tracking": "Adres takibi",
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.stay.informed": "Haberdar olun",
-  "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın."
+  "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın.",
+
+  "settings.manage.wallet": "Cüzdan Yönetimi",
+  "settings.security": "Güvenlik",
+  "settings.preferences": "Tercihler",
+  "settings.notifications": "Bildirim Ayarları",
+  "settings.help": "Yardım Merkezi",
+  "settings.about": "Hakkında",
+
+  "settings.preferences.currency": "Para birimi",
+  "settings.preferences.language": "Dil",
+
+  "settings.about.terms": "Kullanım koşulları",
+  "settings.about.privacy": "Gizlilik politikası",
+  "settings.about.rate": "Bizi değerlendir",
+
+  "singleWallet.name": "Cüzdan ismi",
+  "singleWallet.copy": "Kopyala",
+  "singleWallet.save": "Kaydet",
+  "singleWallet.remove": "Sil"
 }

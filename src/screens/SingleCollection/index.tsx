@@ -5,7 +5,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Row, Spacer, Text, Badge } from '@components/base';
 import {
   BottomSheetEditCollection,
-  WalletList,
+  AddressList,
   BottomSheetCreateRenameGroup
 } from '@components/templates';
 import { EditIcon, AddIcon } from '@components/svg/icons';
@@ -66,7 +66,7 @@ export const SingleGroupScreen = () => {
             numberOfLines={1}
             fontFamily="Inter_700Bold"
             fontSize={16}
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {selectedList.name}
           </Text>
@@ -87,7 +87,7 @@ export const SingleGroupScreen = () => {
               type="circular"
               style={styles.addButton}
             >
-              <AddIcon color={COLORS.white} scale={0.8} />
+              <AddIcon color={COLORS.neutral0} scale={0.8} />
             </Button>
             <Spacer horizontal value={scale(32)} />
             <Button
@@ -96,7 +96,7 @@ export const SingleGroupScreen = () => {
               type="circular"
               style={styles.optionsButton}
             >
-              <EditIcon color={COLORS.smokyBlack} />
+              <EditIcon color={COLORS.neutral900} />
             </Button>
           </>
         }
@@ -104,14 +104,18 @@ export const SingleGroupScreen = () => {
       <Spacer value={32} />
       <View style={{ alignItems: 'center' }}>
         <Text
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
           fontFamily="Inter_600SemiBold"
           fontSize={12}
         >
           {t('total.balance')}
         </Text>
         <Spacer value={10} />
-        <Text fontFamily="Inter_700Bold" fontSize={30} color={COLORS.nero}>
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={30}
+          color={COLORS.neutral800}
+        >
           ${NumberUtils.formatNumber(groupTokens, 2)}
         </Text>
         <Spacer value={10} />
@@ -126,7 +130,7 @@ export const SingleGroupScreen = () => {
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 {' '}
                 (24hr)
@@ -140,7 +144,7 @@ export const SingleGroupScreen = () => {
         style={{ flex: 1, paddingHorizontal: scale(16) }}
         testID="List_Of_Addresses"
       >
-        <WalletList
+        <AddressList
           data={sortListByKey(accounts || [], 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}

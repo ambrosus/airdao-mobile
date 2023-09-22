@@ -1229,7 +1229,7 @@ export const DEFAULT_WORDS = [
   'offer',
   'office',
   'often',
-  'oil',
+  'gray800',
   'okay',
   'old',
   'olive',

@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { Path, Svg } from 'react-native-svg';
+import { COLORS } from '@constants/colors';
 
 export function AirDAOTokenLogo(props: IconProps) {
   const { scale = 1 } = props;
@@ -16,7 +17,7 @@ export function AirDAOTokenLogo(props: IconProps) {
     >
       <Path
         d="M11.8397 4.99995C17.1987 1.90594 23.8012 1.90594 29.1602 4.99995C34.5192 8.09396 37.8205 13.8119 37.8205 20C37.8205 26.188 34.5192 31.9059 29.1602 35C23.8012 38.094 17.1987 38.094 11.8397 35C6.48072 31.9059 3.17944 26.188 3.17944 20C3.17944 13.8119 6.48071 8.09396 11.8397 4.99995Z"
-        fill="#457EFF"
+        fill={COLORS.brand500}
       />
       <Path
         fill-rule="evenodd"

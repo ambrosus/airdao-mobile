@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DatabaseTable } from '@appTypes';
 import { database } from './main';
-import { Q, Database as WDB } from '@nozbe/watermelondb';
+import { Model, Q, Database as WDB } from '@nozbe/watermelondb';
 import { Clause } from '@nozbe/watermelondb/QueryDescription';
 import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
 
@@ -18,11 +18,18 @@ class Database {
     return this.db!.localStorage;
   }
 
+  // DEV ONLY
   private async reset() {
-    if (!this.db) this.init();
-    await this.db?.write(async () => {
-      await this.db?.unsafeResetDatabase();
-    });
+    if (__DEV__) {
+      if (!this.db) this.init();
+      try {
+        await this.db?.write(async () => {
+          await this.db?.unsafeResetDatabase();
+        });
+      } catch (error) {
+        // ignore
+      }
+    }
   }
 
   private async init() {
@@ -51,11 +58,11 @@ class Database {
             return newModel;
           });
         } catch (error) {
-          // ignore
+          throw error;
         }
       });
     } catch (error) {
-      // ignore
+      throw error;
     }
   }
 
@@ -63,14 +70,16 @@ class Database {
     if (!this.db) this.init();
     try {
       const model = await this.db!.get(table).find(id);
-      await model.update((modelToUpdate) => {
-        for (const key in updateObj) {
-          // @ts-ignore
-          modelToUpdate[key] = updateObj[key];
-        }
+      return await this.db?.write(async () => {
+        return await model.update((modelToUpdate) => {
+          for (const key in updateObj) {
+            // @ts-ignore
+            modelToUpdate[key] = updateObj[key];
+          }
+        });
       });
     } catch (error) {
-      // ignore
+      throw error;
     }
   }
 
@@ -78,9 +87,28 @@ class Database {
     if (!this.db) this.init();
     try {
       const model = await this.db!.get(table).find(id);
-      if (model) await model.destroyPermanently();
+      if (model) {
+        await this.db?.write(async () => {
+          await model.destroyPermanently();
+        });
+      }
     } catch (error) {
       // ignore
+      throw error;
+    }
+  }
+
+  async deleteMultiple(models: Model[]) {
+    if (!this.db) this.init();
+    // @ts-ignore
+    try {
+      await this.db?.write(async () => {
+        for (const model of models) {
+          await model.destroyPermanently();
+        }
+      });
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -116,24 +144,27 @@ class Database {
     return await database.get(table).query(Q.unsafeSqlQuery(query)).fetch();
   }
 
-  // setTableName(tableName: string) {
-  //   this.tableName = tableName;
-  // }
-  //
-  // async performTableOperation(
-  //   tableName: DatabaseTable,
-  //   operation: (table: any) => void
-  // ) {
-  //   if (!this.db) this.init();
-  //   try {
-  //     await this.db!.write(async () => {
-  //       const table = this.db!.get(tableName);
-  //       operation(table);
-  //     });
-  //   } catch (error) {
-  //     console.log(error); // TODO handle errors
-  //   }
-  // }
+  async updateRelation<T1 extends Model, T2 extends Model>(
+    model1: T1,
+    model2: T2,
+    key: keyof T1
+  ) {
+    try {
+      if (!this.db) this.init();
+      return this.db?.write(async () => {
+        try {
+          return await model1.update((acc) => {
+            // @ts-ignore
+            acc[key].id = model2.id;
+          });
+        } catch (error) {
+          throw error;
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new Database();

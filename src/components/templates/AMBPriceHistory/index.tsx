@@ -11,14 +11,14 @@ import Animated, {
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon, LogoGradientCircular } from '@components/svg/icons';
+import { ChevronRightIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
-import { BezierChart } from '../BezierChart';
 import { MONTH_NAMES } from '@constants/variables';
+import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
 
 interface AMBPriceHistoryProps {
@@ -136,7 +136,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           style={{
             fontSize: 30,
             fontFamily: 'Mersad_600SemiBold',
-            color: COLORS.jetBlack
+            color: COLORS.neutral800
           }}
         />
       </Row>
@@ -160,14 +160,14 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                 <Text
                   fontFamily="Inter_500Medium"
                   fontSize={14}
-                  color={COLORS.smokyBlack}
+                  color={COLORS.neutral900}
                 >
                   {selectedInterval && '24hrs'}
                 </Text>
                 {badgeType === 'button' && (
                   <>
                     <Spacer horizontal value={scale(4)} />
-                    <ChevronRightIcon color={COLORS.smokyBlack} />
+                    <ChevronRightIcon color={COLORS.neutral900} />
                   </>
                 )}
               </Row>
@@ -181,7 +181,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             style={{
               fontSize: 12,
               fontFamily: 'Inter_500Medium',
-              color: COLORS.asphalt
+              color: COLORS.neutral300
             }}
           />
         </Animated.View>
@@ -208,8 +208,8 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}
-        axisLabelColor={COLORS.smokyBlack}
-        strokeColor={COLORS.chartGreen}
+        axisLabelColor={COLORS.neutral900}
+        strokeColor={COLORS.success300}
         axisColor="transparent"
         onPointSelected={(point) => {
           if (point) {

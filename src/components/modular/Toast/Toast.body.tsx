@@ -14,30 +14,38 @@ import Animated, {
   SlideOutUp
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button, Row, Text } from '@components/base';
-import { CheckIcon, CloseIcon } from '@components/svg/icons';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { CloseIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
-import { styles } from './Toast.styles';
-import { ToastOptions, ToastPosition } from './Toast.types';
+import {
+  ToastAction,
+  ToastOptions,
+  ToastPosition,
+  ToastType
+} from './Toast.types';
 import { COLORS } from '@constants/colors';
+import { ToastBg, ToastBorderColor, ToastStatusIcon } from './Toast.constants';
+import { styles } from './Toast.styles';
 
 export const ToastBody = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const DISTANCE_FROM_EDGE = verticalScale(16);
   const defaultOptions: ToastOptions = useMemo(
     () => ({
-      message: '',
-      title: '',
-      duration: 3500, // ms
-      type: ToastPosition.Top,
-      onBodyPress: undefined
+      text: '',
+      subtext: '',
+      type: ToastType.Success,
+      position: ToastPosition.Top,
+      actions: [],
+      onBodyPress: () => null,
+      duration: 3500 // ms
     }),
     []
   );
 
   const [toastVisible, setToastVisible] = useState(false);
   const [options, setOptions] = React.useState<ToastOptions>(defaultOptions);
-  const timerRef = useRef<any>(null); // TODO change any
+  const timerRef = useRef<NodeJS.Timer | null>(null);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -78,20 +86,38 @@ export const ToastBody = forwardRef((_, ref) => {
     )
   );
 
-  const onUndoPress = () => {
-    if (typeof options.onUndo === 'function') options.onUndo();
-  };
-
-  const isTopToast = options.type === ToastPosition.Top;
+  const isTopToast = options.position === ToastPosition.Top;
   const placement = DISTANCE_FROM_EDGE + (isTopToast ? topInset : bottomInset);
 
   if (!toastVisible) return null;
+
+  const renderAction = (action: ToastAction) => {
+    return (
+      <Button onPress={action.onPress} style={styles.actionBtn}>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          fontWeight="500"
+          color={COLORS.neutral900}
+        >
+          {action.label}
+        </Text>
+      </Button>
+    );
+  };
+
   return (
     <Animated.View
       style={[
         styles.containerStyle,
-        { top: options.type === ToastPosition.Top ? placement : undefined },
-        { bottom: options.type === ToastPosition.Top ? undefined : placement }
+        {
+          backgroundColor: ToastBg[options.type],
+          borderColor: ToastBorderColor[options.type]
+        },
+        { top: isTopToast ? placement : undefined },
+        {
+          bottom: isTopToast ? undefined : placement
+        }
       ]}
       entering={(isTopToast ? SlideInUp : SlideInDown).duration(
         (options.duration ?? 500) / 2
@@ -106,45 +132,39 @@ export const ToastBody = forwardRef((_, ref) => {
         onPress={options.onBodyPress}
       >
         <Row alignItems="center" justifyContent="space-between">
-          <View style={styles.statusIcon}>
-            <CheckIcon color={COLORS.white} scale={0.8} />
-          </View>
+          <View style={styles.statusIcon}>{ToastStatusIcon[options.type]}</View>
           <View style={{ flex: 1 }}>
-            {Boolean(options.title) && (
-              <Text
-                fontSize={16}
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.neutral700}
-              >
-                {options.title}
-              </Text>
-            )}
             <Text
-              fontSize={14}
-              fontWeight="400"
-              fontFamily="Inter_400Regular"
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
               color={COLORS.neutral700}
-              style={{ flexDirection: 'row', alignItems: 'baseline' }}
             >
-              {options.message}
-              {typeof options.onUndo === 'function' && (
-                <Text
-                  onPress={onUndoPress}
-                  fontSize={16}
-                  fontWeight="600"
-                  fontFamily="Inter_600SemiBold"
-                  color="#A1A6B2"
-                >
-                  {' '}
-                  Undo
-                </Text>
-              )}
+              {options.text}
             </Text>
+            {Boolean(options.subtext) && (
+              <>
+                <Spacer value={verticalScale(8)} />
+                <Text
+                  fontSize={14}
+                  fontWeight="400"
+                  fontFamily="Inter_400Regular"
+                  color={COLORS.neutral700}
+                  style={{ flexDirection: 'row', alignItems: 'baseline' }}
+                >
+                  {options.subtext}
+                </Text>
+              </>
+            )}
           </View>
           <Button onPress={hide} style={styles.closeBtn}>
             <CloseIcon color={COLORS.neutral700} />
           </Button>
         </Row>
+        {options.actions && options.actions?.length > 0 && (
+          <View style={styles.actions}>
+            {options.actions?.map(renderAction)}
+          </View>
+        )}
       </Pressable>
     </Animated.View>
   );
