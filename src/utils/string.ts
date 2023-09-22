@@ -39,6 +39,11 @@ const removeNonNumericCharacters = (str: string): string => {
   return str.replace(/[^.\d]+/g, '');
 };
 
+const removeNonAlphabeticCharacters = (str: string): string => {
+  if (!str) return '';
+  return str.replace(/[^a-zA-Z]+/g, '');
+};
+
 const formatNumberInput = (str: string): string => {
   let numericChars = removeNonNumericCharacters(str);
   if (numericChars[0] === '.') numericChars = '0' + numericChars;
@@ -49,5 +54,6 @@ export const StringUtils = {
   formatAddress,
   pluralize,
   removeNonNumericCharacters,
+  removeNonAlphabeticCharacters,
   formatNumberInput
 };

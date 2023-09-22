@@ -8,6 +8,8 @@ import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 interface InputWithIconProps extends InputProps {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  spacingLeft?: number;
+  spacingRight?: number;
   focusedContainerStyle?: InputProps['focusedStyles'];
 }
 
@@ -18,6 +20,8 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
       iconRight,
       focusedContainerStyle = {},
       style,
+      spacingLeft = scale(16),
+      spacingRight = scale(16),
       onFocus,
       onBlur,
       ...restProps
@@ -44,7 +48,7 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
     return (
       <Row style={containerStyles} alignItems="center">
         {iconLeft}
-        <Spacer horizontal value={scale(16)} />
+        <Spacer horizontal value={spacingLeft} />
         <Input
           ref={ref}
           style={[style, styles.input]}
@@ -52,7 +56,7 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
           onFocus={_onFocus}
           onBlur={_onBlur}
         />
-        <Spacer horizontal value={scale(16)} />
+        <Spacer horizontal value={spacingRight} />
         {iconRight}
       </Row>
     );

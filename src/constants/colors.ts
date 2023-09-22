@@ -3,6 +3,7 @@ export const COLORS = {
   alphaBlack10: '#0e0e0e1a',
   alphaBlack30: '#0e0e0e4d',
   alphaBlack50: '#0e0e0e80',
+  alphaBlack60: '#0e0e0e99',
   alphaWhite50: '#ffffff80',
   brand100: '#EDF3FF',
   brand200: '#C9D9FF',
