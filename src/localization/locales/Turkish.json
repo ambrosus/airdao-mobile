@@ -236,5 +236,11 @@
   "singleWallet.name": "Cüzdan ismi",
   "singleWallet.copy": "Kopyala",
   "singleWallet.save": "Kaydet",
-  "singleWallet.remove": "Sil"
+  "singleWallet.remove": "Sil",
+
+  "enter.your.passcode": "",
+  "sign.in.with.face.id": "",
+  "security.enabled": "",
+  "wallet.protected": "",
+  "manage.security": ""
 }

@@ -14,12 +14,13 @@ export const SuccessBackupComplete = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const navigateToSetUpSecurity = () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }]
-      })
-    );
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: 'HomeScreen' }]
+    //   })
+    // );
+    navigation.navigate('SetupPasscode');
   };
   return (
     <SafeAreaView style={styles.container}>

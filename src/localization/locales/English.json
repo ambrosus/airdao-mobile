@@ -241,5 +241,11 @@
   "singleWallet.name": "Name",
   "singleWallet.copy": "Copy to clipboard",
   "singleWallet.save": "Save changes",
-  "singleWallet.remove": "Remove"
+  "singleWallet.remove": "Remove",
+
+  "enter.your.passcode": "Enter your passcode",
+  "sign.in.with.face.id": "Sign in with Face ID",
+  "security.enabled": "Security Enabled!",
+  "wallet.protected": "Your wallet is now protected. Go to",
+  "manage.security": " to manage your wallet security."
 }

@@ -1,10 +1,4 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { Dimensions, KeyboardAvoidingView } from 'react-native';
@@ -19,6 +13,7 @@ import { useForwardedRef } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from '@components/templates/PasscodeModal/styles';
+import { useTranslation } from 'react-i18next';
 
 interface PasscodeModalProps {
   isPasscodeEnabled: boolean;
@@ -30,6 +25,7 @@ export const PasscodeModal = forwardRef<
 >((props, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { top } = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { isPasscodeEnabled } = props;
   const [savedPasscode, setSavedPasscode] = useState([]);
   const [userPasscode, setUserPasscode] = useState<string[]>([]);
@@ -42,10 +38,6 @@ export const PasscodeModal = forwardRef<
   const handlePasscode = (typedPasscode: string[]) => {
     setUserPasscode(typedPasscode);
   };
-
-  const dismiss = useCallback(() => {
-    localRef.current?.dismiss();
-  }, [localRef]);
 
   useEffect(() => {
     if (JSON.stringify(savedPasscode) === JSON.stringify(userPasscode)) {
@@ -72,11 +64,11 @@ export const PasscodeModal = forwardRef<
             <Text
               fontSize={24}
               fontFamily="Inter_700Bold"
-              color={COLORS.nero}
+              color={COLORS.neutral800}
               align="center"
               style={{ paddingTop: verticalScale(160) }}
             >
-              Enter your passcode
+              {t('enter.your.passcode')}
             </Text>
             <Spacer value={verticalScale(24)} />
             <Passcode onPasscodeChange={handlePasscode} />

@@ -13,7 +13,12 @@ import {
   CreateWalletStep2
 } from '@screens/CreateWallet';
 import { RestoreWalletScreen } from '@screens/RestoreWallet';
-import { SuccessBackupComplete } from '@screens/CreateWallet/components';
+import {
+  ConfirmPasscode,
+  SetupPasscode,
+  SuccessBackupComplete,
+  SuccessSetupSecurity
+} from '@screens/CreateWallet/components';
 import { SendCryptoProvider } from '@contexts';
 import { SuccessImport } from '@screens/CreateWallet/components/SuccessImport';
 
@@ -34,6 +39,12 @@ export const HomeStack = () => {
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
+        <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
+        <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
+        <Stack.Screen
+          name="SuccessSetupSecurity"
+          component={SuccessSetupSecurity}
+        />
         <Stack.Screen
           name="SuccessBackupComplete"
           component={SuccessBackupComplete}

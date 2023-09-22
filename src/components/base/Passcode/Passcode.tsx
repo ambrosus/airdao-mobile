@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     height: 18,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: COLORS.nero,
+    borderColor: COLORS.neutral800,
     marginHorizontal: scale(18)
   },
   circleFilled: {
