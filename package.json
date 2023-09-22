@@ -102,6 +102,7 @@
     "react-native-calendar-picker": "^7.1.4",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-graph": "^1.0.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^13.0.1",
     "react-native-mymonero-core": "^0.3.1",
     "react-native-os": "^1.2.6",

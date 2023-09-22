@@ -8,7 +8,7 @@
   "Russian": "Русский",
   "Chinese": "Chinese",
 
-  "wallets.tab": "",
+  "wallets.tab": "Cüzdan",
   "overview.tab": "Genel bakış",
   "watchlist.tab": "İzleme listesi",
   "explore.tab": "Keşfet",
@@ -218,6 +218,11 @@
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.stay.informed": "Haberdar olun",
   "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın.",
+
+  "restore.wallet.loading": "Cüzdanınız alınıyor",
+  "restore.wallet.header": "Mevcut cüzdanı içe aktar",
+  "restore.wallet.title": "Kurtarma ifadesini girin",
+  "restore.wallet.description": "Mevcut cüzdanınızla ilişkili kurtarma ifadesini girin.",
 
   "settings.manage.wallet": "Cüzdan Yönetimi",
   "settings.security": "Güvenlik",

@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  useSafeAreaInsets
-} from 'react-native-safe-area-context';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
-import { Button, Input, Spacer, Spinner, Text } from '@components/base';
+import { Header, InputWithIcon } from '@components/composite';
+import {
+  Button,
+  InputRef,
+  KeyboardDismissingView,
+  Row,
+  Spacer,
+  Spinner,
+  Text
+} from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 import { MnemonicUtils } from '@utils/mnemonics';
+import { StringUtils } from '@utils/string';
 import { styles } from './styles';
 
 export const RestoreWalletScreen = () => {
-  const { top } = useSafeAreaInsets();
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
 
@@ -36,14 +42,28 @@ export const RestoreWalletScreen = () => {
   ]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const inputs = useRef(
+    Array(12)
+      .fill(null)
+      .map(() => React.createRef<InputRef>() as unknown as RefObject<InputRef>)
+  );
 
   useEffect(() => {
     setIsButtonEnabled(mnemonicWords.every((word) => word.trim() !== ''));
   }, [mnemonicWords]);
 
+  const focusNextInput = (from: number) => {
+    if (from === 11) inputs.current[from]?.current?.blur();
+    else inputs.current[from + 1]?.current?.focus();
+  };
+
   const handleWordChange = (index: number, text: string) => {
     const updatedWords = [...mnemonicWords];
-    updatedWords[index] = text;
+    if (text.length >= 2 && text[text.length - 1] == ' ') {
+      // focus next input on space
+      focusNextInput(index);
+    }
+    updatedWords[index] = StringUtils.removeNonAlphabeticCharacters(text);
     setMnemonicWords(updatedWords);
   };
 
@@ -52,31 +72,80 @@ export const RestoreWalletScreen = () => {
     const wordInputs = [];
     for (let i = 0; i < 12; i += 2) {
       wordInputs.push(
-        <View key={i} style={{ flexDirection: 'row' }}>
-          <Input
-            type="text"
-            autoCapitalize="none"
+        <Row
+          key={i}
+          alignItems="center"
+          justifyContent="space-between"
+          style={{
+            marginBottom: verticalScale(16),
+            columnGap: scale(16)
+          }}
+        >
+          <View
             style={{
               flex: 1,
-              marginBottom: verticalScale(16)
+              width: '100%'
             }}
-            placeholder={`${i + 1}.`}
-            placeholderTextColor={COLORS.neutral800}
-            onChangeText={(text) => handleWordChange(i, text)}
-          />
-          <Spacer horizontal value={scale(16)} />
-          <Input
-            type="text"
-            autoCapitalize="none"
+          >
+            <InputWithIcon
+              ref={inputs.current[i]}
+              value={mnemonicWords[i]}
+              type="text"
+              returnKeyType="next"
+              autoCapitalize="none"
+              iconLeft={
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_400Regular"
+                  color={
+                    mnemonicWords[i] !== ''
+                      ? COLORS.neutral900
+                      : COLORS.alphaBlack60
+                  }
+                >
+                  {i + 1}.{' '}
+                </Text>
+              }
+              spacingLeft={0}
+              spacingRight={0}
+              onChangeText={(text) => handleWordChange(i, text)}
+              onSubmitEditing={() => focusNextInput(i)}
+            />
+          </View>
+          <View
             style={{
               flex: 1,
-              marginBottom: verticalScale(16)
+              width: '100%'
             }}
-            placeholder={`${i + 2}.`}
-            placeholderTextColor={COLORS.neutral800}
-            onChangeText={(text) => handleWordChange(i + 1, text)}
-          />
-        </View>
+          >
+            <InputWithIcon
+              ref={inputs.current[i + 1]}
+              value={mnemonicWords[i + 1]}
+              type="text"
+              autoCapitalize="none"
+              returnKeyType={i === 10 ? 'done' : 'next'}
+              iconLeft={
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_400Regular"
+                  color={
+                    mnemonicWords[i + 1] !== ''
+                      ? COLORS.neutral900
+                      : COLORS.alphaBlack60
+                  }
+                >
+                  {i + 2}.{' '}
+                </Text>
+              }
+              spacingLeft={0}
+              spacingRight={0}
+              onChangeText={(text) => handleWordChange(i + 1, text)}
+              onSubmitEditing={() =>
+                i === 10 ? navigateToRestoreWallet() : focusNextInput(i + 1)
+              }
+            />
+          </View>
+        </Row>
       );
     }
 
@@ -108,23 +177,23 @@ export const RestoreWalletScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       {isLoading ? (
-        <SafeAreaView style={styles.loadingContainer}>
+        <View style={styles.loadingContainer}>
           <Text
             align="center"
             fontSize={20}
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('importing.wallet.loader')}
+            {t('restore.wallet.loading')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <Spinner />
-        </SafeAreaView>
+        </View>
       ) : (
-        <View style={{ flex: 1, top, justifyContent: 'space-between' }}>
-          <View>
+        <View style={{ flex: 1 }}>
+          <KeyboardDismissingView style={{ flex: 1 }}>
             <Header
               title={
                 <Text
@@ -132,59 +201,69 @@ export const RestoreWalletScreen = () => {
                   fontSize={16}
                   color={COLORS.neutral800}
                 >
-                  {t('import.existing.wallet')}
+                  {t('restore.wallet.header')}
                 </Text>
               }
               titlePosition="left"
               style={{ shadowColor: 'transparent' }}
             />
-            <Spacer value={verticalScale(16)} />
-            <Text
-              align="center"
-              fontFamily="Inter_700Bold"
-              fontSize={24}
-              color={COLORS.neutral800}
+            <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                flex: 1,
+                justifyContent: 'space-between'
+              }}
             >
-              {t('enter.recovery.phrase')}
-            </Text>
-            <Spacer value={verticalScale(8)} />
-            <View style={{ paddingHorizontal: scale(16) }}>
-              <Text
-                color={COLORS.neutral800}
-                fontFamily="Inter_500Medium"
-                fontSize={15}
-                style={{ textAlign: 'center' }}
+              <View>
+                <Spacer value={verticalScale(16)} />
+                <Text
+                  align="center"
+                  fontFamily="Inter_700Bold"
+                  fontSize={24}
+                  color={COLORS.neutral800}
+                >
+                  {t('restore.wallet.title')}
+                </Text>
+                <Spacer value={verticalScale(8)} />
+                <View style={{ paddingHorizontal: scale(16) }}>
+                  <Text
+                    color={COLORS.neutral800}
+                    fontFamily="Inter_500Medium"
+                    fontSize={15}
+                    style={{ textAlign: 'center' }}
+                  >
+                    {t('restore.wallet.description')}
+                  </Text>
+                  <Spacer value={verticalScale(16)} />
+                  {renderWords()}
+                  <Spacer value={verticalScale(16)} />
+                </View>
+              </View>
+              <Button
+                disabled={!isButtonEnabled}
+                onPress={navigateToRestoreWallet}
+                type="circular"
+                style={{
+                  bottom: verticalScale(32),
+                  marginHorizontal: scale(16),
+                  backgroundColor: isButtonEnabled
+                    ? COLORS.brand600
+                    : COLORS.alphaBlack5
+                }}
               >
-                {t('enter.recovery.phrase.text')}
-              </Text>
-              <Spacer value={verticalScale(16)} />
-              {renderWords()}
-              <Spacer value={verticalScale(16)} />
-            </View>
-          </View>
-          <Button
-            disabled={!isButtonEnabled}
-            onPress={navigateToRestoreWallet}
-            type="circular"
-            style={{
-              bottom: verticalScale(120),
-              marginHorizontal: scale(16),
-              backgroundColor: isButtonEnabled
-                ? COLORS.brand600
-                : COLORS.alphaBlack5
-            }}
-          >
-            <Text
-              fontSize={16}
-              fontFamily="Inter_600SemiBold"
-              color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-              style={{ marginVertical: scale(12) }}
-            >
-              {t('continue.btn')}
-            </Text>
-          </Button>
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_600SemiBold"
+                  color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
+                  style={{ marginVertical: scale(12) }}
+                >
+                  {t('continue.btn')}
+                </Text>
+              </Button>
+            </KeyboardAwareScrollView>
+          </KeyboardDismissingView>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
