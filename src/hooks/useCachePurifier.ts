@@ -22,11 +22,12 @@ export const useCachePurifier = () => {
     );
     await Cache.setItem(CacheKey.AddressLists, cacheableLists);
 
-    // filter unique addresses
+    // watchlisted accounts
     const knownAddresses: CacheableAccount[] = allAddresses
       .filter((account) => account.isOnWatchlist)
       .map((account) => ExplorerAccount.toCacheable(account));
 
+    // add accounts from groups
     for (const list of listsOfAddressGroup) {
       for (const account of list.accounts) {
         if (knownAddresses.indexOfItem(account, 'address') === -1) {

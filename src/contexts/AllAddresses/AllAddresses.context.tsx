@@ -8,6 +8,7 @@ import { createContextSelector } from '@helpers/createContextSelector';
 import { NotificationService } from '@lib';
 import { DeviceEventEmitter } from 'react-native';
 import { EVENTS } from '@constants/events';
+import { ArrayUtils } from '@utils/array';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -128,7 +129,10 @@ const AllAddressesContext = () => {
     setLoading(true);
     const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
       []) as CacheableAccount[];
-    const populatedAddresses = await populateAddresses(addresses);
+    const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
+    const populatedAddresses = await populateAddresses(
+      ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+    );
     setAllAddresses(populatedAddresses);
     reducer({ type: 'set', payload: populatedAddresses });
     setLoading(false);
