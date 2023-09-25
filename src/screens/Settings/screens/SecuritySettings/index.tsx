@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
-import { Row, Switch, Text } from '@components/base';
+import { Row, Spacer, Switch, Text } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { database } from '@database/main';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -64,6 +64,7 @@ export const SecuritySettingsScreen = () => {
   return (
     <SafeAreaView>
       <Header title="Security" style={{ shadowColor: 'transparent' }} />
+      <Spacer value={verticalScale(12)} />
       <View style={{ paddingHorizontal: scale(18) }}>
         <Row
           alignItems="center"
