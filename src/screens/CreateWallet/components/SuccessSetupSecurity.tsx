@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -47,7 +47,10 @@ export const SuccessSetupSecurity = () => {
       </View>
       <PrimaryButton
         onPress={navigateToSetUpSecurity}
-        style={{ paddingHorizontal: scale(16) }}
+        style={{
+          paddingHorizontal: scale(16),
+          marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
+        }}
       >
         <Text
           align="center"
