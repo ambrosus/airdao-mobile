@@ -7,10 +7,7 @@ import React, {
   useState
 } from 'react';
 import { database } from '@database/main';
-import {
-  FaceIDModal,
-  PasscodeModal
-} from '@components/templates/PasscodeModal';
+import { PasscodeModal } from '@components/templates/PasscodeModal';
 import { BottomSheetRef } from '@components/composite';
 import { useAppState } from '@hooks';
 import { View } from 'react-native';
@@ -30,7 +27,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
   const passcodeModalRef = useRef<BottomSheetRef>(null);
-  const faceIDModalRef = useRef<BottomSheetRef>(null);
 
   const { prevState, appState } = useAppState();
 
@@ -45,37 +41,22 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   }, [appState]);
 
   useEffect(() => {
-    if (prevState === 'background') {
-      if (isFaceIDEnabled) {
-        faceIDModalRef.current?.show();
-      }
-      if (isPasscodeEnabled) {
-        passcodeModalRef.current?.show();
-      }
-    } else if (prevState === null) {
-      if (isFaceIDEnabled) {
-        setTimeout(() => {
-          faceIDModalRef.current?.show();
-        }, 1000);
-      }
-      if (isPasscodeEnabled) {
-        setTimeout(() => {
-          passcodeModalRef.current?.show();
-        }, 1000);
-      }
+    if (
+      (prevState === 'background' || prevState === null) &&
+      (isFaceIDEnabled || isPasscodeEnabled)
+    ) {
+      passcodeModalRef.current?.show();
     }
   }, [isFaceIDEnabled, isPasscodeEnabled, prevState]);
 
   return (
     <PasscodeContext.Provider value={{ isPasscodeEnabled, isFaceIDEnabled }}>
-      {isPasscodeEnabled && !isFaceIDEnabled && (
+      {isPasscodeEnabled && (
         <PasscodeModal
           ref={passcodeModalRef}
           isPasscodeEnabled={isPasscodeEnabled}
+          isFaceIDEnabled={isFaceIDEnabled}
         />
-      )}
-      {isFaceIDEnabled && (
-        <FaceIDModal ref={faceIDModalRef} isFaceIDEnabled={isFaceIDEnabled} />
       )}
       <View style={{ flex: 1 }}>{children}</View>
     </PasscodeContext.Provider>

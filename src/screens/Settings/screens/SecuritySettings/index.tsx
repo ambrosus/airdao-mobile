@@ -33,7 +33,8 @@ export const SecuritySettingsScreen = () => {
           isEnrolled
         ) {
           const result = await LocalAuthentication.authenticateAsync({
-            promptMessage: 'Authenticate with Face ID'
+            promptMessage: 'Authenticate with Face ID',
+            fallbackLabel: 'Enter PIN'
           });
           if (result.success) {
             await database.localStorage.set('FaceID', true);
