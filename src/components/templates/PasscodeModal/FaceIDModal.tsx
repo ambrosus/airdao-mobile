@@ -11,6 +11,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 
 interface PasscodeModalProps {
   isFaceIDEnabled: boolean;
+  biometricType?: string | null;
 }
 
 export const FaceIDModal = forwardRef<
@@ -21,14 +22,21 @@ export const FaceIDModal = forwardRef<
   const { prevState } = useAppState();
 
   useEffect(() => {
-    const authenticateWithFaceID = async () => {
+    const authenticateWithBiometric = async () => {
       try {
+        // let promptMessage = 'Authenticate with Biometric';
+        // if (props.biometricType === 'Face ID') {
+        //   promptMessage = 'Authenticate with Face ID';
+        // } else if (props.biometricType === 'Fingerprint, IRIS or etc') {
+        //   promptMessage = 'Authenticate with Fingerprint';
+        // }
+
         const result = await LocalAuthentication.authenticateAsync({
           promptMessage: 'Authenticate with Face ID',
           fallbackLabel: 'Fallback'
         });
+
         if (result.success) {
-          console.log(1);
           localRef.current?.dismiss();
         } else {
           console.log('Authentication failed');
@@ -37,15 +45,16 @@ export const FaceIDModal = forwardRef<
         console.error('Authentication error:', error);
       }
     };
+
     if (props.isFaceIDEnabled && prevState === 'background') {
-      authenticateWithFaceID();
+      authenticateWithBiometric();
     }
     if (props.isFaceIDEnabled && prevState === null) {
       setTimeout(() => {
-        authenticateWithFaceID();
+        authenticateWithBiometric();
       }, 1200);
     }
-  }, [props.isFaceIDEnabled, localRef, prevState]);
+  }, [props.isFaceIDEnabled, localRef, prevState, props.biometricType]);
 
   return (
     <BottomSheet
@@ -54,6 +63,7 @@ export const FaceIDModal = forwardRef<
       height={Dimensions.get('screen').height}
     >
       <></>
+      {/*<Text>Biometric modal rendered</Text>*/}
     </BottomSheet>
   );
 });

@@ -24,7 +24,7 @@
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
-        "NSFaceIDUsageDescription": "Allow AirDAO to access FaceID"
+        "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
       "buildNumber": "1.1.2"
     },

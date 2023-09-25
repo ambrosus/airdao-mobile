@@ -7,11 +7,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.neutral0,
     paddingTop: 300,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.neutral0
+    backgroundColor: COLORS.neutral0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0
   },
   button: {
     paddingTop: verticalScale(24),

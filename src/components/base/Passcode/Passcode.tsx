@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { passcodeRegex } from '@constants/regex';
 
 export const Passcode = ({
   onPasscodeChange
@@ -11,7 +12,7 @@ export const Passcode = ({
   const [code, setCode] = useState('');
 
   const handleCodeChange = (text: string) => {
-    if (/^\d{0,4}$/.test(text)) {
+    if (text.match(passcodeRegex)) {
       setCode(text);
       const passcodeArray = text.split('');
       onPasscodeChange(passcodeArray);
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 24,
     borderBottomWidth: 2,
-    borderColor: 'black',
+    borderColor: COLORS.neutral800,
     width: scale(220),
     height: verticalScale(60),
     opacity: 0,
@@ -77,6 +78,6 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(18)
   },
   circleFilled: {
-    backgroundColor: 'black'
+    backgroundColor: COLORS.neutral800
   }
 });

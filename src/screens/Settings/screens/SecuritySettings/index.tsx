@@ -5,46 +5,92 @@ import { Row, Switch, Text } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { database } from '@database/main';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { useTranslation } from 'react-i18next';
+// import { Toast, ToastPosition, ToastType } from '@components/modular';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
-  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
+  const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
+  const [biometricType, setBiometricType] = useState<string | null>(null);
 
-  const toggleFaceIDAuthentication = async () => {
+  // TODO modify to setup keys to localstorage db for diff types of biometrics
+  const toggleBiometricAuthentication = async () => {
     try {
-      if (isFaceIDEnabled) {
+      if (isBiometricEnabled) {
         await database.localStorage.set('FaceID', false);
-        setIsFaceIDEnabled(false);
+        setIsBiometricEnabled(false);
       } else {
-        const hasHardware = await LocalAuthentication.hasHardwareAsync();
-        const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+        const availableTypes =
+          await LocalAuthentication.supportedAuthenticationTypesAsync();
 
-        if (hasHardware && isEnrolled) {
+        if (
+          availableTypes.includes(
+            LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+          )
+        ) {
           const result = await LocalAuthentication.authenticateAsync({
             promptMessage: 'Authenticate with Face ID'
           });
           if (result.success) {
             await database.localStorage.set('FaceID', true);
-            setIsFaceIDEnabled(true);
+            setIsBiometricEnabled(true);
           }
+          setBiometricType('Face ID');
+        } else if (
+          availableTypes.includes(
+            LocalAuthentication.AuthenticationType.FINGERPRINT
+          )
+        ) {
+          const result = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Authenticate with Fingerprint'
+          });
+          if (result.success) {
+            await database.localStorage.set('FaceID', true);
+            setIsBiometricEnabled(true);
+          }
+          setBiometricType('Fingerprint');
         } else {
-          // TODO
+          setBiometricType(null);
         }
       }
     } catch (error) {
-      console.error('Face ID error:', error);
+      console.error('Biometric authentication error:', error);
     }
   };
 
   useEffect(() => {
-    const checkFaceIDStatus = async () => {
-      const storedFaceID = await database.localStorage.get('FaceID');
-      setIsFaceIDEnabled(!!storedFaceID);
+    const checkBiometricStatus = async () => {
+      const storedBiometric = await database.localStorage.get('Biometric');
+      setIsBiometricEnabled(!!storedBiometric);
     };
-    checkFaceIDStatus();
+    checkBiometricStatus();
+  }, []);
+
+  useEffect(() => {
+    const checkBiometricType = async () => {
+      if (Platform.OS === 'ios') {
+        const availableTypes =
+          await LocalAuthentication.supportedAuthenticationTypesAsync();
+        if (
+          availableTypes.includes(
+            LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+          )
+        ) {
+          setBiometricType('Face ID');
+        } else if (
+          availableTypes.includes(
+            LocalAuthentication.AuthenticationType.FINGERPRINT
+          )
+        ) {
+          setBiometricType('Fingerprint');
+        } else {
+          setBiometricType(null);
+        }
+      }
+    };
+    checkBiometricType();
   }, []);
 
   return (
@@ -65,8 +111,8 @@ export const SecuritySettingsScreen = () => {
           </Text>
           <Row alignItems="center">
             <Switch
-              value={isFaceIDEnabled}
-              onValueChange={toggleFaceIDAuthentication}
+              value={isBiometricEnabled}
+              onValueChange={toggleBiometricAuthentication}
             />
           </Row>
         </Row>
