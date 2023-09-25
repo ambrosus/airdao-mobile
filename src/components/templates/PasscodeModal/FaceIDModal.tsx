@@ -27,8 +27,11 @@ export const FaceIDModal = forwardRef<
         // let promptMessage = 'Authenticate with Biometric';
         // if (props.biometricType === 'Face ID') {
         //   promptMessage = 'Authenticate with Face ID';
-        // } else if (props.biometricType === 'Fingerprint, IRIS or etc') {
-        //   promptMessage = 'Authenticate with Fingerprint';
+        // } else if (
+        //   props.biometricType === 'Fingerprint' ||
+        //   props.biometricType === 'IRIS'
+        // ) {
+        //   promptMessage = 'Authenticate with Fingerprint or IRIS';
         // }
 
         const result = await LocalAuthentication.authenticateAsync({
@@ -37,6 +40,7 @@ export const FaceIDModal = forwardRef<
         });
 
         if (result.success) {
+          console.log(result.success, 'auth res', 'result: ', result);
           localRef.current?.dismiss();
         } else {
           console.log('Authentication failed');
