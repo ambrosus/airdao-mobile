@@ -27,8 +27,11 @@
 
   "common.address": "Address",
   "common.address_plural": "Addresses",
+  "common.date": "Date",
+  "common.status": "Status",
   "common.transaction": "Transaction",
   "common.transaction_plural": "Transactions",
+  "common.transaction.status.SUCCESS": "Completed",
 
   "search.address.input": "Search Address or TX hash",
   "top.holders": "Top holders",

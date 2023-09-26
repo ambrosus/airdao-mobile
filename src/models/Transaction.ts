@@ -1,6 +1,5 @@
 import { TransactionType } from '@appTypes/enums';
 import { TransactionDTO } from './dtos/TransactionDTO';
-import { ExplorerAccount } from './Explorer';
 
 export class Transaction {
   _id: string;
@@ -9,8 +8,8 @@ export class Transaction {
   fee: number;
   type: TransactionType;
   hash: string;
-  from: ExplorerAccount | null;
-  to: ExplorerAccount | null;
+  from: string;
+  to: string;
   status: string;
   value: {
     wei: string;
@@ -29,8 +28,8 @@ export class Transaction {
     this.fee = details.gasCost.ether;
     this.type = details.type;
     this.hash = details.hash;
-    this.from = details.from_id ? new ExplorerAccount(details.from_id) : null;
-    this.to = details.to_id ? new ExplorerAccount(details.to_id) : null;
+    this.from = details.from;
+    this.to = details.to;
     this.status = details.status;
     this.value = details.value;
     this.gasCost = details.gasCost;

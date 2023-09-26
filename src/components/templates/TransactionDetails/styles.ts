@@ -1,14 +1,12 @@
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    paddingBottom: verticalScale(77)
-  },
-  shareBtn: {
-    backgroundColor: COLORS.alphaBlack5,
-    paddingVertical: verticalScale(12.5)
+  status: {
+    paddingHorizontal: scale(8),
+    borderRadius: 1000,
+    backgroundColor: COLORS.success100,
+    minHeight: verticalScale(24)
   }
 });

@@ -1,6 +1,11 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { ExplorerAccountDTO, ExplorerInfoDTO, Transaction } from '@models';
+import {
+  ExplorerAccountDTO,
+  ExplorerInfoDTO,
+  TokenDTO,
+  Transaction
+} from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
@@ -87,22 +92,26 @@ const getTransactionsOfAccount = async (
   }
 };
 
-const searchWalletV2 = async (
-  wallet: string | undefined
-): Promise<{
-  tokens: {
-    address: string;
-    name: string;
-    balance: { wei: string; ether: number };
-  }[];
-  transactions: Transaction[];
-}> => {
+const getTransactionsOfAccountV2 = async (
+  address: string,
+  page: number,
+  limit: number
+): Promise<
+  PaginatedResponseBody<{
+    tokens: TokenDTO[];
+    transactions: TransactionDTO[];
+  }>
+> => {
   try {
-    const apiUrl = `${explorerapiV2Url}/addresses/${wallet}/all`;
+    const _address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+    const apiUrl = `${explorerapiV2Url}/addresses/${_address}/all?page=${page}&limit=${limit}`;
     const response = await axios.get(apiUrl);
     const tokens = response.data.tokens;
     const transactions = response.data.data;
-    return { tokens, transactions };
+    return {
+      data: { tokens, transactions },
+      next: response.data.pagination.hasNext ? (page + 1).toString() : null
+    };
   } catch (error) {
     // TODO handle error
     throw error;
@@ -134,6 +143,6 @@ export const explorerService = {
   searchAddress,
   getTransactionsOfAccount,
   getTransactionDetails,
-  searchWalletV2,
+  getTransactionsOfAccountV2: getTransactionsOfAccountV2,
   getTokenTransactionsV2
 };

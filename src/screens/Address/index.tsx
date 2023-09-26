@@ -152,6 +152,17 @@ export const AddressDetails = (): JSX.Element => {
       <Spacer value={verticalScale(16)} />
       <View style={styles.divider} />
       <Spacer value={verticalScale(16)} />
+      <Row alignItems="center">
+        <Spacer horizontal value={scale(16)} />
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          color={COLORS.neutral800}
+        >
+          {t('transactions')}
+        </Text>
+      </Row>
+      <Spacer value={verticalScale(12)} />
       <AccountTransactions
         transactions={transactions}
         onEndReached={loadMoreTransactions}
