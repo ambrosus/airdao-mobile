@@ -54,7 +54,13 @@ export function useTokensAndTransactions(
   const transactions =
     data && data.pages
       ? (data.pages
-          .map((page) => page.data.transactions.map((t) => new Transaction(t)))
+          .map((page) =>
+            page.data.transactions.map((t) => {
+              const transaction = new Transaction(t);
+              transaction.isSent = t.from === address;
+              return transaction;
+            })
+          )
           .flat(Number.POSITIVE_INFINITY) as Transaction[])
       : [];
 

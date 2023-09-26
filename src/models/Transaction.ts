@@ -20,6 +20,7 @@ export class Transaction {
     ether: number;
     wei: string;
   };
+  isSent?: boolean;
 
   constructor(details: TransactionDTO) {
     this._id = details._id;
