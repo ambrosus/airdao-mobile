@@ -103,8 +103,7 @@ const getTransactionsOfAccountV2 = async (
   }>
 > => {
   try {
-    const _address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
-    const apiUrl = `${explorerapiV2Url}/addresses/${_address}/all?page=${page}&limit=${limit}`;
+    const apiUrl = `${explorerapiV2Url}/addresses/${address}/all?page=${page}&limit=${limit}`;
     const response = await axios.get(apiUrl);
     const tokens = response.data.tokens;
     const transactions = response.data.data;
