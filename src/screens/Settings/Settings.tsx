@@ -1,7 +1,10 @@
 import React from 'react';
 import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets
+} from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';
@@ -59,19 +62,20 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
 
 export const SettingsScreen = () => {
   const { t } = useTranslation();
+  const { top } = useSafeAreaInsets();
 
   const renderMenu = (item: SettingsMenuItem): JSX.Element => {
     return <SettingsMenuItemView item={item} key={item.route} />;
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[{ top }, styles.container]}>
       <Text fontSize={24} fontFamily="Inter_700Bold" color={COLORS.neutral800}>
         {t('settings.tab')}
       </Text>
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
