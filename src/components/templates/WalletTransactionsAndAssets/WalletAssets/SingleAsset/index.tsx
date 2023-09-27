@@ -13,7 +13,8 @@ import {
   TetherLogo,
   BUSDLogo,
   USDCoinLogo,
-  UndefinedTokenLogo
+  UndefinedTokenLogo,
+  HeraPoolTokenLogo
 } from '@components/svg/icons';
 
 interface SingleAssetProps {
@@ -40,8 +41,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
       case 'Tether':
         return <TetherLogo />;
       case '':
-        // TODO add Hera pool token logo here bcs only this token comes with empty name
-        return <UndefinedTokenLogo />;
+        return <HeraPoolTokenLogo />;
       default:
         return <AirDAOTokenLogo />;
     }
@@ -50,7 +50,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   return (
     <View style={styles.container}>
       <Row>
-        {logoComponent}
+        <View style={{ alignSelf: 'center' }}>{logoComponent}</View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
           <Row justifyContent="space-between">
