@@ -13,7 +13,6 @@ import {
   TetherLogo,
   BUSDLogo,
   USDCoinLogo,
-  UndefinedTokenLogo,
   HeraPoolTokenLogo
 } from '@components/svg/icons';
 import { TokenDTO } from '@models';
@@ -24,7 +23,7 @@ interface SingleAssetProps {
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { token } = props;
-  const { name, balance, symbol } = token;
+  const { name, balance, symbol, address } = token;
   const usdPrice = useUSDPrice(balance.ether);
   const { data: ambTokenData } = useAMBPrice();
 
