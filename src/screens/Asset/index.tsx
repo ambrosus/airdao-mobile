@@ -50,7 +50,9 @@ export const AssetScreen = () => {
                 fontSize={15}
                 color={COLORS.neutral800}
               >
-                {tokenInfo.name || 'NULL'}
+                {tokenInfo.name === ''
+                  ? 'Hera pool token'
+                  : tokenInfo.name || tokenInfo.address}
               </Text>
             </Row>
           </>

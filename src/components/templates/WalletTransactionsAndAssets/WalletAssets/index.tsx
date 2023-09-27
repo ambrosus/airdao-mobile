@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount } from '@models';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { verticalScale } from '@utils/scaling';
 
 interface WalletAssetsProps {
   tokens:
@@ -72,7 +73,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const data = [...ambTokenData, ...(tokens || [])];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingBottom: verticalScale(100) }}>
       {!data && error && loading ? (
         <LocalizedRenderEmpty text={t('no.assets.yet')} />
       ) : (

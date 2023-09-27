@@ -23,7 +23,7 @@ interface SingleAssetProps {
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { name, balance } = props;
+  const { name, balance, address } = props;
   const usdPrice = useUSDPrice(balance.ether);
   const { data: ambTokenData } = useAMBPrice();
 
@@ -33,13 +33,14 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
         return <AirDAOTokenLogo />;
       case 'Ethereum':
         return <EthereumLogo />;
-      case 'BUSD':
+      case 'BUSD Token':
         return <BUSDLogo />;
-      case 'USDCoin':
+      case 'USD Coin':
         return <USDCoinLogo />;
       case 'Tether':
         return <TetherLogo />;
       case '':
+        // TODO add Hera pool token logo here bcs only this token comes with empty name
         return <UndefinedTokenLogo />;
       default:
         return <AirDAOTokenLogo />;
@@ -58,7 +59,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name || 'NULL'}
+              {name === '' ? 'Hera pool token' : name || address}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
