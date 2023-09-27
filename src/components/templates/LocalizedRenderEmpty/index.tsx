@@ -18,6 +18,7 @@ export const LocalizedRenderEmpty = ({ text }: LocalizedRenderEmptyProps) => {
       <EmptyAddressListPlaceholderIcon />
       <Spacer value={verticalScale(16)} />
       <Text
+        align="center"
         fontFamily="Inter_400Regular"
         fontSize={15}
         color={COLORS.neutral500}

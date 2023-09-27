@@ -8,12 +8,12 @@ import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
 import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
 import { useTokensAndTransactions, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
+import { AccountTransactions } from '@components/templates';
 
 export const AssetScreen = () => {
   const {
@@ -24,14 +24,17 @@ export const AssetScreen = () => {
   const { top } = useSafeAreaInsets();
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
 
-  const { data: tokensAndTransactions } =
-    useTokensAndTransactions(walletAccount);
+  const { data: tokensAndTransactions } = useTokensAndTransactions(
+    walletAccount,
+    1,
+    20,
+    !!walletAccount
+  );
 
-  const {
-    data: transactions,
-    loading,
-    error
-  } = useTransactionsOfToken(walletAccount, tokenInfo.address);
+  const { data: transactions, loading } = useTransactionsOfToken(
+    walletAccount,
+    tokenInfo.address
+  );
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
@@ -50,7 +53,9 @@ export const AssetScreen = () => {
                 fontSize={15}
                 color={COLORS.neutral800}
               >
-                {tokenInfo.name || 'NULL'}
+                {tokenInfo.name === ''
+                  ? 'Hera pool token'
+                  : tokenInfo.name || tokenInfo.address}
               </Text>
             </Row>
           </>
@@ -116,11 +121,10 @@ export const AssetScreen = () => {
           {t('transactions')}
         </Text>
       </View>
-      <View style={{ height: '80%' }}>
-        <WalletTransactions
-          loading={loading}
+      <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
+        <AccountTransactions
           transactions={transactions || tokensAndTransactions?.transactions}
-          error={error}
+          loading={loading}
         />
       </View>
     </View>

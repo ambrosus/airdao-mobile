@@ -1,35 +1,76 @@
-import { useQuery } from '@tanstack/react-query';
-import { QueryResponse } from '@appTypes/QueryResponse';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
 import { Transaction, TokenDTO } from '@models';
+import { PaginatedResponseBody } from '@appTypes/Pagination';
+import { TransactionDTO } from '@models/dtos/TransactionDTO';
 
 export function useTokensAndTransactions(
-  walletAddress: string | undefined
-): QueryResponse<
-  { tokens: TokenDTO[]; transactions: Transaction[] } | undefined
-> {
-  const { data, error, isInitialLoading } = useQuery<{
-    tokens: TokenDTO[];
-    transactions: Transaction[];
-  }>(
-    ['tokens-and-transactions', walletAddress],
-    async () => {
-      try {
-        const { tokens, transactions } =
-          await API.explorerService.searchWalletV2(walletAddress);
-        return { tokens, transactions };
-      } catch (error) {
-        throw error;
-      }
+  address: string,
+  page: number,
+  limit: number,
+  enabled: boolean
+): PaginatedQueryResponse<{ tokens: TokenDTO[]; transactions: Transaction[] }> {
+  const {
+    data,
+    hasNextPage,
+    error,
+    isInitialLoading,
+    isFetchingNextPage,
+    fetchNextPage
+  } = useInfiniteQuery<
+    PaginatedResponseBody<{
+      tokens: TokenDTO[];
+      transactions: TransactionDTO[];
+    }>
+  >(['wallet-tokens-and-transactions', address, page, limit], {
+    queryFn: ({ pageParam = 1 }) => {
+      return API.explorerService.getTransactionsOfAccountV2(
+        address,
+        parseInt(pageParam),
+        limit
+      );
     },
-    {
-      enabled: !!walletAddress
-    }
-  );
+    getNextPageParam: (
+      lastPage: PaginatedResponseBody<{
+        tokens: TokenDTO[];
+        transactions: TransactionDTO[];
+      }>
+    ) => {
+      if (lastPage.next) {
+        return lastPage.next;
+      }
+      return null;
+    },
+    enabled
+  });
+
+  const tokens =
+    data && data.pages
+      ? (data.pages
+          .map((page) => page.data.tokens)
+          .flat(Number.POSITIVE_INFINITY) as TokenDTO[])
+      : [];
+  const transactions =
+    data && data.pages
+      ? (data.pages
+          .map((page) =>
+            page.data.transactions.map((t) => {
+              const transaction = new Transaction(t);
+              transaction.isSent = t.from === address;
+              return transaction;
+            })
+          )
+          .flat(Number.POSITIVE_INFINITY) as Transaction[])
+      : [];
 
   return {
-    data,
-    loading: isInitialLoading,
-    error
+    data: data?.pages
+      ? { tokens, transactions }
+      : { tokens: [], transactions: [] },
+    loading: isInitialLoading || isFetchingNextPage,
+    error,
+    hasNextPage: Boolean(hasNextPage),
+    fetchNextPage
   };
 }

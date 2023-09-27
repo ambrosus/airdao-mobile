@@ -24,7 +24,7 @@ export function useTransactionsOfToken(
   );
 
   return {
-    data,
+    data: data || [],
     loading: isInitialLoading,
     error
   };

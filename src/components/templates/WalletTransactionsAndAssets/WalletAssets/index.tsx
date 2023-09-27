@@ -6,17 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import { Spinner } from '@components/base';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
-import { ExplorerAccount } from '@models';
+import { ExplorerAccount, TokenDTO } from '@models';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { verticalScale } from '@utils/scaling';
 
 interface WalletAssetsProps {
-  tokens:
-    | {
-        name: string;
-        address: string;
-        balance: { wei: string; ether: number };
-      }[]
-    | undefined;
+  tokens: TokenDTO[] | undefined;
   loading: boolean;
   error: boolean;
   account: ExplorerAccount;
@@ -39,40 +34,29 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
     navigation.navigate('AssetScreen', { tokenInfo, walletAccount });
   };
 
-  const renderToken = ({
-    item
-  }: {
-    item: {
-      name: string;
-      address: string;
-      balance: { wei: string; ether: number };
-    };
-  }) => {
+  const renderToken = ({ item }: { item: TokenDTO }) => {
     return (
       <TouchableOpacity
         onPress={() => navigateToAssetScreen(item, account.address)}
       >
-        <SingleAsset
-          address={item.address}
-          name={item.name}
-          balance={item.balance}
-        />
+        <SingleAsset token={item} />
       </TouchableOpacity>
     );
   };
 
-  const ambTokenData = [
+  const ambTokenData: TokenDTO[] = [
     {
       name: 'AMB',
       address: account.address,
-      balance: { wei: '', ether: account.ambBalance }
+      balance: { wei: '', ether: account.ambBalance },
+      symbol: 'AMB'
     }
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingBottom: verticalScale(100) }}>
       {!data && error && loading ? (
         <LocalizedRenderEmpty text={t('no.assets.yet')} />
       ) : (

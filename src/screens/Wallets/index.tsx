@@ -6,7 +6,7 @@ import {
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { Spacer } from '@components/base';
-import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
+import { useBalanceOfAddress } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
@@ -32,12 +32,6 @@ export const HomeScreen = () => {
       selectedAccountBalance.ether
     );
   }
-
-  const {
-    data: tokensAndTransactions,
-    loading,
-    error
-  } = useTokensAndTransactions(selectedAccountWithBalance?.address);
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -85,13 +79,7 @@ export const HomeScreen = () => {
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
             <AccountActions address={selectedAccountWithBalance.address} />
             <Spacer value={verticalScale(32)} />
-            <WalletTransactionsAndAssets
-              account={selectedAccountWithBalance}
-              transactions={tokensAndTransactions?.transactions}
-              tokens={tokensAndTransactions?.tokens}
-              loading={loading}
-              error={error}
-            />
+            <WalletTransactionsAndAssets account={selectedAccountWithBalance} />
           </>
         )}
       </View>
