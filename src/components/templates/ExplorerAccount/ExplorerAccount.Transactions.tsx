@@ -1,10 +1,18 @@
 import React from 'react';
-import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native';
+import {
+  ListRenderItemInfo,
+  SectionList,
+  SectionListData,
+  StyleSheet
+} from 'react-native';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils/scaling';
-import { Spacer, Spinner } from '@components/base';
+import { Spacer, Spinner, Text } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
+import { COLORS } from '@constants/colors';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -13,11 +21,44 @@ interface ExplorerAccountViewTransactionsProps {
   onEndReached?: () => unknown;
 }
 
+interface TransactionSection {
+  title: string;
+  data: Transaction[];
+  index: number;
+}
+const DAY_FORMAT = 'MMM DD YYYY';
+
 export const AccountTransactions = (
   props: ExplorerAccountViewTransactionsProps
 ): JSX.Element => {
   const { transactions, loading, showTransactionDetailsOnPress, onEndReached } =
     props;
+  const { t } = useTranslation();
+
+  const sectionizedTransactions: TransactionSection[] = React.useMemo(() => {
+    const sectionMap = new Map<string, Transaction[]>();
+    transactions.forEach((n) => {
+      const key = moment(n.timestamp).format(DAY_FORMAT);
+      const transactionsInSection = sectionMap.get(key) || [];
+      transactionsInSection.push(n);
+      sectionMap.set(key, transactionsInSection);
+    });
+    const sections: TransactionSection[] = [];
+    let index = 0;
+    for (const [date, transactions] of sectionMap) {
+      const today = moment().format(DAY_FORMAT);
+      const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
+      const title =
+        date === today
+          ? t('today')
+          : date === yesterday
+          ? t('yesterday')
+          : date;
+      sections.push({ title, data: transactions, index });
+      index++;
+    }
+    return sections;
+  }, [transactions, t]);
 
   const renderTransaction = (
     args: ListRenderItemInfo<Transaction>
@@ -30,19 +71,44 @@ export const AccountTransactions = (
     );
   };
 
+  const renderSectionHeader = (info: {
+    section: SectionListData<Transaction, TransactionSection>;
+  }) => {
+    return (
+      <>
+        {info.section.index !== 0 && (
+          <>
+            <Spacer value={verticalScale(40)} />
+          </>
+        )}
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral300}
+        >
+          {info.section.title.toUpperCase()}
+        </Text>
+        <Spacer value={verticalScale(16)} />
+      </>
+    );
+  };
+
   return (
     <>
-      <FlatList<Transaction>
-        data={transactions}
+      <SectionList<Transaction, TransactionSection>
+        keyExtractor={(item) => item.hash}
+        sections={sectionizedTransactions}
         renderItem={renderTransaction}
-        keyExtractor={(t) => t.hash}
-        contentContainerStyle={styles.list}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(32)} />}
-        onEndReachedThreshold={0.6}
-        onEndReached={onEndReached}
         ListEmptyComponent={
           <LocalizedRenderEmpty text={'common.no.transactions'} />
         }
+        ItemSeparatorComponent={() => <Spacer value={32} />}
+        contentContainerStyle={styles.list}
+        renderSectionHeader={renderSectionHeader}
+        onEndReached={onEndReached}
+        stickySectionHeadersEnabled={false}
+        showsVerticalScrollIndicator={false}
+        testID="Transactions_List"
         ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
       />
     </>

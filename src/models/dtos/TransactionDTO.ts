@@ -1,5 +1,4 @@
 import { TransactionType } from '@appTypes/enums';
-import { ExplorerAccountDTO } from './Explorer';
 
 export interface TransactionDTO {
   _id: string;
@@ -14,10 +13,15 @@ export interface TransactionDTO {
     wei: string;
     ether: number;
   };
+  token?: {
+    address: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    totalSupply: number;
+  };
   from: string;
   to: string;
-  from_id: ExplorerAccountDTO;
-  to_id: ExplorerAccountDTO;
   hash: string;
   status: string;
 }

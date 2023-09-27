@@ -61,7 +61,8 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral900}
           >
-            {transaction.amount} AMB
+            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {transaction.value.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
           <Text

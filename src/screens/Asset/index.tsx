@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
-import { useTokensAndTransactions, useUSDPrice } from '@hooks';
+import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 import { AccountTransactions } from '@components/templates';
@@ -24,16 +24,24 @@ export const AssetScreen = () => {
   const { top } = useSafeAreaInsets();
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
 
-  const { data: tokensAndTransactions } = useTokensAndTransactions(
+  // const { data: tokensAndTransactions } = useTokensAndTransactions(
+  //   walletAccount,
+  //   1,
+  //   20,
+  //   !!walletAccount
+  // );
+
+  const {
+    data: transactions,
+    loading: transactionsLoading,
+    fetchNextPage,
+    hasNextPage
+  } = useTransactionsOfToken(
     walletAccount,
+    tokenInfo.address,
     1,
     20,
-    !!walletAccount
-  );
-
-  const { data: transactions, loading } = useTransactionsOfToken(
-    walletAccount,
-    tokenInfo.address
+    !!walletAccount && !!tokenInfo.address
   );
 
   const navigateToAMBScreen = () => {
@@ -123,8 +131,9 @@ export const AssetScreen = () => {
       </View>
       <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
         <AccountTransactions
-          transactions={transactions || tokensAndTransactions?.transactions}
-          loading={loading}
+          transactions={transactions}
+          loading={transactionsLoading}
+          onEndReached={() => hasNextPage && fetchNextPage()}
         />
       </View>
     </View>

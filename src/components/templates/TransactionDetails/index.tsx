@@ -184,7 +184,8 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral800}
         >
-          {NumberUtils.formatNumber(transaction.amount, 0)} AMB
+          {NumberUtils.formatNumber(transaction.amount, 0)}{' '}
+          {transaction.value.symbol}
           <Text
             fontFamily="Inter_500Medium"
             fontSize={14}

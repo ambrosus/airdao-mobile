@@ -20,6 +20,13 @@ export class Transaction {
     ether: number;
     wei: string;
   };
+  token?: {
+    address: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    totalSupply: number;
+  };
   isSent?: boolean;
 
   constructor(details: TransactionDTO) {
@@ -32,7 +39,7 @@ export class Transaction {
     this.from = details.from;
     this.to = details.to;
     this.status = details.status;
-    this.value = details.value;
-    this.gasCost = details.gasCost;
+    this.value = { ...details.value, symbol: details.value.symbol || 'AMB' };
+    (this.gasCost = details.gasCost), (this.token = details.token);
   }
 }
