@@ -1,9 +1,15 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import { Transaction } from '@models';
 import { Row, Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
-import moment from 'moment';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { DownArrowIcon } from '@components/svg/icons';
+import { StringUtils } from '@utils/string';
+import { useUSDPrice } from '@hooks';
+import { NumberUtils } from '@utils/number';
+import { styles } from './styles';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -11,47 +17,63 @@ interface TransactionItemProps {
 
 export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const { transaction } = props;
-
-  const timeDiff = useMemo(
-    () => moment(transaction.timestamp).fromNow(),
-    [transaction.timestamp]
-  );
+  const isSent = transaction.isSent;
+  const { t } = useTranslation();
+  const usdAmount = useUSDPrice(transaction.amount);
 
   return (
-    <>
+    <View>
       <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral900}
-        >
-          {transaction.type}
-        </Text>
-        <Text
-          fontSize={13}
-          fontFamily="Mersad_600SemiBold"
-          color={COLORS.neutral900}
-        >
-          {transaction.amount} AMB
-        </Text>
+        <Row alignItems="center">
+          <View
+            style={[
+              styles.icon,
+              { transform: [{ rotate: isSent ? '180deg' : '0deg' }] }
+            ]}
+          >
+            <DownArrowIcon color={COLORS.neutral900} />
+          </View>
+          <Spacer value={scale(8)} horizontal />
+          <View>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral900}
+            >
+              {isSent
+                ? t('common.transaction.sent')
+                : t('common.transaction.received')}
+            </Text>
+            <Spacer value={verticalScale(4)} />
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.alphaBlack50}
+            >
+              {t('from')} {StringUtils.formatAddress(transaction.from, 5, 5)}
+            </Text>
+          </View>
+        </Row>
+        <View>
+          <Text
+            fontSize={14}
+            align="right"
+            fontFamily="Mersad_600SemiBold"
+            color={COLORS.neutral900}
+          >
+            {transaction.amount} AMB
+          </Text>
+          <Spacer value={verticalScale(4)} />
+          <Text
+            fontSize={12}
+            align="right"
+            fontFamily="Inter_500Medium"
+            color={COLORS.alphaBlack50}
+          >
+            ${NumberUtils.formatNumber(usdAmount, 2)}
+          </Text>
+        </View>
       </Row>
-      <Spacer value={verticalScale(4)} />
-      <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={12}
-          fontFamily="Inter_500Medium"
-          color={COLORS.alphaBlack50}
-        >
-          {timeDiff}
-        </Text>
-        <Text
-          fontSize={12}
-          fontFamily="Inter_500Medium"
-          color={COLORS.alphaBlack50}
-        >
-          {transaction.fee} TxFee
-        </Text>
-      </Row>
-    </>
+    </View>
   );
 };

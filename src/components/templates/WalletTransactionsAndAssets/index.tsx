@@ -8,32 +8,31 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { styles } from '@components/templates/WalletTransactionsAndAssets/styles';
-import { WalletTransactions } from '@components/templates/WalletTransactionsAndAssets/WalletTransactions';
 import { useTranslation } from 'react-i18next';
-import { WalletAssets } from '@components/templates/WalletTransactionsAndAssets/WalletAssets';
-import { ExplorerAccount, Transaction } from '@models';
+import { ExplorerAccount } from '@models';
+import { AccountTransactions } from '../ExplorerAccount';
+import { WalletAssets } from './WalletAssets';
+import { useTokensAndTransactions } from '@hooks';
+import { styles } from './styles';
 
 interface WalletTransactionsAndAssetsProps {
-  transactions: Transaction[] | undefined;
   account: ExplorerAccount;
-  tokens:
-    | {
-        address: string;
-        name: string;
-        balance: { wei: string; ether: number };
-      }[]
-    | undefined;
-  loading: boolean;
-  error: boolean;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { tokens, transactions, loading, account, error } = props;
+  const { account } = props;
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {
+    data: tokensAndTransactions,
+    loading,
+    fetchNextPage,
+    hasNextPage,
+    error
+  } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
+  const { tokens, transactions } = tokensAndTransactions;
 
   const { t } = useTranslation();
 
@@ -63,6 +62,12 @@ export const WalletTransactionsAndAssets = (
     scrollView.current?.scrollTo({ x: tabWidth, animated: true });
     setCurrentIndex(1);
     indicatorPosition.value = withTiming(tabWidth / 2);
+  };
+
+  const loadMoreTransactions = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
   };
 
   return (
@@ -125,11 +130,17 @@ export const WalletTransactionsAndAssets = (
             error={error}
           />
         </View>
-        <View style={{ width: tabWidth, height: '100%' }}>
-          <WalletTransactions
+        <View
+          style={{
+            width: tabWidth,
+            height: '100%',
+            paddingTop: verticalScale(12)
+          }}
+        >
+          <AccountTransactions
             transactions={transactions}
             loading={loading}
-            error={error}
+            onEndReached={loadMoreTransactions}
           />
         </View>
       </ScrollView>
