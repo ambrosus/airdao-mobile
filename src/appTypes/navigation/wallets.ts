@@ -20,6 +20,9 @@ export type HomeParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
+  SetupPasscode: undefined;
+  ConfirmPasscode: { passcode: string[] };
+  SuccessSetupSecurity: undefined;
   SuccessBackupComplete: undefined;
   SuccessImport: undefined;
   RestoreWalletScreen: undefined;

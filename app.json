@@ -23,12 +23,13 @@
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
+        "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.1"
+      "buildNumber": "1.1.2"
     },
     "android": {
-      "versionCode": 22,
+      "versionCode": 23,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -51,6 +52,12 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow AirDAO to use Face ID."
+        }
+      ],
       [
         "expo-barcode-scanner",
         {

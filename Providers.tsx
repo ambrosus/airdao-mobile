@@ -7,7 +7,8 @@ import {
   AddWalletProvider,
   AllAddressesProvider,
   OnboardingContextProvider,
-  LocalizationProvider
+  LocalizationProvider,
+  PasscodeProvider
 } from '@contexts';
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider';
 import { Database } from '@database';
@@ -32,10 +33,15 @@ const LocalDBProvider: React.FC = ({ children }: any) => (
   </DatabaseProvider>
 );
 
+const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
+  <PasscodeProvider>{children}</PasscodeProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
-  WrappedLocalizationProvider
+  WrappedLocalizationProvider,
+  WrappedPasscodeProvider
 ];
 /**
  * The order of the providers matters
@@ -46,6 +52,7 @@ const providers = [
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
+  WrappedPasscodeProvider,
   OnboardingContextProvider,
   AddWalletProvider
 ];

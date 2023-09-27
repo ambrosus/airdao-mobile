@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacer, Text } from '@components/base';
+import React from 'react';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { View, StyleSheet, Platform } from 'react-native';
-import { PrimaryButton } from '@components/modular';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
+import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
+import { useTranslation } from 'react-i18next';
+import { PrimaryButton } from '@components/modular';
+import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { database } from '@database/main';
+import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 
-export const SuccessBackupComplete = () => {
-  const { t } = useTranslation();
+export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
-  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
-
-  useEffect(() => {
-    Promise.all([database.localStorage.get('Passcode')]).then(
-      ([passcodeRes]) => {
-        setIsPasscodeEnabled(!!passcodeRes);
-      }
-    );
-  }, []);
+  const { t } = useTranslation();
 
   const navigateToSetUpSecurity = () => {
-    if (isPasscodeEnabled) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'HomeScreen' }]
-        })
-      );
-    } else {
-      navigation.navigate('SetupPasscode');
-    }
+    navigation.navigate('HomeScreen');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -46,7 +27,7 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {t('backup.complete')}
+          {t('security.enabled')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -55,12 +36,19 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('backup.complete.text')}
+          {t('wallet.protected')}{' '}
+          <Text fontFamily="Inter_600SemiBold">
+            x{t('settings.tab')}
+            {'>'}
+            {t('settings.security')}
+          </Text>
+          {t('manage.security')}
         </Text>
       </View>
       <PrimaryButton
         onPress={navigateToSetUpSecurity}
         style={{
+          paddingHorizontal: scale(16),
           marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
         }}
       >
@@ -70,7 +58,7 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral0}
         >
-          {t('setup.security.btn')}
+          {t('start.using.wallet.btn')}
         </Text>
       </PrimaryButton>
     </SafeAreaView>
@@ -79,13 +67,12 @@ export const SuccessBackupComplete = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: scale(16)
+    flex: 1
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: scale(27)
   }
 });

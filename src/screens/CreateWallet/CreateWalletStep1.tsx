@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
@@ -122,7 +122,12 @@ export const CreateWalletStep1 = () => {
           </View>
         </View>
         <Spacer value={verticalScale(34)} />
-        <PrimaryButton onPress={onNextPress}>
+        <PrimaryButton
+          onPress={onNextPress}
+          style={{
+            marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
+          }}
+        >
           <Text color={COLORS.neutral0}>{t('verify.phrase')}</Text>
         </PrimaryButton>
       </View>

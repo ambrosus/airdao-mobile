@@ -252,5 +252,18 @@
   "singleWallet.name": "Name",
   "singleWallet.copy": "Copy to clipboard",
   "singleWallet.save": "Save changes",
-  "singleWallet.remove": "Remove"
+  "singleWallet.remove": "Remove",
+
+  "importing.wallet.loader": "Importing your wallet from \n backup",
+  "enter.recovery.phrase": "Enter recovery phrase",
+  "enter.recovery.phrase.text": "Enter the recovery phrase associated with your existing wallet.",
+  "enter.your.passcode": "Enter your passcode",
+  "sign.in.with.face.id": "Sign in with Face ID",
+  "security.enabled": "Security Enabled!",
+  "wallet.protected": "Your wallet is now protected. Go to",
+  "manage.security": " to manage your wallet security.",
+
+  "enter.passcode": "Enter Passcode",
+  "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
+  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered."
 }
