@@ -121,7 +121,7 @@ export const AssetScreen = () => {
           {t('transactions')}
         </Text>
       </View>
-      <View style={{ height: '80%' }}>
+      <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
         <AccountTransactions
           transactions={transactions || tokensAndTransactions?.transactions}
           loading={loading}
