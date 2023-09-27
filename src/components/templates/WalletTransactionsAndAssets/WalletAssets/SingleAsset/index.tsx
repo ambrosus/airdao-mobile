@@ -15,15 +15,15 @@ import {
   USDCoinLogo,
   UndefinedTokenLogo
 } from '@components/svg/icons';
+import { TokenDTO } from '@models';
 
 interface SingleAssetProps {
-  address: string;
-  name: string;
-  balance: { wei: string; ether: number };
+  token: TokenDTO;
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { name, balance } = props;
+  const { token } = props;
+  const { name, balance, symbol } = token;
   const usdPrice = useUSDPrice(balance.ether);
   const { data: ambTokenData } = useAMBPrice();
 
@@ -75,7 +75,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.neutral400}
             >
-              {NumberUtils.formatNumber(balance.ether, 2)} AMB
+              {NumberUtils.formatNumber(balance.ether, 2)} {symbol}
             </Text>
             <Text
               fontFamily="Inter_400Regular"
