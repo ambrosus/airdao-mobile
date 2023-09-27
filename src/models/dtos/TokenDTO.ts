@@ -5,4 +5,5 @@ export interface TokenDTO {
     wei: string;
     ether: number;
   };
+  symbol: string;
 }

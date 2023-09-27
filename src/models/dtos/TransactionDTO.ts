@@ -14,6 +14,8 @@ export interface TransactionDTO {
     wei: string;
     ether: number;
   };
+  from: string;
+  to: string;
   from_id: ExplorerAccountDTO;
   to_id: ExplorerAccountDTO;
   hash: string;

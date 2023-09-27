@@ -27,8 +27,14 @@
 
   "common.address": "Adres",
   "common.address_plural": "Adresler",
+  "common.date": "Tarih",
+  "common.no.transactions": "İşlemlerinizi burada görebilirsiniz",
+  "common.status": "İşlem durumu",
   "common.transaction": "İşlem",
   "common.transaction_plural": "İşlemler",
+  "common.transaction.sent": "Gönderildi",
+  "common.transaction.received": "Alındı",
+  "common.transaction.status.SUCCESS": "Tamamlandı",
 
   "search.address.input": "Adres veya işlem arayın",
   "top.holders": "En büyük sahipler",

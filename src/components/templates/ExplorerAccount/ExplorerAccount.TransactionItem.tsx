@@ -49,8 +49,8 @@ export const ExplorerAccountTransactionItem = (
         </View>
         <View style={styles.transactionDetails}>
           <TransactionDetails
-            transaction={transaction}
             onPressAddress={navigateToAddress}
+            transaction={transaction}
           />
         </View>
       </BottomSheetFloat>
