@@ -74,14 +74,17 @@ export const WalletCard = (props: WalletCardProps) => {
                 AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
-              <Text
-                color={priceTextColor}
-                fontSize={14}
-                fontWeight="500"
-                fontFamily="Inter_500Medium"
-              >
-                ${NumberUtils.formatNumber(usdBalance, usdBalance > 0 ? 2 : 0)}
-              </Text>
+              <View style={styles.usdPriceBg}>
+                <Text
+                  color={priceTextColor}
+                  fontSize={14}
+                  fontWeight="500"
+                  fontFamily="Inter_500Medium"
+                >
+                  $
+                  {NumberUtils.formatNumber(usdBalance, usdBalance > 0 ? 2 : 0)}
+                </Text>
+              </View>
             </Row>
             <Spacer value={verticalScale(10)} />
             {change24HR != undefined && (
@@ -116,5 +119,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -verticalScale(16),
     right: -scale(16)
+  },
+  usdPriceBg: {
+    justifyContent: 'center',
+    minHeight: verticalScale(20),
+    borderRadius: 1000,
+    backgroundColor: COLORS.alphaWhite5,
+    paddingHorizontal: scale(8)
   }
 });
