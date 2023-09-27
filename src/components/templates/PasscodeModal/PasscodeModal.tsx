@@ -74,7 +74,6 @@ export const PasscodeModal = forwardRef<
         localRef.current?.dismiss();
       } else {
         setFaceIDAuthRes(false);
-        console.log('Authentication failed');
       }
     } catch (error) {
       setFaceIDAuthRes(false);

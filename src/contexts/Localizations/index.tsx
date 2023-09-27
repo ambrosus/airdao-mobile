@@ -10,6 +10,8 @@ import i18n from '../../localization/i18n';
 import dayjs from 'dayjs';
 import { Language, LanguageCode } from '@appTypes';
 import { LocalizationUtils } from '@utils/localization';
+import moment from 'moment';
+import 'moment/min/locales';
 
 interface ILanguageContext {
   changeCurrentLanguage: (language: Language) => Promise<void>;
@@ -30,9 +32,11 @@ export const LocalizationProvider: FC<{ children: React.ReactNode }> = ({
     SecureStore.getItemAsync('Localization').then((res) => {
       if (typeof res === 'string') {
         setLanguage(LocalizationUtils.languageToCode(res as Language));
+        moment.locale(LocalizationUtils.languageToCode(res as Language));
       } else {
         // TODO set default language as device default language
         SecureStore.setItemAsync('Localization', 'en');
+        moment.locale('en');
         setLanguage('en');
       }
     });
@@ -40,6 +44,7 @@ export const LocalizationProvider: FC<{ children: React.ReactNode }> = ({
 
   const changeCurrentLanguage = async (newLanguage: Language) => {
     setLanguage(LocalizationUtils.languageToCode(newLanguage));
+    moment.locale(LocalizationUtils.languageToCode(newLanguage));
     await SecureStore.setItemAsync('Localization', newLanguage);
   };
 
