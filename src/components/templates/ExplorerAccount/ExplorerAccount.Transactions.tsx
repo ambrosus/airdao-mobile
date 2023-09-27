@@ -4,6 +4,7 @@ import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils/scaling';
 import { Spacer, Spinner } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
+import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -39,6 +40,9 @@ export const AccountTransactions = (
         ItemSeparatorComponent={() => <Spacer value={verticalScale(32)} />}
         onEndReachedThreshold={0.6}
         onEndReached={onEndReached}
+        ListEmptyComponent={
+          <LocalizedRenderEmpty text={'common.no.transactions'} />
+        }
         ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
       />
     </>

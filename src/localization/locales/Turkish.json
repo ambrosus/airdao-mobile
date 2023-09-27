@@ -28,6 +28,7 @@
   "common.address": "Adres",
   "common.address_plural": "Adresler",
   "common.date": "Tarih",
+  "common.no.transactions": "İşlemlerinizi burada görebilirsiniz",
   "common.status": "İşlem durumu",
   "common.transaction": "İşlem",
   "common.transaction_plural": "İşlemler",

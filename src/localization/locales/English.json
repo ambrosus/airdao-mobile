@@ -28,6 +28,7 @@
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.date": "Date",
+  "common.no.transactions": "You will see your transactions here",
   "common.status": "Status",
   "common.transaction": "Transaction",
   "common.transaction_plural": "Transactions",
