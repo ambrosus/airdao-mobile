@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { Dimensions, KeyboardAvoidingView } from 'react-native';
+import { Alert, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Passcode } from '@components/base/Passcode/Passcode';
 import { database } from '@database/main';
 import {
@@ -40,7 +40,21 @@ export const PasscodeModal = forwardRef<
   }, []);
 
   const handlePasscode = (typedPasscode: string[]) => {
-    setUserPasscode(typedPasscode);
+    if (typedPasscode.length === 4) {
+      if (JSON.stringify(savedPasscode) === JSON.stringify(typedPasscode)) {
+        localRef.current?.dismiss();
+      } else {
+        Alert.alert("Passcode doesn't match", 'Please try again', [
+          {
+            text: 'Try again',
+            onPress: () => setUserPasscode([]),
+            style: 'cancel'
+          }
+        ]);
+      }
+    } else {
+      setUserPasscode(typedPasscode);
+    }
   };
 
   useEffect(() => {
