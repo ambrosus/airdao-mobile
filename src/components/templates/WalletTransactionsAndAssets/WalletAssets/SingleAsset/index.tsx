@@ -13,7 +13,8 @@ import {
   TetherLogo,
   BUSDLogo,
   USDCoinLogo,
-  UndefinedTokenLogo
+  UndefinedTokenLogo,
+  HeraPoolTokenLogo
 } from '@components/svg/icons';
 import { TokenDTO } from '@models';
 
@@ -33,14 +34,14 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
         return <AirDAOTokenLogo />;
       case 'Ethereum':
         return <EthereumLogo />;
-      case 'BUSD':
+      case 'BUSD Token':
         return <BUSDLogo />;
-      case 'USDCoin':
+      case 'USD Coin':
         return <USDCoinLogo />;
       case 'Tether':
         return <TetherLogo />;
       case '':
-        return <UndefinedTokenLogo />;
+        return <HeraPoolTokenLogo />;
       default:
         return <AirDAOTokenLogo />;
     }
@@ -49,7 +50,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   return (
     <View style={styles.container}>
       <Row>
-        {logoComponent}
+        <View style={{ alignSelf: 'center' }}>{logoComponent}</View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
           <Row justifyContent="space-between">
@@ -58,7 +59,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name || 'NULL'}
+              {name === '' ? 'Hera pool token' : name || address}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
