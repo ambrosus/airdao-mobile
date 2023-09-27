@@ -247,5 +247,8 @@
   "sign.in.with.face.id": "",
   "security.enabled": "",
   "wallet.protected": "",
-  "manage.security": ""
+  "manage.security": "",
+  "enter.passcode": "",
+  "enter.passcode.text": "",
+  "enter.passcode.hint": ""
 }

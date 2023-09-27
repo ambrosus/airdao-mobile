@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { PrimaryButton } from '@components/modular';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +58,12 @@ export const SuccessBackupComplete = () => {
           {t('backup.complete.text')}
         </Text>
       </View>
-      <PrimaryButton onPress={navigateToSetUpSecurity}>
+      <PrimaryButton
+        onPress={navigateToSetUpSecurity}
+        style={{
+          marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
+        }}
+      >
         <Text
           align="center"
           fontSize={16}

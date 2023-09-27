@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer, Text, Button, KeyboardDismissingView } from '@components/base';
 import { Alert, KeyboardAvoidingView, View } from 'react-native';
@@ -17,11 +17,7 @@ export const ConfirmPasscode = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'ConfirmPasscode'>>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const { passcode: originalPasscode } = route.params;
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-
-  useEffect(() => {
-    setIsButtonEnabled(passcode.length === 4);
-  }, [passcode]);
+  const isButtonEnabled = passcode.join('').length === 4;
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {

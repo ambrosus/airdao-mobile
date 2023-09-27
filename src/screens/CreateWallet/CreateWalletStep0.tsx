@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -111,13 +111,14 @@ export const CreateWalletStep0 = () => {
               {t('checkbox.text')}
             </Text>
           </Row>
-          <Spacer value={verticalScale(32)} />
           <Button
             disabled={!selected}
             onPress={onContinuePress}
             type="circular"
             style={{
-              backgroundColor: selected ? COLORS.brand600 : COLORS.alphaBlack5
+              backgroundColor: selected ? COLORS.brand600 : COLORS.alphaBlack5,
+              bottom:
+                Platform.OS === 'ios' ? verticalScale(-32) : verticalScale(-64)
             }}
           >
             <Text

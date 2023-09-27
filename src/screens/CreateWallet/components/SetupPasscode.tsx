@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer, Text, Button, KeyboardDismissingView } from '@components/base';
 import { KeyboardAvoidingView, View } from 'react-native';
@@ -14,11 +14,7 @@ export const SetupPasscode = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-
-  useEffect(() => {
-    setIsButtonEnabled(passcode.length === 4);
-  }, [passcode]);
+  const isButtonEnabled = passcode.join('').length === 4;
 
   const onContinuePress = () => {
     if (passcode.every((code) => code !== '')) {
@@ -28,7 +24,6 @@ export const SetupPasscode = () => {
     }
   };
 
-  // tslint:disable-next-line:no-shadowed-variable
   const onPasscodeChange = (passcode: string[]) => {
     setPasscode(passcode);
   };
@@ -52,7 +47,7 @@ export const SetupPasscode = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          Enter Passcode
+          {t('enter.passcode')}
         </Text>
         <Spacer value={verticalScale(8)} />
         <Text
@@ -61,10 +56,9 @@ export const SetupPasscode = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          Passcode will be required for wallet access and transactions.
+          {t('enter.passcode.text')}
         </Text>
         <Spacer value={verticalScale(106)} />
-        {/* TODO work on input */}
         <Passcode onPasscodeChange={onPasscodeChange} />
         <Spacer value={verticalScale(33)} />
         <View style={{ paddingHorizontal: scale(70) }}>
@@ -74,7 +68,7 @@ export const SetupPasscode = () => {
             fontFamily="Inter_400Regular"
             color="#676B73"
           >
-            Use a PIN you will remember. {'\n'} It cannot be recovered.
+            {t('enter.passcode.hint')}
           </Text>
         </View>
         <Spacer value={verticalScale(30)} />

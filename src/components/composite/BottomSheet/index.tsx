@@ -26,7 +26,8 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       fullscreen = false,
       swiperIconVisible = false,
       onClose,
-      testID
+      testID,
+      swipingEnabled = true
     },
     ref
   ) => {
@@ -100,7 +101,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
-        swipeDirection={['down']}
+        swipeDirection={swipingEnabled ? ['down'] : []}
         onSwipeComplete={dismiss}
         useNativeDriverForBackdrop
         propagateSwipe

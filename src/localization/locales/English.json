@@ -255,5 +255,9 @@
   "sign.in.with.face.id": "Sign in with Face ID",
   "security.enabled": "Security Enabled!",
   "wallet.protected": "Your wallet is now protected. Go to",
-  "manage.security": " to manage your wallet security."
+  "manage.security": " to manage your wallet security.",
+
+  "enter.passcode": "Enter Passcode",
+  "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
+  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered."
 }
