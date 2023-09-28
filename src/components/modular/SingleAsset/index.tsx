@@ -3,13 +3,12 @@ import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
-
 import { TokenDTO } from '@models';
-import { TokenLogo } from '@components/modular';
+import { TokenLogo } from '../TokenLogo';
+import { styles } from './styles';
 
 interface SingleAssetProps {
   token: TokenDTO;
