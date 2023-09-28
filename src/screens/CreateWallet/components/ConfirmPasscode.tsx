@@ -59,7 +59,7 @@ export const ConfirmPasscode = () => {
           Re-enter your passcode to secure your wallet
         </Text>
         <Spacer value={verticalScale(106)} />
-        <Passcode onPasscodeChange={onPasscodeChange} />
+        <Passcode onPasscodeChange={onPasscodeChange} autoFocus={true} />
         <Spacer value={verticalScale(50)} />
       </View>
       <KeyboardDismissingView style={{ paddingHorizontal: scale(16) }}>

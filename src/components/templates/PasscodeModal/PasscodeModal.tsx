@@ -3,7 +3,6 @@ import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { Alert, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Passcode } from '@components/base/Passcode/Passcode';
-import { database } from '@database/main';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -16,6 +15,7 @@ import { styles } from '@components/templates/PasscodeModal/styles';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { PrimaryButton } from '@components/modular';
+import usePasscode from '@contexts/Passcode';
 
 interface PasscodeModalProps {
   isPasscodeEnabled: boolean;
@@ -30,44 +30,31 @@ export const PasscodeModal = forwardRef<
   const { top, bottom } = useSafeAreaInsets();
   const { prevState } = useAppState();
   const { t } = useTranslation();
-  const [savedPasscode, setSavedPasscode] = useState([]);
-  const [userPasscode, setUserPasscode] = useState<string[]>([]);
-  const [faceIDAuthRes, setFaceIDAuthRes] = useState<boolean>(true);
+  const { savedPasscode, isFaceIDEnabled } = usePasscode();
 
-  useEffect(() => {
-    // @ts-ignore
-    database.localStorage.get('Passcode').then((res) => setSavedPasscode(res));
-  }, []);
+  const [faceIDAuthRes, setFaceIDAuthRes] = useState<boolean>(true);
 
   const handlePasscode = (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
       if (JSON.stringify(savedPasscode) === JSON.stringify(typedPasscode)) {
         localRef.current?.dismiss();
       } else {
-        Alert.alert("Passcode doesn't match", 'Please try again', [
+        Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
           {
-            text: 'Try again',
-            onPress: () => setUserPasscode([]),
+            text: t('try.again'),
+            onPress: () => null,
             style: 'cancel'
           }
         ]);
       }
-    } else {
-      setUserPasscode(typedPasscode);
     }
   };
-
-  useEffect(() => {
-    if (JSON.stringify(savedPasscode) === JSON.stringify(userPasscode)) {
-      localRef.current?.dismiss();
-    }
-  }, [localRef, userPasscode, savedPasscode]);
 
   const authenticateWithFaceID = async () => {
     try {
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Authenticate with Face ID',
-        fallbackLabel: 'Enter PIN'
+        promptMessage: t('authenticate.with.face.id'),
+        fallbackLabel: t('enter.pin')
       });
       if (result.success) {
         setFaceIDAuthRes(true);
@@ -86,9 +73,7 @@ export const PasscodeModal = forwardRef<
       authenticateWithFaceID();
     }
     if (props.isFaceIDEnabled && prevState === null) {
-      setTimeout(() => {
-        authenticateWithFaceID();
-      }, 1000);
+      authenticateWithFaceID();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isFaceIDEnabled, localRef, prevState]);
@@ -119,7 +104,11 @@ export const PasscodeModal = forwardRef<
             {t('enter.your.passcode')}
           </Text>
           <Spacer value={verticalScale(24)} />
-          <Passcode onPasscodeChange={handlePasscode} />
+          <Passcode
+            onPasscodeChange={handlePasscode}
+            autoFocus={!isFaceIDEnabled}
+            type="change"
+          />
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
       {!faceIDAuthRes ? (
@@ -138,7 +127,7 @@ export const PasscodeModal = forwardRef<
               fontSize={16}
               color={COLORS.neutral0}
             >
-              Sign in with Face ID
+              {t('sign.in.with.face.id')}
             </Text>
           </PrimaryButton>
         </KeyboardDismissingView>

@@ -268,5 +268,15 @@
 
   "enter.passcode": "Enter Passcode",
   "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
-  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered."
+  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered.",
+  "passcode.changed": "Passcode changed!",
+  "enter.new.passcode": "Enter new passcode",
+  "confirm.new.passcode": "Confirm new passcode",
+  "face.id.not.available": "Face ID is not available on this device",
+  "change.passcode": "Change passcode",
+  "authenticate.with.face.id": "Authenticate with Face ID",
+  "passcode.doesnt.match": "Passcode doesn't match",
+  "please.try.again": "Please try again",
+  "try.again": "Try again",
+  "enter.pin": "Enter PIN"
 }

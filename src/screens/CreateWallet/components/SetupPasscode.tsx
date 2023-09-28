@@ -59,7 +59,7 @@ export const SetupPasscode = () => {
           {t('enter.passcode.text')}
         </Text>
         <Spacer value={verticalScale(106)} />
-        <Passcode onPasscodeChange={onPasscodeChange} />
+        <Passcode onPasscodeChange={onPasscodeChange} autoFocus={true} />
         <Spacer value={verticalScale(33)} />
         <View style={{ paddingHorizontal: scale(70) }}>
           <Text

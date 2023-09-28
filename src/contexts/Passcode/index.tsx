@@ -15,6 +15,8 @@ import { View } from 'react-native';
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
   isPasscodeEnabled: boolean;
+  setSavedPasscode: React.Dispatch<React.SetStateAction<string[]>>;
+  savedPasscode: string[];
 }
 
 const PasscodeContext = createContext<IPasscodeContext | undefined>(undefined);
@@ -24,10 +26,10 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
-  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
+  const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
+  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState<boolean>(false);
+  const [savedPasscode, setSavedPasscode] = useState<string[]>([]);
   const passcodeModalRef = useRef<BottomSheetRef>(null);
-
   const { prevState, appState } = useAppState();
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
     ]).then(([passcodeRes, faceIDRes]) => {
       setIsPasscodeEnabled(!!passcodeRes);
       setIsFaceIDEnabled(!!faceIDRes);
+      setSavedPasscode(passcodeRes as string[]);
     });
   }, [appState]);
 
@@ -49,8 +52,21 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
     }
   }, [isFaceIDEnabled, isPasscodeEnabled, prevState]);
 
+  useEffect(() => {
+    if (savedPasscode?.length === 4) {
+      database.localStorage.set('Passcode', savedPasscode);
+    }
+  }, [savedPasscode]);
+
   return (
-    <PasscodeContext.Provider value={{ isPasscodeEnabled, isFaceIDEnabled }}>
+    <PasscodeContext.Provider
+      value={{
+        isPasscodeEnabled,
+        isFaceIDEnabled,
+        savedPasscode,
+        setSavedPasscode
+      }}
+    >
       {isPasscodeEnabled && (
         <PasscodeModal
           ref={passcodeModalRef}

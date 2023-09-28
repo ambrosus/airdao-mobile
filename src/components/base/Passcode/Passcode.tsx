@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { passcodeRegex } from '@constants/regex';
 
 export const Passcode = ({
-  onPasscodeChange
+  onPasscodeChange,
+  autoFocus,
+  type
 }: {
   onPasscodeChange: (passcode: string[]) => void;
+  autoFocus?: boolean;
+  type?: 'creation' | 'change';
 }) => {
   const [code, setCode] = useState('');
 
   const handleCodeChange = (text: string) => {
-    if (text.match(passcodeRegex)) {
-      setCode(text);
-      const passcodeArray = text.split('');
-      onPasscodeChange(passcodeArray);
+    setCode(text);
+    const passcodeArray = text.split('');
+    onPasscodeChange(passcodeArray);
+    if (type === 'change') {
+      if (text.length === 4) {
+        setTimeout(() => setCode(''), 50);
+      }
     }
   };
 
@@ -38,6 +44,8 @@ export const Passcode = ({
   return (
     <View style={styles.container}>
       <TextInput
+        autoFocus={autoFocus}
+        contextMenuHidden={true}
         style={styles.input}
         keyboardType="numeric"
         maxLength={4}
