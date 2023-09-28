@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
+  AccountActions,
   PaginatedAccountList,
   WalletTransactionsAndAssets
 } from '@components/templates';
@@ -12,7 +13,7 @@ import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { PaginationCircles } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { AccountActions, HomeHeader } from './components';
+import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 
 export const HomeScreen = () => {

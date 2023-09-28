@@ -24,11 +24,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const { t } = useTranslation();
 
   const navigateToAssetScreen = (
-    tokenInfo: {
-      name: string;
-      address: string;
-      balance: { wei: string; ether: number };
-    },
+    tokenInfo: TokenDTO,
     walletAccount: string
   ) => {
     navigation.navigate('AssetScreen', { tokenInfo, walletAccount });

@@ -1,19 +1,19 @@
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeParamsList, HomeNavigationProp } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
-import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { LogoGradientCircular } from '@components/svg/icons';
-import { useTranslation } from 'react-i18next';
-import { useUSDPrice } from '@hooks';
+import { useTokensAndTransactions, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
-import { AccountTransactions } from '@components/templates';
+import { AccountActions, AccountTransactions } from '@components/templates';
+import { TokenLogo } from '@components/modular';
 
 export const AssetScreen = () => {
   const {
@@ -23,30 +23,47 @@ export const AssetScreen = () => {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
+  const isAMBToken = walletAccount === tokenInfo.address;
 
-  // const { data: tokensAndTransactions } = useTokensAndTransactions(
-  //   walletAccount,
-  //   1,
-  //   20,
-  //   !!walletAccount
-  // );
+  const {
+    data: tokensAndTransactions,
+    fetchNextPage: fetchNextPageAddresss,
+    hasNextPage: hasNextPageOfAddress
+  } = useTokensAndTransactions(
+    walletAccount,
+    1,
+    20,
+    !!walletAccount && walletAccount === tokenInfo.address
+  );
 
   const {
     data: transactions,
     loading: transactionsLoading,
-    fetchNextPage,
-    hasNextPage
+    fetchNextPage: fetchNextPageToken,
+    hasNextPage: hasNextPageOfToken
   } = useTransactionsOfToken(
     walletAccount,
     tokenInfo.address,
     1,
     20,
-    !!walletAccount && !!tokenInfo.address
+    !!walletAccount &&
+      !!tokenInfo.address &&
+      walletAccount !== tokenInfo.address
   );
+
+  const hasNextPage = isAMBToken ? hasNextPageOfAddress : hasNextPageOfToken;
+  const fetchNextPage = isAMBToken ? fetchNextPageAddresss : fetchNextPageToken;
 
   const navigateToAMBScreen = () => {
     navigation.navigate('AMBMarketScreen');
   };
+
+  const headerTitle =
+    tokenInfo.name === ''
+      ? 'Hera pool token'
+      : tokenInfo.name === 'AMB'
+      ? 'AirDAO (AMB)'
+      : tokenInfo.symbol || tokenInfo.address;
 
   return (
     <View style={{ top }}>
@@ -54,16 +71,16 @@ export const AssetScreen = () => {
         title={
           <>
             <Row alignItems="center">
-              <LogoGradientCircular />
+              <View style={{ transform: [{ scale: 0.75 }] }}>
+                <TokenLogo token={tokenInfo.name} />
+              </View>
               <Spacer horizontal value={scale(4)} />
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
                 color={COLORS.neutral800}
               >
-                {tokenInfo.name === ''
-                  ? 'Hera pool token'
-                  : tokenInfo.name || tokenInfo.address}
+                {headerTitle}
               </Text>
             </Row>
           </>
@@ -81,7 +98,11 @@ export const AssetScreen = () => {
       />
       <Spacer value={verticalScale(16)} />
       <View style={{ alignItems: 'center' }}>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16} color="#A1A6B2">
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral300}
+        >
           {t('your.balance')}
         </Text>
         <Row alignItems="center">
@@ -93,7 +114,7 @@ export const AssetScreen = () => {
             {tokenInfo.balance.ether < 1000
               ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
               : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
-            AMB
+            {tokenInfo.symbol}
           </Text>
           <Spacer horizontal value={scale(8)} />
           <Badge
@@ -109,18 +130,13 @@ export const AssetScreen = () => {
             color={COLORS.gray300}
           />
         </Row>
-        {/*<Row>*/}
-        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
-        {/*    %0.00*/}
-        {/*  </Text>*/}
-        {/*  /!* TODO *!/*/}
-        {/*  <Text fontFamily="Inter_500Medium" fontSize={14} color={COLORS.neutral800}>*/}
-        {/*    ($10.98)*/}
-        {/*  </Text>*/}
-        {/*</Row>*/}
       </View>
-      <Spacer value={verticalScale(16)} />
-      <View style={{ paddingHorizontal: scale(17) }}>
+      <Spacer value={verticalScale(24)} />
+      <AccountActions address={walletAccount} />
+      <Spacer value={verticalScale(24)} />
+      <View style={{ height: 1, backgroundColor: COLORS.neutral100 }} />
+      <Spacer value={verticalScale(24)} />
+      <View style={{ paddingHorizontal: scale(16) }}>
         <Text
           fontFamily="Inter_700Bold"
           fontSize={20}
@@ -131,7 +147,11 @@ export const AssetScreen = () => {
       </View>
       <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
         <AccountTransactions
-          transactions={transactions}
+          transactions={
+            walletAccount === tokenInfo.address
+              ? tokensAndTransactions.transactions
+              : transactions
+          }
           loading={transactionsLoading}
           onEndReached={() => hasNextPage && fetchNextPage()}
         />
