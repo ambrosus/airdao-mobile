@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -23,16 +23,10 @@ import {
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import {
-  PrimaryButton,
-  Toast,
-  ToastPosition,
-  ToastType
-} from '@components/modular';
-import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
+import { PrimaryButton } from '@components/modular';
+import { HomeNavigationProp } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
-import { WalletUtils } from '@utils/wallet';
 import {
   AddressInput,
   ConfirmTransaction,
@@ -41,7 +35,6 @@ import {
   UseMax
 } from './components';
 import { styles } from './styles';
-import { AirDAOEventDispatcher } from '@lib';
 
 export const SendFunds = () => {
   const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
@@ -55,7 +48,6 @@ export const SendFunds = () => {
   const [destinationAddress, setDestinationAddress] = useState('');
   const [amountInCrypto, setAmountInCrypto] = useState('0');
   const [amountInUSD, setAmountInUSD] = useState('0');
-  const [sendLoading, setSendLoading] = useState(false);
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
@@ -109,35 +101,37 @@ export const SendFunds = () => {
   };
 
   const sendTx = async () => {
-    if (account) {
-      try {
-        setSendLoading(true);
-        await WalletUtils.sendTx(
-          walletHash,
-          token,
-          account.address,
-          destinationAddress,
-          Number(amountInCrypto),
-          account.ambBalance.toString()
-        );
-        hideReviewModal();
-        navigation.replace('HomeScreen');
-        AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
-          from: account.address,
-          to: destinationAddress
-        });
-        Toast.show({
-          position: ToastPosition.Top,
-          type: ToastType.Success,
-          text: t('transaction.in.progress')
-        });
-      } catch (error) {
-        // TODO handle
-        Alert.alert('Transfer failed');
-      } finally {
-        setSendLoading(false);
-      }
-    }
+    hideReviewModal();
+    navigation.navigate('SendFundsLoading');
+    // if (account) {
+    //   try {
+    //     setSendLoading(true);
+    //     await WalletUtils.sendTx(
+    //       walletHash,
+    //       token,
+    //       account.address,
+    //       destinationAddress,
+    //       Number(amountInCrypto),
+    //       account.ambBalance.toString()
+    //     );
+    //     hideReviewModal();
+    //     navigation.replace('HomeScreen');
+    //     AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
+    //       from: account.address,
+    //       to: destinationAddress
+    //     });
+    //     Toast.show({
+    //       position: ToastPosition.Top,
+    //       type: ToastType.Success,
+    //       text: t('transaction.in.progress')
+    //     });
+    //   } catch (error) {
+    //     // TODO handle
+    //     Alert.alert('Transfer failed');
+    //   } finally {
+    //     setSendLoading(false);
+    //   }
+    // }
   };
 
   return (
@@ -249,7 +243,7 @@ export const SendFunds = () => {
                   currency={token}
                   estimatedFee={estimatedFee}
                   onSendPress={sendTx}
-                  loading={sendLoading}
+                  loading={false}
                 />
               </BottomSheet>
             </>

@@ -28,10 +28,12 @@
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.date": "Date",
+  "common.done": "Done",
   "common.no.transactions": "You will see your transactions here",
   "common.notification.price-alert": "Price Alert",
   "common.notification.transaction-alert": "Transaction Alert",
   "common.notification.wallet-update": "Wallet Update",
+  "common.share.transaction": "Share transaction",
   "common.status": "Status",
   "common.transaction": "Transaction",
   "common.transaction_plural": "Transactions",
@@ -200,6 +202,10 @@
     "transfer.fee": "Estimated transfer fee",
     "use.max": "Use max"
   },
+  "send.funds.sending": "Sending",
+  "send.funds.sent": "sent",
+  "send.funds.sending.description": "This shouldn’t take long",
+
   "share": "Share",
   "transaction.in.progress": "Transaction in progress!",
   "backup.your.wallet": "Backup your wallet",
