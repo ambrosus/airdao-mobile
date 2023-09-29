@@ -3,13 +3,14 @@ import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { Alert, View } from 'react-native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
 import { useTranslation } from 'react-i18next';
 import { PasscodeUtils } from '@utils/passcode';
+import { Header } from '@components/composite';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
@@ -73,10 +74,15 @@ export const ChangePasscode = () => {
 
   return (
     <View style={{ top }}>
-      <Spacer value={verticalScale(24)} />
-      <Button onPress={onBackPress} style={{ paddingHorizontal: scale(16.5) }}>
-        <CloseIcon scale={1.3} />
-      </Button>
+      <Header
+        contentLeft={
+          <Button onPress={onBackPress}>
+            <CloseIcon scale={1.3} />
+          </Button>
+        }
+        backIconVisible={false}
+        style={{ shadowColor: 'transparent' }}
+      />
       <Spacer value={verticalScale(160)} />
       <Text align="center" fontFamily="Inter_700Bold" fontSize={24}>
         {step === 1
