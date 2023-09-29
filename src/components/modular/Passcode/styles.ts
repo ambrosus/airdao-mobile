@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.neutral800,
     width: scale(220),
-    height: verticalScale(60),
+    height: verticalScale(100),
     opacity: 0,
     position: 'absolute',
     zIndex: 10

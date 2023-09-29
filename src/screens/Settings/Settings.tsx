@@ -1,10 +1,7 @@
 import React from 'react';
 import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  SafeAreaView,
-  useSafeAreaInsets
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';

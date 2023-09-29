@@ -1,7 +1,18 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { Alert, Dimensions, KeyboardAvoidingView } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  TextInput
+} from 'react-native';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -31,6 +42,7 @@ export const PasscodeModal = forwardRef<
   const { prevState } = useAppState();
   const { t } = useTranslation();
   const { isFaceIDEnabled } = usePasscode();
+  const passcodeRef = useRef<TextInput>(null);
 
   const [faceIDAuthRes, setFaceIDAuthRes] = useState<boolean>(true);
 
@@ -65,6 +77,7 @@ export const PasscodeModal = forwardRef<
         localRef.current?.dismiss();
       } else {
         setFaceIDAuthRes(false);
+        passcodeRef.current?.focus();
       }
     } catch (error) {
       setFaceIDAuthRes(false);
@@ -109,6 +122,7 @@ export const PasscodeModal = forwardRef<
           </Text>
           <Spacer value={verticalScale(24)} />
           <Passcode
+            ref={passcodeRef}
             onPasscodeChange={handlePasscode}
             autoFocus={!isFaceIDEnabled}
             type="change"
