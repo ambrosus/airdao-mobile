@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { useTranslation } from 'react-i18next';
-import { Passcode } from '@components/base/Passcode/Passcode';
+import { Passcode } from '@components/modular';
 
 export const SetupPasscode = () => {
   const { top } = useSafeAreaInsets();

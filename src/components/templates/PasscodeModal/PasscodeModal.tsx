@@ -2,7 +2,6 @@ import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { Alert, Dimensions, KeyboardAvoidingView } from 'react-native';
-import { Passcode } from '@components/base/Passcode/Passcode';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -14,8 +13,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from '@components/templates/PasscodeModal/styles';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { PrimaryButton } from '@components/modular';
+import { Passcode, PrimaryButton } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
+import { PasscodeUtils } from '@utils/passcode';
 
 interface PasscodeModalProps {
   isPasscodeEnabled: boolean;
@@ -30,23 +30,27 @@ export const PasscodeModal = forwardRef<
   const { top, bottom } = useSafeAreaInsets();
   const { prevState } = useAppState();
   const { t } = useTranslation();
-  const { savedPasscode, isFaceIDEnabled } = usePasscode();
+  const { isFaceIDEnabled } = usePasscode();
 
   const [faceIDAuthRes, setFaceIDAuthRes] = useState<boolean>(true);
 
   const handlePasscode = (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
-      if (JSON.stringify(savedPasscode) === JSON.stringify(typedPasscode)) {
-        localRef.current?.dismiss();
-      } else {
-        Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
-          {
-            text: t('try.again'),
-            onPress: () => null,
-            style: 'cancel'
-          }
-        ]);
-      }
+      PasscodeUtils.getPasscodeFromDB().then((databasePasscode) => {
+        if (
+          JSON.stringify(databasePasscode) === JSON.stringify(typedPasscode)
+        ) {
+          localRef.current?.dismiss();
+        } else {
+          Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
+            {
+              text: t('try.again'),
+              onPress: () => null,
+              style: 'cancel'
+            }
+          ]);
+        }
+      });
     }
   };
 

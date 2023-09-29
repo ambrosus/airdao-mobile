@@ -3,7 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { database } from '@database/main';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
@@ -12,6 +11,7 @@ import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { ChevronRightIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
 import { SettingsTabNavigationProp } from '@appTypes';
+import { PasscodeUtils } from '@utils/passcode';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ export const SecuritySettingsScreen = () => {
   const toggleFaceIDAuthentication = async () => {
     try {
       if (isFaceIDEnabled) {
-        await database.localStorage.set('FaceID', false);
+        await PasscodeUtils.setFaceIDStatusInDB(false);
         setIsFaceIDEnabled(false);
       } else {
         const hasHardware = await LocalAuthentication.hasHardwareAsync();
@@ -41,7 +41,7 @@ export const SecuritySettingsScreen = () => {
             fallbackLabel: t('enter.pin')
           });
           if (result.success) {
-            await database.localStorage.set('FaceID', true);
+            await PasscodeUtils.setFaceIDStatusInDB(true);
             setIsFaceIDEnabled(true);
           }
         } else {
@@ -59,8 +59,8 @@ export const SecuritySettingsScreen = () => {
 
   useEffect(() => {
     const checkFaceIDStatus = async () => {
-      const storedFaceID = await database.localStorage.get('FaceID');
-      setIsFaceIDEnabled(!!storedFaceID);
+      const storedFaceID = await PasscodeUtils.getFaceIDStatusFromDB();
+      setIsFaceIDEnabled(storedFaceID);
     };
     checkFaceIDStatus();
   }, []);

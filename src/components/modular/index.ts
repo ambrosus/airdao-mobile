@@ -6,3 +6,4 @@ export * from './QRCodeWithLogo';
 export * from './Toast';
 export * from './TransactionItem';
 export * from './WalletCard';
+export * from './Passcode';

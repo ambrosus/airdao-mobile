@@ -6,11 +6,11 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { database } from '@database/main';
 import { PasscodeModal } from '@components/templates/PasscodeModal';
 import { BottomSheetRef } from '@components/composite';
 import { useAppState } from '@hooks';
 import { View } from 'react-native';
+import { PasscodeUtils } from '@utils/passcode';
 
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
@@ -34,12 +34,12 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     Promise.all([
-      database.localStorage.get('Passcode'),
-      database.localStorage.get('FaceID')
+      PasscodeUtils.getPasscodeFromDB(),
+      PasscodeUtils.getFaceIDStatusFromDB()
     ]).then(([passcodeRes, faceIDRes]) => {
       setIsPasscodeEnabled(!!passcodeRes);
       setIsFaceIDEnabled(!!faceIDRes);
-      setSavedPasscode(passcodeRes as string[]);
+      setSavedPasscode(passcodeRes);
     });
   }, [appState]);
 
@@ -54,7 +54,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (savedPasscode?.length === 4) {
-      database.localStorage.set('Passcode', savedPasscode);
+      PasscodeUtils.setPasscodeInDB(savedPasscode);
     }
   }, [savedPasscode]);
 

@@ -7,8 +7,8 @@ import { COLORS } from '@constants/colors';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { useTranslation } from 'react-i18next';
-import { Passcode } from '@components/base/Passcode/Passcode';
-import { database } from '@database/main';
+import { PasscodeUtils } from '@utils/passcode';
+import { Passcode } from '@components/modular';
 
 export const ConfirmPasscode = () => {
   const { top } = useSafeAreaInsets();
@@ -21,7 +21,7 @@ export const ConfirmPasscode = () => {
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
-      await database.localStorage.set('Passcode', passcode);
+      await PasscodeUtils.setPasscodeInDB(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');

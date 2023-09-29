@@ -4,13 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from '@utils/scaling';
-import { Passcode } from '@components/base/Passcode/Passcode';
 import { Alert } from 'react-native';
 import { SettingsTabNavigationProp } from '@appTypes';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
 import { useTranslation } from 'react-i18next';
-import database from '@database/Database';
+import { PasscodeUtils } from '@utils/passcode';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
@@ -24,11 +23,9 @@ export const ChangePasscode = () => {
   };
 
   useEffect(() => {
-    Promise.all([database.localStorage.get('Passcode')]).then(
-      ([passcodeRes]) => {
-        setSavedPasscode(passcodeRes as string[]);
-      }
-    );
+    PasscodeUtils.getPasscodeFromDB().then((passcodeRes) => {
+      setSavedPasscode(passcodeRes);
+    });
   }, [setSavedPasscode]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
@@ -53,7 +50,7 @@ export const ChangePasscode = () => {
       } else if (step === 3) {
         // Step 3: Confirm new user passcode
         if (JSON.stringify(newPasscode) === JSON.stringify(typedPasscode)) {
-          setSavedPasscode(typedPasscode);
+          await PasscodeUtils.setPasscodeInDB(typedPasscode);
           navigation.navigate('SecuritySettings');
           Toast.show({
             text: t('passcode.changed'),
