@@ -5,13 +5,27 @@ import Config from '@constants/config';
 import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { useSendCryptoContext } from '@contexts';
 
-export const Send = () => {
+interface SendProps {
+  address: string;
+}
+
+export const Send = (props: SendProps) => {
   const { t } = useTranslation();
+  const sendCryptoContextReducer = useSendCryptoContext((v) => v.reducer);
   const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToSendScreen = () => {
-    navigation.navigate('SendFunds');
+    sendCryptoContextReducer({ type: 'RESET_DATA' });
+    sendCryptoContextReducer({
+      type: 'SET_DATA',
+      from: props.address,
+      to: ''
+    });
+    setTimeout(() => {
+      navigation.navigate('SendFunds');
+    }, 0);
   };
 
   return (

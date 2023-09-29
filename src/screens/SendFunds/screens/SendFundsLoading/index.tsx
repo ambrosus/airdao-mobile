@@ -1,30 +1,38 @@
 import React, { useRef } from 'react';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { AirDAOTokenLogo, CheckmarkCircleIcon } from '@components/svg/icons';
 import { Spacer, Spinner, Text } from '@components/base';
-import { useTranslation } from 'react-i18next';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
-import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
+import { useSendCryptoContext } from '@contexts';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { styles } from './styles';
 
 export const SendFundsLoading = () => {
+  const { state, reducer } = useSendCryptoContext((v) => v);
+  const {
+    from,
+    to,
+    amount = 0,
+    currency = AirDAODictTypes.Code.AMB,
+    loading,
+    error
+  } = state;
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
-  const loading = false;
   const shareModal = useRef<BottomSheetRef>(null);
-  const amount = 1000;
-  const currency = 'AMB';
-  const from = '0x3ea4085jaei23io350453459opa';
-  const to = '0x45ei45o0dae53iuh33i32esaio345';
 
   const title = loading
     ? `${t('send.funds.sending')} ${amount} ${currency}`
+    : error
+    ? 'Failed'
     : `${amount} ${currency} ${t('send.funds.sent')}!`;
 
   const onSharePress = () => {
@@ -33,6 +41,7 @@ export const SendFundsLoading = () => {
 
   const navigateToHome = () => {
     navigation.replace('HomeScreen');
+    reducer({ type: 'RESET_DATA' });
   };
 
   return (
@@ -61,37 +70,41 @@ export const SendFundsLoading = () => {
         </>
       )}
       <Spacer value={verticalScale(40)} />
-      <Text
-        align="center"
-        color={COLORS.neutral300}
-        fontSize={16}
-        fontFamily="Inter_600SemiBold"
-      >
-        {t('from')}
-      </Text>
-      <Text
-        fontSize={16}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
-      >
-        {from}
-      </Text>
-      <Spacer value={verticalScale(24)} />
-      <Text
-        align="center"
-        color={COLORS.neutral300}
-        fontSize={16}
-        fontFamily="Inter_600SemiBold"
-      >
-        {t('to')}
-      </Text>
-      <Text
-        fontSize={16}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
-      >
-        {to}
-      </Text>
+      <View style={{ paddingHorizontal: scale(24) }}>
+        <Text
+          align="center"
+          color={COLORS.neutral300}
+          fontSize={16}
+          fontFamily="Inter_600SemiBold"
+        >
+          {t('from')}
+        </Text>
+        <Text
+          align="center"
+          fontSize={16}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
+        >
+          {from}
+        </Text>
+        <Spacer value={verticalScale(24)} />
+        <Text
+          align="center"
+          color={COLORS.neutral300}
+          fontSize={16}
+          fontFamily="Inter_600SemiBold"
+        >
+          {t('to')}
+        </Text>
+        <Text
+          align="center"
+          fontSize={16}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
+        >
+          {to}
+        </Text>
+      </View>
       {!loading && (
         <View
           style={{
@@ -100,10 +113,14 @@ export const SendFundsLoading = () => {
             width: '100%'
           }}
         >
-          <SecondaryButton onPress={onSharePress} style={styles.button}>
-            <Text>{t('share')}</Text>
-          </SecondaryButton>
-          <Spacer value={verticalScale(16)} />
+          {!error && (
+            <>
+              <SecondaryButton onPress={onSharePress} style={styles.button}>
+                <Text>{t('share')}</Text>
+              </SecondaryButton>
+              <Spacer value={verticalScale(16)} />
+            </>
+          )}
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
             <Text color={COLORS.neutral0}>{t('common.done')}</Text>
           </PrimaryButton>

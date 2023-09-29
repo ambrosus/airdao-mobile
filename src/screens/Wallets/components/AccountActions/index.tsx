@@ -18,7 +18,7 @@ export const AccountActions = (props: AccountActionsProps) => {
       style={{ columnGap: scale(40) }}
     >
       <Swap />
-      <Send />
+      <Send address={address} />
       <Receive address={address} />
       <Staking />
     </Row>
