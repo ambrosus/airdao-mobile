@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
 import { scale, verticalScale } from '@utils/scaling';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
@@ -13,6 +13,7 @@ import { PasscodeUtils } from '@utils/passcode';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
+  const { top } = useSafeAreaInsets();
   const { savedPasscode, setSavedPasscode } = usePasscode();
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const [step, setStep] = useState<number>(1);
@@ -71,7 +72,7 @@ export const ChangePasscode = () => {
   };
 
   return (
-    <SafeAreaView>
+    <View style={{ top }}>
       <Spacer value={verticalScale(24)} />
       <Button onPress={onBackPress} style={{ paddingHorizontal: scale(16.5) }}>
         <CloseIcon scale={1.3} />
@@ -90,6 +91,6 @@ export const ChangePasscode = () => {
         autoFocus={true}
         type="change"
       />
-    </SafeAreaView>
+    </View>
   );
 };
