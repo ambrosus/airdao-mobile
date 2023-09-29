@@ -3,7 +3,11 @@ import { database } from '@database/main';
 const getPasscodeFromDB = async () => {
   try {
     const passcodeRes = await database.localStorage.get('Passcode');
+<<<<<<< Updated upstream
     return (passcodeRes as string[]) || [];
+=======
+    return passcodeRes;
+>>>>>>> Stashed changes
   } catch (error) {
     console.error('Error fetching Passcode from the database:', error);
     return [];
