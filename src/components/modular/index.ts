@@ -8,3 +8,4 @@ export * from './Toast';
 export * from './TokenLogo';
 export * from './TransactionItem';
 export * from './WalletCard';
+export * from './Passcode';

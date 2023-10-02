@@ -8,7 +8,8 @@ import {
   SecuritySettingsScreen,
   SettingsScreen,
   ManageWalletsScreen,
-  SingleWalletScreen
+  SingleWalletScreen,
+  ChangePasscode
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
 
@@ -31,6 +32,7 @@ export const SettingsStack = () => {
         name="SecuritySettings"
         component={SecuritySettingsScreen}
       />
+      <Stack.Screen name="ChangePasscode" component={ChangePasscode} />
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="SingleWallet" component={SingleWalletScreen} />
     </Stack.Navigator>

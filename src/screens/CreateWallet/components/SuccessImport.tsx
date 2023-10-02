@@ -9,7 +9,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { SuccessIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
-import { database } from '@database/main';
+import { PasscodeUtils } from '@utils/passcode';
 
 export const SuccessImport = () => {
   const { t } = useTranslation();
@@ -17,12 +17,11 @@ export const SuccessImport = () => {
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
 
   useEffect(() => {
-    Promise.all([database.localStorage.get('Passcode')]).then(
-      ([passcodeRes]) => {
-        setIsPasscodeEnabled(!!passcodeRes);
-      }
-    );
+    PasscodeUtils.getPasscodeFromDB().then((passcodeRes) => {
+      setIsPasscodeEnabled(!!passcodeRes);
+    });
   }, []);
+
   const navigateToSetUpSecurity = () => {
     if (isPasscodeEnabled) {
       navigation.dispatch(
