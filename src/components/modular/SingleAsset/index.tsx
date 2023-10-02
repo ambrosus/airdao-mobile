@@ -1,21 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { styles } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset/styles';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
-import {
-  EthereumLogo,
-  AirDAOTokenLogo,
-  TetherLogo,
-  BUSDLogo,
-  USDCoinLogo,
-  HeraPoolTokenLogo
-} from '@components/svg/icons';
 import { TokenDTO } from '@models';
+import { TokenLogo } from '../TokenLogo';
+import { styles } from './styles';
 
 interface SingleAssetProps {
   token: TokenDTO;
@@ -27,29 +20,12 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const usdPrice = useUSDPrice(balance.ether);
   const { data: ambTokenData } = useAMBPrice();
 
-  const logoComponent = useMemo(() => {
-    switch (name) {
-      case 'AirDAO':
-        return <AirDAOTokenLogo />;
-      case 'Ethereum':
-        return <EthereumLogo />;
-      case 'BUSD Token':
-        return <BUSDLogo />;
-      case 'USD Coin':
-        return <USDCoinLogo />;
-      case 'Tether':
-        return <TetherLogo />;
-      case '':
-        return <HeraPoolTokenLogo />;
-      default:
-        return <AirDAOTokenLogo />;
-    }
-  }, [name]);
-
   return (
     <View style={styles.container}>
       <Row>
-        <View style={{ alignSelf: 'center' }}>{logoComponent}</View>
+        <View style={{ alignSelf: 'center' }}>
+          {<TokenLogo token={name} />}
+        </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
           <Row justifyContent="space-between">

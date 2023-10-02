@@ -100,7 +100,9 @@ export const AccountTransactions = (
         sections={sectionizedTransactions}
         renderItem={renderTransaction}
         ListEmptyComponent={
-          <LocalizedRenderEmpty text={'common.no.transactions'} />
+          loading ? null : (
+            <LocalizedRenderEmpty text={'common.no.transactions'} />
+          )
         }
         ItemSeparatorComponent={() => <Spacer value={32} />}
         contentContainerStyle={styles.list}

@@ -63,6 +63,7 @@ export const AddressInput = (props: AddressInputProps) => {
         }
         value={address}
         onChangeValue={onAddressChange}
+        placeholder={t('send.funds.recipient')}
       />
       <BottomSheet
         ref={scannerModalRef}

@@ -190,16 +190,15 @@
   },
 
   "receive.funds": "Receive funds",
-  "send.funds": {
-    "balance": "Balance",
-    "estimated.fee": "Estimated fee",
-    "invalid.address": "Please enter a valid address",
-    "ready.to.send": "Ready to send?",
-    "send.now": "Send now",
-    "review.transaction": "Review Transaction",
-    "transfer.fee": "Estimated transfer fee",
-    "use.max": "Use max"
-  },
+  "send.funds.balance": "Balance",
+  "send.funds.estimated.fee": "Estimated fee",
+  "send.funds.invalid.address": "Please enter a valid address",
+  "send.funds.ready.to.send": "Ready to send?",
+  "send.funds.send.now": "Send now",
+  "send.funds.review.transaction": "Review Transaction",
+  "send.funds.recipient": "Recipient address",
+  "send.funds.transfer.fee": "Estimated transfer fee",
+  "send.funds.use.max": "Use max",
   "share": "Share",
   "transaction.in.progress": "Transaction in progress!",
   "backup.your.wallet": "Backup your wallet",
@@ -269,6 +268,9 @@
   "enter.passcode": "Enter Passcode",
   "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
   "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered.",
+  
+  "token.picker.select": "Select asset to send",
+
   "passcode.changed": "Passcode changed!",
   "enter.new.passcode": "Enter new passcode",
   "confirm.new.passcode": "Confirm new passcode",
