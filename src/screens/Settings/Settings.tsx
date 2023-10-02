@@ -1,10 +1,7 @@
 import React from 'react';
 import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  SafeAreaView,
-  useSafeAreaInsets
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronRightIcon } from '@components/svg/icons';
@@ -45,7 +42,10 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}
-          <Spacer value={scale(8)} horizontal />
+          <Spacer
+            value={item.route === 'AppPreferences' ? scale(12) : scale(8)}
+            horizontal
+          />
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"

@@ -192,21 +192,21 @@
     }
   },
   "receive.funds": "Receive funds",
-  "send.funds": {
-    "balance": "Bakiye",
-    "estimated.fee": "Tahmini ücret",
-    "invalid.address": "Lütfen geçerli bir adres girin",
-    "review.transaction": "İşlemi İncele",
-    "send.now": "Gönder",
-    "transfer.fee": "Tahmini transfer ücreti",
-    "use.max": "Hepsini kullan"
-  },
+
   "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için tutarı ayarlayın veya bakiyenizi yeniden doldurun.",
   "send.funds.error.network": "Kötü internet bağlantısı",
   "send.funds.failed": "İşlem başarısız",
   "send.funds.sending": "Gönderiliyor",
   "send.funds.sent": "gönderildi",
   "send.funds.sending.description": "İşleminiz yapılıyor",
+  "send.funds.balance": "Bakiye",
+  "send.funds.estimated.fee": "Tahmini ücret",
+  "send.funds.invalid.address": "Lütfen geçerli bir adres girin",
+  "send.funds.review.transaction": "İşlemi İncele",
+  "send.funds.recipient": "Alıcı hesabı",
+  "send.funds.send.now": "Gönder",
+  "send.funds.transfer.fee": "Tahmini transfer ücreti",
+  "send.funds.use.max": "Hepsini kullan",
 
   "share": "Paylaş",
   "transaction.in.progress": "Transfer gerçekleştiriliyor!",
@@ -268,5 +268,7 @@
   "manage.security": "",
   "enter.passcode": "Şifrenizi girin",
   "enter.passcode.text": "Cüzdan erişimi ve işlemler için şifre gerekecektir.",
-  "enter.passcode.hint": "Hatırlayacağınız bir PIN kullanın. \n Unutulan şifre kurtarılamaz."
+  "enter.passcode.hint": "Hatırlayacağınız bir PIN kullanın. \n Unutulan şifre kurtarılamaz.",
+
+  "token.picker.select": "Varlık seçin"
 }

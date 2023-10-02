@@ -5,3 +5,4 @@ export * from './ManageWallets';
 export * from './NotificationSettings';
 export * from './SecuritySettings';
 export * from './SingleWallet';
+export * from './ChangePasscode';

@@ -11,6 +11,7 @@ export type SettingsTabParamsList = {
   ManageWallets: undefined;
   NotificationSettings: undefined;
   SecuritySettings: undefined;
+  ChangePasscode: undefined;
   SettingsScreen: undefined;
   SingleWallet: { wallet: WalletDBModel };
 };

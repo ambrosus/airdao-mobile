@@ -192,16 +192,15 @@
   },
 
   "receive.funds": "Receive funds",
-  "send.funds": {
-    "balance": "Balance",
-    "estimated.fee": "Estimated fee",
-    "invalid.address": "Please enter a valid address",
-    "ready.to.send": "Ready to send?",
-    "send.now": "Send now",
-    "review.transaction": "Review Transaction",
-    "transfer.fee": "Estimated transfer fee",
-    "use.max": "Use max"
-  },
+  "send.funds.balance": "Balance",
+  "send.funds.estimated.fee": "Estimated fee",
+  "send.funds.invalid.address": "Please enter a valid address",
+  "send.funds.ready.to.send": "Ready to send?",
+  "send.funds.send.now": "Send now",
+  "send.funds.review.transaction": "Review Transaction",
+  "send.funds.recipient": "Recipient address",
+  "send.funds.transfer.fee": "Estimated transfer fee",
+  "send.funds.use.max": "Use max",
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or refill your balance to proceed.",
   "send.funds.error.network": "Bad internet connection!",
   "send.funds.failed": "Transaction failed",
@@ -277,5 +276,18 @@
 
   "enter.passcode": "Enter Passcode",
   "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
-  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered."
+  "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered.",
+
+  "token.picker.select": "Select asset to send",
+
+  "passcode.changed": "Passcode changed!",
+  "enter.new.passcode": "Enter new passcode",
+  "confirm.new.passcode": "Confirm new passcode",
+  "face.id.not.available": "Face ID is not available on this device",
+  "change.passcode": "Change passcode",
+  "authenticate.with.face.id": "Authenticate with Face ID",
+  "passcode.doesnt.match": "Passcode doesn't match",
+  "please.try.again": "Please try again",
+  "try.again": "Try again",
+  "enter.pin": "Enter PIN"
 }

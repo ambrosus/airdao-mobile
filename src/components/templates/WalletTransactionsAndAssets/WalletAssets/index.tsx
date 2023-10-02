@@ -1,13 +1,12 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { SingleAsset } from '@components/templates/WalletTransactionsAndAssets/WalletAssets/SingleAsset';
-import { LocalizedRenderEmpty } from '@components/templates';
 import { useNavigation } from '@react-navigation/native';
-import { Spinner } from '@components/base';
 import { useTranslation } from 'react-i18next';
+import { LocalizedRenderEmpty } from '@components/templates';
+import { SingleAsset } from '@components/modular';
+import { Button, Spinner } from '@components/base';
 import { HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, TokenDTO } from '@models';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { verticalScale } from '@utils/scaling';
 
 interface WalletAssetsProps {
@@ -24,11 +23,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const { t } = useTranslation();
 
   const navigateToAssetScreen = (
-    tokenInfo: {
-      name: string;
-      address: string;
-      balance: { wei: string; ether: number };
-    },
+    tokenInfo: TokenDTO,
     walletAccount: string
   ) => {
     navigation.navigate('AssetScreen', { tokenInfo, walletAccount });
@@ -36,11 +31,9 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
 
   const renderToken = ({ item }: { item: TokenDTO }) => {
     return (
-      <TouchableOpacity
-        onPress={() => navigateToAssetScreen(item, account.address)}
-      >
+      <Button onPress={() => navigateToAssetScreen(item, account.address)}>
         <SingleAsset token={item} />
-      </TouchableOpacity>
+      </Button>
     );
   };
 

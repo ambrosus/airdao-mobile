@@ -34,9 +34,9 @@ import {
   ShowInUSD,
   UseMax
 } from './components';
-import { styles } from './styles';
 import { WalletUtils } from '@utils/wallet';
 import { AirDAOEventDispatcher } from '@lib';
+import { styles } from './styles';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -61,6 +61,8 @@ export const SendFunds = () => {
     false
   );
   const estimatedFee = useEstimatedTransferFee(
+    // TODO fix symbol
+    // @ts-ignore
     token,
     parseFloat(amountInCrypto),
     senderAddress,
@@ -157,7 +159,26 @@ export const SendFunds = () => {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
-        title={t('account.actions.send')}
+        title={
+          <View>
+            <Text
+              align="center"
+              fontSize={18}
+              color={COLORS.neutral800}
+              fontFamily="Inter_700Bold"
+            >
+              {t('account.actions.send')}
+            </Text>
+            <Row alignItems="center">
+              <Text fontSize={14} color={COLORS.neutral300}>
+                {t('from')}{' '}
+              </Text>
+              <Text color={COLORS.neutral700} fontSize={14}>
+                {StringUtils.formatAddress(senderAddress, 5, 6)}
+              </Text>
+            </Row>
+          </View>
+        }
         style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
