@@ -22,12 +22,7 @@ import {
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import {
-  PrimaryButton,
-  Toast,
-  ToastPosition,
-  ToastType
-} from '@components/modular';
+import { PrimaryButton } from '@components/modular';
 import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
@@ -134,17 +129,12 @@ export const SendFunds = () => {
     try {
       updateSendContext({ type: 'SET_DATA', loading: true });
       hideReviewModal();
-      navigation.navigate('SendFundsLoading');
+      navigation.replace('SendFundsStatus');
       // updateSendContext({ type: 'RESET_DATA' });
       // navigation.replace('HomeScreen');
       AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
         from: senderAddress,
         to: destinationAddress
-      });
-      Toast.show({
-        position: ToastPosition.Top,
-        type: ToastType.Success,
-        text: t('transaction.in.progress')
       });
       await WalletUtils.sendTx(
         walletHash,
@@ -154,16 +144,13 @@ export const SendFunds = () => {
         Number(amountInCrypto),
         balance.ether.toString()
       );
+      updateSendContext({ type: 'SET_DATA', loading: false });
     } catch (error: unknown) {
-      // TODO handle
       updateSendContext({
         type: 'SET_DATA',
         loading: false,
         error: error as any
       });
-      // Alert.alert('Transfer failed');
-    } finally {
-      // setSendLoading(false);
     }
   };
 
@@ -175,11 +162,6 @@ export const SendFunds = () => {
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <KeyboardDismissingView style={styles.container}>
-          {/* {accountLoading && (
-            <View style={styles.loading}>
-              <Spinner />
-            </View>
-          )} */}
           <View style={styles.horizontalPadding}>
             <AddressInput
               address={destinationAddress}

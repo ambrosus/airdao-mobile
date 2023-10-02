@@ -201,6 +201,9 @@
     "transfer.fee": "Tahmini transfer ücreti",
     "use.max": "Hepsini kullan"
   },
+  "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için tutarı ayarlayın veya bakiyenizi yeniden doldurun.",
+  "send.funds.error.network": "Kötü internet bağlantısı",
+  "send.funds.failed": "İşlem başarısız",
   "send.funds.sending": "Gönderiliyor",
   "send.funds.sent": "gönderildi",
   "send.funds.sending.description": "İşleminiz yapılıyor",

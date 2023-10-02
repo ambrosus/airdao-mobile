@@ -21,7 +21,7 @@ import {
 } from '@screens/CreateWallet/components';
 import { SendCryptoProvider } from '@contexts';
 import { SuccessImport } from '@screens/CreateWallet/components/SuccessImport';
-import { SendFundsLoading } from '@screens/SendFunds/screens/SendFundsLoading';
+import { SendFundsStatus } from '@screens/SendFunds/screens/SendFundsStatus';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -37,7 +37,7 @@ export const HomeStack = () => {
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
         <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="SendFundsLoading" component={SendFundsLoading} />
+        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
