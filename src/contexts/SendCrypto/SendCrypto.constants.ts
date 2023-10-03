@@ -1,52 +1,14 @@
-export const SEND_CRYPTO_INITIAL_STATE = {
-  ui: {
-    uiType: 'ACCOUNT_SCREEN',
-    addressTo: '',
-    addressName: '',
-    memo: '',
-    cryptoValue: '',
-    cryptoValueRecounted: 0,
-    comment: '',
-    rawOnly: false,
-    isTransferAll: false,
-    dexCurrencyCode: false,
-    dexOrderData: false,
-    bse: {
-      bseProviderType: false,
-      bseOrderId: false,
-      bseMinCrypto: false,
-      bseTrusteeFee: false,
-      bseOrderData: false
-    },
-    tbk: {
-      transactionBoost: false,
-      transactionAction: false
-    },
-    fioRequestDetails: false
-  },
-  dict: {
-    inputType: 'CRYPTO',
-    decimals: '',
-    extendsProcessor: '',
-    addressUiChecker: '',
-    network: '',
-    addressFrom: '',
-    currencySymbol: '',
-    currencyName: '',
-    currencyCode: '',
-    balanceTotalPretty: '',
-    basicCurrencyBalanceTotal: '',
-    basicCurrencySymbol: '',
-    basicCurrencyCode: '',
-    basicCurrencyRate: ''
-  },
-  fromBlockchain: {
-    neverCounted: true,
-    countedFees: {
-      fees: [],
-      selectedFeeIndex: -10
-    },
-    selectedFee: false,
-    transferAllBalance: false
-  }
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { SendCryptoContextState } from './SendCrypto.types';
+
+export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
+  from: '',
+  to: '',
+  walletHash: '',
+  amount: 0,
+  currency: AirDAODictTypes.Code.AMB,
+  currencyConversionRate: 0, // {currency}/US
+  loading: false,
+  estimatedFee: 0,
+  error: null
 };

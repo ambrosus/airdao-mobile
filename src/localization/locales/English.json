@@ -28,10 +28,12 @@
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.date": "Date",
+  "common.done": "Done",
   "common.no.transactions": "You will see your transactions here",
   "common.notification.price-alert": "Price Alert",
   "common.notification.transaction-alert": "Transaction Alert",
   "common.notification.wallet-update": "Wallet Update",
+  "common.share.transaction": "Share transaction",
   "common.status": "Status",
   "common.transaction": "Transaction",
   "common.transaction_plural": "Transactions",
@@ -199,6 +201,13 @@
   "send.funds.recipient": "Recipient address",
   "send.funds.transfer.fee": "Estimated transfer fee",
   "send.funds.use.max": "Use max",
+  "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or refill your balance to proceed.",
+  "send.funds.error.network": "Bad internet connection!",
+  "send.funds.failed": "Transaction failed",
+  "send.funds.sending": "Sending",
+  "send.funds.sent": "sent",
+  "send.funds.sending.description": "This shouldn’t take long",
+
   "share": "Share",
   "transaction.in.progress": "Transaction in progress!",
   "backup.your.wallet": "Backup your wallet",
@@ -268,7 +277,7 @@
   "enter.passcode": "Enter Passcode",
   "enter.passcode.text": "Passcode will be required for wallet access and transactions.",
   "enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered.",
-  
+
   "token.picker.select": "Select asset to send",
 
   "passcode.changed": "Passcode changed!",
