@@ -17,7 +17,8 @@ import {
   useAMBPrice,
   useBalanceOfAddress,
   useEstimatedTransferFee,
-  useSelectedWalletHash
+  useSelectedWalletHash,
+  useTokensAndTransactions
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -36,6 +37,8 @@ import {
 } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { AirDAOEventDispatcher } from '@lib';
+import { TokenDTO } from '@models';
+import { TokenPicker } from '@components/templates';
 import { styles } from './styles';
 
 export const SendFunds = () => {
@@ -43,17 +46,27 @@ export const SendFunds = () => {
     useSendCryptoContext((v) => v);
   const { to: destinationAddress = '', from: senderAddress = '' } =
     sendContextState;
-  const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
+  // const token = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
   const { data: walletHash } = useSelectedWalletHash();
   // const { account, accountLoading } = useMainAccount();
-  const { data: balance } = useBalanceOfAddress(senderAddress);
+  const { data: ambBalance } = useBalanceOfAddress(senderAddress);
   const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass token name inside to handle different crypto tokens under Ambrosus Networkc
   const ambPrice = ambPriceInfo?.priceUSD || 0;
   const currencyRate = ambPrice;
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
+  const {
+    data: { tokens }
+  } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
+  const defaultAMBToken: TokenDTO = {
+    name: 'AMB',
+    address: senderAddress || '',
+    balance: { wei: '', ether: Number(ambBalance.ether) || 0 },
+    symbol: AirDAODictTypes.Code.AMB
+  };
 
   // const [destinationAddress, setDestinationAddress] = useState('');
+  const [token, setSelectedToken] = useState<TokenDTO>(defaultAMBToken);
   const [amountInCrypto, setAmountInCrypto] = useState('0');
   const [amountInUSD, setAmountInUSD] = useState('0');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
@@ -61,23 +74,30 @@ export const SendFunds = () => {
     false
   );
   const estimatedFee = useEstimatedTransferFee(
-    // TODO fix symbol
-    // @ts-ignore
-    token,
+    token.symbol,
     parseFloat(amountInCrypto),
     senderAddress,
     destinationAddress,
     walletHash
   );
-
   const confirmModalRef = useRef<BottomSheetRef>(null);
+  const balance =
+    token.name === defaultAMBToken.name
+      ? defaultAMBToken.balance.ether
+      : tokens.find((t) => t.name === token.name)?.balance.ether || 0;
+
+  const selectToken = (newToken: TokenDTO) => {
+    setSelectedToken(newToken);
+    setAmountInCrypto('0');
+    setAmountInUSD('0');
+  };
 
   useEffect(() => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
       walletHash,
-      currency: token,
+      currency: token.symbol,
       currencyConversionRate: currencyRate,
       amount: parseFloat(amountInCrypto)
     });
@@ -90,10 +110,8 @@ export const SendFunds = () => {
 
   const useMaxBalance = () => {
     if (balance) {
-      setAmountInCrypto(balance.ether.toString());
-      setAmountInUSD(
-        CurrencyUtils.toUSD(parseFloat(balance.ether), ambPrice).toString()
-      );
+      setAmountInCrypto(balance.toString());
+      setAmountInUSD(CurrencyUtils.toUSD(balance, ambPrice).toString());
     }
   };
 
@@ -140,11 +158,11 @@ export const SendFunds = () => {
       });
       await WalletUtils.sendTx(
         walletHash,
-        token,
+        token.symbol,
         senderAddress,
         destinationAddress,
         Number(amountInCrypto),
-        balance.ether.toString()
+        balance.toString()
       );
       updateSendContext({ type: 'SET_DATA', loading: false });
     } catch (error: unknown) {
@@ -209,6 +227,11 @@ export const SendFunds = () => {
           >
             <View>
               <Row alignItems="center" justifyContent="space-between">
+                <TokenPicker
+                  tokens={[defaultAMBToken].concat(tokens)}
+                  selectedToken={token}
+                  onSelectToken={selectToken}
+                />
                 <View />
                 <Button onPress={useMaxBalance}>
                   <UseMax />
@@ -229,7 +252,7 @@ export const SendFunds = () => {
                 <ShowInUSD
                   usdAmount={Number(amountInUSD)}
                   cryptoAmount={Number(amountInCrypto)}
-                  cryptoSymbol={token}
+                  cryptoSymbol={token.symbol}
                   showInUSD={!amountShownInUSD}
                   cryptoSymbolPlacement="right"
                 />
@@ -237,7 +260,7 @@ export const SendFunds = () => {
               <Spacer value={verticalScale(16)} />
               <Row alignItems="center" style={{ alignSelf: 'center' }}>
                 <Text color={COLORS.neutral400}>
-                  {t('send.funds.balance')}: {balance.ether} {token}
+                  {t('send.funds.balance')}: {balance} {token.symbol}
                 </Text>
               </Row>
               <Spacer value={verticalScale(32)} />
@@ -274,7 +297,7 @@ export const SendFunds = () => {
               to={destinationAddress}
               etherAmount={parseFloat(amountInCrypto)}
               usdAmount={parseFloat(amountInUSD)}
-              currency={token}
+              currency={token.symbol}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
               loading={false}

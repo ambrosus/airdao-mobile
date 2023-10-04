@@ -7,7 +7,7 @@ import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, TokenDTO } from '@models';
-import { verticalScale } from '@utils/scaling';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface WalletAssetsProps {
   tokens: TokenDTO[] | undefined;
@@ -39,17 +39,17 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
 
   const ambTokenData: TokenDTO[] = [
     {
-      name: 'AMB',
+      name: 'AirDAO',
       address: account.address,
       balance: { wei: '', ether: account.ambBalance },
-      symbol: 'AMB'
+      symbol: AirDAODictTypes.Code.AMB
     }
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
 
   return (
-    <View style={{ flex: 1, paddingBottom: verticalScale(100) }}>
+    <View style={{ flex: 1 }}>
       {!data && error && loading ? (
         <LocalizedRenderEmpty text={t('no.assets.yet')} />
       ) : (
@@ -58,6 +58,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           renderItem={renderToken}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: '20%' }}
         />
       )}
     </View>

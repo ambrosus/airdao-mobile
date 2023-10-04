@@ -1,3 +1,5 @@
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+
 export interface TokenDTO {
   address: string;
   name: string;
@@ -5,5 +7,5 @@ export interface TokenDTO {
     wei: string;
     ether: number;
   };
-  symbol: string;
+  symbol: AirDAODictTypes.Code;
 }

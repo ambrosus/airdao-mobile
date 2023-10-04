@@ -18,6 +18,7 @@ export * from './WatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';
+export * from './TokenPicker';
 export * from './TransactionDetails';
 export * from './StatusBar';
 export * from './OnboardingView';
