@@ -240,6 +240,8 @@
   "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
   "no.wallet.stay.informed": "Stay informed",
   "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
+  "no.wallet.create.new": "Create new wallet",
+  "no.wallet.import": "Import existing wallet",
 
   "restore.wallet.loading": "Importing your wallet from \n backup",
   "restore.wallet.header": "Import existing wallet",
