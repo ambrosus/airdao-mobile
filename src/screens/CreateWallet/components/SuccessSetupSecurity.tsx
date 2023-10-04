@@ -38,7 +38,7 @@ export const SuccessSetupSecurity = () => {
         >
           {t('wallet.protected')}{' '}
           <Text fontFamily="Inter_600SemiBold">
-            x{t('settings.tab')}
+            {t('settings.tab')}
             {'>'}
             {t('settings.security')}
           </Text>
