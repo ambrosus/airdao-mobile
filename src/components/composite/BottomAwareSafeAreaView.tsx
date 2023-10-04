@@ -3,7 +3,9 @@ import React from 'react';
 import { View, ViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export const BottomAwareSafeAreaView = (props: ViewProps) => {
+export const BottomAwareSafeAreaView = (
+  props: ViewProps & { paddingBottom?: number }
+) => {
   const { bottom } = useSafeAreaInsets();
   return (
     <View
@@ -13,7 +15,7 @@ export const BottomAwareSafeAreaView = (props: ViewProps) => {
         {
           paddingBottom: Math.max(
             // @ts-ignore
-            verticalScale(props.style?.paddingBottom || 16) - bottom,
+            (props.paddingBottom || verticalScale(16)) - bottom,
             0
           )
         }
