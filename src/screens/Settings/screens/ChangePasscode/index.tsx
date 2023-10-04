@@ -26,7 +26,8 @@ export const ChangePasscode = () => {
 
   useEffect(() => {
     PasscodeUtils.getPasscodeFromDB().then((passcodeRes) => {
-      setSavedPasscode(passcodeRes);
+      setSavedPasscode(passcodeRes as string[]);
+      if (!passcodeRes) setStep(2);
     });
   }, [setSavedPasscode]);
 
@@ -92,11 +93,13 @@ export const ChangePasscode = () => {
           : t('confirm.new.passcode')}
       </Text>
       <Spacer value={verticalScale(24)} />
-      <Passcode
-        onPasscodeChange={handlePasscode}
-        autoFocus={true}
-        type="change"
-      />
+      <View>
+        <Passcode
+          onPasscodeChange={handlePasscode}
+          autoFocus={true}
+          type="change"
+        />
+      </View>
     </View>
   );
 };
