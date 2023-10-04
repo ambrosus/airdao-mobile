@@ -3,11 +3,6 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   input: {
     fontSize: 24,
     borderBottomWidth: 2,

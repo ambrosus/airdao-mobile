@@ -53,7 +53,7 @@ export const Passcode = forwardRef(
     const inputRef = useRef<TextInput>(null);
 
     return (
-      <View style={styles.container}>
+      <>
         <TextInput
           ref={inputRef}
           autoFocus={autoFocus}
@@ -65,7 +65,7 @@ export const Passcode = forwardRef(
           onChangeText={handleCodeChange}
         />
         <View style={styles.circlesContainer}>{renderCircles()}</View>
-      </View>
+      </>
     );
   }
 );
