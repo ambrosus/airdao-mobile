@@ -12,10 +12,12 @@ import { ChevronRightIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { PasscodeUtils } from '@utils/passcode';
+import { useSupportedBiometrics } from '@hooks';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(false);
+  const supportedBiometrics = useSupportedBiometrics();
   const navigation = useNavigation<SettingsTabNavigationProp>();
 
   const toggleFaceIDAuthentication = async () => {
@@ -95,27 +97,33 @@ export const SecuritySettingsScreen = () => {
         </View>
       </Button>
       <Spacer value={verticalScale(16)} />
-      <View style={{ paddingHorizontal: scale(18) }}>
-        <Row
-          alignItems="center"
-          justifyContent="space-between"
-          style={styles.container}
-        >
-          <Text
-            fontSize={16}
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.neutral500}
+      {supportedBiometrics.length > 0 && (
+        <View style={{ paddingHorizontal: scale(18) }}>
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            style={styles.container}
           >
-            {t('sign.in.with.face.id')}
-          </Text>
-          <Row alignItems="center">
-            <Switch
-              value={isFaceIDEnabled}
-              onValueChange={toggleFaceIDAuthentication}
-            />
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral500}
+            >
+              {supportedBiometrics.indexOf(
+                LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+              ) > -1
+                ? t('sign.in.with.face.id')
+                : t('sign.in.with.fingerprint')}
+            </Text>
+            <Row alignItems="center">
+              <Switch
+                value={isFaceIDEnabled}
+                onValueChange={toggleFaceIDAuthentication}
+              />
+            </Row>
           </Row>
-        </Row>
-      </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

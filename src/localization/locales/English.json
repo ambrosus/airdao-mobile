@@ -270,6 +270,7 @@
   "enter.recovery.phrase.text": "Enter the recovery phrase associated with your existing wallet.",
   "enter.your.passcode": "Enter your passcode",
   "sign.in.with.face.id": "Sign in with Face ID",
+  "sign.in.with.fingerprint": "Sign in with fingerprint",
   "security.enabled": "Security Enabled!",
   "wallet.protected": "Your wallet is now protected. Go to",
   "manage.security": " to manage your wallet security.",

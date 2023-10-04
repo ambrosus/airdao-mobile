@@ -263,6 +263,7 @@
 
   "enter.your.passcode": "Şifrenizi girin",
   "sign.in.with.face.id": "Face ID ile gir",
+  "sign.in.with.fingerprint": "Parmak izi ile gir",
   "security.enabled": "Güvenlik Etkinleştirildi!",
   "wallet.protected": "",
   "manage.security": "",
