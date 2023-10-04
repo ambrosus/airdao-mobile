@@ -75,7 +75,6 @@ export const PasscodeModal = forwardRef<
         promptMessage: t('authenticate.with.face.id'),
         fallbackLabel: t('enter.pin')
       });
-      LocalAuthentication.authenticateAsync({});
       if (result.success) {
         setFaceIDAuthRes(true);
         localRef.current?.dismiss();

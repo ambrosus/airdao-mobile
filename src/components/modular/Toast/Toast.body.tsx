@@ -38,7 +38,7 @@ export const ToastBody = forwardRef((_, ref) => {
       position: ToastPosition.Top,
       actions: [],
       onBodyPress: () => null,
-      duration: 3500 // ms
+      duration: 1500 // ms
     }),
     []
   );
@@ -119,12 +119,8 @@ export const ToastBody = forwardRef((_, ref) => {
           bottom: isTopToast ? undefined : placement
         }
       ]}
-      entering={(isTopToast ? SlideInUp : SlideInDown).duration(
-        (options.duration ?? 500) / 2
-      )}
-      exiting={(isTopToast ? SlideOutUp : SlideOutDown).duration(
-        (options.duration ?? 500) / 2
-      )}
+      entering={isTopToast ? SlideInUp : SlideInDown}
+      exiting={isTopToast ? SlideOutUp : SlideOutDown}
       testID="Toast_Body"
     >
       <Pressable
