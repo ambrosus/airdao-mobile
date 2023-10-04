@@ -2,7 +2,7 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Header, InputWithIcon } from '@components/composite';
 import {
@@ -161,7 +161,20 @@ export const RestoreWalletScreen = () => {
           Alert.alert('Invalid mnemonic phrase');
         } else {
           await WalletUtils.processWallet(mnemonicPhrase);
-          navigation.navigate('SuccessImport');
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Tabs',
+                  params: {
+                    screen: 'Wallets',
+                    params: { screen: 'SuccessImport' }
+                  }
+                }
+              ]
+            })
+          );
         }
       } catch (error) {
         // TODO add localization

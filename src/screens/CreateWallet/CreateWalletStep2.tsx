@@ -6,7 +6,7 @@ import { Header } from '@components/composite';
 import { useAddWalletContext } from '@contexts';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from '@screens/CreateWallet/styles';
 import { WalletUtils } from '@utils/wallet';
@@ -142,7 +142,20 @@ export const CreateWalletStep2 = () => {
     try {
       setLoading(true);
       await WalletUtils.processWallet(walletMnemonic);
-      navigation.navigate('SuccessBackupComplete');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Tabs',
+              params: {
+                screen: 'Wallets',
+                params: { screen: 'SuccessBackupComplete' }
+              }
+            }
+          ]
+        })
+      );
     } catch (error) {
       // TODO translate
       Alert.alert('Error occured', 'Could not create wallet!');
