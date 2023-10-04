@@ -109,6 +109,7 @@ export const PasscodeModal = forwardRef<
       ref={localRef}
       containerStyle={styles.container}
       height={Dimensions.get('screen').height}
+      closeOnBackPress={false}
     >
       <KeyboardAvoidingView
         enabled
