@@ -52,7 +52,6 @@ const providers = [
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
-  WrappedPasscodeProvider,
   OnboardingContextProvider,
   AddWalletProvider
 ];
