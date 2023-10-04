@@ -29,7 +29,9 @@ export const NoWalletScreen = () => {
 
   const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setCurrentStep(
-      Math.floor(event.nativeEvent.contentOffset.x / WINDOW_WIDTH)
+      Math.floor(
+        event.nativeEvent.contentOffset.x / parseInt(WINDOW_WIDTH.toString())
+      )
     );
   };
 

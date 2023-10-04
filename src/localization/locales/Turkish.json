@@ -237,8 +237,8 @@
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.stay.informed": "Haberdar olun",
   "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın.",
-  "no.wallet.create.new": "Create new wallet",
-  "no.wallet.import": "Import existing wallet",
+  "no.wallet.create.new": "Yeni cüzdan oluştur",
+  "no.wallet.import": "Mevcut cüzdanı içe aktar",
 
   "restore.wallet.loading": "Cüzdanınız alınıyor",
   "restore.wallet.header": "Mevcut cüzdanı içe aktar",
