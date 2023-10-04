@@ -10,4 +10,5 @@ export * from './PercentChange';
 export * from './PopUpInfo';
 export * from './SegmentedPicker';
 export * from './OnBoardingToolTip/OnBoardingToolTipBody';
+export * from './BottomAwareSafeAreaView';
 export * from './PaginationCircles';

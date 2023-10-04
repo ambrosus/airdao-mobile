@@ -10,20 +10,19 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const RecoveryPhraseModal = forwardRef<BottomSheetRef, BottomSheetProps>(
   (props, ref) => {
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const { t } = useTranslation();
-    const { bottom: bottomInset } = useSafeAreaInsets();
 
     return (
       <BottomSheet
         swiperIconVisible
         ref={localRef}
-        height={verticalScale(204) - bottomInset}
+        height={verticalScale(204)}
         borderRadius={verticalScale(32)}
+        {...props}
       >
         <Header
           title={
@@ -36,7 +35,10 @@ export const RecoveryPhraseModal = forwardRef<BottomSheetRef, BottomSheetProps>(
             </Text>
           }
           backIconVisible={false}
-          style={{ shadowColor: 'transparent' }}
+          style={{
+            shadowColor: COLORS.transparent,
+            backgroundColor: COLORS.transparent
+          }}
         />
         <Text
           align="center"

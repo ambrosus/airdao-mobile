@@ -1,9 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Platform, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomSheetRef, CheckBox, Header } from '@components/composite';
+import {
+  BottomAwareSafeAreaView,
+  BottomSheetRef,
+  CheckBox,
+  Header
+} from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
@@ -13,7 +18,6 @@ import { MnemoicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep0 = () => {
-  const { top } = useSafeAreaInsets();
   const [selected, setSelected] = useState<boolean>(false);
   const navigation = useNavigation<HomeNavigationProp>();
   const recoveryPhraseModalRef = useRef<BottomSheetRef>(null);
@@ -28,7 +32,7 @@ export const CreateWalletStep0 = () => {
   }, [recoveryPhraseModalRef]);
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header
         titlePosition="left"
         title={
@@ -40,10 +44,10 @@ export const CreateWalletStep0 = () => {
             {t('create.new.wallet')}
           </Text>
         }
-        style={{ flex: 1, shadowColor: 'transparent', top }}
+        style={{ shadowColor: 'transparent' }}
       />
-      <View style={[{ top }, styles.container]}>
-        <View>
+      <BottomAwareSafeAreaView style={styles.container}>
+        <View style={{ flex: 1 }}>
           <Text
             align="center"
             fontSize={24}
@@ -52,7 +56,7 @@ export const CreateWalletStep0 = () => {
           >
             {t('backup.your.wallet')}
           </Text>
-          <Spacer value={verticalScale(12)} />
+          <Spacer value={verticalScale(8)} />
           <View>
             <Text
               align="center"
@@ -82,14 +86,14 @@ export const CreateWalletStep0 = () => {
               </Text>
             </Text>
           </View>
-          <Spacer value={verticalScale(64)} />
+          <Spacer value={verticalScale(80)} />
           <View style={styles.mnemoicLogo}>
             <MnemoicIcon />
           </View>
         </View>
         <View
           style={{
-            marginBottom: verticalScale(120),
+            // marginBottom: verticalScale(120),
             width: '100%'
           }}
         >
@@ -111,14 +115,13 @@ export const CreateWalletStep0 = () => {
               {t('checkbox.text')}
             </Text>
           </Row>
+          <Spacer value={verticalScale(32)} />
           <Button
             disabled={!selected}
             onPress={onContinuePress}
             type="circular"
             style={{
-              backgroundColor: selected ? COLORS.brand600 : COLORS.alphaBlack5,
-              bottom:
-                Platform.OS === 'ios' ? verticalScale(-32) : verticalScale(-64)
+              backgroundColor: selected ? COLORS.brand600 : COLORS.alphaBlack5
             }}
           >
             <Text
@@ -132,7 +135,7 @@ export const CreateWalletStep0 = () => {
           </Button>
         </View>
         <RecoveryPhraseModal ref={recoveryPhraseModalRef} />
-      </View>
-    </>
+      </BottomAwareSafeAreaView>
+    </SafeAreaView>
   );
 };
