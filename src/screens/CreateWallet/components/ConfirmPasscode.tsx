@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Spacer, Text, Button, KeyboardDismissingView } from '@components/base';
+import { Spacer, Text, Button } from '@components/base';
 import { Alert, KeyboardAvoidingView, View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -62,7 +62,7 @@ export const ConfirmPasscode = () => {
         <Passcode onPasscodeChange={onPasscodeChange} autoFocus={true} />
         <Spacer value={verticalScale(50)} />
       </View>
-      <KeyboardDismissingView style={{ paddingHorizontal: scale(16) }}>
+      <View style={{ paddingHorizontal: scale(16) }}>
         <Button
           disabled={!isButtonEnabled}
           onPress={onContinuePress}
@@ -83,7 +83,7 @@ export const ConfirmPasscode = () => {
             {t('continue.btn')}
           </Text>
         </Button>
-      </KeyboardDismissingView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
