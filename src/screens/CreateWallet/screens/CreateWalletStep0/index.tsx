@@ -12,7 +12,7 @@ import {
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { RecoveryPhraseModal } from './/components/RecoveryPhraseModal';
+import { RecoveryPhraseModal } from '../../components/RecoveryPhraseModal';
 import { styles } from '@screens/CreateWallet/styles';
 import { MnemoicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
