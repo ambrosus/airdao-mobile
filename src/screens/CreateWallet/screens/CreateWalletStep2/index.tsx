@@ -1,8 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Spacer, Spinner, Text } from '@components/base';
-import { BottomAwareSafeAreaView, Header } from '@components/composite';
+import { Button, Spacer, Text } from '@components/base';
+import {
+  BottomAwareSafeAreaView,
+  CenteredSpinner,
+  Header
+} from '@components/composite';
 import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -195,7 +199,7 @@ export const CreateWalletStep2 = () => {
             }}
           >
             {loading ? (
-              <Spinner color={COLORS.neutral900} />
+              <CenteredSpinner />
             ) : (
               <Text
                 fontSize={16}

@@ -7,8 +7,8 @@ import {
   AMBAbout,
   AMBMarket as AMBMarketsInfo
 } from './components';
-import { Row, Spacer, Spinner, Text } from '@components/base';
-import { BottomSheetRef, Header } from '@components/composite';
+import { Row, Spacer, Text } from '@components/base';
+import { BottomSheetRef, CenteredSpinner, Header } from '@components/composite';
 import { LogoGradientCircular, SmallLogoSVG } from '@components/svg/icons';
 import { SharePortfolio } from '@components/templates';
 import { NumberUtils } from '@utils/number';
@@ -84,7 +84,7 @@ export function AMBMarket(): JSX.Element {
         {error && renderErrorView()}
         {loading && (
           <View testID="spinner">
-            <Spinner />
+            <CenteredSpinner />
           </View>
         )}
         {ambPrice && (
