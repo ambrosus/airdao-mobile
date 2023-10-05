@@ -40,6 +40,7 @@ export const WalletTransactionsAndAssets = (
 
   const indicatorPosition = useSharedValue(0);
 
+  // @ts-ignore
   const indicatorStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: withTiming(indicatorPosition.value) }]
