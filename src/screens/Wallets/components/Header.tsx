@@ -1,11 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-  Platform
-} from 'react-native';
+import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -176,8 +170,6 @@ export const HomeHeader = React.memo((): JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:
-      Platform.OS === 'ios' ? COLORS.neutral0 : COLORS.culturedWhite,
     shadowColor: COLORS.culturedWhite
   },
   notificationCountContainer: {
