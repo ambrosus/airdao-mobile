@@ -72,7 +72,7 @@ export const WalletTransactionsAndAssets = (
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Row alignItems="center" justifyContent="space-between">
         <Button onPress={scrollToTransactions} style={styles.tabLeftTitle}>
           <Text
@@ -121,9 +121,9 @@ export const WalletTransactionsAndAssets = (
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: '100%' }}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
-        <View style={{ width: tabWidth }}>
+        <View style={{ width: tabWidth, flex: 1 }}>
           <WalletAssets
             tokens={tokens}
             loading={loading}
@@ -134,8 +134,7 @@ export const WalletTransactionsAndAssets = (
         <View
           style={{
             width: tabWidth,
-            height: '100%',
-            paddingTop: verticalScale(12)
+            flex: 1
           }}
         >
           <AccountTransactions
