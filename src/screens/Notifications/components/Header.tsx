@@ -38,6 +38,7 @@ export const NotificationsHeader = (
       title={t('notifications.tab')}
       titlePosition="left"
       contentRight={renderContentRight()}
+      style={{ shadowColor: COLORS.transparent }}
     />
   );
 };

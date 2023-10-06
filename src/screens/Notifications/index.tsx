@@ -136,7 +136,7 @@ export const Notifications = (): JSX.Element => {
         showsVerticalScrollIndicator={false}
         testID="Notifications_List"
       />
-      <BottomSheet ref={settingsModal} height={WINDOW_HEIGHT}>
+      <BottomSheet ref={settingsModal} height={WINDOW_HEIGHT} borderRadius={0}>
         {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           title={t('notification.settings')}
