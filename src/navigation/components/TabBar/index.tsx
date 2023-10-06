@@ -39,7 +39,7 @@ const tabs = {
 };
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
-  const bottomSafeArea = useSafeAreaInsets().bottom - 12;
+  const bottomSafeArea = useSafeAreaInsets().bottom;
   const currentRoute = useCurrentRoute();
   const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
   const [isReady, setIsReady] = useState(false);
@@ -66,7 +66,9 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     <Animated.View
       style={[
         styles.mainContainer,
-        { paddingBottom: bottomSafeArea },
+        {
+          paddingBottom: bottomSafeArea
+        },
         animatedStyle
       ]}
     >

@@ -6,7 +6,7 @@ import { COLORS } from '@constants/colors';
 export function WatchlistTabIcon(props: IconProps) {
   const { scale = 1, color = COLORS.brand500 } = props;
   const width = 33;
-  const height = 28;
+  const height = 32;
   return (
     <Svg
       width={width}

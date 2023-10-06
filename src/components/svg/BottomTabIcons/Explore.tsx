@@ -5,8 +5,8 @@ import { COLORS } from '@constants/colors';
 
 export function ExploreTabIcon(props: IconProps) {
   const { scale = 1, color = COLORS.brand500 } = props;
-  const width = 29;
-  const height = 28;
+  const width = 32;
+  const height = 32;
   return (
     <Svg
       width={width}
