@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer, Text, Button } from '@components/base';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -30,7 +30,7 @@ export const SetupPasscode = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled
+      enabled={Platform.OS === 'ios'}
       behavior="padding"
       style={{
         top,
@@ -82,7 +82,7 @@ export const SetupPasscode = () => {
             backgroundColor: isButtonEnabled
               ? COLORS.brand500
               : COLORS.alphaBlack5,
-            marginBottom: verticalScale(48)
+            marginBottom: verticalScale(28)
           }}
         >
           <Text

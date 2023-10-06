@@ -2,10 +2,12 @@ import React, {
   useState,
   forwardRef,
   useImperativeHandle,
-  useRef
+  useRef,
+  useEffect
 } from 'react';
 import { View, TextInput } from 'react-native';
 import { styles } from '@components/modular/Passcode/styles';
+import { Button } from '@components/base';
 
 interface PasscodeProps {
   onPasscodeChange: (passcode: string[]) => void;
@@ -16,6 +18,11 @@ interface PasscodeProps {
 export const Passcode = forwardRef(
   ({ onPasscodeChange, autoFocus, type }: PasscodeProps, ref) => {
     const [code, setCode] = useState('');
+    const inputRef = useRef<TextInput>(null);
+
+    useEffect(() => {
+      if (autoFocus) inputRef.current?.focus();
+    }, [autoFocus, inputRef]);
 
     const handleCodeChange = (text: string) => {
       setCode(text);
@@ -50,8 +57,6 @@ export const Passcode = forwardRef(
       }
     }));
 
-    const inputRef = useRef<TextInput>(null);
-
     return (
       <>
         <TextInput
@@ -64,7 +69,13 @@ export const Passcode = forwardRef(
           value={code}
           onChangeText={handleCodeChange}
         />
-        <View style={styles.circlesContainer}>{renderCircles()}</View>
+        <Button
+          activeOpacity={1}
+          onPress={() => inputRef.current?.focus()}
+          style={styles.circlesContainer}
+        >
+          {renderCircles()}
+        </Button>
       </>
     );
   }
