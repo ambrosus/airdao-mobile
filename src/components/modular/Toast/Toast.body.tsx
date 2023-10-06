@@ -54,8 +54,8 @@ export const ToastBody = forwardRef((_, ref) => {
   }, []);
 
   const hide = useCallback(() => {
-    setOptions(defaultOptions);
     setToastVisible(false);
+    setOptions(defaultOptions);
     clearTimer();
   }, [clearTimer, defaultOptions]);
 

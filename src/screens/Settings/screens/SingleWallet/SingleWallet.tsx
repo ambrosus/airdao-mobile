@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
+import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { Button, Input, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import {
@@ -101,9 +101,10 @@ export const SingleWalletScreen = () => {
             </Text>
           </Button>
         }
+        style={{ shadowColor: COLORS.transparent }}
       />
       {wallet && (
-        <View style={styles.innerContainer}>
+        <BottomAwareSafeAreaView style={styles.innerContainer}>
           <View>
             <View style={styles.nameInput}>
               <Text>{t('singleWallet.name')}</Text>
@@ -159,7 +160,7 @@ export const SingleWalletScreen = () => {
               {t('singleWallet.save')}
             </Text>
           </Button>
-        </View>
+        </BottomAwareSafeAreaView>
       )}
     </SafeAreaView>
   );

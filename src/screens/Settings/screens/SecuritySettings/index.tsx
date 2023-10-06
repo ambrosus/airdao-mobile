@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import * as LocalAuthentication from 'expo-local-authentication';
-import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { ChevronRightIcon } from '@components/svg/icons';
-import { useNavigation } from '@react-navigation/native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { PasscodeUtils } from '@utils/passcode';
 import { useSupportedBiometrics } from '@hooks';
+import { DeviceUtils } from '@utils/device';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export const SecuritySettingsScreen = () => {
   const supportedBiometrics = useSupportedBiometrics();
   const navigation = useNavigation<SettingsTabNavigationProp>();
 
-  const toggleFaceIDAuthentication = async () => {
+  const toggleBiometricAuthentication = async () => {
     try {
       if (isFaceIDEnabled) {
         await PasscodeUtils.setFaceIDStatusInDB(false);
@@ -30,6 +31,9 @@ export const SecuritySettingsScreen = () => {
         const isEnrolled = await LocalAuthentication.isEnrolledAsync();
         const availableTypes =
           await LocalAuthentication.supportedAuthenticationTypesAsync();
+        const hasFaceId = DeviceUtils.checkFaceIDExists(supportedBiometrics);
+        const hasFingerprint =
+          DeviceUtils.checkFingerprintExists(supportedBiometrics);
 
         if (
           availableTypes.includes(
@@ -39,7 +43,11 @@ export const SecuritySettingsScreen = () => {
           isEnrolled
         ) {
           const result = await LocalAuthentication.authenticateAsync({
-            promptMessage: t('authenticate.with.face.id'),
+            promptMessage: hasFaceId
+              ? t('authenticate.with.face.id')
+              : hasFingerprint
+              ? t('authenticate.with.fingerprint')
+              : 'Authenticate',
             fallbackLabel: t('enter.pin')
           });
           if (result.success) {
@@ -48,7 +56,9 @@ export const SecuritySettingsScreen = () => {
           }
         } else {
           Toast.show({
-            text: t('face.id.not.available'),
+            text: hasFaceId
+              ? t('face.id.not.available')
+              : t('fingerprint.not.available'),
             position: ToastPosition.Top,
             type: ToastType.Failed
           });
@@ -118,7 +128,7 @@ export const SecuritySettingsScreen = () => {
             <Row alignItems="center">
               <Switch
                 value={isFaceIDEnabled}
-                onValueChange={toggleFaceIDAuthentication}
+                onValueChange={toggleBiometricAuthentication}
               />
             </Row>
           </Row>
