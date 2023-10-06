@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native';
 import { moderateScale } from '@utils/scaling';
 
 export interface SpinnerProps {
-  size?: number;
+  size?: 'large' | 'small';
 }
 
 export function Spinner(props: SpinnerProps): JSX.Element {

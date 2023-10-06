@@ -16,7 +16,7 @@ export const AccountActionButton = (props: AccountActionButtonProps) => {
   const { Icon, text, isActive, onPress } = props;
 
   const textColor = isActive ? COLORS.neutral900 : COLORS.neutral300;
-  const iconColor = textColor;
+  const iconColor = isActive ? COLORS.neutral900 : COLORS.alphaBlack30;
   return (
     <Button onPress={onPress} disabled={!isActive} style={styles.container}>
       <View style={styles.icon}>
