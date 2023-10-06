@@ -82,7 +82,6 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
         >
           {body}
         </Text>
-        <Spacer value={verticalScale(4)} />
       </View>
       <Spacer horizontal value={scale(21)} />
       {renderChangeInfo()}
