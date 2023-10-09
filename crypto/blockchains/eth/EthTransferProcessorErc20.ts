@@ -5,7 +5,6 @@
 import EthTransferProcessor from './EthTransferProcessor';
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
-import AirDAOCryptoLog from '@crypto/common/AirDAOCryptoLog';
 import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import abi from './ext/erc20.js';
@@ -64,12 +63,6 @@ export default class EthTransferProcessorErc20
     }
 
     if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate dex ' +
-          data.addressFrom +
-          ' started'
-      );
       return super.getFeeRate(data, privateData, additionalData);
     }
 
@@ -78,20 +71,9 @@ export default class EthTransferProcessorErc20
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTxProcessorErc20.getFeeRate removeByFee no token ' +
-          this._tokenAddress
-      );
       tmpData.amount = '0';
       return super.getFeeRate(tmpData, privateData, additionalData);
     }
-    // @ts-ignore
-    AirDAOCryptoLog.log(
-      this._settings.currencyCode +
-        ' EthTxProcessorErc20.getFeeRate estimateGas started token ' +
-        this._tokenAddress
-    );
     let estimatedGas;
 
     try {
@@ -103,14 +85,6 @@ export default class EthTransferProcessorErc20
         const tmp1 = '0xA09fe17Cb49D7c8A7858C8F9fCac954f82a9f487';
         const tmp2 = '0xf1Cff704c6E6ce459e3E1544a9533cCcBDAD7B99';
         firstAddressTo = data.addressFrom === tmp1 ? tmp2 : tmp1;
-        // @ts-ignore
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTxProcessorErc20.getFeeRate estimateGas addressToChanged ' +
-            basicAddressTo +
-            ' => ' +
-            firstAddressTo
-        );
         eventTitle =
           'v20_' + this._mainCurrencyCode.toLowerCase() + '_gas_limit_token2 ';
       }
@@ -130,11 +104,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTxProcessorErc20.getFeeRate estimateGas error1 ' +
-            e.message
-        );
       }
       try {
         serverEstimatedGas2 = await this._token.methods
@@ -148,11 +117,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTxProcessorErc20.getFeeRate estimateGas error2 ' +
-            e.message
-        );
       }
       // @ts-ignore
       const tmp3 = data.amount * 1;
@@ -168,11 +132,6 @@ export default class EthTransferProcessorErc20
           firstAddressTo +
           ' from ' +
           data.addressFrom;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTxProcessorErc20.getFeeRate estimateGas error3 ' +
-            e.message
-        );
       }
 
       if (serverEstimatedGas2 > serverEstimatedGas) {
@@ -199,12 +158,6 @@ export default class EthTransferProcessorErc20
     } catch (e) {
       this.checkError(e, data);
     }
-
-    AirDAOCryptoLog.log(
-      this._settings.currencyCode +
-        ' EthTxProcessorErc20.getFeeRate estimateGas finished ' +
-        estimatedGas
-    );
     const result = await super.getFeeRate(tmpData, privateData, {
       ...additionalData,
       ...{ gasLimit: estimatedGas }
@@ -219,14 +172,6 @@ export default class EthTransferProcessorErc20
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     const tmpData = { ...data };
     if (!tmpData.amount || tmpData.amount === '0') {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessorErc20.getTransferAllBalance ' +
-          data.addressFrom +
-          ' token ' +
-          this._tokenAddress +
-          ' started with load balance needed'
-      );
       try {
         // @ts-ignore
         tmpData.amount = await this._token.methods
@@ -235,25 +180,6 @@ export default class EthTransferProcessorErc20
       } catch (e) {
         this.checkError(e, data);
       }
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessorErc20.getTransferAllBalance ' +
-          data.addressFrom +
-          ' token ' +
-          this._tokenAddress +
-          ' started with loaded balance ' +
-          tmpData.amount
-      );
-    } else {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessorErc20.getTransferAllBalance ' +
-          data.addressFrom +
-          ' token ' +
-          this._tokenAddress +
-          ' started with preset balance ' +
-          tmpData.amount
-      );
     }
 
     const result = await super.getTransferAllBalance(
@@ -270,12 +196,6 @@ export default class EthTransferProcessorErc20
     uiData: AirDAOBlockchainTypes.TransferUiData
   ): Promise<AirDAOBlockchainTypes.SendTxResult> {
     if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sendTx dex ' +
-          data.addressFrom +
-          ' started'
-      );
       return super.sendTx(data, privateData, uiData);
     }
     const tmpData = { ...data };
@@ -283,20 +203,9 @@ export default class EthTransferProcessorErc20
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTxProcessorErc20.sendTx removeByFee no token ' +
-          this._tokenAddress
-      );
       tmpData.amount = '0';
       return super.sendTx(tmpData, privateData, uiData);
     }
-
-    await AirDAOCryptoLog.log(
-      this._settings.currencyCode +
-        ' EthTxProcessorErc20.sendTx started token ' +
-        this._tokenAddress
-    );
 
     try {
       const basicAddressTo = data.addressTo.toLowerCase();
@@ -309,11 +218,6 @@ export default class EthTransferProcessorErc20
     } catch (e) {
       this.checkError(e, data);
     }
-    // @ts-ignore
-    AirDAOCryptoLog.log(
-      'EthTxProcessorErc20 encodeABI finished',
-      tmpData.blockchainData
-    );
     tmpData.amount = '0';
     tmpData.addressTo = this._tokenAddress;
     return super.sendTx(tmpData, privateData, uiData);

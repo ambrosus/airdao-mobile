@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-/**
- * @author Ksu
- * @version 0.20
- */
-import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import { AirDAOBlockchainTypes } from '../../blockchains/AirDAOBlockchainTypes';
 import { AirDAOTransferDispatcher } from '../../blockchains/AirDAOTransferDispatcher';
 import { AirDAOTransferPrivate } from './AirDAOTransferPrivate';
@@ -34,9 +29,6 @@ export namespace AirDAOTransfer {
     data.isTransferAll = true;
     let transferAllCount;
     try {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.getTransferAllBalance started ${data.addressFrom} `
-      );
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -52,20 +44,14 @@ export namespace AirDAOTransfer {
       transferAllCount = await AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       ).getTransferAllBalance(data, privateData, additionalDataTmp);
-
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.getTransferAllBalance got ${data.addressFrom} result is ok`
-      );
-    } catch (e) {
+    } catch (err: unknown) {
+      const e = err as any;
       if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
       ) {
         // noinspection ES6MissingAwait
-        AirDAOCryptoLog.err(
-          `${data.currencyCode} AirDAOTransfer.getTransferAllBalance ` +
-            e.message
-        );
+
         throw new Error(
           'server.not.responding.all.balance.' +
             data.currencyCode +
@@ -111,9 +97,6 @@ export namespace AirDAOTransfer {
     data.derivationPath = data.derivationPath.replace(/quote/g, "'");
     let feesCount;
     try {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.getFeeRate started ${data.addressFrom} `
-      );
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -133,24 +116,15 @@ export namespace AirDAOTransfer {
         additionalDataTmp
       );
       feesCount.countedTime = new Date().getTime();
-    } catch (e) {
+    } catch (err: unknown) {
+      const e = err as any;
       if (typeof e.message === 'undefined') {
-        await AirDAOCryptoLog.log('AirDAOTransfer.getFeeRate strange error');
+        // ignore
       } else if (
         e.message.indexOf('SERVER_RESPONSE_') === -1 &&
         e.message.indexOf('UI_') === -1
       ) {
         // noinspection ES6MissingAwait
-        await AirDAOCryptoLog.err(
-          `${data.currencyCode} AirDAOTransfer.getFeeRate error ` +
-            data.addressFrom +
-            ' => ' +
-            data.addressTo +
-            ' ' +
-            data.amount +
-            ' ' +
-            e.message
-        );
         throw new Error(
           'server.not.responding.network.prices.' +
             data.currencyCode +
@@ -158,9 +132,6 @@ export namespace AirDAOTransfer {
             e.message
         );
       } else {
-        await AirDAOCryptoLog.log(
-          'AirDAOTransfer.getFeeRate inner error ' + e.message
-        );
         throw e;
       }
     }
@@ -245,22 +216,11 @@ export namespace AirDAOTransfer {
         }
       }
     } catch (e: any) {
-      if (
-        e.message.indexOf('SERVER_RESPONSE_') === -1 &&
-        e.message.indexOf('UI_') === -1
-      ) {
-        AirDAOCryptoLog.log(
-          `${data.currencyCode} AirDAOTransfer.sendTx error ` + e.message
-        );
-      }
       throw e;
     }
 
     let txResult;
     try {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.sendTx started ${data.addressFrom} `
-      );
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -269,9 +229,6 @@ export namespace AirDAOTransfer {
         additionalData
       );
       txResult = await processor.sendTx(data, privateData, uiData);
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.sendTx got ${data.addressFrom} result is ok`
-      );
       if (
         typeof uiData === 'undefined' ||
         typeof uiData.selectedFee === 'undefined' ||
@@ -290,17 +247,6 @@ export namespace AirDAOTransfer {
       // if (typeof uiData.selectedFee !== 'undefined')
     } catch (e: any) {
       if (
-        e.message.indexOf('SERVER_RESPONSE_') === -1 &&
-        e.message.indexOf('UI_') === -1 &&
-        e.message.indexOf('connect() timed') === -1
-      ) {
-        // noinspection ES6MissingAwait
-        AirDAOCryptoLog.err(
-          `${data.currencyCode} AirDAOTransfer.sendTx ` + e.message
-        );
-      }
-
-      if (
         e.message.indexOf('imeout') !== -1 ||
         e.message.indexOf('network error') !== -1 ||
         e.message === 'SERVER_RESPONSE_BAD_INTERNET'
@@ -312,9 +258,6 @@ export namespace AirDAOTransfer {
         (data.currencyCode === 'TRX' ||
           data.currencyCode.indexOf('TRX_') !== -1)
       ) {
-        AirDAOCryptoLog.log(
-          `${data.currencyCode} AirDAOTransfer.sendTx ` + e.message
-        );
       } else {
         throw e;
       }
@@ -330,9 +273,6 @@ export namespace AirDAOTransfer {
   ): Promise<string> {
     let txResult = '';
     try {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.sendRawTx started ${data.address} `
-      );
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -340,13 +280,7 @@ export namespace AirDAOTransfer {
         return 'none';
       }
       txResult = await processor.sendRawTx(data, rawTxHex, txRBF, logData);
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.sendRawTx got ${data.address} result is ok`
-      );
     } catch (e) {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.sendRawTx error ` + e.message
-      );
       throw e;
     }
     return txResult;
@@ -358,9 +292,6 @@ export namespace AirDAOTransfer {
   ): Promise<boolean> {
     let txResult = false;
     try {
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.setMissing started ${data.address} `
-      );
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -368,14 +299,7 @@ export namespace AirDAOTransfer {
         return false;
       }
       txResult = await processor.setMissingTx(data, dbTransaction);
-      AirDAOCryptoLog.log(
-        `${data.currencyCode} AirDAOTransfer.setMissing got ${data.address} result is ok`
-      );
-    } catch (e) {
-      AirDAOCryptoLog.err(
-        `${data.currencyCode} AirDAOTransfer.setMissing error ` + e.message
-      );
-    }
+    } catch (e) {}
     return txResult;
   };
 
@@ -386,7 +310,6 @@ export namespace AirDAOTransfer {
   ): boolean {
     let txResult = false;
     try {
-      // AirDAOCryptoLog.log(`AirDAOTransfer.canRBF ${data.currencyCode} from ${source} started ${data.address} `)
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         typeof data.currencyCode !== 'undefined'
           ? data.currencyCode
@@ -396,20 +319,13 @@ export namespace AirDAOTransfer {
         return false;
       }
       txResult = processor.canRBF(data, dbTransaction, source);
-      // AirDAOCryptoLog.log(`AirDAOTransfer.canRBF ${data.currencyCode} from ${source} got ${data.address} result is ${JSON.stringify(txResult)}`)
-    } catch (e) {
-      AirDAOCryptoLog.err(
-        `${data.currencyCode} AirDAOTransfer.canRBF error from ${source} ` +
-          e.message
-      );
-    }
+    } catch (e) {}
     return txResult;
   };
 
   export const checkSendAllModal = function (data: { currencyCode: any }) {
     let checkSendAllModalResult = false;
     try {
-      // AirDAOCryptoLog.log(`AirDAOTransfer.checkSendAllModal ${data.currencyCode} started `)
       const processor = AirDAOTransferDispatcher.getTransferProcessor(
         data.currencyCode
       );
@@ -417,13 +333,7 @@ export namespace AirDAOTransfer {
         return false;
       }
       checkSendAllModalResult = processor.checkSendAllModal(data);
-      // AirDAOCryptoLog.log(`AirDAOTransfer.checkSendAllModal ${data.currencyCode} got result is ok ` + JSON.stringify(checkSendAllModalResult))
-    } catch (e) {
-      AirDAOCryptoLog.err(
-        `${data.currencyCode} AirDAOTransfer.checkSendAllModal error ` +
-          e.message
-      );
-    }
+    } catch (e) {}
     return checkSendAllModalResult;
   };
 }

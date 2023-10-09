@@ -1,9 +1,4 @@
-/**
- * @author Ksu
- * @version 0.20
- */
 import BlocksoftUtils from '../../common/AirDAOUtils';
-import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 
 import EthTmpDS from './stores/EthTmpDS';
 
@@ -53,39 +48,18 @@ export default class EthTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate remove started ' +
-          data.transactionRemoveByFee
-      );
       txRBF = data.transactionRemoveByFee;
       txRBFed = 'RBFremoved';
     } else if (
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate resend started ' +
-          data.transactionReplaceByFee
-      );
       txRBF = data.transactionReplaceByFee;
       txRBFed = 'RBFed';
     } else if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate dex ' +
-          data.addressFrom +
-          ' started'
-      );
+      // ignore
     } else {
       const realAddressToLower = realAddressTo.toLowerCase();
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate ' +
-          data.addressFrom +
-          ' started'
-      );
       txRBFed = 'usualSend';
       if (
         realAddressTo !== '' &&
@@ -109,13 +83,6 @@ export default class EthTransferProcessor
         typeof data.transactionJson.nonce !== 'undefined'
           ? data.transactionJson.nonce
           : false;
-      // AirDAOCryptoLog.log(
-      //   this._settings.currencyCode +
-      //     ' EthTransferProcessor.getFeeRate ' +
-      //     data.addressFrom +
-      //     ' rbf preset nonceForTx ' +
-      //     oldNonce
-      // );
       if (!oldGasPrice) {
         try {
           const ethProvider = AirDAODispatcher.getScannerProcessor(
@@ -125,33 +92,9 @@ export default class EthTransferProcessor
           if (scannedTx) {
             oldGasPrice = scannedTx.gasPrice;
             oldNonce = scannedTx.nonce;
-            AirDAOCryptoLog.log(
-              this._settings.currencyCode +
-                ' EthTransferProcessor.getFeeRate ' +
-                data.addressFrom +
-                ' rbf reloaded nonceForTx ' +
-                oldNonce
-            );
-          }
-          if (!oldGasPrice) {
-            AirDAOCryptoLog.log(
-              this._settings.currencyCode +
-                ' EthTransferProcessor.getFeeRate ' +
-                txRBFed +
-                ' no gasPrice for ' +
-                txRBF
-            );
           }
         } catch (e: any) {
-          AirDAOCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTransferProcessor.getFeeRate ' +
-              txRBFed +
-              'not loaded gasPrice for ' +
-              txRBF +
-              ' ' +
-              e.message
-          );
+          //ignore
         }
       }
       nonceLog += ' txRBFNonce ' + oldNonce;
@@ -161,20 +104,6 @@ export default class EthTransferProcessor
     ) {
       oldNonce = additionalData.nonceForTx;
       nonceLog += ' customFeeNonce ' + oldNonce;
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate ' +
-          data.addressFrom +
-          ' custom nonceForTx ' +
-          additionalData.nonceForTx
-      );
-    } else {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFeeRate ' +
-          data.addressFrom +
-          ' no nonceForTx'
-      );
     }
 
     let gasPrice = {};
@@ -255,13 +184,6 @@ export default class EthTransferProcessor
       ) {
         maxNonceLocal = proxyPriceCheck.maxNonceLocal;
       }
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          `' EthTransferProcessor.getFeeRate ' +
-          ${data.addressFrom} +
-          ' proxyPriceCheck',
-        ${proxyPriceCheck}`
-      );
     }
 
     if (typeof this._web3.LINK === 'undefined') {
@@ -320,10 +242,6 @@ export default class EthTransferProcessor
             ],
             id: 1
           };
-          AirDAOCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTransferProcessor.getFeeRate estimatedGas for WalletConnect start'
-          );
           const tmp = await AirDAOAxios.postWithoutBraking(
             this._web3.LINK,
             params
@@ -339,11 +257,6 @@ export default class EthTransferProcessor
           } else {
             gasLimit = 500000;
           }
-          AirDAOCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTransferProcessor.getFeeRate estimatedGas for WalletConnect result ' +
-              gasLimit
-          );
         } else if (
           typeof data.contractCallData !== 'undefined' &&
           typeof data.contractCallData.contractAddress !== 'undefined'
@@ -377,9 +290,6 @@ export default class EthTransferProcessor
               gasLimit = BlocksoftUtils.mul(gasLimit, 1.5);
             }
           } catch (e: any) {
-            AirDAOCryptoLog.log(
-              'EthTransferProcessor data.contractCallData error ' + e.message
-            );
             // do nothing
           }
 
@@ -401,11 +311,6 @@ export default class EthTransferProcessor
                   realAddressTo,
                   data.amount
                 ); // it doesn't matter what the price of gas is, just a required parameter
-                AirDAOCryptoLog.log(
-                  this._settings.currencyCode +
-                    ' EthTransferProcessor.getFeeRate estimatedGas ' +
-                    gasLimit
-                );
               } catch (e1) {
                 ok = false;
                 if (i > 3) {
@@ -444,11 +349,6 @@ export default class EthTransferProcessor
         }
       } else {
         gasLimit = additionalData.gasLimit;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.getFeeRate preestimatedGas ' +
-            gasLimit
-        );
       }
     } catch (e) {
       throw new Error(e.message + ' in get gasLimit');
@@ -475,16 +375,6 @@ export default class EthTransferProcessor
     if (!gasLimit) {
       throw new Error('invalid transaction (no gas limit.2)');
     }
-
-    // @ts-ignore
-    AirDAOCryptoLog.log(
-      this._settings.currencyCode +
-        ' EthTransferProcessor.getFeeRate prefinished',
-      {
-        gasPrice,
-        gasLimit
-      }
-    );
 
     const result: AirDAOBlockchainTypes.FeeRateResult =
       {} as AirDAOBlockchainTypes.FeeRateResult;
@@ -513,15 +403,6 @@ export default class EthTransferProcessor
         } else {
           nonceLog += ' from serverCheckNoLog ';
         }
-        // if (
-        //   MarketingEvent.DATA.LOG_TESTER &&
-        //   typeof proxyPriceCheck.newNonceDEBUG !== 'undefined'
-        // ) {
-        //   nonceForTxBasic = proxyPriceCheck.newNonceDEBUG;
-        //   nonceLog += ' used newNonceDEBUG';
-        // } else {
-        //   nonceLog += ' used newNonce ';
-        // }
         nonceLog += ' used newNonce ';
 
         if (nonceForTxBasic === 'maxValue+1') {
@@ -555,13 +436,6 @@ export default class EthTransferProcessor
           ' with basic ' +
           nonceForTxBasic +
           nonceLog;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.getFeeRate ' +
-            data.addressFrom +
-            ' ' +
-            nonceLog
-        );
       } else {
         nonceForTx = nonceForTxBasic;
         isNewNonce = true;
@@ -571,13 +445,6 @@ export default class EthTransferProcessor
           ' replaced by basic ' +
           nonceForTxBasic +
           nonceLog;
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.getFeeRate ' +
-            data.addressFrom +
-            ' ' +
-            nonceLog
-        );
       }
     }
 
@@ -592,11 +459,6 @@ export default class EthTransferProcessor
           (await this._web3.eth.getBalance(data.addressFrom));
         // @ts-ignore
         if (!balance || balance * 1 === 0) {
-          AirDAOCryptoLog.log(
-            this._settings.currencyCode +
-              ' EthTxProcessor.getFeeRate balanceFromWeb3 is empty ' +
-              balance
-          );
           actualCheckBalance = false;
         } else {
           actualCheckBalance = true;
@@ -680,9 +542,7 @@ export default class EthTransferProcessor
             ? BlocksoftUtils.toGwei(newGasPrice).toString()
             : newGasPrice;
       } catch (e) {
-        AirDAOCryptoLog.err(
-          'EthTxProcessor.getFeeRate newGasPrice to gwei error ' + e.message
-        );
+        // ignore
       }
 
       const tmp = {
@@ -703,45 +563,13 @@ export default class EthTransferProcessor
       const diff = needSpeed - newGasPrice;
       if (!changedFeeByBalance || diff * 1 < 1000) {
         feesOK[titles[index]] = tmp.gasPrice;
-      } else {
-        AirDAOCryptoLog.log(
-          'EthTxProcessor.getFeeRate skipped feesOk ' +
-            titles[index] +
-            '  as diff ' +
-            diff +
-            ' gasPrice ' +
-            tmp.gasPrice +
-            ' / gasLimit ' +
-            tmp.gasLimit
-        );
       }
       if (
         BlocksoftUtils.diff(newGasPrice, prevGasPrice).indexOf('-') === -1 &&
         newGasPrice !== prevGasPrice
       ) {
         prevGasPrice = tmp.gasPrice;
-        AirDAOCryptoLog.log(
-          'EthTxProcessor.getFeeRate added feeForTx ' +
-            titles[index] +
-            ' ' +
-            tmp.feeForTx +
-            ' with gasPrice ' +
-            tmp.gasPrice +
-            ' / gasLimit ' +
-            tmp.gasLimit
-        );
         result.fees.push(tmp);
-      } else {
-        AirDAOCryptoLog.log(
-          'EthTxProcessor.getFeeRate skipped feeForTx ' +
-            titles[index] +
-            ' ' +
-            tmp.feeForTx +
-            ' with gasPrice ' +
-            tmp.gasPrice +
-            ' / gasLimit ' +
-            tmp.gasLimit
-        );
       }
     }
 
@@ -817,10 +645,7 @@ export default class EthTransferProcessor
                 ? BlocksoftUtils.toGwei(newGasPrice).toString()
                 : newGasPrice;
           } catch (e) {
-            AirDAOCryptoLog.err(
-              'EthTxProcessor.getFeeRate newGasPrice2 to gwei error ' +
-                e.message
-            );
+            // ignore
           }
 
           const tmp = {
@@ -839,14 +664,6 @@ export default class EthTransferProcessor
           };
           // @ts-ignore
           prevGasPrice = tmp.gasPrice;
-          AirDAOCryptoLog.log(
-            'EthTxProcessor.getFeeRate feeForTx rbfFaster ' +
-              tmp.feeForTx +
-              ' with gasPrice ' +
-              tmp.gasPrice +
-              ' / gasLimit ' +
-              tmp.gasLimit
-          );
           result.fees.push(tmp);
         }
       }
@@ -900,9 +717,7 @@ export default class EthTransferProcessor
       try {
         gweiFee = fee !== '0' ? BlocksoftUtils.toGwei(fee).toString() : fee;
       } catch (e) {
-        AirDAOCryptoLog.err(
-          'EthTxProcessor.getFeeRate fee to gwei error ' + e.message
-        );
+        // ignore
       }
       const tmp = {
         langMsg: 'eth_speed_slowest',
@@ -918,19 +733,6 @@ export default class EthTransferProcessor
         ethAllowLongQuery,
         isTransferAll: data.isTransferAll
       };
-
-      AirDAOCryptoLog.log(
-        'EthTxProcessor.getFeeRate feeForTx ' +
-          titles[index] +
-          ' ' +
-          tmp.feeForTx +
-          ' corrected for balance ' +
-          balance +
-          ' with gasPrice ' +
-          tmp.gasPrice +
-          ' / gasLimit ' +
-          tmp.gasLimit
-      );
       if (tmp.gasPrice > 0) {
         result.fees.push(tmp);
       } else {
@@ -940,10 +742,6 @@ export default class EthTransferProcessor
 
     if (!skippedByOld) {
       if (typeof feesOK['eth_speed_fast'] === 'undefined') {
-        AirDAOCryptoLog.log(
-          'EthTxProcessor.getFeeRate showSmallFeeNotice reason ' +
-            JSON.stringify(feesOK)
-        );
         result.showSmallFeeNotice = new Date().getTime();
       }
     }
@@ -957,19 +755,6 @@ export default class EthTransferProcessor
         maxNonceLocal.amountBlocked &&
         typeof maxNonceLocal.amountBlocked[this._settings.currencyCode] !==
           'undefined';
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getFees ethAllowBlockedBalance ' +
-          ethAllowBlockedBalance +
-          ' isNewNonce ' +
-          isNewNonce +
-          ' oldNonce ' +
-          oldNonce +
-          ' amountBlocked ' +
-          JSON.stringify(maxNonceLocal.amountBlocked) +
-          ' => ' +
-          (check ? 'true' : 'false')
-      );
       if (check) {
         try {
           const diff = BlocksoftUtils.diff(
@@ -977,19 +762,6 @@ export default class EthTransferProcessor
             maxNonceLocal.amountBlocked[this._settings.currencyCode]
           ).toString();
           const diffAmount = BlocksoftUtils.diff(diff, data.amount).toString();
-          if (typeof maxNonceLocal !== 'boolean') {
-            AirDAOCryptoLog.log(
-              this._settings.currencyCode +
-                ' EthTransferProcessor.getFees balance ' +
-                result.countedForBasicBalance +
-                ' - blocked ' +
-                maxNonceLocal.amountBlocked[this._settings.currencyCode] +
-                ' = left Balance ' +
-                diff +
-                ' => left Amount ' +
-                diffAmount
-            );
-          }
           if (diff.indexOf('-') !== -1) {
             result.showBlockedBalanceNotice = new Date().getTime();
             result.showBlockedBalanceFree =
@@ -1004,33 +776,13 @@ export default class EthTransferProcessor
             }
           }
         } catch (e) {
-          AirDAOCryptoLog.log(
-            ' EthTransferProcessor.getFees ethAllowBlockedBalance inner error ' +
-              e.message
-          );
+          // ignore
         }
       }
       const LONG_QUERY = await BlocksoftExternalSettings.getStatic(
         'ETH_LONG_QUERY'
       );
       check = maxNonceLocal.queryLength * 1 >= LONG_QUERY * 1;
-      if (typeof maxNonceLocal !== 'boolean') {
-        await AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.getFees ethAllowLongQuery ' +
-            ethAllowLongQuery +
-            ' Query scanned ' +
-            maxNonceLocal.maxScanned +
-            ' success ' +
-            maxNonceLocal.maxSuccess +
-            ' length ' +
-            maxNonceLocal.queryLength +
-            ' txs ' +
-            JSON.stringify(maxNonceLocal.queryTxs) +
-            ' => ' +
-            (check ? 'true' : 'false')
-        );
-      }
       if (check) {
         result.showLongQueryNotice = new Date().getTime();
         result.showLongQueryNoticeTxs = maxNonceLocal.queryTxs;
@@ -1050,12 +802,6 @@ export default class EthTransferProcessor
     additionalData: AirDAOBlockchainTypes.TransferAdditionalData = {}
   ): Promise<AirDAOBlockchainTypes.TransferAllBalanceResult> {
     if (!data.amount || data.amount === '0') {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getTransferAllBalance ' +
-          data.addressFrom +
-          ' started with load balance needed'
-      );
       try {
         // @ts-ignore
         data.amount = await this._web3.eth
@@ -1064,21 +810,6 @@ export default class EthTransferProcessor
       } catch (e) {
         this.checkError(e, data);
       }
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getTransferAllBalance ' +
-          data.addressFrom +
-          ' started with loaded balance ' +
-          data.amount
-      );
-    } else {
-      await AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.getTransferAllBalance ' +
-          data.addressFrom +
-          ' started with preset balance ' +
-          data.amount
-      );
     }
 
     // noinspection EqualityComparisonWithCoercionJS
@@ -1112,15 +843,7 @@ export default class EthTransferProcessor
           fees.fees[fees.selectedFeeIndex].amountForTx
         );
       } catch (e: any) {
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.getTransferAllBalance ' +
-            data.addressFrom +
-            ' => ' +
-            data.addressTo +
-            ' error on logging ' +
-            e.message
-        );
+        // ignore
       }
     }
     return {
@@ -1141,11 +864,6 @@ export default class EthTransferProcessor
       throw new Error('ETH transaction required addressTo');
     }
 
-    await AirDAOCryptoLog.log(
-      this._settings.currencyCode + ' EthTransferProcessor sendTx started',
-      JSON.parse(JSON.stringify(data))
-    );
-
     let txRBFed = '';
     let txRBF = false;
     let realAddressTo = data.addressTo;
@@ -1157,39 +875,17 @@ export default class EthTransferProcessor
       typeof data.transactionRemoveByFee !== 'undefined' &&
       data.transactionRemoveByFee
     ) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sendTx started ' +
-          data.transactionRemoveByFee
-      );
       txRBF = data.transactionRemoveByFee;
       txRBFed = 'RBFremoved';
     } else if (
       typeof data.transactionReplaceByFee !== 'undefined' &&
       data.transactionReplaceByFee
     ) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sendTx resend started ' +
-          data.transactionReplaceByFee
-      );
       txRBF = data.transactionReplaceByFee;
       txRBFed = 'RBFed';
     } else if (typeof data.dexOrderData !== 'undefined' && data.dexOrderData) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sendTx dex ' +
-          data.addressFrom +
-          ' started'
-      );
       txRBFed = 'dexSend';
     } else {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sendTx ' +
-          data.addressFrom +
-          ' started'
-      );
       txRBFed = 'usualSend';
       if (
         realAddressTo !== '' &&
@@ -1225,18 +921,6 @@ export default class EthTransferProcessor
       finalGasLimit = Math.ceil(selectedFee.gasLimit * 1);
     }
 
-    // @ts-ignore
-    AirDAOCryptoLog.log(
-      this._settings.currencyCode +
-        ' EthTransferProcessor.sendTx ' +
-        txRBFed +
-        ' feeForTx',
-      {
-        uiData,
-        finalGasPrice,
-        finalGasLimit
-      }
-    );
     if (finalGasLimit === 0 || !finalGasLimit) {
       throw new Error('SERVER_PLEASE_SELECT_FEE');
     }
@@ -1355,21 +1039,9 @@ export default class EthTransferProcessor
               oldNonce = scannedTx.nonce;
             }
           } catch (e: any) {
-            AirDAOCryptoLog.err(
-              this._settings.currencyCode +
-                ' EthTransferProcessor.sent rbf not loaded nonce for ' +
-                txRBF +
-                ' ' +
-                e.message
-            );
             throw new Error('System error: not loaded nonce for ' + txRBF);
           }
           if (oldNonce === false || oldNonce === -1) {
-            AirDAOCryptoLog.err(
-              this._settings.currencyCode +
-                ' EthTransferProcessor.sent rbf no nonce for ' +
-                txRBF
-            );
             throw new Error('System error: no nonce for ' + txRBF);
           }
         }
@@ -1395,13 +1067,6 @@ export default class EthTransferProcessor
               ? logData.selectedFee.nonceLog
               : '');
         }
-        AirDAOCryptoLog.log(
-          this._settings.currencyCode +
-            ' EthTransferProcessor.sent ' +
-            data.addressFrom +
-            ' nonceLog ' +
-            logData.selectedFee.nonceLog
-        );
       }
 
       if (
@@ -1418,9 +1083,7 @@ export default class EthTransferProcessor
 
       try {
         result = await sender.send(tx, privateData, txRBF, logData);
-        console.log({ result });
       } catch (e) {
-        console.log({ error: e });
         throw e;
       }
 
@@ -1443,13 +1106,6 @@ export default class EthTransferProcessor
         result.transactionJson.txData = tx.data;
         await EthTmpDS.getCache(this._mainCurrencyCode, data.addressFrom);
       }
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferProcessor.sent ' +
-          data.addressFrom +
-          ' done ' +
-          JSON.stringify(result.transactionJson)
-      );
     } catch (e) {
       this.checkError(e, data, txRBF, logData);
     }
@@ -1467,13 +1123,6 @@ export default class EthTransferProcessor
       transaction.transactionJson &&
       typeof transaction.transactionJson.nonce !== 'undefined'
     ) {
-      AirDAOCryptoLog.log(
-        this._settings.currencyCode +
-          ' EthTransferPRocessor.setMissingTx remove nonce ' +
-          transaction.transactionJson.nonce +
-          ' ' +
-          transaction.transactionHash
-      );
       await EthTmpDS.removeNonce(
         this._mainCurrencyCode,
         data.address,
@@ -1489,32 +1138,12 @@ export default class EthTransferProcessor
     source: string
   ): boolean {
     if (transaction.transactionDirection === 'income') {
-      AirDAOCryptoLog.log(
-        'EthTransferProcessor.canRBF ' +
-          transaction.transactionHash +
-          ' false by income'
-      );
       return false;
     }
     if (typeof transaction.transactionJson !== 'undefined') {
       if (typeof transaction.transactionJson.delegatedNonce !== 'undefined') {
-        AirDAOCryptoLog.log(
-          'EthTransferProcessor.canRBF ' +
-            transaction.transactionHash +
-            ' false by delegated'
-        );
         return false;
       }
-      /*if (typeof transaction.transactionJson.nonce !== 'undefined') {
-                const max = EthTmpDS.getMaxStatic(data.address)
-                if (max.success > -1) {
-                    // @ts-ignore
-                    if (transaction.transactionJson.nonce * 1 > max.success * 1) return true
-                    AirDAOCryptoLog.log('EthTransferProcessor.canRBF  ' + transaction.transactionHash + ' false by maxSuccess',
-                        {'nonce' : transaction.transactionJson.nonce, 'max' : max.success})
-                    return false
-                }
-            }*/
     }
     return true;
   }

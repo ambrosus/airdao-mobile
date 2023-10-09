@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-/**
- * @author Ksu
- * @version 0.20
- */
 import { AirDAOBlockchainTypes } from '../../blockchains/AirDAOBlockchainTypes';
 import BlocksoftPrivateKeysUtils from '../../common/AirDAOPrivateKeysUtils';
-import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
 
 export namespace AirDAOTransferPrivate {
@@ -62,9 +57,6 @@ export namespace AirDAOTransferPrivate {
     privateData.privateKey = result.privateKey;
     // @ts-ignore
     privateData.addedData = result.addedData;
-    AirDAOCryptoLog.log(
-      `${data.currencyCode} AirDAOTransferPrivate.initTransferPrivate finished for ${data.addressFrom}`
-    );
     return privateData;
   };
 }
