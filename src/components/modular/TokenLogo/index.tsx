@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, ImageProps } from 'react-native';
 import { AirDAOTokenLogo, BUSDLogo, EthereumLogo } from '@components/svg/icons';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface TokenLogoProps extends Omit<ImageProps, 'source'> {
   token: string;
@@ -13,8 +14,10 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return <AirDAOTokenLogo />;
     case 'Ethereum':
       return <EthereumLogo />;
+    case AirDAODictTypes.Code.BUSD:
     case 'BUSD Token':
       return <BUSDLogo />;
+    case AirDAODictTypes.Code.USDC:
     case 'USD Coin':
       return (
         <Image
@@ -22,6 +25,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
           source={require('@assets/images/tokens/usd-coin.png')}
         />
       );
+    case AirDAODictTypes.Code.Tether:
     case 'Tether USD':
       return (
         <Image
