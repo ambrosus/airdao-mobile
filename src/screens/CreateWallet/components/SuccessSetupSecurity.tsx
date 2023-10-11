@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { BottomAwareSafeAreaView } from '@components/composite';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -38,29 +39,30 @@ export const SuccessSetupSecurity = () => {
         >
           {t('wallet.protected')}{' '}
           <Text fontFamily="Inter_600SemiBold">
-            x{t('settings.tab')}
+            {t('settings.tab')}
             {'>'}
             {t('settings.security')}
           </Text>
           {t('manage.security')}
         </Text>
       </View>
-      <PrimaryButton
-        onPress={navigateToSetUpSecurity}
-        style={{
-          paddingHorizontal: scale(16),
-          marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
-        }}
-      >
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral0}
+      <BottomAwareSafeAreaView>
+        <PrimaryButton
+          onPress={navigateToSetUpSecurity}
+          style={{
+            paddingHorizontal: scale(16)
+          }}
         >
-          {t('start.using.wallet.btn')}
-        </Text>
-      </PrimaryButton>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral0}
+          >
+            {t('start.using.wallet.btn')}
+          </Text>
+        </PrimaryButton>
+      </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
 };

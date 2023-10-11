@@ -9,6 +9,7 @@ import { NumberUtils } from '@utils/number';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
+import { ToastPosition } from '../Toast';
 
 export interface WalletCardProps {
   address: string;
@@ -57,6 +58,7 @@ export const WalletCard = (props: WalletCardProps) => {
         iconProps={{
           color: addressTextColor
         }}
+        toastProps={{ position: ToastPosition.Top }}
       />
       <View>
         {balanceLoading ? (

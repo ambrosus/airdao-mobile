@@ -57,8 +57,8 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           data={data}
           renderItem={renderToken}
           ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
-          showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: '20%' }}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

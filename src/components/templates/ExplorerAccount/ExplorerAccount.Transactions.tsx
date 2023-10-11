@@ -9,7 +9,8 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils/scaling';
-import { Spacer, Spinner, Text } from '@components/base';
+import { CenteredSpinner } from '@components/composite';
+import { Spacer, Text } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { COLORS } from '@constants/colors';
@@ -111,7 +112,7 @@ export const AccountTransactions = (
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         testID="Transactions_List"
-        ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+        ListFooterComponent={() => (loading ? <CenteredSpinner /> : <></>)}
       />
     </>
   );
@@ -121,6 +122,6 @@ const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingHorizontal: scale(16),
-    paddingBottom: '40%'
+    paddingBottom: verticalScale(96)
   }
 });

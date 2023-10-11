@@ -22,7 +22,10 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
         testID="PercentChange_Title"
       >
         {' '}
-        {NumberUtils.formatNumber(change, 2)}%
+        {NumberUtils.addSignToNumber(
+          Number(NumberUtils.formatNumber(change, 2))
+        )}
+        %
       </Text>
     </Row>
   );

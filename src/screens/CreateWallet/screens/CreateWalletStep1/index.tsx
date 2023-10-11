@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Row, Spacer, Spinner, Text } from '@components/base';
-import { Header } from '@components/composite';
+import { Spacer, Spinner, Text } from '@components/base';
+import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { useAddWalletContext } from '@contexts';
 import { verticalScale, scale } from '@utils/scaling';
@@ -39,37 +39,30 @@ export const CreateWalletStep1 = () => {
 
   const renderWord = (word: string, index: number) => {
     return (
-      <React.Fragment key={index}>
-        <Row key={index}>
-          <View
-            style={{
-              backgroundColor: COLORS.neutral100,
-              borderRadius: 48,
-              width: scale(102)
-            }}
-          >
-            <Text
-              align="center"
-              fontFamily="Inter_600SemiBold"
-              fontSize={12}
-              color={COLORS.neutral800}
-              style={{ marginHorizontal: scale(15), marginVertical: scale(8) }}
-            >
-              {index + 1} {word}
-            </Text>
-          </View>
-        </Row>
-        <Spacer value={verticalScale(20)} key={`spacer-${index}`} />
-      </React.Fragment>
+      <View style={styles.mnemonic} key={index}>
+        <Text
+          color={COLORS.neutral400}
+          fontSize={14}
+          fontFamily="Inter_600SemiBold"
+        >
+          {index + 1}
+        </Text>
+        <Spacer value={scale(8)} horizontal />
+        <Text
+          align="center"
+          fontFamily="Inter_600SemiBold"
+          fontSize={14}
+          color={COLORS.neutral900}
+        >
+          {word}
+        </Text>
+      </View>
     );
   };
 
   const onNextPress = () => {
     navigation.navigate('CreateWalletStep2');
   };
-
-  const wordsPerColumn = 4;
-  const numColumns = Math.ceil(walletMnemonicArray.length / wordsPerColumn);
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
@@ -78,16 +71,16 @@ export const CreateWalletStep1 = () => {
         align="center"
         fontSize={24}
         fontFamily="Inter_700Bold"
-        color={COLORS.neutral800}
+        color={COLORS.neutral900}
       >
         {t('your.recovery.phrase')}
       </Text>
       <Spacer value={verticalScale(12)} />
       <Text
         align="center"
-        fontSize={15}
+        fontSize={14}
         fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
+        color={COLORS.neutral900}
       >
         {t('verify.text')}
       </Text>
@@ -98,38 +91,25 @@ export const CreateWalletStep1 = () => {
       )}
       <Spacer value={verticalScale(40)} />
       <View style={styles.innerContainer}>
-        {Array.isArray(walletMnemonicArray) && (
-          <Row flex={1}>
-            {Array.from({ length: numColumns }, (_, columnIndex) => (
-              <View style={styles.column} key={columnIndex}>
-                {walletMnemonicArray
-                  .slice(
-                    columnIndex * wordsPerColumn,
-                    (columnIndex + 1) * wordsPerColumn
-                  )
-                  .map((word, idx) =>
-                    renderWord(word, idx + columnIndex * wordsPerColumn)
-                  )}
-              </View>
-            ))}
-          </Row>
-        )}
-        <View style={styles.warningContainer}>
-          <View style={styles.warning}>
-            <WarningIcon />
-            <Spacer horizontal value={scale(12)} />
-            <Text>{t('verification.alert')}</Text>
-          </View>
+        <View style={styles.mnemonicsContainer}>
+          {Array.isArray(walletMnemonicArray) &&
+            walletMnemonicArray.map(renderWord)}
         </View>
-        <Spacer value={verticalScale(34)} />
-        <PrimaryButton
-          onPress={onNextPress}
-          style={{
-            marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
-          }}
-        >
-          <Text color={COLORS.neutral0}>{t('verify.phrase')}</Text>
-        </PrimaryButton>
+        <View>
+          <View style={styles.warningContainer}>
+            <View style={styles.warning}>
+              <WarningIcon />
+              <Spacer horizontal value={scale(12)} />
+              <Text>{t('verification.alert')}</Text>
+            </View>
+          </View>
+          <Spacer value={verticalScale(34)} />
+          <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
+            <PrimaryButton onPress={onNextPress}>
+              <Text color={COLORS.neutral0}>{t('verify.phrase')}</Text>
+            </PrimaryButton>
+          </BottomAwareSafeAreaView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -141,6 +121,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: scale(16)
   },
   loading: {
@@ -152,15 +133,35 @@ const styles = StyleSheet.create({
     flex: 1
   },
   warningContainer: {
-    backgroundColor: COLORS.lemon,
+    backgroundColor: COLORS.warning100,
     borderRadius: 13,
     borderWidth: 0.2,
-    borderColor: '#ffac23'
+    borderColor: COLORS.warning400
   },
   warning: {
     marginVertical: scale(12),
     marginHorizontal: scale(16),
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  mnemonicsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: verticalScale(24),
+    width: scale(314),
+    alignSelf: 'center',
+    alignItems: 'center',
+    columnGap: scale(16)
+  },
+  mnemonic: {
+    width: scale(94),
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.neutral100,
+    borderRadius: 1000,
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(8),
+    height: verticalScale(36),
+    minHeight: 36
   }
 });

@@ -17,6 +17,7 @@ import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 import { NoWalletStep, StepCircle, StepInfo } from './components';
 import { NoWalletSteps } from './NoWallet.constants';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 export const NoWalletScreen = () => {
   const { setFlowType, setWalletName, setMnemonicLength } =
@@ -24,10 +25,13 @@ export const NoWalletScreen = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const [currentStep, setCurrentStep] = useState(0);
   const { width: WINDOW_WIDTH } = useWindowDimensions();
+  const { t } = useTranslation();
 
   const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setCurrentStep(
-      Math.floor(event.nativeEvent.contentOffset.x / WINDOW_WIDTH)
+      Math.floor(
+        event.nativeEvent.contentOffset.x / parseInt(WINDOW_WIDTH.toString())
+      )
     );
   };
 
@@ -87,7 +91,7 @@ export const NoWalletScreen = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral0}
             >
-              Create new wallet
+              {t('no.wallet.create.new')}
             </Text>
           </PrimaryButton>
           <Spacer value={verticalScale(24)} />
@@ -97,7 +101,7 @@ export const NoWalletScreen = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral900}
             >
-              Import existing wallet
+              {t('no.wallet.import')}
             </Text>
           </SecondaryButton>
         </View>

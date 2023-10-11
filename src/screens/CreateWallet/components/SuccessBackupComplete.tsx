@@ -68,7 +68,9 @@ export const SuccessBackupComplete = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral0}
         >
-          {t('setup.security.btn')}
+          {isPasscodeEnabled
+            ? t('start.using.wallet.btn')
+            : t('setup.security.btn')}
         </Text>
       </PrimaryButton>
     </SafeAreaView>

@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
-import { moderateScale, verticalScale } from '@utils/scaling';
+import { Button, Text } from '@components/base';
+import { moderateScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import {
   QRCodeWithLogo,
   Toast,
@@ -12,6 +11,7 @@ import {
   ToastType
 } from '@components/modular';
 import { Clipboard } from '@utils/clipboard';
+import { styles } from './styles';
 
 interface ReceiveFundsProps {
   address: string;
@@ -37,7 +37,7 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
       <View style={styles.qrCode}>
         <QRCodeWithLogo value={address} size={moderateScale(200)} />
       </View>
-      <Button activeOpacity={1} onLongPress={copyAddress}>
+      <Button onLongPress={copyAddress}>
         <Text
           fontSize={18}
           fontFamily="Inter_500Medium"
@@ -47,7 +47,7 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
           {address}
         </Text>
       </Button>
-      <Spacer value={verticalScale(16)} />
+      {/* <Spacer value={verticalScale(16)} />
       <Button style={styles.shareBtn}>
         <Text
           color={COLORS.neutral900}
@@ -56,7 +56,7 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
         >
           {t('share')}
         </Text>
-      </Button>
+      </Button> */}
     </View>
   );
 };

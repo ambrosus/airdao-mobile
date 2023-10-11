@@ -12,12 +12,12 @@ import {
   KeyboardDismissingView,
   Row,
   Spacer,
-  Spinner,
   Text
 } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
+  CenteredSpinner,
   InputWithIcon
 } from '@components/composite';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
@@ -234,7 +234,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {isLoading && <Spinner />}
+      {isLoading && <CenteredSpinner />}
       {(error && !!address && !finalAccount) || (hashError && !!address) ? (
         <SearchAddressNoResult />
       ) : null}

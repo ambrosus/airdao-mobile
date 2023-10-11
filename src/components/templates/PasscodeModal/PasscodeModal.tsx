@@ -1,6 +1,7 @@
 import React, {
   ForwardedRef,
   forwardRef,
+  useCallback,
   useEffect,
   useRef,
   useState
@@ -18,7 +19,7 @@ import {
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
-import { useAppState, useForwardedRef } from '@hooks';
+import { useAppState, useForwardedRef, useSupportedBiometrics } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from '@components/templates/PasscodeModal/styles';
@@ -42,9 +43,11 @@ export const PasscodeModal = forwardRef<
   const { prevState } = useAppState();
   const { t } = useTranslation();
   const { isFaceIDEnabled } = usePasscode();
+  const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
 
   const [faceIDAuthRes, setFaceIDAuthRes] = useState<boolean>(true);
+  const isAuthenticating = useRef(false);
 
   const handlePasscode = (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
@@ -66,7 +69,7 @@ export const PasscodeModal = forwardRef<
     }
   };
 
-  const authenticateWithFaceID = async () => {
+  const authenticateWithFaceID = useCallback(async () => {
     try {
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: t('authenticate.with.face.id'),
@@ -82,18 +85,23 @@ export const PasscodeModal = forwardRef<
     } catch (error) {
       setFaceIDAuthRes(false);
       console.error('Authentication error:', error);
+    } finally {
+      isAuthenticating.current = false;
     }
-  };
+  }, [localRef, t]);
 
   useEffect(() => {
-    if (props.isFaceIDEnabled && prevState === 'background') {
-      authenticateWithFaceID();
-    }
-    if (props.isFaceIDEnabled && prevState === null) {
-      authenticateWithFaceID();
+    if (prevState === 'background' || prevState === null) {
+      if (props.isFaceIDEnabled) authenticateWithFaceID();
+      else passcodeRef.current?.focus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.isFaceIDEnabled, localRef, prevState]);
+  }, [
+    props.isFaceIDEnabled,
+    prevState,
+    passcodeRef.current, // is required, not focusing on the input otherwise
+    authenticateWithFaceID
+  ]);
 
   return (
     <BottomSheet
@@ -101,6 +109,7 @@ export const PasscodeModal = forwardRef<
       ref={localRef}
       containerStyle={styles.container}
       height={Dimensions.get('screen').height}
+      closeOnBackPress={false}
     >
       <KeyboardAvoidingView
         enabled
@@ -110,7 +119,7 @@ export const PasscodeModal = forwardRef<
           flex: 1
         }}
       >
-        <KeyboardDismissingView>
+        <KeyboardDismissingView disabled={!isFaceIDEnabled}>
           <Text
             fontSize={24}
             fontFamily="Inter_700Bold"
@@ -124,7 +133,6 @@ export const PasscodeModal = forwardRef<
           <Passcode
             ref={passcodeRef}
             onPasscodeChange={handlePasscode}
-            autoFocus={!isFaceIDEnabled}
             type="change"
           />
         </KeyboardDismissingView>
@@ -134,6 +142,7 @@ export const PasscodeModal = forwardRef<
           <PrimaryButton
             onPress={authenticateWithFaceID}
             style={{
+              marginBottom: '5%',
               width: '90%',
               alignSelf: 'center',
               bottom
@@ -145,7 +154,11 @@ export const PasscodeModal = forwardRef<
               fontSize={16}
               color={COLORS.neutral0}
             >
-              {t('sign.in.with.face.id')}
+              {supportedBiometrics.indexOf(
+                LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+              ) > -1
+                ? t('sign.in.with.face.id')
+                : t('sign.in.with.fingerprint')}
             </Text>
           </PrimaryButton>
         </KeyboardDismissingView>

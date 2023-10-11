@@ -5,8 +5,8 @@ import { COLORS } from '@constants/colors';
 
 export function WalletTabIcon(props: IconProps) {
   const { scale = 1, color = COLORS.brand500 } = props;
-  const width = 24;
-  const height = 24;
+  const width = 32;
+  const height = 32;
   return (
     <Svg
       width={width}
@@ -16,7 +16,7 @@ export function WalletTabIcon(props: IconProps) {
       fill="none"
     >
       <Path
-        d="M5.583 3.833a1.75 1.75 0 00-1.75 1.75V17.25a2.917 2.917 0 002.917 2.917h11.084a2.333 2.333 0 002.333-2.334V8.5c0-.864-.47-1.618-1.167-2.021v-.312a2.333 2.333 0 00-2.333-2.334H5.583zm12.25 2.334H5.584a.583.583 0 110-1.167h11.084c.644 0 1.166.522 1.166 1.167zm-1.75 7h1.167a.583.583 0 010 1.166h-1.166a.583.583 0 110-1.166z"
+        d="M3.5 5.833v14.875A3.792 3.792 0 007.292 24.5h14a3.792 3.792 0 003.791-3.792v-9.916a3.793 3.793 0 00-2.916-3.69v-.977A2.625 2.625 0 0019.542 3.5H6.125a2.625 2.625 0 00-2.609 2.333H3.5zM6.125 7a.875.875 0 110-1.75h13.417c.483 0 .875.392.875.875V7H6.125zm12.833 8.167h2.334a.875.875 0 110 1.75h-2.334a.875.875 0 010-1.75z"
         fill={color}
       />
     </Svg>

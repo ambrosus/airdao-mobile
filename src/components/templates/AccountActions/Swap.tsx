@@ -9,7 +9,7 @@ export const Swap = () => {
 
   return (
     <AccountActionButton
-      Icon={SwapIcon}
+      Icon={(props) => <SwapIcon {...props} scale={0.625} />}
       text={t('account.actions.swap')}
       isActive={Config.walletActions.swap}
     />

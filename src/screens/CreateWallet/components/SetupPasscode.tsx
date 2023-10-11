@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Spacer, Text, Button, KeyboardDismissingView } from '@components/base';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { Spacer, Text, Button } from '@components/base';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -30,7 +30,7 @@ export const SetupPasscode = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled
+      enabled={Platform.OS === 'ios'}
       behavior="padding"
       style={{
         top,
@@ -73,7 +73,7 @@ export const SetupPasscode = () => {
         </View>
         <Spacer value={verticalScale(30)} />
       </View>
-      <KeyboardDismissingView style={{ paddingHorizontal: scale(16) }}>
+      <View style={{ paddingHorizontal: scale(16) }}>
         <Button
           disabled={!isButtonEnabled}
           onPress={onContinuePress}
@@ -82,7 +82,7 @@ export const SetupPasscode = () => {
             backgroundColor: isButtonEnabled
               ? COLORS.brand500
               : COLORS.alphaBlack5,
-            marginBottom: verticalScale(48)
+            marginBottom: verticalScale(28)
           }}
         >
           <Text
@@ -94,7 +94,7 @@ export const SetupPasscode = () => {
             {t('continue.btn')}
           </Text>
         </Button>
-      </KeyboardDismissingView>
+      </View>
     </KeyboardAvoidingView>
   );
 };

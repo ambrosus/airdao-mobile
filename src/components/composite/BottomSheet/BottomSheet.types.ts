@@ -15,6 +15,7 @@ export interface BottomSheetProps {
   onClose?: () => unknown;
   testID?: string;
   swipingEnabled?: boolean;
+  closeOnBackPress?: boolean;
 }
 
 export type BottomSheetRef = {

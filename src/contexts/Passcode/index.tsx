@@ -39,7 +39,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
     ]).then(([passcodeRes, faceIDRes]) => {
       setIsPasscodeEnabled(!!passcodeRes);
       setIsFaceIDEnabled(!!faceIDRes);
-      setSavedPasscode(passcodeRes);
+      setSavedPasscode(passcodeRes as string[]);
     });
   }, [appState]);
 

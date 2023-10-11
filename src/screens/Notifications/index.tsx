@@ -129,14 +129,14 @@ export const Notifications = (): JSX.Element => {
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={32} />}
+        ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         testID="Notifications_List"
       />
-      <BottomSheet ref={settingsModal} height={WINDOW_HEIGHT}>
+      <BottomSheet ref={settingsModal} height={WINDOW_HEIGHT} borderRadius={0}>
         {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
           title={t('notification.settings')}

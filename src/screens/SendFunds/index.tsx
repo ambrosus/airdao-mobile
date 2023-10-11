@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -194,7 +194,11 @@ export const SendFunds = () => {
         }
         style={{ shadowColor: COLORS.neutral0 }}
       />
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior="padding"
+        enabled={Platform.OS === 'ios'}
+      >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
             <AddressInput
@@ -220,7 +224,7 @@ export const SendFunds = () => {
               }
             ]}
           >
-            <View>
+            <View style={{ flex: 1 }}>
               <Row alignItems="center" justifyContent="space-between">
                 <TokenPicker
                   tokens={[defaultAMBToken].concat(tokens)}
