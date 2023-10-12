@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';

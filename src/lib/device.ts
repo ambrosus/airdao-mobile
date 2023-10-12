@@ -1,4 +1,4 @@
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { UUID_UTILS } from '@utils/uuid';
 
 export class DeviceService {

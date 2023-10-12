@@ -1,5 +1,5 @@
 import { randomUUID } from 'expo-crypto';
-import { Cache, CacheKey } from './cache';
+import { Cache, CacheKey } from '../lib/cache';
 
 const generateRandomUUID = (): string => {
   return randomUUID();

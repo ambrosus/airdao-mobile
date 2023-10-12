@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNotificationsQuery } from '@hooks';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import useAppFocus from '@hooks/useAppFocused';
 import { AirDAOEventType } from '@appTypes';
 import { AirDAOEventDispatcher } from '@lib';

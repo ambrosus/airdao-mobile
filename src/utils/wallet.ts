@@ -6,7 +6,7 @@ import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
-import { Cache, CacheKey } from './cache';
+import { Cache, CacheKey } from '../lib/cache';
 import { AccountUtils } from './account';
 import { Crypto } from './crypto';
 import { API } from '@api/api';

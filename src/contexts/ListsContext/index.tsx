@@ -4,7 +4,7 @@ import { BottomSheetRef } from '@components/composite';
 import { randomUUID } from 'expo-crypto';
 import { AccountList } from '@models/AccountList';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import {
   useAllAddresses,
   useAllAddressesReducer

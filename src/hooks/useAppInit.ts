@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {

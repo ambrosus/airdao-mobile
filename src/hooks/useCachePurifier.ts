@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useAllAddresses } from '@contexts';
 import { useLists } from '@contexts/ListsContext';
 import { useAppState } from './useAppState';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { ExplorerAccount } from '@models/Explorer';

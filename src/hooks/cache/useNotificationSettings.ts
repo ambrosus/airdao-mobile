@@ -3,7 +3,7 @@ import { QueryResponse } from '@appTypes/QueryResponse';
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
 import { useQuery } from '@tanstack/react-query';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 export const useNotificationSettings =
   (): QueryResponse<NotificationSettings> & {
