@@ -14,7 +14,7 @@ import { PrimaryButton } from '@components/modular';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { TabsParamsList } from '@appTypes';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 interface CardContent {
   icon: React.ReactNode;

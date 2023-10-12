@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DatabaseTable, QueryResponse } from '@appTypes';
 import { Database, WalletDBModel } from '@database';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 export const useSelectedWalletHash = (): QueryResponse<string> => {
   const [loading, setLoading] = useState(true);

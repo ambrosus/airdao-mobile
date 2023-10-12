@@ -10,16 +10,13 @@ const getByHash = async (tmpHash: string) => {
     tmpPublicAndPrivateResult &&
     typeof tmpPublicAndPrivateResult.cashbackToken !== 'undefined'
   ) {
-    // Log.log('SRV/CashBack getByHash ' + tmpHash + ' => ' + tmpPublicAndPrivateResult.cashbackToken)
     return tmpPublicAndPrivateResult;
   }
-  // await Log.log('SRV/CashBack getByHash need to discoverPublic', tmpHash)
   const mnemonic = await AirDAOKeysStorage.getWalletMnemonic(tmpHash);
 
   if (!mnemonic) {
     return false;
   }
-  // await Log.log('SRV/CashBack getByHash got mnemonic to discoverPublic')
   try {
     tmpPublicAndPrivateResult = await AirDAOKeysForRef.discoverPublicAndPrivate(
       {
@@ -30,7 +27,6 @@ const getByHash = async (tmpHash: string) => {
   } catch (error) {
     // ignore
   }
-  // // await Log.log('SRV/CashBack getByHash done discoverPublic ' + tmpHash + ' => ' + tmpPublicAndPrivateResult.cashbackToken)
   try {
     await AirDAOKeysForRefStorage.setPublicAndPrivateResultForHash(
       tmpHash,

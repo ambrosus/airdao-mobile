@@ -1,15 +1,12 @@
 import { Wallet } from '@models/Wallet';
 import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
-import { Database, WalletDBModel, WalletDB, AccountDB } from '@database';
-import { AirDAOTransfer } from '@crypto/actions/AirDAOTransfer/AirDAOTransfer';
+import { Database, WalletDB, AccountDB } from '@database';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import AirDAOUtils from '@crypto/common/AirDAOUtils';
-import { Q } from '@nozbe/watermelondb';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
-import { Cache, CacheKey } from './cache';
+import { Cache, CacheKey } from '../lib/cache';
 import { AccountUtils } from './account';
 import { Crypto } from './crypto';
 import { API } from '@api/api';
@@ -51,7 +48,7 @@ const _getWalletName = async () => {
 const processWallet = async (mnemonic: string) => {
   const number = await _getWalletNumber();
   const name = await _getWalletName();
-  const hash = await _saveWallet({ mnemonic, name, number }); // done
+  const hash = await _saveWallet({ mnemonic, name, number });
   const fullWallet: Wallet = new Wallet({
     hash,
     mnemonic,
@@ -80,56 +77,6 @@ const processWallet = async (mnemonic: string) => {
   return { hash };
 };
 
-const sendTx = async (
-  walletHash: string,
-  currencyCode: AirDAODictTypes.Code,
-  from: string,
-  to: string,
-  etherAmount: number,
-  accountBalanceRaw: string
-) => {
-  const wallets = (await Database.query(
-    DatabaseTable.Wallets,
-    Q.where('hash', Q.eq(walletHash))
-  )) as WalletDBModel[];
-  if (wallets.length > 0) {
-    const wallet = wallets[0];
-    try {
-      const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
-        mnemonic: wallet.mnemonic
-      });
-      await AirDAOTransfer.sendTx(
-        {
-          currencyCode,
-          walletHash: walletHash,
-          derivationPath: info.path,
-          addressFrom: from,
-          addressTo: to,
-          amount: AirDAOUtils.toWei(etherAmount).toString(),
-          useOnlyConfirmed: Boolean(wallet.useUnconfirmed),
-          allowReplaceByFee: Boolean(wallet.allowReplaceByFee),
-          useLegacy: wallet.useLegacy,
-          isHd: Boolean(wallet.isHd),
-          accountBalanceRaw,
-          isTransferAll: false
-        },
-        {
-          uiErrorConfirmed: true,
-          selectedFee: {
-            langMsg: '',
-            feeForTx: '',
-            amountForTx: ''
-          }
-        }, // TODO fix selected fee
-        // CACHE_DATA.additionalData
-        {}
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
-};
-
 const changeSelectedWallet = async (hash: string) => {
   await Cache.setItem(CacheKey.SelectedWallet, hash);
 };
@@ -146,7 +93,6 @@ const deleteWalletWithAccounts = async (hash: string) => {
 
 export const WalletUtils = {
   processWallet,
-  sendTx,
   changeSelectedWallet,
   deleteWalletWithAccounts
 };

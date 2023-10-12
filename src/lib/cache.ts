@@ -1,4 +1,3 @@
-// import * as SecureStore from 'expo-secure-store';
 import createSecureStore from '@neverdull-agency/expo-unlimited-secure-store';
 const SecureStore = createSecureStore();
 const store = SecureStore;

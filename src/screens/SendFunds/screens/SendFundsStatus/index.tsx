@@ -3,15 +3,11 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import {
-  AirDAOTokenLogo,
-  CheckmarkCircleIcon,
-  InfoIcon
-} from '@components/svg/icons';
+import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
 import { Spacer, Spinner, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { PrimaryButton, SecondaryButton } from '@components/modular';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
 import { SharePortfolio } from '@components/templates';
 import { BottomSheetRef } from '@components/composite';
@@ -62,11 +58,12 @@ export const SendFundsStatus = () => {
     navigation.replace('HomeScreen');
     reducer({ type: 'RESET_DATA' });
   };
-
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
-        <AirDAOTokenLogo scale={4} />
+        <View style={{ transform: [{ scale: 4 }] }}>
+          <TokenLogo token={currency} />
+        </View>
       ) : error ? (
         <InfoIcon scale={4} />
       ) : (

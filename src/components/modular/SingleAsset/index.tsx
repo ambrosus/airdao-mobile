@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
@@ -24,7 +24,12 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
-          {<TokenLogo token={name} />}
+          {
+            <TokenLogo
+              token={name}
+              style={{ width: moderateScale(32), height: moderateScale(32) }}
+            />
+          }
         </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>

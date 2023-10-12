@@ -1,4 +1,4 @@
-import { Cache, CacheKey } from './cache';
+import { Cache, CacheKey } from '../cache';
 import * as SecureStore from 'expo-secure-store';
 import { DefaultNotificationSettings } from '@constants/variables';
 
@@ -56,7 +56,7 @@ describe('Cache', () => {
   });
 
   it('should return null if SecureStore returns null', async () => {
-    const key = CacheKey.PersonalList;
+    const key = CacheKey.AddressLists;
     (SecureStore.getItemAsync as jest.Mock).mockResolvedValueOnce(null);
     const result = await Cache.getItem(key);
     expect(result).toBeNull();

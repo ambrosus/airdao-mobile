@@ -14,7 +14,7 @@ import { HomeNavigationProp } from '@appTypes/navigation';
 import { etherumAddressRegex } from '@constants/regex';
 import { OnboardingView } from '@components/templates/OnboardingView';
 import { useNotificationsQuery } from '@hooks';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
 import { COLORS } from '@constants/colors';
 
