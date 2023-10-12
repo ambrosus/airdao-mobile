@@ -48,7 +48,7 @@ const _getWalletName = async () => {
 const processWallet = async (mnemonic: string) => {
   const number = await _getWalletNumber();
   const name = await _getWalletName();
-  const hash = await _saveWallet({ mnemonic, name, number }); // done
+  const hash = await _saveWallet({ mnemonic, name, number });
   const fullWallet: Wallet = new Wallet({
     hash,
     mnemonic,
