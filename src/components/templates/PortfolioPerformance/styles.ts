@@ -1,20 +1,16 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    borderRadius: 16
+    borderRadius: moderateScale(16),
+    paddingVertical: verticalScale(24),
+    paddingHorizontal: scale(24),
+    backgroundColor: COLORS.brand600
   },
   innerContainer: {
-    overflow: 'hidden',
     borderRadius: 16
-  },
-  details: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: verticalScale(18),
-    paddingHorizontal: scale(18)
   },
   logoContainer: {
     width: scale(102),

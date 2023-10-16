@@ -269,7 +269,7 @@ export const TransactionDetails = (
         currencyPosition="right"
         txFee={transaction.fee}
         title="Transaction"
-        bottomSheetTitle="Share Transaction"
+        bottomSheetTitle={t('common.share.transaction')}
         timestamp={transaction.timestamp}
       />
     </View>

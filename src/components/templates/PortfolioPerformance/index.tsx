@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import { ImageBackground, View } from 'react-native';
+import { Image, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -23,6 +24,7 @@ export interface PortfolioPerformanceProps {
 export function PortfolioPerformance(
   props: PortfolioPerformanceProps
 ): JSX.Element {
+  const { t } = useTranslation();
   const {
     balance,
     currency,
@@ -34,26 +36,27 @@ export function PortfolioPerformance(
   } = props;
 
   return (
-    <ImageBackground
-      source={require('../../../../assets/images/portfolio-perfomance.png')}
-      resizeMode="cover"
-      imageStyle={styles.container}
-      testID="Portfolio_Performance"
+    <View
+      style={styles.container}
+      // source={require('../../../../assets/images/portfolio-perfomance.png')}
+      // resizeMode="cover"
+      // imageStyle={styles.container}
+      // testID="Portfolio_Performance"
     >
-      <Row alignItems="center" style={styles.innerContainer}>
-        <View style={styles.details}>
+      <Row alignItems="center" justifyContent="space-between">
+        <View>
           {/* title */}
           <Text
-            fontSize={15}
-            fontFamily="Inter_600SemiBold"
+            fontSize={12}
+            fontFamily="Inter_500Medium"
             color={COLORS.neutral0}
           >
             {title}
           </Text>
-          {!isAMBStatisticsFlow && <Spacer value={verticalScale(4)} />}
+          {!isAMBStatisticsFlow && <Spacer value={verticalScale(6)} />}
           {/* balance */}
           <Text
-            fontSize={24}
+            fontSize={26}
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral0}
           >
@@ -64,14 +67,14 @@ export function PortfolioPerformance(
           {/* fee */}
           {Object.hasOwn(props, 'txFee') && (
             <>
-              <Spacer value={verticalScale(6)} />
+              <Spacer value={verticalScale(12)} />
               <Row alignItems="center">
                 <Text
                   fontSize={11}
                   color={COLORS.alphaWhite50}
                   fontFamily="Inter_600SemiBold"
                 >
-                  TxFee
+                  {t('share.tx.fee')}
                 </Text>
                 <Spacer horizontal value={scale(8)} />
                 <Text
@@ -112,7 +115,9 @@ export function PortfolioPerformance(
                           color={COLORS.neutral800}
                           fontFamily="Inter_600SemiBold"
                         >
-                          (24hr)
+                          {'('}
+                          {t('share.24hr')}
+                          {')'}
                         </Text>
                       </Row>
                     }
@@ -121,7 +126,7 @@ export function PortfolioPerformance(
               </>
             )}
           {/* timestamp */}
-          <Spacer value={verticalScale(8)} />
+          <Spacer value={verticalScale(6)} />
           <Row alignItems="center" justifyContent="space-between">
             <Text
               fontSize={12}
@@ -130,7 +135,7 @@ export function PortfolioPerformance(
             >
               {moment(timestamp).format('YYYY-MM-DD')}
             </Text>
-            <Spacer horizontal value={scale(10)} />
+            <Spacer horizontal value={scale(6)} />
             <Text
               fontSize={12}
               fontFamily="Inter_500Medium"
@@ -140,7 +145,15 @@ export function PortfolioPerformance(
             </Text>
           </Row>
         </View>
+        <Spacer value={scale(4)} horizontal />
+        <Image
+          source={require('@assets/images/logo-sun-like.png')}
+          style={{
+            height: verticalScale(100),
+            width: scale(100)
+          }}
+        />
       </Row>
-    </ImageBackground>
+    </View>
   );
 }
