@@ -294,5 +294,8 @@
   "passcode.doesnt.match": "Passcode doesn't match",
   "please.try.again": "Please try again",
   "try.again": "Try again",
-  "enter.pin": "Enter PIN"
+  "enter.pin": "Enter PIN",
+
+  "confirm.passcode.text": "Confirm passcode",
+  "confirm.passcode.description": "Re-enter your passcode to secure your wallet"
 }

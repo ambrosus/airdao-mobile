@@ -274,5 +274,7 @@
   "enter.passcode.text": "Cüzdan erişimi ve işlemler için şifre gerekecektir.",
   "enter.passcode.hint": "Hatırlayacağınız bir PIN kullanın. \n Unutulan şifre kurtarılamaz.",
 
-  "token.picker.select": "Varlık seçin"
+  "token.picker.select": "Varlık seçin",
+  "confirm.passcode.text": "Şifreni onayla",
+  "confirm.passcode.description": "Cüzdanınızı güvence altına almak için şifrenizi tekrar girin"
 }
