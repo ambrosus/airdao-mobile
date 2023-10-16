@@ -204,6 +204,7 @@
   "send.funds.invalid.address": "Lütfen geçerli bir adres girin",
   "send.funds.review.transaction": "İşlemi İncele",
   "send.funds.recipient": "Alıcı hesabı",
+  "send.funds.go.home": "Ana sayfaya dön",
   "send.funds.send.now": "Gönder",
   "send.funds.transfer.fee": "Tahmini transfer ücreti",
   "send.funds.use.max": "Hepsini kullan",
@@ -275,6 +276,11 @@
   "enter.passcode.hint": "Hatırlayacağınız bir PIN kullanın. \n Unutulan şifre kurtarılamaz.",
 
   "token.picker.select": "Varlık seçin",
+
   "confirm.passcode.text": "Şifreni onayla",
-  "confirm.passcode.description": "Cüzdanınızı güvence altına almak için şifrenizi tekrar girin"
+  "confirm.passcode.description": "Cüzdanınızı güvence altına almak için şifrenizi tekrar girin",
+
+  "share.tx.fee": "İşlem Ücreti",
+  "share.time": "Saat",
+  "share.24hr": "24s"
 }

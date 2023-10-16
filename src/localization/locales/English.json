@@ -192,6 +192,7 @@
   },
 
   "receive.funds": "Receive funds",
+
   "send.funds.balance": "Balance",
   "send.funds.estimated.fee": "Estimated fee",
   "send.funds.invalid.address": "Please enter a valid address",
@@ -203,6 +204,7 @@
   "send.funds.use.max": "Use max",
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or refill your balance to proceed.",
   "send.funds.error.network": "Bad internet connection!",
+  "send.funds.go.home": "Go home",
   "send.funds.failed": "Transaction failed",
   "send.funds.sending": "Sending",
   "send.funds.sent": "sent",
@@ -297,5 +299,9 @@
   "enter.pin": "Enter PIN",
 
   "confirm.passcode.text": "Confirm passcode",
-  "confirm.passcode.description": "Re-enter your passcode to secure your wallet"
+  "confirm.passcode.description": "Re-enter your passcode to secure your wallet",
+
+  "share.tx.fee": "Tx Fee",
+  "share.time": "Time",
+  "share.24hr": "24hr"
 }

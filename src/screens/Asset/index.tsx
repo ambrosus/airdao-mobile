@@ -61,7 +61,7 @@ export const AssetScreen = () => {
   const headerTitle =
     tokenInfo.name === ''
       ? 'Hera pool token'
-      : tokenInfo.name === 'AMB'
+      : tokenInfo.name === 'AirDAO'
       ? 'AirDAO (AMB)'
       : tokenInfo.symbol || tokenInfo.address;
 
@@ -86,7 +86,7 @@ export const AssetScreen = () => {
           </>
         }
         contentRight={
-          tokenInfo.name === 'AMB' && (
+          tokenInfo.name === 'AirDAO' && (
             <>
               <Button onPress={navigateToAMBScreen}>
                 <StatisticsLogo />

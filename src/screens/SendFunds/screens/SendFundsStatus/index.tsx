@@ -154,7 +154,9 @@ export const SendFundsStatus = () => {
             </>
           )}
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
-            <Text color={COLORS.neutral0}>{t('common.done')}</Text>
+            <Text color={COLORS.neutral0}>
+              {error ? t('send.funds.go.home') : t('common.done')}
+            </Text>
           </PrimaryButton>
           <SharePortfolio
             ref={shareModal}
