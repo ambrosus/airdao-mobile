@@ -27,21 +27,16 @@ export const SecuritySettingsScreen = () => {
         await PasscodeUtils.setFaceIDStatusInDB(false);
         setIsFaceIDEnabled(false);
       } else {
+        // check if device has biometric hardware
         const hasHardware = await LocalAuthentication.hasHardwareAsync();
+        // device has registered biometrics data, either fingerprint or face id
         const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-        const availableTypes =
-          await LocalAuthentication.supportedAuthenticationTypesAsync();
         const hasFaceId = DeviceUtils.checkFaceIDExists(supportedBiometrics);
         const hasFingerprint =
           DeviceUtils.checkFingerprintExists(supportedBiometrics);
 
-        if (
-          availableTypes.includes(
-            LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
-          ) &&
-          hasHardware &&
-          isEnrolled
-        ) {
+        if (hasHardware && isEnrolled) {
+          // authenticate with biometrics
           const result = await LocalAuthentication.authenticateAsync({
             promptMessage: hasFaceId
               ? t('authenticate.with.face.id')
@@ -55,6 +50,7 @@ export const SecuritySettingsScreen = () => {
             setIsFaceIDEnabled(true);
           }
         } else {
+          // show error otherwise
           Toast.show({
             text: hasFaceId
               ? t('face.id.not.available')
