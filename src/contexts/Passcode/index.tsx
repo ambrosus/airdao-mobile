@@ -6,7 +6,6 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
-import { useAppState } from '@hooks';
 import { PasscodeUtils } from '@utils/passcode';
 
 interface IPasscodeContext {
@@ -26,7 +25,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState<boolean>(false);
   const [savedPasscode, setSavedPasscode] = useState<string[]>([]);
-  const { appState } = useAppState();
 
   useEffect(() => {
     Promise.all([
@@ -37,7 +35,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       setIsFaceIDEnabled(!!faceIDRes);
       setSavedPasscode(passcodeRes as string[]);
     });
-  }, [appState]);
+  }, []);
 
   useEffect(() => {
     if (savedPasscode?.length === 4) {

@@ -9,7 +9,6 @@ import { Cache, CacheKey } from '@lib/cache';
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
-  SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
     async function prepareNotifications() {
@@ -61,6 +60,7 @@ export const useAppInit = () => {
         setIsAppReady(true);
       }
     }
+    SplashScreen.preventAutoHideAsync();
     prepare();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

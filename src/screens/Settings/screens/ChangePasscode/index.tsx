@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
@@ -24,12 +24,15 @@ export const ChangePasscode = () => {
     navigation.navigate('SecuritySettings');
   };
 
+  const init = useCallback(async () => {
+    const passcode = await PasscodeUtils.getPasscodeFromDB();
+    if (!savedPasscode) setSavedPasscode(passcode as string[]);
+    if (!passcode) setStep(2);
+  }, [savedPasscode, setSavedPasscode]);
+
   useEffect(() => {
-    PasscodeUtils.getPasscodeFromDB().then((passcodeRes) => {
-      setSavedPasscode(passcodeRes as string[]);
-      if (!passcodeRes) setStep(2);
-    });
-  }, [setSavedPasscode]);
+    init();
+  }, [init, savedPasscode, setSavedPasscode]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
