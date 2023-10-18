@@ -205,77 +205,76 @@ export const RestoreWalletScreen = () => {
           <Spinner />
         </View>
       ) : (
-        <View style={{ flex: 1 }}>
-          <KeyboardDismissingView style={{ flex: 1 }}>
-            <Header
-              title={
+        <KeyboardDismissingView style={{ flex: 1 }}>
+          <Header
+            title={
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={16}
+                color={COLORS.neutral800}
+              >
+                {t('restore.wallet.header')}
+              </Text>
+            }
+            titlePosition="left"
+            style={{ shadowColor: 'transparent' }}
+          />
+          <KeyboardAwareScrollView
+            extraHeight={verticalScale(125)}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'space-between'
+            }}
+          >
+            <View>
+              <Spacer value={verticalScale(16)} />
+              <Text
+                align="center"
+                fontFamily="Inter_700Bold"
+                fontSize={24}
+                color={COLORS.neutral800}
+              >
+                {t('restore.wallet.title')}
+              </Text>
+              <Spacer value={verticalScale(8)} />
+              <View style={{ paddingHorizontal: scale(16) }}>
                 <Text
-                  fontFamily="Inter_600SemiBold"
-                  fontSize={16}
                   color={COLORS.neutral800}
+                  fontFamily="Inter_500Medium"
+                  fontSize={15}
+                  style={{ textAlign: 'center' }}
                 >
-                  {t('restore.wallet.header')}
+                  {t('restore.wallet.description')}
                 </Text>
-              }
-              titlePosition="left"
-              style={{ shadowColor: 'transparent' }}
-            />
-            <KeyboardAwareScrollView
-              contentContainerStyle={{
-                flexGrow: 1,
-                justifyContent: 'space-between'
+                <Spacer value={verticalScale(16)} />
+                {renderWords()}
+                <Spacer value={verticalScale(16)} />
+              </View>
+            </View>
+            <Button
+              disabled={!isButtonEnabled}
+              onPress={navigateToRestoreWallet}
+              type="circular"
+              style={{
+                marginTop: verticalScale(16),
+                bottom: verticalScale(32),
+                marginHorizontal: scale(16),
+                backgroundColor: isButtonEnabled
+                  ? COLORS.brand600
+                  : COLORS.alphaBlack5
               }}
             >
-              <View>
-                <Spacer value={verticalScale(16)} />
-                <Text
-                  align="center"
-                  fontFamily="Inter_700Bold"
-                  fontSize={24}
-                  color={COLORS.neutral800}
-                >
-                  {t('restore.wallet.title')}
-                </Text>
-                <Spacer value={verticalScale(8)} />
-                <View style={{ paddingHorizontal: scale(16) }}>
-                  <Text
-                    color={COLORS.neutral800}
-                    fontFamily="Inter_500Medium"
-                    fontSize={15}
-                    style={{ textAlign: 'center' }}
-                  >
-                    {t('restore.wallet.description')}
-                  </Text>
-                  <Spacer value={verticalScale(16)} />
-                  {renderWords()}
-                  <Spacer value={verticalScale(16)} />
-                </View>
-              </View>
-              <Button
-                disabled={!isButtonEnabled}
-                onPress={navigateToRestoreWallet}
-                type="circular"
-                style={{
-                  marginTop: verticalScale(16),
-                  bottom: verticalScale(32),
-                  marginHorizontal: scale(16),
-                  backgroundColor: isButtonEnabled
-                    ? COLORS.brand600
-                    : COLORS.alphaBlack5
-                }}
+              <Text
+                fontSize={16}
+                fontFamily="Inter_600SemiBold"
+                color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
+                style={{ marginVertical: scale(12) }}
               >
-                <Text
-                  fontSize={16}
-                  fontFamily="Inter_600SemiBold"
-                  color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-                  style={{ marginVertical: scale(12) }}
-                >
-                  {t('continue.btn')}
-                </Text>
-              </Button>
-            </KeyboardAwareScrollView>
-          </KeyboardDismissingView>
-        </View>
+                {t('continue.btn')}
+              </Text>
+            </Button>
+          </KeyboardAwareScrollView>
+        </KeyboardDismissingView>
       )}
     </SafeAreaView>
   );
