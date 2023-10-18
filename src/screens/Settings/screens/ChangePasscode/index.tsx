@@ -94,11 +94,7 @@ export const ChangePasscode = () => {
       </Text>
       <Spacer value={verticalScale(24)} />
       <View>
-        <Passcode
-          onPasscodeChange={handlePasscode}
-          autoFocus={true}
-          type="change"
-        />
+        <Passcode onPasscodeChange={handlePasscode} type="change" />
       </View>
     </View>
   );

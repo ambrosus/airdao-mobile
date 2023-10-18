@@ -81,13 +81,17 @@ export const PasscodeModal = forwardRef<BottomSheetRef, BottomSheetProps>(
         isAuthenticating.current = false;
       }
     }, [localRef, t]);
+
     useEffect(() => {
       if (prevState === 'background' || prevState === null) {
-        if (isFaceIDEnabled) authenticateWithFaceID();
-        else {
-          // console.error({ passcodeRef: passcodeRef.current });
-          passcodeRef.current?.focus();
-        }
+        localRef.current?.show();
+        // delay
+        setTimeout(() => {
+          if (isFaceIDEnabled) authenticateWithFaceID();
+          else {
+            passcodeRef.current?.focus();
+          }
+        }, 500);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [

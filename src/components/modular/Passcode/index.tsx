@@ -2,8 +2,7 @@ import React, {
   useState,
   forwardRef,
   useImperativeHandle,
-  useRef,
-  useEffect
+  useRef
 } from 'react';
 import { View, TextInput } from 'react-native';
 import { styles } from '@components/modular/Passcode/styles';
@@ -11,18 +10,13 @@ import { Button } from '@components/base';
 
 interface PasscodeProps {
   onPasscodeChange: (passcode: string[]) => void;
-  autoFocus?: boolean;
   type?: 'creation' | 'change';
 }
 
 export const Passcode = forwardRef(
-  ({ onPasscodeChange, autoFocus, type }: PasscodeProps, ref) => {
+  ({ onPasscodeChange, type }: PasscodeProps, ref) => {
     const [code, setCode] = useState('');
     const inputRef = useRef<TextInput>(null);
-
-    useEffect(() => {
-      if (autoFocus) inputRef.current?.focus();
-    }, [autoFocus, inputRef]);
 
     const handleCodeChange = (text: string) => {
       setCode(text);
@@ -58,25 +52,24 @@ export const Passcode = forwardRef(
     }));
 
     return (
-      <>
+      <View>
         <TextInput
           ref={inputRef}
-          autoFocus={autoFocus}
-          contextMenuHidden={true}
           style={styles.input}
           keyboardType="numeric"
+          contextMenuHidden={true}
           maxLength={4}
           value={code}
           onChangeText={handleCodeChange}
         />
         <Button
           activeOpacity={1}
-          onPress={() => inputRef.current?.focus()}
+          onPress={inputRef.current?.focus}
           style={styles.circlesContainer}
         >
           {renderCircles()}
         </Button>
-      </>
+      </View>
     );
   }
 );
