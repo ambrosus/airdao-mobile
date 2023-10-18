@@ -4,6 +4,7 @@ import { useAppInit } from '@hooks/useAppInit';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Providers } from './Providers';
 import { Toast } from '@components/modular';
+import { PasscodeModal } from '@components/templates';
 
 export default function App() {
   const { isAppReady } = useAppInit();
@@ -17,6 +18,7 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Navigation />
         <Toast />
+        <PasscodeModal />
       </GestureHandlerRootView>
     </Providers>
   );

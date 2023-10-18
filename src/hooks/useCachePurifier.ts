@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useAllAddresses } from '@contexts';
+import { useAllAddresses } from '@contexts/AllAddresses';
 import { useLists } from '@contexts/ListsContext';
 import { useAppState } from './useAppState';
 import { Cache, CacheKey } from '@lib/cache';

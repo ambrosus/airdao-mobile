@@ -36,9 +36,15 @@ const setFaceIDStatusInDB = async (isEnabled: boolean) => {
   }
 };
 
+const verifyPasscode = async (enteredPasscode: string[]) => {
+  const passcode = await PasscodeUtils.getPasscodeFromDB();
+  return JSON.stringify(passcode) === JSON.stringify(enteredPasscode);
+};
+
 export const PasscodeUtils = {
   getPasscodeFromDB,
   setPasscodeInDB,
   getFaceIDStatusFromDB,
-  setFaceIDStatusInDB
+  setFaceIDStatusInDB,
+  verifyPasscode
 };

@@ -3,13 +3,10 @@ import React, {
   FC,
   useContext,
   useEffect,
-  useRef,
   useState
 } from 'react';
-import { PasscodeModal } from '@components/templates/PasscodeModal';
-import { BottomSheetRef } from '@components/composite';
-import { useAppState } from '@hooks';
 import { View } from 'react-native';
+import { useAppState } from '@hooks';
 import { PasscodeUtils } from '@utils/passcode';
 
 interface IPasscodeContext {
@@ -29,8 +26,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState<boolean>(false);
   const [savedPasscode, setSavedPasscode] = useState<string[]>([]);
-  const passcodeModalRef = useRef<BottomSheetRef>(null);
-  const { prevState, appState } = useAppState();
+  const { appState } = useAppState();
 
   useEffect(() => {
     Promise.all([
@@ -42,15 +38,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       setSavedPasscode(passcodeRes as string[]);
     });
   }, [appState]);
-
-  useEffect(() => {
-    if (
-      (prevState === 'background' || prevState === null) &&
-      (isFaceIDEnabled || isPasscodeEnabled)
-    ) {
-      passcodeModalRef.current?.show();
-    }
-  }, [isFaceIDEnabled, isPasscodeEnabled, prevState]);
 
   useEffect(() => {
     if (savedPasscode?.length === 4) {
@@ -67,13 +54,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         setSavedPasscode
       }}
     >
-      {isPasscodeEnabled && (
-        <PasscodeModal
-          ref={passcodeModalRef}
-          isPasscodeEnabled={isPasscodeEnabled}
-          isFaceIDEnabled={isFaceIDEnabled}
-        />
-      )}
       <View style={{ flex: 1 }}>{children}</View>
     </PasscodeContext.Provider>
   );

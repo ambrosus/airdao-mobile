@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { LocalizedRenderEmpty } from '@components/templates';
+import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
 import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { HomeNavigationProp } from '@appTypes';

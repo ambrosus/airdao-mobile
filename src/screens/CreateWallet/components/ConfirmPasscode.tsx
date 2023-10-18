@@ -60,7 +60,7 @@ export const ConfirmPasscode = () => {
             {t('confirm.passcode.description')}
           </Text>
           <Spacer value={verticalScale(106)} />
-          <Passcode onPasscodeChange={onPasscodeChange} autoFocus={true} />
+          <Passcode onPasscodeChange={onPasscodeChange} />
           <Spacer value={verticalScale(50)} />
         </View>
         <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>

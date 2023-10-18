@@ -6,7 +6,7 @@ import { COLORS } from '@constants/colors';
 import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 import { verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
-import { BottomSheetCreateRenameGroup } from '@components/templates';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
