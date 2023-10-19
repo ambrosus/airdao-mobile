@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { SuccessIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 import { PasscodeUtils } from '@utils/passcode';
+import { BottomAwareSafeAreaView } from '@components/composite';
 
 export const SuccessImport = () => {
   const { t } = useTranslation();
@@ -57,16 +58,20 @@ export const SuccessImport = () => {
           {t('import.successful.text')}
         </Text>
       </View>
-      <PrimaryButton onPress={navigateToSetUpSecurity}>
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral0}
-        >
-          {t('start.using.wallet.btn')}
-        </Text>
-      </PrimaryButton>
+      <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
+        <PrimaryButton onPress={navigateToSetUpSecurity}>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral0}
+          >
+            {isPasscodeEnabled
+              ? t('start.using.wallet.btn')
+              : t('setup.security.btn')}
+          </Text>
+        </PrimaryButton>
+      </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
 };
@@ -75,8 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: scale(24),
-    paddingBottom: verticalScale(48)
+    paddingHorizontal: scale(24)
   },
   content: {
     flex: 1,
