@@ -2,26 +2,24 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/Wallets';
 import { AMBMarket } from '@screens/AMBMarket';
-import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { Notifications } from '@screens/Notifications';
-import { getCommonStack } from '../CommonStack';
 import { AssetScreen } from '@screens/Asset';
-import { SendFunds } from '@screens/SendFunds';
+import { SendFunds, SendFundsStatus } from '@screens/SendFunds';
 import {
   CreateWalletStep0,
   CreateWalletStep1,
-  CreateWalletStep2
+  CreateWalletStep2,
+  CreateWalletSuccess
 } from '@screens/CreateWallet';
-import { RestoreWalletScreen } from '@screens/RestoreWallet';
-import {
-  ConfirmPasscode,
-  SetupPasscode,
-  SuccessBackupComplete,
-  SuccessSetupSecurity
-} from '@screens/CreateWallet/components';
+import { ImportWallet, ImportWalletSuccess } from '@screens/ImportWallet';
 import { SendCryptoProvider } from '@contexts';
-import { SuccessImport } from '@screens/CreateWallet/components/SuccessImport';
-import { SendFundsStatus } from '@screens/SendFunds/screens/SendFundsStatus';
+import {
+  SetupPasscode,
+  ConfirmPasscode,
+  SuccessSetupSecurity
+} from '@screens/SetupPasscode';
+import { HomeParamsList } from '@appTypes/navigation/wallets';
+import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -48,14 +46,14 @@ export const HomeStack = () => {
           component={SuccessSetupSecurity}
         />
         <Stack.Screen
-          name="SuccessBackupComplete"
-          component={SuccessBackupComplete}
+          name="CreateWalletSuccess"
+          component={CreateWalletSuccess}
         />
-        <Stack.Screen name="SuccessImport" component={SuccessImport} />
         <Stack.Screen
-          name="RestoreWalletScreen"
-          component={RestoreWalletScreen}
+          name="ImportWalletSuccess"
+          component={ImportWalletSuccess}
         />
+        <Stack.Screen name="ImportWallet" component={ImportWallet} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>

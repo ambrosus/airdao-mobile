@@ -22,7 +22,7 @@ import { MnemonicUtils } from '@utils/mnemonics';
 import { StringUtils } from '@utils/string';
 import { styles } from './styles';
 
-export const RestoreWalletScreen = () => {
+export const ImportWallet = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
 
@@ -169,7 +169,7 @@ export const RestoreWalletScreen = () => {
                   name: 'Tabs',
                   params: {
                     screen: 'Wallets',
-                    params: { screen: 'SuccessImport' }
+                    params: { screen: 'ImportWalletSuccess' }
                   }
                 }
               ]

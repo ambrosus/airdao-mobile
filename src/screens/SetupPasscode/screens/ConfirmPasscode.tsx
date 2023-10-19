@@ -3,13 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, KeyboardAvoidingView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BottomAwareSafeAreaView } from '@components/composite';
 import { Spacer, Text, Button } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { scale, verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
-import { Passcode } from '@components/modular';
-import { BottomAwareSafeAreaView } from '@components/composite';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();

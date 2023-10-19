@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { PrimaryButton } from '@components/modular';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons';
+import { Spacer, Text } from '@components/base';
+import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
 import { PasscodeUtils } from '@utils/passcode';
+import { COLORS } from '@constants/colors';
 
-export const SuccessImport = () => {
+export const ImportWalletSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
@@ -57,16 +58,20 @@ export const SuccessImport = () => {
           {t('import.successful.text')}
         </Text>
       </View>
-      <PrimaryButton onPress={navigateToSetUpSecurity}>
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral0}
-        >
-          {t('start.using.wallet.btn')}
-        </Text>
-      </PrimaryButton>
+      <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
+        <PrimaryButton onPress={navigateToSetUpSecurity}>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral0}
+          >
+            {isPasscodeEnabled
+              ? t('start.using.wallet.btn')
+              : t('setup.security.btn')}
+          </Text>
+        </PrimaryButton>
+      </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
 };
@@ -75,8 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: scale(24),
-    paddingBottom: verticalScale(48)
+    paddingHorizontal: scale(24)
   },
   content: {
     flex: 1,

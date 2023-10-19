@@ -1,14 +1,14 @@
 import React from 'react';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { Spacer, Text } from '@components/base';
-import { SuccessIcon } from '@components/svg/icons';
 import { useTranslation } from 'react-i18next';
-import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { Spacer, Text } from '@components/base';
+import { SuccessIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
+import { HomeNavigationProp } from '@appTypes';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { View, StyleSheet, Platform } from 'react-native';
-import { PrimaryButton } from '@components/modular';
+import { View, StyleSheet } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
-import { HomeNavigationProp } from '@appTypes';
+import { scale, verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
+import { HomeNavigationProp } from '@appTypes';
+import { COLORS } from '@constants/colors';
 
-export const SuccessBackupComplete = () => {
+export const CreateWalletSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
@@ -56,23 +57,20 @@ export const SuccessBackupComplete = () => {
           {t('backup.complete.text')}
         </Text>
       </View>
-      <PrimaryButton
-        onPress={navigateToSetUpSecurity}
-        style={{
-          marginBottom: Platform.OS === 'android' ? verticalScale(32) : 0
-        }}
-      >
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral0}
-        >
-          {isPasscodeEnabled
-            ? t('start.using.wallet.btn')
-            : t('setup.security.btn')}
-        </Text>
-      </PrimaryButton>
+      <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
+        <PrimaryButton onPress={navigateToSetUpSecurity}>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral0}
+          >
+            {isPasscodeEnabled
+              ? t('start.using.wallet.btn')
+              : t('setup.security.btn')}
+          </Text>
+        </PrimaryButton>
+      </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
 };
