@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   input: {
+    fontFamily: 'Mersad_600SemiBold',
     shadowColor: 'transparent',
     alignSelf: 'center',
     fontSize: 46
