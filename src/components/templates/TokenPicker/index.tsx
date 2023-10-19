@@ -5,14 +5,14 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { SingleAsset, TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
-import { TokenDTO } from '@models';
+import { Token } from '@models';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 interface TokenPickerProps {
-  tokens: TokenDTO[];
-  selectedToken: TokenDTO;
-  onSelectToken: (token: TokenDTO) => void;
+  tokens: Token[];
+  selectedToken: Token;
+  onSelectToken: (token: Token) => void;
 }
 
 export const TokenPicker = (props: TokenPickerProps) => {
@@ -28,7 +28,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
     pickerModal.current?.dismiss();
   };
 
-  const renderToken = (item: TokenDTO) => {
+  const renderToken = (item: Token) => {
     const onPress = () => {
       onSelectToken(item);
       hideModal();

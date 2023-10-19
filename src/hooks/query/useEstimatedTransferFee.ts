@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { TransactionUtils } from '@utils/transaction';
-import { TokenDTO } from '@models';
+import { Token } from '@models';
 
 export const useEstimatedTransferFee = (
-  token: TokenDTO,
+  token: Token,
   etherAmount: number,
   addressFrom: string,
   addressTo: string,

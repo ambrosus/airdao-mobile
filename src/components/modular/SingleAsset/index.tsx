@@ -6,12 +6,12 @@ import { COLORS } from '@constants/colors';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
-import { TokenDTO } from '@models';
+import { Token } from '@models';
 import { TokenLogo } from '../TokenLogo';
 import { styles } from './styles';
 
 interface SingleAssetProps {
-  token: TokenDTO;
+  token: Token;
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {

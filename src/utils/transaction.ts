@@ -3,14 +3,14 @@ import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { Database, WalletDBModel } from '@database';
 import TransferDispatcher from '@lib/crypto/TransferDispatcher';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
-import { TokenDTO } from '@models';
+import { Token } from '@models';
 import { Q } from '@nozbe/watermelondb';
 
 const sendTx = async (
   walletHash: string,
   to: string,
   etherAmount: number,
-  token: TokenDTO
+  token: Token
 ) => {
   const wallets = (await Database.query(
     DatabaseTable.Wallets,
@@ -40,7 +40,7 @@ const getEstimatedFee = async (
   walletHash: string,
   to: string,
   etherAmount: number,
-  token: TokenDTO
+  token: Token
 ): Promise<number> => {
   const wallets = (await Database.query(
     DatabaseTable.Wallets,

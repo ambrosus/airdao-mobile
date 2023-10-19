@@ -37,7 +37,7 @@ import {
   UseMax
 } from './components';
 import { AirDAOEventDispatcher } from '@lib';
-import { TokenDTO } from '@models';
+import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { styles } from './styles';
 
@@ -58,15 +58,15 @@ export const SendFunds = () => {
   const {
     data: { tokens }
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
-  const defaultAMBToken: TokenDTO = {
+  const defaultAMBToken: Token = new Token({
     name: 'AMB',
     address: senderAddress || '',
     balance: { wei: '', ether: Number(ambBalance.ether) || 0 },
     symbol: AirDAODictTypes.Code.AMB
-  };
+  });
 
   // const [destinationAddress, setDestinationAddress] = useState('');
-  const [selectedToken, setSelectedToken] = useState<TokenDTO>(defaultAMBToken);
+  const [selectedToken, setSelectedToken] = useState<Token>(defaultAMBToken);
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
@@ -86,7 +86,7 @@ export const SendFunds = () => {
       ? defaultAMBToken.balance.ether
       : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
 
-  const selectToken = (newToken: TokenDTO) => {
+  const selectToken = (newToken: Token) => {
     setSelectedToken(newToken);
     setAmountInCrypto('0');
     setAmountInUSD('0');
