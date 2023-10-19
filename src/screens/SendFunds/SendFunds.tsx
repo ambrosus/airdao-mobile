@@ -26,12 +26,9 @@ import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
+import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
-import { AirDAOEventDispatcher } from '@lib';
-import { TokenDTO } from '@models';
-import { TransactionUtils } from '@utils/transaction';
-import { CurrencyUtils } from '@utils/currency';
 import {
   AddressInput,
   ConfirmTransaction,
@@ -39,6 +36,9 @@ import {
   ShowInUSD,
   UseMax
 } from './components';
+import { AirDAOEventDispatcher } from '@lib';
+import { TokenDTO } from '@models';
+import { TransactionUtils } from '@utils/transaction';
 import { styles } from './styles';
 
 export const SendFunds = () => {
@@ -67,8 +67,8 @@ export const SendFunds = () => {
 
   // const [destinationAddress, setDestinationAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState<TokenDTO>(defaultAMBToken);
-  const [amountInCrypto, setAmountInCrypto] = useState('0');
-  const [amountInUSD, setAmountInUSD] = useState('0');
+  const [amountInCrypto, setAmountInCrypto] = useState('');
+  const [amountInUSD, setAmountInUSD] = useState('');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
@@ -168,6 +168,10 @@ export const SendFunds = () => {
       });
     }
   };
+
+  const reviewButtonDisabled =
+    Number(amountInCrypto) == 0 ||
+    !destinationAddress.match(etherumAddressRegex);
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
@@ -274,14 +278,13 @@ export const SendFunds = () => {
               )}
             </View>
             <PrimaryButton
-              disabled={
-                Number(amountInCrypto) == 0 ||
-                !destinationAddress.match(etherumAddressRegex)
-              }
+              disabled={reviewButtonDisabled}
               onPress={showReviewModal}
             >
               <Text
-                color={COLORS.neutral0}
+                color={
+                  reviewButtonDisabled ? COLORS.alphaBlack30 : COLORS.neutral0
+                }
                 fontSize={16}
                 fontFamily="Inter_500Medium"
                 fontWeight="500"
