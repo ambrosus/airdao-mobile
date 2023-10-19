@@ -12,6 +12,7 @@ export namespace AirDAODictTypes {
     USDC = 'USDC',
     FirepotLp = 'FLP',
     Tether = 'USDT',
+    HeraPoolToken = 'HPT',
     ETH_ERC_20 = 'ETH_ERC_20',
     ETH = 'ETH',
     BNB_SMART = 'BNB_SMART',

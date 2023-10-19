@@ -22,7 +22,7 @@ export const AssetScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
-  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
+  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0, tokenInfo.symbol);
   const isAMBToken = walletAccount === tokenInfo.address;
 
   const {

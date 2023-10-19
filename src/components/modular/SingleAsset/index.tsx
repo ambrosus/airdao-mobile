@@ -17,7 +17,7 @@ interface SingleAssetProps {
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { token } = props;
   const { name, balance, symbol, address } = token;
-  const usdPrice = useUSDPrice(balance.ether);
+  const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
 
   return (
@@ -39,7 +39,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name === '' ? 'Hera pool token' : name || address}
+              {name === '' ? 'Unknown token' : name || address}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
@@ -56,7 +56,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.neutral400}
             >
-              {NumberUtils.formatNumber(balance.ether, 2)} {symbol}
+              {NumberUtils.formatNumber(balance.ether, 2)} {symbol || 'tokens'}
             </Text>
             <Text
               fontFamily="Inter_400Regular"
