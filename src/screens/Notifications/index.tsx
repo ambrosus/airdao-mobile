@@ -1,11 +1,9 @@
 import React, { useRef } from 'react';
 import {
-  Platform,
   SectionList,
   SectionListData,
   SectionListRenderItemInfo,
-  View,
-  useWindowDimensions
+  View
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -17,10 +15,11 @@ import { NotificationSettingsView } from '@components/templates';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { Notification } from '@models/Notification';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { BellIcon } from '@components/svg/icons';
 import { useNotificationsQuery } from '@hooks/query';
+import { DeviceUtils } from '@utils/device';
 import { NotificationsHeader, NotificationBox } from './components';
 import { styles } from './styles';
 
@@ -34,7 +33,6 @@ const DAY_FORMAT = 'DD MMMM YYYY';
 
 export const Notifications = (): JSX.Element => {
   const { data: notifications } = useNotificationsQuery();
-  const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const { top: topInset } = useSafeAreaInsets();
 
   const settingsModal = useRef<BottomSheetRef>(null);
@@ -136,18 +134,14 @@ export const Notifications = (): JSX.Element => {
         showsVerticalScrollIndicator={false}
         testID="Notifications_List"
       />
-      <BottomSheet ref={settingsModal} height={WINDOW_HEIGHT} borderRadius={0}>
-        {Platform.OS === 'ios' && <Spacer value={topInset} />}
+      <BottomSheet ref={settingsModal} height={'100%'} borderRadius={0}>
+        {DeviceUtils.isIOS && <Spacer value={topInset} />}
         <Header
           title={t('notification.settings')}
           style={{
             shadowColor: 'transparent',
-            zIndex: 1000,
-            borderTopLeftRadius: scale(10),
-            borderTopRightRadius: scale(10)
+            zIndex: 1000
           }}
-          titlePosition={Platform.select({ ios: 'left', default: 'center' })}
-          backIconVisible={true}
           onBackPress={() => settingsModal.current?.dismiss()}
         />
         <NotificationSettingsView />
