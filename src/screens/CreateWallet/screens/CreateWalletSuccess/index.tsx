@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { PrimaryButton } from '@components/modular';
+import { View, StyleSheet } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { SuccessIcon } from '@components/svg/icons';
-import { HomeNavigationProp } from '@appTypes';
-import { PasscodeUtils } from '@utils/passcode';
 import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { Spacer, Text } from '@components/base';
+import { SuccessIcon } from '@components/svg/icons';
+import { scale, verticalScale } from '@utils/scaling';
+import { PasscodeUtils } from '@utils/passcode';
+import { HomeNavigationProp } from '@appTypes';
+import { COLORS } from '@constants/colors';
 
-export const SuccessImport = () => {
+export const CreateWalletSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
@@ -35,7 +35,6 @@ export const SuccessImport = () => {
       navigation.navigate('SetupPasscode');
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -46,7 +45,7 @@ export const SuccessImport = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {t('import.successful')}
+          {t('backup.complete')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -55,7 +54,7 @@ export const SuccessImport = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('import.successful.text')}
+          {t('backup.complete.text')}
         </Text>
       </View>
       <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: scale(24)
+    paddingHorizontal: scale(16)
   },
   content: {
     flex: 1,

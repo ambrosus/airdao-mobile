@@ -5,13 +5,13 @@ import {
   BottomSheetRef
 } from '@components/composite';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { PrimaryButton } from '@components/modular';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { PrimaryButton } from '@components/modular';
-import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { AddWalletFlowType, useAddWalletContext } from '@contexts';
 
@@ -37,7 +37,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
     setFlowType(AddWalletFlowType.RESTORE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('RestoreWalletScreen');
+    navigation.navigate('ImportWallet');
     localRef.current?.dismiss();
   };
 
