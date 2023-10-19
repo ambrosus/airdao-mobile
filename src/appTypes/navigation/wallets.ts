@@ -18,12 +18,12 @@ export type HomeParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
+  CreateWalletSuccess: undefined;
   SetupPasscode: undefined;
   ConfirmPasscode: { passcode: string[] };
   SuccessSetupSecurity: undefined;
-  SuccessBackupComplete: undefined;
-  SuccessImport: undefined;
-  RestoreWalletScreen: undefined;
+  ImportWallet: undefined;
+  ImportWalletSuccess: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

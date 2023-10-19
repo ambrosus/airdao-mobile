@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Spacer, Text, Button } from '@components/base';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
 import { useTranslation } from 'react-i18next';
 import { Passcode } from '@components/modular';
+import { Spacer, Text, Button } from '@components/base';
+import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { HomeNavigationProp } from '@appTypes';
 
 export const SetupPasscode = () => {
   const { top } = useSafeAreaInsets();
