@@ -27,6 +27,8 @@
 
   "common.address": "Address",
   "common.address_plural": "Addresses",
+  "common.copy": "Copy to clipboard",
+  "common.copied": "Copied!",
   "common.date": "Date",
   "common.done": "Done",
   "common.no.transactions": "You will see your transactions here",
@@ -86,7 +88,6 @@
   "edit.name": "Edit name",
   "save.btn": "Save",
   "cancel.btn": "Cancel",
-  "copied.to.clipboard": "Copied to Clipboard",
   "search.groups.input": "Search groups",
   "toast.Successfully.removed.wallet.from.group": "Successfully removed wallet from group!",
 
@@ -192,6 +193,7 @@
   },
 
   "receive.funds": "Receive funds",
+  "receive.funds.amb.network.only": "Asset can only be sent within the same network (AMB-NET)",
 
   "send.funds.balance": "Balance",
   "send.funds.estimated.fee": "Estimated fee",
@@ -265,7 +267,6 @@
   "settings.about.rate": "Rate us",
 
   "singleWallet.name": "Name",
-  "singleWallet.copy": "Copy to clipboard",
   "singleWallet.save": "Save changes",
   "singleWallet.remove": "Remove",
 
