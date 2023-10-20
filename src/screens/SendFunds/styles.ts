@@ -19,9 +19,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   input: {
+    textAlign: 'center',
     fontFamily: 'Mersad_600SemiBold',
     shadowColor: 'transparent',
-    alignSelf: 'center',
     fontSize: 46
   },
   addressError: {

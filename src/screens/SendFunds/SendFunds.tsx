@@ -49,7 +49,7 @@ export const SendFunds = () => {
   // const selectedToken = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
   const { data: walletHash } = useSelectedWalletHash();
   // const { account, accountLoading } = useMainAccount();
-  const { data: ambBalance } = useBalanceOfAddress(senderAddress);
+  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
   const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass selectedToken name inside to handle different crypto tokens under Ambrosus Networkc
   const ambPrice = ambPriceInfo?.priceUSD || 0;
   const currencyRate = ambPrice;
@@ -61,7 +61,7 @@ export const SendFunds = () => {
   const defaultAMBToken: Token = new Token({
     name: 'AMB',
     address: senderAddress || '',
-    balance: { wei: '', ether: Number(ambBalance.ether) || 0 },
+    balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
     symbol: AirDAODictTypes.Code.AMB
   });
 
