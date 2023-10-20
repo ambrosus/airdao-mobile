@@ -37,7 +37,7 @@ export const CopyToClipboardButton = (
 
   const onPress = async () => {
     Toast.show({
-      text: t('copied.to.clipboard'),
+      text: t('common.copied'),
       position: ToastPosition.Top,
       type: ToastType.Success,
       ...toastProps

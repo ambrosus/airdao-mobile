@@ -27,6 +27,8 @@
 
   "common.address": "Adres",
   "common.address_plural": "Adresler",
+  "common.copy": "Kopyala",
+  "common.copied": "Kopyalandı!",
   "common.date": "Tarih",
   "common.done": "Tamam",
   "common.no.transactions": "İşlemlerinizi burada görebilirsiniz",
@@ -86,7 +88,6 @@
   "edit.name": "İsmi düzenleyin",
   "save.btn": "Kaydet",
   "cancel.btn": "İptal et",
-  "copied.to.clipboard": "Panoya Kopyalandı",
   "search.groups.input": "Grupları Arayın",
   "toast.Successfully.removed.wallet.from.group": "Cüzdanı başarıyla gruptan kaldırdınız!",
 
@@ -192,6 +193,7 @@
     }
   },
   "receive.funds": "Receive funds",
+  "receive.funds.amb.network.only": "Transferler yalnızca aynı ağ içinde gönderilmelidir (AMB-NET)",
 
   "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için tutarı ayarlayın veya bakiyenizi yeniden doldurun.",
   "send.funds.error.network": "Kötü internet bağlantısı",
@@ -261,7 +263,6 @@
   "settings.about.rate": "Bizi değerlendir",
 
   "singleWallet.name": "Cüzdan ismi",
-  "singleWallet.copy": "Kopyala",
   "singleWallet.save": "Kaydet",
   "singleWallet.remove": "Sil",
 

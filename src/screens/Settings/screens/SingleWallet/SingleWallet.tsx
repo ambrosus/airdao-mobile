@@ -79,7 +79,7 @@ export const SingleWalletScreen = () => {
 
   const copyToClipboard = async () => {
     Toast.show({
-      text: t('copied.to.clipboard'),
+      text: t('common.copied'),
       type: ToastType.Success,
       position: ToastPosition.Bottom
     });
@@ -136,7 +136,7 @@ export const SingleWalletScreen = () => {
                     fontSize={14}
                     fontFamily="Inter_500Medium"
                   >
-                    {t('singleWallet.copy')}
+                    {t('common.copy')}
                   </Text>
                 </Button>
               </View>
