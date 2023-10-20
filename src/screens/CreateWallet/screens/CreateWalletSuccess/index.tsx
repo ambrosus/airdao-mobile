@@ -45,7 +45,7 @@ export const CreateWalletSuccess = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {t('backup.complete')}
+          {t('create.wallet.success')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -54,7 +54,7 @@ export const CreateWalletSuccess = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('backup.complete.text')}
+          {t('create.wallet.success.text')}
         </Text>
       </View>
       <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
@@ -66,8 +66,8 @@ export const CreateWalletSuccess = () => {
             color={COLORS.neutral0}
           >
             {isPasscodeEnabled
-              ? t('start.using.wallet.btn')
-              : t('setup.security.btn')}
+              ? t('button.start.using.wallet')
+              : t('button.setup.security')}
           </Text>
         </PrimaryButton>
       </BottomAwareSafeAreaView>

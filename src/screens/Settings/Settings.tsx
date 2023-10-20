@@ -71,7 +71,7 @@ export const SettingsScreen = () => {
   return (
     <View style={[{ top }, styles.container]}>
       <Text fontSize={24} fontFamily="Inter_700Bold" color={COLORS.neutral800}>
-        {t('settings.tab')}
+        {t('tab.settings')}
       </Text>
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}

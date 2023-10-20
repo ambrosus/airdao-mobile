@@ -51,7 +51,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
           fontSize={20}
           color={COLORS.neutral800}
         >
-          {t('add.wallet')}
+          {t('button.add.wallet')}
         </Text>
         <Spacer value={verticalScale(16)} />
         <PrimaryButton onPress={navigateToWalletCreate}>
@@ -60,7 +60,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
             fontSize={16}
             color={COLORS.neutral0}
           >
-            {t('create.new.wallet')}
+            {t('button.create.wallet')}
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(16)} />
@@ -76,7 +76,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
             color={COLORS.neutral800}
             style={{ marginVertical: scale(12) }}
           >
-            {t('import.existing.wallet')}
+            {t('button.import.wallet')}
           </Text>
         </Button>
       </View>

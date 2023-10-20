@@ -35,7 +35,7 @@ export const NotificationsHeader = (
   return (
     <Header
       titleStyle={styles.headerTitle}
-      title={t('notifications.tab')}
+      title={t('tab.notifications')}
       titlePosition="left"
       contentRight={renderContentRight()}
       style={{ shadowColor: COLORS.transparent }}

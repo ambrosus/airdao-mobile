@@ -73,7 +73,7 @@ export const CreateWalletStep1 = () => {
         fontFamily="Inter_700Bold"
         color={COLORS.neutral900}
       >
-        {t('your.recovery.phrase')}
+        {t('create.wallet.your.recovery.phrase')}
       </Text>
       <Spacer value={verticalScale(12)} />
       <Text
@@ -82,7 +82,7 @@ export const CreateWalletStep1 = () => {
         fontFamily="Inter_500Medium"
         color={COLORS.neutral900}
       >
-        {t('verify.text')}
+        {t('create.wallet.verify.text')}
       </Text>
       {loading && (
         <View style={styles.loading}>
@@ -100,13 +100,15 @@ export const CreateWalletStep1 = () => {
             <View style={styles.warning}>
               <WarningIcon />
               <Spacer horizontal value={scale(12)} />
-              <Text>{t('verification.alert')}</Text>
+              <Text>{t('create.wallet.verification.alert')}</Text>
             </View>
           </View>
           <Spacer value={verticalScale(34)} />
           <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
             <PrimaryButton onPress={onNextPress}>
-              <Text color={COLORS.neutral0}>{t('verify.phrase')}</Text>
+              <Text color={COLORS.neutral0}>
+                {t('create.wallet.verify.phrase')}
+              </Text>
             </PrimaryButton>
           </BottomAwareSafeAreaView>
         </View>

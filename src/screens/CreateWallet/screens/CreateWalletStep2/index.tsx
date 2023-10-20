@@ -160,7 +160,7 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('double.check')}
+            {t('create.wallet.verify.phrase')}
           </Text>
           <Spacer value={verticalScale(8)} />
           <Text
@@ -169,7 +169,7 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >
-            {t('tap.words.in.correct.order')}
+            {t('create.wallet.tap.words.in.correct.order')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <View style={styles.selectedMnemonicContainer}>
@@ -206,7 +206,7 @@ export const CreateWalletStep2 = () => {
                 fontFamily="Inter_600SemiBold"
                 color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
               >
-                {t('verify.btn')}
+                {t('button.verify')}
               </Text>
             )}
           </Button>

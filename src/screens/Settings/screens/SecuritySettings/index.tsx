@@ -39,11 +39,11 @@ export const SecuritySettingsScreen = () => {
           // authenticate with biometrics
           const result = await LocalAuthentication.authenticateAsync({
             promptMessage: hasFaceId
-              ? t('authenticate.with.face.id')
+              ? t('security.authenticate.with.face.id')
               : hasFingerprint
-              ? t('authenticate.with.fingerprint')
+              ? t('security.authenticate.with.fingerprint')
               : 'Authenticate',
-            fallbackLabel: t('enter.pin')
+            fallbackLabel: t('security.enter.pin')
           });
           if (result.success) {
             await PasscodeUtils.setFaceIDStatusInDB(true);
@@ -53,8 +53,8 @@ export const SecuritySettingsScreen = () => {
           // show error otherwise
           Toast.show({
             text: hasFaceId
-              ? t('face.id.not.available')
-              : t('fingerprint.not.available'),
+              ? t('settings.security.face.id.not.available')
+              : t('settings.security.fingerprint.not.available'),
             position: ToastPosition.Top,
             type: ToastType.Failed
           });
@@ -93,7 +93,7 @@ export const SecuritySettingsScreen = () => {
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral500}
             >
-              {t('change.passcode')}
+              {t('settings.security.change.passcode')}
             </Text>
             <Row alignItems="center">
               <ChevronRightIcon scale={1.25} color={COLORS.neutral300} />
@@ -118,8 +118,8 @@ export const SecuritySettingsScreen = () => {
               {supportedBiometrics.indexOf(
                 LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
               ) > -1
-                ? t('sign.in.with.face.id')
-                : t('sign.in.with.fingerprint')}
+                ? t('login.with.face.id')
+                : t('login.with.fingerprint')}
             </Text>
             <Row alignItems="center">
               <Switch

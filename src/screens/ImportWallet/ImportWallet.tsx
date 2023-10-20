@@ -199,7 +199,7 @@ export const ImportWallet = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('restore.wallet.loading')}
+            {t('import.wallet.loading')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <Spinner />
@@ -213,7 +213,7 @@ export const ImportWallet = () => {
                 fontSize={16}
                 color={COLORS.neutral800}
               >
-                {t('restore.wallet.header')}
+                {t('import.wallet.header')}
               </Text>
             }
             titlePosition="left"
@@ -234,7 +234,7 @@ export const ImportWallet = () => {
                 fontSize={24}
                 color={COLORS.neutral800}
               >
-                {t('restore.wallet.title')}
+                {t('import.wallet.title')}
               </Text>
               <Spacer value={verticalScale(8)} />
               <View style={{ paddingHorizontal: scale(16) }}>
@@ -244,7 +244,7 @@ export const ImportWallet = () => {
                   fontSize={15}
                   style={{ textAlign: 'center' }}
                 >
-                  {t('restore.wallet.description')}
+                  {t('import.wallet.description')}
                 </Text>
                 <Spacer value={verticalScale(16)} />
                 {renderWords()}
@@ -270,7 +270,7 @@ export const ImportWallet = () => {
                 color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
                 style={{ marginVertical: scale(12) }}
               >
-                {t('continue.btn')}
+                {t('button.continue')}
               </Text>
             </Button>
           </KeyboardAwareScrollView>

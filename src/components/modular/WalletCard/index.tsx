@@ -96,7 +96,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontFamily="Inter_500Medium"
                 color={priceTextColor}
               >
-                {NumberUtils.addSignToNumber(change24HR)}% {t('today')}
+                {NumberUtils.addSignToNumber(change24HR)}% {t('common.today')}
               </Text>
             )}
           </>

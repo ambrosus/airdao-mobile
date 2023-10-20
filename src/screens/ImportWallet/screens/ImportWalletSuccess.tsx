@@ -46,7 +46,7 @@ export const ImportWalletSuccess = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {t('import.successful')}
+          {t('import.wallet.success')}
         </Text>
         <Spacer value={verticalScale(12)} />
         <Text
@@ -55,7 +55,7 @@ export const ImportWalletSuccess = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('import.successful.text')}
+          {t('import.wallet.success.text')}
         </Text>
       </View>
       <BottomAwareSafeAreaView paddingBottom={verticalScale(26)}>
@@ -67,8 +67,8 @@ export const ImportWalletSuccess = () => {
             color={COLORS.neutral0}
           >
             {isPasscodeEnabled
-              ? t('start.using.wallet.btn')
-              : t('setup.security.btn')}
+              ? t('button.start.using.wallet')
+              : t('button.setup.security')}
           </Text>
         </PrimaryButton>
       </BottomAwareSafeAreaView>

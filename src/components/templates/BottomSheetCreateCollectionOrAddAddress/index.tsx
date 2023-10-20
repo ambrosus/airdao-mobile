@@ -44,7 +44,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.neutral0}
           >
-            {t('add.address.btn')}
+            {t('collection.add.address')}
           </Text>
         </PrimaryButton>
         <Spacer value={scale(24)} />
@@ -62,7 +62,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             fontSize={16}
             color={COLORS.neutral900}
           >
-            {t('create.group')}
+            {t('collection.create')}
           </Text>
         </Button>
       </View>

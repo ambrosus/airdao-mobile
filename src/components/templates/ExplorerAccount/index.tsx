@@ -88,9 +88,9 @@ export const ExplorerAccountView = (
                 fontSize={13}
                 fontWeight="400"
               >
-                {t('address.added.to.group')}
-                {listsWithAccount.length}
-                {t('groups.count')}
+                {t('address.added.to.group', {
+                  count: listsWithAccount.length
+                })}
               </Text>
             ))}
         </Row>
@@ -158,8 +158,8 @@ export const ExplorerAccountView = (
                 color={account.isOnWatchlist ? COLORS.liver : COLORS.neutral0}
               >
                 {account.isOnWatchlist
-                  ? t('watchlisted.address')
-                  : t('watchlist.address.btn')}
+                  ? t('address.watchlisted')
+                  : t('address.add.watchlist')}
               </Text>
               {/*{!account.isOnWatchlist && (*/}
               {/*  <>*/}
@@ -190,12 +190,12 @@ export const ExplorerAccountView = (
                 fontSize={12}
               >
                 {listsWithAccount.length === 0
-                  ? t('add.address.to.group.upper.case')
+                  ? t('address.add.group')
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
-                  : `${t('address.added.to.group')} ${
-                      listsWithAccount.length
-                    } ${t('groups.count')}`}
+                  : t('address.added.to.group', {
+                      count: listsWithAccount.length
+                    })}
               </Text>
               {/*{listsWithAccount.length === 0 && (*/}
               {/*  <>*/}
@@ -210,7 +210,7 @@ export const ExplorerAccountView = (
       <BottomSheetWithHeader
         ref={addToListModal}
         height={fullscreenHeight * 0.95}
-        title={t('add.address.to.group')}
+        title={t('address.add.to.group')}
         avoidKeyboard={false}
         swiperIconVisible={true}
       >

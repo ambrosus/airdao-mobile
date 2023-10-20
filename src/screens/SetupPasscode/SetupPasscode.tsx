@@ -47,7 +47,7 @@ export const SetupPasscode = () => {
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {t('enter.passcode')}
+          {t('security.enter.passcode')}
         </Text>
         <Spacer value={verticalScale(8)} />
         <Text
@@ -56,7 +56,7 @@ export const SetupPasscode = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('enter.passcode.text')}
+          {t('security.enter.passcode.text')}
         </Text>
         <Spacer value={verticalScale(106)} />
         <Passcode onPasscodeChange={onPasscodeChange} />
@@ -68,7 +68,7 @@ export const SetupPasscode = () => {
             fontFamily="Inter_400Regular"
             color="#676B73"
           >
-            {t('enter.passcode.hint')}
+            {t('security.enter.passcode.hint')}
           </Text>
         </View>
         <Spacer value={verticalScale(30)} />
@@ -91,7 +91,7 @@ export const SetupPasscode = () => {
             color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
             style={{ marginVertical: scale(12) }}
           >
-            {t('continue.btn')}
+            {t('button.continue')}
           </Text>
         </Button>
       </View>

@@ -84,7 +84,7 @@ export function AMBAbout(): JSX.Element {
         fontFamily="Inter_500Medium"
         color={COLORS.neutral400}
       >
-        {t('statistics.text')}
+        {t('amb.market.statistics.text')}
       </Text>
       <Spacer value={verticalScale(16)} />
       <Row alignItems="center" style={styles.socialButtons}>

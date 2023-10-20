@@ -188,7 +188,7 @@ export const SendFunds = () => {
             </Text>
             <Row alignItems="center">
               <Text fontSize={14} color={COLORS.neutral300}>
-                {t('from')}{' '}
+                {t('common.transaction.from')}{' '}
               </Text>
               <Text color={COLORS.neutral700} fontSize={14}>
                 {StringUtils.formatAddress(senderAddress, 5, 6)}

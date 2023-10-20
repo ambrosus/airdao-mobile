@@ -81,7 +81,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
               fontSize={scale(16)}
               color={COLORS.neutral900}
             >
-              {t('select.base.currency')}
+              {t('settings.preferences.select.base.currency')}
             </Text>
           }
           titlePosition={Platform.select({ ios: 'left', default: 'center' })}

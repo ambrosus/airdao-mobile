@@ -48,7 +48,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   return (
     <View style={{ flex: 1 }}>
       {!data && error && loading ? (
-        <LocalizedRenderEmpty text={t('no.assets.yet')} />
+        <LocalizedRenderEmpty text={t('empty.assets')} />
       ) : (
         <FlatList
           data={data}

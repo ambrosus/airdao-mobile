@@ -53,9 +53,9 @@ export const Notifications = (): JSX.Element => {
       const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
       const title =
         date === today
-          ? t('today')
+          ? t('common.today')
           : date === yesterday
-          ? t('yesterday')
+          ? t('common.yesterday')
           : date;
       sections.push({ title, data: notifications, index });
       index++;
@@ -107,7 +107,7 @@ export const Notifications = (): JSX.Element => {
           fontSize={15}
           fontFamily="Inter_400Regular"
         >
-          {t('no.notifications.text')}
+          {t('empty.notifications')}
           {'\n'}
           {t('no.notifications.come.back.later.text')}.
         </Text>
