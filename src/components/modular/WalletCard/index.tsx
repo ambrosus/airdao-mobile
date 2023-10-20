@@ -58,6 +58,7 @@ export const WalletCard = (props: WalletCardProps) => {
         iconProps={{
           color: addressTextColor
         }}
+        successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
         toastProps={{ position: ToastPosition.Top }}
       />
       <View>
