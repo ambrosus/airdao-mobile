@@ -54,7 +54,8 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
               fontFamily="Inter_500Medium"
               color={COLORS.alphaBlack50}
             >
-              {t('from')} {StringUtils.formatAddress(transaction.from, 5, 5)}
+              {t('common.transaction.from')}{' '}
+              {StringUtils.formatAddress(transaction.from, 5, 5)}
             </Text>
           </View>
         </Row>

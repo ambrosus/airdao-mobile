@@ -69,11 +69,9 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       if (handleOnCreateGroup) {
         handleOnCreateGroup(localGroupName);
         Toast.show({
-          text: `${t('toast.way.to.go')} ${StringUtils.formatAddress(
-            localGroupName,
-            16,
-            0
-          )} ${t('toast.group.created')}`,
+          text: t('toast.group.created', {
+            name: StringUtils.formatAddress(localGroupName, 16, 0)
+          }),
           position: ToastPosition.Top,
           type: ToastType.Success
         });
@@ -82,9 +80,10 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       if (handleOnRenameGroup && groupId) {
         handleOnRenameGroup(groupId, localGroupName);
         Toast.show({
-          text: `${StringUtils.formatAddress(groupTitle || '', 16, 0)} ${t(
-            'toast.has.been.renamed'
-          )} ${StringUtils.formatAddress(localGroupName, 16, 0)}.`,
+          text: t('toast.group.renamed', {
+            oldName: StringUtils.formatAddress(groupTitle || '', 16, 0),
+            newName: StringUtils.formatAddress(localGroupName, 16, 0)
+          }),
           position: ToastPosition.Top,
           type: ToastType.Success
         });
@@ -134,7 +133,9 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 fontSize={16}
                 color={COLORS.neutral900}
               >
-                {type === 'create' ? t('create.group') : t('rename.group')}
+                {type === 'create'
+                  ? t('collection.create')
+                  : t('collection.rename')}
               </Text>
               <Spacer value={8} />
               <OnboardingView
@@ -151,8 +152,8 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   type="text"
                   placeholder={
                     emptyPlaceholder
-                      ? t('field.required')
-                      : t('group.name.input')
+                      ? t('common.field.required')
+                      : t('collection.name.input.placeholder')
                   }
                   placeholderTextColor={
                     emptyPlaceholder ? COLORS.error400 : COLORS.midnight
@@ -176,7 +177,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                     fontSize={16}
                     color={COLORS.neutral0}
                   >
-                    {type === 'create' ? t('create.btn') : t('save.btn')}
+                    {type === 'create' ? t('button.create') : t('button.save')}
                   </Text>
                 </PrimaryButton>
               </OnboardingView>
@@ -196,7 +197,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                   color={COLORS.neutral800}
                   fontSize={16}
                 >
-                  {t('cancel.btn')}
+                  {t('button.cancel')}
                 </Text>
               </Button>
             </View>

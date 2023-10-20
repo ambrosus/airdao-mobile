@@ -76,7 +76,7 @@ export const BottomSheetEditCollection = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral900}
           >
-            {t('rename.group')}
+            {t('collection.rename')}
           </Text>
         </Button>
         <Button
@@ -92,7 +92,7 @@ export const BottomSheetEditCollection = forwardRef<
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('delete.btn')}{' '}
+            {t('button.delete')}{' '}
             {StringUtils.formatAddress(collection.name, 12, 0)}
           </Text>
         </Button>

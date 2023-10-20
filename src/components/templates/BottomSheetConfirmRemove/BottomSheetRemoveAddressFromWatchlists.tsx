@@ -44,7 +44,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
           fontSize={14}
           color={COLORS.neutral900}
         >
-          {t('confirm.remove.address.from.watchlist')}
+          {t('address.confirm.removal.from.watchlist')}
         </Text>
         <Spacer value={24} />
         <Button
@@ -57,7 +57,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
             fontSize={16}
             color={COLORS.error400}
           >
-            {t('remove.btn')}
+            {t('button.remove')}
           </Text>
         </Button>
         <Spacer value={24} />
@@ -72,7 +72,7 @@ export const BottomSheetRemoveAddressFromWatchlists = forwardRef<
             color={COLORS.neutral900}
             fontSize={16}
           >
-            {t('cancel.btn')}
+            {t('button.cancel')}
           </Text>
         </Button>
       </View>

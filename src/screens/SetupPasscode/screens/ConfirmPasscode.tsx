@@ -48,7 +48,7 @@ export const ConfirmPasscode = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('confirm.passcode.text')}
+            {t('security.confirm.passcode.text')}
           </Text>
           <Spacer value={verticalScale(8)} />
           <Text
@@ -57,7 +57,7 @@ export const ConfirmPasscode = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >
-            {t('confirm.passcode.description')}
+            {t('security.confirm.passcode.description')}
           </Text>
           <Spacer value={verticalScale(106)} />
           <Passcode onPasscodeChange={onPasscodeChange} />
@@ -80,7 +80,7 @@ export const ConfirmPasscode = () => {
               color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
               style={{ marginVertical: scale(12) }}
             >
-              {t('continue.btn')}
+              {t('button.continue')}
             </Text>
           </Button>
         </BottomAwareSafeAreaView>

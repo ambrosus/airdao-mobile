@@ -37,13 +37,13 @@ export const SuccessSetupSecurity = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('wallet.protected')}{' '}
+          {t('security.wallet.protected')}{' '}
           <Text fontFamily="Inter_600SemiBold">
-            {t('settings.tab')}
+            {t('tab.settings')}
             {'>'}
             {t('settings.security')}
           </Text>
-          {t('manage.security')}
+          {t('security.manage')}
         </Text>
       </View>
       <BottomAwareSafeAreaView>
@@ -59,7 +59,7 @@ export const SuccessSetupSecurity = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral0}
           >
-            {t('start.using.wallet.btn')}
+            {t('button.start.using.wallet')}
           </Text>
         </PrimaryButton>
       </BottomAwareSafeAreaView>

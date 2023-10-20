@@ -85,7 +85,7 @@ export const BottomSheetEditWallet = forwardRef<
       toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
-        text: t('toast.Successfully.removed.wallet.from.group'),
+        text: t('toast.removed.wallet.from.group'),
         position: ToastPosition.Top,
         type: ToastType.Success
       });
@@ -106,7 +106,7 @@ export const BottomSheetEditWallet = forwardRef<
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral900}
           >
-            {t('rename.address')}
+            {t('address.rename')}
           </Text>
         </Button>
         {listsWithCurrentWallet.length > 0 ? (
@@ -121,7 +121,7 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.neutral900}
               >
-                {t('move.to.another.group')}
+                {t('address.move.to.another.group')}
               </Text>
             </Button>
             <Button
@@ -133,12 +133,12 @@ export const BottomSheetEditWallet = forwardRef<
               onPress={removeFromCollection}
             >
               <Text color={COLORS.error400}>
-                {t('remove.address.from.group')}
+                {t('address.remove.from.group')}
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title={t('move.to.another.group')}
+              title={t('address.move.to.another.group')}
               wallet={wallet}
               lists={listsOfAddressGroup.filter(
                 (list) => listsWithCurrentWallet.indexOfItem(list, 'id') === -1
@@ -158,12 +158,12 @@ export const BottomSheetEditWallet = forwardRef<
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.neutral900}
               >
-                {t('add.address.to.group.lower.case')}
+                {t('address.add.group')}
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title={t('add.address.to.group.lower.case')}
+              title={t('address.add.group')}
               wallet={wallet}
               lists={listsOfAddressGroup}
               onWalletMove={dismissAddToCollection}

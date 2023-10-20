@@ -23,22 +23,22 @@ export const TabsNavigator = () => {
       <BottomTabs.Screen
         name="Wallets"
         component={HomeStack}
-        options={{ tabBarLabel: t('wallets.tab') }}
+        options={{ tabBarLabel: t('tab.wallets') }}
       />
       <BottomTabs.Screen
         name="Portfolio"
         component={PortfolioStack}
-        options={{ tabBarLabel: t('watchlist.tab') }}
+        options={{ tabBarLabel: t('tab.watchlist') }}
       />
       <BottomTabs.Screen
         name="Search"
         component={SearchStack}
-        options={{ tabBarLabel: t('explore.tab') }}
+        options={{ tabBarLabel: t('tab.explore') }}
       />
       <BottomTabs.Screen
         name="Settings"
         component={SettingsStack}
-        options={{ tabBarLabel: t('settings.tab') }}
+        options={{ tabBarLabel: t('tab.settings') }}
       />
     </BottomTabs.Navigator>
   );

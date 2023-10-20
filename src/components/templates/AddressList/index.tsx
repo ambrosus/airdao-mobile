@@ -70,7 +70,7 @@ export function AddressList(props: AddressListProps): JSX.Element {
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
-      ListEmptyComponent={<LocalizedRenderEmpty text={'no.addresses.yet'} />}
+      ListEmptyComponent={<LocalizedRenderEmpty text={'empty.addresses'} />}
       showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
       refreshing={false} // TODO

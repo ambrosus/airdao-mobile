@@ -41,7 +41,7 @@ export const CreateWalletStep0 = () => {
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {t('create.new.wallet')}
+            {t('button.create.wallet')}
           </Text>
         }
         style={{ shadowColor: 'transparent' }}
@@ -54,7 +54,7 @@ export const CreateWalletStep0 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('backup.your.wallet')}
+            {t('create.wallet.backup')}
           </Text>
           <Spacer value={verticalScale(8)} />
           <View>
@@ -64,7 +64,7 @@ export const CreateWalletStep0 = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
-              {t('backup.wallet.text')}{' '}
+              {t('create.wallet.backup.text')}{' '}
               <Text
                 align="center"
                 onPress={showRecoveryModal}
@@ -73,7 +73,7 @@ export const CreateWalletStep0 = () => {
                 color={COLORS.brand600}
                 style={{ textDecorationLine: 'underline' }}
               >
-                {t('backup.wallet.popup')}
+                {t('create.wallet.backup.popup')}
               </Text>
               <Text
                 align="center"
@@ -82,7 +82,7 @@ export const CreateWalletStep0 = () => {
                 color={COLORS.neutral800}
               >
                 {' '}
-                {t('make.sure.to.write.down')}
+                {t('create.wallet.prepare')}
               </Text>
             </Text>
           </View>
@@ -112,7 +112,7 @@ export const CreateWalletStep0 = () => {
               color={COLORS.neutral800}
               style={{ maxWidth: scale(330) }}
             >
-              {t('checkbox.text')}
+              {t('create.wallet.checkbox.text')}
             </Text>
           </Row>
           <Spacer value={verticalScale(32)} />
@@ -130,7 +130,7 @@ export const CreateWalletStep0 = () => {
               color={selected ? COLORS.neutral0 : COLORS.neutral600}
               style={{ marginVertical: scale(12) }}
             >
-              {t('continue.btn')}
+              {t('button.continue')}
             </Text>
           </Button>
         </View>

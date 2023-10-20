@@ -76,7 +76,7 @@ export const NotificationSettingsView = () => {
         <View style={styles.container}>
           {/* Price alerts */}
           <Row alignItems="center" justifyContent="space-between">
-            <Title>{t('price.alerts.switch')}</Title>
+            <Title>{t('notification.settings.price.alerts.switch')}</Title>
             <Switch
               onValueChange={() =>
                 onSettingsValueChange(
@@ -90,14 +90,14 @@ export const NotificationSettingsView = () => {
           </Row>
           {/* Percentage Change */}
           <Spacer value={verticalScale(32)} />
-          <Title>{t('price.alerts.treshold')}</Title>
+          <Title>{t('notification.settings.price.alerts.treshold')}</Title>
           <Spacer value={verticalScale(8)} />
           <Text
             fontSize={12}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral500}
           >
-            {t('price.alerts.treshold.text')}
+            {t('notification.settings.price.alerts.treshold.text')}
           </Text>
           <Spacer value={verticalScale(8)} />
           <SegmentedPicker
@@ -119,14 +119,16 @@ export const NotificationSettingsView = () => {
           {/* Transaction Alerts */}
           <Row justifyContent="space-between" alignItems="center">
             <View>
-              <Title>{t('transaction.alerts.switch')}</Title>
+              <Title>
+                {t('notification.settings.transaction.alerts.switch')}
+              </Title>
               <Spacer value={verticalScale(8)} />
               <Text
                 fontSize={12}
                 fontFamily="Inter_500Medium"
                 color={COLORS.neutral500}
               >
-                {t('transaction.alerts.switch.text')}
+                {t('notification.settings.transaction.alerts.switch.text')}
               </Text>
             </View>
             <Switch

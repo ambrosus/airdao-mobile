@@ -108,7 +108,7 @@ export const SendFundsStatus = () => {
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('from')}
+            {t('common.transaction.from')}
           </Text>
           <Text
             align="center"
@@ -125,7 +125,7 @@ export const SendFundsStatus = () => {
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('to')}
+            {t('common.transaction.to')}
           </Text>
           <Text
             align="center"
@@ -148,7 +148,7 @@ export const SendFundsStatus = () => {
           {!error && (
             <>
               <SecondaryButton onPress={onSharePress} style={styles.button}>
-                <Text>{t('share')}</Text>
+                <Text>{t('button.share')}</Text>
               </SecondaryButton>
               <Spacer value={verticalScale(16)} />
             </>

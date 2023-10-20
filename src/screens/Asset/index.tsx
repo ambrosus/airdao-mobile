@@ -103,7 +103,7 @@ export const AssetScreen = () => {
           fontSize={16}
           color={COLORS.neutral300}
         >
-          {t('your.balance')}
+          {t('asset.your.balance')}
         </Text>
         <Row alignItems="center">
           <Text
@@ -142,7 +142,7 @@ export const AssetScreen = () => {
           fontSize={20}
           color={COLORS.neutral800}
         >
-          {t('transactions')}
+          {t('common.transactions')}
         </Text>
       </View>
       <View style={{ height: '80%', paddingTop: verticalScale(16) }}>

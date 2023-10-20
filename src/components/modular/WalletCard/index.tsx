@@ -58,6 +58,7 @@ export const WalletCard = (props: WalletCardProps) => {
         iconProps={{
           color: addressTextColor
         }}
+        successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
         toastProps={{ position: ToastPosition.Top }}
       />
       <View>
@@ -95,7 +96,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontFamily="Inter_500Medium"
                 color={priceTextColor}
               >
-                {NumberUtils.addSignToNumber(change24HR)}% {t('today')}
+                {NumberUtils.addSignToNumber(change24HR)}% {t('common.today')}
               </Text>
             )}
           </>

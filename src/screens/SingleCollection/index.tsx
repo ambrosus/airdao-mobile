@@ -108,7 +108,7 @@ export const SingleGroupScreen = () => {
           fontFamily="Inter_600SemiBold"
           fontSize={12}
         >
-          {t('total.balance')}
+          {t('collection.total.balance')}
         </Text>
         <Spacer value={10} />
         <Text

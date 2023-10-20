@@ -50,13 +50,17 @@ export const PasscodeModal = forwardRef<BottomSheetRef, BottomSheetProps>(
         if (isPasscodeCorrect) {
           localRef.current?.dismiss();
         } else {
-          Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
-            {
-              text: t('try.again'),
-              onPress: () => null,
-              style: 'cancel'
-            }
-          ]);
+          Alert.alert(
+            t('security.passcode.doesnt.match'),
+            t('common.please.try.again'),
+            [
+              {
+                text: t('try.again'),
+                onPress: () => null,
+                style: 'cancel'
+              }
+            ]
+          );
         }
       }
     };
@@ -64,8 +68,8 @@ export const PasscodeModal = forwardRef<BottomSheetRef, BottomSheetProps>(
     const authenticateWithFaceID = useCallback(async () => {
       try {
         const result = await LocalAuthentication.authenticateAsync({
-          promptMessage: t('authenticate.with.face.id'),
-          fallbackLabel: t('enter.pin')
+          promptMessage: t('security.authenticate.with.face.id'),
+          fallbackLabel: t('security.enter.pin')
         });
         if (result.success) {
           setFaceIDAuthRes(true);
@@ -125,7 +129,7 @@ export const PasscodeModal = forwardRef<BottomSheetRef, BottomSheetProps>(
               align="center"
               style={{ paddingTop: verticalScale(160) }}
             >
-              {t('enter.your.passcode')}
+              {t('login.enter.your.passcode')}
             </Text>
             <Spacer value={verticalScale(24)} />
             <Passcode
@@ -155,8 +159,8 @@ export const PasscodeModal = forwardRef<BottomSheetRef, BottomSheetProps>(
                 {supportedBiometrics.indexOf(
                   LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
                 ) > -1
-                  ? t('sign.in.with.face.id')
-                  : t('sign.in.with.fingerprint')}
+                  ? t('login.with.face.id')
+                  : t('login.with.fingerprint')}
               </Text>
             </PrimaryButton>
           </KeyboardDismissingView>

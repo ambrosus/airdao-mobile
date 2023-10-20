@@ -80,7 +80,7 @@ export const WalletTransactionsAndAssets = (
             color={currentIndex === 0 ? COLORS.brand500 : COLORS.midnight}
             fontSize={16}
           >
-            {t('my.assets')}
+            {t('wallet.my.assets')}
           </Text>
         </Button>
         <View>
@@ -90,7 +90,7 @@ export const WalletTransactionsAndAssets = (
               color={currentIndex === 0 ? COLORS.midnight : COLORS.brand500}
               fontSize={16}
             >
-              {t('transactions')}
+              {t('common.transactions')}
             </Text>
           </Button>
         </View>

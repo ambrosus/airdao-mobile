@@ -47,9 +47,9 @@ export const HomeHeader = React.memo((): JSX.Element => {
         });
       } else if (!scanned.current) {
         scanned.current = true;
-        Alert.alert(t('invalid.qr.code.msg'), '', [
+        Alert.alert(t('alert.invalid.qr.code.msg'), '', [
           {
-            text: t('scan.again.msg'),
+            text: t('alert.scan.again.msg'),
             onPress: () => {
               scanned.current = false;
             }

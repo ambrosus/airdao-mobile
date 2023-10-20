@@ -121,7 +121,7 @@ export const TransactionDetails = (
               fontSize={16}
               color={COLORS.neutral300}
             >
-              {t('from')}
+              {t('common.transaction.from')}
             </Text>
             <Button
               disabled={!addressesArePressable}
@@ -150,7 +150,7 @@ export const TransactionDetails = (
               fontSize={16}
               color={COLORS.neutral300}
             >
-              {t('to')}
+              {t('common.transaction.to')}
             </Text>
             <Button
               disabled={!addressesArePressable}
@@ -177,7 +177,7 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral300}
         >
-          {t('amount')}
+          {t('common.transaction.amount')}
         </Text>
         <Text
           fontFamily="Mersad_600SemiBold"

@@ -39,7 +39,7 @@ export function AMBMarket(): JSX.Element {
   // };
 
   const renderErrorView = () => {
-    return <Text>{t('could.not.fetch.statistics')}</Text>;
+    return <Text>{t('amb.market.could.not.fetch')}</Text>;
   };
 
   return (
@@ -99,11 +99,11 @@ export function AMBMarket(): JSX.Element {
               }}
             />
             <View style={styles.body}>
-              <BodyTitle title={t('about.airdao')} />
+              <BodyTitle title={t('amb.market.about.airdao')} />
               <Spacer value={verticalScale(16)} />
               <AMBAbout />
               <Spacer value={verticalScale(32)} />
-              <BodyTitle title={t('stats')} />
+              <BodyTitle title={t('amb.market.stats')} />
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
                 maxSupply={NumberUtils.formatNumber(6500000000, 0)}
@@ -121,7 +121,7 @@ export function AMBMarket(): JSX.Element {
                 }
               />
               <Spacer value={verticalScale(8)} />
-              <BodyTitle title={t('markets')} />
+              <BodyTitle title={t('amb.market.markets')} />
               <Spacer value={verticalScale(16)} />
               <AMBMarketsInfo />
             </View>

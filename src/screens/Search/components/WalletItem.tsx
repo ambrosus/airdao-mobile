@@ -74,18 +74,19 @@ export const ExplorerWalletItem = (
           color={COLORS.alphaBlack50}
           fontFamily="Inter_500Medium"
         >
-          {t('single.address.holding')}
-          {NumberUtils.formatNumber(
-            item.calculatePercentHoldings(totalSupply),
-            2
-          )}{' '}
-          {t('single.address.supply')}
+          {t('explore.single.address.holding', {
+            share: NumberUtils.formatNumber(
+              item.calculatePercentHoldings(totalSupply),
+              2
+            )
+          })}
         </Text>
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
           color={COLORS.alphaBlack50}
         >
+          {transactionCount}{' '}
           {t('common.transaction', { count: transactionCount })}
         </Text>
       </Row>
