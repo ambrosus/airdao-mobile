@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
+import { InfoIcon } from '@components/svg/icons';
 import { Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
@@ -67,9 +67,16 @@ export const SendFundsStatus = () => {
       ) : error ? (
         <InfoIcon scale={4} />
       ) : (
-        <CheckmarkCircleIcon color={COLORS.success300} scale={4} />
+        <Image
+          source={require('@assets/icons/checkmark-circle.png')}
+          style={{
+            height: moderateScale(88),
+            width: moderateScale(88),
+            tintColor: COLORS.success300
+          }}
+        />
       )}
-      <Spacer value={verticalScale(56)} />
+      <Spacer value={verticalScale(8)} />
       <Text color={COLORS.neutral800} fontSize={20} fontFamily="Inter_700Bold">
         {title}
       </Text>

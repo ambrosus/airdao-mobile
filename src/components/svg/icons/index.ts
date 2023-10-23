@@ -10,7 +10,6 @@ export * from './BottomSheetSwiper';
 export * from './Browser';
 export * from './Check';
 export * from './Checkmark';
-export * from './CheckmarkCircle';
 export * from './ChevronLeft';
 export * from './ChevronRight';
 export * from './ChevronDown';
