@@ -81,10 +81,11 @@ export const SendFunds = () => {
     walletHash
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
-  const balance =
+  const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
       ? defaultAMBToken.balance.ether
       : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
+  const balanceInUSD = CurrencyUtils.toUSD(balanceInCrypto, currencyRate);
 
   const selectToken = (newToken: Token) => {
     setSelectedToken(newToken);
@@ -109,9 +110,9 @@ export const SendFunds = () => {
   };
 
   const useMaxBalance = () => {
-    if (balance) {
-      setAmountInCrypto(balance.toString());
-      setAmountInUSD(CurrencyUtils.toUSD(balance, ambPrice).toString());
+    if (balanceInCrypto) {
+      setAmountInCrypto(balanceInCrypto.toString());
+      setAmountInUSD(CurrencyUtils.toUSD(balanceInCrypto, ambPrice).toString());
     }
   };
 
@@ -121,18 +122,18 @@ export const SendFunds = () => {
       setAmountInUSD('');
       return;
     }
+    let finalValue = StringUtils.formatNumberInput(newValue);
+    finalValue = StringUtils.limitNumberInputDecimals(finalValue, 3);
     if (amountShownInUSD) {
-      setAmountInUSD(StringUtils.formatNumberInput(newValue));
-      const newUsdAmount =
-        parseFloat(StringUtils.formatNumberInput(newValue)) || 0;
+      setAmountInUSD(finalValue);
+      const newUsdAmount = parseFloat(finalValue) || 0;
       setAmountInCrypto(
-        CurrencyUtils.toCrypto(newUsdAmount, ambPrice).toString()
+        CurrencyUtils.toCrypto(newUsdAmount, ambPrice).toFixed(3)
       );
     } else {
-      setAmountInCrypto(StringUtils.formatNumberInput(newValue));
-      const newCryptoAmount =
-        parseFloat(StringUtils.formatNumberInput(newValue)) || 0;
-      setAmountInUSD(CurrencyUtils.toUSD(newCryptoAmount, ambPrice).toString());
+      setAmountInCrypto(finalValue);
+      const newCryptoAmount = parseFloat(finalValue) || 0;
+      setAmountInUSD(CurrencyUtils.toUSD(newCryptoAmount, ambPrice).toFixed(3));
     }
   };
 
@@ -263,7 +264,11 @@ export const SendFunds = () => {
               <Spacer value={verticalScale(16)} />
               <Row alignItems="center" style={{ alignSelf: 'center' }}>
                 <Text color={COLORS.neutral400}>
-                  {t('send.funds.balance')}: {balance} {selectedToken.symbol}
+                  {t('send.funds.balance')}:{amountShownInUSD ? ' $' : ' '}
+                  {amountShownInUSD
+                    ? balanceInUSD.toFixed(3)
+                    : balanceInCrypto.toFixed(3)}
+                  {amountShownInUSD ? '' : ` ${selectedToken.symbol}`}
                 </Text>
               </Row>
               <Spacer value={verticalScale(32)} />
