@@ -7,15 +7,16 @@ import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
 import { Token } from '@models';
-import { TokenLogo } from '../TokenLogo';
+import { TokenLogo, TokenLogoProps } from '../TokenLogo';
 import { styles } from './styles';
 
 interface SingleAssetProps {
   token: Token;
+  overrideIconVariants?: TokenLogoProps['overrideIconVariants'];
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { token } = props;
+  const { token, overrideIconVariants } = props;
   const { name, balance, symbol, address } = token;
   const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
@@ -24,12 +25,11 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
-          {
-            <TokenLogo
-              token={name}
-              style={{ width: moderateScale(32), height: moderateScale(32) }}
-            />
-          }
+          <TokenLogo
+            token={name}
+            overrideIconVariants={overrideIconVariants}
+            style={{ width: moderateScale(32), height: moderateScale(32) }}
+          />
         </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>

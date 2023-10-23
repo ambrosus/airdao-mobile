@@ -54,6 +54,9 @@ export const TokenPicker = (props: TokenPickerProps) => {
         <Row alignItems="center" justifyContent="space-between">
           <Row alignItems="center">
             <TokenLogo
+              overrideIconVariants={{
+                amb: 'white'
+              }}
               token={selectedToken.name}
               style={{ width: moderateScale(32), height: moderateScale(32) }}
             />

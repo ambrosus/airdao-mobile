@@ -3,15 +3,26 @@ import { Image, ImageProps } from 'react-native';
 import { AirDAOTokenLogo, BUSDLogo, EthereumLogo } from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
-interface TokenLogoProps extends Omit<ImageProps, 'source'> {
+export interface TokenLogoProps extends Omit<ImageProps, 'source'> {
   token: string;
+  overrideIconVariants?: {
+    amb?: 'white' | 'blue';
+  };
 }
 
 export const TokenLogo = (props: TokenLogoProps) => {
-  const { token } = props;
+  const { token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token) {
     case 'AirDAO':
-      return <AirDAOTokenLogo />;
+      return (
+        <Image
+          source={
+            overrideIconVariants.amb === 'white'
+              ? require('@assets/images/tokens/airdao-token-white.png')
+              : require('@assets/images/tokens/airdao-token-blue.png')
+          }
+        />
+      );
     case 'Ethereum':
       return <EthereumLogo />;
     case AirDAODictTypes.Code.BUSD:
