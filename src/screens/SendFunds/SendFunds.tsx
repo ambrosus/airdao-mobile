@@ -59,7 +59,7 @@ export const SendFunds = () => {
     data: { tokens }
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
   const defaultAMBToken: Token = new Token({
-    name: 'AMB',
+    name: 'AirDAO',
     address: senderAddress || '',
     balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
     symbol: AirDAODictTypes.Code.AMB
