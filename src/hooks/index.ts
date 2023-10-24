@@ -10,6 +10,8 @@ export * from './useFullscreenModalHeight';
 export * from './useInitialMountEffect';
 export * from './useKeyboardHeight';
 export * from './useMainAccount';
+export * from './usePasscodeEntryRevealer';
+export * from './usePreventGoingBack';
 export * from './useSupportedBiometrics';
 export * from './useSwipeableDismissListener';
 export * from './useUSDPrice';

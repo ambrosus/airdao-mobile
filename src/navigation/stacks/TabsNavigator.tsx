@@ -2,8 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
-import { PortfolioStack } from './Tabs/PortfolioStack';
 import TabBar from '@navigation/components/TabBar';
+import { usePasscodeEntryRevealer } from '@hooks';
+import { PortfolioStack } from './Tabs/PortfolioStack';
 import SettingsStack from './Tabs/SettingsStack';
 import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
@@ -11,7 +12,9 @@ import HomeStack from './Tabs/HomeStack';
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
 export const TabsNavigator = () => {
+  usePasscodeEntryRevealer();
   const { t } = useTranslation();
+
   return (
     <BottomTabs.Navigator
       initialRouteName="Wallets"

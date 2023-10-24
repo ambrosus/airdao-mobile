@@ -25,4 +25,3 @@ export * from './OnboardingView';
 export * from './LocalizedRenderEmpty';
 export * from './WalletTransactionsAndAssets';
 export * from './BottomSheetWalletCreateOrImport';
-export * from './PasscodeModal';
