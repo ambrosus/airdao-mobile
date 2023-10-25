@@ -14,7 +14,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { RecoveryPhraseModal } from '../../components/RecoveryPhraseModal';
 import { styles } from '@screens/CreateWallet/styles';
-import { MnemoicIcon } from '@components/svg/icons';
+import { MnemonicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep0 = () => {
@@ -88,7 +88,7 @@ export const CreateWalletStep0 = () => {
           </View>
           <Spacer value={verticalScale(80)} />
           <View style={styles.mnemoicLogo}>
-            <MnemoicIcon />
+            <MnemonicIcon />
           </View>
         </View>
         <View

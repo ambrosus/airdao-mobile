@@ -4,10 +4,10 @@ import {
   NotificationIcon,
   HelpIcon,
   AboutIcon,
-  SettingsFilledIcon
+  SettingsFilledIcon,
+  WalletIcon
 } from '@components/svg/icons';
 import { SettingsMenuItem } from './Settings.types';
-import { WalletTabIcon } from '@components/svg/BottomTabIcons';
 import { COLORS } from '@constants/colors';
 
 export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
@@ -15,7 +15,7 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     key: 'manageWallets',
     title: 'settings.manage.wallet',
     route: 'ManageWallets',
-    icon: <WalletTabIcon color={COLORS.brand600} />
+    icon: <WalletIcon color={COLORS.brand600} />
   },
   {
     key: 'securitySettings',
@@ -39,7 +39,7 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     key: 'helpCenter',
     title: 'settings.help',
     route: 'HelpCenter',
-    icon: <HelpIcon color={COLORS.brand600} />
+    icon: <HelpIcon scale={1.2} color={COLORS.brand600} />
   },
   {
     key: 'about',

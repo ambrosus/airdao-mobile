@@ -89,7 +89,7 @@ export const ChangePasscode = () => {
       <Header
         contentLeft={
           <Button onPress={onBackPress}>
-            <CloseIcon scale={1.3} />
+            <CloseIcon scale={1.15} />
           </Button>
         }
         backIconVisible={false}

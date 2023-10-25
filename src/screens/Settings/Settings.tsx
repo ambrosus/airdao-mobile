@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
@@ -38,7 +38,7 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
   };
 
   return (
-    <Button style={styles.menutItem} onPress={onPress}>
+    <Button style={styles.menuItem} onPress={onPress}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}
@@ -54,7 +54,7 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
             {t(item.title)}
           </Text>
         </Row>
-        <ChevronRightIcon color={COLORS.neutral300} scale={1.5} />
+        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Button>
   );

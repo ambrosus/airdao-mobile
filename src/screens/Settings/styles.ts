@@ -12,10 +12,12 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(20),
     rowGap: verticalScale(16)
   },
-  menutItem: {
+  menuItem: {
     borderRadius: moderateScale(16),
     backgroundColor: COLORS.alphaBlack5,
     paddingHorizontal: scale(16),
     paddingVertical: verticalScale(16)
+    // justifyContent: 'center',
+    // height: verticalScale(56)
   }
 });

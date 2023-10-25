@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Text } from '@components/base';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 
@@ -18,7 +18,7 @@ export const AboutMenutItem = (props: { title: string }) => {
       >
         {props.title}
       </Text>
-      <ChevronRightIcon scale={1.25} color={COLORS.neutral300} />
+      <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
     </Row>
   );
 };

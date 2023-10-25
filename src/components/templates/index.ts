@@ -14,7 +14,6 @@ export * from './BottomSheetCreateRenameGroup';
 export * from './BottomSheetSharePortfolio';
 export * from './BottomSheetAddWalletToList';
 export * from './NotificationSettings';
-export * from './WatchlistAddSuccess';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';

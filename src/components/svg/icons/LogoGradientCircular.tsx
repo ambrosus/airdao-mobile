@@ -15,8 +15,8 @@ export function LogoGradientCircular(props: IconProps) {
   const height = 24;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
       style={{ transform: [{ scale }] }}
       fill="none"

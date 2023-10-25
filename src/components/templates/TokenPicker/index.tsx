@@ -64,7 +64,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
             <Text color={COLORS.neutral0}>{selectedToken.symbol}</Text>
             <Spacer value={scale(4)} horizontal />
           </Row>
-          <ChevronDownIcon />
+          <ChevronDownIcon color={COLORS.neutral0} />
         </Row>
       </Button>
       <BottomSheet

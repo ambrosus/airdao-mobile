@@ -1,6 +1,15 @@
 import React from 'react';
 import { Image, ImageProps } from 'react-native';
-import { AirDAOTokenLogo, BUSDLogo, EthereumLogo } from '@components/svg/icons';
+import {
+  AirBondIcon,
+  AirdaoBlueIcon,
+  BusdIcon,
+  EthTokenIcon,
+  GanymadeIcon,
+  HeraPoolIcon,
+  PlutusIcon,
+  TetherIcon
+} from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 export interface TokenLogoProps extends Omit<ImageProps, 'source'> {
@@ -24,10 +33,10 @@ export const TokenLogo = (props: TokenLogoProps) => {
         />
       );
     case 'Ethereum':
-      return <EthereumLogo />;
+      return <EthTokenIcon />;
     case AirDAODictTypes.Code.BUSD:
     case 'BUSD Token':
-      return <BUSDLogo />;
+      return <BusdIcon />;
     case AirDAODictTypes.Code.USDC:
     case 'USD Coin':
       return (
@@ -38,33 +47,13 @@ export const TokenLogo = (props: TokenLogoProps) => {
       );
     case AirDAODictTypes.Code.Tether:
     case 'Tether USD':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/tether-token.png')}
-        />
-      );
+      return <TetherIcon />;
     case 'Ganymaede pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/ganymade-token.png')}
-        />
-      );
+      return <GanymadeIcon />;
     case 'Plutus pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/plutus-token.png')}
-        />
-      );
+      return <PlutusIcon />;
     case 'Hera pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/hera-pool-token.png')}
-        />
-      );
+      return <HeraPoolIcon />;
     case 'Firepot-LP-Token':
       return (
         <Image
@@ -73,13 +62,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
         />
       );
     case 'AirBond':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/airbond-token.png')}
-        />
-      );
+      return <AirBondIcon />;
     default:
-      return <AirDAOTokenLogo />;
+      return <AirdaoBlueIcon />;
   }
 };

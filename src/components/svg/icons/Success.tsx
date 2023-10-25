@@ -6,13 +6,12 @@ import { COLORS } from '@constants/colors';
 export function SuccessIcon(props: IconProps) {
   const { scale = 1, color = COLORS.success300 } = props;
   const width = 88;
-  const height = 89;
+  const height = 88;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill="none"
     >
       <Path

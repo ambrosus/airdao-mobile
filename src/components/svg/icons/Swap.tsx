@@ -9,10 +9,9 @@ export function SwapIcon(props: IconProps) {
   const height = 32;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill="none"
     >
       <G clipPath="url(#prefix__clip0_1214_10744)">

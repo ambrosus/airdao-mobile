@@ -147,7 +147,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
           type="circular"
           style={styles.addOrImportWalletButton}
         >
-          <AddIcon color={COLORS.neutral800} />
+          <AddIcon color={COLORS.neutral800} scale={1.25} />
         </Button>
         <BottomSheetWalletCreateOrImport ref={walletImportCreate} />
       </>

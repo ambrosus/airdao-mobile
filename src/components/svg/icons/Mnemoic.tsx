@@ -3,7 +3,7 @@ import { Path, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
-export function MnemoicIcon(props: IconProps) {
+export function MnemonicIcon(props: IconProps) {
   const { scale = 1, color = COLORS.neutral300 } = props;
   const width = 108;
   const height = 86;

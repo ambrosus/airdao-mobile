@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon, LogoGradientCircular } from '@components/svg/icons';
+import { ChevronDownIcon, LogoGradientCircular } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -33,7 +33,7 @@ export const WalletItem = (props: WalletItemProps) => {
           />
         )}
         <Spacer value={scale(16)} horizontal />
-        <ChevronRightIcon color={COLORS.neutral300} />
+        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Row>
   );

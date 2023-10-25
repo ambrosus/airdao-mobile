@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
@@ -42,7 +42,7 @@ export const SecuritySettingsScreen = () => {
               {t('settings.security.change.passcode')}
             </Text>
             <Row alignItems="center">
-              <ChevronRightIcon scale={1.25} color={COLORS.neutral300} />
+              <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
               <Spacer value={scale(8)} horizontal />
             </Row>
           </Row>

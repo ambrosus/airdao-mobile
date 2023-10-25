@@ -3,13 +3,13 @@ import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
-import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
 import { useLists } from '@contexts';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

@@ -1,21 +1,23 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
-import { IconProps } from './Icon.types';
+import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { moderateScale } from '@utils/scaling';
 
 export function HelpIcon(props: IconProps) {
-  const { scale = 1, color = '#000' } = props;
-  const width = 25,
-    height = 25;
+  const { color = COLORS.neutral900, scale = 1 } = props;
+  const width = moderateScale(20),
+    height = moderateScale(20);
+
   return (
     <Svg
-      width={width}
-      height={height}
-      fill="none"
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
+      fill="none"
     >
       <Path
-        d="M12.557 2.982c5.523 0 10 4.478 10 10s-4.477 10-10 10-10-4.478-10-10 4.477-10 10-10zm0 13.5a1 1 0 100 2 1 1 0 000-2zm0-8.75a2.75 2.75 0 00-2.75 2.75.75.75 0 001.493.102l.007-.102a1.25 1.25 0 012.5 0c0 .54-.135.806-.645 1.333l-.136.137c-.878.878-1.22 1.447-1.22 2.53a.75.75 0 001.5 0c0-.538.136-.805.646-1.332l.135-.137c.878-.878 1.22-1.448 1.22-2.53a2.75 2.75 0 00-2.75-2.75z"
+        d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 11.5a.75.75 0 100 1.5.75.75 0 000-1.5zm0-8A2.5 2.5 0 007.5 8a.5.5 0 001 0 1.5 1.5 0 112.632.984l-.106.11-.118.1-.247.185a3.11 3.11 0 00-.356.323C9.793 10.248 9.5 10.988 9.5 12a.5.5 0 001 0c0-.758.196-1.254.535-1.614l.075-.076.08-.073.088-.072.219-.163.154-.125A2.5 2.5 0 0010 5.5z"
         fill={color}
       />
     </Svg>

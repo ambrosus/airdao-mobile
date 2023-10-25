@@ -8,13 +8,7 @@ export function LogoBigSVG(props: IconProps) {
   const width = 29,
     height = 36;
   return (
-    <Svg
-      width={width}
-      height={height}
-      fill="none"
-      viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
-    >
+    <Svg width={width * scale} height={height * scale} fill="none">
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

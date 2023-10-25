@@ -11,7 +11,7 @@ import Animated, {
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
@@ -167,7 +167,9 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                 {badgeType === 'button' && (
                   <>
                     <Spacer horizontal value={scale(4)} />
-                    <ChevronRightIcon color={COLORS.neutral900} />
+                    <View style={{ transform: [{ rotate: '270deg' }] }}>
+                      <ChevronDownIcon color={COLORS.neutral900} scale={0.83} />
+                    </View>
                   </>
                 )}
               </Row>

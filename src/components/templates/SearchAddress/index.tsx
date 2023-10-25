@@ -210,7 +210,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             <Row alignItems="center">
               {address.length > 0 ? (
                 <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                  <CloseIcon color={COLORS.alphaBlack50} scale={0.75} />
+                  <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
                 </Button>
               ) : (
                 <Button onPress={showScanner}>
