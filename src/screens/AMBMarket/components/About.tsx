@@ -4,6 +4,7 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
   BrowserIcon,
+  DiscordIcon,
   GitHubIcon,
   TelegramIcon,
   TwitterIcon
@@ -33,11 +34,11 @@ const SOCIAL_LINKS: Link[] = [
     url: 'https://twitter.com/airdao_io/',
     icon: <TwitterIcon />
   },
-  // {
-  //   title: 'Discord',
-  //   url: 'https://discord.gg/hnftmSjUr8',
-  //   icon: <DiscordIcon />
-  // },
+  {
+    title: 'Discord',
+    url: 'https://discord.com/invite/airdao',
+    icon: <DiscordIcon />
+  },
   {
     title: 'Telegram',
     url: 'https://t.me/airDAO_official',
