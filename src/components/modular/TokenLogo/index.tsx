@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, ImageProps } from 'react-native';
+import { Image } from 'react-native';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
+  AirdaoWhiteIcon,
   BusdIcon,
   EthTokenIcon,
   GanymadeIcon,
@@ -14,7 +15,7 @@ import {
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { moderateScale } from '@utils/scaling';
 
-export interface TokenLogoProps extends Omit<ImageProps, 'source'> {
+export interface TokenLogoProps {
   token: string;
   scale?: number;
   overrideIconVariants?: {
@@ -26,15 +27,11 @@ export const TokenLogo = (props: TokenLogoProps) => {
   const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token) {
     case 'AirDAO':
-      return (
-        <Image
-          source={
-            overrideIconVariants.amb === 'white'
-              ? require('@assets/images/tokens/airdao-token-white.png')
-              : require('@assets/images/tokens/airdao-token-blue.png')
-          }
-        />
-      );
+      if (overrideIconVariants.amb === 'white') {
+        return <AirdaoWhiteIcon scale={scale} />;
+      }
+      return <AirdaoBlueIcon scale={scale} />;
+
     case 'Ethereum':
       return <EthTokenIcon scale={scale} />;
     case AirDAODictTypes.Code.BUSD:

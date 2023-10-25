@@ -50,6 +50,7 @@ export * from './Success';
 export * from './Mnemoic';
 export * from './TokenAirbond';
 export * from './TokenAirdaoBlue';
+export * from './TokenAirdaoWhite';
 export * from './TokenBusd';
 export * from './TokenEth';
 export * from './TokenGanymade';
