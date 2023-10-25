@@ -34,7 +34,7 @@ export const ToastBody = forwardRef((_, ref) => {
     () => ({
       text: '',
       subtext: '',
-      type: ToastType.Success,
+      type: ToastType.Failed,
       position: ToastPosition.Top,
       actions: [],
       onBodyPress: () => null,

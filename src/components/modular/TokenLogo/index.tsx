@@ -8,19 +8,22 @@ import {
   GanymadeIcon,
   HeraPoolIcon,
   PlutusIcon,
-  TetherIcon
+  TetherIcon,
+  UsdcIcon
 } from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { moderateScale } from '@utils/scaling';
 
 export interface TokenLogoProps extends Omit<ImageProps, 'source'> {
   token: string;
+  scale?: number;
   overrideIconVariants?: {
     amb?: 'white' | 'blue';
   };
 }
 
 export const TokenLogo = (props: TokenLogoProps) => {
-  const { token, overrideIconVariants = { amb: 'blue' } } = props;
+  const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token) {
     case 'AirDAO':
       return (
@@ -33,37 +36,33 @@ export const TokenLogo = (props: TokenLogoProps) => {
         />
       );
     case 'Ethereum':
-      return <EthTokenIcon />;
+      return <EthTokenIcon scale={scale} />;
     case AirDAODictTypes.Code.BUSD:
     case 'BUSD Token':
-      return <BusdIcon />;
+      return <BusdIcon scale={scale} />;
     case AirDAODictTypes.Code.USDC:
     case 'USD Coin':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/usd-coin.png')}
-        />
-      );
+      return <UsdcIcon scale={scale} />;
     case AirDAODictTypes.Code.Tether:
     case 'Tether USD':
-      return <TetherIcon />;
+      return <TetherIcon scale={scale} />;
     case 'Ganymaede pool token':
-      return <GanymadeIcon />;
+      return <GanymadeIcon scale={scale} />;
     case 'Plutus pool token':
-      return <PlutusIcon />;
+      return <PlutusIcon scale={scale} />;
     case 'Hera pool token':
-      return <HeraPoolIcon />;
+      return <HeraPoolIcon scale={scale} />;
     case 'Firepot-LP-Token':
       return (
         <Image
           {...props}
+          style={{ width: moderateScale(96), height: moderateScale(96) }}
           source={require('@assets/images/tokens/firepot-lp-token.png')}
         />
       );
     case 'AirBond':
-      return <AirBondIcon />;
+      return <AirBondIcon scale={scale} />;
     default:
-      return <AirdaoBlueIcon />;
+      return <AirdaoBlueIcon scale={scale} />;
   }
 };

@@ -24,7 +24,7 @@ export const ToastBorderColor: { [key in ToastType]: string } = {
 
 export const ToastStatusIcon: { [key in ToastType]: ReactElement } = {
   [ToastType.Highlight]: <WarningIcon />,
-  [ToastType.Failed]: <InfoIcon />,
+  [ToastType.Failed]: <InfoIcon scale={0.25} />,
   [ToastType.Success]: (
     <Image
       source={require('@assets/icons/checkmark-circle.png')}

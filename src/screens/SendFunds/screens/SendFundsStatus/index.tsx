@@ -61,11 +61,9 @@ export const SendFundsStatus = () => {
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
-        <View style={{ transform: [{ scale: 4 }] }}>
-          <TokenLogo token={currency} />
-        </View>
+        <TokenLogo token={currency} scale={3} />
       ) : error ? (
-        <InfoIcon scale={4} />
+        <InfoIcon />
       ) : (
         <Image
           source={require('@assets/icons/checkmark-circle.png')}

@@ -1,11 +1,12 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { moderateScale } from '@utils/scaling';
 
 export function InfoIcon(props: IconProps) {
   const { scale = 1, color = '#FF4747' } = props;
-  const width = 21;
-  const height = 21;
+  const width = moderateScale(88);
+  const height = moderateScale(88);
   return (
     <Svg
       width={width * scale}
@@ -14,7 +15,7 @@ export function InfoIcon(props: IconProps) {
       viewBox={`0 0 ${width} ${height}`}
     >
       <Path
-        d="M10.002 0c5.523 0 10.001 4.478 10.001 10.002 0 5.523-4.478 10.001-10.001 10.001C4.478 20.003 0 15.525 0 10.002 0 4.478 4.478 0 10.002 0zm0 1.5a8.502 8.502 0 100 17.003 8.502 8.502 0 000-17.003zm-.004 7a.75.75 0 01.744.648l.006.102.004 5.502a.75.75 0 01-1.493.102l-.007-.101-.004-5.502a.75.75 0 01.75-.75zm.004-3.497a.999.999 0 110 1.997.999.999 0 010-1.997z"
+        d="M44 7.33c20.253 0 36.672 16.419 36.672 36.672 0 20.254-16.419 36.672-36.672 36.672-20.254 0-36.672-16.418-36.672-36.672C7.328 23.748 23.746 7.33 44 7.33zm0 5.5c-17.216 0-31.172 13.956-31.172 31.172S26.784 75.174 44 75.174s31.172-13.956 31.172-31.172S61.216 12.83 44 12.83zm-.014 25.668a2.75 2.75 0 012.727 2.376l.025.373.014 20.172a2.75 2.75 0 01-5.475.377l-.026-.373-.013-20.173a2.75 2.75 0 012.748-2.752zm.016-12.825a3.662 3.662 0 110 7.324 3.662 3.662 0 010-7.324z"
         fill={color}
       />
     </Svg>
