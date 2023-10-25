@@ -55,7 +55,7 @@ export const CopyToClipboardButton = (
     await Clipboard.setStringAsync(textToCopy || textToDisplay);
     setTimeout(() => {
       toggleCopied();
-    }, 500);
+    }, 2500);
   };
 
   return (
