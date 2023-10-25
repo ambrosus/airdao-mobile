@@ -139,9 +139,9 @@
   "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
   "create.wallet.your.recovery.phrase": "Kurtarma ifadeniz",
 
-  "empty.addresses": "Henüz adres yok",
+  "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
   "empty.assets": "Henüz varlık yok",
-  "empty.groups": "Henüz grup yok",
+  "empty.groups": "Birden fazla adresi kolayca takip etmek için kişiselleştirilmiş gruplar oluşturun",
   "empty.notifications": "Şu anda herhangi bir bildiriminiz bulunmamaktadır.",
 
   "explore.search.check.typos": "Lütfen yazım hatası olup olmadığını kontrol edin veya farklı bir adres deneyin",

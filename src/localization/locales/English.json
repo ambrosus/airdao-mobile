@@ -139,9 +139,9 @@
   "create.wallet.verify.text": "Make sure to write it down as shown. You will verify this later.",
   "create.wallet.your.recovery.phrase": "Your recovery phrase",
 
-  "empty.addresses": "No addresses yet",
+  "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",
-  "empty.groups": "No groups yet",
+  "empty.groups": "Create personalized groups to easily track multiple addresses",
   "empty.notifications": "You have no notifications right now.",
 
   "explore.search.check.typos": "Please check for any typos or try a different address",
