@@ -5,22 +5,12 @@ import { AccountList } from '@models/AccountList';
 import { styles } from '@screens/Portfolio/components/ListsOfAddressGroup/styles';
 import { LocalizedRenderEmpty } from '@components/templates';
 import { verticalScale } from '@utils/scaling';
-import { Spacer } from '@components/base';
 
 type Props = {
   listsOfAddressGroup: AccountList[];
   onRefresh?: () => void;
 };
 export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
-  if (listsOfAddressGroup.length === 0) {
-    return (
-      <>
-        <Spacer value={20} />
-        <LocalizedRenderEmpty text={'empty.addresses'} />
-      </>
-    );
-  }
-
   return (
     <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
@@ -40,6 +30,11 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
             />
           );
         }}
+        ListEmptyComponent={
+          <View style={{ paddingTop: verticalScale(200) }}>
+            <LocalizedRenderEmpty text={'empty.groups'} />
+          </View>
+        }
         onRefresh={onRefresh}
         refreshing={false}
       />

@@ -9,13 +9,17 @@ import { COLORS } from '@constants/colors';
 
 type LocalizedRenderEmptyProps = {
   text: string;
+  icon?: React.ReactNode;
 };
 
-export const LocalizedRenderEmpty = ({ text }: LocalizedRenderEmptyProps) => {
+export const LocalizedRenderEmpty = ({
+  text,
+  icon
+}: LocalizedRenderEmptyProps) => {
   const { t } = useTranslation();
   return (
     <View testID="empty-list" style={styles.emptyContainer}>
-      <EmptyAddressListPlaceholderIcon />
+      {icon || <EmptyAddressListPlaceholderIcon />}
       <Spacer value={verticalScale(16)} />
       <Text
         align="center"

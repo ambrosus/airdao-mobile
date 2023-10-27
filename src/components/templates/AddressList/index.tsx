@@ -1,6 +1,13 @@
 import React, { useCallback } from 'react';
-import { FlatList, ListRenderItemInfo, ScrollViewProps } from 'react-native';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  ScrollViewProps,
+  View
+} from 'react-native';
 import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
+import { WatchlistTabIcon } from '@components/svg/BottomTabIcons';
+import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
@@ -70,7 +77,14 @@ export function AddressList(props: AddressListProps): JSX.Element {
       scrollEnabled={scrollEnabled}
       data={data}
       renderItem={renderWallet}
-      ListEmptyComponent={<LocalizedRenderEmpty text={'empty.addresses'} />}
+      ListEmptyComponent={
+        <View style={{ paddingTop: verticalScale(234) }}>
+          <LocalizedRenderEmpty
+            text={'empty.addresses'}
+            icon={<WatchlistTabIcon color={COLORS.neutral300} scale={1.7} />}
+          />
+        </View>
+      }
       showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
       refreshing={false} // TODO
