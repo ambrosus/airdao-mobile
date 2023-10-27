@@ -104,7 +104,7 @@ export const AddressDetails = (): JSX.Element => {
         })}`
       : `${t('toast.you.removed.address.from.watchlist', {
           name: finalAccount.name
-        })}}`;
+        })}`;
     Toast.show({
       text: toastMessage,
       position: ToastPosition.Top,
