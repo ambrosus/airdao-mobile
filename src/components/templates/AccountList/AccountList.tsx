@@ -8,10 +8,11 @@ import {
   CreditCardBg
 } from '@constants/colors';
 import { AccountListItem } from './AccountListItem';
+import { Button } from '@components/base';
 
 export const AccountList = forwardRef<FlatList, AccountListProps>(
   (props: AccountListProps, ref) => {
-    const { accounts, horizontal, type, listProps } = props;
+    const { accounts, horizontal, type, listProps, onPressAccount } = props;
 
     const renderAccount = (args: ListRenderItemInfo<AccountDBModel>) => {
       const { item, index } = args;
@@ -21,8 +22,19 @@ export const AccountList = forwardRef<FlatList, AccountListProps>(
         addressTextColor: CreditCardAddressColor[idx],
         priceTextColor: CreditCardBalanceColor[idx]
       };
+      const onPress = () => {
+        if (typeof onPressAccount === 'function') {
+          onPressAccount(item, index);
+        }
+      };
       return (
-        <AccountListItem account={item} type={type} cardProps={cardProps} />
+        <Button
+          disabled={typeof onPressAccount !== 'function'}
+          onPress={onPress}
+          activeOpacity={0.75}
+        >
+          <AccountListItem account={item} type={type} cardProps={cardProps} />
+        </Button>
       );
     };
     return (
@@ -32,7 +44,7 @@ export const AccountList = forwardRef<FlatList, AccountListProps>(
         showsVerticalScrollIndicator={false}
         data={accounts}
         renderItem={renderAccount}
-        keyExtractor={(account) => account.address}
+        keyExtractor={(account, idx) => `${account.address}-${idx}`}
         {...listProps}
         ref={ref}
       />

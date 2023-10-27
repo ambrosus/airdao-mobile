@@ -12,6 +12,7 @@ export interface AccountListProps {
     FlatListProps<AccountDBModel>,
     'data' | 'renderItem' | 'keyExtractor'
   >;
+  onPressAccount?: (account: AccountDBModel, index: number) => unknown;
 }
 
 export interface BaseAccountListItemProps {
