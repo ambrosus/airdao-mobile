@@ -89,7 +89,18 @@ export const SingleWalletScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={wallet?.name || 'Wallet'}
+        title={
+          <View style={{ paddingHorizontal: '20%' }}>
+            <Text
+              numberOfLines={1}
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.neutral900}
+            >
+              {wallet?.name || 'Wallet'}
+            </Text>
+          </View>
+        }
         contentRight={
           <Button onPress={promptWalletDeletion}>
             <Text
