@@ -12,6 +12,7 @@ import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
 import { styles } from './styles';
+import { TokenLogo } from '@components/modular';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
@@ -179,21 +180,25 @@ export const TransactionDetails = (
         >
           {t('common.transaction.amount')}
         </Text>
-        <Text
-          fontFamily="Mersad_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral800}
-        >
-          {NumberUtils.formatNumber(transaction.amount, 0)}{' '}
-          {transaction.value.symbol}
+        <Row alignItems="center">
+          <TokenLogo token={transaction.value.symbol} scale={0.5} />
+          <Spacer value={scale(4)} horizontal />
           <Text
-            fontFamily="Inter_500Medium"
-            fontSize={14}
-            color={COLORS.neutral400}
+            fontFamily="Mersad_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral800}
           >
-            {totalTransactionAmount !== -1 && ` $${totalTransactionAmount}`}
+            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {transaction.value.symbol}
+            <Text
+              fontFamily="Inter_500Medium"
+              fontSize={14}
+              color={COLORS.neutral400}
+            >
+              {totalTransactionAmount !== -1 && ` $${totalTransactionAmount}`}
+            </Text>
           </Text>
-        </Text>
+        </Row>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
@@ -204,13 +209,17 @@ export const TransactionDetails = (
         >
           {t('transaction.modal.estimated.fee')}
         </Text>
-        <Text
-          color={COLORS.neutral700}
-          fontFamily="Inter_600SemiBold"
-          fontSize={14}
-        >
-          {transaction.fee} AMB
-        </Text>
+        <Row alignItems="center">
+          <TokenLogo token="AirDAO" scale={0.5} />
+          <Spacer value={scale(4)} horizontal />
+          <Text
+            color={COLORS.neutral700}
+            fontFamily="Inter_600SemiBold"
+            fontSize={14}
+          >
+            {transaction.fee} AMB
+          </Text>
+        </Row>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <Button
