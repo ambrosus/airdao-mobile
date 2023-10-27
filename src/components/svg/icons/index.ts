@@ -5,6 +5,7 @@ export * from './AppStore';
 export * from './Back';
 export * from './BellIcon';
 export * from './BellIconWelcome';
+export * from './Lock';
 export * from './BottomSheetSwiper';
 export * from './Browser';
 export * from './Check';

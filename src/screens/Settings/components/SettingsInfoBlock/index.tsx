@@ -2,7 +2,7 @@ import React from 'react';
 import { Linking, Platform, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { HelpIcon } from '@components/svg/icons/Help';
-import { AppStoreIcon, PlayStoreIcon } from '@components/svg/icons';
+import { AppStoreIcon, LockIcon, PlayStoreIcon } from '@components/svg/icons';
 import { PlatformSpecificUtils } from '@utils/platform';
 import { styles } from './style';
 
@@ -11,8 +11,19 @@ export const SettingsInfoBlock = () => {
     Linking.openURL('https://airdao.academy/faqs');
   };
 
+  const openPrivacyPolicy = () => {
+    Linking.openURL('https://airdao.io/AirDAO_Mobile_App_Privacy_Policy.pdf');
+  };
+
   return (
     <View testID="Settings_Screen_Settings_Info_Block">
+      <Spacer value={42} />
+      <Button type="base" onPress={openPrivacyPolicy}>
+        <Row alignItems="center">
+          <LockIcon />
+          <Text style={styles.infoTextContainer}>Privacy Policy</Text>
+        </Row>
+      </Button>
       <Spacer value={42} />
       <Button type="base" onPress={openLink}>
         <Row alignItems="center">
