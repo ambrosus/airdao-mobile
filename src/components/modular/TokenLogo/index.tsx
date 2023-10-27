@@ -31,7 +31,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
-
+    case AirDAODictTypes.Code.ETH:
     case 'Ethereum':
       return <EthTokenIcon scale={scale} />;
     case AirDAODictTypes.Code.BUSD:
