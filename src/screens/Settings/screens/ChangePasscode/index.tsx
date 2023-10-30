@@ -41,13 +41,17 @@ export const ChangePasscode = () => {
         if (JSON.stringify(savedPasscode) === JSON.stringify(typedPasscode)) {
           setStep(2);
         } else {
-          Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
-            {
-              text: t('try.again'),
-              onPress: () => null,
-              style: 'cancel'
-            }
-          ]);
+          Alert.alert(
+            t('security.passcode.doesnt.match'),
+            t('common.please.try.again'),
+            [
+              {
+                text: t('try.again'),
+                onPress: () => null,
+                style: 'cancel'
+              }
+            ]
+          );
         }
       } else if (step === 2) {
         // Step 2: Type new user passcode
@@ -59,18 +63,22 @@ export const ChangePasscode = () => {
           await PasscodeUtils.setPasscodeInDB(typedPasscode);
           navigation.navigate('SecuritySettings');
           Toast.show({
-            text: t('passcode.changed'),
+            text: t('change.passcode.success'),
             position: ToastPosition.Top,
             type: ToastType.Success
           });
         } else {
-          Alert.alert(t('passcode.doesnt.match'), t('please.try.again'), [
-            {
-              text: t('try.again'),
-              onPress: () => null,
-              style: 'cancel'
-            }
-          ]);
+          Alert.alert(
+            t('security.passcode.doesnt.match'),
+            t('common.please.try.again'),
+            [
+              {
+                text: t('try.again'),
+                onPress: () => null,
+                style: 'cancel'
+              }
+            ]
+          );
         }
       }
     }
@@ -81,7 +89,7 @@ export const ChangePasscode = () => {
       <Header
         contentLeft={
           <Button onPress={onBackPress}>
-            <CloseIcon scale={1.3} />
+            <CloseIcon scale={1.15} />
           </Button>
         }
         backIconVisible={false}
@@ -90,10 +98,10 @@ export const ChangePasscode = () => {
       <Spacer value={verticalScale(160)} />
       <Text align="center" fontFamily="Inter_700Bold" fontSize={24}>
         {step === 1
-          ? t('enter.your.passcode')
+          ? t('login.enter.your.passcode')
           : step === 2
-          ? t('enter.new.passcode')
-          : t('confirm.new.passcode')}
+          ? t('change.passcode.enter.new.passcode')
+          : t('change.passcode.confirm.new.passcode')}
       </Text>
       <Spacer value={verticalScale(24)} />
       <View>

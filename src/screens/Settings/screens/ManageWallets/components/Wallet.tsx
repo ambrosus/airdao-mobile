@@ -1,11 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import {
-  CheckmarkCircleIcon,
-  ChevronRightIcon,
-  LogoGradientCircular
-} from '@components/svg/icons';
+import { ChevronDownIcon, LogoGradientCircular } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -30,9 +26,14 @@ export const WalletItem = (props: WalletItemProps) => {
         <Text numberOfLines={1}>{wallet.name}</Text>
       </Row>
       <Row alignItems="center">
-        {isSelectedWallet && <CheckmarkCircleIcon color={COLORS.success400} />}
+        {isSelectedWallet && (
+          <Image
+            source={require('@assets/icons/checkmark-circle.png')}
+            style={{ height: moderateScale(20), width: moderateScale(20) }}
+          />
+        )}
         <Spacer value={scale(16)} horizontal />
-        <ChevronRightIcon color={COLORS.neutral300} />
+        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Row>
   );

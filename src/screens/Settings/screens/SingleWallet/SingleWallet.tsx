@@ -79,7 +79,7 @@ export const SingleWalletScreen = () => {
 
   const copyToClipboard = async () => {
     Toast.show({
-      text: t('copied.to.clipboard'),
+      text: t('common.copied'),
       type: ToastType.Success,
       position: ToastPosition.Bottom
     });
@@ -89,7 +89,18 @@ export const SingleWalletScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={wallet?.name || 'Wallet'}
+        title={
+          <View style={{ paddingHorizontal: '20%' }}>
+            <Text
+              numberOfLines={1}
+              fontFamily="Inter_700Bold"
+              fontSize={16}
+              color={COLORS.neutral900}
+            >
+              {wallet?.name || 'Wallet'}
+            </Text>
+          </View>
+        }
         contentRight={
           <Button onPress={promptWalletDeletion}>
             <Text
@@ -136,7 +147,7 @@ export const SingleWalletScreen = () => {
                     fontSize={14}
                     fontFamily="Inter_500Medium"
                   >
-                    {t('singleWallet.copy')}
+                    {t('common.copy')}
                   </Text>
                 </Button>
               </View>

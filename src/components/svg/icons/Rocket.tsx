@@ -9,11 +9,10 @@ export function StakeRocketIcon(props: IconProps) {
     height = 20;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
     >
       <G clipPath="url(#prefix__clip0_1307_4319)">
         <Path

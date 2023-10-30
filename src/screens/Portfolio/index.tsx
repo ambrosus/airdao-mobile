@@ -21,7 +21,7 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
   const { t } = useTranslation();
   const portfolioTabRoutes = [
     { key: 'first', title: t('common.address_plural') },
-    { key: 'second', title: t('groups.capitalize') }
+    { key: 'second', title: t('common.group_plural') }
   ] as const;
 
   type PortfolioTabRoutes = typeof portfolioTabRoutes;

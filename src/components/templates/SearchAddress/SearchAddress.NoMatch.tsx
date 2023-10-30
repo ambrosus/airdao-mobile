@@ -18,7 +18,7 @@ export function SearchAddressNoResult(): JSX.Element {
         fontWeight="600"
         fontFamily="Inter_600SemiBold"
       >
-        {t('no.matches')}
+        {t('explore.search.no.matches')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
@@ -28,7 +28,7 @@ export function SearchAddressNoResult(): JSX.Element {
         color={COLORS.neutral500}
         fontFamily="Inter_400Regular"
       >
-        {t('check.typos')}
+        {t('explore.search.check.typos')}
       </Text>
     </View>
   );

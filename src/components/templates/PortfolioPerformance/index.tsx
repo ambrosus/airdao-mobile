@@ -36,13 +36,7 @@ export function PortfolioPerformance(
   } = props;
 
   return (
-    <View
-      style={styles.container}
-      // source={require('../../../../assets/images/portfolio-perfomance.png')}
-      // resizeMode="cover"
-      // imageStyle={styles.container}
-      // testID="Portfolio_Performance"
-    >
+    <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <View>
           {/* title */}
@@ -129,16 +123,24 @@ export function PortfolioPerformance(
           <Spacer value={verticalScale(6)} />
           <Row alignItems="center" justifyContent="space-between">
             <Text
-              fontSize={12}
-              fontFamily="Inter_500Medium"
+              fontSize={11}
+              color={COLORS.alphaWhite50}
+              fontFamily="Inter_600SemiBold"
+            >
+              {t('share.time')}
+            </Text>
+            <Spacer horizontal value={scale(8)} />
+            <Text
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
               color={COLORS.neutral100}
             >
               {moment(timestamp).format('YYYY-MM-DD')}
             </Text>
-            <Spacer horizontal value={scale(6)} />
+            <Spacer horizontal value={scale(8)} />
             <Text
-              fontSize={12}
-              fontFamily="Inter_500Medium"
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
               color={COLORS.neutral100}
             >
               {moment(timestamp).format('hh:mm A').toLowerCase()}

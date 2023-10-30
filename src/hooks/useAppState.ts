@@ -2,22 +2,27 @@ import { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 
 export const useAppState = () => {
-  const [appState, setAppState] = useState(AppState.currentState);
-  const [prevState, setPrevState] = useState<any>(null);
-  const appStateRef = useRef(appState);
+  const [state, setState] = useState<{
+    appState: string;
+    prevState: string | null;
+  }>({
+    appState: AppState.currentState,
+    prevState: null
+  });
+  const appStateRef = useRef(state.appState);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      appStateRef.current = nextAppState;
-      setAppState((prevS) => {
-        setPrevState(prevS);
-        return nextAppState;
+      setState({
+        appState: nextAppState,
+        prevState: appStateRef.current
       });
+      appStateRef.current = nextAppState;
     });
 
     return () => {
       subscription.remove();
     };
   }, []);
-  return { appState, prevState };
+  return { appState: state.appState, prevState: state.prevState };
 };

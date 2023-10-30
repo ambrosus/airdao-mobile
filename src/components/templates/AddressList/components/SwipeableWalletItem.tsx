@@ -13,7 +13,7 @@ import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/AddressList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetConfirmRemove/BottomSheetRemoveAddressFromWatchlists';
+import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { COLORS } from '@constants/colors';
 import { useSwipeableDismissListener } from '@hooks';

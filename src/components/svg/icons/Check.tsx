@@ -4,16 +4,15 @@ import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
 
 export function CheckIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.black } = props;
+  const { color = COLORS.black, scale = 1 } = props;
   const width = 14,
     height = 10;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
     >
       <Path
         d="M13 1.5l-7.636 7L1 4.5"

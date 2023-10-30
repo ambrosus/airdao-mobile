@@ -9,10 +9,9 @@ export function ListIcon(props: IconProps) {
   const height = 22;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill="none"
     >
       <Path

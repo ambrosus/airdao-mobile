@@ -4,17 +4,16 @@ import { COLORS } from '@constants/colors';
 import { IconProps } from './Icon.types';
 
 export function EmptyAddressListPlaceholderIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.neutral900 } = props;
+  const { color = COLORS.neutral900, scale = 1 } = props;
   const width = 178,
     height = 67;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       fill="none"
       {...props}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
     >
       <Rect
         width={177.501}

@@ -6,30 +6,30 @@ import { COLORS } from '@constants/colors';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
-import { TokenDTO } from '@models';
-import { TokenLogo } from '../TokenLogo';
+import { Token } from '@models';
+import { TokenLogo, TokenLogoProps } from '../TokenLogo';
 import { styles } from './styles';
 
 interface SingleAssetProps {
-  token: TokenDTO;
+  token: Token;
+  overrideIconVariants?: TokenLogoProps['overrideIconVariants'];
 }
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { token } = props;
+  const { token, overrideIconVariants } = props;
   const { name, balance, symbol, address } = token;
-  const usdPrice = useUSDPrice(balance.ether);
+  const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
 
   return (
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
-          {
-            <TokenLogo
-              token={name}
-              style={{ width: moderateScale(32), height: moderateScale(32) }}
-            />
-          }
+          <TokenLogo
+            token={name}
+            overrideIconVariants={overrideIconVariants}
+            style={{ width: moderateScale(32), height: moderateScale(32) }}
+          />
         </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
@@ -39,7 +39,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name === '' ? 'Hera pool token' : name || address}
+              {name === '' ? 'Unknown token' : name || address}
             </Text>
             <Text
               fontFamily="Mersad_600SemiBold"
@@ -56,7 +56,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.neutral400}
             >
-              {NumberUtils.formatNumber(balance.ether, 2)} {symbol}
+              {NumberUtils.formatNumber(balance.ether, 2)} {symbol || 'tokens'}
             </Text>
             <Text
               fontFamily="Inter_400Regular"

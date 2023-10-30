@@ -1,22 +1,18 @@
-import React, {
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  useRef
-} from 'react';
+import React, { useState, forwardRef } from 'react';
 import { View, TextInput } from 'react-native';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button } from '@components/base';
+import { useForwardedRef } from '@hooks';
 
 interface PasscodeProps {
   onPasscodeChange: (passcode: string[]) => void;
   type?: 'creation' | 'change';
 }
 
-export const Passcode = forwardRef(
+export const Passcode = forwardRef<TextInput, PasscodeProps>(
   ({ onPasscodeChange, type }: PasscodeProps, ref) => {
     const [code, setCode] = useState('');
-    const inputRef = useRef<TextInput>(null);
+    const localRef = useForwardedRef<TextInput>(ref);
 
     const handleCodeChange = (text: string) => {
       setCode(text);
@@ -45,26 +41,21 @@ export const Passcode = forwardRef(
       return circleElements;
     };
 
-    useImperativeHandle(ref, () => ({
-      focus: () => {
-        inputRef.current?.focus();
-      }
-    }));
-
     return (
       <View>
         <TextInput
-          ref={inputRef}
+          ref={localRef}
           style={styles.input}
           keyboardType="numeric"
           contextMenuHidden={true}
+          autoFocus={true}
           maxLength={4}
           value={code}
           onChangeText={handleCodeChange}
         />
         <Button
           activeOpacity={1}
-          onPress={inputRef.current?.focus}
+          onPress={localRef.current?.focus}
           style={styles.circlesContainer}
         >
           {renderCircles()}

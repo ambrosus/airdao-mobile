@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
@@ -13,10 +12,6 @@ const AppInitialization = () => {
   const { t } = useTranslation();
   const { data: allWallets, loading } = useAllWallets();
   const navigation = useNavigation<RootNavigationProp>();
-
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
 
   useEffect(() => {
     if (!loading) {

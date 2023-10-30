@@ -8,11 +8,10 @@ export function NotificationIcon(props: IconProps) {
     height = 24;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
     >
       <Path
         d="M9.042 19.003h5.916a3 3 0 01-5.916 0zm2.958-17a7.5 7.5 0 017.5 7.5v4l1.418 3.16A.95.95 0 0120.052 18h-16.1a.95.95 0 01-.867-1.338l1.415-3.16V9.49l.005-.25A7.5 7.5 0 0112 2.004z"

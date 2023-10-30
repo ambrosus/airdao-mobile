@@ -5,14 +5,14 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { SingleAsset, TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
-import { TokenDTO } from '@models';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { Token } from '@models';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 interface TokenPickerProps {
-  tokens: TokenDTO[];
-  selectedToken: TokenDTO;
-  onSelectToken: (token: TokenDTO) => void;
+  tokens: Token[];
+  selectedToken: Token;
+  onSelectToken: (token: Token) => void;
 }
 
 export const TokenPicker = (props: TokenPickerProps) => {
@@ -28,7 +28,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
     pickerModal.current?.dismiss();
   };
 
-  const renderToken = (item: TokenDTO) => {
+  const renderToken = (item: Token) => {
     const onPress = () => {
       onSelectToken(item);
       hideModal();
@@ -48,20 +48,23 @@ export const TokenPicker = (props: TokenPickerProps) => {
           paddingVertical: verticalScale(6),
           paddingHorizontal: scale(12),
           borderRadius: 1000,
-          backgroundColor: COLORS.brand600
+          backgroundColor: COLORS.brand600,
+          width: scale(120)
         }}
       >
         <Row alignItems="center" justifyContent="space-between">
           <Row alignItems="center">
             <TokenLogo
+              overrideIconVariants={{
+                amb: 'white'
+              }}
               token={selectedToken.name}
-              style={{ width: moderateScale(32), height: moderateScale(32) }}
             />
             <Spacer value={scale(4)} horizontal />
             <Text color={COLORS.neutral0}>{selectedToken.symbol}</Text>
             <Spacer value={scale(4)} horizontal />
           </Row>
-          <ChevronDownIcon />
+          <ChevronDownIcon color={COLORS.neutral0} />
         </Row>
       </Button>
       <BottomSheet

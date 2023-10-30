@@ -9,7 +9,6 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { AddIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
@@ -96,7 +95,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             fontSize={16}
             color={COLORS.neutral900}
           >
-            {t('watchlist.tab')}
+            {t('tab.watchlist')}
           </Text>
           <Button
             testID="Portfolio_Tabs_Button"
@@ -104,14 +103,15 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             style={styles.createNewListButton}
           >
             <Row>
-              <AddIcon color={COLORS.brand500} />
               <Spacer horizontal value={scale(6.5)} />
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
                 color={COLORS.brand500}
               >
-                {props.index === 0 ? t('add.address.btn') : t('create.group')}
+                {props.index === 0
+                  ? t('collection.add.address')
+                  : t('collection.create')}
               </Text>
             </Row>
           </Button>

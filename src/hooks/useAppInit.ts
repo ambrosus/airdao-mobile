@@ -58,6 +58,7 @@ export const useAppInit = () => {
         console.error(e);
       } finally {
         setIsAppReady(true);
+        SplashScreen.hideAsync();
       }
     }
     SplashScreen.preventAutoHideAsync();

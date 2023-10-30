@@ -1,13 +1,10 @@
-import { COLORS } from '@constants/colors';
-import { ToastType } from './Toast.types';
 import React, { ReactElement } from 'react';
-import {
-  CheckmarkCircleIcon,
-  InfoIcon,
-  QuestionMarkIcon,
-  WarningIcon
-} from '@components/svg/icons';
+import { Image } from 'react-native';
+import { InfoIcon, QuestionMarkIcon, WarningIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { Spinner } from '@components/base';
+import { moderateScale } from '@utils/scaling';
+import { ToastType } from './Toast.types';
 
 export const ToastBg: { [key in ToastType]: string } = {
   [ToastType.Highlight]: COLORS.warning100,
@@ -27,8 +24,18 @@ export const ToastBorderColor: { [key in ToastType]: string } = {
 
 export const ToastStatusIcon: { [key in ToastType]: ReactElement } = {
   [ToastType.Highlight]: <WarningIcon />,
-  [ToastType.Failed]: <InfoIcon />,
-  [ToastType.Success]: <CheckmarkCircleIcon color={COLORS.success400} />,
+  [ToastType.Failed]: <InfoIcon scale={0.25} />,
+  [ToastType.Success]: (
+    <Image
+      source={require('@assets/icons/checkmark-circle.png')}
+      style={{
+        height: moderateScale(20),
+        width: moderateScale(20),
+        tintColor: COLORS.success400
+      }}
+    />
+  ),
+
   [ToastType.Information]: <QuestionMarkIcon />,
-  [ToastType.Loading]: <Spinner color={COLORS.brand200} />
+  [ToastType.Loading]: <Spinner />
 };

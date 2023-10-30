@@ -55,7 +55,8 @@ export function CollectionItem(props: CollectionItemProps) {
           color={COLORS.alphaBlack50}
           fontSize={12}
         >
-          {collection.accountCount + ` ${t('addresses.text')}`}
+          {' '}
+          {t('common.address.with.count', { count: collection.accountCount })}
         </Text>
         {collection.accountCount > 0 && (
           <Row alignItems="center">

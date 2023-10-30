@@ -53,7 +53,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       </Text>
       <Spacer value={verticalScale(24)} />
       <Row width="100%" alignItems="center" justifyContent="space-between">
-        <Title>{t('from')}</Title>
+        <Title>{t('common.transaction.from')}</Title>
         <Text
           color={COLORS.neutral800}
           fontFamily="Inter_500Medium"
@@ -65,7 +65,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       </Row>
       <Spacer value={verticalScale(16)} />
       <Row width="100%" alignItems="center" justifyContent="space-between">
-        <Title>{t('to')}</Title>
+        <Title>{t('common.transaction.to')}</Title>
         <Text
           color={COLORS.neutral800}
           fontFamily="Inter_500Medium"
@@ -77,7 +77,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       </Row>
       <Spacer value={verticalScale(16)} />
       <Row width="100%" alignItems="center" justifyContent="space-between">
-        <Title>{t('amount')}</Title>
+        <Title>{t('common.transaction.amount')}</Title>
         <Row alignItems="center">
           <Text
             color={COLORS.neutral800}
@@ -116,7 +116,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       <Spacer value={verticalScale(40)} />
       <PrimaryButton onPress={onSendPress} disabled={loading}>
         {loading ? (
-          <Spinner color={COLORS.neutral0} />
+          <Spinner />
         ) : (
           <Text color={COLORS.neutral0} fontSize={16}>
             {t('send.funds.send.now')}

@@ -51,9 +51,9 @@ export const AccountTransactions = (
       const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
       const title =
         date === today
-          ? t('today')
+          ? t('common.today')
           : date === yesterday
-          ? t('yesterday')
+          ? t('common.yesterday')
           : date;
       sections.push({ title, data: transactions, index });
       index++;

@@ -37,14 +37,14 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {t('rename.address')}
+            {t('address.rename')}
           </Text>
         </View>
         <Input
           value={localAddressName}
           onChangeValue={(value) => setLocalAddressName(value)}
           type="text"
-          placeholder={t('edit.name')}
+          placeholder={t('address.edit.name')}
           placeholderTextColor={COLORS.neutral900Alpha[60]}
           style={[styles.bottomSheetInput]}
         />
@@ -60,7 +60,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
               fontSize={16}
               color={COLORS.neutral0}
             >
-              {t('save.btn')}
+              {t('button.save')}
             </Text>
           </PrimaryButton>
           <Spacer value={24} />
@@ -74,7 +74,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
               color={COLORS.neutral900}
               fontSize={16}
             >
-              {t('cancel.btn')}
+              {t('button.cancel')}
             </Text>
           </Button>
         </View>

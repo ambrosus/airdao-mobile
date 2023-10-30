@@ -47,7 +47,35 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 const formatNumberInput = (str: string): string => {
   let numericChars = removeNonNumericCharacters(str);
   if (numericChars[0] === '.') numericChars = '0' + numericChars;
-  return numericChars;
+  return _removeExtraDots(numericChars);
+};
+
+function _removeExtraDots(str: string): string {
+  let firstDotFound = false;
+  return str
+    .split('')
+    .filter((char) => {
+      if (char === '.' && !firstDotFound) {
+        firstDotFound = true;
+        return true;
+      }
+      return char !== '.';
+    })
+    .join('');
+}
+
+const limitNumberInputDecimals = (
+  str: string,
+  decimalPlaces: number
+): string => {
+  const parts = str.split('.');
+  if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
+    if (parts[1].length > decimalPlaces) {
+      parts[1] = parts[1].substring(0, decimalPlaces);
+      str = parts.join('.');
+    }
+  }
+  return str;
 };
 
 export const StringUtils = {
@@ -55,5 +83,6 @@ export const StringUtils = {
   pluralize,
   removeNonNumericCharacters,
   removeNonAlphabeticCharacters,
-  formatNumberInput
+  formatNumberInput,
+  limitNumberInputDecimals
 };

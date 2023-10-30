@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Spacer, Text } from '@components/base';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import {
   BottomAwareSafeAreaView,
   CenteredSpinner,
   Header
 } from '@components/composite';
+import { Button, Spacer, Text } from '@components/base';
 import { useAddWalletContext } from '@contexts';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 import { MnemonicRandom } from './MnemonicRandom';
@@ -71,7 +71,7 @@ export const CreateWalletStep2 = () => {
               name: 'Tabs',
               params: {
                 screen: 'Wallets',
-                params: { screen: 'SuccessBackupComplete' }
+                params: { screen: 'WalletCreateSuccess' }
               }
             }
           ]
@@ -160,7 +160,7 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('double.check')}
+            {t('create.wallet.verify.phrase')}
           </Text>
           <Spacer value={verticalScale(8)} />
           <Text
@@ -169,7 +169,7 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >
-            {t('tap.words.in.correct.order')}
+            {t('create.wallet.tap.words.in.correct.order')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <View style={styles.selectedMnemonicContainer}>
@@ -206,7 +206,7 @@ export const CreateWalletStep2 = () => {
                 fontFamily="Inter_600SemiBold"
                 color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
               >
-                {t('verify.btn')}
+                {t('button.verify')}
               </Text>
             )}
           </Button>

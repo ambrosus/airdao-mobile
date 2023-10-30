@@ -10,7 +10,7 @@ interface CheckmarkProps {
 }
 
 export const Checkmark = (props: CheckmarkProps): JSX.Element => {
-  const { fillColor = 'transparent', size, iconColor, iconScale } = props;
+  const { fillColor = 'transparent', size, iconColor } = props;
 
   return (
     <View
@@ -23,7 +23,7 @@ export const Checkmark = (props: CheckmarkProps): JSX.Element => {
         alignItems: 'center'
       }}
     >
-      <CheckIcon color={iconColor} scale={iconScale} />
+      <CheckIcon color={iconColor} />
     </View>
   );
 };

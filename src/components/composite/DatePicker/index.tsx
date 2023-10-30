@@ -2,18 +2,16 @@ import React, { useCallback } from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
 import { DatePickerProps } from './DatePicker.types';
 import { Row, Spacer } from '@components/base';
-import { ChevronLeftIcon, ChevronRightIcon } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 export const DatePicker = (props: DatePickerProps): JSX.Element => {
   const { selectedStartDate, selectedEndDate, period } = props;
   const renderNextComponent = useCallback(
     () => (
       <Row>
-        <ChevronLeftIcon color={COLORS.black} scale={1.2} />
+        {/* <ChevronLeftIcon color={COLORS.black} scale={1.2} /> */}
         <Spacer value={scale(32)} horizontal />
-        <ChevronRightIcon color={COLORS.black} scale={1.2} />
+        {/* <ChevronRightIcon color={COLORS.black} scale={1.2} /> */}
       </Row>
     ),
     []

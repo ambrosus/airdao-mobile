@@ -8,10 +8,9 @@ export function StatisticsLogo(props: IconProps) {
   const height = 25;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill={color}
     >
       <Path

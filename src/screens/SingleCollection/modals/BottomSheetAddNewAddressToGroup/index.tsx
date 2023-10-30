@@ -61,12 +61,12 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const AddressSources: Segment[] = [
     {
-      title: t('watchlist.tab'),
+      title: t('tab.watchlist'),
       value: 0,
       id: 'watchlist'
     },
     {
-      title: t('top.holders.capitalize'),
+      title: t('common.top.holders.capitalize'),
       value: 1,
       id: 'topHolders'
     }
@@ -189,9 +189,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert(t('invalid.qr.code.msg'), '', [
+      Alert.alert(t('alert.invalid.qr.code.msg'), '', [
         {
-          text: t('scan.again.msg'),
+          text: t('alert.scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -231,11 +231,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           fontFamily="Inter_700Bold"
           fontSize={18}
           color={COLORS.neutral800}
-        >{`${t('add.address.to.selected.group')} ${StringUtils.formatAddress(
-          collection.name,
-          10,
-          0
-        )}`}</Text>
+        >{`${t('address.add.to.selected.group', {
+          selectedGroup: StringUtils.formatAddress(collection.name, 10, 0)
+        })}`}</Text>
       </View>
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
@@ -259,7 +257,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }
           type="text"
           style={{ width: '65%', height: 50 }}
-          placeholder={t('search.public.address.input')}
+          placeholder={t('collection.search.public.address.placeholder')}
           placeholderTextColor="#2f2b4399"
           value={searchValue}
           onChangeText={setSearchValue}
@@ -373,7 +371,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             fontFamily="Inter_600SemiBold"
             fontWeight="600"
           >
-            {`${t(selectingAddedItems ? 'remove.btn' : 'add')} ${t(
+            {`${t(selectingAddedItems ? 'button.remove' : 'button.add')} ${t(
               'common.address',
               {
                 count: selectedAddresses.length

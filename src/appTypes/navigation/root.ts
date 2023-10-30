@@ -10,6 +10,7 @@ export type RootStackParamsList = {
   AppInit: undefined;
   Tabs: NavigatorScreenParams<TabsParamsList>;
   WelcomeScreen: undefined;
+  Passcode: undefined;
 };
 
 export type RootNavigationProp = CompositeNavigationProp<

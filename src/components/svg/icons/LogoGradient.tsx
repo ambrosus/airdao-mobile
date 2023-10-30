@@ -9,10 +9,9 @@ export function LogoGradient(props: Omit<IconProps, 'colors'>) {
   const height = 234;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill="none"
       {...props}
     >

@@ -24,7 +24,7 @@ export const ShowInUSD = (props: ShowInUSDProps) => {
   } = props;
   const amount = NumberUtils.formatNumber(
     showInUSD ? usdAmount : cryptoAmount,
-    5
+    3
   );
   const symbol = showInUSD ? '$' : cryptoSymbol;
   return (

@@ -8,9 +8,10 @@ import {
   InputWithIcon
 } from '@components/composite';
 import { Button, InputRef } from '@components/base';
-import { ScannerIcon } from '@components/svg/icons';
+import { Checkmark, ScannerIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { etherumAddressRegex } from '@constants/regex';
+import { moderateScale } from '@utils/scaling';
 
 interface AddressInputProps {
   address: string;
@@ -23,6 +24,7 @@ export const AddressInput = (props: AddressInputProps) => {
   const scannerModalRef = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const inputRef = useRef<InputRef>(null);
+  const isValidEthAddress = address.match(etherumAddressRegex);
 
   const showScanner = () => {
     scannerModalRef.current?.show();
@@ -41,9 +43,9 @@ export const AddressInput = (props: AddressInputProps) => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert(t('invalid.qr.code.msg'), '', [
+      Alert.alert(t('alert.invalid.qr.code.msg'), '', [
         {
-          text: t('scan.again.msg'),
+          text: t('alert.scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -57,9 +59,18 @@ export const AddressInput = (props: AddressInputProps) => {
       <InputWithIcon
         ref={inputRef}
         iconRight={
-          <Button onPress={showScanner}>
-            <ScannerIcon color={COLORS.brand600} />
-          </Button>
+          isValidEthAddress ? (
+            <Checkmark
+              size={moderateScale(24)}
+              fillColor={COLORS.success400}
+              iconColor={COLORS.neutral0}
+              iconScale={0.75}
+            />
+          ) : (
+            <Button onPress={showScanner}>
+              <ScannerIcon color={COLORS.brand600} />
+            </Button>
+          )
         }
         value={address}
         onChangeValue={onAddressChange}

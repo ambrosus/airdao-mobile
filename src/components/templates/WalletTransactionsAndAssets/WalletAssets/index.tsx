@@ -6,11 +6,11 @@ import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty
 import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { HomeNavigationProp } from '@appTypes';
-import { ExplorerAccount, TokenDTO } from '@models';
+import { ExplorerAccount, Token } from '@models';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface WalletAssetsProps {
-  tokens: TokenDTO[] | undefined;
+  tokens: Token[] | undefined;
   loading: boolean;
   error: boolean;
   account: ExplorerAccount;
@@ -22,14 +22,11 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
 
   const { t } = useTranslation();
 
-  const navigateToAssetScreen = (
-    tokenInfo: TokenDTO,
-    walletAccount: string
-  ) => {
+  const navigateToAssetScreen = (tokenInfo: Token, walletAccount: string) => {
     navigation.navigate('AssetScreen', { tokenInfo, walletAccount });
   };
 
-  const renderToken = ({ item }: { item: TokenDTO }) => {
+  const renderToken = ({ item }: { item: Token }) => {
     return (
       <Button onPress={() => navigateToAssetScreen(item, account.address)}>
         <SingleAsset token={item} />
@@ -37,13 +34,13 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
     );
   };
 
-  const ambTokenData: TokenDTO[] = [
-    {
+  const ambTokenData: Token[] = [
+    new Token({
       name: 'AirDAO',
       address: account.address,
       balance: { wei: '', ether: account.ambBalance },
       symbol: AirDAODictTypes.Code.AMB
-    }
+    })
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
@@ -51,7 +48,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   return (
     <View style={{ flex: 1 }}>
       {!data && error && loading ? (
-        <LocalizedRenderEmpty text={t('no.assets.yet')} />
+        <LocalizedRenderEmpty text={t('empty.assets')} />
       ) : (
         <FlatList
           data={data}

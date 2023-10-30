@@ -99,12 +99,12 @@ export const AddressDetails = (): JSX.Element => {
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
     const toastMessage = isOnWatchlist
-      ? `${finalAccount.name || t('toast.the.address.upper.case')} ${t(
-          'toast.now.on.watchlist.msg'
-        )}`
-      : `${t('toast.you.removed')}${
-          finalAccount.name || t('toast.the.message.lower.case')
-        } ${t('toast.from.watchlist')}`;
+      ? `${t('toast.you.added.address.to.watchlist', {
+          name: finalAccount.name || t('common.address').toUpperCase()
+        })}`
+      : `${t('toast.you.removed.address.from.watchlist', {
+          name: finalAccount.name
+        })}`;
     Toast.show({
       text: toastMessage,
       position: ToastPosition.Top,
@@ -159,7 +159,7 @@ export const AddressDetails = (): JSX.Element => {
           fontSize={20}
           color={COLORS.neutral800}
         >
-          {t('transactions')}
+          {t('common.transactions')}
         </Text>
       </Row>
       <Spacer value={verticalScale(12)} />
@@ -172,7 +172,7 @@ export const AddressDetails = (): JSX.Element => {
       <SharePortfolio
         ref={shareModal}
         title={StringUtils.formatAddress(finalAccount.address, 7, 4)}
-        bottomSheetTitle={t('share.address.performance')}
+        bottomSheetTitle={t('address.share.performance')}
         balance={
           finalAccount.ambBalance < 1000
             ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)

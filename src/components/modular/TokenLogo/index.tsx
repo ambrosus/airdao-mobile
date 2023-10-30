@@ -1,74 +1,65 @@
 import React from 'react';
-import { Image, ImageProps } from 'react-native';
-import { AirDAOTokenLogo, BUSDLogo, EthereumLogo } from '@components/svg/icons';
+import { Image } from 'react-native';
+import {
+  AirBondIcon,
+  AirdaoBlueIcon,
+  AirdaoWhiteIcon,
+  BusdIcon,
+  EthTokenIcon,
+  GanymadeIcon,
+  HeraPoolIcon,
+  PlutusIcon,
+  TetherIcon,
+  UsdcIcon
+} from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { moderateScale } from '@utils/scaling';
 
-interface TokenLogoProps extends Omit<ImageProps, 'source'> {
+export interface TokenLogoProps {
   token: string;
+  scale?: number;
+  overrideIconVariants?: {
+    amb?: 'white' | 'blue';
+  };
 }
 
 export const TokenLogo = (props: TokenLogoProps) => {
-  const { token } = props;
+  const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token) {
     case 'AirDAO':
-      return <AirDAOTokenLogo />;
+      if (overrideIconVariants.amb === 'white') {
+        return <AirdaoWhiteIcon scale={scale} />;
+      }
+      return <AirdaoBlueIcon scale={scale} />;
+    case AirDAODictTypes.Code.ETH:
     case 'Ethereum':
-      return <EthereumLogo />;
+      return <EthTokenIcon scale={scale} />;
     case AirDAODictTypes.Code.BUSD:
     case 'BUSD Token':
-      return <BUSDLogo />;
+      return <BusdIcon scale={scale} />;
     case AirDAODictTypes.Code.USDC:
     case 'USD Coin':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/usd-coin.png')}
-        />
-      );
+      return <UsdcIcon scale={scale} />;
     case AirDAODictTypes.Code.Tether:
     case 'Tether USD':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/tether-token.png')}
-        />
-      );
+      return <TetherIcon scale={scale} />;
     case 'Ganymaede pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/ganymade-token.png')}
-        />
-      );
+      return <GanymadeIcon scale={scale} />;
     case 'Plutus pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/plutus-token.png')}
-        />
-      );
+      return <PlutusIcon scale={scale} />;
     case 'Hera pool token':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/hera-pool-token.png')}
-        />
-      );
+      return <HeraPoolIcon scale={scale} />;
     case 'Firepot-LP-Token':
       return (
         <Image
           {...props}
+          style={{ width: moderateScale(96), height: moderateScale(96) }}
           source={require('@assets/images/tokens/firepot-lp-token.png')}
         />
       );
     case 'AirBond':
-      return (
-        <Image
-          {...props}
-          source={require('@assets/images/tokens/airbond-token.png')}
-        />
-      );
+      return <AirBondIcon scale={scale} />;
     default:
-      return <AirDAOTokenLogo />;
+      return <AirdaoBlueIcon scale={scale} />;
   }
 };

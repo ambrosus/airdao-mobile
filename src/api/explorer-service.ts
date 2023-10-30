@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { ExplorerAccountDTO, ExplorerInfoDTO, TokenDTO } from '@models';
+import { ExplorerAccountDTO, ExplorerInfoDTO, Token, TokenDTO } from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
@@ -93,17 +93,17 @@ const getTransactionsOfAccountV2 = async (
   limit: number
 ): Promise<
   PaginatedResponseBody<{
-    tokens: TokenDTO[];
+    tokens: Token[];
     transactions: TransactionDTO[];
   }>
 > => {
   try {
     const apiUrl = `${explorerapiV2Url}/addresses/${address}/all?page=${page}&limit=${limit}`;
     const response = await axios.get(apiUrl);
-    const tokens = response.data.tokens;
+    const tokens = response.data.tokens as TokenDTO[];
     const transactions = response.data.data;
     return {
-      data: { tokens, transactions },
+      data: { tokens: tokens.map((t) => new Token(t)), transactions },
       next: response.data.pagination.hasNext ? (page + 1).toString() : null
     };
   } catch (error) {

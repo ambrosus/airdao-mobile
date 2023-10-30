@@ -87,7 +87,7 @@ export const SingleGroupScreen = () => {
               type="circular"
               style={styles.addButton}
             >
-              <AddIcon color={COLORS.neutral0} scale={0.8} />
+              <AddIcon color={COLORS.neutral0} scale={1.25} />
             </Button>
             <Spacer horizontal value={scale(32)} />
             <Button
@@ -108,7 +108,7 @@ export const SingleGroupScreen = () => {
           fontFamily="Inter_600SemiBold"
           fontSize={12}
         >
-          {t('total.balance')}
+          {t('collection.total.balance')}
         </Text>
         <Spacer value={10} />
         <Text

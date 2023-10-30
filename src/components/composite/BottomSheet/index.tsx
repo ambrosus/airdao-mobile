@@ -10,7 +10,7 @@ import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { Separator } from '@components/base';
-import { useFullscreenModalHeight } from '@hooks';
+import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 

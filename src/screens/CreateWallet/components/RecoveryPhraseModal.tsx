@@ -31,7 +31,7 @@ export const RecoveryPhraseModal = forwardRef<BottomSheetRef, BottomSheetProps>(
               fontSize={20}
               color={COLORS.neutral800}
             >
-              {t('recovery.phrase.modal.header')}
+              {t('create.wallet.recovery.phrase.modal.header')}
             </Text>
           }
           backIconVisible={false}
@@ -46,7 +46,7 @@ export const RecoveryPhraseModal = forwardRef<BottomSheetRef, BottomSheetProps>(
           fontSize={16}
           style={{ paddingHorizontal: scale(16) }}
         >
-          {t('recovery.phrase.modal.text')}
+          {t('create.wallet.recovery.phrase.modal.text')}
         </Text>
       </BottomSheet>
     );

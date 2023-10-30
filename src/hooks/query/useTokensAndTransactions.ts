@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { Transaction, TokenDTO } from '@models';
+import { Transaction, Token } from '@models';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 
@@ -10,7 +10,7 @@ export function useTokensAndTransactions(
   page: number,
   limit: number,
   enabled: boolean
-): PaginatedQueryResponse<{ tokens: TokenDTO[]; transactions: Transaction[] }> {
+): PaginatedQueryResponse<{ tokens: Token[]; transactions: Transaction[] }> {
   const {
     data,
     hasNextPage,
@@ -20,7 +20,7 @@ export function useTokensAndTransactions(
     fetchNextPage
   } = useInfiniteQuery<
     PaginatedResponseBody<{
-      tokens: TokenDTO[];
+      tokens: Token[];
       transactions: TransactionDTO[];
     }>
   >(['wallet-tokens-and-transactions', address, page, limit], {
@@ -33,7 +33,7 @@ export function useTokensAndTransactions(
     },
     getNextPageParam: (
       lastPage: PaginatedResponseBody<{
-        tokens: TokenDTO[];
+        tokens: Token[];
         transactions: TransactionDTO[];
       }>
     ) => {
@@ -49,7 +49,7 @@ export function useTokensAndTransactions(
     data && data.pages
       ? (data.pages
           .map((page) => page.data.tokens)
-          .flat(Number.POSITIVE_INFINITY) as TokenDTO[])
+          .flat(Number.POSITIVE_INFINITY) as Token[])
       : [];
   const transactions =
     data && data.pages

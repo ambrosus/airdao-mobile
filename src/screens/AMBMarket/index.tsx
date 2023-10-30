@@ -1,23 +1,21 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import {
   AMBPriceInfo,
-  BottomSheetTrade,
   AMBDetailedInfo,
   AMBAbout,
   AMBMarket as AMBMarketsInfo
 } from './components';
 import { Row, Spacer, Text } from '@components/base';
-import { BottomSheetRef, CenteredSpinner, Header } from '@components/composite';
-import { LogoGradientCircular, SmallLogoSVG } from '@components/svg/icons';
-import { SharePortfolio } from '@components/templates';
+import { CenteredSpinner, Header } from '@components/composite';
+import { LogoGradientCircular } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={20} fontFamily="Inter_700Bold" color="#A1A6B2">
@@ -31,15 +29,8 @@ export function AMBMarket(): JSX.Element {
   const marketCap =
     (ambPrice?.circulatingSupply || 0) * (ambPrice?.priceUSD || 0);
 
-  const tradeBottomSheet = useRef<BottomSheetRef>(null);
-  const shareBottomSheet = useRef<BottomSheetRef>(null);
-  // const onSharePress = () => {
-  //   if (!ambPrice) return;
-  //   shareBottomSheet.current?.show();
-  // };
-
   const renderErrorView = () => {
-    return <Text>{t('could.not.fetch.statistics')}</Text>;
+    return <Text>{t('amb.market.could.not.fetch')}</Text>;
   };
 
   return (
@@ -69,12 +60,6 @@ export function AMBMarket(): JSX.Element {
             Platform.OS === 'ios' ? COLORS.neutral0 : COLORS.culturedWhite,
           shadowColor: COLORS.culturedWhite
         }}
-        // contentRight={
-        //   <Button onPress={onSharePress} testID="Share_Button">
-        //     <ShareIcon color={COLORS.neutral800} scale={1.5} />
-        //     <Spacer horizontal value={scale(20)} />
-        //   </Button>
-        // }
       />
       <ScrollView
         bounces={false}
@@ -99,11 +84,11 @@ export function AMBMarket(): JSX.Element {
               }}
             />
             <View style={styles.body}>
-              <BodyTitle title={t('about.airdao')} />
+              <BodyTitle title={t('amb.market.about.airdao')} />
               <Spacer value={verticalScale(16)} />
               <AMBAbout />
               <Spacer value={verticalScale(32)} />
-              <BodyTitle title={t('stats')} />
+              <BodyTitle title={t('amb.market.stats')} />
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
                 maxSupply={NumberUtils.formatNumber(6500000000, 0)}
@@ -121,40 +106,13 @@ export function AMBMarket(): JSX.Element {
                 }
               />
               <Spacer value={verticalScale(8)} />
-              <BodyTitle title={t('markets')} />
+              <BodyTitle title={t('amb.market.markets')} />
               <Spacer value={verticalScale(16)} />
               <AMBMarketsInfo />
             </View>
           </>
         )}
       </ScrollView>
-      <BottomSheetTrade ref={tradeBottomSheet} />
-      <SharePortfolio
-        isAMBStatisticsFlow
-        ref={shareBottomSheet}
-        title={
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SmallLogoSVG />
-            <Spacer horizontal value={scale(8)} />
-            <Text
-              fontSize={15}
-              color={COLORS.neutral0}
-              fontFamily="Inter_600SemiBold"
-            >
-              AirDAO (AMB)
-            </Text>
-          </View>
-        }
-        bottomSheetTitle="Share AMB price"
-        balance={NumberUtils.formatNumber(
-          ambPrice?.priceUSD ?? 0,
-          5
-        ).toString()}
-        currency={'$'}
-        currencyPosition={'left'}
-        last24HourChange={ambPrice?.percentChange24H || 0}
-        timestamp={ambPrice?.timestamp || new Date()}
-      />
     </SafeAreaView>
   );
 }

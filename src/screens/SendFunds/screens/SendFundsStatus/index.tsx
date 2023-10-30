@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
+import { InfoIcon } from '@components/svg/icons';
 import { Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
@@ -61,15 +61,20 @@ export const SendFundsStatus = () => {
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
-        <View style={{ transform: [{ scale: 4 }] }}>
-          <TokenLogo token={currency} />
-        </View>
+        <TokenLogo token={currency} scale={3} />
       ) : error ? (
-        <InfoIcon scale={4} />
+        <InfoIcon />
       ) : (
-        <CheckmarkCircleIcon color={COLORS.success300} scale={4} />
+        <Image
+          source={require('@assets/icons/checkmark-circle.png')}
+          style={{
+            height: moderateScale(88),
+            width: moderateScale(88),
+            tintColor: COLORS.success300
+          }}
+        />
       )}
-      <Spacer value={verticalScale(56)} />
+      <Spacer value={verticalScale(8)} />
       <Text color={COLORS.neutral800} fontSize={20} fontFamily="Inter_700Bold">
         {title}
       </Text>
@@ -108,7 +113,7 @@ export const SendFundsStatus = () => {
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('from')}
+            {t('common.transaction.from')}
           </Text>
           <Text
             align="center"
@@ -125,7 +130,7 @@ export const SendFundsStatus = () => {
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('to')}
+            {t('common.transaction.to')}
           </Text>
           <Text
             align="center"
@@ -148,7 +153,7 @@ export const SendFundsStatus = () => {
           {!error && (
             <>
               <SecondaryButton onPress={onSharePress} style={styles.button}>
-                <Text>{t('share')}</Text>
+                <Text>{t('button.share')}</Text>
               </SecondaryButton>
               <Spacer value={verticalScale(16)} />
             </>

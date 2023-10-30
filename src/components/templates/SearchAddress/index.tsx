@@ -161,9 +161,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert(t('invalid.qr.code.msg'), '', [
+      Alert.alert(t('alert.invalid.qr.code.msg'), '', [
         {
-          text: t('scan.again.msg'),
+          text: t('alert.scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -210,7 +210,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             <Row alignItems="center">
               {address.length > 0 ? (
                 <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                  <CloseIcon color={COLORS.alphaBlack50} scale={0.75} />
+                  <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
                 </Button>
               ) : (
                 <Button onPress={showScanner}>
@@ -219,7 +219,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               )}
             </Row>
           }
-          placeholder={t('search.address.input')}
+          placeholder={t('explore.search.placeholder')}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
@@ -257,7 +257,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               fontSize={20}
               color={COLORS.neutral800}
             >
-              {t('transactions')}
+              {t('common.transactions')}
             </Text>
           </Row>
           <Spacer value={verticalScale(12)} />
@@ -278,7 +278,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             fontSize={20}
             color={COLORS.neutral800}
           >
-            {t('transaction.details')}
+            {t('common.transaction.details')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <TransactionDetails

@@ -8,6 +8,7 @@ export enum CacheKey {
   AddressLists = 'address_lists',
   AllAddresses = 'all_addresses',
   DeviceID = 'device_id',
+  isBiometricAuthenticationInProgress = 'is_biometric_auth_in_progress',
   IsSecondInit = 'is_second_init',
   NotificationSettings = 'notification_settings',
   Onboarding = 'onboarding',

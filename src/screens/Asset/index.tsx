@@ -22,7 +22,7 @@ export const AssetScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
-  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0);
+  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0, tokenInfo.symbol);
   const isAMBToken = walletAccount === tokenInfo.address;
 
   const {
@@ -103,7 +103,7 @@ export const AssetScreen = () => {
           fontSize={16}
           color={COLORS.neutral300}
         >
-          {t('your.balance')}
+          {t('asset.your.balance')}
         </Text>
         <Row alignItems="center">
           <Text
@@ -142,7 +142,7 @@ export const AssetScreen = () => {
           fontSize={20}
           color={COLORS.neutral800}
         >
-          {t('transactions')}
+          {t('common.transactions')}
         </Text>
       </View>
       <View style={{ height: '80%', paddingTop: verticalScale(16) }}>

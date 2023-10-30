@@ -7,5 +7,5 @@ export interface TokenDTO {
     wei: string;
     ether: number;
   };
-  symbol: AirDAODictTypes.Code;
+  symbol: AirDAODictTypes.Code | '';
 }

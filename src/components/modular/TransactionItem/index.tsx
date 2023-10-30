@@ -9,6 +9,7 @@ import { DownArrowIcon } from '@components/svg/icons';
 import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { styles } from './styles';
 
 interface TransactionItemProps {
@@ -19,7 +20,10 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const { transaction } = props;
   const isSent = transaction.isSent;
   const { t } = useTranslation();
-  const usdAmount = useUSDPrice(transaction.amount);
+  const usdAmount = useUSDPrice(
+    transaction.amount,
+    transaction.value.symbol as AirDAODictTypes.Code.AMB
+  );
 
   return (
     <View>
@@ -50,7 +54,8 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
               fontFamily="Inter_500Medium"
               color={COLORS.alphaBlack50}
             >
-              {t('from')} {StringUtils.formatAddress(transaction.from, 5, 5)}
+              {t('common.transaction.from')}{' '}
+              {StringUtils.formatAddress(transaction.from, 5, 5)}
             </Text>
           </View>
         </Row>
@@ -61,7 +66,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral900}
           >
-            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {NumberUtils.formatNumber(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />

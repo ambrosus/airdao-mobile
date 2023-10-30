@@ -4,7 +4,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { StyleSheet } from 'react-native';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { ChevronRightIcon } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 
 export const AppPreferencesMenuItem = (props: AppPreference) => {
   const { title, value } = props;
@@ -31,7 +31,7 @@ export const AppPreferencesMenuItem = (props: AppPreference) => {
           {value}
         </Text>
         <Spacer value={scale(8)} horizontal />
-        <ChevronRightIcon scale={1.25} color={COLORS.neutral300} />
+        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Row>
   );
