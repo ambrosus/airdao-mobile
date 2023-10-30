@@ -1,22 +1,34 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
 import usePasscode from '@contexts/Passcode';
+import { Cache, CacheKey } from '@lib/cache';
 
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const { prevState } = useAppState();
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
-  useEffect(() => {
-    if (!loading) {
-      if (
-        (prevState === null || prevState === 'background') &&
-        (isPasscodeEnabled || isFaceIDEnabled)
-      ) {
+
+  const processPasscodeReveal = useCallback(async () => {
+    if (!isPasscodeEnabled && !isFaceIDEnabled) return;
+    if (prevState === null) {
+      navigation.navigate('Passcode');
+      return;
+    }
+    if (prevState === 'background') {
+      const isBiometricAuthenticationInProgress = await Cache.getItem(
+        CacheKey.isBiometricAuthenticationInProgress
+      );
+      if (isBiometricAuthenticationInProgress === 'false') {
         navigation.navigate('Passcode');
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, prevState, loading]);
+  }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
+
+  useEffect(() => {
+    if (!loading) {
+      processPasscodeReveal();
+    }
+  }, [navigation, prevState, loading, processPasscodeReveal]);
 };

@@ -1,9 +1,9 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Alert, KeyboardAvoidingView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { usePreventGoingBack, useSupportedBiometrics } from '@hooks';
@@ -12,6 +12,7 @@ import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 import { RootNavigationProp } from '@appTypes';
+import { Cache, CacheKey } from '@lib/cache';
 
 export const PasscodeEntry = () => {
   const isAuthSuccessfulRef = useRef(false);
@@ -23,13 +24,37 @@ export const PasscodeEntry = () => {
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
 
-  useFocusEffect(() => {
+  const authenticateWithFaceID = useCallback(async () => {
+    // This is a hack around older Android versions. They unmounts and remounts app after fingerprint prompt. By holding the value in cache, we can check if app comes from Biometric check
+    await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, 'true');
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: t('security.authenticate.with.face.id'),
+        fallbackLabel: t('security.enter.pin')
+      });
+      if (result.success) {
+        isAuthSuccessfulRef.current = true;
+        navigation.pop();
+      } else {
+        passcodeRef.current?.focus();
+      }
+    } catch (error) {
+      // ignore
+    } finally {
+      await Cache.setItem(
+        CacheKey.isBiometricAuthenticationInProgress,
+        'false'
+      );
+    }
+  }, [navigation, t]);
+
+  useEffect(() => {
     if (isFaceIDEnabled) {
       authenticateWithFaceID();
     } else {
       passcodeRef.current?.focus();
     }
-  });
+  }, [authenticateWithFaceID, isFaceIDEnabled]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
@@ -54,23 +79,6 @@ export const PasscodeEntry = () => {
       }
     }
   };
-
-  const authenticateWithFaceID = useCallback(async () => {
-    try {
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: t('security.authenticate.with.face.id'),
-        fallbackLabel: t('security.enter.pin')
-      });
-      if (result.success) {
-        isAuthSuccessfulRef.current = true;
-        navigation.pop();
-      } else {
-        passcodeRef.current?.focus();
-      }
-    } catch (error) {
-      // ignore
-    }
-  }, [navigation, t]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
