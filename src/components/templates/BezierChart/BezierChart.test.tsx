@@ -51,14 +51,14 @@ describe('BezierChart', () => {
     const { getByTestId } = render(
       <BezierChart
         data={mockedData}
-        strokeColor={COLORS.chartGreen}
-        axisLabelColor={COLORS.smokyBlack}
+        strokeColor={COLORS.success300}
+        axisLabelColor={COLORS.neutral900}
         axisColor="transparent"
       />
     );
     const chart = getByTestId('Bezier_Chart');
     expect(chart.props.points).toEqual(mockedData);
-    expect(chart.props.color).toEqual(COLORS.chartGreen);
+    expect(chart.props.color).toEqual(COLORS.success300);
   });
 
   it('allows panning and calls onGestureStart and onGestureEnd callbacks', async () => {

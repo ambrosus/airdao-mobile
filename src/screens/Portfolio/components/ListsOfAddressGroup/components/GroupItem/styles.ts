@@ -4,10 +4,10 @@ import { moderateScale, scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     paddingTop: 14,
     paddingBottom: 18,
-    borderColor: COLORS.charcoal,
+    borderColor: COLORS.alphaBlack5,
     borderBottomWidth: 1
   },
   item: {
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     width: moderateScale(40)
   },
   rightActions: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: scale(130)

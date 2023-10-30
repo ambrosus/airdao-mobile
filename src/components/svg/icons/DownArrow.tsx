@@ -1,26 +1,30 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
-import { IconProps } from './Icon.types';
-import { View } from 'react-native';
+import { Path, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { moderateScale } from '@utils/scaling';
+import { RotateTransform } from 'react-native';
 
-export function DownArrowIcon(props: IconProps) {
-  const { scale = 1, color = '#FFFFFF' } = props;
-  const width = 15,
-    height = 14;
+export function DownArrowIcon(
+  props: Omit<IconProps, 'variant'> & {
+    rotate?: RotateTransform['rotate'];
+  }
+) {
+  const { color = COLORS.neutral900, scale = 1 } = props;
+  const width = moderateScale(24),
+    height = moderateScale(24);
+
   return (
-    <View style={{ transform: [{ rotate: '90deg' }] }}>
-      <Svg
-        width={width}
-        height={height}
-        fill="none"
-        viewBox={`0 0 ${width} ${height}`}
-        style={{ transform: [{ scale }] }}
-      >
-        <Path
-          d="M10.477 5.735l-4.47-4.47L7.185.086l6.482 6.482-6.482 6.482-1.178-1.179 4.47-4.47H.333V5.735h10.144z"
-          fill={color}
-        />
-      </Svg>
-    </View>
+    <Svg
+      width={width * scale}
+      height={height * scale}
+      viewBox={`0 0 ${width} ${height}`}
+      fill="none"
+    >
+      <Path
+        d="M19.716 13.704a1 1 0 10-1.425-1.403L13 17.67V4a1 1 0 00-2 0v13.665L5.715 12.3a1 1 0 00-1.425 1.403l6.823 6.925a1.25 1.25 0 001.78 0l6.823-6.925z"
+        fill={color}
+      />
+    </Svg>
   );
 }

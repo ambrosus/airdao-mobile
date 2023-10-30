@@ -17,61 +17,19 @@ const SendCryptoContext = (): {
 
   const reducer = (payload: SendCryptoDispatchPayload) => {
     switch (payload.type) {
-      case 'RESET_DATA_BLOCKCHAIN': {
-        setState({
-          ui: {
-            ...state.ui
-          },
-          dict: {
-            ...state.dict
-          },
-          fromBlockchain: {
-            ...payload.fromBlockchain
-          }
-        });
-        return;
-      }
       case 'SET_DATA': {
         setState({
-          ui: {
-            ...state.ui,
-            ...payload.ui
-          },
-          dict: {
-            ...state.dict,
-            ...payload.dict
-          },
-          fromBlockchain: {
-            ...state.fromBlockchain,
-            ...payload.fromBlockchain
-          }
+          ...state,
+          ...payload
         });
-        return;
+        break;
       }
       case 'RESET_DATA': {
-        setState({
-          ui: {
-            ...SEND_CRYPTO_INITIAL_STATE.ui,
-            ...payload.ui
-          },
-          dict: {
-            ...SEND_CRYPTO_INITIAL_STATE.dict,
-            ...payload.dict
-          },
-          fromBlockchain: {
-            ...SEND_CRYPTO_INITIAL_STATE.fromBlockchain
-          }
-        });
-        return;
+        setState(SEND_CRYPTO_INITIAL_STATE);
+        break;
       }
-      case 'CLEAN_DATA':
-        setState({
-          ui: {},
-          dict: {},
-          fromBlockchain: {}
-        });
       default: {
-        return;
+        break;
       }
     }
   };

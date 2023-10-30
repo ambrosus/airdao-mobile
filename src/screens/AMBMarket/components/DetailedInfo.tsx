@@ -29,8 +29,8 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
         <Button onPress={() => setVisiblePopUpKey(row.key)}>
           <Row alignItems="center">
             <Text
-              fontSize={12}
-              color={COLORS.slateGrey}
+              fontSize={14}
+              color={COLORS.neutral400}
               fontFamily="Inter_500Medium"
             >
               {t(row.title)}
@@ -47,7 +47,7 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
         </Button>
         <Text
           fontSize={13}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           fontFamily="Mersad_600SemiBold"
         >
           {props[row.key]}

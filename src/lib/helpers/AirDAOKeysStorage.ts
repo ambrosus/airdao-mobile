@@ -1,5 +1,4 @@
 import * as SecureStore from 'expo-secure-store';
-import { WalletMetadata } from '@appTypes';
 
 class AirDAOKeysStorage {
   private serviceName = '';
@@ -28,7 +27,7 @@ class AirDAOKeysStorage {
       const sanitizedKey = this.sanitizeKey(this.serviceName + '_' + key);
       const credentials = await SecureStore.getItemAsync(sanitizedKey);
       if (!credentials) return false;
-      return JSON.parse(credentials) as WalletMetadata;
+      return JSON.parse(credentials);
     } catch (e) {
       console.error('AirDAOStorage getKeyValue error ', e);
       return false;
@@ -53,10 +52,8 @@ class AirDAOKeysStorage {
     if (this.serviceWasInitialized) {
       return true;
     }
-
     const count = await this.getKeyValue('wallets_counter');
-
-    this.serviceWalletsCounter = count && count.number ? count.number : 0;
+    this.serviceWalletsCounter = count;
     this.serviceWallets = {};
     this.publicWallets = [];
     this.publicSelectedWallet = false;
@@ -255,16 +252,11 @@ class AirDAOKeysStorage {
     if (typeof res.privateKey === 'undefined' || !res.privateKey) {
       return false;
     }
-    return this.setKeyValue('ar4_' + hashOrId, res);
+    return this.setKeyValue('ar4_' + hashOrId, res.address);
   }
 
-  async setSettingValue(hashOrId: string, value: number) {
-    return this.setKeyValue('setting_' + hashOrId, {
-      hash: hashOrId,
-      number: value,
-      mnemonic: '',
-      name: ''
-    });
+  async setSettingValue(hashOrId: string) {
+    return this.setKeyValue('setting_' + hashOrId, hashOrId);
   }
 
   async getSettingValue(hashOrId: string) {

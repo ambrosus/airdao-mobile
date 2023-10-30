@@ -2,12 +2,12 @@ import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { COLORS } from '@constants/colors';
 import { StringUtils } from '@utils/string';
 import { AccountList } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -30,7 +30,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           Remove {StringUtils.formatAddress(item.name, 12, 0)} from groups?
         </Text>
@@ -45,7 +45,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
           >
             Remove
           </Text>
@@ -58,7 +58,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
             fontSize={16}
           >
             Cancel

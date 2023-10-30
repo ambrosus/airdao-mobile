@@ -44,7 +44,13 @@ export function useTransactionsOfAccount(
   return {
     data: data?.pages
       ? (data.pages
-          .map((page) => page.data.map((d) => new Transaction(d)))
+          .map((page) =>
+            page.data.map((d) => {
+              const transaction = new Transaction(d);
+              transaction.isSent = d.from === address;
+              return transaction;
+            })
+          )
           .flat(Number.POSITIVE_INFINITY) as Transaction[])
       : [],
     loading: isInitialLoading || isFetchingNextPage,

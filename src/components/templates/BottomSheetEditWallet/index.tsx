@@ -1,7 +1,12 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, Toast, ToastPosition } from '@components/modular';
+import {
+  BottomSheetFloat,
+  Toast,
+  ToastPosition,
+  ToastType
+} from '@components/modular';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
@@ -80,9 +85,9 @@ export const BottomSheetEditWallet = forwardRef<
       toggleAddressesInList([wallet], list);
       dismissThis();
       Toast.show({
-        title: '',
-        message: t('toast.Successfully.removed.wallet.from.group'),
-        type: ToastPosition.Top
+        text: t('toast.removed.wallet.from.group'),
+        position: ToastPosition.Top,
+        type: ToastType.Success
       });
     }
   }, [dismissThis, listsWithCurrentWallet, t, toggleAddressesInList, wallet]);
@@ -99,9 +104,9 @@ export const BottomSheetEditWallet = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
-            {t('rename.address')}
+            {t('address.rename')}
           </Text>
         </Button>
         {listsWithCurrentWallet.length > 0 ? (
@@ -114,26 +119,26 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
-                {t('move.to.another.group')}
+                {t('address.move.to.another.group')}
               </Text>
             </Button>
             <Button
               type="circular"
               style={{
                 ...styles.actionBtn,
-                backgroundColor: COLORS.pinkRed
+                backgroundColor: COLORS.error100
               }}
               onPress={removeFromCollection}
             >
-              <Text color={COLORS.crimsonRed}>
-                {t('remove.address.from.group')}
+              <Text color={COLORS.error400}>
+                {t('address.remove.from.group')}
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title={t('move.to.another.group')}
+              title={t('address.move.to.another.group')}
               wallet={wallet}
               lists={listsOfAddressGroup.filter(
                 (list) => listsWithCurrentWallet.indexOfItem(list, 'id') === -1
@@ -151,14 +156,14 @@ export const BottomSheetEditWallet = forwardRef<
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
-                {t('add.address.to.group.lower.case')}
+                {t('address.add.group')}
               </Text>
             </Button>
             <BottomSheetAddWalletToList
               ref={addToCollectionModalRef}
-              title={t('add.address.to.group.lower.case')}
+              title={t('address.add.group')}
               wallet={wallet}
               lists={listsOfAddressGroup}
               onWalletMove={dismissAddToCollection}

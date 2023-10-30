@@ -5,19 +5,23 @@ import {
   SectionListRenderItemInfo,
   View
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { BottomSheetNotificationSettings } from '@components/templates';
-import { BottomSheetRef } from '@components/composite';
+import {
+  SafeAreaView,
+  useSafeAreaInsets
+} from 'react-native-safe-area-context';
+import { NotificationSettingsView } from '@components/templates';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { NotificationsHeader as Header, NotificationBox } from './components';
 import { Notification } from '@models/Notification';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { BellIcon } from '@components/svg/icons';
 import { useNotificationsQuery } from '@hooks/query';
+import { DeviceUtils } from '@utils/device';
+import { NotificationsHeader, NotificationBox } from './components';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 interface NotificationSection {
   title: string;
@@ -29,12 +33,7 @@ const DAY_FORMAT = 'DD MMMM YYYY';
 
 export const Notifications = (): JSX.Element => {
   const { data: notifications } = useNotificationsQuery();
-
-  // useEffect(() => {
-  //   const databaseService = new DatabaseService();
-  //   const unreadNotifications = notifications.filter((n) => !n.isRead);
-  //   databaseService.markAsRead(unreadNotifications);
-  // }, [notifications]);
+  const { top: topInset } = useSafeAreaInsets();
 
   const settingsModal = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
@@ -54,9 +53,9 @@ export const Notifications = (): JSX.Element => {
       const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
       const title =
         date === today
-          ? t('today')
+          ? t('common.today')
           : date === yesterday
-          ? t('yesterday')
+          ? t('common.yesterday')
           : date;
       sections.push({ title, data: notifications, index });
       index++;
@@ -88,7 +87,7 @@ export const Notifications = (): JSX.Element => {
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={12}
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
           {info.section.title.toUpperCase()}
         </Text>
@@ -104,11 +103,11 @@ export const Notifications = (): JSX.Element => {
         <Spacer value={verticalScale(16)} />
         <Text
           align="center"
-          color={COLORS.davysGray}
+          color={COLORS.neutral500}
           fontSize={15}
           fontFamily="Inter_400Regular"
         >
-          {t('no.notifications.text')}
+          {t('empty.notifications')}
           {'\n'}
           {t('no.notifications.come.back.later.text')}.
         </Text>
@@ -122,20 +121,31 @@ export const Notifications = (): JSX.Element => {
       testID="NotificationScreen"
       style={styles.container}
     >
-      <Header onSettingsPress={showSettingsModal} />
+      <NotificationsHeader onSettingsPress={showSettingsModal} />
       <SectionList<Notification, NotificationSection>
         keyExtractor={(item) => item._id}
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={32} />}
+        ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         testID="Notifications_List"
       />
-      <BottomSheetNotificationSettings ref={settingsModal} />
+      <BottomSheet ref={settingsModal} height={'100%'} borderRadius={0}>
+        {DeviceUtils.isIOS && <Spacer value={topInset} />}
+        <Header
+          title={t('notification.settings')}
+          style={{
+            shadowColor: 'transparent',
+            zIndex: 1000
+          }}
+          onBackPress={() => settingsModal.current?.dismiss()}
+        />
+        <NotificationSettingsView />
+      </BottomSheet>
     </SafeAreaView>
   );
 };

@@ -26,7 +26,7 @@ export const OnBoardingToolTipBody = ({
         <Text
           fontFamily="Inter_500Medium"
           fontSize={12}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           style={styles.title}
         >
           {title}
@@ -41,7 +41,7 @@ export const OnBoardingToolTipBody = ({
       <Text
         fontFamily="Inter_400Regular"
         fontSize={12}
-        color={COLORS.grey}
+        color={COLORS.gray500}
         style={styles.subtitle}
       >
         {subtitle}
@@ -57,7 +57,7 @@ export const OnBoardingToolTipBody = ({
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
                 style={styles.buttonText}
               >
                 {buttonLeftTitle}
@@ -68,7 +68,7 @@ export const OnBoardingToolTipBody = ({
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}
-              color={COLORS.deepBlue}
+              color={COLORS.brand500}
               style={styles.buttonText}
             >
               {buttonRightTitle}

@@ -43,7 +43,7 @@ export const BottomSheetWithHeader = forwardRef<
     if (actionTitle) {
       return (
         <Button onPress={onActionPress} testID={actionButtonTestID}>
-          <Text color={COLORS.jungleGreen}>{actionTitle}</Text>
+          <Text color={COLORS.success400}>{actionTitle}</Text>
         </Button>
       );
     }
@@ -68,7 +68,7 @@ export const BottomSheetWithHeader = forwardRef<
             <Text
               fontSize={18}
               fontFamily="Inter_700Bold"
-              color={COLORS.jetBlack}
+              color={COLORS.neutral800}
             >
               {title}
             </Text>

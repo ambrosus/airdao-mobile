@@ -16,8 +16,7 @@ import { schema } from './schemas';
 const adapter = new SQLiteAdapter({
   schema,
   dbName: 'airdao_dev',
-  jsi: Platform.OS === 'ios',
-  // TODO (optional, but we should implement this method)
+  jsi: Platform.OS === 'ios', // TODO (optional, but we should implement this method)
   onSetUpError: () => null
 });
 

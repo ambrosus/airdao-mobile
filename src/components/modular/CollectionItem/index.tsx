@@ -34,7 +34,7 @@ export function CollectionItem(props: CollectionItemProps) {
         <Text
           fontFamily="Inter_500Medium"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           style={{ width: '70%' }}
           numberOfLines={1}
         >
@@ -43,7 +43,7 @@ export function CollectionItem(props: CollectionItemProps) {
         <Text
           fontFamily="Mersad_600SemiBold"
           fontSize={13}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {tokensFormatted}
         </Text>
@@ -52,10 +52,11 @@ export function CollectionItem(props: CollectionItemProps) {
       <Row justifyContent="space-between">
         <Text
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
           fontSize={12}
         >
-          {collection.accountCount + ` ${t('addresses.text')}`}
+          {' '}
+          {t('common.address.with.count', { count: collection.accountCount })}
         </Text>
         {collection.accountCount > 0 && (
           <Row alignItems="center">

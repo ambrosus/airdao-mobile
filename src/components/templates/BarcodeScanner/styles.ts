@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   getAccessBtn: {
     marginTop: verticalScale(4),
-    backgroundColor: COLORS.mainBlue,
+    backgroundColor: COLORS.brand600,
     paddingVertical: verticalScale(8),
     paddingHorizontal: scale(12)
   }

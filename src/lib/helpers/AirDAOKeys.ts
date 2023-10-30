@@ -16,14 +16,13 @@ const bip32 = require('bip32');
 const bip39 = require('bip39');
 const bs58check = require('bs58check');
 
-const ETH_CACHE = {};
-const CACHE = {};
-const CACHE_ROOTS = {};
 interface CacheRoots {
   [key: string]: any;
 }
+const ETH_CACHE: CacheRoots = {};
+const CACHE: CacheRoots = {};
+const CACHE_ROOTS: CacheRoots = {};
 class AirDAOKeys {
-  private CACHE_ROOTS: CacheRoots = {};
   _bipHex: { [key: string]: string };
   _getRandomBytesFunction;
   constructor() {
@@ -61,6 +60,7 @@ class AirDAOKeys {
             mnemonic = bip39.entropyToMnemonic(random)
         } */
     let random = await this._getRandomBytesFunction(size / 8);
+    // @ts-ignore
     random = Buffer.from(random, 'base64');
     const mnemonic = bip39.entropyToMnemonic(random);
     const hash = KeysUtills.hashMnemonic(mnemonic);
@@ -101,8 +101,10 @@ class AirDAOKeys {
       fromIndex: number;
       toIndex: number;
       fullTree: boolean;
+      derivations?: any; // TODO
     },
-    source
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    source: any
   ): Promise<{
     currencyCode: [
       {
@@ -129,7 +131,7 @@ class AirDAOKeys {
     const toIndex = data.toIndex ? data.toIndex : 10;
     const fullTree = data.fullTree ? data.fullTree : false;
 
-    const results = {};
+    const results: { [key: string]: any[] } = {};
 
     const mnemonicCache = data.mnemonic.toLowerCase();
     let bitcoinRoot = false;
@@ -201,6 +203,7 @@ class AirDAOKeys {
       }
       if (typeof CACHE[hexesCache] === 'undefined' || hasDerivations) {
         let root = false;
+        //
         if (typeof networksConstants[currencyCode] !== 'undefined') {
           root = await this.getBip32Cached(
             data.mnemonic,
@@ -380,16 +383,16 @@ class AirDAOKeys {
 
   async getBip32Cached(mnemonic: string, network = false, seed = false) {
     const mnemonicCache = mnemonic.toLowerCase() + '_' + (network || 'btc');
-    if (typeof this.CACHE_ROOTS[mnemonicCache] === 'undefined') {
+    if (typeof CACHE_ROOTS[mnemonicCache] === 'undefined') {
       if (!seed) {
         seed = await this.getSeedCached(mnemonic);
       }
       const root = network
         ? bip32.fromSeed(seed, network)
         : bip32.fromSeed(seed);
-      this.CACHE_ROOTS[mnemonicCache] = root;
+      CACHE_ROOTS[mnemonicCache] = root;
     }
-    return this.CACHE_ROOTS[mnemonicCache];
+    return CACHE_ROOTS[mnemonicCache];
   }
 
   getEthCached(mnemonicCache) {

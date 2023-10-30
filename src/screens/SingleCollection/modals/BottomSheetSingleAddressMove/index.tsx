@@ -59,7 +59,7 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
               <Text
                 fontFamily="Inter_700Bold"
                 fontSize={18}
-                color={COLORS.nero}
+                color={COLORS.neutral800}
               >
                 Move address to group
               </Text>
@@ -81,7 +81,7 @@ export const BottomSheetSingleAddressMove = forwardRef<BottomSheetRef, Props>(
               >
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.jungleGreen}
+                  color={COLORS.success400}
                   fontSize={16}
                 >
                   Move

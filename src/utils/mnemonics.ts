@@ -19,14 +19,22 @@ const recheckMnemonic = (mnemonic: string): string => {
     if (!word || word.length < 2) continue;
     const index = DEFAULT_WORDS.indexOf(word);
     if (index === -1) {
-      throw new Error('BlocksoftKeysStorage invalid word ' + word);
+      throw new Error('MnemonicsUtils invalid word ' + word);
     }
     checked.push(word);
   }
   if (checked.length <= 11) {
-    throw new Error('BlocksoftKeysStorage invalid words length ' + mnemonic);
+    throw new Error('MnemonicsUtils invalid words length ' + mnemonic);
   }
   return checked.join(' ');
 };
 
-export const MnemonicUtils = { generateNewMnemonic, recheckMnemonic };
+const isValidMnemonic = (mnemonic: string): boolean => {
+  return bip39.validateMnemonic(mnemonic);
+};
+
+export const MnemonicUtils = {
+  generateNewMnemonic,
+  recheckMnemonic,
+  isValidMnemonic
+};

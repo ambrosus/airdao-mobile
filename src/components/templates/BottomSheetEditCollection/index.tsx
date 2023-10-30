@@ -74,25 +74,25 @@ export const BottomSheetEditCollection = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
-            {t('rename.group')}
+            {t('collection.rename')}
           </Text>
         </Button>
         <Button
           type="circular"
           style={{
             ...styles.actionBtn,
-            backgroundColor: COLORS.pinkRed
+            backgroundColor: COLORS.error100
           }}
           onPress={deleteCollection}
         >
           <Text
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            {t('delete.btn')}{' '}
+            {t('button.delete')}{' '}
             {StringUtils.formatAddress(collection.name, 12, 0)}
           </Text>
         </Button>

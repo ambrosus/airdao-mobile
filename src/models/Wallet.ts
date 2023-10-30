@@ -22,7 +22,6 @@ export class Wallet {
     this.name = details.name;
     this.mnemonic = details.mnemonic;
     this.number = details.number;
-    // @ilya I have no idea what below fields correspond
     this.cashback = details.cashback || 'empty_cashback';
     this.isBackedUp = details.isBackedUp || 0;
     this.isHideTransactionForFee = details.isHideTransactionForFee || 1;

@@ -5,7 +5,7 @@ import AirDAOCryptoLog from './AirDAOCryptoLog';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import CookieManager from '@react-native-cookies/cookies';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular/Toast';
 
 const CancelToken =
   axios && typeof axios.CancelToken !== 'undefined'
@@ -405,9 +405,10 @@ class AirDAOAxios {
             ) {
               CACHE_TIMEOUT_ERROR_SHOWN = now;
               Toast.show({
-                title: 'We are sorry',
-                message: 'You have bad internet!',
-                type: ToastPosition.Top
+                text: 'We are sorry',
+                subtext: 'You have bad internet!',
+                type: ToastType.Failed,
+                position: ToastPosition.Top
               });
               // showModal({
               //   type: 'INFO_MODAL',

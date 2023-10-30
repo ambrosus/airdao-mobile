@@ -1,17 +1,18 @@
 import React, { useRef } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import moment from 'moment';
-import { SharePortfolio } from '../BottomSheetSharePortfolio';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { Transaction } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
-import { verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
-import { useTranslation } from 'react-i18next';
-// import { styles } from './styles';
+import { SharePortfolio } from '../BottomSheetSharePortfolio';
+import { styles } from './styles';
+import { TokenLogo } from '@components/modular';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
@@ -19,7 +20,7 @@ interface TransactionDetailsProps {
   onPressAddress?: (address: string) => void;
 }
 
-const ROW_MARGIN = verticalScale(24);
+const ROW_MARGIN: number = verticalScale(24);
 
 const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
   <Row alignItems="center" justifyContent="space-between">
@@ -47,61 +48,95 @@ export const TransactionDetails = (
     totalTransactionAmount = -1;
   }
 
-  // const showShareTransaction = () => {
-  //   shareTransactionModal.current?.show();
-  // };
+  const showShareTransaction = () => {
+    shareTransactionModal.current?.show();
+  };
+
   if (!transaction) return <></>;
   const addressesArePressable = typeof onPressAddress === 'function';
 
   const onPressSendingAddress = () => {
     if (transaction.from && typeof onPressAddress === 'function') {
-      onPressAddress(transaction.from.address);
+      onPressAddress(transaction.from);
     }
   };
 
   const onPressReceivingAddress = () => {
     if (transaction.to && typeof onPressAddress === 'function') {
-      onPressAddress(transaction.to.address);
+      onPressAddress(transaction.to);
     }
   };
 
   return (
     <View testID="Transaction_Details">
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          {t('method')}
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral300}
+        >
+          {t('common.date')}
         </Text>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16}>
-          {transaction.type}
+        <Text
+          fontFamily="Inter_500Medium"
+          fontSize={16}
+          color={COLORS.neutral800}
+        >
+          {moment(transaction.timestamp).format('MMM DD, YYYY hh:mm')}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          {t('amount')}
+        <Text
+          color={COLORS.neutral300}
+          fontSize={16}
+          fontFamily="Inter_600SemiBold"
+        >
+          {t('common.status')}
         </Text>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16}>
-          {NumberUtils.formatNumber(transaction.amount, 0)} AMB
-          {totalTransactionAmount !== -1 && ` ($${totalTransactionAmount})`}
-        </Text>
+        <Row alignItems="center" style={styles.status}>
+          <View
+            style={{
+              height: moderateScale(8),
+              width: moderateScale(8),
+              borderRadius: moderateScale(4),
+              backgroundColor: COLORS.success600
+            }}
+          />
+          <Spacer horizontal value={scale(4)} />
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            color={COLORS.success500}
+          >
+            {t(`common.transaction.status.${transaction.status}`)}
+          </Text>
+        </Row>
       </JustifiedRow>
       {transaction.from && (
         <>
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
-            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-              {t('from')}
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.neutral300}
+            >
+              {t('common.transaction.from')}
             </Text>
             <Button
               disabled={!addressesArePressable}
               onPress={onPressSendingAddress}
             >
               <Text
-                color={COLORS.mainBlue}
+                style={{
+                  textDecorationLine: 'underline'
+                }}
+                color={COLORS.neutral800}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
               >
-                {StringUtils.formatAddress(transaction.from.address, 4, 5)}
+                {StringUtils.formatAddress(transaction.from, 4, 5)}
               </Text>
             </Button>
           </JustifiedRow>
@@ -111,19 +146,26 @@ export const TransactionDetails = (
         <>
           <Spacer value={ROW_MARGIN} />
           <JustifiedRow>
-            <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-              {t('to')}
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.neutral300}
+            >
+              {t('common.transaction.to')}
             </Text>
             <Button
               disabled={!addressesArePressable}
               onPress={onPressReceivingAddress}
             >
               <Text
-                color={COLORS.mainBlue}
+                color={COLORS.neutral800}
                 fontFamily="Inter_600SemiBold"
                 fontSize={16}
+                style={{
+                  textDecorationLine: 'underline'
+                }}
               >
-                {StringUtils.formatAddress(transaction.to.address, 4, 5)}
+                {StringUtils.formatAddress(transaction.to, 4, 5)}
               </Text>
             </Button>
           </JustifiedRow>
@@ -131,22 +173,86 @@ export const TransactionDetails = (
       )}
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          TxFee
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral300}
+        >
+          {t('common.transaction.amount')}
         </Text>
-        <Text color="#222222" fontFamily="Inter_600SemiBold" fontSize={16}>
-          {transaction.fee}
-        </Text>
+        <Row alignItems="center">
+          <TokenLogo token={transaction.value.symbol} scale={0.5} />
+          <Spacer value={scale(4)} horizontal />
+          <Text
+            fontFamily="Mersad_600SemiBold"
+            fontSize={16}
+            color={COLORS.neutral800}
+          >
+            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {transaction.value.symbol}
+            <Text
+              fontFamily="Inter_500Medium"
+              fontSize={14}
+              color={COLORS.neutral400}
+            >
+              {totalTransactionAmount !== -1 && ` $${totalTransactionAmount}`}
+            </Text>
+          </Text>
+        </Row>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
       <JustifiedRow>
-        <Text fontFamily="Inter_600SemiBold" fontSize={13} color="#646464">
-          {t('time')}
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral300}
+        >
+          {t('transaction.modal.estimated.fee')}
         </Text>
-        <Text fontFamily="Inter_600SemiBold" fontSize={16}>
-          {moment(transaction.timestamp).fromNow()}
-        </Text>
+        <Row alignItems="center">
+          <TokenLogo token="AirDAO" scale={0.5} />
+          <Spacer value={scale(4)} horizontal />
+          <Text
+            color={COLORS.neutral700}
+            fontFamily="Inter_600SemiBold"
+            fontSize={14}
+          >
+            {transaction.fee} AMB
+          </Text>
+        </Row>
       </JustifiedRow>
+      <Spacer value={ROW_MARGIN} />
+      <Button
+        type="circular"
+        style={{ backgroundColor: COLORS.alphaBlack5 }}
+        onPress={() =>
+          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`)
+        }
+      >
+        <Text
+          style={{ marginVertical: verticalScale(12) }}
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral800}
+        >
+          {t('transaction.modal.buttons.explorer')}
+        </Text>
+      </Button>
+      <Spacer value={verticalScale(16)} />
+      <Button
+        type="circular"
+        style={{ backgroundColor: COLORS.alphaBlack5 }}
+        onPress={showShareTransaction}
+      >
+        <Text
+          style={{ marginVertical: verticalScale(12) }}
+          fontFamily="Inter_600SemiBold"
+          fontSize={16}
+          color={COLORS.neutral800}
+        >
+          {t('transaction.modal.buttons.share')}
+        </Text>
+      </Button>
       {isShareable && (
         <>
           {/*<Spacer value={ROW_MARGIN} />*/}
@@ -172,7 +278,7 @@ export const TransactionDetails = (
         currencyPosition="right"
         txFee={transaction.fee}
         title="Transaction"
-        bottomSheetTitle="Share Transaction"
+        bottomSheetTitle={t('common.share.transaction')}
         timestamp={transaction.timestamp}
       />
     </View>

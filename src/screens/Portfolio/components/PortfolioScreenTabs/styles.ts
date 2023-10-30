@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   androidButton: {
     width: 48,
     height: 48,
-    backgroundColor: COLORS.electricBlue,
+    backgroundColor: COLORS.brand500,
     borderRadius: 50,
     position: 'absolute',
     alignSelf: 'flex-end',
