@@ -134,9 +134,10 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           value={formattedPrice}
           animatedProps={priceAnimatedProps}
           style={{
-            fontSize: 30,
-            fontFamily: 'Mersad_600SemiBold',
-            color: COLORS.neutral800
+            fontSize: 32,
+            fontFamily: 'Inter_700Bold',
+            fontWeight: '900',
+            color: COLORS.neutral900
           }}
         />
       </Row>

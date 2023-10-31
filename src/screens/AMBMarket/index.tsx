@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import {
@@ -55,11 +55,7 @@ export function AMBMarket(): JSX.Element {
             </Row>
           </>
         }
-        style={{
-          backgroundColor:
-            Platform.OS === 'ios' ? COLORS.neutral0 : COLORS.culturedWhite,
-          shadowColor: COLORS.culturedWhite
-        }}
+        style={{ shadowColor: 'transparent' }}
       />
       <ScrollView
         bounces={false}
