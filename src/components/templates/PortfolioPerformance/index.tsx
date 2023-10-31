@@ -135,7 +135,7 @@ export function PortfolioPerformance(
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral100}
             >
-              {moment(timestamp).format('YYYY-MM-DD')}
+              {moment(timestamp).format('MM-DD-YYYY')}
             </Text>
             <Spacer horizontal value={scale(8)} />
             <Text
