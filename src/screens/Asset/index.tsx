@@ -107,9 +107,10 @@ export const AssetScreen = () => {
         </Text>
         <Row alignItems="center">
           <Text
-            fontFamily="Mersad_600SemiBold"
+            fontFamily="Inter_700Bold"
+            fontWeight="900"
             fontSize={24}
-            color={COLORS.neutral800}
+            color={COLORS.neutral900}
           >
             {tokenInfo.balance.ether < 1000
               ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
