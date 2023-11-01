@@ -46,7 +46,7 @@ export const CopyToClipboardButton = (
     toggleCopied();
     if (showToast) {
       Toast.show({
-        text: t('copied.to.clipboard'),
+        text: t('common.copied'),
         position: ToastPosition.Top,
         type: ToastType.Success,
         ...toastProps
@@ -59,7 +59,7 @@ export const CopyToClipboardButton = (
   };
 
   return (
-    <Row alignItems="center">
+    <Row alignItems="center" style={{ minHeight: 20 }}>
       <Text {...textProps}>{textToDisplay}</Text>
       <Spacer horizontal value={scale(16)} />
       <Button {...buttonProps} onPress={onPress}>
