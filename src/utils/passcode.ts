@@ -1,8 +1,8 @@
-import { database } from '@database/main';
+import { Cache, CacheKey } from '@lib/cache';
 
 const getPasscodeFromDB = async () => {
   try {
-    const passcodeRes = await database.localStorage.get('Passcode');
+    const passcodeRes = await Cache.getItem(CacheKey.Passcode);
     return passcodeRes;
   } catch (error) {
     console.error('Error fetching Passcode from the database:', error);
@@ -12,7 +12,7 @@ const getPasscodeFromDB = async () => {
 
 const setPasscodeInDB = async (passcode: string[]) => {
   try {
-    await database.localStorage.set('Passcode', passcode);
+    await Cache.setItem(CacheKey.Passcode, passcode);
   } catch (error) {
     console.error('Error setting Passcode in the database:', error);
   }
@@ -20,8 +20,8 @@ const setPasscodeInDB = async (passcode: string[]) => {
 
 const getFaceIDStatusFromDB = async () => {
   try {
-    const faceIDRes = await database.localStorage.get('FaceID');
-    return !!faceIDRes;
+    const faceIDRes = await Cache.getItem(CacheKey.IsBiometricEnabled);
+    return faceIDRes === 'true';
   } catch (error) {
     console.error('Error fetching FaceID status from the database:', error);
     return false;
@@ -30,7 +30,7 @@ const getFaceIDStatusFromDB = async () => {
 
 const setFaceIDStatusInDB = async (isEnabled: boolean) => {
   try {
-    await database.localStorage.set('FaceID', isEnabled);
+    await Cache.setItem(CacheKey.IsBiometricEnabled, isEnabled);
   } catch (error) {
     console.error('Error setting FaceID status in the database:', error);
   }

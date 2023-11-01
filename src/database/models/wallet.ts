@@ -9,8 +9,6 @@ export class WalletDBModel extends Model {
   // @ts-ignore
   @text('name') name: string;
   // @ts-ignore
-  @text('mnemonic') mnemonic: string;
-  // @ts-ignore
   @text('hash') hash: string;
   // @ts-ignore
   @field('number') number: number;

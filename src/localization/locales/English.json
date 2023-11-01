@@ -184,6 +184,7 @@
   "send.funds.balance": "Balance",
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or refill your balance to proceed.",
   "send.funds.error.network": "Bad internet connection!",
+  "send.funds.error.private.key.not.found": "Private key not found. Please backup your wallet with your seed phrase again!",
   "send.funds.estimated.fee": "Estimated fee",
   "send.funds.failed": "Transaction failed",
   "send.funds.go.home": "Go home",

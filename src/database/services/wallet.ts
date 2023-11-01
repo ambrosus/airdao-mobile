@@ -7,7 +7,6 @@ const walletsDb = DatabaseTable.Wallets;
 
 interface Wallet {
   name: string;
-  mnemonic: string;
   hash: string;
   number: number;
   cashback: string;

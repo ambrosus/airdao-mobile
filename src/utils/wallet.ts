@@ -12,7 +12,9 @@ import { Crypto } from './crypto';
 import { API } from '@api/api';
 
 const _saveWallet = async (
-  wallet: Pick<WalletMetadata, 'newMnemonic' | 'mnemonic' | 'name' | 'number'>
+  wallet: Pick<WalletMetadata, 'newMnemonic' | 'name' | 'number'> & {
+    mnemonic: string;
+  }
 ) => {
   let storedKey = '';
   try {
@@ -51,7 +53,6 @@ const processWallet = async (mnemonic: string) => {
   const hash = await _saveWallet({ mnemonic, name, number });
   const fullWallet: Wallet = new Wallet({
     hash,
-    mnemonic,
     name,
     number
   });
@@ -63,6 +64,11 @@ const processWallet = async (mnemonic: string) => {
   });
   // create wallet in db
   await WalletDB.createWallet(fullWallet);
+  // securely save private key
+  await Cache.setItem(
+    `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
+    _account.privateKey
+  );
   // create account in db
   const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
   await AccountUtils.createAccountInDB(

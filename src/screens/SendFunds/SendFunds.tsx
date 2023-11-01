@@ -145,29 +145,31 @@ export const SendFunds = () => {
     confirmModalRef.current?.dismiss();
   };
 
-  const sendTx = async () => {
+  const sendTx = () => {
     hideReviewModal();
-    try {
-      updateSendContext({ type: 'SET_DATA', loading: true });
-      navigation.replace('SendFundsStatus');
-      AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
-        from: senderAddress,
-        to: destinationAddress
-      });
-      await TransactionUtils.sendTx(
-        walletHash,
-        destinationAddress,
-        Number(amountInCrypto),
-        selectedToken
-      );
-      updateSendContext({ type: 'SET_DATA', loading: false });
-    } catch (error: unknown) {
-      updateSendContext({
-        type: 'SET_DATA',
-        loading: false,
-        error: error as any
-      });
-    }
+    updateSendContext({ type: 'SET_DATA', loading: true });
+    setTimeout(async () => {
+      try {
+        navigation.replace('SendFundsStatus');
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
+          from: senderAddress,
+          to: destinationAddress
+        });
+        await TransactionUtils.sendTx(
+          walletHash,
+          destinationAddress,
+          Number(amountInCrypto),
+          selectedToken
+        );
+        updateSendContext({ type: 'SET_DATA', loading: false });
+      } catch (error: unknown) {
+        updateSendContext({
+          type: 'SET_DATA',
+          loading: false,
+          error: error as any
+        });
+      }
+    }, 1000);
   };
 
   const reviewButtonDisabled =
