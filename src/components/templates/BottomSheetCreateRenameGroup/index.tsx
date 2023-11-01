@@ -105,6 +105,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
 
     const handleDismiss = useCallback(() => {
       setLocalGroupName('');
+      setEmptyPlaceholder(false);
     }, []);
 
     return (
