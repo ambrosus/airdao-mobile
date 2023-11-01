@@ -62,7 +62,7 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   },
   totalSupply: {
     title: 'amb.market.total.supply',
-    body: 'amb.market.total.supply',
+    body: 'amb.market.total.supply.popup',
     testID: 'total-supply-popupinfo',
     idx: 1,
     key: 'totalSupply'
