@@ -5,7 +5,7 @@ import { useAppState } from './useAppState';
 const useAppFocus = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const navigationIsFocused = useIsFocused();
-  const appState = useAppState();
+  const { appState } = useAppState();
 
   useEffect(() => {
     setIsFocused(navigationIsFocused && appState === 'active');

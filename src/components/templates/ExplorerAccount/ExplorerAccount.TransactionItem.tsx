@@ -44,13 +44,13 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetailsTop}>
           <Spacer value={verticalScale(26.46)} />
           <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            {t('transaction.details')}
+            {t('common.transaction.details')}
           </Text>
         </View>
         <View style={styles.transactionDetails}>
           <TransactionDetails
-            transaction={transaction}
             onPressAddress={navigateToAddress}
+            transaction={transaction}
           />
         </View>
       </BottomSheetFloat>

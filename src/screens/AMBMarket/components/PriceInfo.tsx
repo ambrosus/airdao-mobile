@@ -7,16 +7,16 @@ import { moderateScale, verticalScale } from '@utils/scaling';
 export function AMBPriceInfo(): JSX.Element {
   return (
     <View style={styles.container}>
-      <AMBPriceHistory badgeType="view" />
+      <AMBPriceHistory badgeType="button" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(24),
-    paddingTop: verticalScale(37),
+    paddingTop: verticalScale(20),
     paddingBottom: verticalScale(29),
     alignItems: 'center'
   }

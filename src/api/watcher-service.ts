@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import { NotificationService } from '@lib';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
 import { NotificationSettings } from '@appTypes';

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   itemTitle: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   },
   itemSubInfo: {
     flexDirection: 'row',
@@ -33,14 +33,15 @@ export const styles = StyleSheet.create({
   },
   optionsButton: {
     alignItems: 'center',
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     borderRadius: 50,
     width: 32,
     height: 32
   },
   addButton: {
     alignItems: 'center',
-    backgroundColor: COLORS.electricBlue,
+    justifyContent: 'center',
+    backgroundColor: COLORS.brand500,
     borderRadius: 50,
     width: 32,
     height: 32

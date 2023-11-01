@@ -20,7 +20,7 @@ import {
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
@@ -99,13 +99,17 @@ export const AddressDetails = (): JSX.Element => {
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
     const toastMessage = isOnWatchlist
-      ? `${finalAccount.name || t('toast.the.address.upper.case')} ${t(
-          'toast.now.on.watchlist.msg'
-        )}`
-      : `${t('toast.you.removed')}${
-          finalAccount.name || t('toast.the.message.lower.case')
-        } ${t('toast.from.watchlist')}`;
-    Toast.show({ message: toastMessage, type: ToastPosition.Top, title: '' });
+      ? `${t('toast.you.added.address.to.watchlist', {
+          name: finalAccount.name || t('common.address').toUpperCase()
+        })}`
+      : `${t('toast.you.removed.address.from.watchlist', {
+          name: finalAccount.name
+        })}`;
+    Toast.show({
+      text: toastMessage,
+      position: ToastPosition.Top,
+      type: ToastType.Success
+    });
   };
 
   return (
@@ -123,7 +127,7 @@ export const AddressDetails = (): JSX.Element => {
             {/*  onPress={shareShareModal}*/}
             {/*  testID="Share_Button"*/}
             {/*>*/}
-            {/*  <ShareIcon color={COLORS.smokyBlack} scale={1.1} />*/}
+            {/*  <ShareIcon color={COLORS.neutral900} scale={1.1} />*/}
             {/*</Button>*/}
             <Spacer value={scale(32)} horizontal />
             <Button
@@ -133,8 +137,8 @@ export const AddressDetails = (): JSX.Element => {
               testID="Edit_Button"
             >
               {Platform.select({
-                ios: <EditIcon color={COLORS.smokyBlack} scale={1.1} />,
-                android: <OptionsIcon color={COLORS.smokyBlack} />
+                ios: <EditIcon color={COLORS.neutral900} scale={1.1} />,
+                android: <OptionsIcon color={COLORS.neutral900} />
               })}
             </Button>
           </Row>
@@ -148,6 +152,17 @@ export const AddressDetails = (): JSX.Element => {
       <Spacer value={verticalScale(16)} />
       <View style={styles.divider} />
       <Spacer value={verticalScale(16)} />
+      <Row alignItems="center">
+        <Spacer horizontal value={scale(16)} />
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          color={COLORS.neutral800}
+        >
+          {t('common.transactions')}
+        </Text>
+      </Row>
+      <Spacer value={verticalScale(12)} />
       <AccountTransactions
         transactions={transactions}
         onEndReached={loadMoreTransactions}
@@ -157,7 +172,7 @@ export const AddressDetails = (): JSX.Element => {
       <SharePortfolio
         ref={shareModal}
         title={StringUtils.formatAddress(finalAccount.address, 7, 4)}
-        bottomSheetTitle={t('share.address.performance')}
+        bottomSheetTitle={t('address.share.performance')}
         balance={
           finalAccount.ambBalance < 1000
             ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)

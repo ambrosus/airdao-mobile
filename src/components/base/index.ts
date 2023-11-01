@@ -5,6 +5,7 @@ export * from './Input';
 export * from './Text';
 export * from './Row';
 export * from './KeyboardDismissingView';
+export * from './QRCode';
 export * from './Separator';
 export * from './Spacer';
 export * from './Spinner';

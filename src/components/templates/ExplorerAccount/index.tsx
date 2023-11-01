@@ -88,9 +88,9 @@ export const ExplorerAccountView = (
                 fontSize={13}
                 fontWeight="400"
               >
-                {t('address.added.to.group')}
-                {listsWithAccount.length}
-                {t('groups.count')}
+                {t('address.added.to.group', {
+                  count: listsWithAccount.length
+                })}
               </Text>
             ))}
         </Row>
@@ -118,10 +118,11 @@ export const ExplorerAccountView = (
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
-            fontSize: 13,
+            fontSize: 14,
             fontFamily: 'Inter_600SemiBold',
-            color: COLORS.slateGrey
+            color: COLORS.neutral400
           }}
+          showToast={true}
           style={{ padding: 4 }}
         />
         {!nameVisible && renderListAndWalletInfo()}
@@ -130,7 +131,7 @@ export const ExplorerAccountView = (
       <Text
         fontFamily="Mersad_600SemiBold"
         fontSize={30}
-        color={COLORS.jetBlack}
+        color={COLORS.neutral800}
       >
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
@@ -145,8 +146,8 @@ export const ExplorerAccountView = (
             style={{
               ...styles.actionButton,
               backgroundColor: account.isOnWatchlist
-                ? COLORS.warning
-                : COLORS.mainBlue
+                ? COLORS.warning200
+                : COLORS.brand600
             }}
             testID="Add_To_Watchlist_Button"
             type="circular"
@@ -155,16 +156,16 @@ export const ExplorerAccountView = (
             <Row alignItems="center">
               <Text
                 fontSize={12}
-                color={account.isOnWatchlist ? COLORS.liver : COLORS.white}
+                color={account.isOnWatchlist ? COLORS.liver : COLORS.neutral0}
               >
                 {account.isOnWatchlist
-                  ? t('watchlisted.address')
-                  : t('watchlist.address.btn')}
+                  ? t('address.watchlisted')
+                  : t('address.add.watchlist')}
               </Text>
               {/*{!account.isOnWatchlist && (*/}
               {/*  <>*/}
               {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.white} scale={0.5} />*/}
+              {/*    <PlusIcon color={COLORS.neutral0} scale={0.5} />*/}
               {/*  </>*/}
               {/*)}*/}
             </Row>
@@ -175,8 +176,8 @@ export const ExplorerAccountView = (
               ...styles.actionButton,
               backgroundColor:
                 listsWithAccount.length > 0
-                  ? COLORS.warning
-                  : COLORS.powderWhite
+                  ? COLORS.warning200
+                  : COLORS.brand100
             }}
             testID="Add_To_Collection_Button"
             type="circular"
@@ -185,24 +186,22 @@ export const ExplorerAccountView = (
             <Row alignItems="center">
               <Text
                 color={
-                  listsWithAccount.length > 0
-                    ? COLORS.liver
-                    : COLORS.darkCornflowerBlue
+                  listsWithAccount.length > 0 ? COLORS.liver : COLORS.brand700
                 }
                 fontSize={12}
               >
                 {listsWithAccount.length === 0
-                  ? t('add.address.to.group.upper.case')
+                  ? t('address.add.group')
                   : listsWithAccount.length === 1
                   ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
-                  : `${t('address.added.to.group')} ${
-                      listsWithAccount.length
-                    } ${t('groups.count')}`}
+                  : t('address.added.to.group', {
+                      count: listsWithAccount.length
+                    })}
               </Text>
               {/*{listsWithAccount.length === 0 && (*/}
               {/*  <>*/}
               {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.darkCornflowerBlue} scale={0.5} />*/}
+              {/*    <PlusIcon color={COLORS.brand700} scale={0.5} />*/}
               {/*  </>*/}
               {/*)}*/}
             </Row>
@@ -212,7 +211,7 @@ export const ExplorerAccountView = (
       <BottomSheetWithHeader
         ref={addToListModal}
         height={fullscreenHeight * 0.95}
-        title={t('add.address.to.group')}
+        title={t('address.add.to.group')}
         avoidKeyboard={false}
         swiperIconVisible={true}
       >

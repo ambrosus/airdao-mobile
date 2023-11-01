@@ -2,22 +2,61 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/Wallets';
 import { AMBMarket } from '@screens/AMBMarket';
-import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { Notifications } from '@screens/Notifications';
+import { AssetScreen } from '@screens/Asset';
+import { SendFunds, SendFundsStatus } from '@screens/SendFunds';
+import {
+  CreateWalletStep0,
+  CreateWalletStep1,
+  CreateWalletStep2,
+  CreateWalletSuccess
+} from '@screens/CreateWallet';
+import { ImportWallet, ImportWalletSuccess } from '@screens/ImportWallet';
+import { SendCryptoProvider } from '@contexts';
+import {
+  SetupPasscode,
+  ConfirmPasscode,
+  SuccessSetupSecurity
+} from '@screens/SetupPasscode';
+import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="HomeScreen"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
-      <Stack.Screen name="Notifications" component={Notifications} />
-      {getCommonStack(Stack as any)}
-    </Stack.Navigator>
+    // @ts-ignore
+    <SendCryptoProvider>
+      <Stack.Navigator
+        initialRouteName="HomeScreen"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
+        <Stack.Screen name="Notifications" component={Notifications} />
+        <Stack.Screen name="AssetScreen" component={AssetScreen} />
+        <Stack.Screen name="SendFunds" component={SendFunds} />
+        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
+        <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
+        <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
+        <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
+        <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
+        <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
+        <Stack.Screen
+          name="SuccessSetupSecurity"
+          component={SuccessSetupSecurity}
+        />
+        <Stack.Screen
+          name="CreateWalletSuccess"
+          component={CreateWalletSuccess}
+        />
+        <Stack.Screen
+          name="ImportWalletSuccess"
+          component={ImportWalletSuccess}
+        />
+        <Stack.Screen name="ImportWallet" component={ImportWallet} />
+        {getCommonStack(Stack as any)}
+      </Stack.Navigator>
+    </SendCryptoProvider>
   );
 };
 

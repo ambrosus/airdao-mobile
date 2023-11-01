@@ -26,7 +26,7 @@ export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
             onPress={showPopover}
             style={styles.container}
           >
-            <Text color="#FFFFFF" fontSize={10}>
+            <Text color={COLORS.neutral0} fontSize={10}>
               i
             </Text>
           </Button>

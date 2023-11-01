@@ -11,14 +11,14 @@ import Animated, {
 import { GraphPoint } from 'react-native-graph';
 import { CMCInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
-import { ChevronRightIcon, LogoGradient } from '@components/svg/icons';
+import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
-import { BezierChart } from '../BezierChart';
 import { MONTH_NAMES } from '@constants/variables';
+import { BezierChart } from '../BezierChart';
 import { styles } from './styles';
 
 interface AMBPriceHistoryProps {
@@ -129,26 +129,15 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
 
   return (
     <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
-      <Row alignItems="center" justifyContent="center">
-        <LogoGradient />
-        <Spacer horizontal value={scale(10)} />
-        <Text
-          align="center"
-          fontFamily="Inter_600SemiBold"
-          fontSize={15}
-          color={COLORS.smokyBlack}
-        >
-          AirDAO (AMB)
-        </Text>
-      </Row>
       <Row style={styles.balance} testID="Formatted_Price">
         <AnimatedText
           value={formattedPrice}
           animatedProps={priceAnimatedProps}
           style={{
-            fontSize: 30,
-            fontFamily: 'Mersad_600SemiBold',
-            color: COLORS.jetBlack
+            fontSize: 32,
+            fontFamily: 'Inter_700Bold',
+            fontWeight: '900',
+            color: COLORS.neutral900
           }}
         />
       </Row>
@@ -160,7 +149,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           testID="Badge_Button"
         >
           <Badge
-            color={COLORS.gray300}
+            color="transparent"
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
@@ -172,14 +161,16 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                 <Text
                   fontFamily="Inter_500Medium"
                   fontSize={14}
-                  color={COLORS.smokyBlack}
+                  color={COLORS.neutral900}
                 >
                   {selectedInterval && '24hrs'}
                 </Text>
                 {badgeType === 'button' && (
                   <>
                     <Spacer horizontal value={scale(4)} />
-                    <ChevronRightIcon color={COLORS.smokyBlack} />
+                    <View style={{ transform: [{ rotate: '270deg' }] }}>
+                      <ChevronDownIcon color={COLORS.neutral900} scale={0.83} />
+                    </View>
                   </>
                 )}
               </Row>
@@ -193,7 +184,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             style={{
               fontSize: 12,
               fontFamily: 'Inter_500Medium',
-              color: COLORS.asphalt
+              color: COLORS.neutral300
             }}
           />
         </Animated.View>
@@ -220,8 +211,8 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}
-        axisLabelColor={COLORS.smokyBlack}
-        strokeColor={COLORS.chartGreen}
+        axisLabelColor={COLORS.neutral900}
+        strokeColor={COLORS.success300}
         axisColor="transparent"
         onPointSelected={(point) => {
           if (point) {

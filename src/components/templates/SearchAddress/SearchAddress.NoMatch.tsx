@@ -13,22 +13,22 @@ export function SearchAddressNoResult(): JSX.Element {
       <NoMatch />
       <Spacer value={verticalScale(24)} />
       <Text
-        color={COLORS.davysGray}
+        color={COLORS.neutral500}
         fontSize={16}
         fontWeight="600"
         fontFamily="Inter_600SemiBold"
       >
-        {t('no.matches')}
+        {t('explore.search.no.matches')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
         fontWeight="400"
         fontSize={16}
         align="center"
-        color={COLORS.davysGray}
+        color={COLORS.neutral500}
         fontFamily="Inter_400Regular"
       >
-        {t('check.typos')}
+        {t('explore.search.check.typos')}
       </Text>
     </View>
   );

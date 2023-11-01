@@ -3,13 +3,13 @@ import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
-import { styles } from '@components/templates/BottomSheetConfirmRemove/styles';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
 import { useLists } from '@contexts';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -39,10 +39,12 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           style={styles.text}
           fontFamily="Inter_600SemiBold"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           numberOfLines={1}
         >
-          {t('remove.address.from.group.select')} {collection?.name}?
+          {t('address.remove.from.selected.group', {
+            selectedGroup: collection?.name
+          })}
         </Text>
         <Spacer value={24} />
         <Button
@@ -58,9 +60,9 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
           >
-            {t('remove.btn')}
+            {t('button.remove')}
           </Text>
         </Button>
         <Spacer value={24} />
@@ -71,10 +73,10 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
         >
           <Text
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
             fontSize={16}
           >
-            {t('cancel.btn')}
+            {t('button.cancel')}
           </Text>
         </Button>
       </View>

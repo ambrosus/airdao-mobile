@@ -64,7 +64,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
             <Text
               fontSize={20}
               fontFamily="Inter_700Bold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
             >
               {bottomSheetTitle}
             </Text>
@@ -86,7 +86,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.twitterBtn}
                   onPress={async () => onSharePress(Social.Twitter)}
                 >
-                  <TwitterIcon color="#FFFFFF" />
+                  <TwitterIcon color={COLORS.neutral0} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
                 <Text>Twitter</Text>
@@ -100,7 +100,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.messagesBtn}
                   onPress={() => onSharePress(Social.Sms)}
                 >
-                  <MessagesIcon color="#FFFFFF" />
+                  <MessagesIcon color={COLORS.neutral0} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
                 <Text>Messages</Text>
@@ -112,7 +112,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.lightBtn}
                   onPress={() => onSharePress()}
                 >
-                  <PlusIcon color="#222222" />
+                  <PlusIcon color={COLORS.gray800} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
                 <Text>More</Text>

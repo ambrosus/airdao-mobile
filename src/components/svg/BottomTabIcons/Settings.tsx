@@ -1,11 +1,12 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 
 export function SettingsTabIcon(props: IconProps) {
-  const { scale = 1, color = '#457EFF' } = props;
-  const width = 24;
-  const height = 24;
+  const { scale = 1, color = COLORS.brand500 } = props;
+  const width = 28;
+  const height = 28;
   return (
     <Svg
       width={width}

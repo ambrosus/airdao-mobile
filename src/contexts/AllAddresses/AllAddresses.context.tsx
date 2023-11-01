@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
-import { NotificationService } from '@lib';
-import { DeviceEventEmitter } from 'react-native';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventDispatcher, NotificationService } from '@lib';
+import {
+  AirDAOEventType,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -116,12 +118,6 @@ const AllAddressesContext = () => {
       })
     );
   };
-  // uncomment to clear watchlist
-  // Cache.setItem(CacheKey.AllAddresses, []);
-  // Cache.setItem(CacheKey.NotificationSettings, []);
-  // Cache.setItem(CacheKey.Watchlist, []);
-  // Cache.setItem(CacheKey.AddressLists, []);
-  // Cache.setItem(CacheKey.PersonalList, []);
 
   // fetch all addresses on mount
   const getAddresses = async () => {
@@ -136,8 +132,10 @@ const AllAddressesContext = () => {
   useEffect(() => {
     getAddresses();
 
-    // setup notification listenet
-    const onNewNotificationReceive = async (data: any) => {
+    // setup notification listener
+    const onNewNotificationReceive = async (
+      data: AirDAONotificationReceiveEventPayload
+    ) => {
       if (data.type == 'transaction-alert') {
         const toIdx = allAddresses.findIndex(
           (address) => address.address === data.to
@@ -157,14 +155,16 @@ const AllAddressesContext = () => {
           ]);
           reducer({ type: 'update', payload: updatedReceivingAddress[0] });
         }
-        // refetch();
       }
     };
-    const notificationListenter = DeviceEventEmitter.addListener(
-      EVENTS.NotificationReceived,
-      onNewNotificationReceive
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
+      (payload) =>
+        onNewNotificationReceive(
+          payload as AirDAONotificationReceiveEventPayload
+        )
     );
-    return () => notificationListenter.remove();
+    return () => notificationListenter.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

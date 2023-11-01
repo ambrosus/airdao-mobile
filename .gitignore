@@ -155,6 +155,10 @@ docs/pages/versions/*/react-native/*.diff
 /ios/build
 **/ios/.xcode.env.local
 /ios/versioned-react-native/*/ReactNative/sdks/hermes-engine/destroot
+/ios/*
+/android/*
 
+# dist
+/dist
 #firebase
 /firebase/*

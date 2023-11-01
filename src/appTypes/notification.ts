@@ -1,3 +1,8 @@
+export enum NotificationType {
+  TransactionAlert = 'transaction-alert',
+  PriceAlert = 'price-alert',
+  WalletUpdate = 'wallet-update'
+}
 export interface NotificationSettings {
   priceAlerts: boolean;
   priceThreshold: {

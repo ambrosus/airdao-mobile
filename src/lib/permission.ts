@@ -65,7 +65,7 @@ class PermissionService {
   private showSettingsAlert(permission: string) {
     Alert.alert(
       `${permission} access`,
-      'Access to camera has been blocked. \n Please enable it in the Settings app to continue',
+      `Access to ${permission} has been blocked. Please enable it in the Settings app to continue`,
       [
         {
           text: 'Settings',

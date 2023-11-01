@@ -4,12 +4,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
 import { CacheableAccount, Permission } from '@appTypes';
 import { API } from '@api/api';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
-  SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
     async function prepareNotifications() {
@@ -52,15 +51,19 @@ export const useAppInit = () => {
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
           Inter_600SemiBold: require('../../assets/fonts/Inter-SemiBold.ttf'),
           Inter_700Bold: require('../../assets/fonts/Inter-Bold.ttf'),
-          Mersad_600SemiBold: require('../../assets/fonts/Mersad-SemiBold.ttf')
+          Mersad_600SemiBold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
+          Mersad_800Bold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
+          Mersad_900ExtraBold: require('../../assets/fonts/Mersad-SemiBold.ttf')
         });
       } catch (e) {
         // tslint:disable-next-line:no-console
         console.error(e);
       } finally {
         setIsAppReady(true);
+        SplashScreen.hideAsync();
       }
     }
+    SplashScreen.preventAutoHideAsync();
     prepare();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

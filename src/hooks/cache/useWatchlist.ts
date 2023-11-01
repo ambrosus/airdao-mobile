@@ -4,7 +4,7 @@ import {
   useAllAddressesReducer
 } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
-import { WALLET_UTILS } from '@utils/wallet';
+import { AddressUtils } from '@utils/address';
 
 export const useWatchlist = () => {
   const allAddressesReducer = useAllAddressesReducer();
@@ -14,7 +14,7 @@ export const useWatchlist = () => {
     const newAddress = Object.assign({}, address);
     newAddress.isOnWatchlist = true;
     allAddressesReducer({ type: 'add-or-update', payload: newAddress });
-    WALLET_UTILS.watchChangesOfWallet(address);
+    AddressUtils.watchChangesOfAddress(address);
   };
 
   const removeFromWatchlist = async (address: ExplorerAccount) => {

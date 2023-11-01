@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   container: {
     paddingTop: verticalScale(37),
     paddingBottom: verticalScale(29),
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.neutral0,
     borderRadius: 24,
     alignItems: 'center',
     ...shadow
@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   balance: {
-    marginTop: verticalScale(17),
     alignSelf: 'center'
   },
   balanceAction: {

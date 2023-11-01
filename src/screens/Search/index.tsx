@@ -96,14 +96,14 @@ export const SearchScreen = () => {
                 fontFamily="Inter_700Bold"
                 fontWeight="700"
                 fontSize={20}
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
-                {t('top.holders')}
+                {t('common.top.holders')}
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
             {accountsError ? (
-              <Text>{t('no.account.info')}</Text>
+              <Text>{t('explore.search.no.account.info')}</Text>
             ) : (
               infoData &&
               accounts && (

@@ -1,18 +1,19 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
-import { IconProps } from './Icon.types';
+import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { moderateScale } from '@utils/scaling';
 
 export function BackIcon(props: IconProps) {
-  const { scale = 1, color = '#000000' } = props;
-  const width = 24,
-    height = 24;
+  const { color = COLORS.brand500, scale = 1 } = props;
+  const width = moderateScale(24),
+    height = moderateScale(24);
   return (
     <Svg
-      width={width}
-      height={height}
-      fill="none"
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
+      fill="none"
     >
       <Path
         d="M15.707 4.293a1 1 0 010 1.414L9.414 12l6.293 6.293a1 1 0 01-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"

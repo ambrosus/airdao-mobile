@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(24),
     paddingVertical: verticalScale(12),
     alignSelf: 'center',
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     width: '100%'
   }
 });

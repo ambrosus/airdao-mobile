@@ -27,7 +27,7 @@ export const NotificationsHeader = (
           testID="settings-button"
           style={styles.settingsBtn}
         >
-          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.1} />
+          <SettingsFilledIcon color={COLORS.neutral900} scale={1.1} />
         </Button>
       </Row>
     );
@@ -35,9 +35,10 @@ export const NotificationsHeader = (
   return (
     <Header
       titleStyle={styles.headerTitle}
-      title={t('notifications.tab')}
+      title={t('tab.notifications')}
       titlePosition="left"
       contentRight={renderContentRight()}
+      style={{ shadowColor: COLORS.transparent }}
     />
   );
 };
@@ -46,10 +47,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   },
   settingsBtn: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     height: moderateScale(40),
     width: moderateScale(40)
   }

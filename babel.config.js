@@ -12,9 +12,11 @@ module.exports = function (api) {
           alias: {
             '@api': './src/api',
             '@appTypes': './src/appTypes',
+            '@assets': './src/assets',
             '@components': './src/components',
             '@constants': './src/constants',
             '@contexts': './src/contexts',
+            '@crypto': './crypto',
             '@database': './src/database',
             '@hooks': './src/hooks',
             '@helpers': './src/helpers',
@@ -23,7 +25,13 @@ module.exports = function (api) {
             '@navigation': './src/navigation',
             '@screens': './src/screens',
             '@theme': './src/theme',
-            '@utils': './src/utils'
+            '@utils': './src/utils',
+            'crypto': 'react-native-quick-crypto',
+            'stream': 'stream-browserify',
+            'buffer': '@craftzdog/react-native-buffer',
+            'http': '@tradle/react-native-http',
+            'https': 'https-browserify',
+            'os': 'react-native-os'
           },
           extensions: ['.ts', '.tsx']
         }

@@ -1,0 +1,793 @@
+diff --git a/node_modules/bitcoinjs-lib/src/transaction.js b/node_modules/bitcoinjs-lib/src/transaction.js
+index 994202c..aece634 100644
+--- a/node_modules/bitcoinjs-lib/src/transaction.js
++++ b/node_modules/bitcoinjs-lib/src/transaction.js
+@@ -1,5 +1,4 @@
+ 'use strict';
+-import BlocksoftCryptoLog from '../../../crypto/common/BlocksoftCryptoLog'
+ 
+ Object.defineProperty(exports, '__esModule', { value: true });
+ const bufferutils = require('./bufferutils');
+@@ -50,7 +49,6 @@ class Transaction {
+     this._IS_BTC_FORK = false;
+     this.ins = [];
+     this.outs = [];
+-    BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - started as js - time ' + this.time)
+   }
+   setVerge(_val) {
+     this._IS_VERGE = _val;
+@@ -186,7 +184,7 @@ class Transaction {
+     );
+   }
+   hasWitnesses() {
+-    return this.ins.some(x => {
++    return this.ins.some((x) => {
+       return x.witness.length !== 0;
+     });
+   }
+@@ -206,7 +204,7 @@ class Transaction {
+     newTx.version = this.version;
+     newTx.locktime = this.locktime;
+     newTx._IS_VERGE = this._IS_VERGE;
+-    newTx.ins = this.ins.map(txIn => {
++    newTx.ins = this.ins.map((txIn) => {
+       return {
+         hash: txIn.hash,
+         index: txIn.index,
+@@ -215,7 +213,7 @@ class Transaction {
+         witness: txIn.witness,
+       };
+     });
+-    newTx.outs = this.outs.map(txOut => {
++    newTx.outs = this.outs.map((txOut) => {
+       return {
+         script: txOut.script,
+         value: txOut.value,
+@@ -240,7 +238,7 @@ class Transaction {
+     if (inIndex >= this.ins.length) return ONE;
+     // ignore OP_CODESEPARATOR
+     const ourScript = bscript.compile(
+-      bscript.decompile(prevOutScript).filter(x => {
++      bscript.decompile(prevOutScript).filter((x) => {
+         return x !== script_1.OPS.OP_CODESEPARATOR;
+       }),
+     );
+@@ -276,7 +274,7 @@ class Transaction {
+       // SIGHASH_ALL: only ignore input scripts
+     } else {
+       // "blank" others input scripts
+-      txTmp.ins.forEach(input => {
++      txTmp.ins.forEach((input) => {
+         input.script = EMPTY_SCRIPT;
+       });
+       txTmp.ins[inIndex].script = ourScript;
+@@ -317,7 +315,7 @@ class Transaction {
+     if (!(hashType & Transaction.SIGHASH_ANYONECANPAY)) {
+       tbuffer = Buffer.allocUnsafe(36 * this.ins.length);
+       toffset = 0;
+-      this.ins.forEach(txIn => {
++      this.ins.forEach((txIn) => {
+         writeSlice(txIn.hash);
+         writeUInt32(txIn.index);
+       });
+@@ -330,7 +328,7 @@ class Transaction {
+     ) {
+       tbuffer = Buffer.allocUnsafe(4 * this.ins.length);
+       toffset = 0;
+-      this.ins.forEach(txIn => {
++      this.ins.forEach((txIn) => {
+         writeUInt32(txIn.sequence);
+       });
+       hashSequence = bcrypto.hash256(tbuffer);
+@@ -344,7 +342,7 @@ class Transaction {
+       }, 0);
+       tbuffer = Buffer.allocUnsafe(txOutsSize);
+       toffset = 0;
+-      this.outs.forEach(out => {
++      this.outs.forEach((out) => {
+         writeUInt64(out.value);
+         writeVarSlice(out.script);
+       });
+@@ -451,10 +449,7 @@ class Transaction {
+     }
+     writeInt32(this.version);
+     if (this._IS_VERGE) {
+-      BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - verge added - ' + this.time);
+       writeInt32(this.time);
+-    } else {
+-      BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - not verge ');
+     }
+     const hasWitnesses = _ALLOW_WITNESS && this.hasWitnesses();
+     if (hasWitnesses) {
+@@ -462,14 +457,14 @@ class Transaction {
+       writeUInt8(Transaction.ADVANCED_TRANSACTION_FLAG);
+     }
+     writeVarInt(this.ins.length);
+-    this.ins.forEach(txIn => {
++    this.ins.forEach((txIn) => {
+       writeSlice(txIn.hash);
+       writeUInt32(txIn.index);
+       writeVarSlice(txIn.script);
+       writeUInt32(txIn.sequence);
+     });
+     writeVarInt(this.outs.length);
+-    this.outs.forEach(txOut => {
++    this.outs.forEach((txOut) => {
+       if (isOutput(txOut)) {
+         writeUInt64(txOut.value);
+       } else {
+@@ -478,7 +473,7 @@ class Transaction {
+       writeVarSlice(txOut.script);
+     });
+     if (hasWitnesses) {
+-      this.ins.forEach(input => {
++      this.ins.forEach((input) => {
+         writeVector(input.witness);
+       });
+     }
+@@ -496,14 +491,19 @@ Transaction.SIGHASH_ANYONECANPAY = 0x80;
+ Transaction.ADVANCED_TRANSACTION_MARKER = 0x00;
+ Transaction.ADVANCED_TRANSACTION_FLAG = 0x01;
+ 
+-Transaction.SIGHASH_BITCOINCASHBIP143 = 0x40
+-Transaction.FORKID_BTG = 0x4F // 79
+-Transaction.FORKID_BCH = 0x00
++Transaction.SIGHASH_BITCOINCASHBIP143 = 0x40;
++Transaction.FORKID_BTG = 0x4f; // 79
++Transaction.FORKID_BCH = 0x00;
+ 
+ /**
+  * Hash transaction for signing a specific input for Bitcoin Cash.
+  */
+-Transaction.prototype.hashForCashSignature = function (inIndex, prevOutScript, inAmount, hashType) {
++Transaction.prototype.hashForCashSignature = function (
++  inIndex,
++  prevOutScript,
++  inAmount,
++  hashType,
++) {
+   // This function works the way it does because Bitcoin Cash
+   // uses BIP143 as their replay protection, AND their algo
+   // includes `forkId | hashType`, AND since their forkId=0,
+@@ -515,37 +515,52 @@ Transaction.prototype.hashForCashSignature = function (inIndex, prevOutScript, i
+   // BIP143 sighash activated in BitcoinCash via 0x40 bit
+   if (hashType & Transaction.SIGHASH_BITCOINCASHBIP143) {
+     if (types.Null(inAmount)) {
+-      throw new Error('Bitcoin Cash sighash requires value of input to be signed.')
++      throw new Error(
++        'Bitcoin Cash sighash requires value of input to be signed.',
++      );
+     }
+-    return this.hashForWitnessV0(inIndex, prevOutScript, inAmount, hashType)
++    return this.hashForWitnessV0(inIndex, prevOutScript, inAmount, hashType);
+   } else {
+-    return this.hashForSignature(inIndex, prevOutScript, hashType)
++    return this.hashForSignature(inIndex, prevOutScript, hashType);
+   }
+-}
++};
+ 
+ /**
+  * Hash transaction for signing a specific input for Bitcoin Gold.
+  */
+-Transaction.prototype.hashForGoldSignature = function (inIndex, prevOutScript, inAmount, hashType, sigVersion) {
++Transaction.prototype.hashForGoldSignature = function (
++  inIndex,
++  prevOutScript,
++  inAmount,
++  hashType,
++  sigVersion,
++) {
+   // Bitcoin Gold also implements segregated witness
+   // therefore we can pull out the setting of nForkHashType
+   // and pass it into the functions.
+ 
+-  var nForkHashType = hashType
+-  var fUseForkId = (hashType & Transaction.SIGHASH_BITCOINCASHBIP143) > 0
++  var nForkHashType = hashType;
++  var fUseForkId = (hashType & Transaction.SIGHASH_BITCOINCASHBIP143) > 0;
+   if (fUseForkId) {
+-    nForkHashType |= Transaction.FORKID_BTG << 8
++    nForkHashType |= Transaction.FORKID_BTG << 8;
+   }
+ 
+   // BIP143 sighash activated in BitcoinCash via 0x40 bit
+   if (sigVersion || fUseForkId) {
+     if (types.Null(inAmount)) {
+-      throw new Error('Bitcoin Cash sighash requires value of input to be signed.')
+-    }
+-    return this.hashForWitnessV0(inIndex, prevOutScript, inAmount, nForkHashType)
++      throw new Error(
++        'Bitcoin Cash sighash requires value of input to be signed.',
++      );
++    }
++    return this.hashForWitnessV0(
++      inIndex,
++      prevOutScript,
++      inAmount,
++      nForkHashType,
++    );
+   } else {
+-    return this.hashForSignature(inIndex, prevOutScript, nForkHashType)
++    return this.hashForSignature(inIndex, prevOutScript, nForkHashType);
+   }
+-}
++};
+ 
+ exports.Transaction = Transaction;
+diff --git a/node_modules/bitcoinjs-lib/src/transaction_builder.js b/node_modules/bitcoinjs-lib/src/transaction_builder.js
+index e5f3572..fe16f92 100644
+--- a/node_modules/bitcoinjs-lib/src/transaction_builder.js
++++ b/node_modules/bitcoinjs-lib/src/transaction_builder.js
+@@ -1,8 +1,6 @@
+ 'use strict';
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+-import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog'
+-
+ const baddress = require('./address');
+ const bufferutils_1 = require('./bufferutils');
+ const classify = require('./classify');
+@@ -60,7 +58,6 @@ class TransactionBuilder {
+     this.__TX = new transaction_1.Transaction();
+     this.__TX.version = 2;
+     this.__USE_LOW_R = false;
+-    BlocksoftCryptoLog.log('TransactionBuilder recheck - started as js')
+   }
+   static fromTransaction(transaction, network) {
+     const txb = new TransactionBuilder(network);
+@@ -68,11 +65,11 @@ class TransactionBuilder {
+     txb.setVersion(transaction.version);
+     txb.setLockTime(transaction.locktime);
+     // Copy outputs (done first to avoid signature invalidation)
+-    transaction.outs.forEach(txOut => {
++    transaction.outs.forEach((txOut) => {
+       txb.addOutput(txOut.script, txOut.value);
+     });
+     // Copy inputs
+-    transaction.ins.forEach(txIn => {
++    transaction.ins.forEach((txIn) => {
+       txb.__addInputUnsafe(txIn.hash, txIn.index, {
+         sequence: txIn.sequence,
+         script: txIn.script,
+@@ -97,9 +94,9 @@ class TransactionBuilder {
+     typeforce(types.UInt32, locktime);
+     // if any signatures exist, throw
+     if (
+-      this.__INPUTS.some(input => {
++      this.__INPUTS.some((input) => {
+         if (!input.signatures) return false;
+-        return input.signatures.some(s => s !== undefined);
++        return input.signatures.some((s) => s !== undefined);
+       })
+     ) {
+       throw new Error('No, this would invalidate signatures');
+@@ -242,9 +239,9 @@ class TransactionBuilder {
+     return tx;
+   }
+   __canModifyInputs() {
+-    return this.__INPUTS.every(input => {
++    return this.__INPUTS.every((input) => {
+       if (!input.signatures) return true;
+-      return input.signatures.every(signature => {
++      return input.signatures.every((signature) => {
+         if (!signature) return true;
+         const hashType = signatureHashType(signature);
+         // if SIGHASH_ANYONECANPAY is set, signatures would not
+@@ -263,9 +260,9 @@ class TransactionBuilder {
+     // .build() will fail, but .buildIncomplete() is OK
+     return (
+       this.__TX.outs.length === 0 &&
+-      this.__INPUTS.some(input => {
++      this.__INPUTS.some((input) => {
+         if (!input.signatures) return false;
+-        return input.signatures.some(signature => {
++        return input.signatures.some((signature) => {
+           if (!signature) return false; // no signature, no issue
+           const hashType = signatureHashType(signature);
+           if (hashType & transaction_1.Transaction.SIGHASH_NONE) return false; // SIGHASH_NONE doesn't care about outputs
+@@ -277,9 +274,9 @@ class TransactionBuilder {
+   __canModifyOutputs() {
+     const nInputs = this.__TX.ins.length;
+     const nOutputs = this.__TX.outs.length;
+-    return this.__INPUTS.every(input => {
++    return this.__INPUTS.every((input) => {
+       if (input.signatures === undefined) return true;
+-      return input.signatures.every(signature => {
++      return input.signatures.every((signature) => {
+         if (!signature) return true;
+         const hashType = signatureHashType(signature);
+         const hashTypeMod = hashType & 0x1f;
+@@ -424,7 +421,7 @@ function fixMultisigOrder(input, transaction, vin) {
+     return;
+   if (input.pubkeys.length === input.signatures.length) return;
+   const unmatched = input.signatures.concat();
+-  input.signatures = input.pubkeys.map(pubKey => {
++  input.signatures = input.pubkeys.map((pubKey) => {
+     const keyPair = ECPair.fromPublicKey(pubKey);
+     let match;
+     // check for a signature
+@@ -517,7 +514,7 @@ function prepareInput(input, ourPubKey, redeemScript, witnessScript) {
+           bscript.toASM(witnessScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+     const signScript = witnessScript;
+@@ -558,7 +555,7 @@ function prepareInput(input, ourPubKey, redeemScript, witnessScript) {
+           bscript.toASM(redeemScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+     let signScript = redeemScript;
+@@ -593,7 +590,7 @@ function prepareInput(input, ourPubKey, redeemScript, witnessScript) {
+           bscript.toASM(witnessScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+     const signScript = witnessScript;
+@@ -631,7 +628,7 @@ function prepareInput(input, ourPubKey, redeemScript, witnessScript) {
+           bscript.toASM(input.prevOutScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+     let signScript = input.prevOutScript;
+@@ -682,9 +679,9 @@ function build(type, input, allowIncomplete) {
+     case SCRIPT_TYPES.P2MS: {
+       const m = input.maxSignatures;
+       if (allowIncomplete) {
+-        signatures = signatures.map(x => x || script_1.OPS.OP_0);
++        signatures = signatures.map((x) => x || script_1.OPS.OP_0);
+       } else {
+-        signatures = signatures.filter(x => x);
++        signatures = signatures.filter((x) => x);
+       }
+       // if the transaction is not not complete (complete), or if signatures.length === m, validate
+       // otherwise, the number of OP_0's may be >= m, so don't validate (boo)
+@@ -983,14 +980,8 @@ function getSigningData(
+     vin = signParams;
+   } else if (typeof signParams === 'object') {
+     checkSignArgs(inputs, signParams);
+-    ({
+-      vin,
+-      keyPair,
+-      redeemScript,
+-      hashType,
+-      witnessValue,
+-      witnessScript,
+-    } = signParams);
++    ({ vin, keyPair, redeemScript, hashType, witnessValue, witnessScript } =
++      signParams);
+   } else {
+     throw new TypeError(
+       'TransactionBuilder sign first arg must be TxbSignArg or number',
+@@ -1038,14 +1029,14 @@ function getSigningData(
+   // ready to sign
+   let signatureHash;
+   if (network.messagePrefix == '\x18VERGE Signed Message:\n') {
+-    tx.setVerge(true)
+-    tx.setBTCFork(false)
++    tx.setVerge(true);
++    tx.setBTCFork(false);
+   } else if (typeof network.BTCFork !== 'undefined') {
+-    tx.setBTCFork(network.BTCFork)
+-    tx.setVerge(false)
++    tx.setBTCFork(network.BTCFork);
++    tx.setVerge(false);
+   } else {
+-    tx.setVerge(false)
+-    tx.setBTCFork(false)
++    tx.setVerge(false);
++    tx.setBTCFork(false);
+   }
+   if (input.hasWitness) {
+     signatureHash = tx.hashForWitnessV0(
+@@ -1055,12 +1046,23 @@ function getSigningData(
+       hashType,
+     );
+   } else if (tx._IS_BTC_FORK === 'BTG') {
+-    hashType = 0x01 | 0x40 // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
+-    signatureHash = tx.hashForGoldSignature(vin, input.signScript, witnessValue, hashType, input.witness)
++    hashType = 0x01 | 0x40; // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
++    signatureHash = tx.hashForGoldSignature(
++      vin,
++      input.signScript,
++      witnessValue,
++      hashType,
++      input.witness,
++    );
+   } else if (tx._IS_BTC_FORK === 'BCH') {
+-    hashType = 0x01 | 0x40 // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
+-    signatureHash = tx.hashForCashSignature(vin, input.signScript, witnessValue, hashType)
+-  }else {
++    hashType = 0x01 | 0x40; // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
++    signatureHash = tx.hashForCashSignature(
++      vin,
++      input.signScript,
++      witnessValue,
++      hashType,
++    );
++  } else {
+     signatureHash = tx.hashForSignature(vin, input.signScript, hashType);
+   }
+   return {
+diff --git a/node_modules/bitcoinjs-lib/ts_src/transaction.ts b/node_modules/bitcoinjs-lib/ts_src/transaction.ts
+index 3803a0f..c00a906 100644
+--- a/node_modules/bitcoinjs-lib/ts_src/transaction.ts
++++ b/node_modules/bitcoinjs-lib/ts_src/transaction.ts
+@@ -5,8 +5,6 @@ import * as bscript from './script';
+ import { OPS as opcodes } from './script';
+ import * as types from './types';
+ 
+-import BlocksoftCryptoLog from '../../../crypto/common/BlocksoftCryptoLog'
+-
+ const typeforce = require('typeforce');
+ const varuint = require('varuint-bitcoin');
+ 
+@@ -76,9 +74,9 @@ export class Transaction {
+   static readonly ADVANCED_TRANSACTION_MARKER = 0x00;
+   static readonly ADVANCED_TRANSACTION_FLAG = 0x01;
+ 
+-  static readonly SIGHASH_BITCOINCASHBIP143 = 0x40
+-  static readonly FORKID_BTG = 0x4F // 79
+-  static readonly FORKID_BCH = 0x00
++  static readonly SIGHASH_BITCOINCASHBIP143 = 0x40;
++  static readonly FORKID_BTG = 0x4f; // 79
++  static readonly FORKID_BCH = 0x00;
+ 
+   static fromBuffer(buffer: Buffer, _NO_STRICT?: boolean): Transaction {
+     let offset: number = 0;
+@@ -124,7 +122,6 @@ export class Transaction {
+     }
+ 
+     const tx = new Transaction();
+-    BlocksoftCryptoLog.log('TransactionBuilder Transaction recheck - started as js - time ' + this.time)
+     tx.version = readInt32();
+ 
+     const marker = buffer.readUInt8(offset);
+@@ -197,15 +194,11 @@ export class Transaction {
+   ins: Input[] = [];
+   outs: OpenOutput[] = [];
+ 
+-  setVerge(
+-      _val?: any,
+-  ): void {
++  setVerge(_val?: any): void {
+     this._IS_VERGE = _val;
+   }
+ 
+-  setBTCFork(
+-      _val?: any,
+-  ): void {
++  setBTCFork(_val?: any): void {
+     this._IS_BTC_FORK = _val;
+   }
+ 
+@@ -260,7 +253,7 @@ export class Transaction {
+   }
+ 
+   hasWitnesses(): boolean {
+-    return this.ins.some(x => {
++    return this.ins.some((x) => {
+       return x.witness.length !== 0;
+     });
+   }
+@@ -284,7 +277,7 @@ export class Transaction {
+     newTx.version = this.version;
+     newTx.locktime = this.locktime;
+ 
+-    newTx.ins = this.ins.map(txIn => {
++    newTx.ins = this.ins.map((txIn) => {
+       return {
+         hash: txIn.hash,
+         index: txIn.index,
+@@ -294,7 +287,7 @@ export class Transaction {
+       };
+     });
+ 
+-    newTx.outs = this.outs.map(txOut => {
++    newTx.outs = this.outs.map((txOut) => {
+       return {
+         script: txOut.script,
+         value: (txOut as Output).value,
+@@ -327,7 +320,7 @@ export class Transaction {
+ 
+     // ignore OP_CODESEPARATOR
+     const ourScript = bscript.compile(
+-      bscript.decompile(prevOutScript)!.filter(x => {
++      bscript.decompile(prevOutScript)!.filter((x) => {
+         return x !== opcodes.OP_CODESEPARATOR;
+       }),
+     );
+@@ -374,7 +367,7 @@ export class Transaction {
+       // SIGHASH_ALL: only ignore input scripts
+     } else {
+       // "blank" others input scripts
+-      txTmp.ins.forEach(input => {
++      txTmp.ins.forEach((input) => {
+         input.script = EMPTY_SCRIPT;
+       });
+       txTmp.ins[inIndex].script = ourScript;
+@@ -432,7 +425,7 @@ export class Transaction {
+       tbuffer = Buffer.allocUnsafe(36 * this.ins.length);
+       toffset = 0;
+ 
+-      this.ins.forEach(txIn => {
++      this.ins.forEach((txIn) => {
+         writeSlice(txIn.hash);
+         writeUInt32(txIn.index);
+       });
+@@ -448,7 +441,7 @@ export class Transaction {
+       tbuffer = Buffer.allocUnsafe(4 * this.ins.length);
+       toffset = 0;
+ 
+-      this.ins.forEach(txIn => {
++      this.ins.forEach((txIn) => {
+         writeUInt32(txIn.sequence);
+       });
+ 
+@@ -466,7 +459,7 @@ export class Transaction {
+       tbuffer = Buffer.allocUnsafe(txOutsSize);
+       toffset = 0;
+ 
+-      this.outs.forEach(out => {
++      this.outs.forEach((out) => {
+         writeUInt64((out as Output).value);
+         writeVarSlice(out.script);
+       });
+@@ -559,7 +552,7 @@ export class Transaction {
+   private __toBuffer(
+     buffer?: Buffer,
+     initialOffset?: number,
+-    _ALLOW_WITNESS?: boolean
++    _ALLOW_WITNESS?: boolean,
+   ): Buffer {
+     if (!buffer)
+       buffer = Buffer.allocUnsafe(this.__byteLength(_ALLOW_WITNESS!)) as Buffer;
+@@ -615,7 +608,7 @@ export class Transaction {
+ 
+     writeVarInt(this.ins.length);
+ 
+-    this.ins.forEach(txIn => {
++    this.ins.forEach((txIn) => {
+       writeSlice(txIn.hash);
+       writeUInt32(txIn.index);
+       writeVarSlice(txIn.script);
+@@ -623,7 +616,7 @@ export class Transaction {
+     });
+ 
+     writeVarInt(this.outs.length);
+-    this.outs.forEach(txOut => {
++    this.outs.forEach((txOut) => {
+       if (isOutput(txOut)) {
+         writeUInt64(txOut.value);
+       } else {
+@@ -634,7 +627,7 @@ export class Transaction {
+     });
+ 
+     if (hasWitnesses) {
+-      this.ins.forEach(input => {
++      this.ins.forEach((input) => {
+         writeVector(input.witness);
+       });
+     }
+diff --git a/node_modules/bitcoinjs-lib/ts_src/transaction_builder.ts b/node_modules/bitcoinjs-lib/ts_src/transaction_builder.ts
+index b1b34b6..c4d36bc 100644
+--- a/node_modules/bitcoinjs-lib/ts_src/transaction_builder.ts
++++ b/node_modules/bitcoinjs-lib/ts_src/transaction_builder.ts
+@@ -13,7 +13,6 @@ import { OPS as ops } from './script';
+ import { Output, Transaction } from './transaction';
+ import * as types from './types';
+ 
+-import BlocksoftCryptoLog from '../../../crypto/common/BlocksoftCryptoLog'
+ const typeforce = require('typeforce');
+ 
+ const SCRIPT_TYPES = classify.types;
+@@ -111,12 +110,12 @@ export class TransactionBuilder {
+     txb.setLockTime(transaction.locktime);
+ 
+     // Copy outputs (done first to avoid signature invalidation)
+-    transaction.outs.forEach(txOut => {
++    transaction.outs.forEach((txOut) => {
+       txb.addOutput(txOut.script, (txOut as Output).value);
+     });
+ 
+     // Copy inputs
+-    transaction.ins.forEach(txIn => {
++    transaction.ins.forEach((txIn) => {
+       txb.__addInputUnsafe(txIn.hash, txIn.index, {
+         sequence: txIn.sequence,
+         script: txIn.script,
+@@ -148,7 +147,6 @@ export class TransactionBuilder {
+     this.__TX = new Transaction();
+     this.__TX.version = 2;
+     this.__USE_LOW_R = false;
+-    BlocksoftCryptoLog.log('TransactionBuilder recheck - started as ts')
+   }
+ 
+   setLowR(setting?: boolean): boolean {
+@@ -165,10 +163,10 @@ export class TransactionBuilder {
+ 
+     // if any signatures exist, throw
+     if (
+-      this.__INPUTS.some(input => {
++      this.__INPUTS.some((input) => {
+         if (!input.signatures) return false;
+ 
+-        return input.signatures.some(s => s !== undefined);
++        return input.signatures.some((s) => s !== undefined);
+       })
+     ) {
+       throw new Error('No, this would invalidate signatures');
+@@ -353,10 +351,10 @@ export class TransactionBuilder {
+   }
+ 
+   private __canModifyInputs(): boolean {
+-    return this.__INPUTS.every(input => {
++    return this.__INPUTS.every((input) => {
+       if (!input.signatures) return true;
+ 
+-      return input.signatures.every(signature => {
++      return input.signatures.every((signature) => {
+         if (!signature) return true;
+         const hashType = signatureHashType(signature);
+ 
+@@ -376,10 +374,10 @@ export class TransactionBuilder {
+     // .build() will fail, but .buildIncomplete() is OK
+     return (
+       this.__TX.outs.length === 0 &&
+-      this.__INPUTS.some(input => {
++      this.__INPUTS.some((input) => {
+         if (!input.signatures) return false;
+ 
+-        return input.signatures.some(signature => {
++        return input.signatures.some((signature) => {
+           if (!signature) return false; // no signature, no issue
+           const hashType = signatureHashType(signature);
+           if (hashType & Transaction.SIGHASH_NONE) return false; // SIGHASH_NONE doesn't care about outputs
+@@ -393,10 +391,10 @@ export class TransactionBuilder {
+     const nInputs = this.__TX.ins.length;
+     const nOutputs = this.__TX.outs.length;
+ 
+-    return this.__INPUTS.every(input => {
++    return this.__INPUTS.every((input) => {
+       if (input.signatures === undefined) return true;
+ 
+-      return input.signatures.every(signature => {
++      return input.signatures.every((signature) => {
+         if (!signature) return true;
+         const hashType = signatureHashType(signature);
+ 
+@@ -576,7 +574,7 @@ function fixMultisigOrder(
+ 
+   const unmatched = input.signatures!.concat();
+ 
+-  input.signatures = input.pubkeys!.map(pubKey => {
++  input.signatures = input.pubkeys!.map((pubKey) => {
+     const keyPair = ECPair.fromPublicKey(pubKey!);
+     let match: Buffer | undefined;
+ 
+@@ -693,7 +691,7 @@ function prepareInput(
+           bscript.toASM(witnessScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+ 
+@@ -743,7 +741,7 @@ function prepareInput(
+           bscript.toASM(redeemScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+ 
+@@ -786,7 +784,7 @@ function prepareInput(
+           bscript.toASM(witnessScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+ 
+@@ -831,7 +829,7 @@ function prepareInput(
+           bscript.toASM(input.prevOutScript) +
+           ')',
+       );
+-    if (input.signatures && input.signatures.some(x => x !== undefined)) {
++    if (input.signatures && input.signatures.some((x) => x !== undefined)) {
+       expanded.signatures = input.signatures;
+     }
+ 
+@@ -899,9 +897,9 @@ function build(
+     case SCRIPT_TYPES.P2MS: {
+       const m = input.maxSignatures;
+       if (allowIncomplete) {
+-        signatures = signatures.map(x => x || ops.OP_0);
++        signatures = signatures.map((x) => x || ops.OP_0);
+       } else {
+-        signatures = signatures.filter(x => x);
++        signatures = signatures.filter((x) => x);
+       }
+ 
+       // if the transaction is not not complete (complete), or if signatures.length === m, validate
+@@ -1226,14 +1224,8 @@ function getSigningData(
+     vin = signParams;
+   } else if (typeof signParams === 'object') {
+     checkSignArgs(inputs, signParams);
+-    ({
+-      vin,
+-      keyPair,
+-      redeemScript,
+-      hashType,
+-      witnessValue,
+-      witnessScript,
+-    } = signParams);
++    ({ vin, keyPair, redeemScript, hashType, witnessValue, witnessScript } =
++      signParams);
+   } else {
+     throw new TypeError(
+       'TransactionBuilder sign first arg must be TxbSignArg or number',
+@@ -1290,14 +1282,14 @@ function getSigningData(
+   let signatureHash: Buffer;
+ 
+   if (network.messagePrefix == '\x18VERGE Signed Message:\n') {
+-    tx.setVerge(true)
+-    tx.setBTCFork(false)
++    tx.setVerge(true);
++    tx.setBTCFork(false);
+   } else if (typeof network.BTCFork !== 'undefined') {
+-    tx.setBTCFork(network.BTCFork)
+-    tx.setVerge(false)
++    tx.setBTCFork(network.BTCFork);
++    tx.setVerge(false);
+   } else {
+-    tx.setVerge(false)
+-    tx.setBTCFork(false)
++    tx.setVerge(false);
++    tx.setBTCFork(false);
+   }
+ 
+   if (input.hasWitness) {
+@@ -1308,11 +1300,22 @@ function getSigningData(
+       hashType,
+     );
+   } else if (tx._IS_BTC_FORK === 'BTG') {
+-    hashType = 0x01 | 0x40 // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
+-    signatureHash = tx.hashForGoldSignature(vin, input.signScript, witnessValue, hashType, input.witness)
++    hashType = 0x01 | 0x40; // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
++    signatureHash = tx.hashForGoldSignature(
++      vin,
++      input.signScript,
++      witnessValue,
++      hashType,
++      input.witness,
++    );
+   } else if (tx._IS_BTC_FORK === 'BCH') {
+-    hashType = 0x01 | 0x40 // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
+-    signatureHash = tx.hashForCashSignature(vin, input.signScript, witnessValue, hashType)
++    hashType = 0x01 | 0x40; // Transaction.SIGHASH_ALL | Transaction.SIGHASH_BITCOINCASHBIP143
++    signatureHash = tx.hashForCashSignature(
++      vin,
++      input.signScript,
++      witnessValue,
++      hashType,
++    );
+   } else {
+     signatureHash = tx.hashForSignature(
+       vin,

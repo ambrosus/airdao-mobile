@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     height: 4
   },
   knob: {
-    shadowColor: '#000000',
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 2
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   currentValue: {
-    color: '#000000',
+    color: COLORS.black,
     alignSelf: 'center',
     marginTop: 11
   }

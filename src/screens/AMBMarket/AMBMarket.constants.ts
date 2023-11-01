@@ -16,15 +16,15 @@ export interface AMBMarketItem {
 
 export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   marketCap: {
-    title: 'market.cap',
-    body: 'market.cap.popup',
+    title: 'amb.market.market.cap',
+    body: 'amb.market.market.cap.popup',
     testID: 'market-cap-popupinfo',
     idx: 2,
     key: 'marketCap'
   },
   fullyDilutedMarketCap: {
-    title: 'fully.diluted.market.cap',
-    body: 'fully.diluted.market.cap.popup',
+    title: 'amb.market.fully.diluted.market.cap',
+    body: 'amb.market.fully.diluted.market.cap.popup',
     testID: 'diluted-cap-popupinfo',
     idx: 3,
     key: 'fullyDilutedMarketCap'
@@ -47,22 +47,22 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
   //   testID: 'dex-volume-popupinfo'
   // },
   circulatingSupply: {
-    title: 'circulating.supply',
-    body: 'circulating.supply.popup',
+    title: 'amb.market.circulating.supply',
+    body: 'amb.market.circulating.supply.popup',
     testID: 'circulation-popupinfo',
     idx: 4,
     key: 'circulatingSupply'
   },
   maxSupply: {
-    title: 'max.supply',
-    body: 'max.supply.popup',
+    title: 'amb.market.max.supply',
+    body: 'amb.market.max.supply.popup',
     testID: 'max-supply-popupinfo',
     idx: 0,
     key: 'maxSupply'
   },
   totalSupply: {
-    title: 'total.supply',
-    body: 'total.supply.popup',
+    title: 'amb.market.total.supply',
+    body: 'amb.market.total.supply.popup',
     testID: 'total-supply-popupinfo',
     idx: 1,
     key: 'totalSupply'

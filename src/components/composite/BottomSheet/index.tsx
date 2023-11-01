@@ -10,7 +10,7 @@ import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { Separator } from '@components/base';
-import { useFullscreenModalHeight } from '@hooks';
+import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 
@@ -26,7 +26,9 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       fullscreen = false,
       swiperIconVisible = false,
       onClose,
-      testID
+      testID,
+      swipingEnabled = true,
+      closeOnBackPress = true
     },
     ref
   ) => {
@@ -63,7 +65,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
                     ? 0
                     : keyboardHeight)
                 : height,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: COLORS.neutral0,
               borderTopRightRadius: borderRadius,
               borderTopLeftRadius: borderRadius
             },
@@ -73,7 +75,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         >
           {swiperIconVisible && (
             <View style={styles.swiper}>
-              <Separator height={4} color={COLORS.lavenderGray} />
+              <Separator height={4} color={COLORS.neutral200} />
             </View>
           )}
           {children}
@@ -100,11 +102,11 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
-        swipeDirection={['down']}
+        swipeDirection={swipingEnabled ? ['down'] : []}
         onSwipeComplete={dismiss}
         useNativeDriverForBackdrop
         propagateSwipe
-        onBackButtonPress={dismiss}
+        onBackButtonPress={() => (closeOnBackPress ? dismiss() : null)}
         onBackdropPress={dismiss}
         backdropOpacity={backdropOpacity}
         style={styles.container}

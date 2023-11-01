@@ -6,7 +6,7 @@ import { COLORS } from '@constants/colors';
 import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 import { verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
-import { BottomSheetCreateRenameGroup } from '@components/templates';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
@@ -36,7 +36,7 @@ export const BottomSheetAddWalletToList = forwardRef<
       <Text
         fontSize={18}
         fontFamily="Inter_700Bold"
-        color={COLORS.jetBlack}
+        color={COLORS.neutral800}
         align="center"
       >
         {title}
@@ -49,7 +49,11 @@ export const BottomSheetAddWalletToList = forwardRef<
         }}
         style={{ width: '90%', alignSelf: 'center' }}
       >
-        <Text fontFamily="Inter_600SemiBold" color={COLORS.white} fontSize={16}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          color={COLORS.neutral0}
+          fontSize={16}
+        >
           Create new group
         </Text>
       </PrimaryButton>

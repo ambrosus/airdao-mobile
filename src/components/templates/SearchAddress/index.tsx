@@ -12,12 +12,12 @@ import {
   KeyboardDismissingView,
   Row,
   Spacer,
-  Spinner,
   Text
 } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
+  CenteredSpinner,
   InputWithIcon
 } from '@components/composite';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
@@ -29,7 +29,7 @@ import {
   useTransactionDetails
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
@@ -110,9 +110,10 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
   const toggleWatchlist = async (isOnWatchlist: boolean) => {
     if (isOnWatchlist) {
       Toast.show({
-        title: t('toast.address.watchlisted.msg'),
-        message: t('toast.tap.to.rename.msg'),
-        type: ToastPosition.Top,
+        text: t('toast.address.watchlisted.msg'),
+        subtext: t('toast.tap.to.rename.msg'),
+        position: ToastPosition.Top,
+        type: ToastType.Success,
         onBodyPress: editModal.current?.show
       });
     }
@@ -160,9 +161,9 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert(t('invalid.qr.code.msg'), '', [
+      Alert.alert(t('alert.invalid.qr.code.msg'), '', [
         {
-          text: t('scan.again.msg'),
+          text: t('alert.scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -204,12 +205,12 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           testID="search-input"
           ref={inputRef}
           maxLength={68}
-          iconLeft={<SearchIcon color={COLORS.smokyBlack50} />}
+          iconLeft={<SearchIcon color={COLORS.alphaBlack50} />}
           iconRight={
             <Row alignItems="center">
               {address.length > 0 ? (
                 <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                  <CloseIcon color={COLORS.smokyBlack50} scale={0.75} />
+                  <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
                 </Button>
               ) : (
                 <Button onPress={showScanner}>
@@ -218,7 +219,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
               )}
             </Row>
           }
-          placeholder={t('search.address.input')}
+          placeholder={t('explore.search.placeholder')}
           returnKeyType="search"
           onFocus={onInputFocused}
           onBlur={onInputBlur}
@@ -233,7 +234,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {isLoading && <Spinner />}
+      {isLoading && <CenteredSpinner />}
       {(error && !!address && !finalAccount) || (hashError && !!address) ? (
         <SearchAddressNoResult />
       ) : null}
@@ -249,6 +250,17 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
           <Spacer value={verticalScale(24)} />
           <View style={styles.divider} />
           <Spacer value={verticalScale(24)} />
+          <Row alignItems="center">
+            <Spacer horizontal value={scale(16)} />
+            <Text
+              fontFamily="Inter_700Bold"
+              fontSize={20}
+              color={COLORS.neutral800}
+            >
+              {t('common.transactions')}
+            </Text>
+          </Row>
+          <Spacer value={verticalScale(12)} />
           <AccountTransactions
             transactions={transactions}
             onEndReached={loadMoreTransactions}
@@ -266,7 +278,7 @@ export const SearchAddress = (props: SearchAdressProps): JSX.Element => {
             fontSize={20}
             color={COLORS.neutral800}
           >
-            {t('transaction.details')}
+            {t('common.transaction.details')}
           </Text>
           <Spacer value={verticalScale(24)} />
           <TransactionDetails

@@ -42,9 +42,9 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.white}
+            color={COLORS.neutral0}
           >
-            {t('add.address.btn')}
+            {t('collection.add.address')}
           </Text>
         </PrimaryButton>
         <Spacer value={scale(24)} />
@@ -52,7 +52,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
           onPress={handleCreateCollectionPress}
           type="circular"
           style={{
-            backgroundColor: COLORS.charcoal
+            backgroundColor: COLORS.alphaBlack5
           }}
           testID="Create_Collection_Button"
         >
@@ -60,9 +60,9 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
             style={{ marginVertical: 12 }}
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
-            {t('create.group')}
+            {t('collection.create')}
           </Text>
         </Button>
       </View>
