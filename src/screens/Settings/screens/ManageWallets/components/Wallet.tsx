@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { ChevronDownIcon, LogoGradientCircular } from '@components/svg/icons';
+import { AirdaoBlueIcon, ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -21,7 +21,7 @@ export const WalletItem = (props: WalletItemProps) => {
       style={styles.container}
     >
       <Row alignItems="center" width={scale(224)}>
-        <LogoGradientCircular />
+        <AirdaoBlueIcon scale={1.25} />
         <Spacer value={scale(16)} horizontal />
         <Text numberOfLines={1}>{wallet.name}</Text>
       </Row>
