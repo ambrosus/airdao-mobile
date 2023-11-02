@@ -26,7 +26,7 @@ const createAccountInDB = async (
       changesLog: '',
       currencyCode
     };
-    await AccountDB.createAccount(account, true);
+    return await AccountDB.createAccount(account, true);
   } catch (error) {
     throw error;
   }

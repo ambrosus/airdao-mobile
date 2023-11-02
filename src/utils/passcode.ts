@@ -12,7 +12,7 @@ const getPasscodeFromDB = async () => {
 
 const setPasscodeInDB = async (passcode: string[]) => {
   try {
-    await Cache.setItem(CacheKey.Passcode, passcode);
+    await Cache.setItem(CacheKey.Passcode, passcode.join(''));
   } catch (error) {
     console.error('Error setting Passcode in the database:', error);
   }
@@ -37,8 +37,8 @@ const setFaceIDStatusInDB = async (isEnabled: boolean) => {
 };
 
 const verifyPasscode = async (enteredPasscode: string[]) => {
-  const passcode = await PasscodeUtils.getPasscodeFromDB();
-  return JSON.stringify(passcode) === JSON.stringify(enteredPasscode);
+  const passcode = await getPasscodeFromDB();
+  return passcode == enteredPasscode.join('');
 };
 
 export const PasscodeUtils = {
