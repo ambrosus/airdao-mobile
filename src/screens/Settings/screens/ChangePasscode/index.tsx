@@ -46,7 +46,7 @@ export const ChangePasscode = () => {
             t('common.please.try.again'),
             [
               {
-                text: t('try.again'),
+                text: t('button.try.again'),
                 onPress: () => null,
                 style: 'cancel'
               }
@@ -73,7 +73,7 @@ export const ChangePasscode = () => {
             t('common.please.try.again'),
             [
               {
-                text: t('try.again'),
+                text: t('button.try.again'),
                 onPress: () => null,
                 style: 'cancel'
               }
