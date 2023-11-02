@@ -1,7 +1,13 @@
 import { Wallet } from '@models/Wallet';
 import { DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
-import { Database, WalletDB, AccountDB } from '@database';
+import {
+  Database,
+  WalletDB,
+  AccountDB,
+  AccountDBModel,
+  WalletDBModel
+} from '@database';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
 import { MnemonicUtils } from './mnemonics';
@@ -48,39 +54,52 @@ const _getWalletName = async () => {
 };
 
 const processWallet = async (mnemonic: string) => {
-  const number = await _getWalletNumber();
-  const name = await _getWalletName();
-  const hash = await _saveWallet({ mnemonic, name, number });
-  const fullWallet: Wallet = new Wallet({
-    hash,
-    name,
-    number
-  });
-  // get wallet info from network
-  const { cashbackToken } = await CashBackUtils.getByHash(hash);
-  fullWallet.cashback = cashbackToken;
-  const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
-    mnemonic: mnemonic
-  });
-  // create wallet in db
-  await WalletDB.createWallet(fullWallet);
-  // securely save private key
-  await Cache.setItem(
-    `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
-    _account.privateKey
-  );
-  // create account in db
-  const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
-  await AccountUtils.createAccountInDB(
-    _account.address,
-    fullWallet.hash,
-    _account.path,
-    _account.index,
-    currencyCode
-  );
-  // subscribe to notifications
-  API.watcherService.watchAddresses([_account.address]);
-  return { hash };
+  let walletInDb: WalletDBModel | null = null;
+  let accountInDb: AccountDBModel | null = null;
+  try {
+    const number = await _getWalletNumber();
+    const name = await _getWalletName();
+    const hash = await _saveWallet({ mnemonic, name, number });
+    const fullWallet: Wallet = new Wallet({
+      hash,
+      name,
+      number
+    });
+    // get wallet info from network
+    const { cashbackToken } = await CashBackUtils.getByHash(hash);
+    fullWallet.cashback = cashbackToken;
+    const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
+      mnemonic: mnemonic
+    });
+    const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [walletInDbResult, _, accountInDbResult] = await Promise.all([
+      // create wallet in db
+      WalletDB.createWallet(fullWallet),
+      // securely store private key
+      Cache.setItem(
+        `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
+        _account.privateKey
+      ),
+      // create account in db
+      AccountUtils.createAccountInDB(
+        _account.address,
+        fullWallet.hash,
+        _account.path,
+        _account.index,
+        currencyCode
+      )
+    ]);
+    walletInDb = walletInDbResult;
+    accountInDb = accountInDbResult;
+    // subscribe to notifications
+    API.watcherService.watchAddresses([_account.address]);
+    return { hash };
+  } catch (error) {
+    if (walletInDb) walletInDb.destroyPermanently();
+    if (accountInDb) accountInDb.destroyPermanently();
+    throw error;
+  }
 };
 
 const changeSelectedWallet = async (hash: string) => {

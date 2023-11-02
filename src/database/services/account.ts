@@ -77,6 +77,7 @@ export class AccountDB {
           'wallet'
         );
       }
+      return finalAccount;
     } catch (error) {
       throw error;
     }

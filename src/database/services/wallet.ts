@@ -33,8 +33,9 @@ export class WalletDB {
   static async createWallet(wallet: Wallet) {
     const walletInDB = await this.getWalletByHash(wallet.hash);
     if (!walletInDB) {
-      await Database.createModel(walletsDb, wallet);
+      return (await Database.createModel(walletsDb, wallet)) as WalletDBModel;
     }
+    return walletInDB;
   }
 
   static async updateWalletByHash(

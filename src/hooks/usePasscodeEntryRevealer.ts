@@ -20,7 +20,7 @@ export const usePasscodeEntryRevealer = () => {
       const isBiometricAuthenticationInProgress = await Cache.getItem(
         CacheKey.isBiometricAuthenticationInProgress
       );
-      if (isBiometricAuthenticationInProgress === 'false') {
+      if (!isFaceIDEnabled || isBiometricAuthenticationInProgress === 'false') {
         navigation.navigate('Passcode');
       }
     }

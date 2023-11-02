@@ -34,7 +34,10 @@ const getNotificationSettings = async (): Promise<NotificationSettings> => {
 
 const setItem = async (key: CacheKey | string, item: any): Promise<void> => {
   try {
-    await store.setItem(key, JSON.stringify(item));
+    await store.setItem(
+      key,
+      typeof item === 'string' ? item : JSON.stringify(item)
+    );
   } catch (error) {
     throw error;
   }

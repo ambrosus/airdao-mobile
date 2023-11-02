@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-popover-view/dist/Utility.js b/node_modules/react-native-popover-view/dist/Utility.js
+index 35c6c1d..c51c62c 100644
+--- a/node_modules/react-native-popover-view/dist/Utility.js
++++ b/node_modules/react-native-popover-view/dist/Utility.js
+@@ -40,7 +40,7 @@ import { DEFAULT_ARROW_SIZE, DEFAULT_BORDER_RADIUS } from './Constants';
+ export function getRectForRef(ref) {
+     return new Promise(function (resolve, reject) {
+         if (ref.current) {
+-            NativeModules.UIManager.measure(findNodeHandle(ref.current), function (_1, _2, width, height, x, y) {
++            ref.current.measureInWindow(function (x, y, width, height)  {
+                 return resolve(new Rect(x, y, width, height));
+             });
+         }
