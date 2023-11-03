@@ -3,6 +3,7 @@ import { View, TextInput } from 'react-native';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button } from '@components/base';
 import { useForwardedRef } from '@hooks';
+import { StringUtils } from '@utils/string';
 
 interface PasscodeProps {
   onPasscodeChange: (passcode: string[]) => void;
@@ -15,11 +16,12 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
     const localRef = useForwardedRef<TextInput>(ref);
 
     const handleCodeChange = (text: string) => {
-      setCode(text);
-      const passcodeArray = text.split('');
+      const numericText = StringUtils.removeNonNumericCharacters(text, false);
+      setCode(numericText);
+      const passcodeArray = numericText.split('');
       onPasscodeChange(passcodeArray);
       if (type === 'change') {
-        if (text.length === 4) {
+        if (numericText.length === 4) {
           setTimeout(() => setCode(''), 50);
         }
       }
