@@ -72,10 +72,10 @@ const processWallet = async (mnemonic: string) => {
       mnemonic: mnemonic
     });
     const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
+    // create wallet in db
+    walletInDb = await WalletDB.createWallet(fullWallet);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [walletInDbResult, _, accountInDbResult] = await Promise.all([
-      // create wallet in db
-      WalletDB.createWallet(fullWallet),
+    const [_, accountInDbResult] = await Promise.all([
       // securely store private key
       Cache.setItem(
         `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
@@ -90,7 +90,6 @@ const processWallet = async (mnemonic: string) => {
         currencyCode
       )
     ]);
-    walletInDb = walletInDbResult;
     accountInDb = accountInDbResult;
     // subscribe to notifications
     API.watcherService.watchAddresses([_account.address]);
