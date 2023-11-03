@@ -51,8 +51,15 @@ const setItem = async (key: CacheKey | string, item: any): Promise<void> => {
 const getItem = async (key: CacheKey | string): Promise<unknown | null> => {
   try {
     const item = await store.getItem(key);
-    if (item) return JSON.parse(item);
-    return null;
+    if (!item) return null;
+
+    try {
+      // Attempt to parse it as JSON, if it's a JSON string.
+      return JSON.parse(item);
+    } catch {
+      // If it's not a JSON string, return the original item.
+      return item;
+    }
   } catch (error) {
     throw error;
   }
