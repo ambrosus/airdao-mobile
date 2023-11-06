@@ -61,6 +61,7 @@ export const ChangePasscode = () => {
         // Step 3: Confirm new user passcode
         if (JSON.stringify(newPasscode) === JSON.stringify(typedPasscode)) {
           await PasscodeUtils.setPasscodeInDB(typedPasscode);
+          setSavedPasscode(typedPasscode);
           navigation.navigate('SecuritySettings');
           Toast.show({
             text: t('change.passcode.success'),
