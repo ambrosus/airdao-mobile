@@ -15,7 +15,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
-      stake: false
+      stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs'
   },

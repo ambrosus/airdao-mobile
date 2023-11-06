@@ -3,6 +3,7 @@ export * from './AccountList';
 export * from './AMBToken';
 export * from './Explorer';
 export * from './Notification';
+export * from './StakingPool';
 export * from './Token';
 export * from './Transaction';
 export * from './Wallet';

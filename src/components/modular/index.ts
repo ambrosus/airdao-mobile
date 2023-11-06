@@ -4,6 +4,7 @@ export * from './Button';
 export * from './CollectionItem';
 export * from './QRCodeWithLogo';
 export * from './SingleAsset';
+export * from './StakingPool';
 export * from './Toast';
 export * from './TokenLogo';
 export * from './TransactionItem';

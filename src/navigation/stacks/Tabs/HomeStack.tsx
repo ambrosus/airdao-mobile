@@ -12,6 +12,7 @@ import {
   CreateWalletSuccess
 } from '@screens/CreateWallet';
 import { ImportWallet, ImportWalletSuccess } from '@screens/ImportWallet';
+import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SendCryptoProvider } from '@contexts';
 import {
   SetupPasscode,
@@ -20,6 +21,7 @@ import {
 } from '@screens/SetupPasscode';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
+import { StakingPoolScreen } from '@screens/StakingPool';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -30,28 +32,30 @@ export const HomeStack = () => {
         initialRouteName="HomeScreen"
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
-        <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
-        <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
+        <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
+        <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
-        <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
-        <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
-        <Stack.Screen
-          name="SuccessSetupSecurity"
-          component={SuccessSetupSecurity}
-        />
         <Stack.Screen
           name="CreateWalletSuccess"
           component={CreateWalletSuccess}
         />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen
           name="ImportWalletSuccess"
           component={ImportWalletSuccess}
+        />
+        <Stack.Screen name="Notifications" component={Notifications} />
+        <Stack.Screen name="SendFunds" component={SendFunds} />
+        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
+        <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
+        <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
+        <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
+        <Stack.Screen
+          name="SuccessSetupSecurity"
+          component={SuccessSetupSecurity}
         />
         <Stack.Screen name="ImportWallet" component={ImportWallet} />
         {getCommonStack(Stack as any)}

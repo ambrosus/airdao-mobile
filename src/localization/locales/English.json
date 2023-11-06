@@ -260,6 +260,11 @@
   "share.time": "Time",
   "share.24hr": "24hr",
 
+  "staking.apy": "APY",
+  "staking.current.stake": "Currently staking {{amount}} {{symbol}}",
+  "staking.header": "Stake",
+  "staking.pools": "Pools",
+
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",

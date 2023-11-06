@@ -39,7 +39,7 @@ export function Header(props: HeaderProps): JSX.Element {
           fontFamily="Inter_700Bold"
           fontSize={20}
           fontWeight="700"
-          color={COLORS.neutral800}
+          color={COLORS.neutral900}
         >
           {title}
         </Text>
@@ -53,7 +53,7 @@ export function Header(props: HeaderProps): JSX.Element {
       <>
         {backIconVisible && (
           <Button onPress={_onBackPress}>
-            <BackIcon color={COLORS.neutral900} />
+            <BackIcon color={COLORS.neutral900} scale={1.15} />
           </Button>
         )}
         {titlePosition === 'left' && (

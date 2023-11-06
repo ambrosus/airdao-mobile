@@ -17,6 +17,7 @@ export * from './NotificationSettings';
 export * from './SearchAddress';
 export * from './ExplorerAccount';
 export * from './BarcodeScanner';
+export * from './StakingPoolList';
 export * from './TokenPicker';
 export * from './TransactionDetails';
 export * from './StatusBar';

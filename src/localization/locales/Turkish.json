@@ -260,6 +260,11 @@
   "share.time": "Tarih",
   "share.24hr": "24 saat",
 
+  "staking.apy": "YFG",
+  "staking.current.stake": "{{amount}} {{symbol}} Stake ediliyor",
+  "staking.header": "Stake",
+  "staking.pools": "Havuzlar",
+
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
   "toast.the.message.lower.case": "adres",

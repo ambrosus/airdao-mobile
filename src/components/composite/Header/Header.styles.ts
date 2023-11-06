@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { shadow } from '@constants/shadow';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
@@ -13,8 +12,7 @@ export const styles = StyleSheet.create({
     height: verticalScale(48),
     minHeight: 56,
     paddingLeft: leftPadding,
-    paddingRight: rightPadding,
-    ...shadow
+    paddingRight: rightPadding
   },
   left: {
     position: 'absolute',
