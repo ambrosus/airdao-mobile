@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -28,7 +28,7 @@
       "buildNumber": "1.0.20"
     },
     "android": {
-      "versionCode": 20,
+      "versionCode": 27,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

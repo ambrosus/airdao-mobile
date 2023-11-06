@@ -12,7 +12,7 @@ export const SettingsInfoBlock = () => {
   };
 
   const openPrivacyPolicy = () => {
-    Linking.openURL('https://airdao.io/AirDAO_Mobile_App_Privacy_Policy.pdf');
+    Linking.openURL('https://airdao.io/mobile-privacy-policy');
   };
 
   return (
