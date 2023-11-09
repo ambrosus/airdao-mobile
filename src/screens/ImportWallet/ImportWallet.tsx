@@ -202,7 +202,9 @@ export const ImportWallet = () => {
             {t('import.wallet.loading')}
           </Text>
           <Spacer value={verticalScale(24)} />
-          <Spinner />
+          <View style={{ alignSelf: 'center' }}>
+            <Spinner />
+          </View>
         </View>
       ) : (
         <KeyboardDismissingView style={{ flex: 1 }}>
