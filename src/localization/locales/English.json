@@ -144,6 +144,7 @@
   "empty.assets": "No assets yet",
   "empty.groups": "Create personalized groups to easily track multiple addresses",
   "empty.notifications": "You have no notifications right now.",
+  "empty.notifications.check.later": "Please come back later.",
 
   "explore.search.check.typos": "Please check for any typos or try a different address",
   "explore.search.no.account.info": "Could not load accounts info",

@@ -3,16 +3,18 @@ import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import * as Updates from 'expo-updates';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
+import Config from '@constants/config';
 import { SETTINGS_MENU_ITEMS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
-import Config from '@constants/config';
 
+const isStage = Updates.channel === 'stage';
 const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
   const { item } = props;
   const { t } = useTranslation();
@@ -76,6 +78,7 @@ export const SettingsScreen = () => {
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
+      {isStage && <Text style={{ margin: 20 }}>Build: 1.1.5.1</Text>}
     </View>
   );
 };
