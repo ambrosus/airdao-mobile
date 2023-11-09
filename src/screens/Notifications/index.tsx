@@ -109,7 +109,7 @@ export const Notifications = (): JSX.Element => {
         >
           {t('empty.notifications')}
           {'\n'}
-          {t('no.notifications.come.back.later.text')}.
+          {t('empty.notifications.check.later')}
         </Text>
       </View>
     );

@@ -144,6 +144,7 @@
   "empty.assets": "Henüz varlık yok",
   "empty.groups": "Birden fazla adresi kolayca takip etmek için kişiselleştirilmiş gruplar oluşturun",
   "empty.notifications": "Şu anda herhangi bir bildiriminiz bulunmamaktadır.",
+  "empty.notifications.check.later": "Lütfen daha sonra tekrar bakınız.",
 
   "explore.search.check.typos": "Lütfen yazım hatası olup olmadığını kontrol edin veya farklı bir adres deneyin",
   "explore.search.no.account.info": "Hesap bilgileri yüklenemedi",
