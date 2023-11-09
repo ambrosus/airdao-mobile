@@ -85,7 +85,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
             fontSize={16}
             fontWeight="700"
           >
-            {NumberUtils.formatNumber(etherAmount, 0)} {currency}
+            {etherAmount} {currency}
           </Text>
           <Spacer value={scale(8)} horizontal />
           <Text
@@ -93,7 +93,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
             fontSize={14}
             fontFamily="Inter_500Medium"
           >
-            ${NumberUtils.formatNumber(usdAmount, 0)}
+            ${NumberUtils.formatNumber(usdAmount, 3)}
           </Text>
         </Row>
       </Row>
