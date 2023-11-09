@@ -111,8 +111,17 @@ export const SendFunds = () => {
 
   const useMaxBalance = () => {
     if (balanceInCrypto) {
-      setAmountInCrypto(balanceInCrypto.toString());
-      setAmountInUSD(CurrencyUtils.toUSD(balanceInCrypto, ambPrice).toString());
+      setAmountInCrypto(
+        StringUtils.limitNumberInputDecimals(balanceInCrypto.toString(), 3)
+      );
+      setAmountInUSD(
+        CurrencyUtils.toUSD(
+          parseFloat(
+            StringUtils.limitNumberInputDecimals(balanceInCrypto.toString(), 3)
+          ),
+          ambPrice
+        ).toString()
+      );
     }
   };
 
