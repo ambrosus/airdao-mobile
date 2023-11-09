@@ -2,8 +2,10 @@ import { Cache, CacheKey } from '@lib/cache';
 
 const getPasscodeFromDB = async (): Promise<string[]> => {
   try {
-    const passcodeRes = String(await Cache.getItem(CacheKey.Passcode));
-    return passcodeRes.split('');
+    const passcodeRes = await Cache.getItem(CacheKey.Passcode);
+    if (!passcodeRes) return [];
+    const passcode = String(await Cache.getItem(CacheKey.Passcode));
+    return passcode.split('');
   } catch (error) {
     console.error('Error fetching Passcode from the database:', error);
     return [];
@@ -21,7 +23,7 @@ const setPasscodeInDB = async (passcode: string[]) => {
 const getFaceIDStatusFromDB = async () => {
   try {
     const faceIDRes = await Cache.getItem(CacheKey.IsBiometricEnabled);
-    return faceIDRes === 'true';
+    return faceIDRes === true;
   } catch (error) {
     console.error('Error fetching FaceID status from the database:', error);
     return false;

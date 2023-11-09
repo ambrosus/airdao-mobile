@@ -46,7 +46,8 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 };
 
 const formatNumberInput = (str: string): string => {
-  let numericChars = removeNonNumericCharacters(str);
+  const dottedStr = str.replaceAll(',', '.');
+  let numericChars = removeNonNumericCharacters(dottedStr);
   if (numericChars[0] === '.') numericChars = '0' + numericChars;
   return _removeExtraDots(numericChars);
 };

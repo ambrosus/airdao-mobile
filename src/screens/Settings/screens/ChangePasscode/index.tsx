@@ -27,7 +27,7 @@ export const ChangePasscode = () => {
   const init = useCallback(async () => {
     const passcode = await PasscodeUtils.getPasscodeFromDB();
     if (!savedPasscode) setSavedPasscode(passcode as string[]);
-    if (!passcode) setStep(2);
+    if (passcode.length === 0) setStep(2);
   }, [savedPasscode, setSavedPasscode]);
 
   useEffect(() => {
