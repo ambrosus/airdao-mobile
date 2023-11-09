@@ -39,6 +39,7 @@ import {
 import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
+import { DeviceUtils } from '@utils/device';
 import { styles } from './styles';
 
 export const SendFunds = () => {
@@ -261,6 +262,7 @@ export const SendFunds = () => {
                 keyboardType="numeric"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
+                multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
               />
               <Spacer value={verticalScale(16)} />
               <Button onPress={toggleShowInUSD}>
