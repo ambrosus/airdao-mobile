@@ -13,12 +13,13 @@ import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { PasscodeUtils } from '@utils/passcode';
 import { DeviceUtils } from '@utils/device';
 import { useSupportedBiometrics } from '@hooks';
+import { Cache, CacheKey } from '@lib/cache';
 
 interface IPasscodeContext {
   isFaceIDEnabled: boolean;
   isPasscodeEnabled: boolean;
   loading: boolean;
-  setSavedPasscode: React.Dispatch<React.SetStateAction<string[]>>;
+  setSavedPasscode: (newPasscode: string[]) => Promise<void>;
   savedPasscode: string[];
   toggleBiometricAuthentication: () => unknown;
 }
@@ -44,21 +45,35 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
     ])
       .then(([passcodeRes, faceIDRes]) => {
         setIsPasscodeEnabled(passcodeRes?.length > 0);
-        setIsFaceIDEnabled(!!faceIDRes);
+        setIsFaceIDEnabled(faceIDRes);
         setSavedPasscode(passcodeRes as string[]);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    if (savedPasscode?.length === 4) {
-      PasscodeUtils.setPasscodeInDB(savedPasscode);
+  // useEffect(() => {
+  //   if (savedPasscode?.length === 4) {
+  //     PasscodeUtils.setPasscodeInDB(savedPasscode);
+  //     setIsPasscodeEnabled(true);
+  //   }
+  // }, [savedPasscode]);
+
+  const changePasscode = async (passcode: string[]) => {
+    try {
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
+      await PasscodeUtils.setPasscodeInDB(passcode);
+      setIsPasscodeEnabled(true);
+    } catch (error) {
+      // ignore
+    } finally {
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
     }
-  }, [savedPasscode]);
+  };
 
   const toggleBiometricAuthentication = useCallback(async () => {
     try {
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
       if (isFaceIDEnabled) {
         await PasscodeUtils.setFaceIDStatusInDB(false);
         setIsFaceIDEnabled(false);
@@ -99,6 +114,8 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error('Face ID error:', error);
     } finally {
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
   }, [isFaceIDEnabled, supportedBiometrics, t]);
 
@@ -110,7 +127,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         savedPasscode,
         loading,
         toggleBiometricAuthentication,
-        setSavedPasscode
+        setSavedPasscode: changePasscode
       }}
     >
       <View style={{ flex: 1 }}>{children}</View>

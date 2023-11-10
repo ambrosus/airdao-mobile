@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -9,19 +9,13 @@ import { SuccessIcon } from '@components/svg/icons';
 import { Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
-import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
+import usePasscode from '@contexts/Passcode';
 
 export const ImportWalletSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
-  const [isPasscodeEnabled, setIsPasscodeEnabled] = useState(false);
-
-  useEffect(() => {
-    PasscodeUtils.getPasscodeFromDB().then((passcodeRes) => {
-      setIsPasscodeEnabled(!!passcodeRes);
-    });
-  }, []);
+  const { isPasscodeEnabled } = usePasscode();
 
   const navigateToSetUpSecurity = () => {
     if (isPasscodeEnabled) {

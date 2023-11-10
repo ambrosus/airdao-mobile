@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
@@ -17,22 +17,12 @@ export const ChangePasscode = () => {
   const { top } = useSafeAreaInsets();
   const { savedPasscode, setSavedPasscode } = usePasscode();
   const navigation = useNavigation<SettingsTabNavigationProp>();
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(savedPasscode.length === 0 ? 2 : 1); // ask current passcode if already saved
   const [newPasscode, setNewPasscode] = useState<string[]>([]);
 
   const onBackPress = async () => {
     navigation.navigate('SecuritySettings');
   };
-
-  const init = useCallback(async () => {
-    const passcode = await PasscodeUtils.getPasscodeFromDB();
-    if (!savedPasscode) setSavedPasscode(passcode as string[]);
-    if (passcode.length === 0) setStep(2);
-  }, [savedPasscode, setSavedPasscode]);
-
-  useEffect(() => {
-    init();
-  }, [init, savedPasscode, setSavedPasscode]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
