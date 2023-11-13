@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BottomAwareSafeAreaView } from '@components/composite';
 import { Passcode } from '@components/modular';
 import { Spacer, Text, Button } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
+import { DeviceUtils } from '@utils/device';
 
 export const SetupPasscode = () => {
   const { top } = useSafeAreaInsets();
@@ -30,14 +32,9 @@ export const SetupPasscode = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled={Platform.OS === 'ios'}
+      enabled={DeviceUtils.isIOS}
       behavior="padding"
-      style={{
-        top,
-        flex: 1,
-        justifyContent: 'space-between',
-        marginBottom: 48
-      }}
+      style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
       <View style={{ paddingHorizontal: scale(16) }}>
         <Spacer value={verticalScale(47)} />
@@ -73,7 +70,7 @@ export const SetupPasscode = () => {
         </View>
         <Spacer value={verticalScale(30)} />
       </View>
-      <View style={{ paddingHorizontal: scale(16) }}>
+      <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
         <Button
           disabled={!isButtonEnabled}
           onPress={onContinuePress}
@@ -82,7 +79,7 @@ export const SetupPasscode = () => {
             backgroundColor: isButtonEnabled
               ? COLORS.brand500
               : COLORS.alphaBlack5,
-            marginBottom: verticalScale(28)
+            marginBottom: verticalScale(24)
           }}
         >
           <Text
@@ -94,7 +91,7 @@ export const SetupPasscode = () => {
             {t('button.continue')}
           </Text>
         </Button>
-      </View>
+      </BottomAwareSafeAreaView>
     </KeyboardAvoidingView>
   );
 };
