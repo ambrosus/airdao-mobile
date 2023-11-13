@@ -188,7 +188,7 @@ export const TransactionDetails = (
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {NumberUtils.formatNumber(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
             <Text
               fontFamily="Inter_500Medium"
@@ -217,7 +217,11 @@ export const TransactionDetails = (
             fontFamily="Inter_600SemiBold"
             fontSize={14}
           >
-            {transaction.fee} AMB
+            {StringUtils.limitNumberInputDecimals(
+              transaction.fee.toString(),
+              6
+            )}{' '}
+            AMB
           </Text>
         </Row>
       </JustifiedRow>
