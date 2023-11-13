@@ -116,12 +116,10 @@ export const SendFunds = () => {
         StringUtils.limitNumberInputDecimals(balanceInCrypto.toString(), 3)
       );
       setAmountInUSD(
-        CurrencyUtils.toUSD(
-          parseFloat(
-            StringUtils.limitNumberInputDecimals(balanceInCrypto.toString(), 3)
-          ),
-          ambPrice
-        ).toString()
+        StringUtils.limitNumberInputDecimals(
+          CurrencyUtils.toUSD(balanceInCrypto, ambPrice).toString(),
+          3
+        )
       );
     }
   };
