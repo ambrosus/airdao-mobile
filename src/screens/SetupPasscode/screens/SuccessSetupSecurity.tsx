@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { BottomAwareSafeAreaView } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
@@ -20,8 +20,10 @@ export const SuccessSetupSecurity = () => {
     if (!isFaceIDEnabled) toggleBiometricAuthentication();
   }, [isFaceIDEnabled, toggleBiometricAuthentication]);
 
-  const navigateToSetUpSecurity = () => {
-    navigation.navigate('HomeScreen');
+  const navigateToHome = () => {
+    navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: 'HomeScreen' }] })
+    );
   };
 
   return (
@@ -54,7 +56,7 @@ export const SuccessSetupSecurity = () => {
       </View>
       <BottomAwareSafeAreaView>
         <PrimaryButton
-          onPress={navigateToSetUpSecurity}
+          onPress={navigateToHome}
           style={{
             paddingHorizontal: scale(16)
           }}
