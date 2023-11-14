@@ -23,6 +23,7 @@ export interface CopyToClipboardButtonProps
   iconProps?: IconProps;
   toastProps?: Pick<ToastOptions, 'position'>;
   showToast?: boolean;
+  pressableText?: boolean;
 }
 
 export const CopyToClipboardButton = (
@@ -37,6 +38,7 @@ export const CopyToClipboardButton = (
     showToast = false,
     successText,
     successTextProps,
+    pressableText = false,
     ...buttonProps
   } = props;
   const { t } = useTranslation();
@@ -57,6 +59,30 @@ export const CopyToClipboardButton = (
       toggleCopied();
     }, 2500);
   };
+
+  if (pressableText) {
+    return (
+      <Button {...buttonProps} onPress={onPress}>
+        <Row alignItems="center" style={{ minHeight: 20 }}>
+          {copied ? (
+            <Text {...successTextProps}>
+              {t(successText || t('common.copied'))}
+            </Text>
+          ) : (
+            <Text {...textProps}>{textToDisplay}</Text>
+          )}
+          {/* <Spacer horizontal value={scale(16)} /> */}
+          {/* {showToast || !copied ? (
+            <ClipboardFilledIcon {...iconProps} />
+          ) : (
+            <Text {...successTextProps}>
+              {t(successText || t('common.copied'))}
+            </Text>
+          )} */}
+        </Row>
+      </Button>
+    );
+  }
 
   return (
     <Row alignItems="center" style={{ minHeight: 20 }}>
