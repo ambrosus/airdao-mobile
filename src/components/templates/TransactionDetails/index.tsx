@@ -18,6 +18,7 @@ interface TransactionDetailsProps {
   transaction: Transaction;
   isShareable?: boolean;
   onPressAddress?: (address: string) => void;
+  onViewOnExplorerPress?: () => void;
 }
 
 const ROW_MARGIN: number = verticalScale(24);
@@ -31,7 +32,12 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, isShareable = true, onPressAddress } = props;
+  const {
+    transaction,
+    isShareable = true,
+    onPressAddress,
+    onViewOnExplorerPress
+  } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
@@ -229,9 +235,12 @@ export const TransactionDetails = (
       <Button
         type="circular"
         style={{ backgroundColor: COLORS.alphaBlack5 }}
-        onPress={() =>
-          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`)
-        }
+        onPress={() => {
+          if (typeof onViewOnExplorerPress === 'function') {
+            onViewOnExplorerPress();
+          }
+          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`);
+        }}
       >
         <Text
           style={{ marginVertical: verticalScale(12) }}
