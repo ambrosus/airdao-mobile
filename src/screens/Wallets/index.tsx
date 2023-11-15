@@ -12,6 +12,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { PaginationCircles } from '@components/composite';
+import { WalletCardHeight } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
@@ -47,18 +48,17 @@ export const HomeScreen = () => {
       <View style={{ flex: 1 }}>
         <PaginatedAccountList
           accounts={accounts}
-          horizontal={true}
           type="credit-card"
           listProps={{
             ItemSeparatorComponent: () => (
-              <Spacer value={scale(16)} horizontal />
+              <Spacer horizontal value={scale(16)} />
             ),
             contentContainerStyle: {
               paddingHorizontal: accounts?.length > 1 ? scale(16) : scale(38)
             },
             style: {
               flexGrow: 0,
-              minHeight: verticalScale(172)
+              minHeight: WalletCardHeight
             }
           }}
           onScrolIndexChange={setScrollIdx}

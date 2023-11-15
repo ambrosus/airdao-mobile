@@ -11,6 +11,7 @@ import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
 import { ToastPosition } from '../Toast';
 
+export const WalletCardHeight = 172;
 export interface WalletCardProps {
   address: string;
   ambBalance: number;
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
     // minHeight: 148,
     width: scale(300),
     height: verticalScale(172),
+    minHeight: WalletCardHeight,
     overflow: 'hidden',
     paddingLeft: scale(20),
     paddingVertical: verticalScale(24),
