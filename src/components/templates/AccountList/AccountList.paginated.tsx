@@ -4,71 +4,60 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
-import { scale } from '@utils/scaling';
+import { SCREEN_WIDTH, scale } from '@utils/scaling';
 import { AccountListProps } from './AccountList.types';
 import { AccountList } from './AccountList';
-import { AccountDBModel } from '@database';
 
 interface PaginatedAccountListProps extends AccountListProps {
   listProps?: AccountListProps['listProps'];
   onScrolIndexChange?: (newPosition: number) => void;
 }
-const PAGE_WIDTH = scale(300); // card width
+const PAGE_WIDTH = SCREEN_WIDTH - scale(36) * 2; // card width
 
 export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
-  const { accounts, listProps, onScrolIndexChange } = props;
+  const { accounts, listProps, type, onScrolIndexChange } = props;
   const cardList = useRef<FlatList>(null);
   const scrollPos = useRef(0);
+  const currentIdx = useRef(0);
 
   const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const xPos = event.nativeEvent.contentOffset.x;
-    let newScrollPos = 0;
-    if (xPos >= scrollPos.current) {
-      if (xPos - scrollPos.current >= scale(200)) {
-        // limit 'to-right' scroll by list width
-        newScrollPos = Math.min(
-          accounts.length * PAGE_WIDTH,
-          scrollPos.current + PAGE_WIDTH
-        );
-      } else {
-        newScrollPos = scrollPos.current;
-      }
-    } else {
-      if (scrollPos.current - xPos >= scale(200)) {
-        // limit 'to-left' scroll by 0
-        newScrollPos = Math.max(0, scrollPos.current - PAGE_WIDTH);
-      } else {
-        newScrollPos = scrollPos.current;
-      }
+    const offset = Math.abs(xPos - scrollPos.current);
+    if (offset < scale(200)) {
+      // the scroll offset is not enough to change selected card
+      scrollToItem(currentIdx.current);
+      return;
     }
-    cardList.current?.scrollToOffset({
-      animated: true,
-      offset: newScrollPos
-    });
-    scrollPos.current = newScrollPos;
-    const scrollIdx = Math.floor(scrollPos.current / PAGE_WIDTH);
-    if (typeof onScrolIndexChange === 'function') onScrolIndexChange(scrollIdx);
+    if (xPos > scrollPos.current) {
+      // move next item
+      scrollToItem(currentIdx.current + 1);
+    } else {
+      // move to previous item
+      scrollToItem(currentIdx.current - 1);
+    }
   };
 
-  const scrollToItem = (account: AccountDBModel, idx: number) => {
+  const scrollToItem = (idx: number) => {
     const calculateOffsetForIndex = (idx: number) => {
-      return PAGE_WIDTH * idx;
+      // 14 is chosen arbitrarily to make UI look good
+      return PAGE_WIDTH * idx + scale(14) * (idx - 2);
     };
     scrollPos.current = calculateOffsetForIndex(idx);
     cardList.current?.scrollToOffset({
       animated: true,
       offset: scrollPos.current
     });
+    currentIdx.current = idx;
     if (typeof onScrolIndexChange === 'function') onScrolIndexChange(idx);
   };
 
   return (
     <AccountList
       ref={cardList}
-      onPressAccount={scrollToItem}
+      onPressAccount={(_, idx) => scrollToItem(idx)}
       accounts={accounts}
       horizontal={true}
-      type="credit-card"
+      type={type}
       listProps={{
         decelerationRate: 'fast',
         onScrollEndDrag,

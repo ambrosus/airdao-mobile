@@ -18,6 +18,7 @@ interface TransactionDetailsProps {
   transaction: Transaction;
   isShareable?: boolean;
   onPressAddress?: (address: string) => void;
+  onViewOnExplorerPress?: () => void;
 }
 
 const ROW_MARGIN: number = verticalScale(24);
@@ -31,7 +32,12 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, isShareable = true, onPressAddress } = props;
+  const {
+    transaction,
+    isShareable = true,
+    onPressAddress,
+    onViewOnExplorerPress
+  } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
@@ -188,7 +194,7 @@ export const TransactionDetails = (
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {NumberUtils.formatNumber(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
             <Text
               fontFamily="Inter_500Medium"
@@ -217,7 +223,11 @@ export const TransactionDetails = (
             fontFamily="Inter_600SemiBold"
             fontSize={14}
           >
-            {transaction.fee} AMB
+            {StringUtils.limitNumberInputDecimals(
+              transaction.fee.toString(),
+              6
+            )}{' '}
+            AMB
           </Text>
         </Row>
       </JustifiedRow>
@@ -225,9 +235,12 @@ export const TransactionDetails = (
       <Button
         type="circular"
         style={{ backgroundColor: COLORS.alphaBlack5 }}
-        onPress={() =>
-          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`)
-        }
+        onPress={() => {
+          if (typeof onViewOnExplorerPress === 'function') {
+            onViewOnExplorerPress();
+          }
+          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`);
+        }}
       >
         <Text
           style={{ marginVertical: verticalScale(12) }}

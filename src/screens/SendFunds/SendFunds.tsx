@@ -112,12 +112,17 @@ export const SendFunds = () => {
 
   const useMaxBalance = () => {
     if (balanceInCrypto) {
+      let maxSendableBalance: number = balanceInCrypto;
+      if (selectedToken.name === 'AirDAO') {
+        maxSendableBalance = balanceInCrypto - 0.0005;
+      }
+
       setAmountInCrypto(
-        StringUtils.limitNumberInputDecimals(balanceInCrypto.toString(), 3)
+        StringUtils.limitNumberInputDecimals(maxSendableBalance.toString(), 3)
       );
       setAmountInUSD(
         StringUtils.limitNumberInputDecimals(
-          CurrencyUtils.toUSD(balanceInCrypto, ambPrice).toString(),
+          CurrencyUtils.toUSD(maxSendableBalance, ambPrice).toString(),
           3
         )
       );

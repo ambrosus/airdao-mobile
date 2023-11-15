@@ -10,6 +10,7 @@ import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
+import { ArrayUtils } from '@utils/array';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -124,7 +125,10 @@ const AllAddressesContext = () => {
     setLoading(true);
     const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
       []) as CacheableAccount[];
-    const populatedAddresses = await populateAddresses(addresses);
+    const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
+    const populatedAddresses = await populateAddresses(
+      ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+    );
     setAllAddresses(populatedAddresses);
     reducer({ type: 'set', payload: populatedAddresses });
     setLoading(false);
