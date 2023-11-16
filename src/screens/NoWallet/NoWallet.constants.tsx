@@ -1,18 +1,24 @@
+import React from 'react';
+import {
+  AddressTrackingIcon,
+  SendReceiveIcon,
+  StayInformedIcon
+} from '@components/svg/icons';
 import { StepInfo } from './components';
 
 export const NoWalletSteps: StepInfo[] = [
   {
-    image: require('@assets/images/send-receive.png'),
+    image: <SendReceiveIcon />,
     title: 'no.wallet.send.receive',
     description: 'no.wallet.send.receive.description'
   },
   {
-    image: require('@assets/images/address-tracking.png'),
+    image: <AddressTrackingIcon />,
     title: 'no.wallet.address.tracking',
     description: 'no.wallet.address.tracking.description'
   },
   {
-    image: require('@assets/images/stay-informed.png'),
+    image: <StayInformedIcon />,
     title: 'no.wallet.stay.informed',
     description: 'no.wallet.stay.informed.description'
   }
