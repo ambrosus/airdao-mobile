@@ -3,25 +3,32 @@ import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
 import TabBar from '@navigation/components/TabBar';
-import { usePasscodeEntryRevealer } from '@hooks';
+import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
 import { PortfolioStack } from './Tabs/PortfolioStack';
 import SettingsStack from './Tabs/SettingsStack';
 import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
+import { DeviceUtils } from '@utils/device';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
 export const TabsNavigator = () => {
   usePasscodeEntryRevealer();
   const { t } = useTranslation();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <BottomTabs.Navigator
       initialRouteName="Wallets"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        tabBarStyle: { display: keyboardHeight > 0 ? 'none' : 'flex' }
       }}
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={(props) =>
+        DeviceUtils.isAndroid && keyboardHeight > 0 ? null : (
+          <TabBar {...props} />
+        )
+      }
     >
       <BottomTabs.Screen
         name="Wallets"

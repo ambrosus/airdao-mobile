@@ -1,18 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Dimensions,
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  View
-} from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 
 export interface StepInfo {
-  image: ImageSourcePropType;
+  image: ReactNode;
   title: string;
   description: string;
 }
@@ -22,12 +16,7 @@ export const NoWalletStep = (props: { step: StepInfo }) => {
   const { t } = useTranslation();
   return (
     <View style={styles.stepContainer} key={step.title}>
-      <Image
-        source={step.image}
-        blurRadius={0}
-        style={{ width: '100%' }}
-        resizeMode="cover"
-      />
+      {step.image}
       <Spacer value={verticalScale(42)} />
       <View style={{ paddingHorizontal: scale(20) }}>
         <Text

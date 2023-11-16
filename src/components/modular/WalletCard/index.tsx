@@ -37,6 +37,7 @@ export const WalletCard = (props: WalletCardProps) => {
     balanceLoading = false,
     change24HR
   } = props;
+
   const { t } = useTranslation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -74,7 +75,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontWeight="800"
                 fontFamily="Mersad_600SemiBold"
               >
-                {NumberUtils.formatNumber(ambBalance, ambBalance > 0 ? 2 : 0)}{' '}
+                {StringUtils.limitNumberInputDecimals(ambBalance.toString(), 2)}{' '}
                 AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
