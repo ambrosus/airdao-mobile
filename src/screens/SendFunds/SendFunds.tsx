@@ -262,6 +262,7 @@ export const SendFunds = () => {
                 value={amountShownInUSD ? amountInUSD : amountInCrypto}
                 onChangeValue={onChangeAmountValue}
                 style={styles.input}
+                maxLength={9}
                 keyboardType="numeric"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
