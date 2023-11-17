@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     width: scale(314),
     alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     columnGap: scale(16)
   },
   mnemonic: {
