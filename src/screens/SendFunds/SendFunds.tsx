@@ -114,7 +114,7 @@ export const SendFunds = () => {
     if (balanceInCrypto) {
       let maxSendableBalance: number = balanceInCrypto;
       if (selectedToken.name === 'AirDAO') {
-        maxSendableBalance = balanceInCrypto - 1;
+        maxSendableBalance = balanceInCrypto - 0.0005;
       }
 
       setAmountInCrypto(
