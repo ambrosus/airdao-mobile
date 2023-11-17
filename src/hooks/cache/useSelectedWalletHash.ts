@@ -23,8 +23,9 @@ export const useSelectedWalletHash = (): QueryResponse<string> => {
           setSelectedWalletHash(hash);
           await Cache.setItem(CacheKey.SelectedWallet, hash);
         }
+      } else {
+        setSelectedWalletHash(_selectedWalletHash);
       }
-      setSelectedWalletHash(_selectedWalletHash);
     } catch (error) {
       // TODO
     } finally {

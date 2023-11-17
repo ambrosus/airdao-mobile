@@ -51,6 +51,17 @@ export function useTokensAndTransactions(
           .map((page) => page.data.tokens)
           .flat(Number.POSITIVE_INFINITY) as Token[])
       : [];
+  // Remove duplicated tokens, occurs while lazy loading transactions
+  const uniqueTokenSet = new Set();
+  const filteredTokens = tokens.filter((item) => {
+    const identifier = `${item.address}-${item.name}`;
+    if (!uniqueTokenSet.has(identifier)) {
+      uniqueTokenSet.add(identifier);
+      return true;
+    }
+    return false;
+  });
+
   const transactions =
     data && data.pages
       ? (data.pages
@@ -66,7 +77,7 @@ export function useTokensAndTransactions(
 
   return {
     data: data?.pages
-      ? { tokens, transactions }
+      ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
     loading: isInitialLoading || isFetchingNextPage,
     error,

@@ -33,16 +33,7 @@ const getEstimatedFee = async (
   etherAmount: number,
   token: Token
 ): Promise<number> => {
-  // const wallets = (await Database.query(
-  //   DatabaseTable.Wallets,
-  //   Q.where('hash', Q.eq(walletHash))
-  // )) as WalletDBModel[];
-  // if (wallets.length > 0) {
-  // const wallet = wallets[0];
   try {
-    // const info = await AirDAOKeysForRef.discoverPublicAndPrivate({
-    //   mnemonic: wallet.mnemonic
-    // });
     const privateKey = (await Cache.getItem(
       `${CacheKey.WalletPrivateKey}-${walletHash}`
     )) as string;
@@ -58,9 +49,6 @@ const getEstimatedFee = async (
   } catch (error) {
     throw error;
   }
-  // } else {
-  //   throw Error('Invalid wallet hash');
-  // }
 };
 
 export const TransactionUtils = { sendTx, getEstimatedFee };
