@@ -40,6 +40,7 @@ export class Transaction {
     this.to = details.to;
     this.status = details.status;
     this.value = { ...details.value, symbol: details.value.symbol || 'AMB' };
-    (this.gasCost = details.gasCost), (this.token = details.token);
+    this.gasCost = details.gasCost;
+    this.token = details.token;
   }
 }

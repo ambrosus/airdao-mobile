@@ -97,7 +97,7 @@ export const AccountTransactions = (
   return (
     <>
       <SectionList<Transaction, TransactionSection>
-        keyExtractor={(item) => item.hash}
+        keyExtractor={(item, idx) => `${item.hash}-${idx}`}
         sections={sectionizedTransactions}
         renderItem={renderTransaction}
         ListEmptyComponent={
