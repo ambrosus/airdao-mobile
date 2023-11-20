@@ -19,7 +19,6 @@ import {
   useAMBPrice,
   useBalanceOfAddress,
   useEstimatedTransferFee,
-  useSelectedWalletHash,
   useTokensAndTransactions
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
@@ -40,6 +39,7 @@ import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
+import { useAccountByAddress } from '@hooks/database';
 import { styles } from './styles';
 
 export const SendFunds = () => {
@@ -48,8 +48,9 @@ export const SendFunds = () => {
   const { to: destinationAddress = '', from: senderAddress = '' } =
     sendContextState;
   // const selectedToken = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
-  const { data: walletHash } = useSelectedWalletHash();
-  // const { account, accountLoading } = useMainAccount();
+  const { data: selectedAccount } = useAccountByAddress(senderAddress);
+  const walletHash = selectedAccount?.wallet.id || '';
+
   const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
   const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass selectedToken name inside to handle different crypto tokens under Ambrosus Networkc
   const ambPrice = ambPriceInfo?.priceUSD || 0;
@@ -98,13 +99,12 @@ export const SendFunds = () => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
-      walletHash,
       currency: selectedToken.symbol,
       currencyConversionRate: currencyRate,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estimatedFee, walletHash, currencyRate, selectedToken, amountInCrypto]);
+  }, [estimatedFee, currencyRate, selectedToken, amountInCrypto]);
 
   const setDestinationAddress = (address: string) => {
     updateSendContext({ type: 'SET_DATA', to: address });
