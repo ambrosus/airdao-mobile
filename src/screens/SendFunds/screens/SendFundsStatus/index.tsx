@@ -44,7 +44,7 @@ export const SendFundsStatus = () => {
       break;
     }
     default:
-      errorMessage = '';
+      errorMessage = JSON.stringify(error?.message);
       break;
   }
 
