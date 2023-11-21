@@ -9,7 +9,9 @@ export const mockStakingPools: StakingPool[] = [
       balance: { wei: '', ether: Number(0) || 0 },
       symbol: AirDAODictTypes.Code.AMB
     }),
-    stakingAmount: 20,
+    totalStake: 200000,
+    userStake: 0,
+    earnings: 0,
     apy: 10.45
   },
   {
@@ -19,7 +21,9 @@ export const mockStakingPools: StakingPool[] = [
       balance: { wei: '', ether: Number(0) || 0 },
       symbol: AirDAODictTypes.Code.AMB
     }),
-    stakingAmount: 1000,
+    totalStake: 200000,
+    userStake: 20,
+    earnings: 1000,
     apy: 18.9
   }
 ];

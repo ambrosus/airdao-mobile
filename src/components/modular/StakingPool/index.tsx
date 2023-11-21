@@ -35,7 +35,7 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontWeight="500"
           >
             {t('staking.current.stake', {
-              amount: 20,
+              amount: stakingPool.userStake,
               symbol: stakingPool.token.symbol
             })}
           </Text>

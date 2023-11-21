@@ -2,6 +2,8 @@ import { TokenDTO } from './TokenDTO';
 
 export interface StakingPoolDTO {
   token: TokenDTO;
-  stakingAmount: number;
+  totalStake: number;
+  userStake: number;
+  earnings: number;
   apy: number;
 }

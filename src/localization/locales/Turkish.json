@@ -265,6 +265,11 @@
   "staking.header": "Stake",
   "staking.pools": "Havuzlar",
 
+  "staking.pool.apy": "APY",
+  "staking.pool.earnings": "Kazanç",
+  "staking.pool.total.stake": "Toplam hisse miktarı",
+  "staking.pool.user.stake": "Hisse miktarım",
+
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
   "toast.the.message.lower.case": "adres",

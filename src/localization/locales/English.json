@@ -265,6 +265,11 @@
   "staking.header": "Stake",
   "staking.pools": "Pools",
 
+  "staking.pool.apy": "APY",
+  "staking.pool.earnings": "Earnings",
+  "staking.pool.total.stake": "Total stake",
+  "staking.pool.user.stake": "My stake",
+
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",
