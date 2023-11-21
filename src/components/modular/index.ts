@@ -1,3 +1,4 @@
+export * from './AnimatedTabs';
 export * from './BottomSheetWithHeader';
 export * from './BottomSheetFloat';
 export * from './Button';

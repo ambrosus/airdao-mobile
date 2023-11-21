@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    borderWidth: 0,
     backgroundColor: 'transparent',
     borderRadius: moderateScale(82),
     shadowColor: 'transparent',

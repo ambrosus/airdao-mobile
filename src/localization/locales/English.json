@@ -66,7 +66,9 @@
   "button.create": "Create",
   "button.create.wallet": "Create new wallet",
   "button.delete": "Delete",
+  "button.enter.amount": "Enter amount",
   "button.import.wallet": "Import existing wallet",
+  "button.preview": "Preview",
   "button.remove": "Remove",
   "button.save": "Save",
   "button.setup.security": "Setup security",
@@ -267,8 +269,11 @@
 
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Earnings",
+  "staking.pool.stake": "Stake",
+  "staking.pool.stake.amount": "Amount",
   "staking.pool.total.stake": "Total stake",
   "staking.pool.user.stake": "My stake",
+  "staking.pool.withdraw": "Withdraw",
 
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",

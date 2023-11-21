@@ -1,50 +1,88 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { Row, Spacer, Text } from '@components/base';
+import { KeyboardDismissingView, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { TokenLogo } from '@components/modular';
+import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { HomeParamsList } from '@appTypes';
-import { styles } from './style';
-import { View } from 'react-native';
-import { StakingInfo } from './components';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { StakeToken, StakingInfo } from './components';
+import { styles } from './style';
 
 export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
+  const { t } = useTranslation();
+  const currency = AirDAODictTypes.Code.AMB;
+  const { totalStake, userStake, earnings, apy } = pool;
+
+  const { top } = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title={
-          <Row alignItems="center">
-            <TokenLogo token={pool.token.name} scale={0.75} />
-            <Spacer horizontal value={scale(4)} />
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={15}
-              color={COLORS.neutral900}
-            >
-              {pool.token.name}
-            </Text>
-          </Row>
-        }
+    <View style={styles.container}>
+      <View
         style={{
-          ...shadow
+          paddingTop: top,
+          zIndex: 1000,
+          backgroundColor: COLORS.neutral0
         }}
-      />
-      <View style={styles.stakingInfoContainer}>
-        <StakingInfo
-          totalStake={pool.totalStake}
-          currency={AirDAODictTypes.Code.AMB}
-          userStaking={pool.userStake}
-          earnings={pool.earnings}
-          apy={pool.apy}
+      >
+        <Header
+          title={
+            <Row alignItems="center">
+              <TokenLogo token={pool.token.name} scale={0.75} />
+              <Spacer horizontal value={scale(4)} />
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={15}
+                color={COLORS.neutral900}
+              >
+                {pool.token.name}
+              </Text>
+            </Row>
+          }
+          style={{
+            ...shadow
+          }}
         />
       </View>
-    </SafeAreaView>
+
+      <KeyboardDismissingView style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="position">
+          <View style={styles.stakingInfoContainer}>
+            <StakingInfo
+              totalStake={totalStake}
+              currency={currency}
+              userStaking={userStake}
+              earnings={earnings}
+              apy={apy}
+            />
+          </View>
+          <Spacer value={verticalScale(24)} />
+          <AnimatedTabs
+            tabs={[
+              {
+                title: t('staking.pool.stake'),
+                view: (
+                  <View>
+                    <Spacer value={verticalScale(24)} />
+                    <StakeToken />
+                  </View>
+                )
+              },
+              {
+                title: t('staking.pool.withdraw'),
+                view: <></>
+              }
+            ]}
+          />
+        </KeyboardAvoidingView>
+      </KeyboardDismissingView>
+    </View>
   );
 };
