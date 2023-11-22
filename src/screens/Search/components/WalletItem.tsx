@@ -76,7 +76,8 @@ export const ExplorerWalletItem = (
         >
           {t('explore.single.address.holding', {
             share: NumberUtils.formatNumber(
-              item.calculatePercentHoldings(totalSupply),
+              // item.calculatePercentHoldings(totalSupply),
+              (item.ambBalance / totalSupply) * 100,
               2
             )
           })}
