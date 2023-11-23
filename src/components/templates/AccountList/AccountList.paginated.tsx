@@ -4,7 +4,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
-import { SCREEN_WIDTH, scale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { AccountListProps } from './AccountList.types';
 import { AccountList } from './AccountList';
 
@@ -12,23 +12,50 @@ interface PaginatedAccountListProps extends AccountListProps {
   listProps?: AccountListProps['listProps'];
   onScrolIndexChange?: (newPosition: number) => void;
 }
-const PAGE_WIDTH = SCREEN_WIDTH - scale(36) * 2; // card width
+const SCROLL_OFFSET_LIMIT = scale(200);
+const SCROLL_SPEED_LIMIT = 80;
 
 export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
   const { accounts, listProps, type, onScrolIndexChange } = props;
   const cardList = useRef<FlatList>(null);
   const scrollPos = useRef(0);
   const currentIdx = useRef(0);
+  const scrollBegin = useRef(0);
+  const scrollBeginAt = useRef(0);
+
+  const onScrollBeginDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    // save X position and time of start of scroll
+    scrollBegin.current = event.nativeEvent.contentOffset.x;
+    scrollBeginAt.current = new Date().getTime();
+  };
+
+  const resetScrollBeginInfo = () => {
+    scrollBegin.current = 0;
+    scrollBeginAt.current = 0;
+  };
 
   const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const xPos = event.nativeEvent.contentOffset.x;
     const offset = Math.abs(xPos - scrollPos.current);
-    if (offset < scale(200)) {
+    // calculate speed of scroll by speed = distance / time
+    const speed =
+      (xPos - scrollBegin.current) /
+      (new Date().getTime() / scrollBeginAt.current);
+
+    if (offset < SCROLL_OFFSET_LIMIT && Math.abs(speed) < SCROLL_SPEED_LIMIT) {
       // the scroll offset is not enough to change selected card
       scrollToItem(currentIdx.current);
+      // reset scroll begin info
+      resetScrollBeginInfo();
       return;
     }
-    if (xPos > scrollPos.current) {
+
+    if (
+      xPos > scrollPos.current ||
+      (Math.abs(speed) > SCROLL_SPEED_LIMIT && speed > 0)
+    ) {
       // move next item
       scrollToItem(currentIdx.current + 1);
     } else {
@@ -38,14 +65,11 @@ export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
   };
 
   const scrollToItem = (idx: number) => {
-    const calculateOffsetForIndex = (idx: number) => {
-      // 14 is chosen arbitrarily to make UI look good
-      return PAGE_WIDTH * idx + scale(14) * (idx - 2);
-    };
-    scrollPos.current = calculateOffsetForIndex(idx);
-    cardList.current?.scrollToOffset({
+    if (!(idx >= 0 && idx < accounts.length)) return;
+    cardList.current?.scrollToIndex({
+      index: idx,
       animated: true,
-      offset: scrollPos.current
+      viewOffset: scale(32)
     });
     currentIdx.current = idx;
     if (typeof onScrolIndexChange === 'function') onScrolIndexChange(idx);
@@ -60,7 +84,11 @@ export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
       type={type}
       listProps={{
         decelerationRate: 'fast',
+        onScrollBeginDrag,
         onScrollEndDrag,
+        onMomentumScrollEnd: (event) => {
+          scrollPos.current = event.nativeEvent.contentOffset.x;
+        },
         ...listProps
       }}
     />
