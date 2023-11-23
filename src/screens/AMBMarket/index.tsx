@@ -88,7 +88,7 @@ export function AMBMarket(): JSX.Element {
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
                 maxSupply={NumberUtils.formatNumber(6500000000, 0)}
-                totalSupply={NumberUtils.formatNumber(ambPrice.totalSupply, 0)}
+                totalSupply={NumberUtils.formatNumber(6500000000, 0)}
                 marketCap={'$' + NumberUtils.formatNumber(marketCap, 0)}
                 fullyDilutedMarketCap={
                   '$' + NumberUtils.formatNumber(ambPrice.marketCapUSD, 0)

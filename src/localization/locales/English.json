@@ -54,7 +54,7 @@
   "amb.market.markets": "Markets",
   "amb.market.max.supply": "Max supply",
   "amb.market.max.supply.popup": "The maximum amount of coins that will ever exist in the lifetime of the cryptocurrency, indicating the limit of its potential supply.",
-  "amb.market.statistics.text": "AirDAO is a community-governed layer one blockchain and ecosystem of web3 dApps, powered by its native token, AMB. AirDAO brings the benefits of Web3 to a global audience with a suite of powerful DeFi products in an intuitive, all-in-one interface.",
+  "amb.market.statistics.text": "AirDAO is a pioneering community-governed layer one blockchain and web3 ecosystem powered by AMB. Our products enable financial equality and social inclusion, and we’re dedicated to making web3 more democratized and accessible to all. Your vision, our future. We build together.",
   "amb.market.stats": "Stats",
   "amb.market.total.supply": "Total supply",
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
@@ -77,7 +77,7 @@
 
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter new passcode",
-  "change.passcode.success": "Passcode changed!",
+  "change.passcode.success": "Passcode changed",
 
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
@@ -150,7 +150,7 @@
   "explore.search.no.account.info": "Could not load accounts info",
   "explore.search.no.matches": "Oops! No matches found",
   "explore.search.placeholder": "Search Address or TX hash",
-  "explore.single.address.holding": "Holding {{share}}% of supply",
+  "explore.single.address.holding": "Holds {{share}}% of supply",
 
   "notification.settings": "Notification settings",
   "notification.settings.price.alerts.switch": "Price alerts",
@@ -164,7 +164,7 @@
   "transaction.modal": {
     "amount": "Amount",
     "buttons": {
-      "explorer": "View on explorer",
+      "explorer": "View on Explorer",
       "share": "Share",
       "confirm": "Ok, got it"
     },
@@ -181,10 +181,10 @@
   },
 
   "receive.funds": "Receive funds",
-  "receive.funds.amb.network.only": "Asset can only be sent within the same network (AMB-NET)",
+  "receive.funds.amb.network.only": "Assets can only be sent within the AirDAO network",
 
   "send.funds.balance": "Balance",
-  "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or refill your balance to proceed.",
+  "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or top up wallet to proceed.",
   "send.funds.error.network": "Bad internet connection!",
   "send.funds.error.private.key.not.found": "Private key not found. Please backup your wallet with your seed phrase again!",
   "send.funds.estimated.fee": "Estimated fee",
@@ -201,11 +201,11 @@
   "send.funds.transfer.fee": "Estimated transfer fee",
   "send.funds.use.max": "Use max",
 
-  "import.wallet.description": "Enter the recovery phrase associated with your existing wallet.",
+  "import.wallet.description": "Enter the recovery phrase to import your wallet.",
   "import.wallet.header": "Import existing wallet",
   "import.wallet.loading": "Importing your wallet from \n backup",
   "import.wallet.success": "Wallet import successful!",
-  "import.wallet.success.text": "Your wallet has been successfully imported. You can now access your funds.",
+  "import.wallet.success.text": "Your wallet has been imported. You can now access your funds.",
   "import.wallet.title": "Enter recovery phrase",
 
   "no.wallet.address.tracking": "Address tracking",
@@ -219,8 +219,8 @@
   "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
 
   "settings.about": "About",
-  "settings.help": "Help Center",
-  "settings.manage.wallet": "Manage Wallets",
+  "settings.help": "Help center",
+  "settings.manage.wallet": "Manage wallets",
   "settings.notifications": "Notifications",
   "settings.preferences": "Preferences",
   "settings.security": "Security",
@@ -248,7 +248,7 @@
   "security.confirm.passcode.text": "Confirm passcode",
   "security.enabled": "Security Enabled!",
   "security.enter.passcode": "Enter Passcode",
-  "security.enter.passcode.hint": "Use a PIN you will remember. \nIt cannot be recovered.",
+  "security.enter.passcode.hint": "Use a passcode you will remember. \nIt cannot be recovered.",
   "security.enter.passcode.text": "Passcode will be required for wallet access and transactions.",
   "security.enter.pin": "Enter PIN",
   "security.manage": " to manage your wallet security.",

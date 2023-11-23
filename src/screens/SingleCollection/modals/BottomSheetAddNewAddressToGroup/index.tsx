@@ -39,6 +39,7 @@ import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
+import { ExplorerWalletItem } from '@screens/Search/components';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -61,14 +62,14 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const AddressSources: Segment[] = [
     {
-      title: t('tab.watchlist'),
+      title: t('common.top.holders.capitalize'),
       value: 0,
-      id: 'watchlist'
+      id: 'topHolders'
     },
     {
-      title: t('common.top.holders.capitalize'),
+      title: t('tab.watchlist'),
       value: 1,
-      id: 'topHolders'
+      id: 'watchlist'
     }
   ];
 
@@ -82,7 +83,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const toggleAddressesInList = useLists((v) => v.toggleAddressesInList);
   const [scrollViewIdx, setScrollViewIdx] = useState<
     'watchlist' | 'topHolders'
-  >('watchlist');
+  >('topHolders');
   const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = useWindowDimensions();
   const tabWidth = WINDOW_WIDTH - scale(48);
 
@@ -104,7 +105,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const resetState = () => {
     setSearchValue('');
     setSelectedAddresses([]);
-    setScrollViewIdx('watchlist');
+    setScrollViewIdx('topHolders');
     scrollRef.current?.scrollTo({ x: 0, animated: false });
   };
 
@@ -152,7 +153,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             </Row>
           )}
           <View style={{ flex: 1 }}>
-            <WalletItem item={item} indicatorVisible={true} />
+            <ExplorerWalletItem
+              item={item}
+              indicatorVisible={true}
+              totalSupply={6500000000}
+            />
           </View>
         </Row>
       </Button>
@@ -208,7 +213,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const clearSearch = () => {
     setSearchValue('');
-    setScrollViewIdx('watchlist');
+    setScrollViewIdx('topHolders');
   };
 
   return (
@@ -333,16 +338,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 contentContainerStyle={{
                   paddingBottom: 150
                 }}
-                data={watchlist}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
-            <View style={{ width: tabWidth }}>
-              <FlatList
-                contentContainerStyle={{
-                  paddingBottom: 150
-                }}
                 data={topHolders}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
@@ -351,6 +346,16 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
                 ListFooterComponent={() =>
                   topHoldersLoading ? <Spinner /> : <></>
                 }
+              />
+            </View>
+            <View style={{ width: tabWidth }}>
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: 150
+                }}
+                data={watchlist}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
               />
             </View>
           </ScrollView>

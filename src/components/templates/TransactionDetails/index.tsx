@@ -83,7 +83,7 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral800}
         >
-          {moment(transaction.timestamp).format('MMM DD, YYYY hh:mm')}
+          {moment(transaction.timestamp).format('MM/DD/YYYY hh:mm')}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
