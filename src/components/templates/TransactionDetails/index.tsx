@@ -32,12 +32,7 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const {
-    transaction,
-    isShareable = true,
-    onPressAddress,
-    onViewOnExplorerPress
-  } = props;
+  const { transaction, onPressAddress, onViewOnExplorerPress } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
@@ -88,7 +83,7 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral800}
         >
-          {moment(transaction.timestamp).format('MMM DD, YYYY hh:mm')}
+          {moment(transaction.timestamp).format('MM/DD/YYYY hh:mm')}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
@@ -266,27 +261,10 @@ export const TransactionDetails = (
           {t('transaction.modal.buttons.share')}
         </Text>
       </Button>
-      {isShareable && (
-        <>
-          {/*<Spacer value={ROW_MARGIN} />*/}
-          {/*<Button*/}
-          {/*  type="circular"*/}
-          {/*  style={styles.shareBtn}*/}
-          {/*  onPress={showShareTransaction}*/}
-          {/*  testID="Show_Share_Transaction_Button"*/}
-          {/*>*/}
-          {/*  <Row alignItems="center">*/}
-          {/*    <ShareIcon color="#000000" />*/}
-          {/*    <Spacer value={scale(3.5)} horizontal />*/}
-          {/*    <Text>Share transaction</Text>*/}
-          {/*  </Row>*/}
-          {/*</Button>*/}
-        </>
-      )}
 
       <SharePortfolio
         ref={shareTransactionModal}
-        balance={NumberUtils.formatNumber(transaction.amount, 0)}
+        balance={NumberUtils.formatNumber(transaction.amount, 2)}
         currency="AMB"
         currencyPosition="right"
         txFee={transaction.fee}
