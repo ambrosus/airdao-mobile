@@ -1,5 +1,6 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Clipboard from 'expo-clipboard';
+import { useTranslation } from 'react-i18next';
 import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ClipboardFilledIcon, IconProps } from '@components/svg/icons';
@@ -11,7 +12,6 @@ import {
   ToastType
 } from '@components/modular/Toast';
 import { BaseButtonProps } from '@components/base/Button';
-import { useTranslation } from 'react-i18next';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -42,10 +42,22 @@ export const CopyToClipboardButton = (
     ...buttonProps
   } = props;
   const { t } = useTranslation();
-  const [copied, toggleCopied] = useReducer((flag) => !flag, false);
+  const [copied, setCopied] = useState(false);
+  const timeout = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
+  }, []);
 
   const onPress = async () => {
-    toggleCopied();
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    setCopied(true);
     if (showToast) {
       Toast.show({
         text: t('common.copied'),
@@ -55,14 +67,19 @@ export const CopyToClipboardButton = (
       });
     }
     await Clipboard.setStringAsync(textToCopy || textToDisplay);
-    setTimeout(() => {
-      toggleCopied();
+    timeout.current = setTimeout(() => {
+      setCopied(false);
     }, 2500);
   };
 
   if (pressableText) {
     return (
-      <Button {...buttonProps} onPress={onPress}>
+      <Button
+        {...buttonProps}
+        // @ts-ignore
+        style={{ ...buttonProps.style, padding: 4 }}
+        onPress={onPress}
+      >
         <Row alignItems="center" style={{ minHeight: 20 }}>
           {copied ? (
             <Text {...successTextProps}>
