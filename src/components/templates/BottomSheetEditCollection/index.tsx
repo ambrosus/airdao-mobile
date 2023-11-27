@@ -93,7 +93,7 @@ export const BottomSheetEditCollection = forwardRef<
             fontFamily="Inter_600SemiBold"
           >
             {t('button.delete')}{' '}
-            {StringUtils.formatAddress(collection.name, 12, 0)}
+            {StringUtils.formatAddress(collection.name, 24, 0)}
           </Text>
         </Button>
       </View>

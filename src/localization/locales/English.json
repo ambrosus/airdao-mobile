@@ -135,7 +135,7 @@
   "create.wallet.success": "Nice move! Backup complete.",
   "create.wallet.success.text": "You backed up your wallet. Now let’s setup your wallet’s security.",
   "create.wallet.tap.words.in.correct.order": "Tap the words in the correct order",
-  "create.wallet.verification.alert": "Never share recovery phrase with \n anyone, keep it safe!",
+  "create.wallet.verification.alert": "Never share recovery phrase with \nanyone, keep it safe!",
   "create.wallet.verify.phrase": "Verify phrase",
   "create.wallet.verify.text": "Make sure to write it down as shown. You will verify this later.",
   "create.wallet.your.recovery.phrase": "Your recovery phrase",
@@ -236,6 +236,8 @@
 
   "singleWallet.name": "Name",
   "singleWallet.remove": "Remove",
+  "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet",
+  "singleWallet.remove.alert.description": "Make sure you have a backup of this wallet",
   "singleWallet.save": "Save changes",
 
   "login.enter.your.passcode": "Enter your passcode",

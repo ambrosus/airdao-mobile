@@ -61,18 +61,21 @@ export const SingleWalletScreen = () => {
   };
 
   const promptWalletDeletion = () => {
-    // TODO change text
-    Alert.alert('Delete wallet?', 'This will result in app reload', [
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: deleteWallet
-      },
-      {
-        text: 'Cancel',
-        style: 'cancel'
-      }
-    ]);
+    Alert.alert(
+      t('singleWallet.remove.alert.title'),
+      t('singleWallet.remove.alert.description'),
+      [
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: deleteWallet
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        }
+      ]
+    );
   };
 
   return (

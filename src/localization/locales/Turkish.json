@@ -135,7 +135,7 @@
   "create.wallet.success": "Harika! Yedekleme tamamlandı.",
   "create.wallet.success.text": "Cüzdanınızı yedeklediniz. Şimdi cüzdanınızın güvenliğini ayarlayalım.",
   "create.wallet.tap.words.in.correct.order": "Kelimelere doğru sırayla dokunun",
-  "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \n paylaşmayın, güvende tutun!",
+  "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \npaylaşmayın, güvende tutun!",
   "create.wallet.verify.phrase": "İfadeyi doğrula",
   "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
   "create.wallet.your.recovery.phrase": "Kurtarma ifadeniz",
@@ -236,6 +236,8 @@
 
   "singleWallet.name": "İsim",
   "singleWallet.remove": "Sil",
+  "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
+  "singleWallet.remove.alert.description": "Cüzdanı yedeklediğinizden emin olun",
   "singleWallet.save": "Değişiklikleri kaydet",
 
   "login.enter.your.passcode": "Şifrenizi girin",
