@@ -22,6 +22,21 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
   return formattedString + strAmount.substring(startingIdx + 1);
 };
 
+const limitDecimalCount = (
+  number: string | number,
+  decimalPlaces: number
+): string => {
+  let str = number.toString();
+  const parts = str.split('.');
+  if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
+    if (parts[1].length > decimalPlaces) {
+      parts[1] = parts[1].substring(0, decimalPlaces);
+      str = parts.join('.');
+    }
+  }
+  return str;
+};
+
 const addSignToNumber = (num: number): string => {
   const shouldAddMinus = num.toString() && num.toString()[0] !== '-';
   return (num > 0 ? '+' : shouldAddMinus ? '-' : '') + num;
@@ -52,4 +67,9 @@ const abbreviateNumber = (num: number): string => {
   return newValue;
 };
 
-export const NumberUtils = { formatNumber, addSignToNumber, abbreviateNumber };
+export const NumberUtils = {
+  formatNumber,
+  addSignToNumber,
+  abbreviateNumber,
+  limitDecimalCount
+};

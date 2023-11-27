@@ -75,8 +75,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontWeight="800"
                 fontFamily="Mersad_600SemiBold"
               >
-                {StringUtils.limitNumberInputDecimals(ambBalance.toString(), 2)}{' '}
-                AMB
+                {NumberUtils.limitDecimalCount(ambBalance.toString(), 2)} AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
               <View style={styles.usdPriceBg}>

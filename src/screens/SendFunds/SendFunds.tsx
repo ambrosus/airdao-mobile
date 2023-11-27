@@ -40,6 +40,7 @@ import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
 import { useAccountByAddress } from '@hooks/database';
+import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
 export const SendFunds = () => {
@@ -118,10 +119,10 @@ export const SendFunds = () => {
       }
 
       setAmountInCrypto(
-        StringUtils.limitNumberInputDecimals(maxSendableBalance.toString(), 3)
+        NumberUtils.limitDecimalCount(maxSendableBalance.toString(), 3)
       );
       setAmountInUSD(
-        StringUtils.limitNumberInputDecimals(
+        NumberUtils.limitDecimalCount(
           CurrencyUtils.toUSD(maxSendableBalance, ambPrice).toString(),
           3
         )
@@ -136,7 +137,7 @@ export const SendFunds = () => {
       return;
     }
     let finalValue = StringUtils.formatNumberInput(newValue);
-    finalValue = StringUtils.limitNumberInputDecimals(finalValue, 3);
+    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
     if (amountShownInUSD) {
       setAmountInUSD(finalValue);
       const newUsdAmount = parseFloat(finalValue) || 0;

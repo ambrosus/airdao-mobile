@@ -66,25 +66,10 @@ function _removeExtraDots(str: string): string {
     .join('');
 }
 
-const limitNumberInputDecimals = (
-  str: string,
-  decimalPlaces: number
-): string => {
-  const parts = str.split('.');
-  if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
-    if (parts[1].length > decimalPlaces) {
-      parts[1] = parts[1].substring(0, decimalPlaces);
-      str = parts.join('.');
-    }
-  }
-  return str;
-};
-
 export const StringUtils = {
   formatAddress,
   pluralize,
   removeNonNumericCharacters,
   removeNonAlphabeticCharacters,
-  formatNumberInput,
-  limitNumberInputDecimals
+  formatNumberInput
 };

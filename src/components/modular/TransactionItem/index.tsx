@@ -8,8 +8,8 @@ import { COLORS } from '@constants/colors';
 import { DownArrowIcon } from '@components/svg/icons';
 import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
 interface TransactionItemProps {
@@ -66,7 +66,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral900}
           >
-            {NumberUtils.formatNumber(transaction.amount, 2)}{' '}
+            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
@@ -76,7 +76,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Inter_500Medium"
             color={COLORS.alphaBlack50}
           >
-            ${NumberUtils.formatNumber(usdAmount, 2)}
+            ${NumberUtils.limitDecimalCount(usdAmount, 2)}
           </Text>
         </View>
       </Row>
