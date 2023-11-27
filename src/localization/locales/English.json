@@ -193,7 +193,7 @@
   "send.funds.invalid.address": "Please enter a valid address",
   "send.funds.ready.to.send": "Ready to send?",
   "send.funds.recipient": "Recipient address",
-  "send.funds.review.transaction": "Review Transaction",
+  "send.funds.review.transaction": "Review transaction",
   "send.funds.send.now": "Send now",
   "send.funds.sending": "Sending",
   "send.funds.sending.description": "This shouldn’t take long",
