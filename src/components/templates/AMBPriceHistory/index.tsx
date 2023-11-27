@@ -153,7 +153,11 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
-                  change={ambPriceNow?.percentChange24H || 0}
+                  change={
+                    (selectedInterval === '7d' || selectedInterval === 'weekly'
+                      ? ambPriceNow?.percentChange7D
+                      : ambPriceNow?.percentChange1H) || 0
+                  }
                   fontSize={16}
                   fontWeight="500"
                 />
