@@ -13,7 +13,7 @@ export class Notification {
     switch (title) {
       case 'Price Alert':
         return NotificationType.PriceAlert;
-      case 'Transaction Alert':
+      case 'AMB-Net Tx Alert':
         return NotificationType.TransactionAlert;
       case 'Wallet Update':
         return NotificationType.WalletUpdate;
