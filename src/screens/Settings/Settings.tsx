@@ -78,7 +78,7 @@ export const SettingsScreen = () => {
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
-      {isStage && <Text style={{ margin: 20 }}>Build: 1.1.5.13</Text>}
+      {isStage && <Text style={{ margin: 20 }}>Build: 1.1.5.14</Text>}
     </View>
   );
 };

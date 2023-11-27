@@ -1,13 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
 import { PercentChange } from '@components/composite';
 import { Token } from '@models';
 import { TokenLogo, TokenLogoProps } from '../TokenLogo';
+import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
 interface SingleAssetProps {
@@ -25,11 +25,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
-          <TokenLogo
-            token={name}
-            overrideIconVariants={overrideIconVariants}
-            style={{ width: moderateScale(32), height: moderateScale(32) }}
-          />
+          <TokenLogo token={name} overrideIconVariants={overrideIconVariants} />
         </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
@@ -46,7 +42,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              ${NumberUtils.formatNumber(usdPrice, 2)}
+              ${NumberUtils.limitDecimalCount(usdPrice, 2)}
             </Text>
           </Row>
           <Spacer horizontal value={scale(8)} />
@@ -56,7 +52,8 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.neutral400}
             >
-              {NumberUtils.formatNumber(balance.ether, 2)} {symbol || 'tokens'}
+              {NumberUtils.limitDecimalCount(balance.ether, 2)}{' '}
+              {symbol || 'tokens'}
             </Text>
             <Text
               fontFamily="Inter_400Regular"

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image } from 'react-native';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
   BusdIcon,
   EthTokenIcon,
+  FirepotIcon,
   GanymadeIcon,
   HeraPoolIcon,
   PlutusIcon,
@@ -13,7 +13,6 @@ import {
   UsdcIcon
 } from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { moderateScale } from '@utils/scaling';
 
 export interface TokenLogoProps {
   token: string;
@@ -50,13 +49,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'Hera pool token':
       return <HeraPoolIcon scale={scale} />;
     case 'Firepot-LP-Token':
-      return (
-        <Image
-          {...props}
-          style={{ width: moderateScale(96), height: moderateScale(96) }}
-          source={require('@assets/images/tokens/firepot-lp-token.png')}
-        />
-      );
+      return <FirepotIcon scale={scale} />;
     case 'AirBond':
       return <AirBondIcon scale={scale} />;
     default:

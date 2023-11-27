@@ -218,11 +218,7 @@ export const TransactionDetails = (
             fontFamily="Inter_600SemiBold"
             fontSize={14}
           >
-            {StringUtils.limitNumberInputDecimals(
-              transaction.fee.toString(),
-              6
-            )}{' '}
-            AMB
+            {NumberUtils.limitDecimalCount(transaction.fee.toString(), 6)} AMB
           </Text>
         </Row>
       </JustifiedRow>
