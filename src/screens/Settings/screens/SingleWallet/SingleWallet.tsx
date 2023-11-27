@@ -112,7 +112,15 @@ export const SingleWalletScreen = () => {
             <View style={styles.nameInput}>
               <Text>{t('singleWallet.name')}</Text>
               <Spacer value={verticalScale(8)} />
-              <Input value={walletName} onChangeValue={setWalletName} />
+              <Input
+                value={walletName}
+                onChangeValue={setWalletName}
+                style={{
+                  shadowColor: COLORS.transparent,
+                  borderWidth: 1,
+                  borderColor: COLORS.alphaBlack10
+                }}
+              />
             </View>
             <Spacer value={verticalScale(42)} />
             {account && (
