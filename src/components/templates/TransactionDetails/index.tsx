@@ -43,8 +43,8 @@ export const TransactionDetails = (
     const result = transaction.amount * ambPrice;
     totalTransactionAmount =
       result < 1000
-        ? NumberUtils.formatNumber(result, 2)
-        : NumberUtils.formatNumber(result, 0);
+        ? NumberUtils.limitDecimalCount(result, 2)
+        : NumberUtils.limitDecimalCount(result, 0);
   } else {
     totalTransactionAmount = -1;
   }
@@ -189,7 +189,7 @@ export const TransactionDetails = (
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.formatNumber(transaction.amount, 2)}{' '}
+            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
             <Text
               fontFamily="Inter_500Medium"
@@ -260,7 +260,7 @@ export const TransactionDetails = (
 
       <SharePortfolio
         ref={shareTransactionModal}
-        balance={NumberUtils.formatNumber(transaction.amount, 2)}
+        balance={NumberUtils.limitDecimalCount(transaction.amount, 2)}
         currency="AMB"
         currencyPosition="right"
         txFee={transaction.fee}
