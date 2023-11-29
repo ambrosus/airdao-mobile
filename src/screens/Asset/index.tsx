@@ -113,7 +113,7 @@ export const AssetScreen = () => {
             color={COLORS.neutral900}
           >
             {tokenInfo.balance.ether < 1000
-              ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
+              ? NumberUtils.limitDecimalCount(tokenInfo.balance.ether, 2)
               : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
             {tokenInfo.symbol}
           </Text>
@@ -125,7 +125,7 @@ export const AssetScreen = () => {
                 fontSize={12}
                 color={COLORS.neutral800}
               >
-                ${NumberUtils.formatNumber(usdPrice, 2)}
+                ${NumberUtils.limitDecimalCount(usdPrice, 2)}
               </Text>
             }
             color={COLORS.gray300}
