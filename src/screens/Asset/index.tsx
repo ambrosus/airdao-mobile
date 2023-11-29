@@ -66,7 +66,7 @@ export const AssetScreen = () => {
       : tokenInfo.symbol || tokenInfo.address;
 
   return (
-    <View style={{ top }}>
+    <View style={{ top, flex: 1 }}>
       <Header
         title={
           <>
@@ -113,7 +113,7 @@ export const AssetScreen = () => {
             color={COLORS.neutral900}
           >
             {tokenInfo.balance.ether < 1000
-              ? NumberUtils.formatNumber(tokenInfo.balance.ether, 2)
+              ? NumberUtils.limitDecimalCount(tokenInfo.balance.ether, 2)
               : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
             {tokenInfo.symbol}
           </Text>
@@ -125,7 +125,7 @@ export const AssetScreen = () => {
                 fontSize={12}
                 color={COLORS.neutral800}
               >
-                ${NumberUtils.formatNumber(usdPrice, 2)}
+                ${NumberUtils.limitDecimalCount(usdPrice, 2)}
               </Text>
             }
             color={COLORS.gray300}
@@ -146,7 +146,7 @@ export const AssetScreen = () => {
           {t('common.transactions')}
         </Text>
       </View>
-      <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
+      <View style={{ flex: 1, paddingTop: verticalScale(16) }}>
         <AccountTransactions
           transactions={
             walletAccount === tokenInfo.address

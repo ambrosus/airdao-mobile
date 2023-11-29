@@ -88,7 +88,6 @@ class TransferDispatcher {
   ): Promise<string> {
     // Get account
     const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
-
     // Prepare transaction config
     const txConfig = await this.prepareTransactionConfig(
       account.address,
@@ -96,13 +95,11 @@ class TransferDispatcher {
       amountInEther,
       tokenAddress
     );
-
     // Sign transaction
     const signedTx = await this.web3.eth.accounts.signTransaction(
       txConfig,
       account.privateKey
     );
-
     // Send transaction
     const txReceipt = await this.web3.eth.sendSignedTransaction(
       signedTx.rawTransaction as string
@@ -126,11 +123,15 @@ class TransferDispatcher {
   ) {
     // @ts-ignore
     const tokenContract = new this.web3.eth.Contract(erc20.ERC20, tokenAddress);
-    const decimals = await tokenContract.methods.decimals().call();
+    let decimals = 18;
+    try {
+      decimals = await tokenContract.methods.decimals().call();
+    } catch (error) {
+      // ignore
+    }
     const amountInBaseUnits = this.web3.utils
       .toBN(parseFloat(amountInEther) * Math.pow(10, decimals))
       .toString();
-
     return {
       to: tokenAddress,
       data: tokenContract.methods
