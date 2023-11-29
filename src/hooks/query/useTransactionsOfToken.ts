@@ -20,7 +20,7 @@ export function useTransactionsOfToken(
     isFetchingNextPage,
     fetchNextPage
   } = useInfiniteQuery<PaginatedResponseBody<TransactionDTO[]>>(
-    ['transactions-of-token', address, page, limit],
+    ['transactions-of-token', address, tokenAddress, page, limit],
     {
       queryFn: ({ pageParam = 1 }) => {
         return API.explorerService.getTokenTransactionsV2(

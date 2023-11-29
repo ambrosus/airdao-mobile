@@ -66,7 +66,7 @@ export const AssetScreen = () => {
       : tokenInfo.symbol || tokenInfo.address;
 
   return (
-    <View style={{ top }}>
+    <View style={{ top, flex: 1 }}>
       <Header
         title={
           <>
@@ -146,7 +146,7 @@ export const AssetScreen = () => {
           {t('common.transactions')}
         </Text>
       </View>
-      <View style={{ height: '80%', paddingTop: verticalScale(16) }}>
+      <View style={{ flex: 1, paddingTop: verticalScale(16) }}>
         <AccountTransactions
           transactions={
             walletAccount === tokenInfo.address
