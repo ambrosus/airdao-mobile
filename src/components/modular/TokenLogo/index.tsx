@@ -6,7 +6,7 @@ import {
   BusdIcon,
   EthTokenIcon,
   FirepotIcon,
-  GanymadeIcon,
+  GanymedeIcon,
   HeraPoolIcon,
   PlutusIcon,
   TetherIcon,
@@ -24,33 +24,33 @@ export interface TokenLogoProps {
 
 export const TokenLogo = (props: TokenLogoProps) => {
   const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
-  switch (token) {
-    case 'AirDAO':
+  switch (token.toLowerCase()) {
+    case 'airDAO':
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     case AirDAODictTypes.Code.ETH:
-    case 'Ethereum':
+    case 'ethereum':
       return <EthTokenIcon scale={scale} />;
     case AirDAODictTypes.Code.BUSD:
-    case 'BUSD Token':
+    case 'busd token':
       return <BusdIcon scale={scale} />;
     case AirDAODictTypes.Code.USDC:
-    case 'USD Coin':
+    case 'usd coin':
       return <UsdcIcon scale={scale} />;
     case AirDAODictTypes.Code.Tether:
-    case 'Tether USD':
+    case 'tether usd':
       return <TetherIcon scale={scale} />;
-    case 'Ganymaede pool token':
-      return <GanymadeIcon scale={scale} />;
-    case 'Plutus pool token':
+    case 'ganymede pool token':
+      return <GanymedeIcon scale={scale} />;
+    case 'plutus pool token':
       return <PlutusIcon scale={scale} />;
-    case 'Hera pool token':
+    case 'hera pool token':
       return <HeraPoolIcon scale={scale} />;
-    case 'Firepot-LP-Token':
+    case 'firepot-lp-token':
       return <FirepotIcon scale={scale} />;
-    case 'AirBond':
+    case 'airbond':
       return <AirBondIcon scale={scale} />;
     default:
       return <AirdaoBlueIcon scale={scale} />;

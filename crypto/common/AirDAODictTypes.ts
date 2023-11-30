@@ -12,6 +12,7 @@ export namespace AirDAODictTypes {
     USDC = 'USDC',
     FirepotLp = 'FLP',
     Tether = 'USDT',
+    LangOperation = 'FUND',
     GanymedePoolToken = 'GPT',
     HeraPoolToken = 'HPT',
     PlutusPoolToken = 'PPT',
