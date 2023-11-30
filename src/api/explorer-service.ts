@@ -5,7 +5,6 @@ import {
   ExplorerInfoDTO,
   Token,
   TokenDTO,
-  TokenTransactionDTO,
   TransactionDTO
 } from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
@@ -123,7 +122,7 @@ const getTokenTransactionsV2 = async (
   tokenAddress: string,
   page: number,
   limit: number
-): Promise<PaginatedResponseBody<TokenTransactionDTO[]>> => {
+): Promise<PaginatedResponseBody<TransactionDTO[]>> => {
   try {
     if (!address) return { data: [], next: null };
     const apiUrl = `${explorerapiV2Url}/addresses/${address}/tokens/${tokenAddress}?limit=${limit}&page=${page}`;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { TokenTransaction, Transaction } from '@models';
+import { Transaction } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -21,8 +21,8 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const isSent = transaction.isSent;
   const { t } = useTranslation();
   const symbol =
-    (transaction.value?.symbol as AirDAODictTypes.Code) ||
-    (transaction as TokenTransaction).token?.symbol;
+    transaction.token?.symbol ||
+    (transaction.value?.symbol as AirDAODictTypes.Code);
   const usdAmount = useUSDPrice(transaction.amount, symbol);
 
   return (
