@@ -129,18 +129,22 @@ export const AddressDetails = (): JSX.Element => {
             {/*>*/}
             {/*  <ShareIcon color={COLORS.neutral900} scale={1.1} />*/}
             {/*</Button>*/}
-            <Spacer value={scale(32)} horizontal />
-            <Button
-              style={styles.headerBtn}
-              type="circular"
-              onPress={showEditModal}
-              testID="Edit_Button"
-            >
-              {Platform.select({
-                ios: <EditIcon color={COLORS.neutral900} scale={1.1} />,
-                android: <OptionsIcon color={COLORS.neutral900} />
-              })}
-            </Button>
+            {Boolean(walletInWatchlist) && (
+              <>
+                <Spacer value={scale(32)} horizontal />
+                <Button
+                  style={styles.headerBtn}
+                  type="circular"
+                  onPress={showEditModal}
+                  testID="Edit_Button"
+                >
+                  {Platform.select({
+                    ios: <EditIcon color={COLORS.neutral900} scale={1.1} />,
+                    android: <OptionsIcon color={COLORS.neutral900} />
+                  })}
+                </Button>
+              </>
+            )}
           </Row>
         }
       />
