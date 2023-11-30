@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useAMBPrice } from './query';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { useCurrencyRate } from './useCurrencyRate';
 
-export const useUSDPrice = (
-  etherAmount: number,
+export const useCurrencyRate = (
   symbol: AirDAODictTypes.Code = AirDAODictTypes.Code.AMB
 ): number => {
   const { data: ambPrice } = useAMBPrice();
-  const {} = useCurrencyRate;
-  const [usdPrice, setUSDPrice] = useState(0);
+  const [currencyRate, setCurrencyRate] = useState(0);
   useEffect(() => {
-    let usdPrice = 0;
+    let _currencyRate = 1;
     switch (symbol) {
       case AirDAODictTypes.Code.BUSD: {
-        usdPrice = etherAmount;
+        _currencyRate = 1;
         break;
       }
       default:
-        usdPrice = etherAmount * (ambPrice?.priceUSD || 0);
+        _currencyRate = ambPrice?.priceUSD || 0;
         break;
     }
-    setUSDPrice(usdPrice);
-  }, [ambPrice, etherAmount, symbol]);
+    setCurrencyRate(_currencyRate);
+  }, [ambPrice, symbol]);
 
-  return usdPrice;
+  return currencyRate;
 };

@@ -5,12 +5,14 @@ import { Swap } from './Swap';
 import { Send } from './Send';
 import { Receive } from './Receive';
 import { Staking } from './Staking';
+import { Token } from '@models';
 
 interface AccountActionsProps {
   address: string;
+  token?: Token;
 }
 export const AccountActions = (props: AccountActionsProps) => {
-  const { address } = props;
+  const { address, token } = props;
   return (
     <Row
       alignItems="center"
@@ -18,7 +20,7 @@ export const AccountActions = (props: AccountActionsProps) => {
       style={{ columnGap: scale(40) }}
     >
       <Swap />
-      <Send address={address} />
+      <Send address={address} token={token} />
       <Receive address={address} />
       <Staking />
     </Row>

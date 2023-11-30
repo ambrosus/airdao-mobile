@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
@@ -16,15 +16,16 @@ import { TokenPicker } from '@components/templates';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import {
-  useAMBPrice,
   useBalanceOfAddress,
+  useCurrencyRate,
   useEstimatedTransferFee,
-  useTokensAndTransactions
+  useTokensAndTransactions,
+  useUSDPrice
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
+import { AirDAOEventType, HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
@@ -46,20 +47,22 @@ import { styles } from './styles';
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
     useSendCryptoContext((v) => v);
+  const { t } = useTranslation();
+  const navigation = useNavigation<HomeNavigationProp>();
+  const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
+  const tokenFromNavigationParams = route.params?.token;
   const { to: destinationAddress = '', from: senderAddress = '' } =
     sendContextState;
+
   const { data: selectedAccount } = useAccountByAddress(senderAddress);
   const walletHash = selectedAccount?.wallet.id || '';
 
-  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
-  const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass selectedToken name inside to handle different crypto tokens under Ambrosus Networkc
-  const ambPrice = ambPriceInfo?.priceUSD || 0;
-  const currencyRate = ambPrice;
-  const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
   const {
     data: { tokens }
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
+  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
+
+  // Define default amb token
   const defaultAMBToken: Token = new Token({
     name: 'AirDAO',
     address: senderAddress || '',
@@ -67,13 +70,26 @@ export const SendFunds = () => {
     symbol: AirDAODictTypes.Code.AMB
   });
 
-  const [selectedToken, setSelectedToken] = useState<Token>(defaultAMBToken);
+  const [selectedToken, setSelectedToken] = useState<Token>(
+    tokens.find((t) => t.address === tokenFromNavigationParams?.address) ||
+      defaultAMBToken
+  );
+  const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const balanceInCrypto =
+    selectedToken.name === defaultAMBToken.name
+      ? defaultAMBToken.balance.ether
+      : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
+  // convert crypto balance to usd
+  const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
+
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
   );
+
+  // calculate estimated fee
   const estimatedFee = useEstimatedTransferFee(
     selectedToken,
     parseFloat(amountInCrypto),
@@ -82,16 +98,9 @@ export const SendFunds = () => {
     walletHash
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
-  const balanceInCrypto =
-    selectedToken.name === defaultAMBToken.name
-      ? defaultAMBToken.balance.ether
-      : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
-  const balanceInUSD = CurrencyUtils.toUSD(balanceInCrypto, currencyRate);
 
   const selectToken = (newToken: Token) => {
     setSelectedToken(newToken);
-    setAmountInCrypto('');
-    setAmountInUSD('');
   };
 
   useEffect(() => {
@@ -99,11 +108,10 @@ export const SendFunds = () => {
       type: 'SET_DATA',
       estimatedFee,
       currency: selectedToken.symbol,
-      currencyConversionRate: currencyRate,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estimatedFee, currencyRate, selectedToken, amountInCrypto]);
+  }, [estimatedFee, selectedToken, amountInCrypto]);
 
   const setDestinationAddress = (address: string) => {
     updateSendContext({ type: 'SET_DATA', to: address });
@@ -121,7 +129,7 @@ export const SendFunds = () => {
       );
       setAmountInUSD(
         NumberUtils.limitDecimalCount(
-          CurrencyUtils.toUSD(maxSendableBalance, ambPrice).toString(),
+          CurrencyUtils.toUSD(balanceInCrypto, currencyRate).toString(),
           3
         )
       );
@@ -140,12 +148,14 @@ export const SendFunds = () => {
       setAmountInUSD(finalValue);
       const newUsdAmount = parseFloat(finalValue) || 0;
       setAmountInCrypto(
-        CurrencyUtils.toCrypto(newUsdAmount, ambPrice).toFixed(3)
+        CurrencyUtils.toCrypto(newUsdAmount, currencyRate).toFixed(3)
       );
     } else {
       setAmountInCrypto(finalValue);
       const newCryptoAmount = parseFloat(finalValue) || 0;
-      setAmountInUSD(CurrencyUtils.toUSD(newCryptoAmount, ambPrice).toFixed(3));
+      setAmountInUSD(
+        CurrencyUtils.toUSD(newCryptoAmount, currencyRate).toFixed(3)
+      );
     }
   };
 
