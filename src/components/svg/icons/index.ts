@@ -57,7 +57,7 @@ export * from './TokenAirdaoWhite';
 export * from './TokenBusd';
 export * from './TokenEth';
 export * from './TokenFirepot';
-export * from './TokenGanymade';
+export * from './TokenGanymede';
 export * from './TokenHera';
 export * from './TokenPlutus';
 export * from './TokenTether';
