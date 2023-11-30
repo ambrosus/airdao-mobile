@@ -13,21 +13,11 @@ export interface TransactionDTO {
     wei: string;
     ether: number;
   };
-  token?: {
-    address: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-    totalSupply: number;
-  };
   from: string;
   to: string;
   hash: string;
   status: string;
-}
-
-export interface TokenTransactionDTO extends TransactionDTO {
-  token: {
+  token?: {
     address: string;
     name: string;
     symbol: string;

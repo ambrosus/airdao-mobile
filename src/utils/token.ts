@@ -7,6 +7,12 @@ const getTokenDetails = (
   let name = '';
   let symbol = AirDAODictTypes.Code.AMB;
   switch (address) {
+    case POOL_ADDRESSES.BUSD: {
+      // hera
+      name = 'BUSD';
+      symbol = AirDAODictTypes.Code.BUSD;
+      break;
+    }
     case POOL_ADDRESSES.Hera: {
       // hera
       name = 'Hera Pool Token';

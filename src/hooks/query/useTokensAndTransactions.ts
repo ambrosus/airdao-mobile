@@ -74,7 +74,6 @@ export function useTokensAndTransactions(
           )
           .flat(Number.POSITIVE_INFINITY) as Transaction[])
       : [];
-
   return {
     data: data?.pages
       ? { tokens: filteredTokens, transactions }
