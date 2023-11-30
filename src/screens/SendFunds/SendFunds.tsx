@@ -48,7 +48,6 @@ export const SendFunds = () => {
     useSendCryptoContext((v) => v);
   const { to: destinationAddress = '', from: senderAddress = '' } =
     sendContextState;
-  // const selectedToken = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
   const { data: selectedAccount } = useAccountByAddress(senderAddress);
   const walletHash = selectedAccount?.wallet.id || '';
 
@@ -68,7 +67,6 @@ export const SendFunds = () => {
     symbol: AirDAODictTypes.Code.AMB
   });
 
-  // const [destinationAddress, setDestinationAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState<Token>(defaultAMBToken);
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
@@ -92,8 +90,8 @@ export const SendFunds = () => {
 
   const selectToken = (newToken: Token) => {
     setSelectedToken(newToken);
-    setAmountInCrypto('0');
-    setAmountInUSD('0');
+    setAmountInCrypto('');
+    setAmountInUSD('');
   };
 
   useEffect(() => {
