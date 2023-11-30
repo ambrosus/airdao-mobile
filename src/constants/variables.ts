@@ -105,3 +105,9 @@ const prodEnvAddresses = [
 
 export const MULTISIG_VAULT =
   Config.env === 'prod' ? prodEnvAddresses : testEnvAddresses;
+
+export const POOL_ADDRESSES = {
+  Hera: '0x322269e52800e5094c008f3b01A3FD97BB3C8f5D',
+  Ganymade: '0xE984ACe36F2B6f10Fec8dd6fc1bB19c7b1D2F2c6',
+  Plutus: '0xEB8386a50Edd613cc43f061E9C5A915b0443C5d4'
+};

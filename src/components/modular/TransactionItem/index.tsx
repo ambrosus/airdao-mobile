@@ -1,16 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Transaction } from '@models';
+import { TokenTransaction, Transaction } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { DownArrowIcon } from '@components/svg/icons';
 import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -20,10 +20,10 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const { transaction } = props;
   const isSent = transaction.isSent;
   const { t } = useTranslation();
-  const usdAmount = useUSDPrice(
-    transaction.amount,
-    transaction.value.symbol as AirDAODictTypes.Code.AMB
-  );
+  const symbol =
+    (transaction.value?.symbol as AirDAODictTypes.Code) ||
+    (transaction as TokenTransaction).token?.symbol;
+  const usdAmount = useUSDPrice(transaction.amount, symbol);
 
   return (
     <View>
@@ -66,8 +66,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral900}
           >
-            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
-            {transaction.value.symbol}
+            {NumberUtils.limitDecimalCount(transaction.amount, 2)} {symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
           <Text

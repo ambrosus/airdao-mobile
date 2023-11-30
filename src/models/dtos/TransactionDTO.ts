@@ -25,3 +25,13 @@ export interface TransactionDTO {
   hash: string;
   status: string;
 }
+
+export interface TokenTransactionDTO extends TransactionDTO {
+  token: {
+    address: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    totalSupply: number;
+  };
+}
