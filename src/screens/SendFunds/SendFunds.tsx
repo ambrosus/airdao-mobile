@@ -78,7 +78,8 @@ export const SendFunds = () => {
   const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
       ? defaultAMBToken.balance.ether
-      : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
+      : tokens.find((t) => t.address === selectedToken.address)?.balance
+          .ether || 0;
   // convert crypto balance to usd
   const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
 
