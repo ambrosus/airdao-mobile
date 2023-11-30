@@ -50,7 +50,6 @@ export const AssetScreen = () => {
       !!tokenInfo.address &&
       walletAccount !== tokenInfo.address
   );
-
   const hasNextPage = isAMBToken ? hasNextPageOfAddress : hasNextPageOfToken;
   const fetchNextPage = isAMBToken ? fetchNextPageAddresss : fetchNextPageToken;
 

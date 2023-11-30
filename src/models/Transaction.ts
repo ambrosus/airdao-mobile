@@ -1,5 +1,7 @@
 import { TransactionType } from '@appTypes/enums';
-import { TransactionDTO } from './dtos/TransactionDTO';
+import { TokenTransactionDTO, TransactionDTO } from './dtos/TransactionDTO';
+import { TokenUtils } from '@utils/token';
+import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 export class Transaction {
   _id: string;
@@ -20,13 +22,7 @@ export class Transaction {
     ether: number;
     wei: string;
   };
-  token?: {
-    address: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-    totalSupply: number;
-  };
+
   isSent?: boolean;
 
   constructor(details: TransactionDTO) {
@@ -41,6 +37,24 @@ export class Transaction {
     this.status = details.status;
     this.value = { ...details.value, symbol: details.value.symbol || 'AMB' };
     this.gasCost = details.gasCost;
-    this.token = details.token;
+  }
+}
+
+export class TokenTransaction extends Transaction {
+  token: {
+    address: string;
+    name: string;
+    symbol: AirDAODictTypes.Code;
+    decimals: number;
+    totalSupply: number;
+  };
+
+  constructor(details: TokenTransactionDTO) {
+    super(details);
+    this.token = {
+      ...details.token,
+      name: TokenUtils.getTokenDetails(details.token.address).name,
+      symbol: TokenUtils.getTokenDetails(details.token.address).symbol
+    };
   }
 }
