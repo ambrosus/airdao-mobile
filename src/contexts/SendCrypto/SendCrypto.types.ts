@@ -6,7 +6,6 @@ export interface SendCryptoContextState {
   walletHash: string;
   amount: number;
   currency: AirDAODictTypes.Code;
-  currencyConversionRate: number; // {currency}/USD
   loading: boolean;
   estimatedFee: number;
   error: Error | null;

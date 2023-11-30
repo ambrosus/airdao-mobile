@@ -6,9 +6,11 @@ import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { useSendCryptoContext } from '@contexts';
+import { Token } from '@models';
 
 interface SendProps {
   address: string;
+  token?: Token;
 }
 
 export const Send = (props: SendProps) => {
@@ -24,7 +26,7 @@ export const Send = (props: SendProps) => {
       to: ''
     });
     setTimeout(() => {
-      navigation.navigate('SendFunds');
+      navigation.navigate('SendFunds', { token: props.token });
     }, 0);
   };
 

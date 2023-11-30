@@ -132,7 +132,7 @@ export const AssetScreen = () => {
         </Row>
       </View>
       <Spacer value={verticalScale(24)} />
-      <AccountActions address={walletAccount} />
+      <AccountActions address={walletAccount} token={tokenInfo} />
       <Spacer value={verticalScale(24)} />
       <View style={{ height: 1, backgroundColor: COLORS.neutral100 }} />
       <Spacer value={verticalScale(24)} />
