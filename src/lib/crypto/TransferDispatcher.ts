@@ -123,15 +123,7 @@ class TransferDispatcher {
   ) {
     // @ts-ignore
     const tokenContract = new this.web3.eth.Contract(erc20.ERC20, tokenAddress);
-    let decimals = 18;
-    try {
-      decimals = await tokenContract.methods.decimals().call();
-    } catch (error) {
-      // ignore
-    }
-    const amountInBaseUnits = this.web3.utils
-      .toBN(parseFloat(amountInEther) * Math.pow(10, decimals))
-      .toString();
+    const amountInBaseUnits = this.web3.utils.toWei(amountInEther);
     return {
       to: tokenAddress,
       data: tokenContract.methods

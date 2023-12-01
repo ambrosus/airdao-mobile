@@ -96,7 +96,7 @@
   "common.address.with.count": "{{count}} adres",
   "common.address.with.count_plural": "{{count}} adres",
   "common.copied": "Kopyalandı!",
-  "common.copy": "Panoya kopyalandı",
+  "common.copy": "Panoya kopyala",
   "common.date": "Tarih",
   "common.done": "Tamamlandı",
   "common.field.required": "Zorunlu alan",
@@ -115,11 +115,11 @@
   "common.transaction": "İşlem",
   "common.transaction.amount": "Miktar",
   "common.transaction.details": "İşlem detayları",
-  "common.transaction.from": "Buradan",
+  "common.transaction.from": "Gönderen",
   "common.transaction.received": "Alındı",
   "common.transaction.sent": "Gönderildi",
   "common.transaction.status.SUCCESS": "Tamamlandı",
-  "common.transaction.to": "Buraya",
+  "common.transaction.to": "Alan",
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
@@ -162,22 +162,10 @@
   "asset.your.balance": "Bakiyeniz",
 
   "transaction.modal": {
-    "amount": "Miktar",
     "buttons": {
       "explorer": "Gezginde görüntüle",
-      "share": "Paylaş",
-      "confirm": "Anladım"
-    },
-    "completed": "Tamamlandı",
-    "date": "Tarih",
-    "estimated.fee": "Tahmini ücret",
-    "from": "Kimden",
-    "recipient": "Kime",
-    "sending": "İşlem devam ediyor",
-    "sending.to": "Gönderiliyor",
-    "sent": "Gönderildi",
-    "status": "Durum",
-    "title": "İşleminiz gerçekleştiğinde bildirim alacaksınız"
+      "share": "Paylaş"
+    }
   },
 
   "receive.funds": "Varlık al",

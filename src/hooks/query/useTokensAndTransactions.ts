@@ -62,13 +62,20 @@ export function useTokensAndTransactions(
     return false;
   });
 
+  const txMap = new Map<string, boolean>();
   const transactions =
     data && data.pages
       ? (data.pages
           .map((page) =>
             page.data.transactions.map((t) => {
               const transaction = new Transaction(t);
-              transaction.isSent = t.from === address;
+              /**
+               *  When user sends from account to the same account we receive 2 transactions with the same transaction hash.
+               * */
+              const isTransactionDuplicate = txMap.get(transaction.hash);
+              transaction.isSent =
+                t.from === address && !isTransactionDuplicate;
+              txMap.set(transaction.hash, true);
               return transaction;
             })
           )
