@@ -27,6 +27,10 @@ export const ExplorerAccountTransactionItem = (
     transactionDetailsModal.current?.show();
   };
 
+  const hideTransactionDetails = () => {
+    transactionDetailsModal.current?.dismiss();
+  };
+
   const navigateToAddress = (address: string) => {
     transactionDetailsModal.current?.dismiss();
     // close first, navigate then
@@ -50,6 +54,7 @@ export const ExplorerAccountTransactionItem = (
         <View style={styles.transactionDetails}>
           <TransactionDetails
             onPressAddress={navigateToAddress}
+            onViewOnExplorerPress={hideTransactionDetails}
             transaction={transaction}
           />
         </View>

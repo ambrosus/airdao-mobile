@@ -13,7 +13,7 @@ export type HomeParamsList = {
     tokenInfo: Token;
     walletAccount: string;
   };
-  SendFunds: undefined;
+  SendFunds: { token?: Token };
   SendFundsStatus: undefined;
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;

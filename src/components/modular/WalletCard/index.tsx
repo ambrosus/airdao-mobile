@@ -11,6 +11,7 @@ import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
 import { ToastPosition } from '../Toast';
 
+export const WalletCardHeight = 172;
 export interface WalletCardProps {
   address: string;
   ambBalance: number;
@@ -36,6 +37,7 @@ export const WalletCard = (props: WalletCardProps) => {
     balanceLoading = false,
     change24HR
   } = props;
+
   const { t } = useTranslation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -73,8 +75,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontWeight="800"
                 fontFamily="Mersad_600SemiBold"
               >
-                {NumberUtils.formatNumber(ambBalance, ambBalance > 0 ? 2 : 0)}{' '}
-                AMB
+                {NumberUtils.limitDecimalCount(ambBalance.toString(), 2)} AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
               <View style={styles.usdPriceBg}>
@@ -96,7 +97,8 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontFamily="Inter_500Medium"
                 color={priceTextColor}
               >
-                {NumberUtils.addSignToNumber(change24HR)}% {t('common.today')}
+                {NumberUtils.addSignToNumber(change24HR)}%{' '}
+                {t('common.today').toLowerCase()}
               </Text>
             )}
           </>
@@ -112,6 +114,7 @@ const styles = StyleSheet.create({
     // minHeight: 148,
     width: scale(300),
     height: verticalScale(172),
+    minHeight: WalletCardHeight,
     overflow: 'hidden',
     paddingLeft: scale(20),
     paddingVertical: verticalScale(24),

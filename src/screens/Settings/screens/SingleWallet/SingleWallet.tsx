@@ -8,15 +8,14 @@ import {
 } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView, Header } from '@components/composite';
+import {
+  BottomAwareSafeAreaView,
+  CopyToClipboardButton,
+  Header
+} from '@components/composite';
 import { Button, Input, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
-import {
-  QRCodeWithLogo,
-  Toast,
-  ToastPosition,
-  ToastType
-} from '@components/modular';
+import { QRCodeWithLogo } from '@components/modular';
 import {
   DatabaseTable,
   SettingsTabNavigationProp,
@@ -26,7 +25,6 @@ import { useExplorerAccountFromHash } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
 import { WalletUtils } from '@utils/wallet';
-import { Clipboard } from '@utils/clipboard';
 import { API } from '@api/api';
 import { styles } from './styles';
 
@@ -63,27 +61,21 @@ export const SingleWalletScreen = () => {
   };
 
   const promptWalletDeletion = () => {
-    // TODO change text
-    Alert.alert('Delete wallet?', 'This will result in app reload', [
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: deleteWallet
-      },
-      {
-        text: 'Cancel',
-        style: 'cancel'
-      }
-    ]);
-  };
-
-  const copyToClipboard = async () => {
-    Toast.show({
-      text: t('common.copied'),
-      type: ToastType.Success,
-      position: ToastPosition.Bottom
-    });
-    await Clipboard.copyToClipboard(account?.address || '');
+    Alert.alert(
+      t('singleWallet.remove.alert.title'),
+      t('singleWallet.remove.alert.description'),
+      [
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: deleteWallet
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        }
+      ]
+    );
   };
 
   return (
@@ -120,7 +112,15 @@ export const SingleWalletScreen = () => {
             <View style={styles.nameInput}>
               <Text>{t('singleWallet.name')}</Text>
               <Spacer value={verticalScale(8)} />
-              <Input value={walletName} onChangeValue={setWalletName} />
+              <Input
+                value={walletName}
+                onChangeValue={setWalletName}
+                style={{
+                  shadowColor: COLORS.transparent,
+                  borderWidth: 1,
+                  borderColor: COLORS.alphaBlack10
+                }}
+              />
             </View>
             <Spacer value={verticalScale(42)} />
             {account && (
@@ -141,15 +141,24 @@ export const SingleWalletScreen = () => {
                   {account.address}
                 </Text>
                 <Spacer value={verticalScale(16)} />
-                <Button style={styles.copyButton} onPress={copyToClipboard}>
-                  <Text
-                    color={COLORS.neutral900}
-                    fontSize={14}
-                    fontFamily="Inter_500Medium"
-                  >
-                    {t('common.copy')}
-                  </Text>
-                </Button>
+                <CopyToClipboardButton
+                  textToDisplay={t('common.copy')}
+                  textToCopy={account.address}
+                  pressableText={true}
+                  showToast={false}
+                  iconProps={{ scale: 0 }}
+                  style={styles.copyButton}
+                  textProps={{
+                    color: COLORS.neutral900,
+                    fontSize: 14,
+                    fontFamily: 'Inter_500Medium'
+                  }}
+                  successTextProps={{
+                    color: COLORS.success600,
+                    fontSize: 14,
+                    fontFamily: 'Inter_500Medium'
+                  }}
+                />
               </View>
             )}
           </View>

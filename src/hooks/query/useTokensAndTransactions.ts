@@ -51,22 +51,39 @@ export function useTokensAndTransactions(
           .map((page) => page.data.tokens)
           .flat(Number.POSITIVE_INFINITY) as Token[])
       : [];
+  // Remove duplicated tokens, occurs while lazy loading transactions
+  const uniqueTokenSet = new Set();
+  const filteredTokens = tokens.filter((item) => {
+    const identifier = `${item.address}-${item.name}`;
+    if (!uniqueTokenSet.has(identifier)) {
+      uniqueTokenSet.add(identifier);
+      return true;
+    }
+    return false;
+  });
+
+  const txMap = new Map<string, boolean>();
   const transactions =
     data && data.pages
       ? (data.pages
           .map((page) =>
             page.data.transactions.map((t) => {
               const transaction = new Transaction(t);
-              transaction.isSent = t.from === address;
+              /**
+               *  When user sends from account to the same account we receive 2 transactions with the same transaction hash.
+               * */
+              const isTransactionDuplicate = txMap.get(transaction.hash);
+              transaction.isSent =
+                t.from === address && !isTransactionDuplicate;
+              txMap.set(transaction.hash, true);
               return transaction;
             })
           )
           .flat(Number.POSITIVE_INFINITY) as Transaction[])
       : [];
-
   return {
     data: data?.pages
-      ? { tokens, transactions }
+      ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
     loading: isInitialLoading || isFetchingNextPage,
     error,

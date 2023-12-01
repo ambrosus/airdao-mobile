@@ -1,19 +1,18 @@
 import React from 'react';
-import { Image } from 'react-native';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
   BusdIcon,
   EthTokenIcon,
-  GanymadeIcon,
+  FirepotIcon,
+  GanymedeIcon,
   HeraPoolIcon,
   PlutusIcon,
   TetherIcon,
   UsdcIcon
 } from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { moderateScale } from '@utils/scaling';
 
 export interface TokenLogoProps {
   token: string;
@@ -25,39 +24,38 @@ export interface TokenLogoProps {
 
 export const TokenLogo = (props: TokenLogoProps) => {
   const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
-  switch (token) {
-    case 'AirDAO':
+  switch (token.toLowerCase()) {
+    case 'airDAO':
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
-    case AirDAODictTypes.Code.ETH:
-    case 'Ethereum':
+    case AirDAODictTypes.Code.ETH.toLowerCase():
+    case 'ethereum':
       return <EthTokenIcon scale={scale} />;
-    case AirDAODictTypes.Code.BUSD:
-    case 'BUSD Token':
+    case AirDAODictTypes.Code.BUSD.toLowerCase():
+    case 'busd token':
       return <BusdIcon scale={scale} />;
-    case AirDAODictTypes.Code.USDC:
-    case 'USD Coin':
+    case AirDAODictTypes.Code.USDC.toLowerCase():
+    case 'usd coin':
       return <UsdcIcon scale={scale} />;
-    case AirDAODictTypes.Code.Tether:
-    case 'Tether USD':
+    case AirDAODictTypes.Code.Tether.toLowerCase():
+    case 'tether usd':
       return <TetherIcon scale={scale} />;
-    case 'Ganymaede pool token':
-      return <GanymadeIcon scale={scale} />;
-    case 'Plutus pool token':
+    case AirDAODictTypes.Code.GanymedePoolToken.toLowerCase():
+    case 'ganymede pool token':
+      return <GanymedeIcon scale={scale} />;
+    case AirDAODictTypes.Code.PlutusPoolToken.toLowerCase():
+    case 'plutus pool token':
       return <PlutusIcon scale={scale} />;
-    case 'Hera pool token':
+    case AirDAODictTypes.Code.HeraPoolToken.toLowerCase():
+    case 'hera pool token':
       return <HeraPoolIcon scale={scale} />;
-    case 'Firepot-LP-Token':
-      return (
-        <Image
-          {...props}
-          style={{ width: moderateScale(96), height: moderateScale(96) }}
-          source={require('@assets/images/tokens/firepot-lp-token.png')}
-        />
-      );
-    case 'AirBond':
+    case AirDAODictTypes.Code.FirepotLp.toLowerCase():
+    case 'firepot-lp-token':
+      return <FirepotIcon scale={scale} />;
+    case AirDAODictTypes.Code.Bond.toLowerCase():
+    case 'airbond':
       return <AirBondIcon scale={scale} />;
     default:
       return <AirdaoBlueIcon scale={scale} />;

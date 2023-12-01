@@ -14,7 +14,7 @@ export function BusdIcon(props: Omit<IconProps, 'color'>) {
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
     >
-      <Path fill="url(#prefix__pattern0)" d="M.473.021h32v32h-32z" />
+      <Path fill="url(#prefix__pattern0)" d="M0 0h32v32H0z" />
       <Defs>
         <Pattern
           id="prefix__pattern0"

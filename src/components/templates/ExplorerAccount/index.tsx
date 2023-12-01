@@ -118,10 +118,11 @@ export const ExplorerAccountView = (
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
           textProps={{
-            fontSize: 13,
+            fontSize: 14,
             fontFamily: 'Inter_600SemiBold',
             color: COLORS.neutral400
           }}
+          showToast={true}
           style={{ padding: 4 }}
         />
         {!nameVisible && renderListAndWalletInfo()}

@@ -11,7 +11,9 @@ export type FontFamily =
   | 'Inter_500Medium'
   | 'Inter_600SemiBold'
   | 'Inter_700Bold'
-  | 'Mersad_600SemiBold';
+  | 'Mersad_600SemiBold'
+  | 'Mersad_800Bold'
+  | 'Mersad_900ExtraBold';
 
 export type FontWeight =
   | 'normal'

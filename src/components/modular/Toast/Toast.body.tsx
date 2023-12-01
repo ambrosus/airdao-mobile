@@ -27,24 +27,27 @@ import { COLORS } from '@constants/colors';
 import { ToastBg, ToastBorderColor, ToastStatusIcon } from './Toast.constants';
 import { styles } from './Toast.styles';
 
+const DEFAULT_DURATION = 2500;
+
 export const ToastBody = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const DISTANCE_FROM_EDGE = verticalScale(16);
-  const defaultOptions: ToastOptions = useMemo(
+  const defaultOptions: Omit<ToastOptions, 'duration'> = useMemo(
     () => ({
       text: '',
       subtext: '',
       type: ToastType.Failed,
       position: ToastPosition.Top,
       actions: [],
-      onBodyPress: () => null,
-      duration: 1500 // ms
+      onBodyPress: () => null
     }),
     []
   );
 
   const [toastVisible, setToastVisible] = useState(false);
-  const [options, setOptions] = React.useState<ToastOptions>(defaultOptions);
+  const [options, setOptions] =
+    React.useState<Omit<ToastOptions, 'duration'>>(defaultOptions);
+  const duration = useRef(DEFAULT_DURATION);
   const timerRef = useRef<NodeJS.Timer | null>(null);
 
   const clearTimer = useCallback(() => {
@@ -56,6 +59,7 @@ export const ToastBody = forwardRef((_, ref) => {
   const hide = useCallback(() => {
     setToastVisible(false);
     setOptions(defaultOptions);
+    duration.current = DEFAULT_DURATION;
     clearTimer();
   }, [clearTimer, defaultOptions]);
 
@@ -63,12 +67,13 @@ export const ToastBody = forwardRef((_, ref) => {
     timerRef.current = setTimeout(() => {
       timerRef.current = null;
       hide();
-    }, options.duration);
-  }, [hide, options.duration]);
+    }, duration.current);
+  }, [hide]);
 
   const show = useCallback(
     (params: ToastOptions) => {
       setOptions({ ...defaultOptions, ...params });
+      duration.current = params.duration || DEFAULT_DURATION;
       setToastVisible(true);
       startTimer();
     },

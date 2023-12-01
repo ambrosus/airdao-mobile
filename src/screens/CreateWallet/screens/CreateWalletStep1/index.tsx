@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { MnemonicUtils } from '@utils/mnemonics';
@@ -10,7 +11,6 @@ import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
 import { WarningIcon } from '@components/svg/icons/Warning';
-import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep1 = () => {
@@ -20,6 +20,7 @@ export const CreateWalletStep1 = () => {
     useAddWalletContext();
   const walletMnemonicArray = walletMnemonic.split(' ');
   const { t } = useTranslation();
+  const columnNumber = 3;
 
   const init = async () => {
     setLoading(true);
@@ -39,7 +40,13 @@ export const CreateWalletStep1 = () => {
 
   const renderWord = (word: string, index: number) => {
     return (
-      <View style={styles.mnemonic} key={index}>
+      <View
+        style={[
+          styles.mnemonic,
+          { marginHorizontal: index % 3 === 1 ? scale(16) : 0 }
+        ]}
+        key={index}
+      >
         <Text
           color={COLORS.neutral400}
           fontSize={14}
@@ -67,23 +74,25 @@ export const CreateWalletStep1 = () => {
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
       <Header style={{ shadowColor: 'transparent' }} />
-      <Text
-        align="center"
-        fontSize={24}
-        fontFamily="Inter_700Bold"
-        color={COLORS.neutral900}
-      >
-        {t('create.wallet.your.recovery.phrase')}
-      </Text>
-      <Spacer value={verticalScale(12)} />
-      <Text
-        align="center"
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral900}
-      >
-        {t('create.wallet.verify.text')}
-      </Text>
+      <View style={{ paddingHorizontal: scale(28) }}>
+        <Text
+          align="center"
+          fontSize={24}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral900}
+        >
+          {t('create.wallet.your.recovery.phrase')}
+        </Text>
+        <Spacer value={verticalScale(12)} />
+        <Text
+          align="center"
+          fontSize={16}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral900}
+        >
+          {t('create.wallet.verify.text')}
+        </Text>
+      </View>
       {loading && (
         <View style={styles.loading}>
           <Spinner size="large" />
@@ -91,10 +100,15 @@ export const CreateWalletStep1 = () => {
       )}
       <Spacer value={verticalScale(40)} />
       <View style={styles.innerContainer}>
-        <View style={styles.mnemonicsContainer}>
-          {Array.isArray(walletMnemonicArray) &&
-            walletMnemonicArray.map(renderWord)}
-        </View>
+        <FlatList
+          data={walletMnemonicArray}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          numColumns={columnNumber}
+          keyExtractor={(word, idx) => `${word}-${idx}`}
+          renderItem={(args) => renderWord(args.item, args.index)}
+          ItemSeparatorComponent={() => <Spacer value={verticalScale(24)} />}
+        />
         <View>
           <View style={styles.warningContainer}>
             <View style={styles.warning}>
@@ -146,17 +160,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  mnemonicsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    rowGap: verticalScale(24),
-    width: scale(314),
-    alignSelf: 'center',
-    alignItems: 'center',
-    columnGap: scale(16)
-  },
   mnemonic: {
-    width: scale(94),
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.neutral100,

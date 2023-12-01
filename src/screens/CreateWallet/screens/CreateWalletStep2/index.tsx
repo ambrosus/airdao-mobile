@@ -71,7 +71,7 @@ export const CreateWalletStep2 = () => {
               name: 'Tabs',
               params: {
                 screen: 'Wallets',
-                params: { screen: 'WalletCreateSuccess' }
+                params: { screen: 'CreateWalletSuccess' }
               }
             }
           ]

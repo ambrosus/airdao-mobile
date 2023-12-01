@@ -7,71 +7,88 @@ import {
 import { scale } from '@utils/scaling';
 import { AccountListProps } from './AccountList.types';
 import { AccountList } from './AccountList';
-import { AccountDBModel } from '@database';
 
 interface PaginatedAccountListProps extends AccountListProps {
   listProps?: AccountListProps['listProps'];
   onScrolIndexChange?: (newPosition: number) => void;
 }
-const PAGE_WIDTH = scale(300); // card width
+const SCROLL_OFFSET_LIMIT = scale(200);
+const SCROLL_SPEED_LIMIT = 80;
 
 export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
-  const { accounts, listProps, onScrolIndexChange } = props;
+  const { accounts, listProps, type, onScrolIndexChange } = props;
   const cardList = useRef<FlatList>(null);
   const scrollPos = useRef(0);
+  const currentIdx = useRef(0);
+  const scrollBegin = useRef(0);
+  const scrollBeginAt = useRef(0);
+
+  const onScrollBeginDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    // save X position and time of start of scroll
+    scrollBegin.current = event.nativeEvent.contentOffset.x;
+    scrollBeginAt.current = new Date().getTime();
+  };
+
+  const resetScrollBeginInfo = () => {
+    scrollBegin.current = 0;
+    scrollBeginAt.current = 0;
+  };
 
   const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const xPos = event.nativeEvent.contentOffset.x;
-    let newScrollPos = 0;
-    if (xPos >= scrollPos.current) {
-      if (xPos - scrollPos.current >= scale(200)) {
-        // limit 'to-right' scroll by list width
-        newScrollPos = Math.min(
-          accounts.length * PAGE_WIDTH,
-          scrollPos.current + PAGE_WIDTH
-        );
-      } else {
-        newScrollPos = scrollPos.current;
-      }
-    } else {
-      if (scrollPos.current - xPos >= scale(200)) {
-        // limit 'to-left' scroll by 0
-        newScrollPos = Math.max(0, scrollPos.current - PAGE_WIDTH);
-      } else {
-        newScrollPos = scrollPos.current;
-      }
+    const offset = Math.abs(xPos - scrollPos.current);
+    // calculate speed of scroll by speed = distance / time
+    const speed =
+      (xPos - scrollBegin.current) /
+      (new Date().getTime() / scrollBeginAt.current);
+
+    if (offset < SCROLL_OFFSET_LIMIT && Math.abs(speed) < SCROLL_SPEED_LIMIT) {
+      // the scroll offset is not enough to change selected card
+      scrollToItem(currentIdx.current);
+      // reset scroll begin info
+      resetScrollBeginInfo();
+      return;
     }
-    cardList.current?.scrollToOffset({
-      animated: true,
-      offset: newScrollPos
-    });
-    scrollPos.current = newScrollPos;
-    const scrollIdx = Math.floor(scrollPos.current / PAGE_WIDTH);
-    if (typeof onScrolIndexChange === 'function') onScrolIndexChange(scrollIdx);
+
+    if (
+      xPos > scrollPos.current ||
+      (Math.abs(speed) > SCROLL_SPEED_LIMIT && speed > 0)
+    ) {
+      // move next item
+      scrollToItem(currentIdx.current + 1);
+    } else {
+      // move to previous item
+      scrollToItem(currentIdx.current - 1);
+    }
   };
 
-  const scrollToItem = (account: AccountDBModel, idx: number) => {
-    const calculateOffsetForIndex = (idx: number) => {
-      return PAGE_WIDTH * idx;
-    };
-    scrollPos.current = calculateOffsetForIndex(idx);
-    cardList.current?.scrollToOffset({
+  const scrollToItem = (idx: number) => {
+    if (!(idx >= 0 && idx < accounts.length)) return;
+    cardList.current?.scrollToIndex({
+      index: idx,
       animated: true,
-      offset: scrollPos.current
+      viewOffset: scale(32)
     });
+    currentIdx.current = idx;
     if (typeof onScrolIndexChange === 'function') onScrolIndexChange(idx);
   };
 
   return (
     <AccountList
       ref={cardList}
-      onPressAccount={scrollToItem}
+      onPressAccount={(_, idx) => scrollToItem(idx)}
       accounts={accounts}
       horizontal={true}
-      type="credit-card"
+      type={type}
       listProps={{
         decelerationRate: 'fast',
+        onScrollBeginDrag,
         onScrollEndDrag,
+        onMomentumScrollEnd: (event) => {
+          scrollPos.current = event.nativeEvent.contentOffset.x;
+        },
         ...listProps
       }}
     />

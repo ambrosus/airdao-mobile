@@ -7,7 +7,6 @@ const walletsDb = DatabaseTable.Wallets;
 
 interface Wallet {
   name: string;
-  mnemonic: string;
   hash: string;
   number: number;
   cashback: string;
@@ -34,8 +33,9 @@ export class WalletDB {
   static async createWallet(wallet: Wallet) {
     const walletInDB = await this.getWalletByHash(wallet.hash);
     if (!walletInDB) {
-      await Database.createModel(walletsDb, wallet);
+      return (await Database.createModel(walletsDb, wallet)) as WalletDBModel;
     }
+    return walletInDB;
   }
 
   static async updateWalletByHash(

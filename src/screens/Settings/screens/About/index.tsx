@@ -6,6 +6,7 @@ import { AboutMenutItem } from './About.MenuItem';
 import { Button } from '@components/base';
 import { PlatformSpecificUtils } from '@utils/platform';
 import { styles } from './styles';
+import { Linking } from 'react-native';
 
 // TODO add privacy policy and terms links
 export const AboutScreen = () => {
@@ -19,7 +20,11 @@ export const AboutScreen = () => {
       <Button>
         <AboutMenutItem title={t('settings.about.terms')} />
       </Button>
-      <Button>
+      <Button
+        onPress={() =>
+          Linking.openURL('https://airdao.io/mobile-privacy-policy')
+        }
+      >
         <AboutMenutItem title={t('settings.about.privacy')} />
       </Button>
       <Button type="base" onPress={PlatformSpecificUtils.requestReview}>

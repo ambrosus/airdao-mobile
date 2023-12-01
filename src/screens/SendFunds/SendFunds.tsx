@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
@@ -16,16 +16,16 @@ import { TokenPicker } from '@components/templates';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import {
-  useAMBPrice,
   useBalanceOfAddress,
+  useCurrencyRate,
   useEstimatedTransferFee,
-  useSelectedWalletHash,
-  useTokensAndTransactions
+  useTokensAndTransactions,
+  useUSDPrice
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
+import { AirDAOEventType, HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
@@ -39,25 +39,30 @@ import {
 import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
+import { DeviceUtils } from '@utils/device';
+import { useAccountByAddress } from '@hooks/database';
+import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
     useSendCryptoContext((v) => v);
-  const { to: destinationAddress = '', from: senderAddress = '' } =
-    sendContextState;
-  // const selectedToken = AirDAODictTypes.Code.AMB; // TODO use in future to connect different assets/tokens
-  const { data: walletHash } = useSelectedWalletHash();
-  // const { account, accountLoading } = useMainAccount();
-  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
-  const { data: ambPriceInfo } = useAMBPrice(); // TODO create a wrapper useTokenPrice hook and pass selectedToken name inside to handle different crypto tokens under Ambrosus Networkc
-  const ambPrice = ambPriceInfo?.priceUSD || 0;
-  const currencyRate = ambPrice;
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
+  const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
+  const tokenFromNavigationParams = route.params?.token;
+  const { to: destinationAddress = '', from: senderAddress = '' } =
+    sendContextState;
+
+  const { data: selectedAccount } = useAccountByAddress(senderAddress);
+  const walletHash = selectedAccount?.wallet.id || '';
+
   const {
     data: { tokens }
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
+  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
+
+  // Define default amb token
   const defaultAMBToken: Token = new Token({
     name: 'AirDAO',
     address: senderAddress || '',
@@ -65,14 +70,27 @@ export const SendFunds = () => {
     symbol: AirDAODictTypes.Code.AMB
   });
 
-  // const [destinationAddress, setDestinationAddress] = useState('');
-  const [selectedToken, setSelectedToken] = useState<Token>(defaultAMBToken);
+  const [selectedToken, setSelectedToken] = useState<Token>(
+    tokens.find((t) => t.address === tokenFromNavigationParams?.address) ||
+      defaultAMBToken
+  );
+  const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const balanceInCrypto =
+    selectedToken.name === defaultAMBToken.name
+      ? defaultAMBToken.balance.ether
+      : tokens.find((t) => t.address === selectedToken.address)?.balance
+          .ether || 0;
+  // convert crypto balance to usd
+  const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
+
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
   );
+
+  // calculate estimated fee
   const estimatedFee = useEstimatedTransferFee(
     selectedToken,
     parseFloat(amountInCrypto),
@@ -81,29 +99,20 @@ export const SendFunds = () => {
     walletHash
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
-  const balanceInCrypto =
-    selectedToken.name === defaultAMBToken.name
-      ? defaultAMBToken.balance.ether
-      : tokens.find((t) => t.name === selectedToken.name)?.balance.ether || 0;
-  const balanceInUSD = CurrencyUtils.toUSD(balanceInCrypto, currencyRate);
 
   const selectToken = (newToken: Token) => {
     setSelectedToken(newToken);
-    setAmountInCrypto('0');
-    setAmountInUSD('0');
   };
 
   useEffect(() => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
-      walletHash,
       currency: selectedToken.symbol,
-      currencyConversionRate: currencyRate,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estimatedFee, walletHash, currencyRate, selectedToken, amountInCrypto]);
+  }, [estimatedFee, selectedToken, amountInCrypto]);
 
   const setDestinationAddress = (address: string) => {
     updateSendContext({ type: 'SET_DATA', to: address });
@@ -111,8 +120,20 @@ export const SendFunds = () => {
 
   const useMaxBalance = () => {
     if (balanceInCrypto) {
-      setAmountInCrypto(balanceInCrypto.toString());
-      setAmountInUSD(CurrencyUtils.toUSD(balanceInCrypto, ambPrice).toString());
+      let maxSendableBalance: number = balanceInCrypto;
+      if (selectedToken.name === 'AirDAO') {
+        maxSendableBalance = balanceInCrypto - 0.0005;
+      }
+
+      setAmountInCrypto(
+        NumberUtils.limitDecimalCount(maxSendableBalance.toString(), 3)
+      );
+      setAmountInUSD(
+        NumberUtils.limitDecimalCount(
+          CurrencyUtils.toUSD(balanceInCrypto, currencyRate).toString(),
+          3
+        )
+      );
     }
   };
 
@@ -123,17 +144,19 @@ export const SendFunds = () => {
       return;
     }
     let finalValue = StringUtils.formatNumberInput(newValue);
-    finalValue = StringUtils.limitNumberInputDecimals(finalValue, 3);
+    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
     if (amountShownInUSD) {
       setAmountInUSD(finalValue);
       const newUsdAmount = parseFloat(finalValue) || 0;
       setAmountInCrypto(
-        CurrencyUtils.toCrypto(newUsdAmount, ambPrice).toFixed(3)
+        CurrencyUtils.toCrypto(newUsdAmount, currencyRate).toFixed(3)
       );
     } else {
       setAmountInCrypto(finalValue);
       const newCryptoAmount = parseFloat(finalValue) || 0;
-      setAmountInUSD(CurrencyUtils.toUSD(newCryptoAmount, ambPrice).toFixed(3));
+      setAmountInUSD(
+        CurrencyUtils.toUSD(newCryptoAmount, currencyRate).toFixed(3)
+      );
     }
   };
 
@@ -145,29 +168,31 @@ export const SendFunds = () => {
     confirmModalRef.current?.dismiss();
   };
 
-  const sendTx = async () => {
+  const sendTx = () => {
     hideReviewModal();
-    try {
-      updateSendContext({ type: 'SET_DATA', loading: true });
-      navigation.replace('SendFundsStatus');
-      AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
-        from: senderAddress,
-        to: destinationAddress
-      });
-      await TransactionUtils.sendTx(
-        walletHash,
-        destinationAddress,
-        Number(amountInCrypto),
-        selectedToken
-      );
-      updateSendContext({ type: 'SET_DATA', loading: false });
-    } catch (error: unknown) {
-      updateSendContext({
-        type: 'SET_DATA',
-        loading: false,
-        error: error as any
-      });
-    }
+    updateSendContext({ type: 'SET_DATA', loading: true });
+    setTimeout(async () => {
+      try {
+        navigation.replace('SendFundsStatus');
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
+          from: senderAddress,
+          to: destinationAddress
+        });
+        await TransactionUtils.sendTx(
+          walletHash,
+          destinationAddress,
+          Number(amountInCrypto),
+          selectedToken
+        );
+        updateSendContext({ type: 'SET_DATA', loading: false });
+      } catch (error: unknown) {
+        updateSendContext({
+          type: 'SET_DATA',
+          loading: false,
+          error: error as any
+        });
+      }
+    }, 1000);
   };
 
   const reviewButtonDisabled =
@@ -247,9 +272,11 @@ export const SendFunds = () => {
                 value={amountShownInUSD ? amountInUSD : amountInCrypto}
                 onChangeValue={onChangeAmountValue}
                 style={styles.input}
+                maxLength={9}
                 keyboardType="numeric"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
+                multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
               />
               <Spacer value={verticalScale(16)} />
               <Button onPress={toggleShowInUSD}>

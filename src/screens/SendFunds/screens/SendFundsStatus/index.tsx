@@ -1,18 +1,18 @@
 import React, { useRef } from 'react';
 import { Image, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { InfoIcon } from '@components/svg/icons';
-import { Spacer, Spinner, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
-import { HomeNavigationProp } from '@appTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SharePortfolio } from '@components/templates';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
+import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { useSendCryptoContext } from '@contexts';
+import { InfoIcon } from '@components/svg/icons';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { useSendCryptoContext } from '@contexts';
+import { HomeNavigationProp } from '@appTypes';
+import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 
 export const SendFundsStatus = () => {
@@ -39,8 +39,12 @@ export const SendFundsStatus = () => {
       errorMessage = t('send.funds.error.network');
       break;
     }
+    case 'PRIVATE_KEY_NOT_FOUND': {
+      errorMessage = t('send.funds.error.private.key.not.found');
+      break;
+    }
     default:
-      errorMessage = '';
+      errorMessage = JSON.stringify(error?.message);
       break;
   }
 
@@ -99,6 +103,7 @@ export const SendFundsStatus = () => {
             color={COLORS.neutral400}
             fontSize={15}
             fontFamily="Inter_400Regular"
+            align="center"
           >
             {errorMessage}
           </Text>

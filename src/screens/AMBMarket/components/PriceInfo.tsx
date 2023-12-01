@@ -7,7 +7,7 @@ import { moderateScale, verticalScale } from '@utils/scaling';
 export function AMBPriceInfo(): JSX.Element {
   return (
     <View style={styles.container}>
-      <AMBPriceHistory badgeType="button" />
+      <AMBPriceHistory badgeType="view" />
     </View>
   );
 }

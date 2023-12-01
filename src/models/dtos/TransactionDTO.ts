@@ -13,6 +13,10 @@ export interface TransactionDTO {
     wei: string;
     ether: number;
   };
+  from: string;
+  to: string;
+  hash: string;
+  status: string;
   token?: {
     address: string;
     name: string;
@@ -20,8 +24,4 @@ export interface TransactionDTO {
     decimals: number;
     totalSupply: number;
   };
-  from: string;
-  to: string;
-  hash: string;
-  status: string;
 }

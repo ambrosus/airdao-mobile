@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
-import { CacheableAccount, Permission } from '@appTypes';
+import { CacheableAccount, DatabaseTable, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@lib/cache';
+import { AccountDBModel, Database } from '@database';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -37,6 +38,16 @@ export const useAppInit = () => {
             // save under new push token
             API.watcherService.watchAddresses(watchlist.map((w) => w.address));
           }
+
+          // watch created wallets
+          const allAccounts = (await Database.query(
+            DatabaseTable.Accounts
+          )) as AccountDBModel[];
+          if (allAccounts?.length > 0) {
+            API.watcherService.watchAddresses(
+              allAccounts.map((a) => a.address)
+            );
+          }
         } catch (error) {
           // ignore
         }
@@ -51,7 +62,9 @@ export const useAppInit = () => {
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
           Inter_600SemiBold: require('../../assets/fonts/Inter-SemiBold.ttf'),
           Inter_700Bold: require('../../assets/fonts/Inter-Bold.ttf'),
-          Mersad_600SemiBold: require('../../assets/fonts/Mersad-SemiBold.ttf')
+          Mersad_600SemiBold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
+          Mersad_800Bold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
+          Mersad_900ExtraBold: require('../../assets/fonts/Mersad-SemiBold.ttf')
         });
       } catch (e) {
         // tslint:disable-next-line:no-console

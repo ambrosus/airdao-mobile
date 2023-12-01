@@ -1,8 +1,13 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { ExplorerAccountDTO, ExplorerInfoDTO, Token, TokenDTO } from '@models';
+import {
+  ExplorerAccountDTO,
+  ExplorerInfoDTO,
+  Token,
+  TokenDTO,
+  TransactionDTO
+} from '@models';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
-import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import Config from '@constants/config';
 import { SearchSort } from '@screens/Search/Search.types';

@@ -134,9 +134,10 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           value={formattedPrice}
           animatedProps={priceAnimatedProps}
           style={{
-            fontSize: 30,
-            fontFamily: 'Mersad_600SemiBold',
-            color: COLORS.neutral800
+            fontSize: 32,
+            fontFamily: 'Inter_700Bold',
+            fontWeight: '900',
+            color: COLORS.neutral900
           }}
         />
       </Row>
@@ -152,7 +153,11 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
-                  change={ambPriceNow?.percentChange24H || 0}
+                  change={
+                    (selectedInterval === '7d' || selectedInterval === 'weekly'
+                      ? ambPriceNow?.percentChange7D
+                      : ambPriceNow?.percentChange1H) || 0
+                  }
                   fontSize={16}
                   fontWeight="500"
                 />

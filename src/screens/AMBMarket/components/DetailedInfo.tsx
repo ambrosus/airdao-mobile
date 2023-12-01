@@ -40,7 +40,7 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
               testID={row.testID}
               body={t(row.body)}
               title={t(row.title)}
-              isVisible={visiblePopUpKey === row.key ? true : undefined}
+              isVisible={visiblePopUpKey === row.key}
               onBackdropPress={() => setVisiblePopUpKey('')}
             />
           </Row>

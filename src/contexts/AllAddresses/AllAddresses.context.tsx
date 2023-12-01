@@ -1,34 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
 import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
-import { AirDAOEventDispatcher, NotificationService } from '@lib';
+import { AirDAOEventDispatcher } from '@lib';
 import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
+import { ArrayUtils } from '@utils/array';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const watchlistedAccounts = allAddresses.filter(
-    (address) => address.isOnWatchlist
-  );
-  const watchlistedAccountsRef = useRef(watchlistedAccounts);
-  watchlistedAccountsRef.current = watchlistedAccounts;
-
-  useEffect(() => {
-    const onNotificationTokenRefresh = () => {
-      API.watcherService.watchAddresses(
-        watchlistedAccountsRef.current.map((account) => account.address)
-      );
-    };
-    new NotificationService(onNotificationTokenRefresh);
-  }, [allAddresses]);
 
   const addAddress = useCallback(
     (address: ExplorerAccount) => {
@@ -124,7 +110,10 @@ const AllAddressesContext = () => {
     setLoading(true);
     const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
       []) as CacheableAccount[];
-    const populatedAddresses = await populateAddresses(addresses);
+    const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
+    const populatedAddresses = await populateAddresses(
+      ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+    );
     setAllAddresses(populatedAddresses);
     reducer({ type: 'set', payload: populatedAddresses });
     setLoading(false);

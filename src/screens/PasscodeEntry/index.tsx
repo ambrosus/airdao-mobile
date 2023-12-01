@@ -13,6 +13,7 @@ import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 import { RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils } from '@utils/device';
 
 export const PasscodeEntry = () => {
   const isAuthSuccessfulRef = useRef(false);
@@ -26,7 +27,9 @@ export const PasscodeEntry = () => {
 
   const authenticateWithFaceID = useCallback(async () => {
     // This is a hack around older Android versions. They unmounts and remounts app after fingerprint prompt. By holding the value in cache, we can check if app comes from Biometric check
-    await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, 'true');
+    if (DeviceUtils.isAndroid) {
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
+    }
     try {
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: t('security.authenticate.with.face.id'),
@@ -41,10 +44,12 @@ export const PasscodeEntry = () => {
     } catch (error) {
       // ignore
     } finally {
-      await Cache.setItem(
-        CacheKey.isBiometricAuthenticationInProgress,
-        'false'
-      );
+      if (DeviceUtils.isAndroid) {
+        await Cache.setItem(
+          CacheKey.isBiometricAuthenticationInProgress,
+          false
+        );
+      }
     }
   }, [navigation, t]);
 
@@ -70,7 +75,7 @@ export const PasscodeEntry = () => {
           t('common.please.try.again'),
           [
             {
-              text: t('try.again'),
+              text: t('button.try.again'),
               onPress: () => null,
               style: 'cancel'
             }

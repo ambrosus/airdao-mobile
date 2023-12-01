@@ -4,7 +4,6 @@ import { Database, WalletDBModel } from '@database';
 
 export class Wallet {
   name: string;
-  mnemonic: string;
   hash: string;
   number: number;
   cashback: string;
@@ -20,7 +19,6 @@ export class Wallet {
   constructor(details: WalletMetadata) {
     this.hash = details.hash || 'empty_hash';
     this.name = details.name;
-    this.mnemonic = details.mnemonic;
     this.number = details.number;
     this.cashback = details.cashback || 'empty_cashback';
     this.isBackedUp = details.isBackedUp || 0;
@@ -40,7 +38,6 @@ export class Wallet {
   static fromDBModel(model: WalletDBModel): Wallet {
     return new Wallet({
       name: model.name,
-      mnemonic: model.mnemonic,
       hash: model.hash,
       number: model.number,
       cashback: model.cashback,

@@ -53,7 +53,15 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
         <FlatList
           data={data}
           renderItem={renderToken}
-          ListFooterComponent={() => (loading ? <Spinner /> : <></>)}
+          ListFooterComponent={() =>
+            loading ? (
+              <View style={{ alignSelf: 'center' }}>
+                <Spinner />
+              </View>
+            ) : (
+              <></>
+            )
+          }
           contentContainerStyle={{ paddingBottom: '20%' }}
           showsVerticalScrollIndicator={false}
         />

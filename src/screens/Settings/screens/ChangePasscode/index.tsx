@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseIcon } from '@components/svg/icons';
@@ -17,22 +17,12 @@ export const ChangePasscode = () => {
   const { top } = useSafeAreaInsets();
   const { savedPasscode, setSavedPasscode } = usePasscode();
   const navigation = useNavigation<SettingsTabNavigationProp>();
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(savedPasscode.length === 0 ? 2 : 1); // ask current passcode if already saved
   const [newPasscode, setNewPasscode] = useState<string[]>([]);
 
   const onBackPress = async () => {
     navigation.navigate('SecuritySettings');
   };
-
-  const init = useCallback(async () => {
-    const passcode = await PasscodeUtils.getPasscodeFromDB();
-    if (!savedPasscode) setSavedPasscode(passcode as string[]);
-    if (!passcode) setStep(2);
-  }, [savedPasscode, setSavedPasscode]);
-
-  useEffect(() => {
-    init();
-  }, [init, savedPasscode, setSavedPasscode]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
@@ -46,7 +36,7 @@ export const ChangePasscode = () => {
             t('common.please.try.again'),
             [
               {
-                text: t('try.again'),
+                text: t('button.try.again'),
                 onPress: () => null,
                 style: 'cancel'
               }
@@ -61,6 +51,7 @@ export const ChangePasscode = () => {
         // Step 3: Confirm new user passcode
         if (JSON.stringify(newPasscode) === JSON.stringify(typedPasscode)) {
           await PasscodeUtils.setPasscodeInDB(typedPasscode);
+          setSavedPasscode(typedPasscode);
           navigation.navigate('SecuritySettings');
           Toast.show({
             text: t('change.passcode.success'),
@@ -73,7 +64,7 @@ export const ChangePasscode = () => {
             t('common.please.try.again'),
             [
               {
-                text: t('try.again'),
+                text: t('button.try.again'),
                 onPress: () => null,
                 style: 'cancel'
               }

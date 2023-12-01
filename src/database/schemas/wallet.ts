@@ -9,10 +9,6 @@ export const WalletTable = tableSchema({
       type: 'string'
     },
     {
-      name: 'mnemonic',
-      type: 'string'
-    },
-    {
       name: 'hash',
       type: 'string'
     },

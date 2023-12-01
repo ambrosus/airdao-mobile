@@ -4,6 +4,7 @@ import { RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
 import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils } from '@utils/device';
 
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
@@ -11,19 +12,24 @@ export const usePasscodeEntryRevealer = () => {
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
-    if (!isPasscodeEnabled && !isFaceIDEnabled) return;
-    if (prevState === null) {
-      navigation.navigate('Passcode');
+    const [isBiometricAuthenticationInProgress, isSetupSecurityInProgress] =
+      await Promise.all([
+        Cache.getItem(CacheKey.isBiometricAuthenticationInProgress),
+        Cache.getItem(CacheKey.isSetupSecurityInProgress)
+      ]);
+
+    if (
+      DeviceUtils.isAndroid &&
+      isBiometricAuthenticationInProgress &&
+      isFaceIDEnabled
+    ) {
+      // check is authentication is still in progress for older android devices
       return;
     }
-    if (prevState === 'background') {
-      const isBiometricAuthenticationInProgress = await Cache.getItem(
-        CacheKey.isBiometricAuthenticationInProgress
-      );
-      if (isBiometricAuthenticationInProgress === 'false') {
-        navigation.navigate('Passcode');
-      }
-    }
+    if (isSetupSecurityInProgress) return;
+    if (!isPasscodeEnabled && !isFaceIDEnabled) return;
+    if (prevState === 'active' || prevState === 'inactive') return;
+    navigation.navigate('Passcode');
   }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {

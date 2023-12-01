@@ -18,6 +18,7 @@ interface TransactionDetailsProps {
   transaction: Transaction;
   isShareable?: boolean;
   onPressAddress?: (address: string) => void;
+  onViewOnExplorerPress?: () => void;
 }
 
 const ROW_MARGIN: number = verticalScale(24);
@@ -31,7 +32,7 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, isShareable = true, onPressAddress } = props;
+  const { transaction, onPressAddress, onViewOnExplorerPress } = props;
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
@@ -42,8 +43,8 @@ export const TransactionDetails = (
     const result = transaction.amount * ambPrice;
     totalTransactionAmount =
       result < 1000
-        ? NumberUtils.formatNumber(result, 2)
-        : NumberUtils.formatNumber(result, 0);
+        ? NumberUtils.limitDecimalCount(result, 2)
+        : NumberUtils.limitDecimalCount(result, 0);
   } else {
     totalTransactionAmount = -1;
   }
@@ -82,7 +83,7 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral800}
         >
-          {moment(transaction.timestamp).format('MMM DD, YYYY hh:mm')}
+          {moment(transaction.timestamp).format('MM/DD/YYYY hh:mm')}
         </Text>
       </JustifiedRow>
       <Spacer value={ROW_MARGIN} />
@@ -188,7 +189,7 @@ export const TransactionDetails = (
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.formatNumber(transaction.amount, 6)}{' '}
+            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
             {transaction.value.symbol}
             <Text
               fontFamily="Inter_500Medium"
@@ -217,7 +218,7 @@ export const TransactionDetails = (
             fontFamily="Inter_600SemiBold"
             fontSize={14}
           >
-            {transaction.fee} AMB
+            {NumberUtils.limitDecimalCount(transaction.fee.toString(), 6)} AMB
           </Text>
         </Row>
       </JustifiedRow>
@@ -225,9 +226,12 @@ export const TransactionDetails = (
       <Button
         type="circular"
         style={{ backgroundColor: COLORS.alphaBlack5 }}
-        onPress={() =>
-          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`)
-        }
+        onPress={() => {
+          if (typeof onViewOnExplorerPress === 'function') {
+            onViewOnExplorerPress();
+          }
+          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`);
+        }}
       >
         <Text
           style={{ marginVertical: verticalScale(12) }}
@@ -253,27 +257,10 @@ export const TransactionDetails = (
           {t('transaction.modal.buttons.share')}
         </Text>
       </Button>
-      {isShareable && (
-        <>
-          {/*<Spacer value={ROW_MARGIN} />*/}
-          {/*<Button*/}
-          {/*  type="circular"*/}
-          {/*  style={styles.shareBtn}*/}
-          {/*  onPress={showShareTransaction}*/}
-          {/*  testID="Show_Share_Transaction_Button"*/}
-          {/*>*/}
-          {/*  <Row alignItems="center">*/}
-          {/*    <ShareIcon color="#000000" />*/}
-          {/*    <Spacer value={scale(3.5)} horizontal />*/}
-          {/*    <Text>Share transaction</Text>*/}
-          {/*  </Row>*/}
-          {/*</Button>*/}
-        </>
-      )}
 
       <SharePortfolio
         ref={shareTransactionModal}
-        balance={NumberUtils.formatNumber(transaction.amount, 0)}
+        balance={NumberUtils.limitDecimalCount(transaction.amount, 2)}
         currency="AMB"
         currencyPosition="right"
         txFee={transaction.fee}

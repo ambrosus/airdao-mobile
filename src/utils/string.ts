@@ -34,9 +34,10 @@ const pluralize = (count: number, str: string, pluralForm?: string): string => {
   return count + ' ' + finalForm;
 };
 
-const removeNonNumericCharacters = (str: string): string => {
+const removeNonNumericCharacters = (str: string, allowDot = true): string => {
   if (!str) return '';
-  return str.replace(/[^.\d]+/g, '');
+  if (allowDot) return str.replace(/[^.\d]+/g, '');
+  return str.replace(/[^\d]+/g, '');
 };
 
 const removeNonAlphabeticCharacters = (str: string): string => {
@@ -45,7 +46,8 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 };
 
 const formatNumberInput = (str: string): string => {
-  let numericChars = removeNonNumericCharacters(str);
+  const dottedStr = str.replaceAll(',', '.');
+  let numericChars = removeNonNumericCharacters(dottedStr);
   if (numericChars[0] === '.') numericChars = '0' + numericChars;
   return _removeExtraDots(numericChars);
 };
@@ -64,25 +66,10 @@ function _removeExtraDots(str: string): string {
     .join('');
 }
 
-const limitNumberInputDecimals = (
-  str: string,
-  decimalPlaces: number
-): string => {
-  const parts = str.split('.');
-  if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
-    if (parts[1].length > decimalPlaces) {
-      parts[1] = parts[1].substring(0, decimalPlaces);
-      str = parts.join('.');
-    }
-  }
-  return str;
-};
-
 export const StringUtils = {
   formatAddress,
   pluralize,
   removeNonNumericCharacters,
   removeNonAlphabeticCharacters,
-  formatNumberInput,
-  limitNumberInputDecimals
+  formatNumberInput
 };
