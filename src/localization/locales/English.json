@@ -97,6 +97,7 @@
   "common.address_plural": "Addresses",
   "common.address.with.count": "{{count}} address",
   "common.address.with.count_plural": "{{count}} addresses",
+  "common.balance": "Balance",
   "common.copied": "Copied!",
   "common.copy": "Copy to clipboard",
   "common.date": "Date",
@@ -281,5 +282,6 @@
 
   "token.picker.select": "Select asset to send",
 
-  "wallet.my.assets": "My assets"
+  "wallet.my.assets": "My assets",
+  "wallet.picker.select": "Select Wallet"
 }

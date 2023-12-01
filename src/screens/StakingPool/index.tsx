@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -13,13 +13,20 @@ import { HomeParamsList } from '@appTypes';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { StakeToken, StakingInfo } from './components';
 import { styles } from './style';
+import { WalletPicker } from '@components/templates';
+import { useAllAccounts } from '@hooks/database';
+import { AccountDBModel } from '@database';
 
 export const StakingPoolScreen = () => {
+  const { data: allWallets } = useAllAccounts();
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
   const { t } = useTranslation();
   const currency = AirDAODictTypes.Code.AMB;
   const { totalStake, userStake, earnings, apy } = pool;
+  const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
+    allWallets?.length > 0 ? allWallets[0] : null
+  );
 
   const { top } = useSafeAreaInsets();
 
@@ -46,6 +53,13 @@ export const StakingPoolScreen = () => {
               </Text>
             </Row>
           }
+          contentRight={
+            <WalletPicker
+              selectedWallet={selectedWallet}
+              wallets={allWallets}
+              onSelectWallet={setSelectedWallet}
+            />
+          }
           style={{
             ...shadow
           }}
@@ -71,7 +85,7 @@ export const StakingPoolScreen = () => {
                 view: (
                   <View>
                     <Spacer value={verticalScale(24)} />
-                    <StakeToken />
+                    <StakeToken wallet={selectedWallet} />
                   </View>
                 )
               },
