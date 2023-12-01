@@ -263,8 +263,10 @@
 
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Kazanç",
+  "staking.pool.preview": "Özet",
   "staking.pool.stake": "Stake",
   "staking.pool.stake.amount": "Miktar",
+  "staking.pool.stake.now": "Onayla",
   "staking.pool.total.stake": "Toplam hisse miktarı",
   "staking.pool.user.stake": "Hisse miktarım",
   "staking.pool.withdraw": "Withdraw",

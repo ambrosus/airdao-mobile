@@ -5,11 +5,16 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { BottomSheetRef, InputWithIcon } from '@components/composite';
+import {
+  BottomSheet,
+  BottomSheetRef,
+  InputWithIcon
+} from '@components/composite';
 import { useBalanceOfAddress, useUSDPrice } from '@hooks';
 import { AccountDBModel } from '@database';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
+import { StakePreview } from './Stake.Preview';
 
 const PercentageBox = ({
   percentage,
@@ -27,10 +32,11 @@ const PercentageBox = ({
 
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
+  apy: number;
 }
 
 export const StakeToken = (props: StakeTokenProps) => {
-  const { wallet } = props;
+  const { wallet, apy } = props;
   const { t } = useTranslation();
   const [stakeAmount, setStakeAmount] = useState('');
   const previewDisabled = !stakeAmount || parseFloat(stakeAmount) === 0;
@@ -53,6 +59,10 @@ export const StakeToken = (props: StakeTokenProps) => {
         2
       )
     );
+  };
+
+  const processStake = () => {
+    // TODO
   };
 
   return (
@@ -126,13 +136,22 @@ export const StakeToken = (props: StakeTokenProps) => {
           {t(previewDisabled ? 'button.enter.amount' : 'button.preview')}
         </Text>
       </PrimaryButton>
+      <BottomSheet ref={previewModalRef} swiperIconVisible={true}>
+        <StakePreview
+          onPressStake={processStake}
+          walletAddress={wallet?.address || ''}
+          amount={parseFloat(stakeAmount || '0')}
+          apy={apy}
+        />
+        <Spacer value={verticalScale(36)} />
+      </BottomSheet>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: scale(16)
+    paddingHorizontal: scale(24)
   },
   currencyBadge: {
     paddingHorizontal: scale(8),

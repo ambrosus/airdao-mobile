@@ -264,8 +264,10 @@
 
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Earnings",
+  "staking.pool.preview": "Preview",
   "staking.pool.stake": "Stake",
   "staking.pool.stake.amount": "Amount",
+  "staking.pool.stake.now": "Stake now",
   "staking.pool.total.stake": "Total stake",
   "staking.pool.user.stake": "My stake",
   "staking.pool.withdraw": "Withdraw",
