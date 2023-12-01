@@ -162,22 +162,11 @@
   "asset.your.balance": "Your balance",
 
   "transaction.modal": {
-    "amount": "Amount",
     "buttons": {
       "explorer": "View on Explorer",
-      "share": "Share",
-      "confirm": "Ok, got it"
+      "share": "Share"
     },
-    "completed": "Completed",
-    "date": "Date",
-    "estimated.fee": "Estimated fee",
-    "from": "From",
-    "recipient": "Recipient",
-    "sending": "Transaction in progress",
-    "sending.to": "Sending to",
-    "sent": "Sent",
-    "status": "Status",
-    "title": "You will receive a notification when the transaction is complete"
+    "estimated.fee": "Estimated fee"
   },
 
   "receive.funds": "Receive funds",
