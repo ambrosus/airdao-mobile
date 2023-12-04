@@ -4,7 +4,7 @@ export * from './useAppFocused';
 export * from './useAppInit';
 export * from './useAppState';
 export * from './useCachePurifier';
-export * from './useCurrencyRate';
+export * from './query/useCurrencyRate';
 export * from './useDelayedMount';
 export * from './useExchangeRate';
 export * from './useForwardedRef';

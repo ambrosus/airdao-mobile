@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAMBPrice, useAmbrosusStakingPools } from './query';
+import { useAMBPrice } from './useAMBPrice';
+import { useAmbrosusStakingPools } from './useAmbrosusStakingPools';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { TOKEN_ADDRESSES } from '@constants/variables';
 
@@ -10,13 +11,14 @@ export const useCurrencyRate = (
   const { data: ambPrice } = useAMBPrice();
   const [currencyRate, setCurrencyRate] = useState(0);
   useEffect(() => {
-    let _currencyRate = 1; // AMB/USD
+    let _currencyRate = 1; // token/AMB
     switch (symbol) {
       case AirDAODictTypes.Code.USDC:
       case AirDAODictTypes.Code.Tether:
       case AirDAODictTypes.Code.BUSD: {
-        _currencyRate = 1 / (ambPrice?.priceUSD || 1);
-        break;
+        _currencyRate = 1;
+        setCurrencyRate(1);
+        return;
       }
       case AirDAODictTypes.Code.HeraPoolToken: {
         _currencyRate =
