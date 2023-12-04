@@ -66,7 +66,9 @@
   "button.create": "Create",
   "button.create.wallet": "Create new wallet",
   "button.delete": "Delete",
+  "button.enter.amount": "Enter amount",
   "button.import.wallet": "Import existing wallet",
+  "button.preview": "Preview",
   "button.remove": "Remove",
   "button.save": "Save",
   "button.setup.security": "Setup security",
@@ -95,6 +97,7 @@
   "common.address_plural": "Addresses",
   "common.address.with.count": "{{count}} address",
   "common.address.with.count_plural": "{{count}} addresses",
+  "common.balance": "Balance",
   "common.copied": "Copied!",
   "common.copy": "Copy to clipboard",
   "common.date": "Date",
@@ -254,6 +257,21 @@
   "share.time": "Time",
   "share.24hr": "24hr",
 
+  "staking.apy": "APY",
+  "staking.current.stake": "Currently staking {{amount}} {{symbol}}",
+  "staking.header": "Stake",
+  "staking.pools": "Pools",
+
+  "staking.pool.apy": "APY",
+  "staking.pool.earnings": "Earnings",
+  "staking.pool.preview": "Preview",
+  "staking.pool.stake": "Stake",
+  "staking.pool.stake.amount": "Amount",
+  "staking.pool.stake.now": "Stake now",
+  "staking.pool.total.stake": "Total stake",
+  "staking.pool.user.stake": "My stake",
+  "staking.pool.withdraw": "Withdraw",
+
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",
@@ -266,5 +284,6 @@
 
   "token.picker.select": "Select asset to send",
 
-  "wallet.my.assets": "My assets"
+  "wallet.my.assets": "My assets",
+  "wallet.picker.select": "Select Wallet"
 }

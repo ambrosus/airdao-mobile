@@ -8,21 +8,11 @@ export const useUSDPrice = (
   symbol: AirDAODictTypes.Code = AirDAODictTypes.Code.AMB
 ): number => {
   const { data: ambPrice } = useAMBPrice();
-  const {} = useCurrencyRate;
+  const currencyRate = useCurrencyRate(symbol);
   const [usdPrice, setUSDPrice] = useState(0);
   useEffect(() => {
-    let usdPrice = 0;
-    switch (symbol) {
-      case AirDAODictTypes.Code.BUSD: {
-        usdPrice = etherAmount;
-        break;
-      }
-      default:
-        usdPrice = etherAmount * (ambPrice?.priceUSD || 0);
-        break;
-    }
-    setUSDPrice(usdPrice);
-  }, [ambPrice, etherAmount, symbol]);
+    setUSDPrice(etherAmount * currencyRate);
+  }, [ambPrice, currencyRate, etherAmount, symbol]);
 
   return usdPrice;
 };

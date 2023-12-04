@@ -3,7 +3,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
-import { Token } from '@models';
+import { StakingPool, Token } from '@models';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
@@ -21,6 +21,8 @@ export type HomeParamsList = {
   CreateWalletSuccess: undefined;
   SetupPasscode: undefined;
   ConfirmPasscode: { passcode: string[] };
+  StakingPool: { pool: StakingPool };
+  StakingPools: undefined;
   SuccessSetupSecurity: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
