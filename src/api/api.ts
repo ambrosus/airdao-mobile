@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AMBTokenDTO } from '@models/dtos';
+import { AMBTokenDTO, StakingPoolDTO } from '@models/dtos';
 import { CMCChartData, CMCInterval } from '@appTypes';
 import { AMBToken } from '@models';
 import { watcherService } from './watcher-service';
@@ -44,9 +44,21 @@ const getAMBPriceHistoricalPricing = async (
   }
 };
 
+const getAmbrosusStakingPools = async (): Promise<StakingPoolDTO[]> => {
+  try {
+    const res = await axios.get(`${Config.STAKING_API_URL}`);
+    const poolsMap: { [key: string]: StakingPoolDTO } = res.data.data;
+    const poolsArray = Object.keys(poolsMap).map((key) => poolsMap[key]);
+    return poolsArray;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const API = {
   getAMBTokenData,
   getAMBPriceHistoricalPricing,
+  getAmbrosusStakingPools,
   explorerService,
   watcherService,
   cryptoService

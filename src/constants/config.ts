@@ -5,6 +5,7 @@ const envs = {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus.io/v2',
+    STAKING_API_URL: 'https://staking-api.ambrosus.io/pools/v2',
     env: 'prod',
     debug: {
       appBuildVersion: '1.0.0',
@@ -24,6 +25,7 @@ const envs = {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus-test.io/v2',
+    STAKING_API_URL: 'https://staking-api.ambrosus.io/pools/v2',
     env: 'stage',
     debug: {
       appBuildVersion: '1.0.0',

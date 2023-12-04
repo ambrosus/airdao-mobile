@@ -52,4 +52,8 @@ export class Transaction {
       };
     }
   }
+
+  get symbol(): AirDAODictTypes.Code {
+    return this.token?.symbol || (this.value?.symbol as AirDAODictTypes.Code);
+  }
 }
