@@ -28,7 +28,7 @@ export function useTokensAndTransactions(
   >(['wallet-tokens-and-transactions', address, page, limit], {
     queryFn: ({ pageParam = 1 }) => {
       return API.explorerService.getTransactionsOfAccountV2(
-        '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
+        address,
         parseInt(pageParam),
         limit
       );
