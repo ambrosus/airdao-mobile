@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, Dimensions } from 'react-native';
+import { View, ScrollView, Dimensions, RefreshControl } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -14,6 +14,8 @@ import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
 import { useTokensAndTransactions } from '@hooks';
 import { styles } from './styles';
+import { AirDAOEventType, AirDAOFundsSentFromAppEventPayload } from '@appTypes';
+import { AirDAOEventDispatcher } from '@lib';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -30,6 +32,7 @@ export const WalletTransactionsAndAssets = (
     loading,
     fetchNextPage,
     hasNextPage,
+    refetch: refetchAssets,
     error
   } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
   const { tokens, transactions } = tokensAndTransactions;
@@ -39,6 +42,26 @@ export const WalletTransactionsAndAssets = (
   const tabWidth = Dimensions.get('window').width;
 
   const indicatorPosition = useSharedValue(0);
+
+  useEffect(() => {
+    const onUserMadeTransaction = (
+      data: AirDAOFundsSentFromAppEventPayload
+    ) => {
+      if (
+        (data.from == account.address || data.to === account.address) &&
+        typeof refetchAssets == 'function'
+      ) {
+        refetchAssets();
+      }
+    };
+    const localTransactionListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.FundsSentFromApp,
+      (payload) =>
+        onUserMadeTransaction(payload as AirDAOFundsSentFromAppEventPayload)
+    );
+    return () => localTransactionListenter.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account.address]);
 
   // @ts-ignore
   const indicatorStyle = useAnimatedStyle(() => {
@@ -122,6 +145,9 @@ export const WalletTransactionsAndAssets = (
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
         contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl onRefresh={refetchAssets} refreshing={loading} />
+        }
       >
         <View style={{ width: tabWidth, flex: 1 }}>
           <WalletAssets

@@ -16,8 +16,11 @@ export function useTokensAndTransactions(
     hasNextPage,
     error,
     isInitialLoading,
+    isLoading,
+    isRefetching,
     isFetchingNextPage,
-    fetchNextPage
+    fetchNextPage,
+    refetch
   } = useInfiniteQuery<
     PaginatedResponseBody<{
       tokens: Token[];
@@ -42,7 +45,8 @@ export function useTokensAndTransactions(
       }
       return null;
     },
-    enabled
+    enabled,
+    refetchInterval: 1 * 60 * 1e3 // 1 min
   });
 
   const tokens =
@@ -85,9 +89,11 @@ export function useTokensAndTransactions(
     data: data?.pages
       ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
-    loading: isInitialLoading || isFetchingNextPage,
+    loading:
+      isInitialLoading || isFetchingNextPage || isLoading || isRefetching,
     error,
     hasNextPage: Boolean(hasNextPage),
-    fetchNextPage
+    fetchNextPage,
+    refetch
   };
 }
