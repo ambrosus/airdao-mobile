@@ -16,7 +16,6 @@ export function useTokensAndTransactions(
     hasNextPage,
     error,
     isInitialLoading,
-    isLoading,
     isRefetching,
     isFetchingNextPage,
     fetchNextPage,
@@ -89,8 +88,8 @@ export function useTokensAndTransactions(
     data: data?.pages
       ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
-    loading:
-      isInitialLoading || isFetchingNextPage || isLoading || isRefetching,
+    loading: isInitialLoading || isFetchingNextPage,
+    refetching: isRefetching,
     error,
     hasNextPage: Boolean(hasNextPage),
     fetchNextPage,

@@ -13,9 +13,9 @@ import { ExplorerAccount } from '@models';
 import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
 import { useTokensAndTransactions } from '@hooks';
-import { styles } from './styles';
 import { AirDAOEventType, AirDAOFundsSentFromAppEventPayload } from '@appTypes';
 import { AirDAOEventDispatcher } from '@lib';
+import { styles } from './styles';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -33,6 +33,7 @@ export const WalletTransactionsAndAssets = (
     fetchNextPage,
     hasNextPage,
     refetch: refetchAssets,
+    refetching,
     error
   } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
   const { tokens, transactions } = tokensAndTransactions;
@@ -146,7 +147,10 @@ export const WalletTransactionsAndAssets = (
         }}
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
-          <RefreshControl onRefresh={refetchAssets} refreshing={loading} />
+          <RefreshControl
+            onRefresh={refetchAssets}
+            refreshing={Boolean(refetching)}
+          />
         }
       >
         <View style={{ width: tabWidth, flex: 1 }}>
