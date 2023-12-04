@@ -22,7 +22,8 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Mersad_600SemiBold',
     shadowColor: 'transparent',
-    fontSize: 46
+    fontSize: 46,
+    borderWidth: 0
   },
   addressError: {
     marginTop: verticalScale(2),

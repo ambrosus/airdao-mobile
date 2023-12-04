@@ -109,7 +109,8 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
             fontSize={14}
             fontWeight="600"
           >
-            {estimatedFee} {currency}
+            {estimatedFee}
+            {' AMB'}
           </Text>
         </Row>
       </Row>

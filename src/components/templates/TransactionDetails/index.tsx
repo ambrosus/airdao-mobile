@@ -182,7 +182,7 @@ export const TransactionDetails = (
           {t('common.transaction.amount')}
         </Text>
         <Row alignItems="center">
-          <TokenLogo token={transaction.value.symbol} scale={0.5} />
+          <TokenLogo token={transaction.symbol} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontFamily="Mersad_600SemiBold"
@@ -190,7 +190,7 @@ export const TransactionDetails = (
             color={COLORS.neutral800}
           >
             {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
-            {transaction.value.symbol}
+            {transaction.symbol}
             <Text
               fontFamily="Inter_500Medium"
               fontSize={14}

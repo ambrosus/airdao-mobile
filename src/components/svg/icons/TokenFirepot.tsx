@@ -9,13 +9,12 @@ import {
   Stop,
   Svg
 } from 'react-native-svg';
-import { moderateScale } from '@utils/scaling';
 import { IconProps } from './Icon.types';
 
 export function FirepotIcon(props: Omit<IconProps, 'color'>) {
   const { scale = 1 } = props;
-  const width = moderateScale(32);
-  const height = moderateScale(32);
+  const width = 32;
+  const height = 32;
   return (
     <Svg
       width={width * scale}

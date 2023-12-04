@@ -8,8 +8,10 @@ import {
   FirepotIcon,
   GanymedeIcon,
   HeraPoolIcon,
+  LangFundIcon,
   PlutusIcon,
   TetherIcon,
+  UnknownTokenIcon,
   UsdcIcon
 } from '@components/svg/icons';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
@@ -25,7 +27,7 @@ export interface TokenLogoProps {
 export const TokenLogo = (props: TokenLogoProps) => {
   const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token.toLowerCase()) {
-    case 'airDAO':
+    case 'airdao':
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
@@ -57,7 +59,10 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case AirDAODictTypes.Code.Bond.toLowerCase():
     case 'airbond':
       return <AirBondIcon scale={scale} />;
+    case AirDAODictTypes.Code.LangOperation.toLowerCase():
+    case 'operation funds lang inu':
+      return <LangFundIcon scale={scale} />;
     default:
-      return <AirdaoBlueIcon scale={scale} />;
+      return <UnknownTokenIcon scale={scale} />;
   }
 };

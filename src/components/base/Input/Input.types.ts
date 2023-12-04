@@ -8,7 +8,7 @@ export type TextInputProps = {
   onChangeValue?: (newValue: string) => unknown;
 };
 
-export type InputProps = TextInputProps &
+export type InputProps = Omit<TextInputProps, 'onChangeText'> &
   RNTextInputProps & {
     type?: ButtonType;
   };
