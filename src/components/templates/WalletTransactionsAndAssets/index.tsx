@@ -37,6 +37,8 @@ export const WalletTransactionsAndAssets = (
   return (
     <View style={{ flex: 1 }}>
       <AnimatedTabs
+        onRefresh={refetchAssets}
+        isRefreshing={refetching}
         tabs={[
           {
             title: t('wallet.my.assets'),
