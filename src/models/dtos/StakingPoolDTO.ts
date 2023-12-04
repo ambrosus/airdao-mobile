@@ -1,6 +1,6 @@
 export interface StakingPoolDTO {
-  active: false;
-  apy: null;
+  active: boolean;
+  apy: null | number;
   totalStake: string;
   tokenPrice: string;
   tokenAddress: string;

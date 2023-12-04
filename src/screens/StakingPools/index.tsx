@@ -7,14 +7,15 @@ import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { StakingPoolList } from '@components/templates';
-import { mockStakingPools } from './mockData';
-import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
 import { StakingPool } from '@models';
+import { useAmbrosusStakingPools } from '@hooks';
+import { styles } from './styles';
 
 export const StakingPoolsScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
+  const { data: stakingPools } = useAmbrosusStakingPools();
 
   const navigateToPoolScreen = (pool: StakingPool) => {
     navigation.navigate('StakingPool', { pool });
@@ -47,7 +48,9 @@ export const StakingPoolsScreen = () => {
         </Text>
       </Row>
       <StakingPoolList
-        stakingPools={mockStakingPools}
+        stakingPools={stakingPools.sort(
+          (a, b) => Number(b.isActive) - Number(a.isActive)
+        )}
         contentContainerStyle={{
           paddingHorizontal: scale(16),
           paddingTop: verticalScale(16)

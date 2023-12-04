@@ -8,6 +8,7 @@ export class StakingPool {
   earnings: number;
   apy: number;
   tokenPrice: number;
+  isActive: boolean;
 
   constructor(details: StakingPoolDTO) {
     // @ts-ignore
@@ -15,7 +16,8 @@ export class StakingPool {
     this.userStake = 0; // TODO
     this.totalStake = Number(details.totalStake);
     this.earnings = 0; // TODO
-    this.apy = Number(details.apy);
+    this.apy = details.apy ? Number(details.apy) : 0;
     this.tokenPrice = Number(details.tokenPrice);
+    this.isActive = details.active;
   }
 }

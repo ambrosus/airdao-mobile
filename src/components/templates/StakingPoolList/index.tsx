@@ -22,7 +22,10 @@ export const StakingPoolList = (props: StakingPoolListProps) => {
     };
 
     return (
-      <Button onPress={onPress} disabled={typeof onPressItem !== 'function'}>
+      <Button
+        onPress={onPress}
+        disabled={typeof onPressItem !== 'function' || !args.item.isActive}
+      >
         <StakingPoolItem stakingPool={args.item} />
       </Button>
     );
