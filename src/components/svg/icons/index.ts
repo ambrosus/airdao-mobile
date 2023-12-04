@@ -80,6 +80,7 @@ export * from './TokenEth';
 export * from './TokenFirepot';
 export * from './TokenGanymede';
 export * from './TokenHera';
+export * from './TokenLangFund';
 export * from './TokenPlutus';
 export * from './TokenTether';
 export * from './TokenUnknown';
