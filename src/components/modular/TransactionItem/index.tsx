@@ -10,7 +10,6 @@ import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -20,10 +19,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const { transaction } = props;
   const isSent = transaction.isSent;
   const { t } = useTranslation();
-  const symbol =
-    transaction.token?.symbol ||
-    (transaction.value?.symbol as AirDAODictTypes.Code);
-  const usdAmount = useUSDPrice(transaction.amount, symbol);
+  const usdAmount = useUSDPrice(transaction.amount, transaction.symbol);
 
   return (
     <View>
@@ -66,7 +62,8 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Mersad_600SemiBold"
             color={COLORS.neutral900}
           >
-            {NumberUtils.limitDecimalCount(transaction.amount, 2)} {symbol}
+            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
+            {transaction.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
           <Text
