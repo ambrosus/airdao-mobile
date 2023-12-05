@@ -52,13 +52,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       .catch(() => setLoading(false));
   }, []);
 
-  // useEffect(() => {
-  //   if (savedPasscode?.length === 4) {
-  //     PasscodeUtils.setPasscodeInDB(savedPasscode);
-  //     setIsPasscodeEnabled(true);
-  //   }
-  // }, [savedPasscode]);
-
   const changePasscode = async (passcode: string[]) => {
     try {
       await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
@@ -85,7 +78,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         const hasFaceId = DeviceUtils.checkFaceIDExists(supportedBiometrics);
         const hasFingerprint =
           DeviceUtils.checkFingerprintExists(supportedBiometrics);
-
         if (hasHardware && isEnrolled) {
           // authenticate with biometrics
           const result = await LocalAuthentication.authenticateAsync({
