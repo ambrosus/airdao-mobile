@@ -12,11 +12,19 @@ export const usePasscodeEntryRevealer = () => {
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
-    // if security has not setup yet or app goes to background do nothing
-    if ((!isPasscodeEnabled && !isFaceIDEnabled) || prevState === 'active')
+    // if security has not setup yet do nothing
+    if (!isPasscodeEnabled && !isFaceIDEnabled) {
       return;
-    // if app comes from killed state always show passcode entry
+    }
+    // do nothing when app goes to background or comes back grom inactive state on IOS
+    if (
+      prevState === 'active' ||
+      (DeviceUtils.isIOS && prevState === 'inactive')
+    ) {
+      return;
+    }
     if (prevState === null) {
+      // if app comes from killed state always show passcode entry
       // reset biometric auth and setup security states
       await Promise.all([
         Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),

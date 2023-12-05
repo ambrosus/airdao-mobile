@@ -102,6 +102,7 @@
   "common.copy": "Copy to clipboard",
   "common.date": "Date",
   "common.done": "Done",
+  "common.estimated.fee": "Estimated fee",
   "common.field.required": "This field is required",
   "common.group": "Group",
   "common.group_plural": "Groups",
@@ -168,8 +169,7 @@
     "buttons": {
       "explorer": "View on Explorer",
       "share": "Share"
-    },
-    "estimated.fee": "Estimated fee"
+    }
   },
 
   "receive.funds": "Receive funds",
@@ -179,7 +179,6 @@
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or top up wallet to proceed.",
   "send.funds.error.network": "Bad internet connection!",
   "send.funds.error.private.key.not.found": "Private key not found. Please backup your wallet with your seed phrase again!",
-  "send.funds.estimated.fee": "Estimated fee",
   "send.funds.failed": "Transaction failed",
   "send.funds.go.home": "Go home",
   "send.funds.invalid.address": "Please enter a valid address",
