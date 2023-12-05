@@ -42,7 +42,7 @@ export const useCurrencyRate = (
         break;
       }
       default:
-        _currencyRate = ambPrice?.priceUSD || 0;
+        _currencyRate = 1;
         break;
     }
     setCurrencyRate(_currencyRate * (ambPrice?.priceUSD || 1));
