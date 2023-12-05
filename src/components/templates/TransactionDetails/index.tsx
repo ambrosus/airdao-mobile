@@ -208,7 +208,7 @@ export const TransactionDetails = (
           fontSize={16}
           color={COLORS.neutral300}
         >
-          {t('transaction.modal.estimated.fee')}
+          {t('common.estimated.fee')}
         </Text>
         <Row alignItems="center">
           <TokenLogo token="AirDAO" scale={0.5} />

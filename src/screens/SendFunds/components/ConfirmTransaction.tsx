@@ -99,7 +99,7 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
       </Row>
       <Spacer value={verticalScale(16)} />
       <Row width="100%" alignItems="center" justifyContent="space-between">
-        <Title>{t('send.funds.estimated.fee')}</Title>
+        <Title>{t('common.estimated.fee')}</Title>
         <Row alignItems="center">
           <LogoGradientCircular scale={0.67} />
           <Spacer value={scale(4)} horizontal />
