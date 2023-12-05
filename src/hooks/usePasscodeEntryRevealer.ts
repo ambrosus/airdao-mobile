@@ -12,10 +12,16 @@ export const usePasscodeEntryRevealer = () => {
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
-    // if security has not setup yet do nothing
-    if (!isPasscodeEnabled && !isFaceIDEnabled) return;
-    // if app comes from killed state alaways show passcode entry
+    // if security has not setup yet or app goes to background do nothing
+    if ((!isPasscodeEnabled && !isFaceIDEnabled) || prevState === 'active')
+      return;
+    // if app comes from killed state always show passcode entry
     if (prevState === null) {
+      // reset biometric auth and setup security states
+      await Promise.all([
+        Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),
+        Cache.setItem(CacheKey.isSetupSecurityInProgress, false)
+      ]);
       navigation.navigate('Passcode');
       return;
     }
@@ -30,13 +36,18 @@ export const usePasscodeEntryRevealer = () => {
      we are saving biometric auth progress state in local storage to avoid calling this function infinitely
      */
     if (
-      DeviceUtils.isAndroid &&
-      isBiometricAuthenticationInProgress &&
-      isFaceIDEnabled
+      (DeviceUtils.isAndroid &&
+        isBiometricAuthenticationInProgress &&
+        isFaceIDEnabled) ||
+      isSetupSecurityInProgress
     ) {
+      // reset state
+      await Promise.all([
+        Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),
+        Cache.setItem(CacheKey.isSetupSecurityInProgress, false)
+      ]);
       return;
     }
-    if (isSetupSecurityInProgress) return;
     navigation.navigate('Passcode');
   }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 

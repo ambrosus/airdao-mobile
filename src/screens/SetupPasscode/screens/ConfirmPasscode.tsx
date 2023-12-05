@@ -10,7 +10,6 @@ import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import usePasscode from '@contexts/Passcode';
-import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
 
 export const ConfirmPasscode = () => {
@@ -25,7 +24,6 @@ export const ConfirmPasscode = () => {
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
       setSavedPasscode(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {

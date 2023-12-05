@@ -9,10 +9,10 @@ import React, {
 import { View } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular/Toast';
 import { PasscodeUtils } from '@utils/passcode';
 import { DeviceUtils } from '@utils/device';
-import { useSupportedBiometrics } from '@hooks';
+import { useSupportedBiometrics } from '@hooks/useSupportedBiometrics';
 import { Cache, CacheKey } from '@lib/cache';
 
 interface IPasscodeContext {
@@ -59,8 +59,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       setIsPasscodeEnabled(true);
     } catch (error) {
       // ignore
-    } finally {
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
     }
   };
 
@@ -105,16 +103,13 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error('Face ID error:', error);
-    } finally {
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
-      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
   }, [isFaceIDEnabled, supportedBiometrics, t]);
 
   return (
     <PasscodeContext.Provider
       value={{
-        isPasscodeEnabled,
+        isPasscodeEnabled: isPasscodeEnabled,
         isFaceIDEnabled,
         savedPasscode,
         loading,
