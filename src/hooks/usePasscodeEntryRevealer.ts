@@ -24,13 +24,13 @@ export const usePasscodeEntryRevealer = () => {
       return;
     }
     if (prevState === null) {
+      navigation.navigate('Passcode');
       // if app comes from killed state always show passcode entry
       // reset biometric auth and setup security states
       await Promise.all([
         Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),
         Cache.setItem(CacheKey.isSetupSecurityInProgress, false)
       ]);
-      navigation.navigate('Passcode');
       return;
     }
     const [isBiometricAuthenticationInProgress, isSetupSecurityInProgress] =
