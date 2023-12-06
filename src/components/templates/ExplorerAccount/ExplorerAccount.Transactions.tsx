@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ListRenderItemInfo,
+  RefreshControl,
   SectionList,
   SectionListData,
   StyleSheet
@@ -19,7 +20,9 @@ interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
   loading?: boolean;
   showTransactionDetailsOnPress?: boolean;
+  isRefreshing?: boolean;
   onEndReached?: () => unknown;
+  onRefresh?: () => unknown;
 }
 
 interface TransactionSection {
@@ -32,8 +35,14 @@ const DAY_FORMAT = 'MMM DD YYYY';
 export const AccountTransactions = (
   props: ExplorerAccountViewTransactionsProps
 ): JSX.Element => {
-  const { transactions, loading, showTransactionDetailsOnPress, onEndReached } =
-    props;
+  const {
+    transactions,
+    loading,
+    showTransactionDetailsOnPress,
+    isRefreshing,
+    onRefresh,
+    onEndReached
+  } = props;
   const { t } = useTranslation();
 
   const sectionizedTransactions: TransactionSection[] = React.useMemo(() => {
@@ -113,6 +122,12 @@ export const AccountTransactions = (
         showsVerticalScrollIndicator={false}
         testID="Transactions_List"
         ListFooterComponent={() => (loading ? <CenteredSpinner /> : <></>)}
+        refreshControl={
+          <RefreshControl
+            onRefresh={onRefresh}
+            refreshing={Boolean(isRefreshing)}
+          />
+        }
       />
     </>
   );
