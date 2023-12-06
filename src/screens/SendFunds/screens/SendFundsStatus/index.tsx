@@ -59,7 +59,7 @@ export const SendFundsStatus = () => {
   };
 
   const navigateToHome = () => {
-    navigation.replace('HomeScreen');
+    navigation.popToTop();
     reducer({ type: 'RESET_DATA' });
   };
   return (
