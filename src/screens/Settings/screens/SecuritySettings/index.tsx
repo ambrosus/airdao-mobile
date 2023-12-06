@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -12,12 +12,49 @@ import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { useSupportedBiometrics } from '@hooks';
 import usePasscode from '@contexts/Passcode';
+import { Cache, CacheKey } from '@lib/cache';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
   const supportedBiometrics = useSupportedBiometrics();
-  const { toggleBiometricAuthentication, isFaceIDEnabled } = usePasscode();
+  const {
+    toggleBiometricAuthentication,
+    isFaceIDEnabled,
+    isPasscodeEnabled,
+    savedPasscode
+  } = usePasscode();
   const navigation = useNavigation<SettingsTabNavigationProp>();
+  const [hasHardware, setHasHardware] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isSetupSecurityInProgress, setIsSetupSecurityInProgress] =
+    useState(false);
+  const [
+    isBiometricAuthenticationInProgress,
+    setIsBiometricAuthenticationInProgress
+  ] = useState(false);
+
+  const checkHardware = async () => {
+    // check if device has biometric hardware
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    // device has registered biometrics data, either fingerprint or face id
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    const isSetupSecurityInProgress = await Cache.getItem(
+      CacheKey.isSetupSecurityInProgress
+    );
+    const isBiometricAuthenticationInProgress = await Cache.getItem(
+      CacheKey.isBiometricAuthenticationInProgress
+    );
+    setHasHardware(hasHardware);
+    setIsEnrolled(isEnrolled);
+    setIsSetupSecurityInProgress(Boolean(isSetupSecurityInProgress));
+    setIsBiometricAuthenticationInProgress(
+      Boolean(isBiometricAuthenticationInProgress)
+    );
+  };
+
+  useEffect(() => {
+    checkHardware();
+  }, []);
 
   const navigateToChangePasscode = useCallback(() => {
     navigation.navigate('ChangePasscode');
@@ -76,6 +113,40 @@ export const SecuritySettingsScreen = () => {
           </Row>
         </View>
       )}
+      <View style={{ paddingHorizontal: 24 }}>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Face id enabled</Text>
+          <Text>{String(isFaceIDEnabled)}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Passcode enabled</Text>
+          <Text>{String(isPasscodeEnabled)}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Saved passcode</Text>
+          <Text>{savedPasscode?.length}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Biometrics</Text>
+          <Text>{supportedBiometrics.join(',')}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Has hardware</Text>
+          <Text>{String(hasHardware)}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Is enrolled</Text>
+          <Text>{String(isEnrolled)}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Biometric auth in progress</Text>
+          <Text>{String(isBiometricAuthenticationInProgress)}</Text>
+        </Row>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Setup security progress</Text>
+          <Text>{String(isSetupSecurityInProgress)}</Text>
+        </Row>
+      </View>
     </SafeAreaView>
   );
 };

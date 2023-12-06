@@ -86,7 +86,10 @@ export const WalletCard = (props: WalletCardProps) => {
                   fontFamily="Inter_500Medium"
                 >
                   $
-                  {NumberUtils.formatNumber(usdBalance, usdBalance > 0 ? 2 : 0)}
+                  {NumberUtils.limitDecimalCount(
+                    usdBalance,
+                    usdBalance > 0 ? 2 : 0
+                  )}
                 </Text>
               </View>
             </Row>

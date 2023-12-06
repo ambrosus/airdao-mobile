@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  ScrollView,
-  Dimensions,
-  ViewStyle,
-  RefreshControl
-} from 'react-native';
+import { View, ScrollView, Dimensions, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -24,12 +18,10 @@ type AnimatedTab = {
 interface AnimatedTabsProps {
   tabs: AnimatedTab[];
   containerStyle?: ViewStyle;
-  onRefresh?: () => unknown;
-  isRefreshing?: boolean;
 }
 
 export const AnimatedTabs = (props: AnimatedTabsProps) => {
-  const { tabs, containerStyle, onRefresh, isRefreshing } = props;
+  const { tabs, containerStyle } = props;
   const tabCount = tabs.length;
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -118,12 +110,6 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
         contentContainerStyle={{ flexGrow: 1 }}
-        refreshControl={
-          <RefreshControl
-            onRefresh={onRefresh}
-            refreshing={Boolean(isRefreshing)}
-          />
-        }
       >
         {tabs.map(renderTabView)}
       </ScrollView>

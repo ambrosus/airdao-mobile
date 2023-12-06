@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
@@ -14,10 +14,12 @@ interface WalletAssetsProps {
   loading: boolean;
   error: boolean;
   account: ExplorerAccount;
+  isRefreshing?: boolean;
+  onRefresh?: () => unknown;
 }
 
 export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
-  const { tokens, loading, account, error } = props;
+  const { tokens, loading, account, error, isRefreshing, onRefresh } = props;
   const navigation = useNavigation<HomeNavigationProp>();
 
   const { t } = useTranslation();
@@ -64,6 +66,12 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           }
           contentContainerStyle={{ paddingBottom: '20%' }}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              onRefresh={onRefresh}
+              refreshing={Boolean(isRefreshing)}
+            />
+          }
         />
       )}
     </View>

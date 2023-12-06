@@ -37,8 +37,6 @@ export const WalletTransactionsAndAssets = (
   return (
     <View style={{ flex: 1 }}>
       <AnimatedTabs
-        onRefresh={refetchAssets}
-        isRefreshing={refetching}
         tabs={[
           {
             title: t('wallet.my.assets'),
@@ -48,6 +46,8 @@ export const WalletTransactionsAndAssets = (
                 loading={loading}
                 account={account}
                 error={error}
+                onRefresh={refetchAssets}
+                isRefreshing={refetching}
               />
             )
           },
@@ -57,7 +57,9 @@ export const WalletTransactionsAndAssets = (
               <AccountTransactions
                 transactions={transactions}
                 loading={loading}
+                isRefreshing={refetching}
                 onEndReached={loadMoreTransactions}
+                onRefresh={refetchAssets}
               />
             )
           }
