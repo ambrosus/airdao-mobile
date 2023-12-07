@@ -1,12 +1,11 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
-import { moderateScale } from '@utils/scaling';
 
 export function BrowserIcon(props: Omit<IconProps, 'variant'>) {
   const { color = '#222', scale = 1 } = props;
-  const width = moderateScale(16),
-    height = moderateScale(16);
+  const width = 16,
+    height = 16;
   return (
     <Svg
       width={width * scale}

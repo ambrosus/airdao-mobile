@@ -66,14 +66,16 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             {transaction.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
-          <Text
-            fontSize={12}
-            align="right"
-            fontFamily="Inter_500Medium"
-            color={COLORS.alphaBlack50}
-          >
-            ${NumberUtils.limitDecimalCount(usdAmount, 2)}
-          </Text>
+          {usdAmount >= 0 && (
+            <Text
+              fontSize={12}
+              align="right"
+              fontFamily="Inter_500Medium"
+              color={COLORS.alphaBlack50}
+            >
+              ${NumberUtils.limitDecimalCount(usdAmount, 2)}
+            </Text>
+          )}
         </View>
       </Row>
     </View>

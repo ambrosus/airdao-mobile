@@ -1,12 +1,11 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
-import { moderateScale } from '@utils/scaling';
 
 export function InfoIcon(props: IconProps) {
   const { scale = 1, color = '#FF4747' } = props;
-  const width = moderateScale(88);
-  const height = moderateScale(88);
+  const width = 88;
+  const height = 88;
   return (
     <Svg
       width={width * scale}

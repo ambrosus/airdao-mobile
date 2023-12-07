@@ -37,13 +37,15 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
             >
               {name === '' ? 'Unknown token' : name || address}
             </Text>
-            <Text
-              fontFamily="Mersad_600SemiBold"
-              fontSize={16}
-              color={COLORS.neutral800}
-            >
-              ${NumberUtils.limitDecimalCount(usdPrice, 2)}
-            </Text>
+            {usdPrice >= 0 && (
+              <Text
+                fontFamily="Mersad_600SemiBold"
+                fontSize={16}
+                color={COLORS.neutral800}
+              >
+                ${NumberUtils.limitDecimalCount(usdPrice, 2)}
+              </Text>
+            )}
           </Row>
           <Spacer horizontal value={scale(8)} />
           <Row justifyContent="space-between">

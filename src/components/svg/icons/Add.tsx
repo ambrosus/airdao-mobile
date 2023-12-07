@@ -1,13 +1,12 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 import { IconProps } from './Icon.types';
 
 export function AddIcon(props: IconProps) {
   const { color = COLORS.brand500, scale = 1 } = props;
-  const width = moderateScale(16),
-    height = moderateScale(16);
+  const width = 16,
+    height = 16;
 
   return (
     <Svg

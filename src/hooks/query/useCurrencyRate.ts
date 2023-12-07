@@ -3,6 +3,7 @@ import { useAMBPrice } from './useAMBPrice';
 import { useAmbrosusStakingPools } from './useAmbrosusStakingPools';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { TOKEN_ADDRESSES } from '@constants/variables';
+import { useAirbondPrice } from './useAirbondPrice';
 
 export const useCurrencyRate = (
   symbol: AirDAODictTypes.Code = AirDAODictTypes.Code.AMB
@@ -10,9 +11,18 @@ export const useCurrencyRate = (
   const { data: stakingPools } = useAmbrosusStakingPools();
   const { data: ambPrice } = useAMBPrice();
   const [currencyRate, setCurrencyRate] = useState(0);
+  const { data: airbondPrice } = useAirbondPrice();
   useEffect(() => {
     let _currencyRate = 1; // token/AMB
     switch (symbol) {
+      case AirDAODictTypes.Code.AMB: {
+        _currencyRate = ambPrice?.priceUSD || -1;
+        break;
+      }
+      case AirDAODictTypes.Code.Bond: {
+        _currencyRate = airbondPrice || -1;
+        break;
+      }
       case AirDAODictTypes.Code.USDC:
       case AirDAODictTypes.Code.Tether:
       case AirDAODictTypes.Code.BUSD: {
@@ -42,11 +52,11 @@ export const useCurrencyRate = (
         break;
       }
       default:
-        _currencyRate = 1;
+        _currencyRate = -1;
         break;
     }
     setCurrencyRate(_currencyRate * (ambPrice?.priceUSD || 1));
-  }, [ambPrice, stakingPools, symbol]);
+  }, [airbondPrice, ambPrice, stakingPools, symbol]);
 
   return currencyRate;
 };

@@ -117,18 +117,20 @@ export const AssetScreen = () => {
             {tokenInfo.symbol}
           </Text>
           <Spacer horizontal value={scale(8)} />
-          <Badge
-            icon={
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={12}
-                color={COLORS.neutral800}
-              >
-                ${NumberUtils.limitDecimalCount(usdPrice, 2)}
-              </Text>
-            }
-            color={COLORS.gray300}
-          />
+          {usdPrice >= 0 && (
+            <Badge
+              icon={
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={12}
+                  color={COLORS.neutral800}
+                >
+                  ${NumberUtils.limitDecimalCount(usdPrice, 2)}
+                </Text>
+              }
+              color={COLORS.gray300}
+            />
+          )}
         </Row>
       </View>
       <Spacer value={verticalScale(24)} />

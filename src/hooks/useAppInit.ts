@@ -12,13 +12,32 @@ export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {
+    async function checkNotificationTokenUpdate() {
+      const oldToken = (await Cache.getItem(
+        CacheKey.NotificationToken
+      )) as string;
+      const currentToken = await NotificationService.getPushToken();
+      if (oldToken !== currentToken) {
+        if (!!oldToken) {
+          // replace token in backend
+          API.watcherService.updatePushToken(oldToken, currentToken);
+        }
+        // save current token to cache
+        Cache.setItem(CacheKey.NotificationToken, currentToken);
+      }
+    }
+
     async function prepareNotifications() {
+      await checkNotificationTokenUpdate();
+      // ask notificaiton permission
       await PermissionService.getPermission(Permission.Notifications, {
         requestAgain: true,
         openSettings: true
       });
+      // setup notification listeners
       const notificationService = new NotificationService();
       notificationService.setup();
+      // check if current notification token is saved to remote db
       let notificationTokenSavedToRemoteDB = false;
       try {
         const watcherInfo =
