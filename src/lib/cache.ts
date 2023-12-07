@@ -13,6 +13,7 @@ export enum CacheKey {
   IsSecondInit = 'is_second_init',
   isSetupSecurityInProgress = 'is_setup_passcode_in_progress',
   NotificationSettings = 'notification_settings',
+  NotificationToken = 'notification_token',
   Onboarding = 'onboarding',
   LastNotificationTimestamp = 'last_notification_timestamp',
   Passcode = 'passcode',

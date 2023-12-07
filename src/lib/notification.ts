@@ -14,7 +14,7 @@ export class NotificationService {
     this.listenTokenChanges(listener);
   }
 
-  async getPushToken(): Promise<string> {
+  static async getPushToken(): Promise<string> {
     return await messaging().getToken();
   }
 

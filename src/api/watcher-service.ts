@@ -11,8 +11,7 @@ const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
 const getWatcherInfoOfCurrentUser =
   async (): Promise<WatcherInfoDTO | null> => {
-    const notificationService = new NotificationService();
-    const pushToken = await notificationService.getPushToken();
+    const pushToken = await NotificationService.getPushToken();
     try {
       const response = await axios.get(`${watcherAPI}/${pushToken}`);
       return response.data;
@@ -22,8 +21,7 @@ const getWatcherInfoOfCurrentUser =
   };
 
 const createWatcherForCurrentUser = async () => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
+  const pushToken = await NotificationService.getPushToken();
   try {
     return await axios.post(`${watcherAPI}`, { push_token: pushToken });
   } catch (error) {
@@ -32,8 +30,7 @@ const createWatcherForCurrentUser = async () => {
 };
 
 const watchAddresses = async (addresses: string[]): Promise<void> => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
+  const pushToken = await NotificationService.getPushToken();
   const notificationSettings: NotificationSettings =
     ((await Cache.getItem(
       CacheKey.NotificationSettings
@@ -52,8 +49,7 @@ const watchAddresses = async (addresses: string[]): Promise<void> => {
 };
 
 const removeAllWatchersFromCurrentUser = async (): Promise<void> => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
+  const pushToken = await NotificationService.getPushToken();
   if (!pushToken) return;
   try {
     await axios.delete(`${watcherAPI}`, {
@@ -69,8 +65,7 @@ const removeAllWatchersFromCurrentUser = async (): Promise<void> => {
 const removeWatcherForAddresses = async (
   addresses: string[]
 ): Promise<void> => {
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
+  const pushToken = await NotificationService.getPushToken();
   if (!addresses || !addresses.length || !pushToken) return;
   try {
     await axios.delete(`${watcherAPI}-addresses`, {
@@ -89,8 +84,7 @@ const updateNotificationSettings = async (
   settings: NotificationSettings
 ): Promise<void> => {
   const { pricePercentThreshold, priceAlerts, transactionAlerts } = settings;
-  const notificationService = new NotificationService();
-  const pushToken = await notificationService.getPushToken();
+  const pushToken = await NotificationService.getPushToken();
   try {
     await axios.put(`${watcherAPI}`, {
       addresses: [],
@@ -105,11 +99,27 @@ const updateNotificationSettings = async (
   }
 };
 
+const updatePushToken = async (
+  oldToken: string,
+  newToken: string
+): Promise<void> => {
+  try {
+    await axios.put(`${watcherAPI}/push-token`, {
+      addresses: [],
+      old_push_token: oldToken,
+      new_push_token: newToken
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const watcherService = {
   watchAddresses,
   removeWatcherForAddresses,
   getWatcherInfoOfCurrentUser,
   createWatcherForCurrentUser,
   removeAllWatchersFromCurrentUser,
-  updateNotificationSettings
+  updateNotificationSettings,
+  updatePushToken
 };
