@@ -2,12 +2,11 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 
 export function HelpIcon(props: IconProps) {
   const { color = COLORS.neutral900, scale = 1 } = props;
-  const width = moderateScale(20),
-    height = moderateScale(20);
+  const width = 20,
+    height = 20;
 
   return (
     <Svg

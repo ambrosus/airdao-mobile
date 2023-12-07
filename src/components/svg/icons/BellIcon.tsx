@@ -2,12 +2,11 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 
 export function BellIcon(props: IconProps) {
   const { color = COLORS.neutral100, scale = 1 } = props;
-  const width = moderateScale(40);
-  const height = moderateScale(40);
+  const width = 40;
+  const height = 40;
   return (
     <Svg
       width={width * scale}

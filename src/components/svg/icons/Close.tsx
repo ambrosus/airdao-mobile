@@ -2,12 +2,11 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 
 export function CloseIcon(props: IconProps) {
   const { color = COLORS.neutral900, scale = 1 } = props;
-  const width = moderateScale(24),
-    height = moderateScale(24);
+  const width = 24,
+    height = 24;
 
   return (
     <Svg

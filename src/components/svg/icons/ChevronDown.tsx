@@ -3,7 +3,6 @@ import { Path, Svg } from 'react-native-svg';
 import { RotateTransform } from 'react-native';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 
 export function ChevronDownIcon(
   props: IconProps & {
@@ -11,8 +10,8 @@ export function ChevronDownIcon(
   }
 ) {
   const { color = COLORS.brand500, rotate = '0deg' } = props;
-  const width = moderateScale(24),
-    height = moderateScale(24);
+  const width = 24,
+    height = 24;
   return (
     <Svg
       width={width}

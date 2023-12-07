@@ -2,7 +2,6 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 import { RotateTransform } from 'react-native';
 
 export function DownArrowIcon(
@@ -11,8 +10,8 @@ export function DownArrowIcon(
   }
 ) {
   const { color = COLORS.neutral900, scale = 1 } = props;
-  const width = moderateScale(24),
-    height = moderateScale(24);
+  const width = 14,
+    height = 16;
 
   return (
     <Svg
@@ -22,7 +21,7 @@ export function DownArrowIcon(
       fill="none"
     >
       <Path
-        d="M19.716 13.704a1 1 0 10-1.425-1.403L13 17.67V4a1 1 0 00-2 0v13.665L5.715 12.3a1 1 0 00-1.425 1.403l6.823 6.925a1.25 1.25 0 001.78 0l6.823-6.925z"
+        d="M13.792 9.265a.75.75 0 00-1.09-1.03l-4.955 5.239V.75a.75.75 0 00-1.5 0v12.726L1.29 8.235A.75.75 0 00.2 9.265l6.07 6.418a.995.995 0 00.566.3.753.753 0 00.329-.002.995.995 0 00.557-.298l6.07-6.418z"
         fill={color}
       />
     </Svg>
