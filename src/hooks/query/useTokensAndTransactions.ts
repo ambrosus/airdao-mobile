@@ -44,8 +44,7 @@ export function useTokensAndTransactions(
       }
       return null;
     },
-    enabled,
-    refetchInterval: 1 * 60 * 1e3 // 1 min
+    enabled
   });
 
   const tokens =
