@@ -27,11 +27,13 @@ export interface TokenLogoProps {
 export const TokenLogo = (props: TokenLogoProps) => {
   const { scale, token, overrideIconVariants = { amb: 'blue' } } = props;
   switch (token.toLowerCase()) {
-    case 'airdao':
+    case AirDAODictTypes.Code.AMB.toLowerCase():
+    case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
+    }
     case AirDAODictTypes.Code.ETH.toLowerCase():
     case 'ethereum':
       return <EthTokenIcon scale={scale} />;
