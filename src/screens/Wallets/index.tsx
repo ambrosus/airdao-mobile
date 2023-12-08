@@ -21,9 +21,8 @@ export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
   const [scrollIdx, setScrollIdx] = useState(0);
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
-  const { data: selectedAccountBalance } = useBalanceOfAddress(
-    selectedAccount?.address || ''
-  );
+  const { data: selectedAccountBalance, refetch: refetchAmbBalance } =
+    useBalanceOfAddress(selectedAccount?.address || '');
 
   const selectedAccountWithBalance = selectedAccount
     ? ExplorerAccount.fromDBModel(selectedAccount)
@@ -80,7 +79,10 @@ export const HomeScreen = () => {
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
             <AccountActions address={selectedAccountWithBalance.address} />
             <Spacer value={verticalScale(32)} />
-            <WalletTransactionsAndAssets account={selectedAccountWithBalance} />
+            <WalletTransactionsAndAssets
+              account={selectedAccountWithBalance}
+              onRefresh={refetchAmbBalance}
+            />
           </>
         )}
       </View>

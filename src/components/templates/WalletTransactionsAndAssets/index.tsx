@@ -9,12 +9,13 @@ import { useTokensAndTransactions } from '@hooks';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
+  onRefresh?: () => void;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { account } = props;
+  const { account, onRefresh } = props;
   const {
     data: tokensAndTransactions,
     loading,
@@ -34,6 +35,15 @@ export const WalletTransactionsAndAssets = (
     }
   };
 
+  const _onRefresh = () => {
+    if (typeof refetchAssets === 'function') {
+      refetchAssets();
+    }
+    if (typeof onRefresh === 'function') {
+      onRefresh();
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <AnimatedTabs
@@ -46,7 +56,7 @@ export const WalletTransactionsAndAssets = (
                 loading={loading}
                 account={account}
                 error={error}
-                onRefresh={refetchAssets}
+                onRefresh={_onRefresh}
                 isRefreshing={refetching}
               />
             )
@@ -59,7 +69,7 @@ export const WalletTransactionsAndAssets = (
                 loading={loading}
                 isRefreshing={refetching}
                 onEndReached={loadMoreTransactions}
-                onRefresh={refetchAssets}
+                onRefresh={_onRefresh}
               />
             )
           }
