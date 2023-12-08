@@ -7,24 +7,41 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { RootNavigationProp } from '@appTypes';
 import { useAllWallets } from '@hooks/database';
+import usePasscode from '@contexts/Passcode';
 
 const AppInitialization = () => {
   const { t } = useTranslation();
   const { data: allWallets, loading } = useAllWallets();
+  const {
+    isPasscodeEnabled,
+    isFaceIDEnabled,
+    loading: passcodeLoading
+  } = usePasscode();
   const navigation = useNavigation<RootNavigationProp>();
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && !passcodeLoading) {
       if (allWallets.length > 0) {
-        navigation.replace('Tabs', {
-          screen: 'Wallets',
-          params: { screen: 'HomeScreen' }
-        });
+        if (!isPasscodeEnabled && !isFaceIDEnabled) {
+          navigation.replace('Tabs', {
+            screen: 'Wallets',
+            params: { screen: 'SetupPasscode' }
+          });
+        } else {
+          navigation.replace('Passcode');
+        }
       } else {
         navigation.replace('WelcomeScreen');
       }
     }
-  }, [allWallets, navigation, loading]);
+  }, [
+    allWallets,
+    navigation,
+    loading,
+    passcodeLoading,
+    isPasscodeEnabled,
+    isFaceIDEnabled
+  ]);
 
   return (
     <View style={styles.container}>

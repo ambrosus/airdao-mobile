@@ -3,10 +3,14 @@ import { Alert, KeyboardAvoidingView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
-import { usePreventGoingBack, useSupportedBiometrics } from '@hooks';
+import {
+  useAppState,
+  usePreventGoingBack,
+  useSupportedBiometrics
+} from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
@@ -24,6 +28,19 @@ export const PasscodeEntry = () => {
   const { isFaceIDEnabled } = usePasscode();
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
+  const isFocused = useIsFocused();
+  const { appState } = useAppState();
+
+  const closePasscodeEntry = useCallback(() => {
+    const canGoBack = navigation.canGoBack();
+    if (canGoBack) navigation.pop();
+    else {
+      navigation.replace('Tabs', {
+        screen: 'Wallets',
+        params: { screen: 'HomeScreen' }
+      });
+    }
+  }, [navigation]);
 
   const authenticateWithFaceID = useCallback(async () => {
     // This is a hack around older Android versions. They unmounts and remounts app after fingerprint prompt. By holding the value in cache, we can check if app comes from Biometric check
@@ -37,7 +54,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        navigation.pop();
+        closePasscodeEntry();
       } else {
         passcodeRef.current?.focus();
       }
@@ -51,15 +68,17 @@ export const PasscodeEntry = () => {
         );
       }
     }
-  }, [navigation, t]);
+  }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    if (isFaceIDEnabled) {
-      authenticateWithFaceID();
-    } else {
-      passcodeRef.current?.focus();
+    if (isFocused && appState === 'active') {
+      if (isFaceIDEnabled) {
+        authenticateWithFaceID();
+      } else {
+        passcodeRef.current?.focus();
+      }
     }
-  }, [authenticateWithFaceID, isFaceIDEnabled]);
+  }, [authenticateWithFaceID, isFaceIDEnabled, appState, isFocused]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
@@ -68,7 +87,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
-        navigation.pop();
+        closePasscodeEntry();
       } else {
         Alert.alert(
           t('security.passcode.doesnt.match'),
