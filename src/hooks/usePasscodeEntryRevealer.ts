@@ -8,56 +8,31 @@ import { DeviceUtils } from '@utils/device';
 
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
-  const { prevState } = useAppState();
+  const { prevState, appState } = useAppState();
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
-    // if security has not setup yet do nothing
-    if (!isPasscodeEnabled && !isFaceIDEnabled) {
+    const isSetupSecurityInProgress = await Cache.getItem(
+      CacheKey.isSetupSecurityInProgress
+    );
+    const isBiometricAuthenticationInProgress = await Cache.getItem(
+      CacheKey.isBiometricAuthenticationInProgress
+    );
+    if (isSetupSecurityInProgress) {
+      if (appState === 'inactive' && prevState === 'active') return;
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
       return;
     }
-    // do nothing when app goes to background or comes back grom inactive state on IOS
-    if (
-      prevState === 'active' ||
-      (DeviceUtils.isIOS && prevState === 'inactive')
-    ) {
+
+    // hack around old android devices
+    if (DeviceUtils.isAndroid && isBiometricAuthenticationInProgress) {
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
       return;
     }
-    if (prevState === null) {
+    if (prevState === 'active' && (isFaceIDEnabled || isPasscodeEnabled)) {
       navigation.navigate('Passcode');
-      // if app comes from killed state always show passcode entry
-      // reset biometric auth and setup security states
-      await Promise.all([
-        Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),
-        Cache.setItem(CacheKey.isSetupSecurityInProgress, false)
-      ]);
-      return;
     }
-    const [isBiometricAuthenticationInProgress, isSetupSecurityInProgress] =
-      await Promise.all([
-        Cache.getItem(CacheKey.isBiometricAuthenticationInProgress),
-        Cache.getItem(CacheKey.isSetupSecurityInProgress)
-      ]);
-    /*
-     on older android devices app activity state becomes inactive and then active
-     leading this function to be called on every biometric auth request
-     we are saving biometric auth progress state in local storage to avoid calling this function infinitely
-     */
-    if (
-      (DeviceUtils.isAndroid &&
-        isBiometricAuthenticationInProgress &&
-        isFaceIDEnabled) ||
-      isSetupSecurityInProgress
-    ) {
-      // reset state
-      await Promise.all([
-        Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false),
-        Cache.setItem(CacheKey.isSetupSecurityInProgress, false)
-      ]);
-      return;
-    }
-    navigation.navigate('Passcode');
-  }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
+  }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {
     if (!loading) {
