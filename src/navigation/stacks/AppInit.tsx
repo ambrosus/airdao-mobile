@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { RootNavigationProp } from '@appTypes';
 import { useAllWallets } from '@hooks/database';
 import usePasscode from '@contexts/Passcode';
+import { Cache, CacheKey } from '@lib/cache';
 
 const AppInitialization = () => {
   const { t } = useTranslation();
@@ -19,7 +20,10 @@ const AppInitialization = () => {
   } = usePasscode();
   const navigation = useNavigation<RootNavigationProp>();
 
-  useEffect(() => {
+  const initApp = useCallback(async () => {
+    // reset passcode states
+    await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
+    await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     if (!loading && !passcodeLoading) {
       if (allWallets.length > 0) {
         if (!isPasscodeEnabled && !isFaceIDEnabled) {
@@ -35,12 +39,24 @@ const AppInitialization = () => {
       }
     }
   }, [
-    allWallets,
-    navigation,
-    loading,
-    passcodeLoading,
+    allWallets.length,
+    isFaceIDEnabled,
     isPasscodeEnabled,
-    isFaceIDEnabled
+    loading,
+    navigation,
+    passcodeLoading
+  ]);
+
+  useEffect(() => {
+    initApp();
+  }, [
+    initApp,
+    allWallets.length,
+    isFaceIDEnabled,
+    isPasscodeEnabled,
+    loading,
+    navigation,
+    passcodeLoading
   ]);
 
   return (
