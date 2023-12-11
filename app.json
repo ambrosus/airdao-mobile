@@ -93,7 +93,8 @@
         }
       ],
       ["./plugins/withNotifications.js"],
-      ["./plugins/withSupportsScreenAndroid.js"]
+      ["./plugins/withSupportsScreenAndroid.js"],
+      ["./plugins/withSecureFlag.js"]
     ],
     "extra": {
       "eas": {
