@@ -29,7 +29,7 @@ export const PasscodeEntry = () => {
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
   const isFocused = useIsFocused();
-  const { appState } = useAppState();
+  const { appState, prevState } = useAppState();
 
   const closePasscodeEntry = useCallback(() => {
     const canGoBack = navigation.canGoBack();
@@ -71,14 +71,14 @@ export const PasscodeEntry = () => {
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    if (isFocused && appState === 'active') {
+    if (isFocused && appState === 'active' && prevState !== 'inactive') {
       if (isFaceIDEnabled) {
         authenticateWithFaceID();
       } else {
         passcodeRef.current?.focus();
       }
     }
-  }, [authenticateWithFaceID, isFaceIDEnabled, appState, isFocused]);
+  }, [authenticateWithFaceID, isFaceIDEnabled, appState, isFocused, prevState]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
