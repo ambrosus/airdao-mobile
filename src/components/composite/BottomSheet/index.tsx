@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState
@@ -13,6 +14,8 @@ import { Separator } from '@components/base';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
+import { AirDAOEventDispatcher } from '@lib';
+import { AirDAOEventType } from '@appTypes';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -35,6 +38,17 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const [isVisible, setIsVisible] = useState(false);
     const fullscreenModalHeight = useFullscreenModalHeight();
     const keyboardHeight = useKeyboardHeight();
+
+    useEffect(() => {
+      const dismissListener = AirDAOEventDispatcher.subscribe(
+        AirDAOEventType.CloseAllModals,
+        () => setIsVisible(false)
+      );
+
+      return () => {
+        dismissListener.unsubscribe();
+      };
+    }, []);
 
     const show = useCallback(() => {
       setIsVisible(true);

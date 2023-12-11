@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from '@appTypes';
+import { AirDAOEventType, RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
 import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
+import { AirDAOEventDispatcher } from '@lib';
 
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
@@ -30,7 +31,12 @@ export const usePasscodeEntryRevealer = () => {
       return;
     }
     if (prevState === 'active' && (isFaceIDEnabled || isPasscodeEnabled)) {
-      navigation.navigate('Passcode');
+      // Our BottomSheet component is rendered on top of all screens,
+      // so any open instance of BottomSheet must be closed before navigating to Passcode
+      AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
+      setTimeout(() => {
+        navigation.navigate('Passcode');
+      }, 500);
     }
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 

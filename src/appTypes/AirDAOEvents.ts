@@ -2,6 +2,7 @@ import { NotificationType } from './notification';
 
 export enum AirDAOEventType {
   CollectionItemOpened = 'collection-item-opened',
+  CloseAllModals = 'close-all-modals',
   NotificationReceived = 'notification-received',
   WalletItemOpened = 'wallet-item-opened',
   FundsSentFromApp = 'user-sent-funds-from-app'
@@ -23,4 +24,5 @@ export type AirDAOFundsSentFromAppEventPayload = {
 export type AirDAOEventPayload =
   | AirDAOWalletItemOpenEventPayload
   | AirDAONotificationReceiveEventPayload
-  | AirDAOFundsSentFromAppEventPayload;
+  | AirDAOFundsSentFromAppEventPayload
+  | null;
