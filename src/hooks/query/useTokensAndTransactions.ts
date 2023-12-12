@@ -4,6 +4,12 @@ import { API } from '@api/api';
 import { Transaction, Token } from '@models';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
+import { useEffect } from 'react';
+import { AirDAOEventDispatcher } from '@lib';
+import {
+  AirDAOEventType,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
 
 export function useTokensAndTransactions(
   address: string,
@@ -44,8 +50,31 @@ export function useTokensAndTransactions(
       }
       return null;
     },
-    enabled
+    enabled,
+    refetchInterval: 1 * 60 * 1e3 // 1 min
   });
+
+  useEffect(() => {
+    const onNewNotificationReceive = (
+      data: AirDAONotificationReceiveEventPayload
+    ) => {
+      if (
+        data.type == 'transaction-alert' &&
+        (data.from === address || data.to === address)
+      ) {
+        refetch();
+      }
+    };
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
+      (payload) =>
+        onNewNotificationReceive(
+          payload as AirDAONotificationReceiveEventPayload
+        )
+    );
+    return () => notificationListenter.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const tokens =
     data && data.pages
