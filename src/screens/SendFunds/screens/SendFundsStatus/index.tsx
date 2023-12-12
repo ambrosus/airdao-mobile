@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,8 +7,8 @@ import { SharePortfolio } from '@components/templates';
 import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { InfoIcon } from '@components/svg/icons';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
+import { scale, verticalScale } from '@utils/scaling';
 import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { useSendCryptoContext } from '@contexts';
 import { HomeNavigationProp } from '@appTypes';
@@ -69,14 +69,7 @@ export const SendFundsStatus = () => {
       ) : error ? (
         <InfoIcon />
       ) : (
-        <Image
-          source={require('@assets/icons/checkmark-circle.png')}
-          style={{
-            height: moderateScale(88),
-            width: moderateScale(88),
-            tintColor: COLORS.success300
-          }}
-        />
+        <CheckmarkCircleIcon />
       )}
       <Spacer value={verticalScale(8)} />
       <Text color={COLORS.neutral800} fontSize={20} fontFamily="Inter_700Bold">

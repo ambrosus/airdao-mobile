@@ -7,6 +7,7 @@ export * from './BellIcon';
 export * from './Browser';
 export * from './Check';
 export * from './Checkmark';
+export * from './CheckmarkCircle';
 export * from './ChevronDown';
 export * from './ClipboardFilled';
 export * from './Close';
