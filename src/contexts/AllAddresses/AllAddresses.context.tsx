@@ -58,33 +58,39 @@ const AllAddressesContext = () => {
   );
 
   const reducer = useCallback(
-    (
+    async (
       action: AllAddressesAction | { type: 'set'; payload: ExplorerAccount[] }
     ) => {
+      let finalAddresses: ExplorerAccount[] = [];
       switch (action.type) {
         case 'add': {
-          setAllAddresses([...addAddress(action.payload)]);
+          finalAddresses = addAddress(action.payload);
           break;
         }
         case 'remove': {
-          setAllAddresses([...removeAddress(action.payload)]);
+          finalAddresses = removeAddress(action.payload);
           break;
         }
         case 'update': {
-          setAllAddresses([...updateAddress(action.payload)]);
+          finalAddresses = updateAddress(action.payload);
           break;
         }
         case 'add-or-update': {
-          setAllAddresses([...addOrUpdateAddress(action.payload)]);
+          finalAddresses = addOrUpdateAddress(action.payload);
           break;
         }
         case 'set': {
-          setAllAddresses(action.payload);
+          finalAddresses = action.payload;
           break;
         }
         default:
           break;
       }
+      setAllAddresses(finalAddresses);
+      await Cache.setItem(
+        CacheKey.AllAddresses,
+        finalAddresses.map(ExplorerAccount.toCacheable)
+      );
     },
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );

@@ -180,10 +180,7 @@ const ListsContext = () => {
       }
     });
     allAddressesReducer({ type: 'set', payload: allAddresses });
-    // timeout ensures that the account has been added to all addresses
-    // setTimeout(() => {
     setListsOfAddressGroup([...listOfGroups]);
-    // }, 0);
   };
 
   useEffect(() => {
