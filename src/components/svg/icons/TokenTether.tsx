@@ -4,8 +4,8 @@ import { IconProps } from './Icon.types';
 
 export function TetherIcon(props: Omit<IconProps, 'color'>) {
   const { scale = 1 } = props;
-  const width = 32;
-  const height = 32;
+  const width = 33;
+  const height = 33;
   return (
     <Svg
       width={width * scale}
