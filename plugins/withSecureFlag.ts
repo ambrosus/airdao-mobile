@@ -6,15 +6,13 @@ const withSecureFlag: ConfigPlugin = (config) => {
       let content = config.modResults.contents;
       content = content.replace(
         'import android.os.Bundle;',
-        `import android.os.Bundle;\n
-         import android.view.WindowManager;`
+        `import android.os.Bundle;\nimport android.view.WindowManager;`
       );
-      const flagSecureCode = `getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);`;
+      const flagSecureCode = `getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);\n`;
       if (!content.includes(flagSecureCode)) {
         content = content.replace(
-          'super.onCreate(savedInstanceState);',
-          `super.onCreate(savedInstanceState);\n
-           ${flagSecureCode}`
+          'super.onCreate(null);',
+          `super.onCreate(null);\n${flagSecureCode}`
         );
       }
       config.modResults.contents = content;
