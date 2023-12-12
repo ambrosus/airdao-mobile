@@ -43,10 +43,10 @@ var withSecureFlag = function (config) {
         return __generator(this, function (_a) {
             if (config.modResults.language === 'java') {
                 content = config.modResults.contents;
-                content = content.replace('import android.os.Bundle;', "import android.os.Bundle;\n         import android.view.WindowManager;");
-                flagSecureCode = "getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);";
+                content = content.replace('import android.os.Bundle;', "import android.os.Bundle;\nimport android.view.WindowManager;");
+                flagSecureCode = "getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);\n";
                 if (!content.includes(flagSecureCode)) {
-                    content = content.replace('super.onCreate(savedInstanceState);', "super.onCreate(savedInstanceState);\n           ".concat(flagSecureCode));
+                    content = content.replace('super.onCreate(null);', "super.onCreate(null);\n".concat(flagSecureCode));
                 }
                 config.modResults.contents = content;
             }
