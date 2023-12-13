@@ -53,7 +53,8 @@ export const useCurrencyRate = (
       }
       default:
         _currencyRate = -1;
-        break;
+        setCurrencyRate(-1);
+        return;
     }
     setCurrencyRate(_currencyRate * (ambPrice?.priceUSD || 1));
   }, [airbondPrice, ambPrice, stakingPools, symbol]);
