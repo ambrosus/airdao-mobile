@@ -16,7 +16,7 @@ export const useCurrencyRate = (
     let _currencyRate = 1; // token/AMB
     switch (symbol) {
       case AirDAODictTypes.Code.AMB: {
-        _currencyRate = ambPrice?.priceUSD || -1;
+        _currencyRate = 1;
         break;
       }
       case AirDAODictTypes.Code.Bond: {

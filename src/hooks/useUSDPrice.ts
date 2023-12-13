@@ -9,7 +9,7 @@ export const useUSDPrice = (
   const currencyRate = useCurrencyRate(symbol);
   const [usdPrice, setUSDPrice] = useState(0);
   useEffect(() => {
-    setUSDPrice(etherAmount * currencyRate);
+    setUSDPrice(parseFloat((etherAmount * currencyRate).toFixed(6)));
   }, [currencyRate, etherAmount]);
 
   return usdPrice;
