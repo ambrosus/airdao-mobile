@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { AirDAOEventType, AirDAOFundsSentFromAppEventPayload } from '@appTypes';
+import {
+  AirDAOEventType,
+  AirDAOFundsSentFromAppEventPayload,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
 import { AirDAOEventDispatcher } from '@lib';
 
 export function useBalanceOfAddress(
@@ -36,7 +40,27 @@ export function useBalanceOfAddress(
       (payload) =>
         onUserMadeTransaction(payload as AirDAOFundsSentFromAppEventPayload)
     );
-    return () => localTransactionListenter.unsubscribe();
+    const onNewNotificationReceive = (
+      data: AirDAONotificationReceiveEventPayload
+    ) => {
+      if (
+        data.type == 'transaction-alert' &&
+        (data.from === address || data.to === address)
+      ) {
+        refetch();
+      }
+    };
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
+      (payload) =>
+        onNewNotificationReceive(
+          payload as AirDAONotificationReceiveEventPayload
+        )
+    );
+    return () => {
+      localTransactionListenter.unsubscribe();
+      notificationListenter.unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
   return {

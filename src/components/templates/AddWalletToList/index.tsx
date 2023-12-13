@@ -30,10 +30,10 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   );
 
   const toggleWalletInList = (list: AccountList) => {
+    if (typeof onWalletMove === 'function') onWalletMove(list);
     setTimeout(() => {
       toggleAddressesInList([wallet], list);
-    }, 400);
-    if (typeof onWalletMove === 'function') onWalletMove(list);
+    }, 750);
   };
 
   const renderList = (args: ListRenderItemInfo<AccountList>) => {
