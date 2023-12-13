@@ -17,7 +17,6 @@ import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 import { RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
-import { DeviceUtils } from '@utils/device';
 
 export const PasscodeEntry = () => {
   const isAuthSuccessfulRef = useRef(false);
@@ -28,7 +27,7 @@ export const PasscodeEntry = () => {
   const { isFaceIDEnabled } = usePasscode();
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
-  const { appState, prevState } = useAppState();
+  const { appState } = useAppState();
   const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {
@@ -44,10 +43,7 @@ export const PasscodeEntry = () => {
 
   const authenticateWithFaceID = useCallback(async () => {
     automaticFaceIdCalled.current = true;
-    // This is a hack around older Android versions. They unmounts and remounts app after fingerprint prompt. By holding the value in cache, we can check if app comes from Biometric check
-    if (DeviceUtils.isAndroid) {
-      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
-    }
+    await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
     try {
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: t('security.authenticate.with.face.id'),
@@ -62,33 +58,28 @@ export const PasscodeEntry = () => {
     } catch (error) {
       // ignore
     } finally {
-      if (DeviceUtils.isAndroid) {
-        await Cache.setItem(
-          CacheKey.isBiometricAuthenticationInProgress,
-          false
-        );
-      }
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    if (appState === 'active' && prevState !== 'inactive') {
-      if (isFaceIDEnabled) {
-        authenticateWithFaceID();
-      } else {
-        passcodeRef.current?.focus();
-      }
-    }
-    // if (automaticFaceIdCalled.current) {
-    //   return;
-    // }
-    // if (appState === 'active') {
+    // if (appState === 'active' && prevState !== 'inactive') {
     //   if (isFaceIDEnabled) {
     //     authenticateWithFaceID();
     //   } else {
     //     passcodeRef.current?.focus();
     //   }
     // }
+    if (automaticFaceIdCalled.current) {
+      return;
+    }
+    if (appState === 'active') {
+      if (isFaceIDEnabled) {
+        authenticateWithFaceID();
+      } else {
+        passcodeRef.current?.focus();
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appState]);
 
