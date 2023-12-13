@@ -28,7 +28,7 @@ export const PasscodeEntry = () => {
   const { isFaceIDEnabled } = usePasscode();
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
-  const { appState } = useAppState();
+  const { appState, prevState } = useAppState();
   const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {
@@ -72,16 +72,23 @@ export const PasscodeEntry = () => {
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    if (automaticFaceIdCalled.current) {
-      return;
-    }
-    if (appState === 'active') {
+    if (appState === 'active' && prevState !== 'inactive') {
       if (isFaceIDEnabled) {
         authenticateWithFaceID();
       } else {
         passcodeRef.current?.focus();
       }
     }
+    // if (automaticFaceIdCalled.current) {
+    //   return;
+    // }
+    // if (appState === 'active') {
+    //   if (isFaceIDEnabled) {
+    //     authenticateWithFaceID();
+    //   } else {
+    //     passcodeRef.current?.focus();
+    //   }
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appState]);
 
