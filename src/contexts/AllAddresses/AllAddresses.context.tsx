@@ -11,6 +11,7 @@ import {
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
 import { ArrayUtils } from '@utils/array';
+import { Alert } from 'react-native';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -114,15 +115,23 @@ const AllAddressesContext = () => {
   // fetch all addresses on mount
   const getAddresses = async () => {
     setLoading(true);
-    const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-      []) as CacheableAccount[];
-    const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
-    const populatedAddresses = await populateAddresses(
-      ArrayUtils.mergeArrays('address', addresses, currentAddresses)
-    );
-    setAllAddresses(populatedAddresses);
-    reducer({ type: 'set', payload: populatedAddresses });
-    setLoading(false);
+    try {
+      const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
+        []) as CacheableAccount[];
+      const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
+      const populatedAddresses = await populateAddresses(
+        ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+      );
+      setAllAddresses(populatedAddresses);
+      reducer({ type: 'set', payload: populatedAddresses });
+    } catch (error) {
+      Alert.alert(
+        'Error occured while populating addresses',
+        JSON.stringify(error)
+      );
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     getAddresses();

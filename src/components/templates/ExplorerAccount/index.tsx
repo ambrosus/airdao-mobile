@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, verticalScale } from '@utils/scaling';
@@ -8,14 +9,10 @@ import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { useLists } from '@contexts/ListsContext';
-// import { PlusIcon } from '@components/svg/icons';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { AddWalletToList } from '../AddWalletToList';
-import { BottomSheetWithHeader } from '@components/modular';
-import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useWatchlist } from '@hooks';
-import { useTranslation } from 'react-i18next';
+import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -29,7 +26,6 @@ export const ExplorerAccountView = (
 ): JSX.Element => {
   const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
   const { listsOfAddressGroup } = useLists((v) => v);
-  const fullscreenHeight = useFullscreenModalHeight();
   const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const { t } = useTranslation();
 
@@ -208,19 +204,13 @@ export const ExplorerAccountView = (
           </Button>
         </Row>
       </ScrollView>
-      <BottomSheetWithHeader
+      <BottomSheetAddWalletToList
         ref={addToListModal}
-        height={fullscreenHeight * 0.95}
         title={t('address.add.to.group')}
-        avoidKeyboard={false}
-        swiperIconVisible={true}
-      >
-        <AddWalletToList
-          wallet={account}
-          lists={listsOfAddressGroup}
-          onWalletMove={hideAddToList}
-        />
-      </BottomSheetWithHeader>
+        wallet={account}
+        lists={listsOfAddressGroup}
+        onWalletMove={hideAddToList}
+      />
     </View>
   );
 };
