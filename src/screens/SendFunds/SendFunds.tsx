@@ -279,15 +279,17 @@ export const SendFunds = () => {
                 multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
               />
               <Spacer value={verticalScale(16)} />
-              <Button onPress={toggleShowInUSD}>
-                <ShowInUSD
-                  usdAmount={Number(amountInUSD)}
-                  cryptoAmount={Number(amountInCrypto)}
-                  cryptoSymbol={selectedToken.symbol}
-                  showInUSD={!amountShownInUSD}
-                  cryptoSymbolPlacement="right"
-                />
-              </Button>
+              {currencyRate > 0 && (
+                <Button onPress={toggleShowInUSD}>
+                  <ShowInUSD
+                    usdAmount={Number(amountInUSD)}
+                    cryptoAmount={Number(amountInCrypto)}
+                    cryptoSymbol={selectedToken.symbol}
+                    showInUSD={!amountShownInUSD}
+                    cryptoSymbolPlacement="right"
+                  />
+                </Button>
+              )}
               <Spacer value={verticalScale(16)} />
               <Row alignItems="center" style={{ alignSelf: 'center' }}>
                 <Text color={COLORS.neutral400}>
