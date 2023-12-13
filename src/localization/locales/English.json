@@ -87,6 +87,7 @@
 
   "collection.add.address": "Add address",
   "collection.create": "Create group",
+  "collection.create.new": "Create new group",
   "collection.name.input.placeholder": "Enter group name",
   "collection.rename": "Rename group",
   "collection.search.input": "Search groups",

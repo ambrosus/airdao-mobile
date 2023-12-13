@@ -3,7 +3,7 @@ import { Alert, KeyboardAvoidingView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import {
@@ -28,8 +28,8 @@ export const PasscodeEntry = () => {
   const { isFaceIDEnabled } = usePasscode();
   const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
-  const isFocused = useIsFocused();
-  const { appState, prevState } = useAppState();
+  const { appState } = useAppState();
+  const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {
     const canGoBack = navigation.canGoBack();
@@ -43,6 +43,7 @@ export const PasscodeEntry = () => {
   }, [navigation]);
 
   const authenticateWithFaceID = useCallback(async () => {
+    automaticFaceIdCalled.current = true;
     // This is a hack around older Android versions. They unmounts and remounts app after fingerprint prompt. By holding the value in cache, we can check if app comes from Biometric check
     if (DeviceUtils.isAndroid) {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
@@ -71,14 +72,18 @@ export const PasscodeEntry = () => {
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    if (isFocused && appState === 'active' && prevState !== 'inactive') {
+    if (automaticFaceIdCalled.current) {
+      return;
+    }
+    if (appState === 'active') {
       if (isFaceIDEnabled) {
         authenticateWithFaceID();
       } else {
         passcodeRef.current?.focus();
       }
     }
-  }, [authenticateWithFaceID, isFaceIDEnabled, appState, isFocused, prevState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appState]);
 
   const handlePasscode = async (typedPasscode: string[]) => {
     if (typedPasscode.length === 4) {
