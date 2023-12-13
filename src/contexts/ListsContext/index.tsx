@@ -60,6 +60,7 @@ const ListsContext = () => {
   // handle function for creating list
   const handleOnCreate = useCallback(
     async (value: string) => {
+      createGroupRef.current?.dismiss();
       const newGroupOfAddresses: CacheableAccountList = {
         id: randomUUID(),
         name: value,
@@ -67,8 +68,9 @@ const ListsContext = () => {
       };
       const newGroupsOfAddresses = [...listsOfAddressGroup];
       newGroupsOfAddresses.unshift(newGroupOfAddresses);
-      setListsOfAddressGroup(newGroupsOfAddresses);
-      createGroupRef.current?.dismiss();
+      setTimeout(() => {
+        setListsOfAddressGroup(newGroupsOfAddresses);
+      }, 750);
       return newGroupOfAddresses;
     },
     [listsOfAddressGroup]
