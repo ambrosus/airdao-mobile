@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
@@ -21,22 +21,29 @@ const AppInitialization = () => {
   const navigation = useNavigation<RootNavigationProp>();
 
   const initApp = useCallback(async () => {
-    // reset passcode states
-    await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
-    await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
-    if (!loading && !passcodeLoading) {
-      if (allWallets.length > 0) {
-        if (!isPasscodeEnabled && !isFaceIDEnabled) {
-          navigation.replace('Tabs', {
-            screen: 'Wallets',
-            params: { screen: 'SetupPasscode' }
-          });
+    try {
+      // reset passcode states
+      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
+      if (!loading && !passcodeLoading) {
+        if (allWallets.length > 0) {
+          if (!isPasscodeEnabled && !isFaceIDEnabled) {
+            navigation.replace('Tabs', {
+              screen: 'Wallets',
+              params: { screen: 'SetupPasscode' }
+            });
+          } else {
+            navigation.replace('Passcode');
+          }
         } else {
-          navigation.replace('Passcode');
+          navigation.replace('WelcomeScreen');
         }
-      } else {
-        navigation.replace('WelcomeScreen');
       }
+    } catch (error) {
+      Alert.alert(
+        'Error occured during app initialization',
+        JSON.stringify(error)
+      );
     }
   }, [
     allWallets.length,
