@@ -4,7 +4,6 @@ import { AirDAOEventType, RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
 import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
-import { DeviceUtils } from '@utils/device';
 import { AirDAOEventDispatcher } from '@lib';
 
 export const usePasscodeEntryRevealer = () => {
@@ -25,8 +24,7 @@ export const usePasscodeEntryRevealer = () => {
       return;
     }
 
-    // hack around old android devices
-    if (DeviceUtils.isAndroid && isBiometricAuthenticationInProgress) {
+    if (isBiometricAuthenticationInProgress) {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
       return;
     }
