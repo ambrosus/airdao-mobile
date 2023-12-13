@@ -26,7 +26,6 @@ export const useCachePurifier = () => {
     const knownAddresses: CacheableAccount[] = allAddresses
       .filter((account) => account.isOnWatchlist)
       .map((account) => ExplorerAccount.toCacheable(account));
-
     // add accounts from groups
     for (const list of listsOfAddressGroup) {
       for (const account of list.accounts) {
@@ -43,7 +42,7 @@ export const useCachePurifier = () => {
   }, [purifyAccounts]);
 
   useEffect(() => {
-    if (appState.match(/inactive|background/)) {
+    if (appState.match(/background/)) {
       purifyCache();
     }
   }, [appState, purifyCache]);
