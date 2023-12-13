@@ -87,6 +87,7 @@
 
   "collection.add.address": "Adres ekleyin",
   "collection.create": "Grup oluşturun",
+  "collection.create.new": "Yeni grup oluşturun",
   "collection.name.input.placeholder": "Grup adını girin",
   "collection.rename": "Grubu yeniden adlandırın",
   "collection.search.input": "Grupları arayın",

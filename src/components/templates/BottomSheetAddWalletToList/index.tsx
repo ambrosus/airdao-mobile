@@ -8,6 +8,7 @@ import { verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { useLists } from '@contexts';
+import { useTranslation } from 'react-i18next';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
   title: string;
@@ -20,6 +21,7 @@ export const BottomSheetAddWalletToList = forwardRef<
   const { title, ...addWalletToListProps } = props;
   const fullscreenHeight = useFullscreenModalHeight();
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
+  const { t } = useTranslation();
 
   const showCreateNewListModal = () => {
     createGroupRef.current?.show();
@@ -54,7 +56,7 @@ export const BottomSheetAddWalletToList = forwardRef<
           color={COLORS.neutral0}
           fontSize={16}
         >
-          Create new group
+          {t('collection.create.new')}
         </Text>
       </PrimaryButton>
       <Spacer value={verticalScale(48)} />

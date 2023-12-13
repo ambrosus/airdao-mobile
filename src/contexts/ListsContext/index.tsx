@@ -194,7 +194,6 @@ const ListsContext = () => {
       const shouldPreGroupBeCreated = !(await Cache.getItem(
         CacheKey.PreCreatedGroupWasCreated
       ));
-
       if (shouldPreGroupBeCreated) {
         const newGroupOfAddresses = await handleOnCreate('MultiSig Vault');
         const res = await Promise.all(
