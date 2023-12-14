@@ -99,17 +99,21 @@ const AllAddressesContext = () => {
   const populateAddresses = async (
     addresses: CacheableAccount[]
   ): Promise<ExplorerAccount[]> => {
-    return await Promise.all(
-      addresses.map(async (address) => {
-        const account = new ExplorerAccount(
-          await API.explorerService.searchAddress(address.address)
-        );
-        const newAccount = Object.assign({}, account);
-        newAccount.name = address.name;
-        newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
-        return newAccount;
-      })
-    );
+    try {
+      return await Promise.all(
+        addresses.map(async (address) => {
+          const account = new ExplorerAccount(
+            await API.explorerService.searchAddress(address.address)
+          );
+          const newAccount = Object.assign({}, account);
+          newAccount.name = address.name;
+          newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
+          return newAccount;
+        })
+      );
+    } catch (error) {
+      throw error;
+    }
   };
 
   // fetch all addresses on mount
