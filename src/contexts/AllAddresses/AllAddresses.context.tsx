@@ -126,7 +126,9 @@ const AllAddressesContext = () => {
     try {
       const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
         []) as CacheableAccount[];
-      const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
+      const currentAddresses = allAddresses
+        .filter((address) => !!address)
+        .map(ExplorerAccount.toCacheable);
       const populatedAddresses = await populateAddresses(
         ArrayUtils.mergeArrays('address', addresses, currentAddresses)
       );
