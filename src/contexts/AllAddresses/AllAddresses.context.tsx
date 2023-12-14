@@ -11,7 +11,6 @@ import {
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
 import { ArrayUtils } from '@utils/array';
-import { Alert } from 'react-native';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -135,10 +134,10 @@ const AllAddressesContext = () => {
       setAllAddresses(populatedAddresses);
       reducer({ type: 'set', payload: populatedAddresses });
     } catch (error) {
-      Alert.alert(
-        'Error occured while populating addresses',
-        JSON.stringify(error)
-      );
+      // Alert.alert(
+      //   'Error occured while populating addresses',
+      //   JSON.stringify(error)
+      // );
     } finally {
       setLoading(false);
     }

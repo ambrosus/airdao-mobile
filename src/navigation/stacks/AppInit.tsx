@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
@@ -40,10 +40,10 @@ const AppInitialization = () => {
         }
       }
     } catch (error) {
-      Alert.alert(
-        'Error occured during app initialization',
-        JSON.stringify(error)
-      );
+      // Alert.alert(
+      //   'Error occured during app initialization',
+      //   JSON.stringify(error)
+      // );
     }
   }, [
     allWallets.length,

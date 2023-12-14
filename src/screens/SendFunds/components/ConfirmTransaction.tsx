@@ -87,14 +87,18 @@ export const ConfirmTransaction = (props: ConfirmTransactionProps) => {
           >
             {etherAmount} {currency}
           </Text>
-          <Spacer value={scale(8)} horizontal />
-          <Text
-            color={COLORS.neutral400}
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-          >
-            ${NumberUtils.formatNumber(usdAmount, 3)}
-          </Text>
+          {usdAmount > 0 && (
+            <>
+              <Spacer value={scale(8)} horizontal />
+              <Text
+                color={COLORS.neutral400}
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+              >
+                ${NumberUtils.formatNumber(usdAmount, 3)}
+              </Text>
+            </>
+          )}
         </Row>
       </Row>
       <Spacer value={verticalScale(16)} />
