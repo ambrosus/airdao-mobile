@@ -20,7 +20,7 @@ export function useBalanceOfAddress(
     async () => await API.cryptoService.getBalanceOfAddress(address),
     {
       refetchOnReconnect: true,
-      refetchInterval: 5 * 60 * 1e3, // 5 mins
+      refetchInterval: 1 * 60 * 1e3, // refetch every 1 min
       refetchOnMount: true,
       refetchOnWindowFocus: true,
       enabled: address !== '' && address != null && address !== undefined

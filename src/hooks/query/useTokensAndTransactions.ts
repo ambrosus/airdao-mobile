@@ -51,7 +51,7 @@ export function useTokensAndTransactions(
       return null;
     },
     enabled,
-    refetchInterval: 1 * 60 * 1e3 // 1 min
+    refetchInterval: 1 * 60 * 1e3 // refetch every 1 min
   });
 
   useEffect(() => {
