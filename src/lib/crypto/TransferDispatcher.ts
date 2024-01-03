@@ -86,26 +86,34 @@ class TransferDispatcher {
     amountInEther: string,
     tokenAddress?: string
   ): Promise<string> {
-    // Get account
-    const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
-    // Prepare transaction config
-    const txConfig = await this.prepareTransactionConfig(
-      account.address,
-      recipient,
-      amountInEther,
-      tokenAddress
-    );
-    // Sign transaction
-    const signedTx = await this.web3.eth.accounts.signTransaction(
-      txConfig,
-      account.privateKey
-    );
-    // Send transaction
-    const txReceipt = await this.web3.eth.sendSignedTransaction(
-      signedTx.rawTransaction as string
-    );
-    // @ts-ignore
-    return txReceipt.transactionHash;
+    try {
+      // Get account
+      const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+      // Prepare transaction config
+      const txConfig = await this.prepareTransactionConfig(
+        account.address,
+        recipient,
+        amountInEther,
+        tokenAddress
+      );
+      // Sign transaction
+      const signedTx = await this.web3.eth.accounts.signTransaction(
+        txConfig,
+        account.privateKey
+      );
+      // Send transaction
+      const txReceipt = await this.web3.eth.sendSignedTransaction(
+        signedTx.rawTransaction as string
+      );
+      // @ts-ignore
+      return txReceipt.transactionHash;
+    } catch (error) {
+      //@ts-ignore
+      if (error.message.includes('Returned error: Insufficient funds.')) {
+        throw Error('INSUFFICIENT_FUNDS');
+      }
+      throw error;
+    }
   }
 
   private getTransactionObjectEthers(recipient: string, amountInEther: string) {

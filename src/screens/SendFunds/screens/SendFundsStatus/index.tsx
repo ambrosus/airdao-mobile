@@ -35,6 +35,10 @@ export const SendFundsStatus = () => {
       errorMessage = t('send.funds.error.insufficient.balance');
       break;
     }
+    case 'INSUFFICIENT_FUNDS': {
+      errorMessage = t('send.funds.error.insufficient.balance');
+      break;
+    }
     case 'SERVER_RESPONSE_NOT_CONNECTED': {
       errorMessage = t('send.funds.error.network');
       break;
