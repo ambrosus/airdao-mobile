@@ -22,6 +22,7 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
   return formattedString + strAmount.substring(startingIdx + 1);
 };
 
+// limits the number of decimal places of a number in the format of e.g 245.82
 const limitDecimalCount = (
   number: string | number,
   decimalPlaces: number
@@ -29,7 +30,8 @@ const limitDecimalCount = (
   let str = number.toString();
   const parts = str.split('.');
   if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
-    if (parts[1].length > decimalPlaces) {
+    if (decimalPlaces === 0) str = parts[0];
+    else if (parts[1].length > decimalPlaces) {
       parts[1] = parts[1].substring(0, decimalPlaces);
       str = parts.join('.');
     }

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
+import { useTokensAndTransactions } from '@hooks';
 import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
-import { useTokensAndTransactions } from '@hooks';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -26,6 +26,11 @@ export const WalletTransactionsAndAssets = (
     error
   } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
   const { tokens, transactions } = tokensAndTransactions;
+  const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
+
+  useEffect(() => {
+    if (!refetching) setUserPerformedRefresh(false);
+  }, [refetching]);
 
   const { t } = useTranslation();
 
@@ -36,6 +41,7 @@ export const WalletTransactionsAndAssets = (
   };
 
   const _onRefresh = () => {
+    setUserPerformedRefresh(true);
     if (typeof refetchAssets === 'function') {
       refetchAssets();
     }
@@ -57,7 +63,7 @@ export const WalletTransactionsAndAssets = (
                 account={account}
                 error={error}
                 onRefresh={_onRefresh}
-                isRefreshing={refetching}
+                isRefreshing={refetching && userPerformedRefresh}
               />
             )
           },
@@ -67,7 +73,7 @@ export const WalletTransactionsAndAssets = (
               <AccountTransactions
                 transactions={transactions}
                 loading={loading}
-                isRefreshing={refetching}
+                isRefreshing={refetching && userPerformedRefresh}
                 onEndReached={loadMoreTransactions}
                 onRefresh={_onRefresh}
               />

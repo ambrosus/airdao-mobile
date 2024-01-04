@@ -63,13 +63,6 @@ export const PasscodeEntry = () => {
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
-    // if (appState === 'active' && prevState !== 'inactive') {
-    //   if (isFaceIDEnabled) {
-    //     authenticateWithFaceID();
-    //   } else {
-    //     passcodeRef.current?.focus();
-    //   }
-    // }
     if (automaticFaceIdCalled.current) {
       return;
     }
@@ -116,7 +109,7 @@ export const PasscodeEntry = () => {
           flex: 1
         }}
       >
-        <KeyboardDismissingView disabled={isFaceIDEnabled}>
+        <KeyboardDismissingView>
           <Text
             fontSize={24}
             fontFamily="Inter_700Bold"
