@@ -251,7 +251,11 @@
 
   "settings.security.change.passcode": "Change passcode",
   "settings.security.face.id.not.available": "Face ID is not available on this device",
+  "settings.security.face.id.not.accessible": "Face ID is not accessible on this device",
   "settings.security.fingerprint.not.available": "Fingerprint is not available on this device",
+  "settings.security.fingerprint.not.accessible": "Fingerprint is not accessible on this device",
+  "settings.security.no.biometrics.available": "No biometrics authentication is available on this device",
+  "settings.security.press.to.open.settings": "Press here to open settings",
 
   "share.tx.fee": "Tx Fee",
   "share.time": "Time",
