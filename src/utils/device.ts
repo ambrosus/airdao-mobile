@@ -8,9 +8,12 @@ const reloadApp = async () => {
   return await Updates.reloadAsync();
 };
 
-const checkFaceIDExists = (
-  supportedBiometrics: LocalAuthentication.AuthenticationType[]
-) => {
+const getSupportedBiometrics = async () => {
+  return await LocalAuthentication.supportedAuthenticationTypesAsync();
+};
+
+const checkFaceIDExists = async () => {
+  const supportedBiometrics = await getSupportedBiometrics();
   return (
     supportedBiometrics.indexOf(
       LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
@@ -18,9 +21,8 @@ const checkFaceIDExists = (
   );
 };
 
-const checkFingerprintExists = (
-  supportedBiometrics: LocalAuthentication.AuthenticationType[]
-) => {
+const checkFingerprintExists = async () => {
+  const supportedBiometrics = await getSupportedBiometrics();
   return (
     supportedBiometrics.indexOf(
       LocalAuthentication.AuthenticationType.FINGERPRINT

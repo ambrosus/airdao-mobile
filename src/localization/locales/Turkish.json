@@ -251,7 +251,11 @@
 
   "settings.security.change.passcode": "Şifreyi değiştir",
   "settings.security.face.id.not.available": "Bu cihazda Face ID mevcut değil",
+  "settings.security.face.id.not.accessible": "Bu cihazda Face ID erişimi yok",
   "settings.security.fingerprint.not.available": "Bu cihazda parmak izi kullanılamıyor",
+  "settings.security.fingerprint.not.accessible": "Bu cihazda parmak izi erişimi yok",
+  "settings.security.no.biometrics.available": "Bu cihazda herhangi biyometrik kimlik doğrulama bulunmamaktadır",
+  "settings.security.press.to.open.settings": "Ayarları düzenlemek için buraya dokunun",
 
   "share.tx.fee": "İşlem Ücreti",
   "share.time": "Tarih",

@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
 import { Toast, ToastPosition, ToastType } from '@components/modular/Toast';
@@ -73,9 +73,8 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         const hasHardware = await LocalAuthentication.hasHardwareAsync();
         // device has registered biometrics data, either fingerprint or face id
         const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-        const hasFaceId = DeviceUtils.checkFaceIDExists(supportedBiometrics);
-        const hasFingerprint =
-          DeviceUtils.checkFingerprintExists(supportedBiometrics);
+        const hasFaceId = await DeviceUtils.checkFaceIDExists();
+        const hasFingerprint = await DeviceUtils.checkFingerprintExists();
         if (hasHardware && isEnrolled) {
           // authenticate with biometrics
           const result = await LocalAuthentication.authenticateAsync({
@@ -93,11 +92,25 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
           }
         } else {
           // show error otherwise
+          let errorText = '';
+          let errorSubtext = undefined;
+          let onBodyPress = undefined;
+          if (hasFaceId) {
+            errorText = t('settings.security.face.id.not.accessible');
+            errorSubtext = t('settings.security.press.to.open.settings');
+            onBodyPress = () => Linking.openSettings();
+          } else if (hasFingerprint) {
+            errorText = t('settings.security.fingerprint.not.accessible');
+            errorSubtext = t('settings.security.press.to.open.settings');
+            onBodyPress = () => Linking.openSettings();
+          } else if (supportedBiometrics.length === 0) {
+            errorText = t('settings.security.no.biometrics.available');
+          }
           Toast.show({
-            text: hasFaceId
-              ? t('settings.security.face.id.not.available')
-              : t('settings.security.fingerprint.not.available'),
+            text: errorText,
+            subtext: errorSubtext,
             position: ToastPosition.Top,
+            onBodyPress,
             type: ToastType.Failed
           });
         }
