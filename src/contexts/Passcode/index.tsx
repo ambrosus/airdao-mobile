@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
 import { Toast, ToastPosition, ToastType } from '@components/modular/Toast';
@@ -84,13 +84,12 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
               : hasFingerprint
               ? t('security.authenticate.with.fingerprint')
               : 'Authenticate',
-            fallbackLabel: t('security.enter.pin')
+            fallbackLabel: t('security.enter.pin'),
+            disableDeviceFallback: true
           });
           if (result.success) {
             await PasscodeUtils.setFaceIDStatusInDB(true);
             setIsFaceIDEnabled(true);
-          } else {
-            Alert.alert(result.error, result.success || '');
           }
         } else {
           // show error otherwise
