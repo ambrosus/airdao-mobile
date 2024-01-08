@@ -283,7 +283,7 @@
   "toast.group.renamed": "{{oldName}} has been renamed to {{newName}}",
   "toast.tap.to.rename.msg": "Tap to rename address",
   "toast.removed.wallet.from.group": "Successfully removed wallet from group!",
-  "toast.you.added.address.to.watchlist": "is now on your Watchlist!",
+  "toast.you.added.address.to.watchlist": "{{name}} is now on your Watchlist!",
   "toast.you.removed.address.from.watchlist": "You removed {{name}} from watchlist!",
 
   "token.picker.select": "Select asset to send",
