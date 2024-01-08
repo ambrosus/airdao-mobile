@@ -17,9 +17,9 @@ export const AboutScreen = () => {
         title={t('settings.about')}
         style={{ backgroundColor: 'transparent' }}
       />
-      <Button>
+      {/* <Button>
         <AboutMenutItem title={t('settings.about.terms')} />
-      </Button>
+      </Button> */}
       <Button
         onPress={() =>
           Linking.openURL('https://airdao.io/mobile-privacy-policy')
