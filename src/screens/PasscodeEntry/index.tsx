@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Alert, KeyboardAvoidingView, TextInput } from 'react-native';
+import { Alert, KeyboardAvoidingView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -17,6 +17,7 @@ import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 import { RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils } from '@utils/device';
 
 export const PasscodeEntry = () => {
   const isAuthSuccessfulRef = useRef(false);
@@ -104,53 +105,57 @@ export const PasscodeEntry = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
-        enabled
+        enabled={DeviceUtils.isIOS}
         behavior="padding"
         style={{
           flex: 1
         }}
       >
-        <KeyboardDismissingView>
-          <Text
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-            align="center"
-            style={{ paddingTop: verticalScale(160) }}
-          >
-            {t('login.enter.your.passcode')}
-          </Text>
-          <Spacer value={verticalScale(24)} />
-          <Passcode
-            ref={passcodeRef}
-            onPasscodeChange={handlePasscode}
-            type="change"
-          />
+        <KeyboardDismissingView
+          style={{ flex: 1, justifyContent: 'space-between' }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text
+              fontSize={24}
+              fontFamily="Inter_700Bold"
+              color={COLORS.neutral800}
+              align="center"
+              style={{ paddingTop: verticalScale(160) }}
+            >
+              {t('login.enter.your.passcode')}
+            </Text>
+            <Spacer value={verticalScale(24)} />
+            <Passcode
+              ref={passcodeRef}
+              onPasscodeChange={handlePasscode}
+              type="change"
+            />
+          </View>
+          {isFaceIDEnabled && (
+            <PrimaryButton
+              onPress={authenticateWithFaceID}
+              style={{
+                marginBottom: '5%',
+                width: '90%',
+                alignSelf: 'center'
+              }}
+            >
+              <Text
+                align="center"
+                fontFamily="Inter_500Medium"
+                fontSize={16}
+                color={COLORS.neutral0}
+              >
+                {supportedBiometrics.indexOf(
+                  LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+                ) > -1
+                  ? t('login.with.face.id')
+                  : t('login.with.fingerprint')}
+              </Text>
+            </PrimaryButton>
+          )}
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
-      {isFaceIDEnabled && (
-        <PrimaryButton
-          onPress={authenticateWithFaceID}
-          style={{
-            marginBottom: '5%',
-            width: '90%',
-            alignSelf: 'center'
-          }}
-        >
-          <Text
-            align="center"
-            fontFamily="Inter_500Medium"
-            fontSize={16}
-            color={COLORS.neutral0}
-          >
-            {supportedBiometrics.indexOf(
-              LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
-            ) > -1
-              ? t('login.with.face.id')
-              : t('login.with.fingerprint')}
-          </Text>
-        </PrimaryButton>
-      )}
     </SafeAreaView>
   );
 };
