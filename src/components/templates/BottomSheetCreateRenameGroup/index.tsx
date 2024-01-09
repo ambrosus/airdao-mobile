@@ -65,32 +65,35 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
         return;
       }
       setEmptyPlaceholder(false);
-      // Proceed with form submission
-      if (handleOnCreateGroup) {
-        handleOnCreateGroup(localGroupName);
-        Toast.show({
-          text: t('toast.group.created', {
-            name: StringUtils.formatAddress(localGroupName, 16, 0)
-          }),
-          position: ToastPosition.Top,
-          type: ToastType.Success
-        });
-      }
+      localRef.current?.dismiss();
+      setTimeout(() => {
+        // Proceed with form submission
+        if (handleOnCreateGroup) {
+          handleOnCreateGroup(localGroupName);
+          Toast.show({
+            text: t('toast.group.created', {
+              name: StringUtils.formatAddress(localGroupName, 16, 0)
+            }),
+            position: ToastPosition.Top,
+            type: ToastType.Success
+          });
+        }
 
-      if (handleOnRenameGroup && groupId) {
-        handleOnRenameGroup(groupId, localGroupName);
-        Toast.show({
-          text: t('toast.group.renamed', {
-            oldName: StringUtils.formatAddress(groupTitle || '', 16, 0),
-            newName: StringUtils.formatAddress(localGroupName, 16, 0)
-          }),
-          position: ToastPosition.Top,
-          type: ToastType.Success
-        });
-      }
+        if (handleOnRenameGroup && groupId) {
+          handleOnRenameGroup(groupId, localGroupName);
+          Toast.show({
+            text: t('toast.group.renamed', {
+              oldName: StringUtils.formatAddress(groupTitle || '', 16, 0),
+              newName: StringUtils.formatAddress(localGroupName, 16, 0)
+            }),
+            position: ToastPosition.Top,
+            type: ToastType.Success
+          });
+        }
 
-      setLocalGroupName('');
-      setTimeout(() => localRef.current?.dismiss(), 400);
+        setLocalGroupName('');
+      }, 500);
+      // setTimeout(() => localRef.current?.dismiss(), 400);
     }, [
       groupId,
       groupTitle,

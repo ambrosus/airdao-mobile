@@ -26,7 +26,7 @@ export const ExplorerWalletItem = (
   const { watchlist } = useWatchlist();
   const { t } = useTranslation();
   const listWithAddress = listsOfAddressGroup.filter(
-    (list) => list.accounts.indexOfItem(item, 'address') > -1
+    (list) => list.accounts?.indexOfItem(item, 'address') > -1
   );
   const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
 

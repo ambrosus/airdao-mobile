@@ -40,7 +40,7 @@ export class ExplorerAccount implements CacheableAccount {
     return {
       name: from.name,
       address: from.address,
-      isOnWatchlist: from.isOnWatchlist
+      isOnWatchlist: Boolean(from.isOnWatchlist)
     };
   }
 
