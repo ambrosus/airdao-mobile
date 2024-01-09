@@ -26,10 +26,10 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.10"
+      "buildNumber": "1.1.11"
     },
     "android": {
-      "versionCode": 33,
+      "versionCode": 34,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
