@@ -87,10 +87,6 @@ const AllAddressesContext = () => {
           break;
       }
       setAllAddresses([...finalAddresses]);
-      await Cache.setItem(
-        CacheKey.AllAddresses,
-        finalAddresses.map(ExplorerAccount.toCacheable)
-      );
     },
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
