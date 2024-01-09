@@ -42,7 +42,7 @@ export const useCachePurifier = () => {
   }, [purifyAccounts]);
 
   useEffect(() => {
-    if (appState.match(/background/)) {
+    if (appState.match(/inactive|background/)) {
       purifyCache();
     }
   }, [appState, purifyCache]);

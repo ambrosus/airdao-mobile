@@ -40,7 +40,6 @@ const ListsContext = () => {
 
   const updateListOfAddressGroup = async (newLists: CacheableAccountList[]) => {
     setListsOfAddressGroup([...newLists]);
-    await Cache.setItem(CacheKey.AddressLists, newLists);
   };
 
   // ref for open Create new SingleCollection modal
