@@ -11,7 +11,6 @@ export enum CacheKey {
   isBiometricAuthenticationInProgress = 'is_biometric_auth_in_progress',
   IsBiometricEnabled = 'is_biometric_login_enabled',
   IsSecondInit = 'is_second_init',
-  isSetupSecurityInProgress = 'is_setup_passcode_in_progress',
   NotificationSettings = 'notification_settings',
   NotificationToken = 'notification_token',
   Onboarding = 'onboarding',

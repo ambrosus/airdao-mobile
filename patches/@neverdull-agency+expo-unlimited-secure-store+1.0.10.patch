@@ -10,18 +10,3 @@ index a527dc9..e0e8bdb 100644
      const decryptedBytes = CryptoJS.AES.decrypt(data, key);
      const decryptedValue = decryptedBytes.toString(CryptoJS.enc.Utf8);
      return decryptedValue;
-diff --git a/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/storage.js b/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/storage.js
-index 7fcfba1..9caa561 100644
---- a/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/storage.js
-+++ b/node_modules/@neverdull-agency/expo-unlimited-secure-store/src/storage.js
-@@ -43,8 +43,8 @@ export const setAsync = async (key, value, secureStoreOptions) => {
-             let storage = {};
-             const currentStorageFileUri = await fixedStorageUri(secureStoreOptions);
-             if (currentStorageFileUri) {
--                const storageString = await FileSystem.readAsStringAsync(currentStorageFileUri);
--                storage = JSON.parse(storageString);
-+            const storageString = await FileSystem.readAsStringAsync(currentStorageFileUri);
-+            if(!!storageString) storage = JSON.parse(storageString);
-             } 
- 
-             const { encryptionKey, encryptedData } = AES.encryptWithRandomKey(value);

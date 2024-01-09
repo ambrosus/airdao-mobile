@@ -5,24 +5,18 @@ import { useAppState } from './useAppState';
 import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
 import { AirDAOEventDispatcher } from '@lib';
+import { useCurrentRoute } from '@contexts';
 
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
-  const { prevState, appState } = useAppState();
+  const currentRoute = useCurrentRoute();
+  const { prevState } = useAppState();
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
-    const isSetupSecurityInProgress = await Cache.getItem(
-      CacheKey.isSetupSecurityInProgress
-    );
     const isBiometricAuthenticationInProgress = await Cache.getItem(
       CacheKey.isBiometricAuthenticationInProgress
     );
-    if (isSetupSecurityInProgress) {
-      if (appState === 'inactive' && prevState === 'active') return;
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
-      return;
-    }
 
     if (isBiometricAuthenticationInProgress) {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
@@ -36,11 +30,15 @@ export const usePasscodeEntryRevealer = () => {
         navigation.navigate('Passcode');
       }, 500);
     }
-  }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
+  }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {
-    if (!loading) {
+    if (
+      !loading &&
+      !['SuccessSetupSecurity', 'ChangePasscode'].includes(currentRoute)
+    ) {
       processPasscodeReveal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation, prevState, loading, processPasscodeReveal]);
 };

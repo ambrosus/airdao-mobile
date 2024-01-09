@@ -54,7 +54,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   const changePasscode = async (passcode: string[]) => {
     try {
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
+      setSavedPasscode(passcode);
       await PasscodeUtils.setPasscodeInDB(passcode);
       setIsPasscodeEnabled(true);
     } catch (error) {
@@ -64,7 +64,7 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   const toggleBiometricAuthentication = useCallback(async () => {
     try {
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, true);
+      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
       if (isFaceIDEnabled) {
         await PasscodeUtils.setFaceIDStatusInDB(false);
         setIsFaceIDEnabled(false);
@@ -84,7 +84,8 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
               ? t('security.authenticate.with.fingerprint')
               : 'Authenticate',
             fallbackLabel: t('security.enter.pin'),
-            disableDeviceFallback: true
+            disableDeviceFallback: DeviceUtils.isIOS,
+            cancelLabel: t('button.use.pin')
           });
           if (result.success) {
             await PasscodeUtils.setFaceIDStatusInDB(true);

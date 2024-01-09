@@ -38,6 +38,11 @@ const ListsContext = () => {
     return populatedLists;
   }, [allAddresses, listsOfAddressGroup]);
 
+  const updateListOfAddressGroup = async (newLists: CacheableAccountList[]) => {
+    setListsOfAddressGroup([...newLists]);
+    await Cache.setItem(CacheKey.AddressLists, newLists);
+  };
+
   // ref for open Create new SingleCollection modal
   const createGroupRef = useRef<BottomSheetRef>(null);
 
@@ -52,9 +57,9 @@ const ListsContext = () => {
         },
         'id'
       );
-      setListsOfAddressGroup([...listsOfAddressGroup]);
+      updateListOfAddressGroup(listsOfAddressGroup);
     },
-    [listsOfAddressGroup, setListsOfAddressGroup]
+    [listsOfAddressGroup]
   );
 
   // handle function for creating list
@@ -68,9 +73,7 @@ const ListsContext = () => {
       };
       const newGroupsOfAddresses = [...listsOfAddressGroup];
       newGroupsOfAddresses.unshift(newGroupOfAddresses);
-      setTimeout(() => {
-        setListsOfAddressGroup(newGroupsOfAddresses);
-      }, 750);
+      updateListOfAddressGroup(newGroupsOfAddresses);
       return newGroupOfAddresses;
     },
     [listsOfAddressGroup]
@@ -85,7 +88,7 @@ const ListsContext = () => {
             ? { ...group, name: newGroupName }
             : group
         );
-      setListsOfAddressGroup(newGroupsOfAddresses);
+      updateListOfAddressGroup(newGroupsOfAddresses);
     },
     [listsOfAddressGroup]
   );
@@ -102,7 +105,7 @@ const ListsContext = () => {
         }
         return group;
       });
-      setListsOfAddressGroup(editedGroupsOfAddresses);
+      updateListOfAddressGroup(editedGroupsOfAddresses);
     },
     [listsOfAddressGroup]
   );
@@ -132,7 +135,7 @@ const ListsContext = () => {
         };
       }
     });
-    setListsOfAddressGroup(editedGroups);
+    updateListOfAddressGroup(editedGroups);
   };
 
   const handleOnDeleteAddressFromGroup = (
@@ -154,7 +157,7 @@ const ListsContext = () => {
         }
       }
     );
-    setListsOfAddressGroup(updatedGroups);
+    updateListOfAddressGroup(updatedGroups);
   };
 
   const toggleAddressesInList = (
@@ -182,7 +185,7 @@ const ListsContext = () => {
       }
     });
     allAddressesReducer({ type: 'set', payload: allAddresses });
-    setListsOfAddressGroup([...listOfGroups]);
+    updateListOfAddressGroup(listOfGroups);
   };
 
   useEffect(() => {
@@ -219,7 +222,7 @@ const ListsContext = () => {
   return {
     listsOfAddressGroup: lists,
     listsOfAddressGroupCacheable: listsOfAddressGroup,
-    setListsOfAddressGroup,
+    setListsOfAddressGroup: updateListOfAddressGroup,
     handleOnDelete,
     handleOnCreate,
     handleOnRename,
