@@ -22,8 +22,7 @@ const AppInitialization = () => {
 
   const initApp = useCallback(async () => {
     try {
-      // reset passcode states
-      await Cache.setItem(CacheKey.isSetupSecurityInProgress, false);
+      // reset passcode state
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
       if (!loading && !passcodeLoading) {
         if (allWallets.length > 0) {
