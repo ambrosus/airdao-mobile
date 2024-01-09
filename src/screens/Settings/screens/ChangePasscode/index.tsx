@@ -9,7 +9,6 @@ import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
 import { useTranslation } from 'react-i18next';
-import { PasscodeUtils } from '@utils/passcode';
 import { Header } from '@components/composite';
 
 export const ChangePasscode = () => {
@@ -50,7 +49,6 @@ export const ChangePasscode = () => {
       } else if (step === 3) {
         // Step 3: Confirm new user passcode
         if (JSON.stringify(newPasscode) === JSON.stringify(typedPasscode)) {
-          await PasscodeUtils.setPasscodeInDB(typedPasscode);
           setSavedPasscode(typedPasscode);
           navigation.navigate('SecuritySettings');
           Toast.show({
