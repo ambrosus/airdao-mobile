@@ -64,7 +64,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 
   const toggleBiometricAuthentication = useCallback(async () => {
     try {
-      await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
       if (isFaceIDEnabled) {
         await PasscodeUtils.setFaceIDStatusInDB(false);
         setIsFaceIDEnabled(false);
@@ -76,6 +75,10 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         const hasFaceId = await DeviceUtils.checkFaceIDExists();
         const hasFingerprint = await DeviceUtils.checkFingerprintExists();
         if (hasHardware && isEnrolled) {
+          await Cache.setItem(
+            CacheKey.isBiometricAuthenticationInProgress,
+            true
+          );
           // authenticate with biometrics
           const result = await LocalAuthentication.authenticateAsync({
             promptMessage: hasFaceId

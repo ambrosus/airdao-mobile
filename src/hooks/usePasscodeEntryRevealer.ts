@@ -10,15 +10,15 @@ import { useCurrentRoute } from '@contexts';
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const currentRoute = useCurrentRoute();
-  const { prevState } = useAppState();
+  const { prevState, appState } = useAppState();
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const processPasscodeReveal = useCallback(async () => {
     const isBiometricAuthenticationInProgress = await Cache.getItem(
       CacheKey.isBiometricAuthenticationInProgress
     );
-
     if (isBiometricAuthenticationInProgress) {
+      if (appState === 'inactive' && prevState === 'active') return;
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
       return;
     }
@@ -30,7 +30,7 @@ export const usePasscodeEntryRevealer = () => {
         navigation.navigate('Passcode');
       }, 500);
     }
-  }, [isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
+  }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {
     if (
