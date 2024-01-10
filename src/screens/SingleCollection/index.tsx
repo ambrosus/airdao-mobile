@@ -87,7 +87,7 @@ export const SingleGroupScreen = () => {
               type="circular"
               style={styles.addButton}
             >
-              <AddIcon color={COLORS.neutral0} scale={1.25} />
+              <AddIcon color={COLORS.neutral0} scale={0.9} />
             </Button>
             <Spacer horizontal value={scale(32)} />
             <Button

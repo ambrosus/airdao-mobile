@@ -27,7 +27,7 @@
 
   "address.add.group": "Add to group",
   "address.add.to.group": "Add address to group",
-  "address.add.to.selected.group": "Add address to group {{selectedGroup}}",
+  "address.add.to.selected.group": "Add address to {{selectedGroup}}",
   "address.add.watchlist": "Add to watchlist",
   "address.added.to.group": "Added to {{count}} groups",
   "address.confirm.removal.from.watchlist": "Remove this address from watchlist?",
