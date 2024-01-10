@@ -49,7 +49,7 @@ export const PasscodeEntry = () => {
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: t('security.authenticate.with.face.id'),
         fallbackLabel: t('security.enter.pin'),
-        cancelLabel: t('common.buttons.cancel')
+        cancelLabel: t('buttons.cancel')
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
