@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Alert, KeyboardAvoidingView, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  TextInput,
+  View
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -32,14 +38,17 @@ export const PasscodeEntry = () => {
   const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {
-    const canGoBack = navigation.canGoBack();
-    if (canGoBack) navigation.pop();
-    else {
-      navigation.replace('Tabs', {
-        screen: 'Wallets',
-        params: { screen: 'HomeScreen' }
-      });
-    }
+    Keyboard.dismiss();
+    setTimeout(() => {
+      const canGoBack = navigation.canGoBack();
+      if (canGoBack) navigation.pop();
+      else {
+        navigation.replace('Tabs', {
+          screen: 'Wallets',
+          params: { screen: 'HomeScreen' }
+        });
+      }
+    }, 0);
   }, [navigation]);
 
   const authenticateWithFaceID = useCallback(async () => {
