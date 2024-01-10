@@ -15,6 +15,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
@@ -26,6 +27,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const { bottomSheetTitle, ...portfolioBalanceProps } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const shareRef = useRef<View>(null);
+    const { t } = useTranslation();
 
     const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
@@ -103,7 +105,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   <MessagesIcon color={COLORS.neutral0} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
-                <Text>Messages</Text>
+                <Text>{t('common.messages')}</Text>
               </View>
               <View style={styles.shareButton}>
                 <Button

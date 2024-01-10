@@ -264,7 +264,7 @@ export const TransactionDetails = (
         currency="AMB"
         currencyPosition="right"
         txFee={transaction.fee}
-        title="Transaction"
+        title={t('common.transaction')}
         bottomSheetTitle={t('common.share.transaction')}
         timestamp={transaction.timestamp}
       />
