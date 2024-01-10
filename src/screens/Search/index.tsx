@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   KeyboardDismissingView,
+  Row,
   Spacer,
   Spinner,
   Text
 } from '@components/base';
-import { SearchAddress } from '@components/templates';
+import { SearchAddress, SearchAddressRef } from '@components/templates';
 import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
-import { ExplorerWalletItem } from './components';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
   SearchTabNavigationProp,
   SearchTabParamsList
 } from '@appTypes/navigation';
-import { SearchSort } from './Search.types';
 import { COLORS } from '@constants/colors';
+import { ScannerQRIcon } from '@components/svg/icons';
+import { ExplorerWalletItem } from './components';
+import { SearchSort } from './Search.types';
 import { styles } from './styles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
@@ -41,10 +43,10 @@ export const SearchScreen = () => {
   const { top } = useSafeAreaInsets();
 
   const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
-  const [addressFromParams, setAddressFromParams] = useState('');
+  const searchAddressRef = useRef<SearchAddressRef>(null);
 
   useEffect(() => {
-    if (params?.address) setAddressFromParams(params.address);
+    if (params?.address) searchAddressRef.current?.setAddress(params.address);
   }, [params?.address]);
 
   const loadMoreAccounts = () => {
@@ -77,12 +79,41 @@ export const SearchScreen = () => {
       </View>
     );
   };
+
   return (
-    <View style={{ flex: 1, paddingTop: verticalScale(12), top }}>
-      <View testID="Search_Screen" style={{ flex: 1 }}>
+    <KeyboardDismissingView
+      style={{ flex: 1, paddingTop: verticalScale(12), top }}
+    >
+      <Row
+        alignItems="center"
+        justifyContent="space-between"
+        style={{
+          paddingHorizontal: scale(16),
+          paddingBottom: verticalScale(22),
+          borderBottomWidth: 1,
+          borderBottomColor: COLORS.neutral100
+        }}
+      >
+        <Text
+          fontSize={24}
+          fontFamily="Inter_700Bold"
+          fontWeight="700"
+          color={COLORS.neutral800}
+        >
+          {t('tab.explore')}
+        </Text>
+        <Button onPress={searchAddressRef.current?.showScanner}>
+          <ScannerQRIcon />
+        </Button>
+      </Row>
+      <View
+        testID="Search_Screen"
+        style={{ flex: 1, marginTop: verticalScale(16) }}
+      >
         <SearchAddress
+          scannerDisabled={true}
+          ref={searchAddressRef}
           onContentVisibilityChanged={setSearchAddressContentVisible}
-          initialValue={addressFromParams}
         />
         {searchAddressContentVisible ? null : (
           <Animated.View
@@ -130,6 +161,6 @@ export const SearchScreen = () => {
           </Animated.View>
         )}
       </View>
-    </View>
+    </KeyboardDismissingView>
   );
 };
