@@ -93,7 +93,7 @@
   "collection.rename": "Rename group",
   "collection.search.input": "Search groups",
   "collection.search.public.address.placeholder": "Search public address",
-  "collection.total.balance": "TOTAL BALANCE",
+  "collection.total.balance": "TOTAL VALUE",
 
   "common.address": "Address",
   "common.address_plural": "Addresses",
