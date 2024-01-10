@@ -161,11 +161,10 @@ export const ExplorerAccountView = (
               backgroundColor: account.isOnWatchlist
                 ? COLORS.warning100
                 : COLORS.brand600,
-              borderWidth: listsWithAccount.length > 0 ? 1 : 0,
-              borderColor:
-                listsWithAccount.length > 0
-                  ? COLORS.warning200
-                  : COLORS.transparent
+              borderWidth: account.isOnWatchlist ? 1 : 0,
+              borderColor: account.isOnWatchlist
+                ? COLORS.warning200
+                : COLORS.transparent
             }}
             testID="Add_To_Watchlist_Button"
             type="circular"
