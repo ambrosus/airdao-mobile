@@ -29,8 +29,8 @@ export const ExplorerAccountView = (
   const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const { t } = useTranslation();
 
-  const { data } = useAMBPrice();
-  const ambPriceUSD = data?.priceUSD || 0;
+  const { data: ambPriceData } = useAMBPrice();
+  const ambPriceUSD = ambPriceData?.priceUSD || 0;
 
   const addToListModal = useRef<BottomSheetRef>(null);
 
@@ -123,7 +123,7 @@ export const ExplorerAccountView = (
         />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
-      <Spacer value={verticalScale(12)} />
+      <Spacer value={verticalScale(16)} />
       <Text
         fontFamily="Mersad_600SemiBold"
         fontSize={30}
@@ -131,6 +131,23 @@ export const ExplorerAccountView = (
       >
         ${NumberUtils.formatNumber(USDBalance)}
       </Text>
+      {ambPriceData && (
+        <>
+          <Spacer value={verticalScale(16)} />
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            fontWeight="500"
+            color={COLORS.neutral900}
+          >
+            {`${NumberUtils.addSignToNumber(
+              ambPriceData.percentChange24H
+            )}% ($${NumberUtils.formatNumber(
+              USDBalance * ambPriceData.percentChange24H
+            )}) ${t('common.hour.short').toUpperCase()}`}
+          </Text>
+        </>
+      )}
       <Spacer value={verticalScale(16)} />
       <ScrollView
         horizontal
@@ -142,29 +159,26 @@ export const ExplorerAccountView = (
             style={{
               ...styles.actionButton,
               backgroundColor: account.isOnWatchlist
-                ? COLORS.warning200
-                : COLORS.brand600
+                ? COLORS.warning100
+                : COLORS.brand600,
+              borderWidth: listsWithAccount.length > 0 ? 1 : 0,
+              borderColor:
+                listsWithAccount.length > 0
+                  ? COLORS.warning200
+                  : COLORS.transparent
             }}
             testID="Add_To_Watchlist_Button"
             type="circular"
             onPress={toggleWatchlist}
           >
-            <Row alignItems="center">
-              <Text
-                fontSize={12}
-                color={account.isOnWatchlist ? COLORS.liver : COLORS.neutral0}
-              >
-                {account.isOnWatchlist
-                  ? t('address.watchlisted')
-                  : t('address.add.watchlist')}
-              </Text>
-              {/*{!account.isOnWatchlist && (*/}
-              {/*  <>*/}
-              {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.neutral0} scale={0.5} />*/}
-              {/*  </>*/}
-              {/*)}*/}
-            </Row>
+            <Text
+              fontSize={12}
+              color={account.isOnWatchlist ? COLORS.liver : COLORS.neutral0}
+            >
+              {account.isOnWatchlist
+                ? t('address.watchlisted')
+                : t('address.add.watchlist')}
+            </Text>
           </Button>
           <Spacer value={scale(16)} horizontal />
           <Button
@@ -172,35 +186,34 @@ export const ExplorerAccountView = (
               ...styles.actionButton,
               backgroundColor:
                 listsWithAccount.length > 0
+                  ? COLORS.warning100
+                  : COLORS.alphaBlack5,
+              borderWidth: listsWithAccount.length > 0 ? 1 : 0,
+              borderColor:
+                listsWithAccount.length > 0
                   ? COLORS.warning200
-                  : COLORS.brand100
+                  : COLORS.transparent
             }}
             testID="Add_To_Collection_Button"
             type="circular"
             onPress={showAddToList}
           >
-            <Row alignItems="center">
-              <Text
-                color={
-                  listsWithAccount.length > 0 ? COLORS.liver : COLORS.brand700
-                }
-                fontSize={12}
-              >
-                {listsWithAccount.length === 0
-                  ? t('address.add.group')
-                  : listsWithAccount.length === 1
-                  ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
-                  : t('address.added.to.group', {
-                      count: listsWithAccount.length
-                    })}
-              </Text>
-              {/*{listsWithAccount.length === 0 && (*/}
-              {/*  <>*/}
-              {/*    <Spacer value={scale(8)} horizontal />*/}
-              {/*    <PlusIcon color={COLORS.brand700} scale={0.5} />*/}
-              {/*  </>*/}
-              {/*)}*/}
-            </Row>
+            <Text
+              color={
+                listsWithAccount.length > 0
+                  ? COLORS.warning700
+                  : COLORS.neutral900
+              }
+              fontSize={12}
+            >
+              {listsWithAccount.length === 0
+                ? t('address.add.group')
+                : listsWithAccount.length === 1
+                ? StringUtils.formatAddress(listsWithAccount[0].name, 16, 0)
+                : t('address.added.to.group', {
+                    count: listsWithAccount.length
+                  })}
+            </Text>
           </Button>
         </Row>
       </ScrollView>

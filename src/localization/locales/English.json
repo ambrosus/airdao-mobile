@@ -108,6 +108,7 @@
   "common.field.required": "This field is required",
   "common.group": "Group",
   "common.group_plural": "Groups",
+  "common.hour.short": "hr",
   "common.messages": "Messages",
   "common.no.transactions": "You will see your transactions here",
   "common.notification.price-alert": "Price Alert",
