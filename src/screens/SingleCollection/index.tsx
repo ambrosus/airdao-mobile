@@ -2,25 +2,25 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Row, Spacer, Text, Badge } from '@components/base';
+import { useTranslation } from 'react-i18next';
+import { Button, Spacer, Text, Badge } from '@components/base';
 import {
   BottomSheetEditCollection,
   AddressList,
   BottomSheetCreateRenameGroup
 } from '@components/templates';
 import { EditIcon, AddIcon } from '@components/svg/icons';
-import { BottomSheetRef, Header, PercentChange } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import { useLists } from '@contexts/ListsContext';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
-import { useAMBPrice } from '@hooks';
+import { useUSDPrice } from '@hooks';
 import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { sortListByKey } from '@utils/sort';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 export const SingleGroupScreen = () => {
   const {
@@ -29,7 +29,6 @@ export const SingleGroupScreen = () => {
     }
   } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
   const navigation = useNavigation<CommonStackNavigationProp>();
-  const { data: ambPriceData } = useAMBPrice();
   const { t } = useTranslation();
 
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
@@ -44,7 +43,8 @@ export const SingleGroupScreen = () => {
 
   const { accounts, name } = selectedList;
 
-  const groupTokens = selectedList.totalBalance * (ambPriceData?.priceUSD || 0);
+  const groupBalanceAmb = selectedList.totalBalance;
+  const groupdBalanceUsd = useUSDPrice(groupBalanceAmb);
 
   const showAddAddress = useCallback(() => {
     addNewAddressToGroupRef.current?.show();
@@ -87,7 +87,7 @@ export const SingleGroupScreen = () => {
               type="circular"
               style={styles.addButton}
             >
-              <AddIcon color={COLORS.neutral0} scale={1.25} />
+              <AddIcon color={COLORS.neutral0} scale={0.9} />
             </Button>
             <Spacer horizontal value={scale(32)} />
             <Button
@@ -110,32 +110,30 @@ export const SingleGroupScreen = () => {
         >
           {t('collection.total.balance')}
         </Text>
-        <Spacer value={10} />
+        <Spacer value={verticalScale(8)} />
         <Text
           fontFamily="Inter_700Bold"
-          fontSize={30}
-          color={COLORS.neutral800}
+          fontWeight="800"
+          fontSize={24}
+          color={COLORS.neutral900}
         >
-          ${NumberUtils.formatNumber(groupTokens, 2)}
+          {NumberUtils.formatNumber(
+            groupBalanceAmb,
+            groupBalanceAmb > 100000 ? 2 : 0
+          )}{' '}
+          AMB
         </Text>
-        <Spacer value={10} />
+        <Spacer value={verticalScale(8)} />
         <Badge
-          color={COLORS.gray300}
+          color={COLORS.alphaBlack5}
           icon={
-            <Row>
-              <PercentChange
-                fontSize={14}
-                change={ambPriceData?.percentChange24H || 0}
-              />
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={14}
-                color={COLORS.neutral900}
-              >
-                {' '}
-                (24hr)
-              </Text>
-            </Row>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral800}
+            >
+              ${NumberUtils.formatNumber(groupdBalanceUsd, 2)}
+            </Text>
           }
         />
       </View>

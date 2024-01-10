@@ -1,16 +1,20 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
-import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat } from '@components/modular';
+import { useTranslation } from 'react-i18next';
+import {
+  BottomSheet,
+  BottomSheetProps,
+  BottomSheetRef
+} from '@components/composite';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { useLists } from '@contexts';
 import { COLORS } from '@constants/colors';
 import { AccountList } from '@models';
+import { StringUtils } from '@utils/string';
+import { verticalScale } from '@utils/scaling';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { StringUtils } from '@utils/string';
-import { useTranslation } from 'react-i18next';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {
   collection: AccountList;
@@ -58,10 +62,11 @@ export const BottomSheetEditCollection = forwardRef<
   };
 
   return (
-    <BottomSheetFloat
+    <BottomSheet
       ref={localRef}
       swiperIconVisible
       avoidKeyboard={false}
+      containerStyle={{ minHeight: verticalScale(194) }}
       {...bottomSheetProps}
     >
       <View style={styles.content} testID="bottom-sheet-edit-collection">
@@ -105,6 +110,6 @@ export const BottomSheetEditCollection = forwardRef<
         handleOnRenameGroup={renameGroup}
         ref={renameCollectionModalRef}
       />
-    </BottomSheetFloat>
+    </BottomSheet>
   );
 });

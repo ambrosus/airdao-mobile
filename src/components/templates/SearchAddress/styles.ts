@@ -1,10 +1,11 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { Dimensions, StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   input: {
-    width: '90%',
+    width: '100%',
+    paddingHorizontal: scale(16),
     alignSelf: 'center'
   },
   top: {
