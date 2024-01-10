@@ -23,7 +23,8 @@ export const SendFundsStatus = () => {
     amount = 0,
     currency = AirDAODictTypes.Code.AMB,
     loading,
-    error
+    error,
+    estimatedFee
   } = state;
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
@@ -169,6 +170,7 @@ export const SendFundsStatus = () => {
             ref={shareModal}
             title={t('common.transaction')}
             bottomSheetTitle={t('common.share.transaction')}
+            txFee={estimatedFee}
             balance={amount.toFixed(2)}
             currency={currency}
             currencyPosition={'right'}
