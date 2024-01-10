@@ -281,7 +281,7 @@
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",
-  "toast.group.created": "Way to go {{name}} group created.",
+  "toast.group.created": "{{name}} group created!",
   "toast.group.renamed": "{{oldName}} has been renamed to {{newName}}",
   "toast.tap.to.rename.msg": "Tap to rename address",
   "toast.removed.wallet.from.group": "Successfully removed wallet from group!",

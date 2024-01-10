@@ -14,7 +14,6 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import {
-  BottomSheetFloat,
   PrimaryButton,
   Toast,
   ToastPosition,
@@ -25,6 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useTranslation } from 'react-i18next';
+import { BottomSheet } from '@components/composite';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -112,102 +112,106 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     }, []);
 
     return (
-      <>
-        <BottomSheetFloat
-          height={
-            Platform.OS === 'ios'
-              ? Math.min(verticalScale(365), 320)
-              : Math.min(verticalScale(380), 330)
-          }
-          ref={localRef}
-          containerStyle={
-            Platform.OS === 'android' && { marginBottom: bottomSafeArea }
-          }
-          onClose={handleDismiss}
-          testID="Create_Rename_Collection_BottomSheet"
-          swiperIconVisible
-        >
-          <View testID="BottomSheetCreateRename" style={styles.container}>
-            <View style={styles.content}>
-              <Spacer value={24} />
-              <Text
-                testID="BottomSheetCreateRename_Title"
-                style={styles.newListTitle}
-                fontFamily="Inter_600SemiBold"
-                fontSize={16}
-                color={COLORS.neutral900}
-              >
-                {type === 'create'
-                  ? t('collection.create')
-                  : t('collection.rename')}
-              </Text>
-              <Spacer value={8} />
-              <OnboardingView
-                thisStep={8}
-                tooltipPlacement="bottom"
-                childrenAlwaysVisible
-                helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
-              >
-                <Input
-                  testID="BottomSheetCreateRename_Input"
-                  ref={nameInput}
-                  value={localGroupName}
-                  onChangeValue={setLocalGroupName}
-                  type="text"
-                  placeholder={
-                    emptyPlaceholder
-                      ? t('common.field.required')
-                      : t('collection.name.input.placeholder')
-                  }
-                  placeholderTextColor={
-                    emptyPlaceholder ? COLORS.error400 : COLORS.midnight
-                  }
-                  style={[styles.bottomSheetInput]}
-                />
-              </OnboardingView>
-              <Spacer value={24} />
-              <OnboardingView
-                thisStep={9}
-                tooltipPlacement="bottom"
-                childrenAlwaysVisible
-                helpers={{ next: handleButtonPress }}
-              >
-                <PrimaryButton
-                  testID="BottomSheetCreateRename_Button"
-                  onPress={handleButtonPress}
-                >
-                  <Text
-                    fontFamily="Inter_600SemiBold"
-                    fontSize={16}
-                    color={COLORS.neutral0}
-                  >
-                    {type === 'create' ? t('button.create') : t('button.save')}
-                  </Text>
-                </PrimaryButton>
-              </OnboardingView>
-              <Spacer value={24} />
-              <Button
-                testID="BottomSheetCreateRename_Cancel_Button"
-                type="base"
-                style={styles.bottomSheetCancelButton}
-                onPress={() => {
-                  setTimeout(() => {
-                    localRef.current?.dismiss();
-                  }, 400);
-                }}
+      <BottomSheet
+        height={
+          Platform.OS === 'ios'
+            ? Math.min(verticalScale(365), 320)
+            : Math.min(verticalScale(380), 330)
+        }
+        ref={localRef}
+        containerStyle={
+          Platform.OS === 'android' && { marginBottom: bottomSafeArea }
+        }
+        onClose={handleDismiss}
+        testID="Create_Rename_Collection_BottomSheet"
+        swiperIconVisible
+      >
+        <View testID="BottomSheetCreateRename" style={styles.container}>
+          <View style={styles.content}>
+            <Spacer value={24} />
+            <Text
+              testID="BottomSheetCreateRename_Title"
+              style={styles.newListTitle}
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.neutral900}
+            >
+              {type === 'create'
+                ? t('collection.create')
+                : t('collection.rename')}
+            </Text>
+            <Spacer value={8} />
+            <OnboardingView
+              thisStep={8}
+              tooltipPlacement="bottom"
+              childrenAlwaysVisible
+              helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
+            >
+              <Input
+                testID="BottomSheetCreateRename_Input"
+                ref={nameInput}
+                value={localGroupName}
+                onChangeValue={setLocalGroupName}
+                type="text"
+                placeholder={
+                  emptyPlaceholder
+                    ? t('common.field.required')
+                    : t('collection.name.input.placeholder')
+                }
+                placeholderTextColor={
+                  emptyPlaceholder ? COLORS.error400 : COLORS.alphaBlack60
+                }
+                style={[styles.bottomSheetInput]}
+              />
+            </OnboardingView>
+            <Spacer value={24} />
+            <OnboardingView
+              thisStep={9}
+              tooltipPlacement="bottom"
+              childrenAlwaysVisible
+              helpers={{ next: handleButtonPress }}
+            >
+              <PrimaryButton
+                testID="BottomSheetCreateRename_Button"
+                onPress={handleButtonPress}
+                disabled={!Boolean(localGroupName)}
               >
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.neutral800}
                   fontSize={16}
+                  color={
+                    Boolean(localGroupName)
+                      ? COLORS.neutral0
+                      : COLORS.alphaBlack30
+                  }
                 >
-                  {t('button.cancel')}
+                  {type === 'create' ? t('button.create') : t('button.save')}
                 </Text>
-              </Button>
-            </View>
+              </PrimaryButton>
+            </OnboardingView>
+            <Spacer value={24} />
+            <Button
+              testID="BottomSheetCreateRename_Cancel_Button"
+              type="base"
+              style={styles.bottomSheetCancelButton}
+              onPress={() => {
+                setTimeout(() => {
+                  localRef.current?.dismiss();
+                }, 400);
+              }}
+            >
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontWeight="600"
+                color={COLORS.neutral900}
+                fontSize={16}
+              >
+                {t('button.cancel')}
+              </Text>
+            </Button>
           </View>
-        </BottomSheetFloat>
-      </>
+        </View>
+      </BottomSheet>
     );
   }
 );

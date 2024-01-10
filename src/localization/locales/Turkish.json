@@ -281,7 +281,7 @@
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
   "toast.the.message.lower.case": "adres",
-  "toast.group.created": "Harika! Grup {{name}} oluşturuldu.",
+  "toast.group.created": "{{name}} grubu oluşturuldu!",
   "toast.group.renamed": "{{oldName}} {{newName}} olarak adlandırıldı",
   "toast.tap.to.rename.msg": "Adresi yeniden adlandırmak için dokunun",
   "toast.removed.wallet.from.group": "Cüzdan gruptan başarıyla kaldırıldı!",
