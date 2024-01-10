@@ -13,7 +13,7 @@ interface PaginatedAccountListProps extends AccountListProps {
   onScrolIndexChange?: (newPosition: number) => void;
 }
 const SCROLL_OFFSET_LIMIT = scale(200);
-const SCROLL_SPEED_LIMIT = 80;
+const SCROLL_SPEED_LIMIT = 40;
 
 export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
   const { accounts, listProps, type, onScrolIndexChange } = props;
@@ -43,7 +43,6 @@ export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
     const speed =
       (xPos - scrollBegin.current) /
       (new Date().getTime() / scrollBeginAt.current);
-
     if (offset < SCROLL_OFFSET_LIMIT && Math.abs(speed) < SCROLL_SPEED_LIMIT) {
       // the scroll offset is not enough to change selected card
       scrollToItem(currentIdx.current);
@@ -72,7 +71,9 @@ export const PaginatedAccountList = (props: PaginatedAccountListProps) => {
       viewOffset: scale(32)
     });
     currentIdx.current = idx;
-    if (typeof onScrolIndexChange === 'function') onScrolIndexChange(idx);
+    setTimeout(() => {
+      if (typeof onScrolIndexChange === 'function') onScrolIndexChange(idx);
+    }, 0);
   };
 
   return (
