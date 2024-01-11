@@ -92,8 +92,9 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         <Row justifyContent="space-between" alignItems="center">
           <Text
             fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.neutral900}
+            fontSize={24}
+            fontWeight="700"
+            color={COLORS.neutral800}
           >
             {t('tab.watchlist')}
           </Text>
