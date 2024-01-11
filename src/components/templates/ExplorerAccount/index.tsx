@@ -144,7 +144,7 @@ export const ExplorerAccountView = (
               ambPriceData.percentChange24H
             )}% ($${NumberUtils.formatNumber(
               USDBalance * ambPriceData.percentChange24H
-            )}) ${t('common.hour.short').toUpperCase()}`}
+            )}) 24${t('common.hour.short').toUpperCase()}`}
           </Text>
         </>
       )}
