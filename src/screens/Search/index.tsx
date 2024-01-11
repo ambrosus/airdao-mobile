@@ -21,7 +21,7 @@ import {
   SearchTabParamsList
 } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
-import { ScannerQRIcon } from '@components/svg/icons';
+import { ScannerIcon } from '@components/svg/icons';
 import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
 import { styles } from './styles';
@@ -103,7 +103,7 @@ export const SearchScreen = () => {
           {t('tab.explore')}
         </Text>
         <Button onPress={searchAddressRef.current?.showScanner}>
-          <ScannerQRIcon />
+          <ScannerIcon color={COLORS.neutral600} />
         </Button>
       </Row>
       <View
