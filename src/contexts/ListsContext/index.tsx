@@ -13,6 +13,7 @@ import { ExplorerAccount } from '@models/Explorer';
 import { ExplorerAccountDTO } from '@models';
 import { API } from '@api/api';
 import { MULTISIG_VAULT } from '@constants/variables';
+import { AddressUtils } from '@utils/address';
 
 const ListsContext = () => {
   const allAddresses = useAllAddresses();
@@ -26,17 +27,52 @@ const ListsContext = () => {
       (l) =>
         new AccountList({
           ...l,
-          accounts: l.addresses?.map(
-            (address) =>
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              allAddresses.find(
-                (populatedAddress) => populatedAddress.address === address
-              )!
-          )
+          accounts: l.addresses
+            ?.map(
+              (address) =>
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                allAddresses.find(
+                  (populatedAddress) => populatedAddress.address === address
+                )!
+            )
+            .filter((account) => account != undefined)
         })
     );
     return populatedLists;
   }, [allAddresses, listsOfAddressGroup]);
+
+  const pouplateUnknownAddresses = useCallback(async () => {
+    const unknownAddresses = listsOfAddressGroup
+      .map(
+        (l) =>
+          new AccountList({
+            ...l,
+            accounts: l.addresses
+              ?.map(
+                (address) =>
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  allAddresses.find(
+                    (populatedAddress) => populatedAddress.address === address
+                  )!
+              )
+              .filter((account) => account == undefined)
+          })
+      )
+      .reduce((a, b) => a.concat(b.accounts), [] as ExplorerAccount[]);
+
+    if (unknownAddresses?.length > 0) {
+      const populatedUnknownAddress = await AddressUtils.populateAddresses(
+        unknownAddresses
+      );
+      if (!allAddresses.length) {
+        allAddressesReducer({ type: 'set', payload: populatedUnknownAddress });
+      }
+    }
+  }, [allAddresses, allAddressesReducer, listsOfAddressGroup]);
+
+  useEffect(() => {
+    pouplateUnknownAddresses();
+  }, [allAddresses, listsOfAddressGroup, pouplateUnknownAddresses]);
 
   const updateListOfAddressGroup = async (newLists: CacheableAccountList[]) => {
     setListsOfAddressGroup([...newLists]);

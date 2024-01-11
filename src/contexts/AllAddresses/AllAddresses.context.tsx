@@ -3,7 +3,6 @@ import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { AirDAOEventDispatcher } from '@lib';
 import {
@@ -11,6 +10,7 @@ import {
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
 import { ArrayUtils } from '@utils/array';
+import { AddressUtils } from '@utils/address';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -91,30 +91,6 @@ const AllAddressesContext = () => {
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
 
-  const populateAddresses = async (
-    addresses: CacheableAccount[]
-  ): Promise<ExplorerAccount[]> => {
-    try {
-      return await Promise.all(
-        addresses.map(async (address) => {
-          try {
-            const account = new ExplorerAccount(
-              await API.explorerService.searchAddress(address.address)
-            );
-            const newAccount = Object.assign({}, account);
-            newAccount.name = address.name;
-            newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
-            return newAccount;
-          } catch (error) {
-            throw error;
-          }
-        })
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
-
   // fetch all addresses on mount
   const getAddresses = async () => {
     setLoading(true);
@@ -124,7 +100,7 @@ const AllAddressesContext = () => {
       const currentAddresses = allAddresses
         .filter((address) => !!address)
         .map(ExplorerAccount.toCacheable);
-      const populatedAddresses = await populateAddresses(
+      const populatedAddresses = await AddressUtils.populateAddresses(
         ArrayUtils.mergeArrays('address', addresses, currentAddresses)
       );
       setAllAddresses(populatedAddresses);
@@ -153,13 +129,13 @@ const AllAddressesContext = () => {
           (address) => address.address === data.from
         );
         if (toIdx > -1) {
-          const updatedSenderAddress = await populateAddresses([
+          const updatedSenderAddress = await AddressUtils.populateAddresses([
             allAddresses[toIdx]
           ]);
           reducer({ type: 'update', payload: updatedSenderAddress[0] });
         }
         if (fromIdx > -1) {
-          const updatedReceivingAddress = await populateAddresses([
+          const updatedReceivingAddress = await AddressUtils.populateAddresses([
             allAddresses[fromIdx]
           ]);
           reducer({ type: 'update', payload: updatedReceivingAddress[0] });
