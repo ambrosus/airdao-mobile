@@ -9,5 +9,6 @@ export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
   currency: AirDAODictTypes.Code.AMB,
   loading: false,
   estimatedFee: 0,
-  error: null
+  error: null,
+  transactionId: ''
 };

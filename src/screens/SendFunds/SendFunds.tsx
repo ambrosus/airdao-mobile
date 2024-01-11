@@ -51,9 +51,13 @@ export const SendFunds = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
   const tokenFromNavigationParams = route.params?.token;
-  const { to: destinationAddress = '', from: senderAddress = '' } =
-    sendContextState;
-
+  const {
+    to: destinationAddress = '',
+    from: senderAddress = '',
+    transactionId
+  } = sendContextState;
+  const transactionIdRef = useRef(transactionId);
+  transactionIdRef.current = transactionId;
   const { data: selectedAccount } = useAccountByAddress(senderAddress);
   const walletHash = selectedAccount?.wallet.id || '';
 
@@ -170,7 +174,8 @@ export const SendFunds = () => {
 
   const sendTx = () => {
     hideReviewModal();
-    updateSendContext({ type: 'SET_DATA', loading: true });
+    const txId = new Date().getTime().toString();
+    updateSendContext({ type: 'SET_DATA', loading: true, transactionId: txId });
     setTimeout(async () => {
       try {
         navigation.replace('SendFundsStatus');
@@ -184,13 +189,17 @@ export const SendFunds = () => {
           Number(amountInCrypto),
           selectedToken
         );
-        updateSendContext({ type: 'SET_DATA', loading: false });
+        if (transactionIdRef.current === txId) {
+          updateSendContext({ type: 'SET_DATA', loading: false });
+        }
       } catch (error: unknown) {
-        updateSendContext({
-          type: 'SET_DATA',
-          loading: false,
-          error: error as any
-        });
+        if (transactionIdRef.current === txId) {
+          updateSendContext({
+            type: 'SET_DATA',
+            loading: false,
+            error: error as any
+          });
+        }
       }
     }, 1000);
   };

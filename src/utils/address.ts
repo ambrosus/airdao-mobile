@@ -1,5 +1,5 @@
 import { API } from '@api/api';
-import { Permission } from '@appTypes';
+import { CacheableAccount, Permission } from '@appTypes';
 import { PermissionService } from '@lib';
 import { ExplorerAccount } from '@models';
 
@@ -15,4 +15,32 @@ const addressToToken = (address: string) => {
   return Buffer.from(address).toString('base64').slice(3, 11);
 };
 
-export const AddressUtils = { watchChangesOfAddress, addressToToken };
+const populateAddresses = async (
+  addresses: CacheableAccount[]
+): Promise<ExplorerAccount[]> => {
+  try {
+    return await Promise.all(
+      addresses.map(async (address) => {
+        try {
+          const account = new ExplorerAccount(
+            await API.explorerService.searchAddress(address.address)
+          );
+          const newAccount = Object.assign({}, account);
+          newAccount.name = address.name;
+          newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
+          return newAccount;
+        } catch (error) {
+          throw error;
+        }
+      })
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const AddressUtils = {
+  watchChangesOfAddress,
+  addressToToken,
+  populateAddresses
+};
