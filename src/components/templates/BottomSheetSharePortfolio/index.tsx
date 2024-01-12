@@ -1,6 +1,7 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
+import { useTranslation } from 'react-i18next';
 import { BottomSheetFloat } from '@components/modular';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -15,7 +16,6 @@ import { scale, verticalScale } from '@utils/scaling';
 import { ShareUtils } from '@utils/share';
 import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {
   ref: RefObject<BottomSheetRef>;
@@ -117,7 +117,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   <PlusIcon color={COLORS.gray800} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
-                <Text>More</Text>
+                <Text>{t('common.more')}</Text>
               </View>
             </Row>
           </View>
