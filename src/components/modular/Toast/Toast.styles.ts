@@ -6,12 +6,9 @@ export const styles = StyleSheet.create({
   containerStyle: {
     width: scale(350),
     borderRadius: moderateScale(13),
-    position: 'absolute',
-    alignSelf: 'center',
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
-    borderWidth: 1,
-    zIndex: 1000
+    borderWidth: 1
   },
   statusIcon: {
     width: moderateScale(24),
