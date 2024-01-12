@@ -12,6 +12,8 @@ import {
   CurrencyDBModel
 } from './models';
 import { schema } from './schemas';
+import { PublicAddressDbModel } from './models/public-address';
+import { PublicAddressListDbModel } from './models/public-address-list';
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -26,6 +28,8 @@ export const database = new Database({
     AccountDBModel,
     AccountBalanceDBModel,
     CurrencyDBModel,
+    PublicAddressDbModel,
+    PublicAddressListDbModel,
     TransactionsDBModel,
     TransactionRawDBModel,
     TransactionScannersTmpDBModel,
