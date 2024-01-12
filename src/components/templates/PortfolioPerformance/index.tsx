@@ -7,8 +7,8 @@ import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import { styles } from './styles';
 import { Badge } from '@components/base/Badge';
+import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {
   balance: string;
@@ -148,13 +148,7 @@ export function PortfolioPerformance(
           </Row>
         </View>
         <Spacer value={scale(4)} horizontal />
-        <Image
-          source={require('@assets/images/logo-sun-like.png')}
-          style={{
-            height: verticalScale(100),
-            width: scale(100)
-          }}
-        />
+        <Image source={require('@assets/images/logo-sun-like.png')} />
       </Row>
     </View>
   );
