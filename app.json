@@ -75,7 +75,7 @@
       [
         "@morrowdigital/watermelondb-expo-plugin",
         {
-          "databases": ["airdao_dev.db"]
+          "databases": ["airdao.db"]
         }
       ],
       [
