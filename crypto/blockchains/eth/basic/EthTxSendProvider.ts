@@ -4,7 +4,7 @@
  */
 import { AirDAOBlockchainTypes } from '../../AirDAOBlockchainTypes';
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
-import BlocksoftUtils from '../../../common/AirDAOUtils';
+import AirDAOUtils from '../../../common/AirDAOUtils';
 import EthTmpDS from '../stores/EthTmpDS';
 import EthRawDS from '../stores/EthRawDS';
 
@@ -93,7 +93,7 @@ export default class EthTxSendProvider {
     const nonce =
       typeof logData.setNonce !== 'undefined'
         ? logData.setNonce
-        : BlocksoftUtils.hexToDecimal(tx.nonce);
+        : AirDAOUtils.hexToDecimal(tx.nonce);
 
     await EthRawDS.saveRaw({
       address: tx.from,
@@ -124,7 +124,7 @@ export default class EthTxSendProvider {
       gasPrice:
         typeof logData.gasPrice !== 'undefined'
           ? logData.gasPrice
-          : BlocksoftUtils.hexToDecimal(tx.gasPrice)
+          : AirDAOUtils.hexToDecimal(tx.gasPrice)
     };
     return { transactionHash, transactionJson };
   }
