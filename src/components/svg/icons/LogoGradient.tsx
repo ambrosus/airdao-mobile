@@ -1,48 +1,38 @@
-import React from 'react';
-import Svg, {
-  Circle,
-  Defs,
-  LinearGradient,
-  Path,
-  Stop
-} from 'react-native-svg';
+import * as React from 'react';
+import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { IconProps } from './Icon.types';
+import { COLORS } from '@constants/colors';
 
-export function LogoGradient(props: IconProps) {
+export function LogoGradient(props: Omit<IconProps, 'colors'>) {
   const { scale = 1 } = props;
-  const width = 23;
-  const height = 24;
+  const width = 218;
+  const height = 234;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
       fill="none"
+      {...props}
     >
-      <Circle
-        cx={11.66}
-        cy={11.683}
-        r={10.712}
-        fill="url(#prefix__paint0_linear_1023_10739)"
-      />
       <Path
+        opacity={0.2}
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M7.518 17.41a.164.164 0 01-.221-.048l-.189-.278a.167.167 0 01.036-.225 7.285 7.285 0 001.533-1.62c1.494-2.183 1.494-4.93 0-7.114a7.286 7.286 0 00-1.533-1.62.167.167 0 01-.036-.224l.189-.278a.164.164 0 01.221-.048l8.372 5.104a.73.73 0 010 1.248L7.518 17.41z"
-        fill="#fff"
+        d="M74.373 231.38a3.467 3.467 0 01-4.762.33l-5.437-4.498c-1.42-1.174-1.66-3.253-.58-4.747 9.711-13.436 16.827-27.469 21.511-41.648 17.442-52.793 1.369-108.197-41.62-143.459-11.544-9.47-25.065-17.516-40.46-23.67-1.712-.683-2.62-2.568-2.05-4.32L3.161 2.66A3.466 3.466 0 017.359.39l199.15 53.797c11.115 3.002 15.084 16.683 7.302 25.167L74.372 231.38z"
+        fill="url(#prefix__paint0_linear_1301_4260)"
       />
       <Defs>
         <LinearGradient
-          id="prefix__paint0_linear_1023_10739"
-          x1={22.372}
-          y1={8.038}
-          x2={0.948}
-          y2={8.038}
+          id="prefix__paint0_linear_1301_4260"
+          x1={205.797}
+          y1={25.251}
+          x2={20.552}
+          y2={78.993}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#3568DD" />
-          <Stop offset={1} stopColor="#7DA3F9" />
+          <Stop stopColor={COLORS.brand600} />
+          <Stop offset={1} stopColor="#A4BBF0" />
         </LinearGradient>
       </Defs>
     </Svg>

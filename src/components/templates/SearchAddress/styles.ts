@@ -1,10 +1,11 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { Dimensions, StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   input: {
-    width: '90%',
+    width: '100%',
+    paddingHorizontal: scale(16),
     alignSelf: 'center'
   },
   top: {
@@ -16,7 +17,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#2f2b431a'
   },
   trackBtn: {
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     paddingVertical: verticalScale(8),
     width: Dimensions.get('window').width - verticalScale(32),
     borderRadius: 120,

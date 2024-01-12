@@ -10,6 +10,7 @@ import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useLists } from '@contexts/ListsContext';
+import { useTranslation } from 'react-i18next';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -20,6 +21,7 @@ export interface AddWalletToListProps {
 export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   const { wallet, lists, onWalletMove } = props;
   const { toggleAddressesInList } = useLists((v) => v);
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
     () =>
@@ -28,10 +30,10 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
   );
 
   const toggleWalletInList = (list: AccountList) => {
+    if (typeof onWalletMove === 'function') onWalletMove(list);
     setTimeout(() => {
       toggleAddressesInList([wallet], list);
-    }, 400);
-    if (typeof onWalletMove === 'function') onWalletMove(list);
+    }, 750);
   };
 
   const renderList = (args: ListRenderItemInfo<AccountList>) => {
@@ -53,7 +55,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontSize={14}
                 fontFamily="Inter_500Medium"
                 fontWeight="500"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
                 numberOfLines={1}
                 style={{ flex: 1 }}
               >
@@ -64,7 +66,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
                 fontSize={13}
                 fontWeight="600"
                 fontFamily="Mersad_600SemiBold"
-                color={COLORS.smokyBlack}
+                color={COLORS.neutral900}
               >
                 ${NumberUtils.formatNumber(list.totalBalance, 2)}
               </Text>
@@ -74,9 +76,9 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
               fontSize={12}
               fontWeight="500"
               fontFamily="Inter_500Medium"
-              color={COLORS.smokyBlack50}
+              color={COLORS.alphaBlack50}
             >
-              {list.accountCount} Addresses
+              {list.accountCount} {t('addresses')}
             </Text>
           </View>
         </Row>
@@ -95,7 +97,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
           <InputWithIcon
             value={searchText}
             onChangeValue={setSearchText}
-            placeholder="Search groups"
+            placeholder={t('collection.search.input')}
             iconLeft={<SearchIcon color={COLORS.midnight} />}
           />
         </View>

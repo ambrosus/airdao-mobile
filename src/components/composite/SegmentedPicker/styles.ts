@@ -1,6 +1,7 @@
+import { Dimensions, StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 import { shadow } from '@constants/shadow';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { Dimensions, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -17,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   selectedSegment: {
     ...shadow,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(36)
   }
 });

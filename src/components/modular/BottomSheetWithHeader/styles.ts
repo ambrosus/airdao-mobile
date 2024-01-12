@@ -10,6 +10,6 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Inter_500Medium',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   }
 });

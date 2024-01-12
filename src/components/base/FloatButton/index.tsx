@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     borderRadius: 1000,
     justifyContent: 'center',
     paddingVertical: verticalScale(12)
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   bottomButtonText: {
     fontFamily: 'Inter_500Medium',
     fontSize: 16,
-    color: COLORS.white
+    color: COLORS.neutral0
   },
   iconPadding: {
     paddingRight: 10.5

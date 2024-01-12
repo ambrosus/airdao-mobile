@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -23,12 +23,13 @@
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
+        "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.0.20"
+      "buildNumber": "1.1.13"
     },
     "android": {
-      "versionCode": 27,
+      "versionCode": 36,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -52,6 +53,12 @@
     },
     "plugins": [
       [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow AirDAO to use Face ID."
+        }
+      ],
+      [
         "expo-barcode-scanner",
         {
           "cameraPermission": "You can scan QR code to search addresses."
@@ -63,6 +70,12 @@
         "expo-camera",
         {
           "cameraPermission": "You can scan QR code to search addresses."
+        }
+      ],
+      [
+        "@morrowdigital/watermelondb-expo-plugin",
+        {
+          "databases": ["airdao_dev.db"]
         }
       ],
       [
@@ -80,7 +93,8 @@
         }
       ],
       ["./plugins/withNotifications.js"],
-      ["./plugins/withSupportsScreenAndroid.js"]
+      ["./plugins/withSupportsScreenAndroid.js"],
+      ["./plugins/withSecureFlag.js"]
     ],
     "extra": {
       "eas": {

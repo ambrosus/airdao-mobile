@@ -2,7 +2,7 @@ import React from 'react';
 import { SquareCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
@@ -24,8 +24,8 @@ export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {
         backgroundColor: value ? fillColor : 'transparent',
         borderColor: COLORS.shadowBlue,
         borderWidth: value ? 0 : 1,
-        width: scale(24),
-        height: scale(24)
+        width: moderateScale(24),
+        height: moderateScale(24)
       }}
     >
       {value && <CheckIcon {...iconProps} />}

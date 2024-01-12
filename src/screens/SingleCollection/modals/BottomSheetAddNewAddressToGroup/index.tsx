@@ -8,18 +8,20 @@ import React, {
 } from 'react';
 import {
   Alert,
-  Dimensions,
   FlatList,
   ListRenderItemInfo,
   ScrollView,
   View,
   useWindowDimensions
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
 import {
   BottomSheet,
   BottomSheetRef,
   CheckBox,
+  Header,
   InputWithIcon,
   Segment,
   SegmentedPicker
@@ -34,8 +36,8 @@ import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { BarcodeScanner, WalletItem } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
-import { StringUtils } from '@utils/string';
 import { SearchSort } from '@screens/Search/Search.types';
+import { ExplorerWalletItem } from '@screens/Search/components';
 import { etherumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 
@@ -43,19 +45,6 @@ type Props = {
   ref: RefObject<BottomSheetRef>;
   collection: AccountList;
 };
-
-const AddressSources: Segment[] = [
-  {
-    title: 'Watchlist',
-    value: 0,
-    id: 'watchlist'
-  },
-  {
-    title: 'Top Holders',
-    value: 1,
-    id: 'topHolders'
-  }
-];
 
 export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
@@ -69,6 +58,22 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     fetchNextPage: fetchMoreTopHolders
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchValue, setSearchValue] = useState<string>('');
+  const { t } = useTranslation();
+  const { top } = useSafeAreaInsets();
+
+  const AddressSources: Segment[] = [
+    {
+      title: t('common.top.holders.capitalize'),
+      value: 0,
+      id: 'topHolders'
+    },
+    {
+      title: t('tab.watchlist'),
+      value: 1,
+      id: 'watchlist'
+    }
+  ];
+
   const {
     data: searchedAccount,
     loading: searchLoading,
@@ -79,7 +84,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const toggleAddressesInList = useLists((v) => v.toggleAddressesInList);
   const [scrollViewIdx, setScrollViewIdx] = useState<
     'watchlist' | 'topHolders'
-  >('watchlist');
+  >('topHolders');
   const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = useWindowDimensions();
   const tabWidth = WINDOW_WIDTH - scale(48);
 
@@ -101,7 +106,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const resetState = () => {
     setSearchValue('');
     setSelectedAddresses([]);
-    setScrollViewIdx('watchlist');
+    setScrollViewIdx('topHolders');
     scrollRef.current?.scrollTo({ x: 0, animated: false });
   };
 
@@ -140,8 +145,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           {selectionStarted && (
             <Row>
               <CheckBox
-                fillColor={COLORS.blue500}
-                color={COLORS.white}
+                fillColor={COLORS.brand500}
+                color={COLORS.neutral0}
                 type="square"
                 value={selected}
               />
@@ -149,7 +154,11 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             </Row>
           )}
           <View style={{ flex: 1 }}>
-            <WalletItem item={item} indicatorVisible={true} />
+            <ExplorerWalletItem
+              item={item}
+              indicatorVisible={true}
+              totalSupply={6500000000}
+            />
           </View>
         </Row>
       </Button>
@@ -186,9 +195,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       }, 500);
     } else if (!scanned.current) {
       scanned.current = true;
-      Alert.alert('Invalid QR code', '', [
+      Alert.alert(t('alert.invalid.qr.code.msg'), '', [
         {
-          text: 'Scan again',
+          text: t('alert.scan.again.msg'),
           onPress: () => {
             scanned.current = false;
           }
@@ -205,34 +214,46 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const clearSearch = () => {
     setSearchValue('');
-    setScrollViewIdx('watchlist');
+    setScrollViewIdx('topHolders');
   };
 
   return (
     <BottomSheet
       ref={localRef}
-      height={Dimensions.get('window').height * 0.85}
+      height={'100%'}
       avoidKeyboard={false}
-      swiperIconVisible={true}
-      containerStyle={{
-        paddingHorizontal: scale(24)
-      }}
+      containerStyle={
+        {
+          // paddingHorizontal: scale(24)
+        }
+      }
+      borderRadius={0}
       onClose={resetState}
     >
       <View
-        style={{ alignItems: 'center' }}
+        // style={{ alignItems: 'center' }}
         testID="bottom-sheet-add-new-address"
       >
-        <Spacer value={verticalScale(24)} />
-        <Text
-          fontFamily="Inter_700Bold"
-          fontSize={18}
-          color={COLORS.nero}
-        >{`Add address to ${StringUtils.formatAddress(
-          collection.name,
-          10,
-          0
-        )}`}</Text>
+        <Spacer value={top} />
+        <Header
+          backIconVisible={false}
+          contentLeft={
+            <Button onPress={localRef.current?.dismiss}>
+              <CloseIcon />
+            </Button>
+          }
+          title={
+            <Text
+              style={{ marginLeft: scale(24) }}
+              fontFamily="Inter_700Bold"
+              fontSize={18}
+              numberOfLines={1}
+              color={COLORS.neutral800}
+            >{`${t('address.add.to.selected.group', {
+              selectedGroup: collection.name
+            })}`}</Text>
+          }
+        />
       </View>
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
@@ -256,7 +277,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }
           type="text"
           style={{ width: '65%', height: 50 }}
-          placeholder="Search public address"
+          placeholder={t('collection.search.public.address.placeholder')}
           placeholderTextColor="#2f2b4399"
           value={searchValue}
           onChangeText={setSearchValue}
@@ -270,120 +291,117 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      {!!searchValue ? (
-        <View style={{ flex: 1 }}>
-          {searchLoading && <Spinner />}
-          {Boolean(searchError) && <SearchAddressNoResult />}
-          {searchedAccount && (
-            <View>
-              <Button
-                onPress={() => {
-                  handleItemPress(searchedAccount);
-                }}
-                style={styles.item}
-              >
-                <WalletItem item={searchedAccount} indicatorVisible={true} />
-              </Button>
-            </View>
-          )}
-        </View>
-      ) : (
-        <>
-          <SegmentedPicker
-            disabled={selectionStarted}
-            segments={AddressSources}
-            selectedSegment={scrollViewIdx}
-            onSelectSegment={onSelectSegment}
-            styles={{
-              container: {
-                paddingVertical: verticalScale(2),
-                borderRadius: moderateScale(8)
-              },
-              segment: {
-                selected: {
-                  borderRadius: moderateScale(8),
-                  paddingVertical: verticalScale(6)
+      <View style={{ paddingHorizontal: scale(24), flex: 1 }}>
+        {!!searchValue ? (
+          <View style={{ flex: 1 }}>
+            {searchLoading && <Spinner />}
+            {Boolean(searchError) && <SearchAddressNoResult />}
+            {searchedAccount && (
+              <View>
+                <Button
+                  onPress={() => {
+                    handleItemPress(searchedAccount);
+                  }}
+                  style={styles.item}
+                >
+                  <WalletItem item={searchedAccount} indicatorVisible={true} />
+                </Button>
+              </View>
+            )}
+          </View>
+        ) : (
+          <>
+            <SegmentedPicker
+              disabled={selectionStarted}
+              segments={AddressSources}
+              selectedSegment={scrollViewIdx}
+              onSelectSegment={onSelectSegment}
+              styles={{
+                container: {
+                  paddingVertical: verticalScale(2),
+                  borderRadius: moderateScale(8)
                 },
-                unselected: {
-                  paddingVertical: verticalScale(6)
-                }
-              },
-              segmentText: {
-                selected: {
-                  color: COLORS.neutral800
+                segment: {
+                  selected: {
+                    borderRadius: moderateScale(8),
+                    paddingVertical: verticalScale(6)
+                  },
+                  unselected: {
+                    paddingVertical: verticalScale(6)
+                  }
                 },
-                unselected: {
-                  color: COLORS.neutral800
+                segmentText: {
+                  selected: {
+                    color: COLORS.neutral800
+                  },
+                  unselected: {
+                    color: COLORS.neutral800
+                  }
                 }
-              }
+              }}
+            />
+            <Spacer value={verticalScale(24)} />
+            <ScrollView
+              ref={scrollRef}
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              pagingEnabled
+              scrollEnabled={false}
+            >
+              <View style={{ width: tabWidth }}>
+                <FlatList
+                  contentContainerStyle={{
+                    paddingBottom: 150
+                  }}
+                  data={topHolders}
+                  renderItem={renderItem}
+                  showsVerticalScrollIndicator={false}
+                  onEndReachedThreshold={0.75}
+                  onEndReached={loadMoreTopHolders}
+                  ListFooterComponent={() =>
+                    topHoldersLoading ? <Spinner /> : <></>
+                  }
+                />
+              </View>
+              <View style={{ width: tabWidth }}>
+                <FlatList
+                  contentContainerStyle={{
+                    paddingBottom: 150
+                  }}
+                  data={watchlist}
+                  renderItem={renderItem}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
+            </ScrollView>
+          </>
+        )}
+        {selectionStarted && (
+          <PrimaryButton
+            onPress={submitSelectedAddresses}
+            style={{
+              position: 'absolute',
+              bottom: verticalScale(32),
+              alignSelf: 'center'
             }}
-          />
-          <Spacer value={verticalScale(24)} />
-          <ScrollView
-            ref={scrollRef}
-            contentContainerStyle={{ flexGrow: 1 }}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            pagingEnabled
-            scrollEnabled={false}
           >
-            <View style={{ width: tabWidth }}>
-              <FlatList
-                contentContainerStyle={{
-                  paddingBottom: 150
-                }}
-                data={watchlist}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
-            <View style={{ width: tabWidth }}>
-              <FlatList
-                contentContainerStyle={{
-                  paddingBottom: 150
-                }}
-                data={topHolders}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                onEndReachedThreshold={0.75}
-                onEndReached={loadMoreTopHolders}
-                ListFooterComponent={() =>
-                  topHoldersLoading ? <Spinner /> : <></>
+            <Text
+              color={COLORS.neutral0}
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              fontWeight="600"
+            >
+              {`${t(selectingAddedItems ? 'button.remove' : 'button.add')} ${t(
+                'common.address',
+                {
+                  count: selectedAddresses.length
                 }
-              />
-            </View>
-          </ScrollView>
-        </>
-      )}
-      {selectionStarted && (
-        <PrimaryButton
-          onPress={submitSelectedAddresses}
-          style={{
-            position: 'absolute',
-            bottom: verticalScale(32),
-            alignSelf: 'center'
-          }}
-        >
-          <Text
-            color={COLORS.white}
-            fontSize={16}
-            fontFamily="Inter_600SemiBold"
-            fontWeight="600"
-          >
-            {selectingAddedItems
-              ? `Remove ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  'Address',
-                  'Addresses'
-                )}`
-              : `Add ${StringUtils.pluralize(
-                  selectedAddresses.length,
-                  'Address',
-                  'Addresses'
-                )}`}
-          </Text>
-        </PrimaryButton>
-      )}
+              )}`}
+            </Text>
+          </PrimaryButton>
+        )}
+      </View>
     </BottomSheet>
   );
 });

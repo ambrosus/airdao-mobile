@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { AddressIndicator } from '@components/templates';
+import { useTranslation } from 'react-i18next';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
@@ -23,8 +24,9 @@ export const ExplorerWalletItem = (
   const { address, transactionCount, ambBalance } = item;
   const { listsOfAddressGroup } = useLists((v) => v);
   const { watchlist } = useWatchlist();
+  const { t } = useTranslation();
   const listWithAddress = listsOfAddressGroup.filter(
-    (list) => list.accounts.indexOfItem(item, 'address') > -1
+    (list) => list.accounts?.indexOfItem(item, 'address') > -1
   );
   const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
 
@@ -46,7 +48,7 @@ export const ExplorerWalletItem = (
           <Text
             fontSize={14}
             fontFamily="Inter_500Medium"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
             {StringUtils.formatAddress(address, leftPadding, rightPadding)}
           </Text>
@@ -60,7 +62,7 @@ export const ExplorerWalletItem = (
         <Text
           fontSize={13}
           fontFamily="Mersad_600SemiBold"
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {NumberUtils.formatNumber(ambBalance, 0)} AMB
         </Text>
@@ -69,22 +71,24 @@ export const ExplorerWalletItem = (
       <Row alignItems="center" justifyContent="space-between">
         <Text
           fontSize={12}
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
           fontFamily="Inter_500Medium"
         >
-          Holding{' '}
-          {NumberUtils.formatNumber(
-            item.calculatePercentHoldings(totalSupply),
-            2
-          )}
-          % of supply
+          {t('explore.single.address.holding', {
+            share: NumberUtils.formatNumber(
+              // item.calculatePercentHoldings(totalSupply),
+              (item.ambBalance / totalSupply) * 100,
+              2
+            )
+          })}
         </Text>
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
         >
-          {StringUtils.pluralize(transactionCount, 'Transaction')}
+          {transactionCount}{' '}
+          {t('common.transaction', { count: transactionCount })}
         </Text>
       </Row>
     </View>

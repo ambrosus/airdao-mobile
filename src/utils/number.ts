@@ -22,8 +22,26 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
   return formattedString + strAmount.substring(startingIdx + 1);
 };
 
+// limits the number of decimal places of a number in the format of e.g 245.82
+const limitDecimalCount = (
+  number: string | number,
+  decimalPlaces: number
+): string => {
+  let str = number.toString();
+  const parts = str.split('.');
+  if (str.includes('.') && parts[1] && parts[1].length > decimalPlaces) {
+    if (decimalPlaces === 0) str = parts[0];
+    else if (parts[1].length > decimalPlaces) {
+      parts[1] = parts[1].substring(0, decimalPlaces);
+      str = parts.join('.');
+    }
+  }
+  return str;
+};
+
 const addSignToNumber = (num: number): string => {
-  return (num > 0 ? '+' : '-') + num;
+  const shouldAddMinus = num.toString() && num.toString()[0] !== '-';
+  return (num > 0 ? '+' : shouldAddMinus ? '-' : '') + num;
 };
 
 const abbreviateNumber = (num: number): string => {
@@ -51,4 +69,9 @@ const abbreviateNumber = (num: number): string => {
   return newValue;
 };
 
-export const NumberUtils = { formatNumber, addSignToNumber, abbreviateNumber };
+export const NumberUtils = {
+  formatNumber,
+  addSignToNumber,
+  abbreviateNumber,
+  limitDecimalCount
+};

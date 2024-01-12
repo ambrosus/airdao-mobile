@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { CircularCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
 import { moderateScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
   const {
@@ -41,7 +42,7 @@ export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
           borderRadius: moderateScale(innerCircleSize / 2),
           width: moderateScale(innerCircleSize),
           height: moderateScale(innerCircleSize),
-          backgroundColor: value ? '#FFFFFF' : 'transparent'
+          backgroundColor: value ? COLORS.neutral0 : 'transparent'
         }}
       />
     </Button>

@@ -5,6 +5,7 @@ import { Header } from '@components/composite';
 import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { moderateScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 interface NotificationsHeaderProps {
   onSettingsPress: () => unknown;
@@ -14,6 +15,7 @@ export const NotificationsHeader = (
   props: NotificationsHeaderProps
 ): JSX.Element => {
   const { onSettingsPress = () => null } = props;
+  const { t } = useTranslation();
 
   const renderContentRight = () => {
     return (
@@ -25,7 +27,7 @@ export const NotificationsHeader = (
           testID="settings-button"
           style={styles.settingsBtn}
         >
-          <SettingsFilledIcon color={COLORS.smokyBlack} scale={1.1} />
+          <SettingsFilledIcon color={COLORS.neutral900} scale={1.1} />
         </Button>
       </Row>
     );
@@ -33,9 +35,10 @@ export const NotificationsHeader = (
   return (
     <Header
       titleStyle={styles.headerTitle}
-      title="Notifications"
+      title={t('tab.notifications')}
       titlePosition="left"
       contentRight={renderContentRight()}
+      style={{ shadowColor: COLORS.transparent }}
     />
   );
 };
@@ -44,10 +47,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
-    color: COLORS.smokyBlack
+    color: COLORS.neutral900
   },
   settingsBtn: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     height: moderateScale(40),
     width: moderateScale(40)
   }

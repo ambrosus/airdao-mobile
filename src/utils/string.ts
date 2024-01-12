@@ -34,4 +34,42 @@ const pluralize = (count: number, str: string, pluralForm?: string): string => {
   return count + ' ' + finalForm;
 };
 
-export const StringUtils = { formatAddress, pluralize };
+const removeNonNumericCharacters = (str: string, allowDot = true): string => {
+  if (!str) return '';
+  if (allowDot) return str.replace(/[^.\d]+/g, '');
+  return str.replace(/[^\d]+/g, '');
+};
+
+const removeNonAlphabeticCharacters = (str: string): string => {
+  if (!str) return '';
+  return str.replace(/[^a-zA-Z]+/g, '');
+};
+
+const formatNumberInput = (str: string): string => {
+  const dottedStr = str.replaceAll(',', '.');
+  let numericChars = removeNonNumericCharacters(dottedStr);
+  if (numericChars[0] === '.') numericChars = '0' + numericChars;
+  return _removeExtraDots(numericChars);
+};
+
+function _removeExtraDots(str: string): string {
+  let firstDotFound = false;
+  return str
+    .split('')
+    .filter((char) => {
+      if (char === '.' && !firstDotFound) {
+        firstDotFound = true;
+        return true;
+      }
+      return char !== '.';
+    })
+    .join('');
+}
+
+export const StringUtils = {
+  formatAddress,
+  pluralize,
+  removeNonNumericCharacters,
+  removeNonAlphabeticCharacters,
+  formatNumberInput
+};

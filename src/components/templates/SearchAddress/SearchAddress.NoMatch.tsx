@@ -4,29 +4,31 @@ import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, verticalScale } from '@utils/scaling';
 import { NoMatch } from '@components/svg/icons/NoMatch';
+import { useTranslation } from 'react-i18next';
 
 export function SearchAddressNoResult(): JSX.Element {
+  const { t } = useTranslation();
   return (
     <View style={styles.error}>
       <NoMatch />
       <Spacer value={verticalScale(24)} />
       <Text
-        color={COLORS.davysGray}
+        color={COLORS.neutral500}
         fontSize={16}
         fontWeight="600"
         fontFamily="Inter_600SemiBold"
       >
-        Oops! No matches found
+        {t('explore.search.no.matches')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
         fontWeight="400"
         fontSize={16}
         align="center"
-        color={COLORS.davysGray}
+        color={COLORS.neutral500}
         fontFamily="Inter_400Regular"
       >
-        Please check for any typos or try a different address
+        {t('explore.search.check.typos')}
       </Text>
     </View>
   );

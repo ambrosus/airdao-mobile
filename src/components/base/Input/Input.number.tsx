@@ -1,19 +1,27 @@
 import React from 'react';
 import { InputProps, InputRef } from './Input.types';
 import { TextInput } from './Input.text';
+import { COLORS } from '@constants/colors';
+import { StringUtils } from '@utils/string';
 
 export const NumberInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {
     const { value, style = {}, onChangeValue, ...restProps } = props;
-    const styles = [{ color: '#000000', padding: 0 }, style];
+    const styles = [{ color: COLORS.black, padding: 0 }, style];
+
+    const onChangeText = (text: string) => {
+      if (typeof onChangeValue === 'function') {
+        onChangeValue(StringUtils.formatNumberInput(text));
+      }
+    };
 
     return (
       <TextInput
         ref={ref}
         value={value}
-        onChangeText={onChangeValue}
+        onChangeText={onChangeText}
         style={styles}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         {...restProps}
       />
     );

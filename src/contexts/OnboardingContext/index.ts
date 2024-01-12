@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { createContextSelector } from '@helpers/createContextSelector';
 import { OnboardingContent } from '@constants/onboarding-content';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 
 const OnboardingContext = () => {
   const [, setStatus] = useState<number>(-1);

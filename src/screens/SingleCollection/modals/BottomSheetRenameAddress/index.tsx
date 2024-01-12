@@ -8,6 +8,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -21,6 +22,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
       address || ''
     );
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+    const { t } = useTranslation();
 
     return (
       <BottomSheetFloat
@@ -33,16 +35,16 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
-            color={COLORS.nero}
+            color={COLORS.neutral800}
           >
-            Rename address
+            {t('address.rename')}
           </Text>
         </View>
         <Input
           value={localAddressName}
           onChangeValue={(value) => setLocalAddressName(value)}
           type="text"
-          placeholder="Edit name"
+          placeholder={t('address.edit.name')}
           placeholderTextColor={COLORS.neutral900Alpha[60]}
           style={[styles.bottomSheetInput]}
         />
@@ -56,9 +58,9 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
             <Text
               fontFamily="Inter_600SemiBold"
               fontSize={16}
-              color={COLORS.white}
+              color={COLORS.neutral0}
             >
-              Save
+              {t('button.save')}
             </Text>
           </PrimaryButton>
           <Spacer value={24} />
@@ -69,10 +71,10 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           >
             <Text
               fontFamily="Inter_600SemiBold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
               fontSize={16}
             >
-              Cancel
+              {t('button.cancel')}
             </Text>
           </Button>
         </View>

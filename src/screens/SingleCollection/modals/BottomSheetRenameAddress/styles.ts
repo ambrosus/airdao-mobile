@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.silver
   },
   bottomSheetCreateRenameButton: {
-    backgroundColor: COLORS.grey,
+    backgroundColor: COLORS.gray500,
     marginHorizontal: 18,
     paddingVertical: 16,
     borderRadius: 25,
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   cancelButton: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: COLORS.alphaBlack5,
     paddingVertical: 12,
     borderRadius: 25,
     alignItems: 'center'

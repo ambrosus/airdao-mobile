@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
-import { useAllAddresses } from '@contexts';
+import { useAllAddresses } from '@contexts/AllAddresses';
 import { useLists } from '@contexts/ListsContext';
 import { useAppState } from './useAppState';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { CacheableAccountList } from '@appTypes/CacheableAccountList';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
 import { ExplorerAccount } from '@models/Explorer';
@@ -10,7 +10,7 @@ import { ExplorerAccount } from '@models/Explorer';
 export const useCachePurifier = () => {
   const allAddresses = useAllAddresses();
   const { listsOfAddressGroup } = useLists((v) => v);
-  const appstate = useAppState();
+  const { appState } = useAppState();
 
   const purifyAccounts = useCallback(async () => {
     // set lists
@@ -26,7 +26,6 @@ export const useCachePurifier = () => {
     const knownAddresses: CacheableAccount[] = allAddresses
       .filter((account) => account.isOnWatchlist)
       .map((account) => ExplorerAccount.toCacheable(account));
-
     // add accounts from groups
     for (const list of listsOfAddressGroup) {
       for (const account of list.accounts) {
@@ -43,10 +42,10 @@ export const useCachePurifier = () => {
   }, [purifyAccounts]);
 
   useEffect(() => {
-    if (appstate.match(/inactive|background/)) {
+    if (appState.match(/inactive|background/)) {
       purifyCache();
     }
-  }, [appstate, purifyCache]);
+  }, [appState, purifyCache]);
 
   return null;
 };

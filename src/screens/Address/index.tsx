@@ -20,17 +20,19 @@ import {
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { Toast, ToastPosition } from '@components/modular';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
+import { useTranslation } from 'react-i18next';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Address'>>();
   const { address } = params;
   const initialMount = useRef(true);
+  const { t } = useTranslation();
   const {
     data: account,
     loading: accountLoading,
@@ -74,7 +76,7 @@ export const AddressDetails = (): JSX.Element => {
       <SafeAreaView edges={['top']} style={styles.container}>
         <Header />
         <View style={styles.center}>
-          <Text>Error Occurred</Text>
+          <Text>{t('error.loading.account')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -97,9 +99,17 @@ export const AddressDetails = (): JSX.Element => {
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
     const toastMessage = isOnWatchlist
-      ? `${finalAccount.name || 'The address'} is now on your Watchlists!`
-      : `You removed ${finalAccount.name || 'the address'} from Watchlists!`;
-    Toast.show({ message: toastMessage, type: ToastPosition.Top, title: '' });
+      ? `${t('toast.you.added.address.to.watchlist', {
+          name: finalAccount.name || t('common.address').toUpperCase()
+        })}`
+      : `${t('toast.you.removed.address.from.watchlist', {
+          name: finalAccount.name
+        })}`;
+    Toast.show({
+      text: toastMessage,
+      position: ToastPosition.Top,
+      type: ToastType.Success
+    });
   };
 
   return (
@@ -117,20 +127,24 @@ export const AddressDetails = (): JSX.Element => {
             {/*  onPress={shareShareModal}*/}
             {/*  testID="Share_Button"*/}
             {/*>*/}
-            {/*  <ShareIcon color={COLORS.smokyBlack} scale={1.1} />*/}
+            {/*  <ShareIcon color={COLORS.neutral900} scale={1.1} />*/}
             {/*</Button>*/}
-            <Spacer value={scale(32)} horizontal />
-            <Button
-              style={styles.headerBtn}
-              type="circular"
-              onPress={showEditModal}
-              testID="Edit_Button"
-            >
-              {Platform.select({
-                ios: <EditIcon color={COLORS.smokyBlack} scale={1.1} />,
-                android: <OptionsIcon color={COLORS.smokyBlack} />
-              })}
-            </Button>
+            {Boolean(walletInWatchlist) && (
+              <>
+                <Spacer value={scale(32)} horizontal />
+                <Button
+                  style={styles.headerBtn}
+                  type="circular"
+                  onPress={showEditModal}
+                  testID="Edit_Button"
+                >
+                  {Platform.select({
+                    ios: <EditIcon color={COLORS.neutral900} scale={1.1} />,
+                    android: <OptionsIcon color={COLORS.neutral900} />
+                  })}
+                </Button>
+              </>
+            )}
           </Row>
         }
       />
@@ -142,6 +156,17 @@ export const AddressDetails = (): JSX.Element => {
       <Spacer value={verticalScale(16)} />
       <View style={styles.divider} />
       <Spacer value={verticalScale(16)} />
+      <Row alignItems="center">
+        <Spacer horizontal value={scale(16)} />
+        <Text
+          fontFamily="Inter_700Bold"
+          fontSize={20}
+          color={COLORS.neutral800}
+        >
+          {t('common.transactions')}
+        </Text>
+      </Row>
+      <Spacer value={verticalScale(12)} />
       <AccountTransactions
         transactions={transactions}
         onEndReached={loadMoreTransactions}
@@ -151,8 +176,7 @@ export const AddressDetails = (): JSX.Element => {
       <SharePortfolio
         ref={shareModal}
         title={StringUtils.formatAddress(finalAccount.address, 7, 4)}
-        bottomSheetTitle="Share address performance"
-        // balance={NumberUtils.abbreviateNumber(finalAccount.ambBalance)}
+        bottomSheetTitle={t('address.share.performance')}
         balance={
           finalAccount.ambBalance < 1000
             ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)

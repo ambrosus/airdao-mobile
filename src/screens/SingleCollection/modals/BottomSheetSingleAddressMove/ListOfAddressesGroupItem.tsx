@@ -38,7 +38,7 @@ export const ListOfAddressesGroupItem = ({
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={17}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           style={styles.itemTitle}
         >
           {item.name}
@@ -60,7 +60,7 @@ export const ListOfAddressesGroupItem = ({
         }}
         type="square"
         fillColor={COLORS.sapphireBlue}
-        color={COLORS.white}
+        color={COLORS.neutral0}
         value={idsOfSelectedGroups.includes(item.id)}
       />
     </View>

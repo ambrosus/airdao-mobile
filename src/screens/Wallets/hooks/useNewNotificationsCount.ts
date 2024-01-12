@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { DeviceEventEmitter } from 'react-native';
 import { useNotificationsQuery } from '@hooks';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import useAppFocus from '@hooks/useAppFocused';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventType } from '@appTypes';
+import { AirDAOEventDispatcher } from '@lib';
 
 export function useNewNotificationsCount(): number {
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
@@ -12,7 +12,7 @@ export function useNewNotificationsCount(): number {
 
   const checkNewNotificationCount = async () => {
     // refetch data
-    await refetch();
+    if (typeof refetch === 'function') refetch();
     const res =
       ((await Cache.getItem(CacheKey.LastNotificationTimestamp)) as number) ||
       0;
@@ -28,11 +28,11 @@ export function useNewNotificationsCount(): number {
   }, [focused, notifications]);
 
   useEffect(() => {
-    const notificationListener = DeviceEventEmitter.addListener(
-      EVENTS.NotificationReceived,
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
       checkNewNotificationCount
     );
-    return () => notificationListener.remove();
+    return () => notificationListenter.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

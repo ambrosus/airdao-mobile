@@ -1,24 +1,23 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
 import { IconProps } from './Icon.types';
-import { COLORS } from '@constants/colors';
+import { Path, Svg } from 'react-native-svg';
 
-export function CheckmarkCircleIcon(props: IconProps) {
-  const { scale = 1, color = COLORS.deepBlue } = props;
-  const width = 20,
-    height = 20;
+export const CheckmarkCircleIcon = (props: IconProps): JSX.Element => {
+  const { scale = 1, color = '#2DBA8D' } = props;
+  const width = 88;
+  const height = 88;
+
   return (
     <Svg
-      width={width}
-      height={height}
-      fill="none"
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: [{ scale }] }}
+      fill="none"
     >
       <Path
-        d="M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0zm3.22 6.97l-4.47 4.47-1.97-1.97a.75.75 0 00-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l5-5a.75.75 0 00-1.06-1.06z"
+        d="M44 7.333C64.25 7.333 80.667 23.75 80.667 44S64.25 80.667 44 80.667C23.75 80.667 7.333 64.25 7.333 44 7.333 23.75 23.75 7.333 44 7.333zm0 4.584C26.28 11.917 11.917 26.28 11.917 44c0 17.72 14.364 32.083 32.083 32.083 17.72 0 32.083-14.364 32.083-32.083 0-17.72-14.364-32.083-32.083-32.083zm15.829 20.38a2.292 2.292 0 010 3.24L39.662 55.704a2.292 2.292 0 01-3.24 0l-8.25-8.25a2.292 2.292 0 113.24-3.241l6.63 6.63 18.546-18.547a2.292 2.292 0 013.24 0z"
         fill={color}
       />
     </Svg>
   );
-}
+};

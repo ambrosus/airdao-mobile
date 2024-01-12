@@ -1,6 +1,7 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
+import { useTranslation } from 'react-i18next';
 import { BottomSheetFloat } from '@components/modular';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks/useForwardedRef';
@@ -26,6 +27,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
     const { bottomSheetTitle, ...portfolioBalanceProps } = props;
     const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
     const shareRef = useRef<View>(null);
+    const { t } = useTranslation();
 
     const onSharePress = async (type?: Social) => {
       const captureOptions: CaptureOptions = {
@@ -64,7 +66,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
             <Text
               fontSize={20}
               fontFamily="Inter_700Bold"
-              color={COLORS.smokyBlack}
+              color={COLORS.neutral900}
             >
               {bottomSheetTitle}
             </Text>
@@ -86,7 +88,7 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.twitterBtn}
                   onPress={async () => onSharePress(Social.Twitter)}
                 >
-                  <TwitterIcon color="#FFFFFF" />
+                  <TwitterIcon color={COLORS.neutral0} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
                 <Text>Twitter</Text>
@@ -100,10 +102,10 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.messagesBtn}
                   onPress={() => onSharePress(Social.Sms)}
                 >
-                  <MessagesIcon color="#FFFFFF" />
+                  <MessagesIcon color={COLORS.neutral0} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
-                <Text>Messages</Text>
+                <Text>{t('common.messages')}</Text>
               </View>
               <View style={styles.shareButton}>
                 <Button
@@ -112,10 +114,10 @@ export const SharePortfolio = forwardRef<BottomSheetRef, SharePortfolioProps>(
                   style={styles.lightBtn}
                   onPress={() => onSharePress()}
                 >
-                  <PlusIcon color="#222222" />
+                  <PlusIcon color={COLORS.gray800} />
                 </Button>
                 <Spacer value={verticalScale(8)} />
-                <Text>More</Text>
+                <Text>{t('common.more')}</Text>
               </View>
             </Row>
           </View>

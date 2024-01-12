@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState
@@ -10,9 +11,11 @@ import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { Separator } from '@components/base';
-import { useFullscreenModalHeight } from '@hooks';
+import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
+import { AirDAOEventDispatcher } from '@lib';
+import { AirDAOEventType } from '@appTypes';
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -26,13 +29,26 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       fullscreen = false,
       swiperIconVisible = false,
       onClose,
-      testID
+      testID,
+      swipingEnabled = true,
+      closeOnBackPress = true
     },
     ref
   ) => {
     const [isVisible, setIsVisible] = useState(false);
     const fullscreenModalHeight = useFullscreenModalHeight();
     const keyboardHeight = useKeyboardHeight();
+
+    useEffect(() => {
+      const dismissListener = AirDAOEventDispatcher.subscribe(
+        AirDAOEventType.CloseAllModals,
+        () => setIsVisible(false)
+      );
+
+      return () => {
+        dismissListener.unsubscribe();
+      };
+    }, []);
 
     const show = useCallback(() => {
       setIsVisible(true);
@@ -63,7 +79,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
                     ? 0
                     : keyboardHeight)
                 : height,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: COLORS.neutral0,
               borderTopRightRadius: borderRadius,
               borderTopLeftRadius: borderRadius
             },
@@ -73,7 +89,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         >
           {swiperIconVisible && (
             <View style={styles.swiper}>
-              <Separator height={4} color={COLORS.lavenderGray} />
+              <Separator height={4} color={COLORS.neutral200} />
             </View>
           )}
           {children}
@@ -100,11 +116,11 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
         onDismiss={dismiss}
-        swipeDirection={['down']}
+        swipeDirection={swipingEnabled ? ['down'] : []}
         onSwipeComplete={dismiss}
         useNativeDriverForBackdrop
         propagateSwipe
-        onBackButtonPress={dismiss}
+        onBackButtonPress={() => (closeOnBackPress ? dismiss() : null)}
         onBackdropPress={dismiss}
         backdropOpacity={backdropOpacity}
         style={styles.container}

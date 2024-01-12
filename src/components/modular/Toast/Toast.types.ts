@@ -3,11 +3,25 @@ export enum ToastPosition {
   Bottom = 'bottom'
 }
 
+export enum ToastType {
+  Highlight,
+  Failed,
+  Success,
+  Information,
+  Loading
+}
+
+export interface ToastAction {
+  label: string;
+  onPress: () => unknown;
+}
+
 export interface ToastOptions {
-  title?: string;
-  message: string;
+  text: string;
+  subtext?: string;
+  actions?: ToastAction[];
   duration?: number;
-  type: ToastPosition;
-  onUndo?: () => void;
-  onBodyPress?: () => void;
+  type: ToastType;
+  position?: ToastPosition;
+  onBodyPress?: () => unknown;
 }

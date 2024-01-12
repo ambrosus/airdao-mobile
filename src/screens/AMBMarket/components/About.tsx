@@ -4,11 +4,13 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
   BrowserIcon,
+  DiscordIcon,
   GitHubIcon,
   TelegramIcon,
   TwitterIcon
 } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 interface Link {
   title: string;
@@ -32,11 +34,11 @@ const SOCIAL_LINKS: Link[] = [
     url: 'https://twitter.com/airdao_io/',
     icon: <TwitterIcon />
   },
-  // {
-  //   title: 'Discord',
-  //   url: 'https://discord.gg/hnftmSjUr8',
-  //   icon: <DiscordIcon />
-  // },
+  {
+    title: 'Discord',
+    url: 'https://discord.com/invite/airdao',
+    icon: <DiscordIcon />
+  },
   {
     title: 'Telegram',
     url: 'https://t.me/airDAO_official',
@@ -65,7 +67,7 @@ const LinkButton = ({
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.raisinBlack}
+          color={COLORS.neutral700}
         >
           {title}
         </Text>
@@ -75,13 +77,15 @@ const LinkButton = ({
 };
 
 export function AMBAbout(): JSX.Element {
+  const { t } = useTranslation();
   return (
     <View>
-      <Text fontSize={12} fontFamily="Inter_500Medium" color={COLORS.slateGrey}>
-        AirDAO is a community-governed layer one blockchain and ecosystem of
-        web3 dApps, powered by its native token, AMB. AirDAO brings the benefits
-        of Web3 to a global audience with a suite of powerful DeFi products in
-        an intuitive, all-in-one interface.
+      <Text
+        fontSize={14}
+        fontFamily="Inter_500Medium"
+        color={COLORS.neutral400}
+      >
+        {t('amb.market.statistics.text')}
       </Text>
       <Spacer value={verticalScale(16)} />
       <Row alignItems="center" style={styles.socialButtons}>
@@ -95,7 +99,7 @@ export function AMBAbout(): JSX.Element {
 
 const styles = StyleSheet.create({
   linkBtn: {
-    backgroundColor: COLORS.smokyBlack5,
+    backgroundColor: COLORS.alphaBlack5,
     paddingHorizontal: scale(10),
     paddingVertical: verticalScale(4),
     gap: 10

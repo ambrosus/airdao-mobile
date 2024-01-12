@@ -6,6 +6,7 @@ import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { AccountList } from '@models';
 import { NumberUtils } from '@utils/number';
+import { useTranslation } from 'react-i18next';
 
 interface CollectionItemProps {
   collection: AccountList;
@@ -15,6 +16,7 @@ interface CollectionItemProps {
 export function CollectionItem(props: CollectionItemProps) {
   const { collection, style } = props;
   const { data: ambPriceData } = useAMBPrice();
+  const { t } = useTranslation();
 
   const tokensFormatted = useMemo(() => {
     const formattedNumber = NumberUtils.formatNumber(
@@ -32,7 +34,7 @@ export function CollectionItem(props: CollectionItemProps) {
         <Text
           fontFamily="Inter_500Medium"
           fontSize={14}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
           style={{ width: '70%' }}
           numberOfLines={1}
         >
@@ -41,7 +43,7 @@ export function CollectionItem(props: CollectionItemProps) {
         <Text
           fontFamily="Mersad_600SemiBold"
           fontSize={13}
-          color={COLORS.smokyBlack}
+          color={COLORS.neutral900}
         >
           {tokensFormatted}
         </Text>
@@ -50,10 +52,11 @@ export function CollectionItem(props: CollectionItemProps) {
       <Row justifyContent="space-between">
         <Text
           fontFamily="Inter_500Medium"
-          color={COLORS.smokyBlack50}
+          color={COLORS.alphaBlack50}
           fontSize={12}
         >
-          {collection.accountCount + ' addresses'}
+          {' '}
+          {t('common.address.with.count', { count: collection.accountCount })}
         </Text>
         {collection.accountCount > 0 && (
           <Row alignItems="center">

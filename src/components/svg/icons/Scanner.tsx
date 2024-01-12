@@ -8,8 +8,8 @@ export function ScannerIcon(props: IconProps) {
     height = 28;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       fill="none"
       viewBox={`0 0 ${width} ${height}`}
       style={{ transform: [{ scale }] }}

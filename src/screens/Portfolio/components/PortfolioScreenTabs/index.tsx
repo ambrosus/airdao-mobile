@@ -9,7 +9,6 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { AddIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
@@ -19,6 +18,7 @@ import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates';
 import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -31,6 +31,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
+  const { t } = useTranslation();
 
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
   const handleOnOpenCreateNewList = useCallback(() => {
@@ -91,10 +92,11 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         <Row justifyContent="space-between" alignItems="center">
           <Text
             fontFamily="Inter_700Bold"
-            fontSize={16}
-            color={COLORS.smokyBlack}
+            fontSize={24}
+            fontWeight="700"
+            color={COLORS.neutral800}
           >
-            Watchlist
+            {t('tab.watchlist')}
           </Text>
           <Button
             testID="Portfolio_Tabs_Button"
@@ -102,14 +104,15 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             style={styles.createNewListButton}
           >
             <Row>
-              <AddIcon color={COLORS.deepBlue} />
               <Spacer horizontal value={scale(6.5)} />
               <Text
                 fontFamily="Inter_500Medium"
                 fontSize={14}
-                color={COLORS.deepBlue}
+                color={COLORS.brand500}
               >
-                {props.index === 0 ? 'Add address' : 'Create group'}
+                {props.index === 0
+                  ? t('collection.add.address')
+                  : t('collection.create')}
               </Text>
             </Row>
           </Button>

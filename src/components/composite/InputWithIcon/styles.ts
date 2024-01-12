@@ -1,22 +1,21 @@
 import { Platform, StyleSheet } from 'react-native';
-import { shadow } from '@constants/shadow';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    ...shadow,
     paddingHorizontal: scale(16),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(82),
     borderWidth: 1,
-    borderColor: '#2f2b431a'
+    borderColor: COLORS.alphaBlack10
   },
   focusedStyle: {
-    borderColor: COLORS.blue300
+    borderColor: COLORS.brand300
   },
   input: {
     flex: 1,
+    borderWidth: 0,
     backgroundColor: 'transparent',
     borderRadius: moderateScale(82),
     shadowColor: 'transparent',

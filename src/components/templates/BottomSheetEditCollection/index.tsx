@@ -1,15 +1,20 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
-import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat } from '@components/modular';
+import { useTranslation } from 'react-i18next';
+import {
+  BottomSheet,
+  BottomSheetProps,
+  BottomSheetRef
+} from '@components/composite';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { useLists } from '@contexts';
 import { COLORS } from '@constants/colors';
 import { AccountList } from '@models';
+import { StringUtils } from '@utils/string';
+import { verticalScale } from '@utils/scaling';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 import { styles } from './styles';
-import { StringUtils } from '@utils/string';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {
   collection: AccountList;
@@ -25,6 +30,7 @@ export const BottomSheetEditCollection = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const { handleOnRename, handleOnDelete } = useLists((v) => v);
   const renameCollectionModalRef = useRef<BottomSheetRef>(null);
+  const { t } = useTranslation();
 
   const dismissThis = useCallback(() => {
     setTimeout(() => {
@@ -56,10 +62,11 @@ export const BottomSheetEditCollection = forwardRef<
   };
 
   return (
-    <BottomSheetFloat
+    <BottomSheet
       ref={localRef}
       swiperIconVisible
       avoidKeyboard={false}
+      containerStyle={{ minHeight: verticalScale(194) }}
       {...bottomSheetProps}
     >
       <View style={styles.content} testID="bottom-sheet-edit-collection">
@@ -72,25 +79,26 @@ export const BottomSheetEditCollection = forwardRef<
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
-            color={COLORS.smokyBlack}
+            color={COLORS.neutral900}
           >
-            Rename group
+            {t('collection.rename')}
           </Text>
         </Button>
         <Button
           type="circular"
           style={{
             ...styles.actionBtn,
-            backgroundColor: COLORS.pinkRed
+            backgroundColor: COLORS.error100
           }}
           onPress={deleteCollection}
         >
           <Text
-            color={COLORS.crimsonRed}
+            color={COLORS.error400}
             fontSize={16}
             fontFamily="Inter_600SemiBold"
           >
-            Delete {StringUtils.formatAddress(collection.name, 12, 0)}
+            {t('button.delete')}{' '}
+            {StringUtils.formatAddress(collection.name, 24, 0)}
           </Text>
         </Button>
       </View>
@@ -102,6 +110,6 @@ export const BottomSheetEditCollection = forwardRef<
         handleOnRenameGroup={renameGroup}
         ref={renameCollectionModalRef}
       />
-    </BottomSheetFloat>
+    </BottomSheet>
   );
 });

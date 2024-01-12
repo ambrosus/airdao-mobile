@@ -1,33 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { CacheableAccount } from '@appTypes/CacheableAccount';
-import { Cache, CacheKey } from '@utils/cache';
+import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { API } from '@api/api';
 import { createContextSelector } from '@helpers/createContextSelector';
-import { NotificationService } from '@lib';
-import { DeviceEventEmitter } from 'react-native';
-import { EVENTS } from '@constants/events';
+import { AirDAOEventDispatcher } from '@lib';
+import {
+  AirDAOEventType,
+  AirDAONotificationReceiveEventPayload
+} from '@appTypes';
 import { ArrayUtils } from '@utils/array';
+import { AddressUtils } from '@utils/address';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const watchlistedAccounts = allAddresses.filter(
-    (address) => address.isOnWatchlist
-  );
-  const watchlistedAccountsRef = useRef(watchlistedAccounts);
-  watchlistedAccountsRef.current = watchlistedAccounts;
-
-  useEffect(() => {
-    const onNotificationTokenRefresh = () => {
-      API.watcherService.watchAddresses(
-        watchlistedAccountsRef.current.map((account) => account.address)
-      );
-    };
-    new NotificationService(onNotificationTokenRefresh);
-  }, [allAddresses]);
 
   const addAddress = useCallback(
     (address: ExplorerAccount) => {
@@ -71,77 +58,69 @@ const AllAddressesContext = () => {
   );
 
   const reducer = useCallback(
-    (
+    async (
       action: AllAddressesAction | { type: 'set'; payload: ExplorerAccount[] }
     ) => {
+      let finalAddresses: ExplorerAccount[] = [];
       switch (action.type) {
         case 'add': {
-          setAllAddresses([...addAddress(action.payload)]);
+          finalAddresses = addAddress(action.payload);
           break;
         }
         case 'remove': {
-          setAllAddresses([...removeAddress(action.payload)]);
+          finalAddresses = removeAddress(action.payload);
           break;
         }
         case 'update': {
-          setAllAddresses([...updateAddress(action.payload)]);
+          finalAddresses = updateAddress(action.payload);
           break;
         }
         case 'add-or-update': {
-          setAllAddresses([...addOrUpdateAddress(action.payload)]);
+          finalAddresses = addOrUpdateAddress(action.payload);
           break;
         }
         case 'set': {
-          setAllAddresses(action.payload);
+          finalAddresses = action.payload;
           break;
         }
         default:
           break;
       }
+      setAllAddresses([...finalAddresses]);
     },
     [addAddress, addOrUpdateAddress, removeAddress, updateAddress]
   );
 
-  const populateAddresses = async (
-    addresses: CacheableAccount[]
-  ): Promise<ExplorerAccount[]> => {
-    return await Promise.all(
-      addresses.map(async (address) => {
-        const account = new ExplorerAccount(
-          await API.explorerService.searchAddress(address.address)
-        );
-        const newAccount = Object.assign({}, account);
-        newAccount.name = address.name;
-        newAccount.isOnWatchlist = Boolean(address.isOnWatchlist);
-        return newAccount;
-      })
-    );
-  };
-  // uncomment to clear watchlist
-  // Cache.setItem(CacheKey.AllAddresses, []);
-  // Cache.setItem(CacheKey.NotificationSettings, []);
-  // Cache.setItem(CacheKey.Watchlist, []);
-  // Cache.setItem(CacheKey.AddressLists, []);
-  // Cache.setItem(CacheKey.PersonalList, []);
-
   // fetch all addresses on mount
   const getAddresses = async () => {
     setLoading(true);
-    const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-      []) as CacheableAccount[];
-    const currentAddresses = allAddresses.map(ExplorerAccount.toCacheable);
-    const populatedAddresses = await populateAddresses(
-      ArrayUtils.mergeArrays('address', addresses, currentAddresses)
-    );
-    setAllAddresses(populatedAddresses);
-    reducer({ type: 'set', payload: populatedAddresses });
-    setLoading(false);
+    try {
+      const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
+        []) as CacheableAccount[];
+      const currentAddresses = allAddresses
+        .filter((address) => !!address)
+        .map(ExplorerAccount.toCacheable);
+      const populatedAddresses = await AddressUtils.populateAddresses(
+        ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+      );
+      setAllAddresses(populatedAddresses);
+      reducer({ type: 'set', payload: populatedAddresses });
+    } catch (error) {
+      // Alert.alert(
+      //   'Error occured while populating addresses',
+      //   JSON.stringify(error)
+      // );
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     getAddresses();
 
-    // setup notification listenet
-    const onNewNotificationReceive = async (data: any) => {
+    // setup notification listener
+    const onNewNotificationReceive = async (
+      data: AirDAONotificationReceiveEventPayload
+    ) => {
       if (data.type == 'transaction-alert') {
         const toIdx = allAddresses.findIndex(
           (address) => address.address === data.to
@@ -150,25 +129,27 @@ const AllAddressesContext = () => {
           (address) => address.address === data.from
         );
         if (toIdx > -1) {
-          const updatedSenderAddress = await populateAddresses([
+          const updatedSenderAddress = await AddressUtils.populateAddresses([
             allAddresses[toIdx]
           ]);
           reducer({ type: 'update', payload: updatedSenderAddress[0] });
         }
         if (fromIdx > -1) {
-          const updatedReceivingAddress = await populateAddresses([
+          const updatedReceivingAddress = await AddressUtils.populateAddresses([
             allAddresses[fromIdx]
           ]);
           reducer({ type: 'update', payload: updatedReceivingAddress[0] });
         }
-        // refetch();
       }
     };
-    const notificationListenter = DeviceEventEmitter.addListener(
-      EVENTS.NotificationReceived,
-      onNewNotificationReceive
+    const notificationListenter = AirDAOEventDispatcher.subscribe(
+      AirDAOEventType.NotificationReceived,
+      (payload) =>
+        onNewNotificationReceive(
+          payload as AirDAONotificationReceiveEventPayload
+        )
     );
-    return () => notificationListenter.remove();
+    return () => notificationListenter.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

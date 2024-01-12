@@ -3,12 +3,21 @@ import { InputProps } from '@components/base/Input';
 import { Input, InputRef, Row, Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { styles } from './styles';
-import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+  ViewProps
+} from 'react-native';
 
 interface InputWithIconProps extends InputProps {
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
-  focusedContainerStyle?: InputProps['focusedStyles'];
+  spacingLeft?: number;
+  spacingRight?: number;
+  containerStyle?: {
+    focused?: ViewProps['style'];
+    blurred?: ViewProps['style'];
+  };
 }
 
 export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
@@ -16,8 +25,13 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
     const {
       iconLeft,
       iconRight,
-      focusedContainerStyle = {},
       style,
+      spacingLeft = scale(16),
+      spacingRight = scale(16),
+      containerStyle = {
+        focused: {},
+        blurred: {}
+      },
       onFocus,
       onBlur,
       ...restProps
@@ -27,8 +41,9 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
       ...styles.container,
       ...(focused
         ? // eslint-disable-next-line @typescript-eslint/ban-types
-          { ...styles.focusedStyle, ...(focusedContainerStyle as {}) }
-        : {})
+          { ...styles.focusedStyle, ...(containerStyle.focused as {}) }
+        : // eslint-disable-next-line @typescript-eslint/ban-types
+          { ...(containerStyle.blurred as {}) })
     };
 
     const _onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -44,7 +59,7 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
     return (
       <Row style={containerStyles} alignItems="center">
         {iconLeft}
-        <Spacer horizontal value={scale(16)} />
+        <Spacer horizontal value={spacingLeft} />
         <Input
           ref={ref}
           style={[style, styles.input]}
@@ -52,7 +67,7 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
           onFocus={_onFocus}
           onBlur={_onBlur}
         />
-        <Spacer horizontal value={scale(16)} />
+        <Spacer horizontal value={spacingRight} />
         {iconRight}
       </Row>
     );

@@ -1,13 +1,15 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { RightArrowIcon } from '@components/svg/icons';
+import {
+  RightArrowIcon,
+  BinanceIcon,
+  ProbitIcon,
+  KucoinIcon,
+  MexcIcon
+} from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { BinanceIcon } from '@components/svg/icons/Binance';
-import { KuCoinIcon } from '@components/svg/icons/KuCoin';
-import { ProBitGlobalIcon } from '@components/svg/icons/ProBitGlobal';
-import { MEXCIcon } from '@components/svg/icons/MEXC';
 
 interface MarketItem {
   title: string;
@@ -24,17 +26,17 @@ const marketItems: MarketItem[] = [
   {
     title: 'KuCoin',
     url: 'https://www.kucoin.com/trade/AMB-USDT',
-    icon: <KuCoinIcon />
+    icon: <KucoinIcon />
   },
   {
     title: 'ProBit Global',
     url: 'https://www.probit.com/app/exchange/AMB-USDT',
-    icon: <ProBitGlobalIcon />
+    icon: <ProbitIcon />
   },
   {
     title: 'MEXC',
     url: 'https://www.mexc.com/exchange/AMB_USDT',
-    icon: <MEXCIcon />
+    icon: <MexcIcon />
   }
 ];
 
@@ -56,13 +58,13 @@ export function AMBMarket(): JSX.Element {
             <Text
               fontSize={14}
               fontFamily="Inter_600SemiBold"
-              color={COLORS.jetBlack}
+              color={COLORS.neutral800}
             >
               {item.title}
             </Text>
           </Row>
           <View style={{ transform: [{ rotate: '315deg' }] }}>
-            <RightArrowIcon color={COLORS.frenchSkyBlue} scale={1.25} />
+            <RightArrowIcon color={COLORS.brand400} scale={1.25} />
           </View>
         </Row>
       </Button>

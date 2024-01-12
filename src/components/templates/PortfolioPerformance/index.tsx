@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import { ImageBackground, View } from 'react-native';
+import { Image, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import { styles } from './styles';
 import { Badge } from '@components/base/Badge';
+import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {
   balance: string;
@@ -23,6 +24,7 @@ export interface PortfolioPerformanceProps {
 export function PortfolioPerformance(
   props: PortfolioPerformanceProps
 ): JSX.Element {
+  const { t } = useTranslation();
   const {
     balance,
     currency,
@@ -34,28 +36,23 @@ export function PortfolioPerformance(
   } = props;
 
   return (
-    <ImageBackground
-      source={require('../../../../assets/images/portfolio-perfomance.png')}
-      resizeMode="cover"
-      imageStyle={styles.container}
-      testID="Portfolio_Performance"
-    >
-      <Row alignItems="center" style={styles.innerContainer}>
-        <View style={styles.details}>
+    <View style={styles.container}>
+      <Row alignItems="center" justifyContent="space-between">
+        <View>
           {/* title */}
           <Text
-            fontSize={15}
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.white}
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral0}
           >
             {title}
           </Text>
-          {!isAMBStatisticsFlow && <Spacer value={verticalScale(4)} />}
+          {!isAMBStatisticsFlow && <Spacer value={verticalScale(6)} />}
           {/* balance */}
           <Text
-            fontSize={24}
+            fontSize={26}
             fontFamily="Mersad_600SemiBold"
-            color={COLORS.white}
+            color={COLORS.neutral0}
           >
             {currencyPosition === 'left' ? currency : ''}
             {balance}
@@ -64,18 +61,18 @@ export function PortfolioPerformance(
           {/* fee */}
           {Object.hasOwn(props, 'txFee') && (
             <>
-              <Spacer value={verticalScale(6)} />
+              <Spacer value={verticalScale(12)} />
               <Row alignItems="center">
                 <Text
                   fontSize={11}
-                  color={COLORS.white50}
+                  color={COLORS.alphaWhite50}
                   fontFamily="Inter_600SemiBold"
                 >
-                  TxFee
+                  {t('share.tx.fee')}
                 </Text>
                 <Spacer horizontal value={scale(8)} />
                 <Text
-                  color={COLORS.white}
+                  color={COLORS.neutral0}
                   fontSize={11}
                   fontFamily="Inter_600SemiBold"
                 >
@@ -91,15 +88,15 @@ export function PortfolioPerformance(
                 <Spacer value={verticalScale(8)} />
                 <Row alignItems="center">
                   <Badge
-                    color={COLORS.gray100}
+                    color={COLORS.neutral100}
                     icon={
                       <Row style={{ paddingHorizontal: 4 }}>
                         <Text
                           fontSize={12}
                           color={
                             props.last24HourChange >= 0
-                              ? COLORS.jungleGreen
-                              : COLORS.crimsonRed
+                              ? COLORS.success400
+                              : COLORS.error400
                           }
                         >
                           {`${
@@ -109,10 +106,12 @@ export function PortfolioPerformance(
                         <Spacer horizontal value={scale(4)} />
                         <Text
                           fontSize={12}
-                          color={COLORS.nero}
+                          color={COLORS.neutral800}
                           fontFamily="Inter_600SemiBold"
                         >
-                          (24hr)
+                          {'('}
+                          {t('share.24hr')}
+                          {')'}
                         </Text>
                       </Row>
                     }
@@ -121,18 +120,36 @@ export function PortfolioPerformance(
               </>
             )}
           {/* timestamp */}
-          <Spacer value={verticalScale(8)} />
+          <Spacer value={verticalScale(6)} />
           <Row alignItems="center" justifyContent="space-between">
-            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
-              {moment(timestamp).format('YYYY-MM-DD')}
+            <Text
+              fontSize={11}
+              color={COLORS.alphaWhite50}
+              fontFamily="Inter_600SemiBold"
+            >
+              {t('share.time')}
             </Text>
-            <Spacer horizontal value={scale(10)} />
-            <Text fontSize={12} fontFamily="Inter_500Medium" color="#E6E6E6">
-              {moment(timestamp).format('hh:mm A').toLowerCase()}
+            <Spacer horizontal value={scale(8)} />
+            <Text
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral100}
+            >
+              {moment(timestamp).format('MM/DD/YYYY')}
+            </Text>
+            <Spacer horizontal value={scale(8)} />
+            <Text
+              fontSize={11}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral100}
+            >
+              {moment(timestamp).format('hh:mm').toLowerCase()}
             </Text>
           </Row>
         </View>
+        <Spacer value={scale(4)} horizontal />
+        <Image source={require('@assets/images/logo-sun-like.png')} />
       </Row>
-    </ImageBackground>
+    </View>
   );
 }

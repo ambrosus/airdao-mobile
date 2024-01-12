@@ -1,5 +1,4 @@
 import { NotificationSettings } from '@appTypes/notification';
-import Config from './config';
 
 export const DefaultNotificationSettings: NotificationSettings = {
   priceAlerts: true,
@@ -37,18 +36,18 @@ export const MONTH_NAMES = [
   'December'
 ];
 
-const testEnvAddresses = [
-  '0xCF4FdE7Af51236631eab85C9DE60b7e1C0d3162E',
-  '0x7cee2ae3042D2C646Aa24FACfA92dfeE589046f0',
-  '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
-  '0xf5DcDb300Ab31F5143f380A00Ea9e8E8F1c0Ded3',
-  '0x88a31B42f05ad530EF237152Fde26d6cf0f89b0f',
-  '0x60bBa9ca40D4A5ef331b6065dC58a13c91a67B3C',
-  '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
-  '0x144D5dc1c119EC3D63ba846617E7BFefb00E268d',
-  '0xB38a013436755e0e56996f18f25946028Df8ee31',
-  '0xb739965B6692CFDA431959F3B423fD5870a57C50'
-];
+// const testEnvAddresses = [
+//   '0xCF4FdE7Af51236631eab85C9DE60b7e1C0d3162E',
+//   '0x7cee2ae3042D2C646Aa24FACfA92dfeE589046f0',
+//   '0xb017DcCC473499C83f1b553bE564f3CeAf002254',
+//   '0xf5DcDb300Ab31F5143f380A00Ea9e8E8F1c0Ded3',
+//   '0x88a31B42f05ad530EF237152Fde26d6cf0f89b0f',
+//   '0x60bBa9ca40D4A5ef331b6065dC58a13c91a67B3C',
+//   '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
+//   '0x144D5dc1c119EC3D63ba846617E7BFefb00E268d',
+//   '0xB38a013436755e0e56996f18f25946028Df8ee31',
+//   '0xb739965B6692CFDA431959F3B423fD5870a57C50'
+// ];
 
 const prodEnvAddresses = [
   '0x68c66f1C56CC6341856cf4427650978B653C78D6',
@@ -103,5 +102,18 @@ const prodEnvAddresses = [
   '0xb5B563e5ed9A9d4eaad3F498F497943d637920f3'
 ];
 
-export const MULTISIG_VAULT =
-  Config.env === 'prod' ? prodEnvAddresses : testEnvAddresses;
+// export const MULTISIG_VAULT =
+// Config.env === 'dev' ? testEnvAddresses : prodEnvAddresses;
+export const MULTISIG_VAULT = prodEnvAddresses;
+
+export const TOKEN_ADDRESSES = {
+  AirBond: '0x096B5914C95C34Df19500DAff77470C845EC749D',
+  BUSD: '0x7A477aA8ED4884509387Dba81BA6F2B7C97597e2',
+  FLP: '0xfD3aA0C31308cB069F4c7ebB27A556B264c0C763',
+  Ganymade: '0xE984ACe36F2B6f10Fec8dd6fc1bB19c7b1D2F2c6',
+  Hera: '0x322269e52800e5094c008f3b01A3FD97BB3C8f5D',
+  LangOperation: '0x5EAc6E1940de1Ee063DF778201E8b6F593f2DeCf',
+  Plutus: '0xEB8386a50Edd613cc43f061E9C5A915b0443C5d4',
+  USDC: '0xd8dd0273D31c1cd9Dba104DaCA7C1dfEE4f7b805',
+  USDT: '0xfEE01F2D120250A0a59bfbF9C144F8ECC4425fCc'
+};

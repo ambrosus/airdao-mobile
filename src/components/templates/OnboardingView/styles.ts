@@ -8,14 +8,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     alignSelf: 'center',
-    backgroundColor: COLORS.grey,
+    backgroundColor: COLORS.gray500,
     borderRadius: 24,
     zIndex: 1000
   },
   tooltipButton: {
     borderWidth: 1,
     borderColor: 'white',
-    backgroundColor: COLORS.deepBlue,
+    backgroundColor: COLORS.brand500,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -28,6 +28,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 16,
     paddingLeft: 7,
-    color: COLORS.white
+    color: COLORS.neutral0
   }
 });

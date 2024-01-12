@@ -1,5 +1,6 @@
 import { CacheableAccount, ExplorerAccountType } from '@appTypes';
 import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
+import { AccountDBModel } from '@database';
 
 export class ExplorerInfo {
   totalAddresses: number;
@@ -39,7 +40,25 @@ export class ExplorerAccount implements CacheableAccount {
     return {
       name: from.name,
       address: from.address,
-      isOnWatchlist: from.isOnWatchlist
+      isOnWatchlist: Boolean(from.isOnWatchlist)
     };
+  }
+
+  static fromDBModel(from: AccountDBModel): ExplorerAccount {
+    return new ExplorerAccount({
+      _id: from.id,
+      address: from.address,
+      balance: {
+        wei: '0',
+        ether: 0
+      },
+      byteCode: '',
+      isContract: false,
+      power: 0,
+      role: 0,
+      timestamp: new Date().getTime(),
+      totalTx: 0,
+      type: ExplorerAccountType.Account
+    });
   }
 }
