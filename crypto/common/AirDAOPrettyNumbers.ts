@@ -56,9 +56,7 @@ class AirDAOPrettyNumbers {
       e.message += 'in makeUnPretty';
       throw e;
     }
-    throw new Error(
-      'undefined BlocksoftPrettyNumbers processor to makeUnPretty'
-    );
+    throw new Error('undefined AirDaoPrettyNumbers processor to makeUnPretty');
   }
 }
 

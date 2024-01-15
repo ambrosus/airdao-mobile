@@ -80,11 +80,6 @@ class AirDAOExternalSettings {
       return;
     }
     try {
-      // TODO implement fees
-      // const tmp = await ApiProxy.getAll({
-      //   source: 'BlocksoftExternalSettings._get ' + source,
-      //   onlyFees: true
-      // });
       let tmp;
 
       CACHE_TIME = now;
@@ -97,7 +92,7 @@ class AirDAOExternalSettings {
     } catch (e: any) {
       if (config.debug.appErrors) {
         console.log(
-          'BlocksoftExternalSettings._get started ALL from ' +
+          'AirDAOExternalSettings._get started ALL from ' +
             source +
             ' error ' +
             e.message.toString().substr(0, 150)
@@ -144,7 +139,7 @@ class AirDAOExternalSettings {
       !cached.currentServerValue
     ) {
       AirDAOCryptoLog.err(
-        'BlocksoftExternalSettings.getTrezorServer ' +
+        'AirDAOExternalSettings.getTrezorServer ' +
           key +
           ' setInvalid error with currentServer ' +
           JSON.stringify(TREZOR_SERVERS[key])
@@ -170,7 +165,7 @@ class AirDAOExternalSettings {
           return cached.currentServerValue;
         }
         AirDAOCryptoLog.err(
-          'BlocksoftExternalSettings.getTrezorServer ' +
+          'AirDAOExternalSettings.getTrezorServer ' +
             key +
             ' from ' +
             source +
@@ -204,7 +199,7 @@ class AirDAOExternalSettings {
             allServers[server] = tmp;
           } else {
             AirDAOCryptoLog.err(
-              'BlocksoftExternalSettings.getTrezorServer ' +
+              'AirDAOExternalSettings.getTrezorServer ' +
                 key +
                 ' from ' +
                 source +
@@ -251,7 +246,7 @@ class AirDAOExternalSettings {
     };
     if ((typeof currentServer === 'string' || true) && currentServer) {
       AirDAOCryptoLog.log(
-        `'BlocksoftExternalSettings.getTrezorServer ' +
+        `'AirDAOExternalSettings.getTrezorServer ' +
                 ${key} +
                 ' from ' +
                 ${source} +
@@ -261,7 +256,7 @@ class AirDAOExternalSettings {
       return currentServer;
     } else {
       AirDAOCryptoLog.err(
-        'BlocksoftExternalSettings.getTrezorServer ' +
+        'AirDAOExternalSettings.getTrezorServer ' +
           key +
           ' from ' +
           source +

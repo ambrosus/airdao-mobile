@@ -5,7 +5,6 @@
  */
 import AirDAODict from '@crypto/common/AirDAODict';
 // @ts-ignore
-// import BlocksoftKeysScam from '@crypto/actions/BlocksoftKeys/BlocksoftKeysScam';
 import AirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
 import networksConstants from '@crypto/common/ext/networks-constants';
 import bip44Constants from '@crypto/common/ext/bip44-constants';
@@ -46,7 +45,7 @@ class AirDAOKeys {
                 let random = await this._getRandomBytesFunction(size / 8)
                 random = Buffer.from(random, 'base64')
                 let testMnemonic = bip39.entropyToMnemonic(random)
-                if (await BlocksoftKeysUtils.tonCheckRevert(testMnemonic)) {
+                if (await AirDaoKeysUtils.tonCheckRevert(testMnemonic)) {
                     mnemonic = testMnemonic
                     break
                 }
@@ -72,7 +71,7 @@ class AirDAOKeys {
    * @return {Promise<boolean>}
    */
   // async validateMnemonic(mnemonic: string): Promise<boolean> {
-  //   if (await BlocksoftKeysScam.isScamMnemonic(mnemonic)) {
+  //   if (await AirDaoKeysScam.isScamMnemonic(mnemonic)) {
   //     throw new Error('Scam import error');
   //   }
   //   const result = await bip39.validateMnemonic(mnemonic);
@@ -484,5 +483,5 @@ function serialize(hdkey, version, key, LEN = 78) {
   return buffer;
 }
 
-const singleBlocksoftKeys = new AirDAOKeys();
-export default singleBlocksoftKeys;
+const singleAirDaoKeys = new AirDAOKeys();
+export default singleAirDaoKeys;

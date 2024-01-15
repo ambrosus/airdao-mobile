@@ -71,14 +71,14 @@ class KeysUtills {
       const index = DEFAULT_WORDS.indexOf(word);
 
       if (index === -1) {
-        throw new Error('BlocksoftKeysStorage invalid word ' + word);
+        throw new Error('AirDAOKeysStorage invalid word ' + word);
       }
 
       checked.push(word);
     }
 
     if (checked.length <= 11) {
-      throw new Error('BlocksoftKeysStorage invalid words length ' + mnemonic);
+      throw new Error('AirDAOKeysStorage invalid words length ' + mnemonic);
     }
 
     return checked.join(' ');

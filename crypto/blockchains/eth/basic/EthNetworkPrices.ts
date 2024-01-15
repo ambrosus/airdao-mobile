@@ -3,8 +3,8 @@
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import AirDAOAxios from '../../../common/AirDAOAxios';
-import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
+import AirDAOUtils from '../../../common/AirDAOUtils';
+import AirDAOExternalSettings from '../../../common/AirDAOExternalSettings';
 import EthRawDS from '../stores/EthRawDS';
 import EthTmpDS from '../stores/EthTmpDS';
 
@@ -119,8 +119,8 @@ class EthNetworkPrices {
     if (typeof result.gasPrice !== 'undefined') {
       for (const key in result.gasPrice) {
         // @ts-ignore
-        result.gasPrice[key] = BlocksoftUtils.div(
-          BlocksoftUtils.toWei(result.gasPrice[key], 'gwei'),
+        result.gasPrice[key] = AirDAOUtils.div(
+          AirDAOUtils.toWei(result.gasPrice[key], 'gwei'),
           MAGIC_TX_DIVIDER
         ); // in gwei to wei + magic
       }
@@ -291,7 +291,7 @@ class EthNetworkPrices {
   ) {
     CACHE_FEES_ETH = {};
 
-    const externalSettings = await BlocksoftExternalSettings.getAll(
+    const externalSettings = await AirDAOExternalSettings.getAll(
       'ETH.getNetworkPrices'
     );
     addMultiply(mainCurrencyCode, 2, json.fastest * 1, externalSettings);
@@ -315,16 +315,16 @@ class EthNetworkPrices {
     }
 
     try {
-      CACHE_FEES_ETH[12] = BlocksoftUtils.div(
-        BlocksoftUtils.toWei(CACHE_FEES_ETH[12], 'gwei'),
+      CACHE_FEES_ETH[12] = AirDAOUtils.div(
+        AirDAOUtils.toWei(CACHE_FEES_ETH[12], 'gwei'),
         MAGIC_TX_DIVIDER
       ); // in gwei to wei + magic
-      CACHE_FEES_ETH[6] = BlocksoftUtils.div(
-        BlocksoftUtils.toWei(CACHE_FEES_ETH[6], 'gwei'),
+      CACHE_FEES_ETH[6] = AirDAOUtils.div(
+        AirDAOUtils.toWei(CACHE_FEES_ETH[6], 'gwei'),
         MAGIC_TX_DIVIDER
       ); // in gwei to wei + magic
-      CACHE_FEES_ETH[2] = BlocksoftUtils.div(
-        BlocksoftUtils.toWei(CACHE_FEES_ETH[2], 'gwei'),
+      CACHE_FEES_ETH[2] = AirDAOUtils.div(
+        AirDAOUtils.toWei(CACHE_FEES_ETH[2], 'gwei'),
         MAGIC_TX_DIVIDER
       ); // in gwei to wei + magic
     } catch (e: any) {
@@ -361,7 +361,7 @@ function addMultiply(
     typeof externalSettings['ETH_MULTI_' + blocks] !== 'undefined' &&
     externalSettings['ETH_MULTI_' + blocks] > 0
   ) {
-    CACHE_FEES_ETH[blocks] = BlocksoftUtils.mul(
+    CACHE_FEES_ETH[blocks] = AirDAOUtils.mul(
       fee,
       externalSettings['ETH_MULTI_' + blocks]
     );
@@ -382,7 +382,7 @@ function addMultiply(
     externalSettings.ETH_MULTI > 0
   ) {
     CACHE_FEES_ETH[blocks] =
-      BlocksoftUtils.mul(fee, externalSettings.ETH_MULTI) * 1;
+      AirDAOUtils.mul(fee, externalSettings.ETH_MULTI) * 1;
     AirDAOCryptoLog.log(
       mainCurrencyCode + ' EthNetworkPricesProvider addMultiply result',
       {

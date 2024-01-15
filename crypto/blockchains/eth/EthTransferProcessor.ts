@@ -1,4 +1,4 @@
-import BlocksoftUtils from '../../common/AirDAOUtils';
+import AirDAOUtils from '../../common/AirDAOUtils';
 
 import EthTmpDS from './stores/EthTmpDS';
 
@@ -10,7 +10,7 @@ import EthTxSendProvider from './basic/EthTxSendProvider';
 import AirDAODispatcher from '../AirDAODispatcher';
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
-import BlocksoftExternalSettings from '../../common/AirDAOExternalSettings';
+import AirDAOExternalSettings from '../../common/AirDAOExternalSettings';
 import abi721 from './ext/erc721.js';
 import abi1155 from './ext/erc1155';
 import AirDAOAxios from '@crypto/common/AirDAOAxios';
@@ -164,7 +164,7 @@ export default class EthTransferProcessor
         typeof data.walletConnectData.gasPrice !== 'undefined' &&
         data.walletConnectData.gasPrice
       ) {
-        tmp = BlocksoftUtils.hexToDecimalWalletConnect(
+        tmp = AirDAOUtils.hexToDecimalWalletConnect(
           data.walletConnectData.gasPrice
         );
         if (tmp > 0) {
@@ -208,7 +208,7 @@ export default class EthTransferProcessor
           data.walletConnectData.gas &&
           data.walletConnectData.gas !== '0x0'
         ) {
-          gasLimit = BlocksoftUtils.hexToDecimalWalletConnect(
+          gasLimit = AirDAOUtils.hexToDecimalWalletConnect(
             data.walletConnectData.gas
           );
         } else if (typeof data.walletConnectData !== 'undefined') {
@@ -232,7 +232,7 @@ export default class EthTransferProcessor
                     ? data.walletConnectData.value
                     : data.amount.indexOf('0x') === 0
                     ? data.amount
-                    : '0x' + BlocksoftUtils.decimalToHex(data.amount),
+                    : '0x' + AirDAOUtils.decimalToHex(data.amount),
                 data:
                   typeof data.walletConnectData.data !== 'undefined' &&
                   data.walletConnectData.data
@@ -249,7 +249,7 @@ export default class EthTransferProcessor
           if (typeof tmp !== 'undefined' && typeof tmp.data !== 'undefined') {
             if (typeof tmp.data.result !== 'undefined') {
               gasLimit =
-                BlocksoftUtils.hexToDecimalWalletConnect(tmp.data.result) * 1 +
+                AirDAOUtils.hexToDecimalWalletConnect(tmp.data.result) * 1 +
                 150000;
             } else if (typeof tmp.data.error !== 'undefined') {
               throw new Error(tmp.data.error.message);
@@ -287,7 +287,7 @@ export default class EthTransferProcessor
               data.contractCallData.contractAction
             ](...tmpParams).estimateGas({ from: data.addressFrom });
             if (gasLimit) {
-              gasLimit = BlocksoftUtils.mul(gasLimit, 1.5);
+              gasLimit = AirDAOUtils.mul(gasLimit, 1.5);
             }
           } catch (e: any) {
             // do nothing
@@ -329,18 +329,17 @@ export default class EthTransferProcessor
             if (e.message.indexOf('resolve host') !== -1) {
               throw new Error('SERVER_RESPONSE_NOT_CONNECTED');
             } else {
-              gasLimit =
-                BlocksoftExternalSettings.getStatic('ETH_MIN_GAS_LIMIT');
+              gasLimit = AirDAOExternalSettings.getStatic('ETH_MIN_GAS_LIMIT');
               // e.message += ' in EthEstimateGas in getFeeRate'
               // throw e
             }
           }
           if (!gasLimit || typeof gasLimit !== 'undefined') {
-            gasLimit = BlocksoftExternalSettings.getStatic('ETH_MIN_GAS_LIMIT');
+            gasLimit = AirDAOExternalSettings.getStatic('ETH_MIN_GAS_LIMIT');
           }
 
           const minGasLimit =
-            BlocksoftExternalSettings.getStatic(
+            AirDAOExternalSettings.getStatic(
               this._mainCurrencyCode + '_MIN_GAS_LIMIT'
             ) * 1;
           if (minGasLimit > 0 && gasLimit < minGasLimit) {
@@ -361,7 +360,7 @@ export default class EthTransferProcessor
       !additionalData.isCustomFee
     ) {
       try {
-        const limit = BlocksoftExternalSettings.getStatic(
+        const limit = AirDAOExternalSettings.getStatic(
           this._mainCurrencyCode + '_GAS_LIMIT'
         );
         if (gasLimit * 1 > limit * 1) {
@@ -484,13 +483,13 @@ export default class EthTransferProcessor
         skippedByOld = true;
         continue;
       }
-      let fee = BlocksoftUtils.mul(gasPrice[key], gasLimit);
+      let fee = AirDAOUtils.mul(gasPrice[key], gasLimit);
       let amount = data.amount;
       const needSpeed = gasPrice[key].toString();
       let newGasPrice = needSpeed;
       let changedFeeByBalance = false;
       if (actualCheckBalance) {
-        const tmp = BlocksoftUtils.diff(balance, fee).toString();
+        const tmp = AirDAOUtils.diff(balance, fee).toString();
         if (this._useThisBalance) {
           if (tmp * 1 < 0) {
             continue;
@@ -498,20 +497,17 @@ export default class EthTransferProcessor
           if (data.isTransferAll) {
             amount = tmp;
           } else {
-            const tmp2 = BlocksoftUtils.diff(tmp, amount).toString();
+            const tmp2 = AirDAOUtils.diff(tmp, amount).toString();
             if (tmp2 * 1 < 0) {
               continue;
             }
           }
         } else {
           if (tmp * 1 < 0) {
-            const tmpGasPrice = BlocksoftUtils.div(
-              balance,
-              gasLimit
-            ).toString();
+            const tmpGasPrice = AirDAOUtils.div(balance, gasLimit).toString();
             if (
               tmpGasPrice &&
-              BlocksoftUtils.diff(tmpGasPrice, prevGasPrice).toString() * 1 > 0
+              AirDAOUtils.diff(tmpGasPrice, prevGasPrice).toString() * 1 > 0
             ) {
               fee = balance;
               newGasPrice = tmpGasPrice.split('.')[0];
@@ -539,7 +535,7 @@ export default class EthTransferProcessor
       try {
         gweiFee =
           newGasPrice !== '0'
-            ? BlocksoftUtils.toGwei(newGasPrice).toString()
+            ? AirDAOUtils.toGwei(newGasPrice).toString()
             : newGasPrice;
       } catch (e) {
         // ignore
@@ -565,7 +561,7 @@ export default class EthTransferProcessor
         feesOK[titles[index]] = tmp.gasPrice;
       }
       if (
-        BlocksoftUtils.diff(newGasPrice, prevGasPrice).indexOf('-') === -1 &&
+        AirDAOUtils.diff(newGasPrice, prevGasPrice).indexOf('-') === -1 &&
         newGasPrice !== prevGasPrice
       ) {
         prevGasPrice = tmp.gasPrice;
@@ -595,10 +591,10 @@ export default class EthTransferProcessor
           if (newGasPrice < gasPrice[key]) {
             newGasPrice = gasPrice[key];
           }
-          let fee = BlocksoftUtils.mul(newGasPrice, gasLimit);
+          let fee = AirDAOUtils.mul(newGasPrice, gasLimit);
           let amount = data.amount;
           if (actualCheckBalance) {
-            const tmp = BlocksoftUtils.diff(balance, fee).toString();
+            const tmp = AirDAOUtils.diff(balance, fee).toString();
             if (this._useThisBalance) {
               if (tmp * 1 < 0) {
                 continue;
@@ -606,20 +602,19 @@ export default class EthTransferProcessor
               if (data.isTransferAll) {
                 amount = tmp;
               } else {
-                const tmp2 = BlocksoftUtils.diff(tmp, amount).toString();
+                const tmp2 = AirDAOUtils.diff(tmp, amount).toString();
                 if (tmp2 * 1 < 0) {
                   amount = tmp;
                 }
               }
             } else {
               if (tmp * 1 < 0) {
-                const tmpGasPrice = BlocksoftUtils.div(
+                const tmpGasPrice = AirDAOUtils.div(
                   balance,
                   gasLimit
                 ).toString();
                 if (
-                  BlocksoftUtils.diff(tmpGasPrice, prevGasPrice).toString() *
-                    1 >
+                  AirDAOUtils.diff(tmpGasPrice, prevGasPrice).toString() * 1 >
                   0
                 ) {
                   fee = balance;
@@ -635,14 +630,14 @@ export default class EthTransferProcessor
             newGasPrice = '0';
           } else {
             newGasPrice = newGasPrice.toString();
-            newGasPrice = BlocksoftUtils.round(newGasPrice);
+            newGasPrice = AirDAOUtils.round(newGasPrice);
           }
 
           let gweiFee = 0;
           try {
             gweiFee =
               newGasPrice !== '0'
-                ? BlocksoftUtils.toGwei(newGasPrice).toString()
+                ? AirDAOUtils.toGwei(newGasPrice).toString()
                 : newGasPrice;
           } catch (e) {
             // ignore
@@ -676,23 +671,23 @@ export default class EthTransferProcessor
       let leftForFee = balance;
       if (this._useThisBalance && !data.isTransferAll) {
         if (txRBF) {
-          leftForFee = BlocksoftUtils.diff(
+          leftForFee = AirDAOUtils.diff(
             balance,
-            BlocksoftUtils.div(data.amount, 2)
+            AirDAOUtils.div(data.amount, 2)
           ); // if eth is transferred and paid in eth - so amount is not changed except send all
         } else {
-          leftForFee = BlocksoftUtils.diff(balance, data.amount); // if eth is transferred and paid in eth - so amount is not changed except send all
+          leftForFee = AirDAOUtils.diff(balance, data.amount); // if eth is transferred and paid in eth - so amount is not changed except send all
         }
       }
 
-      let fee = BlocksoftUtils.div(leftForFee, gasLimit);
+      let fee = AirDAOUtils.div(leftForFee, gasLimit);
       if (fee) {
         const tmp = fee.split('.');
         if (tmp) {
           fee = tmp[0];
-          feeForTx = BlocksoftUtils.mul(fee, gasLimit);
+          feeForTx = AirDAOUtils.mul(fee, gasLimit);
           if (this._useThisBalance && (data.isTransferAll || txRBF)) {
-            amountForTx = BlocksoftUtils.diff(balance, feeForTx); // change amount for send all calculations
+            amountForTx = AirDAOUtils.diff(balance, feeForTx); // change amount for send all calculations
           }
         } else {
           feeForTx = 0;
@@ -715,7 +710,7 @@ export default class EthTransferProcessor
           : '?';
       let gweiFee = 0;
       try {
-        gweiFee = fee !== '0' ? BlocksoftUtils.toGwei(fee).toString() : fee;
+        gweiFee = fee !== '0' ? AirDAOUtils.toGwei(fee).toString() : fee;
       } catch (e) {
         // ignore
       }
@@ -757,11 +752,11 @@ export default class EthTransferProcessor
           'undefined';
       if (check) {
         try {
-          const diff = BlocksoftUtils.diff(
+          const diff = AirDAOUtils.diff(
             result.countedForBasicBalance,
             maxNonceLocal.amountBlocked[this._settings.currencyCode]
           ).toString();
-          const diffAmount = BlocksoftUtils.diff(diff, data.amount).toString();
+          const diffAmount = AirDAOUtils.diff(diff, data.amount).toString();
           if (diff.indexOf('-') !== -1) {
             result.showBlockedBalanceNotice = new Date().getTime();
             result.showBlockedBalanceFree =
@@ -770,7 +765,7 @@ export default class EthTransferProcessor
             if (diffAmount.indexOf('-') !== -1) {
               result.showBlockedBalanceNotice = new Date().getTime();
               result.showBlockedBalanceFree =
-                BlocksoftUtils.toUnified(diff, this._settings.decimals) +
+                AirDAOUtils.toUnified(diff, this._settings.decimals) +
                 ' ' +
                 this._settings.currencySymbol;
             }
@@ -779,7 +774,7 @@ export default class EthTransferProcessor
           // ignore
         }
       }
-      const LONG_QUERY = await BlocksoftExternalSettings.getStatic(
+      const LONG_QUERY = await AirDAOExternalSettings.getStatic(
         'ETH_LONG_QUERY'
       );
       check = maxNonceLocal.queryLength * 1 >= LONG_QUERY * 1;
@@ -835,11 +830,11 @@ export default class EthTransferProcessor
     if (this._useThisBalance) {
       try {
         for (const fee of fees.fees) {
-          fee.totalFeePlusAmountETH = BlocksoftUtils.toEther(
-            BlocksoftUtils.add(fee.amountForTx, fee.feeForTx)
+          fee.totalFeePlusAmountETH = AirDAOUtils.toEther(
+            AirDAOUtils.add(fee.amountForTx, fee.feeForTx)
           );
         }
-        fees.selectedTransferAllBalanceETH = BlocksoftUtils.toEther(
+        fees.selectedTransferAllBalanceETH = AirDAOUtils.toEther(
           fees.fees[fees.selectedFeeIndex].amountForTx
         );
       } catch (e: any) {
@@ -1087,7 +1082,7 @@ export default class EthTransferProcessor
         throw e;
       }
 
-      result.transactionFee = BlocksoftUtils.mul(finalGasPrice, finalGasLimit);
+      result.transactionFee = AirDAOUtils.mul(finalGasPrice, finalGasLimit);
       result.transactionFeeCurrencyCode =
         this._mainCurrencyCode === 'BNB' ? 'BNB_SMART' : this._mainCurrencyCode;
       if (txRBF) {

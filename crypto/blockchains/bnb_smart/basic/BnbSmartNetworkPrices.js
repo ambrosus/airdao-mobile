@@ -3,8 +3,8 @@
  */
 import AirDAOCryptoLog from '../../../common/AirDAOCryptoLog';
 import AirDAOAxios from '../../../common/AirDAOAxios';
-import BlocksoftUtils from '../../../common/AirDAOUtils';
-import BlocksoftExternalSettings from '../../../common/AirDAOExternalSettings';
+import AirDAOUtils from '../../../common/AirDAOUtils';
+import AirDAOExternalSettings from '../../../common/AirDAOExternalSettings';
 
 const CACHE_VALID_TIME = 120000; // 2 minute
 const CACHE_FEES = {
@@ -40,7 +40,7 @@ class BnbSmartNetworkPrices {
         typeof res.data !== 'undefined' &&
         typeof res.data.result !== 'undefined'
       ) {
-        const tmp = BlocksoftUtils.hexToDecimal(res.data.result);
+        const tmp = AirDAOUtils.hexToDecimal(res.data.result);
         if (tmp * 1 > 0) {
           CACHE_FEES[mainCurrencyCode] = {
             fee: (tmp * 1).toString().substr(0, 11),
@@ -51,7 +51,7 @@ class BnbSmartNetworkPrices {
           !CACHE_FEES[mainCurrencyCode].fee
         ) {
           CACHE_FEES[mainCurrencyCode].fee =
-            await BlocksoftExternalSettings.getStatic('BNB_SMART_PRICE');
+            await AirDAOExternalSettings.getStatic('BNB_SMART_PRICE');
         }
       }
     } catch (e) {

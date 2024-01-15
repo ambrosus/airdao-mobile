@@ -1,7 +1,7 @@
 /**
  * @version 0.5
  */
-import BlocksoftUtils from '../../common/AirDAOUtils';
+import AirDAOUtils from '../../common/AirDAOUtils';
 import AirDAOAxios from '../../common/AirDAOAxios';
 import AirDAOCryptoLog from '../../common/AirDAOCryptoLog';
 import EthBasic from './basic/EthBasic';
@@ -91,14 +91,14 @@ export default class EthScannerProcessor extends EthBasic {
       tx = { ...res.data.receipt, ...res.data.tx };
     }
 
-    tx.nonce = BlocksoftUtils.hexToDecimal(tx.nonce);
+    tx.nonce = AirDAOUtils.hexToDecimal(tx.nonce);
     if (tx.nonce * 1 === 0) {
       tx.nonce = 0;
     }
-    tx.status = BlocksoftUtils.hexToDecimal(tx.status);
-    tx.gas = BlocksoftUtils.hexToDecimal(tx.gas);
-    tx.gasPrice = BlocksoftUtils.hexToDecimal(tx.gasPrice);
-    tx.gasUsed = BlocksoftUtils.hexToDecimal(tx.gasUsed);
+    tx.status = AirDAOUtils.hexToDecimal(tx.status);
+    tx.gas = AirDAOUtils.hexToDecimal(tx.gas);
+    tx.gasPrice = AirDAOUtils.hexToDecimal(tx.gasPrice);
+    tx.gasUsed = AirDAOUtils.hexToDecimal(tx.gasUsed);
     return tx;
   }
 }
