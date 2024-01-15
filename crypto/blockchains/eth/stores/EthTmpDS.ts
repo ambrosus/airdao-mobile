@@ -4,7 +4,7 @@ import {
   TransactionScannersTmpDBModel,
   TransactionsDBModel
 } from '@database';
-import BlocksoftBN from '../../../common/AirDAOBN';
+import AirDaoBN from '../../../common/AirDAOBN';
 import { DatabaseTable } from '@appTypes';
 
 const tableName = DatabaseTable.TransactionScannersTmp;
@@ -146,7 +146,7 @@ class EthTmpDS {
             if (tmp.transactionStatus === 'new') {
               const amount = tmp.addressAmount;
               if (typeof amountBN[tmp.currencyCode] === 'undefined') {
-                amountBN[tmp.currencyCode] = new BlocksoftBN(0);
+                amountBN[tmp.currencyCode] = new AirDaoBN(0);
               }
               queryLength++;
               queryTxs.push({

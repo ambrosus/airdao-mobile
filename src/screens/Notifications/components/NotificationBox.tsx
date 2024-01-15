@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import {
   Notification,
   NotificationWithPriceChange
 } from '@models/Notification';
-import { View } from 'react-native';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import moment from 'moment';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
 
 interface NotificationBoxProps {
   notification: Notification;
@@ -19,6 +19,34 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
   const { notification } = props;
   const { type, body, createdAt } = notification;
   const { t } = useTranslation();
+
+  const processPriceChangeBody = useCallback(() => {
+    // Extract the percentage change using a regular expression
+    const percentChangeRegex = /(\+|\-)\d+\.\d+%/;
+    const percentChangeMatch = body.match(percentChangeRegex);
+
+    if (!percentChangeMatch) return body; // Return the original string if no match
+
+    const percentChange = percentChangeMatch[0];
+    const isPositiveChange = percentChange.includes('+'); // Determine if it's a positive change
+
+    // Split the string into parts to separate the percent change
+    const parts = body.split(percentChange);
+
+    return (
+      <>
+        {parts[0]}
+        <Text
+          style={{
+            color: isPositiveChange ? COLORS.success400 : COLORS.error400
+          }}
+        >
+          {percentChange}
+        </Text>
+        {parts[1]}
+      </>
+    );
+  }, [body]);
 
   const renderChangeInfo = () => {
     const notificationWithPriceChange =
@@ -80,7 +108,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral500}
         >
-          {body}
+          {processPriceChangeBody()}
         </Text>
       </View>
       <Spacer horizontal value={scale(21)} />

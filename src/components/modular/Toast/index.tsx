@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
-import { ToastBody } from './Toast.body';
 import { ToastOptions } from './Toast.types';
+import { ToastWrapper } from './Toast.wrapper';
 let refs: any[] = [];
 function addNewRef(newRef: any) {
   refs.push({
@@ -33,7 +33,7 @@ export const Toast = (): JSX.Element => {
       removeOldRef(ref);
     }
   }, []);
-  return <ToastBody ref={setRef} />;
+  return <ToastWrapper ref={setRef} />;
 };
 
 Toast.show = (params: ToastOptions) => {
@@ -45,3 +45,4 @@ Toast.hide = () => {
 };
 
 export * from './Toast.types';
+export * from './Toast.body';

@@ -5,7 +5,7 @@
 import EthTransferProcessor from './EthTransferProcessor';
 import { AirDAOBlockchainTypes } from '../AirDAOBlockchainTypes';
 
-import BlocksoftExternalSettings from '@crypto/common/AirDAOExternalSettings';
+import AirDAOExternalSettings from '@crypto/common/AirDAOExternalSettings';
 
 import abi from './ext/erc20.js';
 
@@ -143,11 +143,11 @@ export default class EthTransferProcessorErc20
         estimatedGas = serverEstimatedGas3;
       }
 
-      let minGas = BlocksoftExternalSettings.getStatic(
+      let minGas = AirDAOExternalSettings.getStatic(
         this._settings.tokenBlockchain + '_MIN_GAS_ERC20'
       );
       if (typeof minGas === 'undefined' || !minGas) {
-        minGas = BlocksoftExternalSettings.getStatic('ETH_MIN_GAS_ERC20');
+        minGas = AirDAOExternalSettings.getStatic('ETH_MIN_GAS_ERC20');
       }
       if (typeof minGas === 'undefined' || !minGas) {
         minGas = 70200;

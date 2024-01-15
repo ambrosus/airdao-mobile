@@ -7,10 +7,9 @@ import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { useAddWalletContext } from '@contexts';
 import { verticalScale, scale } from '@utils/scaling';
-import { PrimaryButton } from '@components/modular';
+import { AlertBanner, PrimaryButton, ToastType } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
-import { WarningIcon } from '@components/svg/icons/Warning';
 import { HomeNavigationProp } from '@appTypes';
 
 export const CreateWalletStep1 = () => {
@@ -110,13 +109,10 @@ export const CreateWalletStep1 = () => {
           ItemSeparatorComponent={() => <Spacer value={verticalScale(24)} />}
         />
         <View>
-          <View style={styles.warningContainer}>
-            <View style={styles.warning}>
-              <WarningIcon />
-              <Spacer horizontal value={scale(12)} />
-              <Text>{t('create.wallet.verification.alert')}</Text>
-            </View>
-          </View>
+          <AlertBanner
+            text={t('create.wallet.verification.alert')}
+            type={ToastType.Highlight}
+          />
           <Spacer value={verticalScale(34)} />
           <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
             <PrimaryButton onPress={onNextPress}>
@@ -147,18 +143,6 @@ const styles = StyleSheet.create({
   },
   column: {
     flex: 1
-  },
-  warningContainer: {
-    backgroundColor: COLORS.warning100,
-    borderRadius: 13,
-    borderWidth: 0.2,
-    borderColor: COLORS.warning400
-  },
-  warning: {
-    marginVertical: scale(12),
-    marginHorizontal: scale(16),
-    flexDirection: 'row',
-    alignItems: 'center'
   },
   mnemonic: {
     flex: 1,
