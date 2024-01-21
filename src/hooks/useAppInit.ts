@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { DeviceService, NotificationService, PermissionService } from '@lib';
-import { CacheableAccount, DatabaseTable, Permission } from '@appTypes';
+import { DatabaseTable, Permission } from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@lib/cache';
-import { AccountDBModel, Database } from '@database';
+import { AccountDBModel, Database, PublicAddressDB } from '@database';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
@@ -48,10 +48,10 @@ export const useAppInit = () => {
       }
       if (!notificationTokenSavedToRemoteDB) {
         try {
-          const watchlist = (
-            ((await Cache.getItem(CacheKey.AllAddresses)) ||
-              []) as CacheableAccount[]
-          ).filter((a) => a.isOnWatchlist);
+          const watchlist = (await PublicAddressDB.getAll()).filter(
+            (a) => a.isOnWatchlist
+          );
+
           await API.watcherService.createWatcherForCurrentUser();
           if (watchlist.length > 0) {
             // save under new push token
