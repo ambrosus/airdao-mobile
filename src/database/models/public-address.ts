@@ -1,11 +1,10 @@
 /* eslint-disable camelcase */
 import { DatabaseTable } from '@appTypes';
 import { Model } from '@nozbe/watermelondb';
-import { text } from '@nozbe/watermelondb/decorators';
+import { text, field } from '@nozbe/watermelondb/decorators';
 
 export class PublicAddressDbModel extends Model {
   static table = DatabaseTable.PublicAddresses;
-
   // define fields
 
   // @ts-ignore
@@ -13,5 +12,7 @@ export class PublicAddressDbModel extends Model {
   // @ts-ignore
   @text('name') name: string;
   // @ts-ignore
-  @text('is_watchlisted') isOnWatchlist: boolean;
+  @field('is_watchlisted') isOnWatchlist: boolean;
+  // @ts-ignore
+  @text('group_id') groupId: string;
 }

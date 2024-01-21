@@ -15,6 +15,11 @@ export const PublicAddressesTable = tableSchema({
     {
       name: 'is_watchlisted',
       type: 'boolean'
-    }
+    },
+    {
+      name: 'group_id',
+      type: 'string',
+      isIndexed: true
+    } // Foreign key to the 'public addresses list' table
   ]
 });

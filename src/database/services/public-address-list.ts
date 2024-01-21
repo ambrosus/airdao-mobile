@@ -1,15 +1,10 @@
-import { DatabaseTable } from '@appTypes';
+import { CacheableAccount, DatabaseTable } from '@appTypes';
 import Database from '@database/Database';
 import { Q } from '@nozbe/watermelondb';
 import { PublicAddressListDbModel } from '@database/models';
+import { PublicAddressDB } from './public-address';
 
 const publichAddressListDb = DatabaseTable.PublicAddressLists;
-
-interface PublicAddressList {
-  id: string;
-  name: string;
-  addresses: string[];
-}
 
 export class PublicAddressListDB {
   static async getList(id: string): Promise<PublicAddressListDbModel | null> {
@@ -21,45 +16,68 @@ export class PublicAddressListDB {
     return null;
   }
 
-  static async createOrUpdateList(
-    list: PublicAddressList
-  ): Promise<PublicAddressListDbModel> {
+  static async getAll(): Promise<PublicAddressListDbModel[]> {
+    const lists = (await Database.query(
+      publichAddressListDb
+    )) as PublicAddressListDbModel[];
+    return lists;
+  }
+
+  static async addAccountsToList(
+    accounts: CacheableAccount[],
+    groupId: string
+  ) {
+    if (accounts.length == 0) return;
+    await Promise.all(
+      accounts.map((account) => PublicAddressDB.addToGroup(account, groupId))
+    );
+  }
+
+  static async removeAddressesFromList(addresses: string[]) {
+    if (addresses.length == 0) return;
+    await Promise.all(
+      addresses.map((address) => PublicAddressDB.removeFromGroup(address))
+    );
+  }
+
+  static async createList(name: string, accounts?: CacheableAccount[]) {
     try {
-      const listInDb = await this.getList(list.id);
-      let finalList: PublicAddressListDbModel;
-      if (listInDb) {
-        finalList = (await this.updateList(
-          listInDb.id,
-          list
-        )) as PublicAddressListDbModel;
-      } else {
-        finalList = (await Database.createModel(
-          publichAddressListDb,
-          list
-        )) as PublicAddressListDbModel;
+      const newList = (await Database.createModel(publichAddressListDb, {
+        name
+      })) as PublicAddressListDbModel;
+      if (accounts && accounts.length > 0) {
+        this.addAccountsToList(accounts, newList.id);
       }
-      return finalList;
+      return newList;
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateList(id: string, updateObj: Partial<PublicAddressList>) {
-    const list = await this.getList(id);
-    if (!list) {
-      console.error(
-        'PublicAddressListDB --> could not find any saved list by id --> ',
-        {
-          id
-        }
-      );
-      throw Error('Could not find account by id');
+  static async updateList(id: string, newName: string) {
+    try {
+      const listInDb = await this.getList(id);
+      if (!listInDb) {
+        throw Error('No such list found in db!');
+      }
+      if (!!newName && newName !== listInDb.name) {
+        return await Database.updateModel(publichAddressListDb, id, {
+          name: newName
+        });
+      }
+    } catch (error) {
+      throw error;
     }
-    return await Database.updateModel(publichAddressListDb, list.id, updateObj);
   }
 
   static async deleteList(id: string) {
     const list = await this.getList(id);
-    if (list) return await Database.deleteModel(publichAddressListDb, list.id);
+    if (list) {
+      const allAddresses = await list.fetchAddresses();
+      for (const address of allAddresses) {
+        await PublicAddressDB.removeFromGroup(address.address);
+      }
+      await Database.deleteModel(publichAddressListDb, list.id);
+    }
   }
 }

@@ -1,17 +1,18 @@
-import { DatabaseTable } from '@appTypes';
 import Database from '@database/Database';
 import { Q } from '@nozbe/watermelondb';
-import { PublicAddressDbModel } from '@database/models/public-address';
+import { PublicAddressDbModel } from '@database/models';
+import { CacheableAccount, DatabaseTable } from '@appTypes';
 
 const publichAddressesDb = DatabaseTable.PublicAddresses;
 
-interface PublicAddress {
-  name: string;
-  address: string;
-  isOnWatchlist: boolean;
-}
-
 export class PublicAddressDB {
+  static async getAll(): Promise<PublicAddressDbModel[]> {
+    const allAddresses = (await Database.query(
+      publichAddressesDb
+    )) as PublicAddressDbModel[];
+    return allAddresses;
+  }
+
   static async getPublicAddress(
     address: string
   ): Promise<PublicAddressDbModel | null> {
@@ -24,7 +25,7 @@ export class PublicAddressDB {
   }
 
   static async createOrUpdateAddress(
-    publicAddress: PublicAddress
+    publicAddress: CacheableAccount
   ): Promise<PublicAddressDbModel> {
     try {
       const publicAddressInDb = await this.getPublicAddress(
@@ -48,9 +49,9 @@ export class PublicAddressDB {
     }
   }
 
-  static async updateAddress(
+  private static async updateAddress(
     address: string,
-    updateObj: Partial<PublicAddress>
+    updateObj: Partial<CacheableAccount>
   ) {
     const publicAddress = await this.getPublicAddress(address);
     if (!publicAddress) {
@@ -73,5 +74,19 @@ export class PublicAddressDB {
     const publicAddress = await this.getPublicAddress(address);
     if (publicAddress)
       return await Database.deleteModel(publichAddressesDb, publicAddress.id);
+  }
+
+  static async addToGroup(address: CacheableAccount, groupId: string) {
+    return await this.createOrUpdateAddress({ ...address, groupId });
+  }
+
+  static async removeFromGroup(address: string) {
+    const addressInDb = await this.getPublicAddress(address);
+    if (addressInDb) {
+      // delete address if it is not watchlisted
+      if (!addressInDb.isOnWatchlist) await this.deleteAddress(address);
+      // remove from group otherwise
+      await this.updateAddress(address, { groupId: '' });
+    }
   }
 }
