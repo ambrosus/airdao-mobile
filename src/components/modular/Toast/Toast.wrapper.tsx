@@ -105,40 +105,6 @@ export const ToastWrapper = forwardRef((_, ref) => {
         onPress={options.onBodyPress}
       >
         <AlertBanner {...options} hideVisible={true} onHide={hide} />
-        {/* <Row alignItems="center" justifyContent="space-between">
-          <View style={styles.statusIcon}>{ToastStatusIcon[options.type]}</View>
-          <View style={{ flex: 1 }}>
-            <Text
-              fontSize={16}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral700}
-            >
-              {options.text}
-            </Text>
-            {Boolean(options.subtext) && (
-              <>
-                <Spacer value={verticalScale(8)} />
-                <Text
-                  fontSize={14}
-                  fontWeight="400"
-                  fontFamily="Inter_400Regular"
-                  color={COLORS.neutral700}
-                  style={{ flexDirection: 'row', alignItems: 'baseline' }}
-                >
-                  {options.subtext}
-                </Text>
-              </>
-            )}
-          </View>
-          <Button onPress={hide} style={styles.closeBtn}>
-            <CloseIcon color={COLORS.neutral700} />
-          </Button>
-        </Row>
-        {options.actions && options.actions?.length > 0 && (
-          <View style={styles.actions}>
-            {options.actions?.map(renderAction)}
-          </View>
-        )} */}
       </Pressable>
     </Animated.View>
   );
