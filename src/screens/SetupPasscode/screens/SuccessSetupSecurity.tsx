@@ -22,7 +22,10 @@ export const SuccessSetupSecurity = () => {
 
   const navigateToHome = () => {
     navigation.dispatch(
-      CommonActions.reset({ index: 0, routes: [{ name: 'HomeScreen' }] })
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+      })
     );
   };
 

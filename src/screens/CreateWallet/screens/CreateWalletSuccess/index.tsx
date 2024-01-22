@@ -22,7 +22,7 @@ export const CreateWalletSuccess = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'HomeScreen' }]
+          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
         })
       );
     } else {
