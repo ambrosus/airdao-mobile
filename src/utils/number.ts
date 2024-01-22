@@ -3,7 +3,9 @@
  */
 const formatNumber = (amount: number, decimalPlaces = 2): string => {
   if (amount === undefined || amount == null) return '';
-  const strAmount = amount.toFixed(decimalPlaces);
+  const isNegative = amount < 0;
+  const positiveAmount = Math.abs(amount);
+  const strAmount = positiveAmount.toFixed(decimalPlaces);
   let formattedString = '';
   let counter = 0;
   const startingIdx =
@@ -19,7 +21,11 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
     formattedString = ch + formattedString;
     counter++;
   }
-  return formattedString + strAmount.substring(startingIdx + 1);
+  return (
+    (isNegative ? '-' : '') +
+    formattedString +
+    strAmount.substring(startingIdx + 1)
+  );
 };
 
 // limits the number of decimal places of a number in the format of e.g 245.82
