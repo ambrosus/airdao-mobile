@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -124,13 +124,24 @@ export const ExplorerAccountView = (
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
       <Spacer value={verticalScale(16)} />
-      <Text
-        fontFamily="Mersad_600SemiBold"
-        fontSize={30}
-        color={COLORS.neutral800}
-      >
-        ${NumberUtils.formatNumber(USDBalance)}
-      </Text>
+      <Row alignItems="center">
+        <Text fontSize={28} fontWeight="700" color={COLORS.neutral900}>
+          {NumberUtils.formatNumber(AMBBalance)}
+        </Text>
+        <Badge
+          icon={
+            <Text
+              fontSize={14}
+              fontWeight="500"
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral800}
+            >
+              ${NumberUtils.formatNumber(USDBalance)}
+            </Text>
+          }
+          color={COLORS.alphaBlack5}
+        />
+      </Row>
       {ambPriceData && (
         <>
           <Spacer value={verticalScale(16)} />
