@@ -19,7 +19,6 @@ module.exports = function (api) {
             '@crypto': './crypto',
             '@database': './src/database',
             '@hooks': './src/hooks',
-            '@helpers': './src/helpers',
             '@lib': './src/lib',
             '@models': './src/models',
             '@navigation': './src/navigation',

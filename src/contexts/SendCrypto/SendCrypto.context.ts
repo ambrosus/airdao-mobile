@@ -4,7 +4,7 @@ import {
   SendCryptoDispatch,
   SendCryptoDispatchPayload
 } from './SendCrypto.types';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { SEND_CRYPTO_INITIAL_STATE } from './SendCrypto.constants';
 
 const SendCryptoContext = (): {

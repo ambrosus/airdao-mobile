@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { ExplorerAccount } from '@models/Explorer';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { AirDAOEventDispatcher } from '@lib';
 import {
   AirDAOEventType,

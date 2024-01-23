@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { AddWalletContextState, AddWalletFlowType } from './AddWallet.types';
 
 const AddWalletContext = (): AddWalletContextState => {

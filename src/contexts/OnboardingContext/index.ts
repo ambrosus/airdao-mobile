@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { OnboardingContent } from '@constants/onboarding-content';
 import { Cache, CacheKey } from '@lib/cache';
 

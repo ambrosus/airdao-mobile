@@ -54,7 +54,7 @@ jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
 //   };
 // });
 
-jest.mock('@helpers/createContextSelector', () => ({
+jest.mock('@utils/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]
 }));
 
