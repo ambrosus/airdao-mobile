@@ -149,7 +149,11 @@ export const ExplorerAccountView = (
             fontSize={14}
             fontFamily="Inter_500Medium"
             fontWeight="500"
-            color={COLORS.neutral900}
+            color={
+              ambPriceData.percentChange24H > 0
+                ? COLORS.success400
+                : COLORS.error400
+            }
           >
             {`${NumberUtils.addSignToNumber(
               ambPriceData.percentChange24H
