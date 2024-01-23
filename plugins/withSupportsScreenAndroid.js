@@ -18,7 +18,6 @@ exports.__esModule = true;
 var config_plugins_1 = require('@expo/config-plugins');
 function addAttributesToManifest(androidManifest) {
   var manifest = androidManifest.manifest;
-  manifest.$['android:smallScreens'];
   var supportsScreens = {};
   supportsScreens.$ = __assign(__assign({}, supportsScreens.$), {
     'android:smallScreens': true,

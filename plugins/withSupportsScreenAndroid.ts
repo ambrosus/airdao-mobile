@@ -5,15 +5,14 @@ function addAttributesToManifest(
   androidManifest: AndroidManifest
 ): AndroidManifest {
   const { manifest } = androidManifest;
-  manifest.$['android:smallScreens'];
 
   const supportsScreens = {};
   supportsScreens.$ = {
     ...supportsScreens.$,
-    'android:smallScreens': false,
-    'android:normalScreens': false,
-    'android:largeScreens': true,
-    'android:xlargeScreens': true
+    'android:smallScreens': true,
+    'android:normalScreens': true,
+    'android:largeScreens': false,
+    'android:xlargeScreens': false
   };
   manifest['supports-screens'] = supportsScreens;
   return androidManifest;
