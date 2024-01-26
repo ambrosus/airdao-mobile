@@ -1,18 +1,13 @@
 import { useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
-import { AddWalletContextState, AddWalletFlowType } from './AddWallet.types';
+import { AddWalletContextState } from './AddWallet.types';
 
 const AddWalletContext = (): AddWalletContextState => {
-  const [flowType, setFlowType] = useState<AddWalletFlowType>(
-    AddWalletFlowType.CREATE_WALLET
-  );
   const [walletHash, setWalletHash] = useState('');
   const [walletName, setWalletName] = useState('');
   const [walletMnemonic, setWalletMnemonic] = useState('');
   const [mnemonicLength, setMnemonicLength] = useState(0);
   return {
-    flowType,
-    setFlowType,
     walletHash,
     setWalletHash,
     walletName,

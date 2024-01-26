@@ -13,7 +13,7 @@ import { useForwardedRef } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
-import { AddWalletFlowType, useAddWalletContext } from '@contexts';
+import { useAddWalletContext } from '@contexts';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
   BottomSheetRef,
@@ -22,11 +22,9 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
-  const { setFlowType, setWalletName, setMnemonicLength } =
-    useAddWalletContext();
+  const { setWalletName, setMnemonicLength } = useAddWalletContext();
 
   const navigateToWalletCreate = () => {
-    setFlowType(AddWalletFlowType.CREATE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
     navigation.navigate('CreateWalletStep0');
@@ -34,7 +32,6 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   };
 
   const navigateToImportWallet = () => {
-    setFlowType(AddWalletFlowType.RESTORE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
     navigation.navigate('ImportWallet');

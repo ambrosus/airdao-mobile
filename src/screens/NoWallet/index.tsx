@@ -15,14 +15,13 @@ import { Row, Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { AddWalletFlowType, useAddWalletContext } from '@contexts';
+import { useAddWalletContext } from '@contexts';
 import { NoWalletStep, StepCircle, StepInfo } from './components';
 import { NoWalletSteps } from './NoWallet.constants';
 import { styles } from './styles';
 
 export const NoWalletScreen = () => {
-  const { setFlowType, setWalletName, setMnemonicLength } =
-    useAddWalletContext();
+  const { setWalletName, setMnemonicLength } = useAddWalletContext();
   const navigation = useNavigation<RootNavigationProp>();
   const [currentStep, setCurrentStep] = useState(0);
   const { width: WINDOW_WIDTH } = useWindowDimensions();
@@ -41,7 +40,6 @@ export const NoWalletScreen = () => {
   };
 
   const navigateToNewWallet = () => {
-    setFlowType(AddWalletFlowType.CREATE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
     navigation.navigate('Tabs', {
@@ -51,7 +49,6 @@ export const NoWalletScreen = () => {
   };
 
   const navigateToImportWallet = () => {
-    setFlowType(AddWalletFlowType.RESTORE_WALLET);
     setWalletName('');
     setMnemonicLength(128);
     navigation.navigate('Tabs', {
