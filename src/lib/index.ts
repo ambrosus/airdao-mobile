@@ -1,4 +1,3 @@
-export * from './device';
 export * from './notification';
 export * from './event-dispatcher';
 export * from './helpers/AirDAOKeysStorage';

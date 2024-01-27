@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { DeviceService, NotificationService, PermissionService } from '@lib';
+import { NotificationService, PermissionService } from '@lib';
 import {
   CacheableAccount,
   CacheableAccountList,
@@ -110,7 +110,6 @@ export const useAppInit = () => {
       try {
         migrateAddressesFromCache();
         prepareNotifications();
-        DeviceService.setupUniqueDeviceID();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
