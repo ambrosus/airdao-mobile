@@ -99,8 +99,7 @@ export const SendFunds = () => {
     selectedToken,
     parseFloat(amountInCrypto),
     senderAddress,
-    destinationAddress,
-    walletHash
+    destinationAddress
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
 
@@ -185,6 +184,7 @@ export const SendFunds = () => {
         });
         await TransactionUtils.sendTx(
           walletHash,
+          senderAddress,
           destinationAddress,
           Number(amountInCrypto),
           selectedToken

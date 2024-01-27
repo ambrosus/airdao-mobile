@@ -5,6 +5,7 @@ import { Token } from '@models';
 
 const sendTx = async (
   walletHash: string,
+  from: string,
   to: string,
   etherAmount: number,
   token: Token
@@ -18,6 +19,7 @@ const sendTx = async (
       token.symbol !== AirDAODictTypes.Code.AMB ? token.address : undefined;
     await TransferDispatcher.sendTx(
       privateKey,
+      from,
       to,
       etherAmount.toString(),
       additionalData
@@ -28,20 +30,16 @@ const sendTx = async (
 };
 
 const getEstimatedFee = async (
-  walletHash: string,
+  from: string,
   to: string,
   etherAmount: number,
   token: Token
 ): Promise<number> => {
   try {
-    const privateKey = (await Cache.getItem(
-      `${CacheKey.WalletPrivateKey}-${walletHash}`
-    )) as string;
-    if (!privateKey) throw Error('PRIVATE_KEY_NOT_FOUND');
     const additionalData =
       token.symbol !== AirDAODictTypes.Code.AMB ? token.address : undefined;
     return await TransferDispatcher.getEstimatedFee(
-      privateKey,
+      from,
       to,
       etherAmount.toString(),
       additionalData

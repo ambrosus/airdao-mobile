@@ -56,16 +56,14 @@ class TransferDispatcher {
   }
 
   async getEstimatedFee(
-    privateKey: string,
+    sender: string,
     recipient: string,
     amountInEther: string,
     tokenAddress?: string
   ): Promise<number> {
-    // Get account
-    const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
     // Get transaction config
     const txObject = await this.prepareTransactionConfig(
-      account.address,
+      sender,
       recipient,
       amountInEther,
       tokenAddress
@@ -78,21 +76,19 @@ class TransferDispatcher {
         ).toString()
       )
     );
-    // return gasPrice * GAS_LIMIT;
   }
 
   async sendTx(
     privateKey: string,
+    sender: string,
     recipient: string,
     amountInEther: string,
     tokenAddress?: string
   ): Promise<string> {
     try {
-      // Get account
-      const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
       // Prepare transaction config
       const txConfig = await this.prepareTransactionConfig(
-        account.address,
+        sender,
         recipient,
         amountInEther,
         tokenAddress
@@ -100,7 +96,7 @@ class TransferDispatcher {
       // Sign transaction
       const signedTx = await this.web3.eth.accounts.signTransaction(
         txConfig,
-        account.privateKey
+        privateKey
       );
       // Send transaction
       const txReceipt = await this.web3.eth.sendSignedTransaction(
