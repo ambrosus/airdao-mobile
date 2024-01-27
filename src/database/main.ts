@@ -7,8 +7,7 @@ import {
   AccountDBModel,
   WalletPubDBModel,
   TransactionRawDBModel,
-  TransactionScannersTmpDBModel,
-  CurrencyDBModel
+  TransactionScannersTmpDBModel
 } from './models';
 import { schema } from './schemas';
 import { PublicAddressDbModel } from './models/public-address';
@@ -25,7 +24,6 @@ export const database = new Database({
   adapter,
   modelClasses: [
     AccountDBModel,
-    CurrencyDBModel,
     PublicAddressDbModel,
     PublicAddressListDbModel,
     TransactionsDBModel,

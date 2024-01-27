@@ -18,10 +18,6 @@ function getCurrencyAllSettings(currencyCodeOrObject, source = '') {
       DatabaseTable.Accounts,
       `DELETE FROM ${DatabaseTable.Accounts} WHERE currency_code='ETH_LAND'`
     );
-    Database.unsafeRawQuery(
-      DatabaseTable.Currencies,
-      `DELETE FROM ${DatabaseTable.Currencies} WHERE currency_code='ETH_LAND'`
-    );
   }
 
   if (typeof currencyCodeOrObject.currencyCode !== 'undefined') {
