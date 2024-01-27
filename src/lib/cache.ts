@@ -11,14 +11,11 @@ export enum CacheKey {
   IsBiometricEnabled = 'is_biometric_login_enabled',
   NotificationSettings = 'notification_settings',
   NotificationToken = 'notification_token',
-  Onboarding = 'onboarding',
   LastNotificationTimestamp = 'last_notification_timestamp',
   Passcode = 'passcode',
   PreCreatedGroupWasCreated = 'pre_created_group_was_created',
-  SendInputType = 'send_input_type',
   SelectedWallet = 'selected_wallet',
-  WalletPrivateKey = 'wallet_private_key',
-  Watchlist = 'watchlist'
+  WalletPrivateKey = 'wallet_private_key'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {

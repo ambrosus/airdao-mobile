@@ -6,7 +6,6 @@ import { ListsContextProvider } from '@contexts/ListsContext';
 import {
   AddWalletProvider,
   AllAddressesProvider,
-  OnboardingContextProvider,
   LocalizationProvider,
   PasscodeProvider
 } from '@contexts';
@@ -52,7 +51,6 @@ const providers = [
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
-  OnboardingContextProvider,
   AddWalletProvider
 ];
 

@@ -11,15 +11,6 @@ jest.mock('react-native-graph', () => ({
   GraphPoint: jest.fn()
 }));
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn(),
-    start: jest.fn()
-  }))
-}));
-
 let mockedData = [
   {
     _id: '123123',

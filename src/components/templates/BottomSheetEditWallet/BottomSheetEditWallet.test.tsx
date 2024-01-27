@@ -55,14 +55,6 @@ jest.mock('@contexts/ListsContext', () => ({
   }))
 }));
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 Object.defineProperty(Array.prototype, 'indexOfItem', {
   value: jest.fn()
 });
