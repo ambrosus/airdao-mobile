@@ -12,7 +12,6 @@ import {
 } from '@components/templates';
 import { HomeNavigationProp } from '@appTypes/navigation';
 import { etherumAddressRegex } from '@constants/regex';
-import { OnboardingView } from '@components/templates/OnboardingView';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { useNewNotificationsCount } from '../hooks/useNewNotificationsCount';
@@ -86,21 +85,13 @@ export const HomeHeader = React.memo((): JSX.Element => {
     return (
       <>
         <View style={{ bottom: scale(3) }}>
-          <OnboardingView
-            thisStep={12}
-            childrenAlwaysVisible
-            tooltipPlacement="bottom"
-            helpers={{ next: openScanner }}
-            removeAndroidStatusBarHeight
+          <Button
+            onPress={() => {
+              openScanner();
+            }}
           >
-            <Button
-              onPress={() => {
-                openScanner();
-              }}
-            >
-              <ScannerIcon color="#393b40" />
-            </Button>
-          </OnboardingView>
+            <ScannerIcon color="#393b40" />
+          </Button>
           <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
             <BarcodeScanner
               onScanned={onQRCodeScanned}

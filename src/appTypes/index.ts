@@ -9,7 +9,6 @@ export * from './enums';
 export * from './MainNavigationParams';
 export * from './navigation';
 export * from './notification';
-export * from './OnboardingContent';
 export * from './Permission';
 export * from './QueryResponse';
 export * from './Sharing';

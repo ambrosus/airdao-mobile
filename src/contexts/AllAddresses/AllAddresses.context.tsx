@@ -103,8 +103,6 @@ const AllAddressesContext = () => {
   const getAddresses = async () => {
     setLoading(true);
     try {
-      // const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-      //   []) as CacheableAccount[];
       const addresses = await PublicAddressDB.getAll();
       const currentAddresses = allAddresses
         .filter((address) => !!address)

@@ -19,7 +19,6 @@ import {
   ToastPosition,
   ToastType
 } from '@components/modular';
-import { OnboardingView } from '../OnboardingView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -50,14 +49,6 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
     const [localGroupName, setLocalGroupName] = useState<string>('');
 
     const [emptyPlaceholder, setEmptyPlaceholder] = useState(false);
-
-    // onboarding functions
-    const setDemoName = () => {
-      nameInput.current?.setText('Demo group');
-      setLocalGroupName('Demo Group');
-    };
-
-    // end of onboarding functions
 
     const handleButtonPress = useCallback(() => {
       if (!localGroupName) {
@@ -141,54 +132,41 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
                 : t('collection.rename')}
             </Text>
             <Spacer value={8} />
-            <OnboardingView
-              thisStep={8}
-              tooltipPlacement="bottom"
-              childrenAlwaysVisible
-              helpers={{ next: setDemoName, back: localRef.current?.dismiss }}
-            >
-              <Input
-                testID="BottomSheetCreateRename_Input"
-                ref={nameInput}
-                value={localGroupName}
-                onChangeValue={setLocalGroupName}
-                type="text"
-                placeholder={
-                  emptyPlaceholder
-                    ? t('common.field.required')
-                    : t('collection.name.input.placeholder')
-                }
-                placeholderTextColor={
-                  emptyPlaceholder ? COLORS.error400 : COLORS.alphaBlack60
-                }
-                style={[styles.bottomSheetInput]}
-              />
-            </OnboardingView>
+
+            <Input
+              testID="BottomSheetCreateRename_Input"
+              ref={nameInput}
+              value={localGroupName}
+              onChangeValue={setLocalGroupName}
+              type="text"
+              placeholder={
+                emptyPlaceholder
+                  ? t('common.field.required')
+                  : t('collection.name.input.placeholder')
+              }
+              placeholderTextColor={
+                emptyPlaceholder ? COLORS.error400 : COLORS.alphaBlack60
+              }
+              style={[styles.bottomSheetInput]}
+            />
             <Spacer value={24} />
-            <OnboardingView
-              thisStep={9}
-              tooltipPlacement="bottom"
-              childrenAlwaysVisible
-              helpers={{ next: handleButtonPress }}
+            <PrimaryButton
+              testID="BottomSheetCreateRename_Button"
+              onPress={handleButtonPress}
+              disabled={!Boolean(localGroupName)}
             >
-              <PrimaryButton
-                testID="BottomSheetCreateRename_Button"
-                onPress={handleButtonPress}
-                disabled={!Boolean(localGroupName)}
+              <Text
+                fontFamily="Inter_600SemiBold"
+                fontSize={16}
+                color={
+                  Boolean(localGroupName)
+                    ? COLORS.neutral0
+                    : COLORS.alphaBlack30
+                }
               >
-                <Text
-                  fontFamily="Inter_600SemiBold"
-                  fontSize={16}
-                  color={
-                    Boolean(localGroupName)
-                      ? COLORS.neutral0
-                      : COLORS.alphaBlack30
-                  }
-                >
-                  {type === 'create' ? t('button.create') : t('button.save')}
-                </Text>
-              </PrimaryButton>
-            </OnboardingView>
+                {type === 'create' ? t('button.create') : t('button.save')}
+              </Text>
+            </PrimaryButton>
             <Spacer value={24} />
             <Button
               testID="BottomSheetCreateRename_Cancel_Button"

@@ -101,9 +101,6 @@ jest.mock('@contexts', () => ({
   useLists: jest.fn(() => ({
     handleOnCreate: jest.fn(),
     listsOfAddressGroup: mockedListsOfAddressGroup
-  })),
-  useOnboardingStatus: jest.fn(() => ({
-    start: jest.fn()
   }))
 }));
 
