@@ -215,10 +215,6 @@ function getCurrencyAllSettings(
       `DELETE FROM account WHERE currency_code='ETH_LAND'`
     );
     Database.unsafeRawQuery(
-      DatabaseTable.AccountBalances,
-      `DELETE FROM account_balance WHERE currency_code='ETH_LAND'`
-    );
-    Database.unsafeRawQuery(
       DatabaseTable.Currencies,
       `DELETE FROM currency WHERE currency_code='ETH_LAND'`
     );
