@@ -3,8 +3,6 @@ export * from './query';
 export * from './useAppFocused';
 export * from './useAppInit';
 export * from './useAppState';
-export * from './query/useCurrencyRate';
-export * from './useExchangeRate';
 export * from './useForwardedRef';
 export * from './useFullscreenModalHeight';
 export * from './useInitialMountEffect';
