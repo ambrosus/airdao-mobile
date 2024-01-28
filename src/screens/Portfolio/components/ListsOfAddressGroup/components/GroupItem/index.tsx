@@ -49,7 +49,7 @@ export const GroupItem = memo(
       const [open, setOpen] = useState<boolean>(false);
       // close swipeable on another swipeable open
       useSwipeableDismissListener(
-        'collection-item-opened',
+        AirDAOEventType.CollectionItemOpened,
         group.id,
         swipeableRef
       );
