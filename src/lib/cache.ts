@@ -5,8 +5,8 @@ import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
 
 export enum CacheKey {
-  AddressLists = 'address_lists', // TODO This key is deprecated Can be deleted after a few version updates over 1.0.1
-  AllAddresses = 'all_addresses', // TODO This key is deprecated. Can be deleted after a few version updates over 1.0.1.
+  AddressLists = 'address_lists', // TODO This key is deprecated Can be deleted after a few version updates over 1.1.0
+  AllAddresses = 'all_addresses', // TODO This key is deprecated. Can be deleted after a few version updates over 1.1.0.
   isBiometricAuthenticationInProgress = 'is_biometric_auth_in_progress',
   IsBiometricEnabled = 'is_biometric_login_enabled',
   NotificationSettings = 'notification_settings',
