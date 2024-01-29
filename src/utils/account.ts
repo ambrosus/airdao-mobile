@@ -1,4 +1,4 @@
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 import { AccountDB } from '@database';
 
 const createAccountInDB = async (
@@ -6,7 +6,7 @@ const createAccountInDB = async (
   walletHash: string,
   derivationPath: string,
   index: number,
-  currencyCode: AirDAODictTypes.Code
+  currencyCode: CryptoCurrencyCode
 ) => {
   try {
     const account = {

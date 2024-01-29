@@ -1,6 +1,6 @@
+import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { useCurrencyRate } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -10,7 +10,7 @@ import { StyleSheet, View } from 'react-native';
 
 interface StakingInfoProps {
   totalStake: number;
-  currency: AirDAODictTypes.Code;
+  currency: CryptoCurrencyCode;
   userStaking: number;
   earnings: number;
   apy: number;

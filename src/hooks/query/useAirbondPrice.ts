@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryResponse } from '@appTypes/QueryResponse';
-import web3ContractHelper from '@lib/helpers/AirDAOWeb3ContractHelper';
+import web3ContractHelper from '@lib/crypto/AirDAOWeb3ContractHelper';
 
 export function useAirbondPrice(): QueryResponse<any> {
   const { data, isLoading, isRefetching, error, refetch } = useQuery<any>(

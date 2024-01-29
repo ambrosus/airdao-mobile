@@ -24,8 +24,12 @@ import {
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { AirDAOEventType, HomeNavigationProp, HomeParamsList } from '@appTypes';
+import {
+  AirDAOEventType,
+  CryptoCurrencyCode,
+  HomeNavigationProp,
+  HomeParamsList
+} from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
@@ -71,7 +75,7 @@ export const SendFunds = () => {
     name: 'AirDAO',
     address: senderAddress || '',
     balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
-    symbol: AirDAODictTypes.Code.AMB
+    symbol: CryptoCurrencyCode.AMB
   });
 
   const [selectedToken, setSelectedToken] = useState<Token>(

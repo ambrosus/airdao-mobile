@@ -1,11 +1,11 @@
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 
 export interface SendCryptoContextState {
   from: string;
   to: string;
   walletHash: string;
   amount: number;
-  currency: AirDAODictTypes.Code;
+  currency: CryptoCurrencyCode;
   loading: boolean;
   estimatedFee: number;
   error: Error | null;

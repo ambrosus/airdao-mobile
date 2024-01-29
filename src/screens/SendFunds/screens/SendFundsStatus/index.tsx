@@ -9,9 +9,8 @@ import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { useSendCryptoContext } from '@contexts';
-import { HomeNavigationProp } from '@appTypes';
+import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 
@@ -21,7 +20,7 @@ export const SendFundsStatus = () => {
     from,
     to,
     amount = 0,
-    currency = AirDAODictTypes.Code.AMB,
+    currency = CryptoCurrencyCode.AMB,
     loading,
     error,
     estimatedFee

@@ -1,14 +1,15 @@
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import erc20 from './erc20';
-
-const WEB3_LINK = 'https://network.ambrosus.io';
+import Config from '@constants/config';
 
 class TransferDispatcher {
   private web3: Web3;
 
   constructor() {
-    this.web3 = new Web3(new Web3.providers.HttpProvider(WEB3_LINK));
+    this.web3 = new Web3(
+      new Web3.providers.HttpProvider(Config.WEB3_NETWORK_URL)
+    );
     this.web3.eth.transactionPollingTimeout = 15;
   }
 
@@ -78,6 +79,10 @@ class TransferDispatcher {
     );
   }
 
+  async signTransaction(txConfig: TransactionConfig, privateKey: string) {
+    return await this.web3.eth.accounts.signTransaction(txConfig, privateKey);
+  }
+
   async sendTx(
     privateKey: string,
     sender: string,
@@ -94,10 +99,7 @@ class TransferDispatcher {
         tokenAddress
       );
       // Sign transaction
-      const signedTx = await this.web3.eth.accounts.signTransaction(
-        txConfig,
-        privateKey
-      );
+      const signedTx = await this.signTransaction(txConfig, privateKey);
       // Send transaction
       const txReceipt = await this.web3.eth.sendSignedTransaction(
         signedTx.rawTransaction as string

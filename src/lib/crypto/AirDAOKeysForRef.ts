@@ -1,10 +1,6 @@
-/**
- * @author Javid
- * @version 0.5
- */
 import AirDAOKeys from './AirDAOKeys';
-import AirDAODispatcher from '../../../crypto/blockchains/AirDAODispatcher';
 import { AddressUtils } from '@utils/address';
+import AddressProcessor from '@lib/crypto/AddressProcessor';
 
 const CACHE: { [key: string]: any } = {};
 
@@ -32,8 +28,7 @@ class AirDAOKeysForRef {
       const root = await AirDAOKeys.getBip32Cached(data.mnemonic);
       const path = `m/44'/60'/${index}'/0/0`;
       const child = root.derivePath(path);
-      const processor = await AirDAODispatcher.getAddressProcessor('AMB');
-      result = await processor.getAddress(child.privateKey);
+      result = await AddressProcessor.getAddressByPrivateKey(child.privateKey);
       result.index = index;
       result.path = path;
       if (index === 0) {
@@ -43,18 +38,6 @@ class AirDAOKeysForRef {
     result.cashbackToken = AddressUtils.addressToToken(result.address);
     CACHE[mnemonicCache] = result;
     return result;
-  }
-
-  async signDataForApi(msg: string, privateKey: string) {
-    const processor = await AirDAODispatcher.getAddressProcessor('AMB');
-    if (privateKey.substring(0, 2) !== '0x') {
-      privateKey = '0x' + privateKey;
-    }
-    const signedData = await processor.signMessage(msg, privateKey);
-    delete signedData.v;
-    delete signedData.r;
-    delete signedData.s;
-    return signedData;
   }
 }
 

@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
 import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
-import { HomeNavigationProp } from '@appTypes';
+import { HomeNavigationProp, CryptoCurrencyCode } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;
@@ -41,7 +40,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
       name: 'AirDAO',
       address: account.address,
       balance: { wei: '', ether: account.ambBalance },
-      symbol: AirDAODictTypes.Code.AMB
+      symbol: CryptoCurrencyCode.AMB
     })
   ];
 

@@ -1,4 +1,4 @@
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 import { SendCryptoContextState } from './SendCrypto.types';
 
 export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
@@ -6,7 +6,7 @@ export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
   to: '',
   walletHash: '',
   amount: 0,
-  currency: AirDAODictTypes.Code.AMB,
+  currency: CryptoCurrencyCode.AMB,
   loading: false,
   estimatedFee: 0,
   error: null,

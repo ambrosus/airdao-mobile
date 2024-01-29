@@ -9,8 +9,7 @@ import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
-import { HomeParamsList } from '@appTypes';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakeToken, StakingInfo } from './components';
 import { styles } from './style';
 import { WalletPicker } from '@components/templates';
@@ -22,7 +21,7 @@ export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
   const { t } = useTranslation();
-  const currency = AirDAODictTypes.Code.AMB;
+  const currency = CryptoCurrencyCode.AMB;
   const { totalStake, userStake, earnings, apy } = pool;
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
     allWallets?.length > 0 ? allWallets[0] : null
