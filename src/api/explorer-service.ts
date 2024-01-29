@@ -15,7 +15,7 @@ import { SearchSort } from '@screens/Search/Search.types';
 const exploreApiUrl = Config.EXPLORER_API_URL;
 const explorerapiV2Url = Config.EXPLORER_API_V2_URL;
 
-const getExplorerAccountTypeFromResponseMeta = (
+const _getExplorerAccountTypeFromResponseMeta = (
   search: string
 ): ExplorerAccountType => {
   if (search.includes('apollo')) return ExplorerAccountType.Apollo;
@@ -55,7 +55,7 @@ const searchAddress = async (address: string): Promise<ExplorerAccountDTO> => {
   try {
     const response = await axios.get(`${exploreApiUrl}/search/${address}`);
     const { meta, data } = response.data;
-    const type = getExplorerAccountTypeFromResponseMeta(meta.search);
+    const type = _getExplorerAccountTypeFromResponseMeta(meta.search);
     return data.account ? { ...data.account, type } : { ...data, type };
   } catch (error) {
     throw error;
@@ -72,6 +72,7 @@ const getTransactionDetails = async (hash: string): Promise<TransactionDTO> => {
   }
 };
 
+// deprecated
 const getTransactionsOfAccount = async (
   address: string,
   page: number,
@@ -129,7 +130,6 @@ const getTokenTransactionsV2 = async (
     const response = await axios.get(apiUrl);
     return {
       data: response.data.data,
-      // @ts-ignore
       next: response.data.pagination.hasNext ? (page + 1).toString() : null
     };
   } catch (error) {
@@ -143,6 +143,6 @@ export const explorerService = {
   searchAddress,
   getTransactionsOfAccount,
   getTransactionDetails,
-  getTransactionsOfAccountV2: getTransactionsOfAccountV2,
+  getTransactionsOfAccountV2,
   getTokenTransactionsV2
 };

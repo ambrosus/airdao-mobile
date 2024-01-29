@@ -39,7 +39,6 @@ const watchAddresses = async (addresses: string[]): Promise<void> => {
   try {
     await axios.put(`${watcherAPI}`, {
       addresses,
-      // eslint-disable-next-line camelcase
       push_token: pushToken,
       threshold: notificationSettings.pricePercentThreshold
     });
@@ -71,7 +70,6 @@ const removeWatcherForAddresses = async (
     await axios.delete(`${watcherAPI}-addresses`, {
       data: {
         addresses,
-        // eslint-disable-next-line camelcase
         push_token: pushToken
       }
     });
@@ -88,7 +86,6 @@ const updateNotificationSettings = async (
   try {
     await axios.put(`${watcherAPI}`, {
       addresses: [],
-      // eslint-disable-next-line camelcase
       push_token: pushToken,
       threshold: pricePercentThreshold,
       tx_notification: transactionAlerts ? 'on' : 'off',

@@ -3,7 +3,7 @@ export * from './AirDAOEvents';
 export * from './AppPreferences';
 export * from './CacheableAccount';
 export * from './CacheableAccountList';
-export * from './coinmarketcap';
+export * from './PriceSnapshot';
 export * from './database';
 export * from './enums';
 export * from './MainNavigationParams';

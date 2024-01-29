@@ -9,7 +9,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { GraphPoint } from 'react-native-graph';
-import { CMCInterval } from '@appTypes';
+import { PriceSnapshotInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -28,7 +28,7 @@ interface AMBPriceHistoryProps {
 }
 
 // @ts-ignore
-const intervalTimeDiffMap: { [key in CMCInterval]: number } = {
+const intervalTimeDiffMap: { [key in PriceSnapshotInterval]: number } = {
   // '1h': 3.6 * 10e5,
   '1d': 8.64 * 10e6,
   'weekly': 6.048 * 10e7,
@@ -40,7 +40,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const { data: ambPriceNow } = useAMBPrice();
   const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
   const [selectedInterval, setSelectedInverval] =
-    useState<CMCInterval>(defaultInterval);
+    useState<PriceSnapshotInterval>(defaultInterval);
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
@@ -228,7 +228,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           }
         }}
         onIntervalSelected={(interval) =>
-          setSelectedInverval(interval.value as CMCInterval)
+          setSelectedInverval(interval.value as PriceSnapshotInterval)
         }
       />
     </View>

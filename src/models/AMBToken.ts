@@ -1,4 +1,4 @@
-import { CMCChartQuote } from '@appTypes';
+import { PriceSnapshot } from '@appTypes';
 import { AMBTokenDTO } from './dtos';
 
 export class AMBToken {
@@ -38,7 +38,7 @@ export class AMBToken {
     this.createdAt = new Date(details.createdAt);
   }
 
-  static fromCMCResponse(data: CMCChartQuote): AMBToken {
+  static fromCMCResponse(data: PriceSnapshot): AMBToken {
     return {
       _id: 'amb',
       id: 1,
@@ -57,24 +57,5 @@ export class AMBToken {
       marketCapUSD: -1,
       createdAt: new Date(data[0])
     };
-    // const usdData = data.quote.USD;
-    // return {
-    //   _id: 'amb',
-    //   id: 1,
-    //   name: 'AirDAO',
-    //   symbol: 'AMB',
-    //   circulatingSupply: usdData.circulating_supply,
-    //   maxSupply: -1,
-    //   totalSupply: usdData.total_supply,
-    //   timestamp: new Date(usdData.timestamp),
-    //   rank: -1,
-    //   percentChange1H: -1,
-    //   percentChange24H: -1,
-    //   percentChange7D: -1,
-    //   priceUSD: usdData.price,
-    //   volumeUSD: usdData.volume_24h,
-    //   marketCapUSD: usdData.market_cap,
-    //   createdAt: new Date()
-    // };
   }
 }
