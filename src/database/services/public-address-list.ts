@@ -4,12 +4,12 @@ import { Q } from '@nozbe/watermelondb';
 import { PublicAddressListDbModel } from '@database/models';
 import { PublicAddressDB } from './public-address';
 
-const publichAddressListDb = DatabaseTable.PublicAddressLists;
+const publicAddressListDb = DatabaseTable.PublicAddressLists;
 
 export class PublicAddressListDB {
   static async getList(id: string): Promise<PublicAddressListDbModel | null> {
     const lists = (await Database.query(
-      publichAddressListDb,
+      publicAddressListDb,
       Q.where('id', Q.eq(id))
     )) as PublicAddressListDbModel[];
     if (lists.length > 0) return lists[0];
@@ -18,7 +18,7 @@ export class PublicAddressListDB {
 
   static async getAll(): Promise<PublicAddressListDbModel[]> {
     const lists = (await Database.query(
-      publichAddressListDb
+      publicAddressListDb
     )) as PublicAddressListDbModel[];
     return lists;
   }
@@ -42,7 +42,7 @@ export class PublicAddressListDB {
 
   static async createList(name: string, accounts?: CacheableAccount[]) {
     try {
-      const newList = (await Database.createModel(publichAddressListDb, {
+      const newList = (await Database.createModel(publicAddressListDb, {
         name
       })) as PublicAddressListDbModel;
       if (accounts && accounts.length > 0) {
@@ -61,7 +61,7 @@ export class PublicAddressListDB {
         throw Error('No such list found in db!');
       }
       if (!!newName && newName !== listInDb.name) {
-        return await Database.updateModel(publichAddressListDb, id, {
+        return await Database.updateModel(publicAddressListDb, id, {
           name: newName
         });
       }
@@ -77,7 +77,7 @@ export class PublicAddressListDB {
       for (const address of allAddresses) {
         await PublicAddressDB.removeFromGroup(address.address);
       }
-      await Database.deleteModel(publichAddressListDb, list.id);
+      await Database.deleteModel(publicAddressListDb, list.id);
     }
   }
 }
