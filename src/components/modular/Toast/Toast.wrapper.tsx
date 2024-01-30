@@ -16,9 +16,8 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
 import { ToastOptions, ToastPosition, ToastType } from './Toast.types';
+import { TOAST_DEFAULT_DURATION } from './Toast.constants';
 import { AlertBanner } from './Toast.body';
-
-const DEFAULT_DURATION = 2500;
 
 export const ToastWrapper = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
@@ -38,7 +37,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
   const [toastVisible, setToastVisible] = useState(false);
   const [options, setOptions] =
     React.useState<Omit<ToastOptions, 'duration'>>(defaultOptions);
-  const duration = useRef(DEFAULT_DURATION);
+  const duration = useRef(TOAST_DEFAULT_DURATION);
   const timerRef = useRef<NodeJS.Timer | null>(null);
 
   const clearTimer = useCallback(() => {
@@ -50,7 +49,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
   const hide = useCallback(() => {
     setToastVisible(false);
     setOptions(defaultOptions);
-    duration.current = DEFAULT_DURATION;
+    duration.current = TOAST_DEFAULT_DURATION;
     clearTimer();
   }, [clearTimer, defaultOptions]);
 
@@ -64,7 +63,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
   const show = useCallback(
     (params: ToastOptions) => {
       setOptions({ ...defaultOptions, ...params });
-      duration.current = params.duration || DEFAULT_DURATION;
+      duration.current = params.duration || TOAST_DEFAULT_DURATION;
       setToastVisible(true);
       startTimer();
     },
