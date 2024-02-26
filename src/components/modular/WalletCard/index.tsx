@@ -44,32 +44,32 @@ export const WalletCard = (props: WalletCardProps) => {
       <View style={styles.logo}>
         <LogoGradient />
       </View>
-        <CopyToClipboardButton
-          textToDisplay={StringUtils.formatAddress(
-            address,
-            addressLeftPadding,
-            addressRightPadding
-          )}
-          copiedTextWrapperStyle={{
-            backgroundColor: COLORS.lightWhite,
-            borderColor: COLORS.transparentWhite,
-            borderWidth: 1,
-            paddingHorizontal: 8,
-            borderRadius: 20
-          }}
-          textToCopy={address}
-          textProps={{
-            fontFamily: 'Inter_400Regular',
-            fontSize: 14,
-            fontWeight: '400',
-            color: addressTextColor
-          }}
-          iconProps={{
-            color: addressTextColor
-          }}
-          successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
-          toastProps={{ position: ToastPosition.Top }}
-        />
+      <CopyToClipboardButton
+        textToDisplay={StringUtils.formatAddress(
+          address,
+          addressLeftPadding,
+          addressRightPadding
+        )}
+        copiedTextWrapperStyle={{
+          backgroundColor: COLORS.lightWhite,
+          borderColor: COLORS.transparentWhite,
+          borderWidth: 1,
+          paddingHorizontal: 8,
+          borderRadius: 20
+        }}
+        textToCopy={address}
+        textProps={{
+          fontFamily: 'Inter_400Regular',
+          fontSize: 14,
+          fontWeight: '400',
+          color: addressTextColor
+        }}
+        iconProps={{
+          color: addressTextColor
+        }}
+        successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
+        toastProps={{ position: ToastPosition.Top }}
+      />
       <View>
         {balanceLoading ? (
           <Spinner />

@@ -46,7 +46,7 @@ let Config = envs.prod;
 if (Updates.channel === 'main') {
   Config = envs.prod;
 } else if (Updates.channel === 'stage') {
-  Config = envs.stage;
+  Config = envs.prod;
 }
 
 export default Config;
