@@ -86,6 +86,7 @@ export const COLORS = {
   lemon: '#fffbb5',
   lightYellow: '#fbf2cb',
   orange: '#c8811a',
+  activeOrange: '#e34a16',
   thinGrey: '#2f2b4380',
   transparent: 'transparent',
   transparentWhite: '#ffffffb3',
