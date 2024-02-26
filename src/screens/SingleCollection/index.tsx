@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Button, Spacer, Text, Badge } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import {
   BottomSheetEditCollection,
   AddressList,
@@ -21,6 +21,7 @@ import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { sortListByKey } from '@utils/sort';
 import { styles } from './styles';
+import { TokenLogo } from '@components/modular';
 
 export const SingleGroupScreen = () => {
   const {
@@ -44,7 +45,7 @@ export const SingleGroupScreen = () => {
   const { accounts, name } = selectedList;
 
   const groupBalanceAmb = selectedList.totalBalance;
-  const groupdBalanceUsd = useUSDPrice(groupBalanceAmb);
+  const groupBalanceUsd = useUSDPrice(groupBalanceAmb);
 
   const showAddAddress = useCallback(() => {
     addNewAddressToGroupRef.current?.show();
@@ -111,31 +112,28 @@ export const SingleGroupScreen = () => {
           {t('collection.total.balance')}
         </Text>
         <Spacer value={verticalScale(8)} />
+        <View style={{ flexDirection: 'row' }}>
+          <TokenLogo token={'AirDao'} />
+          <Spacer horizontal value={verticalScale(8)} />
+          <Text
+            fontFamily="Inter_700Bold"
+            fontWeight="800"
+            fontSize={24}
+            color={COLORS.neutral900}
+          >
+            {NumberUtils.formatNumber(
+              groupBalanceAmb,
+              groupBalanceAmb > 100000 ? 2 : 0
+            )}
+          </Text>
+        </View>
         <Text
-          fontFamily="Inter_700Bold"
-          fontWeight="800"
-          fontSize={24}
-          color={COLORS.neutral900}
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
         >
-          {NumberUtils.formatNumber(
-            groupBalanceAmb,
-            groupBalanceAmb > 100000 ? 2 : 0
-          )}{' '}
-          AMB
+          ${NumberUtils.formatNumber(groupBalanceUsd, 2)}
         </Text>
-        <Spacer value={verticalScale(8)} />
-        <Badge
-          color={COLORS.alphaBlack5}
-          icon={
-            <Text
-              fontSize={14}
-              fontFamily="Inter_500Medium"
-              color={COLORS.neutral800}
-            >
-              ${NumberUtils.formatNumber(groupdBalanceUsd, 2)}
-            </Text>
-          }
-        />
       </View>
       <Spacer value={verticalScale(16)} />
       <View
