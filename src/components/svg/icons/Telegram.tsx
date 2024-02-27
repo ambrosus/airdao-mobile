@@ -4,8 +4,8 @@ import { IconProps } from './Icon.types';
 
 export function TelegramIcon(props: IconProps) {
   const { scale = 1, color = '#000' } = props;
-  const width = 14,
-    height = 13;
+  const width = 14;
+  const height = 13;
   return (
     <Svg
       width={width * scale}

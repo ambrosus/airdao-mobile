@@ -220,6 +220,9 @@
   "settings.notifications": "Notifications",
   "settings.preferences": "Preferences",
   "settings.security": "Security",
+  "settings.twitter": "X (formerly Twitter)",
+  "settings.telegram": "Telegram",
+  "settings.medium": "Medium",
 
   "settings.preferences.currency": "Currency",
   "settings.preferences.language": "Language",

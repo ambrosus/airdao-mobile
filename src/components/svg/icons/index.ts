@@ -86,3 +86,5 @@ export * from './TokenPlutus';
 export * from './TokenTether';
 export * from './TokenUnknown';
 export * from './TokenUsdc';
+export * from './XTwitterIcon';
+export * from './MediumIcon';
