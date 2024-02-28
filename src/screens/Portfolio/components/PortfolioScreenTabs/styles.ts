@@ -25,5 +25,10 @@ export const styles = StyleSheet.create({
     bottom: 50,
     right: scale(15),
     zIndex: 10
+  },
+  tabsIndicator: {
+    backgroundColor: COLORS.alphaBlack10,
+    marginLeft: 15,
+    height: 0.5
   }
 });
