@@ -127,6 +127,7 @@ export const SingleGroupScreen = () => {
             )}
           </Text>
         </View>
+        <Spacer value={5} />
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"

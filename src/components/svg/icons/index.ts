@@ -88,3 +88,4 @@ export * from './TokenUnknown';
 export * from './TokenUsdc';
 export * from './XTwitterIcon';
 export * from './MediumIcon';
+export * from './SearchLargeIcon';
