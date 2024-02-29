@@ -89,3 +89,4 @@ export * from './TokenUsdc';
 export * from './XTwitterIcon';
 export * from './MediumIcon';
 export * from './SearchLargeIcon';
+export * from './CirculationIcon';
