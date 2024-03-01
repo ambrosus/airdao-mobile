@@ -119,11 +119,6 @@ export const AssetScreen = () => {
           >
             {NumberUtils.formatNumber(tokenInfo.balance.ether)}{' '}
             {tokenInfo.symbol}
-            {/*TODO remove this comment code when QA check it*/}
-            {/*{tokenInfo.balance.ether < 1000*/}
-            {/*  ? NumberUtils.limitDecimalCount(tokenInfo.balance.ether, 2)*/}
-            {/*  : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}*/}
-            {/*{tokenInfo.symbol}*/}
           </Text>
           <Spacer horizontal value={scale(8)} />
         </Row>
@@ -148,7 +143,7 @@ export const AssetScreen = () => {
             {`${NumberUtils.addSignToNumber(
               percentChange24H
             )}% ($${NumberUtils.formatNumber(
-              USDBalance * percentChange24H
+              (USDBalance * percentChange24H) / 100
             )}) ${t('common.today')}`}
           </Text>
         </View>

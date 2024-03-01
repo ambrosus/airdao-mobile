@@ -10,7 +10,6 @@ import {
 } from './components';
 import { Row, Spacer, Text } from '@components/base';
 import { CenteredSpinner, Header } from '@components/composite';
-import { LogoGradientCircular } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
@@ -43,14 +42,13 @@ export function AMBMarket(): JSX.Element {
         title={
           <>
             <Row alignItems="center">
-              <LogoGradientCircular />
               <Spacer horizontal value={scale(4)} />
               <Text
                 fontFamily="Inter_600SemiBold"
                 fontSize={15}
                 color={COLORS.neutral800}
               >
-                AirDAO (AMB)
+                {t('amb.market.header')}
               </Text>
             </Row>
           </>
@@ -70,7 +68,7 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
-            <AMBPriceInfo />
+            <AMBPriceInfo header={'AirDAO'} />
             <View
               style={{
                 width: '90%',
