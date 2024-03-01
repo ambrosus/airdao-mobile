@@ -22,7 +22,6 @@ export * from './StakingPoolList';
 export * from './TokenPicker';
 export * from './TransactionDetails';
 export * from './StatusBar';
-export * from './OnboardingView';
 export * from './LocalizedRenderEmpty';
 export * from './WalletPicker';
 export * from './WalletTransactionsAndAssets';

@@ -39,3 +39,4 @@ export const ToastStatusIcon: { [key in ToastType]: ReactElement } = {
   [ToastType.Information]: <QuestionMarkIcon />,
   [ToastType.Loading]: <Spinner />
 };
+export const TOAST_DEFAULT_DURATION = 2500;

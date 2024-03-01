@@ -10,7 +10,7 @@ jest.mock(
   () => require('react-native-safe-area-context/jest/mock').default
 );
 
-jest.mock('@helpers/createContextSelector', () => ({
+jest.mock('@utils/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]
 }));
 

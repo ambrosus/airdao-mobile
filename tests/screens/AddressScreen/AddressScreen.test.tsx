@@ -6,14 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import clearAllMocks = jest.clearAllMocks;
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => ({
@@ -57,14 +49,6 @@ const mockedData = {
   loading: false,
   error: false
 };
-
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
 
 jest.mock('@contexts/AllAddresses', () => ({
   useAllAddressesReducer: () => jest.fn(),

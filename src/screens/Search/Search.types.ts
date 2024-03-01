@@ -1,5 +1,5 @@
 export enum SearchSort {
   Balance = 'balance',
-  'Transaction Count' = 'totalTx',
+  TxCount = 'totalTx',
   Address = 'address'
 }

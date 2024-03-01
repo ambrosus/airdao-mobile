@@ -1,6 +1,4 @@
 export * from './account';
-export * from './account-balance';
-export * from './currency';
 export * from './public-address';
 export * from './public-address-list';
 export * from './transaction-scanners-tmp';

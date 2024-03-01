@@ -1,4 +1,4 @@
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 
 export interface TokenDTO {
   address: string;
@@ -7,5 +7,5 @@ export interface TokenDTO {
     wei: string;
     ether: number;
   };
-  symbol: AirDAODictTypes.Code | '';
+  symbol: CryptoCurrencyCode | '';
 }

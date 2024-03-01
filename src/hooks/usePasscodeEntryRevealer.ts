@@ -7,6 +7,8 @@ import { Cache, CacheKey } from '@lib/cache';
 import { AirDAOEventDispatcher } from '@lib';
 import { useCurrentRoute } from '@contexts';
 
+const routesToIgnorePasscodeEntry = ['SuccessSetupSecurity', 'ChangePasscode'];
+
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const currentRoute = useCurrentRoute();
@@ -17,14 +19,15 @@ export const usePasscodeEntryRevealer = () => {
     const isBiometricAuthenticationInProgress = await Cache.getItem(
       CacheKey.isBiometricAuthenticationInProgress
     );
+    // all IOS devices and some Android devices triggers inactive app state whenever we request a biometric authentication (faceId, fingerprint or iris). This state in cache is a workaround to make sure that we do not fire passcode entry state during those transitions.
     if (isBiometricAuthenticationInProgress) {
       if (appState === 'inactive' && prevState === 'active') return;
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
       return;
     }
     if (prevState === 'active' && (isFaceIDEnabled || isPasscodeEnabled)) {
-      // Our BottomSheet component is rendered on top of all screens,
-      // so any open instance of BottomSheet must be closed before navigating to Passcode
+      // Our BottomSheet component is rendered on top of all screens,meaning that if any modal that is open stays open during this transition,
+      // so we close all open instance of BottomSheet navigating to Passcode
       AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
       setTimeout(() => {
         navigation.navigate('Passcode');
@@ -33,10 +36,7 @@ export const usePasscodeEntryRevealer = () => {
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {
-    if (
-      !loading &&
-      !['SuccessSetupSecurity', 'ChangePasscode'].includes(currentRoute)
-    ) {
+    if (!loading && !routesToIgnorePasscodeEntry.includes(currentRoute)) {
       processPasscodeReveal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,7 +1,7 @@
+import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { useExchangeRate } from '@hooks';
+import { useCurrencyRate } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import React, { PropsWithChildren } from 'react';
@@ -10,7 +10,7 @@ import { StyleSheet, View } from 'react-native';
 
 interface StakingInfoProps {
   totalStake: number;
-  currency: AirDAODictTypes.Code;
+  currency: CryptoCurrencyCode;
   userStaking: number;
   earnings: number;
   apy: number;
@@ -31,7 +31,7 @@ const Title = (props: PropsWithChildren) => {
 
 export const StakingInfo = (props: StakingInfoProps) => {
   const { totalStake, currency, userStaking, earnings, apy } = props;
-  const exchangeRate = useExchangeRate(currency);
+  const exchangeRate = useCurrencyRate(currency);
   const userStakingUsd = exchangeRate * userStaking;
   const earningsUsd = exchangeRate * earnings;
   const { t } = useTranslation();

@@ -1,14 +1,15 @@
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import erc20 from './erc20';
-
-const WEB3_LINK = 'https://network.ambrosus.io';
+import Config from '@constants/config';
 
 class TransferDispatcher {
   private web3: Web3;
 
   constructor() {
-    this.web3 = new Web3(new Web3.providers.HttpProvider(WEB3_LINK));
+    this.web3 = new Web3(
+      new Web3.providers.HttpProvider(Config.WEB3_NETWORK_URL)
+    );
     this.web3.eth.transactionPollingTimeout = 15;
   }
 
@@ -56,16 +57,14 @@ class TransferDispatcher {
   }
 
   async getEstimatedFee(
-    privateKey: string,
+    sender: string,
     recipient: string,
     amountInEther: string,
     tokenAddress?: string
   ): Promise<number> {
-    // Get account
-    const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
     // Get transaction config
     const txObject = await this.prepareTransactionConfig(
-      account.address,
+      sender,
       recipient,
       amountInEther,
       tokenAddress
@@ -78,30 +77,29 @@ class TransferDispatcher {
         ).toString()
       )
     );
-    // return gasPrice * GAS_LIMIT;
+  }
+
+  async signTransaction(txConfig: TransactionConfig, privateKey: string) {
+    return await this.web3.eth.accounts.signTransaction(txConfig, privateKey);
   }
 
   async sendTx(
     privateKey: string,
+    sender: string,
     recipient: string,
     amountInEther: string,
     tokenAddress?: string
   ): Promise<string> {
     try {
-      // Get account
-      const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
       // Prepare transaction config
       const txConfig = await this.prepareTransactionConfig(
-        account.address,
+        sender,
         recipient,
         amountInEther,
         tokenAddress
       );
       // Sign transaction
-      const signedTx = await this.web3.eth.accounts.signTransaction(
-        txConfig,
-        account.privateKey
-      );
+      const signedTx = await this.signTransaction(txConfig, privateKey);
       // Send transaction
       const txReceipt = await this.web3.eth.sendSignedTransaction(
         signedTx.rawTransaction as string

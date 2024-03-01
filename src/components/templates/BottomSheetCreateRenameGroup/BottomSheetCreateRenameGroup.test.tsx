@@ -11,14 +11,6 @@ jest.mock('react-native-modal', () => {
   return ({ children }: { children: React.ReactNode }) => <>{children}</>;
 });
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: '0',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 describe('BottomSheetCreateRenameGroup', () => {
   afterAll(() => {
     clearAllMocks();

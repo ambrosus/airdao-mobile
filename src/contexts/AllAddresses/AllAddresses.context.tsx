@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
 import { ExplorerAccount } from '@models/Explorer';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { AirDAOEventDispatcher } from '@lib';
 import {
   AirDAOEventType,
@@ -103,8 +103,6 @@ const AllAddressesContext = () => {
   const getAddresses = async () => {
     setLoading(true);
     try {
-      // const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-      //   []) as CacheableAccount[];
       const addresses = await PublicAddressDB.getAll();
       const currentAddresses = allAddresses
         .filter((address) => !!address)

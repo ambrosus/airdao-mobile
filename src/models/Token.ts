@@ -1,4 +1,4 @@
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 import { TokenDTO } from './dtos';
 import { TokenUtils } from '@utils/token';
 
@@ -9,7 +9,7 @@ export class Token {
     wei: string;
     ether: number;
   };
-  symbol!: AirDAODictTypes.Code;
+  symbol!: CryptoCurrencyCode;
 
   private deriveNameAndSymbolFromDto(dto: TokenDTO) {
     const tokenDetails = TokenUtils.getTokenDetails(dto.address);

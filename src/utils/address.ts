@@ -11,7 +11,7 @@ const watchChangesOfAddress = async (address: ExplorerAccount) => {
 };
 
 const addressToToken = (address: string) => {
-  // any algo could be used to "hide" actual address
+  // any logic could be used to "hide" actual address
   return Buffer.from(address).toString('base64').slice(3, 11);
 };
 

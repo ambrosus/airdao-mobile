@@ -1,15 +1,11 @@
-import singleAirDAODispatcher from '@crypto/blockchains/AirDAODispatcher';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import AirDAOUtils from '@crypto/common/AirDAOUtils';
+import AddressProcessor from '@lib/crypto/AddressProcessor';
+import { CryptoUtils } from '@utils/crypto';
 
-const getBalanceOfAddress = async (
-  address: string,
-  currencyCode = AirDAODictTypes.Code.AMB
-) => {
+const getBalanceOfAddress = async (address: string) => {
   try {
-    const processor = singleAirDAODispatcher.getScannerProcessor(currencyCode);
-    const weiBalance = await processor.getBalance(address);
-    return { wei: weiBalance, ether: AirDAOUtils.toEther(weiBalance) };
+    const weiBalance = await AddressProcessor.getBalance(address);
+    const etherBalance = await CryptoUtils.toEther(weiBalance);
+    return { wei: weiBalance, ether: etherBalance };
   } catch (error) {
     throw error;
   }

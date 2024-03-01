@@ -6,15 +6,14 @@ export const useEstimatedTransferFee = (
   token: Token,
   etherAmount: number,
   addressFrom: string,
-  addressTo: string,
-  walletHash: string
+  addressTo: string
 ) => {
   const [estimatedFee, setEstimatedFee] = useState(0);
 
   const getFee = useCallback(async () => {
     try {
       const fee = await TransactionUtils.getEstimatedFee(
-        walletHash,
+        addressFrom,
         addressTo,
         etherAmount,
         token
@@ -23,12 +22,11 @@ export const useEstimatedTransferFee = (
     } catch (error) {
       setEstimatedFee(0);
     }
-  }, [walletHash, addressTo, etherAmount, token]);
+  }, [addressFrom, addressTo, etherAmount, token]);
 
   useEffect(() => {
-    if (token && etherAmount > 0 && addressFrom && addressTo && walletHash)
-      getFee();
-  }, [token, etherAmount, addressFrom, addressTo, walletHash, getFee]);
+    if (token && etherAmount > 0 && addressFrom && addressTo) getFee();
+  }, [token, etherAmount, addressFrom, addressTo, getFee]);
 
   return estimatedFee;
 };

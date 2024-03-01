@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { DeviceService, NotificationService, PermissionService } from '@lib';
+import { NotificationService, PermissionService } from '@lib';
 import {
   CacheableAccount,
   CacheableAccountList,
@@ -22,6 +22,7 @@ export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {
+    // TODO delete this function after a few updates over version 1.1.0
     async function migrateAddressesFromCache() {
       const allAddresses = (await Cache.getItem(
         CacheKey.AllAddresses
@@ -46,6 +47,12 @@ export const useAppInit = () => {
       await Cache.deleteItem(CacheKey.AddressLists);
       await Cache.deleteItem(CacheKey.AllAddresses);
     }
+
+    /**
+     * This function compares current notification token to the one saved to cache.
+     * If they are same it does nothing.
+     * Otherwise, notifies the watcher API about token change and moves watched addresses to the new token.
+     */
     async function checkNotificationTokenUpdate() {
       const oldToken = (await Cache.getItem(
         CacheKey.NotificationToken
@@ -110,7 +117,6 @@ export const useAppInit = () => {
       try {
         migrateAddressesFromCache();
         prepareNotifications();
-        DeviceService.setupUniqueDeviceID();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),

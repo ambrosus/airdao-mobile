@@ -4,7 +4,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { AccountDBModel } from '@database';
 import { WalletAvatars } from './WalletPicker.constants';
 import { useBalanceOfAddress, useUSDPrice } from '@hooks';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
@@ -23,7 +23,7 @@ export const WalletPickerItem = (props: WalletItemProps) => {
   const { data: ambBalance } = useBalanceOfAddress(wallet.address);
   const usdBalance = useUSDPrice(
     parseFloat(ambBalance?.ether || '0'),
-    AirDAODictTypes.Code.AMB
+    CryptoCurrencyCode.AMB
   );
 
   return (

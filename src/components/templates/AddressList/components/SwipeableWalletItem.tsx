@@ -45,7 +45,11 @@ export const SwipeableWalletItem = memo(
 
       const paddingRightAnimation = useSharedValue(0);
       // close swipeable on another swipeable open
-      useSwipeableDismissListener('wallet-item-opened', item._id, swipeRef);
+      useSwipeableDismissListener(
+        AirDAOEventType.WalletItemOpened,
+        item._id,
+        swipeRef
+      );
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
