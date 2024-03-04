@@ -90,6 +90,7 @@ export const ImportWallet = () => {
             <InputWithIcon
               ref={inputs.current[i]}
               value={mnemonicWords[i]}
+              style={{ paddingLeft: scale(i + 1 > 9 ? 17 : 10) }}
               type="text"
               returnKeyType="next"
               autoCapitalize="none"
@@ -121,6 +122,7 @@ export const ImportWallet = () => {
             <InputWithIcon
               ref={inputs.current[i + 1]}
               value={mnemonicWords[i + 1]}
+              style={{ paddingLeft: scale(i + 2 > 9 ? 17 : 10) }}
               type="text"
               autoCapitalize="none"
               returnKeyType={i === 10 ? 'done' : 'next'}
