@@ -30,7 +30,7 @@
       "buildNumber": "1.1.14"
     },
     "android": {
-      "versionCode": 37,
+      "versionCode": 44,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
