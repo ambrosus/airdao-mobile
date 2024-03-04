@@ -13,6 +13,12 @@ import Config from '@constants/config';
 import { SETTINGS_MENU_ITEMS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
+import { isAndroid } from '@utils/isPlatform';
+
+const stageBuildVersions = {
+  ios: '1.1.0.32',
+  android: '1.1.5.23'
+};
 
 const isStage = Updates.channel === 'stage';
 const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
@@ -77,6 +83,9 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
 export const SettingsScreen = () => {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
+  const currentBuild = isAndroid
+    ? stageBuildVersions.android
+    : stageBuildVersions.ios;
 
   const renderMenu = (item: SettingsMenuItem[], index: number) => {
     const isNeedDelimiter = index + 1 !== SETTINGS_MENU_ITEMS.length;
@@ -108,7 +117,9 @@ export const SettingsScreen = () => {
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
-      {isStage && <Text style={{ margin: 20 }}>Build: 1.1.5.22</Text>}
+      {isStage && (
+        <Text style={{ margin: 20 }}>{`Build: ${currentBuild}`}</Text>
+      )}
     </View>
   );
 };
