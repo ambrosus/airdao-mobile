@@ -18,6 +18,10 @@ const envs = {
       stake: false
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
+    AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   },
   stage: {
@@ -38,6 +42,10 @@ const envs = {
       stake: false
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
+    AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   }
 };

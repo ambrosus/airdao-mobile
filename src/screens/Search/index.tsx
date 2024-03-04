@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import {
@@ -21,10 +27,11 @@ import {
   SearchTabParamsList
 } from '@appTypes/navigation';
 import { COLORS } from '@constants/colors';
-import { ScannerIcon } from '@components/svg/icons';
+import { ScannerIcon, SearchLargeIcon } from '@components/svg/icons';
 import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
 import { styles } from './styles';
+import { DEVICE_HEIGHT } from '@constants/variables';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
@@ -39,6 +46,14 @@ export const SearchScreen = () => {
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
+
+  const heightAnimationValue = useSharedValue(0);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      height: heightAnimationValue.value
+    };
+  });
 
   const { top } = useSafeAreaInsets();
 
@@ -80,41 +95,67 @@ export const SearchScreen = () => {
     );
   };
 
+  const renderSearch = (value: boolean | ((prevState: boolean) => boolean)) => {
+    setSearchAddressContentVisible(value);
+    if (!!value) {
+      heightAnimationValue.value = withTiming(DEVICE_HEIGHT);
+    } else {
+      heightAnimationValue.value = withTiming(scale(0));
+    }
+  };
+
   return (
     <KeyboardDismissingView
       style={{ flex: 1, paddingTop: verticalScale(12), top }}
     >
-      <Row
-        alignItems="center"
-        justifyContent="space-between"
-        style={{
-          paddingHorizontal: scale(16),
-          paddingBottom: verticalScale(22),
-          borderBottomWidth: 1,
-          borderBottomColor: COLORS.neutral100
-        }}
-      >
-        <Text
-          fontSize={24}
-          fontFamily="Inter_700Bold"
-          fontWeight="700"
-          color={COLORS.neutral800}
+      {searchAddressContentVisible ? null : (
+        <Row
+          alignItems="center"
+          justifyContent="space-between"
+          style={{
+            paddingHorizontal: scale(16),
+            paddingBottom: verticalScale(30)
+          }}
         >
-          {t('tab.explore')}
-        </Text>
-        <Button onPress={searchAddressRef.current?.showScanner}>
-          <ScannerIcon color={COLORS.neutral600} />
-        </Button>
-      </Row>
-      <View
-        testID="Search_Screen"
-        style={{ flex: 1, marginTop: verticalScale(16) }}
-      >
-        <SearchAddress
-          scannerDisabled={true}
-          ref={searchAddressRef}
-          onContentVisibilityChanged={setSearchAddressContentVisible}
-        />
+          <Text
+            fontSize={24}
+            fontFamily="Inter_700Bold"
+            fontWeight="700"
+            color={COLORS.neutral800}
+          >
+            {t('tab.explore')}
+          </Text>
+          <Row>
+            <Button
+              onPress={() =>
+                setTimeout(() => searchAddressRef?.current?.focus(), 50)
+              }
+            >
+              <SearchLargeIcon color={COLORS.alphaBlack50} />
+            </Button>
+            <Spacer horizontal value={scale(19)} />
+            <Button onPress={searchAddressRef.current?.showScanner}>
+              <ScannerIcon color={COLORS.neutral600} />
+            </Button>
+          </Row>
+        </Row>
+      )}
+      <View testID="Search_Screen" style={{ flex: 1 }}>
+        <Animated.View
+          style={[
+            {
+              overflow: 'hidden'
+            },
+            animatedStyle
+          ]}
+        >
+          <SearchAddress
+            searchAddress
+            scannerDisabled={true}
+            ref={searchAddressRef}
+            onContentVisibilityChanged={renderSearch}
+          />
+        </Animated.View>
         {searchAddressContentVisible ? null : (
           <Animated.View
             style={styles.container}
@@ -122,7 +163,6 @@ export const SearchScreen = () => {
             exiting={FadeOut}
           >
             <KeyboardDismissingView>
-              <Spacer value={verticalScale(32)} />
               <Text
                 fontFamily="Inter_700Bold"
                 fontWeight="700"

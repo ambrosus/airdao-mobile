@@ -25,7 +25,7 @@ export const PaginationCircles = (props: PaginationCirclesProps) => {
           styles.circle,
           { width: size, height: size, backgroundColor: bgColor }
         ]}
-      ></View>
+      />
     );
   };
 

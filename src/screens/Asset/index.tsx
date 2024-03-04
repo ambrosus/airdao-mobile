@@ -2,14 +2,14 @@ import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Badge, Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeParamsList, HomeNavigationProp } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
 import { scale, verticalScale } from '@utils/scaling';
-import { useTokensAndTransactions, useUSDPrice } from '@hooks';
+import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 import { AccountActions, AccountTransactions } from '@components/templates';
@@ -22,6 +22,12 @@ export const AssetScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
+  const { data: ambPriceData } = useAMBPrice();
+  const percentChange24H = ambPriceData?.percentChange24H || 0;
+  const ambPriceUSD = ambPriceData?.priceUSD || 0;
+  const AMBBalance = tokenInfo.balance.ether;
+  const USDBalance = AMBBalance * ambPriceUSD;
+
   const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0, tokenInfo.symbol);
   const isAMBToken = walletAccount === tokenInfo.address;
 
@@ -111,27 +117,36 @@ export const AssetScreen = () => {
             fontSize={24}
             color={COLORS.neutral900}
           >
-            {tokenInfo.balance.ether < 1000
-              ? NumberUtils.limitDecimalCount(tokenInfo.balance.ether, 2)
-              : NumberUtils.abbreviateNumber(tokenInfo.balance.ether)}{' '}
+            {NumberUtils.formatNumber(tokenInfo.balance.ether)}{' '}
             {tokenInfo.symbol}
           </Text>
           <Spacer horizontal value={scale(8)} />
-          {usdPrice >= 0 && (
-            <Badge
-              icon={
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={12}
-                  color={COLORS.neutral800}
-                >
-                  ${NumberUtils.limitDecimalCount(usdPrice, 2)}
-                </Text>
-              }
-              color={COLORS.gray300}
-            />
-          )}
         </Row>
+        <Spacer value={scale(5)} />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {usdPrice >= 0 && (
+            <Text
+              fontFamily="Inter_500Medium"
+              fontSize={12}
+              color={COLORS.neutral400}
+            >
+              ${NumberUtils.limitDecimalCount(usdPrice, 2)}
+            </Text>
+          )}
+          <Spacer horizontal value={scale(5)} />
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            fontWeight="500"
+            color={percentChange24H > 0 ? COLORS.success400 : COLORS.error400}
+          >
+            {`${NumberUtils.addSignToNumber(
+              percentChange24H
+            )}% ($${NumberUtils.formatNumber(
+              (USDBalance * percentChange24H) / 100
+            )}) ${t('common.today')}`}
+          </Text>
+        </View>
       </View>
       <Spacer value={verticalScale(24)} />
       <AccountActions address={walletAccount} token={tokenInfo} />

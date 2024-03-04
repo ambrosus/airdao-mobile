@@ -24,11 +24,11 @@ export const COLORS = {
   neutral200: '#C2C5CC',
   neutral300: '#a1a6b2',
   neutral400: '#676B73',
-  neutral500: '#51545a',
-  neutral600: '#393b3d',
+  neutral500: '#63636D',
+  neutral600: '#63636D',
   neutral700: '#222426',
   neutral800: '#191919',
-  neutral900: '#0E0E0E',
+  neutral900: '#0C0C0D',
   neutral900Alpha: {
     5: 'rgba(14, 14, 14, 0.05)',
     60: 'rgba(14, 14, 14, 0.60)'
@@ -86,9 +86,11 @@ export const COLORS = {
   lemon: '#fffbb5',
   lightYellow: '#fbf2cb',
   orange: '#c8811a',
+  activeOrange: '#e34a16',
   thinGrey: '#2f2b4380',
   transparent: 'transparent',
   transparentWhite: '#ffffffb3',
+  lightWhite: 'rgba( 255, 255, 255, 0.3 )',
   veryLightGrey: '#ffffff99',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a'

@@ -22,5 +22,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical:
       Platform.OS === 'android' ? verticalScale(8) : verticalScale(13.5)
-  }
+  },
+  iconWrapper: { position: 'absolute' }
 });
