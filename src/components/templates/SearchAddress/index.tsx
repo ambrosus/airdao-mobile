@@ -4,7 +4,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Alert, View, useWindowDimensions } from 'react-native';
+import { Alert, View, useWindowDimensions, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
@@ -44,6 +44,7 @@ import { useTranslation } from 'react-i18next';
 
 interface SearchAdressProps {
   scannerDisabled?: boolean;
+  searchAddress?: boolean;
   onContentVisibilityChanged?: (contentVisible: boolean) => unknown;
 }
 
@@ -51,14 +52,18 @@ export interface SearchAddressRef {
   setAddress: (address: string) => unknown;
   showScanner: () => unknown;
   hideScanner: () => unknown;
+  focus: () => unknown;
 }
 
 const LIMIT = 10;
 
 export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
   (props: SearchAdressProps, ref): JSX.Element => {
-    const { scannerDisabled = false, onContentVisibilityChanged = () => null } =
-      props;
+    const {
+      scannerDisabled = false,
+      onContentVisibilityChanged = () => null,
+      searchAddress = false
+    } = props;
     const navigation = useNavigation<SearchTabNavigationProp>();
     const { height: WINDOW_HEIGHT } = useWindowDimensions();
     const { t } = useTranslation();
@@ -120,7 +125,8 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
           inputRef.current?.setText(address);
         },
         hideScanner,
-        showScanner
+        showScanner,
+        focus
       }),
       [onContentVisibilityChanged]
     );
@@ -163,6 +169,10 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
       scannerModalRef.current?.show();
     };
 
+    const focus = () => {
+      inputRef?.current?.focus();
+    };
+
     const hideScanner = () => {
       scannerModalRef.current?.dismiss();
     };
@@ -192,6 +202,11 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
 
     const clearInput = () => {
       inputRef.current?.clear();
+      setAddress('');
+    };
+
+    const closeInput = () => {
+      inputRef.current?.clear();
       inputRef.current?.blur();
       onContentVisibilityChanged(false);
       setAddress('');
@@ -211,39 +226,65 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
       setAddress(text);
     };
 
+    const searchStyle: ViewStyle = searchAddress
+      ? {
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexDirection: 'row'
+        }
+      : {
+          flex: searchInputFocused && !account ? 1 : 0
+        };
+    const IconRight = () => (
+      <Row alignItems="center" style={{ right: 0 }}>
+        {address.length > 0 || searchAddress ? (
+          <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+            <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
+          </Button>
+        ) : scannerDisabled ? null : (
+          <Button onPress={showScanner}>
+            <ScannerQRIcon />
+          </Button>
+        )}
+      </Row>
+    );
+
     return (
       <>
         <KeyboardDismissingView
           style={{
             ...styles.input,
-            flex: searchInputFocused && !account ? 1 : 0
+            ...searchStyle
           }}
         >
-          <InputWithIcon
-            testID="search-input"
-            ref={inputRef}
-            maxLength={68}
-            iconLeft={<SearchIcon color={COLORS.alphaBlack50} />}
-            iconRight={
-              <Row alignItems="center">
-                {address.length > 0 ? (
-                  <Button onPress={clearInput} style={{ zIndex: 1000 }}>
-                    <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
-                  </Button>
-                ) : scannerDisabled ? null : (
-                  <Button onPress={showScanner}>
-                    <ScannerQRIcon />
-                  </Button>
-                )}
-              </Row>
-            }
-            placeholder={t('explore.search.placeholder')}
-            returnKeyType="search"
-            onFocus={onInputFocused}
-            onBlur={onInputBlur}
-            onChangeText={onChangeText}
-            onSubmitEditing={onInputSubmit}
-          />
+          <View style={{ width: '80%' }}>
+            <InputWithIcon
+              testID="search-input"
+              ref={inputRef}
+              maxLength={68}
+              iconLeft={<SearchIcon color={COLORS.alphaBlack50} />}
+              style={searchAddress ? { width: '60%' } : {}}
+              iconRight={<IconRight />}
+              placeholder={t('explore.search.placeholder')}
+              returnKeyType="search"
+              onFocus={onInputFocused}
+              onBlur={onInputBlur}
+              onChangeText={onChangeText}
+              onSubmitEditing={onInputSubmit}
+            />
+          </View>
+          {searchAddress ? (
+            <Button onPress={closeInput}>
+              <Text
+                style={{
+                  color: COLORS.brand500,
+                  fontSize: 14
+                }}
+              >
+                Cancel
+              </Text>
+            </Button>
+          ) : null}
         </KeyboardDismissingView>
         <BottomSheet
           height={WINDOW_HEIGHT}
@@ -252,7 +293,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
         >
           <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
         </BottomSheet>
-        {isLoading && <CenteredSpinner />}
+        {isLoading && <CenteredSpinner containerStyle={{ marginTop: 15 }} />}
         {(error && !!address && !finalAccount) || (hashError && !!address) ? (
           <SearchAddressNoResult />
         ) : null}

@@ -66,7 +66,7 @@ export const HomeScreen = () => {
           <View style={{ alignSelf: 'center', marginTop: verticalScale(16) }}>
             <PaginationCircles
               totalCount={accounts.length}
-              activeColor={COLORS.neutral500}
+              activeColor={COLORS.activeOrange}
               passiveColor={COLORS.neutral100}
               activeIndex={scrollIdx}
               size={verticalScale(10)}

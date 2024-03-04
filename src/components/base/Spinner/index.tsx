@@ -1,8 +1,10 @@
 import React from 'react';
 import LottieView from 'lottie-react-native';
 import { moderateScale } from '@utils/scaling';
+import { ViewStyle } from 'react-native';
 
 export interface SpinnerProps {
+  containerStyle?: ViewStyle;
   size?: 'large' | 'small';
 }
 

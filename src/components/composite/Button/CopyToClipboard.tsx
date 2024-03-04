@@ -12,6 +12,7 @@ import {
   ToastType
 } from '@components/modular/Toast';
 import { BaseButtonProps } from '@components/base/Button';
+import { View, ViewStyle } from 'react-native';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -23,6 +24,7 @@ export interface CopyToClipboardButtonProps
   iconProps?: IconProps;
   toastProps?: Pick<ToastOptions, 'position'>;
   showToast?: boolean;
+  copiedTextWrapperStyle?: ViewStyle;
   pressableText?: boolean;
 }
 
@@ -39,6 +41,7 @@ export const CopyToClipboardButton = (
     successText,
     successTextProps,
     pressableText = false,
+    copiedTextWrapperStyle,
     ...buttonProps
   } = props;
   const { t } = useTranslation();
@@ -109,9 +112,11 @@ export const CopyToClipboardButton = (
         {showToast || !copied ? (
           <ClipboardFilledIcon {...iconProps} />
         ) : (
-          <Text {...successTextProps}>
-            {t(successText || t('common.copied'))}
-          </Text>
+          <View style={copiedTextWrapperStyle}>
+            <Text {...successTextProps}>
+              {t(successText || t('common.copied'))}
+            </Text>
+          </View>
         )}
       </Button>
     </Row>

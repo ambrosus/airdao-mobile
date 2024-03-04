@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useCurrencyRate } from './query/useCurrencyRate';
+import { useCurrencyRate } from '@hooks/query';
 import { CryptoCurrencyCode } from '@appTypes';
 
 /**

@@ -1,11 +1,12 @@
 import React, { forwardRef, useState } from 'react';
 import { InputProps } from '@components/base/Input';
-import { Input, InputRef, Row, Spacer } from '@components/base';
+import { Input, InputRef, Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { styles } from './styles';
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
+  View,
   ViewProps
 } from 'react-native';
 
@@ -57,19 +58,27 @@ export const InputWithIcon = forwardRef<InputRef, InputWithIconProps>(
     };
 
     return (
-      <Row style={containerStyles} alignItems="center">
-        {iconLeft}
+      <View
+        style={{
+          ...containerStyles,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          position: 'relative'
+        }}
+      >
+        <View style={{ ...styles.iconWrapper, left: 10 }}>{iconLeft}</View>
         <Spacer horizontal value={spacingLeft} />
         <Input
           ref={ref}
-          style={[style, styles.input]}
+          style={[styles.input, style]}
           {...restProps}
           onFocus={_onFocus}
           onBlur={_onBlur}
         />
         <Spacer horizontal value={spacingRight} />
-        {iconRight}
-      </Row>
+        <View style={{ ...styles.iconWrapper, right: 10 }}>{iconRight}</View>
+      </View>
     );
   }
 );

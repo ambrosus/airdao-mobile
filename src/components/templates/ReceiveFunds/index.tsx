@@ -34,7 +34,7 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
           align="center"
           fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral800}
+          color={COLORS.neutral400}
         >
           {t('receive.funds.amb.network.only')}
         </Text>
