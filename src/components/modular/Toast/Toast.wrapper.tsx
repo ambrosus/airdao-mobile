@@ -17,7 +17,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { ToastOptions, ToastPosition, ToastType } from './Toast.types';
 import { TOAST_DEFAULT_DURATION } from './Toast.constants';
 import { AlertBanner } from './Toast.body';
@@ -47,7 +47,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
   const duration = useRef(TOAST_DEFAULT_DURATION);
   const timerRef = useRef<NodeJS.Timer | null>(null);
   const isTopToast = options.position === ToastPosition.Top;
-  const initialPlacement = isTopToast ? -48 : WINDOW_HEIGHT + 48;
+  const initialPlacement = isTopToast ? -scale(50) : WINDOW_HEIGHT + scale(50);
   const placement = useSharedValue(initialPlacement);
 
   const clearTimer = useCallback(() => {
