@@ -49,7 +49,11 @@ export const HomeStack = () => {
         />
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
+        <Stack.Screen
+          name="SendFundsStatus"
+          component={SendFundsStatus}
+          options={{ gestureEnabled: false }}
+        />
         <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
         <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
