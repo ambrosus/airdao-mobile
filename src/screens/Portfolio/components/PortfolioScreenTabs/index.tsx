@@ -104,6 +104,10 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     });
   }, [refs]);
 
+  useEffect(() => {
+    indicatorPosition.value = withTiming(props.index * tabBarWidth);
+  }, [indicatorPosition, props.index, tabBarWidth]);
+
   const portfolioTabsButton = () => {
     if (props.index === 0) {
       navigateToSearch();
