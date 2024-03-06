@@ -26,9 +26,20 @@ export const styles = StyleSheet.create({
     right: scale(15),
     zIndex: 10
   },
-  tabsIndicator: {
+  itemContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-around'
+  },
+  tabsIndicatorWrapper: {
     backgroundColor: COLORS.alphaBlack10,
-    marginLeft: 15,
     height: 0.5
+  },
+  tabsIndicator: {
+    position: 'relative',
+    bottom: 1,
+    left: 0,
+    height: 2,
+    backgroundColor: COLORS.brand500
   }
 });
