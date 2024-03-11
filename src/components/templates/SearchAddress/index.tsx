@@ -281,7 +281,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
                   fontSize: 14
                 }}
               >
-                Cancel
+                {t('button.cancel')}
               </Text>
             </Button>
           ) : null}
