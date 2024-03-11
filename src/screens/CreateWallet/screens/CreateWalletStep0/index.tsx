@@ -34,41 +34,32 @@ export const CreateWalletStep0 = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Header
-        titlePosition="left"
+        titlePosition="center"
         title={
           <Text
             fontFamily="Inter_600SemiBold"
-            fontSize={16}
+            fontSize={scale(18)}
             color={COLORS.neutral800}
           >
-            {t('button.create.wallet')}
+            {t('create.wallet.backup.header')}
           </Text>
         }
         style={{ shadowColor: 'transparent' }}
       />
       <BottomAwareSafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
-          <Text
-            align="center"
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('create.wallet.backup')}
-          </Text>
-          <Spacer value={verticalScale(8)} />
           <View>
             <Text
               align="center"
-              fontSize={16}
+              fontSize={scale(16)}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
-              {t('create.wallet.backup.text')}{' '}
+              {t('create.wallet.backup.text')}
               <Text
                 align="center"
                 onPress={showRecoveryModal}
-                fontSize={16}
+                fontSize={scale(15)}
                 fontFamily="Inter_500Medium"
                 color={COLORS.brand600}
                 style={{ textDecorationLine: 'underline' }}
@@ -77,7 +68,7 @@ export const CreateWalletStep0 = () => {
               </Text>
               <Text
                 align="center"
-                fontSize={15}
+                fontSize={scale(15)}
                 fontFamily="Inter_500Medium"
                 color={COLORS.neutral800}
               >

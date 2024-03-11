@@ -151,21 +151,24 @@ export const CreateWalletStep2 = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Header style={{ shadowColor: COLORS.transparent }} />
+      <Header
+        style={{ shadowColor: COLORS.transparent }}
+        title={
+          <Text
+            align="center"
+            fontSize={scale(18)}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral800}
+          >
+            {t('create.wallet.recovery.phrase.double.check')}
+          </Text>
+        }
+      />
       <View style={styles.container}>
         <View>
           <Text
             align="center"
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('create.wallet.verify.phrase')}
-          </Text>
-          <Spacer value={verticalScale(8)} />
-          <Text
-            align="center"
-            fontSize={15}
+            fontSize={scale(15)}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >

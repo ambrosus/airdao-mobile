@@ -67,7 +67,7 @@ export const AssetScreen = () => {
     tokenInfo.name === ''
       ? 'Hera pool token'
       : tokenInfo.name === 'AirDAO'
-      ? 'AirDAO (AMB)'
+      ? 'AirDAO'
       : tokenInfo.symbol || tokenInfo.address;
 
   return (

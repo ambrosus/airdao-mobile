@@ -137,6 +137,7 @@
   "common.yesterday": "Yesterday",
 
   "create.wallet.backup": "Backup your wallet",
+  "create.wallet.backup.header": "Backup wallet",
   "create.wallet.backup.popup": "recovery phrase.",
   "create.wallet.backup.text": "Your wallet will be backed up with a",
   "create.wallet.checkbox.text": "I understand that if I lose my recovery phrase, AirDAO cannot restore it.",
@@ -150,7 +151,8 @@
   "create.wallet.verification.alert": "Never share recovery phrase with \nanyone, keep it safe!",
   "create.wallet.verify.phrase": "Verify phrase",
   "create.wallet.verify.text": "Make sure to write it down as shown. You will verify this later.",
-  "create.wallet.your.recovery.phrase": "Your recovery phrase",
+  "create.wallet.recovery.phrase": "Recovery phrase",
+  "create.wallet.recovery.phrase.double.check": "Let’s double check",
 
   "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",

@@ -137,6 +137,7 @@
   "common.yesterday": "Dün",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
+  "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
   "create.wallet.backup.text": "Cüzdanınız bir",
   "create.wallet.checkbox.text": "Kurtarma cümlenizi kaybedersem, AirDAO'nun onu geri yükleyemeyeceğini anlıyorum.",
@@ -150,7 +151,8 @@
   "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \npaylaşmayın, güvende tutun!",
   "create.wallet.verify.phrase": "İfadeyi doğrula",
   "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
-  "create.wallet.your.recovery.phrase": "Kurtarma ifadeniz",
+  "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
+  "create.wallet.recovery.phrase.double.check": "Let’s double check",
 
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
   "empty.assets": "Henüz varlık yok",

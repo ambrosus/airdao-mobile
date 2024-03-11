@@ -16,7 +16,7 @@ import { COLORS } from '@constants/colors';
 export function Text(props: TextProps): JSX.Element {
   const {
     style: propsStyle,
-    color = COLORS.black,
+    color = COLORS.neutral500,
     fontSize,
     opacity = 1,
     fontWeight = 'normal',
