@@ -31,7 +31,7 @@ export const usePasscodeEntryRevealer = () => {
       AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
       setTimeout(() => {
         navigation.navigate('Passcode');
-      }, 500);
+      }, 0);
     }
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
