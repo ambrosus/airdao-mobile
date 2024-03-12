@@ -12,8 +12,9 @@ import {
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { RecoveryPhraseModal } from '../../components/RecoveryPhraseModal';
+import { RecoveryPhraseModal } from '@screens/CreateWallet/components';
 import { styles } from '@screens/CreateWallet/styles';
+import { stylesStep0 } from './Step0.styles';
 import { MnemonicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 
@@ -32,7 +33,7 @@ export const CreateWalletStep0 = () => {
   }, [recoveryPhraseModalRef]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={stylesStep0.flexStyle}>
       <Header
         titlePosition="center"
         title={
@@ -47,7 +48,7 @@ export const CreateWalletStep0 = () => {
         style={{ shadowColor: 'transparent' }}
       />
       <BottomAwareSafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={stylesStep0.flexStyle}>
           <View>
             <Text
               align="center"
@@ -55,7 +56,7 @@ export const CreateWalletStep0 = () => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
-              {t('create.wallet.backup.text')}
+              {t('create.wallet.backup.text')}{' '}
               <Text
                 align="center"
                 onPress={showRecoveryModal}
@@ -82,12 +83,7 @@ export const CreateWalletStep0 = () => {
             <MnemonicIcon />
           </View>
         </View>
-        <View
-          style={{
-            // marginBottom: verticalScale(120),
-            width: '100%'
-          }}
-        >
+        <View style={stylesStep0.container}>
           <Row alignItems="center">
             <CheckBox
               fillColor={COLORS.sapphireBlue}
@@ -101,7 +97,7 @@ export const CreateWalletStep0 = () => {
               fontSize={16}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
-              style={{ maxWidth: scale(330) }}
+              style={stylesStep0.createText}
             >
               {t('create.wallet.checkbox.text')}
             </Text>
@@ -119,7 +115,7 @@ export const CreateWalletStep0 = () => {
               fontSize={16}
               fontFamily="Inter_600SemiBold"
               color={selected ? COLORS.neutral0 : COLORS.neutral600}
-              style={{ marginVertical: scale(12) }}
+              style={stylesStep0.buttonTextStyle}
             >
               {t('button.continue')}
             </Text>

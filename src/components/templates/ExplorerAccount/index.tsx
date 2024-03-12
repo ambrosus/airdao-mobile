@@ -39,6 +39,7 @@ export const ExplorerAccountView = (
   const listsWithAccount = listsOfAddressGroup.filter(
     (list) => list.accounts.indexOfItem(account, 'address') > -1
   );
+  const showName = nameVisible && account.name;
 
   const showAddToList = () => {
     addToListModal.current?.show();
@@ -96,9 +97,8 @@ export const ExplorerAccountView = (
 
   return (
     <View style={styles.container} testID="Explorer_Account_View">
-      {nameVisible && (
+      {showName && (
         <>
-          <Spacer value={verticalScale(22)} />
           <Row alignItems="center">
             <Text fontFamily="Inter_600SemiBold" fontSize={15}>
               {account.name}

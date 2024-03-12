@@ -152,7 +152,6 @@
   "create.wallet.verify.phrase": "İfadeyi doğrula",
   "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
   "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
-  "create.wallet.recovery.phrase.double.check": "Let’s double check",
 
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
   "empty.assets": "Henüz varlık yok",

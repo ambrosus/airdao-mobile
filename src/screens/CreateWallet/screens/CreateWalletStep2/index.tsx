@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +10,13 @@ import {
 } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useAddWalletContext } from '@contexts';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
+import { styles } from './Step2.styles';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -152,7 +153,11 @@ export const CreateWalletStep2 = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Header
-        style={{ shadowColor: COLORS.transparent }}
+        style={{
+          shadowColor: COLORS.transparent,
+          borderBottomWidth: 1,
+          borderColor: COLORS.neutral900Alpha['5']
+        }}
         title={
           <Text
             align="center"
@@ -160,15 +165,16 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('create.wallet.recovery.phrase.double.check')}
+            {t('create.wallet.double.check')}
           </Text>
         }
       />
+      <Spacer value={20} />
       <View style={styles.container}>
         <View>
           <Text
             align="center"
-            fontSize={scale(15)}
+            fontSize={scale(16)}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >
@@ -196,9 +202,7 @@ export const CreateWalletStep2 = () => {
               backgroundColor: isMnemonicCorrect
                 ? COLORS.brand600
                 : COLORS.alphaBlack5,
-              width: '90%',
-              alignSelf: 'center',
-              paddingVertical: verticalScale(12)
+              ...styles.button
             }}
           >
             {loading ? (
@@ -218,39 +222,3 @@ export const CreateWalletStep2 = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between'
-  },
-  selectedMnemonicContainer: {
-    minHeight: verticalScale(172),
-    paddingVertical: verticalScale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    borderColor: COLORS.neutral100,
-    borderWidth: 2,
-    marginHorizontal: scale(16),
-    borderRadius: moderateScale(16)
-  },
-  mnemoicContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    rowGap: verticalScale(20),
-    width: scale(342),
-    alignSelf: 'center',
-    alignItems: 'center',
-    columnGap: scale(20)
-  },
-  mnemonic: {
-    width: scale(94),
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.neutral100,
-    borderRadius: 1000,
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(8),
-    height: verticalScale(36),
-    minHeight: 36
-  }
-});

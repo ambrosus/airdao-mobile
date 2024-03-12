@@ -15,6 +15,7 @@ import { etherumAddressRegex } from '@constants/regex';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
+import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -23,8 +24,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const walletImportCreate = useRef<BottomSheetRef>(null);
   const scanned = useRef(false);
   const { data: notifications } = useNotificationsQuery();
-  const newNotificationsCount = 12;
-  // const newNotificationsCount = useNewNotificationsCount();
+  const newNotificationsCount = useNewNotificationsCount();
   const { t } = useTranslation();
 
   const openScanner = () => {
