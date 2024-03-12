@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 export interface StepInfo {
   image: ReactNode;
@@ -44,7 +45,7 @@ export const NoWalletStep = (props: { step: StepInfo }) => {
 const styles = StyleSheet.create({
   stepContainer: {
     alignItems: 'center',
-    width: Dimensions.get('window').width,
+    width: DEVICE_WIDTH,
     marginTop: verticalScale(80)
   }
 });
