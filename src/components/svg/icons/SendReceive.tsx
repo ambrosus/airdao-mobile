@@ -1,11 +1,12 @@
 import React from 'react';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { Circle, ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 export function SendReceiveIcon(props: Omit<IconProps, 'color'>) {
   const { scale = 1 } = props;
-  const width = 420,
-    height = 300;
+  const width = DEVICE_WIDTH;
+  const height = 300;
   return (
     <Svg
       width={width * scale}
@@ -58,7 +59,7 @@ export function SendReceiveIcon(props: Omit<IconProps, 'color'>) {
       </G>
       <Defs>
         <ClipPath id="prefix__clip0_1380_23">
-          <Rect width={420} height={300} rx={24} fill="#fff" />
+          <Rect width={width} height={300} rx={24} fill="#fff" />
         </ClipPath>
       </Defs>
     </Svg>

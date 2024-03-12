@@ -60,7 +60,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     [props.navigationState.routes.length]
   );
 
-  const tabWidth = DEVICE_WIDTH * 0.6 - 15;
+  const tabWidth = DEVICE_WIDTH;
   const tabBarWidth = tabWidth / 2;
 
   const indicatorPosition = useSharedValue(0);
@@ -104,6 +104,10 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     });
   }, [refs]);
 
+  useEffect(() => {
+    indicatorPosition.value = withTiming(props.index * tabBarWidth);
+  }, [indicatorPosition, props.index, tabBarWidth]);
+
   const portfolioTabsButton = () => {
     if (props.index === 0) {
       navigateToSearch();
@@ -145,13 +149,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         </Row>
       </View>
       <Spacer value={verticalScale(27)} />
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingLeft: scale(16)
-        }}
-        ref={containerRef}
-      >
+      <View style={styles.itemContainer} ref={containerRef}>
         {props.navigationState.routes.map((route, i) => {
           const opacity = props.position.interpolate({
             inputRange,
@@ -159,12 +157,12 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
               inputRangeIndex === i ? 1 : 0.3
             )
           });
+          const color =
+            props.navigationState.index === i
+              ? COLORS.brand500
+              : COLORS.neutral900Alpha['60'];
           return (
-            <View
-              key={i}
-              style={{ marginRight: scale(16) }}
-              testID="Portfolio_Screen_Tab_Item"
-            >
+            <View key={i} testID="Portfolio_Screen_Tab_Item">
               <PortfolioScreenTabItem
                 onPress={(idx) => {
                   indicatorPosition.value = withTiming(idx * tabBarWidth);
@@ -172,6 +170,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
                 }}
                 index={i}
                 opacity={opacity}
+                color={color}
                 ref={refs[i]}
               >
                 {route.title}
@@ -193,16 +192,12 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         ref={createGroupRef}
       />
       <Spacer value={verticalScale(5)} />
-      <View style={styles.tabsIndicator}>
+      <View style={styles.tabsIndicatorWrapper}>
         <Animated.View
           style={[
             {
-              position: 'relative',
-              bottom: 1,
-              left: 0,
-              width: tabWidth / 2,
-              height: 2,
-              backgroundColor: 'blue'
+              ...styles.tabsIndicator,
+              width: tabWidth / 2
             },
             indicatorStyle
           ]}

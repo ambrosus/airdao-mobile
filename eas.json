@@ -12,7 +12,10 @@
       }
     },
     "stage": {
-      "channel": "stage"
+      "channel": "stage",
+      "ios": {
+        "cocoapods": "1.15.2"
+      }
     },
     "prod": {
       "channel": "main"
