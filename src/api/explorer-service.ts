@@ -81,7 +81,7 @@ const getTransactionsOfAccount = async (
   }
 };
 
-const getTransactionsOfAccountV2 = async (
+const getTransactionsOfOwnAccount = async (
   address: string,
   page: number,
   limit: number
@@ -131,6 +131,6 @@ export const explorerService = {
   searchAddress,
   getTransactionsOfAccount,
   getTransactionDetails,
-  getTransactionsOfAccountV2,
+  getTransactionsOfOwnAccount,
   getTokenTransactionsV2
 };

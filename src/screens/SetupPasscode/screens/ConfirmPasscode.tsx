@@ -43,7 +43,7 @@ export const ConfirmPasscode = () => {
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
       <View style={{ paddingHorizontal: scale(16) }}>
-        <Spacer value={verticalScale(47)} />
+        <Spacer value={verticalScale(23)} />
         <Text
           align="center"
           fontSize={24}
@@ -52,7 +52,7 @@ export const ConfirmPasscode = () => {
         >
           {t('security.confirm.passcode.text')}
         </Text>
-        <Spacer value={verticalScale(8)} />
+        <Spacer value={verticalScale(23)} />
         <Text
           align="center"
           fontSize={16}

@@ -68,8 +68,8 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
           />
           <Text
             fontSize={16}
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.neutral500}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral900}
           >
             {t(item.title)}
           </Text>

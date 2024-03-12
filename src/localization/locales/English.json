@@ -137,6 +137,7 @@
   "common.yesterday": "Yesterday",
 
   "create.wallet.backup": "Backup your wallet",
+  "create.wallet.backup.header": "Backup wallet",
   "create.wallet.backup.popup": "recovery phrase.",
   "create.wallet.backup.text": "Your wallet will be backed up with a",
   "create.wallet.checkbox.text": "I understand that if I lose my recovery phrase, AirDAO cannot restore it.",
@@ -150,7 +151,7 @@
   "create.wallet.verification.alert": "Never share recovery phrase with \nanyone, keep it safe!",
   "create.wallet.verify.phrase": "Verify phrase",
   "create.wallet.verify.text": "Make sure to write it down as shown. You will verify this later.",
-  "create.wallet.your.recovery.phrase": "Your recovery phrase",
+  "create.wallet.recovery.phrase": "Recovery phrase",
 
   "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",
@@ -171,7 +172,7 @@
   "notification.settings.transaction.alerts.switch": "Transaction alerts",
   "notification.settings.transaction.alerts.switch.text": "Get notified of transactions in your watchlist.",
 
-  "asset.your.balance": "Your balance",
+  "asset.your.balance": "Your Balance",
 
   "transaction.modal": {
     "buttons": {
@@ -251,7 +252,7 @@
   "security.confirm.passcode.description": "Re-enter your passcode to secure your wallet",
   "security.confirm.passcode.text": "Confirm passcode",
   "security.enabled": "Security Enabled!",
-  "security.enter.passcode": "Enter Passcode",
+  "security.enter.passcode": "Choose a passcode",
   "security.enter.passcode.hint": "Use a passcode you will remember. \nIt cannot be recovered.",
   "security.enter.passcode.text": "Passcode will be required for wallet access and transactions.",
   "security.enter.pin": "Enter PIN",

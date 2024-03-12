@@ -41,7 +41,6 @@ export const styles = StyleSheet.create({
   addButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.brand500,
     borderRadius: 50,
     width: 32,
     height: 32
