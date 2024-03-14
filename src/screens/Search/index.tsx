@@ -178,24 +178,22 @@ export const SearchScreen = () => {
             ) : (
               infoData &&
               accounts && (
-                <>
-                  <FlatList<ExplorerAccount>
-                    data={accounts}
-                    renderItem={renderAccount}
-                    keyExtractor={(item) => item._id}
-                    contentContainerStyle={styles.list}
-                    showsVerticalScrollIndicator={false}
-                    ItemSeparatorComponent={() => (
-                      <Spacer value={verticalScale(26)} />
-                    )}
-                    onEndReachedThreshold={0.25}
-                    onEndReached={loadMoreAccounts}
-                    ListFooterComponent={() =>
-                      accountsLoading ? renderSpinner() : <></>
-                    }
-                    testID="List_Of_Addresses"
-                  />
-                </>
+                <FlatList<ExplorerAccount>
+                  data={accounts}
+                  renderItem={renderAccount}
+                  keyExtractor={(item) => `${item._id}${Math.random()}`}
+                  contentContainerStyle={styles.list}
+                  showsVerticalScrollIndicator={false}
+                  ItemSeparatorComponent={() => (
+                    <Spacer value={verticalScale(26)} />
+                  )}
+                  onEndReachedThreshold={0.25}
+                  onEndReached={loadMoreAccounts}
+                  ListFooterComponent={() =>
+                    accountsLoading ? renderSpinner() : <></>
+                  }
+                  testID="List_Of_Addresses"
+                />
               )
             )}
           </Animated.View>

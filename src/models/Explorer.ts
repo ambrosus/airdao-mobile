@@ -24,7 +24,7 @@ export class ExplorerAccount implements CacheableAccount {
   isOnWatchlist?: boolean | undefined;
 
   constructor(details: ExplorerAccountDTO) {
-    this._id = details._id;
+    this._id = details._id || details.address;
     this.address = details.address;
     this.ambBalance = details.balance?.ether || 0;
     this.transactionCount = details.totalTx;
