@@ -10,8 +10,6 @@ import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
 import { ToastPosition } from '../Toast';
 import { styles } from './styles';
-
-export const WalletCardHeight = 172;
 export interface WalletCardProps {
   address: string;
   ambBalance: number;
