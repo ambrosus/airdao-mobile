@@ -72,8 +72,9 @@ export class PublicAddressDB {
 
   static async deleteAddress(address: string) {
     const publicAddress = await this.getPublicAddress(address);
-    if (publicAddress)
+    if (publicAddress) {
       return await Database.deleteModel(publichAddressesDb, publicAddress.id);
+    }
   }
 
   static async addToGroup(address: CacheableAccount, groupId: string) {
@@ -83,10 +84,13 @@ export class PublicAddressDB {
   static async removeFromGroup(address: string) {
     const addressInDb = await this.getPublicAddress(address);
     if (addressInDb) {
-      // delete address if it is not watchlisted
-      if (!addressInDb.isOnWatchlist) await this.deleteAddress(address);
-      // remove from group otherwise
-      await this.updateAddress(address, { groupId: '' });
+      if (!addressInDb.isOnWatchlist) {
+        // delete address if it is not watchlisted
+        await this.deleteAddress(address);
+      } else {
+        // remove from group otherwise
+        await this.updateAddress(address, { groupId: '' });
+      }
     }
   }
 }
