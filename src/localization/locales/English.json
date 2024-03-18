@@ -172,7 +172,7 @@
   "notification.settings.transaction.alerts.switch": "Transaction alerts",
   "notification.settings.transaction.alerts.switch.text": "Get notified of transactions in your watchlist.",
 
-  "asset.your.balance": "Your Balance",
+  "asset.your.balance": "YOUR BALANCE",
 
   "transaction.modal": {
     "buttons": {
