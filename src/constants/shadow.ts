@@ -1,7 +1,6 @@
 import { COLORS } from './colors';
 
 export const shadow = {
-  backgroundColor: 'transparent',
   shadowColor: COLORS.black,
   shadowOffset: {
     width: 0,
@@ -13,7 +12,6 @@ export const shadow = {
 };
 
 export const shadowThick = {
-  backgroundColor: 'transparent',
   shadowColor: COLORS.black,
   shadowOffset: {
     width: 0,
