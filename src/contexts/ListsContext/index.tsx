@@ -58,7 +58,7 @@ const ListsContext = () => {
         'id'
       );
       await PublicAddressListDB.deleteList(selectedGroupId);
-      updateListOfAddressGroup(listsOfAddressGroup);
+      await updateListOfAddressGroup(listsOfAddressGroup);
     },
     [listsOfAddressGroup]
   );

@@ -11,8 +11,8 @@ import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import {
-  SwipeableWalletItemProps,
-  SwipeableWalletItem
+  SwipeableWalletItem,
+  SwipeableWalletItemProps
 } from './components/SwipeableWalletItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
@@ -69,8 +69,7 @@ export function AddressList(props: AddressListProps): JSX.Element {
     <FlatList
       contentContainerStyle={[
         {
-          flexGrow: 1,
-          paddingTop: verticalScale(16)
+          flexGrow: 1
         },
         contentContainerStyle
       ]}

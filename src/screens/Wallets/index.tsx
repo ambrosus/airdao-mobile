@@ -12,10 +12,10 @@ import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { PaginationCircles } from '@components/composite';
-import { WalletCardHeight } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
+import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();

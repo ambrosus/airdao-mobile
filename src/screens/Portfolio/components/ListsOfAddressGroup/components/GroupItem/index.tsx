@@ -9,8 +9,8 @@ import React, {
 import { Dimensions, Pressable, ViewStyle } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withTiming
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
@@ -69,7 +69,7 @@ export const GroupItem = memo(
       }, [group, navigation, timeoutRef]);
 
       const handleRemoveConfirm = (groupId: string) => {
-        handleOnDelete(groupId);
+        handleOnDelete(groupId).then();
         groupDeleteRef.current?.dismiss();
       };
 
@@ -111,9 +111,7 @@ export const GroupItem = memo(
       });
 
       const stylesForFirstItem = useMemo(() => {
-        return {
-          borderTopWidth: 1
-        };
+        return {};
       }, []);
 
       const containerStyles = useMemo(() => {
