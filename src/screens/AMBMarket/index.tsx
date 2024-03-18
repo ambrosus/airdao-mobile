@@ -3,10 +3,10 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import {
-  AMBPriceInfo,
-  AMBDetailedInfo,
   AMBAbout,
-  AMBMarket as AMBMarketsInfo
+  AMBDetailedInfo,
+  AMBMarket as AMBMarketsInfo,
+  AMBPriceInfo
 } from './components';
 import { Row, Spacer, Text } from '@components/base';
 import { CenteredSpinner, Header } from '@components/composite';
@@ -17,7 +17,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 
 const BodyTitle = ({ title }: { title: string }) => (
-  <Text fontSize={20} fontFamily="Inter_700Bold" color="#A1A6B2">
+  <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.neutral900}>
     {title}
   </Text>
 );
@@ -78,10 +78,6 @@ export function AMBMarket(): JSX.Element {
               }}
             />
             <View style={styles.body}>
-              <BodyTitle title={t('amb.market.about.airdao')} />
-              <Spacer value={verticalScale(16)} />
-              <AMBAbout />
-              <Spacer value={verticalScale(32)} />
               <BodyTitle title={t('amb.market.stats')} />
               <Spacer value={verticalScale(16)} />
               <AMBDetailedInfo
@@ -99,6 +95,10 @@ export function AMBMarket(): JSX.Element {
                   '$' + NumberUtils.formatNumber(ambPrice.volumeUSD || 0, 0)
                 }
               />
+              <Spacer value={verticalScale(8)} />
+              <BodyTitle title={t('amb.market.about.airdao')} />
+              <Spacer value={verticalScale(16)} />
+              <AMBAbout />
               <Spacer value={verticalScale(8)} />
               <BodyTitle title={t('amb.market.markets')} />
               <Spacer value={verticalScale(16)} />
