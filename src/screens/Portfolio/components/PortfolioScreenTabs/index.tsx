@@ -13,7 +13,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
 import { Measure } from './components/types';
-import { TabViewProps, Route } from 'react-native-tab-view';
+import { Route, TabViewProps } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates';
 import { SearchTabNavigationProp } from '@appTypes';
@@ -203,7 +203,6 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
           ]}
         />
       </View>
-      <Spacer value={verticalScale(10)} />
     </>
   );
 };

@@ -15,8 +15,7 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
     <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
         contentContainerStyle={{
-          paddingBottom: 150,
-          paddingTop: verticalScale(16)
+          paddingBottom: 150
         }}
         data={listsOfAddressGroup}
         showsVerticalScrollIndicator={false}
