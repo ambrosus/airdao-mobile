@@ -111,9 +111,7 @@ export const GroupItem = memo(
       });
 
       const stylesForFirstItem = useMemo(() => {
-        return {
-          borderTopWidth: 1
-        };
+        return {};
       }, []);
 
       const containerStyles = useMemo(() => {
