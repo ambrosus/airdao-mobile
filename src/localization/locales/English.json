@@ -85,6 +85,7 @@
   "change.passcode.enter.new.passcode": "Enter new passcode",
   "change.passcode.success": "Passcode changed",
 
+  "chart.timeframe.24H": "24 hrs",
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
   "chart.timeframe.monthly": "1M",
@@ -298,7 +299,11 @@
   "toast.you.removed.address.from.watchlist": "You removed {{name}} from watchlist!",
 
   "token.picker.select": "Select asset to send",
+  "token.actions.swap": "Swap",
+  "token.actions.stake": "Stake",
+
 
   "wallet.my.assets": "My assets",
-  "wallet.picker.select": "Select Wallet"
+  "wallet.picker.select": "Select Wallet",
+
 }
