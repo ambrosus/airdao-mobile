@@ -16,8 +16,8 @@ import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
 const stageBuildVersions = {
-  ios: '1.1.0.35',
-  android: '1.1.5.26'
+  ios: '1.1.0.36',
+  android: '1.1.5.27'
 };
 
 const isStage = Updates.channel === 'stage';
