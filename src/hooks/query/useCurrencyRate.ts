@@ -15,12 +15,9 @@ export const useCurrencyRate = (
   useEffect(() => {
     let _currencyRate = 1; // token/AMB
     switch (symbol) {
+      case CryptoCurrencyCode.Bond:
       case CryptoCurrencyCode.AMB: {
         _currencyRate = 1;
-        break;
-      }
-      case CryptoCurrencyCode.Bond: {
-        _currencyRate = airbondPrice || -1;
         break;
       }
       case CryptoCurrencyCode.USDC:

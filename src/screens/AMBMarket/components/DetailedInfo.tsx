@@ -6,7 +6,7 @@ import {
   AMBMarketItemsInfo,
   InfoKey
 } from '../AMBMarket.constants';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { PopUpInfo } from '@components/composite';
@@ -19,6 +19,9 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
   const [visiblePopUpKey, setVisiblePopUpKey] = useState('');
   const { t } = useTranslation();
   const renderRow = (row: AMBMarketItem) => {
+    const onInfoPress = () => {
+      setVisiblePopUpKey(row.key);
+    };
     return (
       <Row
         key={row.title}
@@ -26,25 +29,24 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
         justifyContent="space-between"
         style={styles.item}
       >
-        <Button onPress={() => setVisiblePopUpKey(row.key)}>
-          <Row alignItems="center">
-            <Text
-              fontSize={14}
-              color={COLORS.neutral400}
-              fontFamily="Inter_500Medium"
-            >
-              {t(row.title)}
-            </Text>
-            <Spacer value={scale(7)} horizontal />
-            <PopUpInfo
-              testID={row.testID}
-              body={t(row.body)}
-              title={t(row.title)}
-              isVisible={visiblePopUpKey === row.key}
-              onBackdropPress={() => setVisiblePopUpKey('')}
-            />
-          </Row>
-        </Button>
+        <Row alignItems="center">
+          <Text
+            fontSize={14}
+            color={COLORS.neutral400}
+            fontFamily="Inter_500Medium"
+          >
+            {t(row.title)}
+          </Text>
+          <Spacer value={scale(7)} horizontal />
+          <PopUpInfo
+            onInfoPress={onInfoPress}
+            testID={row.testID}
+            body={t(row.body)}
+            title={t(row.title)}
+            isVisible={visiblePopUpKey === row.key}
+            onBackdropPress={() => setVisiblePopUpKey('')}
+          />
+        </Row>
         <Text
           fontSize={13}
           color={COLORS.neutral900}

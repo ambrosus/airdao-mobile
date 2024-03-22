@@ -2,10 +2,10 @@ import { useWatchlist } from '@hooks';
 import { View } from 'react-native';
 import { AddressList } from '@components/templates';
 import React from 'react';
-import { scale } from '@utils/scaling';
 import { useAllAddressesContext } from '@contexts';
 import { Spinner } from '@components/base';
 import { sortListByKey } from '@utils/sort';
+import { styles } from './styles';
 
 export const WatchList = () => {
   const { watchlist } = useWatchlist();
@@ -13,11 +13,9 @@ export const WatchList = () => {
     useAllAddressesContext((v) => v);
 
   return (
-    <View style={{ paddingHorizontal: scale(16), flex: 1 }}>
+    <View style={styles.main}>
       {addressesLoading ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
+        <View style={styles.addressesWrapper}>
           <Spinner />
         </View>
       ) : (
@@ -25,7 +23,7 @@ export const WatchList = () => {
           isPortfolioFlow={true}
           emptyText=""
           data={sortListByKey(watchlist, 'ambBalance', 'desc')}
-          contentContainerStyle={{ paddingBottom: '40%' }}
+          contentContainerStyle={styles.addressesList}
           onRefresh={refetchAddresses}
         />
       )}
