@@ -26,10 +26,10 @@ const getExplorerInfo = async (): Promise<ExplorerInfoDTO> => {
 
 const getExplorerAccounts = async (
   limit = 20,
-  next: string,
+  page: string | number,
   sort: SearchSort = SearchSort.Balance
 ): Promise<PaginatedResponseBody<ExplorerAccountDTO[]>> => {
-  const url = `${explorerApiV2Url}/addresses?limit=${limit}&sort=${sort}&next=${next}`;
+  const url = `${explorerApiV2Url}/addresses?limit=${limit}&sort=${sort}&page=${page}`;
   try {
     const response = await axios.get(url);
     const nextKey = response.data.pagination.hasNext
