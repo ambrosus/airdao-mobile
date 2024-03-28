@@ -1,11 +1,11 @@
 import React from 'react';
-import { FlatList, View, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
 import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
-import { HomeNavigationProp, CryptoCurrencyCode } from '@appTypes';
+import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
 
 interface WalletAssetsProps {
