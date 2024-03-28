@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  RefreshControl,
+  View
+} from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, {
   FadeIn,
@@ -42,10 +47,18 @@ export const SearchScreen = () => {
     loading: accountsLoading,
     error: accountsError,
     hasNextPage,
-    fetchNextPage
+    fetchNextPage,
+    refetch: refetchAssets,
+    refetching
   } = useExplorerAccounts(SearchSort.Balance);
   const [searchAddressContentVisible, setSearchAddressContentVisible] =
     useState(false);
+
+  const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
+
+  useEffect(() => {
+    if (!refetching) setUserPerformedRefresh(false);
+  }, [refetching]);
 
   const heightAnimationValue = useSharedValue(0);
 
@@ -75,6 +88,15 @@ export const SearchScreen = () => {
     const navigateToWallet = () => {
       navigation.navigate('Address', { address: item.address });
     };
+
+    if (Object.keys(item).length === 0) {
+      return (
+        <Button style={styles.emptyList} activeOpacity={1}>
+          <Text>{t('explore.search.no.account.info')}</Text>
+        </Button>
+      );
+    }
+
     return (
       <Button onPress={navigateToWallet}>
         <ExplorerWalletItem
@@ -86,11 +108,17 @@ export const SearchScreen = () => {
     );
   };
 
+  const _onRefresh = () => {
+    setUserPerformedRefresh(true);
+    if (typeof refetchAssets === 'function') {
+      refetchAssets();
+    }
+  };
+
   const renderSpinner = () => {
     return (
-      <View testID="spinner">
+      <View testID="spinner" style={styles.spinnerContainer}>
         <Spinner />
-        <Spacer value={verticalScale(24)} />
       </View>
     );
   };
@@ -105,17 +133,12 @@ export const SearchScreen = () => {
   };
 
   return (
-    <KeyboardDismissingView
-      style={{ flex: 1, paddingTop: verticalScale(12), top }}
-    >
+    <KeyboardDismissingView style={{ ...styles.main, top }}>
       {searchAddressContentVisible ? null : (
         <Row
           alignItems="center"
           justifyContent="space-between"
-          style={{
-            paddingHorizontal: scale(16),
-            paddingBottom: verticalScale(30)
-          }}
+          style={styles.searchContainer}
         >
           <Text
             fontSize={24}
@@ -140,15 +163,8 @@ export const SearchScreen = () => {
           </Row>
         </Row>
       )}
-      <View testID="Search_Screen" style={{ flex: 1 }}>
-        <Animated.View
-          style={[
-            {
-              overflow: 'hidden'
-            },
-            animatedStyle
-          ]}
-        >
+      <View testID="Search_Screen" style={styles.searchScreen}>
+        <Animated.View style={[styles.searchMain, animatedStyle]}>
           <SearchAddress
             searchAddress
             scannerDisabled={true}
@@ -173,29 +189,27 @@ export const SearchScreen = () => {
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
-            {accountsError ? (
-              <Text>{t('explore.search.no.account.info')}</Text>
-            ) : (
-              infoData &&
-              accounts && (
-                <FlatList<ExplorerAccount>
-                  data={accounts}
-                  renderItem={renderAccount}
-                  keyExtractor={(item) => `${item._id}${Math.random()}`}
-                  contentContainerStyle={styles.list}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={() => (
-                    <Spacer value={verticalScale(26)} />
-                  )}
-                  onEndReachedThreshold={0.25}
-                  onEndReached={loadMoreAccounts}
-                  ListFooterComponent={() =>
-                    accountsLoading ? renderSpinner() : <></>
-                  }
-                  testID="List_Of_Addresses"
+            <FlatList<ExplorerAccount>
+              // @ts-ignore
+              data={accountsError ? [{}] : accounts}
+              refreshControl={
+                <RefreshControl
+                  onRefresh={_onRefresh}
+                  refreshing={!!(refetching && userPerformedRefresh)}
                 />
-              )
-            )}
+              }
+              renderItem={renderAccount}
+              keyExtractor={(item) => `${item._id}${Math.random()}`}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={() => (
+                <Spacer value={verticalScale(26)} />
+              )}
+              onEndReachedThreshold={0.25}
+              onEndReached={loadMoreAccounts}
+              ListFooterComponent={accountsLoading ? renderSpinner() : <></>}
+              testID="List_Of_Addresses"
+            />
           </Animated.View>
         )}
       </View>
