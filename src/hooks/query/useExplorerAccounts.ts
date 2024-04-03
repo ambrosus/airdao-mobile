@@ -17,7 +17,9 @@ export function useExplorerAccounts(
     isInitialLoading,
     isFetchingNextPage,
     hasNextPage,
-    fetchNextPage
+    fetchNextPage,
+    isRefetching,
+    refetch
   } = useInfiniteQuery<PaginatedResponseBody<ExplorerAccountDTO[]>>(
     ['explorer-accounts', sort],
     {
@@ -45,6 +47,8 @@ export function useExplorerAccounts(
       : undefined,
     loading: isInitialLoading || isFetchingNextPage,
     error,
+    refetch,
+    refetching: isRefetching,
     hasNextPage: !!hasNextPage,
     fetchNextPage
   };

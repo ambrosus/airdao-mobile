@@ -9,7 +9,7 @@ import {
   LocalizationProvider,
   PasscodeProvider
 } from '@contexts';
-import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider';
+import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 
 const queryClient = new QueryClient();

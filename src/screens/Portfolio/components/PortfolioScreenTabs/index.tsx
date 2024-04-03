@@ -173,7 +173,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
                 color={color}
                 ref={refs[i]}
               >
-                {route.title}
+                {t(`${route.title}`)}
               </PortfolioScreenTabItem>
             </View>
           );
