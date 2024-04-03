@@ -89,7 +89,15 @@
             "kotlinVersion": "1.6.10",
             "enableProguardInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true,
-            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -keep public class com.shopify.reactnative.skia.* {*;} -keep class com.swmansion.reanimated.** { *; }"
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -keep public class com.shopify.reactnative.skia.* {*;} -keep class com.swmansion.reanimated.** { *; }",
+            "packagingOptions": {
+              "pickFirst": [
+                "lib/x86/libcrypto.so",
+                "lib/x86_64/libcrypto.so",
+                "lib/armeabi-v7a/libcrypto.so",
+                "lib/arm64-v8a/libcrypto.so"
+              ]
+            }
           }
         }
       ],
