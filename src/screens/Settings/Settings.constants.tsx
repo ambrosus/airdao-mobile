@@ -4,7 +4,7 @@ import {
   LockIcon,
   NotificationIcon,
   SettingsFilledIcon,
-  TelegramIcon,
+  TelegramSettingsIcon,
   WalletIcon
 } from '@components/svg/icons';
 import { SettingsMenuItem } from './Settings.types';
@@ -48,7 +48,7 @@ const helpGroup: SettingsMenuItem[] = [
     route: 'About',
     icon: <AboutIcon color={COLORS.neutral400} />
   }
-  //TODO temporarily hide help centre section
+  // TODO temporarily hide help centre section
   // {
   //   key: 'helpCenter',
   //   title: 'settings.help',
@@ -68,7 +68,7 @@ const socialGroup: SettingsMenuItem[] = [
     key: 'telegram',
     title: 'settings.telegram',
     route: 'telegram',
-    icon: <TelegramIcon color={COLORS.neutral400} scale={1.6} />
+    icon: <TelegramSettingsIcon color={COLORS.neutral400} />
   },
   {
     key: 'medium',
