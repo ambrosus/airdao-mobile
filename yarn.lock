@@ -11230,10 +11230,10 @@ react-native-gesture-handler@~2.14.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-graph@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-graph/-/react-native-graph-1.0.1.tgz#4fdd3a85f172d05af3290632a0f6dfd99a790626"
-  integrity sha512-Z0bacgmMApr2AUtOqUHj/Ny1sMQksxpcndM2OFpna90nZOqDXg+Ip500fNqG+HSX/n7bH1FcLISuC4cuHvgQbw==
+react-native-graph@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-graph/-/react-native-graph-1.1.0.tgz#b0a98f96dc386d1a95aeec822a5db94ec9c3d3b4"
+  integrity sha512-jcPLfhOOzjNaug1yw4Y6RecqMTdsiW0dQD+VruOpgzUUIZivNHIQD4LCp3vqdpqhok/nqggviuHVAYQv1ICRTw==
 
 react-native-iphone-x-helper@^1.0.3:
   version "1.3.1"

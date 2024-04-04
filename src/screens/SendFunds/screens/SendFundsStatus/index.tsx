@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SharePortfolio } from '@components/templates';
-import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton, TokenLogo } from '@components/modular';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
@@ -58,9 +58,10 @@ export const SendFundsStatus = () => {
     ? t('send.funds.failed')
     : `${amount} ${currency} ${t('send.funds.sent')}!`;
 
-  const onSharePress = () => {
-    shareModal.current?.show();
-  };
+  // TODO temporarily hide share buttons
+  // const onSharePress = () => {
+  //   shareModal.current?.show();
+  // };
 
   const navigateToHome = () => {
     navigation.popToTop();
@@ -152,14 +153,15 @@ export const SendFundsStatus = () => {
             width: '100%'
           }}
         >
-          {!error && (
-            <>
-              <SecondaryButton onPress={onSharePress} style={styles.button}>
-                <Text>{t('button.share')}</Text>
-              </SecondaryButton>
-              <Spacer value={verticalScale(16)} />
-            </>
-          )}
+          {/*TODO temporarily hide share buttons*/}
+          {/*{!error && (*/}
+          {/*  <>*/}
+          {/*    <SecondaryButton onPress={onSharePress} style={styles.button}>*/}
+          {/*      <Text>{t('button.share')}</Text>*/}
+          {/*    </SecondaryButton>*/}
+          {/*    <Spacer value={verticalScale(16)} />*/}
+          {/*  </>*/}
+          {/*)}*/}
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
             <Text color={COLORS.neutral0}>
               {error ? t('send.funds.go.home') : t('common.done')}

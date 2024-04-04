@@ -85,7 +85,7 @@
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
   "change.passcode.success": "Şifre değiştirildi",
 
-  "chart.timeframe.24HR": "24 saat",
+  "chart.timeframe.24H": "24 saat",
   "chart.timeframe.daily": "1G",
   "chart.timeframe.weekly": "1H",
   "chart.timeframe.monthly": "1A",

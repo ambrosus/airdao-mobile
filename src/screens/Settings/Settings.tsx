@@ -16,8 +16,8 @@ import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
 const stageBuildVersions = {
-  ios: '1.1.0.37',
-  android: '1.1.5.28'
+  ios: '1.1.0.38',
+  android: '1.1.5.29'
 };
 
 const isStage = Updates.channel === 'stage';
@@ -62,10 +62,7 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}
-          <Spacer
-            value={item.route === 'AppPreferences' ? scale(12) : scale(8)}
-            horizontal
-          />
+          <Spacer value={scale(8)} horizontal />
           <Text
             fontSize={16}
             fontFamily="Inter_500Medium"
@@ -90,7 +87,7 @@ export const SettingsScreen = () => {
   const renderMenu = (item: SettingsMenuItem[], index: number) => {
     const isNeedDelimiter = index + 1 !== SETTINGS_MENU_ITEMS.length;
     return (
-      <>
+      <View key={`${item[0].key}`}>
         {item.map(
           (menuItem): JSX.Element => (
             <SettingsMenuItemView item={menuItem} key={menuItem.route} />
@@ -105,7 +102,7 @@ export const SettingsScreen = () => {
             }}
           />
         )}
-      </>
+      </View>
     );
   };
 

@@ -13,8 +13,12 @@ export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const currentRoute = useCurrentRoute();
   const { prevState, appState } = useAppState();
-  const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
-
+  const {
+    isPasscodeEnabled,
+    isFaceIDEnabled,
+    loading,
+    isRequestingPermission
+  } = usePasscode();
   const processPasscodeReveal = useCallback(async () => {
     const isBiometricAuthenticationInProgress = await Cache.getItem(
       CacheKey.isBiometricAuthenticationInProgress
@@ -36,7 +40,11 @@ export const usePasscodeEntryRevealer = () => {
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
   useEffect(() => {
-    if (!loading && !routesToIgnorePasscodeEntry.includes(currentRoute)) {
+    if (
+      !loading &&
+      !routesToIgnorePasscodeEntry.includes(currentRoute) &&
+      !isRequestingPermission
+    ) {
       processPasscodeReveal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
