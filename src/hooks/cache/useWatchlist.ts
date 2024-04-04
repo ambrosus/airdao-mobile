@@ -5,6 +5,7 @@ import {
 } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
 import { AddressUtils } from '@utils/address';
+import { useMemo } from 'react';
 
 export const useWatchlist = () => {
   const allAddressesReducer = useAllAddressesReducer();
@@ -24,8 +25,12 @@ export const useWatchlist = () => {
     API.watcherService.removeWatcherForAddresses([address.address]);
   };
 
+  const watchlist = useMemo(() => {
+    return allAddresses.filter((account) => account.isOnWatchlist);
+  }, [allAddresses]);
+
   return {
-    watchlist: allAddresses.filter((account) => account.isOnWatchlist),
+    watchlist,
     addToWatchlist,
     removeFromWatchlist
   };
