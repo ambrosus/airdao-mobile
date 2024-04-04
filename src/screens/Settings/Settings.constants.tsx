@@ -1,17 +1,17 @@
 import React from 'react';
 import {
+  AboutIcon,
   LockIcon,
   NotificationIcon,
-  HelpIcon,
-  AboutIcon,
   SettingsFilledIcon,
-  WalletIcon,
-  TelegramIcon
+  TelegramIcon,
+  WalletIcon
 } from '@components/svg/icons';
 import { SettingsMenuItem } from './Settings.types';
 import { COLORS } from '@constants/colors';
 import XTwitterIcon from '@components/svg/icons/XTwitterIcon';
 import MediumIcon from '@components/svg/icons/MediumIcon';
+
 const walletGroup: SettingsMenuItem[] = [
   {
     key: 'manageWallets',
@@ -47,13 +47,14 @@ const helpGroup: SettingsMenuItem[] = [
     title: 'settings.about',
     route: 'About',
     icon: <AboutIcon color={COLORS.neutral400} />
-  },
-  {
-    key: 'helpCenter',
-    title: 'settings.help',
-    route: 'HelpCenter',
-    icon: <HelpIcon scale={1.2} color={COLORS.neutral400} />
   }
+  //TODO temporarily hide help centre section
+  // {
+  //   key: 'helpCenter',
+  //   title: 'settings.help',
+  //   route: 'HelpCenter',
+  //   icon: <HelpIcon color={COLORS.neutral400} />
+  // }
 ];
 
 const socialGroup: SettingsMenuItem[] = [

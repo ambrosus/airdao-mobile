@@ -61,11 +61,8 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
     <Button style={styles.menuItem} onPress={onPress}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          {item.icon}
-          <Spacer
-            value={item.route === 'AppPreferences' ? scale(12) : scale(8)}
-            horizontal
-          />
+          <View>{item.icon}</View>
+          <Spacer value={scale(8)} horizontal />
           <Text
             fontSize={16}
             fontFamily="Inter_500Medium"
