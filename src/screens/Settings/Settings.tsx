@@ -61,7 +61,7 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
     <Button style={styles.menuItem} onPress={onPress}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          <View>{item.icon}</View>
+          {item.icon}
           <Spacer value={scale(8)} horizontal />
           <Text
             fontSize={16}
@@ -87,7 +87,7 @@ export const SettingsScreen = () => {
   const renderMenu = (item: SettingsMenuItem[], index: number) => {
     const isNeedDelimiter = index + 1 !== SETTINGS_MENU_ITEMS.length;
     return (
-      <>
+      <View key={`${item[0].key}`}>
         {item.map(
           (menuItem): JSX.Element => (
             <SettingsMenuItemView item={menuItem} key={menuItem.route} />
@@ -102,7 +102,7 @@ export const SettingsScreen = () => {
             }}
           />
         )}
-      </>
+      </View>
     );
   };
 
