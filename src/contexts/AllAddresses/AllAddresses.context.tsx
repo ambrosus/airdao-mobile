@@ -100,7 +100,7 @@ const AllAddressesContext = () => {
   );
 
   // fetch all addresses on mount
-  const getAddresses = async () => {
+  const getAddresses = useCallback(async () => {
     setLoading(true);
     try {
       const addresses = await PublicAddressDB.getAll();
@@ -124,12 +124,17 @@ const AllAddressesContext = () => {
       );
       setAllAddresses(populatedAddresses);
       reducer({ type: 'set', payload: populatedAddresses });
-    } catch (error) {
-      //
     } finally {
       setLoading(false);
     }
-  };
+  }, [allAddresses, reducer]);
+
+  useEffect(() => {
+    if (allAddresses.length === 0) {
+      getAddresses();
+    }
+  }, [allAddresses, getAddresses]);
+
   useEffect(() => {
     getAddresses();
 

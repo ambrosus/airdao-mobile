@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -37,9 +43,14 @@ import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
 import { styles } from './styles';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useAllAddressesContext } from '@contexts';
+import { useWatchlist } from '@hooks';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
+  const { refresh: refetchAddresses, addressesLoading } =
+    useAllAddressesContext((v) => v);
+
   const { data: infoData } = useExplorerInfo();
   const { t } = useTranslation();
   const {
@@ -55,6 +66,8 @@ export const SearchScreen = () => {
     useState(false);
 
   const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
+
+  const { watchlist } = useWatchlist();
 
   useEffect(() => {
     if (!refetching) setUserPerformedRefresh(false);
@@ -109,19 +122,20 @@ export const SearchScreen = () => {
   };
 
   const _onRefresh = () => {
+    refetchAddresses();
     setUserPerformedRefresh(true);
     if (typeof refetchAssets === 'function') {
       refetchAssets();
     }
   };
 
-  const renderSpinner = () => {
+  const renderSpinner = useCallback(() => {
     return (
       <View testID="spinner" style={styles.spinnerContainer}>
         <Spinner />
       </View>
     );
-  };
+  }, []);
 
   const renderSearch = (value: boolean | ((prevState: boolean) => boolean)) => {
     setSearchAddressContentVisible(value);
@@ -131,6 +145,10 @@ export const SearchScreen = () => {
       heightAnimationValue.value = withTiming(scale(0));
     }
   };
+
+  const showFooterSpinner = useMemo(() => {
+    return addressesLoading && watchlist.length === 0;
+  }, [addressesLoading, watchlist]);
 
   return (
     <KeyboardDismissingView style={{ ...styles.main, top }}>
@@ -189,27 +207,31 @@ export const SearchScreen = () => {
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
-            <FlatList<ExplorerAccount>
-              // @ts-ignore
-              data={accountsError ? [{}] : accounts}
-              refreshControl={
-                <RefreshControl
-                  onRefresh={_onRefresh}
-                  refreshing={!!(refetching && userPerformedRefresh)}
-                />
-              }
-              renderItem={renderAccount}
-              keyExtractor={(item) => `${item._id}${Math.random()}`}
-              contentContainerStyle={styles.list}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={() => (
-                <Spacer value={verticalScale(26)} />
-              )}
-              onEndReachedThreshold={0.25}
-              onEndReached={loadMoreAccounts}
-              ListFooterComponent={accountsLoading ? renderSpinner() : <></>}
-              testID="List_Of_Addresses"
-            />
+            {showFooterSpinner ? (
+              renderSpinner()
+            ) : (
+              <FlatList<ExplorerAccount>
+                // @ts-ignore
+                data={accountsError ? [{}] : accounts}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={_onRefresh}
+                    refreshing={!!(refetching && userPerformedRefresh)}
+                  />
+                }
+                renderItem={renderAccount}
+                keyExtractor={(item) => `${item._id}${Math.random()}`}
+                contentContainerStyle={styles.list}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => (
+                  <Spacer value={verticalScale(26)} />
+                )}
+                onEndReachedThreshold={0.25}
+                onEndReached={loadMoreAccounts}
+                ListFooterComponent={accountsLoading ? renderSpinner() : <></>}
+                testID="List_Of_Addresses"
+              />
+            )}
           </Animated.View>
         )}
       </View>
