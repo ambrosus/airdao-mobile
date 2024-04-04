@@ -22,6 +22,8 @@ interface IPasscodeContext {
   setSavedPasscode: (newPasscode: string[]) => Promise<void>;
   savedPasscode: string[];
   toggleBiometricAuthentication: () => unknown;
+  isRequestingPermission: boolean;
+  toggleIsRequestingPermission: (value: boolean) => void;
 }
 
 const PasscodeContext = createContext<IPasscodeContext | undefined>(undefined);
@@ -33,6 +35,8 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState<boolean>(false);
   const [isPasscodeEnabled, setIsPasscodeEnabled] = useState<boolean>(false);
+  const [isRequestingPermission, setIsRequestingPermission] =
+    useState<boolean>(false);
   const [savedPasscode, setSavedPasscode] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const supportedBiometrics = useSupportedBiometrics();
@@ -61,6 +65,9 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       // ignore
     }
   };
+
+  const toggleIsRequestingPermission = (value: boolean) =>
+    setIsRequestingPermission(value);
 
   const toggleBiometricAuthentication = useCallback(async () => {
     try {
@@ -131,6 +138,8 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
         isFaceIDEnabled,
         savedPasscode,
         loading,
+        isRequestingPermission,
+        toggleIsRequestingPermission,
         toggleBiometricAuthentication,
         setSavedPasscode: changePasscode
       }}

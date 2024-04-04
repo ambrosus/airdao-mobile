@@ -16,6 +16,7 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
+import usePasscode from '@contexts/Passcode';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -27,9 +28,12 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const newNotificationsCount = useNewNotificationsCount();
   const { t } = useTranslation();
 
-  const openScanner = () => {
+  const { toggleIsRequestingPermission } = usePasscode();
+
+  const openScanner = useCallback(() => {
+    toggleIsRequestingPermission(true);
     scanner.current?.show();
-  };
+  }, [toggleIsRequestingPermission, scanner]);
 
   const closeScanner = () => {
     scanner.current?.dismiss();
@@ -77,11 +81,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
     return (
       <>
         <View style={{ bottom: scale(3) }}>
-          <Button
-            onPress={() => {
-              openScanner();
-            }}
-          >
+          <Button onPress={openScanner}>
             <ScannerIcon color="#393b40" />
           </Button>
           <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
@@ -104,7 +104,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
     WINDOW_HEIGHT,
     navigateToNotifications,
     newNotificationsCount,
-    onQRCodeScanned
+    onQRCodeScanned,
+    openScanner
   ]);
 
   const openWalletImportCreateModal = useCallback(() => {
