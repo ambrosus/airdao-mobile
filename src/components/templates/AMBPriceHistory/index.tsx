@@ -167,7 +167,8 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
                   fontSize={14}
                   color={COLORS.neutral900}
                 >
-                  {selectedInterval && t('chart.timeframe.24HR')}
+                  {selectedInterval &&
+                    `24${t('common.hour.short').toUpperCase()}`}
                 </Text>
                 {badgeType === 'button' && (
                   <>
