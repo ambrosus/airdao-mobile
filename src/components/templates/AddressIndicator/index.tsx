@@ -40,7 +40,11 @@ export function AddressIndicator(props: AddressIndicatorProps): JSX.Element {
     );
   }
   if (isWatchlisted && !hideWatchlist) {
-    return <WatchlistIcon />;
+    return (
+      <View style={styles.watchlist}>
+        <WatchlistIcon />
+      </View>
+    );
   }
   return <></>;
 }
