@@ -29,7 +29,7 @@ export const ExplorerWalletItem = (
     (list) => list.accounts?.indexOfItem(item, 'address') > -1
   );
   const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
-
+  const isShowHoldPercentage = !!item.ambBalance && !!totalSupply;
   const leftPadding = indicatorVisible
     ? listWithAddress.length > 0 || isWatchlisted
       ? 4
@@ -69,19 +69,20 @@ export const ExplorerWalletItem = (
       </Row>
       <Spacer value={verticalScale(5)} />
       <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={12}
-          color={COLORS.alphaBlack50}
-          fontFamily="Inter_500Medium"
-        >
-          {t('explore.single.address.holding', {
-            share: NumberUtils.formatNumber(
-              // item.calculatePercentHoldings(totalSupply),
-              (item.ambBalance / totalSupply) * 100,
-              2
-            )
-          })}
-        </Text>
+        {isShowHoldPercentage && (
+          <Text
+            fontSize={12}
+            color={COLORS.alphaBlack50}
+            fontFamily="Inter_500Medium"
+          >
+            {t('explore.single.address.holding', {
+              share: NumberUtils.formatNumber(
+                (item.ambBalance / totalSupply) * 100,
+                2
+              )
+            })}
+          </Text>
+        )}
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
