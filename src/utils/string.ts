@@ -48,8 +48,22 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
   let numericChars = removeNonNumericCharacters(dottedStr);
+
   if (numericChars[0] === '.') numericChars = '0' + numericChars;
-  return _removeExtraDots(numericChars);
+
+  numericChars = _removeExtraDots(numericChars);
+
+  numericChars = numericChars.replace(/(0)([1-9])/, '$2');
+
+  let formattedNumber = '';
+  let prevChar = '';
+  for (const char of numericChars) {
+    if (char === '0' && prevChar === '0') continue;
+    formattedNumber += char;
+    prevChar = char;
+  }
+
+  return formattedNumber;
 };
 
 function _removeExtraDots(str: string): string {
