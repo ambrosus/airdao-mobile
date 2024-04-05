@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
@@ -47,17 +47,13 @@ export const ExplorerWalletItem = (
         <Row alignItems="center">
           <Text
             fontSize={14}
+            style={{ width: isWatchlisted ? 90 : 'auto' }}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
             {StringUtils.formatAddress(address, leftPadding, rightPadding)}
           </Text>
-          {indicatorVisible && (
-            <>
-              <Spacer value={scale(10)} horizontal />
-              <AddressIndicator address={item.address} />
-            </>
-          )}
+          {indicatorVisible && <AddressIndicator address={item.address} />}
         </Row>
         <Text
           fontSize={13}

@@ -211,8 +211,7 @@ export const SearchScreen = () => {
               renderSpinner()
             ) : (
               <FlatList<ExplorerAccount>
-                // @ts-ignore
-                data={accountsError ? [{}] : accounts}
+                data={accountsError ? [] : accounts}
                 refreshControl={
                   <RefreshControl
                     onRefresh={_onRefresh}
