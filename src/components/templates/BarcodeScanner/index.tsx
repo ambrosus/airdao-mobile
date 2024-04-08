@@ -36,8 +36,8 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
       openSettings: true
     });
 
-    toggleIsRequestingPermission(false);
     setHasPermission(granted);
+    toggleIsRequestingPermission(false);
   };
 
   useEffect(() => {
