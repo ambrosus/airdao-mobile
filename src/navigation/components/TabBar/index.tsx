@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Platform } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
@@ -125,6 +125,11 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   );
 };
 
+const borderTopWidth = Platform.select({
+  android: 0.5,
+  ios: 0.25
+});
+
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
@@ -132,7 +137,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: COLORS.neutral0,
     opacity: 2,
-    borderTopWidth: 0.25,
+    elevation: 0.25,
+    borderTopWidth,
     borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {
