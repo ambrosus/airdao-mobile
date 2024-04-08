@@ -51,7 +51,7 @@ export const SearchScreen = () => {
   const { refresh: refetchAddresses, addressesLoading } =
     useAllAddressesContext((v) => v);
 
-  const { data: infoData } = useExplorerInfo();
+  const { data: infoData, refetch: refetchInfo } = useExplorerInfo();
   const { t } = useTranslation();
   const {
     data: accounts,
@@ -115,16 +115,20 @@ export const SearchScreen = () => {
         <ExplorerWalletItem
           item={item}
           indicatorVisible={true}
-          totalSupply={infoData?.totalSupply || 1}
+          totalSupply={infoData?.totalSupply || 0}
         />
       </Button>
     );
   };
 
-  const _onRefresh = () => {
-    refetchAddresses();
+  const _onRefresh = async () => {
+    await refetchAddresses();
     setUserPerformedRefresh(true);
-    if (typeof refetchAssets === 'function') {
+    if (
+      typeof refetchAssets === 'function' &&
+      typeof refetchInfo === 'function'
+    ) {
+      refetchInfo();
       refetchAssets();
     }
   };
