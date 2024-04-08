@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
@@ -29,7 +29,7 @@ export const ExplorerWalletItem = (
     (list) => list.accounts?.indexOfItem(item, 'address') > -1
   );
   const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
-
+  const isShowHoldPercentage = !!item.ambBalance && !!totalSupply;
   const leftPadding = indicatorVisible
     ? listWithAddress.length > 0 || isWatchlisted
       ? 4
@@ -47,17 +47,13 @@ export const ExplorerWalletItem = (
         <Row alignItems="center">
           <Text
             fontSize={14}
+            style={{ width: isWatchlisted ? 90 : 'auto' }}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
             {StringUtils.formatAddress(address, leftPadding, rightPadding)}
           </Text>
-          {indicatorVisible && (
-            <>
-              <Spacer value={scale(10)} horizontal />
-              <AddressIndicator address={item.address} />
-            </>
-          )}
+          {indicatorVisible && <AddressIndicator address={item.address} />}
         </Row>
         <Text
           fontSize={13}
@@ -69,19 +65,20 @@ export const ExplorerWalletItem = (
       </Row>
       <Spacer value={verticalScale(5)} />
       <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={12}
-          color={COLORS.alphaBlack50}
-          fontFamily="Inter_500Medium"
-        >
-          {t('explore.single.address.holding', {
-            share: NumberUtils.formatNumber(
-              // item.calculatePercentHoldings(totalSupply),
-              (item.ambBalance / totalSupply) * 100,
-              2
-            )
-          })}
-        </Text>
+        {isShowHoldPercentage && (
+          <Text
+            fontSize={12}
+            color={COLORS.alphaBlack50}
+            fontFamily="Inter_500Medium"
+          >
+            {t('explore.single.address.holding', {
+              share: NumberUtils.formatNumber(
+                (item.ambBalance / totalSupply) * 100,
+                2
+              )
+            })}
+          </Text>
+        )}
         <Text
           fontSize={13}
           fontFamily="Inter_500Medium"
