@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet, Platform } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
@@ -17,6 +17,7 @@ import {
   SettingsTabIcon,
   WalletTabIcon
 } from '@components/svg/BottomTabIcons';
+import { isIos } from '@utils/isPlatform';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
@@ -125,11 +126,6 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   );
 };
 
-const borderTopWidth = Platform.select({
-  android: 0.5,
-  ios: 0.25
-});
-
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.neutral0,
     opacity: 2,
     elevation: 0.25,
-    borderTopWidth,
+    borderTopWidth: isIos ? 0.25 : 0.5,
     borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {
