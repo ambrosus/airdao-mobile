@@ -121,8 +121,8 @@ export const SearchScreen = () => {
     );
   };
 
-  const _onRefresh = () => {
-    refetchAddresses().then();
+  const _onRefresh = async () => {
+    await refetchAddresses();
     setUserPerformedRefresh(true);
     if (
       typeof refetchAssets === 'function' &&
