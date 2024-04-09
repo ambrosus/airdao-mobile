@@ -285,7 +285,7 @@
   "staking.pool.stake.amount": "Amount",
   "staking.pool.stake.now": "Stake now",
   "staking.pool.total.stake": "Total stake",
-  "staking.pool.stake.withdraw": "Withdraw now"
+  "staking.pool.stake.withdraw": "Withdraw now",
   "staking.pool.user.stake": "My stake",
   "staking.pool.withdraw": "Withdraw",
 
@@ -303,8 +303,6 @@
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
 
-
   "wallet.my.assets": "My assets",
-  "wallet.picker.select": "Select Wallet",
-
+  "wallet.picker.select": "Select Wallet"
 }
