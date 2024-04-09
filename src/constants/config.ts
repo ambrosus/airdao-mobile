@@ -1,4 +1,8 @@
 import * as Updates from 'expo-updates';
+// chain id
+// test: 22040
+// prod: 16718
+
 const envs = {
   prod: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
@@ -21,6 +25,7 @@ const envs = {
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+    NETWORK_URL: 'https://network.ambrosus.io',
 
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   },
@@ -45,6 +50,7 @@ const envs = {
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+    NETWORK_URL: 'https://network.ambrosus.io',
 
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   }
