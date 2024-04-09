@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import { HomeNavigationProp } from '@appTypes';
 import { StakingPool } from '@models';
 import { useAmbrosusStakingPools } from '@hooks';
 import { styles } from './styles';
+import { QuestionIcon } from '@components/svg/icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const StakingPoolsScreen = () => {
   const { t } = useTranslation();
@@ -21,9 +23,26 @@ export const StakingPoolsScreen = () => {
     navigation.navigate('StakingPool', { pool });
   };
 
+  const renderHeaderContentRight = useMemo(() => {
+    return (
+      <TouchableOpacity hitSlop={15}>
+        <QuestionIcon />
+      </TouchableOpacity>
+    );
+  }, []);
+
+  const filterStakingPools = useMemo(() => {
+    return stakingPools
+      .filter((pool) => pool.token.symbol !== 'GPT')
+      .sort((a, b) => Number(b.isActive) - Number(a.isActive));
+  }, [stakingPools]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={t('staking.header')} />
+      <Header
+        contentRight={renderHeaderContentRight}
+        title={t('staking.header')}
+      />
       <Spacer value={verticalScale(16)} />
       <Row
         alignItems="center"
@@ -48,9 +67,7 @@ export const StakingPoolsScreen = () => {
         </Text>
       </Row>
       <StakingPoolList
-        stakingPools={stakingPools.sort(
-          (a, b) => Number(b.isActive) - Number(a.isActive)
-        )}
+        stakingPools={filterStakingPools}
         contentContainerStyle={{
           paddingHorizontal: scale(16),
           paddingTop: verticalScale(16)

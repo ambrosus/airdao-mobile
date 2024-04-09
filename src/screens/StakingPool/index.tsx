@@ -15,6 +15,7 @@ import { styles } from './style';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
 import { AccountDBModel } from '@database';
+import { WithdrawToken } from './components/Withdraw';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();
@@ -53,11 +54,13 @@ export const StakingPoolScreen = () => {
             </Row>
           }
           contentRight={
-            <WalletPicker
-              selectedWallet={selectedWallet}
-              wallets={allWallets}
-              onSelectWallet={setSelectedWallet}
-            />
+            allWallets.length > 1 && (
+              <WalletPicker
+                selectedWallet={selectedWallet}
+                wallets={allWallets}
+                onSelectWallet={setSelectedWallet}
+              />
+            )
           }
           style={{
             ...shadow
@@ -90,7 +93,12 @@ export const StakingPoolScreen = () => {
               },
               {
                 title: t('staking.pool.withdraw'),
-                view: <></>
+                view: (
+                  <>
+                    <Spacer value={verticalScale(24)} />
+                    <WithdrawToken wallet={selectedWallet} apy={apy} />
+                  </>
+                )
               }
             ]}
           />

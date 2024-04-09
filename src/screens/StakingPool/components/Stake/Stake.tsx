@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -52,14 +52,17 @@ export const StakeToken = (props: StakeTokenProps) => {
   //   previewModalRef.current?.dismiss();
   // };
 
-  const onPercentageBoxPress = (percentage: number) => {
-    setStakeAmount(
-      NumberUtils.limitDecimalCount(
-        (parseFloat(ambBalance?.ether || '0') * percentage) / 100,
-        2
-      )
-    );
-  };
+  const onPercentageBoxPress = useCallback(
+    (percentage: number) => {
+      setStakeAmount(
+        NumberUtils.limitDecimalCount(
+          (parseFloat(ambBalance?.ether || '0') * percentage) / 100,
+          2
+        )
+      );
+    },
+    [ambBalance.ether]
+  );
 
   const processStake = () => {
     // TODO
