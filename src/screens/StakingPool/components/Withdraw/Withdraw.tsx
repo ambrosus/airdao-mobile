@@ -1,7 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { InputWithIcon } from '@components/composite';
+import {
+  InputWithIcon,
+  BottomSheet,
+  BottomSheetRef
+} from '@components/composite';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { useTranslation } from 'react-i18next';
@@ -12,9 +16,9 @@ import { NumberUtils } from '@utils/number';
 import { useBalanceOfAddress } from '@hooks';
 import { PrimaryButton } from '@components/modular';
 import { AccountDBModel } from '@database';
+import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
-const _BALANCE = '100000';
 
 interface WithrdawTokenProps {
   wallet: AccountDBModel | null;
@@ -23,6 +27,7 @@ interface WithrdawTokenProps {
 
 export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
   const { t } = useTranslation();
+  const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const { data: balance } = useBalanceOfAddress(wallet?.address || '');
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
@@ -44,7 +49,9 @@ export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
   );
 
   const onWithdrawPreview = () => {
-    console.log('asd');
+    if (previewBottomSheetRef && previewBottomSheetRef.current) {
+      previewBottomSheetRef.current.show();
+    }
   };
 
   const isPreviewDisabled = useMemo(() => {
@@ -104,6 +111,13 @@ export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
           {t('button.preview')}
         </Text>
       </PrimaryButton>
+
+      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible={true}>
+        <WithdrawTokenPreview
+          wallet={wallet?.address ?? ''}
+          amount={parseFloat(withdrawAmount)}
+        />
+      </BottomSheet>
     </View>
   );
 };
