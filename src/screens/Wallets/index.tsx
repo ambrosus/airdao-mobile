@@ -16,6 +16,7 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
+import { burnNFT } from '@api/crypto-service';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -35,6 +36,7 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
+    // burnNFT(selectedAccount?._raw);
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
     }
