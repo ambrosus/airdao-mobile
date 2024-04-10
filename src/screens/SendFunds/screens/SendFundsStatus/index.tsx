@@ -52,11 +52,22 @@ export const SendFundsStatus = () => {
       break;
   }
 
-  const title = loading
-    ? `${t('send.funds.sending')} ${amount} ${currency}`
-    : error
-    ? t('send.funds.failed')
-    : `${amount} ${currency} ${t('send.funds.sent')}!`;
+  const getTitle = () => {
+    const isTimeError = error?.message.includes(
+      'Transaction was not mined within'
+    );
+    const isError = !!error;
+    switch (true) {
+      case loading:
+        return `${t('send.funds.sending')} ${amount} ${currency}`;
+      case isError && isTimeError:
+        return 'Transaction was not mined';
+      case !!error:
+        return t('send.funds.failed');
+      default:
+        return `${amount} ${currency} ${t('send.funds.sent')}!`;
+    }
+  };
 
   // TODO temporarily hide share buttons
   // const onSharePress = () => {
@@ -78,7 +89,7 @@ export const SendFundsStatus = () => {
       )}
       <Spacer value={verticalScale(8)} />
       <Text color={COLORS.neutral800} fontSize={20} fontFamily="Inter_700Bold">
-        {title}
+        {getTitle()}
       </Text>
       {loading && (
         <>
