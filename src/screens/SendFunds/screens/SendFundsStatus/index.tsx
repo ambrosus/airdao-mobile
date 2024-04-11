@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -52,7 +52,7 @@ export const SendFundsStatus = () => {
       break;
   }
 
-  const getTitle = () => {
+  const title = useMemo(() => {
     const isTimeError = error?.message.includes(
       'Transaction was not mined within'
     );
@@ -67,7 +67,8 @@ export const SendFundsStatus = () => {
       default:
         return `${amount} ${currency} ${t('send.funds.sent')}!`;
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, currency, error, loading]);
 
   // TODO temporarily hide share buttons
   // const onSharePress = () => {
@@ -89,7 +90,7 @@ export const SendFundsStatus = () => {
       )}
       <Spacer value={verticalScale(8)} />
       <Text color={COLORS.neutral800} fontSize={20} fontFamily="Inter_700Bold">
-        {getTitle()}
+        {title}
       </Text>
       {loading && (
         <>
