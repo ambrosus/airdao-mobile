@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -52,11 +52,23 @@ export const SendFundsStatus = () => {
       break;
   }
 
-  const title = loading
-    ? `${t('send.funds.sending')} ${amount} ${currency}`
-    : error
-    ? t('send.funds.failed')
-    : `${amount} ${currency} ${t('send.funds.sent')}!`;
+  const title = useMemo(() => {
+    const isTimeError = error?.message.includes(
+      'Transaction was not mined within'
+    );
+    const isError = !!error;
+    switch (true) {
+      case loading:
+        return `${t('send.funds.sending')} ${amount} ${currency}`;
+      case isError && isTimeError:
+        return 'Transaction was not mined';
+      case !!error:
+        return t('send.funds.failed');
+      default:
+        return `${amount} ${currency} ${t('send.funds.sent')}!`;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, currency, error, loading]);
 
   // TODO temporarily hide share buttons
   // const onSharePress = () => {
