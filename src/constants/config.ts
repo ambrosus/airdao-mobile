@@ -26,6 +26,7 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
+    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
 
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   },
@@ -51,6 +52,7 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
+    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
 
     WEB3_NETWORK_URL: 'https://network.ambrosus.io'
   }

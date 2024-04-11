@@ -16,7 +16,6 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
-import { burnNFT } from '@api/crypto-service';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();

@@ -16,6 +16,7 @@ import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
 import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
+import { usePoolDetailsByName } from '@contexts';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();
@@ -23,12 +24,16 @@ export const StakingPoolScreen = () => {
   const { pool } = params;
   const { t } = useTranslation();
   const currency = CryptoCurrencyCode.AMB;
-  const { totalStake, userStake, earnings, apy } = pool;
+  const { totalStake, apy } = pool;
+  const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
     allWallets?.length > 0 ? allWallets[0] : null
   );
 
   const { top } = useSafeAreaInsets();
+
+  const earning =
+    (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
 
   return (
     <View style={styles.container}>
@@ -74,8 +79,8 @@ export const StakingPoolScreen = () => {
             <StakingInfo
               totalStake={totalStake}
               currency={currency}
-              userStaking={userStake}
-              earnings={earnings}
+              userStaking={poolStakingDetails?.user.amb ?? 0}
+              earnings={earning}
               apy={apy}
             />
           </View>
