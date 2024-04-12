@@ -3,6 +3,7 @@ export enum CryptoCurrencyCode {
   BUSD = 'BUSD',
   Bond = 'BOND',
   USDC = 'USDC',
+  NFT = 'NFT',
   FirepotLp = 'FLP',
   Tether = 'USDT',
   LangOperation = 'FUND',

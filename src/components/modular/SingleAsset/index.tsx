@@ -9,6 +9,7 @@ import { Token } from '@models';
 import { TokenLogo, TokenLogoProps } from '../TokenLogo';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
+import { CryptoCurrencyCode } from '@appTypes';
 
 interface SingleAssetProps {
   token: Token;
@@ -18,6 +19,7 @@ interface SingleAssetProps {
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { token, overrideIconVariants } = props;
   const { name, balance, symbol, address } = token;
+  const isNFT = symbol === CryptoCurrencyCode.NFT;
   const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
 
@@ -54,7 +56,10 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={14}
               color={COLORS.neutral400}
             >
-              {NumberUtils.limitDecimalCount(balance.ether, 2)}{' '}
+              {NumberUtils.limitDecimalCount(
+                isNFT ? balance.wei : balance.ether,
+                2
+              )}{' '}
               {symbol || 'tokens'}
             </Text>
             <Text
