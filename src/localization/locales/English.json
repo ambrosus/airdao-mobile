@@ -302,8 +302,11 @@
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
 
+  "wallet.empty.nft.header": "No NFTs yet.",
+  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+
 
   "wallet.my.assets": "My assets",
-  "wallet.picker.select": "Select Wallet",
+  "wallet.picker.select": "Select Wallet"
 
 }

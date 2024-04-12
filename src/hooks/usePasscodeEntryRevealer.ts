@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AirDAOEventType, RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
@@ -39,11 +40,16 @@ export const usePasscodeEntryRevealer = () => {
     }
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
 
+  const ignoreRequestingPassword = Platform.select({
+    android: !isRequestingPermission && prevState !== 'active',
+    ios: !isRequestingPermission
+  });
+
   useEffect(() => {
     if (
       !loading &&
       !routesToIgnorePasscodeEntry.includes(currentRoute) &&
-      !isRequestingPermission
+      ignoreRequestingPassword
     ) {
       processPasscodeReveal();
     }

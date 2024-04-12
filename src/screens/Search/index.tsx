@@ -9,12 +9,16 @@ import {
   FlatList,
   ListRenderItemInfo,
   RefreshControl,
+  StyleProp,
+  ViewStyle,
   View
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, {
   FadeIn,
+  FadeInLeft,
   FadeOut,
+  FadeOutRight,
   useAnimatedStyle,
   useSharedValue,
   withTiming
@@ -51,7 +55,7 @@ export const SearchScreen = () => {
   const { refresh: refetchAddresses, addressesLoading } =
     useAllAddressesContext((v) => v);
 
-  const { data: infoData } = useExplorerInfo();
+  const { data: infoData, refetch: refetchInfo } = useExplorerInfo();
   const { t } = useTranslation();
   const {
     data: accounts,
@@ -115,23 +119,27 @@ export const SearchScreen = () => {
         <ExplorerWalletItem
           item={item}
           indicatorVisible={true}
-          totalSupply={infoData?.totalSupply || 1}
+          totalSupply={infoData?.totalSupply || 0}
         />
       </Button>
     );
   };
 
-  const _onRefresh = () => {
-    refetchAddresses();
+  const _onRefresh = async () => {
+    await refetchAddresses();
     setUserPerformedRefresh(true);
-    if (typeof refetchAssets === 'function') {
+    if (
+      typeof refetchAssets === 'function' &&
+      typeof refetchInfo === 'function'
+    ) {
+      refetchInfo();
       refetchAssets();
     }
   };
 
-  const renderSpinner = useCallback(() => {
+  const renderSpinner = useCallback((style: StyleProp<ViewStyle>) => {
     return (
-      <View testID="spinner" style={styles.spinnerContainer}>
+      <View testID="spinner" style={style}>
         <Spinner />
       </View>
     );
@@ -146,9 +154,13 @@ export const SearchScreen = () => {
     }
   };
 
-  const showFooterSpinner = useMemo(() => {
+  const showScreenSpinner = useMemo(() => {
     return addressesLoading && watchlist.length === 0;
   }, [addressesLoading, watchlist]);
+
+  const showFooterSpinner = useMemo((): boolean => {
+    return accountsLoading && !userPerformedRefresh;
+  }, [userPerformedRefresh, accountsLoading]);
 
   return (
     <KeyboardDismissingView style={{ ...styles.main, top }}>
@@ -207,30 +219,45 @@ export const SearchScreen = () => {
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
-            {showFooterSpinner ? (
-              renderSpinner()
+            {showScreenSpinner || refetching ? (
+              renderSpinner(
+                userPerformedRefresh
+                  ? styles.spinnerContainer
+                  : styles.spinnerFooter
+              )
             ) : (
-              <FlatList<ExplorerAccount>
-                // @ts-ignore
-                data={accountsError ? [{}] : accounts}
-                refreshControl={
-                  <RefreshControl
-                    onRefresh={_onRefresh}
-                    refreshing={!!(refetching && userPerformedRefresh)}
-                  />
-                }
-                renderItem={renderAccount}
-                keyExtractor={(item) => `${item._id}${Math.random()}`}
-                contentContainerStyle={styles.list}
-                showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => (
-                  <Spacer value={verticalScale(26)} />
-                )}
-                onEndReachedThreshold={0.25}
-                onEndReached={loadMoreAccounts}
-                ListFooterComponent={accountsLoading ? renderSpinner() : <></>}
-                testID="List_Of_Addresses"
-              />
+              <Animated.View
+                entering={FadeInLeft.duration(150)}
+                exiting={FadeOutRight.duration(150)}
+              >
+                <FlatList<ExplorerAccount>
+                  // @ts-ignore
+                  data={accountsError ? [{}] : accounts}
+                  refreshControl={
+                    <RefreshControl
+                      onRefresh={_onRefresh}
+                      refreshing={!!(refetching && userPerformedRefresh)}
+                    />
+                  }
+                  renderItem={renderAccount}
+                  keyExtractor={(item) => `${item._id}${Math.random()}`}
+                  contentContainerStyle={styles.list}
+                  showsVerticalScrollIndicator={false}
+                  ItemSeparatorComponent={() => (
+                    <Spacer value={verticalScale(26)} />
+                  )}
+                  onEndReachedThreshold={0.25}
+                  onEndReached={loadMoreAccounts}
+                  ListFooterComponent={
+                    showFooterSpinner ? (
+                      renderSpinner(styles.spinnerFooter)
+                    ) : (
+                      <></>
+                    )
+                  }
+                  testID="List_Of_Addresses"
+                />
+              </Animated.View>
             )}
           </Animated.View>
         )}
