@@ -302,6 +302,9 @@
   "token.actions.swap": "Takas",
   "token.actions.stake": "Stake",
 
+  "wallet.empty.nft.header": "No NFTs yet.",
+  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+
 
   "wallet.my.assets": "Varlıklarım",
   "wallet.picker.select": "Cüzdan seç"
