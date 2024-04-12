@@ -1,11 +1,10 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { HomeParamsList } from '@appTypes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image, View } from 'react-native';
 import { Header } from '@components/composite';
-import { Button, Row, Spacer, Spinner, Text } from '@components/base';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { StatisticsLogo } from '@components/svg/icons/Statistics';
 import React from 'react';
 import { useNFTInfo } from '@hooks/query/useNFTInfo';
 import { styles } from './styles';
@@ -16,16 +15,10 @@ export const NFTScreen = () => {
   const {
     params: { tokenInfo, walletAccount }
   } = useRoute<RouteProp<HomeParamsList, 'NFTScreen'>>();
-  const navigation = useNavigation<HomeNavigationProp>();
   const { top } = useSafeAreaInsets();
   const { data, loading } = useNFTInfo(walletAccount);
   const error = !data?.tokenUri;
   const { t } = useTranslation();
-
-  const navigateToAMBScreen = () => {
-    navigation.navigate('AMBMarketScreen');
-  };
-
   const NFTContent = () =>
     error ? (
       <View
@@ -68,28 +61,16 @@ export const NFTScreen = () => {
     <View style={{ top, flex: 1 }}>
       <Header
         title={
-          <>
-            <Row alignItems="center">
-              <Text
-                fontFamily="Inter_600SemiBold"
-                fontSize={18}
-                color={COLORS.neutral800}
-              >
-                {tokenInfo.name}
-              </Text>
-            </Row>
-          </>
+          <Row alignItems="center">
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={18}
+              color={COLORS.neutral800}
+            >
+              {tokenInfo.name}
+            </Text>
+          </Row>
         }
-        contentRight={
-          tokenInfo.name === 'AirDAO' && (
-            <>
-              <Button onPress={navigateToAMBScreen}>
-                <StatisticsLogo />
-              </Button>
-            </>
-          )
-        }
-        style={styles.shadows}
       />
       <View style={styles.headerBorder} />
       <Spacer value={21} />
