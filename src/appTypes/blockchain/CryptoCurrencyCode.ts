@@ -13,5 +13,7 @@ export enum CryptoCurrencyCode {
   ETH = 'ETH',
   BNB_SMART = 'BNB_SMART',
   BNB_SMART_20 = 'BNB_SMART_20',
-  ETC = 'ETC'
+  ETC = 'ETC',
+  Test1 = 'TEST1',
+  Test2 = 'TEST2'
 }

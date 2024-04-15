@@ -19,6 +19,9 @@
     },
     "prod": {
       "channel": "main"
+    },
+    "testnet": {
+      "channel": "testnet"
     }
   }
 }

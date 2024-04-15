@@ -8,6 +8,8 @@
     "build:ios:stage": "./build.sh ios stage",
     "build:android:prod": "./build.sh android prod",
     "build:ios:prod": "./build.sh ios prod",
+    "build:ios:testnet": "./build.sh ios testnet",
+    "build:android:testnet": "./build.sh android prod",
     "start": "npx expo start --dev-client",
     "start:dev": "npx expo start --dev-client",
     "android": "npx expo run:android",
