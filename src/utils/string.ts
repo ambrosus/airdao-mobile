@@ -49,24 +49,21 @@ const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
   let numericChars = removeNonNumericCharacters(dottedStr);
 
-  // Проверяем, если число начинается с нуля, но не является нулем
-  if (numericChars.startsWith('0') && numericChars.length > 1) {
-    numericChars = numericChars.slice(1);
+  if (numericChars[0] === '.') numericChars = '0' + numericChars;
+
+  numericChars = _removeExtraDots(numericChars);
+
+  numericChars = numericChars.replace(/(0)([1-9])/, '$2');
+
+  let formattedNumber = '';
+  let prevChar = '';
+  for (const char of numericChars) {
+    if (char === '0' && prevChar === '0') continue;
+    formattedNumber += char;
+    prevChar = char;
   }
 
-  const [integerPart, decimalPart = ''] = numericChars.split('.');
-  const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
-
-  let formattedDecimalPart = '';
-  if (decimalPart) {
-    formattedDecimalPart = '.' + decimalPart.replace(/(\.[1-9]*)0+$/, '$1');
-  }
-
-  if (str.includes('.') && !formattedDecimalPart) {
-    formattedDecimalPart = '.';
-  }
-
-  return _removeExtraDots(formattedIntegerPart + formattedDecimalPart);
+  return formattedNumber;
 };
 
 function _removeExtraDots(str: string): string {
