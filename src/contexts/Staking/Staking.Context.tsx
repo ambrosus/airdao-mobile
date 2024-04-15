@@ -25,8 +25,8 @@ export const StakingContext = () => {
   const usePoolDetailsByName = (poolName: string) => {
     return useMemo(() => {
       const transformedCurrentPoolName = poolName.split(' ')[0];
-      return poolsStakingDetails?.find(
-        (pool) => pool.contractName === transformedCurrentPoolName
+      return poolsStakingDetails?.find((pool) =>
+        pool.contractName.includes(transformedCurrentPoolName)
       );
     }, [poolName]);
   };

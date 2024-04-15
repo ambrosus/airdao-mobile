@@ -41,9 +41,7 @@ export const StakingPoolsScreen = () => {
   }, [selectedWallet, fetchPoolDetails]);
 
   const filterStakingPools = useMemo(() => {
-    return stakingPools
-      .filter((pool) => pool.token.symbol !== 'GPT')
-      .sort((a, b) => Number(b.isActive) - Number(a.isActive));
+    return stakingPools;
   }, [stakingPools]);
 
   const spinnerContainerStyle: StyleProp<ViewStyle> = {

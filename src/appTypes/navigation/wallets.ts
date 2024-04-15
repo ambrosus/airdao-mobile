@@ -26,6 +26,8 @@ export type HomeParamsList = {
   SuccessSetupSecurity: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
+  StakeSuccessScreen: { type: 'stake' | 'withdraw' };
+  StakeErrorScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

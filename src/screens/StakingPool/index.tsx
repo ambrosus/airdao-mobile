@@ -92,7 +92,11 @@ export const StakingPoolScreen = () => {
                 view: (
                   <View>
                     <Spacer value={verticalScale(24)} />
-                    <StakeToken wallet={selectedWallet} apy={apy} />
+                    <StakeToken
+                      pool={poolStakingDetails}
+                      wallet={selectedWallet}
+                      apy={apy}
+                    />
                   </View>
                 )
               },

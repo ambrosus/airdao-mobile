@@ -1,10 +1,19 @@
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import Config from '@constants/config';
 import { poolAbi, poolsAbi } from '@api/staking/abi';
-import { PoolDetailsArgs, ReturnedPoolDetails } from '@api/staking/types';
+import {
+  PoolDetailsArgs,
+  ReturnedPoolDetails,
+  StakeArgs
+} from '@api/staking/types';
+import { NumberUtils } from '@utils/number';
+import { Cache, CacheKey } from '@lib/cache';
 
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
+
+const transactionGasLimit = 8000000;
+const transactionGasPrice = utils.parseUnits('20', 'gwei');
 
 class Staking {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -17,6 +26,21 @@ class Staking {
     );
   }
 
+  async createStakingPoolContract(
+    addressHash: string,
+    providerOrSigner: any = this.provider.getSigner() ?? this.provider
+  ) {
+    return new ethers.Contract(addressHash, poolAbi, providerOrSigner);
+  }
+
+  async createProvider(walletHash: string) {
+    const privateKey = (await Cache.getItem(
+      `${CacheKey.WalletPrivateKey}-${walletHash}`
+    )) as string;
+
+    return new ethers.Wallet(privateKey, this.provider);
+  }
+
   async getStakingPoolsDetails({
     providerOrSigner = this.provider,
     address
@@ -24,13 +48,12 @@ class Staking {
     try {
       const contract = this.createStakingPoolsContract();
       const poolsCount = await contract?.getPoolsCount();
-      const poolsAddresses = await contract?.getPools(1, poolsCount);
+      const poolsAddresses = await contract?.getPools(0, poolsCount);
 
       return await Promise.all(
         poolsAddresses.map(async (addressHash: string) => {
-          const poolContract = new ethers.Contract(
+          const poolContract = await this.createStakingPoolContract(
             addressHash,
-            poolAbi,
             providerOrSigner
           );
 
@@ -58,6 +81,29 @@ class Staking {
           };
         })
       );
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async stake({ pool, value, walletHash }: StakeArgs) {
+    const overrides = {
+      value: NumberUtils.parseFloatToBigNumber(value),
+      gasPrice: transactionGasPrice,
+      gasLimit: transactionGasLimit
+    };
+
+    try {
+      if (!pool) return;
+
+      const signer = await this.createProvider(walletHash);
+      const contract = await this.createStakingPoolContract(
+        pool.addressHash,
+        signer
+      );
+
+      const stakeContract = await contract.stake(overrides);
+      return await stakeContract.wait();
     } catch (err) {
       console.error(err);
     }

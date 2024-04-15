@@ -22,6 +22,10 @@ import {
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
 import { StakingPoolScreen } from '@screens/StakingPool';
+import {
+  StakeErrorScreen,
+  StakeSuccessScreen
+} from '@screens/StakingPool/screens';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -56,6 +60,11 @@ export const HomeStack = () => {
         />
         <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
         <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
+        <Stack.Screen
+          name="StakeSuccessScreen"
+          component={StakeSuccessScreen}
+        />
+        <Stack.Screen name="StakeErrorScreen" component={StakeErrorScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
         <Stack.Screen
           name="SuccessSetupSecurity"

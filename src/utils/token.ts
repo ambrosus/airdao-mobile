@@ -19,6 +19,18 @@ const getTokenDetails = (
       symbol = CryptoCurrencyCode.BUSD;
       break;
     }
+    case TOKEN_ADDRESSES['“Test1“']: {
+      // BUSD
+      name = 'Test1';
+      symbol = CryptoCurrencyCode.AMB;
+      break;
+    }
+    case TOKEN_ADDRESSES['“Test2“']: {
+      // BUSD
+      name = 'Test2';
+      symbol = CryptoCurrencyCode.AMB;
+      break;
+    }
     case TOKEN_ADDRESSES.FLP: {
       // FLP
       name = 'Firepot-LP-Token';

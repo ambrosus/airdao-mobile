@@ -15,6 +15,12 @@ import { AccountDBModel } from '@database';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { StakePreview } from './Stake.Preview';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { useAllAccounts } from '@hooks/database';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { HomeParamsList } from '@appTypes';
+import { StakePending } from '@screens/StakingPool/components';
 
 const PercentageBox = ({
   percentage,
@@ -23,8 +29,10 @@ const PercentageBox = ({
   percentage: number;
   onPress: (percentage: number) => unknown;
 }) => {
+  const onPercentagePress = () => onPress(percentage);
+
   return (
-    <Button onPress={() => onPress(percentage)} style={styles.percentageBox}>
+    <Button onPress={onPercentagePress} style={styles.percentageBox}>
       <Text>{percentage}%</Text>
     </Button>
   );
@@ -33,10 +41,12 @@ const PercentageBox = ({
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
   apy: number;
+  pool: ReturnedPoolDetails | undefined;
 }
 
-export const StakeToken = (props: StakeTokenProps) => {
-  const { wallet, apy } = props;
+export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
+  const navigation =
+    useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const { t } = useTranslation();
   const [stakeAmount, setStakeAmount] = useState('');
   const previewDisabled = !stakeAmount || parseFloat(stakeAmount) === 0;
@@ -47,10 +57,6 @@ export const StakeToken = (props: StakeTokenProps) => {
   const showPreview = () => {
     previewModalRef.current?.show();
   };
-
-  // const hidePreview = () => {
-  //   previewModalRef.current?.dismiss();
-  // };
 
   const onPercentageBoxPress = useCallback(
     (percentage: number) => {
@@ -64,9 +70,35 @@ export const StakeToken = (props: StakeTokenProps) => {
     [ambBalance.ether]
   );
 
-  const processStake = () => {
-    // TODO
-  };
+  const { data: accounts } = useAllAccounts();
+  const selectedAccount = accounts.length > 0 ? accounts[0] : null;
+  const [loading, setLoading] = useState(false);
+
+  const processStake = useCallback(async () => {
+    if (!pool) return;
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const walletHash = selectedAccount?._raw.hash;
+      const result = await staking.stake({
+        pool,
+        value: stakeAmount,
+        walletHash
+      });
+
+      if (!result) {
+        previewModalRef.current?.dismiss();
+        navigation.navigate('StakeErrorScreen');
+      } else {
+        previewModalRef.current?.dismiss();
+        navigation.navigate('StakeSuccessScreen', { type: 'stake' });
+      }
+    } finally {
+      setStakeAmount('0');
+      previewModalRef.current?.dismiss();
+      setLoading(false);
+    }
+  }, [pool, stakeAmount, navigation, selectedAccount]);
 
   return (
     <View style={styles.container}>
@@ -140,12 +172,16 @@ export const StakeToken = (props: StakeTokenProps) => {
         </Text>
       </PrimaryButton>
       <BottomSheet ref={previewModalRef} swiperIconVisible={true}>
-        <StakePreview
-          onPressStake={processStake}
-          walletAddress={wallet?.address || ''}
-          amount={parseFloat(stakeAmount || '0')}
-          apy={apy}
-        />
+        {loading ? (
+          <StakePending />
+        ) : (
+          <StakePreview
+            onPressStake={processStake}
+            walletAddress={wallet?.address || ''}
+            amount={parseFloat(stakeAmount || '0')}
+            apy={apy}
+          />
+        )}
         <Spacer value={verticalScale(36)} />
       </BottomSheet>
     </View>

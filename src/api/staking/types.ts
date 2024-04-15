@@ -15,3 +15,9 @@ export interface ReturnedPoolDetails {
     pool: number;
   };
 }
+
+export interface StakeArgs {
+  pool: ReturnedPoolDetails;
+  value: string;
+  walletHash: string;
+}
