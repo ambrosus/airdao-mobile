@@ -65,7 +65,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
               <></>
             )
           }
-          contentContainerStyle={{ paddingBottom: '20%' }}
+          contentContainerStyle={{ paddingBottom: '25%' }}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl

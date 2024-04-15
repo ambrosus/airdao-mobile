@@ -91,3 +91,4 @@ export * from './MediumIcon';
 export * from './SearchLargeIcon';
 export * from './CirculationIcon';
 export * from './TelegramSettingsIcon';
+export * from './NFTIcon';
