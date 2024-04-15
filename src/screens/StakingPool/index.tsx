@@ -17,6 +17,7 @@ import { useAllAccounts } from '@hooks/database';
 import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
 import { usePoolDetailsByName } from '@contexts';
+import { BigNumber } from 'ethers';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();
@@ -79,7 +80,7 @@ export const StakingPoolScreen = () => {
             <StakingInfo
               totalStake={totalStake}
               currency={currency}
-              userStaking={poolStakingDetails?.user.amb ?? 0}
+              userStaking={poolStakingDetails?.user.raw ?? BigNumber.from(0)}
               earnings={earning}
               apy={apy}
             />
@@ -105,7 +106,11 @@ export const StakingPoolScreen = () => {
                 view: (
                   <>
                     <Spacer value={verticalScale(24)} />
-                    <WithdrawToken wallet={selectedWallet} apy={apy} />
+                    <WithdrawToken
+                      pool={poolStakingDetails}
+                      wallet={selectedWallet}
+                      apy={apy}
+                    />
                   </>
                 )
               }

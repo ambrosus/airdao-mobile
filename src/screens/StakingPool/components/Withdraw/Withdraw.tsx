@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import {
-  InputWithIcon,
   BottomSheet,
-  BottomSheetRef
+  BottomSheetRef,
+  InputWithIcon
 } from '@components/composite';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
@@ -13,24 +13,43 @@ import { StringUtils } from '@utils/string';
 import { verticalScale } from '@utils/scaling';
 import { PercentageBox } from '@components/composite/PercentageBox';
 import { NumberUtils } from '@utils/number';
-import { useBalanceOfAddress } from '@hooks';
 import { PrimaryButton } from '@components/modular';
 import { AccountDBModel } from '@database';
 import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { staking } from '@api/staking/staking-service';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { HomeParamsList } from '@appTypes';
+import { useAllAccounts } from '@hooks/database';
+import { StakePending } from '@screens/StakingPool/components';
+import { useStakingMultiplyContextSelector } from '@contexts';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
-interface WithrdawTokenProps {
+interface WithdrawTokenProps {
   wallet: AccountDBModel | null;
   apy?: number;
+  pool: ReturnedPoolDetails | undefined;
 }
 
-export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
+export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
   const { t } = useTranslation();
+  const navigation =
+    useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
-  const { data: balance } = useBalanceOfAddress(wallet?.address || '');
+  const { data: allWallets } = useAllAccounts();
+  const [selectedWallet] = useState<AccountDBModel | null>(
+    allWallets?.length > 0 ? allWallets[0] : null
+  );
+
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
+
+  const [loading, setLoading] = useState(false);
+  const { data: accounts } = useAllAccounts();
+  const selectedAccount = accounts.length > 0 ? accounts[0] : null;
+
+  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -39,13 +58,13 @@ export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
   const onPercentSelect = useCallback(
     (percentage: number) => {
       const calculatedToWithdraw = NumberUtils.limitDecimalCount(
-        (parseFloat(balance?.ether || '0') * percentage) / 100,
+        (parseFloat(String(pool?.user?.amb) || '0') * percentage) / 100,
         2
       );
 
       setWithdrawAmount(calculatedToWithdraw);
     },
-    [balance.ether]
+    [pool]
   );
 
   const onWithdrawPreview = () => {
@@ -57,6 +76,35 @@ export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
   const isPreviewDisabled = useMemo(() => {
     return !withdrawAmount || parseFloat(withdrawAmount) === 0;
   }, [withdrawAmount]);
+
+  const onSubmitWithdrawTokens = async () => {
+    if (!pool) return;
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const walletHash = selectedAccount?._raw.hash;
+      const result = await staking.unstake({
+        pool,
+        value: withdrawAmount,
+        walletHash
+      });
+
+      if (!result) {
+        previewBottomSheetRef.current?.dismiss();
+        navigation.navigate('StakeErrorScreen');
+      } else {
+        previewBottomSheetRef.current?.dismiss();
+        navigation.navigate('StakeSuccessScreen', { type: 'withdraw' });
+      }
+    } finally {
+      if (selectedWallet?.address) {
+        await fetchPoolDetails(selectedWallet.address);
+      }
+      setWithdrawAmount('');
+      previewBottomSheetRef.current?.dismiss();
+      setLoading(false);
+    }
+  };
 
   const renderCurrencyFieldIcon = useMemo(() => {
     return (
@@ -113,10 +161,16 @@ export const WithdrawToken = ({ wallet }: WithrdawTokenProps) => {
       </PrimaryButton>
 
       <BottomSheet ref={previewBottomSheetRef} swiperIconVisible={true}>
-        <WithdrawTokenPreview
-          wallet={wallet?.address ?? ''}
-          amount={parseFloat(withdrawAmount)}
-        />
+        {loading ? (
+          <StakePending />
+        ) : (
+          <WithdrawTokenPreview
+            onSubmitWithdrawTokens={onSubmitWithdrawTokens}
+            wallet={wallet?.address ?? ''}
+            amount={parseFloat(withdrawAmount)}
+          />
+        )}
+        <Spacer value={verticalScale(36)} />
       </BottomSheet>
     </View>
   );

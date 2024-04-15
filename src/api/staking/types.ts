@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 export interface PoolDetailsArgs {
   providerOrSigner?: ethers.providers.JsonRpcProvider;
@@ -12,7 +12,7 @@ export interface ReturnedPoolDetails {
   active: boolean;
   user: {
     amb: number;
-    pool: number;
+    raw: BigNumber;
   };
 }
 

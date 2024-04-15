@@ -6,7 +6,6 @@ import {
   ReturnedPoolDetails,
   StakeArgs
 } from '@api/staking/types';
-import { NumberUtils } from '@utils/number';
 import { Cache, CacheKey } from '@lib/cache';
 
 const TEN = BigNumber.from(10);
@@ -76,6 +75,7 @@ class Staking {
             contractName,
             active,
             user: {
+              raw: myStakeInAMB,
               amb: ethers.utils.formatEther(myStakeInAMB)
             }
           };
@@ -88,9 +88,7 @@ class Staking {
 
   async stake({ pool, value, walletHash }: StakeArgs) {
     const overrides = {
-      value: NumberUtils.parseFloatToBigNumber(value),
-      gasPrice: transactionGasPrice,
-      gasLimit: transactionGasLimit
+      value: utils.parseEther(value)
     };
 
     try {
@@ -104,6 +102,34 @@ class Staking {
 
       const stakeContract = await contract.stake(overrides);
       return await stakeContract.wait();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  async unstake({ pool, value, walletHash }: StakeArgs) {
+    try {
+      const signer = await this.createProvider(walletHash);
+      const contract = await this.createStakingPoolContract(
+        pool.addressHash,
+        signer
+      );
+
+      const [tokenPriceAMB] = await Promise.all([contract.getTokenPrice()]);
+
+      const bnUnstakeAmountAMB = utils.parseEther(value);
+      const bnUnstakeAmountInTokens = bnUnstakeAmountAMB
+        .mul(FIXED_POINT)
+        .div(tokenPriceAMB);
+
+      const overrides = {
+        gasPrice: transactionGasPrice,
+        gasLimit: transactionGasLimit
+      };
+      const unstakeContract = await contract.unstake(
+        bnUnstakeAmountInTokens,
+        overrides
+      );
+      return await unstakeContract.wait();
     } catch (err) {
       console.error(err);
     }

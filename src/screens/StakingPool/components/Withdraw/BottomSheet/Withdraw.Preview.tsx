@@ -13,18 +13,16 @@ import { PrimaryButton } from '@components/modular';
 interface WithdrawTokenPreviewProps {
   wallet: string;
   amount: number;
+  onSubmitWithdrawTokens: () => void;
 }
 
 export const WithdrawTokenPreview = ({
   wallet,
-  amount
+  amount,
+  onSubmitWithdrawTokens
 }: WithdrawTokenPreviewProps) => {
   const { t } = useTranslation();
   const usdAmount = useUSDPrice(amount);
-
-  const onSubmitWithdrawTokens = () => {
-    return null;
-  };
 
   return (
     <View style={styles.container}>
@@ -96,7 +94,6 @@ export const WithdrawTokenPreview = ({
           {t('staking.pool.stake.now')}
         </Text>
       </PrimaryButton>
-      <Spacer value={verticalScale(36)} />
     </View>
   );
 };

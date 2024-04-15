@@ -1,4 +1,4 @@
-import { utils, BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 
 /**
  * Example: formatNumber(10000, 2) => 10,000.00
@@ -77,18 +77,27 @@ const abbreviateNumber = (num: number): string => {
   return newValue;
 };
 
-export function parseFloatToBigNumber(str: string): BigNumber {
-  const mathBn = BigNumber.from(str);
-  const roundedBn = mathBn
-    .mul(BigNumber.from(10).pow(18))
-    .div(BigNumber.from(10).pow(18));
-  return utils.parseEther(roundedBn.toString());
-}
+export const formatAmount = (amount: BigNumber, afterDotAmount = 2) => {
+  const amountFloatString = utils.formatEther(amount);
+
+  const [intPart, floatPart] = amountFloatString.split('.');
+  let amountBalance;
+  if (floatPart && afterDotAmount === 0) {
+    amountBalance = intPart;
+  } else if (floatPart && floatPart.length > afterDotAmount) {
+    amountBalance = `${intPart}.${floatPart.slice(0, afterDotAmount)}`;
+  } else if (floatPart) {
+    amountBalance = `${intPart}.${floatPart}`;
+  } else {
+    amountBalance = intPart;
+  }
+  return amountBalance;
+};
 
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
   limitDecimalCount,
-  parseFloatToBigNumber
+  formatAmount
 };

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { COLORS } from '@constants/colors';
 import { usePoolDetailsByName } from '@contexts';
 import { NumberUtils } from '@utils/number';
+import { BigNumber } from 'ethers';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -42,8 +43,8 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontWeight="500"
           >
             {t('staking.current.stake', {
-              amount: NumberUtils.formatNumber(
-                poolStakingDetails?.user.amb ?? 0,
+              amount: NumberUtils.formatAmount(
+                poolStakingDetails?.user.raw ?? BigNumber.from(0),
                 0
               ),
               symbol: 'AMB'

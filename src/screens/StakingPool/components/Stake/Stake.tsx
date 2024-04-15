@@ -21,6 +21,7 @@ import { useAllAccounts } from '@hooks/database';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
+import { useStakingMultiplyContextSelector } from '@contexts';
 
 const PercentageBox = ({
   percentage,
@@ -53,6 +54,13 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
   const previewModalRef = useRef<BottomSheetRef>(null);
   const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
+
+  const { data: allWallets } = useAllAccounts();
+  const [selectedWallet] = useState<AccountDBModel | null>(
+    allWallets?.length > 0 ? allWallets[0] : null
+  );
+
+  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
 
   const showPreview = () => {
     previewModalRef.current?.show();
@@ -94,11 +102,19 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         navigation.navigate('StakeSuccessScreen', { type: 'stake' });
       }
     } finally {
+      if (selectedWallet?.address) {
+        await fetchPoolDetails(selectedWallet.address);
+      }
       setStakeAmount('0');
       previewModalRef.current?.dismiss();
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, stakeAmount, navigation, selectedAccount]);
+
+  const onChangeStakeAmount = (value: string) => {
+    setStakeAmount(StringUtils.removeNonNumericCharacters(value));
+  };
 
   return (
     <View style={styles.container}>
@@ -126,9 +142,7 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         }
         type="number"
         value={stakeAmount}
-        onChangeValue={(value) =>
-          setStakeAmount(StringUtils.removeNonNumericCharacters(value))
-        }
+        onChangeValue={onChangeStakeAmount}
         placeholder="0"
         maxLength={12}
       />
