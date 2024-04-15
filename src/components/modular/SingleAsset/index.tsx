@@ -23,6 +23,10 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
 
+  const tokenUSDBalance = isNFT
+    ? `${balance.wei} ${symbol}s`
+    : `$${NumberUtils.limitDecimalCount(usdPrice, 2)}`;
+
   return (
     <View style={styles.container}>
       <Row>
@@ -45,40 +49,41 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
                 fontSize={16}
                 color={COLORS.neutral800}
               >
-                ${NumberUtils.limitDecimalCount(usdPrice, 2)}
+                {tokenUSDBalance}
               </Text>
             )}
           </Row>
-          <Spacer horizontal value={scale(8)} />
-          <Row justifyContent="space-between">
-            <Text
-              fontFamily="Inter_500Medium"
-              fontSize={14}
-              color={COLORS.neutral400}
-            >
-              {NumberUtils.limitDecimalCount(
-                isNFT ? balance.wei : balance.ether,
-                2
-              )}{' '}
-              {symbol || 'tokens'}
-            </Text>
-            <Text
-              fontFamily="Inter_400Regular"
-              fontSize={14}
-              color={COLORS.neutral800}
-            >
-              {name === 'AMB' ? (
-                <View style={{ paddingTop: verticalScale(3) }}>
-                  <PercentChange
-                    change={ambTokenData?.percentChange24H || 0}
-                    fontSize={14}
-                  />
-                </View>
-              ) : (
-                ''
-              )}
-            </Text>
-          </Row>
+          {!isNFT && (
+            <>
+              <Spacer horizontal value={scale(8)} />
+              <Row justifyContent="space-between">
+                <Text
+                  fontFamily="Inter_500Medium"
+                  fontSize={14}
+                  color={COLORS.neutral400}
+                >
+                  {NumberUtils.limitDecimalCount(balance.ether, 2)}{' '}
+                  {symbol || 'tokens'}
+                </Text>
+                <Text
+                  fontFamily="Inter_400Regular"
+                  fontSize={14}
+                  color={COLORS.neutral800}
+                >
+                  {name === 'AMB' ? (
+                    <View style={{ paddingTop: verticalScale(3) }}>
+                      <PercentChange
+                        change={ambTokenData?.percentChange24H || 0}
+                        fontSize={14}
+                      />
+                    </View>
+                  ) : (
+                    ''
+                  )}
+                </Text>
+              </Row>
+            </>
+          )}
         </View>
       </Row>
     </View>

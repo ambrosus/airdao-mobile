@@ -15,6 +15,7 @@ import {
   UsdcIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
+import NFTIcon from '@components/svg/icons/NFTIcon';
 
 export interface TokenLogoProps {
   token: string;
@@ -64,6 +65,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.LangOperation.toLowerCase():
     case 'operation funds lang inu':
       return <LangFundIcon scale={scale} />;
+    case 'airdao nft':
+      return <NFTIcon />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }
