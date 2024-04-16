@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react';
-import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AirDAOEventType, RootNavigationProp } from '@appTypes';
 import { useAppState } from './useAppState';
@@ -17,8 +16,9 @@ export const usePasscodeEntryRevealer = () => {
   const {
     isPasscodeEnabled,
     isFaceIDEnabled,
-    loading,
-    isRequestingPermission
+    loading
+    // temporarily hide
+    // isRequestingPermission
   } = usePasscode();
   const processPasscodeReveal = useCallback(async () => {
     const isBiometricAuthenticationInProgress = await Cache.getItem(
@@ -39,17 +39,18 @@ export const usePasscodeEntryRevealer = () => {
       }, 500);
     }
   }, [appState, isFaceIDEnabled, isPasscodeEnabled, navigation, prevState]);
-
-  const ignoreRequestingPassword = Platform.select({
-    android: !isRequestingPermission && prevState !== 'active',
-    ios: !isRequestingPermission
-  });
+  // temporarily hide
+  // const ignoreRequestingPassword = Platform.select({
+  //   android: !isRequestingPermission && prevState !== 'active',
+  //   ios: !isRequestingPermission
+  // });
 
   useEffect(() => {
     if (
       !loading &&
-      !routesToIgnorePasscodeEntry.includes(currentRoute) &&
-      ignoreRequestingPassword
+      !routesToIgnorePasscodeEntry.includes(currentRoute)
+      // temporarily hide
+      // && ignoreRequestingPassword
     ) {
       processPasscodeReveal();
     }
