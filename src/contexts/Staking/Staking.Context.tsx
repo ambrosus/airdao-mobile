@@ -28,7 +28,8 @@ export const StakingContext = () => {
       return poolsStakingDetails?.find((pool) =>
         pool.contractName.includes(transformedCurrentPoolName)
       );
-    }, [poolName]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [poolName, poolsStakingDetails]);
   };
 
   return {

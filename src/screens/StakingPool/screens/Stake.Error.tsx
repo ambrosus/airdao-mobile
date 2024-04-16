@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { FailedIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 
 export const StakeErrorScreen = () => {
   const insets = useSafeAreaInsets();

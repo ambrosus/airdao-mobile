@@ -22,7 +22,6 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { useAllAccounts } from '@hooks/database';
 import { StakePending } from '@screens/StakingPool/components';
-import { useStakingMultiplyContextSelector } from '@contexts';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -38,18 +37,11 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
-  const { data: allWallets } = useAllAccounts();
-  const [selectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
-  );
-
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
   const { data: accounts } = useAllAccounts();
   const selectedAccount = accounts.length > 0 ? accounts[0] : null;
-
-  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -73,7 +65,7 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
     }
   };
 
-  const onSubmitWithdrawTokens = async () => {
+  const onSubmitWithdrawTokens = useCallback(async () => {
     if (!pool) return;
     try {
       setLoading(true);
@@ -86,29 +78,29 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
       });
 
       if (!result) {
-        previewBottomSheetRef.current?.dismiss();
-        navigation.navigate('StakeErrorScreen');
+        setTimeout(() => {
+          navigation.navigate('StakeErrorScreen');
+        }, 100);
       } else {
-        previewBottomSheetRef.current?.dismiss();
-        navigation.navigate('StakeSuccessScreen', { type: 'withdraw' });
+        setTimeout(() => {
+          navigation.navigate('StakeSuccessScreen', { type: 'withdraw', pool });
+        }, 100);
       }
     } finally {
-      if (selectedWallet?.address) {
-        await fetchPoolDetails(selectedWallet.address);
-      }
-      setWithdrawAmount('');
       previewBottomSheetRef.current?.dismiss();
-      setLoading(false);
+      setWithdrawAmount('');
+      setTimeout(() => {
+        setLoading(false);
+      }, 125);
     }
-  };
+  }, [withdrawAmount, pool, navigation, selectedAccount]);
 
   const isWrongStakeValue = useMemo(() => {
-    return {
-      button:
-        Number(withdrawAmount) > Number(pool?.user.amb) ||
-        !withdrawAmount ||
-        parseFloat(withdrawAmount) === 0
-    };
+    return (
+      !withdrawAmount ||
+      parseFloat(withdrawAmount) === 0 ||
+      Number(withdrawAmount) > Number(pool?.user.amb)
+    );
   }, [pool, withdrawAmount]);
 
   const renderCurrencyFieldIcon = useMemo(() => {
@@ -140,7 +132,7 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
       <InputWithIcon
         iconRight={renderCurrencyFieldIcon}
         value={withdrawAmount}
-        onChangeText={onChangeWithdrawAmount}
+        onChangeValue={onChangeWithdrawAmount}
         placeholder="0"
         maxLength={12}
         type="number"
@@ -159,22 +151,13 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
         ))}
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton
-        onPress={onWithdrawPreview}
-        disabled={isWrongStakeValue.button}
-      >
-        <Text
-          color={
-            isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0
-          }
-        >
-          {t(
-            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
-          )}
+      <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
+        <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
+          {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}
         </Text>
       </PrimaryButton>
 
-      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible={true}>
+      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
         {loading ? (
           <StakePending />
         ) : (

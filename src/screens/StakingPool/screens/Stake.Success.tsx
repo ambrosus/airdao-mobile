@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
@@ -15,6 +15,9 @@ import { HomeParamsList } from '@appTypes';
 import { SuccessIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import { useAllAccounts } from '@hooks/database';
+import { AccountDBModel } from '@database';
+import { useStakingMultiplyContextSelector } from '@contexts';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
@@ -23,7 +26,29 @@ export const StakeSuccessScreen = () => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
 
-  const onDoneTransactionPress = () => navigation.goBack();
+  const { data: allWallets } = useAllAccounts();
+  const [selectedWallet] = useState<AccountDBModel | null>(
+    allWallets?.length > 0 ? allWallets[0] : null
+  );
+
+  const [loading, setLoading] = useState(false);
+
+  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
+  const refetchPoolDetails = async () => {
+    setLoading(true);
+    try {
+      if (selectedWallet?.address) {
+        await fetchPoolDetails(selectedWallet.address);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onDoneTransactionPress = async () => {
+    navigation.goBack();
+    await refetchPoolDetails();
+  };
 
   const resolveDetailsTypography = useMemo(() => {
     return route.params.type === 'stake'
@@ -49,7 +74,7 @@ export const StakeSuccessScreen = () => {
         {resolveDetailsTypography}
       </Text>
       <View style={{ ...styles.footer, bottom: insets.bottom }}>
-        <PrimaryButton onPress={onDoneTransactionPress}>
+        <PrimaryButton disabled={loading} onPress={onDoneTransactionPress}>
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}

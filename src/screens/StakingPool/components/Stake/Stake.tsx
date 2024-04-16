@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
@@ -18,10 +19,8 @@ import { StakePreview } from './Stake.Preview';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';
 import { useAllAccounts } from '@hooks/database';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
-import { useStakingMultiplyContextSelector } from '@contexts';
 
 const PercentageBox = ({
   percentage,
@@ -54,13 +53,6 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
   const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
-  const { data: allWallets } = useAllAccounts();
-  const [selectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
-  );
-
-  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
-
   const showPreview = () => {
     previewModalRef.current?.show();
   };
@@ -81,10 +73,10 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
   const selectedAccount = accounts.length > 0 ? accounts[0] : null;
   const [loading, setLoading] = useState(false);
 
-  const processStake = useCallback(async () => {
+  const onSubmitStakeTokens = useCallback(async () => {
     if (!pool) return;
+    setLoading(true);
     try {
-      setLoading(true);
       // @ts-ignore
       const walletHash = selectedAccount?._raw.hash;
       const result = await staking.stake({
@@ -94,22 +86,22 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
       });
 
       if (!result) {
-        previewModalRef.current?.dismiss();
-        navigation.navigate('StakeErrorScreen');
+        setTimeout(() => {
+          navigation.navigate('StakeErrorScreen');
+        }, 100);
       } else {
-        previewModalRef.current?.dismiss();
-        navigation.navigate('StakeSuccessScreen', { type: 'stake' });
+        setTimeout(() => {
+          navigation.navigate('StakeSuccessScreen', { type: 'stake', pool });
+        }, 100);
       }
     } finally {
-      if (selectedWallet?.address) {
-        await fetchPoolDetails(selectedWallet.address);
-      }
-      setStakeAmount('0');
       previewModalRef.current?.dismiss();
-      setLoading(false);
+      setStakeAmount('');
+      setTimeout(() => {
+        setLoading(false);
+      }, 125);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, stakeAmount, navigation, selectedAccount]);
+  }, [stakeAmount, pool, navigation, selectedAccount]);
 
   const onChangeStakeAmount = (value: string) => {
     setStakeAmount(StringUtils.removeNonNumericCharacters(value));
@@ -214,14 +206,14 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
           )}
         </Text>
       </PrimaryButton>
-      <BottomSheet ref={previewModalRef} swiperIconVisible={true}>
+      <BottomSheet ref={previewModalRef} swiperIconVisible>
         {loading ? (
           <StakePending />
         ) : (
           <StakePreview
-            onPressStake={processStake}
+            onPressStake={onSubmitStakeTokens}
             walletAddress={wallet?.address || ''}
-            amount={parseFloat(stakeAmount || '0')}
+            amount={parseFloat(stakeAmount)}
             apy={apy}
           />
         )}
