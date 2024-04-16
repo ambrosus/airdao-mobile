@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { Transaction, Token } from '@models';
+import { Token, Transaction } from '@models';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { useEffect } from 'react';

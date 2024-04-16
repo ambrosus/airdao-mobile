@@ -19,6 +19,12 @@ const getTokenDetails = (
       symbol = CryptoCurrencyCode.BUSD;
       break;
     }
+    case TOKEN_ADDRESSES.FLP_OLD: {
+      // FLP_OLD
+      name = 'Firepot-LP-Token';
+      symbol = CryptoCurrencyCode.FirepotLp;
+      break;
+    }
     case TOKEN_ADDRESSES.FLP: {
       // FLP
       name = 'Firepot-LP-Token';
@@ -55,10 +61,22 @@ const getTokenDetails = (
       symbol = CryptoCurrencyCode.USDC;
       break;
     }
+    case TOKEN_ADDRESSES.USDC_OLD: {
+      // USDC_OLD
+      name = 'USD Coin';
+      symbol = CryptoCurrencyCode.USDC;
+      break;
+    }
     case TOKEN_ADDRESSES.USDT: {
       // USDT
       name = 'Tether USD';
       symbol = CryptoCurrencyCode.Tether;
+      break;
+    }
+    case TOKEN_ADDRESSES.NFT: {
+      // NFT
+      name = 'NFT';
+      symbol = CryptoCurrencyCode.NFT;
       break;
     }
     default:
