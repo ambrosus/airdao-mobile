@@ -9,9 +9,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { FailedIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 export const StakeErrorScreen = () => {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeErrorScreen'>>();
 
@@ -32,8 +34,7 @@ export const StakeErrorScreen = () => {
         fontSize={16}
         fontFamily="Inter_500Medium"
       >
-        We encountered a hiccup while processing your staking request.
-        Double-check your wallet balance and network connection
+        {t('staking.pool.error')}
       </Text>
 
       <View style={{ ...styles.footer, bottom: insets.bottom }}>
@@ -46,7 +47,7 @@ export const StakeErrorScreen = () => {
             fontSize={16}
             color={COLORS.neutral800}
           >
-            Retry
+            {t('staking.pool.withdraw.retry')}
           </Text>
         </PrimaryButton>
         <Spacer value={verticalScale(16)} />
@@ -56,7 +57,7 @@ export const StakeErrorScreen = () => {
             fontSize={16}
             color={COLORS.neutral0}
           >
-            Done
+            {t('common.done')}
           </Text>
         </PrimaryButton>
       </View>

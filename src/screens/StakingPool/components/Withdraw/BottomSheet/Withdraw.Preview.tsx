@@ -91,7 +91,7 @@ export const WithdrawTokenPreview = ({
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral0}
         >
-          {t('staking.pool.stake.now')}
+          {t('staking.pool.withdraw.now')}
         </Text>
       </PrimaryButton>
     </View>

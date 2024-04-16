@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -50,7 +50,6 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const { t } = useTranslation();
   const [stakeAmount, setStakeAmount] = useState('');
-  const previewDisabled = !stakeAmount || parseFloat(stakeAmount) === 0;
   const previewModalRef = useRef<BottomSheetRef>(null);
   const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
@@ -116,6 +115,17 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
     setStakeAmount(StringUtils.removeNonNumericCharacters(value));
   };
 
+  const isWrongStakeValue = useMemo(() => {
+    return {
+      message: Number(stakeAmount) < 1000 && stakeAmount !== '',
+      button:
+        (Number(stakeAmount) < 1000 && stakeAmount !== '') ||
+        Number(stakeAmount) > Number(ambBalance.ether) ||
+        !stakeAmount ||
+        parseFloat(stakeAmount) === 0
+    };
+  }, [stakeAmount, ambBalance.ether]);
+
   return (
     <View style={styles.container}>
       <Text
@@ -146,6 +156,19 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         placeholder="0"
         maxLength={12}
       />
+      {isWrongStakeValue.message && (
+        <>
+          <Spacer value={verticalScale(4)} />
+          <Text
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            fontWeight="500"
+            color={COLORS.error400}
+          >
+            {t('staking.pool.stake.warning')}
+          </Text>
+        </>
+      )}
       <Spacer value={verticalScale(8)} />
       <Row alignItems="center" justifyContent="space-between">
         <Text
@@ -180,9 +203,15 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         <PercentageBox onPress={onPercentageBoxPress} percentage={100} />
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton onPress={showPreview} disabled={previewDisabled}>
-        <Text color={previewDisabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(previewDisabled ? 'button.enter.amount' : 'button.preview')}
+      <PrimaryButton onPress={showPreview} disabled={isWrongStakeValue.button}>
+        <Text
+          color={
+            isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0
+          }
+        >
+          {t(
+            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
+          )}
         </Text>
       </PrimaryButton>
       <BottomSheet ref={previewModalRef} swiperIconVisible={true}>

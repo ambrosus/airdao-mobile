@@ -73,10 +73,6 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
     }
   };
 
-  const isPreviewDisabled = useMemo(() => {
-    return !withdrawAmount || parseFloat(withdrawAmount) === 0;
-  }, [withdrawAmount]);
-
   const onSubmitWithdrawTokens = async () => {
     if (!pool) return;
     try {
@@ -105,6 +101,15 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
       setLoading(false);
     }
   };
+
+  const isWrongStakeValue = useMemo(() => {
+    return {
+      button:
+        Number(withdrawAmount) > Number(pool?.user.amb) ||
+        !withdrawAmount ||
+        parseFloat(withdrawAmount) === 0
+    };
+  }, [pool, withdrawAmount]);
 
   const renderCurrencyFieldIcon = useMemo(() => {
     return (
@@ -154,9 +159,18 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
         ))}
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton onPress={onWithdrawPreview} disabled={isPreviewDisabled}>
-        <Text color={isPreviewDisabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t('button.preview')}
+      <PrimaryButton
+        onPress={onWithdrawPreview}
+        disabled={isWrongStakeValue.button}
+      >
+        <Text
+          color={
+            isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0
+          }
+        >
+          {t(
+            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
+          )}
         </Text>
       </PrimaryButton>
 

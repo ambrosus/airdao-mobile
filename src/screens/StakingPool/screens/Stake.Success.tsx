@@ -14,10 +14,12 @@ import {
 import { HomeParamsList } from '@appTypes';
 import { SuccessIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
 
@@ -25,16 +27,16 @@ export const StakeSuccessScreen = () => {
 
   const resolveDetailsTypography = useMemo(() => {
     return route.params.type === 'stake'
-      ? "You've staked AMB! You're now earning rewards with every passing moment."
-      : "You've withdrawn your AMB. Your funds are now liquid and ready for action.";
-  }, [route.params.type]);
+      ? t('staking.pool.stake.success')
+      : t('staking.pool.withdraw.success');
+  }, [route.params.type, t]);
 
   return (
     <View style={styles.container}>
       <SuccessIcon />
       <Spacer value={verticalScale(16)} />
       <Text color={COLORS.neutral800} fontFamily="Inter_700Bold" fontSize={20}>
-        Success
+        {t('staking.pool.success')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
@@ -53,7 +55,7 @@ export const StakeSuccessScreen = () => {
             fontSize={16}
             color={COLORS.neutral0}
           >
-            Done
+            {t('common.done')}
           </Text>
         </PrimaryButton>
       </View>
