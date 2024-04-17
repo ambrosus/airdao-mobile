@@ -27,7 +27,7 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.20"
+      "buildNumber": "1.1.25"
     },
     "android": {
       "versionCode": 51,

@@ -61,7 +61,7 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus-test.io/v2',
     STAKING_API_URL: 'https://staking-api.ambrosus-test.io/pools/v2',
-    env: 'prod',
+    env: 'testnet',
     debug: {
       appBuildVersion: '1.0.0',
       cryptoErrors: true,
@@ -87,11 +87,11 @@ const envs = {
 let Config = envs.prod;
 switch (Updates.channel) {
   case 'main': {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
   case 'stage': {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
   case 'testnet': {
