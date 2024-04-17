@@ -5,9 +5,7 @@ class AddressProcessor {
   private web3: Web3;
 
   constructor() {
-    this.web3 = new Web3(
-      new Web3.providers.HttpProvider(Config.WEB3_NETWORK_URL)
-    );
+    this.web3 = new Web3(new Web3.providers.HttpProvider(Config.NETWORK_URL));
   }
 
   async getAddressByPrivateKey(privateKey: string | Buffer) {

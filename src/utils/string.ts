@@ -49,11 +49,7 @@ const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
   let numericChars = removeNonNumericCharacters(dottedStr);
 
-  if (
-    numericChars.length > 1 &&
-    numericChars.startsWith('0') &&
-    !numericChars.startsWith('0.')
-  ) {
+  if (numericChars.startsWith('0') && numericChars.length > 1) {
     numericChars = numericChars.slice(1);
   }
 
@@ -65,7 +61,7 @@ const formatNumberInput = (str: string): string => {
     formattedDecimalPart = '.' + decimalPart.replace(/(\.[1-9]*)0+$/, '$1');
   }
 
-  if (str.includes('.') && !decimalPart) {
+  if (str.includes('.') && !formattedDecimalPart) {
     formattedDecimalPart = '.';
   }
 
