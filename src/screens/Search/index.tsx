@@ -155,12 +155,12 @@ export const SearchScreen = () => {
   };
 
   const showScreenSpinner = useMemo(() => {
-    return addressesLoading && watchlist.length === 0;
-  }, [addressesLoading, watchlist]);
+    return userPerformedRefresh || addressesLoading;
+  }, [addressesLoading, userPerformedRefresh]);
 
   const showFooterSpinner = useMemo((): boolean => {
-    return accountsLoading && !userPerformedRefresh;
-  }, [userPerformedRefresh, accountsLoading]);
+    return accountsLoading && !userPerformedRefresh && watchlist.length > 0;
+  }, [userPerformedRefresh, accountsLoading, watchlist]);
 
   return (
     <KeyboardDismissingView style={{ ...styles.main, top }}>
@@ -220,11 +220,7 @@ export const SearchScreen = () => {
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
             {showScreenSpinner || refetching ? (
-              renderSpinner(
-                userPerformedRefresh
-                  ? styles.spinnerContainer
-                  : styles.spinnerFooter
-              )
+              renderSpinner(styles.spinnerFooter)
             ) : (
               <Animated.View
                 entering={FadeInLeft.duration(150)}

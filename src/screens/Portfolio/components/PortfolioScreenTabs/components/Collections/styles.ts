@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   main: {
     flex: 1,
     marginTop: 1
   },
-  spinerWrapper: { flex: 1, justifyContent: 'center', alignItems: 'center' }
+  spinnerWrapper: { paddingVertical: scale(36), alignItems: 'center' }
 });
