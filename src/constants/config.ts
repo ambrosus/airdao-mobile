@@ -79,11 +79,11 @@ const envs = {
 let Config = envs.prod;
 switch (Updates.channel) {
   case 'main': {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
   case 'stage': {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
   case 'testnet': {
@@ -91,7 +91,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
 }
