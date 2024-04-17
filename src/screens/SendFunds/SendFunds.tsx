@@ -308,7 +308,7 @@ export const SendFunds = () => {
                 onChangeValue={onChangeAmountValue}
                 style={styles.input}
                 maxLength={9}
-                keyboardType="numeric"
+                keyboardType="decimal-pad"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
                 multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
