@@ -43,6 +43,7 @@ export const BottomSheetAddWalletToList = forwardRef<
       </Text>
       <Spacer value={verticalScale(24)} />
       <AddWalletToList {...addWalletToListProps} />
+      <Spacer value={verticalScale(15)} />
       <PrimaryButton
         onPress={() => {
           showCreateNewListModal();
@@ -57,7 +58,7 @@ export const BottomSheetAddWalletToList = forwardRef<
           {t('collection.create.new')}
         </Text>
       </PrimaryButton>
-      <Spacer value={verticalScale(48)} />
+      <Spacer value={verticalScale(30)} />
       <BottomSheetCreateRenameGroup
         ref={createGroupRef}
         type="create"
