@@ -15,7 +15,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
-      stake: false
+      stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
@@ -39,7 +39,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
-      stake: false
+      stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
@@ -64,7 +64,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
-      stake: false
+      stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
