@@ -35,6 +35,7 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
+    // burnNFT(selectedAccount?._raw);
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
     }

@@ -15,6 +15,9 @@ import { styles } from './style';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
 import { AccountDBModel } from '@database';
+import { WithdrawToken } from './components/Withdraw';
+import { usePoolDetailsByName } from '@contexts';
+import { BigNumber } from 'ethers';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();
@@ -22,12 +25,16 @@ export const StakingPoolScreen = () => {
   const { pool } = params;
   const { t } = useTranslation();
   const currency = CryptoCurrencyCode.AMB;
-  const { totalStake, userStake, earnings, apy } = pool;
+  const { totalStake, apy } = pool;
+  const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
     allWallets?.length > 0 ? allWallets[0] : null
   );
 
   const { top } = useSafeAreaInsets();
+
+  const earning =
+    (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
 
   return (
     <View style={styles.container}>
@@ -53,11 +60,13 @@ export const StakingPoolScreen = () => {
             </Row>
           }
           contentRight={
-            <WalletPicker
-              selectedWallet={selectedWallet}
-              wallets={allWallets}
-              onSelectWallet={setSelectedWallet}
-            />
+            allWallets.length > 1 && (
+              <WalletPicker
+                selectedWallet={selectedWallet}
+                wallets={allWallets}
+                onSelectWallet={setSelectedWallet}
+              />
+            )
           }
           style={{
             ...shadow
@@ -71,8 +80,8 @@ export const StakingPoolScreen = () => {
             <StakingInfo
               totalStake={totalStake}
               currency={currency}
-              userStaking={userStake}
-              earnings={earnings}
+              userStaking={poolStakingDetails?.user.raw ?? BigNumber.from(0)}
+              earnings={earning}
               apy={apy}
             />
           </View>
@@ -84,13 +93,26 @@ export const StakingPoolScreen = () => {
                 view: (
                   <View>
                     <Spacer value={verticalScale(24)} />
-                    <StakeToken wallet={selectedWallet} apy={apy} />
+                    <StakeToken
+                      pool={poolStakingDetails}
+                      wallet={selectedWallet}
+                      apy={apy}
+                    />
                   </View>
                 )
               },
               {
                 title: t('staking.pool.withdraw'),
-                view: <></>
+                view: (
+                  <>
+                    <Spacer value={verticalScale(24)} />
+                    <WithdrawToken
+                      pool={poolStakingDetails}
+                      wallet={selectedWallet}
+                      apy={apy}
+                    />
+                  </>
+                )
               }
             ]}
           />

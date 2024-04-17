@@ -7,11 +7,12 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import React, { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
+import { BigNumber } from 'ethers';
 
 interface StakingInfoProps {
   totalStake: number;
   currency: CryptoCurrencyCode;
-  userStaking: number;
+  userStaking: BigNumber;
   earnings: number;
   apy: number;
 }
@@ -32,7 +33,8 @@ const Title = (props: PropsWithChildren) => {
 export const StakingInfo = (props: StakingInfoProps) => {
   const { totalStake, currency, userStaking, earnings, apy } = props;
   const exchangeRate = useCurrencyRate(currency);
-  const userStakingUsd = exchangeRate * userStaking;
+  const userStakingUsd =
+    Number(NumberUtils.formatAmount(userStaking)) * exchangeRate;
   const earningsUsd = exchangeRate * earnings;
   const { t } = useTranslation();
 
@@ -78,7 +80,7 @@ export const StakingInfo = (props: StakingInfoProps) => {
             fontSize={14}
             fontWeight="600"
           >
-            {NumberUtils.formatNumber(userStaking)} AMB
+            {NumberUtils.formatAmount(userStaking)} AMB
           </Text>
           <Spacer value={scale(8)} horizontal />
           <Text

@@ -6,6 +6,9 @@ import { TokenLogo } from '../TokenLogo';
 import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '@constants/colors';
+import { usePoolDetailsByName } from '@contexts';
+import { NumberUtils } from '@utils/number';
+import { BigNumber } from 'ethers';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -13,6 +16,7 @@ interface StakingPoolItemProps {
 
 export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { stakingPool } = props;
+  const poolStakingDetails = usePoolDetailsByName(stakingPool.token.name);
   const { t } = useTranslation();
 
   return (
@@ -39,8 +43,11 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontWeight="500"
           >
             {t('staking.current.stake', {
-              amount: stakingPool.userStake,
-              symbol: stakingPool.token.symbol
+              amount: NumberUtils.formatAmount(
+                poolStakingDetails?.user.raw ?? BigNumber.from(0),
+                0
+              ),
+              symbol: 'AMB'
             })}
           </Text>
         </View>

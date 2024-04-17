@@ -115,7 +115,7 @@ export const SettingsScreen = () => {
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
       {isStage && (
-        <Text style={{ margin: 20 }}>{`Build: ${currentBuild}`}</Text>
+        <Text style={{ margin: 20 }}>{`Build: ${currentBuild} | Testnet`}</Text>
       )}
     </View>
   );
