@@ -31,6 +31,12 @@ const getTokenDetails = (
       symbol = CryptoCurrencyCode.AMB;
       break;
     }
+    case TOKEN_ADDRESSES.FLP_OLD: {
+      // FLP_OLD
+      name = 'Firepot-LP-Token';
+      symbol = CryptoCurrencyCode.FirepotLp;
+      break;
+    }
     case TOKEN_ADDRESSES.FLP: {
       // FLP
       name = 'Firepot-LP-Token';
@@ -63,6 +69,12 @@ const getTokenDetails = (
     }
     case TOKEN_ADDRESSES.USDC: {
       // USDC
+      name = 'USD Coin';
+      symbol = CryptoCurrencyCode.USDC;
+      break;
+    }
+    case TOKEN_ADDRESSES.USDC_OLD: {
+      // USDC_OLD
       name = 'USD Coin';
       symbol = CryptoCurrencyCode.USDC;
       break;

@@ -92,4 +92,5 @@ export * from './SearchLargeIcon';
 export * from './CirculationIcon';
 export * from './Question';
 export * from './TelegramSettingsIcon';
+export * from './NFTIcon';
 export * from './Failed';
