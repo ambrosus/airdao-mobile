@@ -53,14 +53,14 @@ const formatNumberInput = (str: string): string => {
   let numericChars = removeNonNumericCharacters(currentFlow);
 
   if (
-    numericChars.startsWith('0') &&
     numericChars.length > 1 &&
+    numericChars.startsWith('0') &&
     !numericChars.startsWith('0.')
   ) {
     numericChars = numericChars.slice(1);
   }
 
-  const [integerPart, decimalPart = ''] = numericChars.split('.');
+  const [integerPart, decimalPart = ''] = numericChars.split(',');
   // Remove leading zeros from the integer part
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
   let formattedDecimalPart = '';
