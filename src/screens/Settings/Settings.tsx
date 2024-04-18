@@ -15,9 +15,12 @@ import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
+const iosBuildVersion = '1.1.0.43';
+const androidBuildVersion = '1.1.5.34';
+
 const stageBuildVersions = {
-  ios: '1.1.0.42',
-  android: '1.1.5.33'
+  ios: `${iosBuildVersion} (${androidBuildVersion})`,
+  android: `${androidBuildVersion} (${iosBuildVersion})`
 };
 
 const isStage = Updates.channel === 'stage';
