@@ -48,16 +48,15 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
   let numericChars = removeNonNumericCharacters(dottedStr);
-
   if (
-    numericChars.length > 1 &&
     numericChars.startsWith('0') &&
+    numericChars.length > 1 &&
     !numericChars.startsWith('0.')
   ) {
     numericChars = numericChars.slice(1);
   }
 
-  const [integerPart, decimalPart = ''] = numericChars.split('.');
+  const [integerPart, decimalPart = ''] = numericChars.split(/,| . /);
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
 
   let formattedDecimalPart = '';
