@@ -60,6 +60,10 @@ const formatNumberInput = (str: string): string => {
     numericChars = numericChars.slice(1);
   }
 
+  if (/^0+$/.test(numericChars)) {
+    return '0';
+  }
+
   const [integerPart, decimalPart = ''] = numericChars.split(',');
   // Remove leading zeros from the integer part
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
