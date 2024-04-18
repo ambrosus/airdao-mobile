@@ -16,6 +16,9 @@ import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
+import { Toast } from '@components/modular';
+
+const DEFAULT_BACKDROP_OPACITY = 1;
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -109,12 +112,26 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       ]
     );
 
-    const backdropOpacity = isNestedSheet ? 0 : 0.5;
+    const renderBackdropComponent = useMemo(() => {
+      const backdropOpacity = isNestedSheet ? 0 : 0.5;
+      return (
+        <View
+          style={{
+            ...styles.backdrop,
+            backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`
+          }}
+        >
+          <Toast />
+        </View>
+      );
+    }, [isNestedSheet]);
+
     return (
       <Modal
         testID={testID}
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
+        customBackdrop={renderBackdropComponent}
         onDismiss={dismiss}
         swipeDirection={swipingEnabled ? ['down'] : []}
         onSwipeComplete={dismiss}
@@ -122,7 +139,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         propagateSwipe
         onBackButtonPress={() => (closeOnBackPress ? dismiss() : null)}
         onBackdropPress={dismiss}
-        backdropOpacity={backdropOpacity}
+        backdropOpacity={DEFAULT_BACKDROP_OPACITY}
         style={styles.container}
         animationInTiming={400}
         animationOutTiming={400}
