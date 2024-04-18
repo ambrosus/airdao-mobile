@@ -47,23 +47,28 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 
 const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
-  let numericChars = removeNonNumericCharacters(dottedStr);
+  // Check if the first character is a dot
+  const isFirstCharacterDot = dottedStr.startsWith('.');
+  const currentFlow = isFirstCharacterDot ? '0' + dottedStr : dottedStr;
+  let numericChars = removeNonNumericCharacters(currentFlow);
 
-  // If the first symbol is a dot, automatically adds 0 before dot
-  if (numericChars.startsWith('.')) {
-    numericChars = '0' + numericChars;
+  if (
+    numericChars.length > 1 &&
+    numericChars.startsWith('0') &&
+    !numericChars.startsWith('0.')
+  ) {
+    numericChars = numericChars.slice(1);
   }
 
-  // Remove leading zeros from integer part
-  const [integerPart, decimalPart = ''] = numericChars.split(/[.,\s]/);
+  const [integerPart, decimalPart = ''] = numericChars.split(',');
+  // Remove leading zeros from the integer part
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
-
   let formattedDecimalPart = '';
+
   if (decimalPart) {
     formattedDecimalPart = '.' + decimalPart.replace(/(\.[1-9]*)0+$/, '$1');
   }
 
-  // Handle case when the input has only a decimal point
   if (str.includes('.') && !decimalPart) {
     formattedDecimalPart = '.';
   }
