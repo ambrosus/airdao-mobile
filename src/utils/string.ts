@@ -47,17 +47,17 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 
 const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
-  let numericChars = removeNonNumericCharacters(dottedStr);
-
+  let numericChars = removeNonNumericCharacters(dottedStr); // Заменил str на dottedStr
   if (
-    numericChars.length > 1 &&
     numericChars.startsWith('0') &&
+    numericChars.length > 1 &&
     !numericChars.startsWith('0.')
   ) {
     numericChars = numericChars.slice(1);
   }
 
-  const [integerPart, decimalPart = ''] = numericChars.split('.');
+  const [integerPart, decimalPart = ''] = numericChars.split(/,| . /);
+
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
 
   let formattedDecimalPart = '';
@@ -65,6 +65,7 @@ const formatNumberInput = (str: string): string => {
     formattedDecimalPart = '.' + decimalPart.replace(/(\.[1-9]*)0+$/, '$1');
   }
 
+  // Handle case when the input has only a decimal point
   if (str.includes('.') && !decimalPart) {
     formattedDecimalPart = '.';
   }
