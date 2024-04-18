@@ -56,7 +56,7 @@ const formatNumberInput = (str: string): string => {
     numericChars = numericChars.slice(1);
   }
 
-  const [integerPart, decimalPart = ''] = numericChars.split('.');
+  const [integerPart, decimalPart = ''] = numericChars.split(/,| . /);
   const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
 
   let formattedDecimalPart = '';
