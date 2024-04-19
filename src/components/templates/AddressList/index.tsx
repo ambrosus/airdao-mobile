@@ -80,7 +80,7 @@ export function AddressList(props: AddressListProps): JSX.Element {
         <View style={{ paddingTop: verticalScale(234) }}>
           <LocalizedRenderEmpty
             text={'empty.addresses'}
-            icon={<WatchlistTabIcon color={COLORS.neutral300} scale={1.7} />}
+            icon={<WatchlistTabIcon color={COLORS.neutral300} scale={1.35} />}
           />
         </View>
       }
