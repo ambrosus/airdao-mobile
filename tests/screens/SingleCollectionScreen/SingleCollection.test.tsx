@@ -53,14 +53,6 @@ jest.mock('@contexts/AllAddresses', () => ({
   useAllAddressesReducer: jest.fn()
 }));
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: '0',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 const queryClient = new QueryClient();
 
 const Component = () => {

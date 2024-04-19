@@ -9,8 +9,8 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { GraphPoint } from 'react-native-graph';
-import { CMCInterval } from '@appTypes';
-import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
+import { PriceSnapshotInterval } from '@appTypes';
+import { AnimatedText, Button, Row, Spacer } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
@@ -28,7 +28,7 @@ interface AMBPriceHistoryProps {
 }
 
 // @ts-ignore
-const intervalTimeDiffMap: { [key in CMCInterval]: number } = {
+const intervalTimeDiffMap: { [key in PriceSnapshotInterval]: number } = {
   // '1h': 3.6 * 10e5,
   '1d': 8.64 * 10e6,
   'weekly': 6.048 * 10e7,
@@ -40,7 +40,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
   const { data: ambPriceNow } = useAMBPrice();
   const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
   const [selectedInterval, setSelectedInverval] =
-    useState<CMCInterval>(defaultInterval);
+    useState<PriceSnapshotInterval>(defaultInterval);
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
@@ -127,6 +127,23 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
     };
   }, [selectedInterval]);
 
+  const percentChange = useMemo(() => {
+    switch (selectedInterval) {
+      case '7d':
+      case 'weekly':
+        return ambPriceNow?.percentChange7D || 0;
+      case '1d':
+        return ambPriceNow?.percentChange24H || 0;
+      default:
+        return ambPriceNow?.percentChange1H || 0;
+    }
+  }, [
+    ambPriceNow?.percentChange1H,
+    ambPriceNow?.percentChange24H,
+    ambPriceNow?.percentChange7D,
+    selectedInterval
+  ]);
+
   return (
     <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
       <Row style={styles.balance} testID="Formatted_Price">
@@ -153,22 +170,11 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
-                  change={
-                    (selectedInterval === '7d' || selectedInterval === 'weekly'
-                      ? ambPriceNow?.percentChange7D
-                      : ambPriceNow?.percentChange1H) || 0
-                  }
+                  change={percentChange}
                   fontSize={16}
                   fontWeight="500"
                 />
                 <Spacer horizontal value={scale(4)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.neutral900}
-                >
-                  {selectedInterval && '24hrs'}
-                </Text>
                 {badgeType === 'button' && (
                   <>
                     <Spacer horizontal value={scale(4)} />
@@ -207,11 +213,12 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           {
             text: t('chart.timeframe.weekly'),
             value: 'weekly'
-          },
-          {
-            text: t('chart.timeframe.monthly'),
-            value: 'monthly'
           }
+          // temporarily hide
+          // {
+          //   text: t('chart.timeframe.monthly'),
+          //   value: 'monthly'
+          // }
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}
@@ -228,7 +235,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           }
         }}
         onIntervalSelected={(interval) =>
-          setSelectedInverval(interval.value as CMCInterval)
+          setSelectedInverval(interval.value as PriceSnapshotInterval)
         }
       />
     </View>

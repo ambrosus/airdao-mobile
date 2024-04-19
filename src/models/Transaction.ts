@@ -1,7 +1,7 @@
 import { TransactionType } from '@appTypes/enums';
 import { TransactionDTO } from './dtos/TransactionDTO';
 import { TokenUtils } from '@utils/token';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
+import { CryptoCurrencyCode } from '@appTypes';
 
 export class Transaction {
   _id: string;
@@ -25,7 +25,7 @@ export class Transaction {
   token?: {
     address: string;
     name: string;
-    symbol: AirDAODictTypes.Code;
+    symbol: CryptoCurrencyCode;
     decimals: number;
     totalSupply: number;
   };
@@ -53,7 +53,7 @@ export class Transaction {
     }
   }
 
-  get symbol(): AirDAODictTypes.Code {
-    return this.token?.symbol || (this.value?.symbol as AirDAODictTypes.Code);
+  get symbol(): CryptoCurrencyCode {
+    return this.token?.symbol || (this.value?.symbol as CryptoCurrencyCode);
   }
 }

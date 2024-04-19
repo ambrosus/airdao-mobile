@@ -13,12 +13,18 @@ import { scale, verticalScale } from '@utils/scaling';
 import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
 import { Measure } from './components/types';
-import { TabViewProps, Route } from 'react-native-tab-view';
+import { Route, TabViewProps } from 'react-native-tab-view';
 import { useLists } from '@contexts';
 import { BottomSheetCreateRenameGroup } from '@components/templates';
 import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 import { useTranslation } from 'react-i18next';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -29,8 +35,10 @@ type Props<T extends Route> = Parameters<
 
 export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const containerRef = useRef<View | null>(null);
+
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
+
   const { t } = useTranslation();
 
   const { handleOnCreate, createGroupRef } = useLists((v) => v);
@@ -52,6 +60,23 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     [props.navigationState.routes.length]
   );
 
+  const tabWidth = DEVICE_WIDTH;
+  const tabBarWidth = tabWidth / 2;
+
+  const indicatorPosition = useSharedValue(0);
+  // @ts-ignore
+  const indicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: withTiming(indicatorPosition.value, {
+            duration: 50
+          })
+        }
+      ]
+    };
+  });
+
   useEffect(() => {
     const measureValues: Measure[] = [];
     setTimeout(() => {
@@ -70,6 +95,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
             });
           },
           () => {
+            // tslint:disable-next-line:no-console
             console.error('there was an error');
           }
         );
@@ -77,6 +103,10 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
       setMeasures(measureValues);
     });
   }, [refs]);
+
+  useEffect(() => {
+    indicatorPosition.value = withTiming(props.index * tabBarWidth);
+  }, [indicatorPosition, props.index, tabBarWidth]);
 
   const portfolioTabsButton = () => {
     if (props.index === 0) {
@@ -119,13 +149,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         </Row>
       </View>
       <Spacer value={verticalScale(27)} />
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingLeft: scale(16)
-        }}
-        ref={containerRef}
-      >
+      <View style={styles.itemContainer} ref={containerRef}>
         {props.navigationState.routes.map((route, i) => {
           const opacity = props.position.interpolate({
             inputRange,
@@ -133,19 +157,23 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
               inputRangeIndex === i ? 1 : 0.3
             )
           });
+          const color =
+            props.navigationState.index === i
+              ? COLORS.brand500
+              : COLORS.neutral900Alpha['60'];
           return (
-            <View
-              key={i}
-              style={{ marginRight: scale(16) }}
-              testID="Portfolio_Screen_Tab_Item"
-            >
+            <View key={i} testID="Portfolio_Screen_Tab_Item">
               <PortfolioScreenTabItem
-                onPress={props.onIndexChange}
+                onPress={(idx) => {
+                  indicatorPosition.value = withTiming(idx * tabBarWidth);
+                  props?.onIndexChange(idx);
+                }}
                 index={i}
                 opacity={opacity}
+                color={color}
                 ref={refs[i]}
               >
-                {route.title}
+                {t(`${route.title}`)}
               </PortfolioScreenTabItem>
             </View>
           );
@@ -163,6 +191,18 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
         handleOnCreateGroup={handleOnCreate}
         ref={createGroupRef}
       />
+      <Spacer value={verticalScale(5)} />
+      <View style={styles.tabsIndicatorWrapper}>
+        <Animated.View
+          style={[
+            {
+              ...styles.tabsIndicator,
+              width: tabWidth / 2
+            },
+            indicatorStyle
+          ]}
+        />
+      </View>
     </>
   );
 };

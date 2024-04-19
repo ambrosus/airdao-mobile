@@ -15,13 +15,14 @@ import { ImportWallet, ImportWalletSuccess } from '@screens/ImportWallet';
 import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SendCryptoProvider } from '@contexts';
 import {
-  SetupPasscode,
   ConfirmPasscode,
+  SetupPasscode,
   SuccessSetupSecurity
 } from '@screens/SetupPasscode';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
 import { StakingPoolScreen } from '@screens/StakingPool';
+import { NFTScreen } from '@screens/NFTScreen';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -33,6 +34,7 @@ export const HomeStack = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
+        <Stack.Screen name="NFTScreen" component={NFTScreen} />
         <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
         <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
@@ -49,7 +51,11 @@ export const HomeStack = () => {
         />
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="SendFundsStatus" component={SendFundsStatus} />
+        <Stack.Screen
+          name="SendFundsStatus"
+          component={SendFundsStatus}
+          options={{ gestureEnabled: false }}
+        />
         <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
         <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />

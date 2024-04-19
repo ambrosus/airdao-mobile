@@ -1,16 +1,17 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BottomAwareSafeAreaView } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
+import { styles } from './CreateWalletSuccess.styles';
 
 export const CreateWalletSuccess = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export const CreateWalletSuccess = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'HomeScreen' }]
+          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
         })
       );
     } else {
@@ -68,16 +69,3 @@ export const CreateWalletSuccess = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: scale(16)
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});

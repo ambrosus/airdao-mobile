@@ -1,17 +1,16 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SharePortfolio } from '@components/templates';
-import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton, TokenLogo } from '@components/modular';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
 import { useSendCryptoContext } from '@contexts';
-import { HomeNavigationProp } from '@appTypes';
+import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 
@@ -21,7 +20,7 @@ export const SendFundsStatus = () => {
     from,
     to,
     amount = 0,
-    currency = AirDAODictTypes.Code.AMB,
+    currency = CryptoCurrencyCode.AMB,
     loading,
     error,
     estimatedFee
@@ -53,15 +52,28 @@ export const SendFundsStatus = () => {
       break;
   }
 
-  const title = loading
-    ? `${t('send.funds.sending')} ${amount} ${currency}`
-    : error
-    ? t('send.funds.failed')
-    : `${amount} ${currency} ${t('send.funds.sent')}!`;
+  const title = useMemo(() => {
+    const isTimeError = error?.message.includes(
+      'Transaction was not mined within'
+    );
+    const isError = !!error;
+    switch (true) {
+      case loading:
+        return `${t('send.funds.sending')} ${amount} ${currency}`;
+      case isError && isTimeError:
+        return 'Transaction was not mined';
+      case !!error:
+        return t('send.funds.failed');
+      default:
+        return `${amount} ${currency} ${t('send.funds.sent')}!`;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, currency, error, loading]);
 
-  const onSharePress = () => {
-    shareModal.current?.show();
-  };
+  // TODO temporarily hide share buttons
+  // const onSharePress = () => {
+  //   shareModal.current?.show();
+  // };
 
   const navigateToHome = () => {
     navigation.popToTop();
@@ -153,14 +165,15 @@ export const SendFundsStatus = () => {
             width: '100%'
           }}
         >
-          {!error && (
-            <>
-              <SecondaryButton onPress={onSharePress} style={styles.button}>
-                <Text>{t('button.share')}</Text>
-              </SecondaryButton>
-              <Spacer value={verticalScale(16)} />
-            </>
-          )}
+          {/*TODO temporarily hide share buttons*/}
+          {/*{!error && (*/}
+          {/*  <>*/}
+          {/*    <SecondaryButton onPress={onSharePress} style={styles.button}>*/}
+          {/*      <Text>{t('button.share')}</Text>*/}
+          {/*    </SecondaryButton>*/}
+          {/*    <Spacer value={verticalScale(16)} />*/}
+          {/*  </>*/}
+          {/*)}*/}
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
             <Text color={COLORS.neutral0}>
               {error ? t('send.funds.go.home') : t('common.done')}

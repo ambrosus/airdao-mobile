@@ -55,6 +55,7 @@
   "amb.market.max.supply": "Max supply",
   "amb.market.max.supply.popup": "The maximum amount of coins that will ever exist in the lifetime of the cryptocurrency, indicating the limit of its potential supply.",
   "amb.market.statistics.text": "AirDAO is a pioneering community-governed layer one blockchain and web3 ecosystem powered by AMB. Our products enable financial equality and social inclusion, and we’re dedicated to making web3 more democratized and accessible to all. Your vision, our future. We build together.",
+  "amb.market.header": "Market overview",
   "amb.market.stats": "Stats",
   "amb.market.total.supply": "Total supply",
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
@@ -65,9 +66,11 @@
   "button.continue": "Continue",
   "button.create": "Create",
   "button.create.wallet": "Create new wallet",
+  "button.create.wallet.info": "Start fresh with a new wallet.",
   "button.delete": "Delete",
   "button.enter.amount": "Enter amount",
   "button.import.wallet": "Import existing wallet",
+  "button.import.wallet.info": "Access your existing wallet.",
   "button.preview": "Preview",
   "button.remove": "Remove",
   "button.save": "Save",
@@ -82,6 +85,7 @@
   "change.passcode.enter.new.passcode": "Enter new passcode",
   "change.passcode.success": "Passcode changed",
 
+  "chart.timeframe.24H": "24 hrs",
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
   "chart.timeframe.monthly": "1M",
@@ -134,6 +138,7 @@
   "common.yesterday": "Yesterday",
 
   "create.wallet.backup": "Backup your wallet",
+  "create.wallet.backup.header": "Backup wallet",
   "create.wallet.backup.popup": "recovery phrase.",
   "create.wallet.backup.text": "Your wallet will be backed up with a",
   "create.wallet.checkbox.text": "I understand that if I lose my recovery phrase, AirDAO cannot restore it.",
@@ -147,7 +152,7 @@
   "create.wallet.verification.alert": "Never share recovery phrase with \nanyone, keep it safe!",
   "create.wallet.verify.phrase": "Verify phrase",
   "create.wallet.verify.text": "Make sure to write it down as shown. You will verify this later.",
-  "create.wallet.your.recovery.phrase": "Your recovery phrase",
+  "create.wallet.recovery.phrase": "Recovery phrase",
 
   "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",
@@ -168,7 +173,7 @@
   "notification.settings.transaction.alerts.switch": "Transaction alerts",
   "notification.settings.transaction.alerts.switch.text": "Get notified of transactions in your watchlist.",
 
-  "asset.your.balance": "Your balance",
+  "asset.your.balance": "YOUR BALANCE",
 
   "transaction.modal": {
     "buttons": {
@@ -220,6 +225,9 @@
   "settings.notifications": "Notifications",
   "settings.preferences": "Preferences",
   "settings.security": "Security",
+  "settings.twitter": "X (formerly Twitter)",
+  "settings.telegram": "Telegram",
+  "settings.medium": "Medium",
 
   "settings.preferences.currency": "Currency",
   "settings.preferences.language": "Language",
@@ -245,7 +253,7 @@
   "security.confirm.passcode.description": "Re-enter your passcode to secure your wallet",
   "security.confirm.passcode.text": "Confirm passcode",
   "security.enabled": "Security Enabled!",
-  "security.enter.passcode": "Enter Passcode",
+  "security.enter.passcode": "Choose a passcode",
   "security.enter.passcode.hint": "Use a passcode you will remember. \nIt cannot be recovered.",
   "security.enter.passcode.text": "Passcode will be required for wallet access and transactions.",
   "security.enter.pin": "Enter PIN",
@@ -291,7 +299,14 @@
   "toast.you.removed.address.from.watchlist": "You removed {{name}} from watchlist!",
 
   "token.picker.select": "Select asset to send",
+  "token.actions.swap": "Swap",
+  "token.actions.stake": "Stake",
+
+  "wallet.empty.nft.header": "No NFTs yet.",
+  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+
 
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet"
+
 }

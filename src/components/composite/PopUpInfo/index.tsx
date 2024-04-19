@@ -4,11 +4,19 @@ import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import { Button, Spacer, Text } from '@components/base';
 import { PopUpInfoProps } from './PopUpInfo.types';
 import { styles } from './styles';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
-  const { body, title, placement, testID, isVisible, onBackdropPress } = props;
+  const {
+    onInfoPress,
+    body,
+    title,
+    placement,
+    testID,
+    isVisible,
+    onBackdropPress
+  } = props;
 
   return (
     <Popover
@@ -16,14 +24,18 @@ export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
       placement={(placement || 'auto') as PopoverPlacement}
       popoverStyle={styles.popoverStyle}
       onRequestClose={onBackdropPress}
-      from={(sourceRef, showPopover) => (
+      from={() => (
         <View collapsable={false}>
           <Button
             testID={testID}
-            onPress={showPopover}
+            onPress={onInfoPress}
             style={styles.container}
           >
-            <Text color={COLORS.neutral0} fontSize={10}>
+            <Text
+              style={styles.infoIcon}
+              color={COLORS.neutral0}
+              fontSize={scale(10)}
+            >
               i
             </Text>
           </Button>

@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
   },
   swiper: {
     alignSelf: 'center',
-    backgroundColor: 'red',
     width: scale(42),
     borderRadius: 42,
     marginTop: verticalScale(16)

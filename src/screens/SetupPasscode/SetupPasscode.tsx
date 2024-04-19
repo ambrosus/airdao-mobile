@@ -37,7 +37,7 @@ export const SetupPasscode = () => {
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
       <View style={{ paddingHorizontal: scale(16) }}>
-        <Spacer value={verticalScale(47)} />
+        <Spacer value={verticalScale(23)} />
         <Text
           align="center"
           fontSize={24}
@@ -46,7 +46,7 @@ export const SetupPasscode = () => {
         >
           {t('security.enter.passcode')}
         </Text>
-        <Spacer value={verticalScale(8)} />
+        <Spacer value={scale(23)} />
         <Text
           align="center"
           fontSize={16}

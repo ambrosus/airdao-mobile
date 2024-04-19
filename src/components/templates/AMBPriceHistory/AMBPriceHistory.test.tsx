@@ -50,7 +50,7 @@ describe('AMBPriceHistory', () => {
 
   it('renders correctly with mocked price', () => {
     const mockedPrice = 10.5;
-    const mockedHistoricalPrice = [
+    const mockedPriceSnapshot = [
       { timestamp: new Date(), priceUSD: 10 },
       { timestamp: new Date(), priceUSD: 12 }
     ];
@@ -61,7 +61,7 @@ describe('AMBPriceHistory', () => {
     });
     // @ts-ignore
     useAMBPriceHistorical.mockReturnValue({
-      data: mockedHistoricalPrice,
+      data: mockedPriceSnapshot,
       isLoading: false
     });
     render(<AMBPriceHistory badgeType="view" />);

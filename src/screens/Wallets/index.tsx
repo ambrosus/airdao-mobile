@@ -12,10 +12,10 @@ import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { PaginationCircles } from '@components/composite';
-import { WalletCardHeight } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
+import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -66,7 +66,7 @@ export const HomeScreen = () => {
           <View style={{ alignSelf: 'center', marginTop: verticalScale(16) }}>
             <PaginationCircles
               totalCount={accounts.length}
-              activeColor={COLORS.neutral500}
+              activeColor={COLORS.activeOrange}
               passiveColor={COLORS.neutral100}
               activeIndex={scrollIdx}
               size={verticalScale(10)}

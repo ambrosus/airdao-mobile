@@ -24,8 +24,12 @@ import {
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import { AirDAOEventType, HomeNavigationProp, HomeParamsList } from '@appTypes';
+import {
+  AirDAOEventType,
+  CryptoCurrencyCode,
+  HomeNavigationProp,
+  HomeParamsList
+} from '@appTypes';
 import { CurrencyUtils } from '@utils/currency';
 import { etherumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
@@ -71,18 +75,20 @@ export const SendFunds = () => {
     name: 'AirDAO',
     address: senderAddress || '',
     balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
-    symbol: AirDAODictTypes.Code.AMB
+    symbol: CryptoCurrencyCode.AMB
   });
 
   const [selectedToken, setSelectedToken] = useState<Token>(
-    tokens.find((t) => t.address === tokenFromNavigationParams?.address) ||
-      defaultAMBToken
+    tokens.find(
+      (token) => token.address === tokenFromNavigationParams?.address
+    ) || defaultAMBToken
   );
   const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const isPositiveRate = currencyRate > 0;
   const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
       ? defaultAMBToken.balance.ether
-      : tokens.find((t) => t.address === selectedToken.address)?.balance
+      : tokens.find((token) => token.address === selectedToken.address)?.balance
           .ether || 0;
   // convert crypto balance to usd
   const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
@@ -94,13 +100,14 @@ export const SendFunds = () => {
     false
   );
 
+  const showUsdAmountOnlyPositiveRate = amountShownInUSD && isPositiveRate;
+
   // calculate estimated fee
   const estimatedFee = useEstimatedTransferFee(
     selectedToken,
     parseFloat(amountInCrypto),
     senderAddress,
-    destinationAddress,
-    walletHash
+    destinationAddress
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
 
@@ -117,6 +124,11 @@ export const SendFunds = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [estimatedFee, selectedToken, amountInCrypto]);
+
+  useEffect(() => {
+    onChangeAmountValue(amountShownInUSD ? amountInUSD : amountInCrypto);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyRate]);
 
   const setDestinationAddress = (address: string) => {
     updateSendContext({ type: 'SET_DATA', to: address });
@@ -149,7 +161,7 @@ export const SendFunds = () => {
     }
     let finalValue = StringUtils.formatNumberInput(newValue);
     finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
-    if (amountShownInUSD) {
+    if (showUsdAmountOnlyPositiveRate) {
       setAmountInUSD(finalValue);
       const newUsdAmount = parseFloat(finalValue) || 0;
       setAmountInCrypto(
@@ -185,6 +197,7 @@ export const SendFunds = () => {
         });
         await TransactionUtils.sendTx(
           walletHash,
+          senderAddress,
           destinationAddress,
           Number(amountInCrypto),
           selectedToken
@@ -203,6 +216,17 @@ export const SendFunds = () => {
       }
     }, 1000);
   };
+
+  const balanceAmount = (() => {
+    const usdSymbol = showUsdAmountOnlyPositiveRate ? ' $' : ' ';
+    const amount = showUsdAmountOnlyPositiveRate
+      ? balanceInUSD.toFixed(3)
+      : balanceInCrypto.toFixed(3);
+    const cryptoSymbol = showUsdAmountOnlyPositiveRate
+      ? ''
+      : selectedToken.symbol;
+    return `${usdSymbol}${amount} ${cryptoSymbol}`;
+  })();
 
   const reviewButtonDisabled =
     Number(amountInCrypto) == 0 ||
@@ -278,17 +302,19 @@ export const SendFunds = () => {
               <Spacer value={verticalScale(32)} />
               <Input
                 type="number"
-                value={amountShownInUSD ? amountInUSD : amountInCrypto}
+                value={
+                  showUsdAmountOnlyPositiveRate ? amountInUSD : amountInCrypto
+                }
                 onChangeValue={onChangeAmountValue}
                 style={styles.input}
                 maxLength={9}
-                keyboardType="numeric"
+                keyboardType="decimal-pad"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
                 multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
               />
               <Spacer value={verticalScale(16)} />
-              {currencyRate > 0 && (
+              {isPositiveRate && (
                 <Button onPress={toggleShowInUSD}>
                   <ShowInUSD
                     usdAmount={Number(amountInUSD)}
@@ -302,11 +328,7 @@ export const SendFunds = () => {
               <Spacer value={verticalScale(16)} />
               <Row alignItems="center" style={{ alignSelf: 'center' }}>
                 <Text color={COLORS.neutral400}>
-                  {t('send.funds.balance')}:{amountShownInUSD ? ' $' : ' '}
-                  {amountShownInUSD
-                    ? balanceInUSD.toFixed(3)
-                    : balanceInCrypto.toFixed(3)}
-                  {amountShownInUSD ? '' : ` ${selectedToken.symbol}`}
+                  {t('send.funds.balance')}: {balanceAmount}
                 </Text>
               </Row>
               <Spacer value={verticalScale(32)} />

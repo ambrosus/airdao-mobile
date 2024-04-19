@@ -1,14 +1,14 @@
 import { API } from '@api/api';
-import { CMCInterval, QueryResponse } from '@appTypes';
+import { PriceSnapshotInterval, QueryResponse } from '@appTypes';
 import { AMBToken } from '@models';
 import { useQuery } from '@tanstack/react-query';
 
 export function useAMBPriceHistorical(
-  interval: CMCInterval
+  interval: PriceSnapshotInterval
 ): QueryResponse<AMBToken[] | []> {
   const { data, isLoading, error } = useQuery<AMBToken[]>(
     ['amb-token-historical', interval],
-    () => API.getAMBPriceHistoricalPricing(interval),
+    () => API.getAMBPriceHistoricalPricing(),
     {
       keepPreviousData: true
     }

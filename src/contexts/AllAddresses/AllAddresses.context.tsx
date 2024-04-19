@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AllAddressesAction } from '@contexts';
-import { CacheableAccount } from '@appTypes/CacheableAccount';
-import { Cache, CacheKey } from '@lib/cache';
 import { ExplorerAccount } from '@models/Explorer';
-import { createContextSelector } from '@helpers/createContextSelector';
+import { createContextSelector } from '@utils/createContextSelector';
 import { AirDAOEventDispatcher } from '@lib';
 import {
   AirDAOEventType,
@@ -11,6 +9,9 @@ import {
 } from '@appTypes';
 import { ArrayUtils } from '@utils/array';
 import { AddressUtils } from '@utils/address';
+import { PublicAddressDB } from '@database';
+import { MULTISIG_VAULT } from '@constants/variables';
+import { API } from '@api/api';
 
 const AllAddressesContext = () => {
   const [allAddresses, setAllAddresses] = useState<ExplorerAccount[]>([]);
@@ -64,22 +65,29 @@ const AllAddressesContext = () => {
       let finalAddresses: ExplorerAccount[] = [];
       switch (action.type) {
         case 'add': {
+          await PublicAddressDB.createOrUpdateAddress(action.payload);
           finalAddresses = addAddress(action.payload);
           break;
         }
         case 'remove': {
+          await PublicAddressDB.deleteAddress(action.payload.address);
           finalAddresses = removeAddress(action.payload);
           break;
         }
         case 'update': {
+          await PublicAddressDB.createOrUpdateAddress(action.payload);
           finalAddresses = updateAddress(action.payload);
           break;
         }
         case 'add-or-update': {
+          await PublicAddressDB.createOrUpdateAddress(action.payload);
           finalAddresses = addOrUpdateAddress(action.payload);
           break;
         }
         case 'set': {
+          for (const account of action.payload) {
+            await PublicAddressDB.createOrUpdateAddress(account);
+          }
           finalAddresses = action.payload;
           break;
         }
@@ -92,28 +100,41 @@ const AllAddressesContext = () => {
   );
 
   // fetch all addresses on mount
-  const getAddresses = async () => {
+  const getAddresses = useCallback(async () => {
     setLoading(true);
     try {
-      const addresses = ((await Cache.getItem(CacheKey.AllAddresses)) ||
-        []) as CacheableAccount[];
+      const addresses = await PublicAddressDB.getAll();
       const currentAddresses = allAddresses
         .filter((address) => !!address)
         .map(ExplorerAccount.toCacheable);
+      const MultiSigAddresses = (
+        await Promise.all(
+          MULTISIG_VAULT.map(
+            async (address) => await API.explorerService.searchAddress(address)
+          )
+        )
+      ).map((dto) => new ExplorerAccount(dto));
       const populatedAddresses = await AddressUtils.populateAddresses(
-        ArrayUtils.mergeArrays('address', addresses, currentAddresses)
+        ArrayUtils.mergeArrays(
+          'address',
+          addresses,
+          currentAddresses,
+          MultiSigAddresses
+        )
       );
       setAllAddresses(populatedAddresses);
       reducer({ type: 'set', payload: populatedAddresses });
-    } catch (error) {
-      // Alert.alert(
-      //   'Error occured while populating addresses',
-      //   JSON.stringify(error)
-      // );
     } finally {
       setLoading(false);
     }
-  };
+  }, [allAddresses, reducer]);
+
+  useEffect(() => {
+    if (allAddresses.length === 0) {
+      getAddresses();
+    }
+  }, [allAddresses, getAddresses]);
+
   useEffect(() => {
     getAddresses();
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Spinner, Text } from '@components/base';
@@ -11,6 +11,7 @@ import { AlertBanner, PrimaryButton, ToastType } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
+import { styles } from './Step1.styles';
 
 export const CreateWalletStep1 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -19,7 +20,7 @@ export const CreateWalletStep1 = () => {
     useAddWalletContext();
   const walletMnemonicArray = walletMnemonic.split(' ');
   const { t } = useTranslation();
-  const columnNumber = 3;
+  const columnNumber = 2;
 
   const init = async () => {
     setLoading(true);
@@ -38,12 +39,24 @@ export const CreateWalletStep1 = () => {
   }, [mnemonicLength]);
 
   const renderWord = (word: string, index: number) => {
+    const isNeedSideBorderRadius = !!((index + 1) % 2);
+    const borderRadius = isNeedSideBorderRadius
+      ? {
+          borderBottomLeftRadius: 10,
+          borderTopLeftRadius: 10
+        }
+      : {
+          borderBottomRightRadius: 10,
+          borderTopRightRadius: 10
+        };
     return (
       <View
-        style={[
-          styles.mnemonic,
-          { marginHorizontal: index % 3 === 1 ? scale(16) : 0 }
-        ]}
+        style={{
+          borderLeftWidth: isNeedSideBorderRadius ? 0 : 1,
+          borderLeftColor: COLORS.neutral200,
+          ...styles.mnemonic,
+          ...borderRadius
+        }}
         key={index}
       >
         <Text
@@ -72,17 +85,20 @@ export const CreateWalletStep1 = () => {
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-      <Header style={{ shadowColor: 'transparent' }} />
+      <Header
+        style={{ shadowColor: 'transparent' }}
+        title={
+          <Text
+            align="center"
+            fontSize={scale(18)}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral900}
+          >
+            {t('create.wallet.recovery.phrase')}
+          </Text>
+        }
+      />
       <View style={{ paddingHorizontal: scale(28) }}>
-        <Text
-          align="center"
-          fontSize={24}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral900}
-        >
-          {t('create.wallet.your.recovery.phrase')}
-        </Text>
-        <Spacer value={verticalScale(12)} />
         <Text
           align="center"
           fontSize={16}
@@ -126,33 +142,3 @@ export const CreateWalletStep1 = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  innerContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: scale(16)
-  },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  column: {
-    flex: 1
-  },
-  mnemonic: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.neutral100,
-    borderRadius: 1000,
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(8),
-    height: verticalScale(36),
-    minHeight: 36
-  }
-});

@@ -55,6 +55,7 @@
   "amb.market.max.supply": "Maksimum arz",
   "amb.market.max.supply.popup": "Kripto paranın ömrü boyunca var olabilecek en yüksek jeton miktarı, potansiyel arzının sınırını gösterir.",
   "amb.market.statistics.text": "AirDAO, AMB tarafından desteklenen, topluluk tarafından yönetilen öncü bir birinci katman blockchain ve web3 ekosistemidir. Ürünlerimiz finansal eşitliği ve sosyal katılımı mümkün kılıyor ve web3'ü daha demokratik ve herkes için erişilebilir hale getirmeye kendimizi adadık. Sizin vizyonunuz, bizim geleceğimiz. Birlikte inşa ediyoruz.",
+  "amb.market.header": "Piyasaya bakış",
   "amb.market.stats": "İstatistikler",
   "amb.market.total.supply": "Toplam arz",
   "amb.market.total.supply.popup": "Zaten oluşturulmuş olan jeton miktarı, yakılan tokenlar çıkarıldıktan sonra, bir kripto paranın mevcut arzını ölçen bir ölçüdür.",
@@ -65,9 +66,11 @@
   "button.continue": "Devam et",
   "button.create": "Oluştur",
   "button.create.wallet": "Yeni cüzdan oluştur",
+  "button.create.wallet.info": "Yeni bir cüzdanla yeni bir başlangıç yap.",
   "button.delete": "Sil",
   "button.enter.amount": "Miktar gir",
   "button.import.wallet": "Mevcut cüzdanı içe aktar",
+  "button.import.wallet.info": "Mevcut cüzdana eriş.",
   "button.preview": "Ön izleme",
   "button.remove": "Kaldır",
   "button.save": "Kaydet",
@@ -82,6 +85,7 @@
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
   "change.passcode.success": "Şifre değiştirildi",
 
+  "chart.timeframe.24H": "24 saat",
   "chart.timeframe.daily": "1G",
   "chart.timeframe.weekly": "1H",
   "chart.timeframe.monthly": "1A",
@@ -134,6 +138,7 @@
   "common.yesterday": "Dün",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
+  "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
   "create.wallet.backup.text": "Cüzdanınız bir",
   "create.wallet.checkbox.text": "Kurtarma cümlenizi kaybedersem, AirDAO'nun onu geri yükleyemeyeceğini anlıyorum.",
@@ -147,7 +152,7 @@
   "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \npaylaşmayın, güvende tutun!",
   "create.wallet.verify.phrase": "İfadeyi doğrula",
   "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
-  "create.wallet.your.recovery.phrase": "Kurtarma ifadeniz",
+  "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
 
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
   "empty.assets": "Henüz varlık yok",
@@ -168,7 +173,7 @@
   "notification.settings.transaction.alerts.switch": "İşlem bildirimleri",
   "notification.settings.transaction.alerts.switch.text": "İzleme listenizdeki işlemlerden haberdar olun.",
 
-  "asset.your.balance": "Bakiyeniz",
+  "asset.your.balance": "BAKIYENIZ",
 
   "transaction.modal": {
     "buttons": {
@@ -220,6 +225,9 @@
   "settings.notifications": "Bildirim ayarları",
   "settings.preferences": "Tercihler",
   "settings.security": "Güvenlik",
+  "settings.twitter": "X",
+  "settings.telegram": "Telegram",
+  "settings.medium": "Medium",
 
   "settings.preferences.currency": "Para birimi",
   "settings.preferences.language": "Dil",
@@ -291,6 +299,12 @@
   "toast.you.removed.address.from.watchlist": "{{name}} izleme listesinden çıkarıldı",
 
   "token.picker.select": "Gönderilecek varlığı seçin",
+  "token.actions.swap": "Takas",
+  "token.actions.stake": "Stake",
+
+  "wallet.empty.nft.header": "No NFTs yet.",
+  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+
 
   "wallet.my.assets": "Varlıklarım",
   "wallet.picker.select": "Cüzdan seç"

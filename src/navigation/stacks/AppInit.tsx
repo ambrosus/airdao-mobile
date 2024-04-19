@@ -39,10 +39,7 @@ const AppInitialization = () => {
         }
       }
     } catch (error) {
-      // Alert.alert(
-      //   'Error occured during app initialization',
-      //   JSON.stringify(error)
-      // );
+      // ignore
     }
   }, [
     allWallets.length,

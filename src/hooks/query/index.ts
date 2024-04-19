@@ -2,6 +2,7 @@ export * from './useAMBPrice';
 export * from './useAMBPriceHistorical';
 export * from './useAmbrosusStakingPools';
 export * from './useBalanceOfAddress';
+export * from './useCurrencyRate';
 export * from './useExplorerAccountFromHash';
 export * from './useEstimatedTransferFee';
 export * from './useExplorerInfo';

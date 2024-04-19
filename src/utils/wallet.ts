@@ -1,6 +1,6 @@
 import { Wallet } from '@models/Wallet';
-import { DatabaseTable, WalletMetadata } from '@appTypes';
-import AirDAOKeysStorage from '@lib/helpers/AirDAOKeysStorage';
+import { CryptoCurrencyCode, DatabaseTable, WalletMetadata } from '@appTypes';
+import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
 import {
   Database,
   WalletDB,
@@ -8,13 +8,12 @@ import {
   AccountDBModel,
   WalletDBModel
 } from '@database';
-import { AirDAODictTypes } from '@crypto/common/AirDAODictTypes';
-import AirDAOKeysForRef from '@lib/helpers/AirDAOKeysForRef';
+import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
 import { MnemonicUtils } from './mnemonics';
 import { CashBackUtils } from './cashback';
 import { Cache, CacheKey } from '../lib/cache';
 import { AccountUtils } from './account';
-import { Crypto } from './crypto';
+import { CryptoUtils } from './crypto';
 import { API } from '@api/api';
 
 const _saveWallet = async (
@@ -32,7 +31,7 @@ const _saveWallet = async (
     };
 
     prepared.mnemonic = MnemonicUtils.recheckMnemonic(prepared.mnemonic);
-    prepared.hash = await Crypto.hashMnemonic(prepared.mnemonic);
+    prepared.hash = await CryptoUtils.hashMnemonic(prepared.mnemonic);
 
     const checkKey = await AirDAOKeysStorage.isMnemonicAlreadySaved(prepared);
     if (checkKey) {
@@ -71,7 +70,7 @@ const processWallet = async (mnemonic: string) => {
     const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
       mnemonic: mnemonic
     });
-    const currencyCode = AirDAODictTypes.Code.AMB; // TODO this needs to be changed if we support multiple currencies
+    const currencyCode = CryptoCurrencyCode.AMB; // TODO this needs to be changed if we support multiple currencies
     // create wallet in db
     walletInDb = await WalletDB.createWallet(fullWallet);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

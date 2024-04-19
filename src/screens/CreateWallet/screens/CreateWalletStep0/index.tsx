@@ -12,8 +12,9 @@ import {
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { RecoveryPhraseModal } from '../../components/RecoveryPhraseModal';
+import { RecoveryPhraseModal } from '@screens/CreateWallet/components';
 import { styles } from '@screens/CreateWallet/styles';
+import { stylesStep0 } from './Step0.styles';
 import { MnemonicIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 
@@ -32,35 +33,26 @@ export const CreateWalletStep0 = () => {
   }, [recoveryPhraseModalRef]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={stylesStep0.flexStyle}>
       <Header
-        titlePosition="left"
+        titlePosition="center"
         title={
           <Text
             fontFamily="Inter_600SemiBold"
-            fontSize={16}
+            fontSize={scale(18)}
             color={COLORS.neutral800}
           >
-            {t('button.create.wallet')}
+            {t('create.wallet.backup.header')}
           </Text>
         }
         style={{ shadowColor: 'transparent' }}
       />
       <BottomAwareSafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <Text
-            align="center"
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('create.wallet.backup')}
-          </Text>
-          <Spacer value={verticalScale(8)} />
+        <View style={stylesStep0.flexStyle}>
           <View>
             <Text
               align="center"
-              fontSize={16}
+              fontSize={scale(16)}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
@@ -68,7 +60,7 @@ export const CreateWalletStep0 = () => {
               <Text
                 align="center"
                 onPress={showRecoveryModal}
-                fontSize={16}
+                fontSize={scale(15)}
                 fontFamily="Inter_500Medium"
                 color={COLORS.brand600}
                 style={{ textDecorationLine: 'underline' }}
@@ -77,7 +69,7 @@ export const CreateWalletStep0 = () => {
               </Text>
               <Text
                 align="center"
-                fontSize={15}
+                fontSize={scale(15)}
                 fontFamily="Inter_500Medium"
                 color={COLORS.neutral800}
               >
@@ -91,12 +83,7 @@ export const CreateWalletStep0 = () => {
             <MnemonicIcon />
           </View>
         </View>
-        <View
-          style={{
-            // marginBottom: verticalScale(120),
-            width: '100%'
-          }}
-        >
+        <View style={stylesStep0.container}>
           <Row alignItems="center">
             <CheckBox
               fillColor={COLORS.sapphireBlue}
@@ -110,7 +97,7 @@ export const CreateWalletStep0 = () => {
               fontSize={16}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
-              style={{ maxWidth: scale(330) }}
+              style={stylesStep0.createText}
             >
               {t('create.wallet.checkbox.text')}
             </Text>
@@ -128,7 +115,7 @@ export const CreateWalletStep0 = () => {
               fontSize={16}
               fontFamily="Inter_600SemiBold"
               color={selected ? COLORS.neutral0 : COLORS.neutral600}
-              style={{ marginVertical: scale(12) }}
+              style={stylesStep0.buttonTextStyle}
             >
               {t('button.continue')}
             </Text>

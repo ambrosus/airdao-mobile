@@ -9,6 +9,10 @@ export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
   Notifications: undefined;
+  NFTScreen: {
+    tokenInfo: Token;
+    walletAccount: string;
+  };
   AssetScreen: {
     tokenInfo: Token;
     walletAccount: string;

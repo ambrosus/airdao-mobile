@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, Dimensions, ViewStyle } from 'react-native';
+import { View, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,6 +9,7 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 type AnimatedTab = {
   view: JSX.Element;
@@ -26,7 +27,7 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const tabWidth = Dimensions.get('window').width;
+  const tabWidth = DEVICE_WIDTH;
   const tabBarWidth = tabWidth / tabCount;
 
   const indicatorPosition = useSharedValue(0);

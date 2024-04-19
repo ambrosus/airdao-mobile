@@ -1,4 +1,8 @@
 import { NotificationSettings } from '@appTypes/notification';
+import { Dimensions } from 'react-native';
+
+export const DEVICE_WIDTH = Dimensions.get('window').width;
+export const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 export const DefaultNotificationSettings: NotificationSettings = {
   priceAlerts: true,
@@ -109,11 +113,15 @@ export const MULTISIG_VAULT = prodEnvAddresses;
 export const TOKEN_ADDRESSES = {
   AirBond: '0x096B5914C95C34Df19500DAff77470C845EC749D',
   BUSD: '0x7A477aA8ED4884509387Dba81BA6F2B7C97597e2',
-  FLP: '0xfD3aA0C31308cB069F4c7ebB27A556B264c0C763',
   Ganymade: '0xE984ACe36F2B6f10Fec8dd6fc1bB19c7b1D2F2c6',
   Hera: '0x322269e52800e5094c008f3b01A3FD97BB3C8f5D',
   LangOperation: '0x5EAc6E1940de1Ee063DF778201E8b6F593f2DeCf',
   Plutus: '0xEB8386a50Edd613cc43f061E9C5A915b0443C5d4',
-  USDC: '0xd8dd0273D31c1cd9Dba104DaCA7C1dfEE4f7b805',
-  USDT: '0xfEE01F2D120250A0a59bfbF9C144F8ECC4425fCc'
+  USDT: '0xfEE01F2D120250A0a59bfbF9C144F8ECC4425fCc',
+  NFT: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
+  FLP_OLD: '0xfD3aA0C31308cB069F4c7ebB27A556B264c0C763',
+  FLP: '0x015AB9B3771F1748007ea62885737eF4Fa346291',
+  USDC_OLD: '0xd8dd0273D31c1cd9Dba104DaCA7C1dfEE4f7b805',
+  USDC_OLD_2: '0x7A70536307a0411d2Df2FE832CFa16231089dD6F',
+  USDC: '0xFF9F502976E7bD2b4901aD7Dd1131Bb81E5567de'
 };

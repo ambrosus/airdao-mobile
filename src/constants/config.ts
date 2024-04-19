@@ -1,7 +1,7 @@
 import * as Updates from 'expo-updates';
+
 const envs = {
   prod: {
-    CMC_API_URL: 'https://sandbox-api.coinmarketcap.com',
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus.io/v2',
@@ -18,10 +18,14 @@ const envs = {
       receive: true,
       stake: false
     },
-    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs'
+    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
+    AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+    NETWORK_URL: 'https://network.ambrosus.io',
+    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a'
   },
   stage: {
-    CMC_API_URL: 'https://sandbox-api.coinmarketcap.com',
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus-test.io/v2',
@@ -38,7 +42,12 @@ const envs = {
       receive: true,
       stake: false
     },
-    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs'
+    AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
+    AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
+    NETWORK_URL: 'https://network.ambrosus-test.io',
+    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a'
   }
 };
 

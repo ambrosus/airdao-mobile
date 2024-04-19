@@ -5,22 +5,17 @@ import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
 
 export enum CacheKey {
-  AddressLists = 'address_lists',
-  AllAddresses = 'all_addresses',
-  DeviceID = 'device_id',
+  AddressLists = 'address_lists', // TODO This key is deprecated Can be deleted after a few version updates over 1.1.0
+  AllAddresses = 'all_addresses', // TODO This key is deprecated. Can be deleted after a few version updates over 1.1.0.
   isBiometricAuthenticationInProgress = 'is_biometric_auth_in_progress',
   IsBiometricEnabled = 'is_biometric_login_enabled',
-  IsSecondInit = 'is_second_init',
   NotificationSettings = 'notification_settings',
   NotificationToken = 'notification_token',
-  Onboarding = 'onboarding',
   LastNotificationTimestamp = 'last_notification_timestamp',
   Passcode = 'passcode',
   PreCreatedGroupWasCreated = 'pre_created_group_was_created',
-  SendInputType = 'send_input_type',
   SelectedWallet = 'selected_wallet',
-  WalletPrivateKey = 'wallet_private_key',
-  Watchlist = 'watchlist'
+  WalletPrivateKey = 'wallet_private_key'
 }
 
 const getNotificationSettings = async (): Promise<NotificationSettings> => {

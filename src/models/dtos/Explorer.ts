@@ -1,7 +1,7 @@
 import { ExplorerAccountType } from '@appTypes';
 
 export interface ExplorerInfoDTO {
-  network: 'production';
+  network: 'production' | 'ambnet';
   timestamp: number;
   avgBlockTime: number;
   lastBlock: {

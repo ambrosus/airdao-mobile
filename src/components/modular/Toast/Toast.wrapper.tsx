@@ -6,23 +6,29 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   SlideInDown,
   SlideInUp,
   SlideOutDown,
-  SlideOutUp
+  SlideOutUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { ToastOptions, ToastPosition, ToastType } from './Toast.types';
+import { TOAST_DEFAULT_DURATION } from './Toast.constants';
 import { AlertBanner } from './Toast.body';
-
-const DEFAULT_DURATION = 2500;
 
 export const ToastWrapper = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
+  const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const DISTANCE_FROM_EDGE = verticalScale(16);
+  const topPlacement = DISTANCE_FROM_EDGE + topInset;
+  const bottomPlacement = DISTANCE_FROM_EDGE + bottomInset;
+
   const defaultOptions: Omit<ToastOptions, 'duration'> = useMemo(
     () => ({
       text: '',
@@ -35,11 +41,14 @@ export const ToastWrapper = forwardRef((_, ref) => {
     []
   );
 
-  const [toastVisible, setToastVisible] = useState(false);
+  const [toastVisible, setToastVisible] = useState(true);
   const [options, setOptions] =
     React.useState<Omit<ToastOptions, 'duration'>>(defaultOptions);
-  const duration = useRef(DEFAULT_DURATION);
+  const duration = useRef(TOAST_DEFAULT_DURATION);
   const timerRef = useRef<NodeJS.Timer | null>(null);
+  const isTopToast = options.position === ToastPosition.Top;
+  const initialPlacement = isTopToast ? -scale(50) : WINDOW_HEIGHT + scale(50);
+  const placement = useSharedValue(initialPlacement);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -48,27 +57,41 @@ export const ToastWrapper = forwardRef((_, ref) => {
   }, []);
 
   const hide = useCallback(() => {
+    placement.value = withTiming(initialPlacement, {
+      duration: 500
+    });
     setToastVisible(false);
     setOptions(defaultOptions);
-    duration.current = DEFAULT_DURATION;
+    duration.current = TOAST_DEFAULT_DURATION;
     clearTimer();
-  }, [clearTimer, defaultOptions]);
+  }, [clearTimer, defaultOptions, initialPlacement, placement]);
 
   const startTimer = useCallback(() => {
     timerRef.current = setTimeout(() => {
       timerRef.current = null;
       hide();
     }, duration.current);
-  }, [hide]);
+  }, [duration, hide]);
 
   const show = useCallback(
     (params: ToastOptions) => {
       setOptions({ ...defaultOptions, ...params });
-      duration.current = params.duration || DEFAULT_DURATION;
+      duration.current = params.duration || TOAST_DEFAULT_DURATION;
+      placement.value = withTiming(
+        isTopToast ? topPlacement : bottomPlacement,
+        { duration: 500 }
+      );
       setToastVisible(true);
       startTimer();
     },
-    [defaultOptions, startTimer]
+    [
+      bottomPlacement,
+      defaultOptions,
+      isTopToast,
+      placement,
+      startTimer,
+      topPlacement
+    ]
   );
 
   useImperativeHandle(
@@ -82,19 +105,17 @@ export const ToastWrapper = forwardRef((_, ref) => {
     )
   );
 
-  const isTopToast = options.position === ToastPosition.Top;
-  const placement = DISTANCE_FROM_EDGE + (isTopToast ? topInset : bottomInset);
-
+  const animatedPlacement = useAnimatedStyle(() => ({
+    //@ts-ignore
+    transform: [{ translateY: placement.value }]
+  }));
   if (!toastVisible) return null;
 
   return (
     <Animated.View
       style={[
         { position: 'absolute', alignSelf: 'center', zIndex: 1000 },
-        { top: isTopToast ? placement : undefined },
-        {
-          bottom: isTopToast ? undefined : placement
-        }
+        animatedPlacement
       ]}
       entering={isTopToast ? SlideInUp : SlideInDown}
       exiting={isTopToast ? SlideOutUp : SlideOutDown}
@@ -105,40 +126,6 @@ export const ToastWrapper = forwardRef((_, ref) => {
         onPress={options.onBodyPress}
       >
         <AlertBanner {...options} hideVisible={true} onHide={hide} />
-        {/* <Row alignItems="center" justifyContent="space-between">
-          <View style={styles.statusIcon}>{ToastStatusIcon[options.type]}</View>
-          <View style={{ flex: 1 }}>
-            <Text
-              fontSize={16}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral700}
-            >
-              {options.text}
-            </Text>
-            {Boolean(options.subtext) && (
-              <>
-                <Spacer value={verticalScale(8)} />
-                <Text
-                  fontSize={14}
-                  fontWeight="400"
-                  fontFamily="Inter_400Regular"
-                  color={COLORS.neutral700}
-                  style={{ flexDirection: 'row', alignItems: 'baseline' }}
-                >
-                  {options.subtext}
-                </Text>
-              </>
-            )}
-          </View>
-          <Button onPress={hide} style={styles.closeBtn}>
-            <CloseIcon color={COLORS.neutral700} />
-          </Button>
-        </Row>
-        {options.actions && options.actions?.length > 0 && (
-          <View style={styles.actions}>
-            {options.actions?.map(renderAction)}
-          </View>
-        )} */}
       </Pressable>
     </Animated.View>
   );

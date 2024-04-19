@@ -2,8 +2,8 @@ import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
 import { Dimensions, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withTiming
 } from 'react-native-reanimated';
 import { WalletItem } from '@components/templates/WalletItem';
@@ -32,7 +32,7 @@ const screenWidth = Dimensions.get('screen').width;
 export const SwipeableWalletItem = memo(
   forwardRef<Swipeable, SwipeableWalletItemProps>(
     (
-      { item, idx, isPortfolioFlow = false, removeType = 'watchlist' },
+      { item, isPortfolioFlow = false, removeType = 'watchlist' },
       previousRef
     ) => {
       const editModalRef = useRef<BottomSheetRef>(null);
@@ -45,7 +45,11 @@ export const SwipeableWalletItem = memo(
 
       const paddingRightAnimation = useSharedValue(0);
       // close swipeable on another swipeable open
-      useSwipeableDismissListener('wallet-item-opened', item._id, swipeRef);
+      useSwipeableDismissListener(
+        AirDAOEventType.WalletItemOpened,
+        item._id,
+        swipeRef
+      );
 
       const handleConfirmRemove = useCallback(() => {
         swipeRef.current?.close();
@@ -65,8 +69,7 @@ export const SwipeableWalletItem = memo(
         ? {
             paddingVertical: 16,
             borderColor: COLORS.alphaBlack5,
-            borderBottomWidth: 1,
-            borderTopWidth: idx === 0 ? 1 : 0
+            borderBottomWidth: 1
           }
         : {};
 

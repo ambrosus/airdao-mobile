@@ -5,7 +5,7 @@ import { ExplorerInfoDTO } from '@models/index';
 import { ExplorerInfo } from '@models/Explorer';
 
 export function useExplorerInfo(): QueryResponse<ExplorerInfo | undefined> {
-  const { data, isLoading, error } = useQuery<ExplorerInfoDTO>(
+  const { data, isLoading, error, refetch } = useQuery<ExplorerInfoDTO>(
     ['explorer-info'],
     API.explorerService.getExplorerInfo
   );
@@ -13,6 +13,7 @@ export function useExplorerInfo(): QueryResponse<ExplorerInfo | undefined> {
   return {
     data: data ? new ExplorerInfo(data) : undefined,
     loading: isLoading,
+    refetch,
     error
   };
 }

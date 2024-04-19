@@ -1,11 +1,21 @@
 export const COLORS = {
-  alphaBlack5: '#0e0e0e0d',
-  alphaBlack10: '#0e0e0e1a',
-  alphaBlack30: '#0e0e0e4d',
-  alphaBlack50: '#0e0e0e80',
-  alphaBlack60: '#0e0e0e99',
-  alphaWhite5: '#ffffff0d',
-  alphaWhite50: '#ffffff80',
+  // NEUTRAL
+  neutral0: '#FFFFFF',
+  neutral100: '#F2F2F3',
+  neutral200: '#D5D6D9',
+  neutral300: '#B8B9BF',
+  neutral400: '#9B9CA5',
+  neutral500: '#7E7F8B',
+  neutral600: '#63636D',
+  neutral700: '#46464D',
+  neutral800: '#29292D',
+  neutral900: '#0C0C0D',
+  neutral900Alpha: {
+    5: 'rgba(14, 14, 14, 0.05)',
+    60: 'rgba(14, 14, 14, 0.60)'
+  },
+
+  // PRIMARY
   brand100: '#EDF3FF',
   brand200: '#C9D9FF',
   brand300: '#99B8FF',
@@ -15,24 +25,7 @@ export const COLORS = {
   brand700: '#1A3D8D',
   brand800: '#061B4A',
   brand900: '#071430',
-  gray300: '#2F2B430D',
-  gray500: '#646464',
-  gray700: '#323232',
-  gray800: '#222222',
-  neutral0: '#FFFFFF',
-  neutral100: '#E6E6E6',
-  neutral200: '#C2C5CC',
-  neutral300: '#a1a6b2',
-  neutral400: '#676B73',
-  neutral500: '#51545a',
-  neutral600: '#393b3d',
-  neutral700: '#222426',
-  neutral800: '#191919',
-  neutral900: '#0E0E0E',
-  neutral900Alpha: {
-    5: 'rgba(14, 14, 14, 0.05)',
-    60: 'rgba(14, 14, 14, 0.60)'
-  },
+
   error100: '#FFD9CD',
   error200: '#FFAC9A',
   error300: '#FD6E65',
@@ -42,6 +35,7 @@ export const COLORS = {
   error700: '#7A182A',
   error800: '#49121C',
   error900: '#330F16',
+
   success100: '#C3FBE5',
   success200: '#73E5B7',
   success300: '#2DBA8D',
@@ -51,6 +45,7 @@ export const COLORS = {
   success700: '#095357',
   success800: '#0D3137',
   success900: '#08222A',
+
   warning100: '#FFFBB5',
   warning200: '#FFE773',
   warning300: '#FFC93E',
@@ -60,6 +55,7 @@ export const COLORS = {
   warning700: '#732C17',
   warning800: '#4F1C14',
   warning900: '#491615',
+
   purple100: '#EFECF8',
   purple200: '#D4C9FA',
   purple300: '#B49BF9',
@@ -69,6 +65,21 @@ export const COLORS = {
   purple700: '#3A2786',
   purple800: '#211847',
   purple900: '#11102D',
+
+  //  BLACK
+  alphaBlack5: '#0e0e0e0d',
+  alphaBlack10: '#0e0e0e1a',
+  alphaBlack30: '#0e0e0e4d',
+  alphaBlack50: '#0e0e0e80',
+  alphaBlack60: '#0e0e0e99',
+  alphaWhite5: '#ffffff0d',
+  alphaWhite50: '#ffffff80',
+
+  gray300: '#2F2B430D',
+  gray500: '#646464',
+  gray700: '#323232',
+  gray800: '#222222',
+
   yellow500: '#ff7a00',
   black: '#000000',
   culturedWhite: '#F3F5F7',
@@ -86,9 +97,11 @@ export const COLORS = {
   lemon: '#fffbb5',
   lightYellow: '#fbf2cb',
   orange: '#c8811a',
+  activeOrange: '#e34a16',
   thinGrey: '#2f2b4380',
   transparent: 'transparent',
   transparentWhite: '#ffffffb3',
+  lightWhite: 'rgba( 255, 255, 255, 0.3 )',
   veryLightGrey: '#ffffff99',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a'

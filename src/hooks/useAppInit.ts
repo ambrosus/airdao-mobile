@@ -1,17 +1,58 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { DeviceService, NotificationService, PermissionService } from '@lib';
-import { CacheableAccount, DatabaseTable, Permission } from '@appTypes';
+import { NotificationService, PermissionService } from '@lib';
+import {
+  CacheableAccount,
+  CacheableAccountList,
+  DatabaseTable,
+  Permission
+} from '@appTypes';
 import { API } from '@api/api';
 import { Cache, CacheKey } from '@lib/cache';
-import { AccountDBModel, Database } from '@database';
+import {
+  AccountDBModel,
+  Database,
+  PublicAddressDB,
+  PublicAddressListDB
+} from '@database';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {
+    // TODO delete this function after a few updates over version 1.1.0
+    async function migrateAddressesFromCache() {
+      const allAddresses = (await Cache.getItem(
+        CacheKey.AllAddresses
+      )) as CacheableAccount[];
+      const allLists = (await Cache.getItem(
+        CacheKey.AddressLists
+      )) as CacheableAccountList[];
+      // create addresses in db
+      for (const address of allAddresses) {
+        await PublicAddressDB.createOrUpdateAddress(address);
+      }
+      // create lists in db
+      for (const list of allLists) {
+        // filter out accounts of the selected list
+        const accountsOfList = allAddresses.filter((account) =>
+          list.addresses.includes(account.address)
+        );
+        // create list
+        await PublicAddressListDB.createList(list.name, accountsOfList);
+      }
+      // delete portfolio from cache
+      await Cache.deleteItem(CacheKey.AddressLists);
+      await Cache.deleteItem(CacheKey.AllAddresses);
+    }
+
+    /**
+     * This function compares current notification token to the one saved to cache.
+     * If they are same it does nothing.
+     * Otherwise, notifies the watcher API about token change and moves watched addresses to the new token.
+     */
     async function checkNotificationTokenUpdate() {
       const oldToken = (await Cache.getItem(
         CacheKey.NotificationToken
@@ -48,10 +89,10 @@ export const useAppInit = () => {
       }
       if (!notificationTokenSavedToRemoteDB) {
         try {
-          const watchlist = (
-            ((await Cache.getItem(CacheKey.AllAddresses)) ||
-              []) as CacheableAccount[]
-          ).filter((a) => a.isOnWatchlist);
+          const watchlist = (await PublicAddressDB.getAll()).filter(
+            (a) => a.isOnWatchlist
+          );
+
           await API.watcherService.createWatcherForCurrentUser();
           if (watchlist.length > 0) {
             // save under new push token
@@ -74,8 +115,8 @@ export const useAppInit = () => {
     }
     async function prepare() {
       try {
+        migrateAddressesFromCache();
         prepareNotifications();
-        DeviceService.setupUniqueDeviceID();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),

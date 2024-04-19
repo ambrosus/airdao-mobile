@@ -2,9 +2,10 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
+    "owner": "airdao_mobile",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -26,10 +27,10 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.14"
+      "buildNumber": "1.1.26"
     },
     "android": {
-      "versionCode": 37,
+      "versionCode": 58,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -88,7 +89,15 @@
             "kotlinVersion": "1.6.10",
             "enableProguardInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true,
-            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -keep public class com.shopify.reactnative.skia.* {*;} -keep class com.swmansion.reanimated.** { *; }"
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -keep public class com.shopify.reactnative.skia.* {*;} -keep class com.swmansion.reanimated.** { *; }",
+            "packagingOptions": {
+              "pickFirst": [
+                "lib/x86/libcrypto.so",
+                "lib/x86_64/libcrypto.so",
+                "lib/armeabi-v7a/libcrypto.so",
+                "lib/arm64-v8a/libcrypto.so"
+              ]
+            }
           }
         }
       ],

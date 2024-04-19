@@ -1,7 +1,7 @@
 export enum DatabaseTable {
   Accounts = 'accounts',
-  AccountBalances = 'account_balances',
-  Currencies = 'currencies',
+  PublicAddresses = 'public_addresses',
+  PublicAddressLists = 'public_address_lists',
   TransactionScannersTmp = 'transactions_scanners_tmp',
   Transactions = 'transactions',
   TransactionRaw = 'transactions_raw',

@@ -34,7 +34,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
       hideModal();
     };
     return (
-      <Button onPress={onPress} key={item.name}>
+      <Button onPress={onPress} key={`${item.name}-${item.address}`}>
         <SingleAsset token={item} />
       </Button>
     );

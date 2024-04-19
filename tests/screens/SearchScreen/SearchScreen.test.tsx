@@ -18,14 +18,6 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: jest.fn()
 }));
 
-jest.mock('@contexts/OnBoardingContext', () => ({
-  useOnboardingStatus: jest.fn(() => ({
-    status: 'none',
-    back: jest.fn(),
-    skip: jest.fn()
-  }))
-}));
-
 jest.mock('@contexts/AllAddresses', () => ({
   useAllAddressesReducer: jest.fn(() => ({
     address: [

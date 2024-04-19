@@ -29,16 +29,6 @@ describe('Cache', () => {
     await expect(Cache.getNotificationSettings()).rejects.toThrow(error);
   });
 
-  it('should set an item in SecureStore', async () => {
-    const key = CacheKey.Watchlist;
-    const item = ['BTC', 'USDT', 'ETH'];
-    await Cache.setItem(key, item);
-    expect(SecureStore.setItemAsync).toHaveBeenCalledWith(
-      key,
-      JSON.stringify(item)
-    );
-  });
-
   it('should return parsed item from SecureStore', async () => {
     const key = CacheKey.AddressLists;
     const item = {

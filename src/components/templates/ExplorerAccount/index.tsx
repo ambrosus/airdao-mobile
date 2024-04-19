@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Badge, Button, Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -39,6 +39,7 @@ export const ExplorerAccountView = (
   const listsWithAccount = listsOfAddressGroup.filter(
     (list) => list.accounts.indexOfItem(account, 'address') > -1
   );
+  const showName = nameVisible && account.name;
 
   const showAddToList = () => {
     addToListModal.current?.show();
@@ -96,9 +97,8 @@ export const ExplorerAccountView = (
 
   return (
     <View style={styles.container} testID="Explorer_Account_View">
-      {nameVisible && (
+      {showName && (
         <>
-          <Spacer value={verticalScale(22)} />
           <Row alignItems="center">
             <Text fontFamily="Inter_600SemiBold" fontSize={15}>
               {account.name}
@@ -124,13 +124,24 @@ export const ExplorerAccountView = (
         {!nameVisible && renderListAndWalletInfo()}
       </Row>
       <Spacer value={verticalScale(16)} />
-      <Text
-        fontFamily="Mersad_600SemiBold"
-        fontSize={30}
-        color={COLORS.neutral800}
-      >
-        ${NumberUtils.formatNumber(USDBalance)}
-      </Text>
+      <Row alignItems="center">
+        <Text fontSize={28} fontWeight="700" color={COLORS.neutral900}>
+          {NumberUtils.formatNumber(AMBBalance)}
+        </Text>
+        <Badge
+          icon={
+            <Text
+              fontSize={14}
+              fontWeight="500"
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral800}
+            >
+              ${NumberUtils.formatNumber(USDBalance)}
+            </Text>
+          }
+          color={COLORS.alphaBlack5}
+        />
+      </Row>
       {ambPriceData && (
         <>
           <Spacer value={verticalScale(16)} />
@@ -138,12 +149,16 @@ export const ExplorerAccountView = (
             fontSize={14}
             fontFamily="Inter_500Medium"
             fontWeight="500"
-            color={COLORS.neutral900}
+            color={
+              ambPriceData.percentChange24H > 0
+                ? COLORS.success400
+                : COLORS.error400
+            }
           >
             {`${NumberUtils.addSignToNumber(
               ambPriceData.percentChange24H
             )}% ($${NumberUtils.formatNumber(
-              USDBalance * ambPriceData.percentChange24H
+              (USDBalance * ambPriceData?.percentChange24H) / 100
             )}) 24${t('common.hour.short').toUpperCase()}`}
           </Text>
         </>
