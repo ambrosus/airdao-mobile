@@ -240,7 +240,7 @@
 
   "singleWallet.name": "Name",
   "singleWallet.remove": "Remove",
-  "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet",
+  "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
   "singleWallet.remove.alert.description": "Make sure you have a backup of this wallet",
   "singleWallet.save": "Save changes",
 
