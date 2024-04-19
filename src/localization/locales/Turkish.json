@@ -188,6 +188,8 @@
   "send.funds.balance": "Bakiye",
   "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için miktarı değiştirin veya bakiyenizi arttırın.",
   "send.funds.error.network": "Kötü internet bağlantısı!",
+  "send.funds.error.check.connection": "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.",
+  "send.funds.error.later": "Lütfen daha sonra tekrar deneyin.",
   "send.funds.error.private.key.not.found": "Özel anahtar bulunamadı. Lütfen cüzdanınızı tohum ifadenizle tekrar yedekleyin!",
   "send.funds.failed": "İşlem başarısız",
   "send.funds.go.home": "Ana sayfaya dön",
