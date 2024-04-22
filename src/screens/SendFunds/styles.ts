@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Mersad_600SemiBold',
     shadowColor: 'transparent',
+    lineHeight: 50,
     fontSize: 46,
     borderWidth: 0
   },
