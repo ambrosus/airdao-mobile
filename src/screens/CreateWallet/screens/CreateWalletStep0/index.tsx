@@ -36,6 +36,7 @@ export const CreateWalletStep0 = () => {
     <SafeAreaView style={stylesStep0.flexStyle}>
       <Header
         titlePosition="center"
+        bottomBorder
         title={
           <Text
             fontFamily="Inter_600SemiBold"
@@ -47,6 +48,7 @@ export const CreateWalletStep0 = () => {
         }
         style={{ shadowColor: 'transparent' }}
       />
+      <Spacer value={scale(23)} />
       <BottomAwareSafeAreaView style={styles.container}>
         <View style={stylesStep0.flexStyle}>
           <View>

@@ -36,39 +36,47 @@ export const SetupPasscode = () => {
       behavior="padding"
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
-      <View style={{ paddingHorizontal: scale(16) }}>
-        <Spacer value={verticalScale(23)} />
-        <Text
-          align="center"
-          fontSize={24}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral800}
+      <View>
+        <View
+          style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
         >
-          {t('security.enter.passcode')}
-        </Text>
-        <Spacer value={scale(23)} />
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral800}
-        >
-          {t('security.enter.passcode.text')}
-        </Text>
-        <Spacer value={verticalScale(106)} />
-        <Passcode onPasscodeChange={onPasscodeChange} />
-        <Spacer value={verticalScale(33)} />
-        <View style={{ paddingHorizontal: scale(70) }}>
+          <Spacer value={verticalScale(23)} />
           <Text
             align="center"
-            fontSize={14}
-            fontFamily="Inter_400Regular"
-            color="#676B73"
+            fontSize={24}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral800}
           >
-            {t('security.enter.passcode.hint')}
+            {t('security.enter.passcode')}
           </Text>
+          <Spacer value={scale(19)} />
         </View>
-        <Spacer value={verticalScale(30)} />
+
+        <Spacer value={scale(23)} />
+        <View style={{ paddingHorizontal: scale(16) }}>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral800}
+          >
+            {t('security.enter.passcode.text')}
+          </Text>
+          <Spacer value={verticalScale(106)} />
+          <Passcode onPasscodeChange={onPasscodeChange} />
+          <Spacer value={verticalScale(33)} />
+          <View style={{ paddingHorizontal: scale(70) }}>
+            <Text
+              align="center"
+              fontSize={14}
+              fontFamily="Inter_400Regular"
+              color="#676B73"
+            >
+              {t('security.enter.passcode.hint')}
+            </Text>
+          </View>
+          <Spacer value={verticalScale(30)} />
+        </View>
       </View>
       <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
         <Button
