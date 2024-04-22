@@ -30,7 +30,7 @@ export function CollectionItem(props: CollectionItemProps) {
 
   return (
     <View style={style}>
-      <Row alignItems="center" justifyContent="space-between">
+      <Row alignItems="flex-end" justifyContent="space-between">
         <Text
           fontFamily="Inter_500Medium"
           fontSize={14}
@@ -41,6 +41,7 @@ export function CollectionItem(props: CollectionItemProps) {
           {collection.name}
         </Text>
         <Text
+          style={{ lineHeight: 0 }}
           fontFamily="Mersad_600SemiBold"
           fontSize={13}
           color={COLORS.neutral900}
