@@ -42,16 +42,23 @@ export const ConfirmPasscode = () => {
       behavior="padding"
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
-      <View style={{ paddingHorizontal: scale(16) }}>
-        <Spacer value={verticalScale(23)} />
-        <Text
-          align="center"
-          fontSize={24}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral800}
+      <View>
+        <View
+          style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
         >
-          {t('security.confirm.passcode.text')}
-        </Text>
+          <Spacer value={verticalScale(23)} />
+          <View style={{ paddingHorizontal: scale(16) }}>
+            <Text
+              align="center"
+              fontSize={24}
+              fontFamily="Inter_700Bold"
+              color={COLORS.neutral800}
+            >
+              {t('security.confirm.passcode.text')}
+            </Text>
+          </View>
+          <Spacer value={verticalScale(19)} />
+        </View>
         <Spacer value={verticalScale(23)} />
         <Text
           align="center"

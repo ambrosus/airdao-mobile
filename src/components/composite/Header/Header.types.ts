@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { TextStyle, ViewStyle } from 'react-native';
 
 export interface HeaderProps {
+  bottomBorder?: boolean;
   backIconVisible?: boolean;
   onBackPress?: () => unknown;
   title?: string | ReactNode;
