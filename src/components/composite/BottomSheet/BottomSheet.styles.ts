@@ -11,5 +11,10 @@ export const styles = StyleSheet.create({
     width: scale(42),
     borderRadius: 42,
     marginTop: verticalScale(16)
+  },
+  backdrop: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute'
   }
 });
