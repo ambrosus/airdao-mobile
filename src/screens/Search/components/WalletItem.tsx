@@ -57,6 +57,7 @@ export const ExplorerWalletItem = (
         </Row>
         <Text
           fontSize={13}
+          style={{ lineHeight: 18 }}
           fontFamily="Mersad_600SemiBold"
           color={COLORS.neutral900}
         >
