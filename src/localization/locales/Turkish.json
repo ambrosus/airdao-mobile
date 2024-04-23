@@ -21,7 +21,8 @@
       "swap": "Swap",
       "send": "Gönder",
       "receive": "Al",
-      "stake": "Stake"
+      "stake": "Stake",
+      "bridge": "Bridge"
     }
   },
 

@@ -23,6 +23,8 @@ import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
 import { StakingPoolScreen } from '@screens/StakingPool';
 import { NFTScreen } from '@screens/NFTScreen';
+import { Bridge } from '@screens/Bridge';
+import { BridgeHistory } from '@screens/BridgeHistory';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -59,6 +61,14 @@ export const HomeStack = () => {
         <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
         <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
+        <Stack.Screen name="Bridge" component={Bridge} />
+        <Stack.Screen
+          name="BridgeHistory"
+          options={{
+            presentation: 'fullScreenModal'
+          }}
+          component={BridgeHistory}
+        />
         <Stack.Screen
           name="SuccessSetupSecurity"
           component={SuccessSetupSecurity}

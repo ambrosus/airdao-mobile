@@ -27,6 +27,8 @@ export type HomeParamsList = {
   ConfirmPasscode: { passcode: string[] };
   StakingPool: { pool: StakingPool };
   StakingPools: undefined;
+  Bridge: undefined;
+  BridgeHistory: undefined;
   SuccessSetupSecurity: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
