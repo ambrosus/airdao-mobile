@@ -27,7 +27,7 @@ class Staking {
 
   async createStakingPoolContract(
     addressHash: string,
-    providerOrSigner: any = this.provider.getSigner() ?? this.provider
+    providerOrSigner = this.provider
   ) {
     return new ethers.Contract(addressHash, poolAbi, providerOrSigner);
   }
