@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
-import { Spacer, Text } from '@components/base';
+import { Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -46,8 +46,8 @@ export const StakeSuccessScreen = () => {
   };
 
   const onDoneTransactionPress = async () => {
-    navigation.goBack();
     await refetchPoolDetails();
+    navigation.goBack();
   };
 
   const resolveDetailsTypography = useMemo(() => {
@@ -75,13 +75,17 @@ export const StakeSuccessScreen = () => {
       </Text>
       <View style={{ ...styles.footer, bottom: insets.bottom }}>
         <PrimaryButton disabled={loading} onPress={onDoneTransactionPress}>
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.neutral0}
-          >
-            {t('common.done')}
-          </Text>
+          {loading ? (
+            <Spinner size="small" />
+          ) : (
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.neutral0}
+            >
+              {t('common.done')}
+            </Text>
+          )}
         </PrimaryButton>
       </View>
     </View>
