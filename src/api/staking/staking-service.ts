@@ -27,7 +27,8 @@ class Staking {
 
   async createStakingPoolContract(
     addressHash: string,
-    providerOrSigner = this.provider
+    providerOrSigner: ethers.providers.JsonRpcProvider | ethers.Wallet = this
+      .provider
   ) {
     return new ethers.Contract(addressHash, poolAbi, providerOrSigner);
   }
