@@ -22,7 +22,8 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
-    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a'
+    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
+    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
