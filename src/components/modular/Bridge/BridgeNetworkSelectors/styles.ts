@@ -19,5 +19,13 @@ export const styles = StyleSheet.create({
   },
   selectInnerRowGap: {
     columnGap: 4
+  },
+  reorder: {
+    width: scale(40),
+    height: scale(40),
+    borderRadius: scale(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.neutral100
   }
 });

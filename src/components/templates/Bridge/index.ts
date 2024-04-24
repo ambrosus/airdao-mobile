@@ -1,3 +1,3 @@
-import { BridgeNetworkSelector } from '@components/templates/Bridge/BridgeNetworkSelector/BridgeNetwork.Selector';
+import { BridgeTemplate } from '@components/templates/Bridge/BridgeTemplate';
 
-export { BridgeNetworkSelector };
+export { BridgeTemplate };
