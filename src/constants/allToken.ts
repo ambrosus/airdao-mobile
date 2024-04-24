@@ -260,5 +260,15 @@ export const ALL_TOKENS = [
     address: '0xA2B1253AFA643aEe20E51A5023aFb2597cB6Da88',
     name: 'P(5)T',
     symbol: 'P(5)T'
+  },
+  {
+    address: '0xB4eB7786858AEcE42E52656a891C01F4e5fFC12a',
+    name: '“Test1“',
+    symbol: '“Test1“'
+  },
+  {
+    address: '0x8099B4D8320C237A511310e3C7946cc492Ee663b',
+    name: '“Test2“',
+    symbol: '“Test2“'
   }
 ];
