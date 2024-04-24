@@ -6,6 +6,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
+import { BridgeNetworkSelector } from '@/components/templates/Bridge';
+import { Spacer } from '@components/base';
+import { scale } from '@utils/scaling';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -27,7 +30,14 @@ export const Bridge = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={'Bridge'} contentRight={renderHeaderRightContent} />
+      <Header
+        title="Bridge"
+        bottomBorder
+        contentRight={renderHeaderRightContent}
+      />
+
+      <Spacer value={scale(15)} />
+      <BridgeNetworkSelector />
     </SafeAreaView>
   );
 };
