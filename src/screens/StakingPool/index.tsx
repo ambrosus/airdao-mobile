@@ -18,6 +18,7 @@ import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
 import { usePoolDetailsByName } from '@contexts';
 import { BigNumber } from 'ethers';
+import { TokenUtils } from '@utils/token';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();
@@ -55,7 +56,7 @@ export const StakingPoolScreen = () => {
                 fontSize={15}
                 color={COLORS.neutral900}
               >
-                {pool.token.name}
+                {TokenUtils.truncatePoolTokenName(pool.token.name)}
               </Text>
             </Row>
           }

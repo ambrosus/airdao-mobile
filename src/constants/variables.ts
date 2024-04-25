@@ -105,9 +105,6 @@ const prodEnvAddresses = [
   '0x8e224ea3892a25064f380d9A58F3197C4A5e0ef8',
   '0xb5B563e5ed9A9d4eaad3F498F497943d637920f3'
 ];
-
-// export const MULTISIG_VAULT =
-// Config.env === 'dev' ? testEnvAddresses : prodEnvAddresses;
 export const MULTISIG_VAULT = prodEnvAddresses;
 
 export const TOKEN_ADDRESSES = {

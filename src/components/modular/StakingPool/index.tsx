@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 import { usePoolDetailsByName } from '@contexts';
 import { NumberUtils } from '@utils/number';
 import { BigNumber } from 'ethers';
+import { TokenUtils } from '@utils/token';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -34,7 +35,7 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontFamily="Inter_500Medium"
             fontWeight="500"
           >
-            {stakingPool.token.name}
+            {TokenUtils.truncatePoolTokenName(stakingPool.token.name)}
           </Text>
           <Spacer value={verticalScale(4)} />
           <Text
