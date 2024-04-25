@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -21,22 +21,9 @@ import { ReturnedPoolDetails } from '@api/staking/types';
 import { useAllAccounts } from '@hooks/database';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
+import { PercentageBox } from '@components/composite/PercentageBox';
 
-const PercentageBox = ({
-  percentage,
-  onPress
-}: {
-  percentage: number;
-  onPress: (percentage: number) => unknown;
-}) => {
-  const onPercentagePress = () => onPress(percentage);
-
-  return (
-    <Button onPress={onPercentagePress} style={styles.percentageBox}>
-      <Text>{percentage}%</Text>
-    </Button>
-  );
-};
+const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
@@ -184,15 +171,15 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
       <Spacer value={verticalScale(24)} />
       <Row
         alignItems="center"
-        style={{ flexWrap: 'wrap', rowGap: verticalScale(16) }}
+        style={{ flexWrap: 'wrap', gap: verticalScale(16) }}
       >
-        <PercentageBox onPress={onPercentageBoxPress} percentage={25} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={50} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={75} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={100} />
+        {WITHDRAW_PERCENTAGES.map((percentage) => (
+          <PercentageBox
+            key={percentage}
+            onPress={onPercentageBoxPress}
+            percentage={percentage}
+          />
+        ))}
       </Row>
       <Spacer value={verticalScale(24)} />
       <PrimaryButton onPress={showPreview} disabled={isWrongStakeValue.button}>
