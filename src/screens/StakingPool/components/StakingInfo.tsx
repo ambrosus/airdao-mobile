@@ -47,7 +47,11 @@ export const StakingInfo = (props: StakingInfoProps) => {
       >
         <Title>{t('staking.pool.total.stake')}</Title>
         <Row alignItems="center">
-          <Text>
+          <Text
+            fontSize={14}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
+          >
             {NumberUtils.formatNumber(totalStake, 0)} {currency}
           </Text>
         </Row>
