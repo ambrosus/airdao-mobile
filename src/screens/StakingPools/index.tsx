@@ -68,7 +68,7 @@ export const StakingPoolsScreen = () => {
           fontSize={14}
           fontWeight="500"
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral300}
+          color={COLORS.neutral600}
         >
           {t('staking.pools')}
         </Text>
@@ -76,7 +76,7 @@ export const StakingPoolsScreen = () => {
           fontSize={14}
           fontWeight="500"
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral300}
+          color={COLORS.neutral600}
         >
           {t('staking.apy')}
         </Text>
