@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "owner": "airdao_mobile",
@@ -27,7 +27,7 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.24"
+      "buildNumber": "1.3.2"
     },
     "android": {
       "versionCode": 55,

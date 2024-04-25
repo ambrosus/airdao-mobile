@@ -16,7 +16,7 @@ import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
 const stageBuildVersions = {
-  ios: '1.1.0.42',
+  ios: '1.3.2',
   android: '1.1.5.33'
 };
 
