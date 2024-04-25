@@ -299,7 +299,6 @@
   "staking.pool.stake.warning": "A minimum of 1000 AMB is required to stake.",
   "staking.pool.withdraw.warning": "A minimum of 1000 AMB is required to withdraw.",
 
-
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",
@@ -314,6 +313,11 @@
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
 
+  "wallet.empty.nft.header": "No NFTs yet.",
+  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+
+
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet"
+
 }

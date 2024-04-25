@@ -16,8 +16,8 @@ import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
 const stageBuildVersions = {
-  ios: '1.1.0.38',
-  android: '1.1.5.29'
+  ios: '1.1.0.42',
+  android: '1.1.5.33'
 };
 
 const isStage = Updates.channel === 'stage';
@@ -115,7 +115,7 @@ export const SettingsScreen = () => {
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
       {isStage && (
-        <Text style={{ margin: 20 }}>{`Build: ${currentBuild}`}</Text>
+        <Text style={{ margin: 20 }}>{`Build: ${currentBuild} | Testnet`}</Text>
       )}
     </View>
   );

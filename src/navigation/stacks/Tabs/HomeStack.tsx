@@ -26,6 +26,7 @@ import {
   StakeErrorScreen,
   StakeSuccessScreen
 } from '@screens/StakingPool/screens';
+import { NFTScreen } from '@screens/NFTScreen';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -37,6 +38,7 @@ export const HomeStack = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
+        <Stack.Screen name="NFTScreen" component={NFTScreen} />
         <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
         <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />

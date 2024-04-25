@@ -94,10 +94,24 @@ export const formatAmount = (amount: BigNumber, afterDotAmount = 2) => {
   return amountBalance;
 };
 
+const minimiseAmount = (num: number): string => {
+  if (!num || num === 0) return '0.00';
+
+  const suffixes = ['', 'k', 'mln', 'bln', 'trln'];
+  const absNum = Math.abs(num);
+  let suffixIndex = Math.floor(Math.log10(absNum) / 3);
+
+  suffixIndex = Math.max(0, Math.min(suffixIndex, suffixes.length - 1));
+
+  const scaledNum = (num / Math.pow(10, suffixIndex * 3)).toFixed(2);
+  return `${scaledNum}${suffixes[suffixIndex]}`;
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
   limitDecimalCount,
-  formatAmount
+  formatAmount,
+  minimiseAmount
 };

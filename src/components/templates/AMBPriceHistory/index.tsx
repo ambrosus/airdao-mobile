@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { GraphPoint } from 'react-native-graph';
 import { PriceSnapshotInterval } from '@appTypes';
-import { AnimatedText, Button, Row, Spacer, Text } from '@components/base';
+import { AnimatedText, Button, Row, Spacer } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
@@ -127,6 +127,23 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
     };
   }, [selectedInterval]);
 
+  const percentChange = useMemo(() => {
+    switch (selectedInterval) {
+      case '7d':
+      case 'weekly':
+        return ambPriceNow?.percentChange7D || 0;
+      case '1d':
+        return ambPriceNow?.percentChange24H || 0;
+      default:
+        return ambPriceNow?.percentChange1H || 0;
+    }
+  }, [
+    ambPriceNow?.percentChange1H,
+    ambPriceNow?.percentChange24H,
+    ambPriceNow?.percentChange7D,
+    selectedInterval
+  ]);
+
   return (
     <View testID="AMB_Price_History" style={{ alignItems: 'center' }}>
       <Row style={styles.balance} testID="Formatted_Price">
@@ -153,23 +170,11 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
-                  change={
-                    (selectedInterval === '7d' || selectedInterval === 'weekly'
-                      ? ambPriceNow?.percentChange7D
-                      : ambPriceNow?.percentChange1H) || 0
-                  }
+                  change={percentChange}
                   fontSize={16}
                   fontWeight="500"
                 />
                 <Spacer horizontal value={scale(4)} />
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.neutral900}
-                >
-                  {selectedInterval &&
-                    `24${t('common.hour.short').toUpperCase()}`}
-                </Text>
                 {badgeType === 'button' && (
                   <>
                     <Spacer horizontal value={scale(4)} />
@@ -208,11 +213,12 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           {
             text: t('chart.timeframe.weekly'),
             value: 'weekly'
-          },
-          {
-            text: t('chart.timeframe.monthly'),
-            value: 'monthly'
           }
+          // temporarily hide
+          // {
+          //   text: t('chart.timeframe.monthly'),
+          //   value: 'monthly'
+          // }
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}

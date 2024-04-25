@@ -7,6 +7,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginTop: 1
   },
-  addressesWrapper: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  addressesWrapper: { paddingVertical: scale(36), alignItems: 'center' },
   addressesList: { paddingBottom: '40%' }
 });

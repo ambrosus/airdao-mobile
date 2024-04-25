@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import * as Updates from 'expo-updates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -41,7 +42,11 @@ export const StakingPoolsScreen = () => {
   }, [selectedWallet, fetchPoolDetails]);
 
   const filterStakingPools = useMemo(() => {
-    return stakingPools;
+    return Updates.channel === 'testnet'
+      ? stakingPools.sort((a, b) => Number(b.isActive) - Number(a.isActive))
+      : stakingPools
+          .filter((pool) => pool.token.symbol !== 'GPT')
+          .sort((a, b) => Number(b.isActive) - Number(a.isActive));
   }, [stakingPools]);
 
   const spinnerContainerStyle: StyleProp<ViewStyle> = {
@@ -63,7 +68,7 @@ export const StakingPoolsScreen = () => {
           fontSize={14}
           fontWeight="500"
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral300}
+          color={COLORS.neutral600}
         >
           {t('staking.pools')}
         </Text>
@@ -71,7 +76,7 @@ export const StakingPoolsScreen = () => {
           fontSize={14}
           fontWeight="500"
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral300}
+          color={COLORS.neutral600}
         >
           {t('staking.apy')}
         </Text>

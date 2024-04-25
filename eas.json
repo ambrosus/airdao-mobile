@@ -21,7 +21,11 @@
       "channel": "main"
     },
     "testnet": {
-      "channel": "testnet"
+      "channel": "testnet",
+      "distribution": "internal",
+      "ios": {
+        "cocoapods": "1.15.2"
+      }
     }
   }
 }
