@@ -35,6 +35,9 @@ export const StakingInfo = (props: StakingInfoProps) => {
   const exchangeRate = useCurrencyRate(currency);
   const userStakingUsd =
     Number(NumberUtils.formatAmount(userStaking)) * exchangeRate;
+
+  const totalStakingUSD = totalStake * exchangeRate;
+
   const earningsUsd = exchangeRate * earnings;
   const { t } = useTranslation();
 
@@ -53,6 +56,15 @@ export const StakingInfo = (props: StakingInfoProps) => {
             color={COLORS.neutral800}
           >
             {NumberUtils.formatNumber(totalStake, 0)} {currency}
+          </Text>
+          <Spacer value={scale(8)} horizontal />
+          <Text
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral400}
+            fontSize={14}
+            fontWeight="500"
+          >
+            ${NumberUtils.minimiseAmount(totalStakingUSD)}
           </Text>
         </Row>
       </Row>
@@ -93,7 +105,7 @@ export const StakingInfo = (props: StakingInfoProps) => {
             fontSize={14}
             fontWeight="500"
           >
-            ${NumberUtils.formatNumber(userStakingUsd)}
+            ${NumberUtils.minimiseAmount(userStakingUsd)}
           </Text>
         </Row>
       </Row>
@@ -119,7 +131,7 @@ export const StakingInfo = (props: StakingInfoProps) => {
             fontSize={14}
             fontWeight="500"
           >
-            ${NumberUtils.formatNumber(earningsUsd)}
+            ${NumberUtils.minimiseAmount(earningsUsd)}
           </Text>
         </Row>
       </Row>
