@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
   },
   footer: {
     width: '100%',
-    position: 'absolute'
+    position: 'absolute',
+    bottom: verticalScale(34)
   }
 });

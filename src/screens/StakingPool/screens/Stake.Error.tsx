@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
@@ -12,7 +11,6 @@ import { FailedIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 
 export const StakeErrorScreen = () => {
-  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeErrorScreen'>>();
@@ -37,7 +35,7 @@ export const StakeErrorScreen = () => {
         {t('staking.pool.error')}
       </Text>
 
-      <View style={{ ...styles.footer, bottom: insets.bottom }}>
+      <View style={styles.footer}>
         <PrimaryButton
           colors={[COLORS.alphaBlack5, COLORS.alphaBlack5]}
           onPress={onErrorTransactionPress}
