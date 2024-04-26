@@ -21,6 +21,7 @@ import { staking } from '@api/staking/staking-service';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
+import { useBalanceOfAddress } from '@hooks';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -34,6 +35,9 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
+  const { refetch: refetchAmbBalance } = useBalanceOfAddress(
+    wallet?.address || ''
+  );
   const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
@@ -88,13 +92,16 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
         }, 100);
       }
     } finally {
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
       previewBottomSheetRef.current?.dismiss();
       setWithdrawAmount('');
       setTimeout(() => {
         setLoading(false);
       }, 125);
     }
-  }, [withdrawAmount, pool, navigation, wallet]);
+  }, [withdrawAmount, pool, navigation, wallet, refetchAmbBalance]);
 
   const isWrongStakeValue = useMemo(() => {
     return (

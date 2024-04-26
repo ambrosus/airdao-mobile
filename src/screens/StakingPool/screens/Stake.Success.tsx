@@ -4,7 +4,7 @@ import { styles } from './styles';
 import { Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NavigationProp,
   RouteProp,
@@ -19,7 +19,6 @@ import { useStakingMultiplyContextSelector } from '@contexts';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
-  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
@@ -50,7 +49,7 @@ export const StakeSuccessScreen = () => {
   }, [route.params.type, t]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SuccessIcon />
       <Spacer value={verticalScale(16)} />
       <Text color={COLORS.neutral800} fontFamily="Inter_700Bold" fontSize={20}>
@@ -66,7 +65,7 @@ export const StakeSuccessScreen = () => {
       >
         {resolveDetailsTypography}
       </Text>
-      <View style={{ ...styles.footer, bottom: insets.bottom }}>
+      <View style={styles.footer}>
         <PrimaryButton disabled={loading} onPress={onDoneTransactionPress}>
           {loading ? (
             <Spinner size="small" />
@@ -81,6 +80,6 @@ export const StakeSuccessScreen = () => {
           )}
         </PrimaryButton>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };

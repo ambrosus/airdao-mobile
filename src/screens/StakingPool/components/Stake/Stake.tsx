@@ -36,7 +36,9 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
   const { t } = useTranslation();
   const [stakeAmount, setStakeAmount] = useState('');
   const previewModalRef = useRef<BottomSheetRef>(null);
-  const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
+  const { data: ambBalance, refetch: refetchAmbBalance } = useBalanceOfAddress(
+    wallet?.address || ''
+  );
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
   const showPreview = () => {
@@ -83,13 +85,16 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         }, 100);
       }
     } finally {
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
       previewModalRef.current?.dismiss();
       setStakeAmount('');
       setTimeout(() => {
         setLoading(false);
       }, 125);
     }
-  }, [stakeAmount, pool, navigation, wallet]);
+  }, [stakeAmount, pool, navigation, wallet, refetchAmbBalance]);
 
   const onChangeStakeAmount = (value: string) => {
     setStakeAmount(StringUtils.removeNonNumericCharacters(value));
