@@ -5,6 +5,7 @@ import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 import { StakingPool, Token } from '@models';
 import { ReturnedPoolDetails } from '@api/staking/types';
+import { AccountDBModel } from '@database';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
@@ -34,6 +35,7 @@ export type HomeParamsList = {
   StakeSuccessScreen: {
     type: 'stake' | 'withdraw';
     pool: ReturnedPoolDetails | undefined;
+    wallet: AccountDBModel | null;
   };
   StakeErrorScreen: undefined;
 } & CommonStackParamsList;

@@ -143,7 +143,17 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: moderateScale(16),
     borderWidth: 1,
-    borderColor: COLORS.neutral100
+    borderColor: COLORS.neutral100,
+    backgroundColor: '#fff',
+    shadowColor: '#2F2B431A',
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+
+    elevation: 3
   },
   row: {
     borderBottomWidth: 1,

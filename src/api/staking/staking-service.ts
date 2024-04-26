@@ -11,9 +11,6 @@ import { Cache, CacheKey } from '@lib/cache';
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
 
-const transactionGasLimit = 8000000;
-const transactionGasPrice = utils.parseUnits('20', 'gwei');
-
 class Staking {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
 
@@ -122,14 +119,7 @@ class Staking {
         .mul(FIXED_POINT)
         .div(tokenPriceAMB);
 
-      const overrides = {
-        gasPrice: transactionGasPrice,
-        gasLimit: transactionGasLimit
-      };
-      const unstakeContract = await contract.unstake(
-        bnUnstakeAmountInTokens,
-        overrides
-      );
+      const unstakeContract = await contract.unstake(bnUnstakeAmountInTokens);
       return await unstakeContract.wait();
     } catch (err) {
       console.error(err);

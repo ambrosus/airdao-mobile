@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,10 @@ import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
 import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
-import { usePoolDetailsByName } from '@contexts';
+import {
+  usePoolDetailsByName,
+  useStakingMultiplyContextSelector
+} from '@contexts';
 import { BigNumber } from 'ethers';
 import { TokenUtils } from '@utils/token';
 
@@ -33,6 +36,16 @@ export const StakingPoolScreen = () => {
   );
 
   const { top } = useSafeAreaInsets();
+
+  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
+
+  useEffect(() => {
+    if (selectedWallet?.address) {
+      (async () => {
+        await fetchPoolDetails(selectedWallet.address);
+      })();
+    }
+  }, [selectedWallet, fetchPoolDetails]);
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;

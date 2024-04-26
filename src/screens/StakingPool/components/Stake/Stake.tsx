@@ -18,7 +18,6 @@ import { StringUtils } from '@utils/string';
 import { StakePreview } from './Stake.Preview';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';
-import { useAllAccounts } from '@hooks/database';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
 import { PercentageBox } from '@components/composite/PercentageBox';
@@ -56,8 +55,6 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
     [ambBalance.ether]
   );
 
-  const { data: accounts } = useAllAccounts();
-  const selectedAccount = accounts.length > 0 ? accounts[0] : null;
   const [loading, setLoading] = useState(false);
 
   const onSubmitStakeTokens = useCallback(async () => {
@@ -65,7 +62,7 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
     setLoading(true);
     try {
       // @ts-ignore
-      const walletHash = selectedAccount?._raw.hash;
+      const walletHash = wallet?._raw.hash;
       const result = await staking.stake({
         pool,
         value: stakeAmount,
@@ -78,7 +75,11 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         }, 100);
       } else {
         setTimeout(() => {
-          navigation.navigate('StakeSuccessScreen', { type: 'stake', pool });
+          navigation.navigate('StakeSuccessScreen', {
+            type: 'stake',
+            pool,
+            wallet
+          });
         }, 100);
       }
     } finally {
@@ -88,7 +89,7 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         setLoading(false);
       }, 125);
     }
-  }, [stakeAmount, pool, navigation, selectedAccount]);
+  }, [stakeAmount, pool, navigation, wallet]);
 
   const onChangeStakeAmount = (value: string) => {
     setStakeAmount(StringUtils.removeNonNumericCharacters(value));

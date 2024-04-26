@@ -15,8 +15,6 @@ import { HomeParamsList } from '@appTypes';
 import { SuccessIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
-import { useAllAccounts } from '@hooks/database';
-import { AccountDBModel } from '@database';
 import { useStakingMultiplyContextSelector } from '@contexts';
 
 export const StakeSuccessScreen = () => {
@@ -26,19 +24,14 @@ export const StakeSuccessScreen = () => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
 
-  const { data: allWallets } = useAllAccounts();
-  const [selectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
-  );
-
   const [loading, setLoading] = useState(false);
 
   const { fetchPoolDetails } = useStakingMultiplyContextSelector();
   const refetchPoolDetails = async () => {
     setLoading(true);
     try {
-      if (selectedWallet?.address) {
-        await fetchPoolDetails(selectedWallet.address);
+      if (route.params.wallet?.address) {
+        await fetchPoolDetails(route.params.wallet.address);
       }
     } finally {
       setLoading(false);

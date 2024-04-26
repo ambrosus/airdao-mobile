@@ -20,7 +20,6 @@ import { ReturnedPoolDetails } from '@api/staking/types';
 import { staking } from '@api/staking/staking-service';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
-import { useAllAccounts } from '@hooks/database';
 import { StakePending } from '@screens/StakingPool/components';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
@@ -40,8 +39,6 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
-  const { data: accounts } = useAllAccounts();
-  const selectedAccount = accounts.length > 0 ? accounts[0] : null;
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -70,7 +67,7 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
     try {
       setLoading(true);
       // @ts-ignore
-      const walletHash = selectedAccount?._raw.hash;
+      const walletHash = wallet?._raw.hash;
       const result = await staking.unstake({
         pool,
         value: withdrawAmount,
@@ -83,7 +80,11 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
         }, 100);
       } else {
         setTimeout(() => {
-          navigation.navigate('StakeSuccessScreen', { type: 'withdraw', pool });
+          navigation.navigate('StakeSuccessScreen', {
+            type: 'withdraw',
+            pool,
+            wallet
+          });
         }, 100);
       }
     } finally {
@@ -93,7 +94,7 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
         setLoading(false);
       }, 125);
     }
-  }, [withdrawAmount, pool, navigation, selectedAccount]);
+  }, [withdrawAmount, pool, navigation, wallet]);
 
   const isWrongStakeValue = useMemo(() => {
     return (
