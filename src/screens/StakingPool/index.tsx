@@ -10,7 +10,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
-import { StakeToken, StakingInfo } from './components';
+import { StakingInfo } from './components';
 import { styles } from './style';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
@@ -22,6 +22,7 @@ import {
 } from '@contexts';
 import { BigNumber } from 'ethers';
 import { TokenUtils } from '@utils/token';
+import { StakeToken } from './components/Stake/Stake';
 
 export const StakingPoolScreen = () => {
   const { data: allWallets } = useAllAccounts();

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { useNavigation } from '@react-navigation/native';
-// import { HomeNavigationProp } from '@appTypes';
 import { AccountTransactions } from '@components/templates';
 import { useTokensAndTransactions } from '@hooks';
 import { Header } from '@components/composite';
