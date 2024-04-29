@@ -1,21 +1,21 @@
 module.exports = {
   env: {
     browser: false,
-    es6: true,
+    es6: true
   },
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    'plugin:prettier/recommended',
+    'plugin:prettier/recommended'
   ],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   plugins: ['react-hooks', 'eslint-plugin-prettier'],
   rules: {
@@ -38,6 +38,6 @@ module.exports = {
     'camelcase': 'error',
     'prefer-arrow-callback': 'error',
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
-    'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }],
-  },
+    'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }]
+  }
 };

@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -15,55 +16,100 @@ import { AccountDBModel } from '@database';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { StakePreview } from './Stake.Preview';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { HomeParamsList } from '@appTypes';
+import { StakePending } from '@screens/StakingPool/components';
+import { PercentageBox } from '@components/composite/PercentageBox';
 
-const PercentageBox = ({
-  percentage,
-  onPress
-}: {
-  percentage: number;
-  onPress: (percentage: number) => unknown;
-}) => {
-  return (
-    <Button onPress={() => onPress(percentage)} style={styles.percentageBox}>
-      <Text>{percentage}%</Text>
-    </Button>
-  );
-};
+const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
   apy: number;
+  pool: ReturnedPoolDetails | undefined;
 }
 
-export const StakeToken = (props: StakeTokenProps) => {
-  const { wallet, apy } = props;
+export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
+  const navigation =
+    useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const { t } = useTranslation();
   const [stakeAmount, setStakeAmount] = useState('');
-  const previewDisabled = !stakeAmount || parseFloat(stakeAmount) === 0;
   const previewModalRef = useRef<BottomSheetRef>(null);
-  const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
+  const { data: ambBalance, refetch: refetchAmbBalance } = useBalanceOfAddress(
+    wallet?.address || ''
+  );
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
   const showPreview = () => {
     previewModalRef.current?.show();
   };
 
-  // const hidePreview = () => {
-  //   previewModalRef.current?.dismiss();
-  // };
+  const onPercentageBoxPress = useCallback(
+    (percentage: number) => {
+      setStakeAmount(
+        NumberUtils.limitDecimalCount(
+          (parseFloat(ambBalance?.ether || '0') * percentage) / 100,
+          2
+        )
+      );
+    },
+    [ambBalance.ether]
+  );
 
-  const onPercentageBoxPress = (percentage: number) => {
-    setStakeAmount(
-      NumberUtils.limitDecimalCount(
-        (parseFloat(ambBalance?.ether || '0') * percentage) / 100,
-        2
-      )
-    );
+  const [loading, setLoading] = useState(false);
+
+  const onSubmitStakeTokens = useCallback(async () => {
+    if (!pool) return;
+    setLoading(true);
+    try {
+      // @ts-ignore
+      const walletHash = wallet?._raw.hash;
+      const result = await staking.stake({
+        pool,
+        value: stakeAmount,
+        walletHash
+      });
+
+      if (!result) {
+        setTimeout(() => {
+          navigation.navigate('StakeErrorScreen');
+        }, 100);
+      } else {
+        setTimeout(() => {
+          navigation.navigate('StakeSuccessScreen', {
+            type: 'stake',
+            pool,
+            wallet
+          });
+        }, 100);
+      }
+    } finally {
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
+      previewModalRef.current?.dismiss();
+      setStakeAmount('');
+      setTimeout(() => {
+        setLoading(false);
+      }, 125);
+    }
+  }, [stakeAmount, pool, navigation, wallet, refetchAmbBalance]);
+
+  const onChangeStakeAmount = (value: string) => {
+    setStakeAmount(StringUtils.removeNonNumericCharacters(value));
   };
 
-  const processStake = () => {
-    // TODO
-  };
+  const isWrongStakeValue = useMemo(() => {
+    return {
+      message: Number(stakeAmount) < 1000 && stakeAmount !== '',
+      button:
+        (Number(stakeAmount) < 1000 && stakeAmount !== '') ||
+        Number(stakeAmount) > Number(ambBalance.ether) ||
+        !stakeAmount ||
+        parseFloat(stakeAmount) === 0
+    };
+  }, [stakeAmount, ambBalance.ether]);
 
   return (
     <View style={styles.container}>
@@ -91,12 +137,23 @@ export const StakeToken = (props: StakeTokenProps) => {
         }
         type="number"
         value={stakeAmount}
-        onChangeValue={(value) =>
-          setStakeAmount(StringUtils.removeNonNumericCharacters(value))
-        }
+        onChangeValue={onChangeStakeAmount}
         placeholder="0"
         maxLength={12}
       />
+      {isWrongStakeValue.message && (
+        <>
+          <Spacer value={verticalScale(4)} />
+          <Text
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            fontWeight="500"
+            color={COLORS.error400}
+          >
+            {t('staking.pool.stake.warning')}
+          </Text>
+        </>
+      )}
       <Spacer value={verticalScale(8)} />
       <Row alignItems="center" justifyContent="space-between">
         <Text
@@ -120,29 +177,39 @@ export const StakeToken = (props: StakeTokenProps) => {
       <Spacer value={verticalScale(24)} />
       <Row
         alignItems="center"
-        style={{ flexWrap: 'wrap', rowGap: verticalScale(16) }}
+        style={{ flexWrap: 'wrap', gap: verticalScale(16) }}
       >
-        <PercentageBox onPress={onPercentageBoxPress} percentage={25} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={50} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={75} />
-        <Spacer value={scale(16)} horizontal />
-        <PercentageBox onPress={onPercentageBoxPress} percentage={100} />
+        {WITHDRAW_PERCENTAGES.map((percentage) => (
+          <PercentageBox
+            key={percentage}
+            onPress={onPercentageBoxPress}
+            percentage={percentage}
+          />
+        ))}
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton onPress={showPreview} disabled={previewDisabled}>
-        <Text color={previewDisabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(previewDisabled ? 'button.enter.amount' : 'button.preview')}
+      <PrimaryButton onPress={showPreview} disabled={isWrongStakeValue.button}>
+        <Text
+          color={
+            isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0
+          }
+        >
+          {t(
+            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
+          )}
         </Text>
       </PrimaryButton>
-      <BottomSheet ref={previewModalRef} swiperIconVisible={true}>
-        <StakePreview
-          onPressStake={processStake}
-          walletAddress={wallet?.address || ''}
-          amount={parseFloat(stakeAmount || '0')}
-          apy={apy}
-        />
+      <BottomSheet ref={previewModalRef} swiperIconVisible>
+        {loading ? (
+          <StakePending />
+        ) : (
+          <StakePreview
+            onPressStake={onSubmitStakeTokens}
+            walletAddress={wallet?.address || ''}
+            amount={parseFloat(stakeAmount)}
+            apy={apy}
+          />
+        )}
         <Spacer value={verticalScale(36)} />
       </BottomSheet>
     </View>

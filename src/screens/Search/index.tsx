@@ -219,7 +219,7 @@ export const SearchScreen = () => {
               </Text>
               <Spacer value={verticalScale(12)} />
             </KeyboardDismissingView>
-            {showScreenSpinner || refetching ? (
+            {showScreenSpinner ? (
               renderSpinner(styles.spinnerFooter)
             ) : (
               <Animated.View
