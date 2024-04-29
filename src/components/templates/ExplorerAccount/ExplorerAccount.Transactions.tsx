@@ -15,7 +15,7 @@ import { Spacer, Text } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { COLORS } from '@constants/colors';
-import { BridgeTransaction } from '../BridgeTransaction/index';
+import { BridgeTransaction } from './BridgeTransaction';
 
 interface ExplorerAccountViewTransactionsProps {
   isBridge?: boolean;
