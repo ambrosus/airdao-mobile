@@ -34,7 +34,7 @@ export const StakingInfo = (props: StakingInfoProps) => {
   const { totalStake, currency, userStaking, earnings, apy } = props;
   const exchangeRate = useCurrencyRate(currency);
   const userStakingUsd =
-    Number(NumberUtils.formatAmount(userStaking)) * exchangeRate;
+    parseFloat(NumberUtils.formatAmount(userStaking)) * exchangeRate;
 
   const totalStakingUSD = totalStake * exchangeRate;
 
