@@ -50,6 +50,19 @@ export const StakingPoolScreen = () => {
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
 
+  // Avoid focusing inputs, while tabs are swiped
+  const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
+
+  const onSwipeStateHandle = (state: boolean) => {
+    if (!state) {
+      setTimeout(() => {
+        setIsTabsSwiping(false);
+      }, 25);
+    } else {
+      setIsTabsSwiping(state);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -101,6 +114,7 @@ export const StakingPoolScreen = () => {
           </View>
           <Spacer value={verticalScale(24)} />
           <AnimatedTabs
+            onSwipeStateHandle={onSwipeStateHandle}
             tabs={[
               {
                 title: t('staking.pool.stake'),
@@ -108,6 +122,7 @@ export const StakingPoolScreen = () => {
                   <View>
                     <Spacer value={verticalScale(24)} />
                     <StakeToken
+                      isSwiping={isTabsSwiping}
                       pool={poolStakingDetails}
                       wallet={selectedWallet}
                       apy={apy}
@@ -121,6 +136,7 @@ export const StakingPoolScreen = () => {
                   <>
                     <Spacer value={verticalScale(24)} />
                     <WithdrawToken
+                      isSwiping={isTabsSwiping}
                       pool={poolStakingDetails}
                       wallet={selectedWallet}
                       apy={apy}

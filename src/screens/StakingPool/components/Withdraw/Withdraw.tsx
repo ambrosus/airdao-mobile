@@ -29,9 +29,14 @@ interface WithdrawTokenProps {
   wallet: AccountDBModel | null;
   apy?: number;
   pool: ReturnedPoolDetails | undefined;
+  isSwiping: boolean;
 }
 
-export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
+export const WithdrawToken = ({
+  wallet,
+  pool,
+  isSwiping
+}: WithdrawTokenProps) => {
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
@@ -138,6 +143,8 @@ export const WithdrawToken = ({ wallet, pool }: WithdrawTokenProps) => {
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        focusable={!isSwiping}
+        editable={!isSwiping}
         iconRight={renderCurrencyFieldIcon}
         value={withdrawAmount}
         onChangeValue={onChangeWithdrawAmount}
