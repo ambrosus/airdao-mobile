@@ -8,7 +8,8 @@ import {
 } from '@api/staking/types';
 import { Cache, CacheKey } from '@lib/cache';
 
-export const ESTIMATED_GAS_LIMIT = 67079;
+const STAKE_ESTIMATED_GAS_LIMIT = 67079;
+const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
 
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
@@ -86,6 +87,11 @@ class Staking {
     }
   }
 
+  async estimateGas(gasLimit: number) {
+    const gasPrice = await this.provider.getGasPrice();
+    return gasPrice.mul(gasLimit);
+  }
+
   async stake({ pool, value, walletHash }: StakeArgs) {
     const overrides = {
       value: utils.parseEther(value)
@@ -95,17 +101,13 @@ class Staking {
       if (!pool) return;
 
       const signer = await this.createProvider(walletHash);
-
       const contract = await this.createStakingPoolContract(
         pool.addressHash,
         signer
       );
 
-      const gasPrice = await this.provider.getGasPrice();
-      const estimatedGasLimit = await contract.estimateGas.stake(overrides);
-
-      const _gasResult = gasPrice.mul(estimatedGasLimit);
-      overrides.value = overrides.value.sub(_gasResult);
+      const estimatedGas = await this.estimateGas(STAKE_ESTIMATED_GAS_LIMIT);
+      overrides.value = overrides.value.sub(estimatedGas);
 
       const stakeContract = await contract.stake(overrides);
       return await stakeContract.wait();
@@ -115,6 +117,10 @@ class Staking {
   }
 
   async unstake({ pool, value, walletHash }: StakeArgs) {
+    const overrides = {
+      value: utils.parseEther(value)
+    };
+
     try {
       const signer = await this.createProvider(walletHash);
       const contract = await this.createStakingPoolContract(
@@ -124,8 +130,10 @@ class Staking {
 
       const [tokenPriceAMB] = await Promise.all([contract.getTokenPrice()]);
 
-      const bnUnstakeAmountAMB = utils.parseEther(value);
-      const bnUnstakeAmountInTokens = bnUnstakeAmountAMB
+      const estimatedGas = await this.estimateGas(UNSTAKE_ESTIMATED_GAS_LIMIT);
+      overrides.value = overrides.value.sub(estimatedGas);
+
+      const bnUnstakeAmountInTokens = overrides.value
         .mul(FIXED_POINT)
         .div(tokenPriceAMB);
 
