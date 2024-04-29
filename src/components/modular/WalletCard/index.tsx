@@ -22,6 +22,15 @@ export interface WalletCardProps {
   balanceLoading?: boolean;
   change24HR?: number;
 }
+
+const LOGO_THEME = {
+  DARK: [COLORS.neutral700]
+};
+
+const LOGO_GRADIENT = {
+  DARK: [COLORS.neutral900, COLORS.neutral900],
+  LIGHT: [COLORS.brand600, COLORS.brand300]
+};
 export const WalletCard = (props: WalletCardProps) => {
   const {
     address,
@@ -33,14 +42,28 @@ export const WalletCard = (props: WalletCardProps) => {
     addressTextColor = COLORS.alphaWhite50,
     priceTextColor = COLORS.neutral0,
     balanceLoading = false,
-    change24HR
+    change24HR = 0
   } = props;
 
   const { t } = useTranslation();
+
+  const isDarkTheme = LOGO_THEME.DARK.includes(backgroundColor);
+
+  const logoGradient = isDarkTheme ? LOGO_GRADIENT.DARK : LOGO_GRADIENT.LIGHT;
+
+  const percentChange = NumberUtils.addSignToNumber(change24HR);
+  const fiatChange = NumberUtils.formatNumber(
+    (usdBalance * change24HR) / 100,
+    2
+  );
+  const timeChange = t('common.today').toLowerCase();
+
+  const changeInfo = `${percentChange}% ($${fiatChange}) ${timeChange}`;
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.logo}>
-        <LogoGradient />
+        <LogoGradient logoGradient={logoGradient} />
       </View>
       <CopyToClipboardButton
         textToDisplay={StringUtils.formatAddress(
@@ -105,8 +128,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontFamily="Inter_500Medium"
                 color={priceTextColor}
               >
-                {NumberUtils.addSignToNumber(change24HR)}%{' '}
-                {t('common.today').toLowerCase()}
+                {changeInfo}
               </Text>
             )}
           </>

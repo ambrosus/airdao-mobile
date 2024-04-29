@@ -25,3 +25,8 @@ export interface ToastOptions {
   position?: ToastPosition;
   onBodyPress?: () => unknown;
 }
+
+export interface ToastRef {
+  show: (params: ToastOptions) => void;
+  hide: () => void;
+}

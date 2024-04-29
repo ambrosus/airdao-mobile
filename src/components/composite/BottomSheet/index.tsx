@@ -5,7 +5,12 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { Keyboard, Platform, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
@@ -16,7 +21,7 @@ import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
-import { Toast } from '@components/modular';
+import { Toast } from '../../modular/Toast';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
 
@@ -115,16 +120,18 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     const renderBackdropComponent = useMemo(() => {
       const backdropOpacity = isNestedSheet ? 0 : 0.5;
       return (
-        <View
-          style={{
-            ...styles.backdrop,
-            backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`
-          }}
-        >
-          <Toast />
-        </View>
+        <TouchableWithoutFeedback onPress={dismiss}>
+          <View
+            style={{
+              ...styles.backdrop,
+              backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`
+            }}
+          >
+            <Toast />
+          </View>
+        </TouchableWithoutFeedback>
       );
-    }, [isNestedSheet]);
+    }, [isNestedSheet, dismiss]);
 
     return (
       <Modal

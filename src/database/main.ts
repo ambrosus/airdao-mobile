@@ -15,7 +15,7 @@ import { PublicAddressListDbModel } from './models/public-address-list';
 
 const adapter = new SQLiteAdapter({
   schema,
-  dbName: 'airdao_dev',
+  dbName: 'airdao',
   jsi: Platform.OS === 'ios', // TODO (optional, but we should implement this method)
   onSetUpError: () => null
 });
