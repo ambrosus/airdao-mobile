@@ -15,6 +15,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
@@ -40,6 +41,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
@@ -65,6 +67,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',

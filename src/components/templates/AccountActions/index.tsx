@@ -6,6 +6,7 @@ import { Send } from './Send';
 import { Receive } from './Receive';
 import { Staking } from './Staking';
 import { Token } from '@models';
+import { Bridge } from '@components/templates/AccountActions/Bridge';
 
 interface AccountActionsProps {
   address: string;
@@ -17,12 +18,13 @@ export const AccountActions = (props: AccountActionsProps) => {
     <Row
       alignItems="center"
       justifyContent="center"
-      style={{ columnGap: scale(40) }}
+      style={{ columnGap: scale(28) }}
     >
       <Swap />
       <Send address={address} token={token} />
       <Receive address={address} />
       <Staking />
+      <Bridge />
     </Row>
   );
 };
