@@ -1,6 +1,6 @@
-import { API } from '@api/api';
 import { CryptoCurrencyCode } from '@appTypes';
 import { ALL_TOKENS } from '@constants/allToken';
+import { getAllTokens } from '@api/getAllTokens';
 
 export interface TokenInfo {
   address?: string;
@@ -13,7 +13,7 @@ const getTokenDetails = (address: string): Promise<TokenInfo> | TokenInfo => {
   if (currentToken) {
     return currentToken;
   } else {
-    return API.explorerService.getAllTokens().then((tokens) => {
+    return getAllTokens().then((tokens) => {
       const currentToken = tokens.find((t) => t.address === address);
       return {
         name: currentToken?.name || '',

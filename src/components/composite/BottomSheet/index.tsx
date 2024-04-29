@@ -16,7 +16,7 @@ import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
-import { Toast } from '@components/modular';
+import { Toast } from '../../modular/Toast';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
 
