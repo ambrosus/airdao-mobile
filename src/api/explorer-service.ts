@@ -85,7 +85,8 @@ const getTransactionsOfAccount = async (
 const getTransactionsOfOwnAccount = async (
   address: string,
   page: number,
-  limit: number
+  limit: number,
+  tokenUtils: any
 ): Promise<
   PaginatedResponseBody<{
     tokens: Token[];
@@ -99,7 +100,7 @@ const getTransactionsOfOwnAccount = async (
     const transactions = response.data.data;
     return {
       data: {
-        tokens: tokens.map((t) => new Token(t)),
+        tokens: tokens.map((t) => new Token(t, tokenUtils)),
         transactions
       },
       next: response.data.pagination.hasNext ? (page + 1).toString() : null

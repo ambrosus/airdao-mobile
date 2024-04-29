@@ -5,6 +5,7 @@ import { Transaction } from '@models/index';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { TransactionType } from '@appTypes/enums';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
+import { TokenUtils } from '@utils/token';
 
 export function useTransactionsOfAccount(
   address: string,
@@ -46,7 +47,7 @@ export function useTransactionsOfAccount(
       ? (data.pages
           .map((page) =>
             page.data.map((d) => {
-              const transaction = new Transaction(d);
+              const transaction = new Transaction(d, TokenUtils);
               transaction.isSent = d.from === address;
               return transaction;
             })

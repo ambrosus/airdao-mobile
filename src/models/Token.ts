@@ -1,6 +1,5 @@
 import { CryptoCurrencyCode } from '@appTypes';
 import { TokenDTO } from './dtos';
-import { TokenUtils } from '@utils/token';
 
 export class Token {
   address: string;
@@ -11,12 +10,12 @@ export class Token {
   };
   symbol!: CryptoCurrencyCode | string;
 
-  private deriveNameAndSymbolFromDto(dto: TokenDTO) {
+  private deriveNameAndSymbolFromDto(dto: TokenDTO, tokenUtils: any) {
     if (dto.name && dto.symbol) {
       this.name = dto.name;
       this.symbol = dto.symbol;
     } else {
-      const tokenDetails = TokenUtils.getTokenDetails(dto.address);
+      const tokenDetails = tokenUtils.getTokenDetails(dto.address);
       // @ts-ignore
       const { name, symbol } = tokenDetails;
       this.name = name;
@@ -24,9 +23,9 @@ export class Token {
     }
   }
 
-  constructor(details: TokenDTO) {
+  constructor(details: TokenDTO, tokenUtils: any) {
     this.address = details.address;
     this.balance = details.balance;
-    this.deriveNameAndSymbolFromDto(details);
+    this.deriveNameAndSymbolFromDto(details, tokenUtils);
   }
 }
