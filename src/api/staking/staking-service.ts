@@ -8,6 +8,8 @@ import {
 } from '@api/staking/types';
 import { Cache, CacheKey } from '@lib/cache';
 
+export const ESTIMATED_GAS_LIMIT = 67079;
+
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
 
@@ -93,10 +95,17 @@ class Staking {
       if (!pool) return;
 
       const signer = await this.createProvider(walletHash);
+
       const contract = await this.createStakingPoolContract(
         pool.addressHash,
         signer
       );
+
+      const gasPrice = await this.provider.getGasPrice();
+      const estimatedGasLimit = await contract.estimateGas.stake(overrides);
+
+      const _gasResult = gasPrice.mul(estimatedGasLimit);
+      overrides.value = overrides.value.sub(_gasResult);
 
       const stakeContract = await contract.stake(overrides);
       return await stakeContract.wait();
@@ -104,6 +113,7 @@ class Staking {
       console.error(err);
     }
   }
+
   async unstake({ pool, value, walletHash }: StakeArgs) {
     try {
       const signer = await this.createProvider(walletHash);
