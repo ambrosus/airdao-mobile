@@ -21,7 +21,7 @@
       "swap": "Swap",
       "send": "Gönder",
       "receive": "Al",
-      "stake": "Stake"
+      "stake": "Bahis"
     }
   },
 
@@ -188,6 +188,8 @@
   "send.funds.balance": "Bakiye",
   "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için miktarı değiştirin veya bakiyenizi arttırın.",
   "send.funds.error.network": "Kötü internet bağlantısı!",
+  "send.funds.error.check.connection": "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.",
+  "send.funds.error.later": "Lütfen daha sonra tekrar deneyin.",
   "send.funds.error.private.key.not.found": "Özel anahtar bulunamadı. Lütfen cüzdanınızı tohum ifadenizle tekrar yedekleyin!",
   "send.funds.failed": "İşlem başarısız",
   "send.funds.go.home": "Ana sayfaya dön",
@@ -274,19 +276,31 @@
   "share.24hr": "24 saat",
 
   "staking.apy": "YFG",
-  "staking.current.stake": "{{amount}} {{symbol}} Stake ediliyor",
-  "staking.header": "Stake",
+  "staking.current.stake": "{{amount}} {{symbol}} Bahis ediliyor",
+  "staking.header": "Bahis",
   "staking.pools": "Havuzlar",
 
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Kazanç",
   "staking.pool.preview": "Özet",
-  "staking.pool.stake": "Stake",
+  "staking.pool.stake": "Bahis",
   "staking.pool.stake.amount": "Miktar",
   "staking.pool.stake.now": "Onayla",
   "staking.pool.total.stake": "Toplam hisse miktarı",
   "staking.pool.user.stake": "Hisse miktarım",
-  "staking.pool.withdraw": "Withdraw",
+  "staking.pool.withdraw": "Geri çekmek",
+  "staking.pool.withdraw.now": "Hemen çek",
+  "staking.pool.withdraw.amount": "Tutarı çek",
+  "staking.pool.withdraw.success": "AMB'yi sen kazıkladın! Artık her geçen an ödül kazanıyorsunuz.",
+  "staking.pool.stake.success": "AMB'nizi çektiniz. Fonlarınız artık likit ve işlem için hazır.",
+  "staking.pool.withdraw.error": "Bahis etme isteğinizi işlerken bir aksaklıkla karşılaştık. Cüzdan bakiyenizi ve ağ bağlantınızı iki kez kontrol edin",
+  "staking.pool.withdraw.retry": "Yeniden dene",
+  "staking.pool.pending": "İşlem sürüyor",
+  "staking.pool.pending.description": "Sadece birkaç saniye daha...",
+  "staking.pool.success": "Başarılı!",
+  "staking.pool.stake.warning": "Bahis koymak için en az 1000 AMB gereklidir.",
+  "staking.pool.withdraw.warning": "Geri çekilmek için en az 1000 AMB gereklidir.",
+
 
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
@@ -300,7 +314,7 @@
 
   "token.picker.select": "Gönderilecek varlığı seçin",
   "token.actions.swap": "Takas",
-  "token.actions.stake": "Stake",
+  "token.actions.stake": "Bahis",
 
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",

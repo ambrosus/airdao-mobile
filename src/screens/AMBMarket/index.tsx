@@ -39,6 +39,7 @@ export function AMBMarket(): JSX.Element {
       style={styles.container}
     >
       <Header
+        bottomBorder
         title={
           <>
             <Row alignItems="center">

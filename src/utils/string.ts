@@ -36,7 +36,7 @@ const pluralize = (count: number, str: string, pluralForm?: string): string => {
 
 const removeNonNumericCharacters = (str: string, allowDot = true): string => {
   if (!str) return '';
-  if (allowDot) return str.replace(/[^.\d]+/g, '');
+  if (allowDot) return str.replace(/[^.\d]+/g, '.');
   return str.replace(/[^\d]+/g, '');
 };
 
