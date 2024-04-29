@@ -62,6 +62,7 @@ export const SingleGroupScreen = () => {
       testID="Single_Collection"
     >
       <Header
+        bottomBorder
         title={
           <Text
             numberOfLines={1}

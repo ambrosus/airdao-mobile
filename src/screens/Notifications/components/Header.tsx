@@ -35,6 +35,7 @@ export const NotificationsHeader = (
   return (
     <Header
       titleStyle={styles.headerTitle}
+      bottomBorder
       title={t('tab.notifications')}
       titlePosition="left"
       contentRight={renderContentRight()}

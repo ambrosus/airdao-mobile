@@ -188,6 +188,8 @@
   "send.funds.balance": "Balance",
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or top up wallet to proceed.",
   "send.funds.error.network": "Bad internet connection!",
+  "send.funds.error.check.connection": "Please check your internet connection and try again.",
+  "send.funds.error.later": "Please try again later.",
   "send.funds.error.private.key.not.found": "Private key not found. Please backup your wallet with your seed phrase again!",
   "send.funds.failed": "Transaction failed",
   "send.funds.go.home": "Go home",
@@ -240,7 +242,7 @@
 
   "singleWallet.name": "Name",
   "singleWallet.remove": "Remove",
-  "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet",
+  "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
   "singleWallet.remove.alert.description": "Make sure you have a backup of this wallet",
   "singleWallet.save": "Save changes",
 

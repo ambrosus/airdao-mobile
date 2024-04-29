@@ -235,6 +235,7 @@ export const SendFunds = () => {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
+        bottomBorder
         title={
           <View>
             <Text

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -28,29 +28,41 @@ export const SendFundsStatus = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const shareModal = useRef<BottomSheetRef>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  let errorMessage = '';
-  switch (error?.message) {
-    case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE': {
-      errorMessage = t('send.funds.error.insufficient.balance');
-      break;
+  useEffect(() => {
+    setErrorMessage('');
+    if (error && error.message) {
+      let message = '';
+      switch (error?.message) {
+        case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE': {
+          message = t('send.funds.error.insufficient.balance');
+          break;
+        }
+        case 'INSUFFICIENT_FUNDS': {
+          message = t('send.funds.error.insufficient.balance');
+          break;
+        }
+        case 'SERVER_RESPONSE_NOT_CONNECTED': {
+          message = t('send.funds.error.network');
+          break;
+        }
+        case 'PRIVATE_KEY_NOT_FOUND': {
+          message = t('send.funds.error.private.key.not.found');
+          break;
+        }
+        default:
+          message = t('send.funds.error.check.connection');
+          break;
+      }
+
+      setErrorMessage(message);
+    } else if (error && !error.message) {
+      setErrorMessage(
+        `${t('send.funds.failed')}. ${t('send.funds.error.later')}`
+      );
     }
-    case 'INSUFFICIENT_FUNDS': {
-      errorMessage = t('send.funds.error.insufficient.balance');
-      break;
-    }
-    case 'SERVER_RESPONSE_NOT_CONNECTED': {
-      errorMessage = t('send.funds.error.network');
-      break;
-    }
-    case 'PRIVATE_KEY_NOT_FOUND': {
-      errorMessage = t('send.funds.error.private.key.not.found');
-      break;
-    }
-    default:
-      errorMessage = JSON.stringify(error?.message);
-      break;
-  }
+  }, [error, t]);
 
   const title = useMemo(() => {
     const isTimeError = error?.message.includes(

@@ -11,15 +11,27 @@ import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 
+const CONTRACT_CALL = '(contract call)';
+
 interface TransactionItemProps {
   transaction: Transaction;
 }
 
 export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
   const { transaction } = props;
+  const { type } = transaction;
   const isSent = transaction.isSent;
   const { t } = useTranslation();
   const usdAmount = useUSDPrice(transaction.amount, transaction.symbol);
+
+  const isContractCall = type.toLowerCase().includes('contract');
+  const transactionType = isSent
+    ? t('common.transaction.sent')
+    : t('common.transaction.received');
+
+  const typeToRender = isContractCall
+    ? `${transactionType} ${CONTRACT_CALL}`
+    : transactionType;
 
   return (
     <View>
@@ -40,9 +52,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral900}
             >
-              {isSent
-                ? t('common.transaction.sent')
-                : t('common.transaction.received')}
+              {typeToRender}
             </Text>
             <Spacer value={verticalScale(4)} />
             <Text

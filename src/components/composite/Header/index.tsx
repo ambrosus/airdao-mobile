@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 
 export function Header(props: HeaderProps): JSX.Element {
   const {
+    bottomBorder = false,
     backIconVisible = true,
     contentLeft,
     contentRight,
@@ -72,11 +73,17 @@ export function Header(props: HeaderProps): JSX.Element {
     return <>{contentRight}</>;
   };
 
+  const combineContainerStyles = {
+    ...styles.container,
+    ...(bottomBorder ? styles.containerBorder : {}),
+    ...style
+  };
+
   return (
     <Row
       justifyContent="space-between"
       alignItems="center"
-      style={{ ...styles.container, ...style }}
+      style={combineContainerStyles}
     >
       <Row
         style={{ ...styles.left, ...leftContainerStyles }}
