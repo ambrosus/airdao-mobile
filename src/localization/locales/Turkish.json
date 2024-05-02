@@ -322,5 +322,8 @@
 
 
   "wallet.my.assets": "Varlıklarım",
-  "wallet.picker.select": "Cüzdan seç"
+  "wallet.picker.select": "Cüzdan seç",
+
+  "bridge.select.network": "!!!Select network"
+
 }

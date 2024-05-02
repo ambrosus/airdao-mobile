@@ -35,7 +35,6 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
-    // burnNFT(selectedAccount?._raw);
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
     }
@@ -78,7 +77,10 @@ export const HomeScreen = () => {
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions address={selectedAccountWithBalance.address} />
+            <AccountActions
+              selectedAccount={selectedAccount}
+              address={selectedAccountWithBalance.address}
+            />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
               account={selectedAccountWithBalance}
