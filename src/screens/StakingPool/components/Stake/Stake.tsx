@@ -146,7 +146,7 @@ export const StakeToken = ({
         type="number"
         value={stakeAmount}
         onChangeValue={onChangeStakeAmount}
-        placeholder="0"
+        placeholder="1000"
         maxLength={12}
       />
       {isWrongStakeValue.message && (
