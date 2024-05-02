@@ -1,7 +1,7 @@
 import { createContextSelector } from '@utils/createContextSelector';
 import { useState } from 'react';
-import { useBridgeService } from '@hooks/query/useBridgeService';
 import { ParsedBridge } from '@models/Bridge';
+import Config from '@constants/config';
 
 const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',
@@ -55,20 +55,21 @@ export const BridgeContext = () => {
     address: ''
   });
 
-  const { data: config } = useBridgeService();
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
   const [chosenNetworks, setChosenNetworks] = useState(DEFAULT_CHOSEN_NETWORKS);
 
-  const parsedBridges = Object.keys(config?.data?.bridges || {}).map(
-    (item) => ({
-      // @ts-ignore
-      ...config?.data?.bridges[item],
-      id: item,
-      name: getNetworkNames(item)
-    })
-  );
+  const parsedBridges = Object.keys(Config.BRIDGE_CONFIG).map((item) => ({
+    // @ts-ignore
+    ...Config.BRIDGE_CONFIG.bridges[item],
+    id: item,
+    name: getNetworkNames(item)
+  }));
   const bridges: ParsedBridge[] = [...parsedBridges, DEFAULT_AMB_NETWORK];
+
+  // const parseTokens = () => {
+  //   chosenNetworks.pairs.map((item) => console.log('tt', item));
+  // };
 
   const fromSetter = (value: ParsedBridge) => {
     const {
@@ -104,6 +105,17 @@ export const BridgeContext = () => {
     setTo(value);
   };
 
+  // useEffect(() => {
+  //   console.log('EFFECT');
+  //   if (chosenNetworks.pairs.length) {
+  //     console.log('EFFECT IN IF ->>');
+  //
+  //     parseTokens();
+  //   }
+  // }, [chosenNetworks.pairs]);
+  //
+  // console.log(chosenNetworks, 'chosenNetworks');
+  //
   return {
     bridges,
     fromParams: {
