@@ -15,7 +15,7 @@ interface AccountActionsProps {
   selectedAccount: AccountDBModel | null;
 }
 export const AccountActions = (props: AccountActionsProps) => {
-  const { address, token, selectedAccount } = props;
+  const { address, token } = props;
   return (
     <Row
       alignItems="center"
@@ -26,7 +26,7 @@ export const AccountActions = (props: AccountActionsProps) => {
       <Send address={address} token={token} />
       <Receive address={address} />
       <Staking />
-      <Bridge selectedAccount={selectedAccount} />
+      <Bridge />
     </Row>
   );
 };

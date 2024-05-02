@@ -16,6 +16,7 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -34,11 +35,18 @@ export const HomeScreen = () => {
     );
   }
 
+  const { setSelectedAccount } = useBridgeContextSelector();
+
   useEffect(() => {
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+
+      setSelectedAccount({
+        hash: accounts[scrollIdx].wallet.hash,
+        address: accounts[scrollIdx]?.address
+      });
     }
-  }, [accounts, scrollIdx]);
+  }, [accounts, scrollIdx, setSelectedAccount]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
