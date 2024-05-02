@@ -6,6 +6,7 @@ import { watcherService } from './watcher-service';
 import { explorerService } from './explorer-service';
 import { cryptoService } from './crypto-service';
 import Config from '@constants/config';
+import { bridgeService } from '@api/bridge/bridge-service';
 
 const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
   try {
@@ -44,6 +45,7 @@ export const API = {
   getAMBTokenData,
   getAMBPriceHistoricalPricing,
   getAmbrosusStakingPools,
+  bridgeService,
   explorerService,
   watcherService,
   cryptoService
