@@ -77,7 +77,10 @@ const abbreviateNumber = (num: number): string => {
   return newValue;
 };
 
-export const formatAmount = (amount: BigNumber, afterDotAmount = 2) => {
+export const formatAmount = (
+  amount: BigNumber | number | string,
+  afterDotAmount = 2
+) => {
   const amountFloatString = utils.formatEther(amount);
 
   const [intPart, floatPart] = amountFloatString.split('.');
@@ -86,7 +89,7 @@ export const formatAmount = (amount: BigNumber, afterDotAmount = 2) => {
     amountBalance = intPart;
   } else if (floatPart && floatPart.length > afterDotAmount) {
     amountBalance = `${intPart}.${floatPart.slice(0, afterDotAmount)}`;
-  } else if (floatPart) {
+  } else if (+floatPart > 0) {
     amountBalance = `${intPart}.${floatPart}`;
   } else {
     amountBalance = intPart;

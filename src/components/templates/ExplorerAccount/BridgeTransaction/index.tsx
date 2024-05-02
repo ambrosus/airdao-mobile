@@ -1,39 +1,70 @@
-import React from 'react';
-
-import { Text, View } from 'react-native';
-import { Transaction } from '@models';
-
+import React, { useRef } from 'react';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { styles } from './BridgeTransaction.style';
+
 import { TokenLogo } from '@components/modular';
 import { scale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
 import { Status } from './components/Status/Status';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetBridgeTransactionHistory } from '@components/templates/BottomSheetBridgeTransactionHistory';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 
 interface BridgeTransactionModel {
-  transaction: Transaction;
-  disabled: boolean | undefined;
-  index: number;
+  transaction: BridgeTransactionHistoryDTO;
 }
 
-export const BridgeTransaction = (props: BridgeTransactionModel) => {
-  const { transaction, index } = props;
-  const { symbol, amount, to } = transaction;
+export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
+  const bottomSheetRef = useRef<BottomSheetRef | null>(null);
 
-  const formattingAmount = NumberUtils.limitDecimalCount(amount, 3);
-  const formattingTo = StringUtils.formatAddress(to, 4, 5);
+  const formattedAmount = NumberUtils.formatAmount(transaction.amount, 3);
+
+  const onPreviewTransactionDetails = () => {
+    if (bottomSheetRef && bottomSheetRef.current) {
+      bottomSheetRef.current?.show();
+    }
+  };
 
   return (
-    <View style={styles.main}>
-      <View style={styles.details}>
-        <View style={styles.balance}>
-          <TokenLogo scale={scale(0.6)} token={transaction.symbol} />
-          <Text style={styles.amount}>{`${formattingAmount} ${symbol}`}</Text>
+    <>
+      <TouchableWithoutFeedback onPress={onPreviewTransactionDetails}>
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <Row style={styles.leftContentRow} alignItems="flex-start">
+              <TokenLogo
+                scale={scale(0.6)}
+                token={tokenThumb(transaction.tokenFrom.name)}
+              />
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color="#1D1D1D"
+              >{`${formattedAmount} ${transactionFrom(
+                transaction.tokenFrom.name
+              )}`}</Text>
+            </Row>
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.alphaBlack50}
+              numberOfLines={1}
+            >
+              To: {NETWORK[transaction.networkTo as keyof typeof NETWORK]}
+            </Text>
+          </View>
+          <Status
+            status={!transaction.transferFinishTxHash ? 'pending' : 'success'}
+          />
         </View>
-        <Text style={styles.destination}>{formattingTo}</Text>
-      </View>
+      </TouchableWithoutFeedback>
 
-      <Status status={index % 2 ? 'pending' : 'success'} />
-    </View>
+      <BottomSheetBridgeTransactionHistory
+        ref={bottomSheetRef}
+        transaction={transaction}
+      />
+    </>
   );
 };
