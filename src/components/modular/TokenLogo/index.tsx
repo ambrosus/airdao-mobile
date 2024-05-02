@@ -62,6 +62,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.Bond.toLowerCase():
     case 'airbond':
       return <AirBondIcon scale={scale} />;
+    case 'bsc':
+      return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.LangOperation.toLowerCase():
     case 'operation funds lang inu':
       return <LangFundIcon scale={scale} />;

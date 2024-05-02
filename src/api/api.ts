@@ -5,6 +5,7 @@ import { AMBToken } from '@models';
 import { watcherService } from './watcher-service';
 import { explorerService } from './explorer-service';
 import { cryptoService } from './crypto-service';
+import { bridgeService } from './bridge-service';
 import Config from '@constants/config';
 
 const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
@@ -46,5 +47,6 @@ export const API = {
   getAmbrosusStakingPools,
   explorerService,
   watcherService,
-  cryptoService
+  cryptoService,
+  bridgeService
 };
