@@ -1,10 +1,27 @@
 import axios from 'axios';
 import { getBridge } from './sdk/BridgeSDK';
-import { Config } from '@api/bridge/sdk/types';
+import { Config as BridgeConfig } from '@api/bridge/sdk/types';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import Config from '@constants/config';
 
 interface BridgeParamsModel {
-  data: Config;
+  data: BridgeConfig;
 }
+
+const BRIDGE_TRANSACTIONS_HISTORY_URL = Config.BRIDGE_HISTORY_URL;
+
+export const getBridgeHistory = async (
+  address: string
+): Promise<BridgeTransactionHistoryDTO[]> => {
+  try {
+    const preparedURL = `${BRIDGE_TRANSACTIONS_HISTORY_URL}/txHistory?userAddress=${address}`;
+    const response = await axios.get(preparedURL);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const ProdApi =
   'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json';
@@ -22,5 +39,6 @@ const getBridgeParams = async (): Promise<BridgeParamsModel> => {
 
 export const bridgeService = {
   getBridgeParams,
-  getBridge
+  getBridge,
+  getBridgeHistory
 };

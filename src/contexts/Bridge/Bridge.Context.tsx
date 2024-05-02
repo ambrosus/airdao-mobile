@@ -21,6 +21,8 @@ const DEFAULT_CHOSEN_NETWORKS = {
   pairs: []
 };
 
+type SelectedAccountKeyState = 'hash' | 'address';
+
 export const BridgeContext = () => {
   const getNetworkNames = (name: string) => {
     switch (name) {
@@ -46,7 +48,13 @@ export const BridgeContext = () => {
       isDuplicateWay
     };
   };
-  const [selectedAccountHash, setSelectedAccountHash] = useState('');
+  const [selectedAccount, setSelectedAccount] = useState<
+    Record<SelectedAccountKeyState, string>
+  >({
+    hash: '',
+    address: ''
+  });
+
   const { data: config } = useBridgeService();
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
@@ -110,8 +118,8 @@ export const BridgeContext = () => {
       value: chosenNetworks,
       setter: setChosenNetworks
     },
-    setSelectedAccountHash,
-    selectedAccountHash
+    setSelectedAccount,
+    selectedAccount
   };
 };
 

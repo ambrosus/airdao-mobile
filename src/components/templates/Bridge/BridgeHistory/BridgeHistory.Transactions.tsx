@@ -5,12 +5,12 @@ import {
   SectionList,
   SectionListData
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment/moment';
 import { styles } from './styles';
 import { BridgeTransaction, LocalizedRenderEmpty } from '@components/templates';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
-import { useTranslation } from 'react-i18next';
-import moment from 'moment/moment';
 import { useBridgeHistory } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -23,15 +23,6 @@ interface TransactionSection {
 }
 const DAY_FORMAT = 'MMM DD YYYY';
 
-const account = {
-  _id: 'gHs4w6rwyW5gjCMR',
-  address: '0x4fB246FAf8FAc198f8e5B524E74ABC6755956696',
-  ambBalance: 1170.999,
-  name: '',
-  transactionCount: 0,
-  type: 'account'
-};
-
 export const BridgeHistoryTransactions = () => {
   const { t } = useTranslation();
   const {
@@ -39,7 +30,7 @@ export const BridgeHistoryTransactions = () => {
     loading,
     refetch: refetchAssets,
     refetching
-  } = useBridgeHistory(account.address);
+  } = useBridgeHistory();
 
   const renderSectionHeader = (info: {
     section: SectionListData<BridgeTransactionHistoryDTO, TransactionSection>;
