@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { API } from '@api/api';
+import { bridgeService } from '@api/bridge/bridge-service';
 import { QueryResponse } from '@appTypes';
 
 export function useBridgeHistory(
   address: string
 ): QueryResponse<BridgeTransactionHistoryDTO[]> {
   function fetchBridgeHistory(): Promise<BridgeTransactionHistoryDTO[]> {
-    return API.bridgeService.getBridgeHistory(address);
+    return bridgeService.getBridgeHistory(address);
   }
 
   const { data, error, isInitialLoading, isRefetching, refetch } = useQuery<

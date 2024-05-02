@@ -5,7 +5,6 @@ import { AMBToken } from '@models';
 import { watcherService } from './watcher-service';
 import { explorerService } from './explorer-service';
 import { cryptoService } from './crypto-service';
-import { bridgeService } from './bridge-service';
 import Config from '@constants/config';
 import { bridgeService } from '@api/bridge/bridge-service';
 
@@ -49,6 +48,5 @@ export const API = {
   bridgeService,
   explorerService,
   watcherService,
-  cryptoService,
-  bridgeService
+  cryptoService
 };
