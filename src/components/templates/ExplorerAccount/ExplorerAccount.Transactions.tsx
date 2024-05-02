@@ -15,10 +15,8 @@ import { Spacer, Text } from '@components/base';
 import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { COLORS } from '@constants/colors';
-import { BridgeTransaction } from './BridgeTransaction';
 
 interface ExplorerAccountViewTransactionsProps {
-  isBridge?: boolean;
   transactions: Transaction[];
   loading?: boolean;
   showTransactionDetailsOnPress?: boolean;
@@ -38,7 +36,6 @@ export const AccountTransactions = (
   props: ExplorerAccountViewTransactionsProps
 ): JSX.Element => {
   const {
-    isBridge = false,
     transactions,
     loading,
     showTransactionDetailsOnPress,
@@ -76,22 +73,12 @@ export const AccountTransactions = (
   const renderTransaction = (
     args: ListRenderItemInfo<Transaction>
   ): JSX.Element => {
-    if (isBridge) {
-      return (
-        <BridgeTransaction
-          index={args.index}
-          transaction={args.item}
-          disabled={showTransactionDetailsOnPress}
-        />
-      );
-    } else {
-      return (
-        <ExplorerAccountTransactionItem
-          transaction={args.item}
-          disabled={showTransactionDetailsOnPress}
-        />
-      );
-    }
+    return (
+      <ExplorerAccountTransactionItem
+        transaction={args.item}
+        disabled={showTransactionDetailsOnPress}
+      />
+    );
   };
 
   const renderSectionHeader = (info: {
