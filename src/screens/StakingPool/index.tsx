@@ -23,8 +23,10 @@ import {
 import { BigNumber } from 'ethers';
 import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const StakingPoolScreen = () => {
+  const { selectedAccount } = useBridgeContextSelector();
   const { data: allWallets } = useAllAccounts();
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
@@ -32,8 +34,9 @@ export const StakingPoolScreen = () => {
   const currency = CryptoCurrencyCode.AMB;
   const { totalStake, apy } = pool;
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
+
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
+    selectedAccount
   );
 
   const { top } = useSafeAreaInsets();
