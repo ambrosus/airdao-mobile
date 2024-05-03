@@ -2,6 +2,7 @@ import { createContextSelector } from '@utils/createContextSelector';
 import { useState } from 'react';
 import { ParsedBridge } from '@models/Bridge';
 import Config from '@constants/config';
+import { AccountDBModel } from '@database';
 
 const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',
@@ -20,8 +21,6 @@ const DEFAULT_CHOSEN_NETWORKS = {
   name: '',
   pairs: []
 };
-
-type SelectedAccountKeyState = 'hash' | 'address';
 
 export const BridgeContext = () => {
   const getNetworkNames = (name: string) => {
@@ -48,12 +47,9 @@ export const BridgeContext = () => {
       isDuplicateWay
     };
   };
-  const [selectedAccount, setSelectedAccount] = useState<
-    Record<SelectedAccountKeyState, string>
-  >({
-    hash: '',
-    address: ''
-  });
+  const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
+    null
+  );
 
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);

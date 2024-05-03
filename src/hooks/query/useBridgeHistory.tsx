@@ -10,7 +10,7 @@ export function useBridgeHistory(): QueryResponse<
   const { selectedAccount } = useBridgeContextSelector();
 
   function fetchBridgeHistory(): Promise<BridgeTransactionHistoryDTO[]> {
-    return API.bridgeService.getBridgeHistory(selectedAccount.address);
+    return API.bridgeService.getBridgeHistory(selectedAccount?.address ?? '');
   }
 
   const { data, error, isInitialLoading, isRefetching, refetch } = useQuery<
