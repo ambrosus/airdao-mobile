@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { bridgeService } from '@api/bridge/bridge-service';
 import { QueryResponse } from '@appTypes';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import { API } from '@api/api';
 
 export function useBridgeHistory(): QueryResponse<
   BridgeTransactionHistoryDTO[]
@@ -10,7 +10,7 @@ export function useBridgeHistory(): QueryResponse<
   const { selectedAccount } = useBridgeContextSelector();
 
   function fetchBridgeHistory(): Promise<BridgeTransactionHistoryDTO[]> {
-    return bridgeService.getBridgeHistory(selectedAccount.address);
+    return API.bridgeService.getBridgeHistory(selectedAccount.address);
   }
 
   const { data, error, isInitialLoading, isRefetching, refetch } = useQuery<
