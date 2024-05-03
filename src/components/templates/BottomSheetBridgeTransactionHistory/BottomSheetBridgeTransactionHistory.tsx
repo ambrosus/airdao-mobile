@@ -19,6 +19,7 @@ type RowRightItemType = 'default' | 'status' | 'token' | 'amount';
 
 interface BottomSheetBridgeTransactionHistoryProps {
   transaction: BridgeTransactionHistoryDTO;
+  confirmations?: number;
 }
 
 type RowsStateObject = {

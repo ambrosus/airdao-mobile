@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { styles } from './BridgeTransaction.style';
 
@@ -12,6 +12,7 @@ import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
+import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;
@@ -20,7 +21,18 @@ interface BridgeTransactionModel {
 export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
   const bottomSheetRef = useRef<BottomSheetRef | null>(null);
 
+  const { confirmations, minSafetyBlocks } = useBridgeTransactionStatus(
+    transaction.withdrawTx,
+    transaction.transferFinishTxHash === ''
+  );
+
   const formattedAmount = NumberUtils.formatAmount(transaction.amount, 3);
+  const transactionStatus = useMemo(() => {
+    return transaction.transferFinishTxHash ||
+      (!transaction && minSafetyBlocks === confirmations)
+      ? 'success'
+      : 'confirmations';
+  }, [confirmations, minSafetyBlocks, transaction]);
 
   const onPreviewTransactionDetails = () => {
     if (bottomSheetRef && bottomSheetRef.current) {
@@ -56,13 +68,15 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
             </Text>
           </View>
           <Status
-            status={!transaction.transferFinishTxHash ? 'pending' : 'success'}
+            steps={{ start: confirmations, end: minSafetyBlocks }}
+            status={transactionStatus}
           />
         </View>
       </TouchableWithoutFeedback>
 
       <BottomSheetBridgeTransactionHistory
         ref={bottomSheetRef}
+        confirmations={confirmations}
         transaction={transaction}
       />
     </>

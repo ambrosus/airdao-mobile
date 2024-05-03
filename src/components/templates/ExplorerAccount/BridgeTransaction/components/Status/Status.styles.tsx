@@ -35,6 +35,19 @@ export const pendingStyle = StyleSheet.create({
     color: COLORS.warning700
   }
 });
+export const confirmationStyles = {
+  background: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: COLORS.warning100,
+    borderColor: COLORS.warning200,
+    borderWidth: 1
+  },
+  text: {
+    color: COLORS.warning700
+  }
+};
 export const errorStyle = StyleSheet.create({
   background: {
     backgroundColor: COLORS.error100,
