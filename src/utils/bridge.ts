@@ -9,7 +9,7 @@ export enum NETWORK {
 
 export enum SHORTEN_NETWORK {
   eth = 'Ethereum',
-  bsc = 'BNB Chain',
+  bsc = 'BSC',
   amb = 'AirDAO'
 }
 
