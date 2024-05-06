@@ -41,10 +41,7 @@ export const HomeScreen = () => {
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
 
-      setSelectedAccount({
-        hash: accounts[scrollIdx].wallet.hash,
-        address: accounts[scrollIdx]?.address
-      });
+      setSelectedAccount(accounts[scrollIdx]);
     }
   }, [accounts, scrollIdx, setSelectedAccount]);
 
