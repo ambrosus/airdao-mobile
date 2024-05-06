@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
@@ -19,6 +19,7 @@ type RowRightItemType = 'default' | 'status' | 'token' | 'amount';
 
 interface BottomSheetBridgeTransactionHistoryProps {
   transaction: BridgeTransactionHistoryDTO;
+  confirmations?: number;
 }
 
 type RowsStateObject = {
@@ -90,6 +91,10 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
     }
   ]);
 
+  const isUsdAmountPositive = useMemo(() => {
+    return usdPrice > 0.0;
+  }, [usdPrice]);
+
   const renderRightRowItem = useCallback(
     (type: RowRightItemType, value: string, thumb?: string) => {
       switch (type) {
@@ -108,7 +113,8 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
                 fontFamily="Inter_500Medium"
                 color={COLORS.neutral400}
               >
-                ${NumberUtils.limitDecimalCount(usdPrice, 3)}
+                {isUsdAmountPositive &&
+                  `$${NumberUtils.limitDecimalCount(usdPrice, 3)}`}
               </Text>
             </Row>
           );
@@ -147,7 +153,7 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
         }
       }
     },
-    [usdPrice]
+    [isUsdAmountPositive, usdPrice]
   );
 
   return (
