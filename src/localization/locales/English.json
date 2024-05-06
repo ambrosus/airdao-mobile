@@ -321,6 +321,8 @@
 
 
   "wallet.my.assets": "My assets",
-  "wallet.picker.select": "Select Wallet"
+  "wallet.picker.select": "Select Wallet",
+
+  "bridge.select.network": "Select network"
 
 }
