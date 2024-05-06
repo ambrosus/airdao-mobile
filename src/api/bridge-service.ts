@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Config as BridgeConfig } from '@api/bridge/sdk/types';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import Config from '@constants/config';
-import { getBridge } from '@api/bridge/sdk/BridgeSDK';
+import { getBridgePairs } from '@api/bridge/sdk/BridgeSDK';
 
 interface BridgeParamsModel {
   data: BridgeConfig;
@@ -36,11 +36,10 @@ const getBridgeParams = async (): Promise<BridgeParamsModel> => {
   } catch (error) {
     throw error;
   }
-  Config;
 };
 
 export const bridgeService = {
   getBridgeParams,
-  getBridge,
+  getBridgePairs,
   getBridgeHistory
 };

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, LayoutChangeEvent, View } from 'react-native';
 import { styles } from './styles';
 import {
@@ -17,10 +17,15 @@ import { NumberUtils } from '@utils/number';
 import { DeviceUtils } from '@utils/device';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetChoseToken } from '@components/templates/BottomSheetChoseToken';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
 export const BridgeForm = () => {
+  const choseTokenRef = useRef<BottomSheetRef>(null);
+
   const { t } = useTranslation();
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [amountToExchange, setAmountToExchange] = useState('');
@@ -45,6 +50,8 @@ export const BridgeForm = () => {
   const onSelectMaxAmount = () => {
     setAmountToExchange('999');
   };
+
+  const { networksParams } = useBridgeContextSelector();
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
@@ -66,7 +73,7 @@ export const BridgeForm = () => {
               onLayout={onCurrencySelectorLayoutHandle}
               style={styles.inputCurrencySelector}
             >
-              <Button>
+              <Button onPress={() => choseTokenRef.current?.show()}>
                 <Row style={styles.currencySelectorGap} alignItems="center">
                   <TokenLogo scale={0.7} token="AMB" />
                   <Row
@@ -157,6 +164,11 @@ export const BridgeForm = () => {
         <PrimaryButton onPress={() => null}>
           <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
         </PrimaryButton>
+        <BottomSheetChoseToken
+          ref={choseTokenRef}
+          renderData={networksParams.value}
+          // onPressItem={() => {}}
+        />
       </KeyboardDismissingView>
     </KeyboardAvoidingView>
   );

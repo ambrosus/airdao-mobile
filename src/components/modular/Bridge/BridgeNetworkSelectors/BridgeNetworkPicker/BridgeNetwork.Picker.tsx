@@ -9,8 +9,8 @@ import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetChoseNetworks } from '@components/templates';
 import { useBridgeContextSelector } from '@contexts/Bridge';
-import { ParsedBridge } from '@models/Bridge';
-import { getBridge } from '@api/bridge/sdk/BridgeSDK';
+import { BridgePairsModel, ParsedBridge } from '@models/Bridge';
+import { getBridgePairs } from '@api/bridge/sdk/BridgeSDK';
 
 interface BridgeNetworkPickerProps {
   destination: 'from' | 'to';
@@ -20,28 +20,42 @@ export const BridgeNetworkPicker = ({
   destination
 }: BridgeNetworkPickerProps) => {
   const isFrom = destination === 'from';
-  const { fromParams, toParams, tokenParams } = useBridgeContextSelector();
+  const { fromParams, toParams, networksParams } = useBridgeContextSelector();
   const choseNetworksRef = useRef<BottomSheetRef>(null);
   const showNetworks = () => {
     choseNetworksRef.current?.show();
   };
-
-  useEffect(() => {
-    getBridge({
-      walletHash: '',
-      from: fromParams.value.id,
-      to: toParams.value.id
-    }).then((r) => {
-      tokenParams.setter(r);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromParams.value.id, toParams.value.id]);
 
   const hideNetworks = () => {
     setTimeout(() => {
       choseNetworksRef.current?.dismiss();
     }, 200);
   };
+
+  const parseNetworkParams = (pair: BridgePairsModel) => {
+    const { name, pairs: tokenPair, provider } = pair;
+
+    const tokenForRender = tokenPair.map((tkn) => ({
+      renderTokenItem: tkn[0],
+      name,
+      pairs: tkn,
+      provider
+    }));
+    networksParams.setter(tokenForRender);
+  };
+
+  useEffect(() => {
+    getBridgePairs({
+      walletHash: '',
+      // @ts-ignore
+      from: fromParams.value.id,
+      // @ts-ignore
+      to: toParams.value.id
+    }).then((r) => {
+      return parseNetworkParams(r);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromParams.value.id, toParams.value.id]);
 
   const pickerData = isFrom ? fromParams : toParams;
 

@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
-import { BridgeItem } from './components/BridgeItem';
+import { BridgeSelectorItem } from '../BridgeSelectorItem';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { ParsedBridge } from '@models/Bridge';
 
@@ -42,7 +42,11 @@ export const BottomSheetChoseNetworks = forwardRef<
       <Spacer value={verticalScale(24)} />
       <Spacer value={verticalScale(15)} />
       {bridges.map((item) => (
-        <BridgeItem onPressItem={onPressItem} key={item.id} bridge={item} />
+        <BridgeSelectorItem
+          onPressItem={onPressItem}
+          key={item.id}
+          bridge={item}
+        />
       ))}
       <Spacer value={verticalScale(30)} />
     </BottomSheet>

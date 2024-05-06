@@ -1,6 +1,6 @@
 import { createContextSelector } from '@utils/createContextSelector';
 import { useState } from 'react';
-import { ParsedBridge } from '@models/Bridge';
+import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
 import Config from '@constants/config';
 import { AccountDBModel } from '@database';
 
@@ -15,11 +15,6 @@ const DEFAULT_ETH_NETWORK = {
   id: 'eth',
   name: 'Ethereum',
   side: '0x0De2669e8A7A6F6CC0cBD3Cf2D1EEaD89e243208'
-};
-
-const DEFAULT_CHOSEN_NETWORKS = {
-  name: '',
-  pairs: []
 };
 
 export const BridgeContext = () => {
@@ -53,19 +48,17 @@ export const BridgeContext = () => {
 
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
-  const [chosenNetworks, setChosenNetworks] = useState(DEFAULT_CHOSEN_NETWORKS);
+  const [chosenNetworks, setChosenNetworks] = useState<RenderTokenItem[]>();
 
-  const parsedBridges = Object.keys(Config.BRIDGE_CONFIG).map((item) => ({
-    // @ts-ignore
-    ...Config.BRIDGE_CONFIG.bridges[item],
-    id: item,
-    name: getNetworkNames(item)
-  }));
+  const parsedBridges = Object.keys(Config.BRIDGE_CONFIG.bridges).map(
+    (item) => ({
+      // @ts-ignore
+      ...Config.BRIDGE_CONFIG.bridges[item],
+      id: item,
+      name: getNetworkNames(item)
+    })
+  );
   const bridges: ParsedBridge[] = [...parsedBridges, DEFAULT_AMB_NETWORK];
-
-  // const parseTokens = () => {
-  //   chosenNetworks.pairs.map((item) => console.log('tt', item));
-  // };
 
   const fromSetter = (value: ParsedBridge) => {
     const {
@@ -101,17 +94,6 @@ export const BridgeContext = () => {
     setTo(value);
   };
 
-  // useEffect(() => {
-  //   console.log('EFFECT');
-  //   if (chosenNetworks.pairs.length) {
-  //     console.log('EFFECT IN IF ->>');
-  //
-  //     parseTokens();
-  //   }
-  // }, [chosenNetworks.pairs]);
-  //
-  // console.log(chosenNetworks, 'chosenNetworks');
-  //
   return {
     bridges,
     fromParams: {
@@ -122,7 +104,7 @@ export const BridgeContext = () => {
       value: to,
       setter: toSetter
     },
-    tokenParams: {
+    networksParams: {
       value: chosenNetworks,
       setter: setChosenNetworks
     },

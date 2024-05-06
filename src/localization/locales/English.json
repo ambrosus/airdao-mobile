@@ -323,6 +323,7 @@
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet",
 
-  "bridge.select.network": "Select network"
+  "bridge.select.network": "Select network",
+  "bridge.select.token": "Select token"
 
 }

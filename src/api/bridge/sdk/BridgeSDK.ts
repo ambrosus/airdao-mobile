@@ -24,7 +24,7 @@ export class MySdk extends BridgeSDK {
   }
 }
 
-export async function getBridge({
+export async function getBridgePairs({
   from,
   to
 }: {
