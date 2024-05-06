@@ -10,6 +10,7 @@ export interface HeaderProps {
   titlePosition?: 'left' | 'center';
   contentLeft?: ReactNode;
   contentRight?: ReactNode;
+  closeIconVisible?: boolean;
   style?: ViewStyle;
   leftContainerStyles?: ViewStyle;
   rightContainerStyles?: ViewStyle;

@@ -27,6 +27,8 @@ import {
   StakeSuccessScreen
 } from '@screens/StakingPool/screens';
 import { NFTScreen } from '@screens/NFTScreen';
+import { Bridge } from '@screens/Bridge';
+import { BridgeHistory } from '@screens/BridgeHistory';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -68,6 +70,14 @@ export const HomeStack = () => {
         />
         <Stack.Screen name="StakeErrorScreen" component={StakeErrorScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
+        <Stack.Screen name="Bridge" component={Bridge} />
+        <Stack.Screen
+          name="BridgeHistory"
+          options={{
+            presentation: 'fullScreenModal'
+          }}
+          component={BridgeHistory}
+        />
         <Stack.Screen
           name="SuccessSetupSecurity"
           component={SuccessSetupSecurity}

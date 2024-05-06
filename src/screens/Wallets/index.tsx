@@ -16,6 +16,7 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -34,12 +35,15 @@ export const HomeScreen = () => {
     );
   }
 
+  const { setSelectedAccount } = useBridgeContextSelector();
+
   useEffect(() => {
-    // burnNFT(selectedAccount?._raw);
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+
+      setSelectedAccount(accounts[scrollIdx]);
     }
-  }, [accounts, scrollIdx]);
+  }, [accounts, scrollIdx, setSelectedAccount]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
@@ -78,7 +82,10 @@ export const HomeScreen = () => {
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions address={selectedAccountWithBalance.address} />
+            <AccountActions
+              selectedAccount={selectedAccount}
+              address={selectedAccountWithBalance.address}
+            />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
               account={selectedAccountWithBalance}

@@ -7,6 +7,7 @@ import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
+import { TokenUtils } from '@utils/token';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;
@@ -38,12 +39,15 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   };
 
   const ambTokenData: Token[] = [
-    new Token({
-      name: 'AirDAO',
-      address: account.address,
-      balance: { wei: '', ether: account.ambBalance },
-      symbol: CryptoCurrencyCode.AMB
-    })
+    new Token(
+      {
+        name: 'AirDAO',
+        address: account.address,
+        balance: { wei: '', ether: account.ambBalance },
+        symbol: CryptoCurrencyCode.AMB
+      },
+      TokenUtils
+    )
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];

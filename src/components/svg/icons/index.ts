@@ -93,4 +93,8 @@ export * from './CirculationIcon';
 export * from './Question';
 export * from './TelegramSettingsIcon';
 export * from './NFTIcon';
+export * from './Bridge';
+export * from './History';
 export * from './Failed';
+export * from './EthereumIcon';
+export * from './BSCIcon';

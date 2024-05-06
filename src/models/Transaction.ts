@@ -1,6 +1,5 @@
 import { TransactionType } from '@appTypes/enums';
 import { TransactionDTO } from './dtos/TransactionDTO';
-import { TokenUtils } from '@utils/token';
 import { CryptoCurrencyCode } from '@appTypes';
 
 export class Transaction {
@@ -32,7 +31,7 @@ export class Transaction {
 
   isSent?: boolean;
 
-  constructor(details: TransactionDTO) {
+  constructor(details: TransactionDTO, tokenUtils: any) {
     this._id = details._id;
     this.timestamp = new Date(details.timestamp * 1000);
     this.amount = details.value.ether;
@@ -46,7 +45,7 @@ export class Transaction {
     this.gasCost = details.gasCost;
     if (details.token) {
       // @ts-ignore
-      const { name, symbol } = TokenUtils.getTokenDetails(
+      const { name, symbol } = tokenUtils.getTokenDetails(
         details.token.address
       );
       this.token = {

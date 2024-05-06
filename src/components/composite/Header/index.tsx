@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { BackIcon } from '@components/svg/icons';
+import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { Button, Row, Text } from '@components/base';
 import { HeaderProps } from './Header.types';
 import { styles } from './Header.styles';
@@ -14,6 +14,7 @@ export function Header(props: HeaderProps): JSX.Element {
     contentLeft,
     contentRight,
     title,
+    closeIconVisible = false,
     titlePosition = 'center',
     style = {},
     titleStyle = {},
@@ -52,6 +53,11 @@ export function Header(props: HeaderProps): JSX.Element {
   const renderContentLeft = () => {
     return (
       <>
+        {closeIconVisible && (
+          <Button onPress={navigation.goBack}>
+            <CloseIcon />
+          </Button>
+        )}
         {backIconVisible && (
           <Button onPress={_onBackPress}>
             <BackIcon color={COLORS.neutral900} scale={1.15} />

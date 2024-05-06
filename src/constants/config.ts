@@ -1,4 +1,6 @@
 import * as Updates from 'expo-updates';
+import { bridgeConfig } from '@constants/bridge-config';
+
 const envs = {
   prod: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
@@ -15,6 +17,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
@@ -22,8 +25,12 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
+    ETH_NETWORK_URL: 'https://eth.llamarpc.com',
+    BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
-    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642'
+    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
+    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
+    BRIDGE_CONFIG: bridgeConfig.prod
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -40,6 +47,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
@@ -48,7 +56,9 @@ const envs = {
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
-    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642'
+    POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
+    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
+    BRIDGE_CONFIG: bridgeConfig.prod
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus-test.io',
@@ -65,6 +75,7 @@ const envs = {
       swap: false,
       send: true,
       receive: true,
+      bridge: true,
       stake: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
@@ -73,7 +84,9 @@ const envs = {
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus-test.io',
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
-    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a'
+    NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
+    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
+    BRIDGE_CONFIG: bridgeConfig.test
   }
 };
 

@@ -21,7 +21,8 @@
       "swap": "Swap",
       "send": "Send",
       "receive": "Receive",
-      "stake": "Stake"
+      "stake": "Stake",
+      "bridge": "Bridge"
     }
   },
 
@@ -320,6 +321,8 @@
 
 
   "wallet.my.assets": "My assets",
-  "wallet.picker.select": "Select Wallet"
+  "wallet.picker.select": "Select Wallet",
+
+  "bridge.select.network": "Select network"
 
 }

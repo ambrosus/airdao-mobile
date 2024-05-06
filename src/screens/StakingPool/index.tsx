@@ -10,7 +10,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
-import { StakeToken, StakingInfo } from './components';
+import { StakingInfo } from './components';
 import { styles } from './style';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
@@ -22,8 +22,11 @@ import {
 } from '@contexts';
 import { BigNumber } from 'ethers';
 import { TokenUtils } from '@utils/token';
+import { StakeToken } from './components/Stake/Stake';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const StakingPoolScreen = () => {
+  const { selectedAccount } = useBridgeContextSelector();
   const { data: allWallets } = useAllAccounts();
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
@@ -31,8 +34,9 @@ export const StakingPoolScreen = () => {
   const currency = CryptoCurrencyCode.AMB;
   const { totalStake, apy } = pool;
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
+
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
+    selectedAccount
   );
 
   const { top } = useSafeAreaInsets();
@@ -49,6 +53,19 @@ export const StakingPoolScreen = () => {
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
+
+  // Avoid focusing inputs, while tabs are swiped
+  const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
+
+  const onSwipeStateHandle = (state: boolean) => {
+    if (!state) {
+      setTimeout(() => {
+        setIsTabsSwiping(false);
+      }, 25);
+    } else {
+      setIsTabsSwiping(state);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -101,6 +118,7 @@ export const StakingPoolScreen = () => {
           </View>
           <Spacer value={verticalScale(24)} />
           <AnimatedTabs
+            onSwipeStateHandle={onSwipeStateHandle}
             tabs={[
               {
                 title: t('staking.pool.stake'),
@@ -108,6 +126,7 @@ export const StakingPoolScreen = () => {
                   <View>
                     <Spacer value={verticalScale(24)} />
                     <StakeToken
+                      isSwiping={isTabsSwiping}
                       pool={poolStakingDetails}
                       wallet={selectedWallet}
                       apy={apy}
@@ -121,6 +140,7 @@ export const StakingPoolScreen = () => {
                   <>
                     <Spacer value={verticalScale(24)} />
                     <WithdrawToken
+                      isSwiping={isTabsSwiping}
                       pool={poolStakingDetails}
                       wallet={selectedWallet}
                       apy={apy}

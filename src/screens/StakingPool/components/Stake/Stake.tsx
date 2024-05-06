@@ -28,9 +28,15 @@ interface StakeTokenProps {
   wallet: AccountDBModel | null;
   apy: number;
   pool: ReturnedPoolDetails | undefined;
+  isSwiping: boolean;
 }
 
-export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
+export const StakeToken = ({
+  wallet,
+  apy,
+  pool,
+  isSwiping
+}: StakeTokenProps) => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const { t } = useTranslation();
@@ -123,6 +129,8 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        focusable={!isSwiping}
+        editable={!isSwiping}
         iconRight={
           <View style={styles.currencyBadge}>
             <Text
@@ -138,7 +146,7 @@ export const StakeToken = ({ wallet, apy, pool }: StakeTokenProps) => {
         type="number"
         value={stakeAmount}
         onChangeValue={onChangeStakeAmount}
-        placeholder="0"
+        placeholder="1000"
         maxLength={12}
       />
       {isWrongStakeValue.message && (
