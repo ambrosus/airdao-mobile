@@ -17,6 +17,39 @@ const DEFAULT_ETH_NETWORK = {
   side: '0x0De2669e8A7A6F6CC0cBD3Cf2D1EEaD89e243208'
 };
 
+const DEFAULT_TOKEN = {
+  name: 'amb->eth',
+  pairs: [
+    {
+      address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
+      bridgeNetwork: 'eth',
+      decimals: 18,
+      isNativeCoin: true,
+      name: 'AirDAO (NATIVE)',
+      network: 'amb',
+      symbol: 'AMB'
+    },
+    {
+      address: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
+      bridgeNetwork: 'eth',
+      decimals: 18,
+      isNativeCoin: false,
+      name: 'AirDAO',
+      network: 'eth',
+      symbol: 'AMB'
+    }
+  ],
+  renderTokenItem: {
+    address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
+    bridgeNetwork: 'eth',
+    decimals: 18,
+    isNativeCoin: true,
+    name: 'AirDAO (NATIVE)',
+    network: 'amb',
+    symbol: 'AMB'
+  }
+};
+
 export const BridgeContext = () => {
   const getNetworkNames = (name: string) => {
     switch (name) {
@@ -45,7 +78,7 @@ export const BridgeContext = () => {
   const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
     null
   );
-
+  const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN);
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
   const [chosenNetworks, setChosenNetworks] = useState<RenderTokenItem[]>();
@@ -95,7 +128,6 @@ export const BridgeContext = () => {
   };
 
   return {
-    bridges,
     fromParams: {
       value: from,
       setter: fromSetter
@@ -108,6 +140,11 @@ export const BridgeContext = () => {
       value: chosenNetworks,
       setter: setChosenNetworks
     },
+    tokenParams: {
+      value: selectedToken,
+      setter: setSelectedToken
+    },
+    bridges,
     setSelectedAccount,
     selectedAccount
   };

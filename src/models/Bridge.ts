@@ -18,19 +18,20 @@ export interface BridgeItem {
 }
 
 export interface BridgePairsModel {
-  name: NetworksNamesModel;
+  name: PairsNetworksNamesModel;
   pairs: [Token, Token][];
   provider: ethers.providers.JsonRpcProvider | undefined;
 }
 
 export interface RenderTokenItem {
   renderTokenItem: Token;
-  name: NetworksNamesModel;
+  name: PairsNetworksNamesModel;
   pairs: [Token, Token];
   provider: ethers.providers.JsonRpcProvider | undefined;
 }
 
-type NetworksNamesModel =
+export type SingleNetworksNamesModel = 'eth' | 'amb' | 'bsc';
+export type PairsNetworksNamesModel =
   | 'eth->amb'
   | 'amb->eth'
   | 'bsc->amb'

@@ -96,7 +96,7 @@ export const BridgeNetworkPicker = ({
         </Row>
       </Button>
       <BottomSheetChoseNetworks
-        pickerData={pickerData}
+        destination={destination}
         onPressItem={onPressItem}
         ref={choseNetworksRef}
       />

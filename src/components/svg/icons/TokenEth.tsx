@@ -2,8 +2,14 @@ import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
-export function EthTokenIcon(props: Omit<IconProps, 'color'>) {
-  const { scale = 1 } = props;
+interface EthTokenIconModel extends IconProps {
+  fillColor?: 'blue' | 'gray';
+}
+
+export function EthTokenIcon(props: Omit<EthTokenIconModel, 'color'>) {
+  const { scale = 1, fillColor } = props;
+  const isGray = fillColor !== 'blue';
+
   const width = 32;
   const height = 32;
   return (
@@ -15,7 +21,7 @@ export function EthTokenIcon(props: Omit<IconProps, 'color'>) {
     >
       <Path
         d="M16.064 32.02c8.836 0 16-7.163 16-16 0-8.836-7.164-16-16-16-8.837 0-16 7.164-16 16 0 8.837 7.163 16 16 16z"
-        fill="#403E69"
+        fill={isGray ? '#403E69' : '#627EEA'}
       />
       <Path
         d="M16.053 16.574l-6.721-.577 6.72-3.802v4.379zm0 4.46v6.94c-2.337-3.638-4.913-7.642-6.99-10.883a4400.6 4400.6 0 016.99 3.943zm0-10.068l-6.99 3.9 6.99-10.845v6.945z"

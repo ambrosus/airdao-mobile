@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetChoseToken } from '@components/templates/BottomSheetChoseToken';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import { RenderTokenItem } from '@models/Bridge';
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
@@ -51,7 +52,13 @@ export const BridgeForm = () => {
     setAmountToExchange('999');
   };
 
-  const { networksParams } = useBridgeContextSelector();
+  const { networksParams, tokenParams } = useBridgeContextSelector();
+
+  const onTokenPress = (item: RenderTokenItem) => {
+    tokenParams.setter(item);
+    setTimeout(() => choseTokenRef?.current?.dismiss(), 200);
+  };
+
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
@@ -75,7 +82,10 @@ export const BridgeForm = () => {
             >
               <Button onPress={() => choseTokenRef.current?.show()}>
                 <Row style={styles.currencySelectorGap} alignItems="center">
-                  <TokenLogo scale={0.7} token="AMB" />
+                  <TokenLogo
+                    scale={0.7}
+                    token={tokenParams.value.renderTokenItem.symbol}
+                  />
                   <Row
                     style={styles.currencySelectorInnerGap}
                     alignItems="center"
@@ -85,9 +95,8 @@ export const BridgeForm = () => {
                       fontFamily="Inter_500Medium"
                       color={COLORS.alphaBlack60}
                     >
-                      AMB
+                      {tokenParams.value.renderTokenItem.symbol}
                     </Text>
-
                     <ChevronDownIcon scale={0.45} color={COLORS.alphaBlack60} />
                   </Row>
                 </Row>
@@ -109,7 +118,8 @@ export const BridgeForm = () => {
                 fontFamily="Inter_400Regular"
                 color={COLORS.alphaBlack60}
               >
-                {t('common.balance')}: 10,103 AMB
+                {t('common.balance')}: 10,103{' '}
+                {tokenParams.value.renderTokenItem.symbol}
               </Text>
 
               <Text
@@ -138,7 +148,7 @@ export const BridgeForm = () => {
                 fontFamily="Inter_500Medium"
                 color={COLORS.black}
               >
-                {amountToExchange} AMB
+                {`${amountToExchange} ${tokenParams.value.renderTokenItem.symbol}`}
               </Text>
             </Row>
 
@@ -167,7 +177,8 @@ export const BridgeForm = () => {
         <BottomSheetChoseToken
           ref={choseTokenRef}
           renderData={networksParams.value}
-          // onPressItem={() => {}}
+          // @ts-ignore
+          onPressItem={onTokenPress}
         />
       </KeyboardDismissingView>
     </KeyboardAvoidingView>

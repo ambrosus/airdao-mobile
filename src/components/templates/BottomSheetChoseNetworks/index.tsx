@@ -10,17 +10,22 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { ParsedBridge } from '@models/Bridge';
 
 interface BottomSheetChoseNetworksProps {
-  onPressItem: (bridge: ParsedBridge) => void;
-  pickerData: { value: ParsedBridge; setter: (value: any) => void };
+  onPressItem: (item: ParsedBridge) => void;
+  destination: 'from' | 'to';
 }
 
 export const BottomSheetChoseNetworks = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
 >((props, ref) => {
-  const { onPressItem } = props;
+  const { onPressItem, destination } = props;
+  const isFrom = destination === 'from';
 
-  const { bridges } = useBridgeContextSelector();
+  const { bridges, fromParams, toParams } = useBridgeContextSelector();
+
+  const pickerData = isFrom ? fromParams : toParams;
+
+  // console.log('pickerData', pickerData);
 
   const { t } = useTranslation();
 
@@ -43,9 +48,13 @@ export const BottomSheetChoseNetworks = forwardRef<
       <Spacer value={verticalScale(15)} />
       {bridges.map((item) => (
         <BridgeSelectorItem
+          symbol={item.id}
+          name={item.name}
+          isActive={pickerData.value.id === item.id}
+          // @ts-ignore
           onPressItem={onPressItem}
           key={item.id}
-          bridge={item}
+          item={item}
         />
       ))}
       <Spacer value={verticalScale(30)} />

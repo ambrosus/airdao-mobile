@@ -1,14 +1,18 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, RefObject } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
-import { RenderTokenItem } from '@models/Bridge';
+import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
+import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
+import { ScrollView } from 'react-native';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 interface BottomSheetChoseNetworksProps {
-  onPressItem: () => void;
+  ref: RefObject<BottomSheetRef>;
+  onPressItem: (item: ParsedBridge | RenderTokenItem) => void;
   renderData?: RenderTokenItem[];
 }
 
@@ -16,10 +20,9 @@ export const BottomSheetChoseToken = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
 >((props, ref) => {
-  const { renderData } = props;
+  const { renderData, onPressItem } = props;
   const { t } = useTranslation();
-
-  // console.log('!!', renderData);
+  const { tokenParams } = useBridgeContextSelector();
 
   return (
     <BottomSheet
@@ -38,11 +41,21 @@ export const BottomSheetChoseToken = forwardRef<
       </Text>
       <Spacer value={verticalScale(24)} />
       <Spacer value={verticalScale(15)} />
-      {renderData?.map((item) => (
-        <Text key={item.renderTokenItem.name}>
-          {item.renderTokenItem.symbol}
-        </Text>
-      ))}
+      <ScrollView>
+        {renderData?.map((item) => (
+          <BridgeSelectorItem
+            symbol={item.renderTokenItem.symbol}
+            name={item.renderTokenItem.name}
+            isActive={
+              tokenParams.value.renderTokenItem.address ===
+              item.renderTokenItem.address
+            }
+            onPressItem={onPressItem}
+            key={item.renderTokenItem.name}
+            item={item}
+          />
+        ))}
+      </ScrollView>
       <Spacer value={verticalScale(30)} />
     </BottomSheet>
   );
