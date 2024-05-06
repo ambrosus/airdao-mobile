@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import {
   confirmationStyles,
+  defaultStyle,
   errorStyle,
   pendingStyle,
   styles,
@@ -25,6 +26,13 @@ export const Status = ({ status, steps }: StatusProps) => {
       case 'confirmations': {
         return { ...confirmationStyles };
       }
+      case 'default':
+        if (steps && steps?.start === steps?.end) {
+          return { ...successStyle };
+        }
+        return {
+          ...defaultStyle
+        };
       case 'pending':
         return { ...pendingStyle };
       default:
@@ -40,6 +48,11 @@ export const Status = ({ status, steps }: StatusProps) => {
         return `${transactionStatus
           .charAt(0)
           .toUpperCase()}${transactionStatus.slice(1)}`;
+      case 'default': {
+        return steps?.start && steps.end
+          ? `${steps.start}/${steps.end}`
+          : 'Not started';
+      }
       default:
         return 'Error';
     }

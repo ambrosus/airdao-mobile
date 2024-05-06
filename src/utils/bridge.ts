@@ -7,6 +7,12 @@ export enum NETWORK {
   amb = 'AirDAO'
 }
 
+export enum SHORTEN_NETWORK {
+  eth = 'Ethereum',
+  bsc = 'BNB Chain',
+  amb = 'AirDAO'
+}
+
 export const tokenThumb = (transaction: string) => {
   return transaction.includes('SAMB') ? 'AMB' : transaction;
 };

@@ -7,12 +7,13 @@ import { scale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { Status } from './components/Status/Status';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetBridgeTransactionHistory } from '@components/templates/BottomSheetBridgeTransactionHistory';
+import { BottomSheetBridgeTransactionHistory } from '../../Bridge/BottomSheetBridgeTransactionHistory';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
+import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;
@@ -20,23 +21,31 @@ interface BridgeTransactionModel {
 
 export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
   const bottomSheetRef = useRef<BottomSheetRef | null>(null);
+  const bottomSheetPendingRef = useRef<BottomSheetRef | null>(null);
 
-  const { confirmations, minSafetyBlocks } = useBridgeTransactionStatus(
+  const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     transaction.withdrawTx,
     transaction.transferFinishTxHash === ''
   );
 
   const formattedAmount = NumberUtils.formatAmount(transaction.amount, 3);
   const transactionStatus = useMemo(() => {
-    return transaction.transferFinishTxHash ||
-      (!transaction && minSafetyBlocks === confirmations)
-      ? 'success'
-      : 'confirmations';
-  }, [confirmations, minSafetyBlocks, transaction]);
+    if (!transaction.transferFinishTxHash && +stage !== 2.2) {
+      return 'pending';
+    }
+
+    if (!transaction.transferFinishTxHash && +stage === 2.2) {
+      return 'confirmations';
+    }
+
+    return 'success';
+  }, [stage, transaction]);
 
   const onPreviewTransactionDetails = () => {
-    if (bottomSheetRef && bottomSheetRef.current) {
+    if (transactionStatus === 'success') {
       bottomSheetRef.current?.show();
+    } else {
+      bottomSheetPendingRef.current?.show();
     }
   };
 
@@ -78,6 +87,18 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
         ref={bottomSheetRef}
         confirmations={confirmations}
         transaction={transaction}
+      />
+
+      <BottomSheetBridgeTransactionPendingHistory
+        ref={bottomSheetPendingRef}
+        transaction={transaction}
+        liveTransactionInformation={{
+          stage,
+          confirmations: {
+            current: confirmations,
+            minSafetyBlocks: minSafetyBlocks
+          }
+        }}
       />
     </>
   );
