@@ -42,7 +42,8 @@ export const HomeScreen = () => {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
 
       setSelectedAccount({
-        hash: accounts[scrollIdx].wallet.hash,
+        // @ts-ignore
+        hash: accounts[scrollIdx]._raw.hash,
         address: accounts[scrollIdx]?.address
       });
     }
