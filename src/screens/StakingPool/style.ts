@@ -12,5 +12,10 @@ export const styles = StyleSheet.create({
   stakingInfoContainer: {
     paddingTop: verticalScale(DEVICE_WIDTH > 385 ? 18 : 36),
     paddingHorizontal: scale(16)
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
