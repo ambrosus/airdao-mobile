@@ -33,12 +33,13 @@ export const StakingPoolsScreen = () => {
     navigation.navigate('StakingPool', { pool });
   };
 
-  const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
+  const { fetchPoolDetails, isInitialFetching } =
+    useStakingMultiplyContextSelector();
 
   useEffect(() => {
     if (selectedWallet?.address) {
       (async () => {
-        await fetchPoolDetails(selectedWallet.address);
+        await fetchPoolDetails(selectedWallet.address, true);
       })();
     }
   }, [selectedWallet, fetchPoolDetails]);
@@ -83,7 +84,7 @@ export const StakingPoolsScreen = () => {
           {t('staking.apy')}
         </Text>
       </Row>
-      {isFetching ? (
+      {isInitialFetching ? (
         <View style={spinnerContainerStyle}>
           <Spinner />
         </View>
