@@ -1,8 +1,7 @@
 import { BridgeSDK } from '@api/bridge/sdk/index';
-import { Network, Token } from '@api/bridge/sdk/types';
+import { Config as BridgeConfig, Network, Token } from '@api/bridge/sdk/types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { API } from '@api/api';
 
 export class MySdk extends BridgeSDK {
   getPairs(
@@ -26,11 +25,13 @@ export class MySdk extends BridgeSDK {
 
 export async function getBridgePairs({
   from,
-  to
+  to,
+  bridgeConfig
 }: {
   walletHash: string;
   from: Network;
   to: Network;
+  bridgeConfig: BridgeConfig;
 }) {
   const providerAmb = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
   const providerEth = new ethers.providers.JsonRpcProvider(
@@ -46,9 +47,7 @@ export async function getBridgePairs({
 
   // const signer = new ethers.Wallet(privateKey, providerAmb);
 
-  const config = await API.bridgeService.getBridgeParams();
-
-  const sdk = new MySdk(config.data, {
+  const sdk = new MySdk(bridgeConfig, {
     relayUrls: {
       eth: 'https://relay-eth.ambrosus.io/fees',
       bsc: 'https://relay-bsc.ambrosus.io/fees'

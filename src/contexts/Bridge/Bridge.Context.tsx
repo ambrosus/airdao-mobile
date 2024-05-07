@@ -1,8 +1,8 @@
 import { createContextSelector } from '@utils/createContextSelector';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
-import Config from '@constants/config';
 import { AccountDBModel } from '@database';
+import { API } from '@api/api';
 
 const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',
@@ -51,6 +51,17 @@ const DEFAULT_TOKEN = {
 };
 
 export const BridgeContext = () => {
+  const [config, setConfig] = useState<any>({});
+
+  useEffect(() => {
+    const getConfig = async () => {
+      return await API.bridgeService.getBridgeParams();
+    };
+    getConfig().then((r) => {
+      setConfig(r);
+    });
+  }, []);
+
   const getNetworkNames = (name: string) => {
     switch (name) {
       case 'eth':
@@ -81,16 +92,15 @@ export const BridgeContext = () => {
   const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN);
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
-  const [chosenNetworks, setChosenNetworks] = useState<RenderTokenItem[]>();
+  const [tokensForSelector, setTokensForSelector] =
+    useState<RenderTokenItem[]>();
 
-  const parsedBridges = Object.keys(Config.BRIDGE_CONFIG.bridges).map(
-    (item) => ({
-      // @ts-ignore
-      ...Config.BRIDGE_CONFIG.bridges[item],
-      id: item,
-      name: getNetworkNames(item)
-    })
-  );
+  const parsedBridges = Object.keys(config?.bridges || []).map((item) => ({
+    // @ts-ignore
+    ...config?.bridges[item],
+    id: item,
+    name: getNetworkNames(item)
+  }));
   const bridges: ParsedBridge[] = [...parsedBridges, DEFAULT_AMB_NETWORK];
 
   const fromSetter = (value: ParsedBridge) => {
@@ -137,8 +147,8 @@ export const BridgeContext = () => {
       setter: toSetter
     },
     networksParams: {
-      value: chosenNetworks,
-      setter: setChosenNetworks
+      value: tokensForSelector,
+      setter: setTokensForSelector
     },
     tokenParams: {
       value: selectedToken,
@@ -146,6 +156,7 @@ export const BridgeContext = () => {
     },
     bridges,
     setSelectedAccount,
+    bridgeConfig: config,
     selectedAccount
   };
 };

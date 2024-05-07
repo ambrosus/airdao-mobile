@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
-import { BridgeSelectorItem } from '../BridgeSelectorItem';
+import { BridgeSelectorItem } from '../../BridgeSelectorItem';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { ParsedBridge } from '@models/Bridge';
 

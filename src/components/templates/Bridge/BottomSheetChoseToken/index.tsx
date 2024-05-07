@@ -23,7 +23,7 @@ export const BottomSheetChoseToken = forwardRef<
   const { renderData, onPressItem } = props;
   const { t } = useTranslation();
   const { tokenParams } = useBridgeContextSelector();
-
+  // console.log(tokenParams.value);
   return (
     <BottomSheet
       ref={ref}
@@ -47,8 +47,8 @@ export const BottomSheetChoseToken = forwardRef<
             symbol={item.renderTokenItem.symbol}
             name={item.renderTokenItem.name}
             isActive={
-              tokenParams.value.renderTokenItem.address ===
-              item.renderTokenItem.address
+              tokenParams.value.renderTokenItem.name ===
+              item.renderTokenItem.name
             }
             onPressItem={onPressItem}
             key={item.renderTokenItem.name}

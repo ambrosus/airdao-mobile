@@ -7,10 +7,11 @@ import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetChoseNetworks } from '@components/templates';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { BridgePairsModel, ParsedBridge } from '@models/Bridge';
 import { getBridgePairs } from '@api/bridge/sdk/BridgeSDK';
+import { Token } from '@api/bridge/sdk/types';
+import { BottomSheetChoseNetworks } from '@components/templates/Bridge/BottomSheetChoseNetworks';
 
 interface BridgeNetworkPickerProps {
   destination: 'from' | 'to';
@@ -20,7 +21,8 @@ export const BridgeNetworkPicker = ({
   destination
 }: BridgeNetworkPickerProps) => {
   const isFrom = destination === 'from';
-  const { fromParams, toParams, networksParams } = useBridgeContextSelector();
+  const { fromParams, toParams, networksParams, bridgeConfig } =
+    useBridgeContextSelector();
   const choseNetworksRef = useRef<BottomSheetRef>(null);
   const showNetworks = () => {
     choseNetworksRef.current?.show();
@@ -34,13 +36,39 @@ export const BridgeNetworkPicker = ({
 
   const parseNetworkParams = (pair: BridgePairsModel) => {
     const { name, pairs: tokenPair, provider } = pair;
+    const SAMBinAMBAddress = '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F';
+    const SAMBinETHAddress = '0x683aae5cD37AC94943D05C19E9109D5876113562';
+    const SAMB2inETHAddress = '0xf4fB9BF10E489EA3Edb03E094939341399587b0C';
 
-    const tokenForRender = tokenPair.map((tkn) => ({
-      renderTokenItem: tkn[0],
-      name,
-      pairs: tkn,
-      provider
-    }));
+    const tokenFilter = (tokenPairs: Token[]) => {
+      switch (name) {
+        case 'amb->eth': {
+          const fromAddressIsSAMBinAMB =
+            tokenPairs[0].address === SAMBinAMBAddress;
+          const toAddressIsSAMBinRTH =
+            tokenPairs[1].address === SAMBinETHAddress;
+          return !(fromAddressIsSAMBinAMB && toAddressIsSAMBinRTH);
+        }
+        case 'eth->amb': {
+          const fromIsSAMB2inETH = tokenPairs[0].address === SAMB2inETHAddress;
+          const toIsSAMBinAMB =
+            tokenPairs[1].address === SAMBinAMBAddress &&
+            !tokenPairs[1].isNativeCoin;
+          return !(fromIsSAMB2inETH && toIsSAMBinAMB);
+        }
+        default:
+          return true;
+      }
+    };
+
+    const tokenForRender = tokenPair
+      .filter((item) => tokenFilter(item))
+      .map((tkn) => ({
+        renderTokenItem: tkn[0],
+        name,
+        pairs: tkn,
+        provider
+      }));
     networksParams.setter(tokenForRender);
   };
 
@@ -50,7 +78,8 @@ export const BridgeNetworkPicker = ({
       // @ts-ignore
       from: fromParams.value.id,
       // @ts-ignore
-      to: toParams.value.id
+      to: toParams.value.id,
+      bridgeConfig
     }).then((r) => {
       return parseNetworkParams(r);
     });

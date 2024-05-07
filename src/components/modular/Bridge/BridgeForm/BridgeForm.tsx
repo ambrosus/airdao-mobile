@@ -18,7 +18,7 @@ import { DeviceUtils } from '@utils/device';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetChoseToken } from '@components/templates/BottomSheetChoseToken';
+import { BottomSheetChoseToken } from '../../../templates/Bridge/BottomSheetChoseToken';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { RenderTokenItem } from '@models/Bridge';
 
