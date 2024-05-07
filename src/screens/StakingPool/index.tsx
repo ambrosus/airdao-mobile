@@ -27,14 +27,14 @@ import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const StakingPoolScreen = () => {
-  const { selectedAccount } = useBridgeContextSelector();
-  const { data: allWallets } = useAllAccounts();
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
-  const { t } = useTranslation();
-  const currency = CryptoCurrencyCode.AMB;
   const { totalStake, apy } = pool;
+  const { selectedAccount } = useBridgeContextSelector();
+  const { data: allWallets } = useAllAccounts();
+  const { t } = useTranslation();
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
+  const currency = CryptoCurrencyCode.AMB;
 
   const [currentlySelectedIndex, setCurrentlySelectedIndex] = useState(0);
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
