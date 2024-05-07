@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { KeyboardDismissingView, Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -49,7 +49,7 @@ export const StakingPoolScreen = () => {
         await fetchPoolDetails(selectedWallet.address);
       })();
     }
-  }, [selectedWallet, fetchPoolDetails]);
+  }, [selectedWallet, selectedAccount, fetchPoolDetails]);
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
@@ -59,6 +59,7 @@ export const StakingPoolScreen = () => {
 
   const onSwipeStateHandle = (state: boolean) => {
     if (!state) {
+      Keyboard.dismiss();
       setTimeout(() => {
         setIsTabsSwiping(false);
       }, 25);
@@ -66,6 +67,14 @@ export const StakingPoolScreen = () => {
       setIsTabsSwiping(state);
     }
   };
+
+  const [currentlySelectedIndex, setCurrentlySelectedIndex] = useState(0);
+
+  const onChangedIndex = (idx: number) => setCurrentlySelectedIndex(idx);
+
+  const keyboardVerticalOffset = useMemo(() => {
+    return -verticalScale(currentlySelectedIndex === 0 ? 52 : 76);
+  }, [currentlySelectedIndex]);
 
   return (
     <View style={styles.container}>
@@ -105,8 +114,12 @@ export const StakingPoolScreen = () => {
         />
       </View>
 
-      <KeyboardDismissingView style={styles.container}>
-        <KeyboardAvoidingView style={styles.container} behavior="position">
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          keyboardVerticalOffset={keyboardVerticalOffset}
+          behavior="position"
+        >
           <View style={styles.stakingInfoContainer}>
             <StakingInfo
               totalStake={totalStake}
@@ -118,7 +131,10 @@ export const StakingPoolScreen = () => {
           </View>
           <Spacer value={verticalScale(24)} />
           <AnimatedTabs
+            dismissOnChangeIndex
+            containerStyle={styles.tabsContainer}
             onSwipeStateHandle={onSwipeStateHandle}
+            onChangedIndex={onChangedIndex}
             tabs={[
               {
                 title: t('staking.pool.stake'),
@@ -151,7 +167,7 @@ export const StakingPoolScreen = () => {
             ]}
           />
         </KeyboardAvoidingView>
-      </KeyboardDismissingView>
+      </View>
     </View>
   );
 };

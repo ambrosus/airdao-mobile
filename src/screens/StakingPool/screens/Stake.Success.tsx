@@ -16,12 +16,17 @@ import { SuccessIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { useStakingMultiplyContextSelector } from '@contexts';
+import { useBalanceOfAddress } from '@hooks';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
+
+  const { refetch: refetchAmbBalance } = useBalanceOfAddress(
+    route.params.wallet?.address || ''
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +35,7 @@ export const StakeSuccessScreen = () => {
     setLoading(true);
     try {
       if (route.params.wallet?.address) {
+        if (refetchAmbBalance) refetchAmbBalance();
         await fetchPoolDetails(route.params.wallet.address);
       }
     } finally {

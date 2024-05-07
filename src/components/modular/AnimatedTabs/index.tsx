@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, View, ViewStyle } from 'react-native';
+import { Keyboard, ScrollView, View, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -20,10 +20,18 @@ interface AnimatedTabsProps {
   tabs: AnimatedTab[];
   containerStyle?: ViewStyle;
   onSwipeStateHandle?: (state: boolean) => void;
+  dismissOnChangeIndex?: boolean;
+  onChangedIndex?: (index: number) => void;
 }
 
 export const AnimatedTabs = (props: AnimatedTabsProps) => {
-  const { tabs, containerStyle, onSwipeStateHandle } = props;
+  const {
+    tabs,
+    containerStyle,
+    onSwipeStateHandle,
+    dismissOnChangeIndex,
+    onChangedIndex
+  } = props;
   const tabCount = tabs.length;
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,6 +55,8 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
   }, [currentIndex, indicatorPosition, tabWidth]);
 
   const scrollToTab = (idx: number) => {
+    dismissOnChangeIndex && Keyboard.dismiss();
+    onChangedIndex && onChangedIndex(idx);
     scrollView.current?.scrollTo({ x: tabWidth * idx, animated: true });
     setCurrentIndex(idx);
     indicatorPosition.value = withTiming(idx * tabBarWidth);
