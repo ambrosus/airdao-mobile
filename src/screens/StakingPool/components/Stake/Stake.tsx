@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Row, Spacer, Text } from '@components/base';
+import { InputRef, Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -40,15 +40,21 @@ export const StakeToken = ({
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
   const { t } = useTranslation();
+
+  const inputRef = useRef<InputRef>(null);
+  const previewBottomSheetRef = useRef<BottomSheetRef>(null);
+
   const [stakeAmount, setStakeAmount] = useState('');
-  const previewModalRef = useRef<BottomSheetRef>(null);
-  const { data: ambBalance, refetch: refetchAmbBalance } = useBalanceOfAddress(
-    wallet?.address || ''
-  );
+  const [loading, setLoading] = useState(false);
+
+  const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
   const showPreview = () => {
-    previewModalRef.current?.show();
+    setTimeout(() => {
+      previewBottomSheetRef.current?.show();
+    }, 500);
+    inputRef.current?.blur();
   };
 
   const onPercentageBoxPress = useCallback(
@@ -63,12 +69,22 @@ export const StakeToken = ({
     [ambBalance.ether]
   );
 
-  const [loading, setLoading] = useState(false);
+  async function simulateNavigationDelay(navigate: () => void) {
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    previewBottomSheetRef.current?.dismiss();
+
+    await delay(320);
+
+    navigate();
+    setLoading(false);
+  }
 
   const onSubmitStakeTokens = useCallback(async () => {
     if (!pool) return;
-    setLoading(true);
     try {
+      setLoading(true);
       // @ts-ignore
       const walletHash = wallet?._raw.hash;
       const result = await staking.stake({
@@ -78,29 +94,22 @@ export const StakeToken = ({
       });
 
       if (!result) {
-        setTimeout(() => {
-          navigation.navigate('StakeErrorScreen');
-        }, 100);
+        await simulateNavigationDelay(() =>
+          navigation.navigate('StakeErrorScreen')
+        );
       } else {
-        setTimeout(() => {
+        await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'stake',
             pool,
             wallet
-          });
-        }, 100);
+          })
+        );
       }
     } finally {
-      if (refetchAmbBalance) {
-        refetchAmbBalance();
-      }
-      previewModalRef.current?.dismiss();
       setStakeAmount('');
-      setTimeout(() => {
-        setLoading(false);
-      }, 125);
     }
-  }, [stakeAmount, pool, navigation, wallet, refetchAmbBalance]);
+  }, [stakeAmount, pool, navigation, wallet]);
 
   const onChangeStakeAmount = (value: string) => {
     setStakeAmount(StringUtils.removeNonNumericCharacters(value));
@@ -129,6 +138,7 @@ export const StakeToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
         iconRight={
@@ -207,7 +217,7 @@ export const StakeToken = ({
           )}
         </Text>
       </PrimaryButton>
-      <BottomSheet ref={previewModalRef} swiperIconVisible>
+      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
         {loading ? (
           <StakePending />
         ) : (
