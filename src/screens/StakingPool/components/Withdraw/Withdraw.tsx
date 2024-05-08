@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { InputRef, Row, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -8,7 +10,6 @@ import {
 } from '@components/composite';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
 import { StringUtils } from '@utils/string';
 import { verticalScale } from '@utils/scaling';
 import { PercentageBox } from '@components/composite/PercentageBox';
@@ -18,10 +19,8 @@ import { AccountDBModel } from '@database';
 import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
 import { ReturnedPoolDetails } from '@api/staking/types';
 import { staking } from '@api/staking/staking-service';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
-import { useBalanceOfAddress } from '@hooks';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -40,14 +39,12 @@ export const WithdrawToken = ({
   const { t } = useTranslation();
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
-  const { refetch: refetchAmbBalance } = useBalanceOfAddress(
-    wallet?.address || ''
-  );
+
+  const inputRef = useRef<InputRef>(null);
   const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
-  const [withdrawAmount, setWithdrawAmount] = useState<string>('');
-
   const [loading, setLoading] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -66,10 +63,23 @@ export const WithdrawToken = ({
   );
 
   const onWithdrawPreview = () => {
-    if (previewBottomSheetRef && previewBottomSheetRef.current) {
-      previewBottomSheetRef.current.show();
-    }
+    setTimeout(() => {
+      previewBottomSheetRef.current?.show();
+    }, 500);
+    inputRef.current?.blur();
   };
+
+  async function simulateNavigationDelay(navigate: () => void) {
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    previewBottomSheetRef.current?.dismiss();
+
+    await delay(320);
+
+    navigate();
+    setLoading(false);
+  }
 
   const onSubmitWithdrawTokens = useCallback(async () => {
     if (!pool) return;
@@ -84,29 +94,22 @@ export const WithdrawToken = ({
       });
 
       if (!result) {
-        setTimeout(() => {
-          navigation.navigate('StakeErrorScreen');
-        }, 100);
+        await simulateNavigationDelay(() =>
+          navigation.navigate('StakeErrorScreen')
+        );
       } else {
-        setTimeout(() => {
+        await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',
             pool,
             wallet
-          });
-        }, 100);
+          })
+        );
       }
     } finally {
-      if (refetchAmbBalance) {
-        refetchAmbBalance();
-      }
-      previewBottomSheetRef.current?.dismiss();
       setWithdrawAmount('');
-      setTimeout(() => {
-        setLoading(false);
-      }, 125);
     }
-  }, [withdrawAmount, pool, navigation, wallet, refetchAmbBalance]);
+  }, [withdrawAmount, pool, navigation, wallet]);
 
   const isWrongStakeValue = useMemo(() => {
     return (
@@ -143,6 +146,7 @@ export const WithdrawToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
         iconRight={renderCurrencyFieldIcon}
