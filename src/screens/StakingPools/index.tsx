@@ -16,6 +16,7 @@ import { useStakingMultiplyContextSelector } from '@contexts';
 import { AccountDBModel } from '@database';
 import { useAllAccounts } from '@hooks/database';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const StakingPoolsScreen = () => {
   const { t } = useTranslation();
@@ -23,20 +24,22 @@ export const StakingPoolsScreen = () => {
   const { data: stakingPools } = useAmbrosusStakingPools();
 
   const { data: allWallets } = useAllAccounts();
+  const { selectedAccount } = useBridgeContextSelector();
   const [selectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
+    selectedAccount ? selectedAccount : allWallets[0]
   );
 
   const navigateToPoolScreen = (pool: StakingPool) => {
     navigation.navigate('StakingPool', { pool });
   };
 
-  const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
+  const { fetchPoolDetails, isInitialFetching } =
+    useStakingMultiplyContextSelector();
 
   useEffect(() => {
     if (selectedWallet?.address) {
       (async () => {
-        await fetchPoolDetails(selectedWallet.address);
+        await fetchPoolDetails(selectedWallet.address, true);
       })();
     }
   }, [selectedWallet, fetchPoolDetails]);
@@ -81,7 +84,7 @@ export const StakingPoolsScreen = () => {
           {t('staking.apy')}
         </Text>
       </Row>
-      {isFetching ? (
+      {isInitialFetching ? (
         <View style={spinnerContainerStyle}>
           <Spinner />
         </View>
