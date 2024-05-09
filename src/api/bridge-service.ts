@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Config as BridgeConfig } from '@api/bridge/sdk/types';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import Config from '@constants/config';
-import { getBridge } from '@api/bridge/sdk/BridgeSDK';
+import { bridgeSDK } from '@api/bridge/sdk/BridgeSDK';
 
 interface BridgeParamsModel {
   data: BridgeConfig;
@@ -16,7 +16,6 @@ export const getBridgeHistory = async (
   try {
     const preparedURL = `${BRIDGE_TRANSACTIONS_HISTORY_URL}/txHistory?userAddress=${address}`;
     const response = await axios.get(preparedURL);
-
     return response.data;
   } catch (error) {
     throw error;
@@ -32,15 +31,15 @@ const getBridgeParams = async (): Promise<BridgeParamsModel> => {
   const testNet = false;
   const apiUrl = testNet ? TestNetApi : ProdApi;
   try {
-    return await axios.get(apiUrl);
+    const res = await axios.get(apiUrl);
+    return res.data;
   } catch (error) {
     throw error;
   }
-  Config;
 };
 
 export const bridgeService = {
+  bridgeSDK,
   getBridgeParams,
-  getBridge,
   getBridgeHistory
 };

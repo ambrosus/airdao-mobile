@@ -336,5 +336,9 @@
   "bridge.transaction.to": "To {{networkTo}}",
   "bridge.transaction.sending.heading": "Sending {{tokenFrom}} to {{networkTo}}",
   "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
-  "bridge.select.network": "Select network"
+  "bridge.select.network": "Select network", 
+  "bridge.select.token": "Select token",
+  "bridge.amount.to.bridge": "Amount to bridge",
+  "bridge.amount.network.fee": "Network fee",
+  "bridge.amount.to.receive": "You’ll receive"
 }

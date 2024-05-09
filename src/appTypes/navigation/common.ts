@@ -7,6 +7,7 @@ import { AccountList } from '@models';
 
 export type CommonStackParamsList = {
   Address: { address: ListsOfAddressType['addressId'] };
+  Passcode: { onPasscodeApprove: () => void };
   Collection: { group: AccountList };
 };
 

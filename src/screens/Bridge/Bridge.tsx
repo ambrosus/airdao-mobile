@@ -35,7 +35,6 @@ export const Bridge = () => {
         bottomBorder
         contentRight={renderHeaderRightContent}
       />
-
       <Spacer value={scale(15)} />
       <BridgeTemplate />
     </SafeAreaView>

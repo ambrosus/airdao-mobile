@@ -5,22 +5,25 @@ import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
-import { BridgeItem } from './components/BridgeItem';
+import { BridgeSelectorItem } from '../../BridgeSelectorItem';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { ParsedBridge } from '@models/Bridge';
 
 interface BottomSheetChoseNetworksProps {
-  onPressItem: (bridge: ParsedBridge) => void;
-  pickerData: { value: ParsedBridge; setter: (value: any) => void };
+  onPressItem: (item: ParsedBridge) => void;
+  destination: 'from' | 'to';
 }
 
 export const BottomSheetChoseNetworks = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
 >((props, ref) => {
-  const { onPressItem } = props;
+  const { onPressItem, destination } = props;
+  const isFrom = destination === 'from';
 
-  const { bridges } = useBridgeContextSelector();
+  const { bridges, fromParams, toParams } = useBridgeContextSelector();
+
+  const pickerData = isFrom ? fromParams : toParams;
 
   const { t } = useTranslation();
 
@@ -42,7 +45,15 @@ export const BottomSheetChoseNetworks = forwardRef<
       <Spacer value={verticalScale(24)} />
       <Spacer value={verticalScale(15)} />
       {bridges.map((item) => (
-        <BridgeItem onPressItem={onPressItem} key={item.id} bridge={item} />
+        <BridgeSelectorItem
+          symbol={item.id}
+          name={item.name}
+          isActive={pickerData.value.id === item.id}
+          // @ts-ignore
+          onPressItem={onPressItem}
+          key={item.id}
+          item={item}
+        />
       ))}
       <Spacer value={verticalScale(30)} />
     </BottomSheet>

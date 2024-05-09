@@ -6,8 +6,16 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  tabsContainer: {
+    height: '100%'
+  },
   stakingInfoContainer: {
     paddingTop: verticalScale(DEVICE_WIDTH > 385 ? 18 : 36),
     paddingHorizontal: scale(16)
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

@@ -1,3 +1,6 @@
+import { Token } from '@api/bridge/sdk/types';
+import { ethers } from 'ethers';
+
 export interface Bridge {
   bridges: Bridges;
   tokens: Tokens;
@@ -13,6 +16,27 @@ export interface BridgeItem {
   amb: string;
   side: string;
 }
+
+export interface BridgePairsModel {
+  name: PairsNetworksNamesModel;
+  pairs: [Token, Token][];
+  provider: ethers.providers.JsonRpcProvider | undefined;
+}
+
+export interface RenderTokenItem {
+  renderTokenItem: Token;
+  name: PairsNetworksNamesModel;
+  pairs: [Token, Token];
+  provider: ethers.providers.JsonRpcProvider | undefined;
+}
+
+export type SingleNetworksNamesModel = 'eth' | 'amb' | 'bsc';
+export type PairsNetworksNamesModel =
+  | 'eth->amb'
+  | 'amb->eth'
+  | 'bsc->amb'
+  | 'amb->bsc'
+  | string;
 
 export interface Tokens {
   SAMB: TokenConfig;

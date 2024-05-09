@@ -3,9 +3,7 @@ import {
   AirBondIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
-  BSCIcon,
   BusdIcon,
-  EthereumIcon,
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
@@ -36,6 +34,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
   } = props;
   switch (token.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
+    case CryptoCurrencyCode.SAMB.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
@@ -44,11 +43,9 @@ export const TokenLogo = (props: TokenLogoProps) => {
     }
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
-      if (overrideIconVariants.eth === 'blue') {
-        return <EthereumIcon scale={scale} />;
-      } else {
-        return <EthTokenIcon scale={scale} />;
-      }
+      return (
+        <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
+      );
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
       return <BusdIcon scale={scale} />;
@@ -80,8 +77,6 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return <LangFundIcon scale={scale} />;
     case 'airdao nft':
       return <NFTIcon />;
-    case 'bsc':
-      return <BSCIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

@@ -335,5 +335,9 @@
   "bridge.transaction.to": "{{networkTo}}'a",
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
-  "bridge.select.network": "!!!Select network"
+  "bridge.select.network": "!!!Select network",
+  "bridge.select.token": "!!!Select token",
+  "bridge.amount.to.bridge": "!!!Amount to bridge",
+  "bridge.amount.network.fee": "!!!Network fee",
+  "bridge.amount.to.receive": "!!!You’ll receive"
 }

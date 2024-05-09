@@ -26,4 +26,4 @@ export * from './LocalizedRenderEmpty';
 export * from './WalletPicker';
 export * from './WalletTransactionsAndAssets';
 export * from './ExplorerAccount/BridgeTransaction';
-export * from './BottomSheetChoseNetworks';
+export * from './Bridge/BottomSheetChoseNetworks';

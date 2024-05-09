@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import {
@@ -21,11 +21,20 @@ import { verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
-import { RootNavigationProp } from '@appTypes';
+import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
 
 export const PasscodeEntry = () => {
+  const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
+  const onPasscodeApprove = params?.onPasscodeApprove;
+
+  const onPasscodeEntry = () => {
+    if (typeof onPasscodeApprove === 'function') {
+      onPasscodeApprove();
+    }
+  };
+
   const isAuthSuccessfulRef = useRef(false);
   usePreventGoingBack(isAuthSuccessfulRef);
 
@@ -70,6 +79,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
+        onPasscodeEntry();
         closePasscodeEntry();
       } else {
         passcodeRef.current?.focus();
@@ -79,6 +89,7 @@ export const PasscodeEntry = () => {
     } finally {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
@@ -102,6 +113,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
+        onPasscodeEntry();
         closePasscodeEntry();
       } else {
         Alert.alert(

@@ -40,12 +40,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
-
-      setSelectedAccount({
-        // @ts-ignore
-        hash: accounts[scrollIdx]._raw.hash,
-        address: accounts[scrollIdx]?.address
-      });
+      setSelectedAccount(accounts[scrollIdx]);
     }
   }, [accounts, scrollIdx, setSelectedAccount]);
 
