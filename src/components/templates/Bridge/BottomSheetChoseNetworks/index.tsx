@@ -25,8 +25,6 @@ export const BottomSheetChoseNetworks = forwardRef<
 
   const pickerData = isFrom ? fromParams : toParams;
 
-  // console.log('pickerData', pickerData);
-
   const { t } = useTranslation();
 
   return (

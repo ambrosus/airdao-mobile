@@ -47,13 +47,6 @@ export async function getBridgePairs({
 
   // const signer = new ethers.Wallet(privateKey, providerAmb);
 
-  const sdk = new MySdk(bridgeConfig, {
-    relayUrls: {
-      eth: 'https://relay-eth.ambrosus.io/fees',
-      bsc: 'https://relay-bsc.ambrosus.io/fees'
-    }
-  });
-
   const currentProvider = (from: string) => {
     switch (from) {
       case 'eth':
@@ -64,9 +57,32 @@ export async function getBridgePairs({
         return providerBsc;
     }
   };
+  const sdk = new MySdk(bridgeConfig, {
+    relayUrls: {
+      eth: 'https://relay-eth.ambrosus.io/fees',
+      bsc: 'https://relay-bsc.ambrosus.io/fees'
+    }
+  });
   return {
     name: `${from}->${to}`,
     pairs: sdk.getPairs(from, to),
     provider: currentProvider(from)
   };
 }
+
+export async function getFeeData({ bridgeConfig, dataForFee }) {
+  const { tokenFrom, tokenTo, amountTokens, isMax } = dataForFee;
+  const sdk = new MySdk(bridgeConfig, {
+    relayUrls: {
+      eth: 'https://relay-eth.ambrosus.io/fees',
+      bsc: 'https://relay-bsc.ambrosus.io/fees'
+    }
+  });
+  const fee = sdk.getFeeData(tokenFrom, tokenTo, amountTokens, isMax);
+  return fee;
+}
+
+export const bridgeSDK = {
+  getBridgePairs,
+  getFeeData
+};

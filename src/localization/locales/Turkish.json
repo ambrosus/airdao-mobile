@@ -325,7 +325,9 @@
   "wallet.picker.select": "Cüzdan seç",
 
   "bridge.select.network": "!!!Select network",
-  "bridge.select.token": "!!!Select token"
-
+  "bridge.select.token": "!!!Select token",
+  "bridge.amount.to.bridge": "!!!Amount to bridge",
+  "bridge.amount.network.fee": "!!!Network fee",
+  "bridge.amount.to.receive": "!!!You’ll receive"
 
 }

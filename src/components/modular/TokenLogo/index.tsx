@@ -34,6 +34,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
   } = props;
   switch (token.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
+    case CryptoCurrencyCode.SAMB.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;

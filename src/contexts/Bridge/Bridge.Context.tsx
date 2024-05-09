@@ -11,10 +11,10 @@ const DEFAULT_AMB_NETWORK = {
   name: 'AirDAO'
 };
 const DEFAULT_ETH_NETWORK = {
-  amb: '0x19caBC1E34Ab0CC5C62DaA1394f6022B38b75c78',
+  amb: '0x0000000000',
   id: 'eth',
   name: 'Ethereum',
-  side: '0x0De2669e8A7A6F6CC0cBD3Cf2D1EEaD89e243208'
+  side: '1x1111111111'
 };
 
 const DEFAULT_TOKEN = {
@@ -27,7 +27,7 @@ const DEFAULT_TOKEN = {
       isNativeCoin: true,
       name: 'AirDAO (NATIVE)',
       network: 'amb',
-      symbol: 'AMB'
+      symbol: 'USDT'
     },
     {
       address: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
@@ -95,12 +95,21 @@ export const BridgeContext = () => {
   const [tokensForSelector, setTokensForSelector] =
     useState<RenderTokenItem[]>();
 
-  const parsedBridges = Object.keys(config?.bridges || []).map((item) => ({
-    // @ts-ignore
-    ...config?.bridges[item],
-    id: item,
-    name: getNetworkNames(item)
-  }));
+  const parsedBridges = Object.keys(config?.bridges || []).map((item) => {
+    const res = {
+      // @ts-ignore
+      ...config?.bridges[item],
+      id: item,
+      name: getNetworkNames(item)
+    };
+
+    if (res.id === 'eth') {
+      for (const key in DEFAULT_ETH_NETWORK) {
+        DEFAULT_ETH_NETWORK[key] = res[key];
+      }
+    }
+    return res;
+  });
   const bridges: ParsedBridge[] = [...parsedBridges, DEFAULT_AMB_NETWORK];
 
   const fromSetter = (value: ParsedBridge) => {

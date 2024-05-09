@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Config as BridgeConfig } from '@api/bridge/sdk/types';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import Config from '@constants/config';
+import { bridgeSDK } from '@api/bridge/sdk/BridgeSDK';
 
 interface BridgeParamsModel {
   data: BridgeConfig;
@@ -38,6 +39,7 @@ const getBridgeParams = async (): Promise<BridgeParamsModel> => {
 };
 
 export const bridgeService = {
+  bridgeSDK,
   getBridgeParams,
   getBridgeHistory
 };

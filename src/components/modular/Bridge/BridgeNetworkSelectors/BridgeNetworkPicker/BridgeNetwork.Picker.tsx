@@ -9,9 +9,10 @@ import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { BridgePairsModel, ParsedBridge } from '@models/Bridge';
-import { getBridgePairs } from '@api/bridge/sdk/BridgeSDK';
 import { Token } from '@api/bridge/sdk/types';
 import { BottomSheetChoseNetworks } from '@components/templates/Bridge/BottomSheetChoseNetworks';
+import { API } from '@api/api';
+import { CryptoCurrencyCode } from '@appTypes';
 
 interface BridgeNetworkPickerProps {
   destination: 'from' | 'to';
@@ -21,7 +22,7 @@ export const BridgeNetworkPicker = ({
   destination
 }: BridgeNetworkPickerProps) => {
   const isFrom = destination === 'from';
-  const { fromParams, toParams, networksParams, bridgeConfig } =
+  const { tokenParams, fromParams, toParams, networksParams, bridgeConfig } =
     useBridgeContextSelector();
   const choseNetworksRef = useRef<BottomSheetRef>(null);
   const showNetworks = () => {
@@ -39,7 +40,6 @@ export const BridgeNetworkPicker = ({
     const SAMBinAMBAddress = '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F';
     const SAMBinETHAddress = '0x683aae5cD37AC94943D05C19E9109D5876113562';
     const SAMB2inETHAddress = '0xf4fB9BF10E489EA3Edb03E094939341399587b0C';
-
     const tokenFilter = (tokenPairs: Token[]) => {
       switch (name) {
         case 'amb->eth': {
@@ -70,19 +70,28 @@ export const BridgeNetworkPicker = ({
         provider
       }));
     networksParams.setter(tokenForRender);
+
+    const defaultToken = tokenForRender.find(
+      (token) =>
+        token.renderTokenItem.isNativeCoin ||
+        token.renderTokenItem.symbol === CryptoCurrencyCode.SAMB
+    );
+    tokenParams.setter(defaultToken);
   };
 
   useEffect(() => {
-    getBridgePairs({
-      walletHash: '',
-      // @ts-ignore
-      from: fromParams.value.id,
-      // @ts-ignore
-      to: toParams.value.id,
-      bridgeConfig
-    }).then((r) => {
-      return parseNetworkParams(r);
-    });
+    API.bridgeService.bridgeSDK
+      .getBridgePairs({
+        walletHash: '',
+        // @ts-ignore
+        from: fromParams.value.id,
+        // @ts-ignore
+        to: toParams.value.id,
+        bridgeConfig
+      })
+      .then((r) => {
+        return parseNetworkParams(r);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromParams.value.id, toParams.value.id]);
 
