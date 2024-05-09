@@ -14,12 +14,14 @@ import { COLORS } from '@constants/colors';
 import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
+import { useTranslation } from 'react-i18next';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;
 }
 
 export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
+  const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef | null>(null);
   const bottomSheetPendingRef = useRef<BottomSheetRef | null>(null);
 
@@ -73,7 +75,10 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
               color={COLORS.alphaBlack50}
               numberOfLines={1}
             >
-              To: {NETWORK[transaction.networkTo as keyof typeof NETWORK]}
+              {t('bridge.transaction.to', {
+                networkTo:
+                  NETWORK[transaction.networkTo as keyof typeof NETWORK]
+              })}
             </Text>
           </View>
           <Status

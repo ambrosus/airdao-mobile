@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import {
   confirmationStyles,
@@ -8,6 +8,7 @@ import {
   styles,
   successStyle
 } from './Status.styles';
+import { useTranslation } from 'react-i18next';
 
 interface StatusProps {
   status: string;
@@ -19,7 +20,8 @@ interface StatusProps {
 
 export const Status = ({ status, steps }: StatusProps) => {
   const transactionStatus = status.toLowerCase();
-  const statusStyle = (() => {
+
+  const statusStyle = useMemo(() => {
     switch (transactionStatus) {
       case 'success':
         return { ...successStyle };
@@ -27,7 +29,7 @@ export const Status = ({ status, steps }: StatusProps) => {
         return { ...confirmationStyles };
       }
       case 'default':
-        if (steps && steps?.start === steps?.end) {
+        if (steps && steps.start !== 0 && steps?.start === steps?.end) {
           return { ...successStyle };
         }
         return {
@@ -38,25 +40,27 @@ export const Status = ({ status, steps }: StatusProps) => {
       default:
         return { ...errorStyle };
     }
-  })();
+  }, [transactionStatus, steps]);
 
-  const statusText = (() => {
+  const { t } = useTranslation();
+
+  const statusText = useMemo(() => {
     switch (status) {
       case 'success':
+        return t('common.status.success');
       case 'pending':
+        return t('common.status.pending');
       case 'confirmations':
-        return `${transactionStatus
-          .charAt(0)
-          .toUpperCase()}${transactionStatus.slice(1)}`;
+        return t('bridge.transaction.confirmations');
       case 'default': {
         return steps?.start && steps.end
           ? `${steps.start}/${steps.end}`
-          : 'Not started';
+          : t('common.status.not.started');
       }
       default:
-        return 'Error';
+        return t('common.status.failed');
     }
-  })();
+  }, [status, steps, t]);
 
   return (
     <View style={{ ...styles.statusMain, ...statusStyle.background }}>
