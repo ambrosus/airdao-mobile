@@ -70,6 +70,7 @@ export async function getBridgePairs({
   };
 }
 
+//TODO BRIDGE write types
 export async function getFeeData({ bridgeConfig, dataForFee }) {
   const { tokenFrom, tokenTo, amountTokens, isMax } = dataForFee;
   const sdk = new MySdk(bridgeConfig, {
