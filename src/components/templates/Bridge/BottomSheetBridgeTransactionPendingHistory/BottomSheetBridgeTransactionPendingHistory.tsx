@@ -60,36 +60,33 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
           color={COLORS.neutral800}
           style={styles.heading}
         >
-          {/* TODO: Reformat string into i18n util */}
-          {`${t('send.funds.sending')} ${formattedAmount} ${
-            transaction.tokenFrom.name
-          } to ${
-            SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
-          }`}
+          {t('bridge.transaction.sending.heading', {
+            tokenFrom: `${formattedAmount} ${transaction.tokenFrom.name}`,
+            networkTo:
+              SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
+          })}
         </Text>
-
         <Text
           fontSize={16}
           fontFamily="Inter_500Medium"
           color={COLORS.neutral400}
           style={styles.description}
         >
-          Your transfer is being processed and will be completed within 5-20
-          minutes.
+          {t('bridge.transaction.details.description')}
         </Text>
-
         <BridgeNetworksSelected
           networkFrom={transaction.networkFrom}
           networkTo={transaction.networkTo}
         />
-
-        <RowStageSection stage={1} placeholder="Processing transaction">
+        <RowStageSection
+          stage={1}
+          placeholder={t('bridge.transaction.processing')}
+        >
           <Status status={renderTransactionStatus(1.1)} />
         </RowStageSection>
-
         <RowStageSection
           stage={2}
-          placeholder="Waiting for approval"
+          placeholder={t('bridge.transaction.approval')}
           extraRow={
             <Row
               style={styles.stageExtraRow}
@@ -115,12 +112,12 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
         >
           <Status status={renderTransactionStatus(2.1)} />
         </RowStageSection>
-
         <RowStageSection
           stage={3}
-          placeholder={`Sending funds to ${
-            SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
-          }`}
+          placeholder={t('bridge.transaction.sending.funds', {
+            networkTo:
+              SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
+          })}
         >
           <Status status={renderTransactionStatus(3.1)} />
         </RowStageSection>
@@ -141,9 +138,12 @@ const RowStageSection = ({
   stage: number;
   placeholder: string;
 }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.stageSection}>
-      <Text>Stage {stage}</Text>
+      <Text>
+        {t('bridge.history.transaction.stage')} {stage}
+      </Text>
 
       <Row alignItems="center" justifyContent="space-between">
         <Text

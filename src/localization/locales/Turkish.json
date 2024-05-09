@@ -137,6 +137,9 @@
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
+  "common.status.pending": "Başarısız oldu",
+  "common.status.not.started": "Başlamadı",
+  "common.status.success": "Başarılı",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -302,7 +305,6 @@
   "staking.pool.stake.warning": "Bahis koymak için en az 1000 AMB gereklidir.",
   "staking.pool.withdraw.warning": "Geri çekilmek için en az 1000 AMB gereklidir.",
 
-
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
   "toast.the.message.lower.case": "adres",
@@ -320,10 +322,18 @@
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
-
   "wallet.my.assets": "Varlıklarım",
   "wallet.picker.select": "Cüzdan seç",
 
+  "bridge.history.heading": "İşlem geçmişi",
+  "bridge.transaction.details.description": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacaktır.",
+  "bridge.history.transaction.stage": "AŞAMA",
+  "bridge.transaction.processing": "İşlem işleniyor",
+  "bridge.transaction.approval": "Onay bekleniyor",
+  "bridge.transaction.confirmations": "Onaylar",
+  "bridge.transaction.fee": "Köprü ücreti",
+  "bridge.transaction.to": "{{networkTo}}'a",
+  "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
+  "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
   "bridge.select.network": "!!!Select network"
-
 }

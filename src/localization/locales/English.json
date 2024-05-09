@@ -137,6 +137,10 @@
   "common.transaction_plural": "Transactions",
   "common.transactions": "Transactions",
   "common.yesterday": "Yesterday",
+  "common.status.pending": "Pending",
+  "common.status.failed": "Failed",
+  "common.status.not.started": "Not started",
+  "common.status.success": "Success",
 
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
@@ -319,10 +323,18 @@
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
-
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet",
 
+  "bridge.history.heading": "Transaction history",
+  "bridge.transaction.details.description": "Your transfer is being processed and will be completed within 5-20 minutes.",
+  "bridge.history.transaction.stage": "STAGE",
+  "bridge.transaction.processing": "Processing transaction",
+  "bridge.transaction.approval": "Waiting for approval",
+  "bridge.transaction.confirmations": "Confirmations",
+  "bridge.transaction.fee": "Bridge fee",
+  "bridge.transaction.to": "To {{networkTo}}",
+  "bridge.transaction.sending.heading": "Sending {{tokenFrom}} to {{networkTo}}",
+  "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
   "bridge.select.network": "Select network"
-
 }

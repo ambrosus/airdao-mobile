@@ -55,7 +55,7 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
 
   const [rowsFromTransactionObject] = useState<RowsStateObject[]>([
     {
-      key: 'Date',
+      key: t('common.date'),
       value: timestamp(transaction.timestampStart),
       type: 'default'
     },
@@ -85,7 +85,7 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
       type: 'status'
     },
     {
-      key: 'Fee',
+      key: t('bridge.transaction.fee'),
       value: `${NumberUtils.formatAmount(transaction.fee, 3)} AMB`,
       type: 'default'
     }
