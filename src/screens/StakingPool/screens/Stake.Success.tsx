@@ -25,7 +25,7 @@ export const StakeSuccessScreen = () => {
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
 
   const { refetch: refetchAmbBalance } = useBalanceOfAddress(
-    route.params.wallet?.address || ''
+    route.params.walletAddress || ''
   );
 
   const [loading, setLoading] = useState(false);
@@ -34,9 +34,9 @@ export const StakeSuccessScreen = () => {
   const refetchPoolDetails = async () => {
     setLoading(true);
     try {
-      if (route.params.wallet?.address) {
+      if (route.params.walletAddress) {
         if (refetchAmbBalance) refetchAmbBalance();
-        await fetchPoolDetails(route.params.wallet.address);
+        await fetchPoolDetails(route.params.walletAddress);
       }
     } finally {
       setLoading(false);

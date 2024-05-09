@@ -101,8 +101,7 @@ export const WithdrawToken = ({
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',
-            pool,
-            wallet
+            walletAddress: wallet?.address ?? ''
           })
         );
       }
