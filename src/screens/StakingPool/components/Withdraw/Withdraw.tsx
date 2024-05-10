@@ -141,7 +141,7 @@ export const WithdrawToken = ({
         fontWeight="500"
         color={COLORS.neutral900}
       >
-        {t('staking.pool.stake.amount')}
+        {t('common.transaction.amount')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
@@ -168,7 +168,7 @@ export const WithdrawToken = ({
           />
         ))}
       </Row>
-      <Spacer value={verticalScale(24)} />
+      <Spacer value={verticalScale(44)} />
       <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
         <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
           {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}

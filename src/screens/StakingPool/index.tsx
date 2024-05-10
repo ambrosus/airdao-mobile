@@ -33,19 +33,6 @@ import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { DeviceUtils } from '@utils/device';
 
-const calculateIOSDistanceBetweenKeyboard = (
-  currentlySelectedIndex: number
-): number => {
-  if (SCREEN_HEIGHT < 710) {
-    return currentlySelectedIndex === 0
-      ? SCREEN_HEIGHT / 5.5
-      : SCREEN_HEIGHT / 4.5;
-  }
-  return currentlySelectedIndex === 0
-    ? SCREEN_HEIGHT / 5.5
-    : SCREEN_HEIGHT / 4.75;
-};
-
 const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'padding';
 
 export const StakingPoolScreen = () => {
@@ -58,7 +45,6 @@ export const StakingPoolScreen = () => {
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const currency = CryptoCurrencyCode.AMB;
 
-  const [currentlySelectedIndex, setCurrentlySelectedIndex] = useState(0);
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
     selectedAccount
@@ -91,16 +77,12 @@ export const StakingPoolScreen = () => {
     }
   };
 
-  const onChangedIndex = (idx: number) => setCurrentlySelectedIndex(idx);
-
   const keyboardVerticalOffset = useMemo(() => {
     return Platform.select({
-      ios: -verticalScale(
-        calculateIOSDistanceBetweenKeyboard(currentlySelectedIndex)
-      ),
-      android: verticalScale(currentlySelectedIndex === 0 ? 24 : 0)
+      ios: -verticalScale(SCREEN_HEIGHT / 5.5),
+      android: verticalScale(24)
     });
-  }, [currentlySelectedIndex]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -177,7 +159,6 @@ export const StakingPoolScreen = () => {
                 keyboardShouldPersistTaps="handled"
                 containerStyle={styles.tabsContainer}
                 onSwipeStateHandle={onSwipeStateHandle}
-                onChangedIndex={onChangedIndex}
                 tabs={[
                   {
                     title: t('staking.pool.stake'),
