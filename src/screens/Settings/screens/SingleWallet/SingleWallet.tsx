@@ -81,6 +81,7 @@ export const SingleWalletScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
+        bottomBorder
         title={
           <View style={{ paddingHorizontal: '20%' }}>
             <Text

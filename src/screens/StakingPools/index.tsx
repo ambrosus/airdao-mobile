@@ -53,7 +53,7 @@ export const StakingPoolsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={t('staking.header')} />
+      <Header bottomBorder title={t('staking.header')} />
       <Spacer value={verticalScale(16)} />
       <Row
         alignItems="center"
