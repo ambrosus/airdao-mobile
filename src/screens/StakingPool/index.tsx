@@ -158,7 +158,6 @@ export const StakingPoolScreen = () => {
               contentInsetAdjustmentBehavior="always"
               overScrollMode="never"
               keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="on-drag"
               showsVerticalScrollIndicator={false}
             >
               <View style={styles.stakingInfoContainer}>
@@ -175,6 +174,7 @@ export const StakingPoolScreen = () => {
               <Spacer value={verticalScale(24)} />
               <AnimatedTabs
                 dismissOnChangeIndex
+                keyboardShouldPersistTaps="handled"
                 containerStyle={styles.tabsContainer}
                 onSwipeStateHandle={onSwipeStateHandle}
                 onChangedIndex={onChangedIndex}
