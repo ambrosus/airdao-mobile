@@ -29,17 +29,10 @@ export const StakeSuccessScreen = () => {
   );
 
   const { refetch: refetchTokensAndAssets } = useTokensAndTransactions(
-    route.params.wallet?.address || '',
+    route.params.walletAddress || '',
     1,
     20,
-    !!route.params.wallet?.address
-  );
-
-  const { refetch: refetchTokensAndAssets } = useTokensAndTransactions(
-    route.params.wallet?.address || '',
-    1,
-    20,
-    !!route.params.wallet?.address
+    !!route.params.walletAddress
   );
 
   const [loading, setLoading] = useState(false);

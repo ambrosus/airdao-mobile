@@ -216,7 +216,12 @@ export const StakeToken = ({
           )}
         </Text>
       </PrimaryButton>
-      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
+      <BottomSheet
+        ref={previewBottomSheetRef}
+        swiperIconVisible={!loading}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+      >
         {loading ? (
           <StakePending />
         ) : (
