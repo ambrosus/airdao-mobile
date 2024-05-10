@@ -118,9 +118,13 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
     );
 
     const renderBackdropComponent = useMemo(() => {
+      const onBackdropPress = (): void => {
+        if (closeOnBackPress) dismiss();
+      };
+
       const backdropOpacity = !isVisible ? 0 : isNestedSheet ? 0 : 0.5;
       return (
-        <TouchableWithoutFeedback onPress={dismiss}>
+        <TouchableWithoutFeedback onPress={onBackdropPress}>
           <View
             style={{
               ...styles.backdrop,
@@ -131,7 +135,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
           </View>
         </TouchableWithoutFeedback>
       );
-    }, [isNestedSheet, dismiss, isVisible]);
+    }, [isVisible, isNestedSheet, closeOnBackPress, dismiss]);
 
     return (
       <Modal

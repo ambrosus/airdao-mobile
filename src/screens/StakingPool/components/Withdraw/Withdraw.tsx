@@ -101,8 +101,7 @@ export const WithdrawToken = ({
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',
-            pool,
-            wallet
+            walletAddress: wallet?.address ?? ''
           })
         );
       }
@@ -176,7 +175,12 @@ export const WithdrawToken = ({
         </Text>
       </PrimaryButton>
 
-      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
+      <BottomSheet
+        ref={previewBottomSheetRef}
+        swiperIconVisible={!loading}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+      >
         {loading ? (
           <StakePending />
         ) : (
