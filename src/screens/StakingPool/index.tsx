@@ -80,7 +80,6 @@ export const StakingPoolScreen = () => {
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
 
   // Avoid focusing inputs, while tabs are swiped
-
   const onSwipeStateHandle = (state: boolean) => {
     if (!state) {
       Keyboard.dismiss();
@@ -149,69 +148,68 @@ export const StakingPoolScreen = () => {
         <>
           <KeyboardAvoidingView
             style={styles.container}
-            contentContainerStyle={{ flexGrow: 1 }}
-            // contentContainerStyle={scrollViewStyle}
+            contentContainerStyle={styles.contentContainerStyle}
             keyboardVerticalOffset={keyboardVerticalOffset}
             behavior={KEYBOARD_BEHAVIOR}
           >
-            <View style={styles.container}>
-              <ScrollView
-                bounces={false}
-                scrollEnabled={DeviceUtils.isAndroid}
-                contentInsetAdjustmentBehavior="always"
-                overScrollMode="never"
-                showsVerticalScrollIndicator={false}
-              >
-                <View style={styles.stakingInfoContainer}>
-                  <StakingInfo
-                    totalStake={totalStake}
-                    currency={currency}
-                    userStaking={
-                      poolStakingDetails?.user.raw ?? BigNumber.from(0)
-                    }
-                    earnings={earning}
-                    apy={apy}
-                  />
-                </View>
-                <Spacer value={verticalScale(24)} />
-                <AnimatedTabs
-                  dismissOnChangeIndex
-                  containerStyle={styles.tabsContainer}
-                  onSwipeStateHandle={onSwipeStateHandle}
-                  onChangedIndex={onChangedIndex}
-                  tabs={[
-                    {
-                      title: t('staking.pool.stake'),
-                      view: (
-                        <View>
-                          <Spacer value={verticalScale(24)} />
-                          <StakeToken
-                            isSwiping={isTabsSwiping}
-                            pool={poolStakingDetails}
-                            wallet={selectedWallet}
-                            apy={apy}
-                          />
-                        </View>
-                      )
-                    },
-                    {
-                      title: t('staking.pool.withdraw'),
-                      view: (
-                        <>
-                          <Spacer value={verticalScale(24)} />
-                          <WithdrawToken
-                            isSwiping={isTabsSwiping}
-                            pool={poolStakingDetails}
-                            wallet={selectedWallet}
-                            apy={apy}
-                          />
-                        </>
-                      )
-                    }
-                  ]}
+            <ScrollView
+              bounces={false}
+              scrollEnabled={DeviceUtils.isAndroid}
+              contentInsetAdjustmentBehavior="always"
+              overScrollMode="never"
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.stakingInfoContainer}>
+                <StakingInfo
+                  totalStake={totalStake}
+                  currency={currency}
+                  userStaking={
+                    poolStakingDetails?.user.raw ?? BigNumber.from(0)
+                  }
+                  earnings={earning}
+                  apy={apy}
                 />
-              </ScrollView>
-            </View>
+              </View>
+              <Spacer value={verticalScale(24)} />
+              <AnimatedTabs
+                dismissOnChangeIndex
+                containerStyle={styles.tabsContainer}
+                onSwipeStateHandle={onSwipeStateHandle}
+                onChangedIndex={onChangedIndex}
+                tabs={[
+                  {
+                    title: t('staking.pool.stake'),
+                    view: (
+                      <>
+                        <Spacer value={verticalScale(24)} />
+                        <StakeToken
+                          isSwiping={isTabsSwiping}
+                          pool={poolStakingDetails}
+                          wallet={selectedWallet}
+                          apy={apy}
+                        />
+                      </>
+                    )
+                  },
+                  {
+                    title: t('staking.pool.withdraw'),
+                    view: (
+                      <>
+                        <Spacer value={verticalScale(24)} />
+                        <WithdrawToken
+                          isSwiping={isTabsSwiping}
+                          pool={poolStakingDetails}
+                          wallet={selectedWallet}
+                          apy={apy}
+                        />
+                      </>
+                    )
+                  }
+                ]}
+              />
+            </ScrollView>
           </KeyboardAvoidingView>
         </>
       )}

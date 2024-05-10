@@ -49,10 +49,11 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
   });
 
   useEffect(() => {
+    onChangedIndex && onChangedIndex(currentIndex);
     indicatorPosition.value = withTiming(currentIndex * (tabWidth / 2), {
       duration: 0
     });
-  }, [currentIndex, indicatorPosition, tabWidth]);
+  }, [currentIndex, indicatorPosition, onChangedIndex, tabWidth]);
 
   const scrollToTab = (idx: number) => {
     dismissOnChangeIndex && Keyboard.dismiss();
@@ -119,8 +120,6 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
         ref={scrollView}
         horizontal
         pagingEnabled
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={(event) => {
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
