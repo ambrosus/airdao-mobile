@@ -35,6 +35,13 @@ export const StakeSuccessScreen = () => {
     !!route.params.wallet?.address
   );
 
+  const { refetch: refetchTokensAndAssets } = useTokensAndTransactions(
+    route.params.wallet?.address || '',
+    1,
+    20,
+    !!route.params.wallet?.address
+  );
+
   const [loading, setLoading] = useState(false);
 
   const { fetchPoolDetails } = useStakingMultiplyContextSelector();
