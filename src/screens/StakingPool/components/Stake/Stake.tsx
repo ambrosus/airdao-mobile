@@ -101,8 +101,7 @@ export const StakeToken = ({
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'stake',
-            pool,
-            wallet
+            walletAddress: wallet?.address ?? ''
           })
         );
       }
