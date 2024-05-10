@@ -121,7 +121,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       const onBackdropPress = (): void => {
         if (closeOnBackPress) dismiss();
       };
-        
+
       const backdropOpacity = !isVisible ? 0 : isNestedSheet ? 0 : 0.5;
       return (
         <TouchableWithoutFeedback onPress={onBackdropPress}>
@@ -135,7 +135,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
           </View>
         </TouchableWithoutFeedback>
       );
-    }, [isNestedSheet, dismiss, closeOnBackPress]);
+    }, [isVisible, isNestedSheet, closeOnBackPress, dismiss]);
 
     return (
       <Modal
