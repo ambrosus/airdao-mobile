@@ -186,7 +186,7 @@ export const TransactionDetails = (
           <TokenLogo token={transaction.symbol} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
-            fontFamily="Mersad_600SemiBold"
+            fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.neutral800}
           >
