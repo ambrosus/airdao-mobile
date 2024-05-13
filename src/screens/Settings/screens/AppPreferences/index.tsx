@@ -13,6 +13,7 @@ import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import useLocalization from '@contexts/Localizations';
 import { LocalizationUtils } from '@utils/localization';
+import { View } from 'react-native';
 
 export const AppPreferencesScreen = () => {
   const { t } = useTranslation();
@@ -44,22 +45,25 @@ export const AppPreferencesScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
+        bottomBorder
         title={t('settings.preferences')}
         style={{ backgroundColor: 'transparent' }}
       />
       <Spacer value={verticalScale(8)} />
-      <Button onPress={showCurrencySelection}>
-        <AppPreferencesMenuItem
-          title={t('settings.preferences.currency')}
-          value={selectedCurrency}
-        />
-      </Button>
-      <Button onPress={showLanguageSelection}>
-        <AppPreferencesMenuItem
-          title={t('settings.preferences.language')}
-          value={t(selectedLanguage)}
-        />
-      </Button>
+      <View style={styles.inner}>
+        <Button onPress={showCurrencySelection}>
+          <AppPreferencesMenuItem
+            title={t('settings.preferences.currency')}
+            value={selectedCurrency}
+          />
+        </Button>
+        <Button onPress={showLanguageSelection}>
+          <AppPreferencesMenuItem
+            title={t('settings.preferences.language')}
+            value={t(selectedLanguage)}
+          />
+        </Button>
+      </View>
       <BottomSheetSelectBaseCurrency
         ref={selectBaseCurrencyRef}
         handleCurrencySave={handleCurrencySave}
