@@ -21,7 +21,6 @@ import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakingInfo } from './components';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
-import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
 import {
   usePoolDetailsByName,
@@ -39,28 +38,25 @@ export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
   const { totalStake, apy } = pool;
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount, setSelectedAccount } = useBridgeContextSelector();
   const { data: allWallets } = useAllAccounts();
   const { t } = useTranslation();
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const currency = CryptoCurrencyCode.AMB;
 
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
-  const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
-    selectedAccount
-  );
 
   const { top } = useSafeAreaInsets();
 
   const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
 
   useEffect(() => {
-    if (selectedWallet?.address) {
+    if (selectedAccount?.address) {
       (async () => {
-        await fetchPoolDetails(selectedWallet.address);
+        await fetchPoolDetails(selectedAccount.address);
       })();
     }
-  }, [selectedWallet, selectedAccount, fetchPoolDetails]);
+  }, [selectedAccount, fetchPoolDetails]);
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
@@ -110,9 +106,9 @@ export const StakingPoolScreen = () => {
           contentRight={
             allWallets.length > 1 && (
               <WalletPicker
-                selectedWallet={selectedWallet}
+                selectedWallet={selectedAccount}
                 wallets={allWallets}
-                onSelectWallet={setSelectedWallet}
+                onSelectWallet={setSelectedAccount}
               />
             )
           }
@@ -168,7 +164,7 @@ export const StakingPoolScreen = () => {
                         <StakeToken
                           isSwiping={isTabsSwiping}
                           pool={poolStakingDetails}
-                          wallet={selectedWallet}
+                          wallet={selectedAccount}
                           apy={apy}
                         />
                       </>
@@ -182,7 +178,7 @@ export const StakingPoolScreen = () => {
                         <WithdrawToken
                           isSwiping={isTabsSwiping}
                           pool={poolStakingDetails}
-                          wallet={selectedWallet}
+                          wallet={selectedAccount}
                           apy={apy}
                         />
                       </>
