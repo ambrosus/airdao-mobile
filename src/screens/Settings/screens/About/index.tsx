@@ -14,6 +14,7 @@ export const AboutScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
+        bottomBorder
         title={t('settings.about')}
         style={{ backgroundColor: 'transparent' }}
       />

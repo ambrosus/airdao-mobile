@@ -101,8 +101,7 @@ export const WithdrawToken = ({
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',
-            pool,
-            wallet
+            walletAddress: wallet?.address ?? ''
           })
         );
       }
@@ -142,7 +141,7 @@ export const WithdrawToken = ({
         fontWeight="500"
         color={COLORS.neutral900}
       >
-        {t('staking.pool.stake.amount')}
+        {t('common.transaction.amount')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
@@ -169,14 +168,19 @@ export const WithdrawToken = ({
           />
         ))}
       </Row>
-      <Spacer value={verticalScale(24)} />
+      <Spacer value={verticalScale(44)} />
       <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
         <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
           {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}
         </Text>
       </PrimaryButton>
 
-      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
+      <BottomSheet
+        ref={previewBottomSheetRef}
+        swiperIconVisible={!loading}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+      >
         {loading ? (
           <StakePending />
         ) : (

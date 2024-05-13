@@ -3,7 +3,10 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: scale(18),
     rowGap: verticalScale(8)
+  },
+  inner: {
+    rowGap: verticalScale(8),
+    paddingHorizontal: scale(18)
   }
 });

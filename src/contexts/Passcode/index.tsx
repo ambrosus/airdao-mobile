@@ -128,7 +128,6 @@ export const PasscodeProvider: FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error('Face ID error:', error);
-      Alert.alert('Error occured', JSON.stringify(error));
     }
   }, [isFaceIDEnabled, supportedBiometrics, t]);
 

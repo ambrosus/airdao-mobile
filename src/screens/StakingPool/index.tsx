@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { RouteProp, useRoute } from '@react-navigation/native';
@@ -9,7 +15,7 @@ import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakingInfo } from './components';
@@ -25,6 +31,9 @@ import {
 import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import { DeviceUtils } from '@utils/device';
+
+const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'padding';
 
 export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
@@ -36,7 +45,6 @@ export const StakingPoolScreen = () => {
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const currency = CryptoCurrencyCode.AMB;
 
-  const [currentlySelectedIndex, setCurrentlySelectedIndex] = useState(0);
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
   const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
     selectedAccount
@@ -58,7 +66,6 @@ export const StakingPoolScreen = () => {
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
 
   // Avoid focusing inputs, while tabs are swiped
-
   const onSwipeStateHandle = (state: boolean) => {
     if (!state) {
       Keyboard.dismiss();
@@ -70,11 +77,12 @@ export const StakingPoolScreen = () => {
     }
   };
 
-  const onChangedIndex = (idx: number) => setCurrentlySelectedIndex(idx);
-
   const keyboardVerticalOffset = useMemo(() => {
-    return -verticalScale(currentlySelectedIndex === 0 ? 52 : 76);
-  }, [currentlySelectedIndex]);
+    return Platform.select({
+      ios: -verticalScale(SCREEN_HEIGHT / 5.5),
+      android: verticalScale(24)
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -120,11 +128,19 @@ export const StakingPoolScreen = () => {
         </View>
       ) : (
         <>
-          <View style={styles.container}>
-            <KeyboardAvoidingView
-              style={styles.container}
-              keyboardVerticalOffset={keyboardVerticalOffset}
-              behavior="position"
+          <KeyboardAvoidingView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainerStyle}
+            keyboardVerticalOffset={keyboardVerticalOffset}
+            behavior={KEYBOARD_BEHAVIOR}
+          >
+            <ScrollView
+              bounces={false}
+              scrollEnabled={DeviceUtils.isAndroid}
+              contentInsetAdjustmentBehavior="always"
+              overScrollMode="never"
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
             >
               <View style={styles.stakingInfoContainer}>
                 <StakingInfo
@@ -140,14 +156,14 @@ export const StakingPoolScreen = () => {
               <Spacer value={verticalScale(24)} />
               <AnimatedTabs
                 dismissOnChangeIndex
+                keyboardShouldPersistTaps="handled"
                 containerStyle={styles.tabsContainer}
                 onSwipeStateHandle={onSwipeStateHandle}
-                onChangedIndex={onChangedIndex}
                 tabs={[
                   {
                     title: t('staking.pool.stake'),
                     view: (
-                      <View>
+                      <>
                         <Spacer value={verticalScale(24)} />
                         <StakeToken
                           isSwiping={isTabsSwiping}
@@ -155,7 +171,7 @@ export const StakingPoolScreen = () => {
                           wallet={selectedWallet}
                           apy={apy}
                         />
-                      </View>
+                      </>
                     )
                   },
                   {
@@ -174,8 +190,8 @@ export const StakingPoolScreen = () => {
                   }
                 ]}
               />
-            </KeyboardAvoidingView>
-          </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </>
       )}
     </View>
