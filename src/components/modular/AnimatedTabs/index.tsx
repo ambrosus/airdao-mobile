@@ -43,7 +43,6 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
 
   const indicatorPosition = useSharedValue(0);
 
-  // @ts-ignore
   const indicatorStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: withTiming(indicatorPosition.value) }]
@@ -98,7 +97,7 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
   const onScrollStart = () => onSwipeStateHandle && onSwipeStateHandle(true);
 
   return (
-    <View onStartShouldSetResponder={() => true} style={containerStyle}>
+    <View style={containerStyle}>
       <Row alignItems="center" justifyContent="space-between">
         {tabs.map(renderTabBar)}
       </Row>
