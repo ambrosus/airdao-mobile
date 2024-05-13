@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -32,8 +32,9 @@ import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { DeviceUtils } from '@utils/device';
+import { useKeyboardHeight } from '@hooks';
 
-const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'padding';
+const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
 
 export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
@@ -83,6 +84,15 @@ export const StakingPoolScreen = () => {
       android: verticalScale(24)
     });
   }, []);
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const keyboardHeight = useKeyboardHeight();
+
+  useEffect(() => {
+    if (DeviceUtils.isAndroid && keyboardHeight > 0) {
+      scrollViewRef.current?.scrollToEnd();
+    }
+  }, [keyboardHeight]);
 
   return (
     <View style={styles.container}>
@@ -135,6 +145,7 @@ export const StakingPoolScreen = () => {
             behavior={KEYBOARD_BEHAVIOR}
           >
             <ScrollView
+              ref={scrollViewRef}
               bounces={false}
               scrollEnabled={DeviceUtils.isAndroid}
               contentInsetAdjustmentBehavior="always"
