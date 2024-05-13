@@ -38,7 +38,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
       >
         <Row alignItems="center" testID="Wallet_Item_Row1_Inner">
           <Text
-            fontFamily="Inter_600SemiBold"
+            fontFamily="Inter_500Medium"
             fontSize={13}
             color={COLORS.neutral900}
             testID="Wallet_Item_Name"
@@ -58,7 +58,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
         </Row>
         <Text
           style={typographyAndContainerStyles.typography}
-          fontFamily="Mersad_600SemiBold"
+          fontFamily="Inter_500Medium"
           fontSize={13}
           color={COLORS.neutral900}
           testID="Wallet_Item_Balance"
