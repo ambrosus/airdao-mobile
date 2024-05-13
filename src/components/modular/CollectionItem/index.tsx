@@ -42,7 +42,7 @@ export function CollectionItem(props: CollectionItemProps) {
         </Text>
         <Text
           style={{ lineHeight: 0 }}
-          fontFamily="Mersad_600SemiBold"
+          fontFamily="Inter_500Medium"
           fontSize={13}
           color={COLORS.neutral900}
         >

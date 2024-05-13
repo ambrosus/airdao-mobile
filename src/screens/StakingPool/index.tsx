@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -21,7 +21,6 @@ import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakingInfo } from './components';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
-import { AccountDBModel } from '@database';
 import { WithdrawToken } from './components/Withdraw';
 import {
   usePoolDetailsByName,
@@ -32,35 +31,33 @@ import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { DeviceUtils } from '@utils/device';
+import { useKeyboardHeight } from '@hooks';
 
-const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'padding';
+const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
 
 export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
   const { totalStake, apy } = pool;
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount, setSelectedAccount } = useBridgeContextSelector();
   const { data: allWallets } = useAllAccounts();
   const { t } = useTranslation();
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const currency = CryptoCurrencyCode.AMB;
 
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
-  const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
-    selectedAccount
-  );
 
   const { top } = useSafeAreaInsets();
 
   const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
 
   useEffect(() => {
-    if (selectedWallet?.address) {
+    if (selectedAccount?.address) {
       (async () => {
-        await fetchPoolDetails(selectedWallet.address);
+        await fetchPoolDetails(selectedAccount.address);
       })();
     }
-  }, [selectedWallet, selectedAccount, fetchPoolDetails]);
+  }, [selectedAccount, fetchPoolDetails]);
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
@@ -83,6 +80,15 @@ export const StakingPoolScreen = () => {
       android: verticalScale(24)
     });
   }, []);
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const keyboardHeight = useKeyboardHeight();
+
+  useEffect(() => {
+    if (DeviceUtils.isAndroid && keyboardHeight > 0) {
+      scrollViewRef.current?.scrollToEnd();
+    }
+  }, [keyboardHeight]);
 
   return (
     <View style={styles.container}>
@@ -110,9 +116,9 @@ export const StakingPoolScreen = () => {
           contentRight={
             allWallets.length > 1 && (
               <WalletPicker
-                selectedWallet={selectedWallet}
+                selectedWallet={selectedAccount}
                 wallets={allWallets}
-                onSelectWallet={setSelectedWallet}
+                onSelectWallet={setSelectedAccount}
               />
             )
           }
@@ -135,6 +141,7 @@ export const StakingPoolScreen = () => {
             behavior={KEYBOARD_BEHAVIOR}
           >
             <ScrollView
+              ref={scrollViewRef}
               bounces={false}
               scrollEnabled={DeviceUtils.isAndroid}
               contentInsetAdjustmentBehavior="always"
@@ -168,7 +175,7 @@ export const StakingPoolScreen = () => {
                         <StakeToken
                           isSwiping={isTabsSwiping}
                           pool={poolStakingDetails}
-                          wallet={selectedWallet}
+                          wallet={selectedAccount}
                           apy={apy}
                         />
                       </>
@@ -182,7 +189,7 @@ export const StakingPoolScreen = () => {
                         <WithdrawToken
                           isSwiping={isTabsSwiping}
                           pool={poolStakingDetails}
-                          wallet={selectedWallet}
+                          wallet={selectedAccount}
                           apy={apy}
                         />
                       </>

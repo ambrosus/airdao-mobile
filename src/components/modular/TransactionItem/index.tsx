@@ -69,7 +69,7 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
           <Text
             fontSize={14}
             align="right"
-            fontFamily="Mersad_600SemiBold"
+            fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
             {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
