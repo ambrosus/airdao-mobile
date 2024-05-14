@@ -8,7 +8,7 @@ import { useCurrentRoute } from '@contexts';
 import usePasscode from '@contexts/Passcode';
 
 const APP_HIDDEN_STATES = ['inactive', 'background'];
-const REQUIRE_DELAY_IN_SECONDS = __DEV__ ? 1000 : 2 * 60 * 1000;
+const REQUIRE_DELAY_IN_SECONDS = __DEV__ ? 10000 : 2 * 60 * 1000;
 
 const EXCLUDED_PASSCODE_ROUTES = ['SuccessSetupSecurity', 'ChangePasscode'];
 
@@ -22,33 +22,44 @@ export const usePasscodeEntryRevealer = () => {
 
   const handleAppStateChange = useCallback(
     async (nextAppState: AppStateStatus) => {
-      if (nextAppState === 'active') {
-        if (APP_HIDDEN_STATES.includes(prevAppState.current)) {
-          const currentTime = new Date().getTime();
+      const isBiometricAuthenticationInProgress = await Cache.getItem(
+        CacheKey.isBiometricAuthenticationInProgress
+      );
 
-          // Findes difference between app state changed and redirect or return to correct screen
-          const isTimestampDiffHaveRevealPass = timestampWhenFocused.current
-            ? currentTime - timestampWhenFocused.current >
-              REQUIRE_DELAY_IN_SECONDS
-            : false;
+      if (isBiometricAuthenticationInProgress) {
+        if (nextAppState === 'inactive' && prevAppState.current === 'active')
+          return;
 
-          await Cache.setItem(
-            CacheKey.isBiometricAuthenticationInProgress,
-            false
-          );
+        await Cache.setItem(
+          CacheKey.isBiometricAuthenticationInProgress,
+          false
+        );
 
-          if (isTimestampDiffHaveRevealPass) {
-            if (isFaceIDEnabled || isPasscodeEnabled) {
-              AirDAOEventDispatcher.dispatch(
-                AirDAOEventType.CloseAllModals,
-                null
-              );
-              setTimeout(() => {
-                navigation.navigate('Passcode');
-              }, 500);
+        if (nextAppState === 'active') {
+          if (APP_HIDDEN_STATES.includes(prevAppState.current)) {
+            const currentTime = new Date().getTime();
+
+            // Findes difference between app state changed and redirect or return to correct screen
+            const isTimestampDiffHaveRevealPass = timestampWhenFocused.current
+              ? currentTime - timestampWhenFocused.current >
+                REQUIRE_DELAY_IN_SECONDS
+              : false;
+
+            if (isTimestampDiffHaveRevealPass) {
+              if (isFaceIDEnabled || isPasscodeEnabled) {
+                AirDAOEventDispatcher.dispatch(
+                  AirDAOEventType.CloseAllModals,
+                  null
+                );
+                setTimeout(() => {
+                  navigation.navigate('Passcode');
+                }, 500);
+              }
             }
           }
         }
+
+        return;
       }
       prevAppState.current = nextAppState;
     },
@@ -78,6 +89,4 @@ export const usePasscodeEntryRevealer = () => {
 
     AppState.addEventListener('change', focusListener);
   }, []);
-
-  return null;
 };
