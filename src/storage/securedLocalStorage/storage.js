@@ -19,6 +19,18 @@ const createDirectory = async () => {
   }
 };
 
+const removeCacheDirectoryAsync = async () => {
+  try {
+    const { exists } = await FileSystem.getInfoAsync(storageDirectoryUri);
+    if (exists) {
+      await FileSystem.deleteAsync(storageDirectoryUri, { idempotent: true });
+    }
+  } catch (error) {
+    console.error('Error removing cache directory:', error);
+    throw error;
+  }
+};
+
 const getAsync = async (key, secureStoreOptions) => {
   try {
     let value = null;
@@ -143,4 +155,10 @@ const fixedStorageUri = async (secureStoreOptions) => {
   }
 };
 
-export { createDirectory, getAsync, setAsync, removeAsync };
+export {
+  createDirectory,
+  getAsync,
+  setAsync,
+  removeAsync,
+  removeCacheDirectoryAsync
+};
