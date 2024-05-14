@@ -25,18 +25,22 @@ import { RenderTokenItem } from '@models/Bridge';
 import { API } from '@api/api';
 // import { useNavigation } from '@react-navigation/native';
 // import { RootNavigationProp } from '@appTypes';
-import { FeeData } from '@api/bridge/sdk/types';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { CurrencyUtils } from '@utils/currency';
+import { formatEther } from 'ethers/lib/utils';
 
-interface BridgeFeeModel extends FeeData {
+interface BridgeFeeModel {
+  amount: number | string;
   networkFee: string | number;
+  feeSymbol: string;
   bridgeAmount: string | number;
 }
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
+const DECIMAL_CRYPTO_LIMIT = 5;
+const DECIMAL_USD_LIMIT = 2;
 
 export const BridgeForm = () => {
   const navigation = useNavigation<RootNavigationProp>();
@@ -45,6 +49,7 @@ export const BridgeForm = () => {
   const previewRef = useRef<BottomSheetRef>(null);
 
   const { t } = useTranslation();
+  const [isMax, setMax] = useState(false);
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
@@ -64,100 +69,99 @@ export const BridgeForm = () => {
     };
   }, [currencySelectorWidth]);
 
+  const getFeeData = async () => {
+    const dataForFee = {
+      tokenFrom: tokenParams.value.pairs[0],
+      tokenTo: tokenParams.value.pairs[1],
+      amountTokens: amountToExchange,
+      isMax
+    };
+    try {
+      const fee = await API.bridgeService.bridgeSDK.getFeeData({
+        bridgeConfig,
+        dataForFee
+      });
+      setBridgeFee({
+        amount: formatEther(fee.amount._hex),
+        feeSymbol: fee.feeSymbol.toUpperCase(),
+        networkFee: NumberUtils.limitDecimalCount(
+          Number(formatEther(fee.transferFee._hex)),
+          DECIMAL_CRYPTO_LIMIT
+        ),
+        bridgeAmount: NumberUtils.limitDecimalCount(
+          Number(formatEther(fee.bridgeFee._hex)),
+          DECIMAL_CRYPTO_LIMIT
+        )
+      });
+    } catch (e) {
+      // ignore
+    } finally {
+      setFeeLoader(false);
+    }
+  };
+
   useEffect(() => {
     setFeeLoader(true);
-    const getFeeData = async () => {
-      const { pairs } = tokenParams.value;
-      const dataForFee = {
-        tokenFrom: pairs[0],
-        tokenTo: pairs[1],
-        amountTokens: amountToExchange,
-        isMax: false
-      };
-      try {
-        const fee = await API.bridgeService.bridgeSDK.getFeeData({
-          bridgeConfig,
-          dataForFee
-        });
-        setBridgeFee({
-          ...fee,
-          networkFee: +`${parseInt(fee?.transferFee?._hex || '0')}`.slice(0, 5),
-          bridgeAmount: +`${parseInt(fee?.transferFee?._hex || '0')}`.slice(
-            0,
-            5
-          )
-        });
-      } catch (e) {
-        // ignore
-      } finally {
-        setFeeLoader(false);
-      }
-    };
-
     setBridgeFee(null);
     if (!!amountToExchange) {
       clearTimeout(timeoutDelay);
       setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    amountToExchange,
-    toParams.value.id,
-    fromParams.value.id,
-    tokenParams.value.renderTokenItem.name
-  ]);
+  }, [amountToExchange, toParams.value.id, fromParams.value.id, tokenParams]);
 
   const onChangeAmount = (value: string) => {
+    setMax(false);
     let finalValue = StringUtils.formatNumberInput(value);
-    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
+    finalValue = NumberUtils.limitDecimalCount(
+      finalValue,
+      DECIMAL_CRYPTO_LIMIT
+    );
     setAmountToExchange(finalValue);
   };
 
-  const dataToSend = (() => {
-    const receiveData = NumberUtils.limitDecimalCount(
+  const dataToPreview = (() => {
+    const receiveDataUSD = NumberUtils.limitDecimalCount(
       CurrencyUtils.toUSD(+amountToExchange, 0.2),
-      2
+      DECIMAL_USD_LIMIT
     );
     const bridgeFeeAmount = bridgeFee?.bridgeAmount;
     const networkFee = bridgeFee?.networkFee;
+    // symbol destination = 0 -> from || 1 -> to
+    const symbol = (destination: number) =>
+      tokenParams.value.pairs[destination].symbol;
     return [
       // TODO BRIDGE refactor
       {
-        name: t('bridge.preview.send'),
-        cryptoAmount: amountToExchange,
-        usdAmount: receiveData,
-        symbol: tokenParams.value.pairs[0].symbol
-      },
-      {
         name: t('bridge.preview.receive'),
         cryptoAmount: amountToExchange,
-        usdAmount: receiveData,
-        symbol: tokenParams.value.pairs[1].symbol
+        usdAmount: receiveDataUSD,
+        symbol: symbol(1)
       },
       {
         name: t('bridge.preview.bridge.fee'),
         cryptoAmount: bridgeFeeAmount,
-        symbol: tokenParams.value.pairs[0].symbol
+        symbol: bridgeFee?.feeSymbol
       },
       {
         name: t('bridge.preview.network.fee'),
         cryptoAmount: networkFee,
-        symbol: tokenParams.value.pairs[0].symbol
-      },
-      {
-        name: t('bridge.preview.total'),
-        symbol: tokenParams.value.pairs[0].symbol,
-        cryptoAmount:
-          +amountToExchange + +(bridgeFeeAmount || 0) + +(networkFee || 0)
+        symbol: bridgeFee?.feeSymbol
       }
     ];
   })();
 
   const onSelectMaxAmount = () => {
+    if (tokenParams.value.renderTokenItem.isNativeCoin) {
+      setMax(true);
+    }
     setAmountToExchange('999');
   };
 
   const onTokenPress = (item: RenderTokenItem) => {
+    if (!item.renderTokenItem.isNativeCoin) {
+      setMax(false);
+    }
     tokenParams.setter(item);
     setTimeout(() => choseTokenRef?.current?.dismiss(), 200);
   };
@@ -239,7 +243,7 @@ export const BridgeForm = () => {
                 color={COLORS.sapphireBlue}
                 onPress={onSelectMaxAmount}
               >
-                Max
+                {t('bridge.preview.button.max')}
               </Text>
             </Row>
           </View>
@@ -279,7 +283,7 @@ export const BridgeForm = () => {
                     fontFamily="Inter_500Medium"
                     color={COLORS.black}
                   >
-                    {`${tokenParams.value.renderTokenItem.symbol} ${bridgeFee?.bridgeAmount}`}
+                    {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
                   </Text>
                 ))}
             </Row>
@@ -299,8 +303,7 @@ export const BridgeForm = () => {
           onPressItem={onTokenPress}
         />
         <BottomSheetBridgePreview
-          //TODO BRIDGE write types
-          dataToSend={dataToSend}
+          dataToPreview={dataToPreview}
           ref={previewRef}
           onAcceptPress={onAcceptPress}
         />

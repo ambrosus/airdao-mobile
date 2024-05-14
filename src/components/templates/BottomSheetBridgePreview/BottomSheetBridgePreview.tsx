@@ -8,17 +8,17 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { View } from 'react-native';
 
-interface DataToSendModel {
+interface DataToPreviewModel {
   name: string;
-  cryptoAmount: number | string;
-  usdAmount: number | string;
+  cryptoAmount?: number | string;
+  usdAmount?: number | string;
   symbol: string;
 }
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
   onAcceptPress: () => void;
-  dataToSend: DataToSendModel[];
+  dataToPreview: DataToPreviewModel[];
 }
 
 export const BottomSheetBridgePreview = forwardRef<
@@ -26,7 +26,7 @@ export const BottomSheetBridgePreview = forwardRef<
   BottomSheetChoseNetworksProps
 >((props, ref) => {
   const { t } = useTranslation();
-  const { onAcceptPress, dataToSend } = props;
+  const { onAcceptPress, dataToPreview } = props;
 
   return (
     <BottomSheet
@@ -46,7 +46,7 @@ export const BottomSheetBridgePreview = forwardRef<
         </Text>
         <Spacer value={verticalScale(24)} />
         <View>
-          {dataToSend.map((item) => (
+          {dataToPreview.map((item) => (
             <>
               <View
                 style={{

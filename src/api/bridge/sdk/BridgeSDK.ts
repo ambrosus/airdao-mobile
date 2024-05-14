@@ -73,6 +73,20 @@ export async function getBridgePairs({
 //TODO BRIDGE write types
 export async function getFeeData({ bridgeConfig, dataForFee }) {
   const { tokenFrom, tokenTo, amountTokens, isMax } = dataForFee;
+  const feeSymbol = (() => {
+    const { isNativeCoin } = tokenFrom;
+    const isETHNetwork = !isNativeCoin && tokenFrom.bridgeNetwork === 'eth';
+    const isBSCNetwork = !isNativeCoin && tokenFrom.bridgeNetwork === 'bsc';
+    switch (true) {
+      case isETHNetwork:
+        return 'eth';
+      case isBSCNetwork:
+        return 'bnb';
+      default:
+        return 'amb';
+    }
+  })();
+
   const sdk = new MySdk(bridgeConfig, {
     relayUrls: {
       eth: 'https://relay-eth.ambrosus.io/fees',
@@ -80,7 +94,7 @@ export async function getFeeData({ bridgeConfig, dataForFee }) {
     }
   });
   const fee = sdk.getFeeData(tokenFrom, tokenTo, amountTokens, isMax);
-  return fee;
+  return { ...(await fee), feeSymbol };
 }
 
 export const bridgeSDK = {

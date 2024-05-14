@@ -348,5 +348,6 @@
   "bridge.preview.bridge.fee": "!!!Bridge fee",
   "bridge.preview.network.fee": "!!!Network fee",
   "bridge.preview.total": "!!!Total amount",
-  "bridge.preview.button": "!!!Send funds to Ethereum"
+  "bridge.preview.button": "!!!Send funds to Ethereum",
+  "bridge.preview.button.max": "!!!Max"
 }
