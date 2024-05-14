@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, ViewStyle } from 'react-native';
+import { Keyboard, ScrollView, View, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -19,10 +19,21 @@ type AnimatedTab = {
 interface AnimatedTabsProps {
   tabs: AnimatedTab[];
   containerStyle?: ViewStyle;
+  onSwipeStateHandle?: (state: boolean) => void;
+  dismissOnChangeIndex?: boolean;
+  onChangedIndex?: (index: number) => void;
+  keyboardShouldPersistTaps?: 'always' | 'handled' | 'never' | undefined;
 }
 
 export const AnimatedTabs = (props: AnimatedTabsProps) => {
-  const { tabs, containerStyle } = props;
+  const {
+    tabs,
+    containerStyle,
+    onSwipeStateHandle,
+    dismissOnChangeIndex,
+    onChangedIndex,
+    keyboardShouldPersistTaps
+  } = props;
   const tabCount = tabs.length;
   const scrollView = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -32,7 +43,6 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
 
   const indicatorPosition = useSharedValue(0);
 
-  // @ts-ignore
   const indicatorStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: withTiming(indicatorPosition.value) }]
@@ -40,12 +50,15 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
   });
 
   useEffect(() => {
+    onChangedIndex && onChangedIndex(currentIndex);
     indicatorPosition.value = withTiming(currentIndex * (tabWidth / 2), {
       duration: 0
     });
-  }, [currentIndex, indicatorPosition, tabWidth]);
+  }, [currentIndex, indicatorPosition, onChangedIndex, tabWidth]);
 
   const scrollToTab = (idx: number) => {
+    dismissOnChangeIndex && Keyboard.dismiss();
+    onChangedIndex && onChangedIndex(idx);
     scrollView.current?.scrollTo({ x: tabWidth * idx, animated: true });
     setCurrentIndex(idx);
     indicatorPosition.value = withTiming(idx * tabBarWidth);
@@ -80,6 +93,9 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
     );
   };
 
+  const onScrollEnd = () => onSwipeStateHandle && onSwipeStateHandle(false);
+  const onScrollStart = () => onSwipeStateHandle && onSwipeStateHandle(true);
+
   return (
     <View style={containerStyle}>
       <Row alignItems="center" justifyContent="space-between">
@@ -105,11 +121,14 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
         ref={scrollView}
         horizontal
         pagingEnabled
+        keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={(event) => {
           const scrollOffsetX = event.nativeEvent.contentOffset.x;
           setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
         }}
+        onScrollEndDrag={onScrollEnd}
+        onScrollBeginDrag={onScrollStart}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         {tabs.map(renderTabView)}

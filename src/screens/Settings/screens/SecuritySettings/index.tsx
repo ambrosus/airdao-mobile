@@ -25,7 +25,11 @@ export const SecuritySettingsScreen = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Security" style={{ shadowColor: 'transparent' }} />
+      <Header
+        bottomBorder
+        title="Security"
+        style={{ shadowColor: 'transparent' }}
+      />
       <Spacer value={verticalScale(12)} />
       <Button onPress={navigateToChangePasscode}>
         <View style={{ paddingHorizontal: scale(18) }}>

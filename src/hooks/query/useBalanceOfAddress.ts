@@ -9,22 +9,13 @@ import {
 } from '@appTypes';
 import { AirDAOEventDispatcher } from '@lib';
 
-export function useBalanceOfAddress(
-  address: string
-): QueryResponse<{ wei: string; ether: string }> {
+export function useBalanceOfAddress(address: string): QueryResponse<any> {
   const { data, isLoading, isRefetching, error, refetch } = useQuery<{
     wei: string;
     ether: string;
   }>(
     ['address-balance', address],
-    async () => await API.cryptoService.getBalanceOfAddress(address),
-    {
-      refetchOnReconnect: true,
-      refetchInterval: 1 * 60 * 1e3, // refetch every 1 min
-      refetchOnMount: true,
-      refetchOnWindowFocus: true,
-      enabled: address !== '' && address != null && address !== undefined
-    }
+    async () => await API.cryptoService.getBalanceOfAddress(address)
   );
 
   useEffect(() => {

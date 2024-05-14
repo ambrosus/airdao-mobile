@@ -15,8 +15,8 @@ import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
-const iosBuildVersion = '1.1.0.44';
-const androidBuildVersion = '1.1.5.35';
+const iosBuildVersion = '1.3.9';
+const androidBuildVersion = '1.3.9';
 
 const stageBuildVersions = {
   ios: `${iosBuildVersion} (${androidBuildVersion})`,
@@ -117,9 +117,7 @@ export const SettingsScreen = () => {
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
-      {isStage && (
-        <Text style={{ margin: 20 }}>{`Build: ${currentBuild}`}</Text>
-      )}
+      {isStage && <Text style={{ margin: 20 }}>{currentBuild}</Text>}
     </View>
   );
 };

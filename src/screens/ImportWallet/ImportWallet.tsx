@@ -198,6 +198,7 @@ export const ImportWallet = () => {
       ) : (
         <KeyboardDismissingView style={{ flex: 1 }}>
           <Header
+            bottomBorder
             title={
               <Text
                 fontFamily="Inter_600SemiBold"

@@ -40,7 +40,7 @@ export const COLORS = {
   success200: '#73E5B7',
   success300: '#2DBA8D',
   success400: '#159F80',
-  success500: '#0A8575',
+  success500: '#2DBA8D',
   success600: '#076F6B',
   success700: '#095357',
   success800: '#0D3137',
