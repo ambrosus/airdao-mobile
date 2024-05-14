@@ -23,7 +23,9 @@ export const AccountActionButton = (props: AccountActionButtonProps) => {
         <Icon color={iconColor} />
       </View>
       <Spacer value={verticalScale(10)} />
-      <Text color={textColor}>{text}</Text>
+      <Text fontSize={14} color={textColor}>
+        {text}
+      </Text>
     </Button>
   );
 };
@@ -37,9 +39,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.alphaBlack5,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: moderateScale(48),
-    minHeight: 48,
-    height: moderateScale(48),
-    width: moderateScale(48)
+    aspectRatio: 1,
+    borderRadius: moderateScale(40),
+    minHeight: 40,
+    height: moderateScale(40),
+    width: moderateScale(40)
   }
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { BackIcon } from '@components/svg/icons';
+import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { Button, Row, Text } from '@components/base';
 import { HeaderProps } from './Header.types';
 import { styles } from './Header.styles';
@@ -9,10 +9,12 @@ import { COLORS } from '@constants/colors';
 
 export function Header(props: HeaderProps): JSX.Element {
   const {
+    bottomBorder = false,
     backIconVisible = true,
     contentLeft,
     contentRight,
     title,
+    closeIconVisible = false,
     titlePosition = 'center',
     style = {},
     titleStyle = {},
@@ -51,6 +53,11 @@ export function Header(props: HeaderProps): JSX.Element {
   const renderContentLeft = () => {
     return (
       <>
+        {closeIconVisible && (
+          <Button onPress={navigation.goBack}>
+            <CloseIcon />
+          </Button>
+        )}
         {backIconVisible && (
           <Button onPress={_onBackPress}>
             <BackIcon color={COLORS.neutral900} scale={1.15} />
@@ -72,11 +79,17 @@ export function Header(props: HeaderProps): JSX.Element {
     return <>{contentRight}</>;
   };
 
+  const combineContainerStyles = {
+    ...styles.container,
+    ...(bottomBorder ? styles.containerBorder : {}),
+    ...style
+  };
+
   return (
     <Row
       justifyContent="space-between"
       alignItems="center"
-      style={{ ...styles.container, ...style }}
+      style={combineContainerStyles}
     >
       <Row
         style={{ ...styles.left, ...leftContainerStyles }}

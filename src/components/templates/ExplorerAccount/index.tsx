@@ -158,7 +158,7 @@ export const ExplorerAccountView = (
             {`${NumberUtils.addSignToNumber(
               ambPriceData.percentChange24H
             )}% ($${NumberUtils.formatNumber(
-              USDBalance * ambPriceData.percentChange24H
+              (USDBalance * ambPriceData?.percentChange24H) / 100
             )}) 24${t('common.hour.short').toUpperCase()}`}
           </Text>
         </>

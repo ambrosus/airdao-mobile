@@ -51,12 +51,20 @@ export const PasscodeEntry = () => {
     }, 0);
   }, [navigation]);
 
-  const authenticateWithFaceID = useCallback(async () => {
+  const authenticateWithBiometrics = useCallback(async () => {
     automaticFaceIdCalled.current = true;
     await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
     try {
+      const hasFaceId = await DeviceUtils.checkFaceIDExists();
+      const hasFingerprint = await DeviceUtils.checkFingerprintExists();
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: t('security.authenticate.with.face.id'),
+        promptMessage: t(
+          hasFaceId
+            ? t('security.authenticate.with.face.id')
+            : hasFingerprint
+            ? t('security.authenticate.with.fingerprint')
+            : 'Authenticate'
+        ),
         fallbackLabel: t('security.enter.pin'),
         cancelLabel: t('button.cancel')
       });
@@ -79,7 +87,7 @@ export const PasscodeEntry = () => {
     }
     if (appState === 'active') {
       if (isFaceIDEnabled) {
-        authenticateWithFaceID();
+        authenticateWithBiometrics();
       } else {
         passcodeRef.current?.focus();
       }
@@ -142,7 +150,7 @@ export const PasscodeEntry = () => {
           </View>
           {isFaceIDEnabled && (
             <PrimaryButton
-              onPress={authenticateWithFaceID}
+              onPress={authenticateWithBiometrics}
               style={{
                 marginBottom: '5%',
                 width: '90%',

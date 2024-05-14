@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ViewProps } from 'react-native';
+import { LayoutChangeEvent, ViewProps } from 'react-native';
 
 export type ButtonType = 'base' | 'bordered' | 'circular';
 
@@ -11,6 +11,7 @@ export interface BaseButtonProps {
   onPress?: () => unknown;
   testID?: string;
   onLongPress?: () => unknown;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }
 
 export interface BorderedButtonProps extends BaseButtonProps {

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { HomeParamsList, HomeNavigationProp } from '@appTypes';
+import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { StatisticsLogo } from '@components/svg/icons/Statistics';
@@ -73,6 +73,7 @@ export const AssetScreen = () => {
   return (
     <View style={{ top, flex: 1 }}>
       <Header
+        bottomBorder
         title={
           <>
             <Row alignItems="center">

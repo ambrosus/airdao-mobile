@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useMemo } from 'react';
+import { FlexAlignType, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { NumberUtils } from '@utils/number';
 import { ExplorerAccount } from '@models/Explorer';
@@ -19,12 +19,26 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
   const { item, indicatorVisible } = props;
   const { data: ambTokenData } = useAMBPrice();
   const usdBalance = item.ambBalance * (ambTokenData?.priceUSD || 0);
+
+  const typographyAndContainerStyles = useMemo(() => {
+    return {
+      align: 'center',
+      typography: {
+        lineHeight: 18
+      }
+    };
+  }, []);
+
   return (
     <View style={{ justifyContent: 'space-between' }} testID="Wallet_Item_View">
-      <Row justifyContent="space-between" testID="wallet-item-row1">
+      <Row
+        justifyContent="space-between"
+        alignItems={typographyAndContainerStyles.align as FlexAlignType}
+        testID="wallet-item-row1"
+      >
         <Row alignItems="center" testID="Wallet_Item_Row1_Inner">
           <Text
-            fontFamily="Inter_600SemiBold"
+            fontFamily="Inter_500Medium"
             fontSize={13}
             color={COLORS.neutral900}
             testID="Wallet_Item_Name"
@@ -43,7 +57,8 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
           )}
         </Row>
         <Text
-          fontFamily="Mersad_600SemiBold"
+          style={typographyAndContainerStyles.typography}
+          fontFamily="Inter_500Medium"
           fontSize={13}
           color={COLORS.neutral900}
           testID="Wallet_Item_Balance"

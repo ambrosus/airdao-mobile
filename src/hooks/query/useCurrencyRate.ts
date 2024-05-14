@@ -16,11 +16,13 @@ export const useCurrencyRate = (
     let _currencyRate = 1; // token/AMB
     switch (symbol) {
       case CryptoCurrencyCode.Bond:
+      case CryptoCurrencyCode.SAMB:
       case CryptoCurrencyCode.AMB: {
         _currencyRate = 1;
         break;
       }
       case CryptoCurrencyCode.USDC:
+      case CryptoCurrencyCode.ETH:
       case CryptoCurrencyCode.Tether:
       case CryptoCurrencyCode.BUSD: {
         _currencyRate = 1;

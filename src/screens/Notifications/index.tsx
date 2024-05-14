@@ -137,6 +137,7 @@ export const Notifications = (): JSX.Element => {
       <BottomSheet ref={settingsModal} height={'100%'} borderRadius={0}>
         {DeviceUtils.isIOS && <Spacer value={topInset} />}
         <Header
+          bottomBorder
           title={t('notification.settings')}
           style={{
             shadowColor: 'transparent',

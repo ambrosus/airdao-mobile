@@ -7,6 +7,7 @@ import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
+import { TokenUtils } from '@utils/token';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;
@@ -24,7 +25,9 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   const { t } = useTranslation();
 
   const navigateToAssetScreen = (tokenInfo: Token, walletAccount: string) => {
-    navigation.navigate('AssetScreen', { tokenInfo, walletAccount });
+    const isNFTToken = tokenInfo?.symbol === CryptoCurrencyCode.NFT;
+    const screenToNavigate = isNFTToken ? 'NFTScreen' : 'AssetScreen';
+    navigation.navigate(screenToNavigate, { tokenInfo, walletAccount });
   };
 
   const renderToken = ({ item }: { item: Token }) => {
@@ -36,12 +39,15 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
   };
 
   const ambTokenData: Token[] = [
-    new Token({
-      name: 'AirDAO',
-      address: account.address,
-      balance: { wei: '', ether: account.ambBalance },
-      symbol: CryptoCurrencyCode.AMB
-    })
+    new Token(
+      {
+        name: 'AirDAO',
+        address: account.address,
+        balance: { wei: '', ether: account.ambBalance },
+        symbol: CryptoCurrencyCode.AMB
+      },
+      TokenUtils
+    )
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
@@ -63,7 +69,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
               <></>
             )
           }
-          contentContainerStyle={{ paddingBottom: '20%' }}
+          contentContainerStyle={{ paddingBottom: '25%' }}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl

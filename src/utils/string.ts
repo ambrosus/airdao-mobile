@@ -36,7 +36,7 @@ const pluralize = (count: number, str: string, pluralForm?: string): string => {
 
 const removeNonNumericCharacters = (str: string, allowDot = true): string => {
   if (!str) return '';
-  if (allowDot) return str.replace(/[^.\d]+/g, '');
+  if (allowDot) return str.replace(/[^.\d]+/g, '.');
   return str.replace(/[^\d]+/g, '');
 };
 
@@ -47,9 +47,37 @@ const removeNonAlphabeticCharacters = (str: string): string => {
 
 const formatNumberInput = (str: string): string => {
   const dottedStr = str.replaceAll(',', '.');
-  let numericChars = removeNonNumericCharacters(dottedStr);
-  if (numericChars[0] === '.') numericChars = '0' + numericChars;
-  return _removeExtraDots(numericChars);
+  // Check if the first character is a dot
+  const isFirstCharacterDot = dottedStr.startsWith('.');
+  const currentFlow = isFirstCharacterDot ? '0' + dottedStr : dottedStr;
+  let numericChars = removeNonNumericCharacters(currentFlow);
+
+  if (
+    numericChars.length > 1 &&
+    numericChars.startsWith('0') &&
+    !numericChars.startsWith('0.')
+  ) {
+    numericChars = numericChars.slice(1);
+  }
+
+  if (/^0+$/.test(numericChars)) {
+    return '0';
+  }
+
+  const [integerPart, decimalPart = ''] = numericChars.split(',');
+  // Remove leading zeros from the integer part
+  const formattedIntegerPart = integerPart.replace(/^0+(?=[1-9])/, '');
+  let formattedDecimalPart = '';
+
+  if (decimalPart) {
+    formattedDecimalPart = '.' + decimalPart.replace(/(\.[1-9]*)0+$/, '$1');
+  }
+
+  if (str.includes('.') && !decimalPart) {
+    formattedDecimalPart = '.';
+  }
+
+  return _removeExtraDots(formattedIntegerPart + formattedDecimalPart);
 };
 
 function _removeExtraDots(str: string): string {

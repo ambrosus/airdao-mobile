@@ -7,7 +7,6 @@ import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/com
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 
 type PortfolioScreenProps = {
   route: {
@@ -18,10 +17,9 @@ type PortfolioScreenProps = {
 };
 
 export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
-  const { t } = useTranslation();
   const portfolioTabRoutes = [
-    { key: 'first', title: t('common.address_plural') },
-    { key: 'second', title: t('common.group_plural') }
+    { key: 'first', title: 'common.address_plural' },
+    { key: 'second', title: 'common.group_plural' }
   ] as const;
 
   type PortfolioTabRoutes = typeof portfolioTabRoutes;

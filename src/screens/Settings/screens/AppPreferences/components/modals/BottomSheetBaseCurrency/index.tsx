@@ -75,6 +75,7 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
       >
         {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
+          bottomBorder
           title={
             <Text
               fontFamily="Inter_700Bold"

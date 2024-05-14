@@ -13,7 +13,7 @@ export const Collections = () => {
   return (
     <View style={styles.main}>
       {addressesLoading ? (
-        <View style={styles.spinerWrapper}>
+        <View style={styles.spinnerWrapper}>
           <Spinner />
         </View>
       ) : (

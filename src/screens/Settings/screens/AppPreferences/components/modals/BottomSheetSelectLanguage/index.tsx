@@ -76,6 +76,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
       >
         {Platform.OS === 'ios' && <Spacer value={topInset} />}
         <Header
+          bottomBorder
           titleStyle={styles.headerTitle}
           title={
             <Text

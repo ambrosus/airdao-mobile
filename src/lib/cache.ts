@@ -1,5 +1,5 @@
-import createSecureStore from '@neverdull-agency/expo-unlimited-secure-store';
-const SecureStore = createSecureStore();
+import createSecureStorage from '@/storage/securedLocalStorage';
+const SecureStore = createSecureStorage();
 const store = SecureStore;
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';

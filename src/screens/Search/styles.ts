@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
   },
   emptyList: { height: '100%' },
   spinnerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  spinnerFooter: {
     paddingVertical: scale(10),
     alignItems: 'center'
   },

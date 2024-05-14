@@ -49,9 +49,10 @@ export const TransactionDetails = (
     totalTransactionAmount = -1;
   }
 
-  const showShareTransaction = () => {
-    shareTransactionModal.current?.show();
-  };
+  // TODO temporarily hide share buttons
+  // const showShareTransaction = () => {
+  //   shareTransactionModal.current?.show();
+  // };
 
   if (!transaction) return <></>;
   const addressesArePressable = typeof onPressAddress === 'function';
@@ -185,7 +186,7 @@ export const TransactionDetails = (
           <TokenLogo token={transaction.symbol} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
-            fontFamily="Mersad_600SemiBold"
+            fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.neutral800}
           >
@@ -243,20 +244,21 @@ export const TransactionDetails = (
         </Text>
       </Button>
       <Spacer value={verticalScale(16)} />
-      <Button
-        type="circular"
-        style={{ backgroundColor: COLORS.alphaBlack5 }}
-        onPress={showShareTransaction}
-      >
-        <Text
-          style={{ marginVertical: verticalScale(12) }}
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral800}
-        >
-          {t('transaction.modal.buttons.share')}
-        </Text>
-      </Button>
+      {/*TODO temporarily hide share buttons*/}
+      {/*<Button*/}
+      {/*  type="circular"*/}
+      {/*  style={{ backgroundColor: COLORS.alphaBlack5 }}*/}
+      {/*  onPress={showShareTransaction}*/}
+      {/*>*/}
+      {/*  <Text*/}
+      {/*    style={{ marginVertical: verticalScale(12) }}*/}
+      {/*    fontFamily="Inter_600SemiBold"*/}
+      {/*    fontSize={16}*/}
+      {/*    color={COLORS.neutral800}*/}
+      {/*  >*/}
+      {/*    {t('transaction.modal.buttons.share')}*/}
+      {/*  </Text>*/}
+      {/*</Button>*/}
 
       <SharePortfolio
         ref={shareTransactionModal}

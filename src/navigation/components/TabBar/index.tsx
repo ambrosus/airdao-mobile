@@ -17,6 +17,7 @@ import {
   SettingsTabIcon,
   WalletTabIcon
 } from '@components/svg/BottomTabIcons';
+import { isIos } from '@utils/isPlatform';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
@@ -132,7 +133,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: COLORS.neutral0,
     opacity: 2,
-    borderTopWidth: 0.25,
+    elevation: 0.25,
+    borderTopWidth: isIos ? 0.25 : 0.5,
     borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {

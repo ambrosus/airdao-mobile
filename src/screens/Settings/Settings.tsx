@@ -15,9 +15,12 @@ import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
+const iosBuildVersion = '1.3.8';
+const androidBuildVersion = '1.3.8';
+
 const stageBuildVersions = {
-  ios: '1.1.0.36',
-  android: '1.1.5.27'
+  ios: `${iosBuildVersion} (${androidBuildVersion})`,
+  android: `${androidBuildVersion} (${iosBuildVersion})`
 };
 
 const isStage = Updates.channel === 'stage';
@@ -62,10 +65,7 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           {item.icon}
-          <Spacer
-            value={item.route === 'AppPreferences' ? scale(12) : scale(8)}
-            horizontal
-          />
+          <Spacer value={scale(8)} horizontal />
           <Text
             fontSize={16}
             fontFamily="Inter_500Medium"
@@ -90,7 +90,7 @@ export const SettingsScreen = () => {
   const renderMenu = (item: SettingsMenuItem[], index: number) => {
     const isNeedDelimiter = index + 1 !== SETTINGS_MENU_ITEMS.length;
     return (
-      <>
+      <View key={`${item[0].key}`}>
         {item.map(
           (menuItem): JSX.Element => (
             <SettingsMenuItemView item={menuItem} key={menuItem.route} />
@@ -105,7 +105,7 @@ export const SettingsScreen = () => {
             }}
           />
         )}
-      </>
+      </View>
     );
   };
 
@@ -117,9 +117,7 @@ export const SettingsScreen = () => {
       <View style={styles.innerContainer}>
         {SETTINGS_MENU_ITEMS.map(renderMenu)}
       </View>
-      {isStage && (
-        <Text style={{ margin: 20 }}>{`Build: ${currentBuild}`}</Text>
-      )}
+      {isStage && <Text style={{ margin: 20 }}>{currentBuild}</Text>}
     </View>
   );
 };

@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { Transaction, Token } from '@models';
+import { Token, Transaction } from '@models';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { useEffect } from 'react';
@@ -10,6 +10,7 @@ import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
+import { TokenUtils } from '@utils/token';
 
 export function useTokensAndTransactions(
   address: string,
@@ -36,7 +37,8 @@ export function useTokensAndTransactions(
       return API.explorerService.getTransactionsOfOwnAccount(
         address,
         parseInt(pageParam),
-        limit
+        limit,
+        TokenUtils
       );
     },
     getNextPageParam: (
@@ -99,7 +101,7 @@ export function useTokensAndTransactions(
       ? (data.pages
           .map((page) =>
             page.data.transactions.map((t) => {
-              const transaction = new Transaction(t);
+              const transaction = new Transaction(t, TokenUtils);
               /**
                *  When user sends from account to the same account we receive 2 transactions with the same transaction hash.
                * */

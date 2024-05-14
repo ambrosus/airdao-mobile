@@ -1,10 +1,13 @@
 import * as React from 'react';
-import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 import { IconProps } from './Icon.types';
-import { COLORS } from '@constants/colors';
 
-export function LogoGradient(props: Omit<IconProps, 'colors'>) {
-  const { scale = 1 } = props;
+interface LogoGradientModel extends IconProps {
+  logoGradient: string[];
+}
+
+export function LogoGradient(props: Omit<LogoGradientModel, 'colors'>) {
+  const { scale = 1, logoGradient } = props;
   const width = 218;
   const height = 234;
   return (
@@ -31,8 +34,8 @@ export function LogoGradient(props: Omit<IconProps, 'colors'>) {
           y2={78.993}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor={COLORS.brand600} />
-          <Stop offset={1} stopColor="#A4BBF0" />
+          <Stop stopColor={logoGradient[0]} />
+          <Stop offset={1} stopColor={logoGradient[1]} />
         </LinearGradient>
       </Defs>
     </Svg>

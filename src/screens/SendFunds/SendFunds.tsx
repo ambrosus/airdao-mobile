@@ -47,6 +47,7 @@ import { DeviceUtils } from '@utils/device';
 import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
+import { TokenUtils } from '@utils/token';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -71,12 +72,15 @@ export const SendFunds = () => {
   const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
 
   // Define default amb token
-  const defaultAMBToken: Token = new Token({
-    name: 'AirDAO',
-    address: senderAddress || '',
-    balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
-    symbol: CryptoCurrencyCode.AMB
-  });
+  const defaultAMBToken: Token = new Token(
+    {
+      name: 'AirDAO',
+      address: senderAddress || '',
+      balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
+      symbol: CryptoCurrencyCode.AMB
+    },
+    TokenUtils
+  );
 
   const [selectedToken, setSelectedToken] = useState<Token>(
     tokens.find(
@@ -235,6 +239,7 @@ export const SendFunds = () => {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
+        bottomBorder
         title={
           <View>
             <Text
@@ -308,7 +313,7 @@ export const SendFunds = () => {
                 onChangeValue={onChangeAmountValue}
                 style={styles.input}
                 maxLength={9}
-                keyboardType="numeric"
+                keyboardType="decimal-pad"
                 placeholder="0"
                 placeholderTextColor={COLORS.neutral300}
                 multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
