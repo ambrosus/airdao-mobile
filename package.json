@@ -27,6 +27,7 @@
     "@metamask/safe-event-emitter": "^3.0.0",
     "@morrowdigital/watermelondb-expo-plugin": "^2.3.1",
     "@mymonero/mymonero-paymentid-utils": "^3.0.0",
+    "@neverdull-agency/expo-unlimited-secure-store": "^1.0.10",
     "@nozbe/watermelondb": "^0.27.1",
     "@nozbe/with-observables": "^1.6.0",
     "@react-native-cookies/cookies": "^6.2.1",
