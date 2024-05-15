@@ -2978,6 +2978,13 @@
   resolved "https://registry.yarnpkg.com/@mymonero/mymonero-paymentid-utils/-/mymonero-paymentid-utils-3.0.0.tgz#6977ff29abcfe5dd4921da4c8ffb4a369b26e3a0"
   integrity sha512-kDbhaL9NxJp1Z9k9/gAFjWOoF8l6E4twv8bdS3wc+0i4b+4Iot582tfzIdRrZ5e5N1G+rSb7wK8zAqTFgnOcEw==
 
+"@neverdull-agency/expo-unlimited-secure-store@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@neverdull-agency/expo-unlimited-secure-store/-/expo-unlimited-secure-store-1.0.10.tgz#1e78b502257b267fc918a85eaa41aa01a46d2007"
+  integrity sha512-3rGdoSvp6vFgcwMep+r38xVfHYuQKDKBUQ8Kl4UtOfWcQR4iCKb3WiB5GxPuooVFuV54IGp/r4/tMTi+pQoReA==
+  dependencies:
+    crypto-js "^3.1.9-1"
+
 "@noble/curves@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.1.0.tgz#f13fc667c89184bc04cccb9b11e8e7bae27d8c3d"
@@ -5772,6 +5779,11 @@ crypto-browserify@3.12.0, crypto-browserify@^3.12.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^3.1.9-1:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 crypto-js@^4.2.0:
   version "4.2.0"
