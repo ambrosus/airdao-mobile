@@ -3,6 +3,23 @@ import { Config as BridgeConfig, Network, Token } from '@api/bridge/sdk/types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
 
+interface DataForFeeModel {
+  tokenFrom: Token;
+  tokenTo: Token;
+  amountTokens: string;
+  isMax: boolean;
+}
+interface GetFeeDataModel {
+  bridgeConfig: BridgeConfig;
+  dataForFee: DataForFeeModel;
+}
+
+interface GetBalanceModel {
+  from: string;
+  token: Token;
+  ownerAddress: string;
+}
+
 export class MySdk extends BridgeSDK {
   getPairs(
     sourceNetwork: Network,
@@ -23,6 +40,17 @@ export class MySdk extends BridgeSDK {
   }
 }
 
+export async function currentProvider(from: string) {
+  switch (from) {
+    case 'eth':
+      return new ethers.providers.JsonRpcProvider(Config.ETH_NETWORK_URL);
+    case 'amb':
+      return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+    case 'bsc':
+      return new ethers.providers.JsonRpcProvider(Config.BSC_NETWORK_URL);
+  }
+}
+
 export async function getBridgePairs({
   from,
   to,
@@ -33,45 +61,31 @@ export async function getBridgePairs({
   to: Network;
   bridgeConfig: BridgeConfig;
 }) {
-  const providerAmb = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
-  const providerEth = new ethers.providers.JsonRpcProvider(
-    Config.ETH_NETWORK_URL
-  );
-  const providerBsc = new ethers.providers.JsonRpcProvider(
-    Config.BSC_NETWORK_URL
-  );
-
   // const privateKey = (await Cache.getItem(
   //   `${CacheKey.WalletPrivateKey}-${walletHash}`
   // )) as string;
 
   // const signer = new ethers.Wallet(privateKey, providerAmb);
 
-  const currentProvider = (from: string) => {
-    switch (from) {
-      case 'eth':
-        return providerEth;
-      case 'amb':
-        return providerAmb;
-      case 'bsc':
-        return providerBsc;
-    }
-  };
   const sdk = new MySdk(bridgeConfig, {
     relayUrls: {
       eth: 'https://relay-eth.ambrosus.io/fees',
       bsc: 'https://relay-bsc.ambrosus.io/fees'
     }
   });
+  const provider = currentProvider(from);
   return {
     name: `${from}->${to}`,
     pairs: sdk.getPairs(from, to),
-    provider: currentProvider(from)
+    provider
   };
 }
 
-//TODO BRIDGE write types
-export async function getFeeData({ bridgeConfig, dataForFee }) {
+// TODO BRIDGE write types
+export async function getFeeData({
+  bridgeConfig,
+  dataForFee
+}: GetFeeDataModel) {
   const { tokenFrom, tokenTo, amountTokens, isMax } = dataForFee;
   const feeSymbol = (() => {
     const { isNativeCoin } = tokenFrom;
@@ -97,7 +111,35 @@ export async function getFeeData({ bridgeConfig, dataForFee }) {
   return { ...(await fee), feeSymbol };
 }
 
+export async function getBalance({
+  from,
+  token,
+  ownerAddress
+}: GetBalanceModel) {
+  const provider = await currentProvider(from);
+  if (!ownerAddress) {
+    return null;
+  }
+
+  if (token.isNativeCoin) {
+    return provider?.getBalance(ownerAddress);
+  }
+  const minABI = [
+    {
+      constant: true,
+      inputs: [{ name: '_owner', type: 'address' }],
+      name: 'balanceOf',
+      outputs: [{ name: 'balance', type: 'uint256' }],
+      type: 'function'
+    }
+  ];
+  const contract = new ethers.Contract(token.address, minABI, provider);
+
+  return contract.balanceOf(ownerAddress);
+}
+
 export const bridgeSDK = {
   getBridgePairs,
-  getFeeData
+  getFeeData,
+  getBalance
 };

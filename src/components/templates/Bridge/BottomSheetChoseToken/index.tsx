@@ -5,14 +5,14 @@ import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
-import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
+import { RenderTokenItem } from '@models/Bridge';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
-import { ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
-  onPressItem: (item: ParsedBridge | RenderTokenItem) => void;
+  onPressItem: (arg0: RenderTokenItem) => void;
   renderData?: RenderTokenItem[];
 }
 
@@ -23,7 +23,21 @@ export const BottomSheetChoseToken = forwardRef<
   const { renderData, onPressItem } = props;
   const { t } = useTranslation();
   const { tokenParams } = useBridgeContextSelector();
-  // console.log(tokenParams.value);
+
+  const renderItem = (token: RenderTokenItem) => {
+    return (
+      <BridgeSelectorItem
+        symbol={token.renderTokenItem.symbol}
+        name={token.renderTokenItem.name}
+        isActive={
+          tokenParams.value.renderTokenItem.name === token.renderTokenItem.name
+        }
+        onPressItem={onPressItem}
+        key={token.renderTokenItem.name}
+        item={token}
+      />
+    );
+  };
   return (
     <BottomSheet
       ref={ref}
@@ -41,21 +55,10 @@ export const BottomSheetChoseToken = forwardRef<
       </Text>
       <Spacer value={verticalScale(24)} />
       <Spacer value={verticalScale(15)} />
-      <ScrollView>
-        {renderData?.map((item) => (
-          <BridgeSelectorItem
-            symbol={item.renderTokenItem.symbol}
-            name={item.renderTokenItem.name}
-            isActive={
-              tokenParams.value.renderTokenItem.name ===
-              item.renderTokenItem.name
-            }
-            onPressItem={onPressItem}
-            key={item.renderTokenItem.name}
-            item={item}
-          />
-        ))}
-      </ScrollView>
+      <FlatList
+        data={renderData}
+        renderItem={(item) => renderItem(item.item)}
+      />
       <Spacer value={verticalScale(30)} />
     </BottomSheet>
   );

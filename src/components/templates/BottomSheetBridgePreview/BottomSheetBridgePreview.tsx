@@ -6,7 +6,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 interface DataToPreviewModel {
   name: string;
@@ -27,7 +27,23 @@ export const BottomSheetBridgePreview = forwardRef<
 >((props, ref) => {
   const { t } = useTranslation();
   const { onAcceptPress, dataToPreview } = props;
-
+  const renderItem = (network: DataToPreviewModel) => (
+    <>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Text>{network.name}</Text>
+        <Text>
+          <Text>{`${network.cryptoAmount}  ${network.symbol}`}</Text>{' '}
+          {!!network.usdAmount && <Text>{`$${network.usdAmount}`}</Text>}
+        </Text>
+      </View>
+      <Spacer value={scale(16)} />
+    </>
+  );
   return (
     <BottomSheet
       ref={ref}
@@ -45,25 +61,11 @@ export const BottomSheetBridgePreview = forwardRef<
           {t('bridge.preview.title')}
         </Text>
         <Spacer value={verticalScale(24)} />
-        <View>
-          {dataToPreview.map((item) => (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Text>{item.name}</Text>
-                <Text>
-                  <Text>{`${item.cryptoAmount}  ${item.symbol}`}</Text>{' '}
-                  {!!item.usdAmount && <Text>{`$${item.usdAmount}`}</Text>}
-                </Text>
-              </View>
-              <Spacer value={scale(16)} />
-            </>
-          ))}
-        </View>
+        <FlatList
+          data={dataToPreview}
+          // @ts-ignore
+          renderItem={(item) => renderItem(item)}
+        />
         <Spacer value={verticalScale(15)} />
         <PrimaryButton onPress={onAcceptPress}>
           <Text

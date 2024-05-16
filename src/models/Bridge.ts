@@ -20,14 +20,14 @@ export interface BridgeItem {
 export interface BridgePairsModel {
   name: PairsNetworksNamesModel;
   pairs: [Token, Token][];
-  provider: ethers.providers.JsonRpcProvider | undefined;
+  provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
 
 export interface RenderTokenItem {
   renderTokenItem: Token;
   name: PairsNetworksNamesModel;
   pairs: [Token, Token];
-  provider: ethers.providers.JsonRpcProvider | undefined;
+  provider?: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
 
 export type SingleNetworksNamesModel = 'eth' | 'amb' | 'bsc';

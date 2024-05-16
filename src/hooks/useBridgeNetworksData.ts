@@ -22,13 +22,16 @@ const DECIMAL_USD_LIMIT = 2;
 export const useBridgeNetworksData = ({
   choseTokenRef
 }: UseBridgeNetworksDataModel) => {
-  const { tokenParams, bridgeConfig } = useBridgeContextSelector();
+  const [feeLoader, setFeeLoader] = useState(false);
+  const [balanceLoader, setBalanceLoader] = useState(false);
+
+  const { tokenParams, bridgeConfig, fromParams } = useBridgeContextSelector();
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
-  const [feeLoader, setFeeLoader] = useState(false);
-
+  const [selectedTokenBalance, setSelectedTokenBalance] = useState('');
+  const { selectedAccount } = useBridgeContextSelector();
   const { t } = useTranslation();
 
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
@@ -50,6 +53,25 @@ export const useBridgeNetworksData = ({
     }
   };
 
+  const getSelectedTokenBalance = async () => {
+    try {
+      setBalanceLoader(true);
+      const balance = await API.bridgeService.bridgeSDK.getBalance({
+        from: fromParams.value.id,
+        token: tokenParams.value.renderTokenItem,
+        ownerAddress: selectedAccount?.address || ''
+      });
+      setSelectedTokenBalance(
+        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || ''
+      );
+      return balance;
+    } catch (e) {
+      // ignore
+    } finally {
+      setBalanceLoader(false);
+    }
+  };
+
   const getFeeData = async () => {
     // TODO Handle situation when user has less then fee
     const dataForFee = {
@@ -61,6 +83,7 @@ export const useBridgeNetworksData = ({
     try {
       const fee = await API.bridgeService.bridgeSDK.getFeeData({
         bridgeConfig,
+        // @ts-ignore
         dataForFee
       });
       setBridgeFee({
@@ -133,7 +156,9 @@ export const useBridgeNetworksData = ({
     amountToExchange,
     inputStyles,
     feeLoader,
-    bridgeFee
+    bridgeFee,
+    selectedTokenBalance,
+    balanceLoader
   };
   const methods = {
     getFeeData,
@@ -142,7 +167,8 @@ export const useBridgeNetworksData = ({
     onChangeAmount,
     onTokenPress,
     setFeeLoader,
-    setBridgeFee
+    setBridgeFee,
+    getSelectedTokenBalance
   };
   return {
     variables,

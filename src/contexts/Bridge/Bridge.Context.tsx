@@ -89,7 +89,9 @@ export const BridgeContext = () => {
   const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
     null
   );
-  const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN);
+  const [selectedToken, setSelectedToken] =
+    // @ts-ignore
+    useState<RenderTokenItem>(DEFAULT_TOKEN);
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
   const [tokensForSelector, setTokensForSelector] =
@@ -102,9 +104,10 @@ export const BridgeContext = () => {
       id: item,
       name: getNetworkNames(item)
     };
-
     if (res.id === 'eth') {
+      // tslint:disable-next-line:forin
       for (const key in DEFAULT_ETH_NETWORK) {
+        // @ts-ignore
         DEFAULT_ETH_NETWORK[key] = res[key];
       }
     }

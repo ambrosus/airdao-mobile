@@ -19,8 +19,6 @@ import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetChoseToken } from '../../../templates/Bridge/BottomSheetChoseToken';
 import { useBridgeContextSelector } from '@contexts/Bridge';
-// import { useNavigation } from '@react-navigation/native';
-// import { RootNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
@@ -57,14 +55,23 @@ export const BridgeForm = () => {
     onChangeAmount,
     onTokenPress,
     setFeeLoader,
-    setBridgeFee
+    setBridgeFee,
+    getSelectedTokenBalance
   } = methods;
-  const { dataToPreview, amountToExchange, inputStyles, feeLoader, bridgeFee } =
-    variables;
+  const {
+    dataToPreview,
+    amountToExchange,
+    inputStyles,
+    feeLoader,
+    bridgeFee,
+    selectedTokenBalance,
+    balanceLoader
+  } = variables;
 
   useEffect(() => {
     setFeeLoader(true);
     setBridgeFee(null);
+    getSelectedTokenBalance().then();
     if (!!amountToExchange) {
       clearTimeout(timeoutDelay);
       setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
@@ -140,18 +147,37 @@ export const BridgeForm = () => {
                 fontFamily="Inter_400Regular"
                 color={COLORS.alphaBlack60}
               >
-                {t('common.balance')}: 10,103{' '}
-                {tokenParams.value.renderTokenItem.symbol}
+                {t('common.balance')}:
               </Text>
+              {balanceLoader ? (
+                <>
+                  <Spacer value={10} horizontal />
+                  <Spinner customSize={15} />
+                </>
+              ) : (
+                selectedTokenBalance && (
+                  <>
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_400Regular"
+                      color={COLORS.alphaBlack60}
+                    >
+                      {`${selectedTokenBalance} ${tokenParams.value.renderTokenItem.symbol}`}
+                    </Text>
 
-              <Text
-                fontSize={14}
-                fontFamily="Inter_700Bold"
-                color={COLORS.sapphireBlue}
-                onPress={onSelectMaxAmount}
-              >
-                {t('bridge.preview.button.max')}
-              </Text>
+                    {Number(selectedTokenBalance) > 0 && (
+                      <Text
+                        fontSize={14}
+                        fontFamily="Inter_700Bold"
+                        color={COLORS.sapphireBlue}
+                        onPress={onSelectMaxAmount}
+                      >
+                        {t('bridge.preview.button.max')}
+                      </Text>
+                    )}
+                  </>
+                )
+              )}
             </Row>
           </View>
 
@@ -174,24 +200,26 @@ export const BridgeForm = () => {
               </Text>
             </Row>
             <Row alignItems="center" justifyContent="space-between">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral400}
-              >
-                {t('bridge.amount.network.fee')}
-              </Text>
               {!!amountToExchange &&
                 (feeLoader ? (
                   <Spinner customSize={15} />
                 ) : bridgeFee ? (
-                  <Text
-                    fontSize={14}
-                    fontFamily="Inter_500Medium"
-                    color={COLORS.black}
-                  >
-                    {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
-                  </Text>
+                  <>
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.neutral400}
+                    >
+                      {t('bridge.amount.network.fee')}
+                    </Text>
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.black}
+                    >
+                      {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
+                    </Text>
+                  </>
                 ) : (
                   <></>
                 ))}
@@ -208,7 +236,6 @@ export const BridgeForm = () => {
         <BottomSheetChoseToken
           ref={choseTokenRef}
           renderData={networksParams.value}
-          // @ts-ignore
           onPressItem={onTokenPress}
         />
         <BottomSheetBridgePreview
