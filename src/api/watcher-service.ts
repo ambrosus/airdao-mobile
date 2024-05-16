@@ -7,6 +7,7 @@ import Config from '@constants/config';
 import { NotificationSettings } from '@appTypes';
 import { DefaultNotificationSettings } from '@constants/variables';
 
+const updatePushTokenAPI = `${Config.WALLET_API_URL}/api/v1`;
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
 const getWatcherInfoOfCurrentUser =
@@ -101,7 +102,7 @@ const updatePushToken = async (
   newToken: string
 ): Promise<void> => {
   try {
-    await axios.put(`${watcherAPI}/push-token`, {
+    await axios.put(`${updatePushTokenAPI}/push-token`, {
       addresses: [],
       old_push_token: oldToken,
       new_push_token: newToken
