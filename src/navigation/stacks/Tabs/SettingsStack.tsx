@@ -9,7 +9,8 @@ import {
   SettingsScreen,
   ManageWalletsScreen,
   SingleWalletScreen,
-  ChangePasscode
+  ChangePasscode,
+  RecoveryPhraseScreen
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
 
@@ -35,6 +36,7 @@ export const SettingsStack = () => {
       <Stack.Screen name="ChangePasscode" component={ChangePasscode} />
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="SingleWallet" component={SingleWalletScreen} />
+      <Stack.Screen name="RecoveryPhrase" component={RecoveryPhraseScreen} />
     </Stack.Navigator>
   );
 };
