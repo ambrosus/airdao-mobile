@@ -1,23 +1,23 @@
-import React, { ForwardedRef, forwardRef } from 'react';
-import { Alert, View } from 'react-native';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { API } from '@api/api';
+import { SettingsTabParamsList } from '@appTypes';
 import { Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
-import { COLORS } from '@constants/colors';
 import { TrashIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { WalletDBModel } from '@database';
+import { useForwardedRef } from '@hooks';
+import { ExplorerAccount } from '@models';
 import {
   CommonActions,
   NavigationProp,
   useNavigation
 } from '@react-navigation/native';
-import { SettingsTabParamsList } from '@appTypes';
-import { useTranslation } from 'react-i18next';
-import { WalletDBModel } from '@database';
 import { WalletUtils } from '@utils/wallet';
-import { API } from '@api/api';
-import { ExplorerAccount } from '@models';
-import { useForwardedRef } from '@hooks';
+import React, { ForwardedRef, forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert, View } from 'react-native';
+import { styles } from './styles';
 
 interface BottomSheetSettingsActionsProps {
   wallet: WalletDBModel;
@@ -32,20 +32,24 @@ export const BottomSheetSettingsActions = forwardRef<
   const navigation: NavigationProp<SettingsTabParamsList> = useNavigation();
   const bottomSheetRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
-  const deleteWallet = async () => {
-    await WalletUtils.deleteWalletWithAccounts(wallet.hash);
-    if (account?.address) {
-      API.watcherService.removeWatcherForAddresses([account.address]);
-    }
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'AppInit' }]
-      })
-    );
-  };
-
   const dismissBottomSheetView = () => bottomSheetRef.current?.dismiss();
+
+  const deleteWallet = () => {
+    dismissBottomSheetView();
+
+    setTimeout(async () => {
+      await WalletUtils.deleteWalletWithAccounts(wallet.hash);
+      if (account?.address) {
+        API.watcherService.removeWatcherForAddresses([account.address]);
+      }
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'AppInit' }]
+        })
+      );
+    }, 500);
+  };
 
   const onViewRecoveryPress = async (): Promise<void> => {
     dismissBottomSheetView();
