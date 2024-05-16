@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import {
@@ -21,13 +21,31 @@ import { verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
-import { RootNavigationProp } from '@appTypes';
+import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
+import { Header } from '@components/composite';
 
 export const PasscodeEntry = () => {
+  const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
+  const onPasscodeApprove = params?.onPasscodeApprove;
+
+  const onPasscodeEntry = () => {
+    if (typeof onPasscodeApprove === 'function') {
+      onPasscodeApprove();
+    }
+
+    return null;
+  };
+
+  const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
-  usePreventGoingBack(isAuthSuccessfulRef);
+
+  const isPreventingNavigateBack = params?.title
+    ? isAvailableToNavigateBack
+    : isAuthSuccessfulRef;
+
+  usePreventGoingBack(isPreventingNavigateBack);
 
   const navigation = useNavigation<RootNavigationProp>();
   const { t } = useTranslation();
@@ -70,7 +88,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        closePasscodeEntry();
+        onPasscodeEntry ? onPasscodeEntry() : closePasscodeEntry();
       } else {
         passcodeRef.current?.focus();
       }
@@ -79,6 +97,7 @@ export const PasscodeEntry = () => {
     } finally {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
@@ -102,7 +121,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
-        closePasscodeEntry();
+        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
       } else {
         Alert.alert(
           t('security.passcode.doesnt.match'),
@@ -128,6 +147,9 @@ export const PasscodeEntry = () => {
           flex: 1
         }}
       >
+        {params?.title && (
+          <Header title={params.title} onBackPress={closePasscodeEntry} />
+        )}
         <KeyboardDismissingView
           style={{ flex: 1, justifyContent: 'space-between' }}
         >
