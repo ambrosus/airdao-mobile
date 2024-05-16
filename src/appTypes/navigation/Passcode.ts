@@ -1,3 +1,3 @@
-export interface PasscodeModel {
+export interface passcodeModel {
   onPasscodeApprove: () => void;
 }

@@ -12,7 +12,7 @@ interface DataToPreviewModel {
   name: string;
   cryptoAmount?: number | string;
   usdAmount?: number | string;
-  symbol: string;
+  symbol?: string;
 }
 
 interface BottomSheetChoseNetworksProps {
