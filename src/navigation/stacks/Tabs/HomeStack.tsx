@@ -29,6 +29,7 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { ImportWalletPrivateKey } from '@screens/ImportWallet/screens/ImportWallet.PrivateKey';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -83,6 +84,10 @@ export const HomeStack = () => {
           component={SuccessSetupSecurity}
         />
         <Stack.Screen name="ImportWallet" component={ImportWallet} />
+        <Stack.Screen
+          name="ImportWalletPrivateKey"
+          component={ImportWalletPrivateKey}
+        />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>

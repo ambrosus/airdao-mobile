@@ -37,6 +37,7 @@ export type HomeParamsList = {
     walletAddress: string | null;
   };
   StakeErrorScreen: undefined;
+  ImportWalletPrivateKey: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<
