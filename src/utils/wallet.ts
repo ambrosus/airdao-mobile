@@ -19,7 +19,8 @@ import { API } from '@api/api';
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'name' | 'number'> & {
     mnemonic: string;
-  }
+  },
+  isPrivateKey = false
 ) => {
   let storedKey = '';
   try {
@@ -30,7 +31,9 @@ const _saveWallet = async (
       name: wallet.name
     };
 
-    prepared.mnemonic = MnemonicUtils.recheckMnemonic(prepared.mnemonic);
+    prepared.mnemonic = isPrivateKey
+      ? wallet.mnemonic
+      : MnemonicUtils.recheckMnemonic(prepared.mnemonic);
     prepared.hash = await CryptoUtils.hashMnemonic(prepared.mnemonic);
 
     const checkKey = await AirDAOKeysStorage.isMnemonicAlreadySaved(prepared);
@@ -114,8 +117,62 @@ const deleteWalletWithAccounts = async (hash: string) => {
   }
 };
 
+export const importWalletViaPrivateKey = async (privateKey: string) => {
+  let walletInDb: WalletDBModel | null = null;
+  let accountInDb: AccountDBModel | null = null;
+  const currencyCode = CryptoCurrencyCode.AMB;
+
+  try {
+    const number = await _getWalletNumber();
+    const name = await _getWalletName();
+    const hash = await _saveWallet(
+      { mnemonic: privateKey, name, number },
+      true
+    );
+
+    const fullWallet: Wallet = new Wallet({
+      hash,
+      name,
+      number,
+      cashback: await CashBackUtils.getByHash(hash)
+    });
+
+    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
+      privateKey
+    );
+
+    walletInDb = await WalletDB.createWallet(fullWallet);
+
+    const [, accountInDbResult] = await Promise.all([
+      // Securely store private key
+      Cache.setItem(
+        `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
+        privateKey
+      ),
+      // Create account in DB
+      AccountUtils.createAccountInDB(
+        _account.address,
+        fullWallet.hash,
+        _account.path,
+        _account.index,
+        currencyCode
+      )
+    ]);
+
+    accountInDb = accountInDbResult;
+    // subscribe to notifications
+    API.watcherService.watchAddresses([_account.address]);
+    return { hash };
+  } catch (error) {
+    if (walletInDb) walletInDb.destroyPermanently();
+    if (accountInDb) accountInDb.destroyPermanently();
+    throw error;
+  }
+};
+
 export const WalletUtils = {
   processWallet,
   changeSelectedWallet,
-  deleteWalletWithAccounts
+  deleteWalletWithAccounts,
+  importWalletViaPrivateKey
 };
