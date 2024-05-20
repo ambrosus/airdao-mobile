@@ -11,7 +11,9 @@ import {
   RefreshControl,
   StyleProp,
   ViewStyle,
-  View
+  View,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, {
@@ -19,12 +21,14 @@ import Animated, {
   FadeInLeft,
   FadeOut,
   FadeOutRight,
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import {
   Button,
   KeyboardDismissingView,
@@ -45,13 +49,17 @@ import { COLORS } from '@constants/colors';
 import { ScannerIcon, SearchLargeIcon } from '@components/svg/icons';
 import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
-import { styles } from './styles';
+
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useAllAddressesContext } from '@contexts';
 import { useWatchlist } from '@hooks';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
+  const { top } = useSafeAreaInsets();
+  const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
+  const searchAddressRef = useRef<SearchAddressRef>(null);
+
   const { refresh: refetchAddresses, addressesLoading } =
     useAllAddressesContext((v) => v);
 
@@ -78,17 +86,15 @@ export const SearchScreen = () => {
   }, [refetching]);
 
   const heightAnimationValue = useSharedValue(0);
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      height: heightAnimationValue.value
+      height: interpolate(
+        heightAnimationValue.value,
+        [0, DEVICE_HEIGHT],
+        [0, DEVICE_HEIGHT]
+      )
     };
-  });
-
-  const { top } = useSafeAreaInsets();
-
-  const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
-  const searchAddressRef = useRef<SearchAddressRef>(null);
+  }, [heightAnimationValue]);
 
   useEffect(() => {
     if (params?.address) searchAddressRef.current?.setAddress(params.address);
@@ -100,30 +106,33 @@ export const SearchScreen = () => {
     }
   };
 
-  const renderAccount = (args: ListRenderItemInfo<ExplorerAccount>) => {
-    const { item } = args;
-    const navigateToWallet = () => {
-      navigation.navigate('Address', { address: item.address });
-    };
+  const renderAccount = useCallback(
+    (args: ListRenderItemInfo<ExplorerAccount>) => {
+      const { item } = args;
+      const navigateToWallet = () => {
+        navigation.navigate('Address', { address: item.address });
+      };
 
-    if (Object.keys(item).length === 0) {
+      if (Object.keys(item).length === 0) {
+        return (
+          <Button style={styles.emptyList} activeOpacity={1}>
+            <Text>{t('explore.search.no.account.info')}</Text>
+          </Button>
+        );
+      }
+
       return (
-        <Button style={styles.emptyList} activeOpacity={1}>
-          <Text>{t('explore.search.no.account.info')}</Text>
+        <Button onPress={navigateToWallet}>
+          <ExplorerWalletItem
+            item={item}
+            indicatorVisible={true}
+            totalSupply={infoData?.totalSupply || 0}
+          />
         </Button>
       );
-    }
-
-    return (
-      <Button onPress={navigateToWallet}>
-        <ExplorerWalletItem
-          item={item}
-          indicatorVisible={true}
-          totalSupply={infoData?.totalSupply || 0}
-        />
-      </Button>
-    );
-  };
+    },
+    [infoData?.totalSupply, navigation, t]
+  );
 
   const _onRefresh = async () => {
     await refetchAddresses();
@@ -145,14 +154,18 @@ export const SearchScreen = () => {
     );
   }, []);
 
-  const renderSearch = (value: boolean | ((prevState: boolean) => boolean)) => {
-    setSearchAddressContentVisible(value);
-    if (!!value) {
-      heightAnimationValue.value = withTiming(DEVICE_HEIGHT);
-    } else {
-      heightAnimationValue.value = withTiming(scale(0));
-    }
-  };
+  const renderSearch = useCallback(
+    (value: boolean | ((prevState: boolean) => boolean)) => {
+      heightAnimationValue.value = withTiming(value ? DEVICE_HEIGHT : 0);
+      setTimeout(
+        () => {
+          setSearchAddressContentVisible(value);
+        },
+        !!value ? 0 : 300
+      );
+    },
+    [heightAnimationValue]
+  );
 
   const showScreenSpinner = useMemo(() => {
     return userPerformedRefresh || addressesLoading;
@@ -162,102 +175,113 @@ export const SearchScreen = () => {
     return accountsLoading && !userPerformedRefresh && watchlist.length > 0;
   }, [userPerformedRefresh, accountsLoading, watchlist]);
 
+  const onSearchFocusHandle = useCallback(() => {
+    setTimeout(() => searchAddressRef?.current?.focus(), 0);
+  }, []);
+
+  const onDismissPress = () => {
+    renderSearch(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <KeyboardDismissingView style={{ ...styles.main, top }}>
-      {searchAddressContentVisible ? null : (
-        <Row
-          alignItems="center"
-          justifyContent="space-between"
-          style={styles.searchContainer}
-        >
-          <Text
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            fontWeight="700"
-            color={COLORS.neutral800}
+    <TouchableWithoutFeedback onPress={onDismissPress}>
+      <View style={{ ...styles.main, top }}>
+        {!searchAddressContentVisible && (
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            style={styles.searchContainer}
           >
-            {t('tab.explore')}
-          </Text>
-          <Row>
-            <Button
-              onPress={() =>
-                setTimeout(() => searchAddressRef?.current?.focus(), 50)
-              }
+            <Text
+              fontSize={24}
+              fontFamily="Inter_700Bold"
+              fontWeight="700"
+              color={COLORS.neutral800}
             >
-              <SearchLargeIcon color={COLORS.alphaBlack50} />
-            </Button>
-            <Spacer horizontal value={scale(19)} />
-            <Button onPress={searchAddressRef.current?.showScanner}>
-              <ScannerIcon color={COLORS.neutral600} />
-            </Button>
+              {t('tab.explore')}
+            </Text>
+            <Row>
+              <Button onPress={onSearchFocusHandle}>
+                <SearchLargeIcon color={COLORS.alphaBlack50} />
+              </Button>
+              <Spacer horizontal value={scale(19)} />
+              <Button onPress={searchAddressRef.current?.showScanner}>
+                <ScannerIcon color={COLORS.neutral600} />
+              </Button>
+            </Row>
           </Row>
-        </Row>
-      )}
-      <View testID="Search_Screen" style={styles.searchScreen}>
-        <Animated.View style={[styles.searchMain, animatedStyle]}>
-          <SearchAddress
-            searchAddress
-            scannerDisabled={true}
-            ref={searchAddressRef}
-            onContentVisibilityChanged={renderSearch}
-          />
-        </Animated.View>
-        {searchAddressContentVisible ? null : (
+        )}
+        <View testID="Search_Screen" style={styles.searchScreen}>
           <Animated.View
-            style={styles.container}
             entering={FadeIn}
             exiting={FadeOut}
+            style={[styles.searchMain, animatedStyle]}
           >
-            <KeyboardDismissingView>
-              <Text
-                fontFamily="Inter_700Bold"
-                fontWeight="700"
-                fontSize={20}
-                color={COLORS.neutral900}
-              >
-                {t('common.top.holders')}
-              </Text>
-              <Spacer value={verticalScale(12)} />
-            </KeyboardDismissingView>
-            {showScreenSpinner ? (
-              renderSpinner(styles.spinnerFooter)
-            ) : (
-              <Animated.View
-                entering={FadeInLeft.duration(150)}
-                exiting={FadeOutRight.duration(150)}
-              >
-                <FlatList<ExplorerAccount>
-                  // @ts-ignore
-                  data={accountsError ? [{}] : accounts}
-                  refreshControl={
-                    <RefreshControl
-                      onRefresh={_onRefresh}
-                      refreshing={!!(refetching && userPerformedRefresh)}
-                    />
-                  }
-                  renderItem={renderAccount}
-                  keyExtractor={(item) => `${item._id}${Math.random()}`}
-                  contentContainerStyle={styles.list}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={() => (
-                    <Spacer value={verticalScale(26)} />
-                  )}
-                  onEndReachedThreshold={0.25}
-                  onEndReached={loadMoreAccounts}
-                  ListFooterComponent={
-                    showFooterSpinner ? (
-                      renderSpinner(styles.spinnerFooter)
-                    ) : (
-                      <></>
-                    )
-                  }
-                  testID="List_Of_Addresses"
-                />
-              </Animated.View>
-            )}
+            <SearchAddress
+              searchAddress
+              scannerDisabled={true}
+              ref={searchAddressRef}
+              onContentVisibilityChanged={renderSearch}
+            />
           </Animated.View>
-        )}
+          {!searchAddressContentVisible && (
+            <Animated.View
+              style={styles.container}
+              entering={FadeIn}
+              exiting={FadeOut}
+            >
+              <KeyboardDismissingView>
+                <Text
+                  fontFamily="Inter_700Bold"
+                  fontWeight="700"
+                  fontSize={20}
+                  color={COLORS.neutral900}
+                >
+                  {t('common.top.holders')}
+                </Text>
+                <Spacer value={verticalScale(12)} />
+              </KeyboardDismissingView>
+              {showScreenSpinner ? (
+                renderSpinner(styles.spinnerFooter)
+              ) : (
+                <Animated.View
+                  entering={FadeInLeft.duration(150)}
+                  exiting={FadeOutRight.duration(150)}
+                >
+                  <FlatList<ExplorerAccount>
+                    // @ts-ignore
+                    data={accountsError ? [{}] : accounts}
+                    refreshControl={
+                      <RefreshControl
+                        onRefresh={_onRefresh}
+                        refreshing={!!(refetching && userPerformedRefresh)}
+                      />
+                    }
+                    renderItem={renderAccount}
+                    keyExtractor={(item) => `${item._id}${Math.random()}`}
+                    contentContainerStyle={styles.list}
+                    showsVerticalScrollIndicator={false}
+                    ItemSeparatorComponent={() => (
+                      <Spacer value={verticalScale(26)} />
+                    )}
+                    onEndReachedThreshold={0.25}
+                    onEndReached={loadMoreAccounts}
+                    ListFooterComponent={
+                      showFooterSpinner ? (
+                        renderSpinner(styles.spinnerFooter)
+                      ) : (
+                        <></>
+                      )
+                    }
+                    testID="List_Of_Addresses"
+                  />
+                </Animated.View>
+              )}
+            </Animated.View>
+          )}
+        </View>
       </View>
-    </KeyboardDismissingView>
+    </TouchableWithoutFeedback>
   );
 };
