@@ -133,6 +133,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
 
   return (
     <Header
+      bottomBorder
       backIconVisible={false}
       style={headerStyles}
       contentRight={renderContentRight}

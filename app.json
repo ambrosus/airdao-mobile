@@ -2,7 +2,7 @@
   "expo": {
     "name": "AirDAO",
     "slug": "AirDao",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "owner": "airdao_mobile",
@@ -27,10 +27,11 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.1.25"
+      "buildNumber": "1.3.10"
     },
     "android": {
-      "versionCode": 57,
+      "versionCode": 67,
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -76,7 +77,7 @@
       [
         "@morrowdigital/watermelondb-expo-plugin",
         {
-          "databases": ["airdao_dev.db"]
+          "databases": ["airdao.db"]
         }
       ],
       [

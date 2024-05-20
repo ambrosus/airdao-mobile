@@ -73,6 +73,7 @@ export const AssetScreen = () => {
   return (
     <View style={{ top, flex: 1 }}>
       <Header
+        bottomBorder
         title={
           <>
             <Row alignItems="center">

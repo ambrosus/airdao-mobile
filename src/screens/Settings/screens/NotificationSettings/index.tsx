@@ -9,6 +9,7 @@ export const NotificationSettingsScreen = () => {
   return (
     <SafeAreaView>
       <Header
+        bottomBorder
         title={t('settings.notifications')}
         style={{ backgroundColor: 'transparent' }}
       />

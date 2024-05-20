@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -16,6 +16,8 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
+import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -34,11 +36,22 @@ export const HomeScreen = () => {
     );
   }
 
+  const { setSelectedAccount } = useBridgeContextSelector();
+
+  useFocusEffect(
+    useCallback(() => {
+      WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+      setSelectedAccount(accounts[scrollIdx]);
+    }, [accounts, scrollIdx, setSelectedAccount])
+  );
+
   useEffect(() => {
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+
+      setSelectedAccount(accounts[scrollIdx]);
     }
-  }, [accounts, scrollIdx]);
+  }, [accounts, scrollIdx, setSelectedAccount]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
@@ -77,7 +90,10 @@ export const HomeScreen = () => {
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions address={selectedAccountWithBalance.address} />
+            <AccountActions
+              selectedAccount={selectedAccount}
+              address={selectedAccountWithBalance.address}
+            />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
               account={selectedAccountWithBalance}

@@ -1,3 +1,5 @@
+import { BigNumber, utils } from 'ethers';
+
 /**
  * Example: formatNumber(10000, 2) => 10,000.00
  */
@@ -75,9 +77,44 @@ const abbreviateNumber = (num: number): string => {
   return newValue;
 };
 
+export const formatAmount = (
+  amount: BigNumber | number | string,
+  afterDotAmount = 2
+) => {
+  const amountFloatString = utils.formatEther(amount);
+
+  const [intPart, floatPart] = amountFloatString.split('.');
+  let amountBalance;
+  if (floatPart && afterDotAmount === 0) {
+    amountBalance = intPart;
+  } else if (floatPart && floatPart.length > afterDotAmount) {
+    amountBalance = `${intPart}.${floatPart.slice(0, afterDotAmount)}`;
+  } else if (+floatPart > 0) {
+    amountBalance = `${intPart}.${floatPart}`;
+  } else {
+    amountBalance = intPart;
+  }
+  return amountBalance;
+};
+
+const minimiseAmount = (num: number): string => {
+  if (!num || num === 0) return '0.00';
+
+  const suffixes = ['', 'k', 'mln', 'bln', 'trln'];
+  const absNum = Math.abs(num);
+  let suffixIndex = Math.floor(Math.log10(absNum) / 3);
+
+  suffixIndex = Math.max(0, Math.min(suffixIndex, suffixes.length - 1));
+
+  const scaledNum = (num / Math.pow(10, suffixIndex * 3)).toFixed(2);
+  return `${scaledNum}${suffixes[suffixIndex]}`;
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
-  limitDecimalCount
+  limitDecimalCount,
+  formatAmount,
+  minimiseAmount
 };

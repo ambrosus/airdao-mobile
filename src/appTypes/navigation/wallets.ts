@@ -27,9 +27,16 @@ export type HomeParamsList = {
   ConfirmPasscode: { passcode: string[] };
   StakingPool: { pool: StakingPool };
   StakingPools: undefined;
+  Bridge: undefined;
+  BridgeHistory: undefined;
   SuccessSetupSecurity: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
+  StakeSuccessScreen: {
+    type: 'stake' | 'withdraw';
+    walletAddress: string | null;
+  };
+  StakeErrorScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

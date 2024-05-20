@@ -14,6 +14,10 @@ export const styles = StyleSheet.create({
     paddingLeft: leftPadding,
     paddingRight: rightPadding
   },
+  containerBorder: {
+    borderBottomWidth: 2,
+    borderBottomColor: COLORS.neutral100
+  },
   left: {
     position: 'absolute',
     zIndex: 1000,

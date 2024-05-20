@@ -11,6 +11,7 @@ import { TransactionType } from '@appTypes';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import Config from '@constants/config';
 import { SearchSort } from '@screens/Search/Search.types';
+import { TokenInfo } from '@utils/token';
 // deprecated
 // const exploreApiUrl = Config.EXPLORER_API_URL;
 const explorerApiV2Url = Config.EXPLORER_API_V2_URL;
@@ -84,7 +85,8 @@ const getTransactionsOfAccount = async (
 const getTransactionsOfOwnAccount = async (
   address: string,
   page: number,
-  limit: number
+  limit: number,
+  tokenUtils: any
 ): Promise<
   PaginatedResponseBody<{
     tokens: Token[];
@@ -97,7 +99,10 @@ const getTransactionsOfOwnAccount = async (
     const tokens = response.data.tokens as TokenDTO[];
     const transactions = response.data.data;
     return {
-      data: { tokens: tokens.map((t) => new Token(t)), transactions },
+      data: {
+        tokens: tokens.map((t) => new Token(t, tokenUtils)),
+        transactions
+      },
       next: response.data.pagination.hasNext ? (page + 1).toString() : null
     };
   } catch (error) {
@@ -125,10 +130,21 @@ const getTokenTransactionsV2 = async (
   }
 };
 
+const getAllTokens = async (itemLength = 999): Promise<TokenInfo[]> => {
+  try {
+    const apiUrl = `${explorerApiV2Url}/tokens?pagesize=${itemLength}`;
+    const response = await axios.get(apiUrl);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const explorerService = {
   getExplorerInfo,
   getExplorerAccounts,
   searchAddress,
+  getAllTokens,
   getTransactionsOfAccount,
   getTransactionDetails,
   getTransactionsOfOwnAccount,

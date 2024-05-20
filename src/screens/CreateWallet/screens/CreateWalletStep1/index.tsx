@@ -87,6 +87,7 @@ export const CreateWalletStep1 = () => {
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
       <Header
         style={{ shadowColor: 'transparent' }}
+        bottomBorder
         title={
           <Text
             align="center"
@@ -98,6 +99,7 @@ export const CreateWalletStep1 = () => {
           </Text>
         }
       />
+      <Spacer value={scale(23)} />
       <View style={{ paddingHorizontal: scale(28) }}>
         <Text
           align="center"

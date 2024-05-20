@@ -9,13 +9,13 @@ export function ChevronDownIcon(
     rotate?: RotateTransform['rotate'];
   }
 ) {
-  const { color = COLORS.brand500, rotate = '0deg' } = props;
+  const { scale = 1, color = COLORS.brand500, rotate = '0deg' } = props;
   const width = 24,
     height = 24;
   return (
     <Svg
-      width={width}
-      height={height}
+      width={width * scale}
+      height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
       style={{ transform: [{ rotate }] }}

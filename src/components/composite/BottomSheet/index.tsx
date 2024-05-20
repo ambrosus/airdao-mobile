@@ -5,7 +5,12 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { Keyboard, Platform, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from './BottomSheet.styles';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
@@ -16,6 +21,9 @@ import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
+import { Toast } from '../../modular/Toast';
+
+const DEFAULT_BACKDROP_OPACITY = 1;
 
 export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
   (
@@ -109,12 +117,32 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       ]
     );
 
-    const backdropOpacity = isNestedSheet ? 0 : 0.5;
+    const renderBackdropComponent = useMemo(() => {
+      const onBackdropPress = (): void => {
+        if (closeOnBackPress) dismiss();
+      };
+
+      const backdropOpacity = !isVisible ? 0 : isNestedSheet ? 0 : 0.5;
+      return (
+        <TouchableWithoutFeedback onPress={onBackdropPress}>
+          <View
+            style={{
+              ...styles.backdrop,
+              backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`
+            }}
+          >
+            <Toast />
+          </View>
+        </TouchableWithoutFeedback>
+      );
+    }, [isVisible, isNestedSheet, closeOnBackPress, dismiss]);
+
     return (
       <Modal
         testID={testID}
         avoidKeyboard={avoidKeyboard}
         isVisible={isVisible}
+        customBackdrop={renderBackdropComponent}
         onDismiss={dismiss}
         swipeDirection={swipingEnabled ? ['down'] : []}
         onSwipeComplete={dismiss}
@@ -122,12 +150,12 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         propagateSwipe
         onBackButtonPress={() => (closeOnBackPress ? dismiss() : null)}
         onBackdropPress={dismiss}
-        backdropOpacity={backdropOpacity}
+        backdropOpacity={DEFAULT_BACKDROP_OPACITY}
         style={styles.container}
         animationInTiming={400}
         animationOutTiming={400}
-        backdropTransitionInTiming={400}
-        backdropTransitionOutTiming={400}
+        backdropTransitionInTiming={0}
+        backdropTransitionOutTiming={0}
       >
         {content}
       </Modal>

@@ -1,33 +1,94 @@
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { KeyboardDismissingView, Row, Spacer, Text } from '@components/base';
+import { BigNumber } from 'ethers';
+import { styles } from './style';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
-import { StakeToken, StakingInfo } from './components';
-import { styles } from './style';
+import { StakingInfo } from './components';
 import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
-import { AccountDBModel } from '@database';
+import { WithdrawToken } from './components/Withdraw';
+import {
+  usePoolDetailsByName,
+  useStakingMultiplyContextSelector
+} from '@contexts';
+
+import { TokenUtils } from '@utils/token';
+import { StakeToken } from './components/Stake/Stake';
+import { useBridgeContextSelector } from '@contexts/Bridge';
+import { DeviceUtils } from '@utils/device';
+import { useKeyboardHeight } from '@hooks';
+
+const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
 
 export const StakingPoolScreen = () => {
-  const { data: allWallets } = useAllAccounts();
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
+  const { totalStake, apy } = pool;
+  const { selectedAccount, setSelectedAccount } = useBridgeContextSelector();
+  const { data: allWallets } = useAllAccounts();
   const { t } = useTranslation();
+  const poolStakingDetails = usePoolDetailsByName(pool.token.name);
   const currency = CryptoCurrencyCode.AMB;
-  const { totalStake, userStake, earnings, apy } = pool;
-  const [selectedWallet, setSelectedWallet] = useState<AccountDBModel | null>(
-    allWallets?.length > 0 ? allWallets[0] : null
-  );
+
+  const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
 
   const { top } = useSafeAreaInsets();
+
+  const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
+
+  useEffect(() => {
+    if (selectedAccount?.address) {
+      (async () => {
+        await fetchPoolDetails(selectedAccount.address);
+      })();
+    }
+  }, [selectedAccount, fetchPoolDetails]);
+
+  const earning =
+    (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
+
+  // Avoid focusing inputs, while tabs are swiped
+  const onSwipeStateHandle = (state: boolean) => {
+    if (!state) {
+      Keyboard.dismiss();
+      setTimeout(() => {
+        setIsTabsSwiping(false);
+      }, 25);
+    } else {
+      setIsTabsSwiping(state);
+    }
+  };
+
+  const keyboardVerticalOffset = useMemo(() => {
+    return Platform.select({
+      ios: -verticalScale(SCREEN_HEIGHT / 5.5),
+      android: verticalScale(24)
+    });
+  }, []);
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const keyboardHeight = useKeyboardHeight();
+
+  useEffect(() => {
+    if (DeviceUtils.isAndroid && keyboardHeight > 0) {
+      scrollViewRef.current?.scrollToEnd();
+    }
+  }, [keyboardHeight]);
 
   return (
     <View style={styles.container}>
@@ -48,16 +109,18 @@ export const StakingPoolScreen = () => {
                 fontSize={15}
                 color={COLORS.neutral900}
               >
-                {pool.token.name}
+                {TokenUtils.truncatePoolTokenName(pool.token.name)}
               </Text>
             </Row>
           }
           contentRight={
-            <WalletPicker
-              selectedWallet={selectedWallet}
-              wallets={allWallets}
-              onSelectWallet={setSelectedWallet}
-            />
+            allWallets.length > 1 && (
+              <WalletPicker
+                selectedWallet={selectedAccount}
+                wallets={allWallets}
+                onSelectWallet={setSelectedAccount}
+              />
+            )
           }
           style={{
             ...shadow
@@ -65,37 +128,79 @@ export const StakingPoolScreen = () => {
         />
       </View>
 
-      <KeyboardDismissingView style={styles.container}>
-        <KeyboardAvoidingView style={styles.container} behavior="position">
-          <View style={styles.stakingInfoContainer}>
-            <StakingInfo
-              totalStake={totalStake}
-              currency={currency}
-              userStaking={userStake}
-              earnings={earnings}
-              apy={apy}
-            />
-          </View>
-          <Spacer value={verticalScale(24)} />
-          <AnimatedTabs
-            tabs={[
-              {
-                title: t('staking.pool.stake'),
-                view: (
-                  <View>
-                    <Spacer value={verticalScale(24)} />
-                    <StakeToken wallet={selectedWallet} apy={apy} />
-                  </View>
-                )
-              },
-              {
-                title: t('staking.pool.withdraw'),
-                view: <></>
-              }
-            ]}
-          />
-        </KeyboardAvoidingView>
-      </KeyboardDismissingView>
+      {isFetching ? (
+        <View style={styles.spinner}>
+          <Spinner />
+        </View>
+      ) : (
+        <>
+          <KeyboardAvoidingView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainerStyle}
+            keyboardVerticalOffset={keyboardVerticalOffset}
+            behavior={KEYBOARD_BEHAVIOR}
+          >
+            <ScrollView
+              ref={scrollViewRef}
+              bounces={false}
+              scrollEnabled={DeviceUtils.isAndroid}
+              contentInsetAdjustmentBehavior="always"
+              overScrollMode="never"
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.stakingInfoContainer}>
+                <StakingInfo
+                  totalStake={totalStake}
+                  currency={currency}
+                  userStaking={
+                    poolStakingDetails?.user.raw ?? BigNumber.from(0)
+                  }
+                  earnings={earning}
+                  apy={apy}
+                />
+              </View>
+              <Spacer value={verticalScale(24)} />
+              <AnimatedTabs
+                dismissOnChangeIndex
+                keyboardShouldPersistTaps="handled"
+                containerStyle={styles.tabsContainer}
+                onSwipeStateHandle={onSwipeStateHandle}
+                tabs={[
+                  {
+                    title: t('staking.pool.stake'),
+                    view: (
+                      <>
+                        <Spacer value={verticalScale(24)} />
+                        <StakeToken
+                          isSwiping={isTabsSwiping}
+                          pool={poolStakingDetails}
+                          wallet={selectedAccount}
+                          apy={apy}
+                        />
+                      </>
+                    )
+                  },
+                  {
+                    title: t('staking.pool.withdraw'),
+                    view: (
+                      <>
+                        <Spacer value={verticalScale(24)} />
+                        <WithdrawToken
+                          isSwiping={isTabsSwiping}
+                          pool={poolStakingDetails}
+                          wallet={selectedAccount}
+                          apy={apy}
+                        />
+                      </>
+                    )
+                  }
+                ]}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </>
+      )}
     </View>
   );
 };
