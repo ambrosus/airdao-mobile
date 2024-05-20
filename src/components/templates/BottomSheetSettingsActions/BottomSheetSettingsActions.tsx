@@ -38,16 +38,27 @@ export const BottomSheetSettingsActions = forwardRef<
     dismissBottomSheetView();
 
     setTimeout(async () => {
-      await WalletUtils.deleteWalletWithAccounts(wallet.hash);
-      if (account?.address) {
-        API.watcherService.removeWatcherForAddresses([account.address]);
+      try {
+        await WalletUtils.deleteWalletWithAccounts(wallet.hash);
+        if (account?.address) {
+          API.watcherService.removeWatcherForAddresses([account.address]);
+        }
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'AppInit' }]
+          })
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'AppInit' }]
+          })
+        );
       }
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'AppInit' }]
-        })
-      );
     }, 500);
   };
 
