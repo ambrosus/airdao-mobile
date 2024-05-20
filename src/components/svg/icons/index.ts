@@ -92,3 +92,4 @@ export * from './SearchLargeIcon';
 export * from './CirculationIcon';
 export * from './TelegramSettingsIcon';
 export * from './NFTIcon';
+export * from './WatchlistEmpty';
