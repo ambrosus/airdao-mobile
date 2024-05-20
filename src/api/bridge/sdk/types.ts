@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
 
 export type BridgeNetwork = 'eth' | 'bsc';
 export type Network = BridgeNetwork | 'amb';
@@ -46,6 +46,19 @@ export interface ConfigTokenNetwork {
   denomination: number;
   isPrimary: boolean;
   nativeCoin?: string;
+}
+
+export interface WithdrawParams {
+  tokenFrom: Token;
+  tokenTo: Token;
+  toAddress: string;
+  amountTokens: string;
+  feeData: FeeData;
+  bridge: ethers.Contract;
+}
+export interface RunWithdrawModel {
+  withdrawParams: WithdrawParams;
+  getGasFee: boolean;
 }
 
 export class AllowanceException extends Error {

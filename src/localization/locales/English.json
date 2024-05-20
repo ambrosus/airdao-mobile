@@ -346,6 +346,7 @@
   "bridge.preview.receive": "You’ll receive",
   "bridge.preview.bridge.fee": "Bridge fee",
   "bridge.preview.network.fee": "Network fee",
+  "bridge.preview.gas.fee": "Gas fee",
   "bridge.preview.button": "Send funds to Ethereum",
-  "bridge.preview.button.max": "Max",
+  "bridge.preview.button.max": "Max"
 }

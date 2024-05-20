@@ -23,6 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
+import { FeeData } from '@api/bridge/sdk/types';
 
 // TODO if user change network we need to save chosen token on input
 
@@ -31,6 +32,7 @@ export interface BridgeFeeModel {
   networkFee: string | number;
   feeSymbol: string;
   bridgeAmount: string | number;
+  feeData: FeeData;
 }
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
@@ -46,7 +48,8 @@ export const BridgeForm = () => {
   const { networksParams, tokenParams, fromParams, toParams } =
     useBridgeContextSelector();
   const { methods, variables } = useBridgeNetworksData({
-    choseTokenRef
+    choseTokenRef,
+    previewRef
   });
   const {
     getFeeData,
@@ -56,7 +59,8 @@ export const BridgeForm = () => {
     onTokenPress,
     setFeeLoader,
     setBridgeFee,
-    getSelectedTokenBalance
+    getSelectedTokenBalance,
+    onPressPreview
   } = methods;
   const {
     dataToPreview,
@@ -65,7 +69,8 @@ export const BridgeForm = () => {
     feeLoader,
     bridgeFee,
     selectedTokenBalance,
-    balanceLoader
+    balanceLoader,
+    gasFeeLoader
   } = variables;
 
   useEffect(() => {
@@ -228,10 +233,14 @@ export const BridgeForm = () => {
         </View>
 
         <PrimaryButton
-          onPress={() => previewRef?.current?.show()}
-          disabled={!amountToExchange || !bridgeFee}
+          onPress={onPressPreview}
+          disabled={!amountToExchange || !bridgeFee || gasFeeLoader}
         >
-          <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
+          {gasFeeLoader ? (
+            <Spinner customSize={15} />
+          ) : (
+            <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
+          )}
         </PrimaryButton>
         <BottomSheetChoseToken
           ref={choseTokenRef}

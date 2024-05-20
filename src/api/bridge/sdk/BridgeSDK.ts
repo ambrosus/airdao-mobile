@@ -1,7 +1,14 @@
 import { BridgeSDK } from '@api/bridge/sdk/index';
-import { Config as BridgeConfig, Network, Token } from '@api/bridge/sdk/types';
+import {
+  Config as BridgeConfig,
+  FeeData,
+  Network,
+  Token
+} from '@api/bridge/sdk/types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
+import { AccountDBModel } from '@database';
+import { Cache, CacheKey } from '@lib/cache';
 
 interface DataForFeeModel {
   tokenFrom: Token;
@@ -18,6 +25,18 @@ interface GetBalanceModel {
   from: string;
   token: Token;
   ownerAddress: string;
+}
+
+interface CalculateGasFee {
+  bridgeConfig: BridgeConfig;
+  from: string;
+  withdrawData: {
+    tokenFrom: Token;
+    tokenTo: Token;
+    selectedAccount: AccountDBModel;
+    amountTokens: string;
+    feeData: FeeData;
+  };
 }
 
 export class MySdk extends BridgeSDK {
@@ -61,12 +80,6 @@ export async function getBridgePairs({
   to: Network;
   bridgeConfig: BridgeConfig;
 }) {
-  // const privateKey = (await Cache.getItem(
-  //   `${CacheKey.WalletPrivateKey}-${walletHash}`
-  // )) as string;
-
-  // const signer = new ethers.Wallet(privateKey, providerAmb);
-
   const sdk = new MySdk(bridgeConfig, {
     relayUrls: {
       eth: 'https://relay-eth.ambrosus.io/fees',
@@ -138,7 +151,38 @@ export async function getBalance({
   return contract.balanceOf(ownerAddress);
 }
 
+export async function calculateGasFee({
+  bridgeConfig,
+  from,
+  withdrawData
+}: CalculateGasFee) {
+  const sdk = new MySdk(bridgeConfig, {
+    relayUrls: {
+      eth: 'https://relay-eth.ambrosus.io/fees',
+      bsc: 'https://relay-bsc.ambrosus.io/fees'
+    }
+  });
+  const { tokenFrom, tokenTo, selectedAccount, amountTokens, feeData } =
+    withdrawData;
+  const privateKey = (await Cache.getItem(
+    // @ts-ignore
+    `${CacheKey.WalletPrivateKey}-${selectedAccount._raw?.hash}`
+  )) as string;
+  const provider = await currentProvider(from);
+  const singer = new ethers.Wallet(privateKey, provider);
+  return await sdk.withdraw(
+    tokenFrom,
+    tokenTo,
+    selectedAccount.address,
+    amountTokens,
+    feeData,
+    singer,
+    true
+  );
+}
+
 export const bridgeSDK = {
+  calculateGasFee,
   getBridgePairs,
   getFeeData,
   getBalance

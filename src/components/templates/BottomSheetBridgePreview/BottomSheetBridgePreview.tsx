@@ -64,7 +64,7 @@ export const BottomSheetBridgePreview = forwardRef<
         <FlatList
           data={dataToPreview}
           // @ts-ignore
-          renderItem={(item) => renderItem(item)}
+          renderItem={(item) => renderItem(item.item)}
         />
         <Spacer value={verticalScale(15)} />
         <PrimaryButton onPress={onAcceptPress}>

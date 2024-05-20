@@ -47,19 +47,24 @@ export class BridgeSDK {
     toAddress: string,
     amountTokens: string,
     feeData: FeeData,
-    signer: ethers.Signer
+    signer: ethers.Signer,
+    getGasFee = false
   ) {
     const bridgeContract = this.getBridgeForTokens(tokenFrom, tokenTo).connect(
       signer
     );
-    return withdraw(
+    const withdrawData = {
       tokenFrom,
       tokenTo,
       toAddress,
       amountTokens,
       feeData,
-      bridgeContract
-    );
+      bridge: bridgeContract
+    };
+    return withdraw({
+      withdrawParams: withdrawData,
+      getGasFee
+    });
   }
 
   async setAllowance(

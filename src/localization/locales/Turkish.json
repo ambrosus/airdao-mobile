@@ -342,12 +342,11 @@
   "bridge.amount.network.fee": "!!!Network fee",
   "bridge.amount.to.receive": "!!!You’ll receive",
 
-  "bridge.preview.header": "!!!Preview",
-  "bridge.preview.send": "!!!You're sending",
+  "bridge.preview.title": "!!!Preview",
   "bridge.preview.receive": "!!!You’ll receive",
   "bridge.preview.bridge.fee": "!!!Bridge fee",
   "bridge.preview.network.fee": "!!!Network fee",
-  "bridge.preview.total": "!!!Total amount",
+  "bridge.preview.gas.fee": "!!!Gas fee",
   "bridge.preview.button": "!!!Send funds to Ethereum",
   "bridge.preview.button.max": "!!!Max"
 }

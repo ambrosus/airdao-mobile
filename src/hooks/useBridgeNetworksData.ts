@@ -11,28 +11,33 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
 import { BottomSheetRef } from '@components/composite';
+import { currentProvider } from '@api/bridge/sdk/BridgeSDK';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
+  previewRef: RefObject<BottomSheetRef>;
 }
 
 const DECIMAL_CRYPTO_LIMIT = 5;
 const DECIMAL_USD_LIMIT = 2;
 
 export const useBridgeNetworksData = ({
-  choseTokenRef
+  choseTokenRef,
+  previewRef
 }: UseBridgeNetworksDataModel) => {
   const [feeLoader, setFeeLoader] = useState(false);
   const [balanceLoader, setBalanceLoader] = useState(false);
-
-  const { tokenParams, bridgeConfig, fromParams } = useBridgeContextSelector();
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
   const [selectedTokenBalance, setSelectedTokenBalance] = useState('');
+  const [gasFee, setGasFee] = useState(0);
+  const [gasFeeLoader, setGasFeeLoader] = useState(false);
+
   const { selectedAccount } = useBridgeContextSelector();
   const { t } = useTranslation();
+  const { tokenParams, bridgeConfig, fromParams } = useBridgeContextSelector();
 
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
     setCurrencySelectorWidth(event.nativeEvent.layout.width);
@@ -96,7 +101,8 @@ export const useBridgeNetworksData = ({
         bridgeAmount: NumberUtils.limitDecimalCount(
           Number(formatEther(fee.bridgeFee._hex)),
           DECIMAL_CRYPTO_LIMIT
-        )
+        ),
+        feeData: fee
       });
     } catch (e) {
       // ignore
@@ -138,6 +144,11 @@ export const useBridgeNetworksData = ({
         name: t('bridge.preview.network.fee'),
         cryptoAmount: networkFee,
         symbol: bridgeFee?.feeSymbol
+      },
+      {
+        name: t('bridge.preview.gas.fee'),
+        cryptoAmount: gasFee,
+        symbol: bridgeFee?.feeSymbol
       }
     ];
   })();
@@ -151,6 +162,42 @@ export const useBridgeNetworksData = ({
     setAmountToExchange(finalValue);
   };
 
+  const onPressPreview = async () => {
+    try {
+      setGasFeeLoader(true);
+      if (bridgeFee?.feeData && selectedAccount?.address) {
+        const withdrawData = {
+          tokenFrom: tokenParams.value.pairs[0],
+          tokenTo: tokenParams.value.pairs[1],
+          selectedAccount,
+          amountTokens: amountToExchange,
+          feeData: bridgeFee.feeData
+        };
+        const gasEstimate = await API.bridgeService.bridgeSDK.calculateGasFee({
+          bridgeConfig,
+          from: fromParams.value.id,
+          withdrawData
+        });
+        if (gasEstimate._hex) {
+          const provider = await currentProvider(fromParams.value.id);
+          const gasPrice = await provider?.getGasPrice();
+
+          setGasFee(
+            CurrencyUtils.toUSD(
+              Number(formatEther(gasPrice?._hex || '0x00')),
+              Number(formatEther(gasEstimate?._hex))
+            )
+          );
+        }
+        previewRef?.current?.show();
+      }
+    } catch (e) {
+      // console.log('IN ERROR bridge.estimateGas.wrapWithdraw->', e);
+    } finally {
+      setGasFeeLoader(false);
+    }
+  };
+
   const variables = {
     dataToPreview,
     amountToExchange,
@@ -158,7 +205,8 @@ export const useBridgeNetworksData = ({
     feeLoader,
     bridgeFee,
     selectedTokenBalance,
-    balanceLoader
+    balanceLoader,
+    gasFeeLoader
   };
   const methods = {
     getFeeData,
@@ -168,7 +216,8 @@ export const useBridgeNetworksData = ({
     onTokenPress,
     setFeeLoader,
     setBridgeFee,
-    getSelectedTokenBalance
+    getSelectedTokenBalance,
+    onPressPreview
   };
   return {
     variables,

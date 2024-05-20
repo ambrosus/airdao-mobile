@@ -1,4 +1,10 @@
-import { AllowanceException, FeeData, RelayUrls, Token } from './types';
+import {
+  AllowanceException,
+  FeeData,
+  RelayUrls,
+  RunWithdrawModel,
+  Token
+} from './types';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { erc20Contract } from './abi';
 
@@ -55,14 +61,12 @@ function getAmountInForeignDecimals(
   return ethers.utils.parseUnits(amountTokens, decimals);
 }
 
-export async function withdraw(
-  tokenFrom: Token,
-  tokenTo: Token,
-  toAddress: string,
-  amountTokens: string,
-  feeData: FeeData,
-  bridge: ethers.Contract
-) {
+export async function withdraw({
+  withdrawParams,
+  getGasFee = false
+}: RunWithdrawModel) {
+  const { tokenFrom, tokenTo, toAddress, amountTokens, feeData, bridge } =
+    withdrawParams;
   const fee = feeData.transferFee.add(feeData.bridgeFee);
 
   if (tokenFrom.isNativeCoin) {
@@ -70,14 +74,23 @@ export async function withdraw(
       amountTokens,
       tokenFrom.decimals
     );
-    return;
-    return bridge.wrapWithdraw(
-      toAddress,
-      feeData.signature,
-      feeData.transferFee,
-      feeData.bridgeFee,
-      { value: fee.add(amountBridge) }
-    );
+    if (getGasFee) {
+      return bridge.estimateGas.wrapWithdraw(
+        toAddress,
+        feeData.signature,
+        feeData.transferFee,
+        feeData.bridgeFee,
+        { value: fee.add(amountBridge) }
+      );
+    } else {
+      return bridge.wrapWithdraw(
+        toAddress,
+        feeData.signature,
+        feeData.transferFee,
+        feeData.bridgeFee,
+        { value: fee.add(amountBridge) }
+      );
+    }
   }
 
   const needUnwrap = tokenTo.isNativeCoin;
@@ -98,17 +111,29 @@ export async function withdraw(
     amountAllowance
   );
 
-  return;
-  return bridge.withdraw(
-    tokenFrom.address,
-    toAddress,
-    amountBridge,
-    needUnwrap,
-    feeData.signature,
-    feeData.transferFee,
-    feeData.bridgeFee,
-    { value: fee }
-  );
+  if (getGasFee) {
+    return bridge.estimateGas.withdraw(
+      tokenFrom.address,
+      toAddress,
+      amountBridge,
+      needUnwrap,
+      feeData.signature,
+      feeData.transferFee,
+      feeData.bridgeFee,
+      { value: fee }
+    );
+  } else {
+    return bridge.withdraw(
+      tokenFrom.address,
+      toAddress,
+      amountBridge,
+      needUnwrap,
+      feeData.signature,
+      feeData.transferFee,
+      feeData.bridgeFee,
+      { value: fee }
+    );
+  }
 }
 
 export async function setAllowance(
