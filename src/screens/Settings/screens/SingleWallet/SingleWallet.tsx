@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
-import {
-  CommonActions,
-  RouteProp,
-  useNavigation,
-  useRoute
-} from '@react-navigation/native';
+import React, { useMemo, useRef, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import {
   BottomAwareSafeAreaView,
+  BottomSheetRef,
   CopyToClipboardButton,
   Header
 } from '@components/composite';
@@ -24,9 +20,9 @@ import {
 import { useExplorerAccountFromHash } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { Database, WalletDBModel } from '@database';
-import { WalletUtils } from '@utils/wallet';
-import { API } from '@api/api';
 import { styles } from './styles';
+import { MoreDotsIcon } from '@components/svg/icons';
+import { BottomSheetSettingsActions } from '@components/templates/BottomSheetSettingsActions';
 
 export const SingleWalletScreen = () => {
   const { t } = useTranslation();
@@ -47,36 +43,19 @@ export const SingleWalletScreen = () => {
       wallet: wallet
     });
   };
-  const deleteWallet = async () => {
-    await WalletUtils.deleteWalletWithAccounts(wallet.hash);
-    if (account?.address) {
-      API.watcherService.removeWatcherForAddresses([account.address]);
-    }
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'AppInit' }]
-      })
-    );
+
+  const bottomSheetActionRef = useRef<BottomSheetRef>(null);
+  const onActionsHeaderPress = () => {
+    bottomSheetActionRef.current?.show();
   };
 
-  const promptWalletDeletion = () => {
-    Alert.alert(
-      t('singleWallet.remove.alert.title'),
-      t('singleWallet.remove.alert.description'),
-      [
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: deleteWallet
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        }
-      ]
+  const renderRightHeaderContent = useMemo(() => {
+    return (
+      <TouchableOpacity onPress={onActionsHeaderPress} hitSlop={25}>
+        <MoreDotsIcon />
+      </TouchableOpacity>
     );
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,17 +73,7 @@ export const SingleWalletScreen = () => {
             </Text>
           </View>
         }
-        contentRight={
-          <Button onPress={promptWalletDeletion}>
-            <Text
-              fontSize={16}
-              fontFamily="Inter_500Medium"
-              color={COLORS.error400}
-            >
-              {t('singleWallet.remove')}
-            </Text>
-          </Button>
-        }
+        contentRight={renderRightHeaderContent}
         style={{ shadowColor: COLORS.transparent }}
       />
       {wallet && (
@@ -181,6 +150,11 @@ export const SingleWalletScreen = () => {
               {t('singleWallet.save')}
             </Text>
           </Button>
+          <BottomSheetSettingsActions
+            wallet={wallet}
+            account={account}
+            ref={bottomSheetActionRef}
+          />
         </BottomAwareSafeAreaView>
       )}
     </SafeAreaView>
