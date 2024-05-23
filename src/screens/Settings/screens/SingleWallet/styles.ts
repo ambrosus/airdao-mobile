@@ -40,5 +40,18 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
+  },
+  accessKeysButton: {
+    backgroundColor: COLORS.neutral100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 1000,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    marginHorizontal: scale(24)
+  },
+  footer: {
+    flexDirection: 'column',
+    rowGap: scale(24)
   }
 });

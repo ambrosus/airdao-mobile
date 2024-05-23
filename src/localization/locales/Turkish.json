@@ -246,6 +246,7 @@
   "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
   "singleWallet.remove.alert.description": "Cüzdanı yedeklediğinizden emin olun",
   "singleWallet.save": "Değişiklikleri kaydet",
+  "singleWallet.access.keys": "View access keys",
 
   "login.enter.your.passcode": "Şifrenizi girin",
   "login.with.face.id": "Face ID ile oturum açın",

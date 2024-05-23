@@ -99,3 +99,4 @@ export * from './Failed';
 export * from './EthereumIcon';
 export * from './BSCIcon';
 export * from './MoreDots';
+export * from './LeadEye';
