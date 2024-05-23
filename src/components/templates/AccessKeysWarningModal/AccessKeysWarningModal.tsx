@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Button, Text } from '@components/base';
 import { CloseIcon, LeadEyeIcon, WarningIcon } from '@components/svg/icons';
@@ -17,16 +18,17 @@ export const AccessKeysWarningModal = ({
   walletHash,
   dismiss
 }: AccessKeysWarningModalProps) => {
+  const { t } = useTranslation();
   const navigation: SettingsTabNavigationProp = useNavigation();
 
   const onViewRecoveryPress = async (): Promise<void> => {
     const onPasscodeApprove = () => {
-      navigation.navigate('RecoveryPhrase', { walletHash });
+      navigation.navigate('AccessKeys', { walletHash });
     };
 
     navigation.navigate('Passcode', {
       onPasscodeApprove,
-      title: 'Reveal access keys'
+      title: t('singleWallet.warning.button')
     });
     dismiss();
   };
@@ -51,7 +53,7 @@ export const AccessKeysWarningModal = ({
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.neutral800}
               >
-                Keep your Access keys safe
+                {t('singleWallet.warning.title')}
               </Text>
 
               <Text
@@ -60,7 +62,7 @@ export const AccessKeysWarningModal = ({
                 color={COLORS.neutral600}
                 style={styles.innerTypography}
               >
-                Your Access keys provides full access to you account and funds.
+                {t('singleWallet.warning.description.top')}
               </Text>
 
               <Text
@@ -69,8 +71,7 @@ export const AccessKeysWarningModal = ({
                 color={COLORS.neutral600}
                 style={[styles.innerTypography, styles.innerTypographyMargin]}
               >
-                Do not share this with anyone. The AirDAO team will never
-                request this, but phishers might.
+                {t('singleWallet.warning.description.bottom')}
               </Text>
             </View>
             <SecondaryButton
@@ -83,7 +84,7 @@ export const AccessKeysWarningModal = ({
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.neutral0}
               >
-                Reveal access keys
+                {t('singleWallet.warning.button')}
               </Text>
             </SecondaryButton>
           </View>

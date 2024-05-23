@@ -15,7 +15,7 @@ export type SettingsTabParamsList = {
   ChangePasscode: undefined;
   SettingsScreen: undefined;
   SingleWallet: { wallet: WalletDBModel };
-  RecoveryPhrase: { walletHash: string };
+  AccessKeys: { walletHash: string };
   Passcode: PasscodeModel;
 };
 

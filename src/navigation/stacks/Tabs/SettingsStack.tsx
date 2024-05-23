@@ -2,15 +2,15 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   AboutScreen,
+  AccessKeysScreen,
   AppPreferencesScreen,
+  ChangePasscode,
   HelpCenterScreen,
+  ManageWalletsScreen,
   NotificationSettingsScreen,
   SecuritySettingsScreen,
   SettingsScreen,
-  ManageWalletsScreen,
-  SingleWalletScreen,
-  ChangePasscode,
-  RecoveryPhraseScreen
+  SingleWalletScreen
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
 
@@ -36,7 +36,7 @@ export const SettingsStack = () => {
       <Stack.Screen name="ChangePasscode" component={ChangePasscode} />
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="SingleWallet" component={SingleWalletScreen} />
-      <Stack.Screen name="RecoveryPhrase" component={RecoveryPhraseScreen} />
+      <Stack.Screen name="AccessKeys" component={AccessKeysScreen} />
     </Stack.Navigator>
   );
 };
