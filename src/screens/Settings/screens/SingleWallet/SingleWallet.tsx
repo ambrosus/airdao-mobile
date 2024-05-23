@@ -86,16 +86,18 @@ export const SingleWalletScreen = () => {
           <BottomAwareSafeAreaView style={styles.innerContainer}>
             <View>
               <View style={styles.nameInput}>
-                <Text>{t('singleWallet.name')}</Text>
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.neutral900}
+                >
+                  {t('singleWallet.name')}
+                </Text>
                 <Spacer value={verticalScale(8)} />
                 <Input
                   value={walletName}
                   onChangeValue={setWalletName}
-                  style={{
-                    shadowColor: COLORS.transparent,
-                    borderWidth: 1,
-                    borderColor: COLORS.alphaBlack10
-                  }}
+                  style={styles.input}
                 />
               </View>
               <Spacer value={verticalScale(42)} />

@@ -14,6 +14,12 @@ export const styles = StyleSheet.create({
   nameInput: {
     marginHorizontal: scale(16)
   },
+  input: {
+    shadowColor: COLORS.transparent,
+    borderWidth: 1,
+    borderColor: COLORS.alphaBlack10,
+    color: COLORS.alphaBlack60
+  },
   addressContainer: {
     paddingHorizontal: scale(24),
     alignSelf: 'center'
