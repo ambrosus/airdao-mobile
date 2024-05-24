@@ -1,4 +1,5 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { AccountDBModel } from '@database';
 
 export type BridgeNetwork = 'eth' | 'bsc';
 export type Network = BridgeNetwork | 'amb';
@@ -71,4 +72,32 @@ export class AllowanceException extends Error {
       `User must approve ${amount} of ${token.symbol} for ${spenderAddress} before withdrawing`
     );
   }
+}
+export interface DataForFeeModel {
+  tokenFrom: Token;
+  tokenTo: Token;
+  amountTokens: string;
+  isMax: boolean;
+}
+export interface GetFeeDataModel {
+  bridgeConfig: Config;
+  dataForFee: DataForFeeModel;
+}
+
+export interface GetBalanceModel {
+  from: string;
+  token: Token;
+  ownerAddress: string;
+}
+
+export interface CalculateGasFee {
+  bridgeConfig: Config;
+  from: string;
+  withdrawData: {
+    tokenFrom: Token;
+    tokenTo: Token;
+    selectedAccount: AccountDBModel;
+    amountTokens: string;
+    feeData: FeeData;
+  };
 }

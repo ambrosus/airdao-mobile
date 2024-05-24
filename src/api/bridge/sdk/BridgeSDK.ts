@@ -1,43 +1,15 @@
 import { BridgeSDK } from '@api/bridge/sdk/index';
 import {
+  CalculateGasFee,
   Config as BridgeConfig,
-  FeeData,
+  GetBalanceModel,
+  GetFeeDataModel,
   Network,
   Token
 } from '@api/bridge/sdk/types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { AccountDBModel } from '@database';
 import { Cache, CacheKey } from '@lib/cache';
-
-interface DataForFeeModel {
-  tokenFrom: Token;
-  tokenTo: Token;
-  amountTokens: string;
-  isMax: boolean;
-}
-interface GetFeeDataModel {
-  bridgeConfig: BridgeConfig;
-  dataForFee: DataForFeeModel;
-}
-
-interface GetBalanceModel {
-  from: string;
-  token: Token;
-  ownerAddress: string;
-}
-
-interface CalculateGasFee {
-  bridgeConfig: BridgeConfig;
-  from: string;
-  withdrawData: {
-    tokenFrom: Token;
-    tokenTo: Token;
-    selectedAccount: AccountDBModel;
-    amountTokens: string;
-    feeData: FeeData;
-  };
-}
 
 export class MySdk extends BridgeSDK {
   getPairs(
@@ -49,11 +21,6 @@ export class MySdk extends BridgeSDK {
   }
 
   mapToken(token: Token): Token {
-    // todo logos
-    // todo if isNativeCoin you can change name or symbol, for example:
-    //   use networkToken.nativeCoin (it's a symbol of native coin)
-    //   or create a mapping (networkName => {name, symbol, logo, ...}) for native coins
-
     if (token.isNativeCoin) token.name += ' (NATIVE)';
     return token;
   }
@@ -76,25 +43,20 @@ export async function getBridgePairs({
   bridgeConfig
 }: {
   walletHash: string;
-  from: Network;
-  to: Network;
+  from: Network | string;
+  to: Network | string;
   bridgeConfig: BridgeConfig;
 }) {
-  const sdk = new MySdk(bridgeConfig, {
-    relayUrls: {
-      eth: 'https://relay-eth.ambrosus.io/fees',
-      bsc: 'https://relay-bsc.ambrosus.io/fees'
-    }
-  });
+  const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
   const provider = currentProvider(from);
   return {
     name: `${from}->${to}`,
+    // @ts-ignore
     pairs: sdk.getPairs(from, to),
     provider
   };
 }
 
-// TODO BRIDGE write types
 export async function getFeeData({
   bridgeConfig,
   dataForFee
@@ -114,14 +76,9 @@ export async function getFeeData({
     }
   })();
 
-  const sdk = new MySdk(bridgeConfig, {
-    relayUrls: {
-      eth: 'https://relay-eth.ambrosus.io/fees',
-      bsc: 'https://relay-bsc.ambrosus.io/fees'
-    }
-  });
-  const fee = sdk.getFeeData(tokenFrom, tokenTo, amountTokens, isMax);
-  return { ...(await fee), feeSymbol };
+  const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
+  const fee = await sdk.getFeeData(tokenFrom, tokenTo, amountTokens, isMax);
+  return { ...fee, feeSymbol };
 }
 
 export async function getBalance({
@@ -156,12 +113,7 @@ export async function calculateGasFee({
   from,
   withdrawData
 }: CalculateGasFee) {
-  const sdk = new MySdk(bridgeConfig, {
-    relayUrls: {
-      eth: 'https://relay-eth.ambrosus.io/fees',
-      bsc: 'https://relay-bsc.ambrosus.io/fees'
-    }
-  });
+  const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
   const { tokenFrom, tokenTo, selectedAccount, amountTokens, feeData } =
     withdrawData;
   const privateKey = (await Cache.getItem(

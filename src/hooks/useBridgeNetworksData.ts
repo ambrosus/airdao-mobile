@@ -88,7 +88,6 @@ export const useBridgeNetworksData = ({
     try {
       const fee = await API.bridgeService.bridgeSDK.getFeeData({
         bridgeConfig,
-        // @ts-ignore
         dataForFee
       });
       setBridgeFee({

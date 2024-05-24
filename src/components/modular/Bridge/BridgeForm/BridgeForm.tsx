@@ -2,17 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { styles } from './styles';
 import {
-  Button,
   Input,
   KeyboardDismissingView,
-  Row,
   Spacer,
   Spinner,
   Text
 } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { PrimaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton } from '@components/modular';
 import { DeviceUtils } from '@utils/device';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +21,11 @@ import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
 import { FeeData } from '@api/bridge/sdk/types';
+import {
+  BalanceInfo,
+  FeeInfo,
+  TokenSelector
+} from '@components/modular/Bridge/BridgeForm/components';
 
 // TODO if user change network we need to save chosen token on input
 
@@ -114,27 +116,10 @@ export const BridgeForm = () => {
               onLayout={onCurrencySelectorLayoutHandle}
               style={styles.inputCurrencySelector}
             >
-              <Button onPress={() => choseTokenRef.current?.show()}>
-                <Row style={styles.currencySelectorGap} alignItems="center">
-                  <TokenLogo
-                    scale={0.7}
-                    token={tokenParams.value.renderTokenItem.symbol}
-                  />
-                  <Row
-                    style={styles.currencySelectorInnerGap}
-                    alignItems="center"
-                  >
-                    <Text
-                      fontSize={16}
-                      fontFamily="Inter_500Medium"
-                      color={COLORS.alphaBlack60}
-                    >
-                      {tokenParams.value.renderTokenItem.symbol}
-                    </Text>
-                    <ChevronDownIcon scale={0.45} color={COLORS.alphaBlack60} />
-                  </Row>
-                </Row>
-              </Button>
+              <TokenSelector
+                onPress={() => choseTokenRef.current?.show()}
+                symbol={tokenParams.value.renderTokenItem.symbol}
+              />
             </View>
             <Input
               style={inputStyles}
@@ -144,92 +129,22 @@ export const BridgeForm = () => {
               value={amountToExchange}
               onChangeValue={onChangeAmount}
             />
-
             <Spacer value={scale(8)} />
-            <Row style={styles.balanceContainer} alignItems="center">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_400Regular"
-                color={COLORS.alphaBlack60}
-              >
-                {t('common.balance')}:
-              </Text>
-              {balanceLoader ? (
-                <>
-                  <Spacer value={10} horizontal />
-                  <Spinner customSize={15} />
-                </>
-              ) : (
-                selectedTokenBalance && (
-                  <>
-                    <Text
-                      fontSize={14}
-                      fontFamily="Inter_400Regular"
-                      color={COLORS.alphaBlack60}
-                    >
-                      {`${selectedTokenBalance} ${tokenParams.value.renderTokenItem.symbol}`}
-                    </Text>
-
-                    {Number(selectedTokenBalance) > 0 && (
-                      <Text
-                        fontSize={14}
-                        fontFamily="Inter_700Bold"
-                        color={COLORS.sapphireBlue}
-                        onPress={onSelectMaxAmount}
-                      >
-                        {t('bridge.preview.button.max')}
-                      </Text>
-                    )}
-                  </>
-                )
-              )}
-            </Row>
+            <BalanceInfo
+              loader={balanceLoader}
+              tokenBalance={selectedTokenBalance}
+              tokenSymbol={tokenParams.value.renderTokenItem.symbol}
+              onMaxPress={onSelectMaxAmount}
+            />
           </View>
 
           <Spacer value={scale(32)} />
-          <View style={styles.information}>
-            <Row alignItems="center" justifyContent="space-between">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral400}
-              >
-                {t('bridge.amount.to.receive')}
-              </Text>
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.black}
-              >
-                {`${amountToExchange} ${tokenParams.value.renderTokenItem.symbol}`}
-              </Text>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              {!!amountToExchange &&
-                (feeLoader ? (
-                  <Spinner customSize={15} />
-                ) : bridgeFee ? (
-                  <>
-                    <Text
-                      fontSize={14}
-                      fontFamily="Inter_500Medium"
-                      color={COLORS.neutral400}
-                    >
-                      {t('bridge.amount.network.fee')}
-                    </Text>
-                    <Text
-                      fontSize={14}
-                      fontFamily="Inter_500Medium"
-                      color={COLORS.black}
-                    >
-                      {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
-                    </Text>
-                  </>
-                ) : (
-                  <></>
-                ))}
-            </Row>
-          </View>
+          <FeeInfo
+            amount={amountToExchange}
+            amountSymbol={tokenParams.value.renderTokenItem.symbol}
+            feeLoader={feeLoader}
+            bridgeFee={bridgeFee}
+          />
         </View>
 
         <PrimaryButton

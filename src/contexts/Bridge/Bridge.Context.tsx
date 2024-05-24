@@ -3,52 +3,11 @@ import { useEffect, useState } from 'react';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
 import { AccountDBModel } from '@database';
 import { API } from '@api/api';
-
-const DEFAULT_AMB_NETWORK = {
-  side: '0x0000000000',
-  amb: '1x1111111111',
-  id: 'amb',
-  name: 'AirDAO'
-};
-const DEFAULT_ETH_NETWORK = {
-  amb: '0x0000000000',
-  id: 'eth',
-  name: 'Ethereum',
-  side: '1x1111111111'
-};
-
-const DEFAULT_TOKEN = {
-  name: 'amb->eth',
-  pairs: [
-    {
-      address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
-      bridgeNetwork: 'eth',
-      decimals: 18,
-      isNativeCoin: true,
-      name: 'AirDAO (NATIVE)',
-      network: 'amb',
-      symbol: 'USDT'
-    },
-    {
-      address: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
-      bridgeNetwork: 'eth',
-      decimals: 18,
-      isNativeCoin: false,
-      name: 'AirDAO',
-      network: 'eth',
-      symbol: 'AMB'
-    }
-  ],
-  renderTokenItem: {
-    address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
-    bridgeNetwork: 'eth',
-    decimals: 18,
-    isNativeCoin: true,
-    name: 'AirDAO (NATIVE)',
-    network: 'amb',
-    symbol: 'AMB'
-  }
-};
+import {
+  DEFAULT_AMB_NETWORK,
+  DEFAULT_ETH_NETWORK,
+  DEFAULT_TOKEN_PAIRS
+} from '@contexts/Bridge/constants';
 
 export const BridgeContext = () => {
   const [config, setConfig] = useState<any>({});
@@ -91,7 +50,7 @@ export const BridgeContext = () => {
   );
   const [selectedToken, setSelectedToken] =
     // @ts-ignore
-    useState<RenderTokenItem>(DEFAULT_TOKEN);
+    useState<RenderTokenItem>(DEFAULT_TOKEN_PAIRS);
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
   const [tokensForSelector, setTokensForSelector] =

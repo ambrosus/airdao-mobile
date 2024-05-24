@@ -8,15 +8,15 @@ import { TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextSelector } from '@contexts/Bridge';
-import { BridgePairsModel, ParsedBridge } from '@models/Bridge';
+import {
+  BridgeNetworkPickerProps,
+  BridgePairsModel,
+  ParsedBridge
+} from '@models/Bridge';
 import { Token } from '@api/bridge/sdk/types';
 import { BottomSheetChoseNetworks } from '@components/templates/Bridge/BottomSheetChoseNetworks';
 import { API } from '@api/api';
 import { CryptoCurrencyCode } from '@appTypes';
-
-interface BridgeNetworkPickerProps {
-  destination: 'from' | 'to';
-}
 
 export const BridgeNetworkPicker = ({
   destination
@@ -76,6 +76,7 @@ export const BridgeNetworkPicker = ({
         token.renderTokenItem.isNativeCoin ||
         token.renderTokenItem.symbol === CryptoCurrencyCode.SAMB
     );
+    // @ts-ignore
     tokenParams.setter(defaultToken);
   };
 
@@ -83,9 +84,7 @@ export const BridgeNetworkPicker = ({
     API.bridgeService.bridgeSDK
       .getBridgePairs({
         walletHash: '',
-        // @ts-ignore
         from: fromParams.value.id,
-        // @ts-ignore
         to: toParams.value.id,
         bridgeConfig
       })

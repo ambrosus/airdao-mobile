@@ -1,4 +1,4 @@
-import { Token } from '@api/bridge/sdk/types';
+import { Network as BridgeNetwork, Token } from '@api/bridge/sdk/types';
 import { ethers } from 'ethers';
 
 export interface Bridge {
@@ -30,7 +30,6 @@ export interface RenderTokenItem {
   provider?: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
 
-export type SingleNetworksNamesModel = 'eth' | 'amb' | 'bsc';
 export type PairsNetworksNamesModel =
   | 'eth->amb'
   | 'amb->eth'
@@ -73,9 +72,12 @@ export interface TokenNetworks {
 
 export interface ParsedBridge {
   amb: string;
-  id: string;
+  id: BridgeNetwork | string;
   name: string;
   side: string;
+}
+export interface BridgeNetworkPickerProps {
+  destination: 'from' | 'to';
 }
 
 export type NetworksNames = 'amb' | 'eth' | 'bsc';
