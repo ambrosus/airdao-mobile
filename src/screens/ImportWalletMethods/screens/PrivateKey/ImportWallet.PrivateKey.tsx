@@ -1,22 +1,33 @@
-import React, { useMemo, useState } from 'react';
-import { Alert, StyleProp, View, ViewStyle } from 'react-native';
+import React, { useMemo, useRef, useState } from 'react';
+import { Alert, KeyboardAvoidingView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
-import { Text } from '@components/base';
-import { TextInput } from '@components/base/Input/Input.text';
-import { PrimaryButton } from '@components/modular';
 import { WalletUtils } from '@utils/wallet';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import {
+  Button,
+  KeyboardDismissingView,
+  Row,
+  Spacer,
+  Text
+} from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
+import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
+import { PrimaryButton } from '@components/modular';
+import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
-import { Header } from '@components/composite';
 
 export const ImportWalletPrivateKey = () => {
   const navigation: HomeNavigationProp = useNavigation();
 
+  const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
+
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
 
-  const onImportWalletHandle = async () => {
+  const onImportWalletPress = async () => {
     try {
       await WalletUtils.importWalletViaPrivateKey(privateKey);
       navigation.replace('ImportWalletSuccess');
@@ -26,57 +37,94 @@ export const ImportWalletPrivateKey = () => {
     }
   };
 
-  const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      flex: 1
-    };
-  }, []);
-
-  const innerContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      flex: 1,
-      marginTop: verticalScale(16),
-      marginHorizontal: scale(20),
-      justifyContent: 'space-between'
-    };
-  }, []);
+  const placeholder = useMemo(() => {
+    return secureTextEntry ? '******************************' : 'Private key';
+  }, [secureTextEntry]);
 
   const disabled = useMemo(() => {
-    return privateKey === '' && privateKey.length !== 64;
+    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
+    return {
+      state: isWrongLengthOrEmpty,
+      typographyColor: isWrongLengthOrEmpty
+        ? COLORS.neutral400
+        : COLORS.neutral0
+    };
   }, [privateKey]);
 
+  const toggleSecureTextEntry = () =>
+    setSecureTextEntry((prevState) => !prevState);
+
   return (
-    <SafeAreaView style={containerStyle}>
+    <SafeAreaView style={styles.container}>
       <Header
         bottomBorder
-        title={
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.neutral800}
-          >
-            Import wallet
-          </Text>
-        }
-        titlePosition="left"
-        style={{ shadowColor: 'transparent' }}
+        titleStyle={styles.titleStyle}
+        title="Import wallet"
       />
+      <Spacer value={scale(16)} />
 
-      <View style={innerContainerStyle}>
-        <TextInput
-          value={privateKey}
-          onChangeText={setPrivateKey}
-          placeholder="Private  key"
-        />
+      <KeyboardAvoidingView
+        style={styles.container}
+        keyboardVerticalOffset={20}
+        behavior="padding"
+      >
+        <KeyboardDismissingView style={styles.container}>
+          <View style={styles.innerContainer}>
+            <View>
+              <View>
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.neutral600}
+                >
+                  Enter your private key
+                </Text>
+                <Spacer value={verticalScale(8)} />
+                <TextInput
+                  multiline
+                  value={privateKey}
+                  onChangeText={setPrivateKey}
+                  placeholderTextColor={COLORS.alphaBlack60}
+                  placeholder={placeholder}
+                  secureTextEntry={secureTextEntry}
+                  style={styles.input}
+                />
+              </View>
+              <Spacer value={scale(16)} />
+              <Button onPress={toggleSecureTextEntry}>
+                <Row style={styles.toggleVisibilityRow} alignItems="center">
+                  {secureTextEntry ? (
+                    <LeadEyeEmptyMiddleIcon color={COLORS.neutral600} />
+                  ) : (
+                    <LeadEyeOffIcon color={COLORS.neutral600} />
+                  )}
+                  <Text
+                    fontSize={16}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral800}
+                  >
+                    {secureTextEntry ? 'Show' : 'Hide'} private key
+                  </Text>
+                </Row>
+              </Button>
+            </View>
+            <PrimaryButton
+              disabled={disabled.state}
+              onPress={onImportWalletPress}
+            >
+              <Text
+                fontSize={16}
+                fontFamily="Inter_500Medium"
+                color={disabled.typographyColor}
+              >
+                Hello world
+              </Text>
+            </PrimaryButton>
+          </View>
+        </KeyboardDismissingView>
+      </KeyboardAvoidingView>
 
-        <PrimaryButton disabled={disabled} onPress={onImportWalletHandle}>
-          <Text
-            style={{ color: disabled ? COLORS.alphaBlack30 : COLORS.neutral0 }}
-          >
-            Import wallet
-          </Text>
-        </PrimaryButton>
-      </View>
+      <BottomSheet ref={bottomSheetProcessingRef} />
     </SafeAreaView>
   );
 };
