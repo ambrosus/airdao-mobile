@@ -100,6 +100,7 @@ export * from './EthereumIcon';
 export * from './BSCIcon';
 export * from './ReadingList';
 export * from './Key';
-export * from './LeadEye';
 export * from './LeadEyeOff';
 export * from './LeadEyeEmptyMiddle';
+export * from './MoreDots';
+export * from './LeadEye';
