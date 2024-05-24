@@ -11,7 +11,12 @@ import {
   CreateWalletStep2,
   CreateWalletSuccess
 } from '@screens/CreateWallet';
-import { ImportWallet, ImportWalletSuccess } from '@screens/ImportWallet';
+import { ImportWalletMethods } from '@screens/ImportWalletMethods';
+import {
+  ImportWallet,
+  ImportWalletSuccess,
+  ImportWalletPrivateKey
+} from '@screens/ImportWalletMethods/screens';
 import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SendCryptoProvider } from '@contexts';
 import {
@@ -29,7 +34,6 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
-import { ImportWalletPrivateKey } from '@screens/ImportWallet/screens/ImportWallet.PrivateKey';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -82,6 +86,10 @@ export const HomeStack = () => {
         <Stack.Screen
           name="SuccessSetupSecurity"
           component={SuccessSetupSecurity}
+        />
+        <Stack.Screen
+          name="ImportWalletMethods"
+          component={ImportWalletMethods}
         />
         <Stack.Screen name="ImportWallet" component={ImportWallet} />
         <Stack.Screen

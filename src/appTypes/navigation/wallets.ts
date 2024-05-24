@@ -30,6 +30,7 @@ export type HomeParamsList = {
   Bridge: undefined;
   BridgeHistory: undefined;
   SuccessSetupSecurity: undefined;
+  ImportWalletMethods: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
   StakeSuccessScreen: {

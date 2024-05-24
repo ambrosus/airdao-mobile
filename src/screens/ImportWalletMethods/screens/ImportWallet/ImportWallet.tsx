@@ -21,7 +21,6 @@ import { HomeNavigationProp } from '@appTypes';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { StringUtils } from '@utils/string';
 import { styles } from './styles';
-import { SecondaryButton } from '@components/modular';
 
 export const ImportWallet = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -179,9 +178,6 @@ export const ImportWallet = () => {
     }
   };
 
-  const onNavigateImportPrivateKey = () =>
-    navigation.navigate('ImportWalletPrivateKey');
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {isLoading ? (
@@ -247,37 +243,28 @@ export const ImportWallet = () => {
                 <Spacer value={verticalScale(16)} />
               </View>
             </View>
-
-            <View style={{ flexDirection: 'column', gap: 32 }}>
-              <SecondaryButton
-                onPress={onNavigateImportPrivateKey}
-                style={{ marginHorizontal: scale(14) }}
+            <Button
+              disabled={!isButtonEnabled}
+              onPress={navigateToRestoreWallet}
+              type="circular"
+              style={{
+                marginTop: verticalScale(16),
+                bottom: verticalScale(32),
+                marginHorizontal: scale(16),
+                backgroundColor: isButtonEnabled
+                  ? COLORS.brand600
+                  : COLORS.alphaBlack5
+              }}
+            >
+              <Text
+                fontSize={16}
+                fontFamily="Inter_600SemiBold"
+                color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
+                style={{ marginVertical: scale(12) }}
               >
-                <Text color={COLORS.brand600}>Private key</Text>
-              </SecondaryButton>
-              <Button
-                disabled={!isButtonEnabled}
-                onPress={navigateToRestoreWallet}
-                type="circular"
-                style={{
-                  marginTop: verticalScale(16),
-                  bottom: verticalScale(32),
-                  marginHorizontal: scale(16),
-                  backgroundColor: isButtonEnabled
-                    ? COLORS.brand600
-                    : COLORS.alphaBlack5
-                }}
-              >
-                <Text
-                  fontSize={16}
-                  fontFamily="Inter_600SemiBold"
-                  color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-                  style={{ marginVertical: scale(12) }}
-                >
-                  {t('button.continue')}
-                </Text>
-              </Button>
-            </View>
+                {t('button.continue')}
+              </Text>
+            </Button>
           </KeyboardAwareScrollView>
         </KeyboardDismissingView>
       )}
