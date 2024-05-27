@@ -22,12 +22,22 @@ export const ImportWalletPrivateKeyError = ({ navigation, route }: Props) => {
       <View style={styles.inner}>
         <View style={styles.upperContainer}>
           <InfoIcon color={COLORS.error500} scale={1.5} />
-          <Text>
+          <Text
+            fontSize={20}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral900}
+          >
             {route.params?.error === 'exist'
               ? 'Wallet already exists in your account.'
               : 'Invalid private key.'}
           </Text>
-          <Text>Please try again.</Text>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral600}
+          >
+            Please try again.
+          </Text>
         </View>
       </View>
       <SecondaryButton style={styles.button} onPress={navigation.goBack}>

@@ -17,6 +17,7 @@ import { TextInput } from '@components/base/Input/Input.text';
 import { TextInputProps } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { useFocusEffect } from '@react-navigation/native';
 
 type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;
@@ -41,6 +42,7 @@ export const PrivateKeyMaskedInput = ({
   setPrivateKey,
   secureTextEntry
 }: PrivateKeyMaskedInputProps) => {
+  const [clipboard, setClipboard] = useState('');
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
       width: '100%',
@@ -54,6 +56,14 @@ export const PrivateKeyMaskedInput = ({
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      Clipboard.getClipboardString().then((r) => {
+        setClipboard(r);
+      });
+    }, [])
+  );
+
   const [selection, setSelection] = useState<SelectionObject>(
     SELECTION_INITIAL_STATE
   );
@@ -61,10 +71,7 @@ export const PrivateKeyMaskedInput = ({
   const onChangePrivateKey = async (text: string) => {
     if (!secureTextEntry) {
       setPrivateKey(text);
-    } else if (
-      secureTextEntry &&
-      text === (await Clipboard.getClipboardString())
-    ) {
+    } else if (secureTextEntry && text === clipboard) {
       setPrivateKey(text);
     }
   };
