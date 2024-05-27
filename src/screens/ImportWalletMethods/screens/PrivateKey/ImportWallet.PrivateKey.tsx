@@ -15,8 +15,7 @@ import {
 } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
-import { PrimaryButton } from '@components/modular';
-import { TextInput } from '@components/base/Input/Input.text';
+import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
 import { COLORS } from '@constants/colors';
 
 export const ImportWalletPrivateKey = () => {
@@ -36,10 +35,6 @@ export const ImportWalletPrivateKey = () => {
       throw error;
     }
   };
-
-  const placeholder = useMemo(() => {
-    return secureTextEntry ? '******************************' : 'Private key';
-  }, [secureTextEntry]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
@@ -80,14 +75,10 @@ export const ImportWalletPrivateKey = () => {
                   Enter your private key
                 </Text>
                 <Spacer value={verticalScale(8)} />
-                <TextInput
-                  multiline
+                <PrivateKeyMaskedInput
                   value={privateKey}
-                  onChangeText={setPrivateKey}
-                  placeholderTextColor={COLORS.alphaBlack60}
-                  placeholder={placeholder}
+                  setPrivateKey={setPrivateKey}
                   secureTextEntry={secureTextEntry}
-                  style={styles.input}
                 />
               </View>
               <Spacer value={scale(16)} />
