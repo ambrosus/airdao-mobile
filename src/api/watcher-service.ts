@@ -1,13 +1,11 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { NotificationService } from '@lib';
+import { NotificationService, UID } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
 import { NotificationSettings } from '@appTypes';
 import { DefaultNotificationSettings } from '@constants/variables';
-import sha256 from 'crypto-js/sha256';
-import { getModel, getUniqueId } from 'react-native-device-info';
 
 const updatePushTokenAPI = `${Config.WALLET_API_URL}/api/v1`;
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
@@ -26,13 +24,13 @@ const getWatcherInfoOfCurrentUser =
 const createWatcherForCurrentUser = async () => {
   const pushToken = await NotificationService.getPushToken();
   try {
-    const UID = `${await getUniqueId()}${getModel().replace(/\s/g, '')}`;
-    const hashDigest = sha256(UID).words.join('');
+    const hashDigest = await UID();
     return await axios.post(`${watcherAPI}`, {
       push_token: pushToken,
       device_id: hashDigest
     });
   } catch (error) {
+    console.log('ERROR', error);
     throw error;
   }
 };
@@ -109,8 +107,7 @@ const updatePushToken = async (
   newToken: string
 ): Promise<void> => {
   try {
-    const UID = `${await getUniqueId()}${getModel().replace(/\s/g, '')}`;
-    const hashDigest = sha256(UID).words.join('');
+    const hashDigest = await UID();
     await axios.put(`${updatePushTokenAPI}/push-token`, {
       addresses: [],
       old_push_token: oldToken,
