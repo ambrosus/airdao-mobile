@@ -1,11 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import { HomeNavigationProp } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   KeyboardDismissingView,
@@ -18,24 +15,33 @@ import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrimaryButton } from '@components/modular';
 import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
+import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
+
+type ImportWalletStatuses = 'initial' | 'pending' | 'success';
 
 export const ImportWalletPrivateKey = () => {
-  const navigation: HomeNavigationProp = useNavigation();
-
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
+
+  const [status, setStatus] = useState<ImportWalletStatuses>('initial');
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
 
   const onImportWalletPress = async () => {
+    setStatus('success');
     try {
-      await WalletUtils.importWalletViaPrivateKey(privateKey);
-      navigation.replace('ImportWalletSuccess');
+      // await WalletUtils.importWalletViaPrivateKey(privateKey);
     } catch (error) {
-      Alert.alert('Invalid private key');
+      setStatus('initial');
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (status === 'success' && !bottomSheetProcessingRef.current?.isVisible) {
+      bottomSheetProcessingRef.current?.show();
+    }
+  }, [status]);
 
   const placeholder = useMemo(() => {
     return secureTextEntry ? '******************************' : 'Private key';
@@ -51,8 +57,9 @@ export const ImportWalletPrivateKey = () => {
     };
   }, [privateKey]);
 
-  const toggleSecureTextEntry = () =>
-    setSecureTextEntry((prevState) => !prevState);
+  const toggleSecureTextEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,12 +89,13 @@ export const ImportWalletPrivateKey = () => {
                 <Spacer value={verticalScale(8)} />
                 <TextInput
                   multiline
+                  maxLength={64}
                   value={privateKey}
                   onChangeText={setPrivateKey}
+                  style={styles.input}
                   placeholderTextColor={COLORS.alphaBlack60}
                   placeholder={placeholder}
                   secureTextEntry={secureTextEntry}
-                  style={styles.input}
                 />
               </View>
               <Spacer value={scale(16)} />
@@ -124,7 +132,10 @@ export const ImportWalletPrivateKey = () => {
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
 
-      <BottomSheet ref={bottomSheetProcessingRef} />
+      <BottomSheetImportWalletPrivateKeyStatus
+        ref={bottomSheetProcessingRef}
+        status={status}
+      />
     </SafeAreaView>
   );
 };
