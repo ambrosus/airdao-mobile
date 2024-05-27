@@ -34,8 +34,8 @@ export const NoWalletScreen = () => {
     const [UniqueId, setUnique] = useState('');
     const model = getModel().replace(/\s/g, '');
 
-    const copyAddress = async (data: string) => {
-      await Clipboard.copyToClipboard(data);
+    const copyAddress = async (data: string, field: string) => {
+      await Clipboard.copyToClipboard(`${field}: ${data}`);
     };
 
     useEffect(() => {
@@ -52,25 +52,29 @@ export const NoWalletScreen = () => {
     }, []);
     return (
       <View style={{ padding: 15 }}>
-        <TouchableOpacity onPress={() => copyAddress(model)}>
+        <TouchableOpacity onPress={() => copyAddress(model, 'DEVICE NAME')}>
           <Text style={{ marginLeft: 5 }}>DEVICE NAME</Text>
           <Text>{model}</Text>
           <Spacer value={10} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => copyAddress(UniqueId)}>
+        <TouchableOpacity onPress={() => copyAddress(UniqueId, 'DEVICE UID')}>
           <Text style={{ marginLeft: 5 }}>DEVICE UID</Text>
           <Text>{UniqueId}</Text>
           <Spacer value={10} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => copyAddress(`${UniqueId}${model}`)}>
+        <TouchableOpacity
+          onPress={() => copyAddress(`${UniqueId}${model}`, 'ID TO HASH')}
+        >
           <Text style={{ marginLeft: 5 }}>ID TO HASH</Text>
           <Text>{`${UniqueId}${model}`}</Text>
           <Spacer value={10} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => copyAddress(ID)}>
+        <TouchableOpacity
+          onPress={() => copyAddress(ID, 'UID-HASH TO BACKEND')}
+        >
           <Text style={{ marginLeft: 5 }}>UID-HASH TO BACKEND</Text>
           <Text>{ID}</Text>
           <Spacer value={10} />
