@@ -1,11 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import { HomeNavigationProp } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   KeyboardDismissingView,
@@ -17,9 +14,12 @@ import { scale, verticalScale } from '@utils/scaling';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
+
+type ImportWalletStatuses = 'initial' | 'pending' | 'success';
 
 export const ImportWalletPrivateKey = () => {
-  const navigation: HomeNavigationProp = useNavigation();
+  const [status, setStatus] = useState<ImportWalletStatuses>('initial');
 
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
 
@@ -27,14 +27,20 @@ export const ImportWalletPrivateKey = () => {
   const [privateKey, setPrivateKey] = useState('');
 
   const onImportWalletPress = async () => {
+    setStatus('success');
     try {
-      await WalletUtils.importWalletViaPrivateKey(privateKey);
-      navigation.replace('ImportWalletSuccess');
+      // await WalletUtils.importWalletViaPrivateKey(privateKey);
     } catch (error) {
-      Alert.alert('Invalid private key');
+      setStatus('initial');
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (status === 'success' && !bottomSheetProcessingRef.current?.isVisible) {
+      bottomSheetProcessingRef.current?.show();
+    }
+  }, [status]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
@@ -115,7 +121,10 @@ export const ImportWalletPrivateKey = () => {
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
 
-      <BottomSheet ref={bottomSheetProcessingRef} />
+      <BottomSheetImportWalletPrivateKeyStatus
+        ref={bottomSheetProcessingRef}
+        status={status}
+      />
     </SafeAreaView>
   );
 };

@@ -13,8 +13,8 @@ import {
   TextStyle
 } from 'react-native';
 import { TextInput } from '@components/base/Input/Input.text';
-import { COLORS } from '@constants/colors';
 import { TextInputProps } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
 type SelectionKeys = 'start' | 'end';
@@ -28,6 +28,11 @@ type PrivateKeyMaskedInputProps = TextInputProps & {
 
 const _isAlphanumeric = (char: string) => {
   return /^[a-zA-Z0-9$]+$/.test(char);
+};
+
+const SELECTION_INITIAL_STATE = {
+  start: null,
+  end: null
 };
 
 export const PrivateKeyMaskedInput = ({
@@ -48,10 +53,9 @@ export const PrivateKeyMaskedInput = ({
     };
   }, []);
 
-  const [selection, setSelection] = useState<SelectionObject>({
-    start: null,
-    end: null
-  });
+  const [selection, setSelection] = useState<SelectionObject>(
+    SELECTION_INITIAL_STATE
+  );
 
   const onChangePrivateKey = (text: string) => {
     if (!secureTextEntry) setPrivateKey(text);
@@ -104,14 +108,17 @@ export const PrivateKeyMaskedInput = ({
   const onSelectionChange = useCallback(
     (event: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
       if (secureTextEntry) {
-        const start = event.nativeEvent.selection.start;
-        const end = event.nativeEvent.selection.end;
+        const { start, end } = event.nativeEvent.selection;
 
-        setSelection({
-          ...selection,
-          start,
-          end
-        });
+        if (start === end) {
+          setSelection(SELECTION_INITIAL_STATE);
+        } else {
+          setSelection({
+            ...selection,
+            start,
+            end
+          });
+        }
       }
     },
     [secureTextEntry, selection]
@@ -121,6 +128,7 @@ export const PrivateKeyMaskedInput = ({
     <TextInput
       scrollEnabled={false}
       multiline
+      maxLength={64}
       value={maskedValue}
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
