@@ -58,7 +58,11 @@ export const PrivateKeyMaskedInput = ({
   );
 
   const onChangePrivateKey = (text: string) => {
-    if (!secureTextEntry) setPrivateKey(text);
+    if (!secureTextEntry) {
+      setPrivateKey(text);
+    } else if (secureTextEntry && text.length > 2) {
+      setPrivateKey(text);
+    }
   };
 
   const _isSelectionEmpty = useMemo(() => {
@@ -128,8 +132,8 @@ export const PrivateKeyMaskedInput = ({
     <TextInput
       scrollEnabled={false}
       multiline
-      maxLength={64}
       value={maskedValue}
+      maxLength={66}
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
       onKeyPress={onKeyPress}

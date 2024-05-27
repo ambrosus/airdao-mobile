@@ -1,7 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
+import { HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
@@ -11,15 +14,24 @@ import {
   Text
 } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
+import { WalletUtils } from '@utils/wallet';
+import { COLORS } from '@constants/colors';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
-import { COLORS } from '@constants/colors';
 import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
 
-type ImportWalletStatuses = 'initial' | 'pending' | 'success';
+enum IMPORT_PROCESS_STATUS {
+  INITIAL = 'initial',
+  SUCCESS = 'success',
+  PENDING = 'pending'
+}
 
 export const ImportWalletPrivateKey = () => {
-  const [status, setStatus] = useState<ImportWalletStatuses>('initial');
+  const { t } = useTranslation();
+  const navigation: HomeNavigationProp = useNavigation();
+  const [status, setStatus] = useState<IMPORT_PROCESS_STATUS>(
+    IMPORT_PROCESS_STATUS.INITIAL
+  );
 
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
 
@@ -27,23 +39,30 @@ export const ImportWalletPrivateKey = () => {
   const [privateKey, setPrivateKey] = useState('');
 
   const onImportWalletPress = async () => {
-    setStatus('success');
+    setStatus(IMPORT_PROCESS_STATUS.PENDING);
+    bottomSheetProcessingRef.current?.show();
     try {
-      // await WalletUtils.importWalletViaPrivateKey(privateKey);
+      const account = await WalletUtils.importWalletViaPrivateKey(privateKey);
+
+      if (!account) {
+        navigation.navigate('ImportWalletPrivateKeyError', {
+          error: 'unknown'
+        });
+      }
+
+      setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
-      setStatus('initial');
-      throw error;
+      bottomSheetProcessingRef.current?.dismiss();
+      navigation.navigate('ImportWalletPrivateKeyError', {
+        // @ts-ignore
+        error: error.message.includes('400') ? 'exist' : 'unknown'
+      });
+      setStatus(IMPORT_PROCESS_STATUS.INITIAL);
     }
   };
 
-  useEffect(() => {
-    if (status === 'success' && !bottomSheetProcessingRef.current?.isVisible) {
-      bottomSheetProcessingRef.current?.show();
-    }
-  }, [status]);
-
   const disabled = useMemo(() => {
-    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
+    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length <= 64;
     return {
       state: isWrongLengthOrEmpty,
       typographyColor: isWrongLengthOrEmpty
@@ -52,8 +71,9 @@ export const ImportWalletPrivateKey = () => {
     };
   }, [privateKey]);
 
-  const toggleSecureTextEntry = () =>
+  const toggleSecureTextEntry = useCallback(() => {
     setSecureTextEntry((prevState) => !prevState);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,7 +134,7 @@ export const ImportWalletPrivateKey = () => {
                 fontFamily="Inter_500Medium"
                 color={disabled.typographyColor}
               >
-                Hello world
+                {t('button.continue')}
               </Text>
             </PrimaryButton>
           </View>

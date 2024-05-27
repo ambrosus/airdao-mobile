@@ -15,7 +15,8 @@ import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
   ImportWallet,
   ImportWalletSuccess,
-  ImportWalletPrivateKey
+  ImportWalletPrivateKey,
+  ImportWalletPrivateKeyError
 } from '@screens/ImportWalletMethods/screens';
 import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SendCryptoProvider } from '@contexts';
@@ -95,6 +96,10 @@ export const HomeStack = () => {
         <Stack.Screen
           name="ImportWalletPrivateKey"
           component={ImportWalletPrivateKey}
+        />
+        <Stack.Screen
+          name="ImportWalletPrivateKeyError"
+          component={ImportWalletPrivateKeyError}
         />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>

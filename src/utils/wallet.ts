@@ -161,7 +161,7 @@ export const importWalletViaPrivateKey = async (privateKey: string) => {
 
     accountInDb = accountInDbResult;
     // subscribe to notifications
-    API.watcherService.watchAddresses([_account.address]);
+    await API.watcherService.watchAddresses([_account.address]);
     return { hash };
   } catch (error) {
     if (walletInDb) walletInDb.destroyPermanently();
