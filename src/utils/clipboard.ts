@@ -4,4 +4,10 @@ const copyToClipboard = async (string: string) => {
   return await ExpoClipboard.setStringAsync(string);
 };
 
-export const Clipboard = { copyToClipboard };
+const getClipboardString = async () => {
+  if (await ExpoClipboard.hasStringAsync()) {
+    return await ExpoClipboard.getStringAsync();
+  }
+};
+
+export const Clipboard = { copyToClipboard, getClipboardString };

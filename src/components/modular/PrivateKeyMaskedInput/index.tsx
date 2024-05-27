@@ -12,6 +12,7 @@ import {
   TextInputSelectionChangeEventData,
   TextStyle
 } from 'react-native';
+import { Clipboard } from '@utils/clipboard';
 import { TextInput } from '@components/base/Input/Input.text';
 import { TextInputProps } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -57,10 +58,13 @@ export const PrivateKeyMaskedInput = ({
     SELECTION_INITIAL_STATE
   );
 
-  const onChangePrivateKey = (text: string) => {
+  const onChangePrivateKey = async (text: string) => {
     if (!secureTextEntry) {
       setPrivateKey(text);
-    } else if (secureTextEntry && text.length > 2) {
+    } else if (
+      secureTextEntry &&
+      text === (await Clipboard.getClipboardString())
+    ) {
       setPrivateKey(text);
     }
   };
