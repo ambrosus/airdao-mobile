@@ -30,7 +30,6 @@ const createWatcherForCurrentUser = async () => {
       device_id: hashDigest
     });
   } catch (error) {
-    console.log('ERROR', error);
     throw error;
   }
 };

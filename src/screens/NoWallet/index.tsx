@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { BottomAwareSafeAreaView } from '@components/composite';
-import { Input, Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
@@ -22,6 +22,7 @@ import { NoWalletSteps } from './NoWallet.constants';
 import { styles } from './styles';
 import { UID } from '@lib';
 import { getModel, getUniqueId } from 'react-native-device-info';
+import { Clipboard } from '@utils/clipboard';
 
 export const NoWalletScreen = () => {
   const [showID, setShowID] = useState(false);
@@ -32,6 +33,11 @@ export const NoWalletScreen = () => {
     const [ID, setID] = useState('');
     const [UniqueId, setUnique] = useState('');
     const model = getModel().replace(/\s/g, '');
+
+    const copyAddress = async (data: string) => {
+      await Clipboard.copyToClipboard(data);
+    };
+
     useEffect(() => {
       const getIDs = async () => {
         const _ID = await UID();
@@ -45,22 +51,30 @@ export const NoWalletScreen = () => {
       getIDs().then();
     }, []);
     return (
-      <View>
-        <Text style={{ marginLeft: 5 }}>DEVICE NAME</Text>
-        <Input value={model} />
-        <Spacer value={10} />
+      <View style={{ padding: 15 }}>
+        <TouchableOpacity onPress={() => copyAddress(model)}>
+          <Text style={{ marginLeft: 5 }}>DEVICE NAME</Text>
+          <Text>{model}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
 
-        <Text style={{ marginLeft: 5 }}>DEVICE UID</Text>
-        <Input value={UniqueId} />
-        <Spacer value={10} />
+        <TouchableOpacity onPress={() => copyAddress(UniqueId)}>
+          <Text style={{ marginLeft: 5 }}>DEVICE UID</Text>
+          <Text>{UniqueId}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
 
-        <Text style={{ marginLeft: 5 }}>ID TO HASH</Text>
-        <Input value={`${UniqueId}${model}`} />
-        <Spacer value={10} />
+        <TouchableOpacity onPress={() => copyAddress(`${UniqueId}${model}`)}>
+          <Text style={{ marginLeft: 5 }}>ID TO HASH</Text>
+          <Text>{`${UniqueId}${model}`}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
 
-        <Text style={{ marginLeft: 5 }}>UID-HASH TO BACKEND</Text>
-        <Input value={ID} />
-        <Spacer value={10} />
+        <TouchableOpacity onPress={() => copyAddress(ID)}>
+          <Text style={{ marginLeft: 5 }}>UID-HASH TO BACKEND</Text>
+          <Text>{ID}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
       </View>
     );
   };
