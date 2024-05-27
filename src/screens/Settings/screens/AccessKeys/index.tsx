@@ -28,7 +28,14 @@ export const AccessKeysScreen = ({ route }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header bottomBorder title={t('singleWallet.access.keys.title')} />
+      <Header
+        bottomBorder
+        title={t(
+          isMnemonicAvailable
+            ? 'singleWallet.access.keys.title'
+            : 'singleWallet.access.key.title'
+        )}
+      />
 
       {isMnemonicAvailable ? (
         <AnimatedTabs
