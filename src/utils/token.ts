@@ -1,6 +1,6 @@
 import { API } from '@api/api';
 import { CryptoCurrencyCode } from '@appTypes';
-import { ALL_TOKENS } from '@constants/allToken';
+import Config from '@constants/config';
 
 export interface TokenInfo {
   address?: string;
@@ -12,16 +12,19 @@ const truncatePoolTokenName = (token: string) => {
   return token.split(' ')[0];
 };
 
-const getTokenDetails = (address: string): Promise<TokenInfo> | TokenInfo => {
-  const currentToken = ALL_TOKENS.find((t) => t.address === address) || null;
+const getTokenDetails = async (
+  address: string
+): Promise<Promise<TokenInfo> | TokenInfo> => {
+  const currentToken =
+    Config.ALL_TOKENS.find((t) => t.address === address) || null;
   if (currentToken) {
     return currentToken;
   } else {
-    return API.explorerService.getAllTokens().then((tokens) => {
-      const currentToken = tokens.find((t) => t.address === address);
+    return await API.explorerService.getAllTokens().then((tokens) => {
+      const _currentToken = tokens.find((t) => t.address === address);
       return {
-        name: currentToken?.name || '',
-        symbol: currentToken?.symbol || ''
+        name: _currentToken?.name || '',
+        symbol: _currentToken?.symbol || ''
       };
     });
   }
