@@ -46,7 +46,7 @@ export const ImportWalletPrivateKeyError = ({ navigation, route }: Props) => {
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral800}
         >
-          {t('button.continue')}
+          {t('button.try.again')}
         </Text>
       </SecondaryButton>
     </SafeAreaView>
