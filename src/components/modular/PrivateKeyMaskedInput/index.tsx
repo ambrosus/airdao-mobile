@@ -12,12 +12,12 @@ import {
   TextInputSelectionChangeEventData,
   TextStyle
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Clipboard } from '@utils/clipboard';
 import { TextInput } from '@components/base/Input/Input.text';
 import { TextInputProps } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { useFocusEffect } from '@react-navigation/native';
 
 type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;
@@ -42,7 +42,6 @@ export const PrivateKeyMaskedInput = ({
   setPrivateKey,
   secureTextEntry
 }: PrivateKeyMaskedInputProps) => {
-  const [clipboard, setClipboard] = useState('');
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
       width: '100%',
@@ -56,16 +55,21 @@ export const PrivateKeyMaskedInput = ({
     };
   }, []);
 
+  const [clipboard, setClipboard] = useState('');
+  const [currentCarretPosition, setCurrentCarretPosition] = useState<
+    number | null
+  >(null);
+
+  const [selection, setSelection] = useState<SelectionObject>(
+    SELECTION_INITIAL_STATE
+  );
+
   useFocusEffect(
     useCallback(() => {
       Clipboard.getClipboardString().then((r) => {
         setClipboard(r);
       });
     }, [])
-  );
-
-  const [selection, setSelection] = useState<SelectionObject>(
-    SELECTION_INITIAL_STATE
   );
 
   const onChangePrivateKey = async (text: string) => {
@@ -97,15 +101,24 @@ export const PrivateKeyMaskedInput = ({
           setPrivateKey(value.slice(0, -1));
         }
       } else if (secureTextEntry && _isAlphanumeric(key)) {
-        setPrivateKey(value + key);
+        // Insert the key at the current caret position
+        const currentPos =
+          currentCarretPosition !== null ? currentCarretPosition : value.length;
+        const newPrivateKey =
+          value.substring(0, currentPos) + key + value.substring(currentPos);
+        setPrivateKey(newPrivateKey);
+        // Increment the caret position
+        setCurrentCarretPosition(currentPos + 1);
       }
     },
     [
       _isSelectionEmpty,
       secureTextEntry,
+      currentCarretPosition,
       selection.end,
       selection.start,
       setPrivateKey,
+      setSelection,
       value
     ]
   );
@@ -127,6 +140,7 @@ export const PrivateKeyMaskedInput = ({
 
         if (start === end) {
           setSelection(SELECTION_INITIAL_STATE);
+          setCurrentCarretPosition(start);
         } else {
           setSelection({
             ...selection,
