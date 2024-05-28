@@ -86,16 +86,14 @@ export function useTokensAndTransactions(
       : [];
   // Remove duplicated tokens, occurs while lazy loading transactions
   const uniqueTokenSet = new Set();
-  const filteredTokens = tokens
-    .map((_token) => new Token(_token, TokenUtils))
-    .filter((item) => {
-      const identifier = `${item.address}-${item.name}`;
-      if (!uniqueTokenSet.has(identifier)) {
-        uniqueTokenSet.add(identifier);
-        return true;
-      }
-      return false;
-    });
+  const filteredTokens = tokens.filter((item) => {
+    const identifier = `${item.address}-${item.name}`;
+    if (!uniqueTokenSet.has(identifier)) {
+      uniqueTokenSet.add(identifier);
+      return true;
+    }
+    return false;
+  });
 
   const txMap = new Map<string, boolean>();
   const transactions =
