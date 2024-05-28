@@ -261,16 +261,6 @@ export const ALL_TOKENS_DATA = {
       address: '0xA2B1253AFA643aEe20E51A5023aFb2597cB6Da88',
       name: 'P(5)T',
       symbol: 'P(5)T'
-    },
-    {
-      address: '0xB4eB7786858AEcE42E52656a891C01F4e5fFC12a',
-      name: '“Test1“',
-      symbol: '“Test1“'
-    },
-    {
-      address: '0x8099B4D8320C237A511310e3C7946cc492Ee663b',
-      name: '“Test2“',
-      symbol: '“Test2“'
     }
   ],
   TESTNET: [
@@ -288,11 +278,6 @@ export const ALL_TOKENS_DATA = {
       address: '0x765e3e03f8dfca312EfdAb378e386E1EA60ee93F',
       name: 'AirBond',
       symbol: 'BOND'
-    },
-    {
-      address: '0x7240d2444151d9A8c72F77306Fa10f19FE7C9182',
-      name: '',
-      symbol: ''
     },
     {
       address: '0xADaDDDa32bcb38F9c2863c303886c971B89e4cD4',
@@ -343,6 +328,16 @@ export const ALL_TOKENS_DATA = {
       address: '0x38742FA88FD3b16318Ba64F4747E41954e9FFc0e',
       name: 'BUSD Token',
       symbol: 'BUSD'
+    },
+    {
+      address: '0x7240d2444151d9A8c72F77306Fa10f19FE7C9182',
+      name: '“Test1“',
+      symbol: '“Test1“'
+    },
+    {
+      address: '0xB4eB7786858AEcE42E52656a891C01F4e5fFC12a',
+      name: '“Test2“',
+      symbol: '“Test2“'
     }
   ]
 };

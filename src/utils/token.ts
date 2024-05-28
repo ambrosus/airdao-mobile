@@ -16,7 +16,7 @@ const getTokenDetails = async (
   address: string
 ): Promise<Promise<TokenInfo> | TokenInfo> => {
   const currentToken =
-    Config.ALL_TOKENS.find((t) => t.address === address) || null;
+    Config.ALL_TOKEN.find((t) => t.address === address) || null;
   if (currentToken) {
     return currentToken;
   } else {

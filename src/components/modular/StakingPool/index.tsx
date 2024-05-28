@@ -17,7 +17,10 @@ interface StakingPoolItemProps {
 
 export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { stakingPool } = props;
-  const poolStakingDetails = usePoolDetailsByName(stakingPool.token.name);
+  // console.log(1, 'stakingPool', stakingPool);
+  // console.log(2, 'stakingPool.token', stakingPool.token);
+  // console.log(3, 'stakingPool.token.name', stakingPool.token.name);
+  const poolStakingDetails = usePoolDetailsByName(stakingPool?.token?.name);
   const { t } = useTranslation();
 
   return (
