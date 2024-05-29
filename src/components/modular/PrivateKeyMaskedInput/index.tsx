@@ -51,7 +51,9 @@ export const PrivateKeyMaskedInput = ({
       paddingTop: verticalScale(12),
       paddingBottom: verticalScale(12),
       fontSize: 16,
-      fontFamily: 'Inter_400Regular'
+      fontFamily: 'Inter_400Regular',
+      textAlign: 'left',
+      verticalAlign: 'top'
     };
   }, []);
 
