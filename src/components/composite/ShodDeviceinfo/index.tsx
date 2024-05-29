@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { UID } from '@lib';
+import { NotificationService, UID } from '@lib';
 import { getModel, getUniqueId } from 'react-native-device-info';
 import { Clipboard } from '@utils/clipboard';
 import { Spacer } from '@components/base';
 import * as Updates from 'expo-updates';
+import Config from '@constants/config';
 
 const ShowDeviceInfo = () => {
   // ONLY FOR DEV
   const isTest = Updates.channel === 'testnet' || Updates.channel === '';
   const [ID, setID] = useState('');
   const [UniqueId, setUnique] = useState('');
+  const [pushToken, setPushToken] = useState('');
 
   const model = getModel().replace(/\s/g, '');
 
   const copyAddress = async (data: string, field: string) => {
-    await Clipboard.copyToClipboard(`${field}: ${data}`);
+    if (field === 'url') {
+      await Clipboard.copyToClipboard(data);
+    } else {
+      await Clipboard.copyToClipboard(`${field}: ${data}`);
+    }
   };
 
   useEffect(() => {
@@ -24,8 +30,12 @@ const ShowDeviceInfo = () => {
         const _ID = await UID();
         setID(_ID);
       };
+
       const getUniqueIds = async () => {
         const UNIQUE = await getUniqueId();
+        const _pushToken = await NotificationService.getPushToken();
+        setPushToken(_pushToken);
+
         setUnique(UNIQUE);
       };
       getUniqueIds().then();
@@ -62,6 +72,28 @@ const ShowDeviceInfo = () => {
         >
           <Text style={{ marginLeft: 5 }}>UID-HASH TO BACKEND</Text>
           <Text>{ID}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => copyAddress(pushToken, 'UID-HASH TO BACKEND')}
+        >
+          <Text style={{ marginLeft: 5 }}>PUSH TOKEN</Text>
+          <Text>{pushToken}</Text>
+          <Spacer value={10} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() =>
+            copyAddress(
+              `${Config.WALLET_API_URL}/api/v1/watcher/${pushToken}`,
+              'url'
+            )
+          }
+        >
+          <Text style={{ marginLeft: 5 }}>WATCHER INFO URL</Text>
+          <Text
+            numberOfLines={1}
+          >{`${Config.WALLET_API_URL}/api/v1/watcher/${pushToken}`}</Text>
           <Spacer value={10} />
         </TouchableOpacity>
       </View>
