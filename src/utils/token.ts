@@ -17,8 +17,8 @@ const getTokenDetails = (address: string): Promise<TokenInfo> | TokenInfo => {
     null;
   if (!currentToken) {
     return {
-      name: 'Unknown token',
-      symbol: 'UT'
+      name: address,
+      symbol: ''
     };
   }
   return currentToken;
