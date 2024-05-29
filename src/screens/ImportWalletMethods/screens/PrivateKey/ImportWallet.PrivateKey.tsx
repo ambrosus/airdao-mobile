@@ -80,7 +80,7 @@ export const ImportWalletPrivateKey = () => {
       <Header
         bottomBorder
         titleStyle={styles.titleStyle}
-        title="Import wallet"
+        title={t('import.wallet.common.title')}
       />
       <Spacer value={scale(16)} />
 
@@ -98,7 +98,7 @@ export const ImportWalletPrivateKey = () => {
                   fontFamily="Inter_500Medium"
                   color={COLORS.neutral600}
                 >
-                  Enter your private key
+                  {t('import.wallet.key.input.label')}
                 </Text>
                 <Spacer value={verticalScale(8)} />
                 <PrivateKeyMaskedInput
@@ -120,7 +120,9 @@ export const ImportWalletPrivateKey = () => {
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral800}
                   >
-                    {secureTextEntry ? 'Show' : 'Hide'} private key
+                    {secureTextEntry
+                      ? t('import.wallet.key.show')
+                      : t('import.wallet.key.hide')}
                   </Text>
                 </Row>
               </Button>

@@ -12,6 +12,7 @@ import {
   TextInputSelectionChangeEventData,
   TextStyle
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
 import { Clipboard } from '@utils/clipboard';
 import { TextInput } from '@components/base/Input/Input.text';
@@ -42,6 +43,7 @@ export const PrivateKeyMaskedInput = ({
   setPrivateKey,
   secureTextEntry
 }: PrivateKeyMaskedInputProps) => {
+  const { t } = useTranslation();
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
       width: '100%',
@@ -132,8 +134,10 @@ export const PrivateKeyMaskedInput = ({
   }, [secureTextEntry, value]);
 
   const placeholder = useMemo(() => {
-    return secureTextEntry ? '******************************' : 'Private key';
-  }, [secureTextEntry]);
+    return secureTextEntry
+      ? '******************************'
+      : t('import.wallet.key');
+  }, [secureTextEntry, t]);
 
   const onSelectionChange = useCallback(
     (event: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {

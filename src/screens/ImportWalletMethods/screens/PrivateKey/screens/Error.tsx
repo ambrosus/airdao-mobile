@@ -26,17 +26,18 @@ export const ImportWalletPrivateKeyError = ({ navigation, route }: Props) => {
             fontSize={20}
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral900}
+            style={styles.error}
           >
             {route.params?.error === 'exist'
-              ? 'Wallet already exists in your account.'
-              : 'Invalid private key.'}
+              ? t('import.wallet.key.error.exist')
+              : t('import.wallet.key.error.invalid')}
           </Text>
           <Text
             fontSize={16}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
-            Please try again.
+            {t('import.wallet.key.error.try.again')}
           </Text>
         </View>
       </View>

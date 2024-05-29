@@ -45,7 +45,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
               fontSize={20}
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral900}
-              style={styles.textAlignCenter}
+              style={[styles.textAlignCenter, styles.headingLineHeight]}
             >
               {t('import.wallet.loading')}
             </Text>
@@ -74,7 +74,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
               color={COLORS.neutral600}
               style={styles.textAlignCenter}
             >
-              Your wallet has been imported
+              {t('import.wallet.key.success')}
             </Text>
             <Spacer value={scale(32)} />
             <PrimaryButton onPress={onSuccessButtonPress}>

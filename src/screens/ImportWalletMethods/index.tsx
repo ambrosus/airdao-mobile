@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -14,30 +15,36 @@ import { scale } from '@utils/scaling';
 import { HomeParamsList } from '@appTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type MethodListItemType = (typeof ADD_WALLET_METHODS)[number];
+type ImportWalletMethod = {
+  label: string;
+  icon: JSX.Element;
+  method: 'mnemonic' | 'key';
+};
+
 type ImportWalletMethodsProps = NativeStackScreenProps<
   HomeParamsList,
   'ImportWalletMethods'
 >;
 
-const ADD_WALLET_METHODS = [
-  {
-    label: 'Import with recovery phrase',
-    icon: <ReadingListIcon />,
-    method: 'mnemonic'
-  },
-  {
-    label: 'Import with private keys',
-    icon: <KeyIcon />,
-    method: 'key'
-  }
-] as const;
-
 export const ImportWalletMethods = ({
   navigation
 }: ImportWalletMethodsProps) => {
+  const { t } = useTranslation();
+
+  const ADD_WALLET_METHODS: ImportWalletMethod[] = [
+    {
+      label: t('import.wallet.methods.mnemonic'),
+      icon: <ReadingListIcon />,
+      method: 'mnemonic'
+    },
+    {
+      label: t('import.wallet.methods.key'),
+      icon: <KeyIcon />,
+      method: 'key'
+    }
+  ] as const;
   const renderAddWalletMethodListItem = useCallback(
-    (args: ListRenderItemInfo<MethodListItemType>) => {
+    (args: ListRenderItemInfo<ImportWalletMethod>) => {
       const onNavigateToImportScreen = () => {
         const viaMnemonic = args.item.method === 'mnemonic';
         navigation.navigate(
@@ -72,7 +79,7 @@ export const ImportWalletMethods = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header bottomBorder title="Import wallet" />
+      <Header bottomBorder title={t('import.wallet.common.title')} />
       <Spacer value={scale(16)} />
       <FlatList
         bounces={false}

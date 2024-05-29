@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     rowGap: verticalScale(8)
   },
+  error: {
+    textAlign: 'center'
+  },
   button: {
     width: '100%'
   }

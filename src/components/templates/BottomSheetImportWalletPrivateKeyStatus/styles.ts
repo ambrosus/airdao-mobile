@@ -10,5 +10,8 @@ export const styles = StyleSheet.create({
   },
   textAlignCenter: {
     textAlign: 'center'
+  },
+  headingLineHeight: {
+    lineHeight: 30
   }
 });
