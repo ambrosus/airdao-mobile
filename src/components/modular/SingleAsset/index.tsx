@@ -41,7 +41,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name === '' ? 'Unknown token' : name || address}
+              {name || address}
             </Text>
             {usdPrice >= 0 && (
               <Text

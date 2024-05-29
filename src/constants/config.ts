@@ -1,5 +1,6 @@
 import * as Updates from 'expo-updates';
 import { bridgeConfig } from '@constants/bridge-config';
+import { ALL_TOKENS_DATA } from './allToken';
 
 const envs = {
   prod: {
@@ -31,7 +32,8 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
-    CHAIN_ID: 16718
+    CHAIN_ID: 16718,
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -60,7 +62,8 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
-    CHAIN_ID: 22040
+    CHAIN_ID: 22040,
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus-test.io',
@@ -89,7 +92,8 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
     BRIDGE_CONFIG: bridgeConfig.test,
-    CHAIN_ID: 22040
+    CHAIN_ID: 22040,
+    ALL_TOKENS: ALL_TOKENS_DATA.TESTNET
   }
 };
 
@@ -108,7 +112,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
 }
