@@ -12,6 +12,7 @@ const ShowDeviceInfo = () => {
   const isTest =
     Updates.channel === 'testnet' ||
     Updates.channel === 'stage' ||
+    Updates.channel === 'dev' ||
     Updates.channel === '';
   const [ID, setID] = useState('');
   const [UniqueId, setUnique] = useState('');
