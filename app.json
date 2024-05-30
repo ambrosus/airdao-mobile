@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "AirDAO-Test",
+    "name": "AirDAO",
     "slug": "AirDao",
     "version": "1.3.0",
     "orientation": "portrait",
@@ -19,7 +19,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "bundleIdentifier": "io.test.airdao",
+      "bundleIdentifier": "io.airdao.app",
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
@@ -27,21 +27,21 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
       },
-      "buildNumber": "1.3.11"
+      "buildNumber": "1.3.10"
     },
     "android": {
-      "versionCode": 69,
+      "versionCode": 67,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "io.test.airdao",
+      "package": "io.airdao.app",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=io.test.airdao",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=io.airdao.app",
       "googleServicesFile": "./firebase/google-services.json"
     },
     "notification": {

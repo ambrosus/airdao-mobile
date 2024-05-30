@@ -9,7 +9,10 @@ import Config from '@constants/config';
 
 const ShowDeviceInfo = () => {
   // ONLY FOR DEV
-  const isTest = Updates.channel === 'testnet' || Updates.channel === '';
+  const isTest =
+    Updates.channel === 'testnet' ||
+    Updates.channel === 'stage' ||
+    Updates.channel === '';
   const [ID, setID] = useState('');
   const [UniqueId, setUnique] = useState('');
   const [pushToken, setPushToken] = useState('');
