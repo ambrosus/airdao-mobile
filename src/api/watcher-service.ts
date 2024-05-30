@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { NotificationService } from '@lib';
+import { NotificationService, UID } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
@@ -24,7 +24,11 @@ const getWatcherInfoOfCurrentUser =
 const createWatcherForCurrentUser = async () => {
   const pushToken = await NotificationService.getPushToken();
   try {
-    return await axios.post(`${watcherAPI}`, { push_token: pushToken });
+    const hashDigest = await UID();
+    return await axios.post(`${watcherAPI}`, {
+      push_token: pushToken,
+      device_id: hashDigest
+    });
   } catch (error) {
     throw error;
   }
@@ -102,10 +106,13 @@ const updatePushToken = async (
   newToken: string
 ): Promise<void> => {
   try {
+    const hashDigest = await UID();
+
     await axios.put(`${updatePushTokenAPI}/push-token`, {
       addresses: [],
       old_push_token: oldToken,
-      new_push_token: newToken
+      new_push_token: newToken,
+      device_id: hashDigest
     });
   } catch (error) {
     throw error;
