@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { TokenInfo } from '@utils/token';
+import { TokenInfo } from '@/features/dex-swap-interface/types';
 
 interface BalanceArgs {
   token: TokenInfo;
