@@ -26,7 +26,8 @@
       "@models/*": ["./src/models/*"],
       "@navigation/*": ["./src/navigation/*"],
       "@screens/*": ["./src/screens/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@features/*": ["./src/features/*"]
     }
   }
 }

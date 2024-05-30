@@ -1,1 +1,1 @@
-export { DEXSwapInterface } from './service/dex-swap.service';
+export { DEXSwapInterfaceService } from './service/dex-swap.service';

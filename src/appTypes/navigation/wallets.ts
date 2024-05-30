@@ -37,6 +37,7 @@ export type HomeParamsList = {
     walletAddress: string | null;
   };
   StakeErrorScreen: undefined;
+  DEXSwapScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

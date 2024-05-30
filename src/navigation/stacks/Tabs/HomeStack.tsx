@@ -29,6 +29,7 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { DEXSwapScreen } from '@screens/DEXSwap';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -82,6 +83,8 @@ export const HomeStack = () => {
           name="SuccessSetupSecurity"
           component={SuccessSetupSecurity}
         />
+        {/* TEMP */}
+        <Stack.Screen name="DEXSwapScreen" component={DEXSwapScreen} />
         <Stack.Screen name="ImportWallet" component={ImportWallet} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
