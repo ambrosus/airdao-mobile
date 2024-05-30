@@ -16,7 +16,7 @@ export const DEFAULT_TOKEN_LIST: TokenList = {
       symbol: 'AMB'
     },
     {
-      address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
+      address: '0xFF9F502976E7bD2b4901aD7Dd1131Bb81E5567de',
       chainId: 22040,
       decimals: 18,
       logoURI: 'https://etherscan.io/token/images/centre-usdc_28.png',
@@ -32,7 +32,7 @@ export const DEFAULT_TOKEN_LIST: TokenList = {
       symbol: 'BOND'
     },
     {
-      address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
+      address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
       chainId: 22040,
       decimals: 18,
       logoURI: '',
