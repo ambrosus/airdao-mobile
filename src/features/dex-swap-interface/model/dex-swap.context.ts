@@ -4,14 +4,8 @@ import { FieldSelectedTokens } from './types';
 
 export const DEXSwapContext = () => {
   const [selectedTokens] = useState<FieldSelectedTokens>({
-    INPUT: {
-      token: '',
-      value: 0
-    },
-    OUTPUT: {
-      token: '',
-      value: 0
-    }
+    INPUT: null,
+    OUTPUT: null
   });
 
   return { selectedTokens };
