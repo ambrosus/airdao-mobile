@@ -32,7 +32,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     token,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
-  switch (token.toLowerCase()) {
+  switch (token?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case 'airdao': {
@@ -43,11 +43,13 @@ export const TokenLogo = (props: TokenLogoProps) => {
     }
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
+    case 'weth':
       return (
         <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
       );
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
+    case 'wbnb':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
     case 'usd coin':

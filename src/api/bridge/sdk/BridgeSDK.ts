@@ -104,8 +104,7 @@ export async function getBalance({
     }
   ];
   const contract = new ethers.Contract(token.address, minABI, provider);
-
-  return contract.balanceOf(ownerAddress);
+  return await contract.balanceOf(ownerAddress);
 }
 
 export async function calculateGasFee({

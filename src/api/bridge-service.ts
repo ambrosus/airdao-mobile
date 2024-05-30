@@ -23,13 +23,7 @@ export const getBridgeHistory = async (
 };
 
 const getBridgeParams = async (): Promise<BridgeParamsModel> => {
-  const ProdApi =
-    'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json';
-  const TestNetApi =
-    'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/dev/contracts/configs/test.json';
-
-  const testNet = false;
-  const apiUrl = testNet ? TestNetApi : ProdApi;
+  const apiUrl = Config.BRIDGE_CONFIG;
   try {
     const res = await axios.get(apiUrl);
     return res.data;
