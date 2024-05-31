@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { NotificationService } from '@lib';
+import { NotificationService, UID } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { WatcherInfoDTO } from '@models';
 import Config from '@constants/config';
 import { NotificationSettings } from '@appTypes';
 import { DefaultNotificationSettings } from '@constants/variables';
 
+const updatePushTokenAPI = `${Config.WALLET_API_URL}/api/v1`;
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
 const getWatcherInfoOfCurrentUser =
@@ -23,7 +24,11 @@ const getWatcherInfoOfCurrentUser =
 const createWatcherForCurrentUser = async () => {
   const pushToken = await NotificationService.getPushToken();
   try {
-    return await axios.post(`${watcherAPI}`, { push_token: pushToken });
+    const hashDigest = await UID();
+    return await axios.post(`${watcherAPI}`, {
+      push_token: pushToken,
+      device_id: hashDigest
+    });
   } catch (error) {
     throw error;
   }
@@ -101,10 +106,13 @@ const updatePushToken = async (
   newToken: string
 ): Promise<void> => {
   try {
-    await axios.put(`${watcherAPI}/push-token`, {
+    const hashDigest = await UID();
+
+    await axios.put(`${updatePushTokenAPI}/push-token`, {
       addresses: [],
       old_push_token: oldToken,
-      new_push_token: newToken
+      new_push_token: newToken,
+      device_id: hashDigest
     });
   } catch (error) {
     throw error;
