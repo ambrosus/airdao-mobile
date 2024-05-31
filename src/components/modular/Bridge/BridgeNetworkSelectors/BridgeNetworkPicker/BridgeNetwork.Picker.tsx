@@ -13,10 +13,10 @@ import {
   BridgePairsModel,
   ParsedBridge
 } from '@models/Bridge';
-import { Token } from '@api/bridge/sdk/types';
+import { Token } from '@lib/bridgeSDK/models/types';
 import { BottomSheetChoseNetworks } from '@components/templates/Bridge/BottomSheetChoseNetworks';
-import { API } from '@api/api';
 import { CryptoCurrencyCode } from '@appTypes';
+import { getBridgePairs } from '@lib';
 
 export const BridgeNetworkPicker = ({
   destination
@@ -81,16 +81,14 @@ export const BridgeNetworkPicker = ({
   };
 
   useEffect(() => {
-    API.bridgeService.bridgeSDK
-      .getBridgePairs({
-        walletHash: '',
-        from: fromParams.value.id,
-        to: toParams.value.id,
-        bridgeConfig
-      })
-      .then((r) => {
-        return parseNetworkParams(r);
-      });
+    getBridgePairs({
+      walletHash: '',
+      from: fromParams.value.id,
+      to: toParams.value.id,
+      bridgeConfig
+    }).then((r) => {
+      return parseNetworkParams(r);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromParams.value.id, toParams.value.id]);
 

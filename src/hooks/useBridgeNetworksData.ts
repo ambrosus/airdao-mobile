@@ -1,7 +1,6 @@
 import { LayoutChangeEvent } from 'react-native';
 import { RefObject, useMemo, useState } from 'react';
 import { styles } from '@components/modular/Bridge/BridgeForm/styles';
-import { API } from '@api/api';
 import { formatEther } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { RenderTokenItem } from '@models/Bridge';
@@ -11,7 +10,12 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
 import { BottomSheetRef } from '@components/composite';
-import { currentProvider } from '@api/bridge/sdk/BridgeSDK';
+import {
+  calculateGasFee,
+  currentProvider,
+  getBridgeBalance,
+  getBridgeFeeData
+} from '@lib';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
@@ -61,7 +65,7 @@ export const useBridgeNetworksData = ({
   const getSelectedTokenBalance = async () => {
     try {
       setBalanceLoader(true);
-      const balance = await API.bridgeService.bridgeSDK.getBalance({
+      const balance = await getBridgeBalance({
         from: fromParams.value.id,
         token: tokenParams.value.renderTokenItem,
         ownerAddress: selectedAccount?.address || ''
@@ -86,7 +90,7 @@ export const useBridgeNetworksData = ({
       isMax
     };
     try {
-      const fee = await API.bridgeService.bridgeSDK.getFeeData({
+      const fee = await getBridgeFeeData({
         bridgeConfig,
         dataForFee
       });
@@ -172,7 +176,7 @@ export const useBridgeNetworksData = ({
           amountTokens: amountToExchange,
           feeData: bridgeFee.feeData
         };
-        const gasEstimate = await API.bridgeService.bridgeSDK.calculateGasFee({
+        const gasEstimate = await calculateGasFee({
           bridgeConfig,
           from: fromParams.value.id,
           withdrawData

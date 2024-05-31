@@ -4,9 +4,9 @@ import {
   RelayUrls,
   RunWithdrawModel,
   Token
-} from './types';
+} from '../models/types';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
-import { erc20Contract } from './abi';
+import { erc20Contract } from '../abi/sdkABI';
 
 export async function getFeeData(
   tokenFrom: Token,

@@ -240,7 +240,7 @@
 
 //             console.log(name, from.name, "->", to.name)
 
-//       const feeData = await sdk.getFeeData(from, to, '10000', true);
+//       const feeData = await sdk.getBridgeFeeData(from, to, '10000', true);
 
 //       try {
 //         await sdk.withdraw(

@@ -6,10 +6,10 @@ import {
   FeeData,
   Network,
   Token
-} from './types';
+} from '../models/types';
 import { formatBridgeAddresses, getPairs } from './config';
 import { getFeeData, setAllowance, withdraw } from './withdraws';
-import { bridgeContract } from './abi';
+import { bridgeContract } from '../abi/sdkABI';
 
 export class BridgeSDK {
   config: Config;

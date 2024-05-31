@@ -1,4 +1,4 @@
-import { Network as BridgeNetwork, Token } from '@api/bridge/sdk/types';
+import { Network as BridgeNetwork, Token } from '@lib/bridgeSDK/models/types';
 import { ethers } from 'ethers';
 
 export interface Bridge {

@@ -20,7 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
-import { FeeData } from '@api/bridge/sdk/types';
+import { FeeData } from '@lib/bridgeSDK/models/types';
 import {
   BalanceInfo,
   FeeInfo,

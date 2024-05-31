@@ -1,4 +1,5 @@
 export * from './notification';
 export * from './event-dispatcher';
 export * from './crypto/AirDAOKeysStorage';
+export * from './bridgeSDK';
 export { default as PermissionService } from './permission';

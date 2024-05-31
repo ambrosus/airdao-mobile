@@ -5,7 +5,7 @@ import {
   ConfigToken,
   Network,
   Token
-} from './types';
+} from '../models/types';
 import { isAddress } from 'ethers/lib/utils';
 
 export function formatBridgeAddresses(config: Config): BridgeAddresses {
