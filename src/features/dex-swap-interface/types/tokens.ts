@@ -41,11 +41,10 @@ export interface TagInfo extends TagDetails {
 
 export interface TokenList {
   readonly name: string;
-  readonly timestamp: string;
   readonly version: Version;
-  readonly tokens: TokenInfo[];
-  readonly tokenMap?: {
-    readonly [key: string]: TokenInfo;
+  readonly tokens: {
+    prod: TokenInfo[];
+    testnet: TokenInfo[];
   };
   readonly keywords?: string[];
   readonly tags?: Tags;

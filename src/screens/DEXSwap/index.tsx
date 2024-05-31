@@ -3,8 +3,8 @@ import { FlatList, StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@components/base';
 import { DEXSwapInterfaceService } from '@features/dex-swap-interface';
-import { DEFAULT_TOKEN_LIST } from '@features/dex-swap-interface/entities/tokens';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import Config from '@constants/config';
 
 export const DEXSwapScreen = () => {
   const { selectedAccount } = useBridgeContextSelector();
@@ -23,10 +23,6 @@ export const DEXSwapScreen = () => {
           token: args.item,
           ownerAddress: selectedAccount?.address ?? ''
         });
-
-        // console.log(
-        //   NumberUtils.limitDecimalCount(formatEther(_balance?._hex), 2) || ''
-        // );
       };
 
       return (
@@ -42,7 +38,7 @@ export const DEXSwapScreen = () => {
     <SafeAreaView style={containerStyle}>
       <Text>Swap</Text>
 
-      <FlatList data={DEFAULT_TOKEN_LIST.tokens} renderItem={renderItem} />
+      <FlatList data={Config.DEX_SUPPORTED_TOKENS} renderItem={renderItem} />
       {/* <CurrencySelect /> */}
     </SafeAreaView>
   );

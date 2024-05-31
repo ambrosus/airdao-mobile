@@ -15,7 +15,7 @@ class DEXSwapService {
       if (token.symbol === 'AMB') {
         return await this.provider.getBalance(ownerAddress);
       } else if (token.address) {
-        const minABI = [
+        const GET_BALANCE_ABI = [
           {
             constant: true,
             inputs: [{ name: '_owner', type: 'address' }],
@@ -27,7 +27,7 @@ class DEXSwapService {
 
         const contract = new ethers.Contract(
           token.address,
-          minABI,
+          GET_BALANCE_ABI,
           this.provider
         );
 
