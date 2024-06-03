@@ -1,8 +1,9 @@
-import createSecureStorage from '@/storage/securedLocalStorage';
-const SecureStore = createSecureStorage();
-const store = SecureStore;
+import createSecureStore from '@neverdull-agency/expo-unlimited-secure-store';
 import { NotificationSettings } from '@appTypes/notification';
 import { DefaultNotificationSettings } from '@constants/variables';
+
+const SecureStore = createSecureStore();
+const store = SecureStore;
 
 export enum CacheKey {
   AddressLists = 'address_lists', // TODO This key is deprecated Can be deleted after a few version updates over 1.1.0
