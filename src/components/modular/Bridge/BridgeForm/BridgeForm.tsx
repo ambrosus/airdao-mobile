@@ -62,7 +62,8 @@ export const BridgeForm = () => {
     setFeeLoader,
     setBridgeFee,
     getSelectedTokenBalance,
-    onPressPreview
+    onPressPreview,
+    withdraw
   } = methods;
   const {
     dataToPreview,
@@ -78,16 +79,21 @@ export const BridgeForm = () => {
   useEffect(() => {
     setFeeLoader(true);
     setBridgeFee(null);
-    getSelectedTokenBalance().then();
+    getSelectedTokenBalance(tokenParams.value.renderTokenItem).then();
     if (!!amountToExchange) {
       clearTimeout(timeoutDelay);
       setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amountToExchange, toParams.value.id, fromParams.value.id, tokenParams]);
+  }, [
+    amountToExchange,
+    toParams.value.id,
+    fromParams.value.id,
+    tokenParams.value.renderTokenItem
+  ]);
 
-  const onPasscodeApprove = () => {
-    // console.log('APPROVE!!!!');
+  const onPasscodeApprove = async () => {
+    return await withdraw();
   };
   const onAcceptPress = () => {
     navigation.navigate('Passcode', {

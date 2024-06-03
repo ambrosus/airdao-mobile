@@ -99,5 +99,6 @@ export interface CalculateGasFee {
     selectedAccount: AccountDBModel;
     amountTokens: string;
     feeData: FeeData;
+    gasFee: boolean;
   };
 }

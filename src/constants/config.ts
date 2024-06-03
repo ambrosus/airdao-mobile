@@ -79,7 +79,7 @@ const envs = {
       'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json'
   },
   testnet: {
-    WALLET_API_URL: 'https://wallet-api-api.ambrosus-test.io',
+    WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus-test.io/v2',
     STAKING_API_URL: 'https://staking-api.ambrosus-test.io/pools/v2',

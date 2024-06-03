@@ -3,15 +3,15 @@ import Config from '@constants/config';
 import { Cache, CacheKey } from '@lib/cache';
 import { ethers } from 'ethers';
 import { MySdk } from '../sdk/index';
-import { currentProvider } from './currentProveder';
+import { currentProvider } from '@lib';
 
-export async function calculateGasFee({
+export async function bridgeWithdraw({
   bridgeConfig,
   from,
   withdrawData
 }: CalculateGasFee) {
   const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
-  const { tokenFrom, tokenTo, selectedAccount, amountTokens, feeData } =
+  const { tokenFrom, tokenTo, selectedAccount, amountTokens, feeData, gasFee } =
     withdrawData;
   const privateKey = (await Cache.getItem(
     // @ts-ignore
@@ -26,6 +26,6 @@ export async function calculateGasFee({
     amountTokens,
     feeData,
     singer,
-    true
+    gasFee
   );
 }

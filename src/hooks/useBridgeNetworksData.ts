@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
 import { BottomSheetRef } from '@components/composite';
 import {
-  calculateGasFee,
+  bridgeWithdraw,
   currentProvider,
   getBridgeBalance,
   getBridgeFeeData
@@ -39,7 +39,7 @@ export const useBridgeNetworksData = ({
   const [gasFee, setGasFee] = useState(0);
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
 
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount, networkNativeCoin } = useBridgeContextSelector();
   const { t } = useTranslation();
   const { tokenParams, bridgeConfig, fromParams } = useBridgeContextSelector();
 
@@ -62,14 +62,19 @@ export const useBridgeNetworksData = ({
     }
   };
 
-  const getSelectedTokenBalance = async () => {
+  const getSelectedTokenBalance = async (token) => {
     try {
       setBalanceLoader(true);
       const balance = await getBridgeBalance({
         from: fromParams.value.id,
-        token: tokenParams.value.renderTokenItem,
+        token,
         ownerAddress: selectedAccount?.address || ''
       });
+      // console.log('balanceParams', {
+      //   from: fromParams.value.id,
+      //   token,
+      //   ownerAddress: selectedAccount?.address || ''
+      // });
       setSelectedTokenBalance(
         NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || ''
       );
@@ -96,7 +101,7 @@ export const useBridgeNetworksData = ({
       });
       setBridgeFee({
         amount: formatEther(fee.amount._hex),
-        feeSymbol: fee.feeSymbol.toUpperCase(),
+        feeSymbol: networkNativeCoin?.symbol || '',
         networkFee: NumberUtils.limitDecimalCount(
           Number(formatEther(fee.transferFee._hex)),
           DECIMAL_CRYPTO_LIMIT
@@ -165,35 +170,46 @@ export const useBridgeNetworksData = ({
     setAmountToExchange(finalValue);
   };
 
-  const onPressPreview = async () => {
+  const withdraw = async (gasFee = false) => {
     try {
-      setGasFeeLoader(true);
       if (bridgeFee?.feeData && selectedAccount?.address) {
         const withdrawData = {
           tokenFrom: tokenParams.value.pairs[0],
           tokenTo: tokenParams.value.pairs[1],
           selectedAccount,
           amountTokens: amountToExchange,
-          feeData: bridgeFee.feeData
+          feeData: bridgeFee.feeData,
+          gasFee
         };
-        const gasEstimate = await calculateGasFee({
+        // console.log('withdrawData', withdrawData);
+        return await bridgeWithdraw({
           bridgeConfig,
           from: fromParams.value.id,
           withdrawData
         });
-        if (gasEstimate._hex) {
-          const provider = await currentProvider(fromParams.value.id);
-          const gasPrice = await provider?.getGasPrice();
-
-          setGasFee(
-            CurrencyUtils.toUSD(
-              Number(formatEther(gasPrice?._hex || '0x00')),
-              Number(formatEther(gasEstimate?._hex))
-            )
-          );
-        }
-        previewRef?.current?.show();
       }
+    } catch (e) {
+      // console.log('WITHDRAW ERROR', e);
+      // ignore
+    }
+  };
+
+  const onPressPreview = async () => {
+    try {
+      setGasFeeLoader(true);
+
+      const _gasEstimate = await withdraw(true);
+      if (_gasEstimate._hex) {
+        const provider = await currentProvider(fromParams.value.id);
+        const gasPrice = await provider?.getGasPrice();
+        setGasFee(
+          CurrencyUtils.toUSD(
+            Number(formatEther(gasPrice?._hex || '0x00')),
+            Number(formatEther(_gasEstimate?._hex))
+          )
+        );
+      }
+      previewRef?.current?.show();
     } catch (e) {
       // console.log('IN ERROR bridge.estimateGas.wrapWithdraw->', e);
     } finally {
@@ -220,7 +236,8 @@ export const useBridgeNetworksData = ({
     setFeeLoader,
     setBridgeFee,
     getSelectedTokenBalance,
-    onPressPreview
+    onPressPreview,
+    withdraw
   };
   return {
     variables,

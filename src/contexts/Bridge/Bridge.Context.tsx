@@ -1,5 +1,5 @@
 import { createContextSelector } from '@utils/createContextSelector';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
 import { AccountDBModel } from '@database';
 import { API } from '@api/api';
@@ -108,6 +108,12 @@ export const BridgeContext = () => {
     setTo(value);
   };
 
+  const networkNativeCoin = useMemo(() => {
+    return (tokensForSelector || []).find(
+      (item) => item.renderTokenItem.isNativeCoin
+    )?.renderTokenItem;
+  }, [tokensForSelector]);
+
   return {
     fromParams: {
       value: from,
@@ -125,6 +131,7 @@ export const BridgeContext = () => {
       value: selectedToken,
       setter: setSelectedToken
     },
+    networkNativeCoin,
     bridges,
     setSelectedAccount,
     bridgeConfig: config,
