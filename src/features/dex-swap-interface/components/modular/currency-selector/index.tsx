@@ -43,6 +43,11 @@ export const CurrencySelector = ({ type }: CurrencySelectorProps) => {
     };
   }, [selectedTokens, type]);
 
+  const SAMBSupportedTokenLogo =
+    selectedTokens[type]?.symbol === 'SAMB'
+      ? 'AMB'
+      : selectedTokens[type]?.symbol;
+
   return (
     <>
       <TouchableOpacity onPress={toggleCurrenciesList}>
@@ -50,10 +55,7 @@ export const CurrencySelector = ({ type }: CurrencySelectorProps) => {
           <Row alignItems="center">
             {isSelectedToken && (
               <>
-                <TokenLogo
-                  scale={0.75}
-                  token={selectedTokens[type]?.symbol ?? ''}
-                />
+                <TokenLogo scale={0.75} token={SAMBSupportedTokenLogo ?? ''} />
                 <Spacer horizontal value={scale(4)} />
               </>
             )}

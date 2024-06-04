@@ -34,6 +34,9 @@ export const BottomSheetCurrencyItem = ({
     };
   }, [selectedTokens, type, currency.symbol]);
 
+  const SAMBSupportedTokenLogo =
+    currency.symbol === 'SAMB' ? 'AMB' : currency.symbol;
+
   return (
     <TouchableOpacity
       disabled={isSelectedSameToken}
@@ -41,7 +44,7 @@ export const BottomSheetCurrencyItem = ({
     >
       <Row alignItems="center" justifyContent="space-between">
         <Row style={opacity} alignItems="center">
-          <TokenLogo scale={1} token={currency.symbol} />
+          <TokenLogo scale={0.65} token={SAMBSupportedTokenLogo ?? ''} />
           <Spacer horizontal value={6} />
           <Text
             fontSize={16}
