@@ -42,8 +42,12 @@ export interface TagInfo extends TagDetails {
 export interface TokenList {
   readonly name: string;
   readonly version: Version;
+  readonly default: {
+    production: TokenInfo;
+    testnet: TokenInfo;
+  };
   readonly tokens: {
-    prod: TokenInfo[];
+    production: TokenInfo[];
     testnet: TokenInfo[];
   };
   readonly keywords?: string[];

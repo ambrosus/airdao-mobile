@@ -3,14 +3,32 @@ import { TokenList } from '@features/dex-swap-interface/types';
 export const DEX_SUPPORTED_TOKENS: TokenList = {
   keywords: ['airdao', 'default'],
   name: 'AirDAO Finance Default List',
+  default: {
+    production: {
+      address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+      chainId: 22040,
+      decimals: 18,
+      logoURI: '',
+      name: 'AirDAO',
+      symbol: 'AMB'
+    },
+    testnet: {
+      address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+      chainId: 22040,
+      decimals: 18,
+      logoURI: '',
+      name: 'AirDAO',
+      symbol: 'AMB'
+    }
+  },
   tokens: {
-    prod: [
+    production: [
       {
         address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
         chainId: 22040,
         decimals: 18,
         logoURI: '',
-        name: 'Ambrosus',
+        name: 'AirDAO',
         symbol: 'AMB'
       },
       {
@@ -44,7 +62,7 @@ export const DEX_SUPPORTED_TOKENS: TokenList = {
         chainId: 22040,
         decimals: 18,
         logoURI: '',
-        name: 'Ambrosus',
+        name: 'AirDAO',
         symbol: 'AMB'
       },
       {

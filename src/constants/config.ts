@@ -34,7 +34,7 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.prod
+    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.production
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
