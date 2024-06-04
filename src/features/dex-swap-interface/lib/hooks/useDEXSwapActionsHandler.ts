@@ -20,7 +20,7 @@ export function useDEXSwapActionsHandler() {
         return `${foundPair.label} ${foundPair.to}`;
       }
 
-      return foundPair;
+      return foundPair.label;
     },
     []
   );
