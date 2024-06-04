@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-native';
-import { useDEXSwapActionsHandler } from '../useDEXSwapActionsHandler';
+import { useDEXSwapActionsHandler } from '../use-dex-swap-actions-handler';
 
 describe('useDEXSwapActionsHandler hook unit test', () => {
   it('Test button label with prepared pairs | SAMB - AMB', () => {

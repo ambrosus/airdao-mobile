@@ -1,1 +1,1 @@
-export { CurrencySelect } from './currency-select';
+export { BottomSheetCurrencySelect } from './bottom-sheet-currency-select';
