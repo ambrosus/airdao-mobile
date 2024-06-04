@@ -31,4 +31,14 @@ describe('useDEXSwapActionsHandler hook unit test', () => {
     const _label = buttonActionString(pair);
     expect(_label).toBe('Approve USDC');
   });
+
+  it('Test button label with wrong pairs | USDC - USDT', () => {
+    const pair = { from: 'USDC', to: 'USDT' };
+
+    const { result } = renderHook(() => useDEXSwapActionsHandler());
+    const { buttonActionString } = result.current;
+
+    const _label = buttonActionString(pair);
+    expect(_label).toBe('Wrong pair');
+  });
 });

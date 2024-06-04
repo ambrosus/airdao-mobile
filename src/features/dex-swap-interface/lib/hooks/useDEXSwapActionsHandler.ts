@@ -15,7 +15,7 @@ export function useDEXSwapActionsHandler() {
       });
 
       if (!foundPair) {
-        return 'Unknown';
+        return 'Wrong pair';
       } else if (foundPair.label.includes('Approve')) {
         return `${foundPair.label} ${foundPair.to}`;
       }
