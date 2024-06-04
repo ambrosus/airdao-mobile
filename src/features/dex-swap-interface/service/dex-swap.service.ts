@@ -1,11 +1,7 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { TokenInfo } from '@/features/dex-swap-interface/types';
-
-interface BalanceArgs {
-  token: TokenInfo;
-  ownerAddress: string;
-}
+import { ERC20_BALANCE } from '../lib/abi';
+import type { BalanceArgs } from '../types/swap.service';
 
 class DEXSwapService {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -15,24 +11,22 @@ class DEXSwapService {
       if (token.symbol === 'AMB') {
         return await this.provider.getBalance(ownerAddress);
       } else if (token.address) {
-        const GET_BALANCE_ABI = [
-          {
-            constant: true,
-            inputs: [{ name: '_owner', type: 'address' }],
-            name: 'balanceOf',
-            outputs: [{ name: 'balance', type: 'uint256' }],
-            type: 'function'
-          }
-        ];
-
         const contract = new ethers.Contract(
           token.address,
-          GET_BALANCE_ABI,
+          ERC20_BALANCE,
           this.provider
         );
 
         return await contract.balanceOf(ownerAddress);
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async currentAllowance() {
+    try {
+      return null;
     } catch (error) {
       throw error;
     }

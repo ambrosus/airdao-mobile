@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
-import { FieldSelectedTokens } from './types';
+import { INITIAL_SELECTED_TOKENS, INITIAL_SLIPPAGE_TOLERANCE } from './initial';
 
 export const DEXSwapContext = () => {
-  const [selectedTokens] = useState<FieldSelectedTokens>({
-    INPUT: null,
-    OUTPUT: null
-  });
+  const [slippageTollerance, setSlippageTollerance] = useState(
+    INITIAL_SLIPPAGE_TOLERANCE
+  );
 
-  return { selectedTokens };
+  const [selectedTokens] = useState(INITIAL_SELECTED_TOKENS);
+
+  const onChangeSlippageTollerance = (value: number) =>
+    setSlippageTollerance(value);
+
+  return { selectedTokens, slippageTollerance, onChangeSlippageTollerance };
 };
 
 export const [DEXSwapContextProvider, useDEXSwapContext] =
