@@ -30,6 +30,7 @@ export type HomeParamsList = {
   Bridge: undefined;
   BridgeHistory: undefined;
   SuccessSetupSecurity: undefined;
+  ImportWalletMethods: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
   StakeSuccessScreen: {
@@ -37,6 +38,8 @@ export type HomeParamsList = {
     walletAddress: string | null;
   };
   StakeErrorScreen: undefined;
+  ImportWalletPrivateKey: undefined;
+  ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<
