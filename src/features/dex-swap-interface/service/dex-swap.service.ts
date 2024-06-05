@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { ERC20_BALANCE } from '../lib/abi';
-import type { BalanceArgs } from '../types/swap.service';
+import { ERC20_ALLOWANCE_ABI, ERC20_BALANCE } from '../lib/abi';
+import type { BalanceArgs, CheckAllowanceArgs } from '../types/swap.service';
+import { DEX_SUPPORTED_TOKENS } from '../entities/tokens';
 
 class DEXSwapService {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -24,11 +25,23 @@ class DEXSwapService {
     }
   }
 
-  async currentAllowance() {
+  async checkAllowance({ tokenFrom, walletAddress }: CheckAllowanceArgs) {
     try {
-      return null;
+      if (tokenFrom !== DEX_SUPPORTED_TOKENS.default.production.address) {
+        const contract = new ethers.Contract(
+          tokenFrom,
+          ERC20_ALLOWANCE_ABI,
+          this.provider
+        );
+
+        const allowance = await contract.allowance(
+          walletAddress,
+          walletAddress
+        );
+        return allowance.toString();
+      }
     } catch (error) {
-      throw error;
+      console.warn(error);
     }
   }
 }

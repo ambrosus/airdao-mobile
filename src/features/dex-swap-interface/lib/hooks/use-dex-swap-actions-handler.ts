@@ -10,7 +10,12 @@ interface ButtonActionStringArgs {
 }
 
 export function useDEXSwapActionsHandler() {
-  const { selectedTokens, setSelectedTokens } = useDEXSwapContextSelector();
+  const {
+    selectedTokens,
+    setSelectedTokens,
+    selectedTokensAmount,
+    setSelectedTokensAmount
+  } = useDEXSwapContextSelector();
   const buttonActionString = useCallback(
     ({ from, to }: ButtonActionStringArgs) => {
       const foundPair = supportedSwapPairs.find((token) => {
@@ -33,7 +38,19 @@ export function useDEXSwapActionsHandler() {
       [FIELD.INPUT]: selectedTokens.OUTPUT,
       [FIELD.OUTPUT]: selectedTokens.INPUT
     });
-  }, [selectedTokens.INPUT, selectedTokens.OUTPUT, setSelectedTokens]);
+
+    setSelectedTokensAmount({
+      [FIELD.INPUT]: selectedTokensAmount.OUTPUT,
+      [FIELD.OUTPUT]: selectedTokensAmount.INPUT
+    });
+  }, [
+    selectedTokens.INPUT,
+    selectedTokens.OUTPUT,
+    selectedTokensAmount.INPUT,
+    selectedTokensAmount.OUTPUT,
+    setSelectedTokens,
+    setSelectedTokensAmount
+  ]);
 
   const isSomeTokenNotSelected = useMemo(() => {
     return !selectedTokens.INPUT || !selectedTokens.OUTPUT;

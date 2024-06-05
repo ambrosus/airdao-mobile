@@ -66,6 +66,7 @@ export const DEXSwapContext = () => {
     bottomSheetRefInput,
     bottomSheetRefOutput,
     selectedTokensAmount,
+    setSelectedTokensAmount,
     selectedTokens,
     setSelectedTokens,
     slippageTollerance,

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
+import { Alert } from 'react-native';
 import { PrimaryButton } from '@components/modular';
 import { Text } from '@components/base';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { COLORS } from '@constants/colors';
-import { Alert } from 'react-native';
 
 export const SwapButton = () => {
   const { selectedTokensAmount } = useDEXSwapContextSelector();
