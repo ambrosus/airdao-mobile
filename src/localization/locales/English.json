@@ -263,6 +263,7 @@
   "singleWallet.warning.description.bottom": "Do not share this with anyone. The AirDAO team will never request this, but phishers might.",
   "singleWallet.access.keys": "View access keys",
   "singleWallet.access.keys.title": "Access keys",
+  "singleWallet.access.key.title": "Access key",
   "singleWallet.tab.phrase": "Recovery phrase",
   "singleWallet.tab.keys": "Private keys",
   "singleWallet.tab.phrase.warn": "Make sure to write it down as shown.",
