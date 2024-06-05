@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import {
+  Keyboard,
   StyleProp,
   TextStyle,
   TouchableOpacity,
@@ -13,7 +14,7 @@ import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
-import { BottomSheetCurrenciesList } from '../../templates/bottom-sheet-currencies-list';
+import { BottomSheetCurrenciesList } from '@features/dex-swap-interface/components/templates';
 import { TokenLogo } from '@components/modular';
 
 interface CurrencySelectorProps {
@@ -21,14 +22,21 @@ interface CurrencySelectorProps {
 }
 
 export const CurrencySelector = ({ type }: CurrencySelectorProps) => {
-  const { bottomSheetRef, selectedTokens } = useDEXSwapContextSelector();
+  const {
+    onDismissBottomSheets,
+    bottomSheetRefInput,
+    bottomSheetRefOutput,
+    selectedTokens
+  } = useDEXSwapContextSelector();
 
   const isSelectedToken = !!selectedTokens[type];
 
   const toggleCurrenciesList = useCallback(() => {
-    const visible = bottomSheetRef.current?.isVisible;
-    bottomSheetRef.current?.[visible ? 'dismiss' : 'show']();
-  }, [bottomSheetRef]);
+    Keyboard.dismiss();
+    setTimeout(() => {
+      onDismissBottomSheets(type);
+    }, 500);
+  }, [onDismissBottomSheets, type]);
 
   const currencySelectorStyle: StyleProp<ViewStyle> = useMemo(() => {
     return [
@@ -73,7 +81,11 @@ export const CurrencySelector = ({ type }: CurrencySelectorProps) => {
         </View>
       </TouchableOpacity>
 
-      <BottomSheetCurrenciesList ref={bottomSheetRef} type={type} />
+      <BottomSheetCurrenciesList ref={bottomSheetRefInput} type={FIELD.INPUT} />
+      <BottomSheetCurrenciesList
+        ref={bottomSheetRefOutput}
+        type={FIELD.OUTPUT}
+      />
     </>
   );
 };

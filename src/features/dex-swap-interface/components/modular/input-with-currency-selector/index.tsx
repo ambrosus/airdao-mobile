@@ -19,6 +19,7 @@ export const InputWithCurrencySelector = ({
 }: InputWithCurrencySelectorProps) => {
   const { selectedTokensAmount, onChangeSelectedTokensAmount } =
     useDEXSwapContextSelector();
+
   const label = type === 'INPUT' ? 'You pay' : 'You receive';
 
   const onChangeTokenAmount = (value: string) => {

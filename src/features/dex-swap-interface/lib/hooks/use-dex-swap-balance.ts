@@ -7,7 +7,7 @@ import { formatEther } from 'ethers/lib/utils';
 
 type SelectedBalanceStateKeys = '_hex' | 'beatufied';
 
-export function useDEXSwapBalance(token: TokenInfo) {
+export function useDEXSwapBalance(token: TokenInfo | null) {
   const [isFetchingBalance, setIsFetchingBalance] = useState(false);
   const { selectedAccount } = useBridgeContextSelector();
 

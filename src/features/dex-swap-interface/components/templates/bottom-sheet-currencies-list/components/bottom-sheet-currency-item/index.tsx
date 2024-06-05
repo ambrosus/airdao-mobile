@@ -28,18 +28,29 @@ export const BottomSheetCurrencyItem = ({
     return currency.symbol === selectedTokens[type]?.symbol;
   }, [currency.symbol, selectedTokens, type]);
 
-  const opacity = useMemo(() => {
-    return {
-      opacity: selectedTokens[type]?.symbol === currency.symbol ? 0.5 : 1
-    };
+  const disabledSelectedOppositeToken = useMemo(() => {
+    return (
+      selectedTokens[type === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT]
+        ?.symbol === currency.symbol
+    );
   }, [selectedTokens, type, currency.symbol]);
 
   const SAMBSupportedTokenLogo =
     currency.symbol === 'SAMB' ? 'AMB' : currency.symbol;
 
+  const combineDisabledStates = useMemo(() => {
+    return disabledSelectedOppositeToken || isSelectedSameToken;
+  }, [disabledSelectedOppositeToken, isSelectedSameToken]);
+
+  const opacity = useMemo(() => {
+    return {
+      opacity: combineDisabledStates ? 0.5 : 1
+    };
+  }, [combineDisabledStates]);
+
   return (
     <TouchableOpacity
-      disabled={isSelectedSameToken}
+      disabled={combineDisabledStates}
       onPress={onChangeSelectedToken}
     >
       <Row alignItems="center" justifyContent="space-between">

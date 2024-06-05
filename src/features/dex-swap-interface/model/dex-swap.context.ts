@@ -6,7 +6,8 @@ import { TokenInfo } from '../types';
 import { BottomSheetRef } from '@components/composite';
 
 export const DEXSwapContext = () => {
-  const bottomSheetRef = useRef<BottomSheetRef>(null);
+  const bottomSheetRefOutput = useRef<BottomSheetRef>(null);
+  const bottomSheetRefInput = useRef<BottomSheetRef>(null);
 
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
   const [slippageTollerance, setSlippageTollerance] = useState(
@@ -30,7 +31,22 @@ export const DEXSwapContext = () => {
       ...selectedTokens,
       [key]: token
     });
-    bottomSheetRef.current?.dismiss();
+    bottomSheetRefInput.current?.dismiss();
+    bottomSheetRefOutput.current?.dismiss();
+  };
+
+  const onDismissBottomSheets = (type: keyof typeof FIELD) => {
+    const isBottomSheetVisible =
+      type === FIELD.INPUT
+        ? bottomSheetRefInput.current?.isVisible
+        : bottomSheetRefOutput.current?.isVisible;
+
+    const bottomSheetRef =
+      type === FIELD.INPUT
+        ? bottomSheetRefInput.current
+        : bottomSheetRefOutput.current;
+
+    bottomSheetRef?.[isBottomSheetVisible ? 'dismiss' : 'show']();
   };
 
   const onChangeSlippageTollerance = (value: number) =>
@@ -47,13 +63,16 @@ export const DEXSwapContext = () => {
   };
 
   return {
-    bottomSheetRef,
+    bottomSheetRefInput,
+    bottomSheetRefOutput,
     selectedTokensAmount,
     selectedTokens,
+    setSelectedTokens,
     slippageTollerance,
     onChangeSelectedTokensAmount,
     onChangeSelectedTokens,
-    onChangeSlippageTollerance
+    onChangeSlippageTollerance,
+    onDismissBottomSheets
   };
 };
 

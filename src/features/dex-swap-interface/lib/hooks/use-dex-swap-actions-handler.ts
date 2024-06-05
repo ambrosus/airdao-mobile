@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
 import { supportedSwapPairs } from '@features/dex-swap-interface/utils/pairs';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { FIELD } from '@features/dex-swap-interface/types/fields';
 
 interface ButtonActionStringArgs {
   from: string;
@@ -8,6 +10,7 @@ interface ButtonActionStringArgs {
 }
 
 export function useDEXSwapActionsHandler() {
+  const { selectedTokens, setSelectedTokens } = useDEXSwapContextSelector();
   const buttonActionString = useCallback(
     ({ from, to }: ButtonActionStringArgs) => {
       const foundPair = supportedSwapPairs.find((token) => {
@@ -25,7 +28,15 @@ export function useDEXSwapActionsHandler() {
     []
   );
 
+  const onSwapSelectedTokens = useCallback(() => {
+    setSelectedTokens({
+      [FIELD.INPUT]: selectedTokens.OUTPUT,
+      [FIELD.OUTPUT]: selectedTokens.INPUT
+    });
+  }, [selectedTokens.INPUT, selectedTokens.OUTPUT, setSelectedTokens]);
+
   return {
-    buttonActionString
+    buttonActionString,
+    onSwapSelectedTokens
   };
 }
