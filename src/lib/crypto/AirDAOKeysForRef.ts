@@ -1,6 +1,8 @@
+import { ethers } from 'ethers';
 import AirDAOKeys from './AirDAOKeys';
 import { AddressUtils } from '@utils/address';
 import AddressProcessor from '@lib/crypto/AddressProcessor';
+import Config from '@constants/config';
 
 const CACHE: { [key: string]: any } = {};
 
@@ -38,6 +40,16 @@ class AirDAOKeysForRef {
     result.cashbackToken = AddressUtils.addressToToken(result.address);
     CACHE[mnemonicCache] = result;
     return result;
+  }
+
+  async discoverAccountViaPrivateKey(privateKey: string) {
+    const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+    const wallet = new ethers.Wallet(privateKey, provider);
+
+    const index = 0;
+    const path = `m/44'/60'/${index}'/0/0`;
+
+    return { ...wallet, index, path };
   }
 }
 
