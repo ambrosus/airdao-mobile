@@ -98,6 +98,7 @@ export * from './History';
 export * from './Failed';
 export * from './EthereumIcon';
 export * from './BSCIcon';
+export * from './WatchlistEmpty';
 export * from './ReadingList';
 export * from './Key';
 export * from './LeadEyeOff';
