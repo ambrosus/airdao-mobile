@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { supportedSwapPairs } from '@features/dex-swap-interface/utils/pairs';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
@@ -35,8 +35,13 @@ export function useDEXSwapActionsHandler() {
     });
   }, [selectedTokens.INPUT, selectedTokens.OUTPUT, setSelectedTokens]);
 
+  const isSomeTokenNotSelected = useMemo(() => {
+    return !selectedTokens.INPUT || !selectedTokens.OUTPUT;
+  }, [selectedTokens]);
+
   return {
     buttonActionString,
-    onSwapSelectedTokens
+    onSwapSelectedTokens,
+    isSomeTokenNotSelected
   };
 }
