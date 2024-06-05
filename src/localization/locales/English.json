@@ -205,12 +205,23 @@
   "send.funds.transfer.fee": "Estimated transfer fee",
   "send.funds.use.max": "Use max",
 
+  "import.wallet.methods.mnemonic": "Import with recovery phrase",
+  "import.wallet.methods.key": "Import with private keys",
   "import.wallet.description": "Enter the recovery phrase to import your wallet.",
   "import.wallet.header": "Import existing wallet",
   "import.wallet.loading": "Importing your wallet from \n backup",
   "import.wallet.success": "Wallet import successful!",
   "import.wallet.success.text": "Your wallet has been imported. You can now access your funds.",
   "import.wallet.title": "Enter recovery phrase",
+  "import.wallet.common.title": "Import wallet",
+  "import.wallet.key.input.label": "Enter your private key",
+  "import.wallet.key": "Private key",
+  "import.wallet.key.show": "Show private key",
+  "import.wallet.key.hide": "Hide private key",
+  "import.wallet.key.error.exist": "Wallet already exists in your account.",
+  "import.wallet.key.error.invalid": "Invalid private key.",
+  "import.wallet.key.error.try.again": "Please try again.",
+  "import.wallet.key.success": "Your wallet has been imported.",
 
   "no.wallet.address.tracking": "Address tracking",
   "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
@@ -246,6 +257,16 @@
   "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
   "singleWallet.remove.alert.description": "Make sure you have a backup of this wallet",
   "singleWallet.save": "Save changes",
+  "singleWallet.warning.title": "Keep your Access keys safe",
+  "singleWallet.warning.description.top": "Your Access keys provides full access to you account and funds.",
+  "singleWallet.warning.button": "Reveal access keys",
+  "singleWallet.warning.description.bottom": "Do not share this with anyone. The AirDAO team will never request this, but phishers might.",
+  "singleWallet.access.keys": "View access keys",
+  "singleWallet.access.keys.title": "Access keys",
+  "singleWallet.access.key.title": "Access key",
+  "singleWallet.tab.phrase": "Recovery phrase",
+  "singleWallet.tab.keys": "Private keys",
+  "singleWallet.tab.phrase.warn": "Make sure to write it down as shown.",
 
   "login.enter.your.passcode": "Enter your passcode",
   "login.with.face.id": "Sign in with Face ID",
@@ -319,10 +340,8 @@
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
-
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet",
 
   "bridge.select.network": "Select network"
-
 }

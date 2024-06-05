@@ -41,7 +41,6 @@ export function CollectionItem(props: CollectionItemProps) {
           {collection.name}
         </Text>
         <Text
-          style={{ lineHeight: 0 }}
           fontFamily="Inter_500Medium"
           fontSize={13}
           color={COLORS.neutral900}
@@ -56,7 +55,6 @@ export function CollectionItem(props: CollectionItemProps) {
           color={COLORS.alphaBlack50}
           fontSize={12}
         >
-          {' '}
           {t('common.address.with.count', { count: collection.accountCount })}
         </Text>
         {collection.accountCount > 0 && (
