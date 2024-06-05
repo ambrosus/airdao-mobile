@@ -6,7 +6,6 @@ import {
   View
 } from 'react-native';
 import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
-import { WatchlistTabIcon } from '@components/svg/BottomTabIcons';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
@@ -14,6 +13,7 @@ import {
   SwipeableWalletItem,
   SwipeableWalletItemProps
 } from './components/SwipeableWalletItem';
+import { WatchlistEmptyIcon } from '@components/svg/icons';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
 interface EmptyAddressListProps {
@@ -80,7 +80,7 @@ export function AddressList(props: AddressListProps): JSX.Element {
         <View style={{ paddingTop: verticalScale(234) }}>
           <LocalizedRenderEmpty
             text={'empty.addresses'}
-            icon={<WatchlistTabIcon color={COLORS.neutral300} scale={1.35} />}
+            icon={<WatchlistEmptyIcon color={COLORS.neutral300} scale={1} />}
           />
         </View>
       }

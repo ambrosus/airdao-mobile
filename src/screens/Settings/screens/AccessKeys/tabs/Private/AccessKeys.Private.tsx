@@ -1,0 +1,64 @@
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import { Cache, CacheKey } from '@lib/cache';
+import { Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
+import { CopyToClipboardButton } from '@components/composite';
+
+interface AccessKeysPrivateProps {
+  walletHash: string;
+}
+
+export const AccessKeysPrivateTab = ({
+  walletHash
+}: AccessKeysPrivateProps) => {
+  const { t } = useTranslation();
+  const [privateKey, setPrivateKey] = useState<string>();
+
+  useEffect(() => {
+    (async () => {
+      setPrivateKey(
+        (await Cache.getItem(
+          `${CacheKey.WalletPrivateKey}-${walletHash}`
+        )) as string
+      );
+    })();
+  }, [walletHash]);
+
+  return (
+    <View style={styles.container}>
+      <Spacer value={scale(29)} />
+      <Text
+        fontSize={16}
+        fontFamily="Inter_500Medium"
+        color={COLORS.neutral900}
+        style={styles.privateKey}
+      >
+        {privateKey}
+      </Text>
+      <Spacer value={scale(24)} />
+      <CopyToClipboardButton
+        disableWhenCopied
+        textToDisplay={t('common.copy')}
+        textToCopy={privateKey}
+        pressableText={true}
+        showToast={false}
+        iconProps={{ scale: 0 }}
+        style={styles.copyButton}
+        textProps={{
+          color: COLORS.neutral900,
+          fontSize: 14,
+          fontFamily: 'Inter_500Medium'
+        }}
+        successTextProps={{
+          color: COLORS.success600,
+          fontSize: 14,
+          fontFamily: 'Inter_500Medium'
+        }}
+      />
+    </View>
+  );
+};

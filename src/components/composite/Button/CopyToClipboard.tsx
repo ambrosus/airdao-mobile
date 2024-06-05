@@ -26,6 +26,7 @@ export interface CopyToClipboardButtonProps
   showToast?: boolean;
   copiedTextWrapperStyle?: ViewStyle;
   pressableText?: boolean;
+  disableWhenCopied?: boolean;
 }
 
 export const CopyToClipboardButton = (
@@ -41,6 +42,7 @@ export const CopyToClipboardButton = (
     successText,
     successTextProps,
     pressableText = false,
+    disableWhenCopied = false,
     copiedTextWrapperStyle,
     ...buttonProps
   } = props;
@@ -79,6 +81,7 @@ export const CopyToClipboardButton = (
     return (
       <Button
         {...buttonProps}
+        disabled={disableWhenCopied && copied}
         // @ts-ignore
         style={{ ...buttonProps.style, padding: 4 }}
         onPress={onPress}

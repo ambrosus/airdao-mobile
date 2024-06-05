@@ -15,8 +15,8 @@ import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
-const iosBuildVersion = '1.3.12';
-const androidBuildVersion = '1.3.12';
+const iosBuildVersion = '1.3.13';
+const androidBuildVersion = '1.3.13';
 
 const stageBuildVersions = {
   ios: `${iosBuildVersion} (${androidBuildVersion})`,

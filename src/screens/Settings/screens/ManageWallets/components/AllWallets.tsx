@@ -3,7 +3,7 @@ import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { WalletDBModel } from '@database';
 import { useAllWallets } from '@hooks/database';
-import { Button, Spacer } from '@components/base';
+import { Button } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { WalletItem } from './Wallet';
@@ -26,7 +26,11 @@ export const AllWallets = () => {
     };
     return (
       <Button onPress={onPress}>
-        <WalletItem wallet={args.item} isSelectedWallet={false} />
+        <WalletItem
+          index={args.index}
+          wallet={args.item}
+          isSelectedWallet={false}
+        />
       </Button>
     );
   };
@@ -36,10 +40,9 @@ export const AllWallets = () => {
       data={allWallets}
       renderItem={renderWallet}
       keyExtractor={(w) => w.hash}
-      ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
       contentContainerStyle={{
         paddingHorizontal: scale(18),
-        paddingTop: verticalScale(30)
+        paddingTop: verticalScale(8)
       }}
     />
   );
