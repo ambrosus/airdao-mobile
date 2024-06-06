@@ -62,7 +62,7 @@ export const ImportWalletPrivateKey = () => {
   };
 
   const disabled = useMemo(() => {
-    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length <= 64;
+    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
     return {
       state: isWrongLengthOrEmpty,
       typographyColor: isWrongLengthOrEmpty
