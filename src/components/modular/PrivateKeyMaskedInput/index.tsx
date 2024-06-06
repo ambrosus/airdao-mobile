@@ -108,9 +108,9 @@ export const PrivateKeyMaskedInput = ({
           } else {
             setPrivateKey(value.slice(0, -1));
           }
-        } else if (key === ' ') {
+        } else if (key === ' ' && value.length !== 64) {
           setPrivateKey(value + ' ');
-        } else if (secureTextEntry && _isAlphanumeric(key)) {
+        } else if (_isAlphanumeric(key) && value.length !== 64) {
           // Insert the key at the current caret position
           const currentPos =
             currentCarretPosition !== null
@@ -173,7 +173,8 @@ export const PrivateKeyMaskedInput = ({
       scrollEnabled={false}
       multiline
       value={maskedValue}
-      maxLength={66}
+      maxLength={64}
+      blurOnSubmit
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
       onKeyPress={onKeyPress}
