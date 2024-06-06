@@ -169,6 +169,7 @@ export const PrivateKeyMaskedInput = ({
       multiline
       value={maskedValue}
       maxLength={64}
+      blurOnSubmit
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
       onKeyPress={onKeyPress}
