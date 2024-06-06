@@ -91,7 +91,7 @@ export const PrivateKeyMaskedInput = ({
     return selection.start === null || selection.end === null;
   }, [selection]);
 
-   const onKeyPress = useCallback(
+  const onKeyPress = useCallback(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
       if (secureTextEntry) {
         const key = event.nativeEvent.key;
