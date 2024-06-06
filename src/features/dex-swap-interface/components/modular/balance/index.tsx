@@ -15,7 +15,7 @@ interface BalanceProps {
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokens, onChangeSelectedTokensAmount } =
+  const { selectedTokens, setLastChangedInput, onChangeSelectedTokensAmount } =
     useDEXSwapContextSelector();
   const { selectedTokenBalance, isFetchingBalance } = useDEXSwapBalance(
     selectedTokens?.[type] as TokenInfo
@@ -27,9 +27,16 @@ export const Balance = ({ type }: BalanceProps) => {
   );
 
   const onMaxAmonutPress = useCallback(() => {
-    if (selectedTokenBalance.beatufied)
+    if (selectedTokenBalance.beatufied) {
       onChangeSelectedTokensAmount(type, selectedTokenBalance.beatufied);
-  }, [selectedTokenBalance.beatufied, onChangeSelectedTokensAmount, type]);
+      setLastChangedInput(type);
+    }
+  }, [
+    selectedTokenBalance.beatufied,
+    onChangeSelectedTokensAmount,
+    type,
+    setLastChangedInput
+  ]);
 
   if (isFetchingBalance) {
     return (

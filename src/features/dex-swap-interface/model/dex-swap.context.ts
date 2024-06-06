@@ -75,7 +75,7 @@ export const DEXSwapContext = () => {
     (key: keyof typeof FIELD, value: string) => {
       setLastChangedInput(key);
       const oppositeKey = key === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
-      const isEmpty = value === '';
+      const isEmpty = value === '' || value === '0';
 
       setSelectedTokensAmount((prevSelectedTokensAmount) => ({
         ...prevSelectedTokensAmount,
@@ -105,9 +105,10 @@ export const DEXSwapContext = () => {
     const oppositeValue = selectedTokensAmount[oppositeKey];
 
     if (oppositeValue === '' && selectedTokens[oppositeKey]) {
-      const valueToApply = calculateUSDPrice(
-        selectedTokensAmount[lastChangedInput]
-      );
+      const valueToApply =
+        selectedTokensAmount[lastChangedInput] === ''
+          ? ''
+          : calculateUSDPrice(selectedTokensAmount[lastChangedInput]);
       onApplyOppositeCurrencyAmount(oppositeKey, valueToApply);
       setLastChangedInput(null);
     }
@@ -131,7 +132,8 @@ export const DEXSwapContext = () => {
     slippageTollerance,
     onChangeSlippageTollerance,
     onChangeSelectedTokensAmount,
-    onApplyOppositeCurrencyAmount
+    onApplyOppositeCurrencyAmount,
+    setLastChangedInput
   };
 };
 

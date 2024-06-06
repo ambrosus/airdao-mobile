@@ -4,26 +4,13 @@ import { PrimaryButton } from '@components/modular';
 import { Text } from '@components/base';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { COLORS } from '@constants/colors';
-import { useUSDPrice } from '@hooks';
 
 export const SwapButton = () => {
-  const { selectedTokensAmount, selectedTokens } = useDEXSwapContextSelector();
+  const { selectedTokensAmount } = useDEXSwapContextSelector();
 
   const onSwap = () => {
     Alert.alert('Swap');
   };
-
-  const USDPrice = useUSDPrice(
-    selectedTokensAmount.INPUT,
-    selectedTokens.OUTPUT?.symbol
-  );
-
-  console.log(
-    USDPrice,
-    selectedTokensAmount,
-    selectedTokens.OUTPUT?.symbol,
-    'USD Price'
-  );
 
   const isEmptyAmount = useMemo(() => {
     return (
