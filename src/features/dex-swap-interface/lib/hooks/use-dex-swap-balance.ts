@@ -8,8 +8,9 @@ import { formatEther } from 'ethers/lib/utils';
 type SelectedBalanceStateKeys = '_hex' | 'beatufied';
 
 export function useDEXSwapBalance(token: TokenInfo | null) {
-  const [isFetchingBalance, setIsFetchingBalance] = useState(false);
   const { selectedAccount } = useBridgeContextSelector();
+  const [isFetchingBalance, setIsFetchingBalance] = useState(false);
+  const [allowance, setAllowance] = useState(null);
 
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<
     Record<SelectedBalanceStateKeys, string | null>
@@ -17,6 +18,19 @@ export function useDEXSwapBalance(token: TokenInfo | null) {
     _hex: null,
     beatufied: null
   });
+
+  useEffect(() => {
+    (async () => {
+      if (token?.symbol !== 'AMB') {
+        setAllowance(
+          await DEXSwapInterfaceService.checkAllowance({
+            tokenFrom: token?.address ?? '',
+            walletAddress: selectedAccount?.address ?? ''
+          })
+        );
+      }
+    })();
+  }, [selectedAccount?.address, token]);
 
   useEffect(() => {
     if (selectedAccount?.address && !!token) {
@@ -43,5 +57,5 @@ export function useDEXSwapBalance(token: TokenInfo | null) {
     }
   }, [selectedAccount, token]);
 
-  return { selectedTokenBalance, isFetchingBalance };
+  return { selectedTokenBalance, isFetchingBalance, allowance };
 }
