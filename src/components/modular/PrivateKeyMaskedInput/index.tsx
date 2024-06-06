@@ -90,29 +90,35 @@ export const PrivateKeyMaskedInput = ({
 
   const onKeyPress = useCallback(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-      const key = event.nativeEvent.key;
+      if (secureTextEntry) {
+        const key = event.nativeEvent.key;
 
-      if (secureTextEntry && key.toLowerCase() === 'backspace') {
-        if (!_isSelectionEmpty) {
-          // Check if selection is not empty
-          const selectionStart = selection.start || 0;
-          const selectionEnd = selection.end || 0;
+        if (key.toLowerCase() === 'backspace') {
+          if (!_isSelectionEmpty) {
+            // Check if selection is not empty
+            const selectionStart = selection.start || 0;
+            const selectionEnd = selection.end || 0;
+            const newPrivateKey =
+              value.slice(0, selectionStart) + value.slice(selectionEnd);
+            setPrivateKey(newPrivateKey);
+            setSelection({ start: null, end: null });
+          } else {
+            setPrivateKey(value.slice(0, -1));
+          }
+        } else if (key === ' ') {
+          setPrivateKey(value + ' ');
+        } else if (secureTextEntry && _isAlphanumeric(key)) {
+          // Insert the key at the current caret position
+          const currentPos =
+            currentCarretPosition !== null
+              ? currentCarretPosition
+              : value.length;
           const newPrivateKey =
-            value.slice(0, selectionStart) + value.slice(selectionEnd);
+            value.substring(0, currentPos) + key + value.substring(currentPos);
           setPrivateKey(newPrivateKey);
-          setSelection({ start: null, end: null });
-        } else {
-          setPrivateKey(value.slice(0, -1));
+          // Incrementing caret position
+          setCurrentCarretPosition(currentPos + 1);
         }
-      } else if (secureTextEntry && _isAlphanumeric(key)) {
-        // Insert the key at the current caret position
-        const currentPos =
-          currentCarretPosition !== null ? currentCarretPosition : value.length;
-        const newPrivateKey =
-          value.substring(0, currentPos) + key + value.substring(currentPos);
-        setPrivateKey(newPrivateKey);
-        // Increment the caret position
-        setCurrentCarretPosition(currentPos + 1);
       }
     },
     [
