@@ -88,7 +88,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        onPasscodeEntry ? onPasscodeEntry() : closePasscodeEntry();
+        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
       } else {
         passcodeRef.current?.focus();
       }

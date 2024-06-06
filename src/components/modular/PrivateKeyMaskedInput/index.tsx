@@ -88,7 +88,7 @@ export const PrivateKeyMaskedInput = ({
     return selection.start === null || selection.end === null;
   }, [selection]);
 
-  const onKeyPress = useCallback(
+   const onKeyPress = useCallback(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
       if (secureTextEntry) {
         const key = event.nativeEvent.key;
@@ -170,7 +170,8 @@ export const PrivateKeyMaskedInput = ({
       scrollEnabled={false}
       multiline
       value={maskedValue}
-      maxLength={66}
+      maxLength={64}
+      blurOnSubmit
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
       onKeyPress={onKeyPress}
