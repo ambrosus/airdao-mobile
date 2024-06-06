@@ -88,12 +88,12 @@ export const PrivateKeyMaskedInput = ({
     return selection.start === null || selection.end === null;
   }, [selection]);
 
-  const onKeyPress = useCallback(
+   const onKeyPress = useCallback(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-      const key = event.nativeEvent.key;
+      if (secureTextEntry) {
+        const key = event.nativeEvent.key;
 
-      if (value.length !== 64) {
-        if (secureTextEntry && key.toLowerCase() === 'backspace') {
+        if (key.toLowerCase() === 'backspace') {
           if (!_isSelectionEmpty) {
             // Check if selection is not empty
             const selectionStart = selection.start || 0;
@@ -105,6 +105,8 @@ export const PrivateKeyMaskedInput = ({
           } else {
             setPrivateKey(value.slice(0, -1));
           }
+        } else if (key === ' ') {
+          setPrivateKey(value + ' ');
         } else if (secureTextEntry && _isAlphanumeric(key)) {
           // Insert the key at the current caret position
           const currentPos =
@@ -114,7 +116,7 @@ export const PrivateKeyMaskedInput = ({
           const newPrivateKey =
             value.substring(0, currentPos) + key + value.substring(currentPos);
           setPrivateKey(newPrivateKey);
-          // Increment the caret position
+          // Incrementing caret position
           setCurrentCarretPosition(currentPos + 1);
         }
       }
