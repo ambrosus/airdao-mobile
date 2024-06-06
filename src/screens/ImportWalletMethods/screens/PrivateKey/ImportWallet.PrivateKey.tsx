@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +26,12 @@ enum IMPORT_PROCESS_STATUS {
   PENDING = 'pending'
 }
 
+function delay(cb: () => void) {
+  setTimeout(() => {
+    cb();
+  }, 500);
+}
+
 export const ImportWalletPrivateKey = () => {
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
@@ -45,18 +51,26 @@ export const ImportWalletPrivateKey = () => {
       const account = await WalletUtils.importWalletViaPrivateKey(privateKey);
 
       if (!account) {
-        navigation.navigate('ImportWalletPrivateKeyError', {
-          error: 'unknown'
-        });
+        Keyboard.dismiss();
+        bottomSheetProcessingRef.current?.dismiss();
+
+        delay(() =>
+          navigation.navigate('ImportWalletPrivateKeyError', {
+            error: 'unknown'
+          })
+        );
       }
 
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
+      Keyboard.dismiss();
       bottomSheetProcessingRef.current?.dismiss();
-      navigation.navigate('ImportWalletPrivateKeyError', {
-        // @ts-ignore
-        error: error.message.includes('400') ? 'exist' : 'unknown'
-      });
+      delay(() =>
+        navigation.navigate('ImportWalletPrivateKeyError', {
+          // @ts-ignore
+          error: error.message.includes('400') ? 'exist' : 'unknown'
+        })
+      );
       setStatus(IMPORT_PROCESS_STATUS.INITIAL);
     }
   };
