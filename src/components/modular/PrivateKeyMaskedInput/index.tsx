@@ -76,13 +76,16 @@ export const PrivateKeyMaskedInput = ({
     }, [])
   );
 
-  const onChangePrivateKey = async (text: string) => {
-    if (!secureTextEntry) {
-      setPrivateKey(text);
-    } else if (secureTextEntry && text === clipboard) {
-      setPrivateKey(text);
-    }
-  };
+  const onChangePrivateKey = useCallback(
+    (text: string) => {
+      if (!secureTextEntry) {
+        setPrivateKey(text);
+      } else if (secureTextEntry && clipboard.includes(text)) {
+        setPrivateKey(text);
+      }
+    },
+    [clipboard, secureTextEntry, setPrivateKey]
+  );
 
   const _isSelectionEmpty = useMemo(() => {
     return selection.start === null || selection.end === null;
