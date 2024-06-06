@@ -60,6 +60,19 @@ export const PrivateKeyMaskedInput = ({
   }, []);
 
   const [clipboard, setClipboard] = useState('');
+
+  useEffect(() => {
+    const fetchClipboard = async () => {
+      const clipboardContent = await Clipboard.getClipboardString();
+      setClipboard(clipboardContent);
+    };
+
+    fetchClipboard();
+
+    const intervalId = setInterval(fetchClipboard, 500);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const [currentCarretPosition, setCurrentCarretPosition] = useState<
     number | null
   >(null);
@@ -67,15 +80,6 @@ export const PrivateKeyMaskedInput = ({
   const [selection, setSelection] = useState<SelectionObject>(
     SELECTION_INITIAL_STATE
   );
-
-  useEffect(() => {
-    const getClipboardString = async () => {
-      const clipboardContent = await Clipboard.getClipboardString();
-      setClipboard(clipboardContent);
-    };
-
-    getClipboardString();
-  }, []);
 
   const onChangePrivateKey = useCallback(
     (text: string) => {
