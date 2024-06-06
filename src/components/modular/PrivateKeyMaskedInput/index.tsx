@@ -2,6 +2,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useState
 } from 'react';
@@ -13,7 +14,6 @@ import {
   TextStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect } from '@react-navigation/native';
 import { Clipboard } from '@utils/clipboard';
 import { TextInput } from '@components/base/Input/Input.text';
 import { TextInputProps } from '@components/base';
@@ -68,13 +68,14 @@ export const PrivateKeyMaskedInput = ({
     SELECTION_INITIAL_STATE
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      Clipboard.getClipboardString().then((r) => {
-        setClipboard(r);
-      });
-    }, [])
-  );
+  useEffect(() => {
+    const getClipboardString = async () => {
+      const clipboardContent = await Clipboard.getClipboardString();
+      setClipboard(clipboardContent);
+    };
+
+    getClipboardString();
+  }, []);
 
   const onChangePrivateKey = useCallback(
     (text: string) => {
@@ -108,9 +109,9 @@ export const PrivateKeyMaskedInput = ({
           } else {
             setPrivateKey(value.slice(0, -1));
           }
-        } else if (key === ' ' && value.length !== 64) {
+        } else if (key === ' ') {
           setPrivateKey(value + ' ');
-        } else if (_isAlphanumeric(key) && value.length !== 64) {
+        } else if (secureTextEntry && _isAlphanumeric(key)) {
           // Insert the key at the current caret position
           const currentPos =
             currentCarretPosition !== null
