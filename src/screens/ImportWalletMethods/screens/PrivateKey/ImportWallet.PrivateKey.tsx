@@ -1,13 +1,22 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  View
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
-import { BottomSheetRef, Header } from '@components/composite';
+import {
+  BottomAwareSafeAreaView,
+  BottomSheetRef,
+  Header
+} from '@components/composite';
 import {
   Button,
+  InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
@@ -19,61 +28,54 @@ import { COLORS } from '@constants/colors';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
 import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
+import { isIos } from '@utils/isPlatform';
 
 enum IMPORT_PROCESS_STATUS {
   INITIAL = 'initial',
   SUCCESS = 'success',
   PENDING = 'pending'
 }
-
-function delay(cb: () => void) {
-  setTimeout(() => {
-    cb();
-  }, 500);
-}
+const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
+  ? 'padding'
+  : 'height';
 
 export const ImportWalletPrivateKey = () => {
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
   const [status, setStatus] = useState<IMPORT_PROCESS_STATUS>(
-    IMPORT_PROCESS_STATUS.INITIAL
+    IMPORT_PROCESS_STATUS.PENDING
   );
 
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
+  const maskedInputRef = useRef<InputRef>(null);
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
 
-  const onImportWalletPress = async () => {
-    setStatus(IMPORT_PROCESS_STATUS.PENDING);
+  const onImportWalletPress = useCallback(async () => {
+    maskedInputRef.current?.blur();
     bottomSheetProcessingRef.current?.show();
+    setStatus(IMPORT_PROCESS_STATUS.PENDING);
+
     try {
-      const account = await WalletUtils.importWalletViaPrivateKey(privateKey);
-
-      if (!account) {
-        Keyboard.dismiss();
-        bottomSheetProcessingRef.current?.dismiss();
-
-        delay(() =>
-          navigation.navigate('ImportWalletPrivateKeyError', {
-            error: 'unknown'
-          })
-        );
-      }
-
+      await WalletUtils.importWalletViaPrivateKey(privateKey);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
-      Keyboard.dismiss();
-      bottomSheetProcessingRef.current?.dismiss();
-      delay(() =>
+      // @ts-ignore
+      const errorMessage = error?.message || 'unknown';
+      const errorStatus = errorMessage.includes('400') ? 'exist' : 'unknown';
+
+      setTimeout(() => {
+        bottomSheetProcessingRef.current?.dismiss();
+
         navigation.navigate('ImportWalletPrivateKeyError', {
-          // @ts-ignore
-          error: error.message.includes('400') ? 'exist' : 'unknown'
-        })
-      );
-      setStatus(IMPORT_PROCESS_STATUS.INITIAL);
+          error: errorStatus
+        });
+      }, 1200);
+
+      setStatus(IMPORT_PROCESS_STATUS.PENDING);
     }
-  };
+  }, [navigation, privateKey]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
@@ -100,8 +102,8 @@ export const ImportWalletPrivateKey = () => {
 
       <KeyboardAvoidingView
         style={styles.container}
-        keyboardVerticalOffset={20}
-        behavior="padding"
+        keyboardVerticalOffset={isIos ? 20 : 0}
+        behavior={KEYBOARD_BEHAVIOR}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.innerContainer}>
@@ -116,6 +118,7 @@ export const ImportWalletPrivateKey = () => {
                 </Text>
                 <Spacer value={verticalScale(8)} />
                 <PrivateKeyMaskedInput
+                  ref={maskedInputRef}
                   value={privateKey}
                   setPrivateKey={setPrivateKey}
                   secureTextEntry={secureTextEntry}
@@ -141,22 +144,23 @@ export const ImportWalletPrivateKey = () => {
                 </Row>
               </Button>
             </View>
-            <PrimaryButton
-              disabled={disabled.state}
-              onPress={onImportWalletPress}
-            >
-              <Text
-                fontSize={16}
-                fontFamily="Inter_500Medium"
-                color={disabled.typographyColor}
+            <BottomAwareSafeAreaView paddingBottom={verticalScale(24)}>
+              <PrimaryButton
+                disabled={disabled.state}
+                onPress={onImportWalletPress}
               >
-                {t('button.continue')}
-              </Text>
-            </PrimaryButton>
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_500Medium"
+                  color={disabled.typographyColor}
+                >
+                  {t('button.continue')}
+                </Text>
+              </PrimaryButton>
+            </BottomAwareSafeAreaView>
           </View>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
-
       <BottomSheetImportWalletPrivateKeyStatus
         ref={bottomSheetProcessingRef}
         status={status}

@@ -1,6 +1,7 @@
 import React, {
   Dispatch,
   SetStateAction,
+  forwardRef,
   useCallback,
   useEffect,
   useMemo,
@@ -16,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Clipboard } from '@utils/clipboard';
 import { TextInput } from '@components/base/Input/Input.text';
-import { TextInputProps } from '@components/base';
+import { InputRef, TextInputProps } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 
@@ -38,11 +39,10 @@ const SELECTION_INITIAL_STATE = {
   end: null
 };
 
-export const PrivateKeyMaskedInput = ({
-  value,
-  setPrivateKey,
-  secureTextEntry
-}: PrivateKeyMaskedInputProps) => {
+export const PrivateKeyMaskedInput = forwardRef<
+  InputRef,
+  PrivateKeyMaskedInputProps
+>(({ value, setPrivateKey, secureTextEntry }, maskedInputRef) => {
   const { t } = useTranslation();
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
@@ -175,11 +175,14 @@ export const PrivateKeyMaskedInput = ({
 
   return (
     <TextInput
+      ref={maskedInputRef}
       scrollEnabled={false}
       multiline
       value={maskedValue}
       maxLength={64}
       blurOnSubmit
+      autoCapitalize="none"
+      autoCorrect={false}
       onChangeText={onChangePrivateKey}
       onSelectionChange={onSelectionChange}
       onKeyPress={onKeyPress}
@@ -189,4 +192,4 @@ export const PrivateKeyMaskedInput = ({
       style={inputStyle}
     />
   );
-};
+});
