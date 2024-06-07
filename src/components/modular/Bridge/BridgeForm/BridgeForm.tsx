@@ -82,7 +82,7 @@ export const BridgeForm = () => {
     bridgeTransfer
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
-    bridgeTransfer?.hash,
+    bridgeTransaction?.withdrawTx,
     !!Object.keys(bridgeTransfer).length
   );
 

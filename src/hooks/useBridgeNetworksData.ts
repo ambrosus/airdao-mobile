@@ -27,7 +27,8 @@ const DECIMAL_CRYPTO_LIMIT = 5;
 const DECIMAL_USD_LIMIT = 2;
 const DEFAULT_BRIDGE_TRANSACTION = {
   amount: '0x0',
-  loading: true
+  loading: true,
+  withdrawTx: ''
 };
 const DEFAULT_BRIDGE_TRANSFER = { hash: '' };
 
@@ -49,6 +50,7 @@ export const useBridgeNetworksData = ({
   const [bridgeTransaction, setBridgeTransaction] = useState<{
     amount: string;
     loading?: boolean;
+    withdrawTx: string;
   }>(DEFAULT_BRIDGE_TRANSACTION);
 
   const {
@@ -80,6 +82,7 @@ export const useBridgeNetworksData = ({
     }
   };
 
+  // @ts-ignore
   const getSelectedTokenBalance = async (token) => {
     try {
       setBalanceLoader(true);
@@ -237,16 +240,19 @@ export const useBridgeNetworksData = ({
     try {
       const res = await withdraw();
       if (res) {
-        setBridgeTransfer(res);
-        const bridgeTransaction = {
-          eventId: '',
-          networkFrom: fromParams.value.id || '',
-          networkTo: toParams.value.id || '',
-          tokenFrom: tokenParams.value.pairs[0],
-          tokenTo: tokenParams.value.pairs[1],
-          amount: res.value._hex || '0x0'
-        };
-        setBridgeTransaction(bridgeTransaction);
+        const bridgeTx = await res.wait(res);
+        if (bridgeTx) {
+          const bridgeTransaction = {
+            eventId: '',
+            networkFrom: fromParams.value.id || '',
+            networkTo: toParams.value.id || '',
+            tokenFrom: tokenParams.value.pairs[0],
+            tokenTo: tokenParams.value.pairs[1],
+            amount: res.value._hex || '0x0',
+            withdrawTx: bridgeTx.transactionHash
+          };
+          setBridgeTransaction(bridgeTransaction);
+        }
       }
     } catch (e) {
       transactionInfoRef.current?.dismiss();
