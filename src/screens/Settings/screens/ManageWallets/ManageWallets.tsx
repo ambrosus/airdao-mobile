@@ -12,6 +12,7 @@ export const ManageWalletsScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header
         bottomBorder
+        titleStyle={styles.title}
         title={t('settings.manage.wallet')}
         style={{ shadowColor: COLORS.transparent }}
       />

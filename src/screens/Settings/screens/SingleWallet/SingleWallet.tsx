@@ -71,9 +71,9 @@ export const SingleWalletScreen = () => {
             <View style={{ paddingHorizontal: '20%' }}>
               <Text
                 numberOfLines={1}
-                fontFamily="Inter_700Bold"
-                fontSize={16}
-                color={COLORS.neutral900}
+                fontFamily="Inter_600SemiBold"
+                fontSize={18}
+                color={COLORS.neutral800}
               >
                 {wallet?.name || 'Wallet'}
               </Text>
