@@ -1,3 +1,4 @@
+import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
@@ -29,6 +30,7 @@ export const styles = StyleSheet.create({
   },
   searchScreen: { flex: 1 },
   searchMain: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundColor: COLORS.neutral0
   }
 });
