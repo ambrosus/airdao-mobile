@@ -18,7 +18,7 @@ import { BottomSheetChoseToken } from '../../../templates/Bridge/BottomSheetChos
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
-import { BottomSheetBridgePreview } from '@components/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
+import { BottomSheetBridgePreview } from '../../../templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
 import { FeeData } from '@lib/bridgeSDK/models/types';
 import {
@@ -26,6 +26,8 @@ import {
   FeeInfo,
   TokenSelector
 } from '@components/modular/Bridge/BridgeForm/components';
+import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
+import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 
 // TODO if user change network we need to save chosen token on input
 
@@ -44,6 +46,7 @@ export const BridgeForm = () => {
 
   const choseTokenRef = useRef<BottomSheetRef>(null);
   const previewRef = useRef<BottomSheetRef>(null);
+  const transactionInfoRef = useRef<BottomSheetRef>(null);
 
   const { t } = useTranslation();
   const [timeoutDelay, setTimeoutDelay] = useState(setTimeout(() => null));
@@ -51,7 +54,8 @@ export const BridgeForm = () => {
     useBridgeContextSelector();
   const { methods, variables } = useBridgeNetworksData({
     choseTokenRef,
-    previewRef
+    previewRef,
+    transactionInfoRef
   });
   const {
     getFeeData,
@@ -63,7 +67,7 @@ export const BridgeForm = () => {
     setBridgeFee,
     getSelectedTokenBalance,
     onPressPreview,
-    withdraw
+    onWithdrawApprove
   } = methods;
   const {
     dataToPreview,
@@ -73,8 +77,14 @@ export const BridgeForm = () => {
     bridgeFee,
     selectedTokenBalance,
     balanceLoader,
-    gasFeeLoader
+    gasFeeLoader,
+    bridgeTransaction,
+    bridgeTransfer
   } = variables;
+  const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
+    bridgeTransfer?.hash,
+    !!Object.keys(bridgeTransfer).length
+  );
 
   useEffect(() => {
     setFeeLoader(true);
@@ -93,12 +103,17 @@ export const BridgeForm = () => {
   ]);
 
   const onPasscodeApprove = async () => {
-    return await withdraw();
+    setTimeout(async () => {
+      await onWithdrawApprove();
+    }, 1000);
   };
   const onAcceptPress = () => {
-    navigation.navigate('Passcode', {
-      onPasscodeApprove
-    });
+    previewRef?.current?.dismiss();
+    setTimeout(() => {
+      navigation.navigate('Passcode', {
+        onPasscodeApprove
+      });
+    }, 500);
   };
 
   return (
@@ -172,6 +187,18 @@ export const BridgeForm = () => {
           dataToPreview={dataToPreview}
           ref={previewRef}
           onAcceptPress={onAcceptPress}
+        />
+        <BottomSheetBridgeTransactionPendingHistory
+          ref={transactionInfoRef}
+          // @ts-ignore
+          transaction={bridgeTransaction}
+          liveTransactionInformation={{
+            stage,
+            confirmations: {
+              current: confirmations,
+              minSafetyBlocks
+            }
+          }}
         />
       </KeyboardDismissingView>
     </KeyboardAvoidingView>

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { NumberUtils } from '@utils/number';
@@ -12,8 +12,12 @@ import { BridgeNetworksSelected } from '@components/modular/Bridge';
 import { Status } from '@components/templates/ExplorerAccount/BridgeTransaction/components/Status/Status';
 import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 
+interface TransactionPendingModel extends BridgeTransactionHistoryDTO {
+  loading?: boolean;
+}
+
 interface BottomSheetBridgeTransactionPendingHistoryProps {
-  transaction: BridgeTransactionHistoryDTO;
+  transaction: TransactionPendingModel;
   liveTransactionInformation: {
     stage: string;
     confirmations: {
@@ -29,8 +33,7 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
 >(({ transaction, liveTransactionInformation }, bottomSheetRef) => {
   const { t } = useTranslation();
 
-  const formattedAmount = NumberUtils.formatAmount(transaction.amount, 3);
-
+  const formattedAmount = NumberUtils.formatAmount(transaction?.amount, 3);
   const renderTransactionStatus = useCallback(
     (stage: number) => {
       if (
@@ -53,75 +56,88 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
   return (
     <BottomSheet ref={bottomSheetRef} swiperIconVisible>
       <Spacer value={verticalScale(16)} />
-      <View style={styles.container}>
-        <Text
-          fontSize={18}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral800}
-          style={styles.heading}
+      {transaction?.loading ? (
+        <View
+          style={{
+            height: 300,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
         >
-          {t('bridge.transaction.sending.heading', {
-            tokenFrom: `${formattedAmount} ${transaction.tokenFrom.name}`,
-            networkTo:
-              SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
-          })}
-        </Text>
-        <Text
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral400}
-          style={styles.description}
-        >
-          {t('bridge.transaction.details.description')}
-        </Text>
-        <BridgeNetworksSelected
-          networkFrom={transaction.networkFrom}
-          networkTo={transaction.networkTo}
-        />
-        <RowStageSection
-          stage={1}
-          placeholder={t('bridge.transaction.processing')}
-        >
-          <Status status={renderTransactionStatus(1.1)} />
-        </RowStageSection>
-        <RowStageSection
-          stage={2}
-          placeholder={t('bridge.transaction.approval')}
-          extraRow={
-            <Row
-              style={styles.stageExtraRow}
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral90}
+          <Spinner size={'large'} />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <Text
+            fontSize={18}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral800}
+            style={styles.heading}
+          >
+            {t('bridge.transaction.sending.heading', {
+              tokenFrom: `${formattedAmount} ${transaction?.tokenFrom?.name}`,
+              networkTo:
+                SHORTEN_NETWORK[transaction?.networkTo as keyof typeof NETWORK]
+            })}
+          </Text>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral400}
+            style={styles.description}
+          >
+            {t('bridge.transaction.details.description')}
+          </Text>
+          <BridgeNetworksSelected
+            networkFrom={transaction?.networkFrom}
+            networkTo={transaction?.networkTo}
+          />
+          <RowStageSection
+            stage={1}
+            placeholder={t('bridge.transaction.processing')}
+          >
+            <Status status={renderTransactionStatus(1.1)} />
+          </RowStageSection>
+          <RowStageSection
+            stage={2}
+            placeholder={t('bridge.transaction.approval')}
+            extraRow={
+              <Row
+                style={styles.stageExtraRow}
+                alignItems="center"
+                justifyContent="space-between"
               >
-                Confirmations
-              </Text>
-              <Status
-                status={renderTransactionStatus(2.2)}
-                steps={{
-                  start: liveTransactionInformation.confirmations.current,
-                  end: liveTransactionInformation.confirmations.minSafetyBlocks
-                }}
-              />
-            </Row>
-          }
-        >
-          <Status status={renderTransactionStatus(2.1)} />
-        </RowStageSection>
-        <RowStageSection
-          stage={3}
-          placeholder={t('bridge.transaction.sending.funds', {
-            networkTo:
-              SHORTEN_NETWORK[transaction.networkTo as keyof typeof NETWORK]
-          })}
-        >
-          <Status status={renderTransactionStatus(3.1)} />
-        </RowStageSection>
-      </View>
+                <Text
+                  fontSize={14}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.neutral90}
+                >
+                  Confirmations
+                </Text>
+                <Status
+                  status={renderTransactionStatus(2.2)}
+                  steps={{
+                    start: liveTransactionInformation.confirmations.current,
+                    end: liveTransactionInformation.confirmations
+                      .minSafetyBlocks
+                  }}
+                />
+              </Row>
+            }
+          >
+            <Status status={renderTransactionStatus(2.1)} />
+          </RowStageSection>
+          <RowStageSection
+            stage={3}
+            placeholder={t('bridge.transaction.sending.funds', {
+              networkTo:
+                SHORTEN_NETWORK[transaction?.networkTo as keyof typeof NETWORK]
+            })}
+          >
+            <Status status={renderTransactionStatus(3.1)} />
+          </RowStageSection>
+        </View>
+      )}
       <Spacer value={verticalScale(36)} />
     </BottomSheet>
   );

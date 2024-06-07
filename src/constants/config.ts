@@ -1,4 +1,5 @@
 import * as Updates from 'expo-updates';
+import { BRIDGE_DATA } from '@constants/bridgeData';
 
 const envs = {
   prod: {
@@ -28,16 +29,7 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
-    WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus.io/ws/txStatus',
-    BRIDGE_RELAY_URLS: {
-      relayUrls: {
-        eth: 'https://relay-eth.ambrosus.io/fees',
-        bsc: 'https://relay-bsc.ambrosus.io/fees'
-      }
-    },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json'
+    ...BRIDGE_DATA.prod
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -66,17 +58,7 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
-    WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus.io/ws/txStatus',
-
-    BRIDGE_RELAY_URLS: {
-      relayUrls: {
-        eth: 'https://relay-eth.ambrosus.io/fees',
-        bsc: 'https://relay-bsc.ambrosus.io/fees'
-      }
-    },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json'
+    ...BRIDGE_DATA.stage
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -105,17 +87,7 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc-testnet.public.blastapi.io',
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
-    WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus-test.io/ws/txStatus',
-
-    BRIDGE_RELAY_URLS: {
-      relayUrls: {
-        eth: 'https://relay-eth.ambrosus-test.io/fees',
-        bsc: 'https://relay-bsc.ambrosus-test.io/fees'
-      }
-    },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/dev/contracts/configs/test.json'
+    ...BRIDGE_DATA.testnet
   }
 };
 

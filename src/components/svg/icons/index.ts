@@ -98,3 +98,4 @@ export * from './History';
 export * from './Failed';
 export * from './EthereumIcon';
 export * from './CheckIconCircle';
+export * from './RightArrowInCircle';

@@ -348,5 +348,8 @@
   "bridge.preview.network.fee": "Network fee",
   "bridge.preview.gas.fee": "Gas fee",
   "bridge.preview.button": "Send funds to Ethereum",
-  "bridge.preview.button.max": "Max"
+  "bridge.preview.button.max": "Max",
+
+  "bridge.transaction.info.header": "Sending 100 AMB to Ethereum",
+  "bridge.transaction.info.subheader": "Your transfer is being processed and will be completed within 5-20 minutes."
 }

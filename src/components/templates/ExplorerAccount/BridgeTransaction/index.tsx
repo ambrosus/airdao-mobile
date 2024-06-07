@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { View } from 'react-native';
 import { styles } from './BridgeTransaction.style';
 
 import { TokenLogo } from '@components/modular';
@@ -9,7 +9,7 @@ import { Status } from './components/Status/Status';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetBridgeTransactionHistory } from '../../Bridge/BottomSheetBridgeTransactionHistory';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { Row, Text } from '@components/base';
+import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
@@ -53,7 +53,7 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
 
   return (
     <>
-      <TouchableWithoutFeedback onPress={onPreviewTransactionDetails}>
+      <Button onPress={onPreviewTransactionDetails}>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
             <Row style={styles.leftContentRow} alignItems="flex-start">
@@ -86,7 +86,7 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
             status={transactionStatus}
           />
         </View>
-      </TouchableWithoutFeedback>
+      </Button>
 
       <BottomSheetBridgeTransactionHistory
         ref={bottomSheetRef}
@@ -101,7 +101,7 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
           stage,
           confirmations: {
             current: confirmations,
-            minSafetyBlocks: minSafetyBlocks
+            minSafetyBlocks
           }
         }}
       />

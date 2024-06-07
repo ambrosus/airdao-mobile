@@ -20,14 +20,21 @@ import {
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
   previewRef: RefObject<BottomSheetRef>;
+  transactionInfoRef: RefObject<BottomSheetRef>;
 }
 
 const DECIMAL_CRYPTO_LIMIT = 5;
 const DECIMAL_USD_LIMIT = 2;
+const DEFAULT_BRIDGE_TRANSACTION = {
+  amount: '0x0',
+  loading: true
+};
+const DEFAULT_BRIDGE_TRANSFER = { hash: '' };
 
 export const useBridgeNetworksData = ({
   choseTokenRef,
-  previewRef
+  previewRef,
+  transactionInfoRef
 }: UseBridgeNetworksDataModel) => {
   const [feeLoader, setFeeLoader] = useState(false);
   const [balanceLoader, setBalanceLoader] = useState(false);
@@ -38,10 +45,21 @@ export const useBridgeNetworksData = ({
   const [selectedTokenBalance, setSelectedTokenBalance] = useState('');
   const [gasFee, setGasFee] = useState(0);
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
+  const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
+  const [bridgeTransaction, setBridgeTransaction] = useState<{
+    amount: string;
+    loading?: boolean;
+  }>(DEFAULT_BRIDGE_TRANSACTION);
 
-  const { selectedAccount, networkNativeCoin } = useBridgeContextSelector();
+  const {
+    selectedAccount,
+    networkNativeCoin,
+    toParams,
+    fromParams,
+    tokenParams,
+    bridgeConfig
+  } = useBridgeContextSelector();
   const { t } = useTranslation();
-  const { tokenParams, bridgeConfig, fromParams } = useBridgeContextSelector();
 
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
     setCurrencySelectorWidth(event.nativeEvent.layout.width);
@@ -55,7 +73,7 @@ export const useBridgeNetworksData = ({
   }, [currencySelectorWidth]);
 
   const onSelectMaxAmount = () => {
-    setAmountToExchange('999');
+    setAmountToExchange(selectedTokenBalance);
 
     if (tokenParams.value.renderTokenItem.isNativeCoin) {
       setMax(true);
@@ -70,11 +88,6 @@ export const useBridgeNetworksData = ({
         token,
         ownerAddress: selectedAccount?.address || ''
       });
-      // console.log('balanceParams', {
-      //   from: fromParams.value.id,
-      //   token,
-      //   ownerAddress: selectedAccount?.address || ''
-      // });
       setSelectedTokenBalance(
         NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || ''
       );
@@ -181,7 +194,7 @@ export const useBridgeNetworksData = ({
           feeData: bridgeFee.feeData,
           gasFee
         };
-        // console.log('withdrawData', withdrawData);
+
         return await bridgeWithdraw({
           bridgeConfig,
           from: fromParams.value.id,
@@ -190,7 +203,7 @@ export const useBridgeNetworksData = ({
       }
     } catch (e) {
       // console.log('WITHDRAW ERROR', e);
-      // ignore
+      // ignore;
     }
   };
 
@@ -217,6 +230,29 @@ export const useBridgeNetworksData = ({
     }
   };
 
+  const onWithdrawApprove = async () => {
+    setBridgeTransaction(DEFAULT_BRIDGE_TRANSACTION);
+    setBridgeTransfer(DEFAULT_BRIDGE_TRANSFER);
+    transactionInfoRef.current?.show();
+    try {
+      const res = await withdraw();
+      if (res) {
+        setBridgeTransfer(res);
+        const bridgeTransaction = {
+          eventId: '',
+          networkFrom: fromParams.value.id || '',
+          networkTo: toParams.value.id || '',
+          tokenFrom: tokenParams.value.pairs[0],
+          tokenTo: tokenParams.value.pairs[1],
+          amount: res.value._hex || '0x0'
+        };
+        setBridgeTransaction(bridgeTransaction);
+      }
+    } catch (e) {
+      transactionInfoRef.current?.dismiss();
+    }
+  };
+
   const variables = {
     dataToPreview,
     amountToExchange,
@@ -225,7 +261,9 @@ export const useBridgeNetworksData = ({
     bridgeFee,
     selectedTokenBalance,
     balanceLoader,
-    gasFeeLoader
+    gasFeeLoader,
+    bridgeTransaction,
+    bridgeTransfer
   };
   const methods = {
     getFeeData,
@@ -237,7 +275,7 @@ export const useBridgeNetworksData = ({
     setBridgeFee,
     getSelectedTokenBalance,
     onPressPreview,
-    withdraw
+    onWithdrawApprove
   };
   return {
     variables,
