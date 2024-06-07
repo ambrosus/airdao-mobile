@@ -14,8 +14,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: 8,
     width: '50%',
+    height: 43,
     paddingHorizontal: scale(20),
-    paddingVertical: scale(8),
     backgroundColor: COLORS.neutral100
   },
   contentContainerStyle: {
