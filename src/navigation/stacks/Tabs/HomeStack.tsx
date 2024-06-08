@@ -54,6 +54,10 @@ export const HomeStack = () => {
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
         <Stack.Screen
           name="CreateWalletSuccess"
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false
+          }}
           component={CreateWalletSuccess}
         />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />

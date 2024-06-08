@@ -38,16 +38,16 @@ export const AccessKeysMnemonicTab = ({
     (index: number): StyleProp<ViewStyle> => {
       if (index % 2 !== 0) {
         return {
-          borderTopRightRadius: 16,
-          borderBottomRightRadius: 16,
+          borderTopRightRadius: 8,
+          borderBottomRightRadius: 8,
           borderLeftWidth: 0.5,
           borderLeftColor: COLORS.neutral200
         };
       }
 
       return {
-        borderTopLeftRadius: 16,
-        borderBottomLeftRadius: 16
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8
       };
     },
     []

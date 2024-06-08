@@ -9,6 +9,9 @@ import { Text } from '@components/base';
 import { SecondaryButton } from '@components/modular';
 import { InfoIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { BottomAwareSafeAreaView } from '@components/composite';
+import { verticalScale } from '@utils/scaling';
+import { isIos } from '@utils/isPlatform';
 
 type Props = NativeStackScreenProps<
   HomeParamsList,
@@ -41,15 +44,20 @@ export const ImportWalletPrivateKeyError = ({ navigation, route }: Props) => {
           </Text>
         </View>
       </View>
-      <SecondaryButton style={styles.button} onPress={navigation.goBack}>
-        <Text
-          fontSize={16}
-          fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral800}
-        >
-          {t('button.try.again')}
-        </Text>
-      </SecondaryButton>
+      <BottomAwareSafeAreaView
+        style={styles.button}
+        paddingBottom={isIos ? 0 : verticalScale(24)}
+      >
+        <SecondaryButton onPress={navigation.goBack}>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
+          >
+            {t('button.try.again')}
+          </Text>
+        </SecondaryButton>
+      </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
 };

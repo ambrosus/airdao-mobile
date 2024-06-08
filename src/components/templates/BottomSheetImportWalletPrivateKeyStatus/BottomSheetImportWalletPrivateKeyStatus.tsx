@@ -33,7 +33,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
           routes: [{ name: 'AppInit' }]
         })
       );
-    }, 500);
+    }, 1000);
   }, [bottomSheetProcessingRef, navigation]);
 
   const renderBottomSheetView = useMemo(() => {

@@ -260,7 +260,7 @@
   "singleWallet.warning.title": "Keep your Access keys safe",
   "singleWallet.warning.description.top": "Your Access keys provides full access to you account and funds.",
   "singleWallet.warning.button": "Reveal access keys",
-  "singleWallet.warning.description.bottom": "Do not share this with anyone. The AirDAO team will never request this, but phishers might.",
+  "singleWallet.warning.description.bottom": "Do not share this with anyone.\nThe AirDAO team will never request this, but phishers might.",
   "singleWallet.access.keys": "View access keys",
   "singleWallet.access.keys.title": "Access keys",
   "singleWallet.access.key.title": "Access key",
