@@ -26,8 +26,8 @@ import {
   FeeInfo,
   TokenSelector
 } from '@components/modular/Bridge/BridgeForm/components';
-import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
+import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 
 // TODO if user change network we need to save chosen token on input
 
@@ -65,7 +65,6 @@ export const BridgeForm = () => {
     onTokenPress,
     setFeeLoader,
     setBridgeFee,
-    getSelectedTokenBalance,
     onPressPreview,
     onWithdrawApprove
   } = methods;
@@ -75,8 +74,6 @@ export const BridgeForm = () => {
     inputStyles,
     feeLoader,
     bridgeFee,
-    selectedTokenBalance,
-    balanceLoader,
     gasFeeLoader,
     bridgeTransaction,
     bridgeTransfer
@@ -89,7 +86,6 @@ export const BridgeForm = () => {
   useEffect(() => {
     setFeeLoader(true);
     setBridgeFee(null);
-    getSelectedTokenBalance(tokenParams.value.renderTokenItem).then();
     if (!!amountToExchange) {
       clearTimeout(timeoutDelay);
       setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
@@ -152,8 +148,8 @@ export const BridgeForm = () => {
             />
             <Spacer value={scale(8)} />
             <BalanceInfo
-              loader={balanceLoader}
-              tokenBalance={selectedTokenBalance}
+              loader={tokenParams.loader}
+              tokenBalance={tokenParams.value.renderTokenItem.balance}
               tokenSymbol={tokenParams.value.renderTokenItem.symbol}
               onMaxPress={onSelectMaxAmount}
             />

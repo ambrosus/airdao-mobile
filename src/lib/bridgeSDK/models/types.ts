@@ -12,13 +12,11 @@ export interface EnvData {
 
 export interface Token {
   address: string;
+  bridgeNetwork: BridgeNetwork | string; // for which bridge this token was created, eth or bsc (can't be amb)
   decimals: number;
   isNativeCoin: boolean;
-
-  network: Network; // on which network this token was deployed
-  bridgeNetwork: BridgeNetwork; // for which bridge this token was created, eth or bsc (can't be amb)
-
   name: string;
+  network: Network | string; // on which network this token was deployed
   symbol: string;
 }
 

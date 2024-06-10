@@ -22,9 +22,11 @@ export interface BridgePairsModel {
   pairs: [Token, Token][];
   provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
-
+export interface RenderTokenItem extends Token {
+  balance: number | string;
+}
 export interface RenderTokenItem {
-  renderTokenItem: Token;
+  renderTokenItem: RenderTokenItem;
   name: PairsNetworksNamesModel;
   pairs: [Token, Token];
   provider?: Promise<ethers.providers.JsonRpcProvider | undefined>;

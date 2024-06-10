@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 interface BalanceInfoModel {
   loader: boolean;
-  tokenBalance: string;
+  tokenBalance: string | number;
   tokenSymbol: string;
   onMaxPress: () => void;
 }

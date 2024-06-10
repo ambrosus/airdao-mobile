@@ -8,17 +8,49 @@ import {
   DEFAULT_ETH_NETWORK,
   DEFAULT_TOKEN_PAIRS
 } from '@contexts/Bridge/constants';
+import { getBridgeBalance } from '@lib';
+import { NumberUtils } from '@utils/number';
+import { formatEther } from 'ethers/lib/utils';
 
 export const BridgeContext = () => {
   const [config, setConfig] = useState<any>({});
+  const [selectedToken, setSelectedToken] =
+    // @ts-ignore
+    useState<RenderTokenItem>(DEFAULT_TOKEN_PAIRS);
+  const [tokenDataLoader, setTokenDataLoader] = useState(false);
+
+  const setSelectedTokenData = async (pairs: RenderTokenItem) => {
+    try {
+      setTokenDataLoader(true);
+      const balance = await getBridgeBalance({
+        from: from.id,
+        token: pairs.renderTokenItem,
+        ownerAddress: selectedAccount?.address || ''
+      });
+      const tokenData = {
+        ...pairs
+      };
+      tokenData.renderTokenItem.balance =
+        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || '';
+      setSelectedToken(tokenData);
+      return balance;
+    } catch (e) {
+      // ignore
+    } finally {
+      setTokenDataLoader(false);
+    }
+  };
 
   useEffect(() => {
     const getConfig = async () => {
       return await API.bridgeService.getBridgeParams();
     };
-    getConfig().then((r) => {
+    getConfig().then(async (r) => {
       setConfig(r);
+      // @ts-ignore
+      await setSelectedTokenData(DEFAULT_TOKEN_PAIRS);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getNetworkNames = (name: string) => {
@@ -48,9 +80,6 @@ export const BridgeContext = () => {
   const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
     null
   );
-  const [selectedToken, setSelectedToken] =
-    // @ts-ignore
-    useState<RenderTokenItem>(DEFAULT_TOKEN_PAIRS);
   const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
   const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
   const [tokensForSelector, setTokensForSelector] =
@@ -129,7 +158,8 @@ export const BridgeContext = () => {
     },
     tokenParams: {
       value: selectedToken,
-      setter: setSelectedToken
+      setter: setSelectedTokenData,
+      loader: tokenDataLoader
     },
     networkNativeCoin,
     bridges,

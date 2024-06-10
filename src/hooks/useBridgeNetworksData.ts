@@ -10,12 +10,8 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
 import { BottomSheetRef } from '@components/composite';
-import {
-  bridgeWithdraw,
-  currentProvider,
-  getBridgeBalance,
-  getBridgeFeeData
-} from '@lib';
+import { currentProvider, getBridgeFeeData } from '@lib';
+import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
@@ -38,12 +34,10 @@ export const useBridgeNetworksData = ({
   transactionInfoRef
 }: UseBridgeNetworksDataModel) => {
   const [feeLoader, setFeeLoader] = useState(false);
-  const [balanceLoader, setBalanceLoader] = useState(false);
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
-  const [selectedTokenBalance, setSelectedTokenBalance] = useState('');
   const [gasFee, setGasFee] = useState(0);
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
   const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
@@ -75,7 +69,7 @@ export const useBridgeNetworksData = ({
   }, [currencySelectorWidth]);
 
   const onSelectMaxAmount = () => {
-    setAmountToExchange(selectedTokenBalance);
+    setAmountToExchange(`${tokenParams.value.renderTokenItem.balance}`);
 
     if (tokenParams.value.renderTokenItem.isNativeCoin) {
       setMax(true);
@@ -83,24 +77,6 @@ export const useBridgeNetworksData = ({
   };
 
   // @ts-ignore
-  const getSelectedTokenBalance = async (token) => {
-    try {
-      setBalanceLoader(true);
-      const balance = await getBridgeBalance({
-        from: fromParams.value.id,
-        token,
-        ownerAddress: selectedAccount?.address || ''
-      });
-      setSelectedTokenBalance(
-        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || ''
-      );
-      return balance;
-    } catch (e) {
-      // ignore
-    } finally {
-      setBalanceLoader(false);
-    }
-  };
 
   const getFeeData = async () => {
     // TODO Handle situation when user has less then fee
@@ -265,8 +241,6 @@ export const useBridgeNetworksData = ({
     inputStyles,
     feeLoader,
     bridgeFee,
-    selectedTokenBalance,
-    balanceLoader,
     gasFeeLoader,
     bridgeTransaction,
     bridgeTransfer
@@ -279,7 +253,6 @@ export const useBridgeNetworksData = ({
     onTokenPress,
     setFeeLoader,
     setBridgeFee,
-    getSelectedTokenBalance,
     onPressPreview,
     onWithdrawApprove
   };
