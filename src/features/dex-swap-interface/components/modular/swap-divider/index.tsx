@@ -10,7 +10,7 @@ import { scale } from '@utils/scaling';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 
 export const SwapDivider = () => {
-  const { onSwapSelectedTokens } = useDEXSwapActionsHandler();
+  const { onReverseSelectedTokens } = useDEXSwapActionsHandler();
   const { selectedTokens } = useDEXSwapContextSelector();
 
   const disabled = useMemo(() => {
@@ -24,7 +24,7 @@ export const SwapDivider = () => {
         <View style={styles.wrapper}>
           <Button
             disabled={disabled}
-            onPress={onSwapSelectedTokens}
+            onPress={onReverseSelectedTokens}
             style={styles.button}
           >
             <SwapIcon scale={0.75} color={COLORS.neutral400} />

@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
-import { INITIAL_SELECTED_TOKENS, INITIAL_SLIPPAGE_TOLERANCE } from './initial';
+import {
+  INITIAL_SELECTED_TOKENS,
+  INITIAL_SLIPPAGE_TOLERANCE,
+  INITIAL_TOKENS_AMOUNT
+} from './initial';
 import { FIELD } from '../types/fields';
 import { TokenInfo } from '../types';
 import { BottomSheetRef } from '@components/composite';
@@ -25,10 +29,7 @@ export const DEXSwapContext = () => {
 
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
     Record<keyof typeof FIELD, string>
-  >({
-    INPUT: '',
-    OUTPUT: ''
-  });
+  >(INITIAL_TOKENS_AMOUNT);
 
   const onChangeSelectedTokens = (key: string, token: TokenInfo) => {
     setSelectedTokensAmount({
@@ -120,6 +121,12 @@ export const DEXSwapContext = () => {
     calculateUSDPrice
   ]);
 
+  const reset = useCallback(() => {
+    setSlippageTollerance(INITIAL_SLIPPAGE_TOLERANCE);
+    setSelectedTokens(INITIAL_SELECTED_TOKENS);
+    setSelectedTokensAmount(INITIAL_TOKENS_AMOUNT);
+  }, []);
+
   return {
     bottomSheetRefInput,
     bottomSheetRefOutput,
@@ -133,7 +140,8 @@ export const DEXSwapContext = () => {
     onChangeSlippageTollerance,
     onChangeSelectedTokensAmount,
     onApplyOppositeCurrencyAmount,
-    setLastChangedInput
+    setLastChangedInput,
+    reset
   };
 };
 

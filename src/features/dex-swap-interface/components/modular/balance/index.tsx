@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
+import { View } from 'react-native';
+import { formatEther } from 'ethers/lib/utils';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { useDEXSwapBalance } from '@features/dex-swap-interface/lib/hooks/use-dex-swap-balance';
+import { useDEXSwapBalance } from '@features/dex-swap-interface/lib/hooks';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { TokenInfo } from '@features/dex-swap-interface/types';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
@@ -8,7 +10,6 @@ import { scale } from '@utils/scaling';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils } from '@utils/number';
 import { CryptoCurrencyCode } from '@appTypes';
-import { View } from 'react-native';
 
 interface BalanceProps {
   type: keyof typeof FIELD;
@@ -27,12 +28,19 @@ export const Balance = ({ type }: BalanceProps) => {
   );
 
   const onMaxAmonutPress = useCallback(() => {
+    const fullAmount = NumberUtils.limitDecimalCount(
+      // @ts-ignore
+      formatEther(selectedTokenBalance?._hex),
+      18
+    );
+
     if (selectedTokenBalance.beatufied) {
-      onChangeSelectedTokensAmount(type, selectedTokenBalance.beatufied);
+      onChangeSelectedTokensAmount(type, fullAmount);
       setLastChangedInput(type);
     }
   }, [
     selectedTokenBalance.beatufied,
+    selectedTokenBalance._hex,
     onChangeSelectedTokensAmount,
     type,
     setLastChangedInput

@@ -26,24 +26,60 @@ class DEXSwapService {
       throw error;
     }
   }
-
-  async checkAllowance({ tokenFrom, walletAddress }: CheckAllowanceArgs) {
+  async checkAllowance({
+    addressFrom,
+    privateKey,
+    amountAllowance
+  }: CheckAllowanceArgs) {
     try {
-      if (
-        tokenFrom &&
-        tokenFrom !== DEX_SUPPORTED_TOKENS.default[environment].address
-      ) {
-        const contract = new ethers.Contract(
-          tokenFrom,
-          ERC20_ALLOWANCE_ABI,
-          this.provider
+      if (addressFrom !== DEX_SUPPORTED_TOKENS.default[environment].address) {
+        const signer = new ethers.Wallet(privateKey, this.provider);
+
+        const erc20Contract = new ethers.Contract(
+          ethers.constants.AddressZero,
+          ERC20_ALLOWANCE_ABI
         );
 
-        const allowance = await contract.allowance(
-          walletAddress,
-          walletAddress
+        const erc20 = erc20Contract.attach(addressFrom).connect(signer);
+
+        const allowance = await erc20.allowance(
+          await signer.getAddress(),
+          Config.DEX_ROUTER_V2_ADDRESS
         );
-        return allowance.toString();
+
+        const bnAmountAllowance = ethers.utils.parseUnits(
+          String(amountAllowance),
+          18
+        );
+
+        return allowance.lt(bnAmountAllowance);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async setAllowance({
+    privateKey,
+    addressFrom,
+    amountAllowance
+  }: CheckAllowanceArgs) {
+    try {
+      if (addressFrom !== DEX_SUPPORTED_TOKENS.default[environment].address) {
+        const signer = new ethers.Wallet(privateKey, this.provider);
+
+        const erc20Contract = new ethers.Contract(
+          ethers.constants.AddressZero,
+          ERC20_ALLOWANCE_ABI
+        );
+
+        const erc20 = erc20Contract.attach(addressFrom).connect(signer);
+
+        const bnApproveAllowance = ethers.utils.parseUnits(
+          String(amountAllowance),
+          18
+        );
+
+        return erc20.approve(Config.DEX_ROUTER_V2_ADDRESS, bnApproveAllowance);
       }
     } catch (error) {
       throw error;

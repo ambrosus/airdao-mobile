@@ -34,7 +34,8 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.production
+    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.production,
+    DEX_ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -64,7 +65,7 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.prod
+    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.production
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus-test.io',
@@ -96,7 +97,8 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
     BRIDGE_CONFIG: bridgeConfig.test,
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
-    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.testnet
+    DEX_SUPPORTED_TOKENS: DEX_SUPPORTED_TOKENS.tokens.testnet,
+    DEX_ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755'
   }
 };
 

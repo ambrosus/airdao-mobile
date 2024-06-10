@@ -33,7 +33,7 @@ export function useDEXSwapActionsHandler() {
     []
   );
 
-  const onSwapSelectedTokens = useCallback(() => {
+  const onReverseSelectedTokens = useCallback(() => {
     setSelectedTokens({
       [FIELD.INPUT]: selectedTokens.OUTPUT,
       [FIELD.OUTPUT]: selectedTokens.INPUT
@@ -58,7 +58,7 @@ export function useDEXSwapActionsHandler() {
 
   return {
     buttonActionString,
-    onSwapSelectedTokens,
+    onReverseSelectedTokens,
     isSomeTokenNotSelected
   };
 }

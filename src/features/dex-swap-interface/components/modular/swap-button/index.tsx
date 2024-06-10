@@ -1,16 +1,14 @@
-import React, { useMemo } from 'react';
-import { Alert } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
 import { PrimaryButton } from '@components/modular';
-import { Text } from '@components/base';
+import { Spinner, Text } from '@components/base';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { COLORS } from '@constants/colors';
+import { useDEXSwapAllowance } from '@features/dex-swap-interface/lib';
 
 export const SwapButton = () => {
+  const { isAllowanceLower, increaseAllowance, isAllowanceProcessing } =
+    useDEXSwapAllowance();
   const { selectedTokensAmount } = useDEXSwapContextSelector();
-
-  const onSwap = () => {
-    Alert.alert('Swap');
-  };
 
   const isEmptyAmount = useMemo(() => {
     return (
@@ -18,12 +16,21 @@ export const SwapButton = () => {
     );
   }, [selectedTokensAmount]);
 
+  const onSwap = useCallback(() => {
+    if (!isAllowanceProcessing) {
+      increaseAllowance();
+    }
+  }, [increaseAllowance, isAllowanceProcessing]);
+
   const buttonLabel = useMemo(() => {
     if (isEmptyAmount) {
       return 'Enter amount';
+    } else if (isAllowanceLower) {
+      return 'Increase allowance';
     }
+
     return 'Swap';
-  }, [isEmptyAmount]);
+  }, [isAllowanceLower, isEmptyAmount]);
 
   return (
     <PrimaryButton
@@ -34,9 +41,13 @@ export const SwapButton = () => {
       }
       onPress={onSwap}
     >
-      <Text color={isEmptyAmount ? COLORS.neutral400 : COLORS.neutral0}>
-        {buttonLabel}
-      </Text>
+      {isAllowanceProcessing ? (
+        <Spinner size="small" />
+      ) : (
+        <Text color={isEmptyAmount ? COLORS.neutral400 : COLORS.neutral0}>
+          {buttonLabel}
+        </Text>
+      )}
     </PrimaryButton>
   );
 };
