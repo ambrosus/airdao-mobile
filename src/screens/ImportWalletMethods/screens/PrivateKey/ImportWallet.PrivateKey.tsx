@@ -71,7 +71,7 @@ export const ImportWalletPrivateKey = () => {
         navigation.navigate('ImportWalletPrivateKeyError', {
           error: errorStatus
         });
-      }, 1200);
+      }, 500);
 
       setStatus(IMPORT_PROCESS_STATUS.PENDING);
     }
