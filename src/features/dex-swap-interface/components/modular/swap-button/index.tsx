@@ -3,12 +3,17 @@ import { PrimaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { COLORS } from '@constants/colors';
-import { useDEXSwapAllowance } from '@features/dex-swap-interface/lib';
+import {
+  useDEXSwapAllowance,
+  useDEXSwapBalance
+} from '@features/dex-swap-interface/lib';
+import { FIELD } from '@features/dex-swap-interface/types/fields';
 
 export const SwapButton = () => {
   const { isAllowanceLower, increaseAllowance, isAllowanceProcessing } =
     useDEXSwapAllowance();
-  const { selectedTokensAmount } = useDEXSwapContextSelector();
+  const { selectedTokensAmount, selectedTokens } = useDEXSwapContextSelector();
+  const { selectedTokenBalance } = useDEXSwapBalance(selectedTokens.INPUT);
 
   const isEmptyAmount = useMemo(() => {
     return (
@@ -27,10 +32,20 @@ export const SwapButton = () => {
       return 'Enter amount';
     } else if (isAllowanceLower) {
       return 'Increase allowance';
+    } else if (
+      selectedTokenBalance.beatufied &&
+      +selectedTokenBalance.beatufied < +selectedTokensAmount[FIELD.INPUT]
+    ) {
+      return 'Insufficient funds';
     }
 
     return 'Swap';
-  }, [isAllowanceLower, isEmptyAmount]);
+  }, [
+    isAllowanceLower,
+    isEmptyAmount,
+    selectedTokenBalance.beatufied,
+    selectedTokensAmount
+  ]);
 
   return (
     <PrimaryButton
