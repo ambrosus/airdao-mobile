@@ -18,75 +18,84 @@ export const usePasscodeEntryRevealer = () => {
   const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
 
   const prevAppState = useRef<AppStateStatus>(AppState.currentState);
-  const timestampWhenFocused = useRef<number | null>(null);
+  const timestampWhenHidden = useRef<number | null>(null);
 
   const handleAppStateChange = useCallback(
     async (nextAppState: AppStateStatus) => {
-      const isBiometricAuthenticationInProgress = await Cache.getItem(
-        CacheKey.isBiometricAuthenticationInProgress
-      );
+      if (
+        prevAppState.current === 'active' &&
+        APP_HIDDEN_STATES.includes(nextAppState)
+      ) {
+        // App is moving to the background
+        timestampWhenHidden.current = Date.now();
+      }
 
-      if (isBiometricAuthenticationInProgress) {
-        if (nextAppState === 'inactive' && prevAppState.current === 'active')
-          return;
+      if (
+        APP_HIDDEN_STATES.includes(prevAppState.current) &&
+        nextAppState === 'active'
+      ) {
+        // App is moving to the foreground
+        const currentTime = Date.now();
 
-        await Cache.setItem(
-          CacheKey.isBiometricAuthenticationInProgress,
-          false
-        );
+        if (timestampWhenHidden.current) {
+          const timeDiff = currentTime - timestampWhenHidden.current;
+          if (timeDiff > REQUIRE_DELAY_IN_SECONDS) {
+            // Require authentication if the time difference is greater than the set delay
+            const isBiometricAuthenticationInProgress = await Cache.getItem(
+              CacheKey.isBiometricAuthenticationInProgress
+            );
 
-        if (nextAppState === 'active') {
-          if (APP_HIDDEN_STATES.includes(prevAppState.current)) {
-            const currentTime = new Date().getTime();
-
-            // Findes difference between app state changed and redirect or return to correct screen
-            const isTimestampDiffHaveRevealPass = timestampWhenFocused.current
-              ? currentTime - timestampWhenFocused.current >
-                REQUIRE_DELAY_IN_SECONDS
-              : false;
-
-            if (isTimestampDiffHaveRevealPass) {
-              if (isFaceIDEnabled || isPasscodeEnabled) {
-                AirDAOEventDispatcher.dispatch(
-                  AirDAOEventType.CloseAllModals,
-                  null
-                );
-                setTimeout(() => {
-                  navigation.navigate('Passcode');
-                }, 500);
-              }
+            if (
+              !isBiometricAuthenticationInProgress &&
+              (isPasscodeEnabled || isFaceIDEnabled)
+            ) {
+              AirDAOEventDispatcher.dispatch(
+                AirDAOEventType.CloseAllModals,
+                null
+              );
+              setTimeout(() => {
+                navigation.navigate('Passcode');
+              }, 500);
             }
           }
         }
-
-        return;
       }
+
       prevAppState.current = nextAppState;
     },
-    [isFaceIDEnabled, isPasscodeEnabled, navigation]
+    [isPasscodeEnabled, isFaceIDEnabled, navigation]
   );
 
   useEffect(() => {
-    // Final implementation of navigation & listener
     const appStateChangeListener = (nextAppState: AppStateStatus) => {
       if (!loading && !EXCLUDED_PASSCODE_ROUTES.includes(currentRoute)) {
         handleAppStateChange(nextAppState);
       }
     };
 
-    AppState.addEventListener('change', appStateChangeListener);
+    const subscription = AppState.addEventListener(
+      'change',
+      appStateChangeListener
+    );
+
+    return () => {
+      subscription.remove();
+    };
   }, [currentRoute, loading, handleAppStateChange]);
 
-  // Effect with app state listener & setting date when focused/hidden
   useEffect(() => {
     const focusListener = (nextAppState: AppStateStatus) => {
       if (APP_HIDDEN_STATES.includes(nextAppState)) {
-        timestampWhenFocused.current = new Date().getTime();
+        timestampWhenHidden.current = Date.now();
       } else if (nextAppState === 'active') {
-        timestampWhenFocused.current = null;
+        timestampWhenHidden.current = null;
       }
     };
 
-    AppState.addEventListener('change', focusListener);
+    const subscription = AppState.addEventListener('change', focusListener);
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 };
