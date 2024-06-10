@@ -126,10 +126,10 @@ export const PrivateKeyMaskedInput = forwardRef<
           key === ' ' &&
           maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
         ) {
-          setPrivateKey(value + ' ');
+          setPrivateKey((prevValue) => prevValue + ' ');
         } else if (
           _isAlphanumeric(key) &&
-          maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
+          maskedValue.length < PRIVATE_KEY_MAX_LENGTH // Adjusted condition here
         ) {
           // Insert the key at the current caret position
           const currentPos =
