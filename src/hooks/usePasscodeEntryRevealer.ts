@@ -8,7 +8,7 @@ import { useCurrentRoute } from '@contexts';
 import usePasscode from '@contexts/Passcode';
 
 const APP_HIDDEN_STATES = ['inactive', 'background'];
-const REQUIRE_DELAY_IN_SECONDS = __DEV__ ? 10000 : 2 * 60 * 1000;
+const REQUIRE_DELAY_IN_SECONDS = 2 * 60 * 1000;
 
 const EXCLUDED_PASSCODE_ROUTES = ['SuccessSetupSecurity', 'ChangePasscode'];
 
@@ -30,15 +30,13 @@ export const usePasscodeEntryRevealer = () => {
         timestampWhenHidden.current = Date.now();
       }
 
-      if (
-        APP_HIDDEN_STATES.includes(prevAppState.current) &&
-        nextAppState === 'active'
-      ) {
+      if (nextAppState === 'active') {
         // App is moving to the foreground
         const currentTime = Date.now();
 
         if (timestampWhenHidden.current) {
           const timeDiff = currentTime - timestampWhenHidden.current;
+
           if (timeDiff > REQUIRE_DELAY_IN_SECONDS) {
             // Require authentication if the time difference is greater than the set delay
             const isBiometricAuthenticationInProgress = await Cache.getItem(
@@ -47,7 +45,8 @@ export const usePasscodeEntryRevealer = () => {
 
             if (
               !isBiometricAuthenticationInProgress &&
-              (isPasscodeEnabled || isFaceIDEnabled)
+              (isPasscodeEnabled || isFaceIDEnabled) &&
+              !EXCLUDED_PASSCODE_ROUTES.includes(currentRoute)
             ) {
               AirDAOEventDispatcher.dispatch(
                 AirDAOEventType.CloseAllModals,
@@ -56,6 +55,7 @@ export const usePasscodeEntryRevealer = () => {
               setTimeout(() => {
                 navigation.navigate('Passcode');
               }, 500);
+              timestampWhenHidden.current = null;
             }
           }
         }
@@ -63,12 +63,12 @@ export const usePasscodeEntryRevealer = () => {
 
       prevAppState.current = nextAppState;
     },
-    [isPasscodeEnabled, isFaceIDEnabled, navigation]
+    [isPasscodeEnabled, isFaceIDEnabled, navigation, currentRoute]
   );
 
   useEffect(() => {
     const appStateChangeListener = (nextAppState: AppStateStatus) => {
-      if (!loading && !EXCLUDED_PASSCODE_ROUTES.includes(currentRoute)) {
+      if (!loading) {
         handleAppStateChange(nextAppState);
       }
     };
@@ -81,21 +81,17 @@ export const usePasscodeEntryRevealer = () => {
     return () => {
       subscription.remove();
     };
-  }, [currentRoute, loading, handleAppStateChange]);
+  }, [loading, handleAppStateChange]);
 
   useEffect(() => {
     const focusListener = (nextAppState: AppStateStatus) => {
       if (APP_HIDDEN_STATES.includes(nextAppState)) {
         timestampWhenHidden.current = Date.now();
-      } else if (nextAppState === 'active') {
-        timestampWhenHidden.current = null;
       }
     };
 
-    const subscription = AppState.addEventListener('change', focusListener);
-
-    return () => {
-      subscription.remove();
-    };
+    AppState.addEventListener('change', focusListener);
   }, []);
+
+  return;
 };
