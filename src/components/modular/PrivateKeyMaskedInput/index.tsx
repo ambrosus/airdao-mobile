@@ -39,6 +39,8 @@ const SELECTION_INITIAL_STATE = {
   end: null
 };
 
+const PRIVATE_KEY_MAX_LENGTH = 64;
+
 export const PrivateKeyMaskedInput = forwardRef<
   InputRef,
   PrivateKeyMaskedInputProps
@@ -86,6 +88,7 @@ export const PrivateKeyMaskedInput = forwardRef<
       if (!secureTextEntry) {
         setPrivateKey(text);
       } else if (secureTextEntry && clipboard.includes(text)) {
+        setCurrentCarretPosition(text.length);
         setPrivateKey(text);
       }
     },
@@ -95,6 +98,12 @@ export const PrivateKeyMaskedInput = forwardRef<
   const _isSelectionEmpty = useMemo(() => {
     return selection.start === null || selection.end === null;
   }, [selection]);
+
+  const maskedValue = useMemo(() => {
+    return secureTextEntry
+      ? Array.from({ length: value.length }).fill('*').join('')
+      : value;
+  }, [secureTextEntry, value]);
 
   const onKeyPress = useCallback(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
@@ -115,7 +124,11 @@ export const PrivateKeyMaskedInput = forwardRef<
           }
         } else if (key === ' ') {
           setPrivateKey(value + ' ');
-        } else if (secureTextEntry && _isAlphanumeric(key)) {
+        } else if (
+          secureTextEntry &&
+          _isAlphanumeric(key) &&
+          maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
+        ) {
           // Insert the key at the current caret position
           const currentPos =
             currentCarretPosition !== null
@@ -130,22 +143,16 @@ export const PrivateKeyMaskedInput = forwardRef<
       }
     },
     [
-      _isSelectionEmpty,
       secureTextEntry,
-      currentCarretPosition,
-      selection.end,
+      maskedValue,
+      _isSelectionEmpty,
       selection.start,
+      selection.end,
+      value,
       setPrivateKey,
-      setSelection,
-      value
+      currentCarretPosition
     ]
   );
-
-  const maskedValue = useMemo(() => {
-    return secureTextEntry
-      ? Array.from({ length: value.length }).fill('*').join('')
-      : value;
-  }, [secureTextEntry, value]);
 
   const placeholder = useMemo(() => {
     return secureTextEntry
