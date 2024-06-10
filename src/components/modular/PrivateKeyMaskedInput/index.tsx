@@ -122,7 +122,10 @@ export const PrivateKeyMaskedInput = forwardRef<
           } else {
             setPrivateKey(value.slice(0, -1));
           }
-        } else if (key === ' ') {
+        } else if (
+          key === ' ' &&
+          maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
+        ) {
           setPrivateKey(value + ' ');
         } else if (
           secureTextEntry &&
