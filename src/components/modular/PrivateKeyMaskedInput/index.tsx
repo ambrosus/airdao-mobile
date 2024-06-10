@@ -128,7 +128,6 @@ export const PrivateKeyMaskedInput = forwardRef<
         ) {
           setPrivateKey(value + ' ');
         } else if (
-          secureTextEntry &&
           _isAlphanumeric(key) &&
           maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
         ) {
