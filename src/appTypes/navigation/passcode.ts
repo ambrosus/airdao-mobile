@@ -1,4 +1,3 @@
-export interface PasscodeModel {
-  onPasscodeApprove?: () => void;
-  title?: string;
+export interface passcodeModel {
+  onPasscodeApprove: () => void;
 }

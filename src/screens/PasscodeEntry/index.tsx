@@ -30,15 +30,6 @@ export const PasscodeEntry = () => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
   const onPasscodeApprove = params?.onPasscodeApprove;
 
-  const onPasscodeEntry = () => {
-    if (typeof onPasscodeApprove === 'function') {
-      onPasscodeApprove();
-    }
-
-    return null;
-  };
-
-
   const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
 
@@ -69,6 +60,13 @@ export const PasscodeEntry = () => {
       }
     }, 0);
   }, [navigation]);
+  const onPasscodeEntry = () => {
+    if (typeof onPasscodeApprove === 'function') {
+      onPasscodeApprove();
+      closePasscodeEntry();
+    }
+    return null;
+  };
 
   const authenticateWithBiometrics = useCallback(async () => {
     automaticFaceIdCalled.current = true;

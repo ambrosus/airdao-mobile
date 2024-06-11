@@ -194,14 +194,10 @@ export const useBridgeNetworksData = ({
       if (_gasEstimate._hex) {
         const provider = await currentProvider(fromParams.value.id);
         const gasPrice = await provider?.getGasPrice();
-        const gasAmount = CurrencyUtils.toUSD(
-          gasPrice?._hex,
-          _gasEstimate?._hex
-        );
 
         setGasFee(
           NumberUtils.limitDecimalCount(
-            formatEther(gasAmount),
+            formatEther(_gasEstimate.mul(gasPrice)),
             DECIMAL_CRYPTO_LIMIT
           )
         );
@@ -209,6 +205,7 @@ export const useBridgeNetworksData = ({
       previewRef?.current?.show();
     } catch (e) {
       // console.log('IN ERROR bridge.estimateGas.wrapWithdraw->', e);
+      // ignore
     } finally {
       setGasFeeLoader(false);
     }
