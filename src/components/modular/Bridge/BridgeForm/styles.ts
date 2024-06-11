@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -27,15 +28,6 @@ export const styles = StyleSheet.create({
   },
   input: {
     textAlign: 'right'
-  },
-  currencySelectorGap: {
-    columnGap: scale(8)
-  },
-  currencySelectorInnerGap: {
-    columnGap: 3
-  },
-  balanceContainer: {
-    columnGap: 4
   },
   information: {
     width: '100%',

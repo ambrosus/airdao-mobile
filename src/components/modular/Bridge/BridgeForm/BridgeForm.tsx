@@ -1,50 +1,117 @@
-import React, { useMemo, useState } from 'react';
-import { KeyboardAvoidingView, LayoutChangeEvent, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { styles } from './styles';
 import {
-  Button,
   Input,
   KeyboardDismissingView,
-  Row,
   Spacer,
+  Spinner,
   Text
 } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { PrimaryButton, TokenLogo } from '@components/modular';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
+import { PrimaryButton } from '@components/modular';
 import { DeviceUtils } from '@utils/device';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetChoseToken } from '../../../templates/Bridge/BottomSheetChoseToken';
+import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from '@appTypes';
+import { BottomSheetBridgePreview } from '../../../templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
+import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
+import { FeeData } from '@lib/bridgeSDK/models/types';
+import {
+  BalanceInfo,
+  FeeInfo,
+  TokenSelector
+} from '@components/modular/Bridge/BridgeForm/components';
+import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
+import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
+
+// TODO if user change network we need to save chosen token on input
+
+export interface BridgeFeeModel {
+  amount: number | string;
+  networkFee: string | number;
+  feeSymbol: string;
+  bridgeAmount: string | number;
+  feeData: FeeData;
+}
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
 export const BridgeForm = () => {
+  const navigation = useNavigation<RootNavigationProp>();
+
+  const choseTokenRef = useRef<BottomSheetRef>(null);
+  const previewRef = useRef<BottomSheetRef>(null);
+  const transactionInfoRef = useRef<BottomSheetRef>(null);
+
   const { t } = useTranslation();
-  const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
-  const [amountToExchange, setAmountToExchange] = useState('');
+  const [timeoutDelay, setTimeoutDelay] = useState(setTimeout(() => null));
+  const { networksParams, tokenParams, fromParams, toParams } =
+    useBridgeContextSelector();
+  const { methods, variables } = useBridgeNetworksData({
+    choseTokenRef,
+    previewRef,
+    transactionInfoRef
+  });
+  const {
+    getFeeData,
+    onCurrencySelectorLayoutHandle,
+    onSelectMaxAmount,
+    onChangeAmount,
+    onTokenPress,
+    setFeeLoader,
+    setBridgeFee,
+    onPressPreview,
+    onWithdrawApprove
+  } = methods;
+  const {
+    dataToPreview,
+    amountToExchange,
+    inputStyles,
+    feeLoader,
+    bridgeFee,
+    gasFeeLoader,
+    bridgeTransaction,
+    bridgeTransfer
+  } = variables;
+  const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
+    bridgeTransaction?.withdrawTx,
+    !!Object.keys(bridgeTransfer).length
+  );
 
-  const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
-    setCurrencySelectorWidth(event.nativeEvent.layout.width);
+  useEffect(() => {
+    setFeeLoader(true);
+    setBridgeFee(null);
+    if (!!amountToExchange) {
+      clearTimeout(timeoutDelay);
+      setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    amountToExchange,
+    toParams.value.id,
+    fromParams.value.id,
+    tokenParams.value.renderTokenItem
+  ]);
+
+  const onPasscodeApprove = async () => {
+    setTimeout(async () => {
+      await onWithdrawApprove();
+    }, 1000);
+  };
+  const onAcceptPress = () => {
+    previewRef?.current?.dismiss();
+    setTimeout(() => {
+      navigation.navigate('Passcode', {
+        onPasscodeApprove
+      });
+    }, 500);
   };
 
-  const inputStyles = useMemo(() => {
-    return {
-      ...styles.input,
-      paddingLeft: currencySelectorWidth + 24
-    };
-  }, [currencySelectorWidth]);
-
-  const onChangeAmount = (value: string) => {
-    let finalValue = StringUtils.formatNumberInput(value);
-    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
-    setAmountToExchange(finalValue);
-  };
-
-  const onSelectMaxAmount = () => {
-    setAmountToExchange('999');
-  };
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
@@ -59,32 +126,17 @@ export const BridgeForm = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
-            Amount to bridge
+            {t('bridge.amount.to.bridge')}
           </Text>
           <View style={styles.inputContainerWithSelector}>
             <View
               onLayout={onCurrencySelectorLayoutHandle}
               style={styles.inputCurrencySelector}
             >
-              <Button>
-                <Row style={styles.currencySelectorGap} alignItems="center">
-                  <TokenLogo scale={0.7} token="AMB" />
-                  <Row
-                    style={styles.currencySelectorInnerGap}
-                    alignItems="center"
-                  >
-                    <Text
-                      fontSize={16}
-                      fontFamily="Inter_500Medium"
-                      color={COLORS.alphaBlack60}
-                    >
-                      AMB
-                    </Text>
-
-                    <ChevronDownIcon scale={0.45} color={COLORS.alphaBlack60} />
-                  </Row>
-                </Row>
-              </Button>
+              <TokenSelector
+                onPress={() => choseTokenRef.current?.show()}
+                symbol={tokenParams.value.renderTokenItem.symbol}
+              />
             </View>
             <Input
               style={inputStyles}
@@ -94,69 +146,56 @@ export const BridgeForm = () => {
               value={amountToExchange}
               onChangeValue={onChangeAmount}
             />
-
             <Spacer value={scale(8)} />
-            <Row style={styles.balanceContainer} alignItems="center">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_400Regular"
-                color={COLORS.alphaBlack60}
-              >
-                {t('common.balance')}: 10,103 AMB
-              </Text>
-
-              <Text
-                fontSize={14}
-                fontFamily="Inter_700Bold"
-                color={COLORS.sapphireBlue}
-                onPress={onSelectMaxAmount}
-              >
-                Max
-              </Text>
-            </Row>
+            <BalanceInfo
+              loader={tokenParams.loader}
+              tokenBalance={tokenParams.value.renderTokenItem.balance}
+              tokenSymbol={tokenParams.value.renderTokenItem.symbol}
+              onMaxPress={onSelectMaxAmount}
+            />
           </View>
 
           <Spacer value={scale(32)} />
-          <View style={styles.information}>
-            <Row alignItems="center" justifyContent="space-between">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral400}
-              >
-                You’ll receive
-              </Text>
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.black}
-              >
-                {amountToExchange} AMB
-              </Text>
-            </Row>
-
-            <Row alignItems="center" justifyContent="space-between">
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral400}
-              >
-                Network fee
-              </Text>
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.black}
-              >
-                ...AMB
-              </Text>
-            </Row>
-          </View>
+          <FeeInfo
+            amount={amountToExchange}
+            amountSymbol={tokenParams.value.renderTokenItem.symbol}
+            feeLoader={feeLoader}
+            bridgeFee={bridgeFee}
+          />
         </View>
 
-        <PrimaryButton onPress={() => null}>
-          <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
+        <PrimaryButton
+          onPress={onPressPreview}
+          disabled={!amountToExchange || !bridgeFee || gasFeeLoader}
+        >
+          {gasFeeLoader ? (
+            <Spinner customSize={15} />
+          ) : (
+            <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
+          )}
         </PrimaryButton>
+        <BottomSheetChoseToken
+          ref={choseTokenRef}
+          renderData={networksParams.value}
+          onPressItem={onTokenPress}
+        />
+        <BottomSheetBridgePreview
+          dataToPreview={dataToPreview}
+          ref={previewRef}
+          onAcceptPress={onAcceptPress}
+        />
+        <BottomSheetBridgeTransactionPendingHistory
+          ref={transactionInfoRef}
+          // @ts-ignore
+          transaction={bridgeTransaction}
+          liveTransactionInformation={{
+            stage,
+            confirmations: {
+              current: confirmations,
+              minSafetyBlocks
+            }
+          }}
+        />
       </KeyboardDismissingView>
     </KeyboardAvoidingView>
   );

@@ -137,6 +137,10 @@
   "common.transaction_plural": "Transactions",
   "common.transactions": "Transactions",
   "common.yesterday": "Yesterday",
+  "common.status.pending": "Pending",
+  "common.status.failed": "Failed",
+  "common.status.not.started": "Not started",
+  "common.status.success": "Success",
 
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
@@ -343,5 +347,31 @@
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet",
 
-  "bridge.select.network": "Select network"
+  "bridge.history.heading": "Transaction history",
+  "bridge.transaction.details.description": "Your transfer is being processed and will be completed within 5-20 minutes.",
+  "bridge.history.transaction.stage": "STAGE",
+  "bridge.transaction.processing": "Processing transaction",
+  "bridge.transaction.approval": "Waiting for approval",
+  "bridge.transaction.confirmations": "Confirmations",
+  "bridge.transaction.fee": "Bridge fee",
+  "bridge.transaction.to": "To {{networkTo}}",
+  "bridge.transaction.sending.heading": "Sending {{tokenFrom}} to {{networkTo}}",
+  "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
+  "bridge.select.network": "Select network",
+  "bridge.select.token": "Select token",
+  "bridge.amount.to.bridge": "Amount to bridge",
+  "bridge.amount.network.fee": "Network fee",
+  "bridge.amount.to.receive": "You’ll receive",
+
+  "bridge.preview.title": "Preview",
+  "bridge.preview.receive": "You’ll receive",
+  "bridge.preview.bridge.fee": "Bridge fee",
+  "bridge.preview.network.fee": "Network fee",
+  "bridge.preview.gas.fee": "Gas fee",
+  "bridge.preview.button": "Send funds to Ethereum",
+  "bridge.preview.button.max": "Max",
+
+  "bridge.transaction.info.header": "Sending 100 AMB to Ethereum",
+  "bridge.transaction.info.subheader": "Your transfer is being processed and will be completed within 5-20 minutes."
+
 }

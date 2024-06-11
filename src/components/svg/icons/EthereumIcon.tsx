@@ -4,10 +4,15 @@ import { IconProps } from './Icon.types';
 
 export const EthereumIcon = (props: IconProps) => {
   const { scale = 1 } = props;
-  const width = 31;
-  const height = 31;
+  const width = 32;
+  const height = 32;
   return (
-    <Svg width={width * scale} height={height * scale} fill="none" {...props}>
+    <Svg
+      width={width * scale}
+      height={height * scale}
+      viewBox={`0 0 ${width} ${height}`}
+      fill="none"
+    >
       <Path
         fill="#627EEA"
         d="M10 18.319a8.333 8.333 0 1 0 0-16.667 8.333 8.333 0 0 0 0 16.667Z"

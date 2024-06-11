@@ -38,6 +38,7 @@ export const PasscodeEntry = () => {
     return null;
   };
 
+
   const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
 

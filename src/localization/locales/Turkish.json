@@ -137,6 +137,9 @@
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
+  "common.status.pending": "Başarısız oldu",
+  "common.status.not.started": "Başlamadı",
+  "common.status.success": "Başarılı",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -343,5 +346,32 @@
   "wallet.my.assets": "Varlıklarım",
   "wallet.picker.select": "Cüzdan seç",
 
-  "bridge.select.network": "!!!Select network"
+  "bridge.history.heading": "İşlem geçmişi",
+  "bridge.transaction.details.description": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacaktır.",
+  "bridge.history.transaction.stage": "AŞAMA",
+  "bridge.transaction.processing": "İşlem işleniyor",
+  "bridge.transaction.approval": "Onay bekleniyor",
+  "bridge.transaction.confirmations": "Onaylar",
+  "bridge.transaction.fee": "Köprü ücreti",
+  "bridge.transaction.to": "{{networkTo}}'a",
+  "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
+  "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
+
+  "bridge.select.network": "!!!Select network",
+  "bridge.select.token": "!!!Select token",
+  "bridge.amount.to.bridge": "!!!Amount to bridge",
+  "bridge.amount.network.fee": "!!!Network fee",
+  "bridge.amount.to.receive": "!!!You’ll receive",
+
+  "bridge.preview.title": "!!!Preview",
+  "bridge.preview.receive": "!!!You’ll receive",
+  "bridge.preview.bridge.fee": "!!!Bridge fee",
+  "bridge.preview.network.fee": "!!!Network fee",
+  "bridge.preview.gas.fee": "!!!Gas fee",
+  "bridge.preview.button": "!!!Send funds to Ethereum",
+  "bridge.preview.button.max": "!!!Max",
+
+  "bridge.transaction.info.header": "!!!Sending 100 AMB to Ethereum",
+  "bridge.transaction.info.subheader": "!!!Your transfer is being processed and will be completed within 5-20 minutes."
+
 }

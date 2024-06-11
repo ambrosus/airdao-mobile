@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { FONT } from '@constants/fonts';
 
 export const styles = StyleSheet.create({
   statusMain: {
@@ -35,6 +36,31 @@ export const pendingStyle = StyleSheet.create({
     color: COLORS.warning700
   }
 });
+export const defaultStyle = StyleSheet.create({
+  background: {
+    backgroundColor: COLORS.neutral0,
+    borderColor: COLORS.neutral100,
+    borderWidth: 1
+  },
+  text: {
+    color: COLORS.neutral900,
+    fontSize: 14,
+    fontFamily: FONT.Inter500Medium
+  }
+});
+export const confirmationStyles = {
+  background: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: COLORS.warning100,
+    borderColor: COLORS.warning200,
+    borderWidth: 1
+  },
+  text: {
+    color: COLORS.warning700
+  }
+};
 export const errorStyle = StyleSheet.create({
   background: {
     backgroundColor: COLORS.error100,
