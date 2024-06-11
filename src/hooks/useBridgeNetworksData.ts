@@ -38,7 +38,7 @@ export const useBridgeNetworksData = ({
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
-  const [gasFee, setGasFee] = useState(0);
+  const [gasFee, setGasFee] = useState<string | number>(0);
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
   const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
   const [bridgeTransaction, setBridgeTransaction] = useState<{
@@ -194,10 +194,15 @@ export const useBridgeNetworksData = ({
       if (_gasEstimate._hex) {
         const provider = await currentProvider(fromParams.value.id);
         const gasPrice = await provider?.getGasPrice();
+        const gasAmount = CurrencyUtils.toUSD(
+          gasPrice?._hex,
+          _gasEstimate?._hex
+        );
+
         setGasFee(
-          CurrencyUtils.toUSD(
-            Number(formatEther(gasPrice?._hex || '0x00')),
-            Number(formatEther(_gasEstimate?._hex))
+          NumberUtils.limitDecimalCount(
+            formatEther(gasAmount),
+            DECIMAL_CRYPTO_LIMIT
           )
         );
       }

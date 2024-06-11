@@ -104,35 +104,38 @@ export async function withdraw({
     amountTokens,
     tokenFrom.decimals
   );
-  await checkAllowance(
+
+  const allowance = await checkAllowance(
     tokenFrom,
     bridge.address,
     bridge.signer,
     amountAllowance
   );
 
-  if (getGasFee) {
-    return bridge.estimateGas.withdraw(
-      tokenFrom.address,
-      toAddress,
-      amountBridge,
-      needUnwrap,
-      feeData.signature,
-      feeData.transferFee,
-      feeData.bridgeFee,
-      { value: fee }
-    );
-  } else {
-    return bridge.withdraw(
-      tokenFrom.address,
-      toAddress,
-      amountBridge,
-      needUnwrap,
-      feeData.signature,
-      feeData.transferFee,
-      feeData.bridgeFee,
-      { value: fee }
-    );
+  if (allowance) {
+    if (getGasFee) {
+      return bridge.estimateGas.withdraw(
+        tokenFrom.address,
+        toAddress,
+        amountBridge,
+        needUnwrap,
+        feeData.signature,
+        feeData.transferFee,
+        feeData.bridgeFee,
+        { value: fee }
+      );
+    } else {
+      return bridge.withdraw(
+        tokenFrom.address,
+        toAddress,
+        amountBridge,
+        needUnwrap,
+        feeData.signature,
+        feeData.transferFee,
+        feeData.bridgeFee,
+        { value: fee }
+      );
+    }
   }
 }
 
@@ -143,8 +146,15 @@ export async function setAllowance(
   amount: BigNumberish
 ) {
   const erc20 = erc20Contract.attach(token.address).connect(signer);
-  return;
-  return erc20.approve(bridgeAddress, amount);
+  try {
+    const newAllowance = await erc20.approve(bridgeAddress, amount);
+    if (newAllowance) {
+      return await newAllowance.wait();
+    }
+  } catch (e) {
+    console.warn(`error to set new allowance value ${amount}`, e);
+    throw new AllowanceException(token, amount, bridgeAddress);
+  }
 }
 
 export async function checkAllowance(
@@ -159,8 +169,8 @@ export async function checkAllowance(
     bridgeAddress
   );
   if (allowance < amount) {
-    console.warn(`Need to increase allowance to ${amount}`);
-    return;
-    throw new AllowanceException(token, amount, bridgeAddress);
+    return await setAllowance(token, bridgeAddress, signer, amount);
+  } else {
+    return allowance;
   }
 }
