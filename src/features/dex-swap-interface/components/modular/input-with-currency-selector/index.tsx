@@ -9,6 +9,7 @@ import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/de
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { Balance } from '../balance';
+import { useSwapFieldsHandler } from '@features/dex-swap-interface/lib';
 
 interface InputWithCurrencySelectorProps {
   readonly type: keyof typeof FIELD;
@@ -17,8 +18,8 @@ interface InputWithCurrencySelectorProps {
 export const InputWithCurrencySelector = ({
   type
 }: InputWithCurrencySelectorProps) => {
-  const { selectedTokensAmount, onChangeSelectedTokensAmount } =
-    useDEXSwapContextSelector();
+  const { selectedTokensAmount } = useDEXSwapContextSelector();
+  const { onChangeSelectedTokensAmount } = useSwapFieldsHandler();
 
   const label = type === 'INPUT' ? 'You pay' : 'You receive';
 

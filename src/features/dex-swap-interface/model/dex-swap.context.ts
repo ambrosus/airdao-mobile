@@ -1,15 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
+import { BottomSheetRef } from '@components/composite';
 import {
   INITIAL_SELECTED_TOKENS,
   INITIAL_SLIPPAGE_TOLERANCE,
   INITIAL_TOKENS_AMOUNT
 } from './initial';
-import { FIELD } from '../types/fields';
-import { TokenInfo } from '../types';
-import { BottomSheetRef } from '@components/composite';
-
-import { DEXSwapInterfaceService } from '../service/dex-swap.service';
+import { TokenInfo, FIELD } from '../types';
 
 export const DEXSwapContext = () => {
   const bottomSheetRefOutput = useRef<BottomSheetRef>(null);
@@ -59,78 +56,6 @@ export const DEXSwapContext = () => {
   const onChangeSlippageTollerance = (value: number) =>
     setSlippageTollerance(value);
 
-  const onApplyOppositeCurrencyAmount = useCallback(
-    (key: keyof typeof FIELD, value: number | string) => {
-      setSelectedTokensAmount((prevSelectedTokensAmount) => ({
-        ...prevSelectedTokensAmount,
-        [key]: String(value)
-      }));
-    },
-    []
-  );
-
-  const onChangeSelectedTokensAmount = useCallback(
-    async (key: keyof typeof FIELD, value: string) => {
-      setLastChangedInput(key);
-      const oppositeKey = key === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
-      const isEmpty = value === '' || value === '0';
-
-      setSelectedTokensAmount((prevSelectedTokensAmount) => ({
-        ...prevSelectedTokensAmount,
-        [key]: value
-      }));
-
-      if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
-        const receivedTokens = await DEXSwapInterfaceService.getAmountsOut({
-          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-          amountToSell: value
-        });
-
-        if (selectedTokens[oppositeKey] && receivedTokens) {
-          onApplyOppositeCurrencyAmount(
-            oppositeKey,
-            isEmpty ? '' : receivedTokens
-          );
-        }
-      }
-    },
-    [onApplyOppositeCurrencyAmount, selectedTokens]
-  );
-
-  useEffect(() => {
-    if (!lastChangedInput) return;
-
-    const oppositeKey =
-      lastChangedInput === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
-    const oppositeValue = selectedTokensAmount[oppositeKey];
-
-    const updateReceivedTokens = async () => {
-      if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
-        const receivedTokens = await DEXSwapInterfaceService.getAmountsOut({
-          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-          amountToSell: selectedTokensAmount[lastChangedInput]
-        });
-
-        if (selectedTokens[oppositeKey] && receivedTokens) {
-          onApplyOppositeCurrencyAmount(
-            oppositeKey,
-            selectedTokensAmount[lastChangedInput] === '' ? '' : receivedTokens
-          );
-        }
-      }
-    };
-
-    if (oppositeValue === '' && selectedTokens[oppositeKey]) {
-      updateReceivedTokens();
-      setLastChangedInput(null);
-    }
-  }, [
-    selectedTokens,
-    selectedTokensAmount,
-    lastChangedInput,
-    onApplyOppositeCurrencyAmount
-  ]);
-
   const reset = useCallback(() => {
     setSlippageTollerance(INITIAL_SLIPPAGE_TOLERANCE);
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
@@ -148,8 +73,7 @@ export const DEXSwapContext = () => {
     onChangeSelectedTokens,
     slippageTollerance,
     onChangeSlippageTollerance,
-    onChangeSelectedTokensAmount,
-    onApplyOppositeCurrencyAmount,
+    lastChangedInput,
     setLastChangedInput,
     reset
   };
