@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DEXSwapInterfaceService } from '@features/dex-swap-interface/service/dex-swap.service';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { Cache, CacheKey } from '@lib/cache';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import { allowanceService } from '@features/dex-swap-interface/service';
 
 export function useDEXSwapAllowance() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -25,7 +25,7 @@ export function useDEXSwapAllowance() {
         `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw?.hash ?? ''}`
       )) as string;
 
-      const allowance = await DEXSwapInterfaceService.checkAllowance({
+      const allowance = await allowanceService.checkAllowance({
         addressFrom: selectedTokens[FIELD.INPUT]?.address ?? '',
         privateKey: privateKey ?? '',
         amountAllowance: selectedTokensAmount[FIELD.INPUT]
@@ -62,7 +62,7 @@ export function useDEXSwapAllowance() {
         `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw?.hash ?? ''}`
       )) as string;
 
-      const allowance = await DEXSwapInterfaceService.setAllowance({
+      const allowance = await allowanceService.setAllowance({
         addressFrom: selectedTokens[FIELD.INPUT]?.address ?? '',
         privateKey: privateKey ?? '',
         amountAllowance: selectedTokensAmount[FIELD.INPUT]

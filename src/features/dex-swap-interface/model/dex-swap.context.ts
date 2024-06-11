@@ -73,7 +73,7 @@ export const DEXSwapContext = () => {
   );
 
   const onChangeSelectedTokensAmount = useCallback(
-    (key: keyof typeof FIELD, value: string) => {
+    async (key: keyof typeof FIELD, value: string) => {
       setLastChangedInput(key);
       const oppositeKey = key === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
       const isEmpty = value === '' || value === '0';
@@ -82,6 +82,13 @@ export const DEXSwapContext = () => {
         ...prevSelectedTokensAmount,
         [key]: value
       }));
+
+      // const amountsOut = await DEXSwapInterfaceService.getAmountsOut({
+      //   path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
+      //   amountToSell: value
+      // });
+
+      // console.log(amountsOut);
 
       if (selectedTokens[oppositeKey]) {
         onApplyOppositeCurrencyAmount(

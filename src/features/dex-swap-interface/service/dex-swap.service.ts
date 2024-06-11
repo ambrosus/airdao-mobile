@@ -1,10 +1,12 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { ERC20_ALLOWANCE_ABI, ERC20_BALANCE } from '../lib/abi';
-import type { BalanceArgs, CheckAllowanceArgs } from '../types/swap.service';
-import { DEX_SUPPORTED_TOKENS } from '../entities/tokens';
+import { ERC20_BALANCE, ERC20_TRADE } from '../lib/abi';
+import type { BalanceArgs } from '../types/swap.service';
 
-const environment = Config.env === 'testnet' ? 'testnet' : 'production';
+interface GetAmountsOutArgs {
+  path: [string, string];
+  amountToSell: string;
+}
 
 class DEXSwapService {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -26,63 +28,24 @@ class DEXSwapService {
       throw error;
     }
   }
-  async checkAllowance({
-    addressFrom,
-    privateKey,
-    amountAllowance
-  }: CheckAllowanceArgs) {
+
+  async getAmountsOut({ path, amountToSell }: GetAmountsOutArgs) {
     try {
-      if (addressFrom !== DEX_SUPPORTED_TOKENS.default[environment].address) {
-        const signer = new ethers.Wallet(privateKey, this.provider);
+      const contract = new ethers.Contract(
+        Config.DEX_ROUTER_V2_ADDRESS,
+        ERC20_TRADE,
+        this.provider
+      );
 
-        const erc20Contract = new ethers.Contract(
-          ethers.constants.AddressZero,
-          ERC20_ALLOWANCE_ABI
-        );
+      const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+      const [, amountToReceive] = await contract.getAmountsOut(
+        bnAmountToSell,
+        path
+      );
 
-        const erc20 = erc20Contract.attach(addressFrom).connect(signer);
-
-        const allowance = await erc20.allowance(
-          await signer.getAddress(),
-          Config.DEX_ROUTER_V2_ADDRESS
-        );
-
-        const bnAmountAllowance = ethers.utils.parseUnits(
-          String(amountAllowance),
-          18
-        );
-
-        return allowance.lt(bnAmountAllowance);
-      }
+      return amountToReceive;
     } catch (error) {
       console.error(error);
-    }
-  }
-  async setAllowance({
-    privateKey,
-    addressFrom,
-    amountAllowance
-  }: CheckAllowanceArgs) {
-    try {
-      if (addressFrom !== DEX_SUPPORTED_TOKENS.default[environment].address) {
-        const signer = new ethers.Wallet(privateKey, this.provider);
-
-        const erc20Contract = new ethers.Contract(
-          ethers.constants.AddressZero,
-          ERC20_ALLOWANCE_ABI
-        );
-
-        const erc20 = erc20Contract.attach(addressFrom).connect(signer);
-
-        const bnApproveAllowance = ethers.utils.parseUnits(
-          String(amountAllowance),
-          18
-        );
-
-        return erc20.approve(Config.DEX_ROUTER_V2_ADDRESS, bnApproveAllowance);
-      }
-    } catch (error) {
-      throw error;
     }
   }
 }
