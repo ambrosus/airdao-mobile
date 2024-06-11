@@ -1,16 +1,17 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { InteractionManager, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { useForwardedRef } from '@hooks';
 import { Spacer, Spinner, Text } from '@components/base';
-import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { SuccessIcon } from '@components/svg/icons';
 import { PrimaryButton } from '@components/modular';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { useForwardedRef } from '@hooks';
+import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import usePasscode from '@contexts/Passcode';
 
 interface BottomSheetImportWalletPrivateKeyStatusProps {
   status: 'initial' | 'pending' | 'error' | 'success';
@@ -22,19 +23,45 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 >(({ status }, ref) => {
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
+  const { isPasscodeEnabled } = usePasscode();
+
   const bottomSheetProcessingRef = useForwardedRef<BottomSheetRef>(ref);
 
   const onSuccessButtonPress = useCallback(() => {
     bottomSheetProcessingRef.current?.dismiss();
-    setTimeout(() => {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'AppInit' }]
-        })
-      );
-    }, 1000);
-  }, [bottomSheetProcessingRef, navigation]);
+
+    InteractionManager.runAfterInteractions(() => {
+      if (isPasscodeEnabled) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+          })
+        );
+      } else {
+        navigation.navigate('SetupPasscode');
+      }
+    });
+  }, [bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
+
+  const onBottomSheetClose = useCallback(() => {
+    if (status === 'success') {
+      InteractionManager.runAfterInteractions(() => {
+        setTimeout(() => {
+          if (isPasscodeEnabled) {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+              })
+            );
+          } else {
+            navigation.navigate('SetupPasscode');
+          }
+        });
+      });
+    }
+  }, [status, isPasscodeEnabled, navigation]);
 
   const renderBottomSheetView = useMemo(() => {
     switch (status) {
@@ -94,7 +121,9 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 
   return (
     <BottomSheet
+      avoidKeyboard
       ref={bottomSheetProcessingRef}
+      onClose={onBottomSheetClose}
       closeOnBackPress={status !== 'pending'}
       swipingEnabled={status !== 'pending'}
       swiperIconVisible={status !== 'pending'}
