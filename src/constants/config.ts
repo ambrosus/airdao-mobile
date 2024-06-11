@@ -1,5 +1,6 @@
 import * as Updates from 'expo-updates';
 import { BRIDGE_DATA } from '@constants/bridgeData';
+import { ALL_TOKENS_DATA } from '@constants/allToken';
 
 const envs = {
   prod: {
@@ -22,13 +23,14 @@ const envs = {
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
-    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airdao',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
     ETH_NETWORK_URL: 'https://eth.llamarpc.com',
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.prod
   },
   stage: {
@@ -51,13 +53,14 @@ const envs = {
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
-    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airdao',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
     ETH_NETWORK_URL: 'https://eth.llamarpc.com',
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.stage
   },
   testnet: {
@@ -80,18 +83,19 @@ const envs = {
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
-    AIRDAO_TELEGRAM_URL: 'https://t.me/airDAO_official',
+    AIRDAO_TELEGRAM_URL: 'https://t.me/airdao',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus-test.io',
     ETH_NETWORK_URL: 'https://ethereum-sepolia-rpc.publicnode.com',
     BSC_NETWORK_URL: 'https://bsc-testnet.public.blastapi.io',
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
+    ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
     ...BRIDGE_DATA.testnet
   }
 };
 
-let Config = envs.prod;
+let Config: any = envs.prod;
 switch (Updates.channel) {
   case 'main': {
     Config = envs.prod;

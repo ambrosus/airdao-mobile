@@ -63,7 +63,7 @@ export const DEFAULT_WORDS = [
   'amateur',
   'amazing',
   'among',
-  'common.transaction.amount',
+  'amount',
   'amused',
   'analyst',
   'anchor',

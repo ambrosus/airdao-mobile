@@ -24,6 +24,7 @@ import usePasscode from '@contexts/Passcode';
 import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
+import { Header } from '@components/composite';
 
 export const PasscodeEntry = () => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
@@ -33,10 +34,19 @@ export const PasscodeEntry = () => {
     if (typeof onPasscodeApprove === 'function') {
       onPasscodeApprove();
     }
+
+    return null;
   };
 
+
+  const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
-  usePreventGoingBack(isAuthSuccessfulRef);
+
+  const isPreventingNavigateBack = params?.title
+    ? isAvailableToNavigateBack
+    : isAuthSuccessfulRef;
+
+  usePreventGoingBack(isPreventingNavigateBack);
 
   const navigation = useNavigation<RootNavigationProp>();
   const { t } = useTranslation();
@@ -79,8 +89,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        onPasscodeEntry();
-        closePasscodeEntry();
+        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
       } else {
         passcodeRef.current?.focus();
       }
@@ -113,8 +122,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
-        onPasscodeEntry();
-        closePasscodeEntry();
+        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
       } else {
         Alert.alert(
           t('security.passcode.doesnt.match'),
@@ -140,6 +148,9 @@ export const PasscodeEntry = () => {
           flex: 1
         }}
       >
+        {params?.title && (
+          <Header title={params.title} onBackPress={closePasscodeEntry} />
+        )}
         <KeyboardDismissingView
           style={{ flex: 1, justifyContent: 'space-between' }}
         >

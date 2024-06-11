@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import * as Updates from 'expo-updates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -13,21 +13,14 @@ import { StakingPool } from '@models';
 import { useAmbrosusStakingPools } from '@hooks';
 import { styles } from './styles';
 import { useStakingMultiplyContextSelector } from '@contexts';
-import { AccountDBModel } from '@database';
-import { useAllAccounts } from '@hooks/database';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export const StakingPoolsScreen = () => {
-  const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
+  const { t } = useTranslation();
   const { data: stakingPools } = useAmbrosusStakingPools();
-
-  const { data: allWallets } = useAllAccounts();
   const { selectedAccount } = useBridgeContextSelector();
-  const [selectedWallet] = useState<AccountDBModel | null>(
-    selectedAccount ? selectedAccount : allWallets[0]
-  );
 
   const navigateToPoolScreen = (pool: StakingPool) => {
     navigation.navigate('StakingPool', { pool });
@@ -37,12 +30,12 @@ export const StakingPoolsScreen = () => {
     useStakingMultiplyContextSelector();
 
   useEffect(() => {
-    if (selectedWallet?.address) {
+    if (selectedAccount?.address) {
       (async () => {
-        await fetchPoolDetails(selectedWallet.address, true);
+        await fetchPoolDetails(selectedAccount.address, true);
       })();
     }
-  }, [selectedWallet, fetchPoolDetails]);
+  }, [selectedAccount, fetchPoolDetails]);
 
   const filterStakingPools = useMemo(() => {
     return Updates.channel === 'testnet'
@@ -60,7 +53,7 @@ export const StakingPoolsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={t('staking.header')} />
+      <Header bottomBorder title={t('staking.header')} />
       <Spacer value={verticalScale(16)} />
       <Row
         alignItems="center"

@@ -16,7 +16,7 @@ import { SuccessIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { useStakingMultiplyContextSelector } from '@contexts';
-import { useBalanceOfAddress } from '@hooks';
+import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
@@ -25,7 +25,14 @@ export const StakeSuccessScreen = () => {
     useNavigation<NavigationProp<HomeParamsList, 'StakeSuccessScreen'>>();
 
   const { refetch: refetchAmbBalance } = useBalanceOfAddress(
-    route.params.wallet?.address || ''
+    route.params.walletAddress || ''
+  );
+
+  const { refetch: refetchTokensAndAssets } = useTokensAndTransactions(
+    route.params.walletAddress || '',
+    1,
+    20,
+    !!route.params.walletAddress
   );
 
   const [loading, setLoading] = useState(false);
@@ -34,9 +41,10 @@ export const StakeSuccessScreen = () => {
   const refetchPoolDetails = async () => {
     setLoading(true);
     try {
-      if (route.params.wallet?.address) {
+      if (route.params.walletAddress) {
+        if (refetchTokensAndAssets) refetchTokensAndAssets();
         if (refetchAmbBalance) refetchAmbBalance();
-        await fetchPoolDetails(route.params.wallet.address);
+        await fetchPoolDetails(route.params.walletAddress);
       }
     } finally {
       setLoading(false);

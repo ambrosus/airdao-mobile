@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -17,6 +17,7 @@ import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {
   const { data: accounts } = useAllAccounts();
@@ -36,6 +37,13 @@ export const HomeScreen = () => {
   }
 
   const { setSelectedAccount } = useBridgeContextSelector();
+
+  useFocusEffect(
+    useCallback(() => {
+      WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
+      setSelectedAccount(accounts[scrollIdx]);
+    }, [accounts, scrollIdx, setSelectedAccount])
+  );
 
   useEffect(() => {
     if (accounts.length > 0) {

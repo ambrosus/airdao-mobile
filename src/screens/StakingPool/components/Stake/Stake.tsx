@@ -101,8 +101,7 @@ export const StakeToken = ({
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'stake',
-            pool,
-            wallet
+            walletAddress: wallet?.address ?? ''
           })
         );
       }
@@ -217,7 +216,12 @@ export const StakeToken = ({
           )}
         </Text>
       </PrimaryButton>
-      <BottomSheet ref={previewBottomSheetRef} swiperIconVisible>
+      <BottomSheet
+        ref={previewBottomSheetRef}
+        swiperIconVisible={!loading}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+      >
         {loading ? (
           <StakePending />
         ) : (

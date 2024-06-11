@@ -4,8 +4,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 import { StakingPool, Token } from '@models';
-import { ReturnedPoolDetails } from '@api/staking/types';
-import { AccountDBModel } from '@database';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
@@ -32,14 +30,16 @@ export type HomeParamsList = {
   Bridge: undefined;
   BridgeHistory: undefined;
   SuccessSetupSecurity: undefined;
+  ImportWalletMethods: undefined;
   ImportWallet: undefined;
   ImportWalletSuccess: undefined;
   StakeSuccessScreen: {
     type: 'stake' | 'withdraw';
-    pool: ReturnedPoolDetails | undefined;
-    wallet: AccountDBModel | null;
+    walletAddress: string | null;
   };
   StakeErrorScreen: undefined;
+  ImportWalletPrivateKey: undefined;
+  ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

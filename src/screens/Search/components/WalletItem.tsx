@@ -57,8 +57,8 @@ export const ExplorerWalletItem = (
         </Row>
         <Text
           fontSize={13}
-          style={{ lineHeight: 18 }}
-          fontFamily="Mersad_600SemiBold"
+          // style={{ lineHeight: 18 }}
+          fontFamily="Inter_500Medium"
           color={COLORS.neutral900}
         >
           {NumberUtils.formatNumber(ambBalance, 0)} AMB
