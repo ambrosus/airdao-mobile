@@ -121,6 +121,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 
   return (
     <BottomSheet
+      avoidKeyboard
       ref={bottomSheetProcessingRef}
       onClose={onBottomSheetClose}
       closeOnBackPress={status !== 'pending'}
