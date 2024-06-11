@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { InteractionManager, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
@@ -29,7 +29,8 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 
   const onSuccessButtonPress = useCallback(() => {
     bottomSheetProcessingRef.current?.dismiss();
-    setTimeout(() => {
+
+    InteractionManager.runAfterInteractions(() => {
       if (isPasscodeEnabled) {
         navigation.dispatch(
           CommonActions.reset({
@@ -40,8 +41,27 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
       } else {
         navigation.navigate('SetupPasscode');
       }
-    }, 1000);
+    });
   }, [bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
+
+  const onBottomSheetClose = useCallback(() => {
+    if (status === 'success') {
+      InteractionManager.runAfterInteractions(() => {
+        setTimeout(() => {
+          if (isPasscodeEnabled) {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+              })
+            );
+          } else {
+            navigation.navigate('SetupPasscode');
+          }
+        });
+      });
+    }
+  }, [status, isPasscodeEnabled, navigation]);
 
   const renderBottomSheetView = useMemo(() => {
     switch (status) {
@@ -102,6 +122,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
   return (
     <BottomSheet
       ref={bottomSheetProcessingRef}
+      onClose={onBottomSheetClose}
       closeOnBackPress={status !== 'pending'}
       swipingEnabled={status !== 'pending'}
       swiperIconVisible={status !== 'pending'}
