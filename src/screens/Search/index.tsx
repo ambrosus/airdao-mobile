@@ -13,10 +13,13 @@ import {
   ViewStyle,
   View,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  InteractionManager
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, {
+  Easing,
+  Extrapolation,
   FadeIn,
   FadeInLeft,
   FadeOut,
@@ -91,7 +94,8 @@ export const SearchScreen = () => {
       height: interpolate(
         heightAnimationValue.value,
         [0, DEVICE_HEIGHT],
-        [0, DEVICE_HEIGHT]
+        [0, DEVICE_HEIGHT],
+        Extrapolation.CLAMP
       )
     };
   }, [heightAnimationValue]);
@@ -156,13 +160,17 @@ export const SearchScreen = () => {
 
   const renderSearch = useCallback(
     (value: boolean | ((prevState: boolean) => boolean)) => {
-      heightAnimationValue.value = withTiming(value ? DEVICE_HEIGHT : 0);
       setTimeout(
         () => {
           setSearchAddressContentVisible(value);
         },
         !!value ? 0 : 300
       );
+
+      heightAnimationValue.value = withTiming(value ? DEVICE_HEIGHT : 0, {
+        duration: 300,
+        easing: Easing.linear
+      });
     },
     [heightAnimationValue]
   );
@@ -176,7 +184,9 @@ export const SearchScreen = () => {
   }, [userPerformedRefresh, accountsLoading, watchlist]);
 
   const onSearchFocusHandle = useCallback(() => {
-    setTimeout(() => searchAddressRef?.current?.focus(), 0);
+    InteractionManager.runAfterInteractions(() => {
+      searchAddressRef?.current?.focus();
+    });
   }, []);
 
   const onDismissPress = () => {
