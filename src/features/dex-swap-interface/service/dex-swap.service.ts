@@ -2,6 +2,8 @@ import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { ERC20_BALANCE, ERC20_TRADE } from '../lib/abi';
 import type { BalanceArgs } from '../types/swap.service';
+import { formatEther } from 'ethers/lib/utils';
+import { NumberUtils } from '@utils/number';
 
 interface GetAmountsOutArgs {
   path: [string, string];
@@ -38,12 +40,18 @@ class DEXSwapService {
       );
 
       const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+
       const [, amountToReceive] = await contract.getAmountsOut(
         bnAmountToSell,
         path
       );
 
-      return amountToReceive;
+      const result = NumberUtils.limitDecimalCount(
+        formatEther(amountToReceive?._hex),
+        4
+      );
+
+      return result;
     } catch (error) {
       console.error(error);
     }

@@ -11,16 +11,6 @@ import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { scale } from '@utils/scaling';
 
 export const SwapForm = () => {
-  // const { selectedTokens } = useDEXSwapContextSelector();
-  // useEffect(() => {
-  //   if (selectedTokens.INPUT && selectedTokens.OUTPUT) {
-  //     DEXSwapInterfaceService.getAmountsOut({
-  //       path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-  //       amountToSell: '1'
-  //     });
-  //   }
-  // }, [selectedTokens.INPUT, selectedTokens.OUTPUT]);
-
   return (
     <KeyboardAvoidingView
       style={styles.container}

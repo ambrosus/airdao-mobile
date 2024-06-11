@@ -8,7 +8,8 @@ import {
 import { FIELD } from '../types/fields';
 import { TokenInfo } from '../types';
 import { BottomSheetRef } from '@components/composite';
-import { useDEXCryptoCurrency } from '../lib/hooks/use-dex-crypto-currency';
+
+import { DEXSwapInterfaceService } from '../service/dex-swap.service';
 
 export const DEXSwapContext = () => {
   const bottomSheetRefOutput = useRef<BottomSheetRef>(null);
@@ -21,10 +22,6 @@ export const DEXSwapContext = () => {
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
   const [slippageTollerance, setSlippageTollerance] = useState(
     INITIAL_SLIPPAGE_TOLERANCE
-  );
-
-  const { calculateUSDPrice } = useDEXCryptoCurrency(
-    selectedTokens.OUTPUT?.symbol
   );
 
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
@@ -83,26 +80,21 @@ export const DEXSwapContext = () => {
         [key]: value
       }));
 
-      // const amountsOut = await DEXSwapInterfaceService.getAmountsOut({
-      //   path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-      //   amountToSell: value
-      // });
+      if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
+        const receivedTokens = await DEXSwapInterfaceService.getAmountsOut({
+          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
+          amountToSell: value
+        });
 
-      // console.log(amountsOut);
-
-      if (selectedTokens[oppositeKey]) {
-        onApplyOppositeCurrencyAmount(
-          oppositeKey,
-          isEmpty ? '' : calculateUSDPrice(selectedTokensAmount[key])
-        );
+        if (selectedTokens[oppositeKey] && receivedTokens) {
+          onApplyOppositeCurrencyAmount(
+            oppositeKey,
+            isEmpty ? '' : receivedTokens
+          );
+        }
       }
     },
-    [
-      calculateUSDPrice,
-      onApplyOppositeCurrencyAmount,
-      selectedTokens,
-      selectedTokensAmount
-    ]
+    [onApplyOppositeCurrencyAmount, selectedTokens]
   );
 
   useEffect(() => {
@@ -112,20 +104,31 @@ export const DEXSwapContext = () => {
       lastChangedInput === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
     const oppositeValue = selectedTokensAmount[oppositeKey];
 
+    const updateReceivedTokens = async () => {
+      if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
+        const receivedTokens = await DEXSwapInterfaceService.getAmountsOut({
+          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
+          amountToSell: selectedTokensAmount[lastChangedInput]
+        });
+
+        if (selectedTokens[oppositeKey] && receivedTokens) {
+          onApplyOppositeCurrencyAmount(
+            oppositeKey,
+            selectedTokensAmount[lastChangedInput] === '' ? '' : receivedTokens
+          );
+        }
+      }
+    };
+
     if (oppositeValue === '' && selectedTokens[oppositeKey]) {
-      const valueToApply =
-        selectedTokensAmount[lastChangedInput] === ''
-          ? ''
-          : calculateUSDPrice(selectedTokensAmount[lastChangedInput]);
-      onApplyOppositeCurrencyAmount(oppositeKey, valueToApply);
+      updateReceivedTokens();
       setLastChangedInput(null);
     }
   }, [
     selectedTokens,
     selectedTokensAmount,
     lastChangedInput,
-    onApplyOppositeCurrencyAmount,
-    calculateUSDPrice
+    onApplyOppositeCurrencyAmount
   ]);
 
   const reset = useCallback(() => {
