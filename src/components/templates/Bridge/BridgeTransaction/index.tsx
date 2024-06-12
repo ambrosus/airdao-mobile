@@ -13,8 +13,8 @@ import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
-import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 import { useTranslation } from 'react-i18next';
+import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;

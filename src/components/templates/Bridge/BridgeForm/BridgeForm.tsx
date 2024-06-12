@@ -14,17 +14,15 @@ import { DeviceUtils } from '@utils/device';
 import { scale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetChoseToken } from '../../../templates/Bridge/BottomSheetChoseToken';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '../../../templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
-import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
+import { useBridgeNetworksData } from '@hooks/bridge/useBridgeNetworksData';
 import { BalanceInfo, FeeInfo, TokenSelector } from './components';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
-
-// TODO if user change network we need to save chosen token on input
+import { BottomSheetBridgeItemSelector } from '@components/templates/Bridge/BottomSheetBridgeItemSelector';
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
@@ -37,8 +35,7 @@ export const BridgeForm = () => {
 
   const { t } = useTranslation();
   const [timeoutDelay, setTimeoutDelay] = useState(setTimeout(() => null));
-  const { networksParams, tokenParams, fromParams, toParams } =
-    useBridgeContextSelector();
+  const { tokenParams, fromParams, toParams } = useBridgeContextSelector();
   const { methods, variables } = useBridgeNetworksData({
     choseTokenRef,
     previewRef,
@@ -161,10 +158,10 @@ export const BridgeForm = () => {
             <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
           )}
         </PrimaryButton>
-        <BottomSheetChoseToken
+        <BottomSheetBridgeItemSelector
           ref={choseTokenRef}
-          renderData={networksParams.value}
           onPressItem={onTokenPress}
+          selectorType={'token'}
         />
         <BottomSheetBridgePreview
           dataToPreview={dataToPreview}

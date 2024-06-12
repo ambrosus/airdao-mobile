@@ -8,13 +8,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import moment from 'moment/moment';
 import { styles } from './styles';
-import { BridgeTransaction, LocalizedRenderEmpty } from '@components/templates';
+import { LocalizedRenderEmpty } from '@components/templates';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
 import { useBridgeHistory } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { BridgeTransaction } from '@components/templates/Bridge/BridgeTransaction';
 
 interface TransactionSection {
   title: string;

@@ -10,10 +10,10 @@ import { NumberUtils } from '@utils/number';
 import { TokenLogo } from '@components/modular';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { StringUtils } from '@utils/string';
-import { Status } from '@components/templates/ExplorerAccount/BridgeTransaction/components/Status/Status';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
 import { NETWORK, timestamp } from '@utils/bridge';
+import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
 
 type RowRightItemType = 'default' | 'status' | 'token' | 'amount';
 

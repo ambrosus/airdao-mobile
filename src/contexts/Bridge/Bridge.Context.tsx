@@ -8,16 +8,48 @@ import {
   DEFAULT_ETH_NETWORK,
   DEFAULT_TOKEN_PAIRS
 } from '@contexts/Bridge/constants';
-import { getBridgeBalance } from '@lib';
+import { getBridgeBalance, getBridgePairs } from '@lib';
 import { NumberUtils } from '@utils/number';
 import { formatEther } from 'ethers/lib/utils';
+import { parseNetworkParams } from '@hooks/bridge/services';
 
 export const BridgeContext = () => {
   const [config, setConfig] = useState<any>({});
   const [selectedToken, setSelectedToken] =
     // @ts-ignore
     useState<RenderTokenItem>(DEFAULT_TOKEN_PAIRS);
+  const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
+  const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
+  const [tokensForSelector, setTokensForSelector] =
+    useState<RenderTokenItem[]>();
+
   const [tokenDataLoader, setTokenDataLoader] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
+    null
+  );
+
+  const setAllRequireBridgeData = () => {
+    getBridgePairs({
+      from: from.id,
+      to: to.id,
+      bridgeConfig: config
+    }).then((r) => {
+      return parseNetworkParams(
+        r,
+        setTokensForSelector,
+        setSelectedTokenData,
+        from.id
+      );
+    });
+  };
+
+  const setDefaultBridgeData = () => {
+    setFrom(DEFAULT_AMB_NETWORK);
+    setTo(DEFAULT_ETH_NETWORK);
+    // @ts-ignore
+    setSelectedToken(DEFAULT_TOKEN_PAIRS);
+    setAllRequireBridgeData();
+  };
 
   const setSelectedTokenData = async (pairs: RenderTokenItem) => {
     try {
@@ -42,6 +74,11 @@ export const BridgeContext = () => {
   };
 
   useEffect(() => {
+    setAllRequireBridgeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from.id, from.id]);
+
+  useEffect(() => {
     const getConfig = async () => {
       return await API.bridgeService.getBridgeParams();
     };
@@ -50,6 +87,7 @@ export const BridgeContext = () => {
       // @ts-ignore
       await setSelectedTokenData(DEFAULT_TOKEN_PAIRS);
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -77,13 +115,6 @@ export const BridgeContext = () => {
       isDuplicateWay
     };
   };
-  const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
-    null
-  );
-  const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
-  const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
-  const [tokensForSelector, setTokensForSelector] =
-    useState<RenderTokenItem[]>();
 
   const parsedBridges = Object.keys(config?.bridges || []).map((item) => {
     const res = {
@@ -161,6 +192,7 @@ export const BridgeContext = () => {
       setter: setSelectedTokenData,
       loader: tokenDataLoader
     },
+    setDefaultBridgeData,
     networkNativeCoin,
     bridges,
     setSelectedAccount,

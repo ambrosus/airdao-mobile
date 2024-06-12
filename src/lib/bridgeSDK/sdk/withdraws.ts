@@ -69,73 +69,77 @@ export async function withdraw({
     withdrawParams;
   const fee = feeData.transferFee.add(feeData.bridgeFee);
 
-  if (tokenFrom.isNativeCoin) {
-    const amountBridge = ethers.utils.parseUnits(
+  try {
+    if (tokenFrom.isNativeCoin) {
+      const amountBridge = ethers.utils.parseUnits(
+        amountTokens,
+        tokenFrom.decimals
+      );
+      if (getGasFee) {
+        return bridge.estimateGas.wrapWithdraw(
+          toAddress,
+          feeData.signature,
+          feeData.transferFee,
+          feeData.bridgeFee,
+          { value: fee.add(amountBridge) }
+        );
+      } else {
+        return bridge.wrapWithdraw(
+          toAddress,
+          feeData.signature,
+          feeData.transferFee,
+          feeData.bridgeFee,
+          { value: fee.add(amountBridge) }
+        );
+      }
+    }
+
+    const needUnwrap = tokenTo.isNativeCoin;
+    const amountBridge = getAmountInForeignDecimals(
+      tokenFrom,
+      tokenTo,
+      amountTokens
+    );
+
+    const amountAllowance = ethers.utils.parseUnits(
       amountTokens,
       tokenFrom.decimals
     );
-    if (getGasFee) {
-      return bridge.estimateGas.wrapWithdraw(
-        toAddress,
-        feeData.signature,
-        feeData.transferFee,
-        feeData.bridgeFee,
-        { value: fee.add(amountBridge) }
-      );
-    } else {
-      return bridge.wrapWithdraw(
-        toAddress,
-        feeData.signature,
-        feeData.transferFee,
-        feeData.bridgeFee,
-        { value: fee.add(amountBridge) }
-      );
+
+    const allowance = await checkAllowance(
+      tokenFrom,
+      bridge.address,
+      bridge.signer,
+      amountAllowance
+    );
+
+    if (allowance) {
+      if (getGasFee) {
+        return bridge.estimateGas.withdraw(
+          tokenFrom.address,
+          toAddress,
+          amountBridge,
+          needUnwrap,
+          feeData.signature,
+          feeData.transferFee,
+          feeData.bridgeFee,
+          { value: fee }
+        );
+      } else {
+        return bridge.withdraw(
+          tokenFrom.address,
+          toAddress,
+          amountBridge,
+          needUnwrap,
+          feeData.signature,
+          feeData.transferFee,
+          feeData.bridgeFee,
+          { value: fee }
+        );
+      }
     }
-  }
-
-  const needUnwrap = tokenTo.isNativeCoin;
-  const amountBridge = getAmountInForeignDecimals(
-    tokenFrom,
-    tokenTo,
-    amountTokens
-  );
-
-  const amountAllowance = ethers.utils.parseUnits(
-    amountTokens,
-    tokenFrom.decimals
-  );
-
-  const allowance = await checkAllowance(
-    tokenFrom,
-    bridge.address,
-    bridge.signer,
-    amountAllowance
-  );
-
-  if (allowance) {
-    if (getGasFee) {
-      return bridge.estimateGas.withdraw(
-        tokenFrom.address,
-        toAddress,
-        amountBridge,
-        needUnwrap,
-        feeData.signature,
-        feeData.transferFee,
-        feeData.bridgeFee,
-        { value: fee }
-      );
-    } else {
-      return bridge.withdraw(
-        tokenFrom.address,
-        toAddress,
-        amountBridge,
-        needUnwrap,
-        feeData.signature,
-        feeData.transferFee,
-        feeData.bridgeFee,
-        { value: fee }
-      );
-    }
+  } catch (e) {
+    // ignore
   }
 }
 

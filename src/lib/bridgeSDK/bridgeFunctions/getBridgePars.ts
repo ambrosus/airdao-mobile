@@ -8,7 +8,6 @@ export async function getBridgePairs({
   to,
   bridgeConfig
 }: {
-  walletHash: string;
   from: Network | string;
   to: Network | string;
   bridgeConfig: BridgeConfig;
