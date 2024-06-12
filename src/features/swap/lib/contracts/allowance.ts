@@ -29,8 +29,6 @@ export async function checkIsApprovalRequired({
         Config.ROUTER_V2_ADDRESS
       );
 
-      console.log(allowance.toString());
-
       return allowance.lt(amount);
     }
   } catch (error) {
