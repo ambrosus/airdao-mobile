@@ -1,4 +1,8 @@
-import { Network as BridgeNetwork, Token } from '@lib/bridgeSDK/models/types';
+import {
+  FeeData,
+  Network as BridgeNetwork,
+  Token
+} from '@lib/bridgeSDK/models/types';
 import { ethers } from 'ethers';
 
 export interface Bridge {
@@ -80,6 +84,14 @@ export interface ParsedBridge {
 }
 export interface BridgeNetworkPickerProps {
   destination: 'from' | 'to';
+}
+
+export interface BridgeFeeModel {
+  amount: number | string;
+  networkFee: string | number;
+  feeSymbol: string;
+  bridgeAmount: string | number;
+  feeData: FeeData;
 }
 
 export type NetworksNames = 'amb' | 'eth' | 'bsc';

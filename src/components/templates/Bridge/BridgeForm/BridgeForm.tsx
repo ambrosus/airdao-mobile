@@ -20,24 +20,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '../../../templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { useBridgeNetworksData } from '@hooks/useBridgeNetworksData';
-import { FeeData } from '@lib/bridgeSDK/models/types';
-import {
-  BalanceInfo,
-  FeeInfo,
-  TokenSelector
-} from '@components/modular/Bridge/BridgeForm/components';
+import { BalanceInfo, FeeInfo, TokenSelector } from './components';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 
 // TODO if user change network we need to save chosen token on input
-
-export interface BridgeFeeModel {
-  amount: number | string;
-  networkFee: string | number;
-  feeSymbol: string;
-  bridgeAmount: string | number;
-  feeData: FeeData;
-}
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 

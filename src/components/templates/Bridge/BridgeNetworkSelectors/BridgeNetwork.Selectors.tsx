@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row } from '@components/base';
-import { BridgeNetworkPicker } from '@components/modular/Bridge';
+import { BridgeNetworkPicker } from './BridgeNetworkPicker/BridgeNetwork.Picker';
 import { RightArrowInCircle } from '@components/svg/icons';
 
 export const BridgeNetworkSelectors = () => {

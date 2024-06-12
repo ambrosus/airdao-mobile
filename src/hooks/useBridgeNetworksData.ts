@@ -1,14 +1,13 @@
 import { LayoutChangeEvent } from 'react-native';
 import { RefObject, useMemo, useState } from 'react';
-import { styles } from '@components/modular/Bridge/BridgeForm/styles';
+import { styles as bridgeFormStyle } from '@components/templates/Bridge/BridgeForm/styles';
 import { formatEther } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
-import { RenderTokenItem } from '@models/Bridge';
+import { BridgeFeeModel, RenderTokenItem } from '@models/Bridge';
 import { CurrencyUtils } from '@utils/currency';
 import { StringUtils } from '@utils/string';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
-import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
 import { BottomSheetRef } from '@components/composite';
 import { currentProvider, getBridgeFeeData } from '@lib';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
@@ -63,7 +62,7 @@ export const useBridgeNetworksData = ({
 
   const inputStyles = useMemo(() => {
     return {
-      ...styles.input,
+      ...bridgeFormStyle.input,
       paddingLeft: currencySelectorWidth + 24
     };
   }, [currencySelectorWidth]);

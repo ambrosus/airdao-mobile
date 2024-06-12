@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from '@components/modular/Bridge/BridgeNetworkSelectors/styles';
+import { styles } from '../../BridgeNetworkSelectors/styles';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
@@ -69,6 +69,7 @@ export const BridgeNetworkPicker = ({
         pairs: tkn,
         provider
       }));
+    // @ts-ignore
     networksParams.setter(tokenForRender);
 
     const defaultToken = tokenForRender.find(

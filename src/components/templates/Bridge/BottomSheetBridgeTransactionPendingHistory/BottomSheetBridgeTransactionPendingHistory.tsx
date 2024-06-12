@@ -8,9 +8,9 @@ import { verticalScale } from '@utils/scaling';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
-import { BridgeNetworksSelected } from '@components/modular/Bridge';
-import { Status } from '@components/templates/ExplorerAccount/BridgeTransaction/components/Status/Status';
 import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
+import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
+import { BridgeNetworksSelected } from '@components/templates/Bridge/BridgeNetworksSelected/BridgeNetworksSelected';
 
 interface TransactionPendingModel extends BridgeTransactionHistoryDTO {
   loading?: boolean;

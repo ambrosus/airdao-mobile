@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { styles } from '@components/modular/Bridge/BridgeForm/styles';
+import { StyleSheet, View } from 'react-native';
 import { Row, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import React from 'react';
-import { BridgeFeeModel } from '@components/modular/Bridge/BridgeForm/BridgeForm';
+import { BridgeFeeModel } from '@models/Bridge';
 
 interface FeeInfoModel {
   amount: string;
@@ -63,5 +62,12 @@ const FeeInfo = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  information: {
+    width: '100%',
+    rowGap: 8
+  }
+});
 
 export default FeeInfo;
