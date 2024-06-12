@@ -1,12 +1,12 @@
 import { ethers } from 'ethers';
-import { DEX_SUPPORTED_TOKENS } from '../entities/tokens';
-import { ERC20_ALLOWANCE_ABI } from '../lib/abi';
-import { CheckAllowanceArgs } from '../types/swap.service';
 import Config from '@constants/config';
+import { DEX_SUPPORTED_TOKENS } from '@features/dex-swap-interface/entities/tokens';
+import { ERC20_ALLOWANCE_ABI } from '@features/dex-swap-interface/lib/abi';
+import { CheckAllowanceArgs } from '@features/dex-swap-interface/types';
 import {
   DEX_DEFAULT_TOKEN_BY_ENVIRONMENT,
   environment
-} from '../utils/environment';
+} from '@features/dex-swap-interface/utils';
 
 class Allowance {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);

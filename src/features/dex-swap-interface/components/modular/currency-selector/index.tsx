@@ -12,7 +12,7 @@ import { Text, Spacer, Row } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { BottomSheetCurrenciesList } from '@features/dex-swap-interface/components/templates';
 import { TokenLogo } from '@components/modular';

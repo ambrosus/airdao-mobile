@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-native';
 import { useDEXSwapActionsHandler } from '../use-dex-swap-actions-handler';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 
 jest.mock('@features/dex-swap-interface/model/dex-swap.context', () => ({
   useDEXSwapContextSelector: jest.fn()

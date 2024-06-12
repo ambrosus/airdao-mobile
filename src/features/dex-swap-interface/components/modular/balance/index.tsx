@@ -6,7 +6,7 @@ import {
   useDEXSwapBalance,
   useSwapFieldsHandler
 } from '@features/dex-swap-interface/lib/hooks';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { TokenInfo } from '@features/dex-swap-interface/types';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { scale } from '@utils/scaling';

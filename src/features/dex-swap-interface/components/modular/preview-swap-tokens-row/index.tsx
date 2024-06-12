@@ -4,7 +4,7 @@ import { styles } from './styles';
 import { Row } from '@components/base';
 import { RightArrowIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { PreviewSwapToken } from '../../composite/preview-swap-token';
+import { PreviewSwapToken } from '@features/dex-swap-interface/components/composite';
 
 export const PreviewSwapTokensRow = () => {
   return (

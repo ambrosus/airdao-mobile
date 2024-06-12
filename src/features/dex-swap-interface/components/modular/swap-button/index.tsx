@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { PrimaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { COLORS } from '@constants/colors';
 import {
   useDEXSwapAllowance,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { Cache, CacheKey } from '@lib/cache';
 import { useBridgeContextSelector } from '@contexts/Bridge';

@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { formatEther } from 'ethers/lib/utils';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
-import { DEXSwapInterfaceService } from '@features/dex-swap-interface/service/dex-swap.service';
+import { DEXSwapInterfaceService } from '@features/dex-swap-interface/service';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { NumberUtils } from '@utils/number';
 import { useDEXSwapActionsHandler } from './use-dex-swap-actions-handler';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 
 export function useSwapFieldsHandler() {
   const { isSomeTokenNotSelected, isSomeTokenHasEmptyAmount } =
