@@ -2,7 +2,10 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { formatEther } from 'ethers/lib/utils';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { useDEXSwapBalance } from '@features/dex-swap-interface/lib/hooks';
+import {
+  useDEXSwapBalance,
+  useSwapFieldsHandler
+} from '@features/dex-swap-interface/lib/hooks';
 import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
 import { TokenInfo } from '@features/dex-swap-interface/types';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
@@ -16,8 +19,8 @@ interface BalanceProps {
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokens, setLastChangedInput, onChangeSelectedTokensAmount } =
-    useDEXSwapContextSelector();
+  const { selectedTokens, setLastChangedInput } = useDEXSwapContextSelector();
+  const { onChangeSelectedTokensAmount } = useSwapFieldsHandler();
   const { selectedTokenBalance, isFetchingBalance } = useDEXSwapBalance(
     selectedTokens?.[type] as TokenInfo
   );

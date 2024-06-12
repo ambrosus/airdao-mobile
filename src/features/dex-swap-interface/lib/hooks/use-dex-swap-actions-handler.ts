@@ -56,9 +56,18 @@ export function useDEXSwapActionsHandler() {
     return !selectedTokens.INPUT || !selectedTokens.OUTPUT;
   }, [selectedTokens]);
 
+  const isSomeTokenHasEmptyAmount = useMemo(() => {
+    const isEmptyAmount = (value: string) => value === '' || value === '0';
+    return (
+      isEmptyAmount(selectedTokensAmount.INPUT) ||
+      isEmptyAmount(selectedTokensAmount.OUTPUT)
+    );
+  }, [selectedTokensAmount]);
+
   return {
     buttonActionString,
     onReverseSelectedTokens,
-    isSomeTokenNotSelected
+    isSomeTokenNotSelected,
+    isSomeTokenHasEmptyAmount
   };
 }

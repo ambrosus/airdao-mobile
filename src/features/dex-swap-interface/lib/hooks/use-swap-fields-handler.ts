@@ -4,8 +4,11 @@ import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/de
 import { DEXSwapInterfaceService } from '@features/dex-swap-interface/service/dex-swap.service';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { NumberUtils } from '@utils/number';
+import { useDEXSwapActionsHandler } from './use-dex-swap-actions-handler';
 
 export function useSwapFieldsHandler() {
+  const { isSomeTokenNotSelected, isSomeTokenHasEmptyAmount } =
+    useDEXSwapActionsHandler();
   const {
     selectedTokensAmount,
     setSelectedTokensAmount,
@@ -36,16 +39,27 @@ export function useSwapFieldsHandler() {
       }));
 
       if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
-        const receivedTokens = await DEXSwapInterfaceService.getAmountsOut({
-          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-          amountToSell: value
-        });
-
-        if (selectedTokens[oppositeKey] && receivedTokens) {
-          onApplyOppositeCurrencyAmount(
-            oppositeKey,
-            isEmpty ? '' : receivedTokens
+        if (isEmpty && selectedTokens[oppositeKey]) {
+          onApplyOppositeCurrencyAmount(oppositeKey, '');
+        } else {
+          const bnAmountToReceive = await DEXSwapInterfaceService.getAmountsOut(
+            {
+              path: [
+                selectedTokens.INPUT?.address,
+                selectedTokens.OUTPUT?.address
+              ],
+              amountToSell: value
+            }
           );
+
+          if (bnAmountToReceive) {
+            const receivedTokens = NumberUtils.limitDecimalCount(
+              formatEther(bnAmountToReceive?._hex),
+              4
+            );
+
+            onApplyOppositeCurrencyAmount(oppositeKey, receivedTokens);
+          }
         }
       }
     },
@@ -57,44 +71,47 @@ export function useSwapFieldsHandler() {
     ]
   );
 
-  useEffect(() => {
-    if (!lastChangedInput) return;
+  // Update tokens amount automatically when some token is not selected
+  const updateReceivedTokens = useCallback(async () => {
+    if (
+      selectedTokens.INPUT?.address &&
+      selectedTokens.OUTPUT?.address &&
+      lastChangedInput
+    ) {
+      const bnAmountToReceive = await DEXSwapInterfaceService.getAmountsOut({
+        path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
+        amountToSell: selectedTokensAmount[lastChangedInput]
+      });
 
-    const oppositeKey =
-      lastChangedInput === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
-    const oppositeValue = selectedTokensAmount[oppositeKey];
-
-    const updateReceivedTokens = async () => {
-      if (selectedTokens.INPUT?.address && selectedTokens.OUTPUT?.address) {
-        const bnAmountToReceive = await DEXSwapInterfaceService.getAmountsOut({
-          path: [selectedTokens.INPUT?.address, selectedTokens.OUTPUT?.address],
-          amountToSell: selectedTokensAmount[lastChangedInput]
-        });
-
+      if (bnAmountToReceive) {
         const receivedTokens = NumberUtils.limitDecimalCount(
           formatEther(bnAmountToReceive?._hex),
           4
         );
 
-        if (selectedTokens[oppositeKey] && receivedTokens) {
-          onApplyOppositeCurrencyAmount(
-            oppositeKey,
-            selectedTokensAmount[lastChangedInput] === '' ? '' : receivedTokens
-          );
-        }
+        const oppositeKey =
+          lastChangedInput === FIELD.INPUT ? FIELD.OUTPUT : FIELD.INPUT;
+        onApplyOppositeCurrencyAmount(oppositeKey, receivedTokens);
       }
-    };
-
-    if (oppositeValue === '' && selectedTokens[oppositeKey]) {
-      updateReceivedTokens();
-      setLastChangedInput(null);
     }
   }, [
     selectedTokens,
-    onApplyOppositeCurrencyAmount,
-    setLastChangedInput,
+    selectedTokensAmount,
     lastChangedInput,
-    selectedTokensAmount
+    onApplyOppositeCurrencyAmount
+  ]);
+
+  useEffect(() => {
+    if (!lastChangedInput || isSomeTokenNotSelected) return;
+
+    if (isSomeTokenHasEmptyAmount) updateReceivedTokens();
+  }, [
+    isSomeTokenHasEmptyAmount,
+    isSomeTokenNotSelected,
+    lastChangedInput,
+    selectedTokens,
+    selectedTokensAmount,
+    updateReceivedTokens
   ]);
 
   return {
