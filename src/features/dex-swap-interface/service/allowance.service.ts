@@ -3,8 +3,10 @@ import { DEX_SUPPORTED_TOKENS } from '../entities/tokens';
 import { ERC20_ALLOWANCE_ABI } from '../lib/abi';
 import { CheckAllowanceArgs } from '../types/swap.service';
 import Config from '@constants/config';
-
-const environment = Config.env === 'testnet' ? 'testnet' : 'production';
+import {
+  DEX_DEFAULT_TOKEN_BY_ENVIRONMENT,
+  environment
+} from '../utils/environment';
 
 class Allowance {
   private provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -14,7 +16,7 @@ class Allowance {
     amountAllowance
   }: CheckAllowanceArgs) {
     try {
-      if (addressFrom !== DEX_SUPPORTED_TOKENS.default[environment].address) {
+      if (addressFrom !== DEX_DEFAULT_TOKEN_BY_ENVIRONMENT.address) {
         const signer = new ethers.Wallet(privateKey, this.provider);
 
         const erc20Contract = new ethers.Contract(
