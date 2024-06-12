@@ -1,6 +1,6 @@
 export const SWAP_DEFAULT_SUPPORTED_TOKENS = {
   default: {
-    production: {
+    prod: {
       address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
       name: 'AirDAO',
       symbol: 'AMB'
@@ -20,7 +20,6 @@ export const SWAP_DEFAULT_SUPPORTED_TOKENS = {
       },
       {
         address: '0xFF9F502976E7bD2b4901aD7Dd1131Bb81E5567de',
-        logoURI: 'https://etherscan.io/token/images/centre-usdc_28.png',
         name: 'USDC',
         symbol: 'USDC'
       },
@@ -43,7 +42,6 @@ export const SWAP_DEFAULT_SUPPORTED_TOKENS = {
       },
       {
         address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
-        logoURI: 'https://etherscan.io/token/images/centre-usdc_28.png',
         name: 'USDC',
         symbol: 'USDC'
       },

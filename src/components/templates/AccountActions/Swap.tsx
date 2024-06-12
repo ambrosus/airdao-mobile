@@ -11,7 +11,7 @@ export const Swap = () => {
   const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToSwap = () => {
-    navigation.navigate('Swap');
+    navigation.navigate('SwapScreen');
   };
 
   return (

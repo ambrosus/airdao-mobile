@@ -40,7 +40,7 @@ export type HomeParamsList = {
   StakeErrorScreen: undefined;
   ImportWalletPrivateKey: undefined;
   ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
-  Swap: undefined;
+  SwapScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

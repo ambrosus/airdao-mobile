@@ -35,6 +35,7 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { SwapScreen } from '@screens/Swap';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -106,6 +107,7 @@ export const HomeStack = () => {
           name="ImportWalletPrivateKeyError"
           component={ImportWalletPrivateKeyError}
         />
+        <Stack.Screen name="SwapScreen" component={SwapScreen} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>
