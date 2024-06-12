@@ -4,7 +4,7 @@ import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { FIELD } from '@features/dex-swap-interface/types';
 import { TokenLogo } from '@components/modular';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { COLORS } from '@constants/colors';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';

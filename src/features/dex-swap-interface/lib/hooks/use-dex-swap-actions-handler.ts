@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
-
 import { supportedSwapPairs } from '@features/dex-swap-interface/utils/pairs';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 
 interface ButtonActionStringArgs {

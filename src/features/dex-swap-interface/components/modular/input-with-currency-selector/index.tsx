@@ -5,7 +5,7 @@ import { Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
 import { CurrencySelector } from '../currency-selector';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { Balance } from '../balance';

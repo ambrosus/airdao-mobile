@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { PreviewSwapTokensRow } from '@features/dex-swap-interface/components/modular';
 import { useForwardedRef } from '@hooks';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { PreviewSwapTokensRow } from '../../modular/preview-swap-tokens-row';
 
 export const BottomSheetReviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {

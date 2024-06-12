@@ -1,8 +1,14 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { ERC20_BALANCE, ERC20_TRADE } from '../lib/abi';
-import type { BalanceArgs } from '../types/swap.service';
-import { isNativeWrapped, wrapNativeAddress } from '../utils/native-wrapped';
+import {
+  ERC20_BALANCE,
+  ERC20_TRADE
+} from '@features/dex-swap-interface/lib/abi';
+import type { BalanceArgs } from '@features/dex-swap-interface/types';
+import {
+  isNativeWrapped,
+  wrapNativeAddress
+} from '@features/dex-swap-interface/utils';
 
 interface GetAmountsOutArgs {
   path: [string, string];

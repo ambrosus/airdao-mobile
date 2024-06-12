@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
-import { Divider } from '../../composite';
+import { Divider } from '@features/dex-swap-interface/components/composite';
 import { Button, Spacer } from '@components/base';
 import { SwapIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useDEXSwapActionsHandler } from '@features/dex-swap-interface/lib';
 import { scale } from '@utils/scaling';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 
 export const SwapDivider = () => {
   const { onReverseSelectedTokens } = useDEXSwapActionsHandler();

@@ -4,3 +4,4 @@ export { Balance } from './balance';
 export { SwapDivider } from './swap-divider';
 export { SwapButton } from './swap-button';
 export { SwapForm } from './swap-form';
+export { PreviewSwapTokensRow } from './preview-swap-tokens-row';

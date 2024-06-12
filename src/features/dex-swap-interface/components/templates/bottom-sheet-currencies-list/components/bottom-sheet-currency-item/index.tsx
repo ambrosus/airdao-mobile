@@ -5,7 +5,7 @@ import { TokenInfo } from '@features/dex-swap-interface/types';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { FIELD } from '@features/dex-swap-interface/types/fields';
-import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model/dex-swap.context';
+import { useDEXSwapContextSelector } from '@features/dex-swap-interface/model';
 import { Checkmark } from '@components/svg/icons';
 
 interface BottomSheetCurrencyItemProps {
