@@ -14,5 +14,12 @@ export function useSwapFieldsHandler() {
     }));
   };
 
-  return { onChangeSelectedTokenAmount };
+  const onSelectMaxTokensAmount = (key: SelectedTokensKeys, amount: string) => {
+    setSelectedTokensAmount((prevSelectedTokensAmount) => ({
+      ...prevSelectedTokensAmount,
+      [key]: amount
+    }));
+  };
+
+  return { onChangeSelectedTokenAmount, onSelectMaxTokensAmount };
 }

@@ -5,14 +5,13 @@ import {
   INITIAL_SELECTED_TOKENS_AMOUNT
 } from './initials';
 import { BottomSheetRef } from '@components/composite';
-import { SelectedTokensKeys } from '../types';
+import { SelectedTokensKeys } from '@/features/swap/types';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
 
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
-  const [bnTokenBalance, setBnTokenBalance] = useState(null);
 
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
     Record<SelectedTokensKeys, string>
@@ -23,8 +22,6 @@ export const SwapContext = () => {
     setSelectedTokens,
     selectedTokensAmount,
     setSelectedTokensAmount,
-    bnTokenBalance,
-    setBnTokenBalance,
     bottomSheetTokenARef,
     bottomSheetTokenBRef
   };

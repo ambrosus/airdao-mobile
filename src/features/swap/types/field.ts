@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { SwapToken } from './token';
 
 export enum FIELD {
@@ -8,3 +9,7 @@ export enum FIELD {
 export type SelectedTokensKeys = keyof typeof FIELD;
 export type SelectedTokensState = Record<SelectedTokensKeys, SwapToken | null>;
 export type SelectedTokensAmountState = Record<SelectedTokensKeys, string>;
+export type SelectedTokensBalanceState = Record<
+  SelectedTokensKeys,
+  ethers.BigNumber | null
+>;

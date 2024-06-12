@@ -1,43 +1,80 @@
-import React, { useMemo } from 'react';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { NumberUtils } from '@utils/number';
-import { useSwapContextSelector } from '@features/swap/context';
-import { useUSDPrice } from '@hooks';
+import React, { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
-import { useSwapBalance } from '@features/swap/lib/hooks';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { SelectedTokensKeys } from '@features/swap/types';
 import { scale } from '@utils/scaling';
+import { useSwapContextSelector } from '@features/swap/context';
+import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
+import { NumberUtils } from '@utils/number';
+import { useUSDPrice } from '@hooks';
+import { CryptoCurrencyCode } from '@appTypes';
+import { COLORS } from '@constants/colors';
+import { WalletXsIcon } from '@components/svg/icons';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokensAmount } = useSwapContextSelector();
+  const { selectedTokens } = useSwapContextSelector();
+  const { onSelectMaxTokensAmount } = useSwapFieldsHandler();
+  const { bnBalanceAmount } = useSwapBalance(selectedTokens[type], type);
 
   const normalizedTokenBalance = useMemo(() => {
-    return 0;
-  }, [type]);
+    if (bnBalanceAmount) {
+      return NumberUtils.limitDecimalCount(
+        formatEther(bnBalanceAmount?._hex),
+        2
+      );
+    }
 
-  //   const USDTokenPrice = useUSDPrice(
-  //     Number(NumberUtils.limitDecimalCount(formatEther(bnBalance?.hex), 2))
-  //   );
+    return '';
+  }, [bnBalanceAmount]);
+
+  const USDTokenPrice = useUSDPrice(
+    Number(NumberUtils.limitDecimalCount(normalizedTokenBalance, 2)),
+    selectedTokens[type]?.symbol as CryptoCurrencyCode
+  );
+
+  const onSelectMaxTokensAmountPress = useCallback(() => {
+    if (bnBalanceAmount) {
+      const fullAmount = NumberUtils.limitDecimalCount(
+        formatEther(bnBalanceAmount?._hex),
+        18
+      );
+      onSelectMaxTokensAmount(type, fullAmount);
+    }
+  }, [bnBalanceAmount, onSelectMaxTokensAmount, type]);
 
   return (
     <Row alignItems="center" justifyContent="space-between">
-      {/* <Text>~${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}</Text> */}
+      <Text
+        fontSize={14}
+        fontFamily="Inter_500Medium"
+        color={COLORS.neutral400}
+      >
+        ~${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+      </Text>
 
       <Row alignItems="center">
-        <Text>{normalizedTokenBalance}</Text>
+        <Row alignItems="center">
+          <WalletXsIcon />
+          <Spacer horizontal value={4} />
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral400}
+          >
+            {normalizedTokenBalance}
+          </Text>
+        </Row>
 
         <Spacer horizontal value={scale(16)} />
 
-        <Button>
-          <Text
-            fontSize={14}
-            fontFamily="Inter_600SemiBold"
-            color="#3668DD"
-          ></Text>
+        <Button onPress={onSelectMaxTokensAmountPress}>
+          <Text fontSize={14} fontFamily="Inter_600SemiBold" color="#3668DD">
+            Max
+          </Text>
         </Button>
       </Row>
     </Row>
