@@ -1,9 +1,9 @@
 import { SelectedTokensAmountState, SelectedTokensState } from '../types';
-import { SWAP_DEFAULT_SUPPORTED_TOKENS } from '../entities';
+import { SWAP_SUPPORTED_TOKENS } from '../entities';
 import { environment } from '@utils/environment';
 
 export const INITIAL_SELECTED_TOKENS: SelectedTokensState = {
-  TOKEN_A: SWAP_DEFAULT_SUPPORTED_TOKENS.default[environment],
+  TOKEN_A: SWAP_SUPPORTED_TOKENS.default[environment],
   TOKEN_B: null
 };
 

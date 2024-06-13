@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { SWAP_DEFAULT_SUPPORTED_TOKENS } from '@features/swap/entities';
+import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 import { ERC20_ALLOWANCE } from '@features/swap/lib/abi';
 import { AllowanceArgs } from '@features/swap/types';
 import { createSigner } from '@features/swap/utils/contracts/instances';
@@ -12,9 +12,7 @@ export async function checkIsApprovalRequired({
   amount
 }: AllowanceArgs) {
   try {
-    if (
-      address !== SWAP_DEFAULT_SUPPORTED_TOKENS.default[environment].address
-    ) {
+    if (address !== SWAP_SUPPORTED_TOKENS.default[environment].address) {
       const signer = createSigner(privateKey);
 
       const erc20Contract = new ethers.Contract(

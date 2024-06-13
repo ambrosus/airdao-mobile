@@ -1,7 +1,7 @@
 import * as Updates from 'expo-updates';
 import { bridgeConfig } from '@constants/bridge-config';
 import { ALL_TOKENS_DATA } from '@constants/allToken';
-import { SWAP_DEFAULT_SUPPORTED_TOKENS } from '@features/swap/entities';
+import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
 const envs = {
   prod: {
@@ -34,7 +34,7 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    SWAP_TOKENS: SWAP_DEFAULT_SUPPORTED_TOKENS.tokens.prod,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755'
   },
   stage: {
@@ -65,7 +65,7 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    SWAP_TOKENS: SWAP_DEFAULT_SUPPORTED_TOKENS.tokens.prod,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755'
   },
   testnet: {
@@ -96,7 +96,7 @@ const envs = {
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
     BRIDGE_CONFIG: bridgeConfig.test,
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
-    SWAP_TOKENS: SWAP_DEFAULT_SUPPORTED_TOKENS.tokens.testnet,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755'
   }
 };

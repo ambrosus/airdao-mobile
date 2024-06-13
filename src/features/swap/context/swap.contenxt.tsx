@@ -11,6 +11,8 @@ export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
 
+  const [lastChangedInput, setLastChangedInput] =
+    useState<SelectedTokensKeys | null>(null);
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
 
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
@@ -22,6 +24,8 @@ export const SwapContext = () => {
     setSelectedTokens,
     selectedTokensAmount,
     setSelectedTokensAmount,
+    lastChangedInput,
+    setLastChangedInput,
     bottomSheetTokenARef,
     bottomSheetTokenBRef
   };

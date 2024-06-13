@@ -1,1 +1,1 @@
-export { SWAP_DEFAULT_SUPPORTED_TOKENS } from './tokens';
+export { SWAP_SUPPORTED_TOKENS } from './tokens';

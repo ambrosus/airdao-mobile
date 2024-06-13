@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
-import { checkIsApprovalRequired, increaseAllowance } from '../contracts';
+import {
+  checkIsApprovalRequired,
+  getAmountsOut,
+  increaseAllowance
+} from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 
@@ -72,5 +76,17 @@ export function useSwapActions() {
     selectedTokensAmount.TOKEN_A
   ]);
 
-  return { checkAllowance, setAllowance, isProcessingAllowance };
+  const getTokenAmountOut = useCallback(
+    async (amountToSell: string, path: [string, string]) => {
+      return await getAmountsOut({ path, amountToSell });
+    },
+    []
+  );
+
+  return {
+    getTokenAmountOut,
+    checkAllowance,
+    setAllowance,
+    isProcessingAllowance
+  };
 }

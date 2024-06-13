@@ -12,6 +12,7 @@ import { FIELD } from '@features/swap/types';
 export const SwapScreen = () => {
   const { bottomSheetTokenARef, bottomSheetTokenBRef } =
     useSwapContextSelector();
+
   return (
     <SafeAreaView style={styles.container}>
       <Header bottomBorder title="Swap" />

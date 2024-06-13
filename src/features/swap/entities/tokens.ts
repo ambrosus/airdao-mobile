@@ -1,4 +1,4 @@
-export const SWAP_DEFAULT_SUPPORTED_TOKENS = {
+export const SWAP_SUPPORTED_TOKENS = {
   default: {
     prod: {
       address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
