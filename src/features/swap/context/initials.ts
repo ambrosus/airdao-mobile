@@ -11,3 +11,5 @@ export const INITIAL_SELECTED_TOKENS_AMOUNT: SelectedTokensAmountState = {
   TOKEN_A: '',
   TOKEN_B: ''
 };
+
+export const INITIAL_SLIPPAGE_TOLLERANCE = '0.5';
