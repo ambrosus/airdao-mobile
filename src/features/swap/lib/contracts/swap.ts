@@ -13,16 +13,13 @@ export async function getAmountsOut({
   path
 }: OutAmountGetterArgs) {
   try {
-    if (amountToSell === '' || amountToSell === '0') return;
-
     const provider = createAMBProvider();
 
-    const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
     if (isSelectedSameTokens) {
-      return bnAmountToSell;
+      return amountToSell;
     }
 
     const contract = new ethers.Contract(
@@ -32,7 +29,7 @@ export async function getAmountsOut({
     );
 
     const [, amountToReceive] = await contract.getAmountsOut(
-      bnAmountToSell,
+      amountToSell,
       excludeNativeETH
     );
 

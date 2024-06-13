@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { InteractionManager } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
@@ -8,21 +9,27 @@ export function useSwapSelectTokens() {
     setSelectedTokens,
     selectedTokens,
     setSelectedTokensAmount,
-    selectedTokensAmount
+    selectedTokensAmount,
+    setLastChangedInput
   } = useSwapContextSelector();
+
   const { onDismissBottomSheetByKey, onDismissBottomSheets } =
     useSwapBottomSheetHandler();
 
-  const onSelectToken = (key: SelectedTokensKeys, token: SwapToken) => {
-    setSelectedTokens((prevSelectedTokens) => ({
-      ...prevSelectedTokens,
-      [key]: token
-    }));
+  const onSelectToken = useCallback(
+    async (key: SelectedTokensKeys, token: SwapToken) => {
+      setLastChangedInput(key);
+      setSelectedTokens((prevSelectedTokens) => ({
+        ...prevSelectedTokens,
+        [key]: token
+      }));
 
-    InteractionManager.runAfterInteractions(() => {
-      onDismissBottomSheetByKey(key);
-    });
-  };
+      InteractionManager.runAfterInteractions(() => {
+        onDismissBottomSheetByKey(key);
+      });
+    },
+    [onDismissBottomSheetByKey, setLastChangedInput, setSelectedTokens]
+  );
 
   const onReverseSelectedTokens = () => {
     setSelectedTokens({

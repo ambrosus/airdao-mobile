@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
 import {
   INITIAL_SELECTED_TOKENS,
@@ -19,15 +19,31 @@ export const SwapContext = () => {
     Record<SelectedTokensKeys, string>
   >(INITIAL_SELECTED_TOKENS_AMOUNT);
 
+  const reset = useCallback(() => {
+    setSelectedTokens(INITIAL_SELECTED_TOKENS);
+    setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
+  }, []);
+
+  const latestSelectedTokens = useRef(selectedTokens);
+  const latestSelectedTokensAmount = useRef(selectedTokensAmount);
+
+  useEffect(() => {
+    latestSelectedTokens.current = selectedTokens;
+    latestSelectedTokensAmount.current = selectedTokensAmount;
+  }, [selectedTokens, selectedTokensAmount]);
+
   return {
     selectedTokens,
     setSelectedTokens,
     selectedTokensAmount,
     setSelectedTokensAmount,
     lastChangedInput,
+    latestSelectedTokens,
+    latestSelectedTokensAmount,
     setLastChangedInput,
     bottomSheetTokenARef,
-    bottomSheetTokenBRef
+    bottomSheetTokenBRef,
+    reset
   };
 };
 

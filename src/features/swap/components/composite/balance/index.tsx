@@ -23,7 +23,10 @@ export const Balance = ({ type }: BalanceProps) => {
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
   const { onSelectMaxTokensAmount } = useSwapFieldsHandler();
   const { checkAllowance } = useSwapActions();
-  const { bnBalanceAmount } = useSwapBalance(selectedTokens[type], type);
+  const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
+    selectedTokens[type],
+    type
+  );
 
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalanceAmount) {
@@ -54,6 +57,10 @@ export const Balance = ({ type }: BalanceProps) => {
       onSelectMaxTokensAmount(type, fullAmount);
     }
   }, [bnBalanceAmount, onSelectMaxTokensAmount, type]);
+
+  if (isFetchingBalance) {
+    return <Text>loading</Text>;
+  }
 
   return (
     <Row alignItems="center" justifyContent="space-between">

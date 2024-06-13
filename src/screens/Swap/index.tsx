@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import {
@@ -10,8 +11,14 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 
 export const SwapScreen = () => {
-  const { bottomSheetTokenARef, bottomSheetTokenBRef } =
+  const { bottomSheetTokenARef, bottomSheetTokenBRef, reset } =
     useSwapContextSelector();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => reset();
+    }, [reset])
+  );
 
   return (
     <SafeAreaView style={styles.container}>

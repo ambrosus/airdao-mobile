@@ -78,7 +78,10 @@ export function useSwapActions() {
 
   const getTokenAmountOut = useCallback(
     async (amountToSell: string, path: [string, string]) => {
-      return await getAmountsOut({ path, amountToSell });
+      if (amountToSell === '' || amountToSell === '0') return;
+
+      const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+      return await getAmountsOut({ path, amountToSell: bnAmountToSell });
     },
     []
   );

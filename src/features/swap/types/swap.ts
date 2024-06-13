@@ -1,4 +1,6 @@
+import { ethers } from 'ethers';
+
 export interface OutAmountGetterArgs {
-  amountToSell: string;
+  amountToSell: ethers.BigNumber;
   path: [string, string];
 }
