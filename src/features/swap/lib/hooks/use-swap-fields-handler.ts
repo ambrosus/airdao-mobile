@@ -7,10 +7,9 @@ import { NumberUtils } from '@utils/number';
 import { exactSwapPath } from '@features/swap/utils/exact-swap-path';
 
 export function useSwapFieldsHandler() {
-  const { getTokenAmountOut } = useSwapActions();
+  const { getOppositeReceivedTokenAmount } = useSwapActions();
   const {
     setSelectedTokensAmount,
-
     latestSelectedTokens,
     latestSelectedTokensAmount,
     setIsExactIn
@@ -26,7 +25,10 @@ export function useSwapFieldsHandler() {
       const oppositeKey = isExact ? FIELD.TOKEN_B : FIELD.TOKEN_A;
       const amountToSell = latestSelectedTokensAmount.current[key];
 
-      const bnAmountToReceive = await getTokenAmountOut(amountToSell, path);
+      const bnAmountToReceive = await getOppositeReceivedTokenAmount(
+        amountToSell,
+        path
+      );
       const normalizedAmount = NumberUtils.limitDecimalCount(
         formatEther(bnAmountToReceive?._hex),
         4
@@ -38,7 +40,7 @@ export function useSwapFieldsHandler() {
       });
     },
     [
-      getTokenAmountOut,
+      getOppositeReceivedTokenAmount,
       latestSelectedTokens,
       latestSelectedTokensAmount,
       setSelectedTokensAmount

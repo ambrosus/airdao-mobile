@@ -8,10 +8,12 @@ import {
 } from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
+import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
-  const { selectedTokensAmount, selectedTokens } = useSwapContextSelector();
+  const { selectedTokensAmount, selectedTokens, isExactIn } =
+    useSwapContextSelector();
 
   const [isProcessingAllowance, setIsProcessingAllowance] = useState(false);
 
@@ -78,18 +80,68 @@ export function useSwapActions() {
 
   const getTokenAmountOut = useCallback(
     async (amountToSell: string, path: [string, string]) => {
-      if (amountToSell === '' || amountToSell === '0') return;
-
       const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
-      return await getAmountsOut({ path, amountToSell: bnAmountToSell });
+      return getAmountsOut({
+        path,
+        amountToSell: bnAmountToSell
+      });
     },
     []
   );
 
+  const getTokenAmountOutWithMultiRoute = useCallback(
+    async (amountToSell: string, path: [string, string]) => {
+      const [addressFrom, addressTo] = path;
+
+      if (
+        addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
+        addressTo === MULTI_ROUTE_ADDRESSES.BOND
+      ) {
+        const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+        const usdcToNativeAmount = await getAmountsOut({
+          path: [addressFrom, MULTI_ROUTE_ADDRESSES.SAMB],
+          amountToSell: bnAmountToSell
+        });
+
+        return getAmountsOut({
+          path: [MULTI_ROUTE_ADDRESSES.SAMB, MULTI_ROUTE_ADDRESSES.BOND],
+          amountToSell: usdcToNativeAmount
+        });
+      }
+    },
+    []
+  );
+
+  const getOppositeReceivedTokenAmount = useCallback(
+    async (amountToSell: string, path: [string, string]) => {
+      if (amountToSell === '' || amountToSell === '0') return;
+
+      console.log(amountToSell);
+
+      const [addressFrom, addressTo] = path;
+      if (
+        addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
+        addressTo === MULTI_ROUTE_ADDRESSES.BOND
+      ) {
+        return await getTokenAmountOutWithMultiRoute(amountToSell, path);
+      } else if (
+        isExactIn &&
+        addressFrom === MULTI_ROUTE_ADDRESSES.BOND &&
+        addressTo === MULTI_ROUTE_ADDRESSES.USDC
+      ) {
+        return await getTokenAmountOutWithMultiRoute(amountToSell, path);
+      } else {
+        return await getTokenAmountOut(amountToSell, path);
+      }
+    },
+    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactIn]
+  );
+
   return {
-    getTokenAmountOut,
     checkAllowance,
     setAllowance,
-    isProcessingAllowance
+    isProcessingAllowance,
+    getOppositeReceivedTokenAmount,
+    isExactIn
   };
 }

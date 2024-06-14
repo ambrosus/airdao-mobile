@@ -39,6 +39,7 @@ export const SwapContext = () => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
     setSlippageTolerance(INITIAL_SLIPPAGE_TOLLERANCE);
+    setIsExactIn(true);
   }, []);
 
   return {

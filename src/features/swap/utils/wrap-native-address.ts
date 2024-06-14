@@ -15,6 +15,7 @@ export function isNativeWrapped(path: [string, string]) {
 
 export function wrapNativeAddress(path: [string, string]): [string, string] {
   const nativeAddress = SWAP_SUPPORTED_TOKENS.default[environment].address;
+
   const replacementAddress =
     Config.SWAP_TOKENS.find((token: SwapToken) => token.symbol === 'SAMB')
       ?.address ?? '';

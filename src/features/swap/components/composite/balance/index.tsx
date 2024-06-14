@@ -20,8 +20,10 @@ interface BalanceProps {
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
-  const { onSelectMaxTokensAmount } = useSwapFieldsHandler();
+  const { selectedTokens, selectedTokensAmount, isExactIn } =
+    useSwapContextSelector();
+  const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
+    useSwapFieldsHandler();
   const { checkAllowance } = useSwapActions();
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type],
@@ -55,8 +57,18 @@ export const Balance = ({ type }: BalanceProps) => {
         18
       );
       onSelectMaxTokensAmount(type, fullAmount);
+
+      setTimeout(async () => {
+        await updateReceivedTokensOutput(isExactIn);
+      }, 250);
     }
-  }, [bnBalanceAmount, onSelectMaxTokensAmount, type]);
+  }, [
+    bnBalanceAmount,
+    isExactIn,
+    onSelectMaxTokensAmount,
+    type,
+    updateReceivedTokensOutput
+  ]);
 
   if (isFetchingBalance) {
     return <Text>loading</Text>;
