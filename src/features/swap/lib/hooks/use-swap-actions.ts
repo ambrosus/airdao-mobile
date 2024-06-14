@@ -116,8 +116,6 @@ export function useSwapActions() {
     async (amountToSell: string, path: [string, string]) => {
       if (amountToSell === '' || amountToSell === '0') return;
 
-      console.log(amountToSell);
-
       const [addressFrom, addressTo] = path;
       if (
         addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
