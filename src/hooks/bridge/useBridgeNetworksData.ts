@@ -54,6 +54,7 @@ export const useBridgeNetworksData = ({
     tokenParams,
     bridgeConfig
   } = useBridgeContextSelector();
+
   const { t } = useTranslation();
 
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
@@ -78,7 +79,6 @@ export const useBridgeNetworksData = ({
   // @ts-ignore
 
   const getFeeData = async () => {
-    // TODO Handle situation when user has less then fee
     const dataForFee = {
       tokenFrom: tokenParams.value.pairs[0],
       tokenTo: tokenParams.value.pairs[1],
@@ -91,14 +91,14 @@ export const useBridgeNetworksData = ({
         dataForFee
       });
       setBridgeFee({
-        amount: formatEther(fee.amount._hex),
+        amount: formatEther(fee.amount),
         feeSymbol: networkNativeCoin?.symbol || '',
         networkFee: NumberUtils.limitDecimalCount(
-          Number(formatEther(fee.transferFee._hex)),
+          Number(formatEther(fee.transferFee)),
           DECIMAL_CRYPTO_LIMIT
         ),
         bridgeAmount: NumberUtils.limitDecimalCount(
-          Number(formatEther(fee.bridgeFee._hex)),
+          Number(formatEther(fee.bridgeFee)),
           DECIMAL_CRYPTO_LIMIT
         ),
         feeData: fee
@@ -118,8 +118,12 @@ export const useBridgeNetworksData = ({
     setTimeout(() => choseTokenRef?.current?.dismiss(), 200);
   };
   const dataToPreview = (() => {
-    const receiveDataUSD = NumberUtils.limitDecimalCount(
-      CurrencyUtils.toUSD(+amountToExchange, 0.2),
+    const receiveCryptoData = NumberUtils.limitDecimalCount(
+      bridgeFee?.amount ?? '0',
+      DECIMAL_CRYPTO_LIMIT
+    );
+    const receiveUSDData = NumberUtils.limitDecimalCount(
+      CurrencyUtils.toUSD(+receiveCryptoData, 0.2),
       DECIMAL_USD_LIMIT
     );
     const bridgeFeeAmount = bridgeFee?.bridgeAmount;
@@ -130,8 +134,8 @@ export const useBridgeNetworksData = ({
     return [
       {
         name: t('bridge.preview.receive'),
-        cryptoAmount: amountToExchange,
-        usdAmount: receiveDataUSD,
+        cryptoAmount: receiveCryptoData,
+        usdAmount: receiveUSDData,
         symbol: symbol(1)
       },
       {
@@ -168,7 +172,7 @@ export const useBridgeNetworksData = ({
           tokenFrom: tokenParams.value.pairs[0],
           tokenTo: tokenParams.value.pairs[1],
           selectedAccount,
-          amountTokens: amountToExchange,
+          amountTokens: formatEther(bridgeFee.feeData.amount),
           feeData: bridgeFee.feeData,
           gasFee
         };
@@ -180,7 +184,6 @@ export const useBridgeNetworksData = ({
         });
       }
     } catch (e) {
-      // console.log('WITHDRAW ERROR', e);
       // ignore;
     }
   };
@@ -203,7 +206,6 @@ export const useBridgeNetworksData = ({
       }
       previewRef?.current?.show();
     } catch (e) {
-      // console.log('IN ERROR bridge.estimateGas.wrapWithdraw->', e);
       // ignore
     } finally {
       setGasFeeLoader(false);
@@ -225,7 +227,7 @@ export const useBridgeNetworksData = ({
             networkTo: toParams.value.id || '',
             tokenFrom: tokenParams.value.pairs[0],
             tokenTo: tokenParams.value.pairs[1],
-            amount: res.value._hex || '0x0',
+            amount: res.value ?? '0x0',
             withdrawTx: bridgeTx.transactionHash
           };
           setBridgeTransaction(bridgeTransaction);

@@ -32,7 +32,6 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
   BottomSheetBridgeTransactionPendingHistoryProps
 >(({ transaction, liveTransactionInformation }, bottomSheetRef) => {
   const { t } = useTranslation();
-
   const formattedAmount = NumberUtils.formatAmount(transaction?.amount, 3);
   const renderTransactionStatus = useCallback(
     (stage: number) => {
@@ -52,20 +51,23 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
     },
     [liveTransactionInformation]
   );
+  const TransactionLoader = () => (
+    <View
+      style={{
+        height: 300,
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <Spinner size={'large'} />
+    </View>
+  );
 
   return (
     <BottomSheet ref={bottomSheetRef} swiperIconVisible>
       <Spacer value={verticalScale(16)} />
       {transaction?.loading ? (
-        <View
-          style={{
-            height: 300,
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Spinner size={'large'} />
-        </View>
+        <TransactionLoader />
       ) : (
         <View style={styles.container}>
           <Text

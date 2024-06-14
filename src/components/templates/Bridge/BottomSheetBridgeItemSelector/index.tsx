@@ -62,7 +62,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
     );
   };
 
-  const activeArray = isNetworkSelector ? bridges : networksParams.value;
+  const activeArray = isNetworkSelector ? bridges : networksParams;
   return (
     <BottomSheet
       ref={ref}

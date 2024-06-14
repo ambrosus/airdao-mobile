@@ -175,6 +175,11 @@ export const BridgeContext = () => {
   }, [tokensForSelector]);
 
   return {
+    tokenParams: {
+      value: selectedToken,
+      setter: setSelectedTokenData,
+      loader: tokenDataLoader
+    },
     fromParams: {
       value: from,
       setter: fromSetter
@@ -183,21 +188,13 @@ export const BridgeContext = () => {
       value: to,
       setter: toSetter
     },
-    networksParams: {
-      value: tokensForSelector,
-      setter: setTokensForSelector
-    },
-    tokenParams: {
-      value: selectedToken,
-      setter: setSelectedTokenData,
-      loader: tokenDataLoader
-    },
-    setDefaultBridgeData,
-    networkNativeCoin,
-    bridges,
-    setSelectedAccount,
+    networksParams: tokensForSelector,
     bridgeConfig: config,
-    selectedAccount
+    setDefaultBridgeData,
+    setSelectedAccount,
+    networkNativeCoin,
+    selectedAccount,
+    bridges
   };
 };
 
