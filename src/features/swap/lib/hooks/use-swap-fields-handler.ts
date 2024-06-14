@@ -1,76 +1,72 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { useSwapContextSelector } from '@features/swap/context';
-import {
-  FIELD,
-  SelectedTokensKeys,
-  SelectedTokensState
-} from '@features/swap/types';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapActions } from './use-swap-actions';
 import { NumberUtils } from '@utils/number';
+import { exactSwapPath } from '@features/swap/utils/exact-swap-path';
 
 export function useSwapFieldsHandler() {
   const { getTokenAmountOut } = useSwapActions();
   const {
     setSelectedTokensAmount,
-    selectedTokens,
-    lastChangedInput,
+
     latestSelectedTokens,
-    latestSelectedTokensAmount
+    latestSelectedTokensAmount,
+    setIsExactIn
   } = useSwapContextSelector();
 
-  const updateTokenAmountOut = useCallback(
-    async (
-      key: SelectedTokensKeys,
-      selectedAmount: string,
-      tokens: SelectedTokensState
-    ) => {
-      if (tokens.TOKEN_A && tokens.TOKEN_B) {
-        const path = [
-          selectedTokens.TOKEN_A?.address,
-          selectedTokens.TOKEN_B?.address
-        ] as [string, string];
+  const updateReceivedTokensOutput = useCallback(
+    async (isExact: boolean) => {
+      const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+      if (!TOKEN_A || !TOKEN_B) return '';
 
-        const bnAmountToReceive = await getTokenAmountOut(selectedAmount, path);
+      const path = exactSwapPath(isExact, [TOKEN_A.address, TOKEN_B.address]);
+      const key = isExact ? FIELD.TOKEN_A : FIELD.TOKEN_B;
+      const oppositeKey = isExact ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+      const amountToSell = latestSelectedTokensAmount.current[key];
 
-        if (bnAmountToReceive) {
-          const oppositeKey =
-            key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
-          const normalizedAmount = NumberUtils.limitDecimalCount(
-            formatEther(bnAmountToReceive?._hex),
-            4
-          );
+      const bnAmountToReceive = await getTokenAmountOut(amountToSell, path);
+      const normalizedAmount = NumberUtils.limitDecimalCount(
+        formatEther(bnAmountToReceive?._hex),
+        4
+      );
 
-          setSelectedTokensAmount((prevSelectedTokensAmount) => ({
-            ...prevSelectedTokensAmount,
-            [oppositeKey]: normalizedAmount
-          }));
-        }
-      }
+      setSelectedTokensAmount({
+        ...latestSelectedTokensAmount.current,
+        [oppositeKey]: normalizedAmount
+      });
     },
-    [getTokenAmountOut, selectedTokens, setSelectedTokensAmount]
+    [
+      getTokenAmountOut,
+      latestSelectedTokens,
+      latestSelectedTokensAmount,
+      setSelectedTokensAmount
+    ]
   );
 
   const onChangeSelectedTokenAmount = useCallback(
     async (key: SelectedTokensKeys, amount: string) => {
-      setSelectedTokensAmount((prevSelectedTokensAmount) => {
-        const newSelectedTokensAmount = {
-          ...prevSelectedTokensAmount,
-          [key]: amount
-        };
+      const isEmpty = amount === '' || amount === '0';
+      const oppositeKey = key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+      setIsExactIn(key === FIELD.TOKEN_A);
+      setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
+        ...prevSelectedTokensAmounts,
+        [key]: amount
+      }));
 
-        if (selectedTokens.TOKEN_A && selectedTokens.TOKEN_B) {
-          updateTokenAmountOut(
-            key,
-            newSelectedTokensAmount[key],
-            selectedTokens
-          );
-        }
+      if (isEmpty) {
+        setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
+          ...prevSelectedTokensAmounts,
+          [oppositeKey]: amount
+        }));
+      }
 
-        return newSelectedTokensAmount;
-      });
+      setTimeout(async () => {
+        await updateReceivedTokensOutput(key === FIELD.TOKEN_A);
+      }, 250);
     },
-    [selectedTokens, setSelectedTokensAmount, updateTokenAmountOut]
+    [setIsExactIn, setSelectedTokensAmount, updateReceivedTokensOutput]
   );
 
   const onSelectMaxTokensAmount = (key: SelectedTokensKeys, amount: string) => {
@@ -80,29 +76,9 @@ export function useSwapFieldsHandler() {
     }));
   };
 
-  useEffect(() => {
-    if (!lastChangedInput) return;
-
-    const key = lastChangedInput;
-    const selectedTokensSnapshot = latestSelectedTokens.current;
-    const selectedTokensAmountSnapshot = latestSelectedTokensAmount.current;
-
-    if (selectedTokensSnapshot.TOKEN_A && selectedTokensSnapshot.TOKEN_B) {
-      const oppositeKey = key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
-      const selectedAmount = selectedTokensAmountSnapshot[oppositeKey];
-
-      updateTokenAmountOut(oppositeKey, selectedAmount, selectedTokensSnapshot);
-    }
-  }, [
-    lastChangedInput,
-    latestSelectedTokens,
-    latestSelectedTokensAmount,
-    updateTokenAmountOut
-  ]);
-
   return {
     onChangeSelectedTokenAmount,
     onSelectMaxTokensAmount,
-    updateTokenAmountOut
+    updateReceivedTokensOutput
   };
 }

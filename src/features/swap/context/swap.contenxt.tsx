@@ -6,7 +6,7 @@ import {
   INITIAL_SLIPPAGE_TOLLERANCE
 } from './initials';
 import { BottomSheetRef } from '@components/composite';
-import { SelectedTokensKeys } from '@/features/swap/types';
+import { FIELD, SelectedTokensKeys } from '@/features/swap/types';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
@@ -16,8 +16,11 @@ export const SwapContext = () => {
     INITIAL_SLIPPAGE_TOLLERANCE
   );
 
-  const [lastChangedInput, setLastChangedInput] =
-    useState<SelectedTokensKeys | null>(null);
+  const [isExactIn, setIsExactIn] = useState(true);
+  const [lastChangedInput, setLastChangedInput] = useState<SelectedTokensKeys>(
+    FIELD.TOKEN_A
+  );
+
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
 
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
@@ -51,6 +54,8 @@ export const SwapContext = () => {
     setLastChangedInput,
     bottomSheetTokenARef,
     bottomSheetTokenBRef,
+    isExactIn,
+    setIsExactIn,
     reset
   };
 };

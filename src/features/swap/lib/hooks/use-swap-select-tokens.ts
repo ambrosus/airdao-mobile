@@ -3,6 +3,7 @@ import { InteractionManager } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
+import { useSwapFieldsHandler } from './use-swap-fields-handler';
 
 export function useSwapSelectTokens() {
   const {
@@ -10,15 +11,16 @@ export function useSwapSelectTokens() {
     selectedTokens,
     setSelectedTokensAmount,
     selectedTokensAmount,
-    setLastChangedInput
+    isExactIn
   } = useSwapContextSelector();
+
+  const { updateReceivedTokensOutput } = useSwapFieldsHandler();
 
   const { onDismissBottomSheetByKey, onDismissBottomSheets } =
     useSwapBottomSheetHandler();
 
   const onSelectToken = useCallback(
-    async (key: SelectedTokensKeys, token: SwapToken) => {
-      setLastChangedInput(key);
+    (key: SelectedTokensKeys, token: SwapToken) => {
       setSelectedTokens((prevSelectedTokens) => ({
         ...prevSelectedTokens,
         [key]: token
@@ -27,8 +29,17 @@ export function useSwapSelectTokens() {
       InteractionManager.runAfterInteractions(() => {
         onDismissBottomSheetByKey(key);
       });
+
+      setTimeout(async () => {
+        await updateReceivedTokensOutput(isExactIn);
+      }, 250);
     },
-    [onDismissBottomSheetByKey, setLastChangedInput, setSelectedTokens]
+    [
+      isExactIn,
+      onDismissBottomSheetByKey,
+      setSelectedTokens,
+      updateReceivedTokensOutput
+    ]
   );
 
   const onReverseSelectedTokens = () => {
