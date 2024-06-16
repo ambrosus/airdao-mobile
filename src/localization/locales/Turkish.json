@@ -370,6 +370,7 @@
   "bridge.preview.gas.fee": "!!!Gas fee",
   "bridge.preview.button": "!!!Send funds to Ethereum",
   "bridge.preview.button.max": "!!!Max",
+  "bridge.insufficient.funds": "!!!You have insufficient funds",
 
   "bridge.transaction.info.header": "!!!Sending 100 AMB to Ethereum",
   "bridge.transaction.info.subheader": "!!!Your transfer is being processed and will be completed within 5-20 minutes."

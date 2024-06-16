@@ -11,7 +11,7 @@ import {
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';
 import { DeviceUtils } from '@utils/device';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextSelector } from '@contexts/Bridge';
@@ -60,7 +60,8 @@ export const BridgeForm = () => {
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    bridgeTransfer
+    bridgeTransfer,
+    inputError
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,
@@ -130,6 +131,19 @@ export const BridgeForm = () => {
               value={amountToExchange}
               onChangeValue={onChangeAmount}
             />
+            {inputError && (
+              <>
+                <Spacer value={verticalScale(4)} />
+                <Text
+                  fontSize={12}
+                  fontFamily="Inter_500Medium"
+                  fontWeight="500"
+                  color={COLORS.error400}
+                >
+                  {t('bridge.insufficient.funds')}
+                </Text>
+              </>
+            )}
             <Spacer value={scale(8)} />
             <BalanceInfo
               loader={tokenParams.loader}

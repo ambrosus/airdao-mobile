@@ -45,6 +45,7 @@ export const useBridgeNetworksData = ({
     loading?: boolean;
     withdrawTx: string;
   }>(DEFAULT_BRIDGE_TRANSACTION);
+  const [inputError, setInputError] = useState(false);
 
   const {
     selectedAccount,
@@ -156,6 +157,12 @@ export const useBridgeNetworksData = ({
     ];
   })();
   const onChangeAmount = (value: string) => {
+    const selectedTokenBalance = tokenParams.value.renderTokenItem.balance;
+    if (+value > +selectedTokenBalance) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
     setMax(false);
     let finalValue = StringUtils.formatNumberInput(value);
     finalValue = NumberUtils.limitDecimalCount(
@@ -189,6 +196,11 @@ export const useBridgeNetworksData = ({
   };
 
   const onPressPreview = async () => {
+    const sumAmountFee = +amountToExchange + +(bridgeFee?.networkFee || 0);
+    if (sumAmountFee > +tokenParams.value.renderTokenItem.balance) {
+      setInputError(true);
+      return;
+    }
     try {
       setGasFeeLoader(true);
 
@@ -246,7 +258,8 @@ export const useBridgeNetworksData = ({
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    bridgeTransfer
+    bridgeTransfer,
+    inputError
   };
   const methods = {
     getFeeData,
