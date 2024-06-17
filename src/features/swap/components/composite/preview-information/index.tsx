@@ -26,18 +26,20 @@ export const PreviewInformation = () => {
       selectedTokensAmount[receiveTokensKey] ?? '0'
     );
 
-    const symbol =
-      selectedTokens[isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A]
-        ?.symbol ?? '';
-
     const bnMinimumReceived = minimumAmountOut(
       slippageTolerance,
       bnAmountToReceive
     );
 
-    return `${SwapStringUtils.transformAmountValue(
+    const symbol =
+      selectedTokens[isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A]
+        ?.symbol ?? '';
+
+    const transformedAmount = SwapStringUtils.transformAmountValue(
       formatEther(bnMinimumReceived._hex)
-    )} ${symbol}`;
+    );
+
+    return `${transformedAmount} ${symbol}`;
   }, [
     selectedTokensAmount,
     receiveTokensKey,
