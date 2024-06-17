@@ -46,22 +46,22 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 
   const onBottomSheetClose = useCallback(() => {
     if (status === 'success') {
+      bottomSheetProcessingRef.current?.dismiss();
+
       InteractionManager.runAfterInteractions(() => {
-        setTimeout(() => {
-          if (isPasscodeEnabled) {
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
-              })
-            );
-          } else {
-            navigation.navigate('SetupPasscode');
-          }
-        });
+        if (isPasscodeEnabled) {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+            })
+          );
+        } else {
+          navigation.navigate('SetupPasscode');
+        }
       });
     }
-  }, [status, isPasscodeEnabled, navigation]);
+  }, [status, bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
 
   const renderBottomSheetView = useMemo(() => {
     switch (status) {
@@ -119,12 +119,16 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
     }
   }, [onSuccessButtonPress, status, t]);
 
+  const stateToDisableBackPress = useMemo(() => {
+    return status !== 'pending' && status !== 'success';
+  }, [status]);
+
   return (
     <BottomSheet
       avoidKeyboard
       ref={bottomSheetProcessingRef}
-      onClose={onBottomSheetClose}
-      closeOnBackPress={status !== 'pending'}
+      onBackdropPress={onBottomSheetClose}
+      closeOnBackPress={stateToDisableBackPress}
       swipingEnabled={status !== 'pending'}
       swiperIconVisible={status !== 'pending'}
     >
