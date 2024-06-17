@@ -9,6 +9,7 @@ import {
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
+import { environment } from '@utils/environment';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -96,19 +97,20 @@ export function useSwapActions() {
   const getTokenAmountOutWithMultiRoute = useCallback(
     async (amountToSell: string, path: [string, string]) => {
       const [addressFrom, addressTo] = path;
+      const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
 
       if (
-        addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
-        addressTo === MULTI_ROUTE_ADDRESSES.BOND
+        addressFrom === multiRouteAddresses.USDC &&
+        addressTo === multiRouteAddresses.BOND
       ) {
         const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
         const usdcToNativeAmount = await getAmountsOut({
-          path: [addressFrom, MULTI_ROUTE_ADDRESSES.SAMB],
+          path: [addressFrom, multiRouteAddresses.SAMB],
           amountToSell: bnAmountToSell
         });
 
         return getAmountsOut({
-          path: [MULTI_ROUTE_ADDRESSES.SAMB, MULTI_ROUTE_ADDRESSES.BOND],
+          path: [multiRouteAddresses.SAMB, multiRouteAddresses.BOND],
           amountToSell: usdcToNativeAmount
         });
       }
@@ -121,16 +123,17 @@ export function useSwapActions() {
       if (amountToSell === '' || amountToSell === '0') return;
 
       const [addressFrom, addressTo] = path;
+      const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
       if (
         isExactInRef.current &&
-        addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
-        addressTo === MULTI_ROUTE_ADDRESSES.BOND
+        addressFrom === multiRouteAddresses.USDC &&
+        addressTo === multiRouteAddresses.BOND
       ) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
       } else if (
         isReversedMultiRouteRef.current &&
-        addressFrom === MULTI_ROUTE_ADDRESSES.BOND &&
-        addressTo === MULTI_ROUTE_ADDRESSES.USDC
+        addressFrom === multiRouteAddresses.BOND &&
+        addressTo === multiRouteAddresses.USDC
       ) {
         return await getTokenAmountOut(amountToSell, path);
       } else {

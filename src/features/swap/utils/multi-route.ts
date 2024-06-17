@@ -1,15 +1,17 @@
+import { environment } from '@utils/environment';
 import { MULTI_ROUTE_ADDRESSES } from '../entities';
 
 export function isMultiRouteRequired(
   path: [string, string],
   isExactIn: boolean
 ) {
+  const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
   const [addressFrom, addressTo] = path;
 
   const isMultiRoute =
     isExactIn &&
-    addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
-    addressTo === MULTI_ROUTE_ADDRESSES.BOND;
+    addressFrom === multiRouteAddresses.USDC &&
+    addressTo === multiRouteAddresses.BOND;
 
   return isMultiRoute;
 }
