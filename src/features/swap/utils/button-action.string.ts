@@ -13,14 +13,14 @@ export function buttonActionString(
   bnBalanceAmount: MultiplyBalancesStateType,
   lastChangedInput: keyof typeof FIELD
 ) {
-  const emptyInputValue = '' || '0';
+  const { TOKEN_A, TOKEN_B } = selectedTokens;
+  const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedAmount;
+  const emptyInputValue = '' && '0';
 
-  const isSomeTokenNotSelected =
-    !selectedTokens.TOKEN_A || !selectedTokens.TOKEN_B;
+  const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
 
   const isSomeBalanceIsEmpty =
-    selectedAmount.TOKEN_A === emptyInputValue ||
-    selectedAmount.TOKEN_B === emptyInputValue;
+    AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
 
   if (isSomeBalanceIsEmpty || isSomeTokenNotSelected) {
     return 'Enter amount';
