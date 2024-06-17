@@ -10,17 +10,13 @@ const transformAmountValue = (value: string): string => {
   const [integerPart, fractionalPart] = value.toString().split('.');
 
   let integerLength = integerPart.length;
-  if (integerLength > 5) {
-    integerLength = 5;
-  }
+  if (integerLength > 5) integerLength = 5;
 
   const digitsToKeep = DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
-
   let formattedNumber = integerPart;
 
-  if (fractionalPart) {
+  if (fractionalPart)
     formattedNumber += `.${fractionalPart.slice(0, digitsToKeep)}`;
-  }
 
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
