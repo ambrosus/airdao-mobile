@@ -12,40 +12,43 @@ export function useSwapFieldsHandler() {
     setSelectedTokensAmount,
     latestSelectedTokens,
     latestSelectedTokensAmount,
-    setIsExactIn
+    setIsExactIn,
+    isExactInRef
   } = useSwapContextSelector();
 
-  const updateReceivedTokensOutput = useCallback(
-    async (isExact: boolean) => {
-      const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
-      if (!TOKEN_A || !TOKEN_B) return '';
+  const updateReceivedTokensOutput = useCallback(async () => {
+    const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+    if (!TOKEN_A || !TOKEN_B) return '';
 
-      const path = exactSwapPath(isExact, [TOKEN_A.address, TOKEN_B.address]);
-      const key = isExact ? FIELD.TOKEN_A : FIELD.TOKEN_B;
-      const oppositeKey = isExact ? FIELD.TOKEN_B : FIELD.TOKEN_A;
-      const amountToSell = latestSelectedTokensAmount.current[key];
+    const path = exactSwapPath(isExactInRef.current, [
+      TOKEN_A.address,
+      TOKEN_B.address
+    ]);
 
-      const bnAmountToReceive = await getOppositeReceivedTokenAmount(
-        amountToSell,
-        path
-      );
-      const normalizedAmount = NumberUtils.limitDecimalCount(
-        formatEther(bnAmountToReceive?._hex),
-        4
-      );
+    const key = isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B;
+    const oppositeKey = isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+    const amountToSell = latestSelectedTokensAmount.current[key];
 
-      setSelectedTokensAmount({
-        ...latestSelectedTokensAmount.current,
-        [oppositeKey]: normalizedAmount
-      });
-    },
-    [
-      getOppositeReceivedTokenAmount,
-      latestSelectedTokens,
-      latestSelectedTokensAmount,
-      setSelectedTokensAmount
-    ]
-  );
+    const bnAmountToReceive = await getOppositeReceivedTokenAmount(
+      amountToSell,
+      path
+    );
+    const normalizedAmount = NumberUtils.limitDecimalCount(
+      formatEther(bnAmountToReceive?._hex),
+      4
+    );
+
+    setSelectedTokensAmount({
+      ...latestSelectedTokensAmount.current,
+      [oppositeKey]: normalizedAmount
+    });
+  }, [
+    getOppositeReceivedTokenAmount,
+    isExactInRef,
+    latestSelectedTokens,
+    latestSelectedTokensAmount,
+    setSelectedTokensAmount
+  ]);
 
   const onChangeSelectedTokenAmount = useCallback(
     async (key: SelectedTokensKeys, amount: string) => {
@@ -65,7 +68,7 @@ export function useSwapFieldsHandler() {
       }
 
       setTimeout(async () => {
-        await updateReceivedTokensOutput(key === FIELD.TOKEN_A);
+        await updateReceivedTokensOutput();
       }, 250);
     },
     [setIsExactIn, setSelectedTokensAmount, updateReceivedTokensOutput]

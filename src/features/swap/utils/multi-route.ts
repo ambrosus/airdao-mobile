@@ -6,15 +6,10 @@ export function isMultiRouteRequired(
 ) {
   const [addressFrom, addressTo] = path;
 
-  const original =
+  const isMultiRoute =
     isExactIn &&
     addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
     addressTo === MULTI_ROUTE_ADDRESSES.BOND;
 
-  const reversed =
-    isExactIn &&
-    addressFrom === MULTI_ROUTE_ADDRESSES.BOND &&
-    addressTo === MULTI_ROUTE_ADDRESSES.USDC;
-
-  return { original, reversed };
+  return isMultiRoute;
 }

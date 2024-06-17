@@ -12,8 +12,12 @@ import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
-  const { selectedTokensAmount, selectedTokens, isExactIn } =
-    useSwapContextSelector();
+  const {
+    selectedTokensAmount,
+    selectedTokens,
+    isExactInRef,
+    isReversedMultiRouteRef
+  } = useSwapContextSelector();
 
   const [isProcessingAllowance, setIsProcessingAllowance] = useState(false);
 
@@ -118,28 +122,33 @@ export function useSwapActions() {
 
       const [addressFrom, addressTo] = path;
       if (
+        isExactInRef.current &&
         addressFrom === MULTI_ROUTE_ADDRESSES.USDC &&
         addressTo === MULTI_ROUTE_ADDRESSES.BOND
       ) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
       } else if (
-        isExactIn &&
+        isReversedMultiRouteRef.current &&
         addressFrom === MULTI_ROUTE_ADDRESSES.BOND &&
         addressTo === MULTI_ROUTE_ADDRESSES.USDC
       ) {
-        return await getTokenAmountOutWithMultiRoute(amountToSell, path);
+        return await getTokenAmountOut(amountToSell, path);
       } else {
         return await getTokenAmountOut(amountToSell, path);
       }
     },
-    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactIn]
+    [
+      getTokenAmountOut,
+      getTokenAmountOutWithMultiRoute,
+      isExactInRef,
+      isReversedMultiRouteRef
+    ]
   );
 
   return {
     checkAllowance,
     setAllowance,
     isProcessingAllowance,
-    getOppositeReceivedTokenAmount,
-    isExactIn
+    getOppositeReceivedTokenAmount
   };
 }

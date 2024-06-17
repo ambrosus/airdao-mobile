@@ -11,12 +11,15 @@ import { FIELD, SelectedTokensKeys } from '@/features/swap/types';
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
+  const isReversedMultiRouteRef = useRef<boolean>(false);
+  const isExactInRef = useRef<boolean>(true);
 
+  const [_refMultiRouteGetter, setIsReversedMultiRoute] = useState(false);
   const [slippageTolerance, setSlippageTolerance] = useState(
     INITIAL_SLIPPAGE_TOLLERANCE
   );
 
-  const [isExactIn, setIsExactIn] = useState(true);
+  const [_refExactGetter, setIsExactIn] = useState(true);
   const [lastChangedInput, setLastChangedInput] = useState<SelectedTokensKeys>(
     FIELD.TOKEN_A
   );
@@ -34,6 +37,14 @@ export const SwapContext = () => {
     latestSelectedTokens.current = selectedTokens;
     latestSelectedTokensAmount.current = selectedTokensAmount;
   }, [selectedTokens, selectedTokensAmount]);
+
+  useEffect(() => {
+    isExactInRef.current = _refExactGetter;
+  }, [_refExactGetter]);
+
+  useEffect(() => {
+    isReversedMultiRouteRef.current = _refMultiRouteGetter;
+  }, [_refMultiRouteGetter]);
 
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
@@ -55,7 +66,9 @@ export const SwapContext = () => {
     setLastChangedInput,
     bottomSheetTokenARef,
     bottomSheetTokenBRef,
-    isExactIn,
+    isExactInRef,
+    isReversedMultiRouteRef,
+    setIsReversedMultiRoute,
     setIsExactIn,
     reset
   };

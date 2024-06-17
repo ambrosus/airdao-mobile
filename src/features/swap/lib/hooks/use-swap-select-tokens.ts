@@ -10,8 +10,7 @@ export function useSwapSelectTokens() {
     setSelectedTokens,
     selectedTokens,
     setSelectedTokensAmount,
-    selectedTokensAmount,
-    isExactIn
+    selectedTokensAmount
   } = useSwapContextSelector();
 
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
@@ -31,15 +30,10 @@ export function useSwapSelectTokens() {
       });
 
       setTimeout(async () => {
-        await updateReceivedTokensOutput(isExactIn);
+        await updateReceivedTokensOutput();
       }, 250);
     },
-    [
-      isExactIn,
-      onDismissBottomSheetByKey,
-      setSelectedTokens,
-      updateReceivedTokensOutput
-    ]
+    [onDismissBottomSheetByKey, setSelectedTokens, updateReceivedTokensOutput]
   );
 
   const onReverseSelectedTokens = () => {
