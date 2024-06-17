@@ -15,6 +15,7 @@ import { TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
+import { SwapStringUtils } from '@features/swap/utils';
 
 interface TokenSelectorProps {
   readonly type: SelectedTokensKeys;
@@ -41,10 +42,9 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
     };
   }, [selectedTokens, type]);
 
-  const SAMBSupportedTokenLogo =
-    selectedTokens[type]?.symbol === 'SAMB'
-      ? 'AMB'
-      : selectedTokens[type]?.symbol;
+  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
+    selectedTokens[type]?.symbol ?? ''
+  );
 
   const onToggleSelectTokenModal = useCallback(() => {
     onShowBottomSheetByKey(type);

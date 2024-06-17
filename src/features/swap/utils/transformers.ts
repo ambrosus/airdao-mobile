@@ -21,4 +21,7 @@ const transformAmountValue = (value: string): string => {
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
 
-export const SwapStringUtils = { transformAmountValue };
+const extendedLogoVariants = (symbol: string) =>
+  symbol === 'SAMB' ? 'AMB' : symbol;
+
+export const SwapStringUtils = { transformAmountValue, extendedLogoVariants };

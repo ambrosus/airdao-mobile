@@ -10,6 +10,7 @@ import {
   useSwapFieldsHandler,
   useSwapSelectTokens
 } from '@features/swap/lib/hooks';
+import { SwapStringUtils } from '@features/swap/utils';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];
@@ -60,7 +61,9 @@ export const BottomSheetTokenItem = ({
     token
   ]);
 
-  const SAMBSupportedTokenLogo = token.symbol === 'SAMB' ? 'AMB' : token.symbol;
+  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
+    token.symbol
+  );
 
   const combineDisabledStates = useMemo(() => {
     return isSelectedSameToken || isSelectedReversedToken;
