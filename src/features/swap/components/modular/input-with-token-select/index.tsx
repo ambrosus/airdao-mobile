@@ -15,10 +15,12 @@ interface InputWithTokenSelectProps {
 }
 
 export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
-  const { selectedTokensAmount } = useSwapContextSelector();
+  const { selectedTokensAmount, setLastChangedInput } =
+    useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
   const onChangeTokenAmount = (value: string) => {
+    setLastChangedInput(type);
     let finalValue = StringUtils.formatNumberInput(value);
     finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
     onChangeSelectedTokenAmount(type, finalValue);

@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { BottomSheetRef, Header } from '@components/composite';
 import {
+  BottomSheetPreviewSwap,
   BottomSheetSwapSettings,
   BottomSheetTokensList,
   SwapForm
@@ -16,8 +17,12 @@ import { Button } from '@components/base';
 
 export const SwapScreen = () => {
   const bottomSheetSwapSettingsRef = useRef<BottomSheetRef>(null);
-  const { bottomSheetTokenARef, bottomSheetTokenBRef, reset } =
-    useSwapContextSelector();
+  const {
+    bottomSheetTokenARef,
+    bottomSheetTokenBRef,
+    bottomSheetPreviewSwapRef,
+    reset
+  } = useSwapContextSelector();
 
   useFocusEffect(
     useCallback(() => {
@@ -50,6 +55,7 @@ export const SwapScreen = () => {
       <BottomSheetTokensList ref={bottomSheetTokenARef} type={FIELD.TOKEN_A} />
       <BottomSheetTokensList ref={bottomSheetTokenBRef} type={FIELD.TOKEN_B} />
       <BottomSheetSwapSettings ref={bottomSheetSwapSettingsRef} />
+      <BottomSheetPreviewSwap ref={bottomSheetPreviewSwapRef} />
     </SafeAreaView>
   );
 };

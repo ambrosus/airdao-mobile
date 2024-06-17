@@ -11,6 +11,8 @@ import { FIELD, SelectedTokensKeys } from '@/features/swap/types';
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
+  const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
+
   const isReversedMultiRouteRef = useRef<boolean>(false);
   const isExactInRef = useRef<boolean>(true);
 
@@ -66,6 +68,7 @@ export const SwapContext = () => {
     setLastChangedInput,
     bottomSheetTokenARef,
     bottomSheetTokenBRef,
+    bottomSheetPreviewSwapRef,
     isExactInRef,
     isReversedMultiRouteRef,
     setIsReversedMultiRoute,

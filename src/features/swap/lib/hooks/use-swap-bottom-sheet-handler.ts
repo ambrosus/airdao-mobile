@@ -1,35 +1,50 @@
 import { Keyboard } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { useCallback } from 'react';
 
 export function useSwapBottomSheetHandler() {
-  const { bottomSheetTokenARef, bottomSheetTokenBRef } =
-    useSwapContextSelector();
+  const {
+    bottomSheetTokenARef,
+    bottomSheetTokenBRef,
+    bottomSheetPreviewSwapRef
+  } = useSwapContextSelector();
 
-  const onShowBottomSheetByKey = (key: SelectedTokensKeys) => {
-    Keyboard.dismiss();
+  const onShowBottomSheetByKey = useCallback(
+    (key: SelectedTokensKeys) => {
+      Keyboard.dismiss();
 
-    setTimeout(() => {
+      setTimeout(() => {
+        key === FIELD.TOKEN_A
+          ? bottomSheetTokenARef.current?.show()
+          : bottomSheetTokenBRef.current?.show();
+      }, 500);
+    },
+    [bottomSheetTokenARef, bottomSheetTokenBRef]
+  );
+
+  const onDismissBottomSheetByKey = useCallback(
+    (key: SelectedTokensKeys) => {
       key === FIELD.TOKEN_A
-        ? bottomSheetTokenARef.current?.show()
-        : bottomSheetTokenBRef.current?.show();
-    }, 500);
-  };
+        ? bottomSheetTokenARef.current?.dismiss()
+        : bottomSheetTokenBRef.current?.dismiss();
+    },
+    [bottomSheetTokenARef, bottomSheetTokenBRef]
+  );
 
-  const onDismissBottomSheetByKey = (key: SelectedTokensKeys) => {
-    key === FIELD.TOKEN_A
-      ? bottomSheetTokenARef.current?.dismiss()
-      : bottomSheetTokenBRef.current?.dismiss();
-  };
-
-  const onDismissBottomSheets = () => {
+  const onDismissBottomSheets = useCallback(() => {
     bottomSheetTokenARef.current?.dismiss();
     bottomSheetTokenBRef.current?.dismiss();
-  };
+  }, [bottomSheetTokenARef, bottomSheetTokenBRef]);
+
+  const onReviewSwapPreview = useCallback(() => {
+    bottomSheetPreviewSwapRef.current?.show();
+  }, [bottomSheetPreviewSwapRef]);
 
   return {
     onDismissBottomSheetByKey,
     onShowBottomSheetByKey,
-    onDismissBottomSheets
+    onDismissBottomSheets,
+    onReviewSwapPreview
   };
 }

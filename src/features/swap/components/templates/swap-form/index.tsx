@@ -1,12 +1,14 @@
 import React from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { styles } from './styles';
-import { KeyboardDismissingView, Spacer, Text } from '@components/base';
+import { KeyboardDismissingView, Spacer } from '@components/base';
 import { FIELD } from '@features/swap/types';
 import { scale } from '@utils/scaling';
-import { InputWithTokenSelect } from '@/features/swap/components/modular';
+import {
+  InputWithTokenSelect,
+  ReviewSwapButton
+} from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
-import { PrimaryButton } from '@components/modular';
 
 export const SwapForm = () => {
   return (
@@ -24,9 +26,7 @@ export const SwapForm = () => {
             <InputWithTokenSelect type={FIELD.TOKEN_B} />
           </View>
 
-          <PrimaryButton onPress={() => null}>
-            <Text>Swap</Text>
-          </PrimaryButton>
+          <ReviewSwapButton />
         </View>
       </KeyboardDismissingView>
     </KeyboardAvoidingView>
