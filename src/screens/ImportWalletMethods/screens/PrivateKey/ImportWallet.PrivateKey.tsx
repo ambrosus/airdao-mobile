@@ -73,21 +73,19 @@ export const ImportWalletPrivateKey = () => {
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
       InteractionManager.runAfterInteractions(async () => {
-        await delay(1200);
+        await delay(1400);
         bottomSheetProcessingRef.current?.dismiss();
       });
 
       InteractionManager.runAfterInteractions(() => {
         requestAnimationFrame(async () => {
-          await delay(1200);
+          await delay(1240);
           navigation.navigate('ImportWalletPrivateKeyError', {
             error: errorStatus
           });
           setStatus(IMPORT_PROCESS_STATUS.PENDING);
         });
       });
-
-      // Update the status
     }
   }, [navigation, privateKey]);
 
