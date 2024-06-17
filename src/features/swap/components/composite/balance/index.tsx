@@ -68,6 +68,10 @@ export const Balance = ({ type }: BalanceProps) => {
     updateReceivedTokensOutput
   ]);
 
+  const maximumTokenBalance = useMemo(() => {
+    return !selectedTokens[type] ? '0' : normalizedTokenBalance;
+  }, [normalizedTokenBalance, selectedTokens, type]);
+
   if (isFetchingBalance) {
     return <Text>loading</Text>;
   }
@@ -91,7 +95,7 @@ export const Balance = ({ type }: BalanceProps) => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral400}
           >
-            {normalizedTokenBalance}
+            {maximumTokenBalance}
           </Text>
         </Row>
 
