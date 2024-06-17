@@ -3,8 +3,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapActions } from './use-swap-actions';
-import { NumberUtils } from '@utils/number';
-import { exactSwapPath } from '@features/swap/utils';
+import { SwapStringUtils, exactSwapPath } from '@features/swap/utils';
 
 export function useSwapFieldsHandler() {
   const { getOppositeReceivedTokenAmount } = useSwapActions();
@@ -33,9 +32,8 @@ export function useSwapFieldsHandler() {
       amountToSell,
       path
     );
-    const normalizedAmount = NumberUtils.limitDecimalCount(
-      formatEther(bnAmountToReceive?._hex),
-      4
+    const normalizedAmount = SwapStringUtils.transformAmountValue(
+      formatEther(bnAmountToReceive?._hex)
     );
 
     setSelectedTokensAmount({
@@ -65,11 +63,11 @@ export function useSwapFieldsHandler() {
           ...prevSelectedTokensAmounts,
           [oppositeKey]: amount
         }));
+      } else {
+        setTimeout(async () => {
+          await updateReceivedTokensOutput();
+        }, 250);
       }
-
-      setTimeout(async () => {
-        await updateReceivedTokensOutput();
-      }, 250);
     },
     [setIsExactIn, setSelectedTokensAmount, updateReceivedTokensOutput]
   );
