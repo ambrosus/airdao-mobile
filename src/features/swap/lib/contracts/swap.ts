@@ -1,10 +1,7 @@
 import Config from '@constants/config';
 import { OutAmountGetterArgs } from '@features/swap/types/swap';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
-import {
-  isNativeWrapped,
-  wrapNativeAddress
-} from '@features/swap/utils/wrap-native-address';
+import { isNativeWrapped, wrapNativeAddress } from '@features/swap/utils';
 import { ethers } from 'ethers';
 import { ERC20_TRADE } from '../abi';
 

@@ -4,7 +4,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapActions } from './use-swap-actions';
 import { NumberUtils } from '@utils/number';
-import { exactSwapPath } from '@features/swap/utils/exact-swap-path';
+import { exactSwapPath } from '@features/swap/utils';
 
 export function useSwapFieldsHandler() {
   const { getOppositeReceivedTokenAmount } = useSwapActions();
