@@ -28,6 +28,30 @@ export const BridgeContext = () => {
     null
   );
 
+  const setSelectedTokenData = async (
+    pairs: RenderTokenItem = selectedToken
+  ) => {
+    try {
+      setTokenDataLoader(true);
+      const balance = await getBridgeBalance({
+        from: from.id,
+        token: pairs.renderTokenItem,
+        ownerAddress: selectedAccount?.address || ''
+      });
+      const tokenData = {
+        ...pairs
+      };
+      tokenData.renderTokenItem.balance =
+        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || '';
+      setSelectedToken(tokenData);
+      return balance;
+    } catch (e) {
+      // ignore
+    } finally {
+      setTokenDataLoader(false);
+    }
+  };
+
   const setAllRequireBridgeData = () => {
     getBridgePairs({
       from: from.id,
@@ -49,28 +73,6 @@ export const BridgeContext = () => {
     // @ts-ignore
     setSelectedToken(DEFAULT_TOKEN_PAIRS);
     setAllRequireBridgeData();
-  };
-
-  const setSelectedTokenData = async (pairs: RenderTokenItem) => {
-    try {
-      setTokenDataLoader(true);
-      const balance = await getBridgeBalance({
-        from: from.id,
-        token: pairs.renderTokenItem,
-        ownerAddress: selectedAccount?.address || ''
-      });
-      const tokenData = {
-        ...pairs
-      };
-      tokenData.renderTokenItem.balance =
-        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || '';
-      setSelectedToken(tokenData);
-      return balance;
-    } catch (e) {
-      // ignore
-    } finally {
-      setTokenDataLoader(false);
-    }
   };
 
   useEffect(() => {
@@ -178,6 +180,7 @@ export const BridgeContext = () => {
     tokenParams: {
       value: selectedToken,
       setter: setSelectedTokenData,
+      update: setSelectedTokenData,
       loader: tokenDataLoader
     },
     fromParams: {

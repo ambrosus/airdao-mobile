@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { currentProvider, getBridgeFeeData } from '@lib';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
+import { CryptoCurrencyCode } from '@appTypes';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
@@ -196,8 +197,11 @@ export const useBridgeNetworksData = ({
   };
 
   const onPressPreview = async () => {
-    const sumAmountFee = +amountToExchange + +(bridgeFee?.networkFee || 0);
-    if (sumAmountFee > +tokenParams.value.renderTokenItem.balance) {
+    const checkAmount =
+      bridgeFee?.feeSymbol === CryptoCurrencyCode.AMB
+        ? +amountToExchange + +(bridgeFee?.networkFee || 0)
+        : amountToExchange;
+    if (+checkAmount > +tokenParams.value.renderTokenItem.balance) {
       setInputError(true);
       return;
     }
@@ -243,6 +247,7 @@ export const useBridgeNetworksData = ({
             withdrawTx: bridgeTx.transactionHash
           };
           setBridgeTransaction(bridgeTransaction);
+          await tokenParams.update();
         }
       }
     } catch (e) {
