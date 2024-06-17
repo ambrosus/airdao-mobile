@@ -6,7 +6,10 @@ import { COLORS } from '@constants/colors';
 import { Checkmark } from '@components/svg/icons';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
-import { useSwapSelectTokens } from '@features/swap/lib/hooks';
+import {
+  useSwapFieldsHandler,
+  useSwapSelectTokens
+} from '@features/swap/lib/hooks';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];
@@ -17,8 +20,9 @@ export const BottomSheetTokenItem = ({
   token,
   type
 }: BottomSheetTokenItemProps) => {
-  const { selectedTokens } = useSwapContextSelector();
+  const { selectedTokens, setIsExactIn } = useSwapContextSelector();
   const { onSelectToken, onReverseSelectedTokens } = useSwapSelectTokens();
+  const { updateReceivedTokensOutput } = useSwapFieldsHandler();
 
   const isSelectedSameToken = useMemo(() => {
     return token.symbol === selectedTokens[type]?.symbol;
@@ -31,17 +35,29 @@ export const BottomSheetTokenItem = ({
   }, [selectedTokens, token.address, type]);
 
   const onChangeSelectedTokenPress = useCallback(() => {
+    const { TOKEN_A, TOKEN_B } = selectedTokens;
+
     if (isSelectedReversedToken) {
+      setIsExactIn((prevState) => !prevState);
       onReverseSelectedTokens();
+
+      if (TOKEN_A && TOKEN_B) {
+        setTimeout(async () => {
+          await updateReceivedTokensOutput();
+        }, 250);
+      }
     } else {
       onSelectToken(type, token);
     }
   }, [
+    selectedTokens,
     isSelectedReversedToken,
-    onSelectToken,
+    setIsExactIn,
     onReverseSelectedTokens,
-    token,
-    type
+    updateReceivedTokensOutput,
+    onSelectToken,
+    type,
+    token
   ]);
 
   const SAMBSupportedTokenLogo = token.symbol === 'SAMB' ? 'AMB' : token.symbol;
