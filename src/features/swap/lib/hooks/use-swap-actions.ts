@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
@@ -10,6 +10,7 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
 import { environment } from '@utils/environment';
+import { wrapNativeAddress, isNativeWrapped } from '@features/swap/utils';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -158,10 +159,23 @@ export function useSwapActions() {
     [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef]
   );
 
+  const hasWrapNativeToken = useMemo(() => {
+    const { TOKEN_A, TOKEN_B } = selectedTokens;
+
+    if (TOKEN_A && TOKEN_B) {
+      const excludeNativeETH = wrapNativeAddress([
+        TOKEN_A.address,
+        TOKEN_B.address
+      ]);
+      return isNativeWrapped(excludeNativeETH);
+    }
+  }, [selectedTokens]);
+
   return {
     checkAllowance,
     setAllowance,
     isProcessingAllowance,
-    getOppositeReceivedTokenAmount
+    getOppositeReceivedTokenAmount,
+    hasWrapNativeToken
   };
 }
