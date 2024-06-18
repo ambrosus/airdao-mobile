@@ -17,10 +17,8 @@ export const SwapContext = () => {
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
 
-  const isReversedMultiRouteRef = useRef<boolean>(false);
   const isExactInRef = useRef<boolean>(true);
 
-  const [_refMultiRouteGetter, setIsReversedMultiRoute] = useState(false);
   const [slippageTolerance, setSlippageTolerance] = useState(
     INITIAL_SLIPPAGE_TOLLERANCE
   );
@@ -52,10 +50,6 @@ export const SwapContext = () => {
   }, [_refExactGetter]);
 
   useEffect(() => {
-    isReversedMultiRouteRef.current = _refMultiRouteGetter;
-  }, [_refMultiRouteGetter]);
-
-  useEffect(() => {
     allPairsRef.current = _refPairsGetter;
   }, [_refPairsGetter]);
 
@@ -81,8 +75,6 @@ export const SwapContext = () => {
     bottomSheetTokenBRef,
     bottomSheetPreviewSwapRef,
     isExactInRef,
-    isReversedMultiRouteRef,
-    setIsReversedMultiRoute,
     setIsExactIn,
     allPairsRef,
     setPairs,

@@ -13,12 +13,8 @@ import { environment } from '@utils/environment';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
-  const {
-    selectedTokensAmount,
-    selectedTokens,
-    isExactInRef,
-    isReversedMultiRouteRef
-  } = useSwapContextSelector();
+  const { selectedTokensAmount, selectedTokens, isExactInRef } =
+    useSwapContextSelector();
 
   const [isProcessingAllowance, setIsProcessingAllowance] = useState(false);
 
@@ -99,53 +95,67 @@ export function useSwapActions() {
       const [addressFrom, addressTo] = path;
       const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
 
-      if (
-        addressFrom === multiRouteAddresses.USDC &&
-        addressTo === multiRouteAddresses.BOND
-      ) {
-        const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
-        const usdcToNativeAmount = await getAmountsOut({
-          path: [addressFrom, multiRouteAddresses.SAMB],
+      const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+      const isExactIn = isExactInRef.current;
+
+      const isReversed =
+        addressFrom === multiRouteAddresses.BOND &&
+        addressTo === multiRouteAddresses.USDC;
+
+      if (isExactIn || isReversed) {
+        const intermediatePath = [addressFrom, multiRouteAddresses.SAMB];
+        const finalPath = isExactIn
+          ? [multiRouteAddresses.SAMB, multiRouteAddresses.BOND]
+          : [multiRouteAddresses.SAMB, multiRouteAddresses.USDC];
+
+        const intermediateAmount = await getAmountsOut({
+          path: intermediatePath as [string, string],
           amountToSell: bnAmountToSell
         });
 
-        return getAmountsOut({
-          path: [multiRouteAddresses.SAMB, multiRouteAddresses.BOND],
-          amountToSell: usdcToNativeAmount
+        return await getAmountsOut({
+          path: finalPath as [string, string],
+          amountToSell: intermediateAmount
         });
       }
     },
-    []
+    [isExactInRef]
   );
 
   const getOppositeReceivedTokenAmount = useCallback(
     async (amountToSell: string, path: [string, string]) => {
       if (amountToSell === '' || amountToSell === '0') return;
-
       const [addressFrom, addressTo] = path;
       const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
-      if (
-        isExactInRef.current &&
-        addressFrom === multiRouteAddresses.USDC &&
-        addressTo === multiRouteAddresses.BOND
-      ) {
+
+      const isMultiRouteWithUSDCFirst = new Set([
+        [multiRouteAddresses.USDC, multiRouteAddresses.BOND].join()
+      ]);
+
+      const isMultiRouteWithBONDFirst = new Set([
+        [multiRouteAddresses.BOND, multiRouteAddresses.USDC].join()
+      ]);
+
+      const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
+        [addressFrom, addressTo].join()
+      );
+
+      const isMuliRouteBONDSwap = isMultiRouteWithBONDFirst.has(
+        [addressFrom, addressTo].join()
+      );
+
+      if (isExactInRef.current && isMuliRouteUSDCSwap) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
-      } else if (
-        isReversedMultiRouteRef.current &&
-        addressFrom === multiRouteAddresses.BOND &&
-        addressTo === multiRouteAddresses.USDC
-      ) {
-        return await getTokenAmountOut(amountToSell, path);
+      } else if (!isExactInRef.current && isMuliRouteBONDSwap) {
+        return await getTokenAmountOutWithMultiRoute(amountToSell, [
+          multiRouteAddresses.BOND,
+          multiRouteAddresses.USDC
+        ]);
       } else {
         return await getTokenAmountOut(amountToSell, path);
       }
     },
-    [
-      getTokenAmountOut,
-      getTokenAmountOutWithMultiRoute,
-      isExactInRef,
-      isReversedMultiRouteRef
-    ]
+    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef]
   );
 
   return {
