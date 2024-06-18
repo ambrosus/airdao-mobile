@@ -30,7 +30,7 @@ type PrivateKeyMaskedInputProps = TextInputProps & {
   setPrivateKey: Dispatch<SetStateAction<string>>;
 };
 
-const _isAlphanumeric = (char: string) => {
+const _isAlphanumeric = (char: string): boolean => {
   return /^[a-zA-Z0-9$]+$/.test(char);
 };
 
@@ -75,7 +75,7 @@ export const PrivateKeyMaskedInput = forwardRef<
     return () => clearInterval(intervalId);
   }, []);
 
-  const [currentCarretPosition, setCurrentCarretPosition] = useState<
+  const [currentCaretPosition, setCurrentCaretPosition] = useState<
     number | null
   >(null);
 
@@ -88,7 +88,7 @@ export const PrivateKeyMaskedInput = forwardRef<
       if (!secureTextEntry) {
         setPrivateKey(text);
       } else if (secureTextEntry && clipboard.includes(text)) {
-        setCurrentCarretPosition(text.length);
+        setCurrentCaretPosition(text.length);
         setPrivateKey(text);
       }
     },
@@ -109,38 +109,40 @@ export const PrivateKeyMaskedInput = forwardRef<
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
       if (secureTextEntry) {
         const key = event.nativeEvent.key;
+        const caretPosition =
+          currentCaretPosition !== null ? currentCaretPosition : value.length;
 
         if (key.toLowerCase() === 'backspace') {
           if (!_isSelectionEmpty) {
-            // Check if selection is not empty
+            // Delete selected text
             const selectionStart = selection.start || 0;
             const selectionEnd = selection.end || 0;
             const newPrivateKey =
               value.slice(0, selectionStart) + value.slice(selectionEnd);
             setPrivateKey(newPrivateKey);
             setSelection({ start: null, end: null });
-          } else {
-            setPrivateKey(value.slice(0, -1));
+          } else if (value.length > 0 && caretPosition > 0) {
+            // Delete single character before caret position
+            const newPrivateKey =
+              value.slice(0, caretPosition - 1) + value.slice(caretPosition);
+            setPrivateKey(newPrivateKey);
+            setCurrentCaretPosition(caretPosition - 1);
           }
         } else if (
           key === ' ' &&
           maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
         ) {
           setPrivateKey((prevValue) => prevValue + ' ');
+          setCurrentCaretPosition(caretPosition + 1);
         } else if (
           _isAlphanumeric(key) &&
-          maskedValue.length < PRIVATE_KEY_MAX_LENGTH // Adjusted condition here
+          maskedValue.length < PRIVATE_KEY_MAX_LENGTH
         ) {
-          // Insert the key at the current caret position
-          const currentPos =
-            currentCarretPosition !== null
-              ? currentCarretPosition
-              : value.length;
+          // Insert alphanumeric key at caret position
           const newPrivateKey =
-            value.substring(0, currentPos) + key + value.substring(currentPos);
+            value.slice(0, caretPosition) + key + value.slice(caretPosition);
           setPrivateKey(newPrivateKey);
-          // Incrementing caret position
-          setCurrentCarretPosition(currentPos + 1);
+          setCurrentCaretPosition(caretPosition + 1);
         }
       }
     },
@@ -152,7 +154,8 @@ export const PrivateKeyMaskedInput = forwardRef<
       selection.end,
       value,
       setPrivateKey,
-      currentCarretPosition
+      currentCaretPosition,
+      setCurrentCaretPosition
     ]
   );
 
@@ -169,7 +172,7 @@ export const PrivateKeyMaskedInput = forwardRef<
 
         if (start === end) {
           setSelection(SELECTION_INITIAL_STATE);
-          setCurrentCarretPosition(start);
+          setCurrentCaretPosition(start);
         } else {
           setSelection({
             ...selection,
