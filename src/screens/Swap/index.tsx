@@ -14,9 +14,11 @@ import { FIELD } from '@features/swap/types';
 import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { Button } from '@components/base';
+import { useAllLiquidityPools } from '@features/swap/lib/hooks';
 
 export const SwapScreen = () => {
   const bottomSheetSwapSettingsRef = useRef<BottomSheetRef>(null);
+  useAllLiquidityPools();
   const {
     bottomSheetTokenARef,
     bottomSheetTokenBRef,

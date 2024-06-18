@@ -6,7 +6,11 @@ import {
   INITIAL_SLIPPAGE_TOLLERANCE
 } from './initials';
 import { BottomSheetRef } from '@components/composite';
-import { FIELD, SelectedTokensKeys } from '@/features/swap/types';
+import {
+  FIELD,
+  SelectedPairsState,
+  SelectedTokensKeys
+} from '@/features/swap/types';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
@@ -32,6 +36,9 @@ export const SwapContext = () => {
     Record<SelectedTokensKeys, string>
   >(INITIAL_SELECTED_TOKENS_AMOUNT);
 
+  const allPairsRef = useRef<SelectedPairsState>([]);
+  const [_refPairsGetter, setPairs] = useState<SelectedPairsState>([]);
+
   const latestSelectedTokens = useRef(selectedTokens);
   const latestSelectedTokensAmount = useRef(selectedTokensAmount);
 
@@ -47,6 +54,10 @@ export const SwapContext = () => {
   useEffect(() => {
     isReversedMultiRouteRef.current = _refMultiRouteGetter;
   }, [_refMultiRouteGetter]);
+
+  useEffect(() => {
+    allPairsRef.current = _refPairsGetter;
+  }, [_refPairsGetter]);
 
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
@@ -73,6 +84,8 @@ export const SwapContext = () => {
     isReversedMultiRouteRef,
     setIsReversedMultiRoute,
     setIsExactIn,
+    allPairsRef,
+    setPairs,
     reset
   };
 };

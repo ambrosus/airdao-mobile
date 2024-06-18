@@ -13,3 +13,9 @@ export type SelectedTokensBalanceState = Record<
   SelectedTokensKeys,
   ethers.BigNumber | null
 >;
+
+export type SelectedPairsState = Array<{
+  pairAddress: string;
+  token0: string;
+  token1: string;
+}>;
