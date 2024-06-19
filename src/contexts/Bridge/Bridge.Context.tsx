@@ -10,8 +10,10 @@ import {
 } from '@contexts/Bridge/constants';
 import { getBridgeBalance, getBridgePairs } from '@lib';
 import { NumberUtils } from '@utils/number';
-import { formatEther } from 'ethers/lib/utils';
+import { formatUnits } from 'ethers/lib/utils';
 import { parseNetworkParams } from '@hooks/bridge/services';
+import { CryptoCurrencyCode } from '@appTypes';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 export const BridgeContext = () => {
   const [config, setConfig] = useState<any>({});
@@ -38,11 +40,21 @@ export const BridgeContext = () => {
         token: pairs.renderTokenItem,
         ownerAddress: selectedAccount?.address || ''
       });
+
       const tokenData = {
         ...pairs
       };
+
+      const { USDC, USDT, BUSD } = CryptoCurrencyCode;
+
+      const symbol = pairs.renderTokenItem.symbol;
+      const isUSDToken = symbol === USDC || symbol === USDT || symbol === BUSD;
+
       tokenData.renderTokenItem.balance =
-        NumberUtils.limitDecimalCount(formatEther(balance?._hex), 2) || '';
+        NumberUtils.limitDecimalCount(
+          formatUnits(balance, pairs.renderTokenItem.decimals),
+          isUSDToken ? DECIMAL_LIMIT.USD : DECIMAL_LIMIT.CRYPTO
+        ) || '';
       setSelectedToken(tokenData);
       return balance;
     } catch (e) {

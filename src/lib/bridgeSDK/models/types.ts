@@ -1,5 +1,6 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { AccountDBModel } from '@database';
+import { CryptoCurrencyCode } from '@appTypes';
 
 export type BridgeNetwork = 'eth' | 'bsc';
 export type Network = BridgeNetwork | 'amb';
@@ -17,7 +18,7 @@ export interface Token {
   isNativeCoin: boolean;
   name: string;
   network: Network | string; // on which network this token was deployed
-  symbol: string;
+  symbol: CryptoCurrencyCode | undefined;
 }
 
 export interface FeeData {
@@ -35,7 +36,7 @@ export interface Config {
 export interface ConfigToken {
   isActive: boolean;
   name: string;
-  symbol: string;
+  symbol: CryptoCurrencyCode | undefined;
   logo: string;
   networks: { [net: string]: ConfigTokenNetwork };
 }
@@ -90,7 +91,7 @@ export interface GetBalanceModel {
 
 export interface CalculateGasFee {
   bridgeConfig: Config;
-  from: string;
+  fromNetwork: string;
   withdrawData: {
     tokenFrom: Token;
     tokenTo: Token;

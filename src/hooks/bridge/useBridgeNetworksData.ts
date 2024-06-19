@@ -1,7 +1,7 @@
 import { LayoutChangeEvent } from 'react-native';
 import { RefObject, useMemo, useState } from 'react';
 import { styles as bridgeFormStyle } from '@components/templates/Bridge/BridgeForm/styles';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, formatUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { BridgeFeeModel, RenderTokenItem } from '@models/Bridge';
 import { CurrencyUtils } from '@utils/currency';
@@ -9,9 +9,10 @@ import { StringUtils } from '@utils/string';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
-import { currentProvider, getBridgeFeeData } from '@lib';
+import { currentProvider, getBridgeFeeData, getBridgeTransactions } from '@lib';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
-import { CryptoCurrencyCode } from '@appTypes';
+import { DECIMAL_LIMIT } from '@constants/variables';
+import { useCurrencyRate } from '@hooks';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef: RefObject<BottomSheetRef>;
@@ -19,10 +20,8 @@ interface UseBridgeNetworksDataModel {
   transactionInfoRef: RefObject<BottomSheetRef>;
 }
 
-const DECIMAL_CRYPTO_LIMIT = 5;
-const DECIMAL_USD_LIMIT = 2;
 const DEFAULT_BRIDGE_TRANSACTION = {
-  amount: '0x0',
+  denominatedAmount: '0x0',
   loading: true,
   withdrawTx: ''
 };
@@ -42,12 +41,11 @@ export const useBridgeNetworksData = ({
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
   const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
   const [bridgeTransaction, setBridgeTransaction] = useState<{
-    amount: string;
+    denominatedAmount: string | number;
     loading?: boolean;
     withdrawTx: string;
   }>(DEFAULT_BRIDGE_TRANSACTION);
   const [inputError, setInputError] = useState(false);
-
   const {
     selectedAccount,
     networkNativeCoin,
@@ -56,6 +54,13 @@ export const useBridgeNetworksData = ({
     tokenParams,
     bridgeConfig
   } = useBridgeContextSelector();
+
+  const currentTokenRate = useCurrencyRate(
+    tokenParams.value.renderTokenItem.symbol
+  );
+
+  const selectedTokenFrom = tokenParams.value.pairs[0];
+  const selectedTokenTo = tokenParams.value.pairs[1];
 
   const { t } = useTranslation();
 
@@ -70,63 +75,19 @@ export const useBridgeNetworksData = ({
     };
   }, [currencySelectorWidth]);
 
-  const onSelectMaxAmount = () => {
-    setAmountToExchange(`${tokenParams.value.renderTokenItem.balance}`);
-
-    if (tokenParams.value.renderTokenItem.isNativeCoin) {
-      setMax(true);
-    }
-  };
-
-  // @ts-ignore
-
-  const getFeeData = async () => {
-    const dataForFee = {
-      tokenFrom: tokenParams.value.pairs[0],
-      tokenTo: tokenParams.value.pairs[1],
-      amountTokens: amountToExchange,
-      isMax
-    };
-    try {
-      const fee = await getBridgeFeeData({
-        bridgeConfig,
-        dataForFee
-      });
-      setBridgeFee({
-        amount: formatEther(fee.amount),
-        feeSymbol: networkNativeCoin?.symbol || '',
-        networkFee: NumberUtils.limitDecimalCount(
-          Number(formatEther(fee.transferFee)),
-          DECIMAL_CRYPTO_LIMIT
-        ),
-        bridgeAmount: NumberUtils.limitDecimalCount(
-          Number(formatEther(fee.bridgeFee)),
-          DECIMAL_CRYPTO_LIMIT
-        ),
-        feeData: fee
-      });
-    } catch (e) {
-      // ignore
-    } finally {
-      setFeeLoader(false);
-    }
-  };
-
   const onTokenPress = (item: RenderTokenItem) => {
-    if (!item.renderTokenItem.isNativeCoin) {
-      setMax(false);
-    }
+    setMax(false);
     tokenParams.setter(item);
     setTimeout(() => choseTokenRef?.current?.dismiss(), 200);
   };
   const dataToPreview = (() => {
     const receiveCryptoData = NumberUtils.limitDecimalCount(
       bridgeFee?.amount ?? '0',
-      DECIMAL_CRYPTO_LIMIT
+      DECIMAL_LIMIT.CRYPTO
     );
     const receiveUSDData = NumberUtils.limitDecimalCount(
-      CurrencyUtils.toUSD(+receiveCryptoData, 0.2),
-      DECIMAL_USD_LIMIT
+      CurrencyUtils.toUSD(+receiveCryptoData, currentTokenRate),
+      DECIMAL_LIMIT.USD
     );
     const bridgeFeeAmount = bridgeFee?.bridgeAmount;
     const networkFee = bridgeFee?.networkFee;
@@ -157,55 +118,124 @@ export const useBridgeNetworksData = ({
       }
     ];
   })();
-  const onChangeAmount = (value: string) => {
-    const selectedTokenBalance = tokenParams.value.renderTokenItem.balance;
-    if (+value > +selectedTokenBalance) {
-      setInputError(true);
+
+  const validateBalance = ({
+    balance,
+    amount
+  }: {
+    balance: string | number;
+    amount: string | number;
+  }) => {
+    const _balance = +balance;
+    const _amount = +amount;
+    if (_amount) {
+      const result = _balance >= _amount;
+
+      if (result) {
+        setInputError(false);
+        return true;
+      } else {
+        setInputError(true);
+        return false;
+      }
     } else {
       setInputError(false);
     }
+  };
+
+  const onChangeAmount = (value: string) => {
     setMax(false);
-    let finalValue = StringUtils.formatNumberInput(value);
-    finalValue = NumberUtils.limitDecimalCount(
-      finalValue,
-      DECIMAL_CRYPTO_LIMIT
+    const finalValue = NumberUtils.limitDecimalCount(
+      StringUtils.formatNumberInput(value),
+      DECIMAL_LIMIT.CRYPTO
     );
     setAmountToExchange(finalValue);
   };
 
+  const getFeeData = async (isMaxOptions = false) => {
+    setFeeLoader(true);
+    const amountTokens = isMaxOptions
+      ? tokenParams.value.renderTokenItem.balance
+      : amountToExchange;
+    const dataForFee = {
+      tokenFrom: tokenParams.value.pairs[0],
+      tokenTo: tokenParams.value.pairs[1],
+      amountTokens,
+      isMax: isMaxOptions ?? isMax
+    };
+    try {
+      const fee = await getBridgeFeeData({
+        bridgeConfig,
+        dataForFee
+      });
+      if (isMaxOptions) {
+        setAmountToExchange(
+          NumberUtils.limitDecimalCount(
+            formatUnits(fee.amount, selectedTokenFrom.decimals),
+            DECIMAL_LIMIT.CRYPTO
+          )
+        );
+      }
+      const tokenDecimals =
+        selectedTokenFrom.network === 'amb'
+          ? selectedTokenTo.decimals
+          : selectedTokenFrom.decimals;
+      setBridgeFee({
+        amount: formatUnits(fee.amount, tokenDecimals),
+
+        feeSymbol: networkNativeCoin?.symbol || '',
+        networkFee: NumberUtils.limitDecimalCount(
+          Number(formatEther(fee.transferFee)),
+          DECIMAL_LIMIT.CRYPTO
+        ),
+        bridgeAmount: NumberUtils.limitDecimalCount(
+          Number(formatUnits(fee.bridgeFee, selectedTokenTo.decimals)),
+          DECIMAL_LIMIT.CRYPTO
+        ),
+        feeData: fee
+      });
+    } catch (e) {
+      // console.log('FEE ERROR', e);
+      // ignore
+    } finally {
+      setFeeLoader(false);
+    }
+  };
+  const onSelectMaxAmount = () => {
+    if (tokenParams.value.renderTokenItem.isNativeCoin) {
+      setMax(true);
+      getFeeData(true);
+    } else {
+      onChangeAmount(`${tokenParams.value.renderTokenItem.balance}`);
+    }
+  };
   const withdraw = async (gasFee = false) => {
     try {
       if (bridgeFee?.feeData && selectedAccount?.address) {
         const withdrawData = {
-          tokenFrom: tokenParams.value.pairs[0],
-          tokenTo: tokenParams.value.pairs[1],
+          tokenFrom: selectedTokenFrom,
+          tokenTo: selectedTokenTo,
           selectedAccount,
-          amountTokens: formatEther(bridgeFee.feeData.amount),
+          amountTokens: amountToExchange,
           feeData: bridgeFee.feeData,
           gasFee
         };
 
         return await bridgeWithdraw({
           bridgeConfig,
-          from: fromParams.value.id,
+          fromNetwork: fromParams.value.id,
           withdrawData
         });
       }
     } catch (e) {
+      // console.log('GENERAL withdraw', e);
       // ignore;
     }
   };
 
   const onPressPreview = async () => {
-    const checkAmount =
-      bridgeFee?.feeSymbol === CryptoCurrencyCode.AMB
-        ? +amountToExchange + +(bridgeFee?.networkFee || 0)
-        : amountToExchange;
-    if (+checkAmount > +tokenParams.value.renderTokenItem.balance) {
-      setInputError(true);
-      return;
-    }
     try {
+      setInputError(false);
       setGasFeeLoader(true);
 
       const _gasEstimate = await withdraw(true);
@@ -216,12 +246,13 @@ export const useBridgeNetworksData = ({
         setGasFee(
           NumberUtils.limitDecimalCount(
             formatEther(_gasEstimate.mul(gasPrice)),
-            DECIMAL_CRYPTO_LIMIT
+            DECIMAL_LIMIT.CRYPTO
           )
         );
       }
       previewRef?.current?.show();
     } catch (e) {
+      // console.log('GAS_ESTIMATE', e);
       // ignore
     } finally {
       setGasFeeLoader(false);
@@ -237,16 +268,21 @@ export const useBridgeNetworksData = ({
       if (res) {
         const bridgeTx = await res.wait(res);
         if (bridgeTx) {
-          const bridgeTransaction = {
+          const allBridgeTransaction = await getBridgeTransactions(
+            selectedAccount?.address
+          );
+          const withdrawTransaction = allBridgeTransaction.find(
+            (trans) => trans.withdrawTx === bridgeTx.transactionHash
+          ) || {
             eventId: '',
             networkFrom: fromParams.value.id || '',
             networkTo: toParams.value.id || '',
             tokenFrom: tokenParams.value.pairs[0],
             tokenTo: tokenParams.value.pairs[1],
-            amount: res.value ?? '0x0',
+            denominatedAmount: amountToExchange,
             withdrawTx: bridgeTx.transactionHash
           };
-          setBridgeTransaction(bridgeTransaction);
+          setBridgeTransaction(withdrawTransaction);
           await tokenParams.update();
         }
       }
@@ -264,7 +300,8 @@ export const useBridgeNetworksData = ({
     gasFeeLoader,
     bridgeTransaction,
     bridgeTransfer,
-    inputError
+    inputError,
+    isMax
   };
   const methods = {
     getFeeData,
@@ -275,7 +312,8 @@ export const useBridgeNetworksData = ({
     setFeeLoader,
     setBridgeFee,
     onPressPreview,
-    onWithdrawApprove
+    onWithdrawApprove,
+    validateBalance
   };
   return {
     variables,

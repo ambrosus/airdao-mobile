@@ -47,10 +47,11 @@ export const BridgeForm = () => {
     onSelectMaxAmount,
     onChangeAmount,
     onTokenPress,
-    setFeeLoader,
     setBridgeFee,
     onPressPreview,
-    onWithdrawApprove
+    onWithdrawApprove,
+    validateBalance,
+    setFeeLoader
   } = methods;
   const {
     dataToPreview,
@@ -61,7 +62,8 @@ export const BridgeForm = () => {
     gasFeeLoader,
     bridgeTransaction,
     bridgeTransfer,
-    inputError
+    inputError,
+    isMax
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,
@@ -69,11 +71,23 @@ export const BridgeForm = () => {
   );
 
   useEffect(() => {
-    setFeeLoader(true);
-    setBridgeFee(null);
-    if (!!amountToExchange) {
-      clearTimeout(timeoutDelay);
-      setTimeoutDelay(setTimeout(() => getFeeData(), 1000));
+    if (!isMax) {
+      setBridgeFee(null);
+      const selectedTokenBalance = tokenParams.value.renderTokenItem.balance;
+
+      const isValidateAmount = validateBalance({
+        balance: selectedTokenBalance,
+        amount: amountToExchange
+      });
+      if (!!amountToExchange && isValidateAmount) {
+        clearTimeout(timeoutDelay);
+        setFeeLoader(true);
+        setTimeoutDelay(
+          setTimeout(async () => {
+            await getFeeData();
+          }, 1000)
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -120,7 +134,7 @@ export const BridgeForm = () => {
             >
               <TokenSelector
                 onPress={() => choseTokenRef.current?.show()}
-                symbol={tokenParams.value.renderTokenItem.symbol}
+                symbol={tokenParams.value.renderTokenItem.symbol ?? ''}
               />
             </View>
             <Input
@@ -148,7 +162,7 @@ export const BridgeForm = () => {
             <BalanceInfo
               loader={tokenParams.loader}
               tokenBalance={tokenParams.value.renderTokenItem.balance}
-              tokenSymbol={tokenParams.value.renderTokenItem.symbol}
+              tokenSymbol={tokenParams.value.renderTokenItem.symbol ?? ''}
               onMaxPress={onSelectMaxAmount}
             />
           </View>
@@ -156,7 +170,7 @@ export const BridgeForm = () => {
           <Spacer value={scale(32)} />
           <FeeInfo
             amount={amountToExchange}
-            amountSymbol={tokenParams.value.renderTokenItem.symbol}
+            amountSymbol={tokenParams.value.renderTokenItem.symbol ?? ''}
             feeLoader={feeLoader}
             bridgeFee={bridgeFee}
           />
@@ -164,7 +178,9 @@ export const BridgeForm = () => {
 
         <PrimaryButton
           onPress={onPressPreview}
-          disabled={!amountToExchange || !bridgeFee || gasFeeLoader}
+          disabled={
+            !amountToExchange || !bridgeFee || gasFeeLoader || inputError
+          }
         >
           {gasFeeLoader ? (
             <Spinner customSize={15} />

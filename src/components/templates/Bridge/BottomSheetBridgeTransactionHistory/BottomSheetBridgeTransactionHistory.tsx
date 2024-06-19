@@ -61,8 +61,8 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
     },
     {
       key: t('common.transaction.amount'),
-      value: `${NumberUtils.formatAmount(
-        transaction.amount,
+      value: `${NumberUtils.limitDecimalCount(
+        transaction?.denominatedAmount ?? transaction.amount,
         3
       )} ${transactionTokenAddress(transaction.tokenFrom.name, 1, 2)}`,
       type: 'amount'

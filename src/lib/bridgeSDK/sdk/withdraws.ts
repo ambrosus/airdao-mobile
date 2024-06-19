@@ -57,7 +57,7 @@ function getAmountInForeignDecimals(
   // same rule for getting fees
 
   const decimals =
-    tokenFrom.network == 'amb' ? tokenTo.decimals : tokenFrom.decimals;
+    tokenFrom.network === 'amb' ? tokenTo.decimals : tokenFrom.decimals;
   return ethers.utils.parseUnits(amountTokens, decimals);
 }
 

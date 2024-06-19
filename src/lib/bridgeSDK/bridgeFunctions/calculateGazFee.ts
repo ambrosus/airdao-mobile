@@ -7,7 +7,7 @@ import { currentProvider } from '@lib';
 
 export async function bridgeWithdraw({
   bridgeConfig,
-  from,
+  fromNetwork,
   withdrawData
 }: CalculateGasFee) {
   const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
@@ -17,7 +17,7 @@ export async function bridgeWithdraw({
     // @ts-ignore
     `${CacheKey.WalletPrivateKey}-${selectedAccount._raw?.hash}`
   )) as string;
-  const provider = await currentProvider(from);
+  const provider = await currentProvider(fromNetwork);
   const singer = new ethers.Wallet(privateKey, provider);
   return await sdk.withdraw(
     tokenFrom,

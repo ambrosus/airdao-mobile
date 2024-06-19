@@ -15,6 +15,7 @@ import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;
@@ -30,7 +31,10 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
     transaction.transferFinishTxHash === ''
   );
 
-  const formattedAmount = NumberUtils.formatAmount(transaction.amount, 3);
+  const formattedAmount = NumberUtils.limitDecimalCount(
+    transaction?.denominatedAmount || '0',
+    DECIMAL_LIMIT.CRYPTO
+  );
   const transactionStatus = useMemo(() => {
     if (!transaction.transferFinishTxHash && +stage !== 2.2) {
       return 'pending';

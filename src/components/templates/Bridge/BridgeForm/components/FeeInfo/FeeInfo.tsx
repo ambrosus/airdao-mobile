@@ -28,36 +28,35 @@ const FeeInfo = ({
           fontFamily="Inter_500Medium"
           color={COLORS.neutral400}
         >
-          {t('bridge.amount.to.receive')}
+          {t('bridge.preview.receive')}
         </Text>
         <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.black}>
           {`${amount} ${amountSymbol}`}
         </Text>
       </Row>
       <Row alignItems="center" justifyContent="space-between">
-        {!!amount &&
-          (feeLoader ? (
-            <Spinner customSize={15} />
-          ) : bridgeFee ? (
-            <>
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.neutral400}
-              >
-                {t('bridge.amount.network.fee')}
-              </Text>
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={COLORS.black}
-              >
-                {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
-              </Text>
-            </>
-          ) : (
-            <></>
-          ))}
+        {feeLoader ? (
+          <Spinner customSize={15} />
+        ) : bridgeFee ? (
+          <>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral400}
+            >
+              {t('bridge.amount.network.fee')}
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.black}
+            >
+              {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
+            </Text>
+          </>
+        ) : (
+          <></>
+        )}
       </Row>
     </View>
   );

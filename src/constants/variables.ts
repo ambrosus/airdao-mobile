@@ -4,6 +4,11 @@ import { Dimensions } from 'react-native';
 export const DEVICE_WIDTH = Dimensions.get('window').width;
 export const DEVICE_HEIGHT = Dimensions.get('window').height;
 
+export const DECIMAL_LIMIT = {
+  CRYPTO: 5,
+  USD: 2
+};
+
 export const DefaultNotificationSettings: NotificationSettings = {
   priceAlerts: true,
   priceThreshold: {

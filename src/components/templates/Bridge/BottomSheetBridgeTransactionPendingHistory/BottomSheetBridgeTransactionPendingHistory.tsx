@@ -11,6 +11,7 @@ import { COLORS } from '@constants/colors';
 import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
 import { BridgeNetworksSelected } from '@components/templates/Bridge/BridgeNetworksSelected/BridgeNetworksSelected';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 interface TransactionPendingModel extends BridgeTransactionHistoryDTO {
   loading?: boolean;
@@ -32,7 +33,10 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
   BottomSheetBridgeTransactionPendingHistoryProps
 >(({ transaction, liveTransactionInformation }, bottomSheetRef) => {
   const { t } = useTranslation();
-  const formattedAmount = NumberUtils.formatAmount(transaction?.amount, 3);
+  const formattedAmount = NumberUtils.limitDecimalCount(
+    transaction?.denominatedAmount ?? transaction.amount,
+    DECIMAL_LIMIT.CRYPTO
+  );
   const renderTransactionStatus = useCallback(
     (stage: number) => {
       if (

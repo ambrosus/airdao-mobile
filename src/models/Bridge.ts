@@ -27,7 +27,7 @@ export interface BridgePairsModel {
   provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
 export interface RenderTokenItem extends Token {
-  balance: number | string;
+  balance: string;
 }
 export interface RenderTokenItem {
   renderTokenItem: RenderTokenItem;
@@ -87,10 +87,10 @@ export interface BridgeNetworkPickerProps {
 }
 
 export interface BridgeFeeModel {
-  amount: number | string;
+  amount: string;
   networkFee: string | number;
   feeSymbol: string;
-  bridgeAmount: string | number;
+  bridgeAmount: string;
   feeData: FeeData;
 }
 
