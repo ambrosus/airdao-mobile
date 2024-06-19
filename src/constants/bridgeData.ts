@@ -47,6 +47,7 @@ export const BRIDGE_DATA = {
     SAMB2_IN_ETH: '0xA93b86955C4dbb3210Bd4C4eD98C57a11F6f3db2',
     WETH_IN_ETH: '0x7cc041cb88D96D54B8aC4eFf8f9B83112C6748c5',
     SAMB_IN_BSC: '0xD570b2AB6efBFE296798E56D74153563E082d75c',
+    WNBN_IN_BSC: '0x2ca25159d6C26633466c0DBB5e0bB07371FB30BA',
 
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
     WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus-test.io/ws/txStatus',

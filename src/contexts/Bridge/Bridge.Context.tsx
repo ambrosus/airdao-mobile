@@ -90,7 +90,7 @@ export const BridgeContext = () => {
   useEffect(() => {
     setAllRequireBridgeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from.id, from.id]);
+  }, [from.id, to.id]);
 
   useEffect(() => {
     const getConfig = async () => {
