@@ -19,6 +19,7 @@ interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
   onAcceptPress: () => void;
   dataToPreview: DataToPreviewModel[];
+  title: string;
 }
 
 export const BottomSheetBridgePreview = forwardRef<
@@ -26,7 +27,7 @@ export const BottomSheetBridgePreview = forwardRef<
   BottomSheetChoseNetworksProps
 >((props, ref) => {
   const { t } = useTranslation();
-  const { onAcceptPress, dataToPreview } = props;
+  const { onAcceptPress, dataToPreview, title } = props;
   const renderItem = (network: DataToPreviewModel) => (
     <>
       <View
@@ -73,7 +74,7 @@ export const BottomSheetBridgePreview = forwardRef<
             color={COLORS.neutral0}
             fontSize={16}
           >
-            {t('bridge.preview.button')}
+            {title}
           </Text>
         </PrimaryButton>
       </View>

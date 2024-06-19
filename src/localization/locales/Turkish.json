@@ -21,7 +21,7 @@
       "swap": "Swap",
       "send": "Gönder",
       "receive": "Al",
-      "bridge": "Bridge",
+      "bridge": "Köprü",
       "stake": "Bahis"
     }
   },
@@ -357,21 +357,20 @@
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
 
-  "bridge.select.network": "!!!Select network",
-  "bridge.select.token": "!!!Select token",
-  "bridge.amount.to.bridge": "!!!Amount to bridge",
-  "bridge.amount.network.fee": "!!!Network fee",
+  "bridge.select.network": "Ağ Seç ",
+  "bridge.select.token": "Token Seç ",
+  "bridge.amount.to.bridge": "Köprülemek için Miktar ",
+  "bridge.amount.network.fee": "Ağ Ücreti ",
 
-  "bridge.preview.title": "!!!Preview",
-  "bridge.preview.receive": "!!!You’ll receive",
-  "bridge.preview.bridge.fee": "!!!Bridge fee",
-  "bridge.preview.network.fee": "!!!Network fee",
-  "bridge.preview.gas.fee": "!!!Gas fee",
-  "bridge.preview.button": "!!!Send funds to Ethereum",
-  "bridge.preview.button.max": "!!!Max",
-  "bridge.insufficient.funds": "!!!You have insufficient funds",
+  "bridge.preview.title": "Önizleme ",
+  "bridge.preview.receive": "Alacağınız",
+  "bridge.preview.bridge.fee": "Köprü Ücreti",
+  "bridge.preview.network.fee": "Ağ Ücreti",
+  "bridge.preview.gas.fee": "Gaz Ücreti",
+  "bridge.preview.button": "{network}'a Fon Gönder",
+  "bridge.preview.button.max": "Maksimum",
+  "bridge.insufficient.funds": "Yetersiz bakiye",
 
-  "bridge.transaction.info.header": "!!!Sending 100 AMB to Ethereum",
-  "bridge.transaction.info.subheader": "!!!Your transfer is being processed and will be completed within 5-20 minutes."
+  "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak."
 
 }

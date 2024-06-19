@@ -194,6 +194,10 @@ export const BridgeForm = () => {
           selectorType={'token'}
         />
         <BottomSheetBridgePreview
+          title={t('bridge.preview.button').replace(
+            '{network}',
+            toParams.value.name
+          )}
           dataToPreview={dataToPreview}
           ref={previewRef}
           onAcceptPress={onAcceptPress}
