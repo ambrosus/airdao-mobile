@@ -7,7 +7,7 @@ import {
 } from '@features/swap/utils/contracts/instances';
 import { SelectedTokensState } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
-import { wrapNativeAddress } from '@features/swap/utils';
+import { typedPath, wrapNativeAddress } from '@features/swap/utils';
 import { useSwapActions } from './use-swap-actions';
 
 export function useAllLiquidityPools() {
@@ -102,14 +102,21 @@ export function useAllLiquidityPools() {
     reserveIn: BigNumber,
     reserveOut: BigNumber
   ): string => {
+    const newAmountIn = parseFloat(amountIn);
     // @ts-ignore
     const initialPrice = reserveOut / reserveIn;
-    const newReserveIn = reserveIn.add(amountIn);
+    const newReserveIn = reserveIn.add(newAmountIn);
     const newReserveOut = reserveOut.sub(amountOut);
     // @ts-ignore
     const newPrice = newReserveOut / newReserveIn;
     const priceImpact = ((newPrice - initialPrice) / initialPrice) * 100;
     return String(-priceImpact.toFixed(2));
+  };
+
+  const calculateMultiRoutePriceImpact = () => {
+    const path = typedPath(selectedTokens);
+
+    return path;
   };
 
   const uiGetterPriceImpact = useCallback(async () => {
@@ -124,21 +131,19 @@ export function useAllLiquidityPools() {
 
         const { TOKEN_A, TOKEN_B } = latestSelectedTokensAmount.current;
         if (reserveIn && reserveOut) {
-          const [executeReserveIn, executeReserveOut] = isExactInRef.current
-            ? [reserveIn, reserveOut]
-            : [reserveOut, reserveIn];
-
           const amountToSell = isExactInRef.current ? TOKEN_A : TOKEN_B;
           const amountToReceive = isExactInRef.current ? TOKEN_B : TOKEN_A;
 
           const bnAmountOut = ethers.utils.parseUnits(amountToReceive);
 
-          return calculatePriceImpact(
+          const impact = calculatePriceImpact(
             amountToSell,
             bnAmountOut,
-            executeReserveIn,
-            executeReserveOut
+            reserveIn,
+            reserveOut
           );
+
+          return impact;
         }
       }
     }
@@ -159,6 +164,7 @@ export function useAllLiquidityPools() {
     getPairAddress,
     getReserves,
     calculatePriceImpact,
+    calculateMultiRoutePriceImpact,
     uiGetterPriceImpact
   };
 }
