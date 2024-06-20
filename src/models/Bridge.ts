@@ -3,7 +3,7 @@ import {
   Network as BridgeNetwork,
   Token
 } from '@lib/bridgeSDK/models/types';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 export interface Bridge {
   bridges: Bridges;
@@ -27,7 +27,7 @@ export interface BridgePairsModel {
   provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
 export interface RenderTokenItem extends Token {
-  balance: string;
+  balance: BigNumber;
 }
 export interface RenderTokenItem {
   renderTokenItem: RenderTokenItem;
@@ -87,10 +87,10 @@ export interface BridgeNetworkPickerProps {
 }
 
 export interface BridgeFeeModel {
-  amount: string;
-  networkFee: string | number;
-  feeSymbol: string;
-  bridgeAmount: string;
+  amount: BigNumber;
+  networkFee: BigNumber;
+  feeToken: Token;
+  bridgeAmount: BigNumber;
   feeData: FeeData;
 }
 

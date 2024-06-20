@@ -49,7 +49,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
     const { item }: { item: RenderTokenItem } = token;
     return (
       <BridgeSelectorItem
-        symbol={item.renderTokenItem?.symbol}
+        symbol={item.renderTokenItem.symbol}
         name={item.renderTokenItem.name}
         isActive={
           tokenParams?.value?.renderTokenItem?.name ===

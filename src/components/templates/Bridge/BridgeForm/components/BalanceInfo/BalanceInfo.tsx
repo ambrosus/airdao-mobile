@@ -3,22 +3,28 @@ import { styles } from './BalanceInfo.styles';
 import { COLORS } from '@constants/colors';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useBridgeContextSelector } from '@contexts/Bridge';
+import { formatUnits } from 'ethers/lib/utils';
+import { NumberUtils } from '@utils/number';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 interface BalanceInfoModel {
-  loader: boolean;
-  tokenBalance: string | number;
-  tokenSymbol: string;
   onMaxPress: () => void;
 }
 
-const BalanceInfo = ({
-  loader,
-  tokenBalance,
-  tokenSymbol,
-  onMaxPress
-}: BalanceInfoModel) => {
+const BalanceInfo = ({ onMaxPress }: BalanceInfoModel) => {
   const { t } = useTranslation();
+  const {
+    tokenParams: {
+      loader,
+      value: { renderTokenItem }
+    }
+  } = useBridgeContextSelector();
 
+  const balance = NumberUtils.limitDecimalCount(
+    formatUnits(renderTokenItem.balance || 0, renderTokenItem.decimals),
+    DECIMAL_LIMIT.CRYPTO
+  );
   return (
     <Row style={styles.balanceContainer} alignItems="center">
       <Text
@@ -34,17 +40,17 @@ const BalanceInfo = ({
           <Spinner customSize={15} />
         </>
       ) : (
-        tokenBalance && (
+        !!balance && (
           <>
             <Text
               fontSize={14}
               fontFamily="Inter_400Regular"
               color={COLORS.alphaBlack60}
             >
-              {`${tokenBalance} ${tokenSymbol}`}
+              {`${balance} ${renderTokenItem.symbol}`}
             </Text>
 
-            {Number(tokenBalance) > 0 && (
+            {Number(balance) > 0 && (
               <Text
                 fontSize={14}
                 fontFamily="Inter_700Bold"

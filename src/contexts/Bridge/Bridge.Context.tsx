@@ -1,5 +1,5 @@
 import { createContextSelector } from '@utils/createContextSelector';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
 import { AccountDBModel } from '@database';
 import { API } from '@api/api';
@@ -9,11 +9,7 @@ import {
   DEFAULT_TOKEN_PAIRS
 } from '@contexts/Bridge/constants';
 import { getBridgeBalance, getBridgePairs } from '@lib';
-import { NumberUtils } from '@utils/number';
-import { formatUnits } from 'ethers/lib/utils';
 import { parseNetworkParams } from '@hooks/bridge/services';
-import { CryptoCurrencyCode } from '@appTypes';
-import { DECIMAL_LIMIT } from '@constants/variables';
 
 export const BridgeContext = () => {
   const [config, setConfig] = useState<any>({});
@@ -45,16 +41,7 @@ export const BridgeContext = () => {
         ...pairs
       };
 
-      const { USDC, USDT, BUSD } = CryptoCurrencyCode;
-
-      const symbol = pairs.renderTokenItem.symbol;
-      const isUSDToken = symbol === USDC || symbol === USDT || symbol === BUSD;
-
-      tokenData.renderTokenItem.balance =
-        NumberUtils.limitDecimalCount(
-          formatUnits(balance, pairs.renderTokenItem.decimals),
-          isUSDToken ? DECIMAL_LIMIT.USD : DECIMAL_LIMIT.CRYPTO
-        ) || '';
+      tokenData.renderTokenItem.balance = balance;
       setSelectedToken(tokenData);
       return balance;
     } catch (e) {
@@ -182,11 +169,10 @@ export const BridgeContext = () => {
     setTo(value);
   };
 
-  const networkNativeCoin = useMemo(() => {
-    return (tokensForSelector || []).find(
-      (item) => item.renderTokenItem.isNativeCoin
-    )?.renderTokenItem;
-  }, [tokensForSelector]);
+  const selectedTokenDecimals =
+    selectedToken.pairs[0].network === 'amb'
+      ? selectedToken.pairs[1].decimals
+      : selectedToken.pairs[0].decimals;
 
   return {
     tokenParams: {
@@ -204,10 +190,10 @@ export const BridgeContext = () => {
       setter: toSetter
     },
     networksParams: tokensForSelector,
+    selectedTokenDecimals,
     bridgeConfig: config,
     setDefaultBridgeData,
     setSelectedAccount,
-    networkNativeCoin,
     selectedAccount,
     bridges
   };

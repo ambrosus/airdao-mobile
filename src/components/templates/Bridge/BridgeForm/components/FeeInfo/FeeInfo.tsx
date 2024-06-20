@@ -4,21 +4,30 @@ import { Row, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import React from 'react';
 import { BridgeFeeModel } from '@models/Bridge';
+import { formatEther } from 'ethers/lib/utils';
+import { NumberUtils } from '@utils/number';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 interface FeeInfoModel {
   amount: string;
-  amountSymbol: string;
+  symbol?: string;
   feeLoader: boolean;
   bridgeFee: BridgeFeeModel | null;
 }
 
 const FeeInfo = ({
   amount,
-  amountSymbol,
+  symbol = '',
   feeLoader,
   bridgeFee
 }: FeeInfoModel) => {
   const { t } = useTranslation();
+
+  const feeAmount = NumberUtils.limitDecimalCount(
+    formatEther(bridgeFee?.networkFee || 0),
+    DECIMAL_LIMIT.CRYPTO
+  );
+  const feeData = `${bridgeFee?.feeToken.symbol} ${feeAmount}`;
 
   return (
     <View style={styles.information}>
@@ -31,7 +40,7 @@ const FeeInfo = ({
           {t('bridge.preview.receive')}
         </Text>
         <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.black}>
-          {`${amount} ${amountSymbol}`}
+          {`${amount} ${symbol}`}
         </Text>
       </Row>
       <Row alignItems="center" justifyContent="space-between">
@@ -51,7 +60,7 @@ const FeeInfo = ({
               fontFamily="Inter_500Medium"
               color={COLORS.black}
             >
-              {`${bridgeFee?.feeSymbol} ${bridgeFee?.networkFee}`}
+              {feeData}
             </Text>
           </>
         ) : (

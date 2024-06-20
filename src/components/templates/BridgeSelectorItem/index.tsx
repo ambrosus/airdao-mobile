@@ -6,10 +6,11 @@ import { scale } from '@utils/scaling';
 import { TokenLogo } from '@components/modular';
 import { CheckIconCircle } from '@components/svg/icons';
 import { styles } from './styles';
+import { CryptoCurrencyCode } from '@appTypes';
 
 interface BridgeSelectorItemModel {
   name: string;
-  symbol: string;
+  symbol: CryptoCurrencyCode | undefined;
   item: ParsedBridge | RenderTokenItem;
   isActive: boolean;
   onPressItem: (item: any) => void;
@@ -28,7 +29,7 @@ export const BridgeSelectorItem = ({
       <View style={styles.container}>
         <TokenLogo
           overrideIconVariants={{ eth: 'blue' }}
-          token={symbol}
+          token={symbol || CryptoCurrencyCode.AMB}
           scale={0.8}
         />
         <Spacer horizontal value={scale(10)} />

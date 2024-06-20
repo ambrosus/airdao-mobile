@@ -159,18 +159,13 @@ export const BridgeForm = () => {
               </>
             )}
             <Spacer value={scale(8)} />
-            <BalanceInfo
-              loader={tokenParams.loader}
-              tokenBalance={tokenParams.value.renderTokenItem.balance}
-              tokenSymbol={tokenParams.value.renderTokenItem.symbol ?? ''}
-              onMaxPress={onSelectMaxAmount}
-            />
+            <BalanceInfo onMaxPress={onSelectMaxAmount} />
           </View>
 
           <Spacer value={scale(32)} />
           <FeeInfo
             amount={amountToExchange}
-            amountSymbol={tokenParams.value.renderTokenItem.symbol ?? ''}
+            symbol={tokenParams.value.renderTokenItem.symbol}
             feeLoader={feeLoader}
             bridgeFee={bridgeFee}
           />
@@ -194,7 +189,7 @@ export const BridgeForm = () => {
           selectorType={'token'}
         />
         <BottomSheetBridgePreview
-          title={t('bridge.preview.button').replace(
+          btnTitle={t('bridge.preview.button').replace(
             '{network}',
             toParams.value.name
           )}

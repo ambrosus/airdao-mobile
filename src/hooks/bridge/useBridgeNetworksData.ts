@@ -1,7 +1,7 @@
 import { LayoutChangeEvent } from 'react-native';
 import { RefObject, useMemo, useState } from 'react';
 import { styles as bridgeFormStyle } from '@components/templates/Bridge/BridgeForm/styles';
-import { formatEther, formatUnits } from 'ethers/lib/utils';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { BridgeFeeModel, RenderTokenItem } from '@models/Bridge';
 import { CurrencyUtils } from '@utils/currency';
@@ -13,11 +13,13 @@ import { currentProvider, getBridgeFeeData, getBridgeTransactions } from '@lib';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { DECIMAL_LIMIT } from '@constants/variables';
 import { useCurrencyRate } from '@hooks';
+import { BigNumber } from 'ethers';
+import { DEFAULT_TOKEN_FROM } from '@contexts/Bridge/constants';
 
 interface UseBridgeNetworksDataModel {
-  choseTokenRef: RefObject<BottomSheetRef>;
-  previewRef: RefObject<BottomSheetRef>;
-  transactionInfoRef: RefObject<BottomSheetRef>;
+  choseTokenRef?: RefObject<BottomSheetRef>;
+  previewRef?: RefObject<BottomSheetRef>;
+  transactionInfoRef?: RefObject<BottomSheetRef>;
 }
 
 const DEFAULT_BRIDGE_TRANSACTION = {
@@ -37,7 +39,7 @@ export const useBridgeNetworksData = ({
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
-  const [gasFee, setGasFee] = useState<string | number>(0);
+  const [gasFee, setGasFee] = useState<BigNumber>(BigNumber.from(0));
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
   const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
   const [bridgeTransaction, setBridgeTransaction] = useState<{
@@ -48,19 +50,29 @@ export const useBridgeNetworksData = ({
   const [inputError, setInputError] = useState(false);
   const {
     selectedAccount,
-    networkNativeCoin,
     toParams,
     fromParams,
     tokenParams,
-    bridgeConfig
+    bridgeConfig,
+    networksParams,
+    selectedTokenDecimals
   } = useBridgeContextSelector();
 
+  const networkNativeToken = useMemo(() => {
+    const token = (networksParams || []).find(
+      (item) => item.renderTokenItem.isNativeCoin
+    )?.renderTokenItem;
+    return token ?? DEFAULT_TOKEN_FROM;
+  }, [networksParams]);
+
+  const selectedToken = tokenParams.value;
+
   const currentTokenRate = useCurrencyRate(
-    tokenParams.value.renderTokenItem.symbol
+    selectedToken.renderTokenItem.symbol
   );
 
-  const selectedTokenFrom = tokenParams.value.pairs[0];
-  const selectedTokenTo = tokenParams.value.pairs[1];
+  const selectedTokenFrom = selectedToken.pairs[0];
+  const selectedTokenTo = selectedToken.pairs[1];
 
   const { t } = useTranslation();
 
@@ -82,64 +94,79 @@ export const useBridgeNetworksData = ({
   };
   const dataToPreview = (() => {
     const receiveCryptoData = NumberUtils.limitDecimalCount(
-      bridgeFee?.amount ?? '0',
+      formatUnits(bridgeFee?.amount || 0, selectedTokenDecimals),
       DECIMAL_LIMIT.CRYPTO
     );
     const receiveUSDData = NumberUtils.limitDecimalCount(
       CurrencyUtils.toUSD(+receiveCryptoData, currentTokenRate),
       DECIMAL_LIMIT.USD
     );
-    const bridgeFeeAmount = bridgeFee?.bridgeAmount;
-    const networkFee = bridgeFee?.networkFee;
-    // symbol destination = 0 -> from || 1 -> to
-    const symbol = (destination: number) =>
-      tokenParams.value.pairs[destination].symbol;
+
     return [
       {
         name: t('bridge.preview.receive'),
-        cryptoAmount: receiveCryptoData,
+        crypto: {
+          amount: bridgeFee?.amount ?? BigNumber.from(0),
+          decimals: selectedTokenDecimals
+        },
         usdAmount: receiveUSDData,
-        symbol: symbol(1)
+        symbol: selectedTokenFrom.symbol
       },
       {
         name: t('bridge.preview.bridge.fee'),
-        cryptoAmount: bridgeFeeAmount,
-        symbol: bridgeFee?.feeSymbol
+        crypto: {
+          amount: bridgeFee?.bridgeAmount ?? BigNumber.from(0),
+          decimals: networkNativeToken?.decimals || 18
+        },
+        usdAmount: null,
+        symbol: bridgeFee?.feeToken.symbol
       },
       {
         name: t('bridge.preview.network.fee'),
-        cryptoAmount: networkFee,
-        symbol: bridgeFee?.feeSymbol
+        crypto: {
+          amount: bridgeFee?.networkFee ?? BigNumber.from(0),
+          decimals: networkNativeToken?.decimals || 18
+        },
+        usdAmount: null,
+        symbol: bridgeFee?.feeToken.symbol
       },
       {
         name: t('bridge.preview.gas.fee'),
-        cryptoAmount: gasFee,
-        symbol: bridgeFee?.feeSymbol
+        crypto: {
+          amount: gasFee,
+          decimals: networkNativeToken?.decimals || 18
+        },
+        usdAmount: null,
+        symbol: bridgeFee?.feeToken.symbol
       }
     ];
   })();
 
   const validateBalance = ({
     balance,
-    amount
+    amount,
+    token = selectedToken.renderTokenItem,
+    callBack = setInputError
   }: {
-    balance: string | number;
-    amount: string | number;
+    token?: RenderTokenItem;
+    balance: BigNumber;
+    amount: string | BigNumber;
+    callBack?: (v: boolean) => void;
   }) => {
-    const _balance = +balance;
-    const _amount = +amount;
-    if (_amount) {
-      const result = _balance >= _amount;
-
-      if (result) {
-        setInputError(false);
-        return true;
-      } else {
-        setInputError(true);
+    const decimals = token.decimals ?? 18;
+    if (!!amount && !!balance) {
+      const bigNumberAmount =
+        typeof amount === 'string' ? parseUnits(amount, decimals) : amount;
+      const isAmountGraterThenBalance = bigNumberAmount.gt(balance);
+      if (isAmountGraterThenBalance) {
+        callBack(true);
         return false;
+      } else {
+        callBack(false);
+        return true;
       }
     } else {
-      setInputError(false);
+      callBack(false);
     }
   };
 
@@ -155,11 +182,14 @@ export const useBridgeNetworksData = ({
   const getFeeData = async (isMaxOptions = false) => {
     setFeeLoader(true);
     const amountTokens = isMaxOptions
-      ? tokenParams.value.renderTokenItem.balance
+      ? formatUnits(
+          selectedToken.renderTokenItem.balance,
+          selectedToken.renderTokenItem.decimals
+        )
       : amountToExchange;
     const dataForFee = {
-      tokenFrom: tokenParams.value.pairs[0],
-      tokenTo: tokenParams.value.pairs[1],
+      tokenFrom: selectedToken.pairs[0],
+      tokenTo: selectedToken.pairs[1],
       amountTokens,
       isMax: isMaxOptions ?? isMax
     };
@@ -176,22 +206,11 @@ export const useBridgeNetworksData = ({
           )
         );
       }
-      const tokenDecimals =
-        selectedTokenFrom.network === 'amb'
-          ? selectedTokenTo.decimals
-          : selectedTokenFrom.decimals;
       setBridgeFee({
-        amount: formatUnits(fee.amount, tokenDecimals),
-
-        feeSymbol: networkNativeCoin?.symbol || '',
-        networkFee: NumberUtils.limitDecimalCount(
-          Number(formatEther(fee.transferFee)),
-          DECIMAL_LIMIT.CRYPTO
-        ),
-        bridgeAmount: NumberUtils.limitDecimalCount(
-          Number(formatUnits(fee.bridgeFee, selectedTokenTo.decimals)),
-          DECIMAL_LIMIT.CRYPTO
-        ),
+        amount: fee.amount,
+        feeToken: networkNativeToken,
+        networkFee: fee.transferFee,
+        bridgeAmount: fee.bridgeFee,
         feeData: fee
       });
     } catch (e) {
@@ -202,11 +221,16 @@ export const useBridgeNetworksData = ({
     }
   };
   const onSelectMaxAmount = () => {
-    if (tokenParams.value.renderTokenItem.isNativeCoin) {
+    if (selectedToken.renderTokenItem.isNativeCoin) {
       setMax(true);
       getFeeData(true);
     } else {
-      onChangeAmount(`${tokenParams.value.renderTokenItem.balance}`);
+      onChangeAmount(
+        `${formatUnits(
+          selectedToken.renderTokenItem.balance,
+          selectedToken.renderTokenItem.decimals
+        )}`
+      );
     }
   };
   const withdraw = async (gasFee = false) => {
@@ -243,12 +267,7 @@ export const useBridgeNetworksData = ({
         const provider = await currentProvider(fromParams.value.id);
         const gasPrice = await provider?.getGasPrice();
 
-        setGasFee(
-          NumberUtils.limitDecimalCount(
-            formatEther(_gasEstimate.mul(gasPrice)),
-            DECIMAL_LIMIT.CRYPTO
-          )
-        );
+        setGasFee(_gasEstimate.mul(gasPrice));
       }
       previewRef?.current?.show();
     } catch (e) {
@@ -262,7 +281,7 @@ export const useBridgeNetworksData = ({
   const onWithdrawApprove = async () => {
     setBridgeTransaction(DEFAULT_BRIDGE_TRANSACTION);
     setBridgeTransfer(DEFAULT_BRIDGE_TRANSFER);
-    transactionInfoRef.current?.show();
+    transactionInfoRef?.current?.show();
     try {
       const res = await withdraw();
       if (res) {
@@ -277,8 +296,8 @@ export const useBridgeNetworksData = ({
             eventId: '',
             networkFrom: fromParams.value.id || '',
             networkTo: toParams.value.id || '',
-            tokenFrom: tokenParams.value.pairs[0],
-            tokenTo: tokenParams.value.pairs[1],
+            tokenFrom: selectedToken.pairs[0],
+            tokenTo: selectedToken.pairs[1],
             denominatedAmount: amountToExchange,
             withdrawTx: bridgeTx.transactionHash
           };
@@ -287,7 +306,7 @@ export const useBridgeNetworksData = ({
         }
       }
     } catch (e) {
-      transactionInfoRef.current?.dismiss();
+      transactionInfoRef?.current?.dismiss();
     }
   };
 
