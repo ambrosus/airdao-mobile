@@ -27,7 +27,7 @@ const transformAmountValue = (value: string): string => {
   const [integerPart, fractionalPart] = value.toString().split('.');
 
   let integerLength = integerPart.length;
-  if (integerLength > 5) integerLength = 5;
+  if (integerLength > 6) integerLength = 6;
 
   const digitsToKeep = DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
   let formattedNumber = integerPart;
