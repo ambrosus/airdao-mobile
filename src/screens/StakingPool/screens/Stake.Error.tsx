@@ -22,7 +22,7 @@ export const StakeErrorScreen = () => {
       <FailedIcon />
       <Spacer value={verticalScale(16)} />
       <Text color={COLORS.neutral800} fontFamily="Inter_700Bold" fontSize={20}>
-        Transaction failed
+        {t('send.funds.failed')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
