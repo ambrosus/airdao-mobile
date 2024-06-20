@@ -298,7 +298,7 @@
   "share.24hr": "24 saat",
 
   "staking.apy": "YFG",
-  "staking.current.stake": "{{amount}} {{symbol}} Stake ediliyor",
+  "staking.current.stake": "{{amount}} {{symbol}} Şu anda stake ediliyo",
   "staking.header": "Stake",
   "staking.pools": "Havuzlar",
 
@@ -321,7 +321,7 @@
   "staking.pool.pending.description": "Sadece birkaç saniye daha...",
   "staking.pool.success": "Başarılı!",
   "staking.pool.error": "Staking talebinizi işlerken bir aksaklıkla karşılaştık. Cüzdan bakiyenizi ve ağ bağlantınızı bir kez daha kontrol edin.",
-  "staking.pool.stake.warning": "Stake koymak için en az 1000 AMB gereklidir.",
+  "staking.pool.stake.warning": "Stake yapmak için en az 1000 AMB gereklidir.",
   "staking.pool.withdraw.warning": "Geri çekilmek için en az 1000 AMB gereklidir.",
 
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
