@@ -1,5 +1,4 @@
-import { BigNumber } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { ethers } from 'ethers';
 
 const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   1: 5,
@@ -39,8 +38,8 @@ const transformAmountValue = (value: string): string => {
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
 
-const transformMinAmountValue = (bnMinimumAmount: BigNumber): string => {
-  const value = formatEther(bnMinimumAmount);
+const transformMinAmountValue = (bnMinimumAmount: ethers.BigNumber): string => {
+  const value = ethers.utils.formatEther(bnMinimumAmount);
   const [integerPart, fractionalPart] = value.toString().split('.');
 
   let integerLength = integerPart.length;
