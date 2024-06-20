@@ -16,13 +16,6 @@ const MIN_RECEIVED_DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   4: 0
 };
 
-const LP_FEE_DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
-  1: 3,
-  2: 2,
-  3: 1,
-  4: 0
-};
-
 const transformAmountValue = (value: string): string => {
   const [integerPart, fractionalPart] = value.toString().split('.');
 
@@ -60,7 +53,7 @@ const transformRealizedLPFee = (value: string) => {
   let integerLength = integerPart.length;
   if (integerLength > 4) integerLength = 4;
 
-  const digitsToKeep = LP_FEE_DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
+  const digitsToKeep = MIN_RECEIVED_DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
   let formattedNumber = integerPart;
 
   if (fractionalPart)
