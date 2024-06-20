@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
 import {
+  INITAL_UI_BOTTOM_SHEET_INFORMATION,
   INITIAL_SELECTED_TOKENS,
   INITIAL_SELECTED_TOKENS_AMOUNT,
   INITIAL_SLIPPAGE_TOLLERANCE
@@ -9,8 +10,7 @@ import { BottomSheetRef } from '@components/composite';
 import {
   FIELD,
   SelectedPairsState,
-  SelectedTokensKeys,
-  UIBottomSheetInformationState
+  SelectedTokensKeys
 } from '@/features/swap/types';
 
 export const SwapContext = () => {
@@ -18,12 +18,9 @@ export const SwapContext = () => {
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
 
-  const [uiBottomSheetInformation, setUiBottomSheetInformation] =
-    useState<UIBottomSheetInformationState>({
-      priceImpact: null,
-      minimumReceivedAmount: null,
-      lpFee: null
-    });
+  const [uiBottomSheetInformation, setUiBottomSheetInformation] = useState(
+    INITAL_UI_BOTTOM_SHEET_INFORMATION
+  );
 
   const isExactInRef = useRef<boolean>(true);
 
@@ -65,6 +62,7 @@ export const SwapContext = () => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
     setSlippageTolerance(INITIAL_SLIPPAGE_TOLLERANCE);
+    setUiBottomSheetInformation(INITAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
   }, []);
 

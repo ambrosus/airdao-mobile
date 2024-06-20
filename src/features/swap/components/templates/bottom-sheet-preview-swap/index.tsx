@@ -2,13 +2,13 @@ import React, { forwardRef } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { useForwardedRef } from '@hooks';
+import { PreviewInformation } from '@features/swap/components/composite';
+import { BottomSheetReviewTokenItem } from '@features/swap/components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { BottomSheetReviewTokenItem } from '../../base';
 import { FIELD } from '@features/swap/types';
-import { PreviewInformation } from '../../composite';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {

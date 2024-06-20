@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { ERC20_PAIR } from '../abi';
+import { ERC20_PAIR } from '@features/swap/lib/abi';
 import {
   createAMBProvider,
   createFactoryContract

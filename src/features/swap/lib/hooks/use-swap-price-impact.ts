@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+import { useCallback } from 'react';
 import {
   isMultiRouteWithUSDCFirst,
   isMultiRouteWithBONDFirst,
@@ -6,18 +8,14 @@ import {
   multiHopCumulativeImpact,
   singleHopImpact
 } from '@features/swap/utils';
-
-import { ethers } from 'ethers';
-import { useCallback } from 'react';
-import { getAmountsOut } from '../contracts';
+import { getAmountsOut } from '@features/swap/lib/contracts';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useAllLiquidityPools } from './use-all-liquidity-pools';
+import { useSwapActions } from './use-swap-actions';
 import {
   NonNullableSelectedTokensState,
   SwapToken
 } from '@features/swap/types';
-import { formatEther } from 'ethers/lib/utils';
-import { useSwapActions } from './use-swap-actions';
 
 export function useSwapPriceImpact() {
   const { latestSelectedTokens, latestSelectedTokensAmount, isExactInRef } =
@@ -129,7 +127,7 @@ export function useSwapPriceImpact() {
 
             const intermediateAmountToSellWithRealizedFee =
               subtractRealizedLPFeeFromInput(
-                formatEther(intermediateAmount._hex)
+                ethers.utils.formatEther(intermediateAmount._hex)
               );
 
             const intermediateImpact = singleHopImpact(

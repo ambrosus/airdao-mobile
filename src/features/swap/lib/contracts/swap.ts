@@ -3,7 +3,7 @@ import { OutAmountGetterArgs } from '@features/swap/types/swap';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
 import { isNativeWrapped, wrapNativeAddress } from '@features/swap/utils';
 import { ethers } from 'ethers';
-import { ERC20_TRADE } from '../abi';
+import { ERC20_TRADE } from '@features/swap/lib/abi';
 
 export async function getAmountsOut({
   amountToSell,

@@ -1,7 +1,7 @@
+import { useCallback } from 'react';
 import { Keyboard } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { useCallback } from 'react';
 
 export function useSwapBottomSheetHandler() {
   const {

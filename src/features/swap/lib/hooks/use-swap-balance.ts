@@ -1,8 +1,8 @@
+import { useEffect, useState } from 'react';
+import { BigNumber } from 'ethers/lib/ethers';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { SelectedTokensKeys, SwapToken } from '@features/swap/types';
-import { useEffect, useState } from 'react';
 import { getBalanceOf } from '../contracts';
-import { BigNumber } from 'ethers/lib/ethers';
 
 export function useSwapBalance(
   token: SwapToken | null,

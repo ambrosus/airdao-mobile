@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useSwapContextSelector } from '@features/swap/context';
 import { MultiplyBalancesStateType, SwapToken } from '@features/swap/types';
-import { getBalanceOf } from '../contracts';
+import { getBalanceOf } from '@features/swap/lib/contracts';
 
 export function useSwapMultiplyBalance() {
   const { selectedAccount } = useBridgeContextSelector();
