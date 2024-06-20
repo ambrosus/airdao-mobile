@@ -49,6 +49,11 @@ export const ImportWalletPrivateKey = () => {
     IMPORT_PROCESS_STATUS.PENDING
   );
 
+  const dismissKeyboard = useCallback(() => {
+    maskedInputRef.current?.blur();
+    Keyboard.dismiss();
+  }, []);
+
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
   const maskedInputRef = useRef<InputRef>(null);
 
@@ -59,27 +64,27 @@ export const ImportWalletPrivateKey = () => {
     new Promise((resolve) => setTimeout(resolve, ms));
 
   const onImportWalletPress = useCallback(async () => {
-    maskedInputRef.current?.blur();
-    Keyboard.dismiss();
     setStatus(IMPORT_PROCESS_STATUS.PENDING);
     bottomSheetProcessingRef.current?.show();
 
     try {
+      dismissKeyboard();
       await WalletUtils.importWalletViaPrivateKey(privateKey);
       await delay(1200);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
+      dismissKeyboard();
       // @ts-ignore
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
       InteractionManager.runAfterInteractions(async () => {
-        await delay(1400);
+        await delay(1200);
         bottomSheetProcessingRef.current?.dismiss();
       });
 
       InteractionManager.runAfterInteractions(() => {
         requestAnimationFrame(async () => {
-          await delay(1240);
+          await delay(1200);
           navigation.navigate('ImportWalletPrivateKeyError', {
             error: errorStatus
           });
@@ -87,7 +92,7 @@ export const ImportWalletPrivateKey = () => {
         });
       });
     }
-  }, [navigation, privateKey]);
+  }, [dismissKeyboard, navigation, privateKey]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
