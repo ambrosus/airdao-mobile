@@ -25,46 +25,38 @@ export function useSwapPriceImpact() {
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapActions();
 
-  const singleHopImpactGetter = useCallback(async () => {
-    if (!hasWrapNativeToken) {
-      const selectedTokens = latestSelectedTokens.current;
-      const pool = getPairAddress(selectedTokens);
+  const singleHopImpactGetter = useCallback(
+    async (amountToSell: string, amountToReceive: string) => {
+      if (!hasWrapNativeToken) {
+        const selectedTokens = latestSelectedTokens.current;
+        const pool = getPairAddress(selectedTokens);
 
-      if (pool && pool.pairAddress) {
-        const { reserveIn, reserveOut } = await getReserves(
-          pool.pairAddress,
-          selectedTokens
-        );
-
-        const { TOKEN_A, TOKEN_B } = latestSelectedTokensAmount.current;
-        if (reserveIn && reserveOut) {
-          const amountToSell = isExactInRef.current ? TOKEN_A : TOKEN_B;
-          const amountToReceive = isExactInRef.current ? TOKEN_B : TOKEN_A;
-
-          const amountToSellWithRealizedFee =
-            subtractRealizedLPFeeFromInput(amountToSell);
-
-          const bnAmountOut = ethers.utils.parseUnits(amountToReceive);
-
-          const impact = singleHopImpact(
-            amountToSellWithRealizedFee,
-            bnAmountOut,
-            reserveIn,
-            reserveOut
+        if (pool && pool.pairAddress) {
+          const { reserveIn, reserveOut } = await getReserves(
+            pool.pairAddress,
+            selectedTokens
           );
 
-          return +impact >= 0 ? impact : -impact;
+          if (reserveIn && reserveOut) {
+            const amountToSellWithRealizedFee =
+              subtractRealizedLPFeeFromInput(amountToSell);
+
+            const bnAmountOut = ethers.utils.parseUnits(amountToReceive);
+
+            const impact = singleHopImpact(
+              amountToSellWithRealizedFee,
+              bnAmountOut,
+              reserveIn,
+              reserveOut
+            );
+
+            return +impact >= 0 ? impact : -impact;
+          }
         }
       }
-    }
-  }, [
-    getPairAddress,
-    getReserves,
-    hasWrapNativeToken,
-    isExactInRef,
-    latestSelectedTokens,
-    latestSelectedTokensAmount
-  ]);
+    },
+    [getPairAddress, getReserves, hasWrapNativeToken, latestSelectedTokens]
+  );
 
   const multiHopImpactGetter = useCallback(async () => {
     const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
@@ -208,6 +200,8 @@ export function useSwapPriceImpact() {
 
   const uiPriceImpactGetter = useCallback(async () => {
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
+      latestSelectedTokensAmount.current;
     const isExactIn = isExactInRef.current;
 
     const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
@@ -221,13 +215,18 @@ export function useSwapPriceImpact() {
     if (isExactIn && isMuliRouteUSDCSwap) {
       return await multiHopImpactGetter();
     } else if (!isExactIn && isMuliRouteBONDSwap) {
-      return await singleHopImpactGetter();
+      const amountToSell = !isExactInRef.current ? AMOUNT_A : AMOUNT_B;
+      const amountToReceive = !isExactInRef.current ? AMOUNT_B : AMOUNT_A;
+      return await singleHopImpactGetter(amountToSell, amountToReceive);
     } else {
-      return await singleHopImpactGetter();
+      const amountToSell = isExactInRef.current ? AMOUNT_A : AMOUNT_B;
+      const amountToReceive = isExactInRef.current ? AMOUNT_B : AMOUNT_A;
+      return await singleHopImpactGetter(amountToSell, amountToReceive);
     }
   }, [
     isExactInRef,
     latestSelectedTokens,
+    latestSelectedTokensAmount,
     multiHopImpactGetter,
     singleHopImpactGetter
   ]);

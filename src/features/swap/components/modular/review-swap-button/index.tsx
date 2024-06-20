@@ -29,7 +29,7 @@ export const ReviewSwapButton = () => {
   }, [swapButtonString]);
 
   return (
-    <PrimaryButton disabled={disabled} onPress={onReviewSwapPreview}>
+    <PrimaryButton onPress={onReviewSwapPreview}>
       <Text color={disabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
         {swapButtonString}
       </Text>
