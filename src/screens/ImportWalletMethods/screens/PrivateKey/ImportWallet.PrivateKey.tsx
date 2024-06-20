@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
+  InteractionManager,
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
   View
@@ -33,7 +34,8 @@ import { isIos } from '@utils/isPlatform';
 enum IMPORT_PROCESS_STATUS {
   INITIAL = 'initial',
   SUCCESS = 'success',
-  PENDING = 'pending'
+  PENDING = 'pending',
+  ERROR = 'error'
 }
 const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
   ? 'padding'
@@ -52,28 +54,38 @@ export const ImportWalletPrivateKey = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
 
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   const onImportWalletPress = useCallback(async () => {
-    maskedInputRef.current?.blur();
-    bottomSheetProcessingRef.current?.show();
     setStatus(IMPORT_PROCESS_STATUS.PENDING);
+    setTimeout(() => {
+      bottomSheetProcessingRef.current?.show();
+    }, 500);
+    maskedInputRef.current?.blur();
 
     try {
       await WalletUtils.importWalletViaPrivateKey(privateKey);
+      await delay(1200);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
       // @ts-ignore
-      const errorMessage = error?.message || 'unknown';
-      const errorStatus = errorMessage.includes('400') ? 'exist' : 'unknown';
+      const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
-      setTimeout(() => {
+      InteractionManager.runAfterInteractions(async () => {
+        await delay(1200);
         bottomSheetProcessingRef.current?.dismiss();
+      });
 
-        navigation.navigate('ImportWalletPrivateKeyError', {
-          error: errorStatus
+      InteractionManager.runAfterInteractions(() => {
+        requestAnimationFrame(async () => {
+          await delay(1200);
+          navigation.navigate('ImportWalletPrivateKeyError', {
+            error: errorStatus
+          });
+          setStatus(IMPORT_PROCESS_STATUS.PENDING);
         });
-      }, 500);
-
-      setStatus(IMPORT_PROCESS_STATUS.PENDING);
+      });
     }
   }, [navigation, privateKey]);
 
@@ -161,6 +173,7 @@ export const ImportWalletPrivateKey = () => {
           </View>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
+
       <BottomSheetImportWalletPrivateKeyStatus
         ref={bottomSheetProcessingRef}
         status={status}
