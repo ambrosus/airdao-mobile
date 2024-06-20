@@ -19,3 +19,8 @@ export type SelectedPairsState = Array<{
   token0: string;
   token1: string;
 }>;
+
+export type NonNullableSelectedTokensState = Record<
+  SelectedTokensKeys,
+  SwapToken
+>;

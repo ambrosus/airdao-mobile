@@ -10,7 +10,13 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
 import { environment } from '@utils/environment';
-import { wrapNativeAddress, isNativeWrapped } from '@features/swap/utils';
+import {
+  wrapNativeAddress,
+  isNativeWrapped,
+  isMultiRouteWithUSDCFirst,
+  isMultiRouteWithBONDFirst,
+  multiRouteAddresses
+} from '@features/swap/utils';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -114,10 +120,12 @@ export function useSwapActions() {
           amountToSell: bnAmountToSell
         });
 
-        return await getAmountsOut({
+        const final = await getAmountsOut({
           path: finalPath as [string, string],
           amountToSell: intermediateAmount
         });
+
+        return final;
       }
     },
     [isExactInRef]
@@ -127,15 +135,6 @@ export function useSwapActions() {
     async (amountToSell: string, path: [string, string]) => {
       if (amountToSell === '' || amountToSell === '0') return;
       const [addressFrom, addressTo] = path;
-      const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
-
-      const isMultiRouteWithUSDCFirst = new Set([
-        [multiRouteAddresses.USDC, multiRouteAddresses.BOND].join()
-      ]);
-
-      const isMultiRouteWithBONDFirst = new Set([
-        [multiRouteAddresses.BOND, multiRouteAddresses.USDC].join()
-      ]);
 
       const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
         [addressFrom, addressTo].join()

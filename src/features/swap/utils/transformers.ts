@@ -3,7 +3,8 @@ const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   2: 4,
   3: 3,
   4: 2,
-  5: 1
+  5: 1,
+  6: 0
 };
 
 const transformAmountValue = (value: string): string => {

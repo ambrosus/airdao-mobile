@@ -15,3 +15,13 @@ export function isMultiRouteRequired(
 
   return isMultiRoute;
 }
+
+export const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
+
+export const isMultiRouteWithUSDCFirst = new Set([
+  [multiRouteAddresses.USDC, multiRouteAddresses.BOND].join()
+]);
+
+export const isMultiRouteWithBONDFirst = new Set([
+  [multiRouteAddresses.BOND, multiRouteAddresses.USDC].join()
+]);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { ERC20_PAIR } from '../abi';
 import {
   createAMBProvider,
@@ -7,18 +7,10 @@ import {
 } from '@features/swap/utils/contracts/instances';
 import { SelectedTokensState } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
-import { typedPath, wrapNativeAddress } from '@features/swap/utils';
-import { useSwapActions } from './use-swap-actions';
+import { wrapNativeAddress } from '@features/swap/utils';
 
 export function useAllLiquidityPools() {
-  const {
-    setPairs,
-    allPairsRef,
-    selectedTokens,
-    latestSelectedTokensAmount,
-    isExactInRef
-  } = useSwapContextSelector();
-  const { hasWrapNativeToken } = useSwapActions();
+  const { setPairs, allPairsRef } = useSwapContextSelector();
 
   const getAllPoolsCount = useCallback(async () => {
     const pairs = [];
@@ -96,75 +88,12 @@ export function useAllLiquidityPools() {
     [getPairAddress]
   );
 
-  const calculatePriceImpact = (
-    amountIn: string,
-    amountOut: BigNumber,
-    reserveIn: BigNumber,
-    reserveOut: BigNumber
-  ): string => {
-    const newAmountIn = parseFloat(amountIn);
-    // @ts-ignore
-    const initialPrice = reserveOut / reserveIn;
-    const newReserveIn = reserveIn.add(newAmountIn);
-    const newReserveOut = reserveOut.sub(amountOut);
-    // @ts-ignore
-    const newPrice = newReserveOut / newReserveIn;
-    const priceImpact = ((newPrice - initialPrice) / initialPrice) * 100;
-    return String(-priceImpact.toFixed(2));
-  };
-
-  const calculateMultiRoutePriceImpact = () => {
-    const path = typedPath(selectedTokens);
-
-    return path;
-  };
-
-  const uiGetterPriceImpact = useCallback(async () => {
-    if (!hasWrapNativeToken) {
-      const pool = getPairAddress(selectedTokens);
-
-      if (pool && pool.pairAddress) {
-        const { reserveIn, reserveOut } = await getReserves(
-          pool.pairAddress,
-          selectedTokens
-        );
-
-        const { TOKEN_A, TOKEN_B } = latestSelectedTokensAmount.current;
-        if (reserveIn && reserveOut) {
-          const amountToSell = isExactInRef.current ? TOKEN_A : TOKEN_B;
-          const amountToReceive = isExactInRef.current ? TOKEN_B : TOKEN_A;
-
-          const bnAmountOut = ethers.utils.parseUnits(amountToReceive);
-
-          const impact = calculatePriceImpact(
-            amountToSell,
-            bnAmountOut,
-            reserveIn,
-            reserveOut
-          );
-
-          return impact;
-        }
-      }
-    }
-  }, [
-    getPairAddress,
-    getReserves,
-    hasWrapNativeToken,
-    isExactInRef,
-    latestSelectedTokensAmount,
-    selectedTokens
-  ]);
-
   useEffect(() => {
     getAllPoolsCount();
   }, [getAllPoolsCount]);
 
   return {
     getPairAddress,
-    getReserves,
-    calculatePriceImpact,
-    calculateMultiRoutePriceImpact,
-    uiGetterPriceImpact
+    getReserves
   };
 }
