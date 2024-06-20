@@ -1,3 +1,6 @@
+import { BigNumber } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+
 const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   1: 5,
   2: 4,
@@ -5,6 +8,13 @@ const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   4: 2,
   5: 1,
   6: 0
+};
+
+const MIN_RECEIVED_DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
+  1: 3,
+  2: 2,
+  3: 1,
+  4: 0
 };
 
 const transformAmountValue = (value: string): string => {
@@ -22,7 +32,27 @@ const transformAmountValue = (value: string): string => {
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
 
+const transformMinAmountValue = (bnMinimumAmount: BigNumber): string => {
+  const value = formatEther(bnMinimumAmount);
+  const [integerPart, fractionalPart] = value.toString().split('.');
+
+  let integerLength = integerPart.length;
+  if (integerLength > 4) integerLength = 4;
+
+  const digitsToKeep = MIN_RECEIVED_DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
+  let formattedNumber = integerPart;
+
+  if (fractionalPart)
+    formattedNumber += `.${fractionalPart.slice(0, digitsToKeep)}`;
+
+  return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
+};
+
 const extendedLogoVariants = (symbol: string) =>
   symbol === 'SAMB' ? 'AMB' : symbol;
 
-export const SwapStringUtils = { transformAmountValue, extendedLogoVariants };
+export const SwapStringUtils = {
+  transformAmountValue,
+  extendedLogoVariants,
+  transformMinAmountValue
+};

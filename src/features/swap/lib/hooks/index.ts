@@ -7,3 +7,4 @@ export { useSwapSettings } from './use-swap-settings';
 export { useSwapMultiplyBalance } from './use-swap-multiply-balance';
 export { useAllLiquidityPools } from './use-all-liquidity-pools';
 export { useSwapPriceImpact } from './use-swap-price-impact';
+export { useSwapInterface } from './use-swap-interface';

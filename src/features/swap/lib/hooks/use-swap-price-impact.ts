@@ -50,7 +50,7 @@ export function useSwapPriceImpact() {
               reserveOut
             );
 
-            return +impact >= 0 ? impact : -impact;
+            return Number(+impact >= 0 ? impact : -impact);
           }
         }
       }
@@ -185,7 +185,7 @@ export function useSwapPriceImpact() {
         );
       }
 
-      return 0.0;
+      return 0;
     } catch (error) {
       console.error('Error calculating price impact:', error);
       return 0;

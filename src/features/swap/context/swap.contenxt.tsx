@@ -9,13 +9,21 @@ import { BottomSheetRef } from '@components/composite';
 import {
   FIELD,
   SelectedPairsState,
-  SelectedTokensKeys
+  SelectedTokensKeys,
+  UIBottomSheetInformationState
 } from '@/features/swap/types';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
+
+  const [uiBottomSheetInformation, setUiBottomSheetInformation] =
+    useState<UIBottomSheetInformationState>({
+      priceImpact: null,
+      minimumReceivedAmount: null,
+      lpFee: null
+    });
 
   const isExactInRef = useRef<boolean>(true);
 
@@ -75,6 +83,8 @@ export const SwapContext = () => {
     bottomSheetTokenBRef,
     bottomSheetPreviewSwapRef,
     isExactInRef,
+    setUiBottomSheetInformation,
+    uiBottomSheetInformation,
     setIsExactIn,
     allPairsRef,
     setPairs,

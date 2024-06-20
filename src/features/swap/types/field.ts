@@ -24,3 +24,11 @@ export type NonNullableSelectedTokensState = Record<
   SelectedTokensKeys,
   SwapToken
 >;
+
+export type UIBottomSheetInformationState = {
+  priceImpact: number | null;
+  minimumReceivedAmount: string | null;
+  lpFee: string | null;
+};
+
+export type UIBottomSheetInformationKeys = keyof UIBottomSheetInformationState;
