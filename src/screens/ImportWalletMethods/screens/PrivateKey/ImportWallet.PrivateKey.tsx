@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
-  Keyboard,
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
   View
@@ -49,11 +48,6 @@ export const ImportWalletPrivateKey = () => {
     IMPORT_PROCESS_STATUS.PENDING
   );
 
-  const dismissKeyboard = useCallback(() => {
-    maskedInputRef.current?.blur();
-    Keyboard.dismiss();
-  }, []);
-
   const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
   const maskedInputRef = useRef<InputRef>(null);
 
@@ -65,15 +59,16 @@ export const ImportWalletPrivateKey = () => {
 
   const onImportWalletPress = useCallback(async () => {
     setStatus(IMPORT_PROCESS_STATUS.PENDING);
-    bottomSheetProcessingRef.current?.show();
+    setTimeout(() => {
+      bottomSheetProcessingRef.current?.show();
+    }, 500);
+    maskedInputRef.current?.blur();
 
     try {
-      dismissKeyboard();
       await WalletUtils.importWalletViaPrivateKey(privateKey);
       await delay(1200);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
-      dismissKeyboard();
       // @ts-ignore
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
@@ -92,7 +87,7 @@ export const ImportWalletPrivateKey = () => {
         });
       });
     }
-  }, [dismissKeyboard, navigation, privateKey]);
+  }, [navigation, privateKey]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
