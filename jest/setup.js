@@ -121,3 +121,38 @@ jest.mock('@shopify/react-native-skia', () => ({
   Circle: 'Circle',
   Group: 'Group'
 }));
+
+jest.mock('ethers', () => {
+  class MockContract {
+    constructor(address, abi, signerOrProvider) {
+      this.address = address;
+      this.abi = abi;
+      this.signerOrProvider = signerOrProvider;
+    }
+  }
+
+  class MockWallet {
+    constructor(privateKey, provider) {
+      this.privateKey = privateKey;
+      this.provider = provider;
+    }
+  }
+
+  class MockJsonRpcProvider {
+    constructor(url) {
+      this.url = url;
+    }
+
+    async getBlockNumber() {
+      return 12345;
+    }
+  }
+
+  return {
+    Contract: MockContract,
+    Wallet: MockWallet,
+    providers: {
+      JsonRpcProvider: MockJsonRpcProvider
+    }
+  };
+});
