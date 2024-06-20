@@ -3,57 +3,53 @@ import { View } from 'react-native';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
-import { SwapStringUtils, minimumAmountOut } from '@features/swap/utils';
-import { ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
 import { FIELD } from '@features/swap/types';
 import { COLORS } from '@constants/colors';
 
 export const PreviewInformation = () => {
   const {
-    selectedTokensAmount,
     selectedTokens,
-    slippageTolerance,
-    isExactInRef
+
+    isExactInRef,
+    uiBottomSheetInformation
   } = useSwapContextSelector();
 
-  const receiveTokensKey = useMemo(() => {
-    return isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
-  }, [isExactInRef]);
+  const tokensSymbols = useMemo(() => {
+    const sellTokenSymbol =
+      selectedTokens[isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B]
+        ?.symbol ?? '';
 
-  const minimumReceivedTokens = useMemo(() => {
-    const bnAmountToReceive = ethers.utils.parseUnits(
-      selectedTokensAmount[receiveTokensKey] ?? '0'
-    );
-
-    const bnMinimumReceived = minimumAmountOut(
-      slippageTolerance,
-      bnAmountToReceive
-    );
-
-    const symbol =
+    const receiveTokenSymbol =
       selectedTokens[isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A]
         ?.symbol ?? '';
 
-    const transformedAmount = SwapStringUtils.transformAmountValue(
-      formatEther(bnMinimumReceived._hex)
-    );
-
-    return `${transformedAmount} ${symbol}`;
-  }, [
-    selectedTokensAmount,
-    receiveTokensKey,
-    selectedTokens,
-    isExactInRef,
-    slippageTolerance
-  ]);
+    return { sellTokenSymbol, receiveTokenSymbol };
+  }, [isExactInRef, selectedTokens]);
 
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <Text>Minimum received</Text>
 
-        <RightSideRowItem>{minimumReceivedTokens}</RightSideRowItem>
+        <RightSideRowItem>
+          {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokensSymbols.receiveTokenSymbol}`}
+        </RightSideRowItem>
+      </Row>
+
+      <Row alignItems="center" justifyContent="space-between">
+        <Text>Price Impact</Text>
+
+        <RightSideRowItem>
+          {uiBottomSheetInformation.priceImpact}%
+        </RightSideRowItem>
+      </Row>
+
+      <Row alignItems="center" justifyContent="space-between">
+        <Text>Liquidity Provider Fee</Text>
+
+        <RightSideRowItem>
+          {`${uiBottomSheetInformation.lpFee} ${tokensSymbols.sellTokenSymbol}`}
+        </RightSideRowItem>
       </Row>
     </View>
   );
