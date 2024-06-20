@@ -1,4 +1,4 @@
-export function exactSwapPath(
+export function executeSwapPath(
   isExactIn: boolean,
   path: [string | undefined, string | undefined]
 ): [string, string] {

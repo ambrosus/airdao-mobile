@@ -3,7 +3,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapActions } from './use-swap-actions';
-import { SwapStringUtils, exactSwapPath } from '@features/swap/utils';
+import { SwapStringUtils, executeSwapPath } from '@features/swap/utils';
 
 export function useSwapFieldsHandler() {
   const { getOppositeReceivedTokenAmount } = useSwapActions();
@@ -19,7 +19,7 @@ export function useSwapFieldsHandler() {
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
     if (!TOKEN_A || !TOKEN_B) return '';
 
-    const path = exactSwapPath(isExactInRef.current, [
+    const path = executeSwapPath(isExactInRef.current, [
       TOKEN_A.address,
       TOKEN_B.address
     ]);
