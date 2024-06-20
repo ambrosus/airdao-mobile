@@ -1,5 +1,6 @@
+import { useCallback } from 'react';
+import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useCallback, useState } from 'react';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import {
   SwapStringUtils,
@@ -7,11 +8,9 @@ import {
   realizedLPFee
 } from '@features/swap/utils';
 import { FIELD } from '@features/swap/types';
-import { ethers } from 'ethers';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 
 export function useSwapInterface() {
-  const [isProcessingBottomSheet, setIsProcessingBottomSheet] = useState(false);
   const { onReviewSwapPreview } = useSwapBottomSheetHandler();
 
   const {
@@ -58,8 +57,6 @@ export function useSwapInterface() {
       }
     } catch (error) {
       throw error;
-    } finally {
-      setIsProcessingBottomSheet(false);
     }
   }, [
     isExactInRef,
@@ -71,5 +68,5 @@ export function useSwapInterface() {
     lastChangedInput
   ]);
 
-  return { isProcessingBottomSheet, resolveBottomSheetData };
+  return { resolveBottomSheetData };
 }
