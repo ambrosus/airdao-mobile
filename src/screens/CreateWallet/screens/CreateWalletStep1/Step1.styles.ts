@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
@@ -20,13 +20,15 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   mnemonic: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.neutral100,
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(8),
-    height: verticalScale(36),
-    minHeight: 36
+    columnGap: 8,
+    width: '50%',
+    height: 43,
+    paddingHorizontal: scale(20),
+    backgroundColor: COLORS.neutral100
+  },
+  contentContainerStyle: {
+    gap: 8
   }
 });

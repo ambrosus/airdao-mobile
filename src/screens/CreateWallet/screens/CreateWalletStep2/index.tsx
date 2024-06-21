@@ -59,15 +59,8 @@ export const CreateWalletStep2 = () => {
       await WalletUtils.processWallet(walletMnemonic);
       navigation.dispatch(
         CommonActions.reset({
-          index: 1,
+          index: 0,
           routes: [
-            {
-              name: 'Tabs',
-              params: {
-                screen: 'Wallets',
-                params: { screen: 'HomeScreen' }
-              }
-            },
             {
               name: 'Tabs',
               params: {

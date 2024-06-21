@@ -36,7 +36,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const navigateToImportWallet = () => {
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('ImportWallet');
+    navigation.navigate('ImportWalletMethods');
     localRef.current?.dismiss();
   };
 

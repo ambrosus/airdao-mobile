@@ -6,3 +6,4 @@ export * from './NotificationSettings';
 export * from './SecuritySettings';
 export * from './SingleWallet';
 export * from './ChangePasscode';
+export * from './AccessKeys';

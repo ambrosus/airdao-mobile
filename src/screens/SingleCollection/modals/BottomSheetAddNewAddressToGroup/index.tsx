@@ -11,8 +11,8 @@ import {
   FlatList,
   ListRenderItemInfo,
   ScrollView,
-  View,
-  useWindowDimensions
+  useWindowDimensions,
+  View
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -34,7 +34,7 @@ import { COLORS } from '@constants/colors';
 import { useLists } from '@contexts/ListsContext';
 import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { BarcodeScanner, WalletItem } from '@components/templates';
+import { BarcodeScanner } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { SearchSort } from '@screens/Search/Search.types';
 import { ExplorerWalletItem } from '@screens/Search/components';
@@ -258,7 +258,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       <Spacer value={verticalScale(24)} />
       <View style={styles.bottomSheetInput}>
         <InputWithIcon
-          editable={selectedAddresses.length === 0}
           ref={inputRef}
           iconLeft={<SearchIcon color="#2f2b4399" />}
           iconRight={
@@ -296,23 +295,25 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           <View style={{ flex: 1 }}>
             {searchLoading && <Spinner />}
             {Boolean(searchError) && <SearchAddressNoResult />}
-            {searchedAccount && (
-              <View>
-                <Button
-                  onPress={() => {
-                    handleItemPress(searchedAccount);
-                  }}
-                  style={styles.item}
-                >
-                  <WalletItem item={searchedAccount} indicatorVisible={true} />
-                </Button>
-              </View>
+            {searchedAccount ? (
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: 150
+                }}
+                data={[searchedAccount]}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={() =>
+                  topHoldersLoading ? <Spinner /> : <></>
+                }
+              />
+            ) : (
+              <></>
             )}
           </View>
         ) : (
           <>
             <SegmentedPicker
-              disabled={selectionStarted}
               segments={AddressSources}
               selectedSegment={scrollViewIdx}
               onSelectSegment={onSelectSegment}
