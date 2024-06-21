@@ -1,10 +1,4 @@
-import {
-  AllowanceException,
-  FeeData,
-  RelayUrls,
-  RunWithdrawModel,
-  Token
-} from '../models/types';
+import { FeeData, RelayUrls, RunWithdrawModel, Token } from '../models/types';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { erc20Contract } from '../abi/sdkABI';
 
@@ -139,7 +133,7 @@ export async function withdraw({
       }
     }
   } catch (e) {
-    // ignore
+    return e;
   }
 }
 
@@ -157,7 +151,8 @@ export async function setAllowance(
     }
   } catch (e) {
     console.warn(`error to set new allowance value ${amount}`, e);
-    throw new AllowanceException(token, amount, bridgeAddress);
+    return e;
+    // throw new AllowanceException(token, amount, bridgeAddress);
   }
 }
 

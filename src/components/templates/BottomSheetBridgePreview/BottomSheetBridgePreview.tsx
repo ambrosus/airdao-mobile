@@ -58,7 +58,8 @@ export const BottomSheetBridgePreview = forwardRef<
       return !validateBalance({
         balance: selectedToken.balance,
         amount: withdrawSum,
-        token: feeToken
+        token: feeToken,
+        error: ''
       });
     } else {
       return false;

@@ -77,7 +77,8 @@ export const BridgeForm = () => {
 
       const isValidateAmount = validateBalance({
         balance: selectedTokenBalance,
-        amount: amountToExchange
+        amount: amountToExchange,
+        error: null
       });
       if (!!amountToExchange && isValidateAmount) {
         clearTimeout(timeoutDelay);
@@ -145,7 +146,7 @@ export const BridgeForm = () => {
               value={amountToExchange}
               onChangeValue={onChangeAmount}
             />
-            {inputError && (
+            {!!inputError && (
               <>
                 <Spacer value={verticalScale(4)} />
                 <Text
@@ -154,7 +155,7 @@ export const BridgeForm = () => {
                   fontWeight="500"
                   color={COLORS.error400}
                 >
-                  {t('bridge.insufficient.funds')}
+                  {inputError}
                 </Text>
               </>
             )}
@@ -173,9 +174,7 @@ export const BridgeForm = () => {
 
         <PrimaryButton
           onPress={onPressPreview}
-          disabled={
-            !amountToExchange || !bridgeFee || gasFeeLoader || inputError
-          }
+          disabled={!amountToExchange || !bridgeFee || gasFeeLoader}
         >
           {gasFeeLoader ? (
             <Spinner customSize={15} />

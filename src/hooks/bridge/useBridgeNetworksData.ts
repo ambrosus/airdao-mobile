@@ -10,11 +10,13 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { currentProvider, getBridgeFeeData, getBridgeTransactions } from '@lib';
-import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { DECIMAL_LIMIT } from '@constants/variables';
 import { useCurrencyRate } from '@hooks';
 import { BigNumber } from 'ethers';
 import { DEFAULT_TOKEN_FROM } from '@contexts/Bridge/constants';
+import { useNavigation } from '@react-navigation/native';
+import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
+import { HomeNavigationProp } from '@appTypes';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef?: RefObject<BottomSheetRef>;
@@ -34,6 +36,8 @@ export const useBridgeNetworksData = ({
   previewRef,
   transactionInfoRef
 }: UseBridgeNetworksDataModel) => {
+  const navigation = useNavigation<HomeNavigationProp>();
+
   const [feeLoader, setFeeLoader] = useState(false);
   const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [isMax, setMax] = useState(false);
@@ -47,7 +51,7 @@ export const useBridgeNetworksData = ({
     loading?: boolean;
     withdrawTx: string;
   }>(DEFAULT_BRIDGE_TRANSACTION);
-  const [inputError, setInputError] = useState(false);
+  const [inputError, setInputError] = useState<string | null>('');
   const {
     selectedAccount,
     toParams,
@@ -75,7 +79,6 @@ export const useBridgeNetworksData = ({
   const selectedTokenTo = selectedToken.pairs[1];
 
   const { t } = useTranslation();
-
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
     setCurrencySelectorWidth(event.nativeEvent.layout.width);
   };
@@ -143,30 +146,33 @@ export const useBridgeNetworksData = ({
   })();
 
   const validateBalance = ({
+    error = '',
     balance,
     amount,
     token = selectedToken.renderTokenItem,
     callBack = setInputError
   }: {
+    error: string | null;
     token?: RenderTokenItem;
     balance: BigNumber;
     amount: string | BigNumber;
-    callBack?: (v: boolean) => void;
+    callBack?: (v: string | null) => void;
   }) => {
     const decimals = token.decimals ?? 18;
-    if (!!amount && !!balance) {
+    if (!!+amount && !!balance) {
       const bigNumberAmount =
         typeof amount === 'string' ? parseUnits(amount, decimals) : amount;
       const isAmountGraterThenBalance = bigNumberAmount.gt(balance);
       if (isAmountGraterThenBalance) {
-        callBack(true);
+        callBack(error);
         return false;
       } else {
-        callBack(false);
+        callBack(error);
         return true;
       }
     } else {
-      callBack(false);
+      callBack(error);
+      return false;
     }
   };
 
@@ -177,6 +183,35 @@ export const useBridgeNetworksData = ({
       DECIMAL_LIMIT.CRYPTO
     );
     setAmountToExchange(finalValue);
+  };
+
+  const errorHandler = (error: unknown) => {
+    // @ts-ignore
+    const errorMessage = `${error?.message}`;
+    const amountLessThenFee = errorMessage.includes(
+      'error when getting fees: amount is too small'
+    );
+
+    const insufficientFundToProcessTransaction =
+      // @ts-ignore
+      error?.code === 'INSUFFICIENT_FUNDS' &&
+      // @ts-ignore
+      error?.method === 'estimateGas' &&
+      errorMessage.includes(
+        'insufficient funds for intrinsic transaction cost'
+      );
+
+    switch (true) {
+      case amountLessThenFee:
+        setInputError(t('bridge.amount.less.then.fee'));
+        break;
+      case insufficientFundToProcessTransaction:
+        setInputError(t('bridge.insufficient.funds.to.pay.fee'));
+        break;
+      default:
+        navigation.navigate('BridgeTransferError');
+        break;
+    }
   };
 
   const getFeeData = async (isMaxOptions = false) => {
@@ -214,7 +249,7 @@ export const useBridgeNetworksData = ({
         feeData: fee
       });
     } catch (e) {
-      // console.log('FEE ERROR', e);
+      errorHandler(e);
       // ignore
     } finally {
       setFeeLoader(false);
@@ -252,26 +287,27 @@ export const useBridgeNetworksData = ({
         });
       }
     } catch (e) {
-      // console.log('GENERAL withdraw', e);
+      // console.log('withdraw ERROR', e);
+      errorHandler(e);
+      return e;
       // ignore;
     }
   };
 
   const onPressPreview = async () => {
     try {
-      setInputError(false);
+      setInputError('');
       setGasFeeLoader(true);
 
       const _gasEstimate = await withdraw(true);
       if (_gasEstimate._hex) {
         const provider = await currentProvider(fromParams.value.id);
         const gasPrice = await provider?.getGasPrice();
-
         setGasFee(_gasEstimate.mul(gasPrice));
+        previewRef?.current?.show();
       }
-      previewRef?.current?.show();
     } catch (e) {
-      // console.log('GAS_ESTIMATE', e);
+      // console.log('onPressPreview ERROR', e);
       // ignore
     } finally {
       setGasFeeLoader(false);
@@ -306,6 +342,7 @@ export const useBridgeNetworksData = ({
         }
       }
     } catch (e) {
+      // console.log('onWithdrawApprove ERROR', e);
       transactionInfoRef?.current?.dismiss();
     }
   };
