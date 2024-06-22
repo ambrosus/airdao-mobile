@@ -50,7 +50,6 @@ export const BridgeForm = () => {
     setBridgeFee,
     onPressPreview,
     onWithdrawApprove,
-    validateBalance,
     setFeeLoader
   } = methods;
   const {
@@ -73,14 +72,7 @@ export const BridgeForm = () => {
   useEffect(() => {
     if (!isMax) {
       setBridgeFee(null);
-      const selectedTokenBalance = tokenParams.value.renderTokenItem.balance;
-
-      const isValidateAmount = validateBalance({
-        balance: selectedTokenBalance,
-        amount: amountToExchange,
-        error: null
-      });
-      if (!!amountToExchange && isValidateAmount) {
+      if (!!amountToExchange && !inputError) {
         clearTimeout(timeoutDelay);
         setFeeLoader(true);
         setTimeoutDelay(
@@ -111,7 +103,6 @@ export const BridgeForm = () => {
       });
     }, 500);
   };
-
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}

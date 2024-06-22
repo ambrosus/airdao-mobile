@@ -41,7 +41,7 @@ export const BottomSheetBridgePreview = forwardRef<
   const { onAcceptPress, dataToPreview, btnTitle } = props;
   const { networksParams, tokenParams } = useBridgeContextSelector();
   const {
-    methods: { validateBalance }
+    methods: { isAmountGraterThenBalance }
   } = useBridgeNetworksData({});
 
   const isWithdrawAmountIsGraterThanBalance = useMemo(() => {
@@ -55,12 +55,12 @@ export const BottomSheetBridgePreview = forwardRef<
       dataToPreview
         .filter((item) => item.symbol === selectedToken.symbol)
         .forEach((item) => (withdrawSum = withdrawSum.add(item.crypto.amount)));
-      return !validateBalance({
+      const isAmountGrater = isAmountGraterThenBalance({
         balance: selectedToken.balance,
         amount: withdrawSum,
-        token: feeToken,
-        error: ''
+        token: feeToken
       });
+      return isAmountGrater;
     } else {
       return false;
     }

@@ -145,33 +145,21 @@ export const useBridgeNetworksData = ({
     ];
   })();
 
-  const validateBalance = ({
-    error = '',
+  const isAmountGraterThenBalance = ({
     balance,
     amount,
-    token = selectedToken.renderTokenItem,
-    callBack = setInputError
+    token = selectedToken.renderTokenItem
   }: {
-    error: string | null;
-    token?: RenderTokenItem;
     balance: BigNumber;
+    token?: RenderTokenItem;
     amount: string | BigNumber;
-    callBack?: (v: string | null) => void;
   }) => {
     const decimals = token.decimals ?? 18;
     if (!!+amount && !!balance) {
       const bigNumberAmount =
         typeof amount === 'string' ? parseUnits(amount, decimals) : amount;
-      const isAmountGraterThenBalance = bigNumberAmount.gt(balance);
-      if (isAmountGraterThenBalance) {
-        callBack(error);
-        return false;
-      } else {
-        callBack(error);
-        return true;
-      }
+      return bigNumberAmount.gt(balance);
     } else {
-      callBack(error);
       return false;
     }
   };
@@ -182,6 +170,17 @@ export const useBridgeNetworksData = ({
       StringUtils.formatNumberInput(value),
       DECIMAL_LIMIT.CRYPTO
     );
+    const selectedTokenBalance = tokenParams.value.renderTokenItem.balance;
+    const isAmountGrater = isAmountGraterThenBalance({
+      balance: selectedTokenBalance,
+      amount: value
+    });
+    if (isAmountGrater) {
+      setInputError(t('bridge.insufficient.funds'));
+    } else {
+      setInputError(null);
+    }
+
     setAmountToExchange(finalValue);
   };
 
@@ -275,7 +274,7 @@ export const useBridgeNetworksData = ({
           tokenFrom: selectedTokenFrom,
           tokenTo: selectedTokenTo,
           selectedAccount,
-          amountTokens: amountToExchange,
+          amountTokens: formatUnits(bridgeFee.amount, selectedTokenDecimals),
           feeData: bridgeFee.feeData,
           gasFee
         };
@@ -287,18 +286,14 @@ export const useBridgeNetworksData = ({
         });
       }
     } catch (e) {
-      // console.log('withdraw ERROR', e);
       errorHandler(e);
       return e;
-      // ignore;
     }
   };
 
   const onPressPreview = async () => {
     try {
-      setInputError('');
       setGasFeeLoader(true);
-
       const _gasEstimate = await withdraw(true);
       if (_gasEstimate._hex) {
         const provider = await currentProvider(fromParams.value.id);
@@ -307,8 +302,6 @@ export const useBridgeNetworksData = ({
         previewRef?.current?.show();
       }
     } catch (e) {
-      // console.log('onPressPreview ERROR', e);
-      // ignore
     } finally {
       setGasFeeLoader(false);
     }
@@ -342,7 +335,6 @@ export const useBridgeNetworksData = ({
         }
       }
     } catch (e) {
-      // console.log('onWithdrawApprove ERROR', e);
       transactionInfoRef?.current?.dismiss();
     }
   };
@@ -369,7 +361,7 @@ export const useBridgeNetworksData = ({
     setBridgeFee,
     onPressPreview,
     onWithdrawApprove,
-    validateBalance
+    isAmountGraterThenBalance
   };
   return {
     variables,
