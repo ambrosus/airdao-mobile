@@ -10,11 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
-import {
-  BottomAwareSafeAreaView,
-  BottomSheetRef,
-  Header
-} from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   InputRef,
@@ -73,13 +69,13 @@ export const ImportWalletPrivateKey = () => {
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
       InteractionManager.runAfterInteractions(async () => {
-        await delay(1200);
+        await delay(1600);
         bottomSheetProcessingRef.current?.dismiss();
       });
 
       InteractionManager.runAfterInteractions(() => {
         requestAnimationFrame(async () => {
-          await delay(1200);
+          await delay(2200);
           navigation.navigate('ImportWalletPrivateKeyError', {
             error: errorStatus
           });
@@ -156,7 +152,7 @@ export const ImportWalletPrivateKey = () => {
                 </Row>
               </Button>
             </View>
-            <BottomAwareSafeAreaView paddingBottom={verticalScale(24)}>
+            <View style={styles.footer}>
               <PrimaryButton
                 disabled={disabled.state}
                 onPress={onImportWalletPress}
@@ -169,7 +165,7 @@ export const ImportWalletPrivateKey = () => {
                   {t('button.continue')}
                 </Text>
               </PrimaryButton>
-            </BottomAwareSafeAreaView>
+            </View>
           </View>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
