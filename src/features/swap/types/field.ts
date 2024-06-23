@@ -6,6 +6,8 @@ export enum FIELD {
   TOKEN_B = 'TOKEN_B'
 }
 
+type UIAllowanceType = 'increase' | 'increased' | 'suitable';
+
 export type SelectedTokensKeys = keyof typeof FIELD;
 export type SelectedTokensState = Record<SelectedTokensKeys, SwapToken | null>;
 export type SelectedTokensAmountState = Record<SelectedTokensKeys, string>;
@@ -29,6 +31,7 @@ export type UIBottomSheetInformationState = {
   priceImpact: number | null;
   minimumReceivedAmount: string | null;
   lpFee: string | null;
+  allowance: UIAllowanceType | null;
 };
 
 export type UIBottomSheetInformationKeys = keyof UIBottomSheetInformationState;

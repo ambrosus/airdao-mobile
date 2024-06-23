@@ -8,5 +8,10 @@ export const styles = StyleSheet.create({
   },
   heading: {
     textAlign: 'center'
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 24
   }
 });

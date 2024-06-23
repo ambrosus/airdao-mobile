@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { SelectedTokensKeys } from '@features/swap/types';
 import { scale } from '@utils/scaling';
 import { useSwapContextSelector } from '@features/swap/context';
-import {
-  useSwapActions,
-  useSwapBalance,
-  useSwapFieldsHandler
-} from '@features/swap/lib/hooks';
+import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { NumberUtils } from '@utils/number';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -20,10 +16,10 @@ interface BalanceProps {
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
+  const { selectedTokens } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
-  const { checkAllowance } = useSwapActions();
+
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type],
     type
@@ -39,10 +35,6 @@ export const Balance = ({ type }: BalanceProps) => {
 
     return '';
   }, [bnBalanceAmount]);
-
-  useEffect(() => {
-    if (selectedTokensAmount.TOKEN_A !== '') checkAllowance();
-  }, [checkAllowance, selectedTokensAmount.TOKEN_A]);
 
   const USDTokenPrice = useUSDPrice(
     Number(NumberUtils.limitDecimalCount(normalizedTokenBalance, 2)),

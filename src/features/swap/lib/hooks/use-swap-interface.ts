@@ -9,6 +9,7 @@ import {
 } from '@features/swap/utils';
 import { FIELD } from '@features/swap/types';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
+import { useSwapActions } from './use-swap-actions';
 
 export function useSwapInterface() {
   const { onReviewSwapPreview } = useSwapBottomSheetHandler();
@@ -21,6 +22,7 @@ export function useSwapInterface() {
     setUiBottomSheetInformation
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
+  const { checkAllowance } = useSwapActions();
 
   const resolveBottomSheetData = useCallback(async () => {
     const oppositeLastInputKey = isExactInRef.current
@@ -39,6 +41,7 @@ export function useSwapInterface() {
 
       const amountToSell = latestSelectedTokensAmount.current[lastChangedInput];
       const liquidityProviderFee = realizedLPFee(amountToSell);
+      const allowance = await checkAllowance();
 
       if (priceImpact && bnMinimumReceivedAmount && liquidityProviderFee) {
         const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
@@ -48,7 +51,8 @@ export function useSwapInterface() {
         setUiBottomSheetInformation({
           priceImpact,
           minimumReceivedAmount: receivedAmountOut,
-          lpFee: SwapStringUtils.transformRealizedLPFee(liquidityProviderFee)
+          lpFee: SwapStringUtils.transformRealizedLPFee(liquidityProviderFee),
+          allowance: allowance ? 'increase' : 'suitable'
         });
 
         setTimeout(() => {
@@ -63,9 +67,10 @@ export function useSwapInterface() {
     latestSelectedTokensAmount,
     uiPriceImpactGetter,
     slippageTolerance,
+    lastChangedInput,
+    checkAllowance,
     setUiBottomSheetInformation,
-    onReviewSwapPreview,
-    lastChangedInput
+    onReviewSwapPreview
   ]);
 
   return { resolveBottomSheetData };

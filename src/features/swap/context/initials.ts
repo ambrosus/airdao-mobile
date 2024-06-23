@@ -22,5 +22,6 @@ export const INITAL_UI_BOTTOM_SHEET_INFORMATION: UIBottomSheetInformationState =
   {
     priceImpact: null,
     minimumReceivedAmount: null,
-    lpFee: null
+    lpFee: null,
+    allowance: null
   };

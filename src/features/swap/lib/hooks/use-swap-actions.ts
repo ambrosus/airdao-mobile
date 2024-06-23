@@ -17,6 +17,7 @@ import {
   isMultiRouteWithBONDFirst,
   multiRouteAddresses
 } from '@features/swap/utils';
+import { FIELD } from '@features/swap/types';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -27,15 +28,18 @@ export function useSwapActions() {
 
   const checkAllowance = useCallback(async () => {
     setIsProcessingAllowance(true);
+    const isExactIn = isExactInRef.current;
+
+    const amountToSell =
+      selectedTokensAmount[isExactIn ? FIELD.TOKEN_B : FIELD.TOKEN_A];
+
     try {
       const privateKey = (await Cache.getItem(
         // @ts-ignore
         `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
       )) as string;
 
-      const bnAmountToSell = ethers.utils.parseEther(
-        selectedTokensAmount.TOKEN_A
-      );
+      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
       return checkIsApprovalRequired({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -48,7 +52,12 @@ export function useSwapActions() {
     } finally {
       setIsProcessingAllowance(false);
     }
-  }, [selectedAccount, selectedTokens.TOKEN_A, selectedTokensAmount.TOKEN_A]);
+  }, [
+    isExactInRef,
+    selectedAccount?._raw,
+    selectedTokens.TOKEN_A,
+    selectedTokensAmount
+  ]);
 
   const setAllowance = useCallback(async () => {
     setIsProcessingAllowance(true);
