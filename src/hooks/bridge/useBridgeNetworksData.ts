@@ -9,7 +9,7 @@ import { StringUtils } from '@utils/string';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
-import { currentProvider, getBridgeFeeData, getBridgeTransactions } from '@lib';
+import { currentProvider, getBridgeFeeData } from '@lib';
 import { DECIMAL_LIMIT } from '@constants/variables';
 import { useCurrencyRate } from '@hooks';
 import { BigNumber } from 'ethers';
@@ -17,6 +17,7 @@ import { DEFAULT_TOKEN_FROM } from '@contexts/Bridge/constants';
 import { useNavigation } from '@react-navigation/native';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { HomeNavigationProp } from '@appTypes';
+import { API } from '@api/api';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef?: RefObject<BottomSheetRef>;
@@ -302,6 +303,7 @@ export const useBridgeNetworksData = ({
         previewRef?.current?.show();
       }
     } catch (e) {
+      // ignore
     } finally {
       setGasFeeLoader(false);
     }
@@ -316,8 +318,8 @@ export const useBridgeNetworksData = ({
       if (res) {
         const bridgeTx = await res.wait(res);
         if (bridgeTx) {
-          const allBridgeTransaction = await getBridgeTransactions(
-            selectedAccount?.address
+          const allBridgeTransaction = await API.bridgeService.getBridgeHistory(
+            selectedAccount?.address || ''
           );
           const withdrawTransaction = allBridgeTransaction.find(
             (trans) => trans.withdrawTx === bridgeTx.transactionHash
