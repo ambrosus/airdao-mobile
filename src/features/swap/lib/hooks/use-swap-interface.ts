@@ -15,7 +15,6 @@ export function useSwapInterface() {
   const { onReviewSwapPreview } = useSwapBottomSheetHandler();
 
   const {
-    lastChangedInput,
     slippageTolerance,
     latestSelectedTokensAmount,
     isExactInRef,
@@ -25,6 +24,10 @@ export function useSwapInterface() {
   const { checkAllowance } = useSwapActions();
 
   const resolveBottomSheetData = useCallback(async () => {
+    const tokensToSellKey = isExactInRef.current
+      ? FIELD.TOKEN_A
+      : FIELD.TOKEN_B;
+
     const oppositeLastInputKey = isExactInRef.current
       ? FIELD.TOKEN_B
       : FIELD.TOKEN_A;
@@ -39,7 +42,7 @@ export function useSwapInterface() {
         ethers.utils.parseUnits(receivedAmountOut)
       );
 
-      const amountToSell = latestSelectedTokensAmount.current[lastChangedInput];
+      const amountToSell = latestSelectedTokensAmount.current[tokensToSellKey];
       const liquidityProviderFee = realizedLPFee(amountToSell);
       const allowance = await checkAllowance();
 
@@ -71,7 +74,6 @@ export function useSwapInterface() {
     latestSelectedTokensAmount,
     uiPriceImpactGetter,
     slippageTolerance,
-    lastChangedInput,
     checkAllowance,
     setUiBottomSheetInformation,
     onReviewSwapPreview

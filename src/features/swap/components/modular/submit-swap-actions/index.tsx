@@ -135,14 +135,19 @@ export const SubmitSwapActions = () => {
       <PrimaryButton
         disabled={isProcessingSwap}
         onPress={onCompleteMultiStepSwap}
+        style={styles.button}
       >
-        <Text
-          fontSize={16}
-          fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral0}
-        >
-          Swap now
-        </Text>
+        {isProcessingSwap ? (
+          <Spinner />
+        ) : (
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral0}
+          >
+            Swap now
+          </Text>
+        )}
       </PrimaryButton>
     );
   }

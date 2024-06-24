@@ -8,6 +8,10 @@ export const styles = StyleSheet.create({
     columnGap: scale(24)
   },
   multiStepButton: {
-    width: '46.5%'
+    width: '46.5%',
+    height: 48
+  },
+  button: {
+    height: 48
   }
 });

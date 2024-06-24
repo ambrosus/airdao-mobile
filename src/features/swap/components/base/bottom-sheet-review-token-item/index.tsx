@@ -6,7 +6,6 @@ import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
 import { TokenLogo } from '@components/modular';
 import { Spacer, Text } from '@components/base';
-import { NumberUtils } from '@utils/number';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
@@ -49,7 +48,7 @@ export const BottomSheetReviewTokenItem = ({
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {NumberUtils.limitDecimalCount(selectedTokensAmount[type], 2)}{' '}
+          {SwapStringUtils.transformAmountValue(selectedTokensAmount[type])}{' '}
           {selectedTokens[type]?.symbol}
         </Text>
       </View>
