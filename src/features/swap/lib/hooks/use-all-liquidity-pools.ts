@@ -24,6 +24,7 @@ export function useAllLiquidityPools() {
         ERC20_PAIR,
         createAMBProvider()
       );
+
       const token0 = await pairContract.token0();
       const token1 = await pairContract.token1();
 
