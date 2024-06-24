@@ -76,7 +76,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
         color={COLORS.neutral800}
         align="center"
       >
-        {t('bridge.select.network')}
+        {t(isNetworkSelector ? 'bridge.select.network' : 'bridge.select.token')}
       </Text>
       <Spacer value={verticalScale(16)} />
       <FlatList
