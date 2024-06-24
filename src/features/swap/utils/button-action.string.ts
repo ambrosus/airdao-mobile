@@ -11,13 +11,15 @@ export function buttonActionString(
   selectedTokens: SelectedTokensState,
   selectedAmount: SelectedTokensAmountState,
   bnBalanceAmount: MultiplyBalancesStateType,
-  lastChangedInput: keyof typeof FIELD
+  isExactIn: boolean
 ) {
   const { TOKEN_A, TOKEN_B } = selectedTokens;
   const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedAmount;
   const emptyInputValue = '' && '0';
 
   const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
+
+  const keyToSellTokens = isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B;
 
   const isSomeBalanceIsEmpty =
     AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
@@ -26,15 +28,17 @@ export function buttonActionString(
     return 'Enter amount';
   }
 
-  const lastChangedInputBalance = bnBalanceAmount[lastChangedInput]?._hex;
+  const lastChangedInputBalance = bnBalanceAmount[keyToSellTokens]?._hex;
 
   if (lastChangedInputBalance) {
     const normalizedBalanceAmount = NumberUtils.limitDecimalCount(
       formatEther(lastChangedInputBalance),
-      2
+      18
     );
 
-    if (normalizedBalanceAmount < selectedAmount[lastChangedInput]) {
+    if (
+      Number(selectedAmount[keyToSellTokens]) > Number(normalizedBalanceAmount)
+    ) {
       return 'Insufficient funds';
     }
   }

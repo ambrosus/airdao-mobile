@@ -26,6 +26,12 @@ export const PreviewInformation = () => {
     return { sellTokenSymbol, receiveTokenSymbol };
   }, [isExactInRef, selectedTokens]);
 
+  const uiPriceImpact = useMemo(() => {
+    const { priceImpact } = uiBottomSheetInformation;
+
+    return priceImpact != null && priceImpact < 0.01 ? '<0.01' : priceImpact;
+  }, [uiBottomSheetInformation]);
+
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
@@ -39,9 +45,7 @@ export const PreviewInformation = () => {
       <Row alignItems="center" justifyContent="space-between">
         <Text>Price Impact</Text>
 
-        <RightSideRowItem>
-          {uiBottomSheetInformation.priceImpact}%
-        </RightSideRowItem>
+        <RightSideRowItem>{uiPriceImpact}%</RightSideRowItem>
       </Row>
 
       <Row alignItems="center" justifyContent="space-between">

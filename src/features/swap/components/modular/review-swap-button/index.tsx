@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { PrimaryButton } from '@components/modular';
-import { Text } from '@components/base';
+import { Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
@@ -11,7 +11,7 @@ import { buttonActionString } from '@features/swap/utils/button-action.string';
 
 export const ReviewSwapButton = () => {
   const { bnBalances } = useSwapMultiplyBalance();
-  const { selectedTokens, selectedTokensAmount, lastChangedInput } =
+  const { selectedTokens, selectedTokensAmount, isExactInRef } =
     useSwapContextSelector();
 
   const { resolveBottomSheetData } = useSwapInterface();
@@ -23,9 +23,9 @@ export const ReviewSwapButton = () => {
       selectedTokens,
       selectedTokensAmount,
       bnBalances,
-      lastChangedInput
+      isExactInRef.current
     );
-  }, [bnBalances, lastChangedInput, selectedTokens, selectedTokensAmount]);
+  }, [bnBalances, isExactInRef, selectedTokens, selectedTokensAmount]);
 
   const onResolveBottomSheetDataPress = useCallback(async () => {
     try {
@@ -44,9 +44,13 @@ export const ReviewSwapButton = () => {
 
   return (
     <PrimaryButton disabled={disabled} onPress={onResolveBottomSheetDataPress}>
-      <Text color={disabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
-        {swapButtonString}
-      </Text>
+      {isProcessingBottomSheet ? (
+        <Spinner />
+      ) : (
+        <Text color={disabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
+          {swapButtonString}
+        </Text>
+      )}
     </PrimaryButton>
   );
 };

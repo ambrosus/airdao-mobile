@@ -1,4 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -9,9 +10,17 @@ export const styles = StyleSheet.create({
   heading: {
     textAlign: 'center'
   },
-  footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: 24
+  preview: {
+    width: '100%',
+    flexDirection: 'column',
+    backgroundColor: COLORS.alphaBlack5,
+    padding: 12,
+    borderRadius: moderateScale(16)
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: COLORS.neutral200,
+    alignSelf: 'center'
   }
 });
