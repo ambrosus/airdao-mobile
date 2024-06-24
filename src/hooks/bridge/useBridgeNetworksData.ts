@@ -216,11 +216,14 @@ export const useBridgeNetworksData = ({
 
   const getFeeData = async (isMaxOptions = false) => {
     setFeeLoader(true);
+    const setTokenAmount = () => {
+      if (selectedToken.renderTokenItem.isNativeCoin) {
+        return selectedToken.renderTokenItem.balance.sub(BigNumber.from(1));
+      }
+      return selectedToken.renderTokenItem.balance;
+    };
     const amountTokens = isMaxOptions
-      ? formatUnits(
-          selectedToken.renderTokenItem.balance,
-          selectedToken.renderTokenItem.decimals
-        )
+      ? formatUnits(setTokenAmount(), selectedToken.renderTokenItem.decimals)
       : amountToExchange;
     const dataForFee = {
       tokenFrom: selectedToken.pairs[0],
