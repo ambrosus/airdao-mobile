@@ -43,7 +43,11 @@ export function useSwapInterface() {
       const liquidityProviderFee = realizedLPFee(amountToSell);
       const allowance = await checkAllowance();
 
-      if (priceImpact && bnMinimumReceivedAmount && liquidityProviderFee) {
+      if (
+        typeof priceImpact === 'number' &&
+        typeof liquidityProviderFee === 'string' &&
+        bnMinimumReceivedAmount
+      ) {
         const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
           bnMinimumReceivedAmount
         );

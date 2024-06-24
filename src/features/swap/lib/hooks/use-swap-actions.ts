@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
@@ -7,7 +7,8 @@ import {
   increaseAllowance,
   swapExactETHForTokens,
   swapExactTokensForETH,
-  swapExactTokensForTokens
+  swapExactTokensForTokens,
+  swapMultiHopExactTokensForTokens
 } from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
@@ -26,13 +27,15 @@ import { createSigner } from '@features/swap/utils/contracts/instances';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
-  const { selectedTokensAmount, selectedTokens, isExactInRef } =
-    useSwapContextSelector();
-
-  const [isProcessingAllowance, setIsProcessingAllowance] = useState(false);
+  const {
+    selectedTokensAmount,
+    selectedTokens,
+    isExactInRef,
+    uiBottomSheetInformation,
+    setUiBottomSheetInformation
+  } = useSwapContextSelector();
 
   const checkAllowance = useCallback(async () => {
-    setIsProcessingAllowance(true);
     const isExactIn = isExactInRef.current;
 
     const amountToSell =
@@ -54,8 +57,6 @@ export function useSwapActions() {
       });
     } catch (error) {
       throw error;
-    } finally {
-      setIsProcessingAllowance(false);
     }
   }, [
     isExactInRef,
@@ -65,7 +66,6 @@ export function useSwapActions() {
   ]);
 
   const setAllowance = useCallback(async () => {
-    setIsProcessingAllowance(true);
     try {
       const privateKey = (await Cache.getItem(
         // @ts-ignore
@@ -87,17 +87,21 @@ export function useSwapActions() {
 
       if (response) {
         checkAllowance();
+        setUiBottomSheetInformation({
+          ...uiBottomSheetInformation,
+          allowance: 'increased'
+        });
       }
     } catch (error) {
       throw error;
-    } finally {
-      setIsProcessingAllowance(false);
     }
   }, [
     checkAllowance,
-    selectedAccount,
+    selectedAccount?._raw,
     selectedTokens.TOKEN_A,
-    selectedTokensAmount.TOKEN_A
+    selectedTokensAmount.TOKEN_A,
+    setUiBottomSheetInformation,
+    uiBottomSheetInformation
   ]);
 
   const getTokenAmountOut = useCallback(
@@ -134,12 +138,10 @@ export function useSwapActions() {
           amountToSell: bnAmountToSell
         });
 
-        const final = await getAmountsOut({
+        return await getAmountsOut({
           path: finalPath as [string, string],
           amountToSell: intermediateAmount
         });
-
-        return final;
       }
     },
     [isExactInRef]
@@ -177,11 +179,16 @@ export function useSwapActions() {
       // @ts-ignore
       `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
     )) as string;
-
     const signer = createSigner(privateKey);
 
     const isExactIn = isExactInRef.current;
     const { TOKEN_A, TOKEN_B } = selectedTokens;
+
+    const tokenAddresses = [TOKEN_A?.address, TOKEN_B?.address].join();
+
+    const isMultiRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(tokenAddresses);
+    const isMultiRouteBONDSwap = isMultiRouteWithBONDFirst.has(tokenAddresses);
+
     const amountToSell =
       selectedTokensAmount[isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B];
 
@@ -196,12 +203,12 @@ export function useSwapActions() {
     } else if (path[1] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
       await swapExactTokensForETH(amountToSell, excludeNativeETH, signer);
+    } else if (isExactInRef.current && isMultiRouteUSDCSwap) {
+      await swapMultiHopExactTokensForTokens(amountToSell, path, signer);
+    } else if (!isExactInRef.current && isMultiRouteBONDSwap) {
+      await swapMultiHopExactTokensForTokens(amountToSell, path, signer);
     } else {
-      await swapExactTokensForTokens(
-        amountToSell,
-        [multiRouteAddresses.SAMB, multiRouteAddresses.USDC],
-        signer
-      );
+      await swapExactTokensForTokens(amountToSell, path, signer);
     }
   }, [
     isExactInRef,
@@ -225,7 +232,6 @@ export function useSwapActions() {
   return {
     checkAllowance,
     setAllowance,
-    isProcessingAllowance,
     getOppositeReceivedTokenAmount,
     hasWrapNativeToken,
     swapTokens

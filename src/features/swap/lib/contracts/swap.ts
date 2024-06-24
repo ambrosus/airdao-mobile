@@ -7,9 +7,11 @@ import {
 import {
   isNativeWrapped,
   minimumAmountOut,
+  multiRouteAddresses,
   wrapNativeAddress
 } from '@features/swap/utils';
 import { ERC20_TRADE } from '@features/swap/lib/abi';
+import { formatEther } from 'ethers/lib/utils';
 
 export async function getAmountsOut({
   amountToSell,
@@ -58,18 +60,43 @@ export async function swapExactETHForTokens(
     const tx = await routerContract.swapExactETHForTokens(
       bnMinimumReceivedAmount,
       path,
-      // [multiRouteAddresses.SAMB, multiRouteAddresses.USDC],
       signer.address,
       deadline,
       { value: bnAmountToSell }
     );
 
-    const result = await tx.wait();
-    // console.log('swapExactETHForTokens', result);
-    return result;
+    return await tx.wait();
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export async function swapMultiHopExactTokensForTokens(
+  amountToSell: string,
+  path: [string, string],
+  signer: Wallet
+) {
+  const [addressFrom, addressTo] = path;
+  const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+
+  const bnIntermediateAmountToReceive = await getAmountsOut({
+    amountToSell: bnAmountToSell,
+    path: [addressFrom, multiRouteAddresses.SAMB]
+  });
+
+  const intermediateSwapResult = await swapExactTokensForETH(
+    amountToSell,
+    [addressFrom, multiRouteAddresses.SAMB],
+    signer
+  );
+
+  if (intermediateSwapResult) {
+    return await swapExactETHForTokens(
+      formatEther(bnIntermediateAmountToReceive),
+      [multiRouteAddresses.SAMB, addressTo],
+      signer
+    );
   }
 }
 
@@ -98,9 +125,7 @@ export async function swapExactTokensForTokens(
       deadline
     );
 
-    const result = await tx.wait();
-    // console.log('swapExactTokensForTokens', result);
-    return result;
+    return await tx.wait();
   } catch (error) {
     console.error(error);
     throw error;
@@ -132,9 +157,7 @@ export async function swapExactTokensForETH(
       deadline
     );
 
-    const result = await tx.wait();
-    // console.log('swapExactTokensForETH', result);
-    return result;
+    return await tx.wait();
   } catch (error) {
     console.error(error);
     throw error;
