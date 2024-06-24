@@ -100,7 +100,11 @@ export const SubmitSwapActions = () => {
           {isIncreasingAllowance ? (
             <Spinner />
           ) : (
-            <Text style={firstStepTypographyStyle}>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              style={firstStepTypographyStyle}
+            >
               {multiStepButtonActionText?.firstStep}
             </Text>
           )}
@@ -113,7 +117,11 @@ export const SubmitSwapActions = () => {
           {isProcessingSwap ? (
             <Spinner />
           ) : (
-            <Text style={secondStepTypographyStyle}>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              style={secondStepTypographyStyle}
+            >
               {multiStepButtonActionText?.secondStep}
             </Text>
           )}
@@ -128,7 +136,13 @@ export const SubmitSwapActions = () => {
         disabled={isProcessingSwap}
         onPress={onCompleteMultiStepSwap}
       >
-        <Text>Swap</Text>
+        <Text
+          fontSize={16}
+          fontFamily="Inter_600SemiBold"
+          color={COLORS.neutral0}
+        >
+          Swap now
+        </Text>
       </PrimaryButton>
     );
   }

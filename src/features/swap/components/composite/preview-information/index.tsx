@@ -5,26 +5,45 @@ import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { COLORS } from '@constants/colors';
+import {
+  isMultiRouteWithUSDCFirst,
+  isMultiRouteWithBONDFirst
+} from '@features/swap/utils';
 
 export const PreviewInformation = () => {
-  const {
-    selectedTokens,
+  const { latestSelectedTokens, isExactInRef, uiBottomSheetInformation } =
+    useSwapContextSelector();
 
-    isExactInRef,
-    uiBottomSheetInformation
-  } = useSwapContextSelector();
+  const isMultiHopSwap = useMemo(() => {
+    const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+
+    const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
+      [TOKEN_A?.address, TOKEN_B?.address].join()
+    );
+
+    const isMuliRouteBONDSwap = isMultiRouteWithBONDFirst.has(
+      [TOKEN_A?.address, TOKEN_B?.address].join()
+    );
+
+    return (
+      (isExactInRef.current && isMuliRouteUSDCSwap) ||
+      (!isExactInRef.current && isMuliRouteBONDSwap)
+    );
+  }, [isExactInRef, latestSelectedTokens]);
 
   const tokensSymbols = useMemo(() => {
     const sellTokenSymbol =
-      selectedTokens[isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B]
-        ?.symbol ?? '';
+      latestSelectedTokens.current[
+        isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+      ]?.symbol ?? '';
 
     const receiveTokenSymbol =
-      selectedTokens[isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A]
-        ?.symbol ?? '';
+      latestSelectedTokens.current[
+        isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A
+      ]?.symbol ?? '';
 
     return { sellTokenSymbol, receiveTokenSymbol };
-  }, [isExactInRef, selectedTokens]);
+  }, [isExactInRef, latestSelectedTokens]);
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;
@@ -55,6 +74,16 @@ export const PreviewInformation = () => {
           {`${uiBottomSheetInformation.lpFee} ${tokensSymbols.sellTokenSymbol}`}
         </RightSideRowItem>
       </Row>
+
+      {isMultiHopSwap && (
+        <Row alignItems="center" justifyContent="space-between">
+          <Text>Route</Text>
+
+          <RightSideRowItem>
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > SAMB > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+          </RightSideRowItem>
+        </Row>
+      )}
     </View>
   );
 };
