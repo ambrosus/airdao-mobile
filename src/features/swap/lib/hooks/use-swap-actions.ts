@@ -4,7 +4,10 @@ import { useSwapContextSelector } from '@features/swap/context';
 import {
   checkIsApprovalRequired,
   getAmountsOut,
-  increaseAllowance
+  increaseAllowance,
+  swapExactETHForTokens,
+  swapExactTokensForETH,
+  swapExactTokensForTokens
 } from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
@@ -15,9 +18,11 @@ import {
   isNativeWrapped,
   isMultiRouteWithUSDCFirst,
   isMultiRouteWithBONDFirst,
-  multiRouteAddresses
+  multiRouteAddresses,
+  executeSwapPath
 } from '@features/swap/utils';
 import { FIELD } from '@features/swap/types';
+import { createSigner } from '@features/swap/utils/contracts/instances';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -167,6 +172,44 @@ export function useSwapActions() {
     [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef]
   );
 
+  const swapTokens = useCallback(async () => {
+    const privateKey = (await Cache.getItem(
+      // @ts-ignore
+      `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
+    )) as string;
+
+    const signer = createSigner(privateKey);
+
+    const isExactIn = isExactInRef.current;
+    const { TOKEN_A, TOKEN_B } = selectedTokens;
+    const amountToSell =
+      selectedTokensAmount[isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B];
+
+    const path = executeSwapPath(isExactIn, [
+      TOKEN_A?.address,
+      TOKEN_B?.address
+    ]);
+
+    if (path[0] === multiRouteAddresses.AMB) {
+      const excludeNativeETH = wrapNativeAddress(path);
+      await swapExactETHForTokens(amountToSell, excludeNativeETH, signer);
+    } else if (path[1] === multiRouteAddresses.AMB) {
+      const excludeNativeETH = wrapNativeAddress(path);
+      await swapExactTokensForETH(amountToSell, excludeNativeETH, signer);
+    } else {
+      await swapExactTokensForTokens(
+        amountToSell,
+        [multiRouteAddresses.SAMB, multiRouteAddresses.USDC],
+        signer
+      );
+    }
+  }, [
+    isExactInRef,
+    selectedAccount?._raw,
+    selectedTokens,
+    selectedTokensAmount
+  ]);
+
   const hasWrapNativeToken = useMemo(() => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
 
@@ -184,6 +227,7 @@ export function useSwapActions() {
     setAllowance,
     isProcessingAllowance,
     getOppositeReceivedTokenAmount,
-    hasWrapNativeToken
+    hasWrapNativeToken,
+    swapTokens
   };
 }

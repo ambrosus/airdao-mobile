@@ -64,7 +64,9 @@ export async function swapExactETHForTokens(
       { value: bnAmountToSell }
     );
 
-    return await tx.wait();
+    const result = await tx.wait();
+    // console.log('swapExactETHForTokens', result);
+    return result;
   } catch (error) {
     console.error(error);
     throw error;
@@ -96,7 +98,9 @@ export async function swapExactTokensForTokens(
       deadline
     );
 
-    return await tx.wait();
+    const result = await tx.wait();
+    // console.log('swapExactTokensForTokens', result);
+    return result;
   } catch (error) {
     console.error(error);
     throw error;
@@ -128,7 +132,9 @@ export async function swapExactTokensForETH(
       deadline
     );
 
-    return await tx.wait();
+    const result = await tx.wait();
+    // console.log('swapExactTokensForETH', result);
+    return result;
   } catch (error) {
     console.error(error);
     throw error;
