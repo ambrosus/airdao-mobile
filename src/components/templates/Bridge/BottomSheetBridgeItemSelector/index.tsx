@@ -6,7 +6,7 @@ import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { BridgeSelectorItem } from '../../BridgeSelectorItem';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { FlatList } from 'react-native';
 import { RenderTokenItem } from '@models/Bridge';
 
@@ -26,7 +26,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
   const isFrom = selectorType && destination === 'from';
 
   const { bridges, networksParams, tokenParams, fromParams, toParams } =
-    useBridgeContextSelector();
+    useBridgeContextData();
 
   const pickerData = isFrom ? fromParams : toParams;
 

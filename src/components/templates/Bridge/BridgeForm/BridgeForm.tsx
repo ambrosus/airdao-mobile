@@ -14,7 +14,7 @@ import { DeviceUtils } from '@utils/device';
 import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { BottomSheetBridgePreview } from '../../../templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
@@ -35,7 +35,7 @@ export const BridgeForm = () => {
 
   const { t } = useTranslation();
   const [timeoutDelay, setTimeoutDelay] = useState(setTimeout(() => null));
-  const { tokenParams, fromParams, toParams } = useBridgeContextSelector();
+  const { tokenParams, fromParams, toParams } = useBridgeContextData();
   const { methods, variables } = useBridgeNetworksData({
     choseTokenRef,
     previewRef,

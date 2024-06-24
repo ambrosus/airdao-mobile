@@ -3,7 +3,7 @@ import { styles } from './BalanceInfo.styles';
 import { COLORS } from '@constants/colors';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { formatUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { DECIMAL_LIMIT } from '@constants/variables';
@@ -19,7 +19,7 @@ const BalanceInfo = ({ onMaxPress }: BalanceInfoModel) => {
       loader,
       value: { renderTokenItem }
     }
-  } = useBridgeContextSelector();
+  } = useBridgeContextData();
 
   const balance = NumberUtils.limitDecimalCount(
     formatUnits(renderTokenItem.balance || 0, renderTokenItem.decimals),

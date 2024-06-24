@@ -9,9 +9,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { useBridgeContextData } from '@contexts/Bridge';
+import { DEFAULT_AMB_NETWORK } from '@contexts/Bridge/constants';
 
 export const BridgeTransferError = ({}) => {
   const navigation = useNavigation<HomeNavigationProp>();
+
+  const { fromParams } = useBridgeContextData();
 
   const { t } = useTranslation();
 
@@ -41,6 +45,7 @@ export const BridgeTransferError = ({}) => {
       </PrimaryButton>
       <SecondaryButton
         onPress={() => {
+          fromParams.setter(DEFAULT_AMB_NETWORK);
           navigation.navigate('HomeScreen');
         }}
         style={styles.button}

@@ -6,7 +6,7 @@ import { NumberUtils } from '@utils/number';
 import { BridgeFeeModel, RenderTokenItem } from '@models/Bridge';
 import { CurrencyUtils } from '@utils/currency';
 import { StringUtils } from '@utils/string';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { currentProvider, getBridgeFeeData } from '@lib';
@@ -61,7 +61,7 @@ export const useBridgeNetworksData = ({
     bridgeConfig,
     networksParams,
     selectedTokenDecimals
-  } = useBridgeContextSelector();
+  } = useBridgeContextData();
 
   const networkNativeToken = useMemo(() => {
     const token = (networksParams || []).find(

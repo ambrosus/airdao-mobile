@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
 import { BottomSheetBridgeItemSelector } from '../../BottomSheetBridgeItemSelector';
 
@@ -15,7 +15,7 @@ export const BridgeNetworkPicker = ({
   destination
 }: BridgeNetworkPickerProps) => {
   const isFrom = destination === 'from';
-  const { fromParams, toParams } = useBridgeContextSelector();
+  const { fromParams, toParams } = useBridgeContextData();
   const choseNetworksRef = useRef<BottomSheetRef>(null);
   const showNetworks = () => {
     choseNetworksRef.current?.show();

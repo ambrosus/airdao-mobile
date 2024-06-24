@@ -66,14 +66,6 @@ export const BridgeContext = () => {
     });
   };
 
-  const setDefaultBridgeData = () => {
-    setFrom(DEFAULT_AMB_NETWORK);
-    setTo(DEFAULT_ETH_NETWORK);
-    // @ts-ignore
-    setSelectedToken(DEFAULT_TOKEN_PAIRS);
-    setAllRequireBridgeData();
-  };
-
   useEffect(() => {
     setAllRequireBridgeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,6 +166,12 @@ export const BridgeContext = () => {
       ? selectedToken.pairs[1].decimals
       : selectedToken.pairs[0].decimals;
 
+  const setDefaultBridgeData = () => {
+    fromSetter(DEFAULT_AMB_NETWORK);
+    setAllRequireBridgeData();
+    // @ts-ignore
+  };
+
   return {
     tokenParams: {
       value: selectedToken,
@@ -201,4 +199,4 @@ export const BridgeContext = () => {
 
 export const [BridgeContextProvider, useBridgeContext] =
   createContextSelector(BridgeContext);
-export const useBridgeContextSelector = () => useBridgeContext((v) => v);
+export const useBridgeContextData = () => useBridgeContext((v) => v);

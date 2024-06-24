@@ -9,7 +9,7 @@ import { PrimaryButton } from '@components/modular';
 import { FlatList, View } from 'react-native';
 import { BigNumber } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { useBridgeNetworksData } from '@hooks/bridge/useBridgeNetworksData';
 import { formatUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
@@ -39,7 +39,7 @@ export const BottomSheetBridgePreview = forwardRef<
 >((props, ref) => {
   const { t } = useTranslation();
   const { onAcceptPress, dataToPreview, btnTitle } = props;
-  const { networksParams, tokenParams } = useBridgeContextSelector();
+  const { networksParams, tokenParams } = useBridgeContextData();
   const {
     methods: { isAmountGraterThenBalance }
   } = useBridgeNetworksData({});

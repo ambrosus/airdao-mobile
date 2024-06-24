@@ -15,7 +15,7 @@ import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
+import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakingInfo } from './components';
@@ -29,7 +29,7 @@ import {
 
 import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { DeviceUtils } from '@utils/device';
 import { useKeyboardHeight } from '@hooks';
 
@@ -39,7 +39,7 @@ export const StakingPoolScreen = () => {
   const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
   const { pool } = params;
   const { totalStake, apy } = pool;
-  const { selectedAccount, setSelectedAccount } = useBridgeContextSelector();
+  const { selectedAccount, setSelectedAccount } = useBridgeContextData();
   const { data: allWallets } = useAllAccounts();
   const { t } = useTranslation();
   const poolStakingDetails = usePoolDetailsByName(pool.token.name);
