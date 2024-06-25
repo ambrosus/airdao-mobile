@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
 
 export const SettingsDeadlineForm = () => {
-  const { settings, onChangeSettings } = useSwapSettings();
+  const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onChangeDeadline = useCallback(
     (value: string) => {
@@ -33,7 +33,7 @@ export const SettingsDeadlineForm = () => {
             keyboardType="numeric"
             style={styles.input}
             placeholder="20"
-            value={settings.deadline}
+            value={_refSettingsGetter.deadline}
             onChangeText={onChangeDeadline}
           />
           <Text

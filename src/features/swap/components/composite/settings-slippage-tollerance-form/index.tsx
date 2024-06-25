@@ -10,7 +10,7 @@ import { COLORS } from '@constants/colors';
 const SLIPPAGE_TOLLERANCE_PERCENTAGES = ['0.1', '0.5', '1'];
 
 export const SettingsSlippageTolleranceForm = () => {
-  const { settings, onChangeSettings } = useSwapSettings();
+  const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onPercentageBoxPress = (value: number) => {
     onChangeSettings('slippageTolerance', String(value));
@@ -27,11 +27,11 @@ export const SettingsSlippageTolleranceForm = () => {
     <View style={styles.container}>
       <SettingsInputWithLabel
         label="Slippage tolerance"
-        value={settings.current.slippageTolerance}
+        value={_refSettingsGetter.slippageTolerance}
         onChangeText={onChangeSlippageToleranceHandle}
         placeholder="0.05%"
       >
-        {settings.current.slippageTolerance.length > 0 && (
+        {_refSettingsGetter.slippageTolerance.length > 0 && (
           <Text
             fontSize={16}
             fontFamily="Inter_400Regular"
