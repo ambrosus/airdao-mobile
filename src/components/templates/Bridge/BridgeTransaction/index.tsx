@@ -32,7 +32,7 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
   );
 
   const formattedAmount = NumberUtils.limitDecimalCount(
-    transaction?.denominatedAmount || '0',
+    transaction.decimalAmount,
     DECIMAL_LIMIT.CRYPTO
   );
   const transactionStatus = useMemo(() => {

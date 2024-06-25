@@ -168,6 +168,7 @@ export const BridgeContext = () => {
 
   const setDefaultBridgeData = () => {
     fromSetter(DEFAULT_AMB_NETWORK);
+    toSetter(DEFAULT_ETH_NETWORK);
     setAllRequireBridgeData();
     // @ts-ignore
   };

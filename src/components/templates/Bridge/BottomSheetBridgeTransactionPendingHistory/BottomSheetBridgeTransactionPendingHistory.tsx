@@ -34,7 +34,7 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
 >(({ transaction, liveTransactionInformation }, bottomSheetRef) => {
   const { t } = useTranslation();
   const formattedAmount = NumberUtils.limitDecimalCount(
-    transaction?.denominatedAmount ?? transaction.amount,
+    transaction.decimalAmount,
     DECIMAL_LIMIT.CRYPTO
   );
   const renderTransactionStatus = useCallback(
