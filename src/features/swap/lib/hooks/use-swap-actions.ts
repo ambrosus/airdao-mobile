@@ -207,7 +207,7 @@ export function useSwapActions() {
 
     if (path[0] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
-      await swapExactETHForTokens(
+      return await swapExactETHForTokens(
         amountToSell,
         excludeNativeETH,
         signer,
@@ -216,20 +216,19 @@ export function useSwapActions() {
       );
     } else if (path[1] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
-      await swapExactTokensForETH(
+      return await swapExactTokensForETH(
         amountToSell,
         excludeNativeETH,
         signer,
         settings.current.slippageTolerance,
         settings.current.deadline
-      ),
-        settings.current.slippageTolerance;
+      );
     } else if (
       settings.current.multihops &&
       isExactInRef.current &&
       isMultiRouteUSDCSwap
     ) {
-      await swapMultiHopExactTokensForTokens(
+      return await swapMultiHopExactTokensForTokens(
         amountToSell,
         path,
         signer,
@@ -241,7 +240,7 @@ export function useSwapActions() {
       !isExactInRef.current &&
       isMultiRouteBONDSwap
     ) {
-      await swapMultiHopExactTokensForTokens(
+      return await swapMultiHopExactTokensForTokens(
         amountToSell,
         path,
         signer,
@@ -249,7 +248,7 @@ export function useSwapActions() {
         settings.current.deadline
       );
     } else {
-      await swapExactTokensForTokens(
+      return await swapExactTokensForTokens(
         amountToSell,
         path,
         signer,

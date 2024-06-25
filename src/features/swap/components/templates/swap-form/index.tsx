@@ -11,12 +11,16 @@ import {
 } from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
 
+import { isIos } from '@utils/isPlatform';
+
+const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';
+
 export const SwapForm = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
       keyboardVerticalOffset={20}
-      behavior="height"
+      behavior={KEYBOARD_BEHAVIOR}
     >
       <KeyboardDismissingView style={styles.container}>
         <View style={styles.inner}>

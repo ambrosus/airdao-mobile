@@ -41,10 +41,15 @@ export function useSwapBottomSheetHandler() {
     bottomSheetPreviewSwapRef.current?.show();
   }, [bottomSheetPreviewSwapRef]);
 
+  const onReviewSwapDismiss = useCallback(() => {
+    bottomSheetPreviewSwapRef.current?.dismiss();
+  }, [bottomSheetPreviewSwapRef]);
+
   return {
     onDismissBottomSheetByKey,
     onShowBottomSheetByKey,
     onDismissBottomSheets,
-    onReviewSwapPreview
+    onReviewSwapPreview,
+    onReviewSwapDismiss
   };
 }

@@ -41,6 +41,18 @@ export type HomeParamsList = {
   ImportWalletPrivateKey: undefined;
   ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
   SwapScreen: undefined;
+  SwapSuccessScreen: {
+    AMOUNT_A: string;
+    AMOUNT_B: string;
+    SYMBOL_A: string;
+    SYMBOL_B: string;
+  };
+  SwapErrorScreen: {
+    AMOUNT_A: string;
+    AMOUNT_B: string;
+    SYMBOL_A: string;
+    SYMBOL_B: string;
+  };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

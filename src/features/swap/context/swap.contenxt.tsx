@@ -19,6 +19,8 @@ export const SwapContext = () => {
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
 
   const [_refSettingsGetter, setSettings] = useState(INITAL_SETTINGS);
+  const [isProcessingSwap, setIsProcessingSwap] = useState(false);
+  const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
 
   const [uiBottomSheetInformation, setUiBottomSheetInformation] = useState(
     INITAL_UI_BOTTOM_SHEET_INFORMATION
@@ -83,6 +85,10 @@ export const SwapContext = () => {
     _refExactGetter,
     setSettings,
     setIsExactIn,
+    isProcessingSwap,
+    setIsProcessingSwap,
+    isIncreasingAllowance,
+    setIsIncreassingAllowance,
     allPairsRef,
     setPairs,
     reset
