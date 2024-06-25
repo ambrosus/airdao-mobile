@@ -75,9 +75,7 @@ export function useSwapActions() {
         `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
       )) as string;
 
-      const bnAmountToSell = ethers.utils.parseEther(
-        selectedTokensAmount.TOKEN_A
-      );
+      const bnAmountToSell = ethers.utils.parseEther('1000000');
 
       const allowance = await increaseAllowance({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -102,7 +100,6 @@ export function useSwapActions() {
     checkAllowance,
     selectedAccount?._raw,
     selectedTokens.TOKEN_A,
-    selectedTokensAmount.TOKEN_A,
     setUiBottomSheetInformation,
     uiBottomSheetInformation
   ]);
