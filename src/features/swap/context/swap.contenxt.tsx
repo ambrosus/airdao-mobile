@@ -80,6 +80,7 @@ export const SwapContext = () => {
     setUiBottomSheetInformation,
     uiBottomSheetInformation,
     _refSettingsGetter,
+    _refExactGetter,
     setSettings,
     setIsExactIn,
     allPairsRef,

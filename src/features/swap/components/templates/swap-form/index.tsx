@@ -6,7 +6,8 @@ import { FIELD } from '@features/swap/types';
 import { scale } from '@utils/scaling';
 import {
   InputWithTokenSelect,
-  ReviewSwapButton
+  ReviewSwapButton,
+  TokenInfoPlate
 } from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
 
@@ -24,6 +25,9 @@ export const SwapForm = () => {
             <InputWithTokenSelect type={FIELD.TOKEN_A} />
             <SwapReverseTokens />
             <InputWithTokenSelect type={FIELD.TOKEN_B} />
+
+            <Spacer value={scale(24)} />
+            <TokenInfoPlate />
           </View>
 
           <ReviewSwapButton />
