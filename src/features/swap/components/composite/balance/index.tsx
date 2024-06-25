@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { scale } from '@utils/scaling';
@@ -17,6 +18,7 @@ interface BalanceProps {
 }
 
 export const Balance = ({ type }: BalanceProps) => {
+  const { t } = useTranslation();
   const { selectedTokens, setIsExactIn } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
@@ -102,7 +104,7 @@ export const Balance = ({ type }: BalanceProps) => {
 
         <Button onPress={onSelectMaxTokensAmountPress}>
           <Text fontSize={14} fontFamily="Inter_600SemiBold" color="#3668DD">
-            Max
+            {t('swap.text.button.max')}
           </Text>
         </Button>
       </Row>

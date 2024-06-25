@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Switch, Text } from '@components/base';
 import {
   useSwapFieldsHandler,
@@ -6,6 +7,7 @@ import {
 } from '@features/swap/lib/hooks';
 
 export const SettingsMultiHopForm = () => {
+  const { t } = useTranslation();
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
   const { onChangeSettings, _refSettingsGetter } = useSwapSettings();
 
@@ -23,7 +25,7 @@ export const SettingsMultiHopForm = () => {
 
   return (
     <Row alignItems="center" justifyContent="space-between">
-      <Text>Disable multihops</Text>
+      <Text>{t('swap.settings.multihops')}</Text>
       <Switch
         value={!_refSettingsGetter.multihops}
         onValueChange={onToggleMultiHopsAllowance}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
@@ -15,6 +16,7 @@ interface InputWithTokenSelectProps {
 }
 
 export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
+  const { t } = useTranslation();
   const { selectedTokensAmount, setLastChangedInput } =
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
@@ -26,7 +28,7 @@ export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
     onChangeSelectedTokenAmount(type, finalValue);
   };
 
-  const label = type === FIELD.TOKEN_A ? 'You pay' : 'You receive';
+  const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
 
   return (
     <View style={styles.wrapper}>

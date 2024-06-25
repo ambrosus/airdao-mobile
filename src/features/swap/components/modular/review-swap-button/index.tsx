@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -10,6 +11,7 @@ import {
 import { buttonActionString } from '@features/swap/utils/button-action.string';
 
 export const ReviewSwapButton = () => {
+  const { t } = useTranslation();
   const { bnBalances } = useSwapMultiplyBalance();
   const { selectedTokens, selectedTokensAmount, isExactInRef } =
     useSwapContextSelector();
@@ -23,9 +25,10 @@ export const ReviewSwapButton = () => {
       selectedTokens,
       selectedTokensAmount,
       bnBalances,
-      isExactInRef.current
+      isExactInRef.current,
+      t
     );
-  }, [bnBalances, isExactInRef, selectedTokens, selectedTokensAmount]);
+  }, [t, bnBalances, isExactInRef, selectedTokens, selectedTokensAmount]);
 
   const onResolveBottomSheetDataPress = useCallback(async () => {
     try {
@@ -39,8 +42,10 @@ export const ReviewSwapButton = () => {
   }, [resolveBottomSheetData]);
 
   const disabled = useMemo(() => {
-    return swapButtonString !== 'Review swap' || isProcessingBottomSheet;
-  }, [swapButtonString, isProcessingBottomSheet]);
+    return (
+      swapButtonString !== t('swap.button.review') || isProcessingBottomSheet
+    );
+  }, [t, swapButtonString, isProcessingBottomSheet]);
 
   return (
     <PrimaryButton disabled={disabled} onPress={onResolveBottomSheetDataPress}>

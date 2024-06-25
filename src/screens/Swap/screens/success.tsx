@@ -31,8 +31,14 @@ export const SwapSuccessScreen = ({ route, navigation }: Props) => {
   };
 
   const description = useMemo(() => {
-    return `Your swap of ${tokens.AMOUNT_A} ${tokens.SYMBOL_A} to ${tokens.AMOUNT_B} ${tokens.SYMBOL_B} was successful.`;
-  }, [tokens.AMOUNT_A, tokens.AMOUNT_B, tokens.SYMBOL_A, tokens.SYMBOL_B]);
+    const { AMOUNT_A, SYMBOL_A, AMOUNT_B, SYMBOL_B } = tokens;
+    return t('swap.status.success.desc', {
+      AMOUNT_A,
+      SYMBOL_A,
+      AMOUNT_B,
+      SYMBOL_B
+    });
+  }, [t, tokens]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,7 +64,7 @@ export const SwapSuccessScreen = ({ route, navigation }: Props) => {
             fontSize={16}
             color={COLORS.neutral0}
           >
-            Go to wallet
+            {t('swap.button.go.wallet')}
           </Text>
         </PrimaryButton>
         <SecondaryButton onPress={onDoneTransactionPress}>
@@ -67,7 +73,7 @@ export const SwapSuccessScreen = ({ route, navigation }: Props) => {
             fontSize={16}
             color={COLORS.neutral800}
           >
-            View details
+            {t('swap.button.details')}
           </Text>
         </SecondaryButton>
       </View>

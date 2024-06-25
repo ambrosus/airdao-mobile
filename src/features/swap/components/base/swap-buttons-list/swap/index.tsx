@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -13,6 +14,7 @@ export const SwapButton = ({
   isProcessingSwap,
   onCompleteMultiStepSwap
 }: SwapButtonProps) => {
+  const { t } = useTranslation();
   return (
     <PrimaryButton
       disabled={isProcessingSwap}
@@ -27,7 +29,7 @@ export const SwapButton = ({
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral0}
         >
-          Swap now
+          {t('swap.button.swap')}
         </Text>
       )}
     </PrimaryButton>

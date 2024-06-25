@@ -20,8 +20,14 @@ export const SwapErrorScreen = ({ navigation, route }: Props) => {
   const onErrorTransactionPress = () => navigation.goBack();
 
   const description = useMemo(() => {
-    return `Your swap of ${tokens.AMOUNT_A} ${tokens.SYMBOL_A} to ${tokens.AMOUNT_B} ${tokens.SYMBOL_B} was successful.`;
-  }, [tokens.AMOUNT_A, tokens.AMOUNT_B, tokens.SYMBOL_A, tokens.SYMBOL_B]);
+    const { AMOUNT_A, SYMBOL_A, AMOUNT_B, SYMBOL_B } = tokens;
+    return t('swap.status.error.desc', {
+      AMOUNT_A,
+      SYMBOL_A,
+      AMOUNT_B,
+      SYMBOL_B
+    });
+  }, [t, tokens]);
 
   return (
     <View style={styles.container}>
@@ -38,7 +44,7 @@ export const SwapErrorScreen = ({ navigation, route }: Props) => {
         fontSize={16}
         fontFamily="Inter_500Medium"
       >
-        Swap Failed
+        {t('swap.status.error.heading')}
       </Text>
 
       <View style={styles.footer}>

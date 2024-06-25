@@ -1,5 +1,6 @@
 import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -11,6 +12,7 @@ import {
 } from '@features/swap/utils';
 
 export const PreviewInformation = () => {
+  const { t } = useTranslation();
   const { latestSelectedTokens, isExactInRef, uiBottomSheetInformation } =
     useSwapContextSelector();
 
@@ -63,7 +65,7 @@ export const PreviewInformation = () => {
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
-        <Text>Minimum received</Text>
+        <Text>{t('swap.bottom.sheet.min.received')}</Text>
 
         <RightSideRowItem>
           {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokensSymbols.receiveTokenSymbol}`}
@@ -71,7 +73,7 @@ export const PreviewInformation = () => {
       </Row>
 
       <Row alignItems="center" justifyContent="space-between">
-        <Text>Price Impact</Text>
+        <Text>{t('swap.bottom.sheet.impact')}</Text>
 
         <RightSideRowItem color={priceImpactHighlight}>
           {uiPriceImpact}%
@@ -79,7 +81,7 @@ export const PreviewInformation = () => {
       </Row>
 
       <Row alignItems="center" justifyContent="space-between">
-        <Text>Liquidity Provider Fee</Text>
+        <Text>{t('swap.bottom.sheet.lpfee')}</Text>
 
         <RightSideRowItem>
           {`${uiBottomSheetInformation.lpFee} ${tokensSymbols.sellTokenSymbol}`}
@@ -88,7 +90,7 @@ export const PreviewInformation = () => {
 
       {isMultiHopSwap && (
         <Row alignItems="center" justifyContent="space-between">
-          <Text>Route</Text>
+          <Text>{t('swap.route')}</Text>
 
           <RightSideRowItem>
             {`${latestSelectedTokens.current.TOKEN_A?.symbol} > SAMB > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}

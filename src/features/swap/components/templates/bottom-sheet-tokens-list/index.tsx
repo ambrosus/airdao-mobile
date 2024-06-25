@@ -8,7 +8,6 @@ import { useForwardedRef } from '@hooks';
 import Config from '@constants/config';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-
 import { BottomSheetTokenItem } from '@features/swap/components/modular';
 import { SelectedTokensKeys, SwapToken } from '@features/swap/types';
 

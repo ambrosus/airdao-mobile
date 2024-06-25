@@ -6,12 +6,14 @@ import {
   SelectedTokensState
 } from '../types';
 import { NumberUtils } from '@utils/number';
+import { TFunction } from 'i18next';
 
 export function buttonActionString(
   selectedTokens: SelectedTokensState,
   selectedAmount: SelectedTokensAmountState,
   bnBalanceAmount: MultiplyBalancesStateType,
-  isExactIn: boolean
+  isExactIn: boolean,
+  t: TFunction<'translation', undefined>
 ) {
   const { TOKEN_A, TOKEN_B } = selectedTokens;
   const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedAmount;
@@ -25,7 +27,7 @@ export function buttonActionString(
     AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
 
   if (isSomeBalanceIsEmpty || isSomeTokenNotSelected) {
-    return 'Enter amount';
+    return t('button.enter.amount');
   }
 
   const lastChangedInputBalance = bnBalanceAmount[keyToSellTokens]?._hex;
@@ -39,9 +41,9 @@ export function buttonActionString(
     if (
       Number(selectedAmount[keyToSellTokens]) > Number(normalizedBalanceAmount)
     ) {
-      return 'Insufficient funds';
+      return t('swap.button.insufficient');
     }
   }
 
-  return 'Review swap';
+  return t('swap.button.review');
 }

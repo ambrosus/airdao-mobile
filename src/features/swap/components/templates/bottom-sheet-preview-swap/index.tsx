@@ -12,9 +12,11 @@ import { FIELD } from '@features/swap/types';
 import { SubmitSwapActions } from '../../modular';
 import { useSwapContextSelector } from '@features/swap/context';
 import { SwapPendingLayout } from './components/pending';
+import { useTranslation } from 'react-i18next';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
+    const { t } = useTranslation();
     const bottomSheetRef = useForwardedRef(ref);
     const { isProcessingSwap } = useSwapContextSelector();
 
@@ -35,7 +37,7 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
               color={COLORS.neutral800}
               style={styles.heading}
             >
-              Ready to swap?
+              {t('swap.bottom.sheet.heading')}
             </Text>
 
             <View style={styles.preview}>

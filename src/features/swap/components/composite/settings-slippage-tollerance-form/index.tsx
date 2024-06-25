@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { SettingsInputWithLabel } from '@/features/swap/components/base';
 import { PercentageBox } from '@components/composite/PercentageBox';
@@ -10,6 +11,7 @@ import { COLORS } from '@constants/colors';
 const SLIPPAGE_TOLLERANCE_PERCENTAGES = ['0.1', '0.5', '1'];
 
 export const SettingsSlippageTolleranceForm = () => {
+  const { t } = useTranslation();
   const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onPercentageBoxPress = (value: number) => {
@@ -26,7 +28,7 @@ export const SettingsSlippageTolleranceForm = () => {
   return (
     <View style={styles.container}>
       <SettingsInputWithLabel
-        label="Slippage tolerance"
+        label={t('swap.settings.slippage')}
         value={_refSettingsGetter.slippageTolerance}
         onChangeText={onChangeSlippageToleranceHandle}
         placeholder="0.05%"
