@@ -15,12 +15,12 @@ export const styles = StyleSheet.create({
     borderRadius: 1000,
     transform: [{ rotate: '90deg' }],
     elevation: 2,
-    shadowColor: COLORS.gray300,
+    shadowColor: '#C2C5CC',
     shadowOffset: {
       width: 0,
       height: 4
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     zIndex: 99999
   }

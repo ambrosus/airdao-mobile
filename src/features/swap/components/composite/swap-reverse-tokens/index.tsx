@@ -7,7 +7,7 @@ import {
 } from '@features/swap/lib/hooks';
 import { Divider } from '@/features/swap/components/base';
 import { Button, Spacer } from '@components/base';
-import { SwapIcon } from '@components/svg/icons';
+import { SwapOppositeArrowsIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -41,7 +41,7 @@ export const SwapReverseTokens = () => {
       <Divider>
         <View style={styles.wrapper}>
           <Button onPress={onReverseSelectedTokensPress} style={styles.button}>
-            <SwapIcon scale={0.75} color={COLORS.neutral400} />
+            <SwapOppositeArrowsIcon scale={0.75} color={COLORS.neutral400} />
           </Button>
         </View>
       </Divider>
