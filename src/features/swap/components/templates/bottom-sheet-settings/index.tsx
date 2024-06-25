@@ -27,7 +27,7 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
           color={COLORS.neutral800}
           style={styles.heading}
         >
-          {t('swap.settings.heading"')}
+          {t('swap.settings.heading')}
         </Text>
 
         <View style={styles.container}>
