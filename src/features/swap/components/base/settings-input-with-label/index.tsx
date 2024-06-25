@@ -1,28 +1,30 @@
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import React, { ReactNode, useRef } from 'react';
+import {
+  View,
+  TextInput,
+  TextInputProps,
+  TouchableWithoutFeedback
+} from 'react-native';
 import { styles } from './styles';
 import { Text } from '@components/base';
-import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
-import { useSwapSettings } from '@features/swap/lib/hooks';
-import { useSwapContextSelector } from '@features/swap/context/swap.contenxt';
 
-interface SettingsInputWithLabelProps {
+interface SettingsInputWithLabelProps extends TextInputProps {
   label: string;
+  children?: ReactNode;
 }
 
 export const SettingsInputWithLabel = ({
-  label
+  label,
+  onChangeText,
+  value,
+  style,
+  placeholder,
+  children
 }: SettingsInputWithLabelProps) => {
-  const { slippageTolerance } = useSwapContextSelector();
-  const { onChangeSlippageTolerance } = useSwapSettings();
+  const inputRef = useRef<TextInput>(null);
 
-  const onChangeSlippageToleranceHandle = useCallback(
-    (value: string) => {
-      onChangeSlippageTolerance(value);
-    },
-    [onChangeSlippageTolerance]
-  );
+  const onInputContainerPress = () => inputRef.current?.focus();
 
   return (
     <View style={styles.formWithLabel}>
@@ -34,13 +36,21 @@ export const SettingsInputWithLabel = ({
         {label}
       </Text>
 
-      <TextInput
-        pointerEvents="box-none"
-        type="number"
-        selection={{ start: 0, end: slippageTolerance.length - 1 }}
-        value={slippageTolerance}
-        onChangeText={onChangeSlippageToleranceHandle}
-      />
+      <TouchableWithoutFeedback onPress={onInputContainerPress}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            maxLength={24}
+            style={style}
+            placeholder={placeholder}
+            keyboardType="numeric"
+            value={value}
+            onChangeText={onChangeText}
+          />
+
+          {children}
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

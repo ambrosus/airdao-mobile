@@ -43,25 +43,31 @@ export async function getAmountsOut({
 export async function swapExactETHForTokens(
   amountToSell: string,
   path: [string, string],
-  signer: Wallet
+  signer: Wallet,
+  slippageTolerance: string,
+  deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, ERC20_TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+    const timestampDeadline =
+      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
     const bnAmountToReceive = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
 
-    const bnMinimumReceivedAmount = minimumAmountOut(`0.5%`, bnAmountToReceive);
+    const bnMinimumReceivedAmount = minimumAmountOut(
+      `${slippageTolerance}%`,
+      bnAmountToReceive
+    );
 
     const tx = await routerContract.swapExactETHForTokens(
       bnMinimumReceivedAmount,
       path,
       signer.address,
-      deadline,
+      timestampDeadline,
       { value: bnAmountToSell }
     );
 
@@ -75,7 +81,9 @@ export async function swapExactETHForTokens(
 export async function swapMultiHopExactTokensForTokens(
   amountToSell: string,
   path: [string, string],
-  signer: Wallet
+  signer: Wallet,
+  slippageTolerance: string,
+  deadline: string
 ) {
   const [addressFrom, addressTo] = path;
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -88,14 +96,18 @@ export async function swapMultiHopExactTokensForTokens(
   const intermediateSwapResult = await swapExactTokensForETH(
     amountToSell,
     [addressFrom, multiRouteAddresses.SAMB],
-    signer
+    signer,
+    slippageTolerance,
+    deadline
   );
 
   if (intermediateSwapResult) {
     return await swapExactETHForTokens(
       formatEther(bnIntermediateAmountToReceive),
       [multiRouteAddresses.SAMB, addressTo],
-      signer
+      signer,
+      slippageTolerance,
+      deadline
     );
   }
 }
@@ -103,26 +115,32 @@ export async function swapMultiHopExactTokensForTokens(
 export async function swapExactTokensForTokens(
   amountToSell: string,
   path: [string, string],
-  signer: Wallet
+  signer: Wallet,
+  slippageTolerance: string,
+  deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, ERC20_TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+    const timestampDeadline =
+      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
     const bnAmountToReceive = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
 
-    const bnMinimumReceivedAmount = minimumAmountOut(`0.5%`, bnAmountToReceive);
+    const bnMinimumReceivedAmount = minimumAmountOut(
+      `${slippageTolerance}%`,
+      bnAmountToReceive
+    );
 
     const tx = await routerContract.swapExactTokensForTokens(
       bnAmountToSell,
       bnMinimumReceivedAmount,
       path,
       signer.address,
-      deadline
+      timestampDeadline
     );
 
     return await tx.wait();
@@ -135,26 +153,32 @@ export async function swapExactTokensForTokens(
 export async function swapExactTokensForETH(
   amountToSell: string,
   path: [string, string],
-  signer: Wallet
+  signer: Wallet,
+  slippageTolerance: string,
+  deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, ERC20_TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+    const timestampDeadline =
+      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
     const bnAmountToReceive = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
 
-    const bnMinimumReceivedAmount = minimumAmountOut(`0.5%`, bnAmountToReceive);
+    const bnMinimumReceivedAmount = minimumAmountOut(
+      `${slippageTolerance}%`,
+      bnAmountToReceive
+    );
 
     const tx = await routerContract.swapExactTokensForETH(
       bnAmountToSell,
       bnMinimumReceivedAmount,
       path,
       signer.address,
-      deadline
+      timestampDeadline
     );
 
     return await tx.wait();

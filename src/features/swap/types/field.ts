@@ -35,3 +35,12 @@ export type UIBottomSheetInformationState = {
 };
 
 export type UIBottomSheetInformationKeys = keyof UIBottomSheetInformationState;
+
+export type Settings = {
+  slippageTolerance: string;
+  deadline: string;
+  multihops: boolean;
+  extendedMode: boolean;
+};
+
+export type SettingsKeys = keyof Settings;

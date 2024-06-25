@@ -1,5 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,5 +7,8 @@ export const styles = StyleSheet.create({
   },
   slippageTolleranceRow: {
     columnGap: scale(16)
+  },
+  symbol: {
+    marginRight: 2
   }
 });

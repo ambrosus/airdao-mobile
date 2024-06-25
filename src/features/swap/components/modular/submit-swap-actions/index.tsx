@@ -6,13 +6,15 @@ import { FIELD } from '@features/swap/types';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useSwapActions } from '@features/swap/lib/hooks';
+import { useSwapActions, useSwapSettings } from '@features/swap/lib/hooks';
+import { PriceImpactExpertModeColors } from './button.colors';
 
 export const SubmitSwapActions = () => {
   const { uiBottomSheetInformation, latestSelectedTokens, isExactInRef } =
     useSwapContextSelector();
 
   const { setAllowance, swapTokens } = useSwapActions();
+  const { settings } = useSwapSettings();
 
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
   const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
@@ -88,6 +90,39 @@ export const SubmitSwapActions = () => {
           : COLORS.alphaBlack5
     };
   }, [isProcessingSwap, uiBottomSheetInformation.allowance]);
+
+  // UI Button Elements
+  if (
+    uiBottomSheetInformation?.priceImpact &&
+    uiBottomSheetInformation?.priceImpact > 15
+  ) {
+    return (
+      <PrimaryButton
+        disabled={!settings.current.extendedMode}
+        onPress={onCompleteMultiStepSwap}
+        colors={
+          PriceImpactExpertModeColors[
+            settings.current.extendedMode ? 'expert' : 'default'
+          ]
+        }
+        style={styles.button}
+      >
+        {isProcessingSwap ? (
+          <Spinner />
+        ) : (
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral0}
+          >
+            {!settings.current.extendedMode
+              ? 'Price impact too high'
+              : 'Swap anyway'}
+          </Text>
+        )}
+      </PrimaryButton>
+    );
+  }
 
   if (uiBottomSheetInformation.allowance !== 'suitable') {
     return (

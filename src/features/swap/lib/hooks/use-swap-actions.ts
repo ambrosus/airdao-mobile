@@ -24,6 +24,7 @@ import {
 } from '@features/swap/utils';
 import { FIELD } from '@features/swap/types';
 import { createSigner } from '@features/swap/utils/contracts/instances';
+import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextSelector();
@@ -34,6 +35,8 @@ export function useSwapActions() {
     uiBottomSheetInformation,
     setUiBottomSheetInformation
   } = useSwapContextSelector();
+
+  const { settings } = useSwapSettings();
 
   const checkAllowance = useCallback(async () => {
     const isExactIn = isExactInRef.current;
@@ -160,9 +163,17 @@ export function useSwapActions() {
         [addressFrom, addressTo].join()
       );
 
-      if (isExactInRef.current && isMuliRouteUSDCSwap) {
+      if (
+        settings.current.multihops &&
+        isExactInRef.current &&
+        isMuliRouteUSDCSwap
+      ) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
-      } else if (!isExactInRef.current && isMuliRouteBONDSwap) {
+      } else if (
+        settings.current.multihops &&
+        !isExactInRef.current &&
+        isMuliRouteBONDSwap
+      ) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, [
           multiRouteAddresses.BOND,
           multiRouteAddresses.USDC
@@ -171,7 +182,7 @@ export function useSwapActions() {
         return await getTokenAmountOut(amountToSell, path);
       }
     },
-    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef]
+    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef, settings]
   );
 
   const swapTokens = useCallback(async () => {
@@ -199,22 +210,62 @@ export function useSwapActions() {
 
     if (path[0] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
-      await swapExactETHForTokens(amountToSell, excludeNativeETH, signer);
+      await swapExactETHForTokens(
+        amountToSell,
+        excludeNativeETH,
+        signer,
+        settings.current.slippageTolerance,
+        settings.current.deadline
+      );
     } else if (path[1] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
-      await swapExactTokensForETH(amountToSell, excludeNativeETH, signer);
-    } else if (isExactInRef.current && isMultiRouteUSDCSwap) {
-      await swapMultiHopExactTokensForTokens(amountToSell, path, signer);
-    } else if (!isExactInRef.current && isMultiRouteBONDSwap) {
-      await swapMultiHopExactTokensForTokens(amountToSell, path, signer);
+      await swapExactTokensForETH(
+        amountToSell,
+        excludeNativeETH,
+        signer,
+        settings.current.slippageTolerance,
+        settings.current.deadline
+      ),
+        settings.current.slippageTolerance;
+    } else if (
+      settings.current.multihops &&
+      isExactInRef.current &&
+      isMultiRouteUSDCSwap
+    ) {
+      await swapMultiHopExactTokensForTokens(
+        amountToSell,
+        path,
+        signer,
+        settings.current.slippageTolerance,
+        settings.current.deadline
+      );
+    } else if (
+      settings.current.multihops &&
+      !isExactInRef.current &&
+      isMultiRouteBONDSwap
+    ) {
+      await swapMultiHopExactTokensForTokens(
+        amountToSell,
+        path,
+        signer,
+        settings.current.slippageTolerance,
+        settings.current.deadline
+      );
     } else {
-      await swapExactTokensForTokens(amountToSell, path, signer);
+      await swapExactTokensForTokens(
+        amountToSell,
+        path,
+        signer,
+        settings.current.slippageTolerance,
+        settings.current.deadline
+      );
     }
   }, [
     isExactInRef,
     selectedAccount?._raw,
     selectedTokens,
-    selectedTokensAmount
+    selectedTokensAmount,
+    settings
   ]);
 
   const hasWrapNativeToken = useMemo(() => {

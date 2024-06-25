@@ -42,10 +42,10 @@ export function useSwapFieldsHandler() {
       [oppositeKey]: normalizedAmount
     });
   }, [
-    getOppositeReceivedTokenAmount,
     isExactInRef,
     latestSelectedTokens,
     latestSelectedTokensAmount,
+    getOppositeReceivedTokenAmount,
     setSelectedTokensAmount
   ]);
 

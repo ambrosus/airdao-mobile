@@ -6,7 +6,12 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { SettingsSlippageTolleranceForm } from '@/features/swap/components/composite';
+import {
+  SettingsDeadlineForm,
+  SettingsExpertModeForm,
+  SettingsSlippageTolleranceForm,
+  SettingsMultiHopForm
+} from '@/features/swap/components/composite';
 
 export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
@@ -26,6 +31,11 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
         <View style={styles.container}>
           <Spacer value={scale(16)} />
           <SettingsSlippageTolleranceForm />
+          <SettingsDeadlineForm />
+          <View style={styles.switches}>
+            <SettingsExpertModeForm />
+            <SettingsMultiHopForm />
+          </View>
         </View>
         <Spacer value={scale(56)} />
       </BottomSheet>

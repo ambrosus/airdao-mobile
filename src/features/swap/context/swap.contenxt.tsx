@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
 import {
+  INITAL_SETTINGS,
   INITAL_UI_BOTTOM_SHEET_INFORMATION,
   INITIAL_SELECTED_TOKENS,
-  INITIAL_SELECTED_TOKENS_AMOUNT,
-  INITIAL_SLIPPAGE_TOLLERANCE
+  INITIAL_SELECTED_TOKENS_AMOUNT
 } from './initials';
 import { BottomSheetRef } from '@components/composite';
 import {
@@ -18,15 +18,13 @@ export const SwapContext = () => {
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
 
+  const [_refSettingsGetter, setSettings] = useState(INITAL_SETTINGS);
+
   const [uiBottomSheetInformation, setUiBottomSheetInformation] = useState(
     INITAL_UI_BOTTOM_SHEET_INFORMATION
   );
 
   const isExactInRef = useRef<boolean>(true);
-
-  const [slippageTolerance, setSlippageTolerance] = useState(
-    INITIAL_SLIPPAGE_TOLLERANCE
-  );
 
   const [_refExactGetter, setIsExactIn] = useState(true);
   const [lastChangedInput, setLastChangedInput] = useState<SelectedTokensKeys>(
@@ -61,7 +59,7 @@ export const SwapContext = () => {
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
-    setSlippageTolerance(INITIAL_SLIPPAGE_TOLLERANCE);
+    setSettings(INITAL_SETTINGS);
     setUiBottomSheetInformation(INITAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
   }, []);
@@ -71,8 +69,6 @@ export const SwapContext = () => {
     setSelectedTokens,
     selectedTokensAmount,
     setSelectedTokensAmount,
-    slippageTolerance,
-    setSlippageTolerance,
     lastChangedInput,
     latestSelectedTokens,
     latestSelectedTokensAmount,
@@ -83,6 +79,8 @@ export const SwapContext = () => {
     isExactInRef,
     setUiBottomSheetInformation,
     uiBottomSheetInformation,
+    _refSettingsGetter,
+    setSettings,
     setIsExactIn,
     allPairsRef,
     setPairs,

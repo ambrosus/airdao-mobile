@@ -10,18 +10,18 @@ import {
 import { FIELD } from '@features/swap/types';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapActions } from './use-swap-actions';
+import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapInterface() {
   const { onReviewSwapPreview } = useSwapBottomSheetHandler();
-
   const {
-    slippageTolerance,
     latestSelectedTokensAmount,
     isExactInRef,
     setUiBottomSheetInformation
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
   const { checkAllowance } = useSwapActions();
+  const { settings } = useSwapSettings();
 
   const resolveBottomSheetData = useCallback(async () => {
     const tokensToSellKey = isExactInRef.current
@@ -38,7 +38,7 @@ export function useSwapInterface() {
     try {
       const priceImpact = await uiPriceImpactGetter();
       const bnMinimumReceivedAmount = minimumAmountOut(
-        `${slippageTolerance}%`,
+        `${settings.current.slippageTolerance}%`,
         ethers.utils.parseUnits(receivedAmountOut)
       );
 
@@ -73,7 +73,7 @@ export function useSwapInterface() {
     isExactInRef,
     latestSelectedTokensAmount,
     uiPriceImpactGetter,
-    slippageTolerance,
+    settings,
     checkAllowance,
     setUiBottomSheetInformation,
     onReviewSwapPreview

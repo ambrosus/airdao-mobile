@@ -16,12 +16,14 @@ import {
   NonNullableSelectedTokensState,
   SwapToken
 } from '@features/swap/types';
+import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapPriceImpact() {
   const { latestSelectedTokens, latestSelectedTokensAmount, isExactInRef } =
     useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapActions();
+  const { settings } = useSwapSettings();
 
   const singleHopImpactGetter = useCallback(
     async (amountToSell: string, amountToReceive: string) => {
@@ -210,9 +212,13 @@ export function useSwapPriceImpact() {
       [TOKEN_A?.address, TOKEN_B?.address].join()
     );
 
-    if (isExactIn && isMuliRouteUSDCSwap) {
+    if (settings.current.multihops && isExactIn && isMuliRouteUSDCSwap) {
       return await multiHopImpactGetter();
-    } else if (!isExactIn && isMuliRouteBONDSwap) {
+    } else if (
+      settings.current.multihops &&
+      !isExactIn &&
+      isMuliRouteBONDSwap
+    ) {
       const amountToSell = !isExactInRef.current ? AMOUNT_A : AMOUNT_B;
       const amountToReceive = !isExactInRef.current ? AMOUNT_B : AMOUNT_A;
       return await singleHopImpactGetter(amountToSell, amountToReceive);
@@ -226,7 +232,8 @@ export function useSwapPriceImpact() {
     latestSelectedTokens,
     latestSelectedTokensAmount,
     multiHopImpactGetter,
-    singleHopImpactGetter
+    singleHopImpactGetter,
+    settings
   ]);
 
   return {

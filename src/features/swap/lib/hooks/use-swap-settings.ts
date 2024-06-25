@@ -1,11 +1,24 @@
 import { useSwapContextSelector } from '@features/swap/context';
+import { Settings, SettingsKeys } from '@features/swap/types';
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useSwapSettings() {
-  const { setSlippageTolerance } = useSwapContextSelector();
+  const { setSettings, _refSettingsGetter } = useSwapContextSelector();
+  const settings = useRef<Settings>(_refSettingsGetter);
 
-  const onChangeSlippageTolerance = (value: string) => {
-    setSlippageTolerance(value);
-  };
+  useEffect(() => {
+    settings.current = _refSettingsGetter;
+  }, [_refSettingsGetter]);
 
-  return { onChangeSlippageTolerance };
+  const onChangeSettings = useCallback(
+    (key: SettingsKeys, value: any) => {
+      setSettings({
+        ..._refSettingsGetter,
+        [key]: value
+      });
+    },
+    [_refSettingsGetter, setSettings]
+  );
+
+  return { onChangeSettings, settings, _refSettingsGetter };
 }
