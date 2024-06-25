@@ -100,11 +100,7 @@ export const SubmitSwapActions = () => {
       <PrimaryButton
         disabled={!settings.current.extendedMode}
         onPress={onCompleteMultiStepSwap}
-        colors={
-          PriceImpactExpertModeColors[
-            settings.current.extendedMode ? 'expert' : 'default'
-          ]
-        }
+        colors={PriceImpactExpertModeColors(settings.current.extendedMode)}
         style={styles.button}
       >
         {isProcessingSwap ? (
