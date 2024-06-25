@@ -24,8 +24,7 @@ export const Balance = ({ type }: BalanceProps) => {
     useSwapFieldsHandler();
 
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
-    selectedTokens[type],
-    type
+    selectedTokens[type]
   );
 
   const normalizedTokenBalance = useMemo(() => {
