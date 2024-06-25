@@ -15,7 +15,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: COLORS.alphaBlack5,
     padding: 12,
-    borderRadius: moderateScale(16)
+    borderRadius: moderateScale(16),
+    marginTop: verticalScale(16)
   },
   divider: {
     width: '100%',

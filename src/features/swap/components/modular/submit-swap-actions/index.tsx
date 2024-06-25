@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapActions } from '@features/swap/lib/hooks';
 import {
+  SwapErrorImpactButton,
   ApprovalRequiredButton,
-  SwapButton,
-  SwapErrorImpactButton
-} from '@features/swap/components/base/swap-buttons-list';
+  SwapButton
+} from '../../base/swap-buttons-list';
 
 export const SubmitSwapActions = () => {
   const { uiBottomSheetInformation } = useSwapContextSelector();
