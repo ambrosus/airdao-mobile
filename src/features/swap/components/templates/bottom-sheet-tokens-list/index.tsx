@@ -1,5 +1,6 @@
 import React, { forwardRef, useCallback } from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
@@ -19,6 +20,7 @@ export const BottomSheetTokensList = forwardRef<
   BottomSheetRef,
   BottomSheetTokensListProps
 >(({ type }, ref) => {
+  const { t } = useTranslation();
   const bottomSheetRef = useForwardedRef(ref);
 
   const renderListCurrencyItem = useCallback(
@@ -37,7 +39,7 @@ export const BottomSheetTokensList = forwardRef<
         color={COLORS.neutral900}
         style={styles.heading}
       >
-        Select asset
+        {t('swap.select.asset')}
       </Text>
       <Spacer value={scale(16)} />
       <FlatList

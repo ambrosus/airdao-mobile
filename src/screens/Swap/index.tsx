@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheetRef, Header } from '@components/composite';
 import {
@@ -17,6 +18,7 @@ import { Button } from '@components/base';
 import { useAllLiquidityPools } from '@features/swap/lib/hooks';
 
 export const SwapScreen = () => {
+  const { t } = useTranslation();
   const bottomSheetSwapSettingsRef = useRef<BottomSheetRef>(null);
   useAllLiquidityPools();
   const {
@@ -48,7 +50,7 @@ export const SwapScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header
         bottomBorder
-        title="Swap"
+        title={t('account.actions.swap')}
         contentRight={renderHeaderRightContent}
       />
 
