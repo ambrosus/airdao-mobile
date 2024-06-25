@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { SelectedTokensKeys } from '@features/swap/types';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { scale } from '@utils/scaling';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
@@ -10,13 +10,14 @@ import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { WalletXsIcon } from '@components/svg/icons';
+import { ShimmerLoader } from '@components/animations';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
 }
 
 export const Balance = ({ type }: BalanceProps) => {
-  const { selectedTokens } = useSwapContextSelector();
+  const { selectedTokens, setIsExactIn } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
@@ -48,6 +49,7 @@ export const Balance = ({ type }: BalanceProps) => {
         18
       );
       onSelectMaxTokensAmount(type, fullAmount);
+      setIsExactIn(type === FIELD.TOKEN_A);
 
       setTimeout(async () => {
         await updateReceivedTokensOutput();
@@ -56,6 +58,7 @@ export const Balance = ({ type }: BalanceProps) => {
   }, [
     bnBalanceAmount,
     onSelectMaxTokensAmount,
+    setIsExactIn,
     type,
     updateReceivedTokensOutput
   ]);
@@ -64,31 +67,35 @@ export const Balance = ({ type }: BalanceProps) => {
     return !selectedTokens[type] ? '0' : normalizedTokenBalance;
   }, [normalizedTokenBalance, selectedTokens, type]);
 
-  if (isFetchingBalance) {
-    return <Text>loading</Text>;
-  }
-
   return (
     <Row alignItems="center" justifyContent="space-between">
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral400}
-      >
-        ~${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
-      </Text>
+      {isFetchingBalance ? (
+        <ShimmerLoader width={45} height={12} />
+      ) : (
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral400}
+        >
+          ~${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+        </Text>
+      )}
 
       <Row alignItems="center">
         <Row alignItems="center">
           <WalletXsIcon />
           <Spacer horizontal value={4} />
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral400}
-          >
-            {maximumTokenBalance}
-          </Text>
+          {isFetchingBalance ? (
+            <ShimmerLoader width={45} height={12} />
+          ) : (
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral400}
+            >
+              {maximumTokenBalance}
+            </Text>
+          )}
         </Row>
 
         <Spacer horizontal value={scale(16)} />
