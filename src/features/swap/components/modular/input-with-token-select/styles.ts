@@ -1,3 +1,4 @@
+import { moderateScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -11,8 +12,8 @@ export const styles = StyleSheet.create({
   input: {
     width: '60%',
     borderWidth: 0,
-    fontSize: 24,
-    fontFamily: 'Inter700_Bold',
+    fontSize: moderateScale(29),
+    fontFamily: 'Rationell_700Bold',
     paddingLeft: 0,
     paddingRight: 0
   }
