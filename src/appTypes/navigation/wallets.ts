@@ -29,6 +29,7 @@ export type HomeParamsList = {
   StakingPools: undefined;
   Bridge: undefined;
   BridgeHistory: undefined;
+  BridgeTransferError: undefined;
   SuccessSetupSecurity: undefined;
   ImportWalletMethods: undefined;
   ImportWallet: undefined;

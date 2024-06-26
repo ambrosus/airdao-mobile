@@ -4,9 +4,9 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Alert, View, useWindowDimensions, ViewStyle } from 'react-native';
+import { Alert, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ExplorerAccountView, AccountTransactions } from '../ExplorerAccount';
+import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import { TransactionDetails } from '../TransactionDetails';
 import { SearchAddressNoResult } from './SearchAddress.NoMatch';
@@ -30,8 +30,8 @@ import { scale, verticalScale } from '@utils/scaling';
 import {
   useExplorerInfo,
   useSearchAccount,
-  useTransactionsOfAccount,
-  useTransactionDetails
+  useTransactionDetails,
+  useTransactionsOfAccount
 } from '@hooks';
 import { etherumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition, ToastType } from '@components/modular';

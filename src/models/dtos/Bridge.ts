@@ -1,18 +1,20 @@
-interface BridgeTransactionTokenDestination {
+export interface BridgeTransactionTokenDestination {
   name: string;
-  denomination: number;
+  decimals?: number;
+  denomination?: number;
   isNative?: boolean;
   address: string;
 }
 
 export interface BridgeTransactionHistoryDTO {
-  eventId: string;
+  eventId: string | number;
   networkFrom: string;
   networkTo: string;
   tokenFrom: BridgeTransactionTokenDestination;
   tokenTo: BridgeTransactionTokenDestination;
   userTo: string;
   amount: number;
+  decimalAmount: string;
   denominatedAmount: string;
   fee: string;
   withdrawTx: string;

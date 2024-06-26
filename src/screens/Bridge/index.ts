@@ -1,3 +1,2 @@
-import { Bridge } from './Bridge';
-
-export { Bridge };
+export * from './Bridge';
+export * from './BridgeTransferError/BridgeTransferError';
