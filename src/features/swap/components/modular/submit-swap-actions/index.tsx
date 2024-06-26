@@ -58,6 +58,7 @@ export const SubmitSwapActions = () => {
   }, [_refExactGetter, selectedTokens, selectedTokensAmount]);
 
   const onCompleteMultiStepSwap = useCallback(async () => {
+    const routeParams = prepareRouteParams();
     if (uiBottomSheetInformation.allowance === 'increase') {
       try {
         setIsIncreassingAllowance(true);
@@ -70,8 +71,6 @@ export const SubmitSwapActions = () => {
         setIsProcessingSwap(true);
         const tx = await swapTokens();
 
-        const routeParams = prepareRouteParams();
-
         if (!tx) {
           await simulateNavigationDelay(() =>
             navigation.navigate('SwapErrorScreen', routeParams)
@@ -82,6 +81,9 @@ export const SubmitSwapActions = () => {
           );
         }
       } catch (error) {
+        await simulateNavigationDelay(() =>
+          navigation.navigate('SwapErrorScreen', routeParams)
+        );
         throw error;
       }
     }

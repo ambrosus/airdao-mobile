@@ -13,17 +13,26 @@ import { useSwapActions } from './use-swap-actions';
 import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapInterface() {
-  const { onReviewSwapPreview } = useSwapBottomSheetHandler();
+  const { onReviewSwapPreview, onReviewSwapDismiss } =
+    useSwapBottomSheetHandler();
   const {
     latestSelectedTokensAmount,
     isExactInRef,
     setUiBottomSheetInformation
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance } = useSwapActions();
+  const { checkAllowance, hasWrapNativeToken } = useSwapActions();
   const { settings } = useSwapSettings();
 
   const resolveBottomSheetData = useCallback(async () => {
+    if (hasWrapNativeToken) {
+      onReviewSwapPreview();
+      setUiBottomSheetInformation((prevState) => ({
+        ...prevState,
+        allowance: 'suitable'
+      }));
+    }
+
     const tokensToSellKey = isExactInRef.current
       ? FIELD.TOKEN_A
       : FIELD.TOKEN_B;
@@ -67,16 +76,19 @@ export function useSwapInterface() {
         }, 500);
       }
     } catch (error) {
+      onReviewSwapDismiss();
       throw error;
     }
   }, [
+    hasWrapNativeToken,
     isExactInRef,
     latestSelectedTokensAmount,
+    onReviewSwapPreview,
+    setUiBottomSheetInformation,
     uiPriceImpactGetter,
     settings,
     checkAllowance,
-    setUiBottomSheetInformation,
-    onReviewSwapPreview
+    onReviewSwapDismiss
   ]);
 
   return { resolveBottomSheetData };
