@@ -46,6 +46,7 @@ export type HomeParamsList = {
     AMOUNT_B: string;
     SYMBOL_A: string;
     SYMBOL_B: string;
+    txHash: string;
   };
   SwapErrorScreen: {
     AMOUNT_A: string;

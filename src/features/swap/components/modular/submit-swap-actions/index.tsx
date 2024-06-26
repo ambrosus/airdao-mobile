@@ -77,7 +77,10 @@ export const SubmitSwapActions = () => {
           );
         } else {
           await simulateNavigationDelay(() =>
-            navigation.navigate('SwapSuccessScreen', routeParams)
+            navigation.navigate('SwapSuccessScreen', {
+              ...routeParams,
+              txHash: tx.hash
+            })
           );
         }
       } catch (error) {

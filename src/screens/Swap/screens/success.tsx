@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeParamsList } from '@appTypes';
 import { CommonActions } from '@react-navigation/native';
+import { environment } from '@utils/environment';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SwapSuccessScreen'>;
 
@@ -19,7 +20,16 @@ export const SwapSuccessScreen = ({ route, navigation }: Props) => {
 
   const [tokens] = useState(route.params);
 
-  const onDoneTransactionPress = () => navigation.goBack();
+  const onReviewTransactionDetailsPress = () => {
+    const txHash = tokens.txHash;
+
+    const path =
+      environment === 'testnet'
+        ? 'https://staging-testnet.airdao.io/explorer'
+        : 'https://airdao.io/explorer';
+
+    Linking.openURL(`${path}/tx/${txHash}/`);
+  };
 
   const onNavigateToWallets = () => {
     navigation.dispatch(
@@ -67,7 +77,7 @@ export const SwapSuccessScreen = ({ route, navigation }: Props) => {
             {t('swap.button.go.wallet')}
           </Text>
         </PrimaryButton>
-        <SecondaryButton onPress={onDoneTransactionPress}>
+        <SecondaryButton onPress={onReviewTransactionDetailsPress}>
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
