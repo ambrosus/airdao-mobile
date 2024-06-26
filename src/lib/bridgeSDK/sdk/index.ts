@@ -23,7 +23,11 @@ export class MySdk extends BridgeSDK {
     const isNativeBNB =
       token.isNativeCoin && token.symbol === CryptoCurrencyCode.WBNB;
     if (isNativeETH || isNativeBNB) {
-      token.name = isNativeETH ? 'Ether' : 'BNB';
+      token.name = isNativeETH ? 'ETH' : 'BNB';
+    }
+    if (token.network === 'amb' && token.isNativeCoin) {
+      token.name = 'AirDAO';
+      token.symbol = CryptoCurrencyCode.AMB;
     }
     return token;
   }
