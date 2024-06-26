@@ -12,17 +12,19 @@ import { COLORS } from '@constants/colors';
 
 interface BottomSheetReviewTokenItemProps {
   type: keyof typeof FIELD;
+  tokenKey: keyof typeof FIELD;
 }
 
 export const BottomSheetReviewTokenItem = ({
-  type
+  type,
+  tokenKey
 }: BottomSheetReviewTokenItemProps) => {
   const { t } = useTranslation();
   const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
 
   const token = SwapStringUtils.extendedLogoVariants(
-    selectedTokens[type]?.symbol ?? ''
+    selectedTokens[tokenKey]?.symbol ?? ''
   );
 
   const combinedTypeContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -50,8 +52,8 @@ export const BottomSheetReviewTokenItem = ({
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {SwapStringUtils.transformAmountValue(selectedTokensAmount[type])}{' '}
-          {selectedTokens[type]?.symbol}
+          {SwapStringUtils.transformAmountValue(selectedTokensAmount[tokenKey])}{' '}
+          {selectedTokens[tokenKey]?.symbol}
         </Text>
       </View>
     </View>

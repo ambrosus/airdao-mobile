@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { useForwardedRef } from '@hooks';
@@ -13,12 +13,34 @@ import { SubmitSwapActions } from '../../modular';
 import { useSwapContextSelector } from '@features/swap/context';
 import { SwapPendingLayout } from './components/pending';
 import { useTranslation } from 'react-i18next';
+import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
     const { t } = useTranslation();
     const bottomSheetRef = useForwardedRef(ref);
-    const { isProcessingSwap } = useSwapContextSelector();
+    const { selectedTokens, isProcessingSwap, isReversedTokens } =
+      useSwapContextSelector();
+
+    const isWrapOrUnwrapETH = useMemo(() => {
+      const { TOKEN_A, TOKEN_B } = selectedTokens;
+      const path = [TOKEN_A?.address, TOKEN_B?.address] as [string, string];
+
+      return isETHtoWrapped(path) || isWrappedToETH(path);
+    }, [selectedTokens]);
+
+    const token = useMemo(() => {
+      if (isWrapOrUnwrapETH)
+        return {
+          tokenA: FIELD.TOKEN_A,
+          tokenB: FIELD.TOKEN_B
+        };
+
+      return {
+        tokenA: isReversedTokens ? FIELD.TOKEN_B : FIELD.TOKEN_A,
+        tokenB: isReversedTokens ? FIELD.TOKEN_A : FIELD.TOKEN_B
+      };
+    }, [isReversedTokens, isWrapOrUnwrapETH]);
 
     return (
       <BottomSheet
@@ -41,12 +63,18 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
             </Text>
 
             <View style={styles.preview}>
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_A} />
+              <BottomSheetReviewTokenItem
+                type={FIELD.TOKEN_A}
+                tokenKey={token.tokenA}
+              />
               <View style={styles.divider} />
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_B} />
+              <BottomSheetReviewTokenItem
+                type={FIELD.TOKEN_B}
+                tokenKey={token.tokenB}
+              />
             </View>
 
-            <PreviewInformation />
+            {!isWrapOrUnwrapETH && <PreviewInformation />}
 
             <Spacer value={scale(24)} />
             <SubmitSwapActions />

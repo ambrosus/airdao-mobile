@@ -21,6 +21,7 @@ export const SwapContext = () => {
   const [_refSettingsGetter, setSettings] = useState(INITAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
   const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
+  const [isReversedTokens, setIsReversedTokens] = useState(false);
 
   const [uiBottomSheetInformation, setUiBottomSheetInformation] = useState(
     INITAL_UI_BOTTOM_SHEET_INFORMATION
@@ -91,6 +92,8 @@ export const SwapContext = () => {
     setIsIncreassingAllowance,
     allPairsRef,
     setPairs,
+    isReversedTokens,
+    setIsReversedTokens,
     reset
   };
 };
