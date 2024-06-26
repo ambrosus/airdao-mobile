@@ -7,6 +7,7 @@ import { useSwapActions } from '@features/swap/lib/hooks';
 import {
   SwapStringUtils,
   executeSwapPath,
+  plateVisibility,
   resolvePlateSymbol
 } from '@features/swap/utils';
 import { formatEther } from 'ethers/lib/utils';
@@ -74,13 +75,13 @@ export const TokenInfoPlate = () => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
     const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
 
-    return (
-      TOKEN_A &&
-      AMOUNT_A !== '' &&
-      TOKEN_B &&
-      AMOUNT_B !== '' &&
-      oppositeAmountPerOneToken !== '' &&
-      TokenUSDPrice !== 0
+    return plateVisibility(
+      TOKEN_A,
+      AMOUNT_A,
+      TOKEN_B,
+      AMOUNT_B,
+      oppositeAmountPerOneToken,
+      TokenUSDPrice
     );
   }, [
     TokenUSDPrice,
