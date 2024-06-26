@@ -19,8 +19,7 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
     const { t } = useTranslation();
     const bottomSheetRef = useForwardedRef(ref);
-    const { selectedTokens, isProcessingSwap, isReversedTokens } =
-      useSwapContextSelector();
+    const { selectedTokens, isProcessingSwap } = useSwapContextSelector();
 
     const isWrapOrUnwrapETH = useMemo(() => {
       const { TOKEN_A, TOKEN_B } = selectedTokens;
@@ -28,19 +27,6 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
 
       return isETHtoWrapped(path) || isWrappedToETH(path);
     }, [selectedTokens]);
-
-    const token = useMemo(() => {
-      if (isWrapOrUnwrapETH)
-        return {
-          tokenA: FIELD.TOKEN_A,
-          tokenB: FIELD.TOKEN_B
-        };
-
-      return {
-        tokenA: isReversedTokens ? FIELD.TOKEN_B : FIELD.TOKEN_A,
-        tokenB: isReversedTokens ? FIELD.TOKEN_A : FIELD.TOKEN_B
-      };
-    }, [isReversedTokens, isWrapOrUnwrapETH]);
 
     return (
       <BottomSheet
@@ -63,15 +49,9 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
             </Text>
 
             <View style={styles.preview}>
-              <BottomSheetReviewTokenItem
-                type={FIELD.TOKEN_A}
-                tokenKey={token.tokenA}
-              />
+              <BottomSheetReviewTokenItem type={FIELD.TOKEN_A} />
               <View style={styles.divider} />
-              <BottomSheetReviewTokenItem
-                type={FIELD.TOKEN_B}
-                tokenKey={token.tokenB}
-              />
+              <BottomSheetReviewTokenItem type={FIELD.TOKEN_B} />
             </View>
 
             {!isWrapOrUnwrapETH && <PreviewInformation />}
