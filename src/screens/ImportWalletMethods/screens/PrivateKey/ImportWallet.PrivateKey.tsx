@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
-  Keyboard,
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
   View
@@ -11,11 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
-import {
-  BottomAwareSafeAreaView,
-  BottomSheetRef,
-  Header
-} from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   InputRef,
@@ -59,10 +54,11 @@ export const ImportWalletPrivateKey = () => {
     new Promise((resolve) => setTimeout(resolve, ms));
 
   const onImportWalletPress = useCallback(async () => {
-    maskedInputRef.current?.blur();
-    Keyboard.dismiss();
     setStatus(IMPORT_PROCESS_STATUS.PENDING);
-    bottomSheetProcessingRef.current?.show();
+    setTimeout(() => {
+      bottomSheetProcessingRef.current?.show();
+    }, 500);
+    maskedInputRef.current?.blur();
 
     try {
       await WalletUtils.importWalletViaPrivateKey(privateKey);
@@ -73,21 +69,19 @@ export const ImportWalletPrivateKey = () => {
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
       InteractionManager.runAfterInteractions(async () => {
-        await delay(1200);
+        await delay(1600);
         bottomSheetProcessingRef.current?.dismiss();
       });
 
       InteractionManager.runAfterInteractions(() => {
         requestAnimationFrame(async () => {
-          await delay(1200);
+          await delay(2200);
           navigation.navigate('ImportWalletPrivateKeyError', {
             error: errorStatus
           });
           setStatus(IMPORT_PROCESS_STATUS.PENDING);
         });
       });
-
-      // Update the status
     }
   }, [navigation, privateKey]);
 
@@ -158,7 +152,7 @@ export const ImportWalletPrivateKey = () => {
                 </Row>
               </Button>
             </View>
-            <BottomAwareSafeAreaView paddingBottom={verticalScale(24)}>
+            <View style={styles.footer}>
               <PrimaryButton
                 disabled={disabled.state}
                 onPress={onImportWalletPress}
@@ -171,7 +165,7 @@ export const ImportWalletPrivateKey = () => {
                   {t('button.continue')}
                 </Text>
               </PrimaryButton>
-            </BottomAwareSafeAreaView>
+            </View>
           </View>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
