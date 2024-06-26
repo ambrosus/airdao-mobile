@@ -373,5 +373,6 @@
   "swap.settings.expert": "Toggle expert mode",
   "swap.settings.multihops": "Disable multihops",
   "swap.settings.label.minutes": "minutes",
-  "swap.status.error.heading": "Swap Failed"
+  "swap.status.error.heading": "Swap Failed",
+  "swap.label.estimated": "estimated"
 }

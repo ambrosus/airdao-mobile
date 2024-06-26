@@ -373,5 +373,6 @@
   "swap.settings.expert": "Uzman modunu değiştir",
   "swap.settings.multihops": "Çoklu atlamaları devre dışı bırak",
   "swap.settings.label.minutes": "dakika",
-  "swap.status.error.heading": "Takas Başarısız"
+  "swap.status.error.heading": "Takas Başarısız",
+  "swap.label.estimated": "tahmini"
 }

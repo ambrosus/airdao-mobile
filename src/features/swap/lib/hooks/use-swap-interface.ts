@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
@@ -20,7 +20,10 @@ export function useSwapInterface() {
     latestSelectedTokensAmount,
     isExactInRef,
     setUiBottomSheetInformation,
-    isReversedTokens
+    isReversedTokens,
+    _refExactGetter,
+    selectedTokens,
+    selectedTokensAmount
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
   const { checkAllowance, hasWrapNativeToken } = useSwapActions();
@@ -112,5 +115,29 @@ export function useSwapInterface() {
     onReviewSwapDismiss
   ]);
 
-  return { resolveBottomSheetData };
+  const isEstimatedToken = useMemo(() => {
+    const emptyInputValue = '' && '0';
+
+    const { TOKEN_A, TOKEN_B } = selectedTokens;
+    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
+
+    const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
+
+    const isSomeBalanceIsEmpty =
+      AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
+
+    if (isSomeBalanceIsEmpty || isSomeTokenNotSelected) {
+      return {
+        tokenA: false,
+        tokenB: false
+      };
+    }
+
+    return {
+      tokenA: !_refExactGetter,
+      tokenB: _refExactGetter
+    };
+  }, [_refExactGetter, selectedTokens, selectedTokensAmount]);
+
+  return { resolveBottomSheetData, isEstimatedToken };
 }

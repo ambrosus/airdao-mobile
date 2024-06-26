@@ -13,9 +13,13 @@ import { StringUtils } from '@utils/string';
 
 interface InputWithTokenSelectProps {
   readonly type: SelectedTokensKeys;
+  readonly estimated: boolean;
 }
 
-export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
+export const InputWithTokenSelect = ({
+  type,
+  estimated
+}: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
   const { selectedTokensAmount, setLastChangedInput, setIsReversedTokens } =
     useSwapContextSelector();
@@ -33,7 +37,9 @@ export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
 
   return (
     <View style={styles.wrapper}>
-      <Text>{label}</Text>
+      <Text>
+        {label} {estimated && `(${t('swap.label.estimated')})`}
+      </Text>
       <View style={styles.upperRow}>
         <TextInput
           value={selectedTokensAmount[type]}
