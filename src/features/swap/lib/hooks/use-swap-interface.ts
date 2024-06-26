@@ -58,13 +58,12 @@ export function useSwapInterface() {
         ethers.utils.parseUnits(receivedAmountOut)
       );
 
-      const amountToSell = latestSelectedTokensAmount.current[tokensToSellKey];
+      const amountToSell =
+        latestSelectedTokensAmount.current[
+          isReversedTokens ? FIELD.TOKEN_A : tokensToSellKey
+        ];
 
-      const liquidityProviderFee = realizedLPFee(
-        isReversedTokens
-          ? latestSelectedTokensAmount.current.TOKEN_A
-          : amountToSell
-      );
+      const liquidityProviderFee = realizedLPFee(amountToSell);
       const allowance = await checkAllowance();
 
       if (
