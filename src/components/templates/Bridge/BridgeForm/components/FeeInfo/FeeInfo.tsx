@@ -27,7 +27,7 @@ const FeeInfo = ({
     formatEther(bridgeFee?.networkFee || 0),
     DECIMAL_LIMIT.CRYPTO
   );
-  const feeData = `${bridgeFee?.feeToken.symbol} ${feeAmount}`;
+  const feeData = `${feeAmount} ${bridgeFee?.feeToken.symbol}`;
 
   return (
     <View style={styles.information}>

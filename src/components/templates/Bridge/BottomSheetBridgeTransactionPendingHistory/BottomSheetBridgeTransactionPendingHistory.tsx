@@ -12,6 +12,7 @@ import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
 import { BridgeNetworksSelected } from '@components/templates/Bridge/BridgeNetworksSelected/BridgeNetworksSelected';
 import { DECIMAL_LIMIT } from '@constants/variables';
+import { PrimaryButton } from '@components/modular';
 
 interface TransactionPendingModel extends BridgeTransactionHistoryDTO {
   loading?: boolean;
@@ -19,6 +20,7 @@ interface TransactionPendingModel extends BridgeTransactionHistoryDTO {
 
 interface BottomSheetBridgeTransactionPendingHistoryProps {
   transaction: TransactionPendingModel;
+  buttonType: 'done' | 'share';
   liveTransactionInformation: {
     stage: string;
     confirmations: {
@@ -31,7 +33,7 @@ interface BottomSheetBridgeTransactionPendingHistoryProps {
 export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
   BottomSheetRef,
   BottomSheetBridgeTransactionPendingHistoryProps
->(({ transaction, liveTransactionInformation }, bottomSheetRef) => {
+>(({ transaction, liveTransactionInformation, buttonType }, bottomSheetRef) => {
   const { t } = useTranslation();
   const formattedAmount = NumberUtils.limitDecimalCount(
     transaction.decimalAmount,
@@ -55,6 +57,7 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
     },
     [liveTransactionInformation]
   );
+  const isDoneBtn = buttonType === 'done';
   const TransactionLoader = () => (
     <View
       style={{
@@ -66,6 +69,13 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
       <Spinner size={'large'} />
     </View>
   );
+
+  const onButtonPress = () => {
+    if (isDoneBtn) {
+      // @ts-ignore
+      bottomSheetRef?.current?.dismiss();
+    }
+  };
 
   return (
     <BottomSheet ref={bottomSheetRef} swiperIconVisible>
@@ -142,8 +152,20 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
           >
             <Status status={renderTransactionStatus(3.1)} />
           </RowStageSection>
+          {!!buttonType && (
+            <PrimaryButton onPress={onButtonPress}>
+              <Text
+                fontFamily="Inter_600SemiBold"
+                color={COLORS.neutral0}
+                fontSize={16}
+              >
+                {isDoneBtn ? t('common.done') : t('button.share')}
+              </Text>
+            </PrimaryButton>
+          )}
         </View>
       )}
+
       <Spacer value={verticalScale(36)} />
     </BottomSheet>
   );

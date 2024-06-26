@@ -3,7 +3,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { DECIMAL_LIMIT, DEVICE_HEIGHT } from '@constants/variables';
+import { DECIMAL_LIMIT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { FlatList, View } from 'react-native';
@@ -13,6 +13,7 @@ import { useBridgeContextData } from '@contexts/Bridge';
 import { useBridgeNetworksData } from '@hooks/bridge/useBridgeNetworksData';
 import { formatUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
+import { BridgeNetworksSelected } from '@components/templates/Bridge/BridgeNetworksSelected/BridgeNetworksSelected';
 
 interface CryptoAmount {
   amount: BigNumber;
@@ -39,7 +40,8 @@ export const BottomSheetBridgePreview = forwardRef<
 >((props, ref) => {
   const { t } = useTranslation();
   const { onAcceptPress, dataToPreview, btnTitle } = props;
-  const { networksParams, tokenParams } = useBridgeContextData();
+  const { networksParams, tokenParams, fromParams, toParams } =
+    useBridgeContextData();
   const {
     methods: { isAmountGraterThenBalance }
   } = useBridgeNetworksData({});
@@ -105,11 +107,7 @@ export const BottomSheetBridgePreview = forwardRef<
     );
   };
   return (
-    <BottomSheet
-      ref={ref}
-      height={DEVICE_HEIGHT * 0.44}
-      swiperIconVisible={true}
-    >
+    <BottomSheet ref={ref} swiperIconVisible={true}>
       <View style={{ marginHorizontal: scale(24) }}>
         <Spacer value={verticalScale(24)} />
         <Text
@@ -120,6 +118,11 @@ export const BottomSheetBridgePreview = forwardRef<
         >
           {t('bridge.preview.title')}
         </Text>
+        <Spacer value={verticalScale(24)} />
+        <BridgeNetworksSelected
+          networkFrom={fromParams.value.id}
+          networkTo={toParams.value.id}
+        />
         <Spacer value={verticalScale(24)} />
         <FlatList
           data={dataToPreview}
@@ -143,6 +146,7 @@ export const BottomSheetBridgePreview = forwardRef<
           </Text>
         )}
       </View>
+      <Spacer value={verticalScale(34)} />
     </BottomSheet>
   );
 });

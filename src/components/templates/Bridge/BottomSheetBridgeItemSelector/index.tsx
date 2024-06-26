@@ -31,6 +31,10 @@ export const BottomSheetBridgeItemSelector = forwardRef<
   const pickerData = isFrom ? fromParams : toParams;
 
   const { t } = useTranslation();
+  const header = t(
+    isNetworkSelector ? 'bridge.select.network' : 'bridge.select.assets'
+  );
+
   const renderNetworkItem = (network: any) => {
     const { item } = network;
     return (
@@ -77,7 +81,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
         color={COLORS.neutral800}
         align="center"
       >
-        {t(isNetworkSelector ? 'bridge.select.network' : 'bridge.select.token')}
+        {header}
       </Text>
       <Spacer value={verticalScale(16)} />
       <FlatList
