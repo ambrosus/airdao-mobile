@@ -165,7 +165,9 @@ export const BridgeForm = () => {
 
         <PrimaryButton
           onPress={onPressPreview}
-          disabled={!amountToExchange || !bridgeFee || gasFeeLoader}
+          disabled={
+            !amountToExchange || !bridgeFee || gasFeeLoader || !!inputError
+          }
         >
           {gasFeeLoader ? (
             <Spinner customSize={15} />
@@ -189,6 +191,7 @@ export const BridgeForm = () => {
         />
         <BottomSheetBridgeTransactionPendingHistory
           ref={transactionInfoRef}
+          buttonType={'done'}
           // @ts-ignore
           transaction={bridgeTransaction}
           liveTransactionInformation={{

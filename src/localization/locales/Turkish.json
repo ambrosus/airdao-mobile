@@ -360,7 +360,7 @@
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
 
   "bridge.select.network": "Ağ Seç ",
-  "bridge.select.token": "Token Seç ",
+  "bridge.select.assets": "Varlıklarım Seç ",
   "bridge.amount.to.bridge": "Köprülemek için Miktar ",
   "bridge.amount.network.fee": "Ağ Ücreti ",
 
