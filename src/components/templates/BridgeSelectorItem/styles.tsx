@@ -12,5 +12,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: scale(20)
   },
-  text: { fontSize: scale(16) }
+  text: {
+    fontSize: scale(16)
+  },
+  boldText: {
+    fontSize: scale(16),
+    fontWeight: '600'
+  }
 });

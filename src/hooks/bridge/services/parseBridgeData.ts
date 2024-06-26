@@ -27,12 +27,13 @@ export const parseNetworkParams = (
 
   const defaultToken = (() => {
     if (fromId !== 'amb') {
-      return tokenForRender.find((token) => {
-        const { symbol } = token.renderTokenItem;
-        const isAMB = symbol === CryptoCurrencyCode.AMB;
-        const isSAMB = symbol === CryptoCurrencyCode.SAMB;
-        return isAMB || isSAMB;
-      });
+      const isAMBToken = tokenForRender.find(
+        (token) => token.renderTokenItem.symbol === CryptoCurrencyCode.AMB
+      );
+      const isSAMBToken = tokenForRender.find(
+        (token) => token.renderTokenItem.symbol === CryptoCurrencyCode.SAMB
+      );
+      return isAMBToken || isSAMBToken;
     } else {
       return tokenForRender.find((token) => token.renderTokenItem.isNativeCoin);
     }
