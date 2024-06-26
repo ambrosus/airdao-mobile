@@ -10,7 +10,6 @@ import {
   TokenInfoPlate
 } from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
-
 import { isIos } from '@utils/isPlatform';
 
 const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';

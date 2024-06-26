@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -22,6 +23,7 @@ interface TokenSelectorProps {
 }
 
 export const TokenSelector = ({ type }: TokenSelectorProps) => {
+  const { t } = useTranslation();
   const { selectedTokens } = useSwapContextSelector();
   const { onShowBottomSheetByKey } = useSwapBottomSheetHandler();
 
@@ -66,7 +68,9 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
             color={COLORS.neutral900}
             style={tokenSymbolTypographyStyle}
           >
-            {isSelectedToken ? selectedTokens[type]?.symbol : 'Select asset'}
+            {isSelectedToken
+              ? selectedTokens[type]?.symbol
+              : t('swap.select.asset')}
           </Text>
         </Row>
         <Spacer horizontal value={scale(4)} />

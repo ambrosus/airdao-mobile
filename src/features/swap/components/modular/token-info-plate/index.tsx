@@ -9,8 +9,12 @@ import { formatEther } from 'ethers/lib/utils';
 import { COLORS } from '@constants/colors';
 
 export const TokenInfoPlate = () => {
-  const { selectedTokens, selectedTokensAmount, _refExactGetter } =
-    useSwapContextSelector();
+  const {
+    selectedTokens,
+    selectedTokensAmount,
+    _refExactGetter,
+    _refSettingsGetter
+  } = useSwapContextSelector();
   const { getOppositeReceivedTokenAmount } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
@@ -45,7 +49,12 @@ export const TokenInfoPlate = () => {
         setOppositeAmountPerOneToken(normalizedAmount);
       }
     })();
-  }, [_refExactGetter, getOppositeReceivedTokenAmount, selectedTokens]);
+  }, [
+    _refExactGetter,
+    _refSettingsGetter,
+    getOppositeReceivedTokenAmount,
+    selectedTokens
+  ]);
 
   const TokenUSDPrice = useUSDPrice(1, symbols?.TOKEN_A as CryptoCurrencyCode);
 

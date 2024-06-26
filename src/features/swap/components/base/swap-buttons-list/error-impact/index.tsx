@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
@@ -15,6 +16,7 @@ export const SwapErrorImpactButton = ({
   isProcessingSwap,
   onCompleteMultiStepSwap
 }: SwapErrorImpactButtonProps) => {
+  const { t } = useTranslation();
   const { uiBottomSheetInformation } = useSwapContextSelector();
   const { settings } = useSwapSettings();
 
@@ -35,12 +37,12 @@ export const SwapErrorImpactButton = ({
 
     if (priceImpact) {
       if (priceImpact > 10 && !expertMode) {
-        return 'Price impact too high';
+        return t('swap.button.impact.high');
       } else {
-        return 'Swap anyway';
+        return t('swap.button.swap.anyway');
       }
     }
-  }, [settings, uiBottomSheetInformation]);
+  }, [settings, uiBottomSheetInformation, t]);
 
   const buttonColors = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;

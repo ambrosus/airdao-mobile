@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
@@ -7,6 +8,7 @@ import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
 
 export const SettingsDeadlineForm = () => {
+  const { t } = useTranslation();
   const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onChangeDeadline = useCallback(
@@ -24,7 +26,7 @@ export const SettingsDeadlineForm = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral500}
         >
-          Transaction deadline
+          {t('swap.settings.deadline')}
         </Text>
 
         <Row alignItems="center" justifyContent="space-between">
@@ -41,7 +43,7 @@ export const SettingsDeadlineForm = () => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
-            minutes
+            {t('swap.settings.label.minutes')}
           </Text>
         </Row>
       </View>

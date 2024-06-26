@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
@@ -15,6 +16,7 @@ import {
 
 export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
+    const { t } = useTranslation();
     const bottomSheetSwapSettingsRef = useForwardedRef(ref);
     return (
       <BottomSheet swiperIconVisible ref={bottomSheetSwapSettingsRef}>
@@ -25,7 +27,7 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
           color={COLORS.neutral800}
           style={styles.heading}
         >
-          Transaction settings
+          {t('swap.settings.heading')}
         </Text>
 
         <View style={styles.container}>

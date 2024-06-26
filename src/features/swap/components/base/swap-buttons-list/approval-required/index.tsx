@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { StyleProp, TextStyle, ViewStyle, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from '../styles';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
@@ -18,6 +19,7 @@ export const ApprovalRequiredButton = ({
   isProcessingSwap,
   onCompleteMultiStepSwap
 }: ApprovalRequiredButtonProps) => {
+  const { t } = useTranslation();
   const { uiBottomSheetInformation, latestSelectedTokens, isExactInRef } =
     useSwapContextSelector();
   const multiStepButtonsDisabledStates = useMemo(() => {
@@ -41,11 +43,18 @@ export const ApprovalRequiredButton = ({
         latestSelectedTokens.current[isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B];
 
       return {
-        firstStep: `Approve ${selectedTokens?.symbol}`,
-        secondStep: 'Swap now'
+        firstStep: t('swap.button.approve', {
+          symbol: selectedTokens?.symbol
+        }),
+        secondStep: t('swap.button.swap')
       };
     }
-  }, [isExactInRef, latestSelectedTokens, uiBottomSheetInformation.allowance]);
+  }, [
+    t,
+    isExactInRef,
+    latestSelectedTokens,
+    uiBottomSheetInformation.allowance
+  ]);
 
   const firstStepTypographyStyle: StyleProp<TextStyle> = useMemo(() => {
     return {

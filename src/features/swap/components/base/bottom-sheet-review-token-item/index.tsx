@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
@@ -16,7 +17,8 @@ interface BottomSheetReviewTokenItemProps {
 export const BottomSheetReviewTokenItem = ({
   type
 }: BottomSheetReviewTokenItemProps) => {
-  const label = type === FIELD.TOKEN_A ? 'You pay' : 'You receive';
+  const { t } = useTranslation();
+  const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
 
   const token = SwapStringUtils.extendedLogoVariants(
