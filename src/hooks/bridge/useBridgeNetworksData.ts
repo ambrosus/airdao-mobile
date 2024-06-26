@@ -23,6 +23,7 @@ import { HomeNavigationProp } from '@appTypes';
 import { API } from '@api/api';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';
+import Config from '@constants/config';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef?: RefObject<BottomSheetRef>;
@@ -73,16 +74,10 @@ export const useBridgeNetworksData = ({
     fromParams,
     tokenParams,
     bridgeConfig,
-    networksParams,
     selectedTokenDecimals
   } = useBridgeContextData();
 
-  const networkNativeToken = useMemo(() => {
-    const token = (networksParams || []).find(
-      (item) => item.renderTokenItem.isNativeCoin
-    )?.renderTokenItem;
-    return token ?? DEFAULT_TOKEN_FROM;
-  }, [networksParams]);
+  const networkNativeToken = Config.NETWORK_NATIVE_COIN[fromParams.value.id];
 
   const selectedToken = tokenParams.value;
 
