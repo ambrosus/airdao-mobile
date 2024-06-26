@@ -4,6 +4,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import {
   SwapStringUtils,
+  maximumAmountOut,
   minimumAmountOut,
   realizedLPFee
 } from '@features/swap/utils';
@@ -18,7 +19,8 @@ export function useSwapInterface() {
   const {
     latestSelectedTokensAmount,
     isExactInRef,
-    setUiBottomSheetInformation
+    setUiBottomSheetInformation,
+    isReversedTokens
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
   const { checkAllowance, hasWrapNativeToken } = useSwapActions();
@@ -51,23 +53,42 @@ export function useSwapInterface() {
         ethers.utils.parseUnits(receivedAmountOut)
       );
 
+      const bnMaximumReceivedAmount = maximumAmountOut(
+        `${settings.current.slippageTolerance}%`,
+        ethers.utils.parseUnits(receivedAmountOut)
+      );
+
       const amountToSell = latestSelectedTokensAmount.current[tokensToSellKey];
-      const liquidityProviderFee = realizedLPFee(amountToSell);
+
+      const liquidityProviderFee = realizedLPFee(
+        isReversedTokens
+          ? latestSelectedTokensAmount.current.TOKEN_A
+          : amountToSell
+      );
       const allowance = await checkAllowance();
 
       if (
         typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'string' &&
-        bnMinimumReceivedAmount
+        typeof liquidityProviderFee === 'number' &&
+        bnMinimumReceivedAmount &&
+        bnMaximumReceivedAmount
       ) {
         const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
           bnMinimumReceivedAmount
         );
 
+        const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
+          bnMaximumReceivedAmount
+        );
+
         setUiBottomSheetInformation({
           priceImpact,
-          minimumReceivedAmount: receivedAmountOut,
-          lpFee: SwapStringUtils.transformRealizedLPFee(liquidityProviderFee),
+          minimumReceivedAmount: isReversedTokens
+            ? receivedMaxAmountOut
+            : receivedAmountOut,
+          lpFee: SwapStringUtils.transformRealizedLPFee(
+            String(liquidityProviderFee)
+          ),
           allowance: allowance ? 'increase' : 'suitable'
         });
 
@@ -88,6 +109,7 @@ export function useSwapInterface() {
     uiPriceImpactGetter,
     settings,
     checkAllowance,
+    isReversedTokens,
     onReviewSwapDismiss
   ]);
 
