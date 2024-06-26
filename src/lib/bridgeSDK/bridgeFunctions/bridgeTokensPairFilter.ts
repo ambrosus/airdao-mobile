@@ -7,11 +7,9 @@ interface BridgeTokensPairBuilderModel {
 }
 
 // amb->eth/bsc:
-// we show only native AMB token (SAMB_IN_AMB isNative:true)
 // if we send wrap token (WBNB, WETH) we always do unwrap
 
 // eth/bsc->amb:
-// we send only to native AMB token (SAMB_IN_AMB isNative:true)
 // if we can unwrap token we always do it
 
 export const bridgeTokensPairFilter = ({
@@ -29,11 +27,10 @@ export const bridgeTokensPairFilter = ({
   } = Config;
 
   const fromIsSAMBinAMB = from.address === SAMB_IN_AMB && !from.isNativeCoin;
-  const fromIsSAMBinETH = from.address === SAMB_IN_ETH;
   const fromIsSAMBinBSC = from.address === SAMB_IN_BSC;
+  const fromIsSAMB2inETH = from.address === SAMB2_IN_ETH;
 
   const toIsSAMBinETH = to.address === SAMB_IN_ETH;
-  const toIsSAMB2InETH = to.address === SAMB2_IN_ETH;
   const toIsWETHinETH = to.address === WETH_IN_ETH && !to.isNativeCoin;
   const toIsSAMBinAMB = to.address === SAMB_IN_AMB && !to.isNativeCoin;
   const toIsWBNBinBSC = to.address === WNBN_IN_BSC && !to.isNativeCoin;
@@ -42,14 +39,8 @@ export const bridgeTokensPairFilter = ({
   switch (bridgePairName) {
     case 'amb->eth': {
       // hide pairs
-      // 'AMB_SAMB->ETH_SAMB'
-      // 'AMB_SAMB->ETH_SAMB2'
-      // 'AMB_WETH->ETH_WETH'
-      return !(
-        (fromIsSAMBinAMB && toIsSAMBinETH) ||
-        (fromIsSAMBinAMB && toIsSAMB2InETH) ||
-        toIsWETHinETH
-      );
+      // 'AMB_SAMB->ETH_SAMB' 'AMB_WETH->ETH_WETH'
+      return !((fromIsSAMBinAMB && toIsSAMBinETH) || toIsWETHinETH);
     }
 
     case 'amb->bsc': {
@@ -61,7 +52,7 @@ export const bridgeTokensPairFilter = ({
     case 'eth->amb': {
       // hide pairs
       // 'ETH_SAMB->AMB_SAMB' 'ETH_SMB2->AMB_SAMB
-      return !(fromIsSAMBinETH || toIsSAMBinAMB);
+      return !(fromIsSAMB2inETH && toIsSAMBinAMB);
     }
 
     case 'bsc->amb':

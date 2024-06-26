@@ -14,7 +14,7 @@ interface BridgeSelectorItemModel {
   item: ParsedBridge | RenderTokenItem;
   isActive: boolean;
   onPressItem: (item: any) => void;
-  // onPressItem: (item: unknown) => void;
+  tokenSymbol?: string;
 }
 
 export const BridgeSelectorItem = ({
@@ -22,7 +22,8 @@ export const BridgeSelectorItem = ({
   item,
   onPressItem,
   isActive,
-  name
+  name,
+  tokenSymbol
 }: BridgeSelectorItemModel) => {
   return (
     <Button style={styles.mainButton} onPress={() => onPressItem(item)}>
@@ -33,6 +34,12 @@ export const BridgeSelectorItem = ({
           scale={0.8}
         />
         <Spacer horizontal value={scale(10)} />
+        {!!tokenSymbol && (
+          <>
+            <Text style={styles.boldText}>{tokenSymbol}</Text>
+            <Spacer value={5} horizontal />
+          </>
+        )}
         <Text style={styles.text}>{name}</Text>
       </View>
       {isActive && <CheckIconCircle />}
