@@ -230,14 +230,15 @@ export const useBridgeNetworksData = ({
 
   const getFeeData = async (isMaxOptions = false) => {
     setFeeLoader(true);
-    const setTokenAmount = () => {
-      if (selectedToken.renderTokenItem.isNativeCoin) {
-        return selectedToken.renderTokenItem.balance.sub(BigNumber.from(1));
-      }
-      return selectedToken.renderTokenItem.balance;
-    };
+    const tokenItem = selectedToken.renderTokenItem;
+
+    // we need to subtract 1 from the balance to avoid inaccuracies in calculations about the maximum transfer amount
+    const amountToSubtract = '1';
+    const amountToFee = tokenItem.isNativeCoin
+      ? tokenItem.balance.sub(parseUnits(amountToSubtract, tokenItem.decimals))
+      : tokenItem.balance;
     const amountTokens = isMaxOptions
-      ? formatUnits(setTokenAmount(), selectedToken.renderTokenItem.decimals)
+      ? formatUnits(amountToFee, tokenItem.decimals)
       : amountToExchange;
     const dataForFee = {
       tokenFrom: selectedToken.pairs[0],
