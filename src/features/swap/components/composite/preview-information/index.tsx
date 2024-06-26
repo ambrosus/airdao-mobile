@@ -75,7 +75,9 @@ export const PreviewInformation = () => {
       <Row alignItems="center" justifyContent="space-between">
         <Text>
           {t(
-            isReversedTokens ? 'Maximum sold' : 'swap.bottom.sheet.min.received'
+            isReversedTokens
+              ? 'swap.bottom.sheet.max.sold'
+              : 'swap.bottom.sheet.min.received'
           )}
         </Text>
 

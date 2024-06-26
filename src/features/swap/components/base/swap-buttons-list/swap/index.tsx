@@ -24,9 +24,9 @@ export const SwapButton = ({
 
     if (TOKEN_A && TOKEN_B) {
       if (isETHtoWrapped([TOKEN_A.address, TOKEN_B.address])) {
-        return 'Wrap';
+        return t('swap.button.wrap');
       } else if (isWrappedToETH([TOKEN_A.address, TOKEN_B.address])) {
-        return 'Unwrap';
+        return t('swap.button.unwrap');
       }
     }
 
