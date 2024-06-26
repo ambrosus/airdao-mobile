@@ -355,7 +355,7 @@
   "bridge.transaction.approval": "Waiting for approval",
   "bridge.transaction.confirmations": "Confirmations",
   "bridge.transaction.fee": "Bridge fee",
-  "bridge.transaction.to": "To {{networkTo}}",
+  "bridge.transaction.to": "To: {{networkTo}}",
   "bridge.transaction.sending.heading": "Sending {{tokenFrom}} to {{networkTo}}",
   "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
   "bridge.select.network": "Select network",
