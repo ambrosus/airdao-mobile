@@ -7,6 +7,7 @@ import {
 } from '../types';
 import { NumberUtils } from '@utils/number';
 import { TFunction } from 'i18next';
+import { isWrappedToETH } from './wrap-native-address';
 
 export function buttonActionString(
   selectedTokens: SelectedTokensState,
@@ -21,7 +22,18 @@ export function buttonActionString(
 
   const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
 
-  const keyToSellTokens = isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B;
+  const ethSwapOrUnswapPath = [TOKEN_A?.address, TOKEN_B?.address] as [
+    string,
+    string
+  ];
+
+  const isWrapEth = isWrappedToETH(ethSwapOrUnswapPath);
+
+  const keyToSellTokens = isWrapEth
+    ? FIELD.TOKEN_A
+    : isExactIn
+    ? FIELD.TOKEN_A
+    : FIELD.TOKEN_B;
 
   const isSomeBalanceIsEmpty =
     AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;

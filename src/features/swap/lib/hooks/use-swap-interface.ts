@@ -4,6 +4,8 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import {
   SwapStringUtils,
+  isETHtoWrapped,
+  isWrappedToETH,
   maximumAmountOut,
   minimumAmountOut,
   realizedLPFee
@@ -126,7 +128,20 @@ export function useSwapInterface() {
     const isSomeBalanceIsEmpty =
       AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
 
-    if (isSomeBalanceIsEmpty || isSomeTokenNotSelected) {
+    const ethSwapOrUnswapPath = [TOKEN_A?.address, TOKEN_B?.address] as [
+      string,
+      string
+    ];
+
+    const isWrapEth = isWrappedToETH(ethSwapOrUnswapPath);
+    const isEthUnwrap = isETHtoWrapped(ethSwapOrUnswapPath);
+
+    if (
+      isSomeBalanceIsEmpty ||
+      isSomeTokenNotSelected ||
+      !isWrapEth ||
+      !isEthUnwrap
+    ) {
       return {
         tokenA: false,
         tokenB: false
