@@ -1,3 +1,5 @@
+import { BRIDGE_NATIVE_COINS } from '@constants/bridgeNetworkNativeCoins';
+
 export const BRIDGE_DATA = {
   prod: {
     // bridge token exception addresses
@@ -7,7 +9,9 @@ export const BRIDGE_DATA = {
     SAMB2_IN_ETH: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
     WETH_IN_ETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     SAMB_IN_BSC: '0x23c1C1cc14270B7Bd63677d1fe4790891b17A33d',
+    WNBN_IN_BSC: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
 
+    NETWORK_NATIVE_COIN: BRIDGE_NATIVE_COINS.prod,
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus.io/ws/txStatus',
     BRIDGE_RELAY_URLS: {
@@ -26,7 +30,8 @@ export const BRIDGE_DATA = {
     SAMB_IN_ETH: '0x683aae5cD37AC94943D05C19E9109D5876113562',
     WETH_IN_ETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     SAMB_IN_BSC: '0x23c1C1cc14270B7Bd63677d1fe4790891b17A33d',
-
+    WNBN_IN_BSC: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    NETWORK_NATIVE_COIN: BRIDGE_NATIVE_COINS.prod,
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
     WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus.io/ws/txStatus',
 
@@ -48,7 +53,7 @@ export const BRIDGE_DATA = {
     WETH_IN_ETH: '0x7cc041cb88D96D54B8aC4eFf8f9B83112C6748c5',
     SAMB_IN_BSC: '0xD570b2AB6efBFE296798E56D74153563E082d75c',
     WNBN_IN_BSC: '0x2ca25159d6C26633466c0DBB5e0bB07371FB30BA',
-
+    NETWORK_NATIVE_COIN: BRIDGE_NATIVE_COINS.testnet,
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
     WSS_BRIDGE_HISTORY_URL: 'wss://backoffice-api.ambrosus-test.io/ws/txStatus',
 
