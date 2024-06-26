@@ -2,6 +2,7 @@ import Config from '@constants/config';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 import { environment } from '@utils/environment';
 import { SwapToken } from '../types';
+import { multiRouteAddresses } from '.';
 
 export function isNativeWrapped(path: [string, string]) {
   const wrappedPath = Config.SWAP_TOKENS.find(
@@ -23,4 +24,16 @@ export function wrapNativeAddress(path: [string, string]): [string, string] {
   return path.map((token) =>
     token === nativeAddress ? replacementAddress : token
   ) as [string, string];
+}
+
+export function isETHtoWrapped(path: [string, string]) {
+  return (
+    path[0] === multiRouteAddresses.AMB && path[1] === multiRouteAddresses.SAMB
+  );
+}
+
+export function isWrappedToETH(path: [string, string]) {
+  return (
+    path[0] === multiRouteAddresses.SAMB && path[1] === multiRouteAddresses.AMB
+  );
 }

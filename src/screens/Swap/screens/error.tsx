@@ -34,7 +34,7 @@ export const SwapErrorScreen = ({ navigation, route }: Props) => {
       <FailedIcon />
       <Spacer value={verticalScale(16)} />
       <Text color={COLORS.neutral800} fontFamily="Inter_700Bold" fontSize={20}>
-        Transaction failed
+        {t('swap.status.error.heading')}
       </Text>
       <Spacer value={verticalScale(8)} />
       <Text
@@ -44,23 +44,10 @@ export const SwapErrorScreen = ({ navigation, route }: Props) => {
         fontSize={16}
         fontFamily="Inter_500Medium"
       >
-        {t('swap.status.error.heading')}
+        {description}
       </Text>
 
       <View style={styles.footer}>
-        <PrimaryButton
-          colors={[COLORS.alphaBlack5, COLORS.alphaBlack5]}
-          onPress={onErrorTransactionPress}
-        >
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.neutral800}
-          >
-            {description}
-          </Text>
-        </PrimaryButton>
-        <Spacer value={verticalScale(16)} />
         <PrimaryButton onPress={onErrorTransactionPress}>
           <Text
             fontFamily="Inter_600SemiBold"

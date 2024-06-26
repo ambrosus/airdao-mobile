@@ -8,7 +8,9 @@ import {
   swapExactETHForTokens,
   swapExactTokensForETH,
   swapExactTokensForTokens,
-  swapMultiHopExactTokensForTokens
+  swapMultiHopExactTokensForTokens,
+  unwrapETH,
+  wrapETH
 } from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
@@ -20,7 +22,9 @@ import {
   isMultiRouteWithUSDCFirst,
   isMultiRouteWithBONDFirst,
   multiRouteAddresses,
-  executeSwapPath
+  executeSwapPath,
+  isETHtoWrapped,
+  isWrappedToETH
 } from '@features/swap/utils';
 import { FIELD } from '@features/swap/types';
 import { createSigner } from '@features/swap/utils/contracts/instances';
@@ -205,7 +209,11 @@ export function useSwapActions() {
       TOKEN_B?.address
     ]);
 
-    if (path[0] === multiRouteAddresses.AMB) {
+    if (isETHtoWrapped(path)) {
+      return await wrapETH(amountToSell, signer);
+    } else if (isWrappedToETH(path)) {
+      return await unwrapETH(amountToSell, signer);
+    } else if (path[0] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);
       return await swapExactETHForTokens(
         amountToSell,

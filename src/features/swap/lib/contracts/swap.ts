@@ -10,7 +10,7 @@ import {
   multiRouteAddresses,
   wrapNativeAddress
 } from '@features/swap/utils';
-import { ERC20_TRADE } from '@features/swap/lib/abi';
+import { ERC20, ERC20_TRADE } from '@features/swap/lib/abi';
 import { formatEther } from 'ethers/lib/utils';
 
 export async function getAmountsOut({
@@ -186,4 +186,24 @@ export async function swapExactTokensForETH(
     console.error(error);
     throw error;
   }
+}
+
+export async function wrapETH(amountToSell: string, signer: Wallet) {
+  const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+  const contract = new ethers.Contract(multiRouteAddresses.SAMB, ERC20);
+
+  const signedContract = contract.connect(signer);
+  const tx = await signedContract.deposit({ value: bnAmountToSell });
+
+  return await tx.wait();
+}
+
+export async function unwrapETH(amountToSell: string, signer: Wallet) {
+  const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+  const contract = new ethers.Contract(multiRouteAddresses.SAMB, ERC20);
+
+  const signedContract = contract.connect(signer);
+  const tx = await signedContract.withdraw(bnAmountToSell);
+
+  return await tx.wait();
 }
