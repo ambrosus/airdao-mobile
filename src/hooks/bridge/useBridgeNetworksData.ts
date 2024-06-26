@@ -353,6 +353,7 @@ export const useBridgeNetworksData = ({
             withdrawTx: bridgeTx.transactionHash
           };
           setBridgeTransaction(parseBridgeTransaction(withdrawTransaction));
+          setAmountToExchange('');
           await tokenParams.update();
         }
       }
