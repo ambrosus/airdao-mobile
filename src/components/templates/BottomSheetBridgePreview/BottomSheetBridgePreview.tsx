@@ -3,7 +3,6 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { DECIMAL_LIMIT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { FlatList, View } from 'react-native';
@@ -85,7 +84,7 @@ export const BottomSheetBridgePreview = forwardRef<
   const renderItem = (item: DataToPreviewModel) => {
     const amountToRender = NumberUtils.limitDecimalCount(
       formatUnits(item.crypto.amount, item.crypto.decimals),
-      DECIMAL_LIMIT.CRYPTO
+      2
     );
 
     return (
