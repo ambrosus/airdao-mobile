@@ -21,19 +21,23 @@ export const TokenInfoPlate = () => {
     _refSettingsGetter,
     isReversedTokens
   } = useSwapContextSelector();
+
   const { getOppositeReceivedTokenAmount } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
 
   const symbols = useMemo(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
+    const [symbolA, symbolB] = [
+      selectedTokens.TOKEN_A?.symbol,
+      selectedTokens.TOKEN_B?.symbol
+    ];
 
-    if (TOKEN_A && TOKEN_B) {
+    if (symbolA && symbolB) {
       return resolvePlateSymbol(
         isReversedTokens,
         _refExactGetter,
-        TOKEN_A.symbol,
-        TOKEN_B.symbol
+        symbolA,
+        symbolB
       );
     }
   }, [_refExactGetter, isReversedTokens, selectedTokens]);
@@ -97,9 +101,9 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {symbols?.TOKEN_A ?? 'AMB'} ($
+        1 {selectedTokens.TOKEN_A?.symbol ?? 'AMB'} ($
         {SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}) ={' '}
-        {oppositeAmountPerOneToken} {symbols?.TOKEN_B}
+        {oppositeAmountPerOneToken} {selectedTokens.TOKEN_B?.symbol}
       </Text>
     </Row>
   ) : (

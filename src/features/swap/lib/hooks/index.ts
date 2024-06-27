@@ -8,3 +8,4 @@ export { useSwapMultiplyBalance } from './use-swap-multiply-balance';
 export { useAllLiquidityPools } from './use-all-liquidity-pools';
 export { useSwapPriceImpact } from './use-swap-price-impact';
 export { useSwapInterface } from './use-swap-interface';
+export { useSwapTokens } from './use-swap-tokens';

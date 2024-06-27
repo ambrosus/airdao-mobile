@@ -21,13 +21,12 @@ export const InputWithTokenSelect = ({
   estimated
 }: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
-  const { selectedTokensAmount, setLastChangedInput, setIsReversedTokens } =
+  const { selectedTokensAmount, setLastChangedInput } =
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
   const onChangeTokenAmount = (value: string) => {
     setLastChangedInput(type);
-    setIsReversedTokens(false);
     let finalValue = StringUtils.formatNumberInput(value);
     finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
     onChangeSelectedTokenAmount(type, finalValue);

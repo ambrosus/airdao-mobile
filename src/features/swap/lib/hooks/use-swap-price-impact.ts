@@ -19,8 +19,12 @@ import {
 import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapPriceImpact() {
-  const { latestSelectedTokens, latestSelectedTokensAmount, isExactInRef } =
-    useSwapContextSelector();
+  const {
+    latestSelectedTokens,
+    latestSelectedTokensAmount,
+    isExactInRef,
+    isReversedTokensRef
+  } = useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapActions();
   const { settings } = useSwapSettings();
@@ -219,21 +223,30 @@ export function useSwapPriceImpact() {
       !isExactIn &&
       isMuliRouteBONDSwap
     ) {
-      const amountToSell = !isExactInRef.current ? AMOUNT_A : AMOUNT_B;
+      const amountToSell = isReversedTokensRef.current
+        ? AMOUNT_A
+        : !isExactInRef.current
+        ? AMOUNT_A
+        : AMOUNT_B;
       const amountToReceive = !isExactInRef.current ? AMOUNT_B : AMOUNT_A;
       return await singleHopImpactGetter(amountToSell, amountToReceive);
     } else {
-      const amountToSell = isExactInRef.current ? AMOUNT_A : AMOUNT_B;
+      const amountToSell = isReversedTokensRef.current
+        ? AMOUNT_A
+        : isExactInRef.current
+        ? AMOUNT_A
+        : AMOUNT_B;
       const amountToReceive = isExactInRef.current ? AMOUNT_B : AMOUNT_A;
       return await singleHopImpactGetter(amountToSell, amountToReceive);
     }
   }, [
-    isExactInRef,
     latestSelectedTokens,
     latestSelectedTokensAmount,
+    isExactInRef,
+    settings,
     multiHopImpactGetter,
-    singleHopImpactGetter,
-    settings
+    isReversedTokensRef,
+    singleHopImpactGetter
   ]);
 
   return {

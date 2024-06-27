@@ -4,56 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD } from '@features/swap/types';
 import { COLORS } from '@constants/colors';
-import {
-  isMultiRouteWithUSDCFirst,
-  isMultiRouteWithBONDFirst
-} from '@features/swap/utils';
+import { useSwapTokens } from '@features/swap/lib/hooks';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
-  const {
-    latestSelectedTokens,
-    isExactInRef,
-    uiBottomSheetInformation,
-    isReversedTokens
-  } = useSwapContextSelector();
+  const { latestSelectedTokens, uiBottomSheetInformation, isReversedTokens } =
+    useSwapContextSelector();
 
-  const isMultiHopSwap = useMemo(() => {
-    const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
-
-    const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
-      [TOKEN_A?.address, TOKEN_B?.address].join()
-    );
-
-    const isMuliRouteBONDSwap = isMultiRouteWithBONDFirst.has(
-      [TOKEN_A?.address, TOKEN_B?.address].join()
-    );
-
-    return (
-      (isExactInRef.current && isMuliRouteUSDCSwap) ||
-      (!isExactInRef.current && isMuliRouteBONDSwap)
-    );
-  }, [isExactInRef, latestSelectedTokens]);
-
-  const tokensSymbols = useMemo(() => {
-    const sellTokenSymbol =
-      latestSelectedTokens.current[
-        isReversedTokens
-          ? FIELD.TOKEN_A
-          : isExactInRef.current
-          ? FIELD.TOKEN_A
-          : FIELD.TOKEN_B
-      ]?.symbol ?? '';
-
-    const receiveTokenSymbol =
-      latestSelectedTokens.current[
-        isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A
-      ]?.symbol ?? '';
-
-    return { sellTokenSymbol, receiveTokenSymbol };
-  }, [isExactInRef, isReversedTokens, latestSelectedTokens]);
+  const { tokenToSell, tokenToReceive, isMultiHopSwap } = useSwapTokens();
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;
@@ -82,7 +41,7 @@ export const PreviewInformation = () => {
         </Text>
 
         <RightSideRowItem>
-          {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokensSymbols.receiveTokenSymbol}`}
+          {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokenToReceive.TOKEN?.symbol}`}
         </RightSideRowItem>
       </Row>
 
@@ -98,7 +57,7 @@ export const PreviewInformation = () => {
         <Text>{t('swap.bottom.sheet.lpfee')}</Text>
 
         <RightSideRowItem>
-          {`${uiBottomSheetInformation.lpFee} ${tokensSymbols.sellTokenSymbol}`}
+          {`${uiBottomSheetInformation.lpFee} ${tokenToSell.TOKEN?.symbol}`}
         </RightSideRowItem>
       </Row>
 

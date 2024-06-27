@@ -19,6 +19,7 @@ export const SwapContext = () => {
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
   const isExactInRef = useRef<boolean>(true);
   const allPairsRef = useRef<SelectedPairsState>([]);
+  const isReversedTokensRef = useRef<boolean>(false);
 
   // Tokens connected states
   const [_refExactGetter, setIsExactIn] = useState(true);
@@ -59,6 +60,10 @@ export const SwapContext = () => {
     allPairsRef.current = _refPairsGetter;
   }, [_refPairsGetter]);
 
+  useEffect(() => {
+    isReversedTokensRef.current = isReversedTokens;
+  }, [isReversedTokens]);
+
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
@@ -93,6 +98,7 @@ export const SwapContext = () => {
     allPairsRef,
     setPairs,
     isReversedTokens,
+    isReversedTokensRef,
     setIsReversedTokens,
     reset
   };
