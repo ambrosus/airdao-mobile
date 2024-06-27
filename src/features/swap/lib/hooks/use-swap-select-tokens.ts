@@ -10,7 +10,8 @@ export function useSwapSelectTokens() {
     setSelectedTokens,
     selectedTokens,
     setSelectedTokensAmount,
-    selectedTokensAmount
+    selectedTokensAmount,
+    setIsReversedTokens
   } = useSwapContextSelector();
 
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
@@ -20,6 +21,7 @@ export function useSwapSelectTokens() {
 
   const onSelectToken = useCallback(
     (key: SelectedTokensKeys, token: SwapToken) => {
+      setIsReversedTokens(false);
       setSelectedTokens((prevSelectedTokens) => ({
         ...prevSelectedTokens,
         [key]: token
@@ -33,7 +35,12 @@ export function useSwapSelectTokens() {
         await updateReceivedTokensOutput();
       }, 250);
     },
-    [onDismissBottomSheetByKey, setSelectedTokens, updateReceivedTokensOutput]
+    [
+      onDismissBottomSheetByKey,
+      setIsReversedTokens,
+      setSelectedTokens,
+      updateReceivedTokensOutput
+    ]
   );
 
   const onReverseSelectedTokens = () => {

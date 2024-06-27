@@ -356,12 +356,15 @@
   "swap.status.error.desc": "Your swap of {{AMOUNT_A}} {{SYMBOL_A}} to {{SYMBOL_B}} could not be completed.",
   "swap.bottom.sheet.heading": "Ready to swap?",
   "swap.bottom.sheet.min.received": "Minimum received",
+  "swap.bottom.sheet.max.sold": "Maximum sold",
   "swap.bottom.sheet.impact": "Price impact",
   "swap.bottom.sheet.lpfee": "Network fee",
   "swap.button.approve": "Approve {{symbol}}",
   "swap.button.swap": "Swap now",
   "swap.button.impact.high": "Price impact too high",
   "swap.button.swap.anyway": "Swap anyway",
+  "swap.button.wrap": "Wrap",
+  "swap.button.unwrap": "Unwrap",
   "swap.button.go.wallet": "Go to wallet",
   "swap.button.details": "View details",
   "swap.settings.heading": "Transaction settings",
@@ -370,5 +373,6 @@
   "swap.settings.expert": "Toggle expert mode",
   "swap.settings.multihops": "Disable multihops",
   "swap.settings.label.minutes": "minutes",
-  "swap.status.error.heading": "Swap Failed"
+  "swap.status.error.heading": "Swap Failed",
+  "swap.label.estimated": "estimated"
 }

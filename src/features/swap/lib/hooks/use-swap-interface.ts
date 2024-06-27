@@ -1,9 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import {
   SwapStringUtils,
+  isETHtoWrapped,
+  isWrappedToETH,
+  maximumAmountOut,
   minimumAmountOut,
   realizedLPFee
 } from '@features/swap/utils';
@@ -18,7 +21,11 @@ export function useSwapInterface() {
   const {
     latestSelectedTokensAmount,
     isExactInRef,
-    setUiBottomSheetInformation
+    setUiBottomSheetInformation,
+    isReversedTokens,
+    _refExactGetter,
+    selectedTokens,
+    selectedTokensAmount
   } = useSwapContextSelector();
   const { uiPriceImpactGetter } = useSwapPriceImpact();
   const { checkAllowance, hasWrapNativeToken } = useSwapActions();
@@ -51,23 +58,41 @@ export function useSwapInterface() {
         ethers.utils.parseUnits(receivedAmountOut)
       );
 
-      const amountToSell = latestSelectedTokensAmount.current[tokensToSellKey];
+      const bnMaximumReceivedAmount = maximumAmountOut(
+        `${settings.current.slippageTolerance}%`,
+        ethers.utils.parseUnits(receivedAmountOut)
+      );
+
+      const amountToSell =
+        latestSelectedTokensAmount.current[
+          isReversedTokens ? FIELD.TOKEN_A : tokensToSellKey
+        ];
+
       const liquidityProviderFee = realizedLPFee(amountToSell);
       const allowance = await checkAllowance();
 
       if (
         typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'string' &&
-        bnMinimumReceivedAmount
+        typeof liquidityProviderFee === 'number' &&
+        bnMinimumReceivedAmount &&
+        bnMaximumReceivedAmount
       ) {
         const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
           bnMinimumReceivedAmount
         );
 
+        const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
+          bnMaximumReceivedAmount
+        );
+
         setUiBottomSheetInformation({
           priceImpact,
-          minimumReceivedAmount: receivedAmountOut,
-          lpFee: SwapStringUtils.transformRealizedLPFee(liquidityProviderFee),
+          minimumReceivedAmount: isReversedTokens
+            ? receivedMaxAmountOut
+            : receivedAmountOut,
+          lpFee: SwapStringUtils.transformRealizedLPFee(
+            String(liquidityProviderFee)
+          ),
           allowance: allowance ? 'increase' : 'suitable'
         });
 
@@ -88,8 +113,46 @@ export function useSwapInterface() {
     uiPriceImpactGetter,
     settings,
     checkAllowance,
+    isReversedTokens,
     onReviewSwapDismiss
   ]);
 
-  return { resolveBottomSheetData };
+  const isEstimatedToken = useMemo(() => {
+    const emptyInputValue = '' && '0';
+
+    const { TOKEN_A, TOKEN_B } = selectedTokens;
+    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
+
+    const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
+
+    const isSomeBalanceIsEmpty =
+      AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
+
+    const ethSwapOrUnswapPath = [TOKEN_A?.address, TOKEN_B?.address] as [
+      string,
+      string
+    ];
+
+    const isWrapEth = isWrappedToETH(ethSwapOrUnswapPath);
+    const isEthUnwrap = isETHtoWrapped(ethSwapOrUnswapPath);
+
+    if (
+      isSomeBalanceIsEmpty ||
+      isSomeTokenNotSelected ||
+      !isWrapEth ||
+      !isEthUnwrap
+    ) {
+      return {
+        tokenA: false,
+        tokenB: false
+      };
+    }
+
+    return {
+      tokenA: !_refExactGetter,
+      tokenB: _refExactGetter
+    };
+  }, [_refExactGetter, selectedTokens, selectedTokensAmount]);
+
+  return { resolveBottomSheetData, isEstimatedToken };
 }

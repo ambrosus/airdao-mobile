@@ -13,8 +13,12 @@ import {
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
-  const { latestSelectedTokens, isExactInRef, uiBottomSheetInformation } =
-    useSwapContextSelector();
+  const {
+    latestSelectedTokens,
+    isExactInRef,
+    uiBottomSheetInformation,
+    isReversedTokens
+  } = useSwapContextSelector();
 
   const isMultiHopSwap = useMemo(() => {
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
@@ -36,7 +40,11 @@ export const PreviewInformation = () => {
   const tokensSymbols = useMemo(() => {
     const sellTokenSymbol =
       latestSelectedTokens.current[
-        isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+        isReversedTokens
+          ? FIELD.TOKEN_A
+          : isExactInRef.current
+          ? FIELD.TOKEN_A
+          : FIELD.TOKEN_B
       ]?.symbol ?? '';
 
     const receiveTokenSymbol =
@@ -45,7 +53,7 @@ export const PreviewInformation = () => {
       ]?.symbol ?? '';
 
     return { sellTokenSymbol, receiveTokenSymbol };
-  }, [isExactInRef, latestSelectedTokens]);
+  }, [isExactInRef, isReversedTokens, latestSelectedTokens]);
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;
@@ -65,7 +73,13 @@ export const PreviewInformation = () => {
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
-        <Text>{t('swap.bottom.sheet.min.received')}</Text>
+        <Text>
+          {t(
+            isReversedTokens
+              ? 'swap.bottom.sheet.max.sold'
+              : 'swap.bottom.sheet.min.received'
+          )}
+        </Text>
 
         <RightSideRowItem>
           {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokensSymbols.receiveTokenSymbol}`}

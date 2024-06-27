@@ -16,11 +16,13 @@ export const SwapReverseTokens = () => {
   const { onReverseSelectedTokens } = useSwapSelectTokens();
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
 
-  const { setIsExactIn, selectedTokens } = useSwapContextSelector();
+  const { setIsExactIn, selectedTokens, setIsReversedTokens } =
+    useSwapContextSelector();
 
   const onReverseSelectedTokensPress = useCallback(() => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
     setIsExactIn((prevState) => !prevState);
+    setIsReversedTokens((prevState) => !prevState);
     onReverseSelectedTokens();
 
     if (TOKEN_A && TOKEN_B) {
@@ -32,6 +34,7 @@ export const SwapReverseTokens = () => {
     onReverseSelectedTokens,
     selectedTokens,
     setIsExactIn,
+    setIsReversedTokens,
     updateReceivedTokensOutput
   ]);
 

@@ -209,9 +209,14 @@ export function useSwapActions() {
       TOKEN_B?.address
     ]);
 
-    if (isETHtoWrapped(path)) {
+    const ethSwapOrUnswapPath = [TOKEN_A?.address, TOKEN_B?.address] as [
+      string,
+      string
+    ];
+
+    if (isETHtoWrapped(ethSwapOrUnswapPath)) {
       return await wrapETH(amountToSell, signer);
-    } else if (isWrappedToETH(path)) {
+    } else if (isWrappedToETH(ethSwapOrUnswapPath)) {
       return await unwrapETH(amountToSell, signer);
     } else if (path[0] === multiRouteAddresses.AMB) {
       const excludeNativeETH = wrapNativeAddress(path);

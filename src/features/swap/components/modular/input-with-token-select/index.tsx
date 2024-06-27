@@ -13,16 +13,21 @@ import { StringUtils } from '@utils/string';
 
 interface InputWithTokenSelectProps {
   readonly type: SelectedTokensKeys;
+  readonly estimated: boolean;
 }
 
-export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
+export const InputWithTokenSelect = ({
+  type,
+  estimated
+}: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
-  const { selectedTokensAmount, setLastChangedInput } =
+  const { selectedTokensAmount, setLastChangedInput, setIsReversedTokens } =
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
   const onChangeTokenAmount = (value: string) => {
     setLastChangedInput(type);
+    setIsReversedTokens(false);
     let finalValue = StringUtils.formatNumberInput(value);
     finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
     onChangeSelectedTokenAmount(type, finalValue);
@@ -32,7 +37,9 @@ export const InputWithTokenSelect = ({ type }: InputWithTokenSelectProps) => {
 
   return (
     <View style={styles.wrapper}>
-      <Text>{label}</Text>
+      <Text>
+        {label} {estimated && `(${t('swap.label.estimated')})`}
+      </Text>
       <View style={styles.upperRow}>
         <TextInput
           value={selectedTokensAmount[type]}

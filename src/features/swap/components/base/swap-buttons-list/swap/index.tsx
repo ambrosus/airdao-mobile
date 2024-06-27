@@ -5,11 +5,7 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { styles } from '../styles';
 import { useSwapContextSelector } from '@features/swap/context';
-import {
-  executeSwapPath,
-  isETHtoWrapped,
-  isWrappedToETH
-} from '@features/swap/utils';
+import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
 
 interface SwapButtonProps {
   isProcessingSwap: boolean;
@@ -21,27 +17,21 @@ export const SwapButton = ({
   onCompleteMultiStepSwap
 }: SwapButtonProps) => {
   const { t } = useTranslation();
-  const { selectedTokens, isExactInRef } = useSwapContextSelector();
+  const { selectedTokens } = useSwapContextSelector();
 
   const buttonActionString = useMemo(() => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
-    const isExactIn = isExactInRef.current;
 
     if (TOKEN_A && TOKEN_B) {
-      const path = executeSwapPath(isExactIn, [
-        TOKEN_A.address,
-        TOKEN_B.address
-      ]);
-
-      if (isETHtoWrapped(path)) {
-        return 'Wrap';
-      } else if (isWrappedToETH(path)) {
-        return 'Unwrap';
+      if (isETHtoWrapped([TOKEN_A.address, TOKEN_B.address])) {
+        return t('swap.button.wrap');
+      } else if (isWrappedToETH([TOKEN_A.address, TOKEN_B.address])) {
+        return t('swap.button.unwrap');
       }
     }
 
     return t('swap.button.swap');
-  }, [t, isExactInRef, selectedTokens]);
+  }, [t, selectedTokens]);
 
   return (
     <PrimaryButton

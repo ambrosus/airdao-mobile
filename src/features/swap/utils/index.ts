@@ -5,5 +5,6 @@ export * from './wrap-native-address';
 export * from './path';
 export * from './provider-fee';
 export * from './price-impact';
+export * from './token-plate';
 
 export { SwapStringUtils } from './transformers';

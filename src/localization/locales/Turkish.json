@@ -356,12 +356,15 @@
   "swap.status.error.desc": "{{AMOUNT_A}} {{SYMBOL_A}}'nin {{SYMBOL_B}}'ye takası tamamlanamadı.",
   "swap.bottom.sheet.heading": "Takas yapmaya hazır mısınız?,",
   "swap.bottom.sheet.min.received": "Minimum alacağınız",
+  "swap.bottom.sheet.max.sold": "Maksimum satılan",
   "swap.bottom.sheet.impact": "Fiyat etkisi",
   "swap.bottom.sheet.lpfee": "Ağ ücreti",
   "swap.button.approve": "Onayla {{symbol}}",
   "swap.button.swap": "Şimdi takas et",
   "swap.button.impact.high": "Fiyat etkisi çok yüksek",
   "swap.button.swap.anyway": "Yine de takas et",
+  "swap.button.wrap": "Sar",
+  "swap.button.unwrap": "Aç",
   "swap.button.go.wallet": "Cüzdana git",
   "swap.button.details": "Detayları göster",
   "swap.settings.heading": "İşlem ayarları",
@@ -370,5 +373,6 @@
   "swap.settings.expert": "Uzman modunu değiştir",
   "swap.settings.multihops": "Çoklu atlamaları devre dışı bırak",
   "swap.settings.label.minutes": "dakika",
-  "swap.status.error.heading": "Takas Başarısız"
+  "swap.status.error.heading": "Takas Başarısız",
+  "swap.label.estimated": "tahmini"
 }
