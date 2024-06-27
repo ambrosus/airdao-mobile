@@ -138,7 +138,8 @@
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
-  "common.status.pending": "Başarısız oldu",
+  "common.status.pending": "Beklemede",
+  "common.status.failed": "Başarısız oldu",
   "common.status.not.started": "Başlamadı",
   "common.status.success": "Başarılı",
 
