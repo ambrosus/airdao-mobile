@@ -21,8 +21,8 @@
       "swap": "Swap",
       "send": "Gönder",
       "receive": "Al",
-      "bridge": "Bridge",
-      "stake": "Stake"
+      "bridge": "Köprü",
+      "stake": "Bahis"
     }
   },
 
@@ -121,6 +121,7 @@
   "common.notification.transaction-alert": "İşlem Bildirimi",
   "common.notification.wallet-update": "Cüzdan Bildirimi",
   "common.please.try.again": "Lütfen tekrar deneyin",
+  "common.try.again": "Tekrar deneyin",
   "common.share.transaction": "İşlemi paylaş",
   "common.status": "Durum",
   "common.today": "Bugün",
@@ -137,6 +138,10 @@
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
+  "common.status.pending": "Beklemede",
+  "common.status.failed": "Başarısız oldu",
+  "common.status.not.started": "Başlamadı",
+  "common.status.success": "Başarılı",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -344,5 +349,36 @@
   "wallet.my.assets": "Varlıklarım",
   "wallet.picker.select": "Cüzdan seç",
 
-  "bridge.select.network": "!!!Select network"
+  "bridge.history.heading": "İşlem geçmişi",
+  "bridge.transaction.details.description": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacaktır.",
+  "bridge.history.transaction.stage": "AŞAMA",
+  "bridge.transaction.processing": "İşlem işleniyor",
+  "bridge.transaction.approval": "Onay bekleniyor",
+  "bridge.transaction.confirmations": "Onaylar",
+  "bridge.transaction.fee": "Köprü ücreti",
+  "bridge.transaction.to": "{{networkTo}}'a",
+  "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
+  "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
+
+  "bridge.select.network": "Ağ Seç ",
+  "bridge.select.assets": "Varlıklarım Seç ",
+  "bridge.amount.to.bridge": "Köprülemek için Miktar ",
+  "bridge.amount.network.fee": "Ağ Ücreti ",
+
+  "bridge.preview.title": "Önizleme ",
+  "bridge.preview.receive": "Alacağınız",
+  "bridge.preview.bridge.fee": "Köprü Ücreti",
+  "bridge.preview.network.fee": "Ağ Ücreti",
+  "bridge.preview.gas.fee": "Gaz Ücreti",
+  "bridge.preview.button": "{network}'a Fon Gönder",
+  "bridge.preview.button.max": "Maksimum",
+  "bridge.insufficient.funds": "Yetersiz bakiye",
+
+  "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
+
+  "bridge.transfer.failed.header": "!!Bridge Transaction Failed",
+  "bridge.transfer.failed.sub.header": "!!An error occurred while processing your transaction.",
+  "bridge.transfer.failed.to.wallet.btn": "!!Go to wallet",
+  "bridge.amount.less.then.fee": "!!!Amount less then fee",
+  "bridge.unknown.error": "!!!Unknown error"
 }

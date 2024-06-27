@@ -5,6 +5,7 @@ import { Swap } from './Swap';
 import { Send } from './Send';
 import { Receive } from './Receive';
 import { Staking } from './Staking';
+import { Bridge } from './Bridge';
 import { Token } from '@models';
 import { AccountDBModel } from '@database';
 
@@ -25,6 +26,7 @@ export const AccountActions = (props: AccountActionsProps) => {
       <Send address={address} token={token} />
       <Receive address={address} />
       <Staking />
+      <Bridge />
     </Row>
   );
 };
