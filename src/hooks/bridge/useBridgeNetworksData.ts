@@ -120,7 +120,8 @@ export const useBridgeNetworksData = ({
         name: t('bridge.preview.receive'),
         crypto: {
           amount: bridgeFee?.amount ?? BigNumber.from(0),
-          decimals: selectedTokenDecimals
+          decimals: selectedTokenDecimals,
+          cutToPrecision: 2
         },
         usdAmount: receiveUSDData,
         symbol: selectedTokenFrom.symbol

@@ -13,10 +13,12 @@ import { useBridgeNetworksData } from '@hooks/bridge/useBridgeNetworksData';
 import { formatUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { BridgeNetworksSelected } from '@components/templates/Bridge/BridgeNetworksSelected/BridgeNetworksSelected';
+import { DECIMAL_LIMIT } from '@constants/variables';
 
 interface CryptoAmount {
   amount: BigNumber;
   decimals: number;
+  cutToPrecision?: number;
 }
 
 interface DataToPreviewModel {
@@ -56,12 +58,11 @@ export const BottomSheetBridgePreview = forwardRef<
       dataToPreview
         .filter((item) => item.symbol === selectedToken.symbol)
         .forEach((item) => (withdrawSum = withdrawSum.add(item.crypto.amount)));
-      const isAmountGrater = isAmountGraterThenBalance({
+      return isAmountGraterThenBalance({
         balance: selectedToken.balance,
         amount: withdrawSum,
         token: feeToken
       });
-      return isAmountGrater;
     } else {
       return false;
     }
@@ -84,7 +85,7 @@ export const BottomSheetBridgePreview = forwardRef<
   const renderItem = (item: DataToPreviewModel) => {
     const amountToRender = NumberUtils.limitDecimalCount(
       formatUnits(item.crypto.amount, item.crypto.decimals),
-      2
+      item.crypto.cutToPrecision ?? DECIMAL_LIMIT.CRYPTO
     );
 
     return (
