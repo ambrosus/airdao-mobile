@@ -69,7 +69,7 @@ export function useSwapInterface() {
         );
 
         const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMinimumReceivedAmount
+          bnMaximumReceivedAmount
         );
 
         const minimumReceivedAmount = !_refExactGetter
