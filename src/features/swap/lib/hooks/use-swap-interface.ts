@@ -16,7 +16,7 @@ import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 
 export function useSwapInterface() {
-  const { setUiBottomSheetInformation, isReversedTokens, _refExactGetter } =
+  const { setUiBottomSheetInformation, _refExactGetter } =
     useSwapContextSelector();
 
   const { onReviewSwapPreview, onReviewSwapDismiss } =
@@ -40,15 +40,21 @@ export function useSwapInterface() {
       const priceImpact = await uiPriceImpactGetter();
       const bnMinimumReceivedAmount = minimumAmountOut(
         `${settings.current.slippageTolerance}%`,
-        ethers.utils.parseUnits(tokenToReceive.AMOUNT)
+        ethers.utils.parseUnits(
+          _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
+        )
       );
 
       const bnMaximumReceivedAmount = maximumAmountOut(
         `${settings.current.slippageTolerance}%`,
-        ethers.utils.parseUnits(tokenToReceive.AMOUNT)
+        ethers.utils.parseUnits(
+          _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
+        )
       );
 
-      const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
+      const liquidityProviderFee = realizedLPFee(
+        _refExactGetter ? tokenToSell.AMOUNT : tokenToReceive.AMOUNT
+      );
       const allowance = await checkAllowance();
 
       if (
@@ -63,13 +69,12 @@ export function useSwapInterface() {
         );
 
         const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMaximumReceivedAmount
+          bnMinimumReceivedAmount
         );
 
-        const minimumReceivedAmount =
-          isReversedTokens || !_refExactGetter
-            ? receivedMaxAmountOut
-            : receivedAmountOut;
+        const minimumReceivedAmount = !_refExactGetter
+          ? receivedMaxAmountOut
+          : receivedAmountOut;
 
         setUiBottomSheetInformation({
           priceImpact,
@@ -97,7 +102,6 @@ export function useSwapInterface() {
     tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
     checkAllowance,
-    isReversedTokens,
     onReviewSwapDismiss,
     _refExactGetter
   ]);
@@ -112,13 +116,13 @@ export function useSwapInterface() {
       tokenToReceive.AMOUNT === emptyInputValue;
 
     const ethSwapOrUnswapPath = [
-      tokenToSell.TOKEN?.address,
-      tokenToReceive.TOKEN?.address
-    ] as [string, string];
+      tokenToSell.TOKEN?.address ?? '',
+      tokenToReceive.TOKEN?.address ?? ''
+    ];
 
     const isWrapEth = isWrappedToETH(ethSwapOrUnswapPath);
     const isEthUnwrap = isETHtoWrapped(ethSwapOrUnswapPath);
-    const combinedSwapOrUnwrapETH = isWrapEth && isEthUnwrap;
+    const combinedSwapOrUnwrapETH = isWrapEth || isEthUnwrap;
 
     if (
       isSomeBalanceIsEmpty ||

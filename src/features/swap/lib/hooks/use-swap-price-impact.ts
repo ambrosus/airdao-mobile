@@ -19,12 +19,8 @@ import {
 import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapPriceImpact() {
-  const {
-    latestSelectedTokens,
-    latestSelectedTokensAmount,
-    isExactInRef,
-    isReversedTokensRef
-  } = useSwapContextSelector();
+  const { latestSelectedTokens, latestSelectedTokensAmount, isExactInRef } =
+    useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapActions();
   const { settings } = useSwapSettings();
@@ -127,7 +123,7 @@ export function useSwapPriceImpact() {
             ];
 
             const intermediateAmount = await getAmountsOut({
-              path: intermediatePath as [string, string],
+              path: intermediatePath,
               amountToSell: bnAmountToSell
             });
 
@@ -144,7 +140,7 @@ export function useSwapPriceImpact() {
             );
 
             const finalAmount = await getAmountsOut({
-              path: finalPath as [string, string],
+              path: finalPath,
               amountToSell: intermediateAmount
             });
 
@@ -223,20 +219,12 @@ export function useSwapPriceImpact() {
       !isExactIn &&
       isMuliRouteBONDSwap
     ) {
-      const amountToSell = isReversedTokensRef.current
-        ? AMOUNT_A
-        : !isExactInRef.current
-        ? AMOUNT_A
-        : AMOUNT_B;
-      const amountToReceive = !isExactInRef.current ? AMOUNT_B : AMOUNT_A;
+      const amountToSell = AMOUNT_A;
+      const amountToReceive = AMOUNT_B;
       return await singleHopImpactGetter(amountToSell, amountToReceive);
     } else {
-      const amountToSell = isReversedTokensRef.current
-        ? AMOUNT_A
-        : isExactInRef.current
-        ? AMOUNT_A
-        : AMOUNT_B;
-      const amountToReceive = isExactInRef.current ? AMOUNT_B : AMOUNT_A;
+      const amountToSell = AMOUNT_A;
+      const amountToReceive = AMOUNT_B;
       return await singleHopImpactGetter(amountToSell, amountToReceive);
     }
   }, [
@@ -245,7 +233,6 @@ export function useSwapPriceImpact() {
     isExactInRef,
     settings,
     multiHopImpactGetter,
-    isReversedTokensRef,
     singleHopImpactGetter
   ]);
 

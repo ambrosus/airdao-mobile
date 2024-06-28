@@ -8,10 +8,9 @@ import {
   SwapErrorImpactButton,
   ApprovalRequiredButton,
   SwapButton
-} from '../../base/swap-buttons-list';
+} from '@features/swap/components/base/swap-buttons-list';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { isWrappedToETH } from '@features/swap/utils';
 
 export const SubmitSwapActions = () => {
   const navigation: HomeNavigationProp = useNavigation();
@@ -21,7 +20,6 @@ export const SubmitSwapActions = () => {
     isProcessingSwap,
     isIncreasingAllowance,
     setIsIncreassingAllowance,
-    _refExactGetter,
     selectedTokens,
     selectedTokensAmount
   } = useSwapContextSelector();
@@ -48,30 +46,15 @@ export const SubmitSwapActions = () => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
     const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
 
-    const ethSwapOrUnswapPath = [TOKEN_A?.address, TOKEN_B?.address] as [
-      string,
-      string
-    ];
-
-    const isWrapEth = isWrappedToETH(ethSwapOrUnswapPath);
-
     const routeParams = {
-      AMOUNT_A: isWrapEth ? AMOUNT_A : _refExactGetter ? AMOUNT_A : AMOUNT_B,
-      AMOUNT_B: isWrapEth ? AMOUNT_B : _refExactGetter ? AMOUNT_B : AMOUNT_A,
-      SYMBOL_A: isWrapEth
-        ? TOKEN_A?.symbol
-        : _refExactGetter
-        ? TOKEN_A?.symbol
-        : TOKEN_B?.symbol,
-      SYMBOL_B: isWrapEth
-        ? TOKEN_B?.symbol
-        : _refExactGetter
-        ? TOKEN_B?.symbol
-        : TOKEN_A?.symbol
+      AMOUNT_A,
+      AMOUNT_B: AMOUNT_B,
+      SYMBOL_A: TOKEN_A?.symbol,
+      SYMBOL_B: TOKEN_B?.symbol
     };
 
     return routeParams as any;
-  }, [_refExactGetter, selectedTokens, selectedTokensAmount]);
+  }, [selectedTokens, selectedTokensAmount]);
 
   const onCompleteMultiStepSwap = useCallback(async () => {
     const routeParams = prepareRouteParams();

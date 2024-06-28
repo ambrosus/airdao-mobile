@@ -1,16 +1,9 @@
 import { SwapToken } from '../types';
 
-export function resolvePlateSymbol(
-  reversed: boolean,
-  isExactIn: boolean,
-  symbolA: string,
-  symbolB: string
-) {
-  const reversedPath = reversed ? symbolA : symbolB;
-
+export function resolvePlateSymbol(symbolA: string, symbolB: string) {
   return {
-    TOKEN_A: reversed ? reversedPath : isExactIn ? symbolA : symbolB,
-    TOKEN_B: reversed ? reversedPath : !isExactIn ? symbolA : symbolB
+    TOKEN_A: symbolA,
+    TOKEN_B: symbolB
   };
 }
 

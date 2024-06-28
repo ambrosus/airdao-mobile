@@ -3,10 +3,9 @@ import { Text, Row } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { useSwapActions } from '@features/swap/lib/hooks';
+import { useSwapActions, useSwapTokens } from '@features/swap/lib/hooks';
 import {
   SwapStringUtils,
-  executeSwapPath,
   plateVisibility,
   resolvePlateSymbol
 } from '@features/swap/utils';
@@ -18,43 +17,35 @@ export const TokenInfoPlate = () => {
     selectedTokens,
     selectedTokensAmount,
     _refExactGetter,
-    _refSettingsGetter,
-    isReversedTokens
+    _refSettingsGetter
   } = useSwapContextSelector();
 
   const { getOppositeReceivedTokenAmount } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
 
+  const { tokenToSell, tokenToReceive } = useSwapTokens();
+
   const symbols = useMemo(() => {
     const [symbolA, symbolB] = [
-      selectedTokens.TOKEN_A?.symbol,
-      selectedTokens.TOKEN_B?.symbol
+      tokenToSell.TOKEN?.symbol,
+      tokenToReceive.TOKEN?.symbol
     ];
 
     if (symbolA && symbolB) {
-      return resolvePlateSymbol(
-        isReversedTokens,
-        _refExactGetter,
-        symbolA,
-        symbolB
-      );
+      return resolvePlateSymbol(symbolA, symbolB);
     }
-  }, [_refExactGetter, isReversedTokens, selectedTokens]);
+  }, [tokenToReceive.TOKEN?.symbol, tokenToSell.TOKEN?.symbol]);
 
   useEffect(() => {
     (async () => {
       const { TOKEN_A, TOKEN_B } = selectedTokens;
 
       if (TOKEN_A && TOKEN_B) {
-        const reversedPath = isReversedTokens
-          ? [TOKEN_B.address, TOKEN_A.address]
-          : [TOKEN_A.address, TOKEN_B.address];
-
-        const path = executeSwapPath(
-          _refExactGetter,
-          reversedPath as [string, string]
-        );
+        const path = [
+          tokenToSell.TOKEN?.address ?? '',
+          tokenToReceive.TOKEN?.address ?? ''
+        ];
 
         const bnAmount = await getOppositeReceivedTokenAmount('1', path);
 
@@ -70,7 +61,8 @@ export const TokenInfoPlate = () => {
     _refSettingsGetter,
     getOppositeReceivedTokenAmount,
     selectedTokens,
-    isReversedTokens
+    tokenToReceive.TOKEN,
+    tokenToSell.TOKEN
   ]);
 
   const TokenUSDPrice = useUSDPrice(1, symbols?.TOKEN_A as CryptoCurrencyCode);

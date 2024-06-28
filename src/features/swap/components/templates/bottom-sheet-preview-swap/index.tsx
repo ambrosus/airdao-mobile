@@ -23,7 +23,7 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
 
     const isWrapOrUnwrapETH = useMemo(() => {
       const { TOKEN_A, TOKEN_B } = selectedTokens;
-      const path = [TOKEN_A?.address, TOKEN_B?.address] as [string, string];
+      const path = [TOKEN_A?.address, TOKEN_B?.address];
 
       return isETHtoWrapped(path) || isWrappedToETH(path);
     }, [selectedTokens]);

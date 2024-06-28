@@ -4,7 +4,7 @@ import { environment } from '@utils/environment';
 import { SwapToken } from '../types';
 import { multiRouteAddresses } from '.';
 
-export function isNativeWrapped(path: [string, string]) {
+export function isNativeWrapped(path: string[]) {
   const wrappedPath = Config.SWAP_TOKENS.find(
     (token: SwapToken) => token.symbol === 'SAMB'
   )?.address;
@@ -14,7 +14,7 @@ export function isNativeWrapped(path: [string, string]) {
   return isPathSameAddress;
 }
 
-export function wrapNativeAddress(path: [string, string]): [string, string] {
+export function wrapNativeAddress(path: string[]): [string, string] {
   const nativeAddress = SWAP_SUPPORTED_TOKENS.default[environment].address;
 
   const replacementAddress =
@@ -26,13 +26,13 @@ export function wrapNativeAddress(path: [string, string]): [string, string] {
   ) as [string, string];
 }
 
-export function isETHtoWrapped(path: [string | undefined, string | undefined]) {
+export function isETHtoWrapped(path: string[]) {
   return (
     path[0] === multiRouteAddresses.AMB && path[1] === multiRouteAddresses.SAMB
   );
 }
 
-export function isWrappedToETH(path: [string | undefined, string | undefined]) {
+export function isWrappedToETH(path: string[]) {
   return (
     path[0] === multiRouteAddresses.SAMB && path[1] === multiRouteAddresses.AMB
   );

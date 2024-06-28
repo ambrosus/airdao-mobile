@@ -16,7 +16,6 @@ export function useSwapFieldsHandler() {
   } = useSwapContextSelector();
 
   const updateReceivedTokensOutput = useCallback(async () => {
-    const key = isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B;
     const oppositeKey = isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
 
@@ -27,7 +26,10 @@ export function useSwapFieldsHandler() {
       TOKEN_B.address
     ]);
 
-    const amountToSell = latestSelectedTokensAmount.current[key];
+    const amountToSell =
+      latestSelectedTokensAmount.current[
+        isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+      ];
 
     const bnAmountToReceive = await getOppositeReceivedTokenAmount(
       amountToSell,

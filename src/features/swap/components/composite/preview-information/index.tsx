@@ -9,7 +9,7 @@ import { useSwapTokens } from '@features/swap/lib/hooks';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
-  const { latestSelectedTokens, uiBottomSheetInformation, isReversedTokens } =
+  const { latestSelectedTokens, uiBottomSheetInformation, _refExactGetter } =
     useSwapContextSelector();
 
   const { tokenToSell, tokenToReceive, isMultiHopSwap } = useSwapTokens();
@@ -29,19 +29,29 @@ export const PreviewInformation = () => {
     }
   }, [uiBottomSheetInformation]);
 
+  const symbol = useMemo(() => {
+    return _refExactGetter
+      ? tokenToReceive.TOKEN?.symbol
+      : tokenToSell.TOKEN?.symbol;
+  }, [
+    _refExactGetter,
+    tokenToReceive.TOKEN?.symbol,
+    tokenToSell.TOKEN?.symbol
+  ]);
+
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <Text>
           {t(
-            isReversedTokens
+            !_refExactGetter
               ? 'swap.bottom.sheet.max.sold'
               : 'swap.bottom.sheet.min.received'
           )}
         </Text>
 
         <RightSideRowItem>
-          {`${uiBottomSheetInformation.minimumReceivedAmount} ${tokenToReceive.TOKEN?.symbol}`}
+          {`${uiBottomSheetInformation.minimumReceivedAmount} ${symbol}`}
         </RightSideRowItem>
       </Row>
 

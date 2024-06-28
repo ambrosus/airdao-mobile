@@ -7,47 +7,36 @@ import {
 import { useMemo } from 'react';
 
 export function useSwapTokens() {
-  const {
-    selectedTokens,
-    selectedTokensAmount,
-    isReversedTokens,
-    _refExactGetter,
-    isExactInRef
-  } = useSwapContextSelector();
+  const { selectedTokens, selectedTokensAmount, isExactInRef } =
+    useSwapContextSelector();
 
   const tokenToSell = useMemo(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
-
-    const token = _refExactGetter ? TOKEN_A : TOKEN_B;
-    const amount = _refExactGetter ? AMOUNT_A : AMOUNT_B;
+    const { TOKEN_A } = selectedTokens;
+    const { TOKEN_A: AMOUNT_A } = selectedTokensAmount;
 
     return {
-      TOKEN: isReversedTokens ? TOKEN_A : token,
-      AMOUNT: isReversedTokens ? AMOUNT_A : amount
+      TOKEN: TOKEN_A,
+      AMOUNT: AMOUNT_A
     };
-  }, [selectedTokens, selectedTokensAmount, isReversedTokens, _refExactGetter]);
+  }, [selectedTokens, selectedTokensAmount]);
 
   const tokenToReceive = useMemo(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
-
-    const token = _refExactGetter ? TOKEN_B : TOKEN_A;
-    const amount = _refExactGetter ? AMOUNT_B : AMOUNT_A;
+    const { TOKEN_B } = selectedTokens;
+    const { TOKEN_B: AMOUNT_B } = selectedTokensAmount;
 
     return {
-      TOKEN: token,
-      AMOUNT: amount
+      TOKEN: TOKEN_B,
+      AMOUNT: AMOUNT_B
     };
-  }, [_refExactGetter, selectedTokens, selectedTokensAmount]);
+  }, [selectedTokens, selectedTokensAmount]);
 
   const tokenToSellKey = useMemo(() => {
-    return isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B;
-  }, [isExactInRef]);
+    return FIELD.TOKEN_A;
+  }, []);
 
   const tokenToReceiveKey = useMemo(() => {
-    return isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
-  }, [isExactInRef]);
+    return FIELD.TOKEN_B;
+  }, []);
 
   const executedTokensAddresses = useMemo(() => {
     const [addressA, addressB] = [

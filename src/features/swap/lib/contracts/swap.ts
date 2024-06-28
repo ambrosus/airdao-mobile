@@ -42,7 +42,7 @@ export async function getAmountsOut({
 
 export async function swapExactETHForTokens(
   amountToSell: string,
-  path: [string, string],
+  path: string[],
   signer: Wallet,
   slippageTolerance: string,
   deadline: string
@@ -80,7 +80,7 @@ export async function swapExactETHForTokens(
 
 export async function swapMultiHopExactTokensForTokens(
   amountToSell: string,
-  path: [string, string],
+  path: string[],
   signer: Wallet,
   slippageTolerance: string,
   deadline: string
@@ -114,7 +114,7 @@ export async function swapMultiHopExactTokensForTokens(
 
 export async function swapExactTokensForTokens(
   amountToSell: string,
-  path: [string, string],
+  path: string[],
   signer: Wallet,
   slippageTolerance: string,
   deadline: string
@@ -152,7 +152,7 @@ export async function swapExactTokensForTokens(
 
 export async function swapExactTokensForETH(
   amountToSell: string,
-  path: [string, string],
+  path: string[],
   signer: Wallet,
   slippageTolerance: string,
   deadline: string
