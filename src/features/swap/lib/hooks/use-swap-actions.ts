@@ -20,10 +20,10 @@ import {
   wrapNativeAddress,
   isNativeWrapped,
   isMultiRouteWithUSDCFirst,
-  isMultiRouteWithBONDFirst,
   multiRouteAddresses,
   isETHtoWrapped,
-  isWrappedToETH
+  isWrappedToETH,
+  executeSwapPath
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -144,31 +144,16 @@ export function useSwapActions() {
       if (amountToSell === '' || amountToSell === '0') return;
       const [addressFrom, addressTo] = path;
 
+      const route = executeSwapPath(isExactInRef.current, path);
+
       const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
         [addressFrom, addressTo].join()
       );
 
-      const isMuliRouteBONDSwap = isMultiRouteWithBONDFirst.has(
-        [addressFrom, addressTo].join()
-      );
-
-      if (
-        settings.current.multihops &&
-        isExactInRef.current &&
-        isMuliRouteUSDCSwap
-      ) {
+      if (settings.current.multihops && isMuliRouteUSDCSwap) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
-      } else if (
-        settings.current.multihops &&
-        !isExactInRef.current &&
-        isMuliRouteBONDSwap
-      ) {
-        return await getTokenAmountOutWithMultiRoute(amountToSell, [
-          multiRouteAddresses.BOND,
-          multiRouteAddresses.USDC
-        ]);
       }
-      return await getTokenAmountOut(amountToSell, path);
+      return await getTokenAmountOut(amountToSell, route);
     },
     [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef, settings]
   );
@@ -186,18 +171,16 @@ export function useSwapActions() {
     ].join();
 
     const isMultiRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(tokenAddresses);
-    const isMultiRouteBONDSwap = isMultiRouteWithBONDFirst.has(tokenAddresses);
 
     const amountToSell = tokenToSell.AMOUNT;
 
-    const path = [
+    const path = executeSwapPath(true, [
       tokenToSell.TOKEN?.address ?? '',
       tokenToReceive.TOKEN?.address ?? ''
-    ];
+    ]);
 
     const excludeNativeETH = wrapNativeAddress(path);
     const { slippageTolerance, deadline, multihops } = settings.current;
-    const isExactIn = isExactInRef.current;
 
     if (isETHtoWrapped(path)) {
       return await wrapETH(amountToSell, signer);
@@ -227,17 +210,7 @@ export function useSwapActions() {
       );
     }
 
-    if (multihops && isExactIn && isMultiRouteUSDCSwap) {
-      return await swapMultiHopExactTokensForTokens(
-        amountToSell,
-        path,
-        signer,
-        slippageTolerance,
-        deadline
-      );
-    }
-
-    if (multihops && !isExactIn && isMultiRouteBONDSwap) {
+    if (multihops && isMultiRouteUSDCSwap) {
       return await swapMultiHopExactTokensForTokens(
         amountToSell,
         path,
@@ -255,7 +228,6 @@ export function useSwapActions() {
       deadline
     );
   }, [
-    isExactInRef,
     selectedAccount?._raw,
     settings,
     tokenToReceive.TOKEN?.address,
@@ -277,6 +249,7 @@ export function useSwapActions() {
     checkAllowance,
     setAllowance,
     getOppositeReceivedTokenAmount,
+    getTokenAmountOut,
     hasWrapNativeToken,
     swapTokens
   };

@@ -26,13 +26,13 @@ export function wrapNativeAddress(path: string[]): [string, string] {
   ) as [string, string];
 }
 
-export function isETHtoWrapped(path: string[]) {
+export function isETHtoWrapped(path: Array<string | undefined>) {
   return (
     path[0] === multiRouteAddresses.AMB && path[1] === multiRouteAddresses.SAMB
   );
 }
 
-export function isWrappedToETH(path: string[]) {
+export function isWrappedToETH(path: Array<string | undefined>) {
   return (
     path[0] === multiRouteAddresses.SAMB && path[1] === multiRouteAddresses.AMB
   );

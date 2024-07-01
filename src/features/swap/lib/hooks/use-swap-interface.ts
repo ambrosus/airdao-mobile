@@ -52,9 +52,7 @@ export function useSwapInterface() {
         )
       );
 
-      const liquidityProviderFee = realizedLPFee(
-        _refExactGetter ? tokenToSell.AMOUNT : tokenToReceive.AMOUNT
-      );
+      const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
       const allowance = await checkAllowance();
 
       if (
@@ -110,7 +108,6 @@ export function useSwapInterface() {
     const emptyInputValue = '' && '0';
 
     const isSomeTokenNotSelected = !tokenToSell.TOKEN || !tokenToReceive.TOKEN;
-
     const isSomeBalanceIsEmpty =
       tokenToSell.AMOUNT === emptyInputValue ||
       tokenToReceive.AMOUNT === emptyInputValue;

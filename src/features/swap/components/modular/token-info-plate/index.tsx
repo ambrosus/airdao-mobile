@@ -20,7 +20,7 @@ export const TokenInfoPlate = () => {
     _refSettingsGetter
   } = useSwapContextSelector();
 
-  const { getOppositeReceivedTokenAmount } = useSwapActions();
+  const { getTokenAmountOut } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
 
@@ -47,7 +47,7 @@ export const TokenInfoPlate = () => {
           tokenToReceive.TOKEN?.address ?? ''
         ];
 
-        const bnAmount = await getOppositeReceivedTokenAmount('1', path);
+        const bnAmount = await getTokenAmountOut('1', path);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -59,7 +59,7 @@ export const TokenInfoPlate = () => {
   }, [
     _refExactGetter,
     _refSettingsGetter,
-    getOppositeReceivedTokenAmount,
+    getTokenAmountOut,
     selectedTokens,
     tokenToReceive.TOKEN,
     tokenToSell.TOKEN

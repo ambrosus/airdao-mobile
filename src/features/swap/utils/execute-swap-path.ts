@@ -1,6 +1,6 @@
 export function executeSwapPath(
   isExactIn: boolean,
-  path: [string | undefined, string | undefined]
+  path: Array<string | undefined>
 ): [string, string] {
   const [fromAddress, toAddress] = path;
 

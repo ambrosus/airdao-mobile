@@ -2,7 +2,6 @@ import { ethers } from 'ethers';
 import { useCallback } from 'react';
 import {
   isMultiRouteWithUSDCFirst,
-  isMultiRouteWithBONDFirst,
   multiRouteAddresses,
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
@@ -66,11 +65,8 @@ export function useSwapPriceImpact() {
       latestSelectedTokens.current as NonNullableSelectedTokensState;
 
     const amountToSell = isExactInRef.current ? AMOUNT_A : AMOUNT_B;
-
     const tokenAddresses = [TOKEN_A?.address, TOKEN_B?.address].join();
-
     const isMultiRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(tokenAddresses);
-    const isMultiRouteBONDSwap = isMultiRouteWithBONDFirst.has(tokenAddresses);
 
     const calculateImpact = async (
       intermediateToken: SwapToken,
@@ -174,15 +170,6 @@ export function useSwapPriceImpact() {
           ],
           amountToSell
         );
-      } else if (!isExactInRef.current && isMultiRouteBONDSwap) {
-        return await calculateImpact(
-          { name: 'SAMB', address: multiRouteAddresses.SAMB, symbol: 'SAMB' },
-          [
-            { name: 'BOND', address: multiRouteAddresses.BOND, symbol: 'BOND' },
-            { name: 'USDC', address: multiRouteAddresses.USDC, symbol: 'USDC' }
-          ],
-          amountToSell
-        );
       }
 
       return 0;
@@ -202,35 +189,19 @@ export function useSwapPriceImpact() {
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
     const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
       latestSelectedTokensAmount.current;
-    const isExactIn = isExactInRef.current;
 
     const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
       [TOKEN_A?.address, TOKEN_B?.address].join()
     );
 
-    const isMuliRouteBONDSwap = isMultiRouteWithBONDFirst.has(
-      [TOKEN_A?.address, TOKEN_B?.address].join()
-    );
-
-    if (settings.current.multihops && isExactIn && isMuliRouteUSDCSwap) {
+    if (settings.current.multihops && isMuliRouteUSDCSwap) {
       return await multiHopImpactGetter();
-    } else if (
-      settings.current.multihops &&
-      !isExactIn &&
-      isMuliRouteBONDSwap
-    ) {
-      const amountToSell = AMOUNT_A;
-      const amountToReceive = AMOUNT_B;
-      return await singleHopImpactGetter(amountToSell, amountToReceive);
     } else {
-      const amountToSell = AMOUNT_A;
-      const amountToReceive = AMOUNT_B;
-      return await singleHopImpactGetter(amountToSell, amountToReceive);
+      return await singleHopImpactGetter(AMOUNT_A, AMOUNT_B);
     }
   }, [
     latestSelectedTokens,
     latestSelectedTokensAmount,
-    isExactInRef,
     settings,
     multiHopImpactGetter,
     singleHopImpactGetter
