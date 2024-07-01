@@ -2,7 +2,7 @@ import Config from '@constants/config';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 import { environment } from '@utils/environment';
 import { SwapToken } from '../types';
-import { multiRouteAddresses } from '.';
+import { multiRouteAddresses } from './multi-route';
 
 export function isNativeWrapped(path: string[]) {
   const wrappedPath = Config.SWAP_TOKENS.find(
