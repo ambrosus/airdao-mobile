@@ -10,24 +10,26 @@ import {
 import { getAmountsOut } from '@features/swap/lib/contracts';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useAllLiquidityPools } from './use-all-liquidity-pools';
-import { useSwapActions } from './use-swap-actions';
-import {
-  NonNullableSelectedTokensState,
-  SwapToken
-} from '@features/swap/types';
+import { FIELD, SwapToken } from '@features/swap/types';
 import { useSwapSettings } from './use-swap-settings';
+import { useSwapTokens } from './use-swap-tokens';
+import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapPriceImpact() {
-  const { latestSelectedTokens, latestSelectedTokensAmount, isExactInRef } =
-    useSwapContextSelector();
+  const { isExactInRef } = useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
-  const { hasWrapNativeToken } = useSwapActions();
+  const { hasWrapNativeToken } = useSwapHelpers();
   const { settings } = useSwapSettings();
+  const { tokenToSell, tokenToReceive, tokensRoute } = useSwapTokens();
 
   const singleHopImpactGetter = useCallback(
     async (amountToSell: string, amountToReceive: string) => {
       if (!hasWrapNativeToken) {
-        const selectedTokens = latestSelectedTokens.current;
+        const selectedTokens = {
+          [FIELD.TOKEN_A]: tokenToSell.TOKEN,
+          [FIELD.TOKEN_B]: tokenToReceive.TOKEN
+        };
+
         const pool = getPairAddress(selectedTokens);
 
         if (pool && pool.pairAddress) {
@@ -54,18 +56,17 @@ export function useSwapPriceImpact() {
         }
       }
     },
-    [getPairAddress, getReserves, hasWrapNativeToken, latestSelectedTokens]
+    [
+      getPairAddress,
+      getReserves,
+      hasWrapNativeToken,
+      tokenToReceive.TOKEN,
+      tokenToSell.TOKEN
+    ]
   );
 
   const multiHopImpactGetter = useCallback(async () => {
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
-      latestSelectedTokensAmount.current;
-
-    const { TOKEN_A, TOKEN_B } =
-      latestSelectedTokens.current as NonNullableSelectedTokensState;
-
-    const amountToSell = isExactInRef.current ? AMOUNT_A : AMOUNT_B;
-    const tokenAddresses = [TOKEN_A?.address, TOKEN_B?.address].join();
+    const tokenAddresses = tokensRoute.join();
     const isMultiRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(tokenAddresses);
 
     const calculateImpact = async (
@@ -77,7 +78,7 @@ export function useSwapPriceImpact() {
         subtractRealizedLPFeeFromInput(amountToSell);
 
       const intermediatePool = getPairAddress({
-        TOKEN_A,
+        TOKEN_A: tokenToSell.TOKEN,
         TOKEN_B: intermediateToken
       });
       const finalPool = getPairAddress({
@@ -89,7 +90,7 @@ export function useSwapPriceImpact() {
         if (intermediatePool && intermediatePool.pairAddress) {
           const { reserveIn: interReserveIn, reserveOut: interReserveOut } =
             await getReserves(intermediatePool.pairAddress, {
-              TOKEN_A,
+              TOKEN_A: tokenToSell.TOKEN,
               TOKEN_B: intermediateToken
             });
 
@@ -110,9 +111,10 @@ export function useSwapPriceImpact() {
             );
 
             const intermediatePath = [
-              TOKEN_A?.address,
+              tokenToSell.TOKEN?.address,
               intermediateToken.address
-            ];
+            ] as [string, string];
+
             const finalPath = [
               intermediateToken.address,
               finalTokens[1].address
@@ -162,13 +164,14 @@ export function useSwapPriceImpact() {
 
     try {
       if (isExactInRef.current && isMultiRouteUSDCSwap) {
+        const _tokenToSell = tokenToSell.TOKEN as SwapToken;
         return await calculateImpact(
           { name: 'SAMB', address: multiRouteAddresses.SAMB, symbol: 'SAMB' },
           [
             { name: 'SAMB', address: multiRouteAddresses.SAMB, symbol: 'SAMB' },
-            TOKEN_B
+            _tokenToSell
           ],
-          amountToSell
+          tokenToSell.AMOUNT
         );
       }
 
@@ -177,34 +180,28 @@ export function useSwapPriceImpact() {
       console.error('Error calculating price impact:', error);
       return 0;
     }
-  }, [
-    getPairAddress,
-    getReserves,
-    isExactInRef,
-    latestSelectedTokens,
-    latestSelectedTokensAmount
-  ]);
+  }, [getPairAddress, getReserves, isExactInRef, tokenToSell, tokensRoute]);
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
-      latestSelectedTokensAmount.current;
-
     const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
-      [TOKEN_A?.address, TOKEN_B?.address].join()
+      tokensRoute.join()
     );
 
     if (settings.current.multihops && isMuliRouteUSDCSwap) {
       return await multiHopImpactGetter();
     } else {
-      return await singleHopImpactGetter(AMOUNT_A, AMOUNT_B);
+      return await singleHopImpactGetter(
+        tokenToSell.AMOUNT,
+        tokenToReceive.AMOUNT
+      );
     }
   }, [
-    latestSelectedTokens,
-    latestSelectedTokensAmount,
+    tokensRoute,
     settings,
     multiHopImpactGetter,
-    singleHopImpactGetter
+    singleHopImpactGetter,
+    tokenToSell.AMOUNT,
+    tokenToReceive.AMOUNT
   ]);
 
   return {

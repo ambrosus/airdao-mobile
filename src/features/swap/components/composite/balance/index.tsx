@@ -54,7 +54,7 @@ export const Balance = ({ type }: BalanceProps) => {
 
       setTimeout(async () => {
         await updateReceivedTokensOutput();
-      }, 250);
+      });
     }
   }, [
     bnBalanceAmount,

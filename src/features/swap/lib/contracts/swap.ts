@@ -19,13 +19,10 @@ export async function getAmountsOut({
 }: OutAmountGetterArgs) {
   try {
     const provider = createAMBProvider();
-
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
-    if (isSelectedSameTokens) {
-      return amountToSell;
-    }
+    if (isSelectedSameTokens) return amountToSell;
 
     const contract = createRouterContract(provider, ERC20_TRADE);
 

@@ -1,7 +1,7 @@
+import { useMemo } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { isMultiRouteWithUSDCFirst } from '@features/swap/utils';
-import { useMemo } from 'react';
 
 export function useSwapTokens() {
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
@@ -52,12 +52,24 @@ export function useSwapTokens() {
     return isMuliRouteUSDCSwap;
   }, [executedTokensAddresses]);
 
+  const tokensRoute = useMemo(() => {
+    const [addressA, addressB] = [
+      tokenToSell.TOKEN?.address,
+      tokenToReceive.TOKEN?.address
+    ];
+
+    if (!addressA || !addressB) return ['', ''];
+
+    return [addressA, addressB];
+  }, [tokenToReceive, tokenToSell]);
+
   return {
     tokenToSell,
     tokenToReceive,
     tokenToSellKey,
     tokenToReceiveKey,
     executedTokensAddresses,
-    isMultiHopSwap
+    isMultiHopSwap,
+    tokensRoute
   };
 }

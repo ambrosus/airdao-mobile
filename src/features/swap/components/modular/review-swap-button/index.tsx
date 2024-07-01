@@ -13,8 +13,7 @@ import { buttonActionString } from '@features/swap/utils/button-action.string';
 export const ReviewSwapButton = () => {
   const { t } = useTranslation();
   const { bnBalances } = useSwapMultiplyBalance();
-  const { selectedTokens, selectedTokensAmount, isExactInRef } =
-    useSwapContextSelector();
+  const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
 
   const { resolveBottomSheetData } = useSwapInterface();
 
@@ -25,10 +24,9 @@ export const ReviewSwapButton = () => {
       selectedTokens,
       selectedTokensAmount,
       bnBalances,
-      isExactInRef.current,
       t
     );
-  }, [t, bnBalances, isExactInRef, selectedTokens, selectedTokensAmount]);
+  }, [t, bnBalances, selectedTokens, selectedTokensAmount]);
 
   const onResolveBottomSheetDataPress = useCallback(async () => {
     try {

@@ -14,19 +14,18 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { SwapPendingLayout } from './components/pending';
 import { useTranslation } from 'react-i18next';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
+import { useSwapTokens } from '@features/swap/lib/hooks';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
     const { t } = useTranslation();
     const bottomSheetRef = useForwardedRef(ref);
-    const { selectedTokens, isProcessingSwap } = useSwapContextSelector();
+    const { isProcessingSwap } = useSwapContextSelector();
+    const { tokensRoute } = useSwapTokens();
 
     const isWrapOrUnwrapETH = useMemo(() => {
-      const { TOKEN_A, TOKEN_B } = selectedTokens;
-      const path = [TOKEN_A?.address, TOKEN_B?.address];
-
-      return isETHtoWrapped(path) || isWrappedToETH(path);
-    }, [selectedTokens]);
+      return isETHtoWrapped(tokensRoute) || isWrappedToETH(tokensRoute);
+    }, [tokensRoute]);
 
     return (
       <BottomSheet

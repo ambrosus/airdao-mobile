@@ -12,7 +12,6 @@ export function buttonActionString(
   selectedTokens: SelectedTokensState,
   selectedAmount: SelectedTokensAmountState,
   bnBalanceAmount: MultiplyBalancesStateType,
-  isExactIn: boolean,
   t: TFunction<'translation', undefined>
 ) {
   const { TOKEN_A, TOKEN_B } = selectedTokens;
@@ -22,8 +21,6 @@ export function buttonActionString(
 
   const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
 
-  const keyToSellTokens = FIELD.TOKEN_A;
-
   const isSomeBalanceIsEmpty =
     AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
 
@@ -31,7 +28,7 @@ export function buttonActionString(
     return t('button.enter.amount');
   }
 
-  const lastChangedInputBalance = bnBalanceAmount[keyToSellTokens]?._hex;
+  const lastChangedInputBalance = bnBalanceAmount[FIELD.TOKEN_A]?._hex;
 
   if (lastChangedInputBalance) {
     const normalizedBalanceAmount = NumberUtils.limitDecimalCount(
@@ -40,7 +37,7 @@ export function buttonActionString(
     );
 
     if (
-      Number(selectedAmount[keyToSellTokens]) > Number(normalizedBalanceAmount)
+      Number(selectedAmount[FIELD.TOKEN_A]) > Number(normalizedBalanceAmount)
     ) {
       return t('swap.button.insufficient');
     }

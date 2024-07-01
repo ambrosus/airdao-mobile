@@ -45,7 +45,7 @@ export const BottomSheetTokenItem = ({
       if (TOKEN_A && TOKEN_B) {
         setTimeout(async () => {
           await updateReceivedTokensOutput();
-        }, 250);
+        });
       }
     } else {
       onSelectToken(type, token);

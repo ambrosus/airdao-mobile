@@ -14,6 +14,7 @@ import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
+import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapInterface() {
   const { setUiBottomSheetInformation, _refExactGetter } =
@@ -23,9 +24,10 @@ export function useSwapInterface() {
     useSwapBottomSheetHandler();
 
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance, hasWrapNativeToken } = useSwapActions();
+  const { checkAllowance } = useSwapActions();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
 
   const resolveBottomSheetData = useCallback(async () => {
     if (hasWrapNativeToken) {
@@ -105,12 +107,9 @@ export function useSwapInterface() {
   ]);
 
   const isEstimatedToken = useMemo(() => {
-    const emptyInputValue = '' && '0';
-
     const isSomeTokenNotSelected = !tokenToSell.TOKEN || !tokenToReceive.TOKEN;
     const isSomeBalanceIsEmpty =
-      tokenToSell.AMOUNT === emptyInputValue ||
-      tokenToReceive.AMOUNT === emptyInputValue;
+      isEmptyAmount(tokenToSell.AMOUNT) || isEmptyAmount(tokenToReceive.AMOUNT);
 
     const ethSwapOrUnswapPath = [
       tokenToSell.TOKEN?.address ?? '',
@@ -136,7 +135,14 @@ export function useSwapInterface() {
       tokenA: !_refExactGetter,
       tokenB: _refExactGetter
     };
-  }, [_refExactGetter, tokenToReceive, tokenToSell]);
+  }, [
+    _refExactGetter,
+    isEmptyAmount,
+    tokenToReceive.AMOUNT,
+    tokenToReceive.TOKEN,
+    tokenToSell.AMOUNT,
+    tokenToSell.TOKEN
+  ]);
 
   return { resolveBottomSheetData, isEstimatedToken };
 }

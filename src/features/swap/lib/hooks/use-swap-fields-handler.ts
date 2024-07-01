@@ -4,6 +4,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapActions } from './use-swap-actions';
 import { SwapStringUtils } from '@features/swap/utils';
+import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapFieldsHandler() {
   const { getOppositeReceivedTokenAmount } = useSwapActions();
@@ -15,6 +16,8 @@ export function useSwapFieldsHandler() {
     isExactInRef
   } = useSwapContextSelector();
 
+  const { isEmptyAmount } = useSwapHelpers();
+
   const updateReceivedTokensOutput = useCallback(async () => {
     const oppositeKey = isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
@@ -22,11 +25,12 @@ export function useSwapFieldsHandler() {
     if (!TOKEN_A || !TOKEN_B) return '';
 
     const path = [TOKEN_A?.address, TOKEN_B.address];
-
     const amountToSell =
       latestSelectedTokensAmount.current[
         isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
       ];
+
+    if (isEmptyAmount(amountToSell)) return;
 
     const bnAmountToReceive = await getOppositeReceivedTokenAmount(
       amountToSell,
@@ -44,13 +48,13 @@ export function useSwapFieldsHandler() {
     isExactInRef,
     latestSelectedTokens,
     latestSelectedTokensAmount,
+    isEmptyAmount,
     getOppositeReceivedTokenAmount,
     setSelectedTokensAmount
   ]);
 
   const onChangeSelectedTokenAmount = useCallback(
     async (key: SelectedTokensKeys, amount: string) => {
-      const isEmpty = amount === '' || amount === '0';
       const oppositeKey = key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
       setIsExactIn(key === FIELD.TOKEN_A);
       setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
@@ -58,7 +62,7 @@ export function useSwapFieldsHandler() {
         [key]: amount
       }));
 
-      if (isEmpty) {
+      if (isEmptyAmount(amount)) {
         setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
           ...prevSelectedTokensAmounts,
           [oppositeKey]: amount
@@ -66,10 +70,15 @@ export function useSwapFieldsHandler() {
       } else {
         setTimeout(async () => {
           await updateReceivedTokensOutput();
-        }, 250);
+        });
       }
     },
-    [setIsExactIn, setSelectedTokensAmount, updateReceivedTokensOutput]
+    [
+      isEmptyAmount,
+      setIsExactIn,
+      setSelectedTokensAmount,
+      updateReceivedTokensOutput
+    ]
   );
 
   const onSelectMaxTokensAmount = (key: SelectedTokensKeys, amount: string) => {

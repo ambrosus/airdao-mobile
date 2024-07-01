@@ -13,18 +13,13 @@ import { formatEther } from 'ethers/lib/utils';
 import { COLORS } from '@constants/colors';
 
 export const TokenInfoPlate = () => {
-  const {
-    selectedTokens,
-    selectedTokensAmount,
-    _refExactGetter,
-    _refSettingsGetter
-  } = useSwapContextSelector();
+  const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
 
   const { getTokenAmountOut } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
 
-  const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
 
   const symbols = useMemo(() => {
     const [symbolA, symbolB] = [
@@ -39,15 +34,8 @@ export const TokenInfoPlate = () => {
 
   useEffect(() => {
     (async () => {
-      const { TOKEN_A, TOKEN_B } = selectedTokens;
-
-      if (TOKEN_A && TOKEN_B) {
-        const path = [
-          tokenToSell.TOKEN?.address ?? '',
-          tokenToReceive.TOKEN?.address ?? ''
-        ];
-
-        const bnAmount = await getTokenAmountOut('1', path);
+      if (tokenToSell.TOKEN && tokenToSell.TOKEN) {
+        const bnAmount = await getTokenAmountOut('1', tokensRoute);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -60,31 +48,23 @@ export const TokenInfoPlate = () => {
     _refExactGetter,
     _refSettingsGetter,
     getTokenAmountOut,
-    selectedTokens,
     tokenToReceive.TOKEN,
-    tokenToSell.TOKEN
+    tokenToSell.TOKEN,
+    tokensRoute
   ]);
 
   const TokenUSDPrice = useUSDPrice(1, symbols?.TOKEN_A as CryptoCurrencyCode);
 
   const isShowPlate = useMemo(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
-
     return plateVisibility(
-      TOKEN_A,
-      AMOUNT_A,
-      TOKEN_B,
-      AMOUNT_B,
+      tokenToSell.TOKEN,
+      tokenToSell.AMOUNT,
+      tokenToReceive.TOKEN,
+      tokenToReceive.AMOUNT,
       oppositeAmountPerOneToken,
       TokenUSDPrice
     );
-  }, [
-    TokenUSDPrice,
-    oppositeAmountPerOneToken,
-    selectedTokens,
-    selectedTokensAmount
-  ]);
+  }, [TokenUSDPrice, oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
 
   return isShowPlate ? (
     <Row justifyContent="center" alignItems="center">
@@ -93,9 +73,9 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {selectedTokens.TOKEN_A?.symbol ?? 'AMB'} ($
+        1 {tokenToSell.TOKEN?.symbol ?? 'AMB'} ($
         {SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}) ={' '}
-        {oppositeAmountPerOneToken} {selectedTokens.TOKEN_B?.symbol}
+        {oppositeAmountPerOneToken} {tokenToReceive.TOKEN?.symbol}
       </Text>
     </Row>
   ) : (

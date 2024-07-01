@@ -12,9 +12,7 @@ export function useSwapSelectTokens() {
     setSelectedTokensAmount,
     selectedTokensAmount
   } = useSwapContextSelector();
-
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
-
   const { onDismissBottomSheetByKey, onDismissBottomSheets } =
     useSwapBottomSheetHandler();
 
@@ -31,7 +29,7 @@ export function useSwapSelectTokens() {
 
       setTimeout(async () => {
         await updateReceivedTokensOutput();
-      }, 250);
+      });
     },
     [onDismissBottomSheetByKey, setSelectedTokens, updateReceivedTokensOutput]
   );

@@ -3,35 +3,36 @@ import { View } from 'react-native';
 import { styles } from './styles';
 import {
   useSwapFieldsHandler,
-  useSwapSelectTokens
+  useSwapSelectTokens,
+  useSwapTokens
 } from '@features/swap/lib/hooks';
+import { useSwapContextSelector } from '@features/swap/context';
 import { Divider } from '@/features/swap/components/base';
 import { Button, Spacer } from '@components/base';
 import { SwapOppositeArrowsIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { useSwapContextSelector } from '@features/swap/context';
 
 export const SwapReverseTokens = () => {
   const { onReverseSelectedTokens } = useSwapSelectTokens();
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
-
-  const { setIsExactIn, selectedTokens } = useSwapContextSelector();
+  const { setIsExactIn } = useSwapContextSelector();
+  const { tokenToSell, tokenToReceive } = useSwapTokens();
 
   const onReverseSelectedTokensPress = useCallback(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
     setIsExactIn((prevState) => !prevState);
     onReverseSelectedTokens();
 
-    if (TOKEN_A && TOKEN_B) {
+    if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
       setTimeout(async () => {
         await updateReceivedTokensOutput();
-      }, 250);
+      });
     }
   }, [
     onReverseSelectedTokens,
-    selectedTokens,
     setIsExactIn,
+    tokenToReceive.TOKEN,
+    tokenToSell.TOKEN,
     updateReceivedTokensOutput
   ]);
 
