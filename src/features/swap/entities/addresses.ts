@@ -1,4 +1,4 @@
-export const MULTI_ROUTE_ADDRESSES = {
+export const TOKEN_ADDRESSES = {
   testnet: {
     SAMB: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
     USDC: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',

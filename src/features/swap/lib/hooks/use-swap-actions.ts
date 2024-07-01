@@ -14,14 +14,13 @@ import {
 } from '../contracts';
 import { useBridgeContextSelector } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
-import { MULTI_ROUTE_ADDRESSES } from '@features/swap/entities';
-import { environment } from '@utils/environment';
 import {
   wrapNativeAddress,
   isMultiRouteWithUSDCFirst,
   isETHtoWrapped,
   isWrappedToETH,
-  executeSwapPath
+  executeSwapPath,
+  addresses
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -111,20 +110,18 @@ export function useSwapActions() {
   const getTokenAmountOutWithMultiRoute = useCallback(
     async (amountToSell: string, path: string[]) => {
       const [addressFrom, addressTo] = path;
-      const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
 
       const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
       const isExactIn = isExactInRef.current;
 
       const isReversed =
-        addressFrom === multiRouteAddresses.BOND &&
-        addressTo === multiRouteAddresses.USDC;
+        addressFrom === addresses.BOND && addressTo === addresses.USDC;
 
       if (isExactIn || isReversed) {
-        const intermediatePath = [addressFrom, multiRouteAddresses.SAMB];
+        const intermediatePath = [addressFrom, addresses.SAMB];
         const finalPath = isExactIn
-          ? [multiRouteAddresses.SAMB, multiRouteAddresses.BOND]
-          : [multiRouteAddresses.SAMB, multiRouteAddresses.USDC];
+          ? [addresses.SAMB, addresses.BOND]
+          : [addresses.SAMB, addresses.USDC];
 
         const intermediateAmount = await getAmountsOut({
           path: intermediatePath,

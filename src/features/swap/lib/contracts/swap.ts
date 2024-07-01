@@ -7,7 +7,7 @@ import {
 import {
   isNativeWrapped,
   minimumAmountOut,
-  multiRouteAddresses,
+  addresses,
   wrapNativeAddress
 } from '@features/swap/utils';
 import { ERC20, ERC20_TRADE } from '@features/swap/lib/abi';
@@ -17,6 +17,8 @@ export async function getAmountsOut({
   amountToSell,
   path
 }: OutAmountGetterArgs) {
+  if (formatEther(amountToSell) === '') return;
+
   try {
     const provider = createAMBProvider();
     const excludeNativeETH = wrapNativeAddress(path);
@@ -33,6 +35,7 @@ export async function getAmountsOut({
 
     return amountToReceive;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -87,12 +90,12 @@ export async function swapMultiHopExactTokensForTokens(
 
   const bnIntermediateAmountToReceive = await getAmountsOut({
     amountToSell: bnAmountToSell,
-    path: [addressFrom, multiRouteAddresses.SAMB]
+    path: [addressFrom, addresses.SAMB]
   });
 
   const intermediateSwapResult = await swapExactTokensForETH(
     amountToSell,
-    [addressFrom, multiRouteAddresses.SAMB],
+    [addressFrom, addresses.SAMB],
     signer,
     slippageTolerance,
     deadline
@@ -101,7 +104,7 @@ export async function swapMultiHopExactTokensForTokens(
   if (intermediateSwapResult) {
     return await swapExactETHForTokens(
       formatEther(bnIntermediateAmountToReceive),
-      [multiRouteAddresses.SAMB, addressTo],
+      [addresses.SAMB, addressTo],
       signer,
       slippageTolerance,
       deadline
@@ -187,7 +190,7 @@ export async function swapExactTokensForETH(
 
 export async function wrapETH(amountToSell: string, signer: Wallet) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const contract = new ethers.Contract(multiRouteAddresses.SAMB, ERC20);
+  const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
   const tx = await signedContract.deposit({ value: bnAmountToSell });
@@ -197,7 +200,7 @@ export async function wrapETH(amountToSell: string, signer: Wallet) {
 
 export async function unwrapETH(amountToSell: string, signer: Wallet) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const contract = new ethers.Contract(multiRouteAddresses.SAMB, ERC20);
+  const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
   const tx = await signedContract.withdraw(bnAmountToSell);

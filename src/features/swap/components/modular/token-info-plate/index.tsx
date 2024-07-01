@@ -34,7 +34,7 @@ export const TokenInfoPlate = () => {
 
   useEffect(() => {
     (async () => {
-      if (tokenToSell.TOKEN && tokenToSell.TOKEN) {
+      if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
         const bnAmount = await getTokenAmountOut('1', tokensRoute);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(

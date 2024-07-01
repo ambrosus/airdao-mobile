@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { useCallback } from 'react';
 import {
   isMultiRouteWithUSDCFirst,
-  multiRouteAddresses,
+  addresses,
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
   singleHopImpact
@@ -166,9 +166,9 @@ export function useSwapPriceImpact() {
       if (isExactInRef.current && isMultiRouteUSDCSwap) {
         const _tokenToSell = tokenToSell.TOKEN as SwapToken;
         return await calculateImpact(
-          { name: 'SAMB', address: multiRouteAddresses.SAMB, symbol: 'SAMB' },
+          { name: 'SAMB', address: addresses.SAMB, symbol: 'SAMB' },
           [
-            { name: 'SAMB', address: multiRouteAddresses.SAMB, symbol: 'SAMB' },
+            { name: 'SAMB', address: addresses.SAMB, symbol: 'SAMB' },
             _tokenToSell
           ],
           tokenToSell.AMOUNT

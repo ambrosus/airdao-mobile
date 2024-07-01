@@ -1,8 +1,8 @@
 import { environment } from '@utils/environment';
-import { MULTI_ROUTE_ADDRESSES } from '../entities';
+import { TOKEN_ADDRESSES } from '../entities';
 
 export function isMultiRouteRequired(path: string[], isExactIn: boolean) {
-  const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
+  const multiRouteAddresses = TOKEN_ADDRESSES[environment];
   const [addressFrom, addressTo] = path;
 
   const isMultiRoute =
@@ -13,12 +13,12 @@ export function isMultiRouteRequired(path: string[], isExactIn: boolean) {
   return isMultiRoute;
 }
 
-export const multiRouteAddresses = MULTI_ROUTE_ADDRESSES[environment];
+export const addresses = TOKEN_ADDRESSES[environment];
 
 export const isMultiRouteWithUSDCFirst = new Set([
-  [multiRouteAddresses.USDC, multiRouteAddresses.BOND].join()
+  [addresses.USDC, addresses.BOND].join()
 ]);
 
 export const isMultiRouteWithBONDFirst = new Set([
-  [multiRouteAddresses.BOND, multiRouteAddresses.USDC].join()
+  [addresses.BOND, addresses.USDC].join()
 ]);

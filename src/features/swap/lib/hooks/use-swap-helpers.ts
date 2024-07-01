@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import {
   wrapNativeAddress,
   isNativeWrapped,
-  multiRouteAddresses,
+  addresses,
   isMultiRouteWithUSDCFirst
 } from '@features/swap/utils';
 import { Cache, CacheKey } from '@lib/cache';
@@ -33,11 +33,11 @@ export function useSwapHelpers() {
   }, [selectedAccount?._raw]);
 
   const isStartsWithETH = useMemo(() => {
-    return tokenToSell.TOKEN?.address === multiRouteAddresses.AMB;
+    return tokenToSell.TOKEN?.address === addresses.AMB;
   }, [tokenToSell]);
 
   const isEndsWithETH = useMemo(() => {
-    return tokenToReceive.TOKEN?.address === multiRouteAddresses.AMB;
+    return tokenToReceive.TOKEN?.address === addresses.AMB;
   }, [tokenToReceive]);
 
   const isEmptyAmount = useCallback((amount: string) => {
