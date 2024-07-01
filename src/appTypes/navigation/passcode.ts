@@ -1,3 +1,5 @@
-export interface passcodeModel {
-  onPasscodeApprove: () => void;
+export interface PasscodeParams {
+  title?: string;
+  onPasscodeApprove?: () => void | undefined;
+  onPasscodeApproveWithNavigate?: () => void | undefined;
 }
