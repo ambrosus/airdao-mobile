@@ -5,14 +5,15 @@ import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { COLORS } from '@constants/colors';
-import { useSwapTokens } from '@features/swap/lib/hooks';
+import { useSwapHelpers, useSwapTokens } from '@features/swap/lib/hooks';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
   const { latestSelectedTokens, uiBottomSheetInformation, _refExactGetter } =
     useSwapContextSelector();
 
-  const { tokenToSell, tokenToReceive, isMultiHopSwap } = useSwapTokens();
+  const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { isMultiHopSwap } = useSwapHelpers();
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;

@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD } from '@features/swap/types';
-import { isMultiRouteWithUSDCFirst } from '@features/swap/utils';
 
 export function useSwapTokens() {
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
@@ -26,14 +24,6 @@ export function useSwapTokens() {
     };
   }, [selectedTokens, selectedTokensAmount]);
 
-  const tokenToSellKey = useMemo(() => {
-    return FIELD.TOKEN_A;
-  }, []);
-
-  const tokenToReceiveKey = useMemo(() => {
-    return FIELD.TOKEN_B;
-  }, []);
-
   const executedTokensAddresses = useMemo(() => {
     const [addressA, addressB] = [
       tokenToSell.TOKEN?.address,
@@ -42,15 +32,6 @@ export function useSwapTokens() {
 
     return { addressA, addressB };
   }, [tokenToSell, tokenToReceive]);
-
-  const isMultiHopSwap = useMemo(() => {
-    const { addressA, addressB } = executedTokensAddresses;
-    const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
-      [addressA, addressB].join()
-    );
-
-    return isMuliRouteUSDCSwap;
-  }, [executedTokensAddresses]);
 
   const tokensRoute = useMemo(() => {
     const [addressA, addressB] = [
@@ -66,10 +47,7 @@ export function useSwapTokens() {
   return {
     tokenToSell,
     tokenToReceive,
-    tokenToSellKey,
-    tokenToReceiveKey,
     executedTokensAddresses,
-    isMultiHopSwap,
     tokensRoute
   };
 }

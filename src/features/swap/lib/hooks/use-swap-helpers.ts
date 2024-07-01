@@ -2,7 +2,8 @@ import { useCallback, useMemo } from 'react';
 import {
   wrapNativeAddress,
   isNativeWrapped,
-  multiRouteAddresses
+  multiRouteAddresses,
+  isMultiRouteWithUSDCFirst
 } from '@features/swap/utils';
 import { Cache, CacheKey } from '@lib/cache';
 
@@ -11,7 +12,8 @@ import { useBridgeContextSelector } from '@contexts/Bridge';
 
 export function useSwapHelpers() {
   const { selectedAccount } = useBridgeContextSelector();
-  const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { tokenToSell, tokenToReceive, executedTokensAddresses } =
+    useSwapTokens();
 
   const hasWrapNativeToken = useMemo(() => {
     if (tokenToSell.TOKEN || tokenToReceive.TOKEN) {
@@ -42,11 +44,21 @@ export function useSwapHelpers() {
     return amount === '0' || amount === '';
   }, []);
 
+  const isMultiHopSwap = useMemo(() => {
+    const { addressA, addressB } = executedTokensAddresses;
+    const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
+      [addressA, addressB].join()
+    );
+
+    return isMuliRouteUSDCSwap;
+  }, [executedTokensAddresses]);
+
   return {
     hasWrapNativeToken,
     _privateKeyGetter,
     isStartsWithETH,
     isEmptyAmount,
-    isEndsWithETH
+    isEndsWithETH,
+    isMultiHopSwap
   };
 }
