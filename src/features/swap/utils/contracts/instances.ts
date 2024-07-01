@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { FACTORY_ABI } from '@features/swap/lib/abi';
 
-type MultiProviderArg = ethers.providers.JsonRpcProvider | ethers.Signer;
+type ProviderOrSigner = ethers.providers.JsonRpcProvider | ethers.Signer;
 
 export function createAMBProvider() {
   return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -16,7 +16,7 @@ export function createSigner(
 }
 
 export function createRouterContract(
-  provider: MultiProviderArg = createAMBProvider(),
+  provider: ProviderOrSigner = createAMBProvider(),
   ABI: unknown = []
 ) {
   return new ethers.Contract(
