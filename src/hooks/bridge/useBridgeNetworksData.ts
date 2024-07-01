@@ -269,6 +269,7 @@ export const useBridgeNetworksData = ({
     }
   };
   const onSelectMaxAmount = () => {
+    setInputError('');
     if (selectedToken.renderTokenItem.isNativeCoin) {
       setMax(true);
       getFeeData(true);
