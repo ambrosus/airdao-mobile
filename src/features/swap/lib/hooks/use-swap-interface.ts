@@ -42,14 +42,14 @@ export function useSwapInterface() {
       const priceImpact = await uiPriceImpactGetter();
       const bnMinimumReceivedAmount = minimumAmountOut(
         `${settings.current.slippageTolerance}%`,
-        ethers.utils.parseUnits(
+        ethers.utils.parseEther(
           _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
         )
       );
 
       const bnMaximumReceivedAmount = maximumAmountOut(
         `${settings.current.slippageTolerance}%`,
-        ethers.utils.parseUnits(
+        ethers.utils.parseEther(
           _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
         )
       );

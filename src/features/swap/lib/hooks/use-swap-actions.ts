@@ -98,7 +98,7 @@ export function useSwapActions() {
 
   const getTokenAmountOut = useCallback(
     async (amountToSell: string, path: string[]) => {
-      const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
       return getAmountsOut({
         path,
         amountToSell: bnAmountToSell
@@ -111,7 +111,7 @@ export function useSwapActions() {
     async (amountToSell: string, path: string[]) => {
       const [addressFrom, addressTo] = path;
 
-      const bnAmountToSell = ethers.utils.parseUnits(amountToSell);
+      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
       const isExactIn = isExactInRef.current;
 
       const isReversed =
