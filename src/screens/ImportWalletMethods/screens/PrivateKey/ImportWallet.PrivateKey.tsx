@@ -26,6 +26,7 @@ import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
 import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
 import { isIos } from '@utils/isPlatform';
+import { delay } from '@utils/delay';
 
 enum IMPORT_PROCESS_STATUS {
   INITIAL = 'initial',
@@ -49,9 +50,6 @@ export const ImportWalletPrivateKey = () => {
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
-
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
 
   const onImportWalletPress = useCallback(async () => {
     setStatus(IMPORT_PROCESS_STATUS.PENDING);
