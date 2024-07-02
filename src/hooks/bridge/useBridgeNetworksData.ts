@@ -342,6 +342,7 @@ export const useBridgeNetworksData = ({
           const withdrawTransaction = transactionFromALLTransaction || {
             ...DEFAULT_BRIDGE_TRANSACTION,
             eventId: 0,
+            loading: false,
             networkFrom: fromParams.value.id || '',
             networkTo: toParams.value.id || '',
             tokenFrom: selectedToken.pairs[0],
