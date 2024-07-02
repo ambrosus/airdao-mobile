@@ -360,12 +360,12 @@
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
 
-  "bridge.select.network": "Ağ Seç ",
-  "bridge.select.assets": "Varlıklarım Seç ",
-  "bridge.amount.to.bridge": "Köprülemek için Miktar ",
+  "bridge.select.network": "Ağ Seç",
+  "bridge.select.assets": "Varlıklarım Seç",
+  "bridge.amount.to.bridge": "Köprülemek için Miktar",
   "bridge.amount.network.fee": "Ağ Ücreti ",
 
-  "bridge.preview.title": "Önizleme ",
+  "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
   "bridge.preview.bridge.fee": "Köprü Ücreti",
   "bridge.preview.network.fee": "Ağ Ücreti",

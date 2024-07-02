@@ -128,7 +128,7 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
                   fontFamily="Inter_500Medium"
                   color={COLORS.neutral90}
                 >
-                  Confirmations
+                  {t('bridge.transaction.confirmations')}
                 </Text>
                 <Status
                   status={renderTransactionStatus(2.2)}

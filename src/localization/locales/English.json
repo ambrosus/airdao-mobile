@@ -360,7 +360,7 @@
   "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
 
   "bridge.select.network": "Select network",
-  "bridge.select.assets": "Select assets",
+  "bridge.select.assets": "Select asset",
   "bridge.amount.to.bridge": "Amount to bridge",
   "bridge.amount.network.fee": "Network fee",
 
