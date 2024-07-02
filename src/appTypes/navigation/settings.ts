@@ -3,7 +3,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { WalletDBModel } from '@database';
 import { TabsParamsList } from './tabs';
-import { PasscodeModel } from './passcode';
+import { PasscodeParams } from './passcode-params';
 
 export type SettingsTabParamsList = {
   About: undefined;
@@ -16,7 +16,7 @@ export type SettingsTabParamsList = {
   SettingsScreen: undefined;
   SingleWallet: { wallet: WalletDBModel };
   AccessKeys: { walletHash: string };
-  Passcode: PasscodeModel;
+  Passcode: PasscodeParams;
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<

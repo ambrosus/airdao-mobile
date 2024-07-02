@@ -90,7 +90,7 @@ export const BridgeForm = () => {
     tokenParams.value.renderTokenItem
   ]);
 
-  const onPasscodeApprove = async () => {
+  const onPasscodeApproveWithNavigate = async () => {
     setTimeout(async () => {
       await onWithdrawApprove();
     }, 1000);
@@ -99,7 +99,7 @@ export const BridgeForm = () => {
     previewRef?.current?.dismiss();
     setTimeout(() => {
       navigation.navigate('Passcode', {
-        onPasscodeApprove
+        onPasscodeApproveWithNavigate
       });
     }, 500);
   };
