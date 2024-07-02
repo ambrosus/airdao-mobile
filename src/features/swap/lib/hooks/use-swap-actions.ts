@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   checkIsApprovalRequired,
+  getAmountsIn,
   getAmountsOut,
   increaseAllowance,
   swapExactETHForTokens,
@@ -107,34 +108,59 @@ export function useSwapActions() {
     []
   );
 
+  const getTokenAmountIn = useCallback(
+    async (amountToReceive: string, path: string[]) => {
+      const bnAmountToReceive = ethers.utils.parseEther(amountToReceive);
+      return getAmountsIn({
+        path,
+        amountToReceive: bnAmountToReceive
+      });
+    },
+    []
+  );
+
   const getTokenAmountOutWithMultiRoute = useCallback(
     async (amountToSell: string, path: string[]) => {
       const [addressFrom, addressTo] = path;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-      const isExactIn = isExactInRef.current;
 
-      const isReversed =
-        addressFrom === addresses.BOND && addressTo === addresses.USDC;
+      const intermediatePath = [addressFrom, addresses.SAMB];
+      const finalPath = [addresses.SAMB, addressTo];
 
-      if (isExactIn || isReversed) {
-        const intermediatePath = [addressFrom, addresses.SAMB];
-        const finalPath = isExactIn
-          ? [addresses.SAMB, addresses.BOND]
-          : [addresses.SAMB, addresses.USDC];
+      const intermediateAmount = await getAmountsOut({
+        path: intermediatePath,
+        amountToSell: bnAmountToSell
+      });
 
-        const intermediateAmount = await getAmountsOut({
-          path: intermediatePath,
-          amountToSell: bnAmountToSell
-        });
-
-        return await getAmountsOut({
-          path: finalPath,
-          amountToSell: intermediateAmount
-        });
-      }
+      return await getAmountsOut({
+        path: finalPath,
+        amountToSell: intermediateAmount
+      });
     },
-    [isExactInRef]
+    []
+  );
+
+  const getTokenAmountInWithMultiRoute = useCallback(
+    async (amountToSell: string, path: string[]) => {
+      const [addressFrom, addressTo] = path;
+
+      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+
+      const intermediatePath = [addressFrom, addresses.SAMB];
+      const finalPath = [addresses.SAMB, addressTo];
+
+      const intermediateAmount = await getAmountsIn({
+        path: intermediatePath,
+        amountToReceive: bnAmountToSell
+      });
+
+      return await getAmountsIn({
+        path: finalPath,
+        amountToReceive: intermediateAmount
+      });
+    },
+    []
   );
 
   const getOppositeReceivedTokenAmount = useCallback(
@@ -159,15 +185,21 @@ export function useSwapActions() {
         settings.current.multihops &&
         isMuliRouteUSDCSwap
       ) {
-        return await getTokenAmountOutWithMultiRoute(
-          amountToSell,
-          path.reverse()
-        );
+        return await getTokenAmountInWithMultiRoute(amountToSell, path);
+      } else if (!isExactInRef.current) {
+        return await getTokenAmountIn(amountToSell, path);
       }
 
       return await getTokenAmountOut(amountToSell, route);
     },
-    [getTokenAmountOut, getTokenAmountOutWithMultiRoute, isExactInRef, settings]
+    [
+      getTokenAmountIn,
+      getTokenAmountInWithMultiRoute,
+      getTokenAmountOut,
+      getTokenAmountOutWithMultiRoute,
+      isExactInRef,
+      settings
+    ]
   );
 
   const swapTokens = useCallback(async () => {

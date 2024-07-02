@@ -1,5 +1,8 @@
 import { Wallet, ethers } from 'ethers';
-import { OutAmountGetterArgs } from '@features/swap/types/swap';
+import {
+  InAmountGetterArgs,
+  OutAmountGetterArgs
+} from '@features/swap/types/swap';
 import {
   createAMBProvider,
   createRouterContract
@@ -34,6 +37,33 @@ export async function getAmountsOut({
     );
 
     return amountToReceive;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getAmountsIn({
+  amountToReceive,
+  path
+}: InAmountGetterArgs) {
+  if (formatEther(amountToReceive) === '') return;
+
+  try {
+    const provider = createAMBProvider();
+    const excludeNativeETH = wrapNativeAddress(path);
+    const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
+
+    if (isSelectedSameTokens) return amountToReceive;
+
+    const contract = createRouterContract(provider, ERC20_TRADE);
+
+    const [amountToSell] = await contract.getAmountsIn(
+      amountToReceive,
+      excludeNativeETH
+    );
+
+    return amountToSell;
   } catch (error) {
     console.error(error);
     throw error;

@@ -77,7 +77,7 @@ export const PreviewInformation = () => {
           <Text>{t('swap.route')}</Text>
 
           <RightSideRowItem>
-            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > SAMB > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > AMB > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
           </RightSideRowItem>
         </Row>
       )}
