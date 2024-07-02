@@ -21,3 +21,7 @@ export interface BridgeTransactionHistoryDTO {
   timestampStart: number;
   transferFinishTxHash: string;
 }
+
+export interface BridgeTransactionDTO extends BridgeTransactionHistoryDTO {
+  loading?: boolean;
+}

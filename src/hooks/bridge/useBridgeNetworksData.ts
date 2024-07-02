@@ -21,7 +21,7 @@ import { useNavigation } from '@react-navigation/native';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { HomeNavigationProp } from '@appTypes';
 import { API } from '@api/api';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { BridgeTransactionDTO } from '@models/dtos/Bridge';
 import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';
 import Config from '@constants/config';
 
@@ -47,7 +47,6 @@ const DEFAULT_BRIDGE_TRANSACTION = {
   timestampStart: 0,
   transferFinishTxHash: ''
 };
-const DEFAULT_BRIDGE_TRANSFER = { hash: '' };
 
 export const useBridgeNetworksData = ({
   choseTokenRef,
@@ -63,10 +62,9 @@ export const useBridgeNetworksData = ({
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
   const [gasFee, setGasFee] = useState<BigNumber>(BigNumber.from(0));
   const [gasFeeLoader, setGasFeeLoader] = useState(false);
-  const [bridgeTransfer, setBridgeTransfer] = useState(DEFAULT_BRIDGE_TRANSFER);
   const [bridgeTransaction, setBridgeTransaction] =
     // @ts-ignore
-    useState<BridgeTransactionHistoryDTO>(DEFAULT_BRIDGE_TRANSACTION);
+    useState<BridgeTransactionDTO>(DEFAULT_BRIDGE_TRANSACTION);
   const [inputError, setInputError] = useState<string | null>('');
   const {
     selectedAccount,
@@ -326,7 +324,6 @@ export const useBridgeNetworksData = ({
   const onWithdrawApprove = async () => {
     // @ts-ignore
     setBridgeTransaction(DEFAULT_BRIDGE_TRANSACTION);
-    setBridgeTransfer(DEFAULT_BRIDGE_TRANSFER);
     transactionInfoRef?.current?.show();
     try {
       const res = await withdraw();
@@ -369,7 +366,6 @@ export const useBridgeNetworksData = ({
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    bridgeTransfer,
     inputError,
     isMax
   };
