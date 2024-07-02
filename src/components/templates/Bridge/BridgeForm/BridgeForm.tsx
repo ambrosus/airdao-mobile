@@ -60,13 +60,12 @@ export const BridgeForm = () => {
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    bridgeTransfer,
     inputError,
     isMax
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,
-    !!Object.keys(bridgeTransfer).length
+    !bridgeTransaction?.loading
   );
 
   useEffect(() => {
