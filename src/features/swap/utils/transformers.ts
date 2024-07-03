@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
+const AMOUNT_FLOAT_DIGITS_LENGTH: { [key: number]: number } = {
   1: 5,
   2: 4,
   3: 3,
@@ -8,14 +8,14 @@ const DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
   5: 1
 };
 
-const MIN_RECEIVED_DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
+const MIN_RECEIVED_FLOAT_DIGITS_LENGTH: { [key: number]: number } = {
   1: 4,
   2: 3,
   3: 2,
   4: 1
 };
 
-const LPFEE_DIGITS_TO_KEEP_MAP: { [key: number]: number } = {
+const LPFEE_FLOAT_DIGITS_LENGTH: { [key: number]: number } = {
   1: 6,
   2: 5,
   3: 4,
@@ -30,7 +30,7 @@ const transformAmountValue = (value: string): string => {
   let integerLength = integerPart.length;
   if (integerLength > 5) integerLength = 5;
 
-  const digitsToKeep = DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
+  const digitsToKeep = AMOUNT_FLOAT_DIGITS_LENGTH[integerLength] ?? 1;
   let formattedNumber = integerPart;
 
   if (fractionalPart)
@@ -46,7 +46,7 @@ const transformMinAmountValue = (bnMinimumAmount: ethers.BigNumber): string => {
   let integerLength = integerPart.length;
   if (integerLength > 4) integerLength = 4;
 
-  const digitsToKeep = MIN_RECEIVED_DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
+  const digitsToKeep = MIN_RECEIVED_FLOAT_DIGITS_LENGTH[integerLength] ?? 1;
   let formattedNumber = integerPart;
 
   if (fractionalPart)
@@ -61,7 +61,7 @@ const transformRealizedLPFee = (value: string) => {
   let integerLength = integerPart.length;
   if (integerLength > 4) integerLength = 4;
 
-  const digitsToKeep = LPFEE_DIGITS_TO_KEEP_MAP[integerLength] ?? 1;
+  const digitsToKeep = LPFEE_FLOAT_DIGITS_LENGTH[integerLength] ?? 1;
   let formattedNumber = integerPart;
 
   if (fractionalPart)
