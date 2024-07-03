@@ -20,7 +20,7 @@ export const AccountActions = (props: AccountActionsProps) => {
     <Row
       alignItems="center"
       justifyContent="center"
-      style={{ columnGap: scale(40) }}
+      style={{ columnGap: scale(30) }}
     >
       <Swap />
       <Send address={address} token={token} />
