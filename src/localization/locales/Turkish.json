@@ -360,12 +360,12 @@
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
 
-  "bridge.select.network": "Ağ Seç ",
-  "bridge.select.assets": "Varlıklarım Seç ",
-  "bridge.amount.to.bridge": "Köprülemek için Miktar ",
+  "bridge.select.network": "Ağ Seç",
+  "bridge.select.assets": "Varlıklarım Seç",
+  "bridge.amount.to.bridge": "Köprülemek için Miktar",
   "bridge.amount.network.fee": "Ağ Ücreti ",
 
-  "bridge.preview.title": "Önizleme ",
+  "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
   "bridge.preview.bridge.fee": "Köprü Ücreti",
   "bridge.preview.network.fee": "Ağ Ücreti",
@@ -376,9 +376,9 @@
 
   "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
 
-  "bridge.transfer.failed.header": "!!Bridge Transaction Failed",
-  "bridge.transfer.failed.sub.header": "!!An error occurred while processing your transaction.",
-  "bridge.transfer.failed.to.wallet.btn": "!!Go to wallet",
-  "bridge.amount.less.then.fee": "!!!Amount less then fee",
-  "bridge.unknown.error": "!!!Unknown error"
+  "bridge.transfer.failed.header": "Köprü İşlemi Başarısız",
+  "bridge.transfer.failed.sub.header": "İşleminiz gerçekleştirilirken bir hata oluştu.",
+  "bridge.transfer.failed.to.wallet.btn": "Cüzdana git",
+  "bridge.amount.less.then.fee": "Bakiye ücretten daha az",
+  "bridge.unknown.error": "Bilinmeyen hata"
 }

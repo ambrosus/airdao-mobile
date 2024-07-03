@@ -60,13 +60,12 @@ export const BridgeForm = () => {
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    bridgeTransfer,
     inputError,
     isMax
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,
-    !!Object.keys(bridgeTransfer).length
+    !bridgeTransaction?.loading
   );
 
   useEffect(() => {
@@ -90,7 +89,7 @@ export const BridgeForm = () => {
     tokenParams.value.renderTokenItem
   ]);
 
-  const onPasscodeApprove = async () => {
+  const onPasscodeApproveWithNavigate = async () => {
     setTimeout(async () => {
       await onWithdrawApprove();
     }, 1000);
@@ -99,7 +98,7 @@ export const BridgeForm = () => {
     previewRef?.current?.dismiss();
     setTimeout(() => {
       navigation.navigate('Passcode', {
-        onPasscodeApprove
+        onPasscodeApproveWithNavigate
       });
     }, 500);
   };

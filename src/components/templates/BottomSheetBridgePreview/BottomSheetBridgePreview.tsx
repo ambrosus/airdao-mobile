@@ -108,7 +108,7 @@ export const BottomSheetBridgePreview = forwardRef<
   return (
     <BottomSheet ref={ref} swiperIconVisible={true}>
       <View style={{ marginHorizontal: scale(24) }}>
-        <Spacer value={verticalScale(24)} />
+        <Spacer value={verticalScale(16)} />
         <Text
           fontSize={18}
           fontFamily="Inter_700Bold"
@@ -117,12 +117,13 @@ export const BottomSheetBridgePreview = forwardRef<
         >
           {t('bridge.preview.title')}
         </Text>
-        <Spacer value={verticalScale(24)} />
+        <Spacer value={verticalScale(18)} />
         <BridgeNetworksSelected
+          type={'preview'}
           networkFrom={fromParams.value.id}
           networkTo={toParams.value.id}
         />
-        <Spacer value={verticalScale(24)} />
+        <Spacer value={verticalScale(18)} />
         <FlatList
           data={dataToPreview}
           // @ts-ignore

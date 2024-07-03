@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Config from '@constants/config';
+import { keepWSAlive } from '@utils/keepWSlive';
 
 const POINTED_STAGES = ['1.1', '2.1', '2.2', '3.1', '3.1', '4'];
 const WSS_BRIDGE_TRANSACTIONS_HISTORY_URL = Config.WSS_BRIDGE_HISTORY_URL;
@@ -19,6 +20,8 @@ export function useBridgeTransactionStatus(
           `${WSS_BRIDGE_TRANSACTIONS_HISTORY_URL}?txHash=${txHash}`
         );
 
+        const intervalId = keepWSAlive(ws);
+
         ws.onmessage = async (event: MessageEvent<string>) => {
           const { data } = event;
           const { status, confirmations, minSafetyBlocks } = JSON.parse(data);
@@ -35,13 +38,17 @@ export function useBridgeTransactionStatus(
             resolve(null);
           }
 
-          ws.onerror = (error) => reject(error);
-          ws.onclose = () => reject('WebSocket closed unexpectedly');
+          ws.onerror = (error) => {
+            reject(error);
+          };
+          ws.onclose = () => {
+            reject('WebSocket closed unexpectedly');
+            clearInterval(intervalId);
+          };
         };
       });
     } catch (error) {
       await new Promise((resolve) => setTimeout(resolve, 500)); // sleep 0.5s
-      console.error(error);
     }
   }, [txHash]);
 
