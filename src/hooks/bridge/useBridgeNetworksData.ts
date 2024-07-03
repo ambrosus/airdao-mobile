@@ -195,9 +195,9 @@ export const useBridgeNetworksData = ({
   const errorHandler = (error: unknown) => {
     // @ts-ignore
     const errorMessage = `${error?.message}`;
-    const amountLessThenFee = errorMessage.includes(
-      'error when getting fees: amount is too small'
-    );
+    const amountLessThenFee =
+      errorMessage.includes('error when getting fees: amount is too small') ||
+      errorMessage.includes('amount to small');
 
     const insufficientFundToProcessTransaction =
       // @ts-ignore
@@ -230,6 +230,8 @@ export const useBridgeNetworksData = ({
     const amountToFee = tokenItem.isNativeCoin
       ? tokenItem.balance.sub(parseUnits(amountToSubtract, tokenItem.decimals))
       : tokenItem.balance;
+
+    const isAmountToFeeLessThenZero = !amountToFee.gt(0);
     const amountTokens = isMaxOptions
       ? formatUnits(amountToFee, tokenItem.decimals)
       : amountToExchange;
@@ -240,6 +242,10 @@ export const useBridgeNetworksData = ({
       isMax: isMaxOptions ?? isMax
     };
     try {
+      if (isAmountToFeeLessThenZero) {
+        throw Error('amount to small');
+      }
+
       const fee = await getBridgeFeeData({
         bridgeConfig,
         dataForFee
