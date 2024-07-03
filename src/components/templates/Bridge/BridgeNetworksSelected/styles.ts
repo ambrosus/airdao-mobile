@@ -4,12 +4,10 @@ import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   previewWrapper: {
-    paddingHorizontal: scale(12),
-    paddingVertical: scale(10),
+    minWidth: scale(120),
+    minHeight: scale(40),
     borderRadius: scale(15),
-    backgroundColor: COLORS.neutral100
-  },
-  rowGap: {
+    backgroundColor: COLORS.neutral100,
     gap: scale(8)
   },
   reorder: {
