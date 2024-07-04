@@ -22,6 +22,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@airdao/airdao-bond": "^12.1.2",
     "@babel/preset-env": "^7.21.5",
     "@craftzdog/react-native-buffer": "^6.0.5",
     "@metamask/safe-event-emitter": "^3.0.0",

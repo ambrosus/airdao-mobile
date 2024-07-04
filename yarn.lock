@@ -12,6 +12,14 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.2.0.tgz#e1a84fca468f4b337816fcb7f0964beb620ba855"
   integrity sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==
 
+"@airdao/airdao-bond@^12.1.2":
+  version "12.1.2"
+  resolved "https://registry.yarnpkg.com/@airdao/airdao-bond/-/airdao-bond-12.1.2.tgz#487f6c5b5aebb8d5fd31c1c0050d1d200f63d5e0"
+  integrity sha512-2FSo+SfRZHhDDPEJG6417t/qTK2ZakL9DSkVypfsviFxU11PnsrObOCWLGlFk+kvOZRQqb9OAeflTYNcq4FR8A==
+  dependencies:
+    ethers "^5.7.2"
+    solmate "^6.2.0"
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.0.tgz"
@@ -12653,6 +12661,11 @@ sodium-native@^3.3.0:
   integrity sha512-PaNN/roiFWzVVTL6OqjzYct38NSXewdl2wz8SRB51Br/MLIJPrbM3XexhVWkq7D3UWMysfrhKVf1v1phZq6MeQ==
   dependencies:
     node-gyp-build "^4.3.0"
+
+solmate@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/solmate/-/solmate-6.2.0.tgz#edd29b5f3d6faafafdcf65fe4d1d959b4841cfa8"
+  integrity sha512-AM38ioQ2P8zRsA42zenb9or6OybRjOLXIu3lhIT8rhddUuduCt76pUEuLxOIg9GByGojGz+EbpFdCB6B+QZVVA==
 
 source-map-js@^1.2.0:
   version "1.2.0"
