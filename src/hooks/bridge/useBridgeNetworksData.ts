@@ -385,7 +385,9 @@ export const useBridgeNetworksData = ({
     setBridgeFee,
     onPressPreview,
     onWithdrawApprove,
-    isAmountGraterThenBalance
+    isAmountGraterThenBalance,
+    setAmountToExchange,
+    setInputError
   };
   return {
     variables,
