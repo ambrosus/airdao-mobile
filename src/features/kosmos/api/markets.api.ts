@@ -1,5 +1,5 @@
-import Config from '@constants/config';
 import axios from 'axios';
+import Config from '@constants/config';
 
 export async function fetchActiveMarkets(controller: AbortController) {
   const signal = controller.signal;

@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { fetchActiveMarkets } from '@features/kosmos/api';
 import { MarketType } from '@features/kosmos/types';
-import { useEffect, useState } from 'react';
 
 export function useActiveMarkets() {
   const [loading, setLoading] = useState(false);
