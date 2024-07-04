@@ -167,7 +167,7 @@ export async function checkAllowance(
     await signer.getAddress(),
     bridgeAddress
   );
-  if (allowance < amount) {
+  if (amount.gt(allowance)) {
     return await setAllowance(token, bridgeAddress, signer, amount);
   } else {
     return allowance;
