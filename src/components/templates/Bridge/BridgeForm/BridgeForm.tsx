@@ -50,7 +50,9 @@ export const BridgeForm = () => {
     setBridgeFee,
     onPressPreview,
     onWithdrawApprove,
-    setFeeLoader
+    setFeeLoader,
+    setAmountToExchange,
+    setInputError
   } = methods;
   const {
     dataToPreview,
@@ -82,8 +84,13 @@ export const BridgeForm = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amountToExchange]);
+
+  useEffect(() => {
+    setAmountToExchange('');
+    setInputError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    amountToExchange,
     toParams.value.id,
     fromParams.value.id,
     tokenParams.value.renderTokenItem
