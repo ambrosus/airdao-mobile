@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchClosedMarkets } from '@features/kosmos/api';
 import { MarketType } from '@features/kosmos/types';
 
@@ -19,5 +19,17 @@ export function useClosedMarkets() {
     };
   }, []);
 
-  return { isClosedMarketsLoading: loading, closedMarkets };
+  const refetchClosedMarkets = useCallback(() => {
+    setLoading(true);
+
+    fetchClosedMarkets()
+      .then((response) => setClosedMarkets(response.data))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return {
+    isClosedMarketsLoading: loading,
+    refetchClosedMarkets,
+    closedMarkets
+  };
 }

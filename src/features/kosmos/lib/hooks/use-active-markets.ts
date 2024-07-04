@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchActiveMarkets } from '@features/kosmos/api';
 import { MarketType } from '@features/kosmos/types';
 
@@ -19,5 +19,13 @@ export function useActiveMarkets() {
     };
   }, []);
 
-  return { isMarketsLoading: loading, markets };
+  const refetchMarkets = useCallback(() => {
+    setLoading(true);
+
+    fetchActiveMarkets()
+      .then((response) => setMarkets(response.data))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { isMarketsLoading: loading, refetchMarkets, markets };
 }
