@@ -1,5 +1,5 @@
 import * as Updates from 'expo-updates';
-import { bridgeConfig } from '@constants/bridge-config';
+import { BRIDGE_DATA } from '@constants/bridgeData';
 import { ALL_TOKENS_DATA } from '@constants/allToken';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
@@ -37,6 +37,8 @@ const envs = {
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
+    ...BRIDGE_DATA.prod
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -61,6 +63,8 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airdao',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus.io',
+    ETH_NETWORK_URL: 'https://eth.llamarpc.com',
+    BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
@@ -69,6 +73,8 @@ const envs = {
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
+    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
+    ...BRIDGE_DATA.stage
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -93,6 +99,8 @@ const envs = {
     AIRDAO_TELEGRAM_URL: 'https://t.me/airdao',
     AIRDAO_MEDIUM_URL: 'https://blog.airdao.io/',
     NETWORK_URL: 'https://network.ambrosus-test.io',
+    ETH_NETWORK_URL: 'https://ethereum-sepolia-rpc.publicnode.com',
+    BSC_NETWORK_URL: 'https://bsc-testnet.public.blastapi.io',
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
@@ -101,6 +109,8 @@ const envs = {
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
+    ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
+    ...BRIDGE_DATA.testnet
   }
 };
 

@@ -16,7 +16,7 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {
@@ -36,7 +36,7 @@ export const HomeScreen = () => {
     );
   }
 
-  const { setSelectedAccount } = useBridgeContextSelector();
+  const { setSelectedAccount } = useBridgeContextData();
 
   useFocusEffect(
     useCallback(() => {
@@ -48,7 +48,6 @@ export const HomeScreen = () => {
   useEffect(() => {
     if (accounts.length > 0) {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
-
       setSelectedAccount(accounts[scrollIdx]);
     }
   }, [accounts, scrollIdx, setSelectedAccount]);

@@ -42,12 +42,12 @@ export const SingleWalletScreen = () => {
       t('singleWallet.remove.alert.description'),
       [
         {
-          text: 'Delete',
+          text: t('button.delete'),
           style: 'destructive',
           onPress: () => deleteWallet(account?.address, wallet.hash)
         },
         {
-          text: 'Cancel',
+          text: t('button.cancel'),
           style: 'cancel'
         }
       ]

@@ -10,6 +10,7 @@ import { PrimaryButton } from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
 import { useForwardedRef } from '@hooks';
 import { scale } from '@utils/scaling';
+import { delay } from '@utils/delay';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 
@@ -24,44 +25,46 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
   const { isPasscodeEnabled } = usePasscode();
-
   const bottomSheetProcessingRef = useForwardedRef<BottomSheetRef>(ref);
 
-  const onSuccessButtonPress = useCallback(() => {
+  const onSuccessButtonPress = useCallback(async () => {
     bottomSheetProcessingRef.current?.dismiss();
 
     InteractionManager.runAfterInteractions(() => {
-      if (isPasscodeEnabled) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
-          })
-        );
-      } else {
-        navigation.navigate('SetupPasscode');
-      }
+      requestAnimationFrame(async () => {
+        await delay(500);
+        if (isPasscodeEnabled) {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+            })
+          );
+        } else {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Tabs',
+                  params: {
+                    screen: 'Wallets',
+                    params: {
+                      screen: 'SetupPasscode'
+                    }
+                  }
+                }
+              ]
+            })
+          );
+        }
+      });
     });
   }, [bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
 
-  const onBottomSheetClose = useCallback(() => {
-    if (status === 'success') {
-      InteractionManager.runAfterInteractions(() => {
-        setTimeout(() => {
-          if (isPasscodeEnabled) {
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
-              })
-            );
-          } else {
-            navigation.navigate('SetupPasscode');
-          }
-        });
-      });
-    }
-  }, [status, isPasscodeEnabled, navigation]);
+  const onBottomSheetClose = useCallback(async () => {
+    if (status === 'success') onSuccessButtonPress();
+  }, [status, onSuccessButtonPress]);
 
   const renderBottomSheetView = useMemo(() => {
     switch (status) {
@@ -119,12 +122,16 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
     }
   }, [onSuccessButtonPress, status, t]);
 
+  const stateToDisableBackPress = useMemo(() => {
+    return status !== 'pending' && status !== 'success';
+  }, [status]);
+
   return (
     <BottomSheet
       avoidKeyboard
       ref={bottomSheetProcessingRef}
-      onClose={onBottomSheetClose}
-      closeOnBackPress={status !== 'pending'}
+      onBackdropPress={onBottomSheetClose}
+      closeOnBackPress={stateToDisableBackPress}
       swipingEnabled={status !== 'pending'}
       swiperIconVisible={status !== 'pending'}
     >

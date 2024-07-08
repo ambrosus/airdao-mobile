@@ -295,31 +295,20 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           <View style={{ flex: 1 }}>
             {searchLoading && <Spinner />}
             {Boolean(searchError) && <SearchAddressNoResult />}
-            {searchedAccount && (
-              <View>
-                <Button
-                  onPress={() => {
-                    handleItemPress(searchedAccount);
-                  }}
-                  style={styles.item}
-                >
-                  {searchedAccount ? (
-                    <FlatList
-                      contentContainerStyle={{
-                        paddingBottom: 150
-                      }}
-                      data={[searchedAccount]}
-                      renderItem={renderItem}
-                      showsVerticalScrollIndicator={false}
-                      ListFooterComponent={() =>
-                        topHoldersLoading ? <Spinner /> : <></>
-                      }
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </Button>
-              </View>
+            {searchedAccount ? (
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: 150
+                }}
+                data={[searchedAccount]}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={() =>
+                  topHoldersLoading ? <Spinner /> : <></>
+                }
+              />
+            ) : (
+              <></>
             )}
           </View>
         ) : (

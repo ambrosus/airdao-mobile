@@ -22,7 +22,6 @@ export const useCurrencyRate = (
         break;
       }
       case CryptoCurrencyCode.USDC:
-      case CryptoCurrencyCode.ETH:
       case CryptoCurrencyCode.Tether:
       case CryptoCurrencyCode.BUSD: {
         _currencyRate = 1;
