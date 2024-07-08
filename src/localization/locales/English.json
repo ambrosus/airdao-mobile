@@ -348,8 +348,6 @@
   "wallet.my.assets": "My assets",
   "wallet.picker.select": "Select Wallet",
 
-  "bridge.select.network": "Select network",
-
   "swap.route": "Route",
   "swap.pay": "You pay",
   "swap.receive": "You receive",
@@ -379,7 +377,7 @@
   "swap.settings.multihops": "Disable multihops",
   "swap.settings.label.minutes": "minutes",
   "swap.status.error.heading": "Swap Failed",
-  "swap.label.estimated": "estimated"
+  "swap.label.estimated": "estimated",
   "bridge.history.heading": "Transaction history",
   "bridge.transaction.details.description": "Your transfer is being processed and will be completed within 5-20 minutes.",
   "bridge.history.transaction.stage": "STAGE",
