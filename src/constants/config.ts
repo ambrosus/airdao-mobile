@@ -16,7 +16,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
@@ -49,7 +49,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
@@ -82,7 +82,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
