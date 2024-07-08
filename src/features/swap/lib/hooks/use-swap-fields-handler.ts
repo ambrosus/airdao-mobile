@@ -1,0 +1,96 @@
+import { useCallback } from 'react';
+import { formatEther } from 'ethers/lib/utils';
+import { useSwapContextSelector } from '@features/swap/context';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { useSwapActions } from './use-swap-actions';
+import { SwapStringUtils } from '@features/swap/utils';
+import { useSwapHelpers } from './use-swap-helpers';
+
+export function useSwapFieldsHandler() {
+  const { getOppositeReceivedTokenAmount } = useSwapActions();
+  const {
+    setSelectedTokensAmount,
+    latestSelectedTokens,
+    latestSelectedTokensAmount,
+    setIsExactIn,
+    isExactInRef
+  } = useSwapContextSelector();
+
+  const { isEmptyAmount } = useSwapHelpers();
+
+  const updateReceivedTokensOutput = useCallback(async () => {
+    const oppositeKey = isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+    const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+
+    if (!TOKEN_A || !TOKEN_B) return '';
+
+    const path = [TOKEN_A?.address, TOKEN_B.address];
+    const amountToSell =
+      latestSelectedTokensAmount.current[
+        isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+      ];
+
+    if (isEmptyAmount(amountToSell)) return;
+
+    const bnAmountToReceive = await getOppositeReceivedTokenAmount(
+      amountToSell,
+      path
+    );
+    const normalizedAmount = SwapStringUtils.transformAmountValue(
+      formatEther(bnAmountToReceive?._hex)
+    );
+
+    setSelectedTokensAmount({
+      ...latestSelectedTokensAmount.current,
+      [oppositeKey]: normalizedAmount
+    });
+  }, [
+    isExactInRef,
+    latestSelectedTokens,
+    latestSelectedTokensAmount,
+    isEmptyAmount,
+    getOppositeReceivedTokenAmount,
+    setSelectedTokensAmount
+  ]);
+
+  const onChangeSelectedTokenAmount = useCallback(
+    async (key: SelectedTokensKeys, amount: string) => {
+      const oppositeKey = key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+      setIsExactIn(key === FIELD.TOKEN_A);
+      setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
+        ...prevSelectedTokensAmounts,
+        [key]: amount
+      }));
+
+      if (isEmptyAmount(amount)) {
+        setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
+          ...prevSelectedTokensAmounts,
+          [oppositeKey]: amount
+        }));
+      } else {
+        setTimeout(async () => {
+          await updateReceivedTokensOutput();
+        });
+      }
+    },
+    [
+      isEmptyAmount,
+      setIsExactIn,
+      setSelectedTokensAmount,
+      updateReceivedTokensOutput
+    ]
+  );
+
+  const onSelectMaxTokensAmount = (key: SelectedTokensKeys, amount: string) => {
+    setSelectedTokensAmount((prevSelectedTokensAmount) => ({
+      ...prevSelectedTokensAmount,
+      [key]: amount
+    }));
+  };
+
+  return {
+    onChangeSelectedTokenAmount,
+    onSelectMaxTokensAmount,
+    updateReceivedTokensOutput
+  };
+}

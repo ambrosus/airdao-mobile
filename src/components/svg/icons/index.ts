@@ -104,5 +104,7 @@ export * from './LeadEyeOff';
 export * from './LeadEyeEmptyMiddle';
 export * from './MoreDots';
 export * from './LeadEye';
+export * from './WalletXs';
+export * from './SwapOppositeArrows';
 export * from './CheckIconCircle';
 export * from './RightArrowInCircle';
