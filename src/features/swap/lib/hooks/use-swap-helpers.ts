@@ -8,10 +8,10 @@ import {
 import { Cache, CacheKey } from '@lib/cache';
 
 import { useSwapTokens } from './use-swap-tokens';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 
 export function useSwapHelpers() {
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount } = useBridgeContextData();
   const { tokenToSell, tokenToReceive, executedTokensAddresses } =
     useSwapTokens();
 

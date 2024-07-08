@@ -13,7 +13,7 @@ import {
   unwrapETH,
   wrapETH
 } from '../contracts';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   wrapNativeAddress,
@@ -29,7 +29,7 @@ import { useSwapTokens } from './use-swap-tokens';
 import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapActions() {
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount } = useBridgeContextData();
   const {
     isExactInRef,
     uiBottomSheetInformation,

@@ -16,7 +16,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: true,
+      swap: false,
       send: true,
       receive: true,
       bridge: true,
@@ -31,14 +31,11 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
-    BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
+    ...BRIDGE_DATA.prod,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
-    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    ...BRIDGE_DATA.prod
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -52,7 +49,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: true,
+      swap: false,
       send: true,
       receive: true,
       bridge: true,
@@ -67,14 +64,11 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc.llamarpc.com',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus.io',
-    BRIDGE_CONFIG: bridgeConfig.prod,
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
+    ...BRIDGE_DATA.stage,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
-    ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    ...BRIDGE_DATA.stage
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -88,7 +82,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: true,
+      swap: false,
       send: true,
       receive: true,
       bridge: true,
@@ -103,14 +97,11 @@ const envs = {
     BSC_NETWORK_URL: 'https://bsc-testnet.public.blastapi.io',
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
-    BRIDGE_HISTORY_URL: 'https://backoffice-api.ambrosus-test.io',
-    BRIDGE_CONFIG: bridgeConfig.test,
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
+    ...BRIDGE_DATA.testnet,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
     ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
     FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
-    ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
-    ...BRIDGE_DATA.testnet
   }
 };
 
@@ -129,7 +120,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
 }
