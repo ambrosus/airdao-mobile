@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
+import { isAndroid } from '@utils/isPlatform';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,5 +17,8 @@ export const styles = StyleSheet.create({
   },
   toggleVisibilityRow: {
     gap: 8
+  },
+  footer: {
+    paddingBottom: isAndroid ? verticalScale(20) : 0
   }
 });

@@ -28,15 +28,6 @@ import { Header } from '@components/composite';
 
 export const PasscodeEntry = () => {
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
-  const onPasscodeApprove = params?.onPasscodeApprove;
-
-  const onPasscodeEntry = () => {
-    if (typeof onPasscodeApprove === 'function') {
-      onPasscodeApprove();
-    }
-
-    return null;
-  };
 
   const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
@@ -69,6 +60,26 @@ export const PasscodeEntry = () => {
     }, 0);
   }, [navigation]);
 
+  const onPasscodeEntry = useCallback(() => {
+    if (typeof params?.onPasscodeApproveWithNavigate === 'function') {
+      params.onPasscodeApproveWithNavigate();
+      closePasscodeEntry();
+    }
+    return null;
+  }, [closePasscodeEntry, params]);
+
+  const onSuccessActions = useCallback(() => {
+    if (params?.onPasscodeApprove) {
+      return params.onPasscodeApprove();
+    }
+
+    if (params?.onPasscodeApproveWithNavigate && onPasscodeEntry) {
+      return onPasscodeEntry();
+    }
+
+    return closePasscodeEntry();
+  }, [onPasscodeEntry, closePasscodeEntry, params]);
+
   const authenticateWithBiometrics = useCallback(async () => {
     automaticFaceIdCalled.current = true;
     await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
@@ -88,7 +99,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
+        onSuccessActions();
       } else {
         passcodeRef.current?.focus();
       }
@@ -121,7 +132,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
-        onPasscodeApprove ? onPasscodeEntry() : closePasscodeEntry();
+        onSuccessActions();
       } else {
         Alert.alert(
           t('security.passcode.doesnt.match'),

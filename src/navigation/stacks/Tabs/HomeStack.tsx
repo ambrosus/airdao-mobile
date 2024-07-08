@@ -14,15 +14,15 @@ import {
 import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
   ImportWallet,
-  ImportWalletSuccess,
   ImportWalletPrivateKey,
-  ImportWalletPrivateKeyError
+  ImportWalletPrivateKeyError,
+  ImportWalletSuccess
 } from '@screens/ImportWalletMethods/screens';
 import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SendCryptoProvider } from '@contexts';
 import {
-  SetupPasscode,
   ConfirmPasscode,
+  SetupPasscode,
   SuccessSetupSecurity
 } from '@screens/SetupPasscode';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
@@ -33,7 +33,7 @@ import {
   StakeSuccessScreen
 } from '@screens/StakingPool/screens';
 import { NFTScreen } from '@screens/NFTScreen';
-import { Bridge } from '@screens/Bridge';
+import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
@@ -82,6 +82,10 @@ export const HomeStack = () => {
         <Stack.Screen name="StakeErrorScreen" component={StakeErrorScreen} />
         <Stack.Screen name="StakingPools" component={StakingPoolsScreen} />
         <Stack.Screen name="Bridge" component={Bridge} />
+        <Stack.Screen
+          name="BridgeTransferError"
+          component={BridgeTransferError}
+        />
         <Stack.Screen
           name="BridgeHistory"
           options={{

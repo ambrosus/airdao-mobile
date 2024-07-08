@@ -10,6 +10,7 @@ import { PrimaryButton } from '@components/modular';
 import { HomeNavigationProp } from '@appTypes';
 import { useForwardedRef } from '@hooks';
 import { scale } from '@utils/scaling';
+import { delay } from '@utils/delay';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
 
@@ -24,31 +25,14 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
   const { isPasscodeEnabled } = usePasscode();
-
   const bottomSheetProcessingRef = useForwardedRef<BottomSheetRef>(ref);
 
-  const onSuccessButtonPress = useCallback(() => {
+  const onSuccessButtonPress = useCallback(async () => {
     bottomSheetProcessingRef.current?.dismiss();
 
     InteractionManager.runAfterInteractions(() => {
-      if (isPasscodeEnabled) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
-          })
-        );
-      } else {
-        navigation.navigate('SetupPasscode');
-      }
-    });
-  }, [bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
-
-  const onBottomSheetClose = useCallback(() => {
-    if (status === 'success') {
-      bottomSheetProcessingRef.current?.dismiss();
-
-      InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(async () => {
+        await delay(500);
         if (isPasscodeEnabled) {
           navigation.dispatch(
             CommonActions.reset({
@@ -57,11 +41,30 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
             })
           );
         } else {
-          navigation.navigate('SetupPasscode');
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Tabs',
+                  params: {
+                    screen: 'Wallets',
+                    params: {
+                      screen: 'SetupPasscode'
+                    }
+                  }
+                }
+              ]
+            })
+          );
         }
       });
-    }
-  }, [status, bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
+    });
+  }, [bottomSheetProcessingRef, isPasscodeEnabled, navigation]);
+
+  const onBottomSheetClose = useCallback(async () => {
+    if (status === 'success') onSuccessButtonPress();
+  }, [status, onSuccessButtonPress]);
 
   const renderBottomSheetView = useMemo(() => {
     switch (status) {

@@ -9,11 +9,13 @@ import { HomeNavigationProp } from '@appTypes';
 import { BridgeTemplate } from '@/components/templates/Bridge';
 import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
+import { useBridgeContextData } from '@contexts/Bridge';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
+  const { setDefaultBridgeData } = useBridgeContextData();
 
   const renderHeaderRightContent = useMemo(() => {
     return (
@@ -31,11 +33,14 @@ export const Bridge = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
+        onBackPress={() => {
+          setDefaultBridgeData();
+          navigation.goBack();
+        }}
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}
       />
-
       <Spacer value={scale(15)} />
       <BridgeTemplate />
     </SafeAreaView>

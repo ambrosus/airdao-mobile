@@ -4,11 +4,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { ListsOfAddressType } from '@appTypes/ListsOfAddressGroup';
 import { AccountList } from '@models';
-import { PasscodeModel } from './passcode';
+import { PasscodeParams } from './passcode-params';
 
 export type CommonStackParamsList = {
   Address: { address: ListsOfAddressType['addressId'] };
-  Passcode: PasscodeModel;
+  Passcode: PasscodeParams;
   Collection: { group: AccountList };
 };
 

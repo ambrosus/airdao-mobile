@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
-import { BridgeNetworkSelectors } from '@components/modular/Bridge/BridgeNetworkSelectors/BridgeNetwork.Selectors';
-import { BridgeForm } from '@components/modular/Bridge';
+import { BridgeNetworkSelectors } from './BridgeNetworkSelectors/BridgeNetwork.Selectors';
+import { BridgeForm } from './BridgeForm/BridgeForm';
 import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 

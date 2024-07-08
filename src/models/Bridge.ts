@@ -1,3 +1,10 @@
+import {
+  FeeData,
+  Network as BridgeNetwork,
+  Token
+} from '@lib/bridgeSDK/models/types';
+import { BigNumber, ethers } from 'ethers';
+
 export interface Bridge {
   bridges: Bridges;
   tokens: Tokens;
@@ -13,6 +20,28 @@ export interface BridgeItem {
   amb: string;
   side: string;
 }
+
+export interface BridgePairsModel {
+  name: PairsNetworksNamesModel;
+  pairs: [Token, Token][];
+  provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
+}
+export interface RenderTokenItem extends Token {
+  balance: BigNumber;
+}
+export interface RenderTokenItem {
+  renderTokenItem: RenderTokenItem;
+  name: PairsNetworksNamesModel;
+  pairs: [Token, Token];
+  provider?: Promise<ethers.providers.JsonRpcProvider | undefined>;
+}
+
+export type PairsNetworksNamesModel =
+  | 'eth->amb'
+  | 'amb->eth'
+  | 'bsc->amb'
+  | 'amb->bsc'
+  | string;
 
 export interface Tokens {
   SAMB: TokenConfig;
@@ -49,9 +78,20 @@ export interface TokenNetworks {
 
 export interface ParsedBridge {
   amb: string;
-  id: string;
+  id: BridgeNetwork | string;
   name: string;
   side: string;
 }
+export interface BridgeNetworkPickerProps {
+  destination: 'from' | 'to';
+}
 
-export type NetworksNames = 'amb' | 'eth' | 'bsc';
+export interface BridgeFeeModel {
+  amount: BigNumber;
+  networkFee: BigNumber;
+  feeToken: Token;
+  bridgeAmount: BigNumber;
+  feeData: FeeData;
+}
+
+export type NetworksNames = 'amb' | 'eth' | 'bsc' | string;
