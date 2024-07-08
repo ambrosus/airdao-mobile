@@ -1,3 +1,3 @@
-import { BridgeTemplate } from '@components/templates/Bridge/BridgeTemplate';
+import { BridgeTemplate } from './BridgeTemplate';
 
 export { BridgeTemplate };
