@@ -1,13 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
+import debounce from 'lodash/debounce';
+import { useSwapActions } from './use-swap-actions';
+import { useSwapHelpers } from './use-swap-helpers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { useSwapActions } from './use-swap-actions';
 import { SwapStringUtils } from '@features/swap/utils';
-import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapFieldsHandler() {
-  const { getOppositeReceivedTokenAmount } = useSwapActions();
   const {
     setSelectedTokensAmount,
     latestSelectedTokens,
@@ -16,19 +16,20 @@ export function useSwapFieldsHandler() {
     isExactInRef
   } = useSwapContextSelector();
 
+  const { getOppositeReceivedTokenAmount } = useSwapActions();
   const { isEmptyAmount } = useSwapHelpers();
 
   const updateReceivedTokensOutput = useCallback(async () => {
-    const oppositeKey = isExactInRef.current ? FIELD.TOKEN_B : FIELD.TOKEN_A;
+    const isExactIn = isExactInRef.current;
+    const oppositeKey = isExactIn ? FIELD.TOKEN_B : FIELD.TOKEN_A;
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
+    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } =
+      latestSelectedTokensAmount.current;
 
-    if (!TOKEN_A || !TOKEN_B) return '';
+    if (!TOKEN_A || !TOKEN_B) return;
 
     const path = [TOKEN_A?.address, TOKEN_B.address];
-    const amountToSell =
-      latestSelectedTokensAmount.current[
-        isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
-      ];
+    const amountToSell = isExactIn ? AMOUNT_A : AMOUNT_B;
 
     if (isEmptyAmount(amountToSell)) return;
 
@@ -40,9 +41,18 @@ export function useSwapFieldsHandler() {
       formatEther(bnAmountToReceive?._hex)
     );
 
-    setSelectedTokensAmount({
-      ...latestSelectedTokensAmount.current,
-      [oppositeKey]: normalizedAmount
+    setSelectedTokensAmount((prevSelectedTokensAmounts) => {
+      const currentAmount =
+        prevSelectedTokensAmounts[
+          isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+        ];
+      if (!isEmptyAmount(currentAmount)) {
+        return {
+          ...prevSelectedTokensAmounts,
+          [oppositeKey]: normalizedAmount
+        };
+      }
+      return prevSelectedTokensAmounts;
     });
   }, [
     isExactInRef,
@@ -53,8 +63,13 @@ export function useSwapFieldsHandler() {
     setSelectedTokensAmount
   ]);
 
+  const debouncedUpdateReceivedTokensOutput = useMemo(
+    () => debounce(updateReceivedTokensOutput),
+    [updateReceivedTokensOutput]
+  );
+
   const onChangeSelectedTokenAmount = useCallback(
-    async (key: SelectedTokensKeys, amount: string) => {
+    (key: SelectedTokensKeys, amount: string) => {
       const oppositeKey = key === FIELD.TOKEN_A ? FIELD.TOKEN_B : FIELD.TOKEN_A;
       setIsExactIn(key === FIELD.TOKEN_A);
       setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
@@ -69,15 +84,15 @@ export function useSwapFieldsHandler() {
         }));
       } else {
         setTimeout(async () => {
-          await updateReceivedTokensOutput();
+          await debouncedUpdateReceivedTokensOutput();
         });
       }
     },
     [
+      debouncedUpdateReceivedTokensOutput,
       isEmptyAmount,
       setIsExactIn,
-      setSelectedTokensAmount,
-      updateReceivedTokensOutput
+      setSelectedTokensAmount
     ]
   );
 
