@@ -62,7 +62,6 @@ export const SwapContext = () => {
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
-    setSettings(INITAL_SETTINGS);
     setUiBottomSheetInformation(INITAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
   }, []);
