@@ -11,7 +11,7 @@ export function useSwapSettings() {
   }, [_refSettingsGetter]);
 
   const onChangeSettings = useCallback(
-    (key: SettingsKeys, value: any) => {
+    (key: SettingsKeys, value: string | boolean) => {
       setSettings({
         ..._refSettingsGetter,
         [key]: value
