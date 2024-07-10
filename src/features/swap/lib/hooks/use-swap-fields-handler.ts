@@ -48,7 +48,7 @@ export function useSwapFieldsHandler() {
         ];
       if (!isEmptyAmount(currentAmount)) {
         return {
-          ...prevSelectedTokensAmounts,
+          ...latestSelectedTokensAmount.current,
           [oppositeKey]: normalizedAmount
         };
       }
@@ -64,7 +64,7 @@ export function useSwapFieldsHandler() {
   ]);
 
   const debouncedUpdateReceivedTokensOutput = useMemo(
-    () => debounce(updateReceivedTokensOutput),
+    () => debounce(async () => await updateReceivedTokensOutput(), 100),
     [updateReceivedTokensOutput]
   );
 
@@ -83,16 +83,14 @@ export function useSwapFieldsHandler() {
           [oppositeKey]: amount
         }));
       } else {
-        setTimeout(async () => {
-          await debouncedUpdateReceivedTokensOutput();
-        });
+        Promise.resolve(debouncedUpdateReceivedTokensOutput());
       }
     },
     [
-      debouncedUpdateReceivedTokensOutput,
-      isEmptyAmount,
       setIsExactIn,
-      setSelectedTokensAmount
+      setSelectedTokensAmount,
+      isEmptyAmount,
+      debouncedUpdateReceivedTokensOutput
     ]
   );
 
