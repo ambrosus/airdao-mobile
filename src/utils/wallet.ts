@@ -141,8 +141,11 @@ export const importWalletViaPrivateKey = async (privateKey: string) => {
       privateKey
     );
 
-    walletInDb = await WalletDB.createWallet(fullWallet);
+    if (!_account) throw new Error();
 
+    await API.watcherService.watchAddresses([_account.address]);
+
+    walletInDb = await WalletDB.createWallet(fullWallet);
     const [, accountInDbResult] = await Promise.all([
       // Securely store private key
       Cache.setItem(
@@ -160,8 +163,6 @@ export const importWalletViaPrivateKey = async (privateKey: string) => {
     ]);
 
     accountInDb = accountInDbResult;
-    // subscribe to notifications
-    await API.watcherService.watchAddresses([_account.address]);
     return { hash };
   } catch (error) {
     if (walletInDb) walletInDb.destroyPermanently();
