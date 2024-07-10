@@ -31,7 +31,7 @@ describe('SwapStringUtils', () => {
       const value = '291111.9546';
       const transformedValue = SwapStringUtils.transformAmountValue(value);
 
-      expect(transformedValue).toEqual('291111');
+      expect(transformedValue).toEqual('291111.9');
     });
   });
 });

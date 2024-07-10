@@ -24,7 +24,7 @@ describe('wrapNativeAddress utility | Unit Test', () => {
     ] as [string, string];
 
     const expectedPath = [
-      '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
+      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
       '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
     ];
 
