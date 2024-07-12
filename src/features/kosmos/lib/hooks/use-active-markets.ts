@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchActiveMarkets } from '@features/kosmos/api';
 import { MarketType } from '@features/kosmos/types';
+import { useMarketsTokens } from './use-market-tokens';
 
 export function useActiveMarkets() {
+  const { tokens, isTokensLoading } = useMarketsTokens();
+
   const [loading, setLoading] = useState(false);
   const [markets, setMarkets] = useState<MarketType[]>([]);
 
@@ -27,5 +30,10 @@ export function useActiveMarkets() {
       .finally(() => setLoading(false));
   }, []);
 
-  return { isMarketsLoading: loading, refetchMarkets, markets };
+  return {
+    isMarketsLoading: loading || isTokensLoading,
+    refetchMarkets,
+    markets,
+    tokens
+  };
 }

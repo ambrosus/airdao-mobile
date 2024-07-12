@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     left: 0
   },
   rightContainerStyles: {
-    right: 0
+    right: scale(16.5)
   },
   heading: {
     fontFamily: 'Inter_700Bold',

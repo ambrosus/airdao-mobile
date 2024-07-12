@@ -1,1 +1,1 @@
-export { ActiveMarketsWithFilters } from './active-markets';
+export { MarketsTabs } from './market-tabs';
