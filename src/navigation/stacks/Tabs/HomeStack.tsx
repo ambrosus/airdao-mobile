@@ -35,6 +35,7 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { KosmosScreen } from '@screens/Kosmos';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -110,6 +111,7 @@ export const HomeStack = () => {
           name="ImportWalletPrivateKeyError"
           component={ImportWalletPrivateKeyError}
         />
+        <Stack.Screen name="KosmosScreen" component={KosmosScreen} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>

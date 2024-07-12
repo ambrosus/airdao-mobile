@@ -41,6 +41,7 @@ export type HomeParamsList = {
   StakeErrorScreen: undefined;
   ImportWalletPrivateKey: undefined;
   ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
+  KosmosScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<
