@@ -1,5 +1,10 @@
 import { FiltersState, MarketType, StatusFilterValues } from '../types';
 
+export const INITIAL_FILTERS: FiltersState = {
+  status: 'all',
+  payment: null
+};
+
 function filterByStatus(
   status: StatusFilterValues,
   markets: MarketType[],

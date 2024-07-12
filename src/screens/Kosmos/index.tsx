@@ -8,14 +8,12 @@ import {
   MarketsTabs
 } from '@features/kosmos/components/templates';
 import { FiltersState } from '@features/kosmos/types';
+import { INITIAL_FILTERS } from '@features/kosmos/utils';
 
 export const KosmosScreen = () => {
   const bottomSheetFiltersRef = useRef<BottomSheetRef>(null);
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [filters] = useState<FiltersState>({
-    status: 'all',
-    payment: null
-  });
+  const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
 
   const onViewFiltersPress = useCallback(
     () => bottomSheetFiltersRef.current?.show(),
@@ -47,7 +45,10 @@ export const KosmosScreen = () => {
       />
 
       <MarketsTabs changeActiveIndex={setSelectedTabIndex} filters={filters} />
-      <BottomSheetFilters ref={bottomSheetFiltersRef} />
+      <BottomSheetFilters
+        ref={bottomSheetFiltersRef}
+        updateFilters={setFilters}
+      />
     </SafeAreaView>
   );
 };
