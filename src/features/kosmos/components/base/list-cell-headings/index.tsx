@@ -10,7 +10,8 @@ const LIST_HEADER_TITLES = ['bonds', 'discount', 'value'];
 export const ListCellHeadings = () => {
   const listHeadingsStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
-      paddingHorizontal: scale(16.5)
+      paddingHorizontal: scale(16.5),
+      paddingBottom: 16
     };
   }, []);
 

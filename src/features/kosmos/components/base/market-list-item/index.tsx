@@ -1,15 +1,16 @@
 import React, { memo, useMemo } from 'react';
-import { View, Image, StyleProp, TextStyle } from 'react-native';
+import { View, Image, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { getTokenByAddress } from '@features/kosmos/utils';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 
 interface MarketListItemProps {
   market: MarketType;
   tokens: Token[];
+  index: number;
 }
 
 interface StyledItemTextProps {
@@ -18,7 +19,7 @@ interface StyledItemTextProps {
   color?: keyof typeof COLORS | string;
 }
 
-const _MarketListItem = ({ market, tokens }: MarketListItemProps) => {
+const _MarketListItem = ({ market, tokens, index }: MarketListItemProps) => {
   const unwrapped = useMemo(() => {
     return getTokenByAddress(market.payoutToken, tokens);
   }, [tokens, market]);
@@ -27,18 +28,24 @@ const _MarketListItem = ({ market, tokens }: MarketListItemProps) => {
     return market.discount > 0 ? COLORS.success600 : COLORS.error600;
   }, [market]);
 
+  const combinedItemStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      ...styles.container,
+      marginTop: index === 0 ? 0 : verticalScale(16)
+    };
+  }, [index]);
+
   return (
-    <View style={styles.container}>
+    <View style={combinedItemStyle}>
       <Row style={styles.itemLabelContainer} alignItems="center">
         <Image src={unwrapped?.logoUrl} style={styles.logo} />
         <StyledItemText label={unwrapped?.symbol} />
       </Row>
       <StyledItemText
-        align
         label={`${market.discount.toFixed(2)}%`}
         color={discountItemColor}
       />
-      <StyledItemText label={market.discount.toFixed(2)} />
+      <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
     </View>
   );
 };
@@ -46,11 +53,11 @@ const _MarketListItem = ({ market, tokens }: MarketListItemProps) => {
 const StyledItemText = ({
   align,
   label = '',
-  color = 'neutral600'
+  color = COLORS.neutral600
 }: StyledItemTextProps) => {
   const textItemStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
-      marginLeft: align ? scale(-32) : 0
+      marginLeft: align ? scale(-16) : 0
     };
   }, [align]);
 

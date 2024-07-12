@@ -1,9 +1,10 @@
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    padding: scale(16),
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(16),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'

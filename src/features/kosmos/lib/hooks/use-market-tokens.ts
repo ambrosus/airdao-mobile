@@ -7,9 +7,11 @@ export function useMarketsTokens() {
   const [tokens, setTokens] = useState<Token[]>([]);
 
   useEffect(() => {
-    setLoading(true);
+    if (tokens.length > 0) return;
 
+    setLoading(true);
     const controller = new AbortController();
+
     fetchMarketTokens(controller)
       .then((response) => setTokens(response.data))
       .finally(() => setLoading(false));
@@ -17,7 +19,7 @@ export function useMarketsTokens() {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [tokens]);
 
   return { isTokensLoading: loading, tokens };
 }

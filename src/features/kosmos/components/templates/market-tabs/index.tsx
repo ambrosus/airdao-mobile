@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { AnimatedTabs } from '@components/modular';
 import {
-  ActiveMarketsList,
+  MarketsList,
   UserOrdersList
 } from '@/features/kosmos/components/composite';
 import { WrappedListsContainer } from '@features/kosmos/components/base';
@@ -34,7 +34,7 @@ export const MarketsTabs = ({
           title: 'Markets',
           view: (
             <WrappedListsContainer>
-              <ActiveMarketsList filters={filters} />
+              <MarketsList filters={filters} />
             </WrappedListsContainer>
           )
         },
