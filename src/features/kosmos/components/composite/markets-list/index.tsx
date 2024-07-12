@@ -25,8 +25,8 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
   const { closedMarkets, isClosedMarketsLoading } = useClosedMarkets();
 
   const filteredMarkets = useMemo(() => {
-    return filter(filters, markets, closedMarkets);
-  }, [filters, markets, closedMarkets]);
+    return filter(filters, markets, closedMarkets, tokens);
+  }, [filters, markets, closedMarkets, tokens]);
 
   const renderMarketListItem = useCallback(
     (args: ListRenderItemInfo<MarketType>) => {

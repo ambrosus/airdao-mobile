@@ -31,8 +31,7 @@ export const BottomSheetFilters = forwardRef<
   const onResetFilters = useCallback(() => {
     updateFilters(INITIAL_FILTERS);
     setUiFilters(INITIAL_FILTERS);
-    bottomSheetRef.current?.dismiss();
-  }, [bottomSheetRef, updateFilters]);
+  }, [updateFilters]);
 
   const onApplyFilters = useCallback(() => {
     updateFilters(uiFilters);

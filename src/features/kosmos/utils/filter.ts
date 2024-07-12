@@ -1,4 +1,11 @@
-import { FiltersState, MarketType, StatusFilterValues } from '../types';
+import { getTokenByAddress } from './token-by-address';
+import {
+  FiltersState,
+  MarketType,
+  PaymetsTokens,
+  StatusFilterValues,
+  Token
+} from '../types';
 
 export const INITIAL_FILTERS: FiltersState = {
   status: 'all',
@@ -21,18 +28,35 @@ function filterByStatus(
   }
 }
 
-export function filter(
+function filterMarketsByToken(
+  markets: MarketType[],
+  token: PaymetsTokens,
+  tokens: Token[]
+): MarketType[] {
+  return markets.filter((market) => {
+    const payoutToken = getTokenByAddress(market.payoutToken, tokens);
+    return payoutToken && payoutToken.symbol === token;
+  });
+}
+
+function filterByPayment(
+  token: PaymetsTokens,
+  markets: MarketType[],
+  tokens: Token[]
+): MarketType[] {
+  return filterMarketsByToken(markets, token, tokens);
+}
+
+export const filter = (
   filters: FiltersState,
   markets: MarketType[],
-  closedMarkets: MarketType[]
-): MarketType[] {
+  closedMarkets: MarketType[],
+  tokens: Token[]
+): MarketType[] => {
   const { status, payment } = filters;
-
   const filteredMarkets = filterByStatus(status, markets, closedMarkets);
 
-  if (!payment) {
-    return filteredMarkets;
-  }
+  if (payment) return filterByPayment(payment, filteredMarkets, tokens);
 
-  return [...markets, ...closedMarkets];
-}
+  return filteredMarkets;
+};
