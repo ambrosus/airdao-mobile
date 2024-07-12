@@ -1,12 +1,5 @@
 import { SwapToken } from '../types';
 
-export function resolvePlateSymbol(symbolA: string, symbolB: string) {
-  return {
-    TOKEN_A: symbolA,
-    TOKEN_B: symbolB
-  };
-}
-
 export function plateVisibility(
   TOKEN_A: SwapToken | null,
   AMOUNT_A: string,

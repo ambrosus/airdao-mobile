@@ -4,11 +4,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapActions, useSwapTokens } from '@features/swap/lib/hooks';
-import {
-  SwapStringUtils,
-  plateVisibility,
-  resolvePlateSymbol
-} from '@features/swap/utils';
+import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { COLORS } from '@constants/colors';
 
@@ -28,9 +24,16 @@ export const TokenInfoPlate = () => {
     ];
 
     if (symbolA && symbolB) {
-      return resolvePlateSymbol(symbolA, symbolB);
+      return {
+        TOKEN_A: _refExactGetter ? symbolA : symbolB,
+        TOKEN_B: _refExactGetter ? symbolB : symbolA
+      };
     }
-  }, [tokenToReceive.TOKEN?.symbol, tokenToSell.TOKEN?.symbol]);
+  }, [
+    _refExactGetter,
+    tokenToReceive.TOKEN?.symbol,
+    tokenToSell.TOKEN?.symbol
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -73,9 +76,9 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {tokenToSell.TOKEN?.symbol ?? 'AMB'} ($
+        1 {symbols?.TOKEN_A ?? 'AMB'} ($
         {SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}) ={' '}
-        {oppositeAmountPerOneToken} {tokenToReceive.TOKEN?.symbol}
+        {oppositeAmountPerOneToken} {symbols?.TOKEN_B}
       </Text>
     </Row>
   ) : (
