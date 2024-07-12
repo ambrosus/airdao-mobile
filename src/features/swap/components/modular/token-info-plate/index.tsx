@@ -15,7 +15,7 @@ import { COLORS } from '@constants/colors';
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
 
-  const { getTokenAmountOut } = useSwapActions();
+  const { getOppositeReceivedTokenAmount } = useSwapActions();
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
 
@@ -35,7 +35,7 @@ export const TokenInfoPlate = () => {
   useEffect(() => {
     (async () => {
       if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
-        const bnAmount = await getTokenAmountOut('1', tokensRoute);
+        const bnAmount = await getOppositeReceivedTokenAmount('1', tokensRoute);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -47,7 +47,7 @@ export const TokenInfoPlate = () => {
   }, [
     _refExactGetter,
     _refSettingsGetter,
-    getTokenAmountOut,
+    getOppositeReceivedTokenAmount,
     tokenToReceive.TOKEN,
     tokenToSell.TOKEN,
     tokensRoute
