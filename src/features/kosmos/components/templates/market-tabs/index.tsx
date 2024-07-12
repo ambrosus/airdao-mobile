@@ -4,7 +4,7 @@ import {
   ActiveMarketsList,
   UserOrdersList
 } from '@/features/kosmos/components/composite';
-import { ListCellHeadings } from '@features/kosmos/components/base';
+import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { FiltersState } from '@features/kosmos/types';
 
 interface MarketsTabsProps {
@@ -33,19 +33,17 @@ export const MarketsTabs = ({
         {
           title: 'Markets',
           view: (
-            <>
-              <ListCellHeadings />
+            <WrappedListsContainer>
               <ActiveMarketsList filters={filters} />
-            </>
+            </WrappedListsContainer>
           )
         },
         {
           title: 'My orders',
           view: (
-            <>
-              <ListCellHeadings />
+            <WrappedListsContainer>
               <UserOrdersList />
-            </>
+            </WrappedListsContainer>
           )
         }
       ]}
