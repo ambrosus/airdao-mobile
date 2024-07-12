@@ -1,21 +1,37 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import { FiltersSelector } from '@features/kosmos/components/modular';
-import { MarketsTabs } from '@features/kosmos/components/templates';
+import {
+  BottomSheetFilters,
+  MarketsTabs
+} from '@features/kosmos/components/templates';
 import { FiltersState } from '@features/kosmos/types';
 
 export const KosmosScreen = () => {
+  const bottomSheetFiltersRef = useRef<BottomSheetRef>(null);
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const [filters] = useState<FiltersState>({
     status: 'all',
     payment: null
   });
 
+  const onViewFiltersPress = useCallback(
+    () => bottomSheetFiltersRef.current?.show(),
+    []
+  );
+
   const renderHeaderRightContent = useMemo(() => {
-    return selectedTabIndex === 0 && <FiltersSelector label="Filter by" />;
-  }, [selectedTabIndex]);
+    return (
+      selectedTabIndex === 0 && (
+        <FiltersSelector
+          label="Filter by"
+          onFiltersPress={onViewFiltersPress}
+        />
+      )
+    );
+  }, [onViewFiltersPress, selectedTabIndex]);
 
   return (
     <SafeAreaView>
@@ -31,6 +47,7 @@ export const KosmosScreen = () => {
       />
 
       <MarketsTabs changeActiveIndex={setSelectedTabIndex} filters={filters} />
+      <BottomSheetFilters ref={bottomSheetFiltersRef} />
     </SafeAreaView>
   );
 };

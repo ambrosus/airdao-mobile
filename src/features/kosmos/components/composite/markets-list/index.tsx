@@ -11,6 +11,7 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { filter } from '@/features/kosmos/utils/filter';
 import { Spinner } from '@components/base';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 const ESTIMATED_ITEM_SIZE = 56;
 
@@ -66,6 +67,7 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
       onRefresh={refetchMarkets}
       refreshing={isMarketsLoading}
       estimatedItemSize={ESTIMATED_ITEM_SIZE}
+      estimatedListSize={{ width: DEVICE_WIDTH, height: 40 }}
       ListFooterComponent={RenderListFooterComponent}
       removeClippedSubviews
     />
