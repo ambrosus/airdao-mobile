@@ -40,11 +40,11 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
 
       return (
         <TouchableOpacity onPress={redirectToDetails}>
-          <MarketListItem index={index} market={market} tokens={tokens} />
+          <MarketListItem index={index} market={market} />
         </TouchableOpacity>
       );
     },
-    [navigation, tokens]
+    [navigation]
   );
 
   const RenderListFooterComponent = useCallback(() => {

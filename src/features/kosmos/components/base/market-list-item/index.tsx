@@ -9,7 +9,6 @@ import { useExtractToken } from '@features/kosmos/lib/hooks';
 
 interface MarketListItemProps {
   market: MarketType;
-
   index: number;
 }
 
