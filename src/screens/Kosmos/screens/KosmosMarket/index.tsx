@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { Header } from '@components/composite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MarketHeaderDetails } from '@features/kosmos/components/base';
+import { MarketTableDetails } from '@features/kosmos/components/composite';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 
@@ -21,7 +22,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
 
   return (
     <SafeAreaView>
-      <Header backIconVisible title={renderHeaderMiddleContent} />
+      <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
+
+      <MarketTableDetails market={route.params.market} />
     </SafeAreaView>
   );
 };

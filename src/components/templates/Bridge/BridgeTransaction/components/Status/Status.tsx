@@ -23,8 +23,12 @@ export const Status = ({ status, steps }: StatusProps) => {
 
   const statusStyle = useMemo(() => {
     switch (transactionStatus) {
+      case 'active':
       case 'success':
         return { ...successStyle };
+      case 'closed': {
+        return { ...defaultStyle };
+      }
       case 'confirmations': {
         return { ...confirmationStyles };
       }
@@ -48,6 +52,10 @@ export const Status = ({ status, steps }: StatusProps) => {
     switch (status) {
       case 'success':
         return t('common.status.success');
+      case 'active':
+        return 'Active';
+      case 'closed':
+        return 'Closed';
       case 'pending':
         return t('common.status.pending');
       case 'confirmations':
