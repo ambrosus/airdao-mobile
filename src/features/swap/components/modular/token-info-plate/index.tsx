@@ -10,12 +10,11 @@ import { COLORS } from '@constants/colors';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
-
+  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
   const { getOppositeReceivedTokenAmount } = useSwapActions();
+
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
-
-  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
 
   useEffect(() => {
     (async () => {
