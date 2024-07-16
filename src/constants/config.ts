@@ -113,7 +113,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
 }

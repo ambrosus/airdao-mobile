@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from 'react-native';
 import uppercase from 'lodash/upperCase';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 
 const LIST_HEADER_TITLES = ['bonds', 'discount', 'value'];
 
@@ -11,7 +11,7 @@ export const ListCellHeadings = () => {
   const listHeadingsStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
       paddingHorizontal: scale(16.5),
-      paddingBottom: 16
+      paddingBottom: verticalScale(16)
     };
   }, []);
 

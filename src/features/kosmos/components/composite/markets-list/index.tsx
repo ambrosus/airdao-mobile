@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
 import { MarketListItem } from '@/features/kosmos/components/base';
@@ -11,15 +12,18 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { filter } from '@/features/kosmos/utils/filter';
 import { Spinner } from '@components/base';
-import { DEVICE_WIDTH } from '@constants/variables';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
+import { HomeNavigationProp } from '@appTypes';
 
 const ESTIMATED_ITEM_SIZE = 56;
+const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
 
 interface ActiveMarketsListProps {
   filters: FiltersState;
 }
 
 export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
+  const navigation: HomeNavigationProp = useNavigation();
   const { tokens, isTokensLoading } = useMarketsTokens();
   const { markets, refetchMarkets, isMarketsLoading } = useActiveMarkets();
   const { closedMarkets, isClosedMarketsLoading } = useClosedMarkets();
@@ -30,17 +34,17 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
 
   const renderMarketListItem = useCallback(
     (args: ListRenderItemInfo<MarketType>) => {
+      const { item: market, index } = args;
+      const redirectToDetails = () =>
+        navigation.navigate('KosmosMarketScreen', { market });
+
       return (
-        <TouchableOpacity>
-          <MarketListItem
-            index={args.index}
-            market={args.item}
-            tokens={tokens}
-          />
+        <TouchableOpacity onPress={redirectToDetails}>
+          <MarketListItem index={index} market={market} tokens={tokens} />
         </TouchableOpacity>
       );
     },
-    [tokens]
+    [navigation, tokens]
   );
 
   const RenderListFooterComponent = useCallback(() => {
@@ -67,7 +71,7 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
       onRefresh={refetchMarkets}
       refreshing={isMarketsLoading}
       estimatedItemSize={ESTIMATED_ITEM_SIZE}
-      estimatedListSize={{ width: DEVICE_WIDTH, height: 40 }}
+      estimatedListSize={ESTIMATED_LIST_SIZE}
       ListFooterComponent={RenderListFooterComponent}
       removeClippedSubviews
     />

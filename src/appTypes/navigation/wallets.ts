@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 import { StakingPool, Token } from '@models';
+import { MarketType } from '@features/kosmos/types';
 
 export type HomeParamsList = {
   HomeScreen: undefined;
@@ -42,6 +43,7 @@ export type HomeParamsList = {
   ImportWalletPrivateKey: undefined;
   ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
   KosmosScreen: undefined;
+  KosmosMarketScreen: { market: MarketType };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

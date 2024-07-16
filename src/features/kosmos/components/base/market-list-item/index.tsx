@@ -1,15 +1,15 @@
-import React, { memo, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { View, Image, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
-import { MarketType, Token } from '@features/kosmos/types';
-import { getTokenByAddress } from '@features/kosmos/utils';
+import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
+import { useExtractToken } from '@features/kosmos/lib/hooks';
 
 interface MarketListItemProps {
   market: MarketType;
-  tokens: Token[];
+
   index: number;
 }
 
@@ -19,36 +19,36 @@ interface StyledItemTextProps {
   color?: keyof typeof COLORS | string;
 }
 
-const _MarketListItem = ({ market, tokens, index }: MarketListItemProps) => {
-  const unwrapped = useMemo(() => {
-    return getTokenByAddress(market.payoutToken, tokens);
-  }, [tokens, market]);
+export const MarketListItem = React.memo(
+  ({ market, index }: MarketListItemProps) => {
+    const { token } = useExtractToken(market.payoutToken);
 
-  const discountItemColor = useMemo(() => {
-    return market.discount > 0 ? COLORS.success600 : COLORS.error600;
-  }, [market]);
+    const discountItemColor = useMemo(() => {
+      return market.discount > 0 ? COLORS.success600 : COLORS.error600;
+    }, [market]);
 
-  const combinedItemStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      ...styles.container,
-      marginTop: index === 0 ? 0 : verticalScale(16)
-    };
-  }, [index]);
+    const combinedItemStyle: StyleProp<ViewStyle> = useMemo(() => {
+      return {
+        ...styles.container,
+        marginTop: index === 0 ? 0 : verticalScale(16)
+      };
+    }, [index]);
 
-  return (
-    <View style={combinedItemStyle}>
-      <Row style={styles.itemLabelContainer} alignItems="center">
-        <Image src={unwrapped?.logoUrl} style={styles.logo} />
-        <StyledItemText label={unwrapped?.symbol} />
-      </Row>
-      <StyledItemText
-        label={`${market.discount.toFixed(2)}%`}
-        color={discountItemColor}
-      />
-      <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
-    </View>
-  );
-};
+    return (
+      <View style={combinedItemStyle}>
+        <Row style={styles.itemLabelContainer} alignItems="center">
+          <Image src={token?.logoUrl} style={styles.logo} />
+          <StyledItemText label={token?.symbol} />
+        </Row>
+        <StyledItemText
+          label={`${market.discount.toFixed(2)}%`}
+          color={discountItemColor}
+        />
+        <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
+      </View>
+    );
+  }
+);
 
 const StyledItemText = ({
   align,
@@ -72,5 +72,3 @@ const StyledItemText = ({
     </Text>
   );
 };
-
-export const MarketListItem = memo(_MarketListItem);

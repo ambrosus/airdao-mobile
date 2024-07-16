@@ -33,10 +33,6 @@ export const FiltersItem = ({
   }, [isSelected]);
 
   const onFilterValuePress = () => {
-    if (stateKey === 'payment' && filters.payment === value) {
-      return updateFilters({ ...filters, payment: null });
-    }
-
     return updateFilters({ ...filters, [stateKey]: value });
   };
 
