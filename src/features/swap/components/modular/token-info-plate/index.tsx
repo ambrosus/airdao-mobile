@@ -17,28 +17,11 @@ export const TokenInfoPlate = () => {
 
   const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
 
-  const symbols = useMemo(() => {
-    const [symbolA, symbolB] = [
-      tokenToSell.TOKEN?.symbol,
-      tokenToReceive.TOKEN?.symbol
-    ];
-
-    if (symbolA && symbolB) {
-      return {
-        TOKEN_A: _refExactGetter ? symbolA : symbolB,
-        TOKEN_B: _refExactGetter ? symbolB : symbolA
-      };
-    }
-  }, [
-    _refExactGetter,
-    tokenToReceive.TOKEN?.symbol,
-    tokenToSell.TOKEN?.symbol
-  ]);
-
   useEffect(() => {
     (async () => {
       if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
-        const bnAmount = await getOppositeReceivedTokenAmount('1', tokensRoute);
+        const route = _refExactGetter ? tokensRoute.reverse() : tokensRoute;
+        const bnAmount = await getOppositeReceivedTokenAmount('1', route);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -56,7 +39,10 @@ export const TokenInfoPlate = () => {
     tokensRoute
   ]);
 
-  const TokenUSDPrice = useUSDPrice(1, symbols?.TOKEN_A as CryptoCurrencyCode);
+  const TokenUSDPrice = useUSDPrice(
+    1,
+    tokenToReceive.TOKEN?.symbol as CryptoCurrencyCode
+  );
 
   const isShowPlate = useMemo(() => {
     return plateVisibility(
@@ -76,9 +62,9 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {symbols?.TOKEN_A ?? 'AMB'} ($
+        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'} ($
         {SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}) ={' '}
-        {oppositeAmountPerOneToken} {symbols?.TOKEN_B}
+        {oppositeAmountPerOneToken} {tokenToSell.TOKEN?.symbol}
       </Text>
     </Row>
   ) : (
