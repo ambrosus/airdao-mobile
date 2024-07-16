@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react';
-import { useMarketsTokens } from './use-market-tokens';
 import { getTokenByAddress } from '@features/kosmos/utils';
+import { useMarketTokens } from './use-market-tokens';
 
 export function useExtractToken(address?: string) {
-  const { tokens, isTokensLoading } = useMarketsTokens();
+  const { tokens } = useMarketTokens();
 
   const token = useMemo(() => {
     if (address) return getTokenByAddress(address, tokens);
@@ -16,5 +16,5 @@ export function useExtractToken(address?: string) {
     [tokens]
   );
 
-  return { token, extractTokenCb, isTokensLoading };
+  return { token, extractTokenCb, isTokensLoading: tokens };
 }

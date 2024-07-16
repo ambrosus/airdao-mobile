@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { BigNumber, utils } from 'ethers';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
 import { useExtractToken } from './use-extract-token';
 import {
@@ -8,10 +9,9 @@ import {
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
-import { useMarketsTokens } from './use-market-tokens';
 
 export function useMarketDetails(market: MarketType) {
-  const { tokens } = useMarketsTokens();
+  const { tokens } = useKosmosMarketsContextSelector();
   const { extractTokenCb } = useExtractToken();
   const payoutToken = extractTokenCb(market.payoutToken);
   const quoteToken = extractTokenCb(market.quoteToken);

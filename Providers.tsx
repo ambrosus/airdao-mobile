@@ -13,6 +13,7 @@ import {
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@contexts/Bridge';
+import { KosmosMarketsContextProvider } from '@features/kosmos/context';
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,11 @@ const BridgeProvider: React.FC = ({ children }: any) => (
   <BridgeContextProvider>{children}</BridgeContextProvider>
 );
 
+const KosmosMarketplaceProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <KosmosMarketsContextProvider>{children}</KosmosMarketsContextProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
@@ -65,7 +71,8 @@ const providers = [
   WrappedLocalizationProvider,
   AddWalletProvider,
   StakingProvider,
-  BridgeProvider
+  BridgeProvider,
+  KosmosMarketplaceProvider
 ];
 
 export const Providers = combineComponents(...providers);

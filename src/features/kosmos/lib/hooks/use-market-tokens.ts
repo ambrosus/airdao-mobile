@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { fetchMarketTokens } from '@features/kosmos/api';
-import { Token } from '@features/kosmos/types';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context/markets/markets.context';
 
-export function useMarketsTokens() {
-  const [loading, setLoading] = useState(false);
-  const [tokens, setTokens] = useState<Token[]>([]);
+export function useMarketTokens() {
+  const { tokens, isTokensLoading, setTokens, setIsTokensLoading } =
+    useKosmosMarketsContextSelector();
 
   useEffect(() => {
     if (tokens.length > 0) return;
 
-    setLoading(true);
+    setIsTokensLoading(true);
     const controller = new AbortController();
 
     fetchMarketTokens(controller)
       .then((response) => setTokens(response.data))
-      .finally(() => setLoading(false));
+      .finally(() => setIsTokensLoading(false));
 
     return () => {
       controller.abort();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokens]);
 
-  return { isTokensLoading: loading, tokens };
+  return { isTokensLoading, tokens };
 }
