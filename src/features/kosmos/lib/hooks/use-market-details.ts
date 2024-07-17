@@ -53,5 +53,30 @@ export function useMarketDetails(market: MarketType) {
     tokens
   ]);
 
-  return { payoutToken, quoteToken, assetValue, lockPeriod, availableAmount };
+  const maxBondable = useMemo(() => {
+    return formatDecimals(
+      utils.formatUnits(market.maxPayout, payoutToken?.decimals),
+      payoutToken?.contractAddress,
+      tokens
+    );
+  }, [
+    market.maxPayout,
+    payoutToken?.contractAddress,
+    payoutToken?.decimals,
+    tokens
+  ]);
+
+  const discount = useMemo(() => {
+    return market.discount ? market.discount.toFixed(2) : '-';
+  }, [market.discount]);
+
+  return {
+    payoutToken,
+    quoteToken,
+    assetValue,
+    lockPeriod,
+    availableAmount,
+    maxBondable,
+    discount
+  };
 }
