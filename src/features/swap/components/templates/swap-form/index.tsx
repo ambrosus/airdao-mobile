@@ -10,8 +10,8 @@ import {
   TokenInfoPlate
 } from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
-import { isIos } from '@utils/isPlatform';
 import { useSwapInterface } from '@features/swap/lib/hooks';
+import { isIos } from '@utils/isPlatform';
 
 const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';
 
@@ -21,7 +21,7 @@ export const SwapForm = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      keyboardVerticalOffset={20}
+      keyboardVerticalOffset={isIos ? 20 : 0}
       behavior={KEYBOARD_BEHAVIOR}
     >
       <KeyboardDismissingView style={styles.container}>
@@ -42,7 +42,9 @@ export const SwapForm = () => {
             <TokenInfoPlate />
           </View>
 
-          <ReviewSwapButton />
+          <View style={styles.footer}>
+            <ReviewSwapButton />
+          </View>
         </View>
       </KeyboardDismissingView>
     </KeyboardAvoidingView>
