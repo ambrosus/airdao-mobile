@@ -63,6 +63,7 @@ export const ImportWalletPrivateKey = () => {
       await delay(1200);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
+      console.error(error);
       // @ts-ignore
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
@@ -84,7 +85,7 @@ export const ImportWalletPrivateKey = () => {
   }, [navigation, privateKey]);
 
   const disabled = useMemo(() => {
-    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length !== 64;
+    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length <= 60;
     return {
       state: isWrongLengthOrEmpty,
       typographyColor: isWrongLengthOrEmpty
