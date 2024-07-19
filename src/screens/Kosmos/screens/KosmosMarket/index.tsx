@@ -4,7 +4,7 @@ import { Header } from '@components/composite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MarketHeaderDetails } from '@features/kosmos/components/base';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
-import { ExactMarketTokenTabs } from '@features/kosmos/components/templates';
+import { MarketChartsWithTimeframes } from '@features/kosmos/components/templates';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 
@@ -31,9 +31,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     <SafeAreaView style={screenWrapperStyle}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
-      <ScrollView>
+      <ScrollView scrollEnabled={false}>
         <MarketTableDetails market={route.params.market} />
-        <ExactMarketTokenTabs />
+        <MarketChartsWithTimeframes market={route.params.market} />
       </ScrollView>
     </SafeAreaView>
   );

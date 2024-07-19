@@ -61,3 +61,8 @@ export type Token = {
   tokenId: string;
   displayPrecision: number;
 };
+
+export interface ApiPricesResponse {
+  price: number;
+  timestamp: number;
+}

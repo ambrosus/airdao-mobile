@@ -108,6 +108,7 @@
     "react-i18next": "^13.1.0",
     "react-native": "0.73.6",
     "react-native-calendar-picker": "^7.1.4",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-device-info": "^11.1.0",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-graph": "^1.1.0",
