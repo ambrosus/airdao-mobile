@@ -88,8 +88,8 @@ export const PrivateKeyMaskedInput = forwardRef<
   const onChangePrivateKey = useCallback(
     (text: string) => {
       if (!secureTextEntry) {
-        const cleanedKey = text.replace(/[^\w$]/g, '');
-        setPrivateKey(cleanedKey);
+        const removedExtraSymbols = text.replace(/[^\w$]/g, '');
+        setPrivateKey(removedExtraSymbols);
       } else if (secureTextEntry && clipboard.includes(text)) {
         setPrivateKey(text);
         setCurrentCaretPosition(text.length);
