@@ -58,6 +58,7 @@ export const AddressInput = (props: AddressInputProps) => {
     <>
       <InputWithIcon
         ref={inputRef}
+        numberOfLines={1}
         iconRight={
           isValidEthAddress ? (
             <Checkmark

@@ -52,7 +52,7 @@ export const BridgeForm = () => {
     onWithdrawApprove,
     setFeeLoader,
     setAmountToExchange,
-    setInputError
+    setInputErrorType
   } = methods;
   const {
     dataToPreview,
@@ -62,8 +62,10 @@ export const BridgeForm = () => {
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    inputError,
-    isMax
+    inputErrorType,
+    errorMessage,
+    isMax,
+    INPUT_ERROR_TYPES
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,
@@ -73,7 +75,7 @@ export const BridgeForm = () => {
   useEffect(() => {
     if (!isMax) {
       setBridgeFee(null);
-      if (!!amountToExchange && !inputError) {
+      if (!!amountToExchange && !errorMessage) {
         clearTimeout(timeoutDelay);
         setFeeLoader(true);
         setTimeoutDelay(
@@ -88,7 +90,7 @@ export const BridgeForm = () => {
 
   useEffect(() => {
     setAmountToExchange('');
-    setInputError(null);
+    setInputErrorType(INPUT_ERROR_TYPES.NO_ERROR);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     toParams.value.id,
@@ -109,6 +111,9 @@ export const BridgeForm = () => {
       });
     }, 500);
   };
+
+  const isButtonDisabled =
+    !amountToExchange || !bridgeFee || gasFeeLoader || !!inputErrorType;
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
@@ -143,7 +148,7 @@ export const BridgeForm = () => {
               value={amountToExchange}
               onChangeValue={onChangeAmount}
             />
-            {!!inputError && (
+            {!!errorMessage && (
               <>
                 <Spacer value={verticalScale(4)} />
                 <Text
@@ -152,7 +157,7 @@ export const BridgeForm = () => {
                   fontWeight="500"
                   color={COLORS.error400}
                 >
-                  {inputError}
+                  {errorMessage}
                 </Text>
               </>
             )}
@@ -169,16 +174,17 @@ export const BridgeForm = () => {
           />
         </View>
 
-        <PrimaryButton
-          onPress={onPressPreview}
-          disabled={
-            !amountToExchange || !bridgeFee || gasFeeLoader || !!inputError
-          }
-        >
+        <PrimaryButton onPress={onPressPreview} disabled={isButtonDisabled}>
           {gasFeeLoader ? (
             <Spinner customSize={15} />
           ) : (
-            <Text color={COLORS.neutral0}>{t('button.preview')}</Text>
+            <Text
+              color={isButtonDisabled ? COLORS.neutral400 : COLORS.neutral0}
+            >
+              {inputErrorType === INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS
+                ? t('bridge.insufficient.funds')
+                : t('button.preview')}
+            </Text>
           )}
         </PrimaryButton>
         <BottomSheetBridgeItemSelector

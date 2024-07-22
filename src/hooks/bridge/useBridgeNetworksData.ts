@@ -48,11 +48,20 @@ const DEFAULT_BRIDGE_TRANSACTION = {
   transferFinishTxHash: ''
 };
 
+const INPUT_ERROR_TYPES = {
+  INSUFFICIENT_FUNDS: 'insufficientFund',
+  LESS_THEN_FEE: 'amountLessThenFee',
+  INSUFFICIENT_FUNDS_TO_PROCESS: 'insufficientFundToProcessTransaction',
+  NO_ERROR: null
+};
+
 export const useBridgeNetworksData = ({
   choseTokenRef,
   previewRef,
   transactionInfoRef
 }: UseBridgeNetworksDataModel) => {
+  const { t } = useTranslation();
+
   const navigation = useNavigation<HomeNavigationProp>();
 
   const [feeLoader, setFeeLoader] = useState(false);
@@ -65,7 +74,9 @@ export const useBridgeNetworksData = ({
   const [bridgeTransaction, setBridgeTransaction] =
     // @ts-ignore
     useState<BridgeTransactionDTO>(DEFAULT_BRIDGE_TRANSACTION);
-  const [inputError, setInputError] = useState<string | null>('');
+  const [inputErrorType, setInputErrorType] = useState<string | null>(
+    INPUT_ERROR_TYPES.NO_ERROR
+  );
   const {
     selectedAccount,
     toParams,
@@ -74,6 +85,18 @@ export const useBridgeNetworksData = ({
     bridgeConfig,
     selectedTokenDecimals
   } = useBridgeContextData();
+
+  const errorMessage = useMemo(() => {
+    switch (inputErrorType) {
+      case 'amountLessThenFee':
+        return t('bridge.amount.less.then.fee');
+      case 'insufficientFundToProcessTransaction':
+        return t('bridge.insufficient.funds.to.pay.fee');
+      default:
+        return '';
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputErrorType]);
 
   const networkNativeToken = Config.NETWORK_NATIVE_COIN[fromParams.value.id];
 
@@ -86,7 +109,6 @@ export const useBridgeNetworksData = ({
   const selectedTokenFrom = selectedToken.pairs[0];
   const selectedTokenTo = selectedToken.pairs[1];
 
-  const { t } = useTranslation();
   const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
     setCurrencySelectorWidth(event.nativeEvent.layout.width);
   };
@@ -184,9 +206,9 @@ export const useBridgeNetworksData = ({
       amount: value
     });
     if (isAmountGrater) {
-      setInputError(t('bridge.insufficient.funds'));
+      setInputErrorType(INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS);
     } else {
-      setInputError(null);
+      setInputErrorType(INPUT_ERROR_TYPES.NO_ERROR);
     }
 
     setAmountToExchange(finalValue);
@@ -210,10 +232,10 @@ export const useBridgeNetworksData = ({
 
     switch (true) {
       case amountLessThenFee:
-        setInputError(t('bridge.amount.less.then.fee'));
+        setInputErrorType(INPUT_ERROR_TYPES.LESS_THEN_FEE);
         break;
       case insufficientFundToProcessTransaction:
-        setInputError(t('bridge.insufficient.funds.to.pay.fee'));
+        setInputErrorType(INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS_TO_PROCESS);
         break;
       default:
         navigation.navigate('BridgeTransferError');
@@ -273,7 +295,7 @@ export const useBridgeNetworksData = ({
     }
   };
   const onSelectMaxAmount = () => {
-    setInputError('');
+    setInputErrorType(INPUT_ERROR_TYPES.NO_ERROR);
     if (selectedToken.renderTokenItem.isNativeCoin) {
       setMax(true);
       getFeeData(true);
@@ -372,8 +394,10 @@ export const useBridgeNetworksData = ({
     bridgeFee,
     gasFeeLoader,
     bridgeTransaction,
-    inputError,
-    isMax
+    inputErrorType,
+    errorMessage,
+    isMax,
+    INPUT_ERROR_TYPES
   };
   const methods = {
     getFeeData,
@@ -387,7 +411,7 @@ export const useBridgeNetworksData = ({
     onWithdrawApprove,
     isAmountGraterThenBalance,
     setAmountToExchange,
-    setInputError
+    setInputErrorType
   };
   return {
     variables,

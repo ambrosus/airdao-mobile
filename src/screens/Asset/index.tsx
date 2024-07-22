@@ -77,8 +77,8 @@ export const AssetScreen = () => {
         title={
           <>
             <Row alignItems="center">
-              <View style={{ transform: [{ scale: 0.75 }] }}>
-                <TokenLogo token={tokenInfo.name} />
+              <View>
+                <TokenLogo scale={0.7} token={tokenInfo.name} />
               </View>
               <Spacer horizontal value={scale(4)} />
               <Text
