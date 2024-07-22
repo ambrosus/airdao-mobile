@@ -81,10 +81,6 @@ export const PrivateKeyMaskedInput = forwardRef<
     SELECTION_INITIAL_STATE
   );
 
-  const inputMaxLengthValue = useMemo(() => {
-    return clipboard.startsWith('0x') ? 66 : 64;
-  }, [clipboard]);
-
   const onChangePrivateKey = useCallback(
     (text: string) => {
       if (!secureTextEntry) {
@@ -131,13 +127,7 @@ export const PrivateKeyMaskedInput = forwardRef<
             setPrivateKey(newPrivateKey);
             setCurrentCaretPosition(caretPosition - 1);
           }
-        } else if (key === ' ' && maskedValue.length !== inputMaxLengthValue) {
-          setPrivateKey((prevValue) => prevValue + ' ');
-          setCurrentCaretPosition(caretPosition + 1);
-        } else if (
-          _isAlphanumeric(key) &&
-          maskedValue.length < inputMaxLengthValue
-        ) {
+        } else if (_isAlphanumeric(key)) {
           // Insert alphanumeric key at caret position
           const newPrivateKey =
             value.slice(0, caretPosition) + key + value.slice(caretPosition);
@@ -150,8 +140,6 @@ export const PrivateKeyMaskedInput = forwardRef<
       secureTextEntry,
       currentCaretPosition,
       value,
-      maskedValue.length,
-      inputMaxLengthValue,
       _isSelectionEmpty,
       selection.start,
       selection.end,
@@ -192,7 +180,7 @@ export const PrivateKeyMaskedInput = forwardRef<
       multiline
       value={maskedValue}
       blurOnSubmit
-      maxLength={inputMaxLengthValue}
+      maxLength={120}
       autoCapitalize="none"
       autoCorrect={false}
       onChangeText={onChangePrivateKey}

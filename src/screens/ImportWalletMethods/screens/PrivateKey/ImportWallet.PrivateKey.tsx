@@ -101,12 +101,10 @@ export const ImportWalletPrivateKey = () => {
   }, [accounts, navigation, privateKey]);
 
   const disabled = useMemo(() => {
-    const isWrongLengthOrEmpty = privateKey === '' || privateKey.length <= 60;
+    const isEmpty = privateKey === '';
     return {
-      state: isWrongLengthOrEmpty,
-      typographyColor: isWrongLengthOrEmpty
-        ? COLORS.neutral400
-        : COLORS.neutral0
+      state: isEmpty,
+      typographyColor: isEmpty ? COLORS.neutral400 : COLORS.neutral0
     };
   }, [privateKey]);
 
