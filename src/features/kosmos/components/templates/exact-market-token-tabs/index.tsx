@@ -1,15 +1,22 @@
 import React from 'react';
 import { View } from 'react-native';
+import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
+import { BuyBondTab } from './tabs/buy-bond';
+import { MarketType } from '@features/kosmos/types';
 
-export const ExactMarketTokenTabs = () => {
+interface ExactMarketTokenTabsProps {
+  market: MarketType;
+}
+
+export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
   return (
     <AnimatedTabs
-      containerStyle={{ height: '100%' }}
+      containerStyle={styles.container}
       tabs={[
         {
           title: 'Buy bond',
-          view: <View style={{ flex: 1, backgroundColor: 'red' }} />
+          view: <BuyBondTab market={market} />
         },
         {
           title: 'Buy bond',
