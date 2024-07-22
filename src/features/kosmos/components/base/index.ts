@@ -5,3 +5,4 @@ export { FiltersItem } from './filters-item';
 export { MarketHeaderDetails } from './market-header-details';
 export { RowJustifyAlignedItem } from './row-justify-aligned-item';
 export { ChartTooltip } from './chart-tooltip';
+export { ChartIntervalItem } from './chart-interval-item';

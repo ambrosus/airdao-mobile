@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import { View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import { useFocusEffect } from '@react-navigation/native';
 import { chartConfigStyle, styles } from './styles';
 import {
   getTokenPriceForChart,
@@ -16,7 +17,6 @@ import {
 } from '@features/kosmos/constants';
 import { DataPointsPressEventHandler, TooltipState } from './types';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useFocusEffect } from '@react-navigation/native';
 
 type MarketChartProps = {
   tokenAddress: string;
@@ -169,45 +169,43 @@ export const MarketChart = ({
   }, [points]);
 
   return (
-    <TouchableWithoutFeedback onPress={onDismissTooltip}>
-      <View style={styles.container}>
-        {isChartComputedPoints && (
-          <LineChart
-            style={styles.chartContainer}
-            data={{
-              labels: [],
-              datasets: [
-                {
-                  data: downsample(points.market, 100),
-                  color: () => '#8D5FEA',
-                  strokeWidth: 1,
-                  withDots: true
-                },
-                {
-                  data: downsample(points.bonds, 100),
-                  color: () => '#77C33D',
-                  strokeWidth: 1,
-                  withDots: true
-                }
-              ]
-            }}
-            decorator={() =>
-              isMarketTooltipVisible && <ChartTooltip tooltip={tooltip} />
-            }
-            withInnerLines={true}
-            withVerticalLines={false}
-            withHorizontalLines={true}
-            withShadow={false}
-            segments={3}
-            width={CHART_WIDTH}
-            height={CHART_HEIGHT}
-            onDataPointClick={onDataPointClick}
-            yAxisLabel="$"
-            yAxisInterval={CHART_Y_AXIS_INTERVAL}
-            chartConfig={chartConfigStyle}
-          />
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      {isChartComputedPoints && (
+        <LineChart
+          style={styles.chartContainer}
+          data={{
+            labels: [],
+            datasets: [
+              {
+                data: downsample(points.market, 100),
+                color: () => '#8D5FEA',
+                strokeWidth: 1,
+                withDots: true
+              },
+              {
+                data: downsample(points.bonds, 100),
+                color: () => '#77C33D',
+                strokeWidth: 1,
+                withDots: true
+              }
+            ]
+          }}
+          decorator={() =>
+            isMarketTooltipVisible && <ChartTooltip tooltip={tooltip} />
+          }
+          withInnerLines={true}
+          withVerticalLines={false}
+          withHorizontalLines={true}
+          withShadow={false}
+          segments={3}
+          width={CHART_WIDTH}
+          height={CHART_HEIGHT}
+          onDataPointClick={onDataPointClick}
+          yAxisLabel="$"
+          yAxisInterval={CHART_Y_AXIS_INTERVAL}
+          chartConfig={chartConfigStyle}
+        />
+      )}
+    </View>
   );
 };

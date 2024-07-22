@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { Row, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
+import React from 'react';
+import { styles } from './styles';
+import { Row } from '@components/base';
 import { CHART_INTERVALS } from '@features/kosmos/constants';
+import { ChartIntervalItem } from '../../base';
 
 interface ChartTimeIntervalsProps {
   onChangeInterval: (interval: number) => void;
@@ -13,31 +13,15 @@ export const _ChartTimeIntervals = ({
   onChangeInterval,
   chartInterval
 }: ChartTimeIntervalsProps) => {
-  const rowStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      columnGap: 16,
-      zIndex: -1
-    };
-  }, []);
-
-  const intervalValueColor = useCallback(
-    (interval: number) => {
-      return interval === chartInterval ? COLORS.black : COLORS.neutral300;
-    },
-    [chartInterval]
-  );
-
   return (
-    <Row style={rowStyle} alignItems="center" justifyContent="center">
+    <Row style={styles.container} alignItems="center" justifyContent="center">
       {CHART_INTERVALS.map((interval) => (
-        <TouchableOpacity
-          onPress={() => onChangeInterval(interval.value)}
+        <ChartIntervalItem
           key={interval.label}
-        >
-          <Text color={intervalValueColor(interval.value)}>
-            {interval.label}
-          </Text>
-        </TouchableOpacity>
+          selectedInterval={chartInterval}
+          interval={interval}
+          onChangeInterval={onChangeInterval}
+        />
       ))}
     </Row>
   );
