@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { MarketChart } from '../../modular';
 import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { ChartTimeIntervals } from '../../composite';
 import { CHART_INTERVALS } from '@features/kosmos/constants';
+import { verticalScale } from '@utils/scaling';
 
 interface MarketChartsWithTimeframesProps {
   market: MarketType;
@@ -21,8 +22,14 @@ export const MarketChartsWithTimeframes = ({
     []
   );
 
+  const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      marginTop: verticalScale(32)
+    };
+  }, []);
+
   return (
-    <View>
+    <View style={containerStyle}>
       <MarketChart
         market={market}
         chartInterval={chartInterval}

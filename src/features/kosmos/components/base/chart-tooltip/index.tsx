@@ -1,102 +1,117 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { View } from 'react-native';
+import moment from 'moment';
+import { styles } from './styles';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
+import { TooltipState } from '../../modular/market-chart/types';
+import { Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import {
+  TRIANGLE_WIDTH,
+  RECT_WIDTH,
+  RECT_HEIGHT,
+  TRIANGLE_HEIGHT
+} from '@features/kosmos/constants';
 
 interface ChartTooltipProps {
-  tooltipAxis: { x: number; y: number };
+  tooltip: TooltipState;
 }
 
-const RECT_WIDTH = scale(162);
-const RECT_HEIGHT = 80;
-const TRIANGLE_WIDTH = 10;
-const TRIANGLE_HEIGHT = 10;
+export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
+  const date = useMemo(() => {
+    return moment(tooltip.value.timestamp).format('DD/MM/YY HH:mm');
+  }, [tooltip]);
 
-export const ChartTooltip = React.memo(({ tooltipAxis }: ChartTooltipProps) => {
   const rectX = useMemo(() => {
-    const potentialX = tooltipAxis.x + TRIANGLE_WIDTH;
+    const potentialX = tooltip.x + TRIANGLE_WIDTH;
     if (potentialX + RECT_WIDTH > DEVICE_WIDTH) {
-      return tooltipAxis.x - RECT_WIDTH - TRIANGLE_WIDTH;
+      return tooltip.x - RECT_WIDTH - TRIANGLE_WIDTH;
     }
     return potentialX;
-  }, [tooltipAxis.x]);
+  }, [tooltip.x]);
 
   const rectY = useMemo(() => {
-    if (tooltipAxis.y + RECT_HEIGHT + TRIANGLE_HEIGHT > DEVICE_HEIGHT) {
-      return DEVICE_HEIGHT - RECT_HEIGHT - TRIANGLE_HEIGHT;
+    const potentialY = tooltip.y - RECT_HEIGHT / 2;
+    if (potentialY < 0) {
+      return 0;
+    } else if (potentialY + RECT_HEIGHT > DEVICE_HEIGHT) {
+      return DEVICE_HEIGHT - RECT_HEIGHT;
     }
-    return tooltipAxis.y > RECT_HEIGHT
-      ? tooltipAxis.y - RECT_HEIGHT / 2
-      : tooltipAxis.y;
-  }, [tooltipAxis.y]);
+    return potentialY;
+  }, [tooltip.y]);
 
-  const triangleStyle = {
-    top: tooltipAxis.y - TRIANGLE_HEIGHT / 2,
-    transform: [
+  const triangleStyle = useMemo(() => {
+    return {
+      top: tooltip.y - TRIANGLE_HEIGHT / 2,
+      left:
+        rectX === tooltip.x + TRIANGLE_WIDTH
+          ? rectX - TRIANGLE_WIDTH - 5
+          : rectX + RECT_WIDTH - 5,
+      transform: [
+        {
+          rotate: rectX === tooltip.x + TRIANGLE_WIDTH ? '90deg' : '-90deg'
+        }
+      ]
+    };
+  }, [rectX, tooltip.x, tooltip.y]);
+
+  const innerContainerStyle = useMemo(() => {
+    return [
+      styles.tooltipContainer,
       {
-        rotate:
-          rectX === tooltipAxis.x - RECT_WIDTH - TRIANGLE_WIDTH
-            ? '180deg'
-            : '0deg'
+        left: rectX,
+        top: rectY
       }
-    ]
-  };
+    ];
+  }, [rectX, rectY]);
+
+  const discountTextColor = useMemo(() => {
+    return tooltip.value.discount > 0 ? COLORS.success600 : COLORS.error600;
+  }, [tooltip.value.discount]);
 
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.tooltipContainer,
-          {
-            left: rectX,
-            top: rectY
-          }
-        ]}
-      >
-        <Text style={styles.tooltipText}>0.00</Text>
+      <View style={innerContainerStyle}>
+        <Row alignItems="center" justifyContent="space-between">
+          <Text fontSize={12} fontFamily="Inter_400Regular">
+            Market price:
+          </Text>
+          <Text fontSize={12} fontFamily="Inter_400Regular">
+            ${tooltip.value.market.toFixed(4)}
+          </Text>
+        </Row>
+        {!!tooltip.value.bond && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text fontSize={12} fontFamily="Inter_400Regular">
+              Bond price:
+            </Text>
+            <Text fontSize={12} fontFamily="Inter_400Regular">
+              ${tooltip.value.bond?.toFixed(4)}
+            </Text>
+          </Row>
+        )}
+        <Row alignItems="center" justifyContent="space-between">
+          <Text fontSize={12} fontFamily="Inter_400Regular">
+            Discount:
+          </Text>
+          <Text
+            color={discountTextColor}
+            fontSize={12}
+            fontFamily="Inter_400Regular"
+          >
+            {tooltip.value.discount.toFixed(2)}%
+          </Text>
+        </Row>
+        <Text
+          fontSize={12}
+          style={{ marginTop: 8 }}
+          fontFamily="Inter_400Regular"
+          color={COLORS.neutral800}
+        >
+          {date}
+        </Text>
       </View>
-      <View
-        style={[
-          styles.triangle,
-          triangleStyle,
-          {
-            left:
-              rectX === tooltipAxis.x - RECT_WIDTH - TRIANGLE_WIDTH
-                ? tooltipAxis.x - TRIANGLE_WIDTH
-                : tooltipAxis.x + RECT_WIDTH
-          }
-        ]}
-      />
+      <View style={[styles.triangle, triangleStyle]} />
     </View>
   );
-});
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute'
-  },
-  tooltipContainer: {
-    width: RECT_WIDTH,
-    height: RECT_HEIGHT,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute'
-  },
-  tooltipText: {
-    color: '#000'
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: TRIANGLE_WIDTH,
-    borderLeftColor: 'transparent',
-    borderRightWidth: TRIANGLE_WIDTH,
-    borderRightColor: 'transparent',
-    borderTopWidth: TRIANGLE_HEIGHT,
-    borderTopColor: '#000',
-    position: 'absolute'
-  }
 });

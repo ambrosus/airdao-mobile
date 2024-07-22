@@ -6,6 +6,7 @@ import {
   getTokenPriceForChart,
   getSDAPriceForChart
 } from '@features/kosmos/api';
+import { ChartTooltip } from '@features/kosmos/components/base';
 import { ApiPricesResponse, MarketType } from '@features/kosmos/types';
 import { mapper, downsample, replaceTimestamps } from '@features/kosmos/utils';
 import {
@@ -13,7 +14,9 @@ import {
   CHART_HEIGHT,
   CHART_Y_AXIS_INTERVAL
 } from '@features/kosmos/constants';
-import { DataPointsPressEventHandler, TooltipAxisState } from './types';
+import { DataPointsPressEventHandler, TooltipState } from './types';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { useFocusEffect } from '@react-navigation/native';
 
 type MarketChartProps = {
   tokenAddress: string;
@@ -35,13 +38,15 @@ export const MarketChart = ({
   chartInterval,
   market
 }: MarketChartProps) => {
+  const { isMarketTooltipVisible, onToggleMarketTooltip } =
+    useKosmosMarketsContextSelector();
+
   const [marketPrices, setMarketPrices] = useState<Array<number[]>>([]);
   const [bondPrices, setBondPrices] = useState<Array<number[]>>([]);
-  const [tooltipAxis, setTooltipAxis] = useState<TooltipAxisState>({
+  const [tooltip, setTooltip] = useState<TooltipState>({
     x: 0,
     y: 0,
-    value: { bond: 0, market: 0, timestamp: 0 },
-    visible: false
+    value: { bond: 0, market: 0, timestamp: 0, discount: 0 }
   });
 
   const fetchChartPoints = useCallback(
@@ -103,13 +108,20 @@ export const MarketChart = ({
   }, [chartInterval, fetchChartPoints]);
 
   const onDismissTooltip = useCallback(() => {
-    setTooltipAxis({
+    setTooltip({
       x: 0,
       y: 0,
-      visible: false,
-      value: { bond: 0, market: 0, timestamp: 0 }
+      value: { bond: 0, market: 0, timestamp: 0, discount: 0 }
     });
-  }, []);
+    onToggleMarketTooltip(true);
+  }, [onToggleMarketTooltip]);
+
+  // Reset show tooltip state after navigated back
+  useFocusEffect(
+    useCallback(() => {
+      return () => onToggleMarketTooltip(false);
+    }, [onToggleMarketTooltip])
+  );
 
   const points = useMemo(() => {
     return {
@@ -122,26 +134,34 @@ export const MarketChart = ({
     (x: number, y: number, index: number) => {
       const bondPrice = points.bonds[index];
       const marketPrice = points.market[index];
-      const timestamp = marketPrices[index][1];
+      const timestamp = marketPrices[index][0];
 
-      setTooltipAxis({
+      const discountPercentage =
+        ((marketPrice - bondPrice) / marketPrice) * 100;
+
+      setTooltip({
         x,
         y,
-        value: { bond: bondPrice, market: marketPrice, timestamp },
-        visible: true
+        value: {
+          bond: bondPrice,
+          market: marketPrice,
+          timestamp,
+          discount: discountPercentage
+        }
       });
+      onToggleMarketTooltip(true);
     },
-    [marketPrices, points.bonds, points.market]
+    [marketPrices, onToggleMarketTooltip, points.bonds, points.market]
   );
 
   const onDataPointClick = useCallback(
     (point: DataPointsPressEventHandler) => {
       const { x, y, index } = point;
-      if (tooltipAxis.x === x && tooltipAxis.y === y) onDismissTooltip();
+      if (tooltip.x === x && tooltip.y === y) onDismissTooltip();
 
       return updateTooltipData(x, y, index);
     },
-    [tooltipAxis.x, tooltipAxis.y, onDismissTooltip, updateTooltipData]
+    [tooltip.x, tooltip.y, onDismissTooltip, updateTooltipData]
   );
 
   const isChartComputedPoints = useMemo(() => {
@@ -171,7 +191,10 @@ export const MarketChart = ({
                 }
               ]
             }}
-            withInnerLines={false}
+            decorator={() =>
+              isMarketTooltipVisible && <ChartTooltip tooltip={tooltip} />
+            }
+            withInnerLines={true}
             withVerticalLines={false}
             withHorizontalLines={true}
             withShadow={false}

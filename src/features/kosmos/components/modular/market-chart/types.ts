@@ -9,9 +9,11 @@ export type DataPointsPressEventHandler = {
   getColor: (opacity: number) => string;
 };
 
-export type TooltipAxisState = {
+export type TooltipAxis = {
   x: number;
   y: number;
-  visible: boolean;
-  value: { bond: number; market: number; timestamp: number };
 };
+
+export interface TooltipState extends TooltipAxis {
+  value: { bond: number; market: number; timestamp: number; discount: number };
+}
