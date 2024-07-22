@@ -183,7 +183,7 @@ export const TransactionDetails = (
           {t('common.transaction.amount')}
         </Text>
         <Row alignItems="center">
-          <TokenLogo token={transaction.symbol} scale={0.5} />
+          <TokenLogo address={transaction.token?.address} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontFamily="Inter_600SemiBold"

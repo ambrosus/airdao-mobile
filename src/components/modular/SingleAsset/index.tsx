@@ -31,7 +31,10 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
-          <TokenLogo token={name} overrideIconVariants={overrideIconVariants} />
+          <TokenLogo
+            address={address}
+            overrideIconVariants={overrideIconVariants}
+          />
         </View>
         <Spacer horizontal value={scale(8)} />
         <View style={styles.item}>
