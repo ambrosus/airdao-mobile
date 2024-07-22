@@ -27,6 +27,9 @@ import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
 import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
 import { isIos } from '@utils/isPlatform';
 import { delay } from '@utils/delay';
+import { useAllAccounts } from '@hooks/database';
+import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
+import { AccountUtils } from '@utils/account';
 
 enum IMPORT_PROCESS_STATUS {
   INITIAL = 'initial',
@@ -39,8 +42,11 @@ const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
   : 'height';
 
 export const ImportWalletPrivateKey = () => {
-  const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
+
+  const { t } = useTranslation();
+  const { data: accounts } = useAllAccounts();
+
   const [status, setStatus] = useState<IMPORT_PROCESS_STATUS>(
     IMPORT_PROCESS_STATUS.PENDING
   );
@@ -59,13 +65,23 @@ export const ImportWalletPrivateKey = () => {
     maskedInputRef.current?.blur();
 
     try {
-      await WalletUtils.importWalletViaPrivateKey(privateKey);
+      await WalletUtils.importWalletViaPrivateKey(privateKey, accounts);
       await delay(1200);
       setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
     } catch (error) {
       console.error(error);
       // @ts-ignore
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
+
+      if (errorStatus === 'exist') {
+        const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
+          privateKey
+        );
+
+        if (!AccountUtils.isWalletAreadyExist(_account.address, accounts)) {
+          return setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
+        }
+      }
 
       InteractionManager.runAfterInteractions(async () => {
         await delay(1600);
@@ -82,7 +98,7 @@ export const ImportWalletPrivateKey = () => {
         });
       });
     }
-  }, [navigation, privateKey]);
+  }, [accounts, navigation, privateKey]);
 
   const disabled = useMemo(() => {
     const isWrongLengthOrEmpty = privateKey === '' || privateKey.length <= 60;
