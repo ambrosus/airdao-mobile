@@ -50,7 +50,6 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         </View>
       )}
       <KeyboardAwareScrollView
-        scrollEnabled={false}
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
         showsVerticalScrollIndicator={false}
