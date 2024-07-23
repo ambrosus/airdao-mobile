@@ -13,6 +13,8 @@ import Animated, {
   withTiming,
   AnimatedStyleProp
 } from 'react-native-reanimated';
+import { BalanceWithButton } from '@features/kosmos/components/modular';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface BuyBondTabProps {
   market: MarketType;
@@ -22,12 +24,10 @@ const useAnimatedFooterSpacer = (
   isActive: boolean
 ): AnimatedStyleProp<{ marginTop: number }> => {
   const marginTop = useSharedValue(isActive ? 8 : 234);
-  const marginBottom = useSharedValue(isActive ? 0 : 230);
 
   useEffect(() => {
     marginTop.value = withTiming(isActive ? 8 : 234, { duration: 500 });
-    marginBottom.value = withTiming(isActive ? 0 : 230, { duration: 500 });
-  }, [isActive, marginBottom, marginTop]);
+  }, [isActive, marginTop]);
 
   return useAnimatedStyle(() => {
     return {
@@ -37,7 +37,8 @@ const useAnimatedFooterSpacer = (
 };
 
 export const BuyBondTab = ({ market }: BuyBondTabProps) => {
-  const { quoteToken } = useMarketDetails(market);
+  const { quoteToken, maxBondable, discount } = useMarketDetails(market);
+  const { amountToBuy } = useKosmosMarketsContextSelector();
   const [leftInputContentWidth, setLeftInputContentWidth] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
@@ -70,9 +71,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
     );
   }, [onRenderInputLeftContentLayoutHandler, quoteToken?.symbol]);
 
-  const onFocusHandle = () => {
-    setIsActive(true);
-  };
+  const onFocusHandle = () => setIsActive(true);
   const onBlurHandle = () => setIsActive(false);
 
   return (
@@ -87,6 +86,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
             Amount
           </Text>
           <InputWithIcon
+            value={amountToBuy}
             keyboardType="numeric"
             style={styles.input}
             onFocus={onFocusHandle}
@@ -100,17 +100,41 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
         </View>
 
         <View style={styles.balance}>
-          <Text>Balance: 20,000 AMB Max</Text>
+          <BalanceWithButton qouteToken={quoteToken} />
         </View>
 
         <View style={styles.details}>
           <Row alignItems="center" justifyContent="space-between">
-            <Text>Max bondable:</Text>
-            <Text>123</Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral400}
+            >
+              Max bondable:
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral90}
+            >
+              {maxBondable}
+            </Text>
           </Row>
           <Row alignItems="center" justifyContent="space-between">
-            <Text>Max bondable:</Text>
-            <Text>123</Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral400}
+            >
+              Discount
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral90}
+            >
+              {discount}%
+            </Text>
           </Row>
         </View>
       </View>

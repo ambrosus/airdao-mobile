@@ -19,7 +19,7 @@ export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
           view: <BuyBondTab market={market} />
         },
         {
-          title: 'Buy bond',
+          title: 'History',
           view: <View style={{ flex: 1, backgroundColor: 'yellow' }} />
         }
       ]}

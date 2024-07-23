@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16.5)
   },
   inputWithHeadingContainer: {
+    marginTop: 16,
     rowGap: 8
   },
   inputLeftContainer: {
@@ -24,7 +25,8 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(8)
   },
   details: {
-    marginTop: verticalScale(24)
+    marginTop: verticalScale(24),
+    rowGap: 8
   },
   footer: {
     marginTop: verticalScale(234),
