@@ -1,12 +1,14 @@
+import { ethers } from 'ethers';
+
 export const SWAP_SUPPORTED_TOKENS = {
   default: {
     prod: {
-      address: '0x0000000000000000000000000000000000000000',
+      address: ethers.constants.AddressZero,
       name: 'AirDAO',
       symbol: 'AMB'
     },
     testnet: {
-      address: '0x0000000000000000000000000000000000000000',
+      address: ethers.constants.AddressZero,
       name: 'AirDAO',
       symbol: 'AMB'
     }
