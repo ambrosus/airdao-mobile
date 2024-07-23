@@ -1,12 +1,12 @@
 export const SWAP_SUPPORTED_TOKENS = {
   default: {
     prod: {
-      address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+      address: '0x0000000000000000000000000000000000000000',
       name: 'AirDAO',
       symbol: 'AMB'
     },
     testnet: {
-      address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+      address: '0x0000000000000000000000000000000000000000',
       name: 'AirDAO',
       symbol: 'AMB'
     }
