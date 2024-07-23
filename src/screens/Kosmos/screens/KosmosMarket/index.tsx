@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { SafeAreaView, ViewStyle, StyleProp } from 'react-native';
+import { SafeAreaView, ViewStyle, StyleProp, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { styles } from './styles';
 import { Header } from '@components/composite';
 import { MarketHeaderDetails } from '@features/kosmos/components/base';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
@@ -12,7 +13,7 @@ import {
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { KeyboardDismissingView } from '@components/base';
+import { KeyboardDismissingView, Spinner } from '@components/base';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -20,7 +21,8 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const { onToggleMarketTooltip } = useKosmosMarketsContextSelector();
+  const { onToggleMarketTooltip, isExactMarketLoading } =
+    useKosmosMarketsContextSelector();
   const { token } = useExtractToken(route.params.market.payoutToken);
 
   const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -40,7 +42,15 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     <SafeAreaView style={screenWrapperStyle}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
+      {isExactMarketLoading && (
+        <View style={styles.loader}>
+          <View style={styles.innerLoader}>
+            <Spinner />
+          </View>
+        </View>
+      )}
       <KeyboardAwareScrollView
+        scrollEnabled={false}
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
         showsVerticalScrollIndicator={false}

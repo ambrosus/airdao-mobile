@@ -28,8 +28,11 @@ export const MarketChartsWithTimeframes = ({
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[2].value);
 
   const onChangeInterval = useCallback(
-    (interval: number) => setChartInterval(interval),
-    []
+    (interval: number) => {
+      onToggleMarketTooltip(false);
+      setChartInterval(interval);
+    },
+    [onToggleMarketTooltip]
   );
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {

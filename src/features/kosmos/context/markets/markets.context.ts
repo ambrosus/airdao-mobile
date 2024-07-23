@@ -6,6 +6,7 @@ const KosmosMarketsContext = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [isTokensLoading, setIsTokensLoading] = useState(false);
   const [isMarketTooltipVisible, setIsMarketTooltipVisible] = useState(false);
+  const [isExactMarketLoading, setIsExactMarketLoading] = useState(false);
 
   const onToggleMarketTooltip = useCallback((value: boolean) => {
     setIsMarketTooltipVisible(value);
@@ -17,7 +18,9 @@ const KosmosMarketsContext = () => {
     isTokensLoading,
     setIsTokensLoading,
     isMarketTooltipVisible,
-    onToggleMarketTooltip
+    onToggleMarketTooltip,
+    isExactMarketLoading,
+    setIsExactMarketLoading
   };
 };
 
