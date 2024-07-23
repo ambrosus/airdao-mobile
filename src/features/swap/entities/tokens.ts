@@ -16,7 +16,7 @@ export const SWAP_SUPPORTED_TOKENS = {
   tokens: {
     prod: [
       {
-        address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+        address: ethers.constants.AddressZero,
         name: 'AirDAO',
         symbol: 'AMB'
       },
@@ -38,7 +38,7 @@ export const SWAP_SUPPORTED_TOKENS = {
     ],
     testnet: [
       {
-        address: '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+        address: ethers.constants.AddressZero,
         name: 'AirDAO',
         symbol: 'AMB'
       },
