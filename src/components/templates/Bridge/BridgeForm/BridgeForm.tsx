@@ -23,6 +23,7 @@ import { BalanceInfo, FeeInfo, TokenSelector } from './components';
 import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 import { BottomSheetBridgeItemSelector } from '@components/templates/Bridge/BottomSheetBridgeItemSelector';
+import { isAndroid } from '@utils/isPlatform';
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
@@ -187,6 +188,7 @@ export const BridgeForm = () => {
             </Text>
           )}
         </PrimaryButton>
+        <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
         <BottomSheetBridgeItemSelector
           ref={choseTokenRef}
           onPressItem={onTokenPress}
