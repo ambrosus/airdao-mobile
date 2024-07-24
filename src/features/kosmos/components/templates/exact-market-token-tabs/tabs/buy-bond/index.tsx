@@ -48,7 +48,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
         </View>
 
         <View style={styles.balance}>
-          <BalanceWithButton qouteToken={quoteToken} />
+          <BalanceWithButton qouteToken={quoteToken} market={market} />
         </View>
 
         <View style={styles.details}>

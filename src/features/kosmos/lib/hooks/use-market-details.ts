@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
@@ -95,6 +95,13 @@ export function useMarketDetails(market: MarketType) {
     return _willGet(amountToBuy, market.bondMarketPrice);
   }, [amountToBuy, market.bondMarketPrice]);
 
+  const willGetWithArguments = useCallback(
+    (amount: string) => {
+      return _willGet(amount, market.bondMarketPrice);
+    },
+    [market.bondMarketPrice]
+  );
+
   return {
     payoutToken,
     quoteToken,
@@ -105,6 +112,7 @@ export function useMarketDetails(market: MarketType) {
     discount,
     protocolFee,
     willGet,
-    willGetSubFee
+    willGetSubFee,
+    willGetWithArguments
   };
 }

@@ -1,23 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { Token } from '@features/kosmos/types';
+import { MarketType, Token } from '@features/kosmos/types';
 import { getBalanceOf } from '@features/kosmos/lib/contracts';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useBridgeContextData } from '@contexts/Bridge';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { formatEther } from 'ethers/lib/utils';
+import { useBalance } from '@features/kosmos/lib/hooks';
 
 interface BalanceWithButtonProps {
   qouteToken: Token | undefined;
+  market: MarketType;
 }
 
-export const BalanceWithButton = ({ qouteToken }: BalanceWithButtonProps) => {
-  const { onChangeAmountToBuy, setBnBalance, setIsBalanceFetching } =
+export const BalanceWithButton = ({
+  qouteToken,
+  market
+}: BalanceWithButtonProps) => {
+  const { setBnBalance, bnBalance, setIsBalanceFetching } =
     useKosmosMarketsContextSelector();
   const { selectedAccount } = useBridgeContextData();
   const [balance, setBalance] = useState('');
+  const { calculateMaximumAvailableAmount } = useBalance(market, balance);
 
   useEffect(() => {
     (async () => {
@@ -46,8 +52,10 @@ export const BalanceWithButton = ({ qouteToken }: BalanceWithButtonProps) => {
   ]);
 
   const onMaxAmountPress = useCallback(() => {
-    if (+balance > 0.0) onChangeAmountToBuy(balance);
-  }, [balance, onChangeAmountToBuy]);
+    if (!bnBalance || +balance <= 0) return;
+
+    return calculateMaximumAvailableAmount();
+  }, [balance, bnBalance, calculateMaximumAvailableAmount]);
 
   return (
     <Row alignItems="center">
