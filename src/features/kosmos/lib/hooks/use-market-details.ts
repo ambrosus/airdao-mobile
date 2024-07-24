@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
@@ -9,12 +9,20 @@ import {
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
+import { getProtocolFee } from '@features/kosmos/api';
+import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 
 export function useMarketDetails(market: MarketType) {
-  const { tokens } = useKosmosMarketsContextSelector();
+  const [protocolFee, setProtocolFee] = useState(0);
+
+  const { tokens, amountToBuy } = useKosmosMarketsContextSelector();
   const { extractTokenCb } = useExtractToken();
   const payoutToken = extractTokenCb(market.payoutToken);
   const quoteToken = extractTokenCb(market.quoteToken);
+
+  useEffect(() => {
+    getProtocolFee().then((response) => setProtocolFee(response));
+  }, []);
 
   const assetValue = useMemo(() => {
     return (
@@ -70,6 +78,23 @@ export function useMarketDetails(market: MarketType) {
     return market.discount ? market.discount.toFixed(2) : '-';
   }, [market.discount]);
 
+  const slippage = useMemo(() => {
+    return market.marketType === 'SDA' ? +amountToBuy * 0.0001 : 0;
+  }, [amountToBuy, market.marketType]);
+
+  const willGetSubFee = useMemo(() => {
+    return _willGetSubFee(
+      amountToBuy,
+      protocolFee,
+      slippage,
+      market.bondMarketPrice
+    );
+  }, [amountToBuy, market.bondMarketPrice, protocolFee, slippage]);
+
+  const willGet = useMemo(() => {
+    return _willGet(amountToBuy, market.bondMarketPrice);
+  }, [amountToBuy, market.bondMarketPrice]);
+
   return {
     payoutToken,
     quoteToken,
@@ -77,6 +102,9 @@ export function useMarketDetails(market: MarketType) {
     lockPeriod,
     availableAmount,
     maxBondable,
-    discount
+    discount,
+    protocolFee,
+    willGet,
+    willGetSubFee
   };
 }

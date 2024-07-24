@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { SafeAreaView, ViewStyle, StyleProp, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import { MarketHeaderDetails } from '@features/kosmos/components/base';
@@ -13,7 +14,7 @@ import {
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { KeyboardDismissingView, Spinner } from '@components/base';
+import { Spinner } from '@components/base';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -21,8 +22,12 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const { onToggleMarketTooltip, isExactMarketLoading } =
-    useKosmosMarketsContextSelector();
+  const {
+    onToggleMarketTooltip,
+    isExactMarketLoading,
+    isBalanceFetching,
+    reset
+  } = useKosmosMarketsContextSelector();
   const { token } = useExtractToken(route.params.market.payoutToken);
 
   const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -38,31 +43,42 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
 
   const onScrollBeginDragHandler = () => onToggleMarketTooltip(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => reset();
+    }, [reset])
+  );
+
+  const combinedLoading = useMemo(() => {
+    return isBalanceFetching || isExactMarketLoading;
+  }, [isBalanceFetching, isExactMarketLoading]);
+
   return (
     <SafeAreaView style={screenWrapperStyle}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
-      {isExactMarketLoading && (
+      {combinedLoading && (
         <View style={styles.loader}>
           <View style={styles.innerLoader}>
             <Spinner />
           </View>
         </View>
       )}
+
       <KeyboardAwareScrollView
+        enableOnAndroid
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
         showsVerticalScrollIndicator={false}
-        onScrollBeginDrag={onScrollBeginDragHandler}
         overScrollMode="never"
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={onScrollBeginDragHandler}
         scrollToOverflowEnabled={false}
         extraHeight={300}
       >
-        <KeyboardDismissingView>
-          <MarketTableDetails market={route.params.market} />
-          <MarketChartsWithTimeframes market={route.params.market} />
-          <ExactMarketTokenTabs market={route.params.market} />
-        </KeyboardDismissingView>
+        <MarketTableDetails market={route.params.market} />
+        <MarketChartsWithTimeframes market={route.params.market} />
+        <ExactMarketTokenTabs market={route.params.market} />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

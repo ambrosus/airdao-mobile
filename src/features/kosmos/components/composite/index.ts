@@ -3,3 +3,4 @@ export { UserOrdersList } from './user-orders-list';
 export { FiltersSections } from './filters-section';
 export { MarketTableDetails } from './market-table-details';
 export { ChartTimeIntervals } from './chart-time-intervals';
+export { BuyBondInputWithError } from './buy-bond-input-with-error';

@@ -8,6 +8,8 @@ const KosmosMarketsContext = () => {
   const [isMarketTooltipVisible, setIsMarketTooltipVisible] = useState(false);
   const [isExactMarketLoading, setIsExactMarketLoading] = useState(false);
   const [amountToBuy, setAmountToBuy] = useState('');
+  const [bnBalance, setBnBalance] = useState<string | null>(null);
+  const [isBalanceFetching, setIsBalanceFetching] = useState(false);
 
   const onToggleMarketTooltip = useCallback((value: boolean) => {
     setIsMarketTooltipVisible(value);
@@ -17,6 +19,12 @@ const KosmosMarketsContext = () => {
     (amount: string) => setAmountToBuy(amount),
     []
   );
+
+  const reset = useCallback(() => {
+    setIsMarketTooltipVisible(false);
+    setAmountToBuy('');
+    setBnBalance(null);
+  }, []);
 
   return {
     tokens,
@@ -28,7 +36,12 @@ const KosmosMarketsContext = () => {
     isExactMarketLoading,
     setIsExactMarketLoading,
     onChangeAmountToBuy,
-    amountToBuy
+    amountToBuy,
+    bnBalance,
+    setBnBalance,
+    isBalanceFetching,
+    setIsBalanceFetching,
+    reset
   };
 };
 

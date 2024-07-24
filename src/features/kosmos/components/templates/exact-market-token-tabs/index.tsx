@@ -12,6 +12,7 @@ interface ExactMarketTokenTabsProps {
 export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
   return (
     <AnimatedTabs
+      keyboardShouldPersistTaps="handled"
       containerStyle={styles.container}
       tabs={[
         {

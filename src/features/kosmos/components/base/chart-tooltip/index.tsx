@@ -12,6 +12,7 @@ import {
   RECT_HEIGHT,
   TRIANGLE_HEIGHT
 } from '@features/kosmos/constants';
+import { discountColor } from '@features/kosmos/utils';
 
 interface ChartTooltipProps {
   tooltip: TooltipState;
@@ -65,10 +66,6 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
     ];
   }, [rectX, rectY]);
 
-  const discountTextColor = useMemo(() => {
-    return tooltip.value.discount > 0 ? COLORS.success600 : COLORS.error600;
-  }, [tooltip.value.discount]);
-
   return (
     <View style={styles.container}>
       <View style={innerContainerStyle}>
@@ -95,7 +92,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
             Discount:
           </Text>
           <Text
-            color={discountTextColor}
+            color={discountColor(tooltip.value.discount)}
             fontSize={12}
             fontFamily="Inter_400Regular"
           >

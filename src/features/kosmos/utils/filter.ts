@@ -34,8 +34,8 @@ function filterMarketsByToken(
   tokens: Token[]
 ): MarketType[] {
   return markets.filter((market) => {
-    const payoutToken = getTokenByAddress(market.payoutToken, tokens);
-    return payoutToken && payoutToken.symbol === token;
+    const qouteToken = getTokenByAddress(market.quoteToken, tokens);
+    return qouteToken && qouteToken.symbol === token;
   });
 }
 
