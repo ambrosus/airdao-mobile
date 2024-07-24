@@ -117,7 +117,7 @@ export const BridgeForm = () => {
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
-      enabled={DeviceUtils.isIOS}
+      enabled={DeviceUtils.isIOS || DeviceUtils.isAndroid}
       style={styles.container}
       behavior="padding"
     >
