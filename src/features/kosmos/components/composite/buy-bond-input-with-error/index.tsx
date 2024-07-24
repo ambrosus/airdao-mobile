@@ -9,6 +9,8 @@ import { COLORS } from '@constants/colors';
 import { MarketType, Token } from '@features/kosmos/types';
 import { verticalScale } from '@utils/scaling';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
+import { StringUtils } from '@utils/string';
+import { NumberUtils } from '@utils/number';
 
 interface BuyBondInputWithErrorProps {
   onFocus: () => void;
@@ -38,8 +40,11 @@ export const BuyBondInputWithError = ({
     []
   );
 
-  const onChangeAmountToBuyHandle = (amount: string) =>
-    onChangeAmountToBuy(amount);
+  const onChangeAmountToBuyHandle = (amount: string) => {
+    let finalValue = StringUtils.formatNumberInput(amount);
+    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
+    onChangeAmountToBuy(finalValue);
+  };
 
   const renderInputLeftContent = useMemo(() => {
     return (
@@ -63,7 +68,7 @@ export const BuyBondInputWithError = ({
     <View>
       <InputWithIcon
         value={amountToBuy}
-        onChangeText={onChangeAmountToBuyHandle}
+        onChangeValue={onChangeAmountToBuyHandle}
         keyboardType="numeric"
         style={styles.input}
         onFocus={onFocus}
