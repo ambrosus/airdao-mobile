@@ -1,9 +1,7 @@
 import { ethers } from 'ethers';
-import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
-import { ERC20_ALLOWANCE } from '@features/swap/lib/abi';
+import { ALLOWANCE } from '@features/swap/lib/abi';
 import { AllowanceArgs } from '@features/swap/types';
 import { createSigner } from '@features/swap/utils/contracts/instances';
-import { environment } from '@utils/environment';
 import Config from '@constants/config';
 
 export async function checkIsApprovalRequired({
@@ -12,12 +10,12 @@ export async function checkIsApprovalRequired({
   amount
 }: AllowanceArgs) {
   try {
-    if (address !== SWAP_SUPPORTED_TOKENS.default[environment].address) {
+    if (address !== ethers.constants.AddressZero) {
       const signer = createSigner(privateKey);
 
       const erc20Contract = new ethers.Contract(
         ethers.constants.AddressZero,
-        ERC20_ALLOWANCE
+        ALLOWANCE
       );
 
       const erc20 = erc20Contract.attach(address).connect(signer);
@@ -44,7 +42,7 @@ export async function increaseAllowance({
 
     const erc20Contract = new ethers.Contract(
       ethers.constants.AddressZero,
-      ERC20_ALLOWANCE
+      ALLOWANCE
     );
 
     const erc20 = erc20Contract.attach(address).connect(signer);

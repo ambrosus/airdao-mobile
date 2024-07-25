@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { ERC20_PAIR } from '@features/swap/lib/abi';
+import { PAIR } from '@features/swap/lib/abi';
 import {
   createAMBProvider,
   createFactoryContract
@@ -21,7 +21,7 @@ export function useAllLiquidityPools() {
       const pairAddress = await contract.allPairs(i);
       const pairContract = new ethers.Contract(
         pairAddress,
-        ERC20_PAIR,
+        PAIR,
         createAMBProvider()
       );
 
@@ -63,11 +63,7 @@ export function useAllLiquidityPools() {
   const getReserves = useCallback(
     async (pairAddress: string, selectedTokens: SelectedTokensState) => {
       const mapper = getPairAddress(selectedTokens);
-      const pair = new ethers.Contract(
-        pairAddress,
-        ERC20_PAIR,
-        createAMBProvider()
-      );
+      const pair = new ethers.Contract(pairAddress, PAIR, createAMBProvider());
       const reserves = await pair.getReserves();
 
       const { TOKEN_A, TOKEN_B } = selectedTokens;

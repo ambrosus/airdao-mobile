@@ -2,13 +2,13 @@ import { useCallback, useMemo } from 'react';
 import {
   wrapNativeAddress,
   isNativeWrapped,
-  addresses,
   isMultiRouteWithUSDCFirst
 } from '@features/swap/utils';
 import { Cache, CacheKey } from '@lib/cache';
 
 import { useSwapTokens } from './use-swap-tokens';
 import { useBridgeContextData } from '@contexts/Bridge';
+import { ethers } from 'ethers';
 
 export function useSwapHelpers() {
   const { selectedAccount } = useBridgeContextData();
@@ -33,11 +33,11 @@ export function useSwapHelpers() {
   }, [selectedAccount?._raw]);
 
   const isStartsWithETH = useMemo(() => {
-    return tokenToSell.TOKEN?.address === addresses.AMB;
+    return tokenToSell.TOKEN?.address === ethers.constants.AddressZero;
   }, [tokenToSell]);
 
   const isEndsWithETH = useMemo(() => {
-    return tokenToReceive.TOKEN?.address === addresses.AMB;
+    return tokenToReceive.TOKEN?.address === ethers.constants.AddressZero;
   }, [tokenToReceive]);
 
   const isEmptyAmount = useCallback((amount: string) => {

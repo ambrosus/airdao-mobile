@@ -1,4 +1,4 @@
-export const ERC20_PAIR = [
+export const PAIR = [
   {
     name: 'getReserves',
     type: 'function',

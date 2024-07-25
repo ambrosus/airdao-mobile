@@ -1,4 +1,4 @@
-export const ERC20_BALANCE = [
+export const BALANCE = [
   {
     constant: true,
     inputs: [{ name: '_owner', type: 'address' }],

@@ -7,14 +7,14 @@ import {
   createAMBProvider,
   createRouterContract
 } from '@features/swap/utils/contracts/instances';
+import { formatEther } from 'ethers/lib/utils';
 import {
   isNativeWrapped,
   minimumAmountOut,
   addresses,
   wrapNativeAddress
 } from '@features/swap/utils';
-import { ERC20, ERC20_TRADE } from '@features/swap/lib/abi';
-import { formatEther } from 'ethers/lib/utils';
+import { ERC20, TRADE } from '@features/swap/lib/abi';
 
 export async function getAmountsOut({
   amountToSell,
@@ -29,7 +29,7 @@ export async function getAmountsOut({
 
     if (isSelectedSameTokens) return amountToSell;
 
-    const contract = createRouterContract(provider, ERC20_TRADE);
+    const contract = createRouterContract(provider, TRADE);
 
     const [, amountToReceive] = await contract.getAmountsOut(
       amountToSell,
@@ -56,7 +56,7 @@ export async function getAmountsIn({
 
     if (isSelectedSameTokens) return amountToReceive;
 
-    const contract = createRouterContract(provider, ERC20_TRADE);
+    const contract = createRouterContract(provider, TRADE);
 
     const [amountToSell] = await contract.getAmountsIn(
       amountToReceive,
@@ -78,7 +78,7 @@ export async function swapExactETHForTokens(
   deadline: string
 ) {
   try {
-    const routerContract = createRouterContract(signer, ERC20_TRADE);
+    const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
@@ -93,7 +93,7 @@ export async function swapExactETHForTokens(
       bnAmountToReceive
     );
 
-    const tx = await routerContract.swapExactETHForTokens(
+    const tx = await routerContract.swapExactAMBForTokens(
       bnMinimumReceivedAmount,
       path,
       signer.address,
@@ -150,7 +150,7 @@ export async function swapExactTokensForTokens(
   deadline: string
 ) {
   try {
-    const routerContract = createRouterContract(signer, ERC20_TRADE);
+    const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
@@ -188,7 +188,7 @@ export async function swapExactTokensForETH(
   deadline: string
 ) {
   try {
-    const routerContract = createRouterContract(signer, ERC20_TRADE);
+    const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
@@ -203,7 +203,7 @@ export async function swapExactTokensForETH(
       bnAmountToReceive
     );
 
-    const tx = await routerContract.swapExactTokensForETH(
+    const tx = await routerContract.swapExactTokensForAMB(
       bnAmountToSell,
       bnMinimumReceivedAmount,
       path,
