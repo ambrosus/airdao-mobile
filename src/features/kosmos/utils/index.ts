@@ -5,3 +5,4 @@ export * from './decimals';
 export * from './timestamp';
 export * from './mapper';
 export * from './discount';
+export * from './reducer';
