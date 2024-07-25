@@ -5,6 +5,10 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  totalReducedAmountsContainer: {
+    paddingHorizontal: scale(16),
+    marginBottom: 16
+  },
   listContentContainerStyle: {
     paddingHorizontal: scale(16)
   },

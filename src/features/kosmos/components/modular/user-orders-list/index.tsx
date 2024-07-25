@@ -7,6 +7,7 @@ import { ScreenLoader } from '../../base';
 import { TxType } from '@features/kosmos/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { ClaimableOrderCardDetails } from '../claimable-order-card-details';
+import { TotalOrdersAmount } from '../../composite';
 
 const ESTIMATED_ITEM_SIZE = 172;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
@@ -32,6 +33,10 @@ export const UserOrdersList = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.totalReducedAmountsContainer}>
+        <TotalOrdersAmount transactions={transactions} />
+      </View>
+
       <FlashList
         keyExtractor={(item) => item.txHash}
         data={transactions}
