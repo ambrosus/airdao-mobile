@@ -3,7 +3,10 @@ import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
-import { MarketListItem } from '@/features/kosmos/components/base';
+import {
+  MarketListItem,
+  ScreenLoader
+} from '@/features/kosmos/components/base';
 import { FiltersState, MarketType } from '@features/kosmos/types';
 import {
   useActiveMarkets,
@@ -11,7 +14,6 @@ import {
   useMarketTokens
 } from '@features/kosmos/lib/hooks';
 import { filter } from '@/features/kosmos/utils';
-import { Spinner } from '@components/base';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { HomeNavigationProp } from '@appTypes';
 
@@ -57,11 +59,7 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
   }, [isClosedMarketsLoading, isMarketsLoading, isTokensLoading]);
 
   if (combinedLoadingState) {
-    return (
-      <View style={styles.loader}>
-        <Spinner />
-      </View>
-    );
+    return <ScreenLoader />;
   }
 
   return (

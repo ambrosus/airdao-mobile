@@ -37,3 +37,23 @@ export function replaceTimestamps<
 
   return result;
 }
+
+export function getTimeRemaining(timestamp: number): string {
+  const now: number = new Date().getTime();
+
+  const difference: number = timestamp * 1000 - now;
+
+  if (difference < 0) {
+    return '0d 0h 0m';
+  }
+
+  const days: number = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const hours: number = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes: number = Math.floor(
+    (difference % (1000 * 60 * 60)) / (1000 * 60)
+  );
+
+  return `${days}d ${hours}h ${minutes}m`;
+}

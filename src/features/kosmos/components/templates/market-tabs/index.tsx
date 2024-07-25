@@ -33,7 +33,7 @@ export const MarketsTabs = ({
         {
           title: 'Markets',
           view: (
-            <WrappedListsContainer>
+            <WrappedListsContainer table>
               <MarketsList filters={filters} />
             </WrappedListsContainer>
           )

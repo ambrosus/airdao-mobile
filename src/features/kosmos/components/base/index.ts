@@ -6,3 +6,5 @@ export { MarketHeaderDetails } from './market-header-details';
 export { RowJustifyAlignedItem } from './row-justify-aligned-item';
 export { ChartTooltip } from './chart-tooltip';
 export { ChartIntervalItem } from './chart-interval-item';
+export { OrderCardDetails } from './order-card-details';
+export { ScreenLoader } from './screen-loader';

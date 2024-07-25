@@ -4,13 +4,15 @@ import { styles } from './styles';
 import { ListCellHeadings } from '../list-cell-headings';
 
 export const WrappedListsContainer = ({
-  children
+  children,
+  table = false
 }: {
   children: ReactNode;
+  table?: boolean;
 }) => {
   return (
     <View style={styles.container}>
-      <ListCellHeadings />
+      {table && <ListCellHeadings />}
       {children}
     </View>
   );
