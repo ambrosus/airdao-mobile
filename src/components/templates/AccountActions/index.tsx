@@ -3,11 +3,11 @@ import { Row } from '@components/base';
 import { scale } from '@utils/scaling';
 import { Swap } from './Swap';
 import { Send } from './Send';
-import { Receive } from './Receive';
 import { Staking } from './Staking';
 import { Bridge } from './Bridge';
 import { Token } from '@models';
 import { AccountDBModel } from '@database';
+import { Kosmos } from './Kosmos';
 
 interface AccountActionsProps {
   address: string;
@@ -24,9 +24,9 @@ export const AccountActions = (props: AccountActionsProps) => {
     >
       <Swap />
       <Send address={address} token={token} />
-      <Receive address={address} />
       <Staking />
       <Bridge />
+      <Kosmos />
     </Row>
   );
 };

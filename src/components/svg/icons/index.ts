@@ -106,3 +106,4 @@ export * from './MoreDots';
 export * from './LeadEye';
 export * from './CheckIconCircle';
 export * from './RightArrowInCircle';
+export * from './Kosmos';
