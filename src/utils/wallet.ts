@@ -117,7 +117,10 @@ const deleteWalletWithAccounts = async (hash: string) => {
   }
 };
 
-export const importWalletViaPrivateKey = async (privateKey: string) => {
+export const importWalletViaPrivateKey = async (
+  privateKey: string,
+  accounts: AccountDBModel[]
+) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
   const currencyCode = CryptoCurrencyCode.AMB;
@@ -163,11 +166,19 @@ export const importWalletViaPrivateKey = async (privateKey: string) => {
     ]);
 
     accountInDb = accountInDbResult;
-    return { hash };
+
+    await API.watcherService.watchAddresses([_account.address]);
+    return { hash, address: _account.address };
   } catch (error) {
-    if (walletInDb) walletInDb.destroyPermanently();
-    if (accountInDb) accountInDb.destroyPermanently();
-    throw error;
+    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
+      privateKey
+    );
+
+    if (AccountUtils.isWalletAreadyExist(_account.address, accounts)) {
+      if (walletInDb) walletInDb.destroyPermanently();
+      if (accountInDb) accountInDb.destroyPermanently();
+      throw error;
+    }
   }
 };
 

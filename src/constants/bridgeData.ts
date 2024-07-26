@@ -20,8 +20,7 @@ export const BRIDGE_DATA = {
         bsc: 'https://relay-bsc.ambrosus.io/fees'
       }
     },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json'
+    BRIDGE_CONFIG: 'https://bridge-config.ambrosus.io/v2'
   },
   stage: {
     // bridge token exception addresses
@@ -41,8 +40,7 @@ export const BRIDGE_DATA = {
         bsc: 'https://relay-bsc.ambrosus.io/fees'
       }
     },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/28ef2bb7d101581436e2fd2deba740d5698795a8/contracts/configs/main.json'
+    BRIDGE_CONFIG: 'https://bridge-config.ambrosus.io/v2'
   },
   testnet: {
     // bridge token exception addresses
@@ -63,7 +61,6 @@ export const BRIDGE_DATA = {
         bsc: 'https://relay-bsc.ambrosus-test.io/fees'
       }
     },
-    BRIDGE_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/ambrosus-bridge/dev/contracts/configs/test.json'
+    BRIDGE_CONFIG: 'https://bridge-config.ambrosus-test.io/v2'
   }
 };
