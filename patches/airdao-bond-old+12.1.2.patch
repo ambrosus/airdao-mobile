@@ -1,0 +1,26 @@
+diff --git a/node_modules/airdao-bond-old/src/contracts/contracts.js b/node_modules/airdao-bond-old/src/contracts/contracts.js
+index 1234567..89abcde 100644
+--- a/node_modules/airdao-bond-old/src/contracts/contracts.js
++++ b/node_modules/airdao-bond-old/src/contracts/contracts.js
+@@ -2,0 +3,9 @@
++import CHAIN16718 from '../../deployments/main.json';
++import CHAIN22040 from '../../deployments/test.json';
++import CHAIN30746 from '../../deployments/dev.json';
++
++const NETWORKS = {
++  16718: CHAIN16718,
++  22040: CHAIN22040,
++  30746: CHAIN30746,
++};
+@@ -82,10 +91,10 @@ 
+ function loadAllDeploymentsFromFile(networkName, signer) {
+-  const deployments = require(`../../deployments/${networkName}.json`);
++  const deployments = NETWORKS[networkName];
+   const result = {};
+
+   for (const name of Object.keys(deployments)) {
+     const deployment = deployments[name];
+     result[name] = new ethers.Contract(deployment.address, deployment.abi, signer);
+   }
+   return result;
+ }

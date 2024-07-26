@@ -8,10 +8,10 @@ import { COLORS } from '@constants/colors';
 import { MarketType } from '@features/kosmos/types';
 import {
   useMarketDetails,
-  useTransactionErrorHandler
+  useTransactionErrorHandler,
+  useBondContracts
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
-import { useBondContracts } from '@features/kosmos/lib/hooks/use-bond-contracts';
 import { useBridgeContextData } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import { ethers } from 'ethers';

@@ -4195,6 +4195,14 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+"airdao-bond-old@npm:@airdao/airdao-bond@12.1.2":
+  version "12.1.2"
+  resolved "https://registry.yarnpkg.com/@airdao/airdao-bond/-/airdao-bond-12.1.2.tgz#487f6c5b5aebb8d5fd31c1c0050d1d200f63d5e0"
+  integrity sha512-2FSo+SfRZHhDDPEJG6417t/qTK2ZakL9DSkVypfsviFxU11PnsrObOCWLGlFk+kvOZRQqb9OAeflTYNcq4FR8A==
+  dependencies:
+    ethers "^5.7.2"
+    solmate "^6.2.0"
+
 ajv@8.11.0:
   version "8.11.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.0.tgz#977e91dd96ca669f54a11e23e378e33b884a565f"

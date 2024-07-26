@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { useTransactions } from '@features/kosmos/lib/hooks';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
-import { ScreenLoader } from '../../base';
+import { ScreenLoader } from '@features/kosmos/components/base';
 import { TxType } from '@features/kosmos/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
-import { ClaimableOrderCardDetails } from '../claimable-order-card-details';
-import { TotalOrdersAmount } from '../../composite';
+import { TotalOrdersAmount } from '../../composite/total-orders-amount';
+import { ClaimableOrderCardDetails } from '../../composite/claimable-order-card-details';
 
 const ESTIMATED_ITEM_SIZE = 172;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
@@ -27,6 +27,10 @@ export const UserOrdersList = () => {
     return <View style={styles.listFooterComponent} />;
   }, []);
 
+  const sortedByDateTxs = useMemo(() => {
+    return transactions.sort((a, b) => b.date - a.date);
+  }, [transactions]);
+
   if (isTransactionsLoading) {
     return <ScreenLoader height="100%" />;
   }
@@ -39,7 +43,7 @@ export const UserOrdersList = () => {
 
       <FlashList
         keyExtractor={(item) => item.txHash}
-        data={transactions}
+        data={sortedByDateTxs}
         contentContainerStyle={styles.listContentContainerStyle}
         renderItem={renderOrderListItem}
         ListFooterComponent={RenderListFooterComponent}

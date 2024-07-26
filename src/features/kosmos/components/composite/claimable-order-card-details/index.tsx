@@ -1,12 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
+// @ts-ignore
+import { ContractNames } from '@airdao/airdao-bond';
 import { styles } from './styles';
-import { OrderCardDetails } from '../../base';
+import { OrderCardDetails } from '@features/kosmos/components/base';
 import { SecondaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { TxType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { getTimeRemaining } from '@features/kosmos/utils';
+import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
@@ -16,6 +19,7 @@ export const ClaimableOrderCardDetails = ({
   transaction
 }: ClaimableOrderCardDetailsProps) => {
   const [isClaimingNow, setIsClaimingNow] = useState(false);
+  const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
 
   const vestingEndsDate = useMemo(() => {
     return transaction.vestingType === 'Fixed-expiry'
@@ -28,8 +32,8 @@ export const ClaimableOrderCardDetails = ({
   }, [vestingEndsDate]);
 
   const disabled = useMemo(() => {
-    return isClaimingNow || !isVestingPass;
-  }, [isClaimingNow, isVestingPass]);
+    return isClaimingNow || !isVestingPass || transaction.isClaimed;
+  }, [isClaimingNow, isVestingPass, transaction.isClaimed]);
 
   const buttonColor = useMemo(() => {
     return disabled ? COLORS.neutral100 : COLORS.brand600;
@@ -40,8 +44,13 @@ export const ClaimableOrderCardDetails = ({
   }, [disabled]);
 
   const onButtonPress = useCallback(() => {
+    const contractName =
+      transaction.vestingType === 'Fixed-expiry'
+        ? ContractNames.FixedExpiryTeller
+        : ContractNames.FixedTermTeller;
     setIsClaimingNow((prevState) => !prevState);
-  }, []);
+    onClaimButtonPress(contractName);
+  }, [onClaimButtonPress, transaction.vestingType]);
 
   const textStringValue = useMemo(() => {
     if (transaction.isClaimed) return 'Claimed';
