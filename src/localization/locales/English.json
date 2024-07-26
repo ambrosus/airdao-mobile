@@ -401,7 +401,7 @@
   "bridge.preview.gas.fee": "Gas fee",
   "bridge.preview.button": "Send funds to {network}",
   "bridge.preview.button.max": "Max",
-  "bridge.insufficient.funds": "You have insufficient funds",
+  "bridge.insufficient.funds": "Insufficient balance",
 
   "bridge.transaction.info.subheader": "Your transfer is being processed and will be completed within 5-20 minutes.",
 

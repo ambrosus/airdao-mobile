@@ -238,18 +238,8 @@ export const ALL_TOKENS_DATA = {
       symbol: 'P(3)T'
     },
     {
-      address: '0xd8dd0273D31c1cd9Dba104DaCA7C1dfEE4f7b805',
-      name: 'USD Coin',
-      symbol: 'USDC'
-    },
-    {
-      address: '0x7A70536307a0411d2Df2FE832CFa16231089dD6F',
-      name: 'USD Coin',
-      symbol: 'USDC'
-    },
-    {
       address: '0xFF9F502976E7bD2b4901aD7Dd1131Bb81E5567de',
-      name: '-->USD Coin',
+      name: 'USD Coin',
       symbol: 'USDC'
     },
     {
@@ -264,11 +254,6 @@ export const ALL_TOKENS_DATA = {
     }
   ],
   TESTNET: [
-    {
-      address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
-      name: 'USD Coin',
-      symbol: 'USDC'
-    },
     {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       name: 'Synthetic Amber',
