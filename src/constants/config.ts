@@ -34,8 +34,8 @@ const envs = {
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.prod,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
-    ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
-    FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
+    ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -67,8 +67,8 @@ const envs = {
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.stage,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
-    ROUTER_V2_ADDRESS: '0x49aADE9bDE7C48148B0EbA37E82Cc7f9a8301755',
-    FACTORY_ADDRESS: '0x31A65bade6593B4fab076c6b16c338182abcC8b7'
+    ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -120,7 +120,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
 }
