@@ -146,6 +146,8 @@ export const importWalletViaPrivateKey = async (
 
     if (!_account) throw new Error();
 
+    await API.watcherService.watchAddresses([_account.address]);
+
     walletInDb = await WalletDB.createWallet(fullWallet);
     const [, accountInDbResult] = await Promise.all([
       // Securely store private key
@@ -164,6 +166,7 @@ export const importWalletViaPrivateKey = async (
     ]);
 
     accountInDb = accountInDbResult;
+
     await API.watcherService.watchAddresses([_account.address]);
     return { hash, address: _account.address };
   } catch (error) {

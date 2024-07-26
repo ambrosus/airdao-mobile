@@ -13,6 +13,7 @@ import {
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@contexts/Bridge';
+import { SwapContextProvider } from '@features/swap/context';
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,11 @@ const BridgeProvider: React.FC = ({ children }: any) => (
   <BridgeContextProvider>{children}</BridgeContextProvider>
 );
 
+const SwapProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <SwapContextProvider>{children}</SwapContextProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
@@ -65,7 +71,8 @@ const providers = [
   WrappedLocalizationProvider,
   AddWalletProvider,
   StakingProvider,
-  BridgeProvider
+  BridgeProvider,
+  SwapProvider
 ];
 
 export const Providers = combineComponents(...providers);

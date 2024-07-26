@@ -122,6 +122,7 @@ export const useAppInit = () => {
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
           Inter_600SemiBold: require('../../assets/fonts/Inter-SemiBold.ttf'),
           Inter_700Bold: require('../../assets/fonts/Inter-Bold.ttf'),
+          Rationell_700Bold: require('../../assets/fonts/Rationell-Bold.ttf'),
           Mersad_600SemiBold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
           Mersad_800Bold: require('../../assets/fonts/Mersad-SemiBold.ttf'),
           Mersad_900ExtraBold: require('../../assets/fonts/Mersad-SemiBold.ttf')
