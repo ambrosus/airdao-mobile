@@ -5,7 +5,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { Header } from '@components/composite';
-import { MarketHeaderDetails } from '@features/kosmos/components/base';
+import {
+  MarketHeaderDetails,
+  ScreenLoader
+} from '@features/kosmos/components/base';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
   ExactMarketTokenTabs,
@@ -14,7 +17,6 @@ import {
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { Spinner } from '@components/base';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -59,9 +61,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
 
       {combinedLoading && (
         <View style={styles.loader}>
-          <View style={styles.innerLoader}>
-            <Spinner />
-          </View>
+          <ScreenLoader height="90%" />
         </View>
       )}
 
