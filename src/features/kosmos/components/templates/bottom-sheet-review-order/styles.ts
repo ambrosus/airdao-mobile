@@ -3,11 +3,11 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    marginTop: verticalScale(16),
     marginBottom: verticalScale(50),
     paddingHorizontal: scale(24)
   },
   heading: {
+    marginTop: verticalScale(16),
     textAlign: 'center'
   },
   innerContainer: {

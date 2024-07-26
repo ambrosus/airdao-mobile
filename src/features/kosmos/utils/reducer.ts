@@ -10,7 +10,7 @@ type ExtractTokenCallback = (address: string) => Token | undefined;
  * @param {string} amount - The amount of the payout in string format.
  * @returns {number} - The computed payment amount in numerical format.
  */
-function extractPaymentAmount(
+export function extractPaymentAmount(
   payoutToken: Token | undefined,
   amount: string
 ): number {

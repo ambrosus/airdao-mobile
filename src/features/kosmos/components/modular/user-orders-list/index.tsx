@@ -8,14 +8,13 @@ import { TxType } from '@features/kosmos/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { TotalOrdersAmount } from '../../composite/total-orders-amount';
 import { ClaimableOrderCardDetails } from '../../composite/claimable-order-card-details';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 const ESTIMATED_ITEM_SIZE = 172;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
 
 export const UserOrdersList = () => {
-  const { transactions } = useKosmosMarketsContextSelector();
-  const { isTransactionsLoading, refetchTransactions } = useTransactions();
+  const { transactions, isTransactionsLoading, refetchTransactions } =
+    useTransactions();
 
   const renderOrderListItem = useCallback(
     (args: ListRenderItemInfo<TxType>) => {

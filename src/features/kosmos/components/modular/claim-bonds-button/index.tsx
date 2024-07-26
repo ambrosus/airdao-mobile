@@ -20,6 +20,7 @@ interface ClaimBondsButtonProps {
   setIsClaimingNow: Dispatch<SetStateAction<boolean>>;
   buttonStyle?: any;
   onDismissBottomSheet: () => void;
+  payout: string;
 }
 
 export const ClaimBondsButton = ({
@@ -27,7 +28,8 @@ export const ClaimBondsButton = ({
   isClaimingNow,
   setIsClaimingNow,
   buttonStyle,
-  onDismissBottomSheet
+  onDismissBottomSheet,
+  payout
 }: ClaimBondsButtonProps) => {
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
   const [isClaimed, setIsClaimed] = useState(false);
@@ -72,7 +74,7 @@ export const ClaimBondsButton = ({
   }, [isOrderClaimed, isVestingPass, vestingEndsDate]);
 
   const onButtonPress = useCallback(async () => {
-    if (textStringValue === 'Close') onDismissBottomSheet();
+    if (textStringValue === 'Close') return onDismissBottomSheet();
 
     try {
       const contractName =
@@ -91,12 +93,16 @@ export const ClaimBondsButton = ({
       onDismissBottomSheet();
       setTimeout(() => {
         setIsClaimingNow(false);
-        Toast.show({ text: 'Success', type: ToastType.Success });
+        Toast.show({
+          text: `Success! You claimed $${Number(payout).toFixed(4)}`,
+          type: ToastType.Success
+        });
       }, 500);
     }
   }, [
     onClaimButtonPress,
     onDismissBottomSheet,
+    payout,
     setIsClaimingNow,
     textStringValue,
     transaction.vestingType

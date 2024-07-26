@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingRight: 0
   },
   leftContainerStyles: {
-    left: 0
+    left: scale(16.5)
   },
   rightContainerStyles: {
     right: scale(16.5)

@@ -80,74 +80,85 @@ export const BottomSheetReviewOrder = forwardRef<
   }, [bottomSheetRef]);
 
   return (
-    <BottomSheet swiperIconVisible ref={bottomSheetRef}>
-      {isClaimingNow ? (
-        <StakePending />
-      ) : (
-        <View style={styles.container}>
-          <Text
-            fontSize={20}
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.neutral800}
-            style={styles.heading}
-          >
-            Bond details
-          </Text>
+    <BottomSheet
+      swiperIconVisible={!isClaimingNow}
+      swipingEnabled={!isClaimingNow}
+      ref={bottomSheetRef}
+    >
+      <View style={styles.container}>
+        {isClaimingNow ? (
+          <StakePending />
+        ) : (
+          <>
+            <Text
+              fontSize={20}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral800}
+              style={styles.heading}
+            >
+              Bond details
+            </Text>
 
-          <View style={styles.innerContainer}>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Bonds</StyledTextItem>
-              <Row style={styles.bondsRowGap} alignItems="center">
-                <TokenLogo scale={0.5} token={qouteToken?.symbol ?? ''} />
-                <StyledTextItem isValue>{amount}</StyledTextItem>
+            <View style={styles.innerContainer}>
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Bonds</StyledTextItem>
+                <Row style={styles.bondsRowGap} alignItems="center">
+                  <TokenLogo scale={0.5} token={qouteToken?.symbol ?? ''} />
+                  <StyledTextItem isValue>{amount}</StyledTextItem>
+                </Row>
               </Row>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Discount</StyledTextItem>
-              <StyledTextItem isValue>
-                {transaction.discount.toFixed(2)}%
-              </StyledTextItem>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Payout</StyledTextItem>
-              <Row alignItems="center">
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Discount</StyledTextItem>
                 <StyledTextItem isValue>
-                  {formatDecimals(payout, payoutToken?.contractAddress, tokens)}{' '}
-                  {payoutToken?.symbol}
+                  {transaction.discount.toFixed(2)}%
                 </StyledTextItem>
-                <Spacer horizontal value={4} />
-                <StyledTextItem>{usdPayoutPrice.toFixed(2)}$</StyledTextItem>
               </Row>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Status</StyledTextItem>
-              <Status status={status} />
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Lock period</StyledTextItem>
-              <StyledTextItem isValue>{lockPeriod}</StyledTextItem>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Transaction hash</StyledTextItem>
-              <StyledTextItem isValue primary>
-                {StringUtils.formatAddress(
-                  transaction.txHash,
-                  ADDRESS_LEFT_PADDING,
-                  ADDRESS_RIGHT_PADDING
-                )}
-              </StyledTextItem>
-            </Row>
-          </View>
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Payout</StyledTextItem>
+                <Row alignItems="center">
+                  <StyledTextItem isValue>
+                    {formatDecimals(
+                      payout,
+                      payoutToken?.contractAddress,
+                      tokens
+                    )}{' '}
+                    {payoutToken?.symbol}
+                  </StyledTextItem>
+                  <Spacer horizontal value={4} />
+                  <StyledTextItem>{usdPayoutPrice.toFixed(2)}$</StyledTextItem>
+                </Row>
+              </Row>
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Status</StyledTextItem>
+                <Status status={status} />
+              </Row>
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Lock period</StyledTextItem>
+                <StyledTextItem isValue>{lockPeriod}</StyledTextItem>
+              </Row>
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Transaction hash</StyledTextItem>
+                <StyledTextItem isValue primary>
+                  {StringUtils.formatAddress(
+                    transaction.txHash,
+                    ADDRESS_LEFT_PADDING,
+                    ADDRESS_RIGHT_PADDING
+                  )}
+                </StyledTextItem>
+              </Row>
+            </View>
 
-          <ClaimBondsButton
-            transaction={transaction}
-            isClaimingNow={isClaimingNow}
-            setIsClaimingNow={setIsClaimingNow}
-            buttonStyle={styles.button}
-            onDismissBottomSheet={onDismissBottomSheet}
-          />
-        </View>
-      )}
+            <ClaimBondsButton
+              transaction={transaction}
+              isClaimingNow={isClaimingNow}
+              setIsClaimingNow={setIsClaimingNow}
+              buttonStyle={styles.button}
+              onDismissBottomSheet={onDismissBottomSheet}
+              payout={payout}
+            />
+          </>
+        )}
+      </View>
     </BottomSheet>
   );
 });

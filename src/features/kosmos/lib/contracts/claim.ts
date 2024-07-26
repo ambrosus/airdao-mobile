@@ -35,11 +35,6 @@ export async function claimBond({
   const contract = version === 'v1' ? BondOld : Bond;
 
   try {
-    Toast.show({
-      text: 'loading',
-      type: ToastType.Loading
-    });
-
     const tx = await contract.Methods[
       contractName === 'BondFixedTermTeller'
         ? 'bondFixedTermTellerRedeem'
@@ -52,13 +47,15 @@ export async function claimBond({
 
     return await tx.wait();
   } catch (error) {
-    // deleteLoading(hash);
     console.error(error);
     console.error('claim bond error', error);
-    // if (e.code !== 'ACTION_REJECTED') {
-    //   Notify.error('Error', null, { autoClose: 5000 });
-    // }
-    // Notify.dismiss('claim-loading');
+    // @ts-ignore
+    if (error.code !== 'ACTION_REJECTED') {
+      Toast.show({
+        text: 'Error',
+        type: ToastType.Failed
+      });
+    }
     throw error;
   } finally {
     setIsOrderClaiming(false);

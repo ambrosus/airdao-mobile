@@ -4,12 +4,14 @@ import { View } from 'react-native';
 import { ContractNames } from '@airdao/airdao-bond';
 import { styles } from './styles';
 import { OrderCardDetails } from '@features/kosmos/components/base';
-import { SecondaryButton } from '@components/modular';
+import { SecondaryButton, Toast, ToastType } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { TxType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { getTimeRemaining } from '@features/kosmos/utils';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
+import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { BigNumber, ethers } from 'ethers';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
@@ -20,6 +22,8 @@ export const ClaimableOrderCardDetails = ({
 }: ClaimableOrderCardDetailsProps) => {
   const [isClaimingNow, setIsClaimingNow] = useState(false);
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
+
+  const { extractTokenCb } = useExtractToken();
 
   const vestingEndsDate = useMemo(() => {
     return transaction.vestingType === 'Fixed-expiry'
@@ -33,7 +37,7 @@ export const ClaimableOrderCardDetails = ({
 
   const disabled = useMemo(() => {
     return isClaimingNow || !isVestingPass || transaction.isClaimed;
-  }, [isClaimingNow, isVestingPass, transaction.isClaimed]);
+  }, [isClaimingNow, transaction.isClaimed, isVestingPass]);
 
   const buttonColor = useMemo(() => {
     return disabled ? COLORS.neutral100 : COLORS.brand600;
@@ -43,14 +47,36 @@ export const ClaimableOrderCardDetails = ({
     return disabled ? COLORS.neutral400 : COLORS.neutral0;
   }, [disabled]);
 
-  const onButtonPress = useCallback(() => {
-    const contractName =
-      transaction.vestingType === 'Fixed-expiry'
-        ? ContractNames.FixedExpiryTeller
-        : ContractNames.FixedTermTeller;
-    setIsClaimingNow((prevState) => !prevState);
-    onClaimButtonPress(contractName);
-  }, [onClaimButtonPress, transaction.vestingType]);
+  const payout = useMemo(() => {
+    const token = extractTokenCb(transaction.payoutToken);
+
+    const payoutBn = BigNumber.from(transaction.payoutAmount);
+    const payout = ethers.utils.formatUnits(payoutBn, token?.decimals);
+
+    return +payout * (token?.price || 0);
+  }, [extractTokenCb, transaction.payoutAmount, transaction.payoutToken]);
+
+  const onButtonPress = useCallback(async () => {
+    try {
+      const contractName =
+        transaction.vestingType === 'Fixed-expiry'
+          ? ContractNames.FixedExpiryTeller
+          : ContractNames.FixedTermTeller;
+      setIsClaimingNow(true);
+      const tx = await onClaimButtonPress(contractName);
+
+      if (tx) {
+        Toast.show({
+          text: `Success! You claimed $${Number(payout).toFixed(4)}`,
+          type: ToastType.Success
+        });
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsClaimingNow(false);
+    }
+  }, [onClaimButtonPress, payout, transaction.vestingType]);
 
   const textStringValue = useMemo(() => {
     if (transaction.isClaimed) return 'Claimed';
