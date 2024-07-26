@@ -13,6 +13,6 @@ export const styles = StyleSheet.create({
   },
   button: {
     marginTop: verticalScale(16),
-    paddingVertical: 6
+    paddingVertical: 8
   }
 });

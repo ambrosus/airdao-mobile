@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TxType } from '@features/kosmos/types';
 import { useBridgeContextData } from '@contexts/Bridge';
 import { fetchMarketTransactions } from '@features/kosmos/api';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 const VERSIONS = ['v1', 'v2'];
 
 export function useTransactions() {
+  const { transactions, setTransactions } = useKosmosMarketsContextSelector();
   const { selectedAccount } = useBridgeContextData();
   const [loading, setLoading] = useState(false);
-  const [transactions, setTransactions] = useState<TxType[]>([]);
 
-  useEffect(() => {
+  const fetchTransactions = useCallback(async () => {
     if (!selectedAccount?.address) return;
 
-    setLoading(true);
     const controller = new AbortController();
 
     Promise.all(
@@ -27,9 +27,19 @@ export function useTransactions() {
       })
     ).then((response) => {
       setTransactions([...response[0], ...response[1]]);
-      setLoading(false);
     });
-  }, [selectedAccount]);
+  }, [selectedAccount, setTransactions]);
 
-  return { isTransactionsLoading: loading, transactions };
+  useEffect(() => {
+    if (transactions.length === 0) {
+      setLoading(true);
+      fetchTransactions();
+      setLoading(false);
+    }
+  }, [fetchTransactions, selectedAccount, transactions.length]);
+
+  return {
+    isTransactionsLoading: loading,
+    refetchTransactions: fetchTransactions
+  };
 }

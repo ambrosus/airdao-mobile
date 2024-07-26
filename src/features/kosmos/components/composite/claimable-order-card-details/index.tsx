@@ -60,28 +60,30 @@ export const ClaimableOrderCardDetails = ({
   }, [transaction.isClaimed, isVestingPass, vestingEndsDate]);
 
   return (
-    <View style={styles.container}>
-      <OrderCardDetails transaction={transaction} />
+    <>
+      <View style={styles.container}>
+        <OrderCardDetails transaction={transaction} />
 
-      <SecondaryButton
-        disabled={disabled}
-        style={{ ...styles.button, backgroundColor: buttonColor }}
-        onPress={onButtonPress}
-      >
-        {isClaimingNow ? (
-          <Spinner size="xs" />
-        ) : (
-          <Text
-            style={{
-              fontSize: 14,
-              fontFamily: 'Inter_500Medium',
-              color: textColor
-            }}
-          >
-            {textStringValue}
-          </Text>
-        )}
-      </SecondaryButton>
-    </View>
+        <SecondaryButton
+          disabled={disabled}
+          style={{ ...styles.button, backgroundColor: buttonColor }}
+          onPress={onButtonPress}
+        >
+          {isClaimingNow ? (
+            <Spinner size="xs" />
+          ) : (
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: 'Inter_500Medium',
+                color: textColor
+              }}
+            >
+              {textStringValue}
+            </Text>
+          )}
+        </SecondaryButton>
+      </View>
+    </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { styles } from './styles';
@@ -9,6 +9,8 @@ import { formatDecimals, getTokenByAddress } from '@features/kosmos/utils';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { InfoIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
+import { BottomSheetRef } from '@components/composite';
 
 interface OrderCardDetailsProps {
   transaction: TxType;
@@ -16,6 +18,8 @@ interface OrderCardDetailsProps {
 
 export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
   const { tokens } = useKosmosMarketsContextSelector();
+
+  const bottomSheetRef = useRef<BottomSheetRef>(null);
 
   const quoteToken = useMemo(() => {
     const address = transaction.quoteToken;
@@ -37,6 +41,10 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
     return ethers.utils.formatUnits(payoutBn, payoutToken?.decimals);
   }, [payoutToken?.decimals, transaction.payoutAmount]);
 
+  const onReviewOrderDetails = useCallback(() => {
+    bottomSheetRef.current?.show();
+  }, []);
+
   return (
     <>
       <Row alignItems="center" justifyContent="space-between">
@@ -50,7 +58,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
             {amount}
           </Text>
         </Row>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onReviewOrderDetails}>
           <InfoIcon color={COLORS.neutral300} scale={0.25} />
         </TouchableOpacity>
       </Row>
@@ -90,6 +98,15 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
           </Text>
         </Row>
       </View>
+
+      <BottomSheetReviewOrder
+        ref={bottomSheetRef}
+        transaction={transaction}
+        qouteToken={quoteToken}
+        payoutToken={payoutToken}
+        payout={payout}
+        amount={amount}
+      />
     </>
   );
 };

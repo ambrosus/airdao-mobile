@@ -6,6 +6,7 @@ import { useBondContracts } from './use-bond-contracts';
 import { Cache, CacheKey } from '@lib/cache';
 import { claimBond } from '../contracts';
 import { Dispatch, SetStateAction } from 'react';
+import { useTransactions } from './use-transactions';
 
 export function useClaimBonds(
   transaction: TxType,
@@ -13,6 +14,7 @@ export function useClaimBonds(
 ) {
   const { contracts } = useBondContracts();
   const { selectedAccount } = useBridgeContextData();
+  const { refetchTransactions } = useTransactions();
 
   const onClaimButtonPress = async (contractName: string) => {
     const { version, txHash, payoutToken, payoutAmount, vesting, eventId } =
@@ -38,7 +40,7 @@ export function useClaimBonds(
     // disableOrders = getFromLocalStorage('savedHashes');
     // disableOrders[hash] = true;
     // localStorage.setItem('savedHashes', JSON.stringify(disableOrders));
-    return await claimBond({
+    const tx = await claimBond({
       contracts,
       contractName,
       arg1: String(idOrAddress),
@@ -48,6 +50,10 @@ export function useClaimBonds(
       version,
       setIsOrderClaiming
     });
+
+    refetchTransactions();
+
+    return tx;
   };
 
   return { onClaimButtonPress };
