@@ -1,5 +1,6 @@
 export { FiltersSelector } from './filters-selector';
 export { MarketChart } from './market-chart';
 export { BalanceWithButton } from './balance';
-export { BuyBondButton } from './buy-bond-button';
+export { ReviewBondPurchaseButton } from './review-bond-purchase-button';
 export { ClaimBondsButton } from './claim-bonds-button';
+export { BuyBondButton } from './buy-bond-button';

@@ -1,10 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
-import Animated, { AnimatedStyleProp } from 'react-native-reanimated';
+import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
+import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { PrimaryButton, Toast, ToastType } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
 import {
   useMarketDetails,
@@ -14,22 +15,24 @@ import {
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import { useBridgeContextData } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
-import { ethers } from 'ethers';
 import Config from '@constants/config';
 
-type AnimatedStyleType = AnimatedStyleProp<{ marginTop: number }>;
+import { HomeNavigationProp } from '@appTypes';
 
 interface BuyBondButtonProps {
-  animatedStyle: AnimatedStyleType;
   market: MarketType;
+  setIsTransactionProcessing: Dispatch<SetStateAction<boolean>>;
+  onDismissBottomSheet: () => void;
 }
 
 export const BuyBondButton = ({
-  animatedStyle,
-  market
+  market,
+  setIsTransactionProcessing,
+  onDismissBottomSheet
 }: BuyBondButtonProps) => {
-  const { selectedAccount } = useBridgeContextData();
+  const navigation: HomeNavigationProp = useNavigation();
 
+  const { selectedAccount } = useBridgeContextData();
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee } = useMarketDetails(market);
@@ -47,6 +50,7 @@ export const BuyBondButton = ({
 
   const onBuyBondsPress = useCallback(async () => {
     try {
+      setIsTransactionProcessing(true);
       const signer = await createNewSigner();
       await (
         await purchaseBonds(
@@ -58,19 +62,36 @@ export const BuyBondButton = ({
             amount: ethers.utils
               .parseUnits(amountToBuy, quoteToken?.decimals)
               .toString(),
-            minAmountOut: market.marketType === 'SDA' ? willGetSubFee : '0',
+            minAmountOut:
+              market.marketType === 'SDA' ? willGetSubFee ?? '0' : '0',
             vestingType: market.vestingType
           },
           quoteToken?.contractAddress ?? ''
         )
       )
         .wait()
-        .then((res: any) => {
-          console.warn(res);
+        .then((tx: any) => {
+          if (tx) {
+            setIsTransactionProcessing(false);
+          }
         });
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      onDismissBottomSheet();
+
+      setTimeout(() => {
+        setIsTransactionProcessing(false);
+        navigation.goBack();
+      }, 500);
+
+      setTimeout(() => {
+        Toast.show({
+          text: `Success! You bought ${amountToBuy} ${quoteToken?.symbol} bond`,
+          type: ToastType.Success
+        });
+      }, 600);
     }
   }, [
     amountToBuy,
@@ -79,8 +100,12 @@ export const BuyBondButton = ({
     market.id,
     market.marketType,
     market.vestingType,
+    navigation,
+    onDismissBottomSheet,
     quoteToken?.contractAddress,
     quoteToken?.decimals,
+    quoteToken?.symbol,
+    setIsTransactionProcessing,
     willGetSubFee
   ]);
 
@@ -89,26 +114,19 @@ export const BuyBondButton = ({
     [amountToBuy, error]
   );
 
-  const label = useMemo(
-    () => (disabled ? 'Enter amount to buy' : 'Preview'),
-    [disabled]
-  );
-
   const textColor = useMemo(() => {
     return disabled ? COLORS.alphaBlack30 : COLORS.neutral0;
   }, [disabled]);
 
   return (
-    <Animated.View style={[styles.footer, animatedStyle]}>
-      <PrimaryButton
-        disabled={disabled}
-        style={styles.button}
-        onPress={onBuyBondsPress}
-      >
-        <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>
-          {label}
-        </Text>
-      </PrimaryButton>
-    </Animated.View>
+    <PrimaryButton
+      disabled={disabled}
+      style={styles.button}
+      onPress={onBuyBondsPress}
+    >
+      <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>
+        Buy bond
+      </Text>
+    </PrimaryButton>
   );
 };

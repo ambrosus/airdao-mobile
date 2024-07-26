@@ -56,7 +56,7 @@ export const MarketTableDetails = ({ market }: MarketTableDetailsProps) => {
           </StyledTextItem>
         </Row>
       </RowJustifyAlignedItem>
-      <RowJustifyAlignedItem label={TableKeys.LockPeriod}>
+      <RowJustifyAlignedItem label={TableKeys.MarketDuration}>
         <Row alignItems="center">
           <StyledTextItem>
             {timestampToFormatedDate(market.start)}

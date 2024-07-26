@@ -69,14 +69,16 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
   return (
     <View style={styles.container}>
       <View style={innerContainerStyle}>
-        <Row alignItems="center" justifyContent="space-between">
-          <Text fontSize={12} fontFamily="Inter_400Regular">
-            Market price:
-          </Text>
-          <Text fontSize={12} fontFamily="Inter_400Regular">
-            ${tooltip.value.market.toFixed(4)}
-          </Text>
-        </Row>
+        {!!tooltip.value.market && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text fontSize={12} fontFamily="Inter_400Regular">
+              Market price:
+            </Text>
+            <Text fontSize={12} fontFamily="Inter_400Regular">
+              ${tooltip.value.market.toFixed(4)}
+            </Text>
+          </Row>
+        )}
         {!!tooltip.value.bond && (
           <Row alignItems="center" justifyContent="space-between">
             <Text fontSize={12} fontFamily="Inter_400Regular">
@@ -87,18 +89,20 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
             </Text>
           </Row>
         )}
-        <Row alignItems="center" justifyContent="space-between">
-          <Text fontSize={12} fontFamily="Inter_400Regular">
-            Discount:
-          </Text>
-          <Text
-            color={discountColor(tooltip.value.discount)}
-            fontSize={12}
-            fontFamily="Inter_400Regular"
-          >
-            {tooltip.value.discount.toFixed(2)}%
-          </Text>
-        </Row>
+        {!!tooltip.value.discount && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text fontSize={12} fontFamily="Inter_400Regular">
+              Discount:
+            </Text>
+            <Text
+              color={discountColor(tooltip.value.discount)}
+              fontSize={12}
+              fontFamily="Inter_400Regular"
+            >
+              {tooltip.value.discount.toFixed(2)}%
+            </Text>
+          </Row>
+        )}
         <Text
           fontSize={12}
           style={{ marginTop: 8 }}
