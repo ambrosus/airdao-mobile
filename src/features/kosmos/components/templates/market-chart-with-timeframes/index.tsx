@@ -18,10 +18,12 @@ import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface MarketChartsWithTimeframesProps {
   market: MarketType;
+  onScrollToMarket: () => void;
 }
 
 export const MarketChartsWithTimeframes = ({
-  market
+  market,
+  onScrollToMarket
 }: MarketChartsWithTimeframesProps) => {
   const { onToggleMarketTooltip } = useKosmosMarketsContextSelector();
   const { quoteToken } = useMarketDetails(market);
@@ -29,10 +31,11 @@ export const MarketChartsWithTimeframes = ({
 
   const onChangeInterval = useCallback(
     (interval: number) => {
+      onScrollToMarket();
       onToggleMarketTooltip(false);
       setChartInterval(interval);
     },
-    [onToggleMarketTooltip]
+    [onScrollToMarket, onToggleMarketTooltip]
   );
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {

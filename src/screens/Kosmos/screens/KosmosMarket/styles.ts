@@ -1,3 +1,4 @@
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -7,13 +8,8 @@ export const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     width: '100%',
-    height: '95%',
+    height: DEVICE_HEIGHT > 800 ? '95%' : '90%',
     backgroundColor: 'white',
     zIndex: 9999
-  },
-  innerLoader: {
-    height: '75%',
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 });

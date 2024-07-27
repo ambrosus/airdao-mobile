@@ -82,6 +82,7 @@ export const BottomSheetReviewOrder = forwardRef<
   return (
     <BottomSheet
       swiperIconVisible={!isClaimingNow}
+      closeOnBackPress={!isClaimingNow}
       swipingEnabled={!isClaimingNow}
       ref={bottomSheetRef}
     >

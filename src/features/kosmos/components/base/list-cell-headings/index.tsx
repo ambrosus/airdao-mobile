@@ -28,7 +28,6 @@ export const ListCellHeadings = () => {
           color={COLORS.neutral600}
           key={index}
         >
-          {index === 1 && '     '}
           {uppercase(heading)}
         </Text>
       ))}

@@ -33,7 +33,7 @@ export const UserOrdersList = () => {
   }, [transactions]);
 
   if (isTransactionsLoading) {
-    return <ScreenLoader height="100%" />;
+    return <ScreenLoader />;
   }
 
   return (
@@ -47,7 +47,6 @@ export const UserOrdersList = () => {
         data={sortedByDateTxs}
         onRefresh={refetchTransactions}
         refreshing={isTransactionsLoading}
-        contentContainerStyle={styles.listContentContainerStyle}
         renderItem={renderOrderListItem}
         ListFooterComponent={RenderListFooterComponent}
         estimatedItemSize={ESTIMATED_ITEM_SIZE}

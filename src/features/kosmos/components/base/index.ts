@@ -8,3 +8,4 @@ export { ChartTooltip } from './chart-tooltip';
 export { ChartIntervalItem } from './chart-interval-item';
 export { OrderCardDetails } from './order-card-details';
 export { ScreenLoader } from './screen-loader';
+export { TransactionHistoryItem } from './transaction-history-item';

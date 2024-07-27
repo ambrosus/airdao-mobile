@@ -37,13 +37,13 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
 
   const renderMarketListItem = useCallback(
     (args: ListRenderItemInfo<MarketType>) => {
-      const { item: market, index } = args;
+      const { item: market } = args;
       const redirectToDetails = () =>
         navigation.navigate('KosmosMarketScreen', { market });
 
       return (
         <TouchableOpacity onPress={redirectToDetails}>
-          <MarketListItem index={index} market={market} />
+          <MarketListItem market={market} />
         </TouchableOpacity>
       );
     },

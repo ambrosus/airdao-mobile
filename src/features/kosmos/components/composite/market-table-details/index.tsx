@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { View } from 'react-native';
+import { LayoutChangeEvent, View } from 'react-native';
 import { styles } from './styles';
 import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
 import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
@@ -21,14 +21,18 @@ enum TableKeys {
 
 interface MarketTableDetailsProps {
   market: MarketType;
+  onHandlerMarketLayout: (event: LayoutChangeEvent) => void;
 }
 
-export const MarketTableDetails = ({ market }: MarketTableDetailsProps) => {
+export const MarketTableDetails = ({
+  market,
+  onHandlerMarketLayout
+}: MarketTableDetailsProps) => {
   const { payoutToken, assetValue, lockPeriod, availableAmount } =
     useMarketDetails(market);
 
   return (
-    <View style={styles.container}>
+    <View onLayout={onHandlerMarketLayout} style={styles.container}>
       {/* Assets in Bond */}
       <RowJustifyAlignedItem label={TableKeys.AssetsInBond}>
         <Row alignItems="center" style={styles.bondAssetsRow}>

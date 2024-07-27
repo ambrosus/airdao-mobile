@@ -40,7 +40,7 @@ export const KosmosScreen = () => {
         rightContainerStyles={styles.rightContainerStyles}
         titleStyle={styles.heading}
         titlePosition="left"
-        backIconVisible={false}
+        backIconVisible
         contentRight={renderHeaderRightContent}
       />
 

@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   listContentContainerStyle: {
+    flex: 1,
     paddingHorizontal: scale(16)
   },
   listFooterComponent: {

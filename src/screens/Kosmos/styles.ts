@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
   heading: {
     fontFamily: 'Inter_700Bold',
     fontSize: moderateScale(24),
-    color: COLORS.neutral800
+    color: COLORS.neutral800,
+    marginLeft: -12
   }
 });

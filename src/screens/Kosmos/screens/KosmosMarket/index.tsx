@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
-import { SafeAreaView, ViewStyle, StyleProp, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+  SafeAreaView,
+  ViewStyle,
+  StyleProp,
+  View,
+  LayoutChangeEvent
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
@@ -14,9 +20,9 @@ import {
   ExactMarketTokenTabs,
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -30,6 +36,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     isBalanceFetching,
     reset
   } = useKosmosMarketsContextSelector();
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
   const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -51,6 +58,28 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     }, [reset])
   );
 
+  const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
+
+  const onHandlerMarketLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      if (marketLayoutYAxis === 0) {
+        const { y } = event.nativeEvent.layout;
+        setMarketLayoutYAxis(y);
+      }
+    },
+    [marketLayoutYAxis]
+  );
+
+  const onScrollToMarket = useCallback(
+    () => scrollViewRef.current?.scrollToPosition(0, marketLayoutYAxis),
+    [marketLayoutYAxis]
+  );
+
+  const onScrollToEnd = useCallback(
+    () => scrollViewRef.current?.scrollToEnd(true),
+    [scrollViewRef]
+  );
+
   const combinedLoading = useMemo(() => {
     return isBalanceFetching || isExactMarketLoading;
   }, [isBalanceFetching, isExactMarketLoading]);
@@ -61,11 +90,12 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
 
       {combinedLoading && (
         <View style={styles.loader}>
-          <ScreenLoader height="90%" />
+          <ScreenLoader height="100%" />
         </View>
       )}
 
       <KeyboardAwareScrollView
+        ref={scrollViewRef}
         enableOnAndroid
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
@@ -76,9 +106,18 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         scrollToOverflowEnabled={false}
         extraHeight={300}
       >
-        <MarketTableDetails market={route.params.market} />
-        <MarketChartsWithTimeframes market={route.params.market} />
-        <ExactMarketTokenTabs market={route.params.market} />
+        <MarketTableDetails
+          market={route.params.market}
+          onHandlerMarketLayout={onHandlerMarketLayout}
+        />
+        <MarketChartsWithTimeframes
+          market={route.params.market}
+          onScrollToMarket={onScrollToMarket}
+        />
+        <ExactMarketTokenTabs
+          market={route.params.market}
+          onScrollToEnd={onScrollToEnd}
+        />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

@@ -1,18 +1,31 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useCallback } from 'react';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { BuyBondTab } from './tabs/buy-bond';
 import { MarketType } from '@features/kosmos/types';
+import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType;
+  onScrollToEnd: () => void;
 }
 
-export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
+export const ExactMarketTokenTabs = ({
+  market,
+  onScrollToEnd
+}: ExactMarketTokenTabsProps) => {
+  const onChangedIndex = useCallback(
+    (index: number) => {
+      if (index === 1) onScrollToEnd();
+    },
+    [onScrollToEnd]
+  );
+
   return (
     <AnimatedTabs
       keyboardShouldPersistTaps="handled"
+      dismissOnChangeIndex
+      onChangedIndex={onChangedIndex}
       containerStyle={styles.container}
       tabs={[
         {
@@ -21,7 +34,7 @@ export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
         },
         {
           title: 'History',
-          view: <View style={{ flex: 1, backgroundColor: 'yellow' }} />
+          view: <TransactionsHistoryTab market={market} />
         }
       ]}
     />

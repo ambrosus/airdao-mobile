@@ -6,6 +6,8 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
+import { ethers } from 'ethers';
+import { upperCase } from 'lodash';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Text } from '@components/base';
@@ -15,12 +17,10 @@ import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { ethers } from 'ethers';
 import {
   formatDecimals,
   timestampToFormatedDate
 } from '@features/kosmos/utils';
-import { upperCase } from 'lodash';
 import { BuyBondButton } from '../../modular';
 import { StakePending } from '@screens/StakingPool/components';
 
@@ -57,6 +57,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
   return (
     <BottomSheet
       swiperIconVisible={!isTransactionProcessing}
+      closeOnBackPress={isTransactionProcessing}
       swipingEnabled={!isTransactionProcessing}
       ref={bottomSheetRef}
     >
