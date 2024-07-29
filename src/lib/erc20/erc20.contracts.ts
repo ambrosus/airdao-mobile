@@ -1,11 +1,15 @@
-import { GetBalanceArgs } from '@appTypes';
-import Config from '@constants/config';
 import { ethers } from 'ethers';
+import { GetAllowanceArgs, GetBalanceArgs } from '@appTypes';
+import Config from '@constants/config';
 import { ERC20_ABI } from './abi/ERC20_ABI';
 
 class ERC20 {
   createNativeProvider() {
     return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+  }
+
+  createSigner(privateKey: string) {
+    return new ethers.Wallet(privateKey, this.createNativeProvider());
   }
 
   async balanceOf({ tokenAddress, ownerAddress }: GetBalanceArgs) {
@@ -21,6 +25,29 @@ class ERC20 {
     } catch (error) {
       throw error;
     }
+  }
+
+  async checkAllowance({
+    tokenAddress,
+    privateKey,
+    amount,
+    spenderAddress
+  }: GetAllowanceArgs) {
+    if (tokenAddress === ethers.constants.AddressZero) return false;
+    const bnAmount = ethers.utils.parseEther(amount);
+
+    const signer = this.createSigner(privateKey);
+    const erc20 = new ethers.Contract(ethers.constants.AddressZero, ERC20_ABI);
+    const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
+
+    const allowance = await signedERC2OContract.allowance(
+      signer.getAddress(),
+      spenderAddress
+    );
+
+    const isAllowanceLessThanAmount = allowance.lt(bnAmount);
+
+    return { allowance, needToIncrease: isAllowanceLessThanAmount };
   }
 }
 
