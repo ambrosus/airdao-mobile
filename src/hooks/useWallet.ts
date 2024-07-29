@@ -47,9 +47,9 @@ export function useWallet(): ReturnedHookValues {
   const onExtractPrivateKey = useCallback(async () => {
     return (await Cache.getItem(
       // @ts-ignore
-      `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
+      `${CacheKey.WalletPrivateKey}-${wallet?._raw.hash ?? ''}`
     )) as string;
-  }, []);
+  }, [wallet]);
 
   return { wallet, onChangeSelectedWallet, onExtractPrivateKey };
 }
