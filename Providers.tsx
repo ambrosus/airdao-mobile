@@ -8,7 +8,8 @@ import {
   AllAddressesProvider,
   LocalizationProvider,
   PasscodeProvider,
-  StakingContextProvider
+  StakingContextProvider,
+  WalletContextProvider
 } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
@@ -37,6 +38,11 @@ const LocalDBProvider: React.FC = ({ children }: any) => (
 
 const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
   <PasscodeProvider>{children}</PasscodeProvider>
+);
+
+const WalletProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <WalletContextProvider>{children}</WalletContextProvider>
 );
 
 const StakingProvider: React.FC = ({ children }: any) => (
@@ -70,6 +76,7 @@ const providers = [
   ListsContextProvider,
   WrappedLocalizationProvider,
   AddWalletProvider,
+  WalletProvider,
   StakingProvider,
   BridgeProvider,
   SwapProvider
