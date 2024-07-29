@@ -9,3 +9,5 @@ export interface GetAllowanceArgs {
   amount: string;
   spenderAddress: string;
 }
+
+export type SetAllowanceArgs = GetAllowanceArgs;

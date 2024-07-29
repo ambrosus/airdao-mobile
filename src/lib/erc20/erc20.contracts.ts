@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { GetAllowanceArgs, GetBalanceArgs } from '@appTypes';
+import { GetAllowanceArgs, GetBalanceArgs, SetAllowanceArgs } from '@appTypes';
 import Config from '@constants/config';
 import { ERC20_ABI } from './abi/ERC20_ABI';
 
@@ -20,7 +20,6 @@ class ERC20 {
         return await provider.getBalance(ownerAddress);
 
       const erc20 = new ethers.Contract(tokenAddress, ERC20_ABI, provider);
-
       return await erc20.balanceOf(ownerAddress);
     } catch (error) {
       throw error;
@@ -34,20 +33,47 @@ class ERC20 {
     spenderAddress
   }: GetAllowanceArgs) {
     if (tokenAddress === ethers.constants.AddressZero) return false;
-    const bnAmount = ethers.utils.parseEther(amount);
+    try {
+      const bnAmount = ethers.utils.parseEther(amount);
 
-    const signer = this.createSigner(privateKey);
-    const erc20 = new ethers.Contract(ethers.constants.AddressZero, ERC20_ABI);
-    const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
+      const signer = this.createSigner(privateKey);
+      const erc20 = new ethers.Contract(
+        ethers.constants.AddressZero,
+        ERC20_ABI
+      );
+      const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
 
-    const allowance = await signedERC2OContract.allowance(
-      signer.getAddress(),
-      spenderAddress
-    );
+      const allowance = await signedERC2OContract.allowance(
+        signer.getAddress(),
+        spenderAddress
+      );
 
-    const isAllowanceLessThanAmount = allowance.lt(bnAmount);
+      const isAllowanceLessThanAmount = allowance.lt(bnAmount);
 
-    return { allowance, needToIncrease: isAllowanceLessThanAmount };
+      return { allowance, needToIncrease: isAllowanceLessThanAmount };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async setAllowance({
+    tokenAddress,
+    privateKey,
+    amount,
+    spenderAddress
+  }: SetAllowanceArgs) {
+    try {
+      const bnAmount = ethers.utils.parseEther(amount);
+      const signer = this.createSigner(privateKey);
+      const erc20 = new ethers.Contract(
+        ethers.constants.AddressZero,
+        ERC20_ABI
+      );
+      const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
+      return await signedERC2OContract.approve(spenderAddress, bnAmount);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
