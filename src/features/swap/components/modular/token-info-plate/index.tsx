@@ -20,11 +20,7 @@ export const TokenInfoPlate = () => {
     (async () => {
       if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
         const route = _refExactGetter ? tokensRoute.reverse() : tokensRoute;
-        const bnAmount = await getOppositeReceivedTokenAmount(
-          '1',
-          route,
-          _refExactGetter
-        );
+        const bnAmount = await getOppositeReceivedTokenAmount('1', route);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)

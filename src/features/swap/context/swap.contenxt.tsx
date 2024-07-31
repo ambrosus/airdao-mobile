@@ -34,6 +34,8 @@ export const SwapContext = () => {
   const [_refSettingsGetter, setSettings] = useState(INITAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
   const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
+  const [isMultiHopSwapBetterCurrency, setIsMultiHopSwapCurrencyBetter] =
+    useState(false);
 
   // Swap preview information
   const [_refPairsGetter, setPairs] = useState<SelectedPairsState>([]);
@@ -64,6 +66,7 @@ export const SwapContext = () => {
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
     setUiBottomSheetInformation(INITAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
+    setIsMultiHopSwapCurrencyBetter(false);
   }, []);
 
   return {
@@ -84,6 +87,8 @@ export const SwapContext = () => {
     _refSettingsGetter,
     _refExactGetter,
     setSettings,
+    isMultiHopSwapBetterCurrency,
+    setIsMultiHopSwapCurrencyBetter,
     setIsExactIn,
     isProcessingSwap,
     setIsProcessingSwap,

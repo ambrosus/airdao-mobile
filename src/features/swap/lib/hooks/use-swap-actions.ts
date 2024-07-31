@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   checkIsApprovalRequired,
@@ -32,7 +32,8 @@ export function useSwapActions() {
   const {
     isExactInRef,
     uiBottomSheetInformation,
-    setUiBottomSheetInformation
+    setUiBottomSheetInformation,
+    setIsMultiHopSwapCurrencyBetter
   } = useSwapContextSelector();
 
   const { settings } = useSwapSettings();
@@ -165,28 +166,53 @@ export function useSwapActions() {
   );
 
   const getOppositeReceivedTokenAmount = useCallback(
-    async (amountToSell: string, path: string[], reversed?: boolean) => {
-      if (amountToSell === '' || amountToSell === '0') return;
-      const route = reversed ? path.reverse() : path;
-      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(route);
+    async (amountToSell: string, path: string[]): Promise<BigNumber> => {
+      let bestRate = BigNumber.from('0');
 
-      if (
-        isExactInRef.current &&
-        settings.current.multihops &&
-        isMultiHopPathAvailable
-      ) {
-        return await getTokenAmountOutWithMultiRoute(amountToSell, path);
-      } else if (
-        !isExactInRef.current &&
-        settings.current.multihops &&
-        isMultiHopPathAvailable
-      ) {
-        return await getTokenAmountInWithMultiRoute(amountToSell, path);
-      } else if (!isExactInRef.current) {
-        return await getTokenAmountIn(amountToSell, path);
+      if (amountToSell === '' || amountToSell === '0') return bestRate;
+
+      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(path);
+
+      try {
+        const [singleHopAmount, multiHopAmount] = await Promise.all([
+          (async () => {
+            if (isExactInRef.current && !isMultiHopPathAvailable) {
+              return await getTokenAmountOut(amountToSell, path);
+            } else {
+              return await getTokenAmountIn(amountToSell, path);
+            }
+          })(),
+          (async () => {
+            if (settings.current.multihops && isMultiHopPathAvailable) {
+              if (isExactInRef.current) {
+                return await getTokenAmountOutWithMultiRoute(
+                  amountToSell,
+                  path
+                );
+              } else {
+                return await getTokenAmountInWithMultiRoute(amountToSell, path);
+              }
+            } else {
+              return BigNumber.from('0');
+            }
+          })()
+        ]);
+
+        if (singleHopAmount.gt(bestRate)) {
+          setIsMultiHopSwapCurrencyBetter(false);
+          bestRate = singleHopAmount;
+        }
+
+        if (multiHopAmount.gt(bestRate)) {
+          setIsMultiHopSwapCurrencyBetter(true);
+          bestRate = multiHopAmount;
+        }
+      } catch (error) {
+        console.error('Error in getOppositeReceivedTokenAmount:', error);
+        return bestRate;
       }
 
-      return await getTokenAmountOut(amountToSell, path);
+      return bestRate;
     },
     [
       getTokenAmountIn,
@@ -194,6 +220,7 @@ export function useSwapActions() {
       getTokenAmountOut,
       getTokenAmountOutWithMultiRoute,
       isExactInRef,
+      setIsMultiHopSwapCurrencyBetter,
       settings
     ]
   );

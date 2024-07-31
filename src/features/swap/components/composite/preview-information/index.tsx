@@ -11,8 +11,12 @@ import { getObjectKeyByValue } from '@utils/object';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
-  const { latestSelectedTokens, uiBottomSheetInformation, _refExactGetter } =
-    useSwapContextSelector();
+  const {
+    latestSelectedTokens,
+    uiBottomSheetInformation,
+    _refExactGetter,
+    isMultiHopSwapBetterCurrency
+  } = useSwapContextSelector();
 
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { isMultiHopSwap } = useSwapHelpers();
@@ -83,7 +87,7 @@ export const PreviewInformation = () => {
         </RightSideRowItem>
       </Row>
 
-      {isMultiHopSwap && (
+      {isMultiHopSwap && isMultiHopSwapBetterCurrency && (
         <Row alignItems="center" justifyContent="space-between">
           <Text>{t('swap.route')}</Text>
 
