@@ -165,9 +165,10 @@ export function useSwapActions() {
   );
 
   const getOppositeReceivedTokenAmount = useCallback(
-    async (amountToSell: string, path: string[]) => {
+    async (amountToSell: string, path: string[], reversed?: boolean) => {
       if (amountToSell === '' || amountToSell === '0') return;
-      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(path);
+      const route = reversed ? path.reverse() : path;
+      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(route);
 
       if (
         isExactInRef.current &&
