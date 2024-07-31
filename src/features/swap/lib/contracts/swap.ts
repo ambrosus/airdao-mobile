@@ -12,7 +12,8 @@ import {
   isNativeWrapped,
   minimumAmountOut,
   addresses,
-  wrapNativeAddress
+  wrapNativeAddress,
+  extractMiddleAddressMultiHop
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -117,15 +118,16 @@ export async function swapMultiHopExactTokensForTokens(
 ) {
   const [addressFrom, addressTo] = path;
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+  const middleAddress = extractMiddleAddressMultiHop(path);
 
   const bnIntermediateAmountToReceive = await getAmountsOut({
     amountToSell: bnAmountToSell,
-    path: [addressFrom, addresses.SAMB]
+    path: [addressFrom, middleAddress]
   });
 
   const intermediateSwapResult = await swapExactTokensForETH(
     amountToSell,
-    [addressFrom, addresses.SAMB],
+    [addressFrom, middleAddress],
     signer,
     slippageTolerance,
     deadline
@@ -134,7 +136,7 @@ export async function swapMultiHopExactTokensForTokens(
   if (intermediateSwapResult) {
     return await swapExactETHForTokens(
       formatEther(bnIntermediateAmountToReceive),
-      [addresses.SAMB, addressTo],
+      [middleAddress, addressTo],
       signer,
       slippageTolerance,
       deadline
