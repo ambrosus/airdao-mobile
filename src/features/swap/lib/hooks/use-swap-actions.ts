@@ -17,11 +17,10 @@ import { useBridgeContextData } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   wrapNativeAddress,
-  isMultiRouteWithUSDCFirst,
   isETHtoWrapped,
   isWrappedToETH,
-  executeSwapPath,
-  addresses
+  extractMiddleAddressMultiHop,
+  isMultiHopSwapAvaliable
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -124,9 +123,10 @@ export function useSwapActions() {
       const [addressFrom, addressTo] = path;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+      const middleAddress = extractMiddleAddressMultiHop(path);
 
-      const intermediatePath = [addressFrom, addresses.SAMB];
-      const finalPath = [addresses.SAMB, addressTo];
+      const intermediatePath = [addressFrom, middleAddress];
+      const finalPath = [middleAddress, addressTo];
 
       const intermediateAmount = await getAmountsOut({
         path: intermediatePath,
@@ -146,9 +146,10 @@ export function useSwapActions() {
       const [addressFrom, addressTo] = path;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+      const middleAddress = extractMiddleAddressMultiHop(path);
 
-      const intermediatePath = [addressFrom, addresses.SAMB];
-      const finalPath = [addresses.SAMB, addressTo];
+      const intermediatePath = [addressFrom, middleAddress];
+      const finalPath = [middleAddress, addressTo];
 
       const intermediateAmount = await getAmountsIn({
         path: intermediatePath,
@@ -166,31 +167,25 @@ export function useSwapActions() {
   const getOppositeReceivedTokenAmount = useCallback(
     async (amountToSell: string, path: string[]) => {
       if (amountToSell === '' || amountToSell === '0') return;
-      const [addressFrom, addressTo] = path;
-
-      const route = executeSwapPath(isExactInRef.current, path);
-
-      const isMuliRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
-        [addressFrom, addressTo].join()
-      );
+      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(path);
 
       if (
         isExactInRef.current &&
         settings.current.multihops &&
-        isMuliRouteUSDCSwap
+        isMultiHopPathAvailable
       ) {
         return await getTokenAmountOutWithMultiRoute(amountToSell, path);
       } else if (
         !isExactInRef.current &&
         settings.current.multihops &&
-        isMuliRouteUSDCSwap
+        isMultiHopPathAvailable
       ) {
         return await getTokenAmountInWithMultiRoute(amountToSell, path);
       } else if (!isExactInRef.current) {
         return await getTokenAmountIn(amountToSell, path);
       }
 
-      return await getTokenAmountOut(amountToSell, route);
+      return await getTokenAmountOut(amountToSell, path);
     },
     [
       getTokenAmountIn,
@@ -204,12 +199,10 @@ export function useSwapActions() {
 
   const swapTokens = useCallback(async () => {
     const signer = createSigner(await _privateKeyGetter());
-
-    const isMultiRouteUSDCSwap = isMultiRouteWithUSDCFirst.has(
-      tokensRoute.join()
-    );
-
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
+
+    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(excludeNativeETH);
+
     const { slippageTolerance, deadline, multihops } = settings.current;
 
     if (isETHtoWrapped(tokensRoute)) {
@@ -240,7 +233,7 @@ export function useSwapActions() {
       );
     }
 
-    if (multihops && isMultiRouteUSDCSwap) {
+    if (multihops && isMultiHopPathAvailable) {
       return await swapMultiHopExactTokensForTokens(
         tokenToSell.AMOUNT,
         tokensRoute,
