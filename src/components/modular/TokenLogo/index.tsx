@@ -23,6 +23,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 export interface TokenLogoProps {
   token?: string;
   scale?: number;
+  isNativeCoin?: boolean | string;
   address?: string;
   overrideIconVariants?: {
     amb?: 'white' | 'blue';
@@ -35,12 +36,13 @@ export const TokenLogo = (props: TokenLogoProps) => {
     scale,
     token,
     address,
+    isNativeCoin,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
   const { selectedAccount } = useBridgeContextData();
   const tokenName = useMemo(() => {
     if (address) {
-      if (selectedAccount?.address === address) {
+      if (isNativeCoin || selectedAccount?.address === address) {
         return 'airdao';
       } else {
         return (
@@ -51,7 +53,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     } else {
       return token;
     }
-  }, [address, selectedAccount?.address, token]);
+  }, [address, isNativeCoin, selectedAccount?.address, token]);
 
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
