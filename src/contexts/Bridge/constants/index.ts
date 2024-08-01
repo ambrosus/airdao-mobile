@@ -24,6 +24,13 @@ export const DEFAULT_TOKEN_FROM: Token = {
   symbol: CryptoCurrencyCode.AMB
 };
 
+export const INPUT_ERROR_TYPES = {
+  INSUFFICIENT_FUNDS: 'insufficientFund',
+  LESS_THEN_FEE: 'amountLessThenFee',
+  INSUFFICIENT_FUNDS_TO_PROCESS: 'insufficientFundToProcessTransaction',
+  NO_ERROR: null
+};
+
 export const DEFAULT_TOKEN_TO = {
   address: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
   bridgeNetwork: 'eth',

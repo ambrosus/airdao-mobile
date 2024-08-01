@@ -24,6 +24,7 @@ import { useBridgeTransactionStatus } from '@hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionPendingHistory } from '@components/templates/Bridge/BottomSheetBridgeTransactionPendingHistory';
 import { BottomSheetBridgeItemSelector } from '@components/templates/Bridge/BottomSheetBridgeItemSelector';
 import { isAndroid } from '@utils/isPlatform';
+import { INPUT_ERROR_TYPES } from '@contexts/Bridge/constants';
 
 const KEYBOARD_VERTICAL_OFFSET = 155;
 
@@ -65,8 +66,7 @@ export const BridgeForm = () => {
     bridgeTransaction,
     inputErrorType,
     errorMessage,
-    isMax,
-    INPUT_ERROR_TYPES
+    isMax
   } = variables;
   const { confirmations, minSafetyBlocks, stage } = useBridgeTransactionStatus(
     bridgeTransaction?.withdrawTx,

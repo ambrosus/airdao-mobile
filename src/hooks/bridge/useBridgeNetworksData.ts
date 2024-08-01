@@ -216,6 +216,14 @@ export const useBridgeNetworksData = ({
 
   const errorHandler = (error: unknown) => {
     // @ts-ignore
+    const inputAmount = parseUnits(
+      amountToExchange,
+      selectedToken.renderTokenItem.decimals
+    );
+    const insufficientWalletFunds = inputAmount.gt(
+      selectedToken.renderTokenItem.balance
+    );
+    // @ts-ignore
     const errorMessage = `${error?.message}`;
     const amountLessThenFee =
       errorMessage.includes('error when getting fees: amount is too small') ||
@@ -231,6 +239,9 @@ export const useBridgeNetworksData = ({
       );
 
     switch (true) {
+      case insufficientWalletFunds:
+        setInputErrorType(INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS);
+        break;
       case amountLessThenFee:
         setInputErrorType(INPUT_ERROR_TYPES.LESS_THEN_FEE);
         break;
@@ -396,8 +407,7 @@ export const useBridgeNetworksData = ({
     bridgeTransaction,
     inputErrorType,
     errorMessage,
-    isMax,
-    INPUT_ERROR_TYPES
+    isMax
   };
   const methods = {
     getFeeData,
