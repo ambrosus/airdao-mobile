@@ -1,5 +1,5 @@
 import { environment } from '@utils/environment';
-import { TOKEN_ADDRESSES } from '../entities';
+import { SWAP_SUPPORTED_TOKENS, TOKEN_ADDRESSES } from '../entities';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
@@ -42,4 +42,35 @@ export const extractMiddleAddressMultiHop = (path: string[]): string => {
   if (addressFrom === addresses.BOND) return addresses.AMB;
 
   return '';
+};
+// export const extractArrayOfMiddleMultiHopAddresses = (path: string[]) => {
+//   const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment];
+
+//   const filterByAddress = tokens.filter((token) => {
+//     return !path.includes(token.address);
+//   });
+
+//   if (path.includes(addresses.AMB)) {
+//     return filterByAddress.filter((token) => token.symbol !== 'SAMB');
+//   } else if (path.includes(addresses.SAMB)) {
+//     return filterByAddress.filter((token) => token.symbol !== 'AMB');
+//   }
+
+//   return filterByAddress;
+// };
+
+export const extractArrayOfMiddleMultiHopAddresses = (path: string[]) => {
+  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment];
+
+  const filterByAddress = tokens.filter((token) => {
+    return !path.includes(token.address);
+  });
+
+  if (path.includes(addresses.AMB)) {
+    return filterByAddress.filter((token) => token.symbol !== 'SAMB')[0];
+  } else if (path.includes(addresses.SAMB)) {
+    return filterByAddress.filter((token) => token.symbol !== 'AMB')[0];
+  }
+
+  return filterByAddress[0];
 };

@@ -109,15 +109,12 @@ export function useSwapPriceImpact() {
               amountToSellWithRealizedFee
             );
 
-            const intermediatePath = [
-              tokenToSell.TOKEN?.address,
-              middleAddress
-            ] as [string, string];
-
-            const finalPath = [middleAddress, _tokenToReceive?.address ?? ''];
-
-            const intermediateAmount = await getAmountsOut({
-              path: intermediatePath,
+            const [, intermediateAmount, finalAmount] = await getAmountsOut({
+              path: [
+                _tokenToSell?.address ?? '',
+                middleAddress,
+                _tokenToReceive?.address ?? ''
+              ],
               amountToSell: bnAmountToSell
             });
 
@@ -132,11 +129,6 @@ export function useSwapPriceImpact() {
               interReserveIn,
               interReserveOut
             );
-
-            const finalAmount = await getAmountsOut({
-              path: finalPath,
-              amountToSell: intermediateAmount
-            });
 
             const finalImpact = singleHopImpact(
               intermediateAmountToSellWithRealizedFee,

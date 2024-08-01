@@ -12,8 +12,8 @@ import {
   isNativeWrapped,
   minimumAmountOut,
   addresses,
-  wrapNativeAddress,
-  extractMiddleAddressMultiHop
+  extractMiddleAddressMultiHop,
+  wrapNativeAddress
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -32,12 +32,7 @@ export async function getAmountsOut({
 
     const contract = createRouterContract(provider, TRADE);
 
-    const [, amountToReceive] = await contract.getAmountsOut(
-      amountToSell,
-      excludeNativeETH
-    );
-
-    return amountToReceive;
+    return await contract.getAmountsOut(amountToSell, excludeNativeETH);
   } catch (error) {
     console.error(error);
     throw error;
@@ -59,14 +54,9 @@ export async function getAmountsIn({
 
     const contract = createRouterContract(provider, TRADE);
 
-    const [amountToSell] = await contract.getAmountsIn(
-      amountToReceive,
-      excludeNativeETH
-    );
-
-    return amountToSell;
+    return await contract.getAmountsIn(amountToReceive, excludeNativeETH);
   } catch (error) {
-    console.error(error);
+    console.error(error, 'ERROR');
     throw error;
   }
 }
@@ -84,7 +74,7 @@ export async function swapExactETHForTokens(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
@@ -116,13 +106,13 @@ export async function swapMultiHopExactTokensForTokens(
   slippageTolerance: string,
   deadline: string
 ) {
-  const [addressFrom, addressTo] = path;
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+  const [addressFrom, addressTo] = path;
   const middleAddress = extractMiddleAddressMultiHop(path);
 
   const bnIntermediateAmountToReceive = await getAmountsOut({
     amountToSell: bnAmountToSell,
-    path: [addressFrom, middleAddress]
+    path: [addressFrom, middleAddress, addressTo]
   });
 
   const intermediateSwapResult = await swapExactTokensForETH(

@@ -6,8 +6,6 @@ import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { COLORS } from '@constants/colors';
 import { useSwapHelpers, useSwapTokens } from '@features/swap/lib/hooks';
-import { addresses, extractMiddleAddressMultiHop } from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils/object';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
@@ -46,17 +44,8 @@ export const PreviewInformation = () => {
     tokenToSell.TOKEN?.symbol
   ]);
 
-  const middleHopSymbol = useMemo(() => {
-    const middleAddress = extractMiddleAddressMultiHop([
-      tokenToSell.TOKEN?.address ?? '',
-      tokenToReceive.TOKEN?.address ?? ''
-    ]);
-
-    return getObjectKeyByValue(addresses, middleAddress);
-  }, [tokenToReceive.TOKEN?.address, tokenToSell.TOKEN?.address]);
-
   const isMultiHopRoute = useMemo(() => {
-    return isMultiHopSwap && isMultiHopSwapBetterCurrency;
+    return isMultiHopSwap && isMultiHopSwapBetterCurrency.state;
   }, [isMultiHopSwap, isMultiHopSwapBetterCurrency]);
 
   return (
@@ -96,7 +85,7 @@ export const PreviewInformation = () => {
           <Text>{t('swap.route')}</Text>
 
           <RightSideRowItem>
-            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${middleHopSymbol} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${isMultiHopSwapBetterCurrency.token} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
           </RightSideRowItem>
         </Row>
       )}
