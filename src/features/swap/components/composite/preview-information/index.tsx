@@ -55,6 +55,10 @@ export const PreviewInformation = () => {
     return getObjectKeyByValue(addresses, middleAddress);
   }, [tokenToReceive.TOKEN?.address, tokenToSell.TOKEN?.address]);
 
+  const isMultiHopRoute = useMemo(() => {
+    return isMultiHopSwap && isMultiHopSwapBetterCurrency;
+  }, [isMultiHopSwap, isMultiHopSwapBetterCurrency]);
+
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
@@ -87,7 +91,7 @@ export const PreviewInformation = () => {
         </RightSideRowItem>
       </Row>
 
-      {isMultiHopSwap && isMultiHopSwapBetterCurrency && (
+      {isMultiHopRoute && (
         <Row alignItems="center" justifyContent="space-between">
           <Text>{t('swap.route')}</Text>
 

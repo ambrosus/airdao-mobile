@@ -3,10 +3,6 @@ import { TOKEN_ADDRESSES } from '../entities';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
-export const isMultiRouteWithUSDCFirst = new Set([
-  [addresses.USDC, addresses.BOND].join()
-]);
-
 export const isMultiRouteWithBONDFirst = new Set([
   [addresses.BOND, addresses.USDC].join()
 ]);

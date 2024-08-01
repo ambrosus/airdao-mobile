@@ -71,7 +71,6 @@ export function useSwapActions() {
       const bnAmountToSell = ethers.utils.parseEther('1000000');
 
       const allowance = await increaseAllowance({
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         address: tokenToSell.TOKEN?.address ?? '',
         privateKey,
         amount: bnAmountToSell
@@ -169,14 +168,14 @@ export function useSwapActions() {
     async (
       amountToSell: string,
       path: string[],
-      reversed?: boolean
+      plate = false
     ): Promise<BigNumber> => {
       let bestRate = BigNumber.from('0');
 
       if (amountToSell === '' || amountToSell === '0') return bestRate;
 
-      const route = reversed ? [...path].reverse() : path;
-      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(path);
+      const route = path;
+      const isMultiHopPathAvailable = isMultiHopSwapAvaliable(route);
 
       try {
         const [singleHopAmount, multiHopAmount] = await Promise.all([
@@ -206,14 +205,32 @@ export function useSwapActions() {
           })()
         ]);
 
-        if (singleHopAmount.gt(bestRate)) {
-          setIsMultiHopSwapCurrencyBetter(false);
-          bestRate = singleHopAmount;
-        }
+        if (isExactInRef.current) {
+          if (singleHopAmount.gt(bestRate)) {
+            if (!plate) setIsMultiHopSwapCurrencyBetter(false);
+            bestRate = singleHopAmount;
+          }
 
-        if (multiHopAmount.gt(bestRate)) {
-          setIsMultiHopSwapCurrencyBetter(true);
-          bestRate = multiHopAmount;
+          if (multiHopAmount.gt(bestRate)) {
+            if (!plate) setIsMultiHopSwapCurrencyBetter(true);
+            bestRate = multiHopAmount;
+          }
+        } else {
+          if (
+            bestRate.isZero() ||
+            (singleHopAmount.lt(bestRate) && !singleHopAmount.isZero())
+          ) {
+            if (!plate) setIsMultiHopSwapCurrencyBetter(false);
+            bestRate = singleHopAmount;
+          }
+
+          if (
+            bestRate.isZero() ||
+            (multiHopAmount.lt(bestRate) && !multiHopAmount.isZero())
+          ) {
+            if (!plate) setIsMultiHopSwapCurrencyBetter(true);
+            bestRate = multiHopAmount;
+          }
         }
       } catch (error) {
         console.error('Error in getOppositeReceivedTokenAmount:', error);
