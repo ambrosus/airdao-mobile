@@ -3222,10 +3222,10 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-firebase/analytics@^20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-20.3.0.tgz#8c00d9a56eade754b27528f5bb5e549e4456a444"
-  integrity sha512-viZWxZgTyv94t1qf8chXtC6YZyte4N0LxZspYJLjDeXGAMrLNGq8pku3rv7EY+bGJh5PWdc7pGHpbO4cIxcQkw==
+"@react-native-firebase/analytics@^17.5.0":
+  version "17.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-17.5.0.tgz#4f133f64edf2c5959116f862a62c12e6f4ec20ce"
+  integrity sha512-SATj+O8YbSJkL5tHtMSxaXqojZROO6+1mq4BDm9m2Gt8HqDXL7FCUl8dyB1h0dp5cvQ6Jl3nkYEICzHNnSXMeQ==
 
 "@react-native-firebase/app@^17.5.0":
   version "17.5.0"
@@ -3235,12 +3235,12 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-20.3.0.tgz#6d6f126687663097feb4c7214ca9c5ec0da6e120"
-  integrity sha512-k4vyPI9TgF11XOaBG0DH1DUFFG4LfRl8IgEJH6xFXDyiCIGdgvO5OxJQNw0TlWXztnEPt3CZkQCVBuajdPe//w==
+"@react-native-firebase/crashlytics@^17.5.0":
+  version "17.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-17.5.0.tgz#0685e262b99f67150b268f60a739e0a051fb2245"
+  integrity sha512-BknqnrsGceKDT1jm+gArIymXLguPw1AKkAKqEyH/XU+K0Np6M7+VsISipHjO2dizyGlkFjIN2lGdqTvfLzRC9Q==
   dependencies:
-    stacktrace-js "^2.0.2"
+    stacktrace-js "^2.0.0"
 
 "@react-native-firebase/messaging@^17.5.0":
   version "17.5.0"
@@ -12766,7 +12766,7 @@ stacktrace-gps@^3.0.4:
     source-map "0.5.6"
     stackframe "^1.3.4"
 
-stacktrace-js@^2.0.2:
+stacktrace-js@^2.0.0, stacktrace-js@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/stacktrace-js/-/stacktrace-js-2.0.2.tgz#4ca93ea9f494752d55709a081d400fdaebee897b"
   integrity sha512-Je5vBeY4S1r/RnLydLl0TBTi3F2qdfWmYsGvtfZgEI+SCprPppaIhQf5nGcal4gI4cGpCV/duLcAzT1np6sQqg==
