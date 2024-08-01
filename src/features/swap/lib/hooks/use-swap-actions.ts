@@ -166,20 +166,25 @@ export function useSwapActions() {
   );
 
   const getOppositeReceivedTokenAmount = useCallback(
-    async (amountToSell: string, path: string[]): Promise<BigNumber> => {
+    async (
+      amountToSell: string,
+      path: string[],
+      reversed?: boolean
+    ): Promise<BigNumber> => {
       let bestRate = BigNumber.from('0');
 
       if (amountToSell === '' || amountToSell === '0') return bestRate;
 
+      const route = reversed ? [...path].reverse() : path;
       const isMultiHopPathAvailable = isMultiHopSwapAvaliable(path);
 
       try {
         const [singleHopAmount, multiHopAmount] = await Promise.all([
           (async () => {
-            if (isExactInRef.current && !isMultiHopPathAvailable) {
-              return await getTokenAmountOut(amountToSell, path);
+            if (isExactInRef.current) {
+              return await getTokenAmountOut(amountToSell, route);
             } else {
-              return await getTokenAmountIn(amountToSell, path);
+              return await getTokenAmountIn(amountToSell, route);
             }
           })(),
           (async () => {
@@ -187,10 +192,13 @@ export function useSwapActions() {
               if (isExactInRef.current) {
                 return await getTokenAmountOutWithMultiRoute(
                   amountToSell,
-                  path
+                  route
                 );
               } else {
-                return await getTokenAmountInWithMultiRoute(amountToSell, path);
+                return await getTokenAmountInWithMultiRoute(
+                  amountToSell,
+                  route
+                );
               }
             } else {
               return BigNumber.from('0');
