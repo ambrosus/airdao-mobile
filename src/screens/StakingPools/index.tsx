@@ -14,7 +14,7 @@ import { useAmbrosusStakingPools } from '@hooks';
 import { styles } from './styles';
 import { useStakingMultiplyContextSelector } from '@contexts';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 
 export const StakingPoolsScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();

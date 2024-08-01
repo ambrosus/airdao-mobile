@@ -16,7 +16,7 @@ import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {

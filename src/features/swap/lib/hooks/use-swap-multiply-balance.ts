@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { useSwapContextSelector } from '@features/swap/context';
 import { MultiplyBalancesStateType, SwapToken } from '@features/swap/types';
 import { getBalanceOf } from '@features/swap/lib/contracts';
