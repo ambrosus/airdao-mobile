@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { BigNumber } from 'ethers/lib/ethers';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { SwapToken } from '@features/swap/types';
 import { getBalanceOf } from '../contracts';
 import { useFocusEffect } from '@react-navigation/native';

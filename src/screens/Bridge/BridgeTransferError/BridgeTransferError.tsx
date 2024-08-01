@@ -9,8 +9,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { useBridgeContextData } from '@contexts/Bridge';
-import { DEFAULT_AMB_NETWORK } from '@contexts/Bridge/constants';
+import { useBridgeContextData } from '@features/bridge/context';
+import { DEFAULT_AMB_NETWORK } from '../../../features/bridge/constants';
 
 export const BridgeTransferError = ({}) => {
   const navigation = useNavigation<HomeNavigationProp>();
