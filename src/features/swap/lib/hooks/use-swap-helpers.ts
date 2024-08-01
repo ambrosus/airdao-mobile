@@ -7,7 +7,7 @@ import {
 import { Cache, CacheKey } from '@lib/cache';
 
 import { useSwapTokens } from './use-swap-tokens';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { ethers } from 'ethers';
 
 export function useSwapHelpers() {

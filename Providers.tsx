@@ -12,7 +12,7 @@ import {
 } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
-import { BridgeContextProvider } from '@contexts/Bridge';
+import { BridgeContextProvider } from '@features/bridge/context';
 import { SwapContextProvider } from '@features/swap/context';
 
 const queryClient = new QueryClient();

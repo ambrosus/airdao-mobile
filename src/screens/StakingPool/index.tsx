@@ -29,7 +29,7 @@ import {
 
 import { TokenUtils } from '@utils/token';
 import { StakeToken } from './components/Stake/Stake';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { DeviceUtils } from '@utils/device';
 import { useKeyboardHeight } from '@hooks';
 

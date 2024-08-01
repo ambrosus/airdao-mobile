@@ -18,7 +18,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
 import Config from '@constants/config';
 import { Token } from '@models/Token';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 
 export interface TokenLogoProps {
   token?: string;

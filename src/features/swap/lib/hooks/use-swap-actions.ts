@@ -13,7 +13,7 @@ import {
   unwrapETH,
   wrapETH
 } from '../contracts';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   wrapNativeAddress,

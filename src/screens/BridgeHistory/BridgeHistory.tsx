@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { BridgeHistoryTransactions } from '@components/templates/Bridge/BridgeHistory/BridgeHistory.Transactions';
+import { BridgeHistoryTransactions } from '@features/bridge/templates/BridgeHistory/BridgeHistory.Transactions';
 
 export const BridgeHistory = () => {
   const { t } = useTranslation();
