@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { View } from 'react-native';
 import { styles } from './styles';
 import {
   Input,
@@ -10,7 +10,6 @@ import {
 } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';
-import { DeviceUtils } from '@utils/device';
 import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
@@ -25,10 +24,11 @@ import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/tem
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { BottomSheetBridgeItemSelector } from '@features/bridge/templates/BottomSheetBridgeItemSelector';
 import { INPUT_ERROR_TYPES } from '@features/bridge/constants';
-
-const KEYBOARD_VERTICAL_OFFSET = 155;
+import { useKeyboardHeight } from '@hooks';
+import { DEVICE_HEIGHT } from '@constants/variables';
 
 export const BridgeForm = () => {
+  const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
   const navigation = useNavigation<RootNavigationProp>();
 
   const choseTokenRef = useRef<BottomSheetRef>(null);
@@ -116,107 +116,102 @@ export const BridgeForm = () => {
   const isButtonDisabled =
     !amountToExchange || !bridgeFee || gasFeeLoader || !!inputErrorType;
   return (
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={KEYBOARD_VERTICAL_OFFSET}
-      enabled={DeviceUtils.isIOS || DeviceUtils.isAndroid}
-      style={styles.container}
-      behavior="padding"
-    >
-      <KeyboardDismissingView style={styles.separatedContainer}>
-        <View style={styles.inputContainerWitHeading}>
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
+    <KeyboardDismissingView style={styles.separatedContainer}>
+      <View style={styles.inputContainerWitHeading}>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral900}
+        >
+          {t('bridge.amount.to.bridge')}
+        </Text>
+        <View style={styles.inputContainerWithSelector}>
+          <View
+            onLayout={onCurrencySelectorLayoutHandle}
+            style={styles.inputCurrencySelector}
           >
-            {t('bridge.amount.to.bridge')}
-          </Text>
-          <View style={styles.inputContainerWithSelector}>
-            <View
-              onLayout={onCurrencySelectorLayoutHandle}
-              style={styles.inputCurrencySelector}
-            >
-              <TokenSelector
-                onPress={() => choseTokenRef.current?.show()}
-                symbol={tokenParams.value.renderTokenItem.symbol ?? ''}
-              />
-            </View>
-            <Input
-              style={inputStyles}
-              type="number"
-              keyboardType="decimal-pad"
-              maxLength={9}
-              value={amountToExchange}
-              onChangeValue={onChangeAmount}
+            <TokenSelector
+              onPress={() => choseTokenRef.current?.show()}
+              symbol={tokenParams.value.renderTokenItem.symbol ?? ''}
             />
-            {!!errorMessage && (
-              <>
-                <Spacer value={verticalScale(4)} />
-                <Text
-                  fontSize={12}
-                  fontFamily="Inter_500Medium"
-                  fontWeight="500"
-                  color={COLORS.error400}
-                >
-                  {errorMessage}
-                </Text>
-              </>
-            )}
-            <Spacer value={scale(8)} />
-            <BalanceInfo onMaxPress={onSelectMaxAmount} />
           </View>
-
-          <Spacer value={scale(32)} />
-          <FeeInfo
-            amount={amountToExchange}
-            symbol={tokenParams.value.renderTokenItem.symbol}
-            feeLoader={feeLoader}
-            bridgeFee={bridgeFee}
+          <Input
+            style={inputStyles}
+            type="number"
+            keyboardType="decimal-pad"
+            maxLength={9}
+            value={amountToExchange}
+            onChangeValue={onChangeAmount}
           />
+          {!!errorMessage && (
+            <>
+              <Spacer value={verticalScale(4)} />
+              <Text
+                fontSize={12}
+                fontFamily="Inter_500Medium"
+                fontWeight="500"
+                color={COLORS.error400}
+              >
+                {errorMessage}
+              </Text>
+            </>
+          )}
+          <Spacer value={scale(8)} />
+          <BalanceInfo onMaxPress={onSelectMaxAmount} />
         </View>
 
-        <PrimaryButton onPress={onPressPreview} disabled={isButtonDisabled}>
-          {gasFeeLoader ? (
-            <Spinner customSize={15} />
-          ) : (
-            <Text
-              color={isButtonDisabled ? COLORS.neutral400 : COLORS.neutral0}
-            >
-              {inputErrorType === INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS
-                ? t('bridge.insufficient.funds')
-                : t('button.preview')}
-            </Text>
-          )}
-        </PrimaryButton>
-        <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
-        <BottomSheetBridgeItemSelector
-          ref={choseTokenRef}
-          onPressItem={onTokenPress}
-          selectorType={'token'}
+        <Spacer value={scale(32)} />
+        <FeeInfo
+          amount={amountToExchange}
+          symbol={tokenParams.value.renderTokenItem.symbol}
+          feeLoader={feeLoader}
+          bridgeFee={bridgeFee}
         />
-        <BottomSheetBridgePreview
-          btnTitle={t('bridge.preview.button').replace(
-            '{network}',
-            toParams.value.name
-          )}
-          dataToPreview={dataToPreview}
-          ref={previewRef}
-          onAcceptPress={onAcceptPress}
-        />
-        <BottomSheetBridgeTransactionPendingHistory
-          ref={transactionInfoRef}
-          buttonType={'done'}
-          // @ts-ignore
-          transaction={bridgeTransaction}
-          liveTransactionInformation={{
-            stage,
-            confirmations: {
-              current: confirmations,
-              minSafetyBlocks
-            }
-          }}
-        />
-      </KeyboardDismissingView>
-    </KeyboardAvoidingView>
+      </View>
+
+      <PrimaryButton
+        style={{ paddingBottom: keyboardHeight }}
+        onPress={onPressPreview}
+        disabled={isButtonDisabled}
+      >
+        {gasFeeLoader ? (
+          <Spinner customSize={15} />
+        ) : (
+          <Text color={isButtonDisabled ? COLORS.neutral400 : COLORS.neutral0}>
+            {inputErrorType === INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS
+              ? t('bridge.insufficient.funds')
+              : t('button.preview')}
+          </Text>
+        )}
+      </PrimaryButton>
+      <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
+      <BottomSheetBridgeItemSelector
+        ref={choseTokenRef}
+        onPressItem={onTokenPress}
+        selectorType={'token'}
+      />
+      <BottomSheetBridgePreview
+        btnTitle={t('bridge.preview.button').replace(
+          '{network}',
+          toParams.value.name
+        )}
+        dataToPreview={dataToPreview}
+        ref={previewRef}
+        onAcceptPress={onAcceptPress}
+      />
+      <BottomSheetBridgeTransactionPendingHistory
+        ref={transactionInfoRef}
+        buttonType={'done'}
+        // @ts-ignore
+        transaction={bridgeTransaction}
+        liveTransactionInformation={{
+          stage,
+          confirmations: {
+            current: confirmations,
+            minSafetyBlocks
+          }
+        }}
+      />
+    </KeyboardDismissingView>
   );
 };
