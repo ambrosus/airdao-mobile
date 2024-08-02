@@ -28,10 +28,9 @@ export async function getAmountsOut({
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
-    if (isSelectedSameTokens) return amountToSell;
+    if (isSelectedSameTokens) return [amountToSell];
 
     const contract = createRouterContract(provider, TRADE);
-
     return await contract.getAmountsOut(amountToSell, excludeNativeETH);
   } catch (error) {
     console.error(error);
@@ -50,10 +49,9 @@ export async function getAmountsIn({
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
-    if (isSelectedSameTokens) return amountToReceive;
+    if (isSelectedSameTokens) return [amountToReceive];
 
     const contract = createRouterContract(provider, TRADE);
-
     return await contract.getAmountsIn(amountToReceive, excludeNativeETH);
   } catch (error) {
     console.error(error, 'ERROR');
@@ -110,9 +108,9 @@ export async function swapMultiHopExactTokensForTokens(
   const [addressFrom, addressTo] = path;
   const middleAddress = extractMiddleAddressMultiHop(path);
 
-  const bnIntermediateAmountToReceive = await getAmountsOut({
+  const [, bnIntermediateAmountToReceive] = await getAmountsOut({
     amountToSell: bnAmountToSell,
-    path: [addressFrom, middleAddress, addressTo]
+    path: [addressFrom, middleAddress]
   });
 
   const intermediateSwapResult = await swapExactTokensForETH(
@@ -147,7 +145,7 @@ export async function swapExactTokensForTokens(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
@@ -185,7 +183,7 @@ export async function swapExactTokensForETH(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });

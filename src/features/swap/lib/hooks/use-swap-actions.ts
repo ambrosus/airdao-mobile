@@ -35,6 +35,7 @@ export function useSwapActions() {
     isExactInRef,
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
+    isMultiHopSwapBetterCurrency,
     setIsMultiHopSwapCurrencyBetter
   } = useSwapContextSelector();
 
@@ -225,23 +226,22 @@ export function useSwapActions() {
         }
       }
 
-      // Compare and return the best rate based on tradeIn
       if (tradeIn) {
-        if (multiHopAmount.gt(singleHopAmount)) {
-          onChangeMultiHopUiState(plate, middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.gt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      } else {
         if (multiHopAmount.lt(singleHopAmount)) {
           onChangeMultiHopUiState(plate, middleHopAddress.address);
         } else {
           resetMultiHopUiState();
         }
         return singleHopAmount.lt(multiHopAmount)
+          ? singleHopAmount
+          : multiHopAmount;
+      } else {
+        if (multiHopAmount.gt(singleHopAmount)) {
+          onChangeMultiHopUiState(plate, middleHopAddress.address);
+        } else {
+          resetMultiHopUiState();
+        }
+        return singleHopAmount.gt(multiHopAmount)
           ? singleHopAmount
           : multiHopAmount;
       }
@@ -260,10 +260,14 @@ export function useSwapActions() {
 
   const swapTokens = useCallback(async () => {
     const signer = createSigner(await _privateKeyGetter());
+    const { slippageTolerance, deadline, multihops } = settings.current;
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvaliable(excludeNativeETH);
 
-    const { slippageTolerance, deadline, multihops } = settings.current;
+    const isMultiHopSwapPossible =
+      multihops &&
+      isMultiHopPathAvailable &&
+      isMultiHopSwapBetterCurrency.state;
 
     if (isETHtoWrapped(tokensRoute)) {
       return await wrapETH(tokenToSell.AMOUNT, signer);
@@ -273,7 +277,7 @@ export function useSwapActions() {
       return await unwrapETH(tokenToSell.AMOUNT, signer);
     }
 
-    if (isStartsWithETH && !isMultiHopPathAvailable && !multihops) {
+    if (isStartsWithETH && !isMultiHopSwapPossible) {
       return await swapExactETHForTokens(
         tokenToSell.AMOUNT,
         excludeNativeETH,
@@ -283,7 +287,7 @@ export function useSwapActions() {
       );
     }
 
-    if (isEndsWithETH) {
+    if (isEndsWithETH && !isMultiHopSwapPossible) {
       return await swapExactTokensForETH(
         tokenToSell.AMOUNT,
         excludeNativeETH,
@@ -293,7 +297,7 @@ export function useSwapActions() {
       );
     }
 
-    if (multihops && isMultiHopPathAvailable) {
+    if (multihops && isMultiHopSwapPossible) {
       return await swapMultiHopExactTokensForTokens(
         tokenToSell.AMOUNT,
         tokensRoute,
@@ -313,6 +317,7 @@ export function useSwapActions() {
   }, [
     _privateKeyGetter,
     isEndsWithETH,
+    isMultiHopSwapBetterCurrency.state,
     isStartsWithETH,
     settings,
     tokenToSell.AMOUNT,
