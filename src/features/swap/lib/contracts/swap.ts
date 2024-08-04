@@ -12,8 +12,8 @@ import {
   isNativeWrapped,
   minimumAmountOut,
   addresses,
-  extractMiddleAddressMultiHop,
-  wrapNativeAddress
+  wrapNativeAddress,
+  extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -104,16 +104,24 @@ export async function swapMultiHopExactTokensForTokens(
   slippageTolerance: string,
   deadline: string
 ) {
+  const excludeNativeETH = wrapNativeAddress(path);
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const [addressFrom, addressTo] = path;
-  const middleAddress = extractMiddleAddressMultiHop(path);
+  const [addressFrom, addressTo] = excludeNativeETH;
+  const middleAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
 
   const [, bnIntermediateAmountToReceive] = await getAmountsOut({
     amountToSell: bnAmountToSell,
     path: [addressFrom, middleAddress]
   });
 
-  const intermediateSwapResult = await swapExactTokensForETH(
+  const key = `${path[0]}-${path[1]}`;
+  const swapFunctions = swapFunctionMap[key];
+
+  if (!swapFunctions) {
+    throw new Error('Invalid path configuration');
+  }
+
+  const intermediateSwapResult = await swapFunctions.intermediate(
     amountToSell,
     [addressFrom, middleAddress],
     signer,
@@ -122,7 +130,7 @@ export async function swapMultiHopExactTokensForTokens(
   );
 
   if (intermediateSwapResult) {
-    return await swapExactETHForTokens(
+    return await swapFunctions.final(
       formatEther(bnIntermediateAmountToReceive),
       [middleAddress, addressTo],
       signer,
@@ -227,3 +235,28 @@ export async function unwrapETH(amountToSell: string, signer: Wallet) {
 
   return await tx.wait();
 }
+
+export const swapFunctionMap: {
+  [key: string]: { intermediate: any; final: any };
+} = {
+  [`${addresses.AMB}-${addresses.USDC}`]: {
+    intermediate: swapExactETHForTokens,
+    final: swapExactTokensForTokens
+  },
+  [`${addresses.AMB}-${addresses.BOND}`]: {
+    intermediate: swapExactETHForTokens,
+    final: swapExactTokensForTokens
+  },
+  [`${addresses.BOND}-${addresses.USDC}`]: {
+    intermediate: swapExactTokensForTokens,
+    final: swapExactTokensForETH
+  },
+  [`${addresses.BOND}-${addresses.AMB}`]: {
+    intermediate: swapExactTokensForTokens,
+    final: swapExactTokensForETH
+  },
+  [`${addresses.BOND}-${addresses.USDC}`]: {
+    intermediate: swapExactTokensForETH,
+    final: swapExactETHForTokens
+  }
+};

@@ -5,7 +5,7 @@ import {
   multiHopCumulativeImpact,
   singleHopImpact,
   isMultiHopSwapAvaliable,
-  extractMiddleAddressMultiHop
+  extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { getAmountsOut } from '@features/swap/lib/contracts';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -67,7 +67,8 @@ export function useSwapPriceImpact() {
 
   const multiHopImpactGetter = useCallback(async () => {
     const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
-    const middleAddress = extractMiddleAddressMultiHop(tokensRoute);
+    const middleAddress =
+      extractArrayOfMiddleMultiHopAddresses(tokensRoute).address;
 
     const _tokenToSell = tokenToSell.TOKEN;
     const _tokenToReceive = tokenToReceive.TOKEN;

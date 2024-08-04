@@ -1,6 +1,4 @@
 import Config from '@constants/config';
-import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
-import { environment } from '@utils/environment';
 import { SwapToken } from '../types';
 import { addresses } from './multi-route';
 import { ethers } from 'ethers';
@@ -16,7 +14,7 @@ export function isNativeWrapped(path: string[]) {
 }
 
 export function wrapNativeAddress(path: string[]): [string, string] {
-  const nativeAddress = SWAP_SUPPORTED_TOKENS.default[environment].address;
+  const nativeAddress = ethers.constants.AddressZero;
 
   const replacementAddress =
     Config.SWAP_TOKENS.find((token: SwapToken) => token.symbol === 'SAMB')

@@ -46,7 +46,7 @@ export const ReviewSwapButton = () => {
   }, [t, swapButtonString, isProcessingBottomSheet]);
 
   return (
-    <PrimaryButton onPress={onResolveBottomSheetDataPress}>
+    <PrimaryButton disabled={disabled} onPress={onResolveBottomSheetDataPress}>
       {isProcessingBottomSheet ? (
         <Spinner />
       ) : (

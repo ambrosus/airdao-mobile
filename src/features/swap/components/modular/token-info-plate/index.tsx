@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { formatEther } from 'ethers/lib/utils';
 import { Text, Row } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { useSwapActions, useSwapTokens } from '@features/swap/lib/hooks';
+import { useSwapTokens } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
-import { formatEther } from 'ethers/lib/utils';
+
 import { COLORS } from '@constants/colors';
+import { useSwapBetterCurrency } from '@features/swap/lib/hooks/use-swap-better-currency';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
   const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
-  const { getOppositeReceivedTokenAmount } = useSwapActions();
+  const { getOppositeReceivedTokenAmountForPlate } = useSwapBetterCurrency();
 
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
@@ -19,8 +21,10 @@ export const TokenInfoPlate = () => {
   useEffect(() => {
     (async () => {
       if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
-        const route = _refExactGetter ? tokensRoute.reverse() : tokensRoute;
-        const bnAmount = await getOppositeReceivedTokenAmount('1', route, true);
+        const bnAmount = await getOppositeReceivedTokenAmountForPlate(
+          '1',
+          tokensRoute
+        );
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -32,7 +36,7 @@ export const TokenInfoPlate = () => {
   }, [
     _refExactGetter,
     _refSettingsGetter,
-    getOppositeReceivedTokenAmount,
+    getOppositeReceivedTokenAmountForPlate,
     tokenToReceive.TOKEN,
     tokenToSell.TOKEN,
     tokensRoute

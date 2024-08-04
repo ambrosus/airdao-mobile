@@ -1,10 +1,8 @@
 import { useCallback } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   checkIsApprovalRequired,
-  getAmountsIn,
-  getAmountsOut,
   increaseAllowance,
   swapExactETHForTokens,
   swapExactTokensForETH,
@@ -19,24 +17,19 @@ import {
   wrapNativeAddress,
   isETHtoWrapped,
   isWrappedToETH,
-  isMultiHopSwapAvaliable,
-  extractArrayOfMiddleMultiHopAddresses,
-  addresses
+  isMultiHopSwapAvaliable
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 import { useSwapHelpers } from './use-swap-helpers';
-import { getObjectKeyByValue } from '@utils/object';
 
 export function useSwapActions() {
   const { selectedAccount } = useBridgeContextData();
   const {
-    isExactInRef,
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
-    isMultiHopSwapBetterCurrency,
-    setIsMultiHopSwapCurrencyBetter
+    isMultiHopSwapBetterCurrency
   } = useSwapContextSelector();
 
   const { settings } = useSwapSettings();
@@ -71,7 +64,7 @@ export function useSwapActions() {
         `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
       )) as string;
 
-      const bnAmountToSell = ethers.utils.parseEther('1000000');
+      const bnAmountToSell = ethers.utils.parseEther('100000000');
 
       const allowance = await increaseAllowance({
         address: tokenToSell.TOKEN?.address ?? '',
@@ -98,165 +91,6 @@ export function useSwapActions() {
     tokenToSell.TOKEN?.address,
     uiBottomSheetInformation
   ]);
-
-  const getTokenAmountOut = useCallback(
-    async (amountToSell: string, path: string[]) => {
-      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-      const prices = await getAmountsOut({
-        path,
-        amountToSell: bnAmountToSell
-      });
-
-      return prices[prices.length - 1];
-    },
-    []
-  );
-
-  const getTokenAmountIn = useCallback(
-    async (amountToReceive: string, path: string[]) => {
-      const bnAmountToReceive = ethers.utils.parseEther(amountToReceive);
-      const prices = await getAmountsIn({
-        path,
-        amountToReceive: bnAmountToReceive
-      });
-
-      return prices[0];
-    },
-    []
-  );
-
-  const getTokenAmountOutWithMultiRoute = useCallback(
-    async (amountToSell: string, path: string[], middleAddress: string) => {
-      const [addressFrom, addressTo] = path;
-      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-
-      const prices = await getAmountsOut({
-        path: [addressFrom, middleAddress, addressTo],
-        amountToSell: bnAmountToSell
-      });
-
-      return prices[prices.length - 1];
-    },
-    []
-  );
-
-  const getTokenAmountInWithMultiRoute = useCallback(
-    async (amountToSell: string, path: string[], middleAddress: string) => {
-      const [addressFrom, addressTo] = path;
-      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-
-      const prices = await getAmountsIn({
-        path: [addressFrom, middleAddress, addressTo],
-        amountToReceive: bnAmountToSell
-      });
-
-      return prices[0];
-    },
-    []
-  );
-
-  const resetMultiHopUiState = useCallback(() => {
-    return setIsMultiHopSwapCurrencyBetter({
-      state: false,
-      token: ''
-    });
-  }, [setIsMultiHopSwapCurrencyBetter]);
-
-  const onChangeMultiHopUiState = useCallback(
-    (plate = false, middleHopAddress: string) => {
-      if (!plate) {
-        setIsMultiHopSwapCurrencyBetter({
-          state: true,
-          token: getObjectKeyByValue(addresses, middleHopAddress) ?? ''
-        });
-      }
-    },
-    [setIsMultiHopSwapCurrencyBetter]
-  );
-
-  const getOppositeReceivedTokenAmount = useCallback(
-    async (amountToSell: string, path: string[], plate = false) => {
-      if (amountToSell === '' || amountToSell === '0')
-        return BigNumber.from('0');
-
-      const isMultiHopRouteSupported = isMultiHopSwapAvaliable(path);
-      const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
-      const { multihops } = settings.current;
-      const tradeIn = isExactInRef.current;
-
-      let singleHopAmount: BigNumber = BigNumber.from('0');
-      let multiHopAmount: BigNumber = BigNumber.from('0');
-
-      try {
-        if (tradeIn) {
-          singleHopAmount = await getTokenAmountOut(amountToSell, path);
-        } else {
-          singleHopAmount = await getTokenAmountIn(amountToSell, path);
-        }
-      } catch (error) {
-        console.error('Error fetching single-hop amount:', error);
-      }
-
-      if (!isMultiHopRouteSupported || !multihops) {
-        return singleHopAmount;
-      }
-
-      // Calculate multi-hop amount
-      try {
-        const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
-        if (tradeIn) {
-          multiHopAmount = await getTokenAmountOutWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        } else {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        }
-      } catch (error) {
-        resetMultiHopUiState();
-        if (tradeIn) {
-          return await getTokenAmountOut(amountToSell, path);
-        } else {
-          return await getTokenAmountIn(amountToSell, path);
-        }
-      }
-
-      if (tradeIn) {
-        if (multiHopAmount.lt(singleHopAmount)) {
-          onChangeMultiHopUiState(plate, middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.lt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      } else {
-        if (multiHopAmount.gt(singleHopAmount)) {
-          onChangeMultiHopUiState(plate, middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.gt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      }
-    },
-    [
-      getTokenAmountIn,
-      getTokenAmountInWithMultiRoute,
-      getTokenAmountOut,
-      getTokenAmountOutWithMultiRoute,
-      isExactInRef,
-      onChangeMultiHopUiState,
-      resetMultiHopUiState,
-      settings
-    ]
-  );
 
   const swapTokens = useCallback(async () => {
     const signer = createSigner(await _privateKeyGetter());
@@ -309,7 +143,7 @@ export function useSwapActions() {
 
     return await swapExactTokensForTokens(
       tokenToSell.AMOUNT,
-      tokensRoute,
+      excludeNativeETH,
       signer,
       slippageTolerance,
       deadline
@@ -327,8 +161,6 @@ export function useSwapActions() {
   return {
     checkAllowance,
     setAllowance,
-    getOppositeReceivedTokenAmount,
-    getTokenAmountOut,
     swapTokens
   };
 }
