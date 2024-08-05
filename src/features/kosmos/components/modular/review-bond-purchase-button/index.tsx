@@ -30,13 +30,18 @@ export const ReviewBondPurchaseButton = ({
   );
 
   const disabled = useMemo(
-    () => !parseFloat(amountToBuy) || error !== '',
-    [amountToBuy, error]
+    () => !parseFloat(amountToBuy) || error !== '' || !market.isLive,
+    [amountToBuy, error, market.isLive]
   );
 
   const label = useMemo(
-    () => (disabled ? 'Enter amount to buy' : 'Preview'),
-    [disabled]
+    () =>
+      !market.isLive
+        ? 'Market closed'
+        : disabled
+        ? 'Enter amount to buy'
+        : 'Preview',
+    [disabled, market.isLive]
   );
 
   const textColor = useMemo(() => {
