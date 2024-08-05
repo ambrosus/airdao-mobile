@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { styles } from './styles';
 import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
@@ -12,6 +12,7 @@ import { Row, Text } from '@components/base';
 
 interface TransactionsHistoryTabProps {
   market: MarketType;
+  focused: boolean;
 }
 
 const LIST_HEADER_TITLES = ['bonds', 'payout', 'date'];
@@ -20,7 +21,8 @@ const ESTIMATED_ITEM_SIZE = 26;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT / 4 };
 
 export const TransactionsHistoryTab = ({
-  market
+  market,
+  focused
 }: TransactionsHistoryTabProps) => {
   const { marketTransactions, quoteToken, payoutToken } =
     useMarketDetails(market);
@@ -45,8 +47,15 @@ export const TransactionsHistoryTab = ({
     [payoutToken, quoteToken]
   );
 
+  const combineContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      ...styles.container,
+      height: focused ? 'auto' : 0
+    };
+  }, [focused]);
+
   return (
-    <View style={styles.container}>
+    <View style={combineContainerStyle}>
       <Row width="80%" alignItems="center" justifyContent="space-between">
         {LIST_HEADER_TITLES.map((heading, index) => (
           <Text
@@ -60,9 +69,10 @@ export const TransactionsHistoryTab = ({
           </Text>
         ))}
       </Row>
+
       <View style={styles.list}>
         <FlashList
-          nestedScrollEnabled
+          scrollEnabled={false}
           data={transactions}
           estimatedItemSize={ESTIMATED_ITEM_SIZE}
           estimatedListSize={ESTIMATED_LIST_SIZE}

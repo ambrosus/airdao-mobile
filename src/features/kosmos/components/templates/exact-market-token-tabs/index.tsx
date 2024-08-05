@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { BuyBondTab } from './tabs/buy-bond';
@@ -14,9 +14,13 @@ export const ExactMarketTokenTabs = ({
   market,
   onScrollToEnd
 }: ExactMarketTokenTabsProps) => {
+  const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0);
+
   const onChangedIndex = useCallback(
     (index: number) => {
-      if (index === 1) onScrollToEnd();
+      setCurrentFocusedIndex(index);
+
+      if (index === 0) onScrollToEnd();
     },
     [onScrollToEnd]
   );
@@ -34,7 +38,12 @@ export const ExactMarketTokenTabs = ({
         },
         {
           title: 'History',
-          view: <TransactionsHistoryTab market={market} />
+          view: (
+            <TransactionsHistoryTab
+              focused={currentFocusedIndex === 1}
+              market={market}
+            />
+          )
         }
       ]}
     />
