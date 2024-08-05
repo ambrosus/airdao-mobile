@@ -42,7 +42,7 @@ export const BuyBondInputWithError = ({
 
   const onChangeAmountToBuyHandle = (amount: string) => {
     let finalValue = StringUtils.formatNumberInput(amount);
-    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
+    finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
     onChangeAmountToBuy(finalValue);
   };
 

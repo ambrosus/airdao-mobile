@@ -13,12 +13,14 @@ export function useTransactionErrorHandler(market: MarketType) {
   useEffect(() => {
     if (amountToBuy === '') return setError('');
 
-    if (willGetSubFee.gte(BigNumber.from(market.maxPayout))) {
-      return setError('Enter amount less then max bondable value');
+    if (willGetSubFee?.gte(BigNumber.from(market.maxPayout))) {
+      setError('Enter amount less then max bondable value');
     } else if (bnBalance && utils.parseUnits(amountToBuy).gt(bnBalance)) {
-      return setError('Insufficient balance');
-    } else if (willGet.gt(BigNumber.from(market.capacity))) {
-      return setError('Enter amount less then available amount');
+      setError('Insufficient balance');
+    } else if (willGet?.gt(BigNumber.from(market.capacity))) {
+      setError('Enter amount less then available amount');
+    } else {
+      setError('');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
