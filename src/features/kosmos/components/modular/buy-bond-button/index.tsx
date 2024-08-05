@@ -23,19 +23,21 @@ interface BuyBondButtonProps {
   market: MarketType;
   setIsTransactionProcessing: Dispatch<SetStateAction<boolean>>;
   onDismissBottomSheet: () => void;
+  willGetAfterUnlock: string | number;
 }
 
 export const BuyBondButton = ({
   market,
   setIsTransactionProcessing,
-  onDismissBottomSheet
+  onDismissBottomSheet,
+  willGetAfterUnlock
 }: BuyBondButtonProps) => {
   const navigation: HomeNavigationProp = useNavigation();
 
   const { selectedAccount } = useBridgeContextData();
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
-  const { quoteToken, willGetSubFee } = useMarketDetails(market);
+  const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);
   const { amountToBuy } = useKosmosMarketsContextSelector();
 
   const createNewSigner = useCallback(async () => {
@@ -76,7 +78,6 @@ export const BuyBondButton = ({
           }
         });
     } catch (error) {
-      console.error(error);
       throw error;
     } finally {
       onDismissBottomSheet();
@@ -88,7 +89,7 @@ export const BuyBondButton = ({
 
       setTimeout(() => {
         Toast.show({
-          text: `Success! You bought ${amountToBuy} ${quoteToken?.symbol} bond`,
+          text: `Success! You bought ${willGetAfterUnlock} ${payoutToken?.symbol} bond`,
           type: ToastType.Success
         });
       }, 600);
@@ -102,10 +103,11 @@ export const BuyBondButton = ({
     market.vestingType,
     navigation,
     onDismissBottomSheet,
+    payoutToken?.symbol,
     quoteToken?.contractAddress,
     quoteToken?.decimals,
-    quoteToken?.symbol,
     setIsTransactionProcessing,
+    willGetAfterUnlock,
     willGetSubFee
   ]);
 

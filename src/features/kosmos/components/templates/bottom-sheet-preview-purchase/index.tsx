@@ -54,6 +54,16 @@ export const BottomSheetPreviewPurchase = forwardRef<
     [bottomSheetRef]
   );
 
+  const willGetAfterUnlock = useMemo(
+    () =>
+      formatDecimals(
+        formattedWillGetSubFee,
+        payoutToken?.contractAddress,
+        tokens
+      ),
+    [formattedWillGetSubFee, payoutToken?.contractAddress, tokens]
+  );
+
   return (
     <BottomSheet
       swiperIconVisible={!isTransactionProcessing}
@@ -119,6 +129,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               </StyledTextItem>
             </Row>
             <BuyBondButton
+              willGetAfterUnlock={willGetAfterUnlock}
               onDismissBottomSheet={onDismissBottomSheet}
               setIsTransactionProcessing={setIsTransactionProcessing}
               market={market}
