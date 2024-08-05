@@ -75,24 +75,28 @@ export const BuyBondButton = ({
         .then((tx: any) => {
           if (tx) {
             setIsTransactionProcessing(false);
+
+            setTimeout(() => {
+              setIsTransactionProcessing(false);
+              navigation.goBack();
+            }, 500);
+
+            setTimeout(() => {
+              Toast.show({
+                text: `Success! You bought ${willGetAfterUnlock} ${payoutToken?.symbol} bond`,
+                type: ToastType.Success
+              });
+            }, 600);
           }
         });
     } catch (error) {
+      Toast.show({
+        text: `Error`,
+        type: ToastType.Failed
+      });
       throw error;
     } finally {
       onDismissBottomSheet();
-
-      setTimeout(() => {
-        setIsTransactionProcessing(false);
-        navigation.goBack();
-      }, 500);
-
-      setTimeout(() => {
-        Toast.show({
-          text: `Success! You bought ${willGetAfterUnlock} ${payoutToken?.symbol} bond`,
-          type: ToastType.Success
-        });
-      }, 600);
     }
   }, [
     amountToBuy,

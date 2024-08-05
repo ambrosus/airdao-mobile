@@ -40,11 +40,17 @@ export const BuyBondInputWithError = ({
     []
   );
 
-  const onChangeAmountToBuyHandle = (amount: string) => {
-    let finalValue = StringUtils.formatNumberInput(amount);
-    finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
-    onChangeAmountToBuy(finalValue);
-  };
+  const onChangeAmountToBuyHandle = useCallback(
+    (amount: string) => {
+      let finalValue = StringUtils.formatNumberInput(amount);
+      finalValue = NumberUtils.limitDecimalCount(
+        finalValue,
+        quoteToken?.displayPrecision ?? 0
+      );
+      onChangeAmountToBuy(finalValue);
+    },
+    [onChangeAmountToBuy, quoteToken?.displayPrecision]
+  );
 
   const renderInputLeftContent = useMemo(() => {
     return (
