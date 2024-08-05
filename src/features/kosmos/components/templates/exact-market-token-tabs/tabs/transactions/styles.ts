@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: verticalScale(16),
     marginHorizontal: scale(16.5)
   },
   list: {
