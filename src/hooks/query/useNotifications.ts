@@ -10,8 +10,8 @@ export function useNotificationsQuery(): QueryResponse<Notification[]> {
   );
   return {
     data:
-      data && Array.isArray(data.historical_notifications)
-        ? data.historical_notifications
+      data && Array.isArray(data.historicalNotifications)
+        ? data.historicalNotifications
             .map((n) => new Notification({ ...n, _id: n.timestamp }))
             .sort((n1, n2) => n2.createdAt.getTime() - n1.createdAt.getTime())
         : [],
