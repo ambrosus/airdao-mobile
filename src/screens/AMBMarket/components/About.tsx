@@ -11,6 +11,7 @@ import {
 } from '@components/svg/icons';
 import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import Config from '@constants/config';
 
 interface Link {
   title: string;
@@ -41,7 +42,7 @@ const SOCIAL_LINKS: Link[] = [
   },
   {
     title: 'Telegram',
-    url: 'https://t.me/airDAO_official',
+    url: Config.AIRDAO_TELEGRAM_URL,
     icon: <TelegramIcon />
   }
 ];
