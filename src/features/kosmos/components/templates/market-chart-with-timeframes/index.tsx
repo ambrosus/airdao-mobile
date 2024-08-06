@@ -63,6 +63,7 @@ export const MarketChartsWithTimeframes = ({
         <ChartTimeIntervals
           onChangeInterval={onChangeInterval}
           chartInterval={chartInterval}
+          fpaPrice={market.marketType === 'FPA' ? market.askingPrice : null}
         />
 
         <Row
