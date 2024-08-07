@@ -12,10 +12,10 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.2.0.tgz#e1a84fca468f4b337816fcb7f0964beb620ba855"
   integrity sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==
 
-"@airdao/airdao-bond@npm:@airdao/airdao-bond@12.1.11-upg":
-  version "12.1.11-upg"
-  resolved "https://registry.yarnpkg.com/@airdao/airdao-bond/-/airdao-bond-12.1.11-upg.tgz#6f907757c1e1723decaffe8849e153d93045d272"
-  integrity sha512-8sTlDu5UGNGmFLS2MAaZSa2Tq/VwMJJ9Tu4Xz64OLR+VUeOgmNijrEdk9MLZlzz2czp8TLU819fpGADvQz4fVw==
+"@airdao/airdao-bond@npm:@airdao/airdao-bond@12.1.13-upg":
+  version "12.1.13-upg"
+  resolved "https://registry.yarnpkg.com/@airdao/airdao-bond/-/airdao-bond-12.1.13-upg.tgz#144451ae9b1a78c4f691ff12711a8ea63008bb27"
+  integrity sha512-gS62S3kfgzMYuwV/OMMTYkpeyXhT3+lAIzAdeMkKQrUATl4lt/YAIdwSN3hLylHe8YqsIHg4Aq9DIATtUXIAyA==
   dependencies:
     "@airdao/bond-periphery" "^1.0.2"
     "@airdao/deployments" "^0.2.5"
