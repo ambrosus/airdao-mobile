@@ -380,6 +380,49 @@
   "bridge.transfer.failed.to.wallet.btn": "Go to wallet",
   "bridge.amount.less.then.fee": "Amount less then fee",
   "bridge.insufficient.funds.to.pay.fee": "Insufficient funds to pay the network fee",
-  "bridge.unknown.error": "Unknown error"
+  "bridge.unknown.error": "Unknown error",
 
+  "kosmos.primary.tabs.market": "Markets",
+  "kosmos.primary.tabs.orders": "My orders",
+  "kosmos.table.headings.discount": "Discount",
+  "kosmos.table.headings.value": "Value",
+  "kosmos.orders.total.bonded": "TOTAL VALUE BONDED",
+  "kosmos.orders.claimable": "CLAIMABLE",
+  "kosmos.payout": "Payout",
+
+  "kosmos.button.reset": "Reset",
+  "kosmos.button.apply": "Apply",
+  "kosmos.button.claimed": "Claimed",
+  "kosmos.button.buy.bond": "Buy Bond",
+  "kosmos.button.claim": "Claim",
+  "kosmos.button.close": "Close",
+  "kosmos.button.enter.amount": "Enter amount to buy",
+  "kosmos.button.market.closed": "Market closed",
+
+  "kosmos.status.closed": "Closed",
+  "kosmos.status.active": "Active",
+  "kosmos.filter": "Filter",
+  "kosmos.filter.by": "Filter by",
+  "kosmos.filter.payment": "Payment token",
+  "kosmos.filter.all": "All",
+
+  "kosmos.success.toast": "Success! You claimed ${{amount}}",
+  "kosmos.buy.success.toast": "Success! You bought {{amount}} {amountSymbol} bond",
+  "kosmos.bottom.sheet.title": "Bond details",
+  "kosmos.lock.period": "Lock period",
+  "kosmos.transaction.hash": "Transaction hash",
+  "kosmos.assets.bond": "Assets in bond",
+  "kosmos.assets.value": "Asset value",
+  "kosmos.available.amount": "Available amount",
+  "kosmos.market.duration": "Market duration",
+  "kosmos.max.bondable": "Max bondable",
+  "kosmos.buying": "You're buying",
+  "kosmos.getting": "You will get",
+  "kosmos.protocol.fee": "Protocol fee",
+
+  "kosmos.chart.explanation.bond": "Bond price",
+  "kosmos.chart.explanation.market": "Market price",
+
+  "kosmos.market.tabs.buy.bond": "Buy bond",
+  "kosmos.market.tabs.history": "History"
 }

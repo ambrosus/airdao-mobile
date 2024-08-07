@@ -380,5 +380,49 @@
   "bridge.transfer.failed.sub.header": "!!An error occurred while processing your transaction.",
   "bridge.transfer.failed.to.wallet.btn": "!!Go to wallet",
   "bridge.amount.less.then.fee": "!!!Amount less then fee",
-  "bridge.unknown.error": "!!!Unknown error"
+  "bridge.unknown.error": "!!!Unknown error",
+
+  "kosmos.primary.tabs.market": "Piyasalar",
+  "kosmos.primary.tabs.orders": "Siparişlerim",
+  "kosmos.table.headings.discount": "İndirim",
+  "kosmos.table.headings.value": "Değer",
+  "kosmos.orders.total.bonded": "Tahvil edilen toplam değer",
+  "kosmos.orders.claimable": "TALEP EDİLEBİLİR",
+  "kosmos.payout": "Ödeme",
+
+  "kosmos.button.reset": "Sıfırla",
+  "kosmos.button.apply": "Başvur",
+  "kosmos.button.claimed": "Talep Edildi",
+  "kosmos.button.buy.bond": "Tahvil satın al",
+  "kosmos.button.claim": "Talep et",
+  "kosmos.button.close": "Kapat",
+  "kosmos.button.enter.amount": "Satın alınacak miktarı girin",
+  "kosmos.button.market.closed": "Piyasa kapalı",
+
+  "kosmos.status.closed": "Kapalı",
+  "kosmos.status.active": "Aktif",
+  "kosmos.filter": "Filtre",
+  "kosmos.filter.by": "Göre filtrele",
+  "kosmos.filter.payment": "Ödeme belirteci",
+  "kosmos.filter.all": "Tümü",
+
+  "kosmos.success.toast": "Success! You claimed ${{amount}}",
+  "kosmos.buy.success.toast": "Başarılı! {{amount}} {{amountSymbol}} tahvil satın aldınız",
+  "kosmos.bottom.sheet.title": "Tahvil ayrıntıları",
+  "kosmos.lock.period": "Kilit süresi",
+  "kosmos.transaction.hash": "İşlem Karması",
+  "kosmos.assets.bond": "Tahvildeki varlıklar",
+  "kosmos.assets.value": "Varlık Değeri",
+  "kosmos.available.amount": "Mevcut miktar",
+  "kosmos.market.duration": "Piyasa süresi",
+  "kosmos.max.bondable": "Maksimum tahvil edilebilir",
+  "kosmos.buying": "Satın alıyorsunuz",
+  "kosmos.getting": "Alacaksınız",
+  "kosmos.protocol.fee": "Protokol ücreti",
+
+  "kosmos.chart.explanation.bond": "Tahvil fiyatı",
+  "kosmos.chart.explanation.market": "Piyasa fiyatı",
+
+  "kosmos.market.tabs.buy.bond": "Tahvil satın al",
+  "kosmos.market.tabs.history": "Geçmiş"
 }

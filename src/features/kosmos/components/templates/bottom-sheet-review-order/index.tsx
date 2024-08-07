@@ -6,6 +6,7 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
@@ -40,6 +41,8 @@ export const BottomSheetReviewOrder = forwardRef<
   BottomSheetRef,
   BottomSheetReviewOrderProps
 >(({ transaction, payout, amount, payoutToken, qouteToken }, ref) => {
+  const { t } = useTranslation();
+
   const bottomSheetRef = useForwardedRef(ref);
   const { tokens } = useKosmosMarketsContextSelector();
   const [isClaimingNow, setIsClaimingNow] = useState(false);
@@ -97,7 +100,7 @@ export const BottomSheetReviewOrder = forwardRef<
               color={COLORS.neutral800}
               style={styles.heading}
             >
-              Bond details
+              {t('kosmos.bottom.sheet.title')}
             </Text>
 
             <View style={styles.innerContainer}>
@@ -109,13 +112,15 @@ export const BottomSheetReviewOrder = forwardRef<
                 </Row>
               </Row>
               <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Discount</StyledTextItem>
+                <StyledTextItem>
+                  {t('kosmos.table.headings.discount')}
+                </StyledTextItem>
                 <StyledTextItem isValue>
                   {transaction.discount.toFixed(2)}%
                 </StyledTextItem>
               </Row>
               <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Payout</StyledTextItem>
+                <StyledTextItem>{t('kosmos.payout')}</StyledTextItem>
                 <Row alignItems="center">
                   <StyledTextItem isValue>
                     {formatDecimals(
@@ -130,15 +135,15 @@ export const BottomSheetReviewOrder = forwardRef<
                 </Row>
               </Row>
               <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Status</StyledTextItem>
+                <StyledTextItem>{t('common.status')}</StyledTextItem>
                 <Status status={status} />
               </Row>
               <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Lock period</StyledTextItem>
+                <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
                 <StyledTextItem isValue>{lockPeriod}</StyledTextItem>
               </Row>
               <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Transaction hash</StyledTextItem>
+                <StyledTextItem>{t('kosmos.transaction.hash')}</StyledTextItem>
                 <StyledTextItem isValue primary>
                   {StringUtils.formatAddress(
                     transaction.txHash,

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
@@ -15,8 +16,6 @@ interface TransactionsHistoryTabProps {
   focused: boolean;
 }
 
-const LIST_HEADER_TITLES = ['bonds', 'payout', 'date'];
-
 const ESTIMATED_ITEM_SIZE = 26;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT / 4 };
 
@@ -24,6 +23,9 @@ export const TransactionsHistoryTab = ({
   market,
   focused
 }: TransactionsHistoryTabProps) => {
+  const { t } = useTranslation();
+
+  const LIST_HEADER_TITLES = ['bonds', t('kosmos.payout'), t('common.date')];
   const { marketTransactions, quoteToken, payoutToken } =
     useMarketDetails(market);
 

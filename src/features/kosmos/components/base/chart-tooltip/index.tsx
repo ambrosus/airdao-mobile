@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { TooltipState } from '../../modular/market-chart/types';
@@ -19,6 +20,8 @@ interface ChartTooltipProps {
 }
 
 export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
+  const { t } = useTranslation();
+
   const date = useMemo(() => {
     return moment(tooltip.value.timestamp).format('DD/MM/YY HH:mm');
   }, [tooltip]);
@@ -72,7 +75,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
         {!!tooltip.value.market && (
           <Row alignItems="center" justifyContent="space-between">
             <Text fontSize={12} fontFamily="Inter_400Regular">
-              Market price:
+              {t('kosmos.chart.explanation.market')}:
             </Text>
             <Text fontSize={12} fontFamily="Inter_400Regular">
               ${tooltip.value.market.toFixed(4)}
@@ -82,7 +85,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
         {!!tooltip.value.bond && (
           <Row alignItems="center" justifyContent="space-between">
             <Text fontSize={12} fontFamily="Inter_400Regular">
-              Bond price:
+              {t('kosmos.chart.explanation.bond')}:
             </Text>
             <Text fontSize={12} fontFamily="Inter_400Regular">
               ${tooltip.value.bond?.toFixed(4)}
@@ -92,7 +95,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
         {!!tooltip.value.discount && (
           <Row alignItems="center" justifyContent="space-between">
             <Text fontSize={12} fontFamily="Inter_400Regular">
-              Discount:
+              {t('kosmos.table.headings.discount')}:
             </Text>
             <Text
               color={discountColor(tooltip.value.discount)}

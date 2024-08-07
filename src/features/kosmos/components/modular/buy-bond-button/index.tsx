@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { PrimaryButton, Toast, ToastType } from '@components/modular';
@@ -16,7 +17,6 @@ import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import { useBridgeContextData } from '@contexts/Bridge';
 import { Cache, CacheKey } from '@lib/cache';
 import Config from '@constants/config';
-
 import { HomeNavigationProp } from '@appTypes';
 
 interface BuyBondButtonProps {
@@ -32,6 +32,7 @@ export const BuyBondButton = ({
   onDismissBottomSheet,
   willGetAfterUnlock
 }: BuyBondButtonProps) => {
+  const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
 
   const { selectedAccount } = useBridgeContextData();
@@ -83,7 +84,10 @@ export const BuyBondButton = ({
 
             setTimeout(() => {
               Toast.show({
-                text: `Success! You bought ${willGetAfterUnlock} ${payoutToken?.symbol} bond`,
+                text: t('kosmos.buy.success.toast', {
+                  amount: willGetAfterUnlock,
+                  amountSymbol: payoutToken?.symbol
+                }),
                 type: ToastType.Success
               });
             }, 600);
@@ -99,17 +103,15 @@ export const BuyBondButton = ({
       onDismissBottomSheet();
     }
   }, [
+    t,
     amountToBuy,
     contracts,
     createNewSigner,
-    market.id,
-    market.marketType,
-    market.vestingType,
+    market,
     navigation,
     onDismissBottomSheet,
-    payoutToken?.symbol,
-    quoteToken?.contractAddress,
-    quoteToken?.decimals,
+    payoutToken,
+    quoteToken,
     setIsTransactionProcessing,
     willGetAfterUnlock,
     willGetSubFee
@@ -131,7 +133,7 @@ export const BuyBondButton = ({
       onPress={onBuyBondsPress}
     >
       <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>
-        Buy bond
+        {t('kosmos.button.buy.bond')}
       </Text>
     </PrimaryButton>
   );

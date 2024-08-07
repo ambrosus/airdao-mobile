@@ -2,6 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
+import { useTranslation } from 'react-i18next';
+import { BigNumber, ethers } from 'ethers';
 import { styles } from './styles';
 import { OrderCardDetails } from '@features/kosmos/components/base';
 import { SecondaryButton, Toast, ToastType } from '@components/modular';
@@ -11,7 +13,6 @@ import { COLORS } from '@constants/colors';
 import { getTimeRemaining } from '@features/kosmos/utils';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
-import { BigNumber, ethers } from 'ethers';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
@@ -20,6 +21,8 @@ interface ClaimableOrderCardDetailsProps {
 export const ClaimableOrderCardDetails = ({
   transaction
 }: ClaimableOrderCardDetailsProps) => {
+  const { t } = useTranslation();
+
   const [isClaimingNow, setIsClaimingNow] = useState(false);
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
 
@@ -67,7 +70,9 @@ export const ClaimableOrderCardDetails = ({
 
       if (tx) {
         Toast.show({
-          text: `Success! You claimed $${Number(payout).toFixed(4)}`,
+          text: t('kosmos.success.toast', {
+            payout: Number(payout).toFixed(4)
+          }),
           type: ToastType.Success
         });
       }
@@ -76,14 +81,14 @@ export const ClaimableOrderCardDetails = ({
     } finally {
       setIsClaimingNow(false);
     }
-  }, [onClaimButtonPress, payout, transaction.vestingType]);
+  }, [onClaimButtonPress, payout, t, transaction.vestingType]);
 
   const textStringValue = useMemo(() => {
-    if (transaction.isClaimed) return 'Claimed';
+    if (transaction.isClaimed) return t('kosmos.button.claimed');
     if (!isVestingPass) return getTimeRemaining(vestingEndsDate);
 
-    return 'Claim';
-  }, [transaction.isClaimed, isVestingPass, vestingEndsDate]);
+    return t('kosmos.button.claim');
+  }, [transaction.isClaimed, t, isVestingPass, vestingEndsDate]);
 
   return (
     <>

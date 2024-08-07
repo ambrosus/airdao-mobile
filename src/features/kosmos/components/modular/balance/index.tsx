@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { getBalanceOf } from '@features/kosmos/lib/contracts';
@@ -19,6 +20,7 @@ export const BalanceWithButton = ({
   qouteToken,
   market
 }: BalanceWithButtonProps) => {
+  const { t } = useTranslation();
   const { setBnBalance, bnBalance, setIsBalanceFetching } =
     useKosmosMarketsContextSelector();
   const { selectedAccount } = useBridgeContextData();
@@ -64,12 +66,12 @@ export const BalanceWithButton = ({
         fontFamily="Inter_400Regular"
         color={COLORS.alphaBlack60}
       >
-        Balance: {balance} {qouteToken?.symbol}
+        {t('send.funds.balance')}: {balance} {qouteToken?.symbol}
       </Text>
       <Spacer horizontal value={4} />
       <TouchableOpacity onPress={onMaxAmountPress}>
         <Text fontSize={14} fontFamily="Inter_700Bold" color={COLORS.brand500}>
-          Max
+          {t('bridge.preview.button.max')}
         </Text>
       </TouchableOpacity>
     </Row>

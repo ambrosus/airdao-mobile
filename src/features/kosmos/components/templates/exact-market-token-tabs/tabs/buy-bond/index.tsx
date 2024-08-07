@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Keyboard, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
@@ -20,6 +21,8 @@ interface BuyBondTabProps {
 }
 
 export const BuyBondTab = ({ market }: BuyBondTabProps) => {
+  const { t } = useTranslation();
+
   const { quoteToken, payoutToken, maxBondable, discount } =
     useMarketDetails(market);
 
@@ -48,7 +51,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
-            Amount
+            {t('common.transaction.amount')}
           </Text>
           <BuyBondInputWithError
             onFocus={onFocusHandle}
@@ -69,7 +72,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral400}
             >
-              Max bondable:
+              {t('kosmos.max.bondable')}:
             </Text>
             <Text
               fontSize={14}
@@ -85,7 +88,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral400}
             >
-              Discount
+              {t('kosmos.table.headings.discount')}
             </Text>
             <Text
               fontSize={14}
