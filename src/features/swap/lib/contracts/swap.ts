@@ -13,7 +13,7 @@ import {
   minimumAmountOut,
   addresses,
   wrapNativeAddress,
-  extractMiddleAddressMultiHop
+  extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -28,16 +28,10 @@ export async function getAmountsOut({
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
-    if (isSelectedSameTokens) return amountToSell;
+    if (isSelectedSameTokens) return [amountToSell];
 
     const contract = createRouterContract(provider, TRADE);
-
-    const [, amountToReceive] = await contract.getAmountsOut(
-      amountToSell,
-      excludeNativeETH
-    );
-
-    return amountToReceive;
+    return await contract.getAmountsOut(amountToSell, excludeNativeETH);
   } catch (error) {
     console.error(error);
     throw error;
@@ -55,18 +49,12 @@ export async function getAmountsIn({
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
 
-    if (isSelectedSameTokens) return amountToReceive;
+    if (isSelectedSameTokens) return [amountToReceive];
 
     const contract = createRouterContract(provider, TRADE);
-
-    const [amountToSell] = await contract.getAmountsIn(
-      amountToReceive,
-      excludeNativeETH
-    );
-
-    return amountToSell;
+    return await contract.getAmountsIn(amountToReceive, excludeNativeETH);
   } catch (error) {
-    console.error(error);
+    console.error(error, 'ERROR');
     throw error;
   }
 }
@@ -84,7 +72,7 @@ export async function swapExactETHForTokens(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
@@ -116,16 +104,24 @@ export async function swapMultiHopExactTokensForTokens(
   slippageTolerance: string,
   deadline: string
 ) {
-  const [addressFrom, addressTo] = path;
+  const excludeNativeETH = wrapNativeAddress(path);
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const middleAddress = extractMiddleAddressMultiHop(path);
+  const [addressFrom, addressTo] = excludeNativeETH;
+  const middleAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
 
-  const bnIntermediateAmountToReceive = await getAmountsOut({
+  const [, bnIntermediateAmountToReceive] = await getAmountsOut({
     amountToSell: bnAmountToSell,
     path: [addressFrom, middleAddress]
   });
 
-  const intermediateSwapResult = await swapExactTokensForETH(
+  const key = `${path[0]}-${path[1]}`;
+  const swapFunctions = swapFunctionMap[key];
+
+  if (!swapFunctions) {
+    throw new Error('Invalid path configuration');
+  }
+
+  const intermediateSwapResult = await swapFunctions.intermediate(
     amountToSell,
     [addressFrom, middleAddress],
     signer,
@@ -134,7 +130,7 @@ export async function swapMultiHopExactTokensForTokens(
   );
 
   if (intermediateSwapResult) {
-    return await swapExactETHForTokens(
+    return await swapFunctions.final(
       formatEther(bnIntermediateAmountToReceive),
       [middleAddress, addressTo],
       signer,
@@ -157,7 +153,7 @@ export async function swapExactTokensForTokens(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
@@ -195,7 +191,7 @@ export async function swapExactTokensForETH(
     const timestampDeadline =
       Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-    const bnAmountToReceive = await getAmountsOut({
+    const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
       path
     });
@@ -239,3 +235,28 @@ export async function unwrapETH(amountToSell: string, signer: Wallet) {
 
   return await tx.wait();
 }
+
+export const swapFunctionMap: {
+  [key: string]: { intermediate: any; final: any };
+} = {
+  [`${addresses.AMB}-${addresses.USDC}`]: {
+    intermediate: swapExactETHForTokens,
+    final: swapExactTokensForTokens
+  },
+  [`${addresses.AMB}-${addresses.BOND}`]: {
+    intermediate: swapExactETHForTokens,
+    final: swapExactTokensForTokens
+  },
+  [`${addresses.BOND}-${addresses.USDC}`]: {
+    intermediate: swapExactTokensForTokens,
+    final: swapExactTokensForETH
+  },
+  [`${addresses.BOND}-${addresses.AMB}`]: {
+    intermediate: swapExactTokensForTokens,
+    final: swapExactTokensForETH
+  },
+  [`${addresses.BOND}-${addresses.USDC}`]: {
+    intermediate: swapExactTokensForETH,
+    final: swapExactETHForTokens
+  }
+};

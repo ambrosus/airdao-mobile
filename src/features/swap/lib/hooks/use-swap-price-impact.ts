@@ -5,7 +5,7 @@ import {
   multiHopCumulativeImpact,
   singleHopImpact,
   isMultiHopSwapAvaliable,
-  extractMiddleAddressMultiHop
+  extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { getAmountsOut } from '@features/swap/lib/contracts';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -67,7 +67,8 @@ export function useSwapPriceImpact() {
 
   const multiHopImpactGetter = useCallback(async () => {
     const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
-    const middleAddress = extractMiddleAddressMultiHop(tokensRoute);
+    const middleAddress =
+      extractArrayOfMiddleMultiHopAddresses(tokensRoute).address;
 
     const _tokenToSell = tokenToSell.TOKEN;
     const _tokenToReceive = tokenToReceive.TOKEN;
@@ -109,15 +110,12 @@ export function useSwapPriceImpact() {
               amountToSellWithRealizedFee
             );
 
-            const intermediatePath = [
-              tokenToSell.TOKEN?.address,
-              middleAddress
-            ] as [string, string];
-
-            const finalPath = [middleAddress, _tokenToReceive?.address ?? ''];
-
-            const intermediateAmount = await getAmountsOut({
-              path: intermediatePath,
+            const [, intermediateAmount, finalAmount] = await getAmountsOut({
+              path: [
+                _tokenToSell?.address ?? '',
+                middleAddress,
+                _tokenToReceive?.address ?? ''
+              ],
               amountToSell: bnAmountToSell
             });
 
@@ -132,11 +130,6 @@ export function useSwapPriceImpact() {
               interReserveIn,
               interReserveOut
             );
-
-            const finalAmount = await getAmountsOut({
-              path: finalPath,
-              amountToSell: intermediateAmount
-            });
 
             const finalImpact = singleHopImpact(
               intermediateAmountToSellWithRealizedFee,

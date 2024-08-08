@@ -6,13 +6,15 @@ import { Row, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { COLORS } from '@constants/colors';
 import { useSwapHelpers, useSwapTokens } from '@features/swap/lib/hooks';
-import { addresses, extractMiddleAddressMultiHop } from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils/object';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();
-  const { latestSelectedTokens, uiBottomSheetInformation, _refExactGetter } =
-    useSwapContextSelector();
+  const {
+    latestSelectedTokens,
+    uiBottomSheetInformation,
+    _refExactGetter,
+    isMultiHopSwapBetterCurrency
+  } = useSwapContextSelector();
 
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { isMultiHopSwap } = useSwapHelpers();
@@ -42,14 +44,9 @@ export const PreviewInformation = () => {
     tokenToSell.TOKEN?.symbol
   ]);
 
-  const middleHopSymbol = useMemo(() => {
-    const middleAddress = extractMiddleAddressMultiHop([
-      tokenToSell.TOKEN?.address ?? '',
-      tokenToReceive.TOKEN?.address ?? ''
-    ]);
-
-    return getObjectKeyByValue(addresses, middleAddress);
-  }, [tokenToReceive.TOKEN?.address, tokenToSell.TOKEN?.address]);
+  const isMultiHopRoute = useMemo(() => {
+    return isMultiHopSwap && isMultiHopSwapBetterCurrency.state;
+  }, [isMultiHopSwap, isMultiHopSwapBetterCurrency]);
 
   return (
     <View style={styles.container}>
@@ -83,12 +80,12 @@ export const PreviewInformation = () => {
         </RightSideRowItem>
       </Row>
 
-      {isMultiHopSwap && (
+      {isMultiHopRoute && (
         <Row alignItems="center" justifyContent="space-between">
           <Text>{t('swap.route')}</Text>
 
           <RightSideRowItem>
-            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${middleHopSymbol} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${isMultiHopSwapBetterCurrency.token} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
           </RightSideRowItem>
         </Row>
       )}
