@@ -8,6 +8,7 @@ import React, {
 import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { upperCase } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Text } from '@components/base';
@@ -32,6 +33,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
   BottomSheetRef,
   BottomSheetPreviewPurchaseProps
 >(({ market }, ref) => {
+  const { t } = useTranslation();
   const bottomSheetRef = useForwardedRef(ref);
   const { amountToBuy } = useKosmosMarketsContextSelector();
   const { payoutToken, quoteToken, willGetSubFee, protocolFee } =
@@ -67,7 +69,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
   return (
     <BottomSheet
       swiperIconVisible={!isTransactionProcessing}
-      closeOnBackPress={isTransactionProcessing}
+      closeOnBackPress={!isTransactionProcessing}
       swipingEnabled={!isTransactionProcessing}
       ref={bottomSheetRef}
     >
@@ -86,7 +88,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
             </Text>
 
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>You’re buying</StyledTextItem>
+              <StyledTextItem>{t('kosmos.buying')}</StyledTextItem>
               <Row style={styles.bondsRowGap} alignItems="center">
                 <TokenLogo scale={0.5} token={quoteToken?.symbol ?? ''} />
                 <StyledTextItem isValue>
@@ -95,7 +97,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               </Row>
             </Row>
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>You will get</StyledTextItem>
+              <StyledTextItem>{t('kosmos.getting')}</StyledTextItem>
               <StyledTextItem isValue>
                 {amountToBuy
                   ? formatDecimals(
@@ -108,13 +110,15 @@ export const BottomSheetPreviewPurchase = forwardRef<
               </StyledTextItem>
             </Row>
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Discount</StyledTextItem>
+              <StyledTextItem>
+                {t('kosmos.table.headings.discount')}
+              </StyledTextItem>
               <StyledTextItem isValue>
                 {market.discount.toFixed(2)}%
               </StyledTextItem>
             </Row>
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Lock period</StyledTextItem>
+              <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
               <StyledTextItem isValue>
                 {timestampToFormatedDate(market.start)}
                 {' - '}
@@ -122,7 +126,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               </StyledTextItem>
             </Row>
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>Protocol fee</StyledTextItem>
+              <StyledTextItem>{t('kosmos.protocol.fee')}</StyledTextItem>
               <StyledTextItem isValue>
                 {calculatedProtocolFee.toFixed()}{' '}
                 {upperCase(quoteToken?.symbol)}

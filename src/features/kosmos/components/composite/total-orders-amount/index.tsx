@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { upperCase } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { TxType } from '@features/kosmos/types';
 import { Row, Text } from '@components/base';
@@ -16,6 +17,7 @@ interface TotalOrdersAmountProps {
 }
 
 export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
+  const { t } = useTranslation();
   const { extractTokenCb } = useExtractToken();
 
   const totalBonded = useMemo(() => {
@@ -35,7 +37,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
           color={COLORS.neutral600}
           style={styles.keyTypography}
         >
-          {upperCase('total value bonded')}
+          {upperCase(t('kosmos.orders.total.bonded'))}
         </Text>
         <Text
           fontSize={16}
@@ -52,7 +54,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
           color={COLORS.neutral600}
           style={styles.keyTypography}
         >
-          {upperCase('claimable')}
+          {upperCase(t('kosmos.orders.claimable'))}
         </Text>
         <Text
           fontSize={16}

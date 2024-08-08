@@ -1,13 +1,20 @@
 import React, { useMemo } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import uppercase from 'lodash/upperCase';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 
-const LIST_HEADER_TITLES = ['bonds', 'discount', 'value'];
-
 export const ListCellHeadings = () => {
+  const { t } = useTranslation();
+
+  const LIST_HEADER_TITLES = [
+    'bonds',
+    t('kosmos.table.headings.discount'),
+    t('kosmos.table.headings.value')
+  ];
+
   const listHeadingsStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
       paddingHorizontal: scale(16.5),

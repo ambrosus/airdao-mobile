@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { BuyBondTab } from './tabs/buy-bond';
@@ -14,6 +15,7 @@ export const ExactMarketTokenTabs = ({
   market,
   onScrollToEnd
 }: ExactMarketTokenTabsProps) => {
+  const { t } = useTranslation();
   const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0);
 
   const onChangedIndex = useCallback(
@@ -33,11 +35,11 @@ export const ExactMarketTokenTabs = ({
       containerStyle={styles.container}
       tabs={[
         {
-          title: 'Buy bond',
+          title: t('kosmos.market.tabs.buy.bond'),
           view: <BuyBondTab market={market} />
         },
         {
-          title: 'History',
+          title: t('kosmos.market.tabs.history'),
           view: (
             <TransactionsHistoryTab
               focused={currentFocusedIndex === 1}

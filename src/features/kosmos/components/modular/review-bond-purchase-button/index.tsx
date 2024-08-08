@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import Animated, { AnimatedStyleProp } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
@@ -21,6 +22,7 @@ export const ReviewBondPurchaseButton = ({
   market,
   onPreviewPurchase
 }: ReviewBondPurchaseButtonProps) => {
+  const { t } = useTranslation();
   const { error } = useTransactionErrorHandler(market);
   const { amountToBuy } = useKosmosMarketsContextSelector();
 
@@ -37,11 +39,11 @@ export const ReviewBondPurchaseButton = ({
   const label = useMemo(
     () =>
       !market.isLive
-        ? 'Market closed'
+        ? t('kosmos.button.market.closed')
         : disabled
-        ? 'Enter amount to buy'
-        : 'Preview',
-    [disabled, market.isLive]
+        ? t('kosmos.button.enter.amount')
+        : t('button.preview'),
+    [disabled, market.isLive, t]
   );
 
   const textColor = useMemo(() => {

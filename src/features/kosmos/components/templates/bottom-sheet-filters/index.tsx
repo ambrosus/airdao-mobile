@@ -6,8 +6,9 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { FiltersState, Statuses } from '@features/kosmos/types';
+import { FiltersState } from '@features/kosmos/types';
 import { FiltersSections } from '@features/kosmos/components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
@@ -25,6 +26,7 @@ export const BottomSheetFilters = forwardRef<
   BottomSheetRef,
   BottomSheetFiltersProps
 >(({ updateFilters }, ref) => {
+  const { t } = useTranslation();
   const bottomSheetRef = useForwardedRef(ref);
   const [uiFilters, setUiFilters] = useState<FiltersState>(INITIAL_FILTERS);
 
@@ -47,22 +49,26 @@ export const BottomSheetFilters = forwardRef<
         color={COLORS.neutral800}
         style={styles.heading}
       >
-        Filter by
+        {t('kosmos.filter.by')}
       </Text>
 
       <View style={styles.container}>
         <View style={styles.filters}>
           <FiltersSections
             stateKey="status"
-            label="Status"
+            label={t('common.status')}
             filters={uiFilters}
             updateFilters={setUiFilters}
-            values={[Statuses.ALL, Statuses.ACTIVE, Statuses.CLOSED]}
+            values={[
+              t('kosmos.filter.all'),
+              t('kosmos.status.active'),
+              t('kosmos.status.closed')
+            ]}
           />
 
           <FiltersSections
             stateKey="payment"
-            label="Payment token"
+            label={t('kosmos.filter.payment')}
             filters={uiFilters}
             updateFilters={setUiFilters}
             values={['BOND', 'USDC', 'AMB']}
@@ -76,7 +82,7 @@ export const BottomSheetFilters = forwardRef<
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral800}
             >
-              Reset
+              {t('kosmos.button.reset')}
             </Text>
           </SecondaryButton>
 
@@ -86,7 +92,7 @@ export const BottomSheetFilters = forwardRef<
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral0}
             >
-              Apply
+              {t('kosmos.button.apply')}
             </Text>
           </PrimaryButton>
         </Row>

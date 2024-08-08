@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
+import { useTranslation } from 'react-i18next';
 import { TxType } from '@features/kosmos/types';
 import { getTimeRemaining } from '@features/kosmos/utils';
 import { SecondaryButton, Toast, ToastType } from '@components/modular';
@@ -31,6 +32,8 @@ export const ClaimBondsButton = ({
   onDismissBottomSheet,
   payout
 }: ClaimBondsButtonProps) => {
+  const { t } = useTranslation();
+
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
   const [isClaimed, setIsClaimed] = useState(false);
 
@@ -67,14 +70,15 @@ export const ClaimBondsButton = ({
   }, [isVestingPass, isOrderClaimed]);
 
   const textStringValue = useMemo(() => {
-    if (isOrderClaimed) return 'Close';
+    if (isOrderClaimed) return t('kosmos.button.close');
     if (!isVestingPass) return getTimeRemaining(vestingEndsDate);
 
-    return 'Claim';
-  }, [isOrderClaimed, isVestingPass, vestingEndsDate]);
+    return t('kosmos.button.claim');
+  }, [isOrderClaimed, isVestingPass, t, vestingEndsDate]);
 
   const onButtonPress = useCallback(async () => {
-    if (textStringValue === 'Close') return onDismissBottomSheet();
+    if (textStringValue === t('kosmos.button.close'))
+      return onDismissBottomSheet();
 
     try {
       const contractName =
@@ -94,7 +98,9 @@ export const ClaimBondsButton = ({
       setTimeout(() => {
         setIsClaimingNow(false);
         Toast.show({
-          text: `Success! You claimed $${Number(payout).toFixed(4)}`,
+          text: t('kosmos.success.toast', {
+            amount: Number(payout).toFixed(4)
+          }),
           type: ToastType.Success
         });
       }, 500);
@@ -104,6 +110,7 @@ export const ClaimBondsButton = ({
     onDismissBottomSheet,
     payout,
     setIsClaimingNow,
+    t,
     textStringValue,
     transaction.vestingType
   ]);

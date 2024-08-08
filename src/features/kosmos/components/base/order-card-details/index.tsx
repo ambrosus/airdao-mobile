@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
+import { upperCase } from 'lodash';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
@@ -17,6 +19,7 @@ interface OrderCardDetailsProps {
 }
 
 export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
+  const { t } = useTranslation();
   const { tokens } = useKosmosMarketsContextSelector();
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
@@ -70,7 +73,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
-            DISCOUNT
+            {upperCase(t('kosmos.table.headings.discount'))}
           </Text>
           <Text
             fontSize={16}
@@ -86,7 +89,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
-            PAYOUT
+            {upperCase(t('kosmos.payout'))}
           </Text>
           <Text
             fontSize={14}

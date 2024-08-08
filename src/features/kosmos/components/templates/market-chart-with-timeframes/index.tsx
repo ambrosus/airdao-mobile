@@ -5,6 +5,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { MarketChart } from '@features/kosmos/components/modular';
 import { MarketType } from '@features/kosmos/types';
@@ -25,6 +26,7 @@ export const MarketChartsWithTimeframes = ({
   market,
   onScrollToMarket
 }: MarketChartsWithTimeframesProps) => {
+  const { t } = useTranslation();
   const { onToggleMarketTooltip } = useKosmosMarketsContextSelector();
   const { quoteToken } = useMarketDetails(market);
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[2].value);
@@ -85,7 +87,7 @@ export const MarketChartsWithTimeframes = ({
               fontFamily="Inter_500Medium"
               color={COLORS.neutral600}
             >
-              Bond price
+              {t('kosmos.chart.explanation.bond')}
             </Text>
           </Row>
           <Row style={styles.innerRowContainer} alignItems="center">
@@ -102,7 +104,7 @@ export const MarketChartsWithTimeframes = ({
               fontFamily="Inter_500Medium"
               color={COLORS.neutral600}
             >
-              Market price
+              {t('kosmos.chart.explanation.market')}
             </Text>
           </Row>
         </Row>

@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnimatedTabs } from '@components/modular';
 import {
   MarketsList,
@@ -16,6 +17,8 @@ export const MarketsTabs = ({
   changeActiveIndex,
   filters
 }: MarketsTabsProps) => {
+  const { t } = useTranslation();
+
   const onChangeActiveTabIndex = useCallback(
     (index: number) => {
       changeActiveIndex(index);
@@ -31,7 +34,7 @@ export const MarketsTabs = ({
       containerStyle={{ height: '100%' }}
       tabs={[
         {
-          title: 'Markets',
+          title: t('kosmos.primary.tabs.market'),
           view: (
             <WrappedListsContainer table>
               <MarketsList filters={filters} />
@@ -39,7 +42,7 @@ export const MarketsTabs = ({
           )
         },
         {
-          title: 'My orders',
+          title: t('kosmos.primary.tabs.orders'),
           view: (
             <WrappedListsContainer>
               <UserOrdersList />
