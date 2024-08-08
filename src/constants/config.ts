@@ -32,7 +32,7 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io/',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     ...BRIDGE_DATA.prod
   },
   stage: {
@@ -96,7 +96,7 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io/',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io',
     ...BRIDGE_DATA.testnet
   }
 };
@@ -116,7 +116,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
 }
