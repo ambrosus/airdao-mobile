@@ -14,7 +14,7 @@ export async function getTokenPriceForChart(
   signal: AbortSignal
 ) {
   return axios.get(
-    `${Config.MARKETPLACE_URL}/v2/api/tokens-price?tokenAddress=${tokenAddress}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
+    `${Config.MARKETPLACE_URL}/v2/api/tokens-price?tokenAddress=${tokenAddress}&dateFrom=${dateFrom}&dateTo=${dateTo}&optimized=1`,
     { signal }
   );
 }
@@ -26,7 +26,7 @@ export async function getSDAPriceForChart(
   signal: AbortSignal
 ) {
   return axios.get(
-    `${Config.MARKETPLACE_URL}/v2/api/market-prices?marketId=${marketId}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
+    `${Config.MARKETPLACE_URL}/v2/api/market-prices?marketId=${marketId}&dateFrom=${dateFrom}&dateTo=${dateTo}&optimized=1`,
     { signal }
   );
 }
