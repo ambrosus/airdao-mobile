@@ -9,7 +9,7 @@ import {
 } from '@features/kosmos/api';
 import { ChartTooltip } from '@features/kosmos/components/base';
 import { ApiPricesResponse, MarketType } from '@features/kosmos/types';
-import { mapper, downsample, replaceTimestamps } from '@features/kosmos/utils';
+import { mapper, replaceTimestamps } from '@features/kosmos/utils';
 import {
   CHART_WIDTH,
   CHART_HEIGHT,
@@ -185,13 +185,13 @@ export const MarketChart = ({
             labels: [],
             datasets: [
               {
-                data: downsample(points.market, 100),
+                data: points.market,
                 color: () => '#8D5FEA',
                 strokeWidth: 1,
                 withDots: true
               },
               {
-                data: downsample(points.bonds, 100),
+                data: points.bonds,
                 color: () => '#77C33D',
                 strokeWidth: 1,
                 withDots: true
