@@ -43,6 +43,7 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
       {
         name: 'AirDAO',
         address: account.address,
+        isNativeCoin: true,
         balance: { wei: '', ether: account.ambBalance },
         symbol: CryptoCurrencyCode.AMB
       },
