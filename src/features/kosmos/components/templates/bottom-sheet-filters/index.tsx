@@ -60,7 +60,7 @@ export const BottomSheetFilters = forwardRef<
             filters={uiFilters}
             updateFilters={setUiFilters}
             values={[
-              t('kosmos.filter.all'),
+              t('kosmos.status.all'),
               t('kosmos.status.active'),
               t('kosmos.status.closed')
             ]}

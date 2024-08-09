@@ -399,15 +399,15 @@
   "kosmos.button.enter.amount": "Enter amount to buy",
   "kosmos.button.market.closed": "Market closed",
 
+  "kosmos.status.all": "All",
   "kosmos.status.closed": "Closed",
   "kosmos.status.active": "Active",
   "kosmos.filter": "Filter",
   "kosmos.filter.by": "Filter by",
   "kosmos.filter.payment": "Payment token",
-  "kosmos.filter.all": "All",
 
   "kosmos.success.toast": "Success! You claimed ${{amount}}",
-  "kosmos.buy.success.toast": "Success! You bought {{amount}} {amountSymbol} bond",
+  "kosmos.buy.success.toast": "Success! You bought {{amount}} {{amountSymbol}} bond",
   "kosmos.bottom.sheet.title": "Bond details",
   "kosmos.lock.period": "Lock period",
   "kosmos.transaction.hash": "Transaction hash",

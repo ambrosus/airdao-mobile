@@ -1,3 +1,4 @@
+import i18n from '@localization/i18n';
 import { getTokenByAddress } from './token-by-address';
 import {
   FiltersState,
@@ -8,7 +9,7 @@ import {
 } from '../types';
 
 export const INITIAL_FILTERS: FiltersState = {
-  status: 'all',
+  status: i18n.t('kosmos.status.all'),
   payment: null
 };
 
@@ -18,11 +19,11 @@ function filterByStatus(
   closedMarkets: MarketType[]
 ): MarketType[] {
   switch (status) {
-    case 'active':
+    case i18n.t('kosmos.status.active'):
       return markets;
-    case 'closed':
+    case i18n.t('kosmos.status.closed'):
       return closedMarkets;
-    case 'all':
+    case i18n.t('kosmos.status.all'):
     default:
       return [...markets, ...closedMarkets];
   }

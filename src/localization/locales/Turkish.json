@@ -399,12 +399,12 @@
   "kosmos.button.enter.amount": "Satın alınacak miktarı girin",
   "kosmos.button.market.closed": "Piyasa kapalı",
 
+  "kosmos.status.all": "Tümü",
   "kosmos.status.closed": "Kapalı",
   "kosmos.status.active": "Aktif",
   "kosmos.filter": "Filtre",
   "kosmos.filter.by": "Göre filtrele",
   "kosmos.filter.payment": "Ödeme belirteci",
-  "kosmos.filter.all": "Tümü",
 
   "kosmos.success.toast": "Success! You claimed ${{amount}}",
   "kosmos.buy.success.toast": "Başarılı! {{amount}} {{amountSymbol}} tahvil satın aldınız",
