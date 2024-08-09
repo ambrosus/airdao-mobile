@@ -119,6 +119,8 @@
   "common.no.transactions": "You will see your transactions here",
   "common.notification.price-alert": "Price Alert",
   "common.notification.transaction-alert": "Transaction Alert",
+  "common.notification.testnet-price-alert": "Price Alert Test",
+  "common.notification.testnet-transaction-alert": "AMB-TestNet Tx Alert",
   "common.notification.wallet-update": "Wallet Update",
   "common.please.try.again": "Please try again",
   "common.try.again": "Try again",
