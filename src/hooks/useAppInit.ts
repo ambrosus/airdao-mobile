@@ -113,10 +113,12 @@ export const useAppInit = () => {
         }
       }
     }
+
     async function prepare() {
       try {
-        migrateAddressesFromCache();
-        prepareNotifications();
+        await Cache.checkFirstAppInstall();
+        await migrateAddressesFromCache();
+        await prepareNotifications();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
           Inter_500Medium: require('../../assets/fonts/Inter-Medium.ttf'),
