@@ -52,7 +52,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
     <>
       <Row alignItems="center" justifyContent="space-between">
         <Row style={styles.innerRowContainer} alignItems="center">
-          <TokenLogo scale={0.65} token={quoteToken?.symbol ?? ''} />
+          <TokenLogo scale={0.65} token={payoutToken?.symbol ?? ''} />
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
