@@ -8,23 +8,15 @@ import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType;
-  onScrollToEnd: () => void;
 }
 
-export const ExactMarketTokenTabs = ({
-  market,
-  onScrollToEnd
-}: ExactMarketTokenTabsProps) => {
+export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
   const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0);
 
   const onChangedIndex = useCallback(
-    (index: number) => {
-      setCurrentFocusedIndex(index);
-
-      if (index === 0) onScrollToEnd();
-    },
-    [onScrollToEnd]
+    (index: number) => setCurrentFocusedIndex(index),
+    []
   );
 
   return (

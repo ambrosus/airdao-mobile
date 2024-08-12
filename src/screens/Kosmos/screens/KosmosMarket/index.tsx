@@ -75,11 +75,6 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
-  const onScrollToEnd = useCallback(
-    () => scrollViewRef.current?.scrollToEnd(true),
-    [scrollViewRef]
-  );
-
   const combinedLoading = useMemo(() => {
     return isBalanceFetching || isExactMarketLoading;
   }, [isBalanceFetching, isExactMarketLoading]);
@@ -114,10 +109,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
           market={route.params.market}
           onScrollToMarket={onScrollToMarket}
         />
-        <ExactMarketTokenTabs
-          market={route.params.market}
-          onScrollToEnd={onScrollToEnd}
-        />
+        <ExactMarketTokenTabs market={route.params.market} />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
