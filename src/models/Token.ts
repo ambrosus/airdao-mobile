@@ -4,6 +4,7 @@ import { TokenDTO } from './dtos';
 export class Token {
   address: string;
   name!: string;
+  isNativeCoin?: string | boolean;
   balance?: {
     wei?: string;
     ether?: number;
@@ -24,6 +25,7 @@ export class Token {
   }
 
   constructor(details: TokenDTO, tokenUtils: any) {
+    this.isNativeCoin = details.isNativeCoin || '';
     this.address = details.address;
     this.balance = details.balance;
     this.deriveNameAndSymbolFromDto(details, tokenUtils);

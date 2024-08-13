@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Alert, KeyboardAvoidingView, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  View
+} from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BottomAwareSafeAreaView } from '@components/composite';
@@ -10,7 +15,11 @@ import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import usePasscode from '@contexts/Passcode';
-import { DeviceUtils } from '@utils/device';
+import { isIos } from '@utils/isPlatform';
+
+const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
+  ? 'padding'
+  : 'height';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();
@@ -38,8 +47,7 @@ export const ConfirmPasscode = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled={DeviceUtils.isIOS}
-      behavior="padding"
+      behavior={KEYBOARD_BEHAVIOR}
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
       <View>

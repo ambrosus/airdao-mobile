@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -48,6 +48,7 @@ import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
+import { isIOS } from 'react-native-popover-view/dist/Constants';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -265,7 +266,7 @@ export const SendFunds = () => {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
-        enabled={Platform.OS === 'ios'}
+        enabled={isIOS}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>

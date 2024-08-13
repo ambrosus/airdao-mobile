@@ -35,6 +35,8 @@ import {
 import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { SwapScreen } from '@screens/Swap';
+import { SwapSuccessScreen, SwapErrorScreen } from '@screens/Swap/screens';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -110,6 +112,9 @@ export const HomeStack = () => {
           name="ImportWalletPrivateKeyError"
           component={ImportWalletPrivateKeyError}
         />
+        <Stack.Screen name="SwapScreen" component={SwapScreen} />
+        <Stack.Screen name="SwapSuccessScreen" component={SwapSuccessScreen} />
+        <Stack.Screen name="SwapErrorScreen" component={SwapErrorScreen} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>

@@ -39,8 +39,6 @@ const SELECTION_INITIAL_STATE = {
   end: null
 };
 
-const PRIVATE_KEY_MAX_LENGTH = 64;
-
 export const PrivateKeyMaskedInput = forwardRef<
   InputRef,
   PrivateKeyMaskedInputProps
@@ -129,16 +127,7 @@ export const PrivateKeyMaskedInput = forwardRef<
             setPrivateKey(newPrivateKey);
             setCurrentCaretPosition(caretPosition - 1);
           }
-        } else if (
-          key === ' ' &&
-          maskedValue.length !== PRIVATE_KEY_MAX_LENGTH
-        ) {
-          setPrivateKey((prevValue) => prevValue + ' ');
-          setCurrentCaretPosition(caretPosition + 1);
-        } else if (
-          _isAlphanumeric(key) &&
-          maskedValue.length < PRIVATE_KEY_MAX_LENGTH
-        ) {
+        } else if (_isAlphanumeric(key)) {
           // Insert alphanumeric key at caret position
           const newPrivateKey =
             value.slice(0, caretPosition) + key + value.slice(caretPosition);
@@ -149,14 +138,12 @@ export const PrivateKeyMaskedInput = forwardRef<
     },
     [
       secureTextEntry,
-      maskedValue,
+      currentCaretPosition,
+      value,
       _isSelectionEmpty,
       selection.start,
       selection.end,
-      value,
-      setPrivateKey,
-      currentCaretPosition,
-      setCurrentCaretPosition
+      setPrivateKey
     ]
   );
 
@@ -192,8 +179,8 @@ export const PrivateKeyMaskedInput = forwardRef<
       scrollEnabled={false}
       multiline
       value={maskedValue}
-      maxLength={64}
       blurOnSubmit
+      maxLength={120}
       autoCapitalize="none"
       autoCorrect={false}
       onChangeText={onChangePrivateKey}
