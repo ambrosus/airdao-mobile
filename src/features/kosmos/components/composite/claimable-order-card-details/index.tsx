@@ -71,7 +71,7 @@ export const ClaimableOrderCardDetails = ({
       if (tx) {
         Toast.show({
           text: t('kosmos.success.toast', {
-            payout: Number(payout).toFixed(4)
+            amount: Number(payout).toFixed(4)
           }),
           type: ToastType.Success
         });

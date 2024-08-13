@@ -118,7 +118,9 @@
   "common.more": "More",
   "common.no.transactions": "You will see your transactions here",
   "common.notification.price-alert": "Price Alert",
+  "common.notification.test-price-alert": "Price Alert Test",
   "common.notification.transaction-alert": "Transaction Alert",
+  "common.notification.transaction-testnet-alert": "AMB-TestNet Tx Alert",
   "common.notification.wallet-update": "Wallet Update",
   "common.please.try.again": "Please try again",
   "common.try.again": "Try again",
@@ -398,6 +400,7 @@
   "kosmos.button.close": "Close",
   "kosmos.button.enter.amount": "Enter amount to buy",
   "kosmos.button.market.closed": "Market closed",
+  "kosmos.button.ready.claim": "Ready to claim",
 
   "kosmos.status.all": "All",
   "kosmos.status.closed": "Closed",
@@ -408,6 +411,8 @@
 
   "kosmos.success.toast": "Success! You claimed ${{amount}}",
   "kosmos.buy.success.toast": "Success! You bought {{amount}} {{amountSymbol}} bond",
+  "kosmos.input.error.max.bondable": "Enter amount less than max bondable value",
+  "kosmos.input.error.max.value": "Enter amount less then available amount",
   "kosmos.bottom.sheet.title": "Bond details",
   "kosmos.lock.period": "Lock period",
   "kosmos.transaction.hash": "Transaction hash",
