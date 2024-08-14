@@ -57,3 +57,22 @@ export function getTimeRemaining(timestamp: number): string {
 
   return `${days}d ${hours}h ${minutes}m`;
 }
+
+export function _timestampToDate(
+  timestamp: number,
+  withoutTime?: boolean
+): string {
+  const date = new Date(timestamp * 1000);
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  let formattedDate = `${day}/${month}/${year}`;
+
+  if (!withoutTime) formattedDate += ` ${hours}:${minutes}`;
+  return formattedDate;
+}
