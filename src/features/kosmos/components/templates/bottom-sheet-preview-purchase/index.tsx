@@ -19,6 +19,7 @@ import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import {
+  _timestampToDate,
   formatDecimals,
   timestampToFormatedDate
 } from '@features/kosmos/utils';
@@ -117,14 +118,23 @@ export const BottomSheetPreviewPurchase = forwardRef<
                 {market.discount.toFixed(2)}%
               </StyledTextItem>
             </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
-              <StyledTextItem isValue>
-                {timestampToFormatedDate(market.start)}
-                {' - '}
-                {timestampToFormatedDate(market.conclusion)}
-              </StyledTextItem>
-            </Row>
+            {market?.vestingType === 'Fixed-expiry' ? (
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>Vesting expired date</StyledTextItem>
+                <StyledTextItem isValue>
+                  {_timestampToDate(+market.vesting)}
+                </StyledTextItem>
+              </Row>
+            ) : (
+              <Row alignItems="center" justifyContent="space-between">
+                <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
+                <StyledTextItem isValue>
+                  {timestampToFormatedDate(market.start)}
+                  {' - '}
+                  {timestampToFormatedDate(market.conclusion)}
+                </StyledTextItem>
+              </Row>
+            )}
             <Row alignItems="center" justifyContent="space-between">
               <StyledTextItem>{t('kosmos.protocol.fee')}</StyledTextItem>
               <StyledTextItem isValue>

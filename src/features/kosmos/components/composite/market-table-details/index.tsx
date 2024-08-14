@@ -9,7 +9,10 @@ import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { MarketType } from '@features/kosmos/types';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { timestampToFormatedDate } from '@features/kosmos/utils';
+import {
+  _timestampToDate,
+  timestampToFormatedDate
+} from '@features/kosmos/utils';
 
 interface MarketTableDetailsProps {
   market: MarketType;
@@ -41,11 +44,19 @@ export const MarketTableDetails = ({
         </Row>
       </RowJustifyAlignedItem>
       {/* Lock Period */}
-      <RowJustifyAlignedItem label={t('kosmos.lock.period')}>
-        <Row alignItems="center">
-          <StyledTextItem>{lockPeriod}</StyledTextItem>
-        </Row>
-      </RowJustifyAlignedItem>
+      {market?.vestingType === 'Fixed-expiry' ? (
+        <RowJustifyAlignedItem label="VESTING EXPIRED DATE">
+          <Row alignItems="center">
+            <StyledTextItem>{_timestampToDate(+market.vesting)}</StyledTextItem>
+          </Row>
+        </RowJustifyAlignedItem>
+      ) : (
+        <RowJustifyAlignedItem label={t('kosmos.lock.period')}>
+          <Row alignItems="center">
+            <StyledTextItem>{lockPeriod}</StyledTextItem>
+          </Row>
+        </RowJustifyAlignedItem>
+      )}
       {/* Available amount */}
       <RowJustifyAlignedItem label={t('kosmos.available.amount')}>
         <Row alignItems="center">

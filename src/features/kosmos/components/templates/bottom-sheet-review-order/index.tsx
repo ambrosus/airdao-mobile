@@ -17,6 +17,7 @@ import { TokenLogo } from '@components/modular';
 import {
   MAINNET_VESTINGS,
   TESTNET_VESTINGS,
+  _timestampToDate,
   formatDecimals
 } from '@features/kosmos/utils';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
@@ -138,10 +139,19 @@ export const BottomSheetReviewOrder = forwardRef<
                 <StyledTextItem>{t('common.status')}</StyledTextItem>
                 <Status status={status} />
               </Row>
-              <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
-                <StyledTextItem isValue>{lockPeriod}</StyledTextItem>
-              </Row>
+              {transaction?.vestingType === 'Fixed-expiry' ? (
+                <Row alignItems="center" justifyContent="space-between">
+                  <StyledTextItem>Vesting expired date</StyledTextItem>
+                  <StyledTextItem isValue>
+                    {_timestampToDate(+transaction.vesting)}
+                  </StyledTextItem>
+                </Row>
+              ) : (
+                <Row alignItems="center" justifyContent="space-between">
+                  <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
+                  <StyledTextItem isValue>{lockPeriod}</StyledTextItem>
+                </Row>
+              )}
               <Row alignItems="center" justifyContent="space-between">
                 <StyledTextItem>{t('kosmos.transaction.hash')}</StyledTextItem>
                 <StyledTextItem isValue primary>
