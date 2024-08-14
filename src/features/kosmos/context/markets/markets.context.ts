@@ -11,6 +11,7 @@ const KosmosMarketsContext = () => {
   const [amountToBuy, setAmountToBuy] = useState('');
   const [bnBalance, setBnBalance] = useState<ethers.BigNumber | null>(null);
   const [isBalanceFetching, setIsBalanceFetching] = useState(false);
+  const [claimedOrderIds, setClaimedOrderIds] = useState<string[]>([]);
 
   const onToggleMarketTooltip = useCallback((value: boolean) => {
     setIsMarketTooltipVisible(value);
@@ -19,6 +20,14 @@ const KosmosMarketsContext = () => {
   const onChangeAmountToBuy = useCallback(
     (amount: string) => setAmountToBuy(amount),
     []
+  );
+
+  const onAppendClaimedOrderId = useCallback(
+    (id: string) => {
+      if (!claimedOrderIds.includes(id))
+        setClaimedOrderIds((prevState) => [...prevState, id]);
+    },
+    [claimedOrderIds]
   );
 
   const reset = useCallback(() => {
@@ -42,6 +51,8 @@ const KosmosMarketsContext = () => {
     setBnBalance,
     isBalanceFetching,
     setIsBalanceFetching,
+    claimedOrderIds,
+    onAppendClaimedOrderId,
     reset
   };
 };
