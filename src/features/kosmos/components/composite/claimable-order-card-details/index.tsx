@@ -13,6 +13,7 @@ import { COLORS } from '@constants/colors';
 import { getTimeRemaining } from '@features/kosmos/utils';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
@@ -22,6 +23,9 @@ export const ClaimableOrderCardDetails = ({
   transaction
 }: ClaimableOrderCardDetailsProps) => {
   const { t } = useTranslation();
+
+  const { claimedOrderIds, onAppendClaimedOrderId } =
+    useKosmosMarketsContextSelector();
 
   const [isClaimingNow, setIsClaimingNow] = useState(false);
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
@@ -38,9 +42,14 @@ export const ClaimableOrderCardDetails = ({
     return vestingEndsDate * 1000 < new Date().getTime();
   }, [vestingEndsDate]);
 
+  const isOrderClaimed = useMemo(
+    () => claimedOrderIds.includes(transaction.txHash) || transaction.isClaimed,
+    [claimedOrderIds, transaction]
+  );
+
   const disabled = useMemo(() => {
-    return isClaimingNow || !isVestingPass || transaction.isClaimed;
-  }, [isClaimingNow, transaction.isClaimed, isVestingPass]);
+    return isClaimingNow || !isVestingPass || isOrderClaimed;
+  }, [isClaimingNow, isVestingPass, isOrderClaimed]);
 
   const buttonColor = useMemo(() => {
     return disabled ? COLORS.neutral100 : COLORS.brand600;
@@ -69,6 +78,7 @@ export const ClaimableOrderCardDetails = ({
       const tx = await onClaimButtonPress(contractName);
 
       if (tx) {
+        onAppendClaimedOrderId(transaction.txHash);
         Toast.show({
           text: t('kosmos.success.toast', {
             amount: Number(payout).toFixed(4)
@@ -81,14 +91,21 @@ export const ClaimableOrderCardDetails = ({
     } finally {
       setIsClaimingNow(false);
     }
-  }, [onClaimButtonPress, payout, t, transaction.vestingType]);
+  }, [
+    transaction.vestingType,
+    transaction.txHash,
+    onClaimButtonPress,
+    onAppendClaimedOrderId,
+    t,
+    payout
+  ]);
 
   const textStringValue = useMemo(() => {
-    if (transaction.isClaimed) return t('kosmos.button.claimed');
+    if (isOrderClaimed) return t('kosmos.button.claimed');
     if (!isVestingPass) return getTimeRemaining(vestingEndsDate);
 
     return t('kosmos.button.claim');
-  }, [transaction.isClaimed, t, isVestingPass, vestingEndsDate]);
+  }, [isOrderClaimed, t, isVestingPass, vestingEndsDate]);
 
   return (
     <>

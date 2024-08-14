@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState
-} from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +8,7 @@ import { SecondaryButton, Toast, ToastType } from '@components/modular';
 import { Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface ClaimBondsButtonProps {
   transaction: TxType;
@@ -34,8 +29,10 @@ export const ClaimBondsButton = ({
 }: ClaimBondsButtonProps) => {
   const { t } = useTranslation();
 
+  const { claimedOrderIds, onAppendClaimedOrderId } =
+    useKosmosMarketsContextSelector();
+
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
-  const [isClaimed, setIsClaimed] = useState(false);
 
   const vestingEndsDate = useMemo(() => {
     return transaction.vestingType === 'Fixed-expiry'
@@ -51,9 +48,10 @@ export const ClaimBondsButton = ({
     return isClaimingNow || !isVestingPass;
   }, [isClaimingNow, isVestingPass]);
 
-  const isOrderClaimed = useMemo(() => {
-    return transaction.isClaimed || isClaimed;
-  }, [transaction.isClaimed, isClaimed]);
+  const isOrderClaimed = useMemo(
+    () => claimedOrderIds.includes(transaction.txHash) || transaction.isClaimed,
+    [claimedOrderIds, transaction]
+  );
 
   const buttonColor = useMemo(() => {
     if (isClaimingNow || !isVestingPass || isOrderClaimed)
@@ -88,9 +86,7 @@ export const ClaimBondsButton = ({
       setIsClaimingNow(true);
       const tx = await onClaimButtonPress(contractName);
 
-      if (tx) {
-        setIsClaimed(true);
-      }
+      if (tx) onAppendClaimedOrderId(transaction.txHash);
     } catch (error) {
       throw error;
     } finally {
@@ -106,12 +102,14 @@ export const ClaimBondsButton = ({
       }, 500);
     }
   }, [
+    onAppendClaimedOrderId,
     onClaimButtonPress,
     onDismissBottomSheet,
     payout,
     setIsClaimingNow,
     t,
     textStringValue,
+    transaction.txHash,
     transaction.vestingType
   ]);
 
