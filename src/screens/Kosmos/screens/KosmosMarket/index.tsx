@@ -4,7 +4,9 @@ import {
   ViewStyle,
   StyleProp,
   View,
-  LayoutChangeEvent
+  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  NativeScrollEvent
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -39,6 +41,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
+  const [scrollYAxis, setScrollYAxis] = useState<number>(0);
+  const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
+
   const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
       flex: 1
@@ -58,8 +63,6 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     }, [reset])
   );
 
-  const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
-
   const onHandlerMarketLayout = useCallback(
     (event: LayoutChangeEvent) => {
       if (marketLayoutYAxis === 0) {
@@ -75,14 +78,22 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
-  const onScrollToEnd = useCallback(
-    () => scrollViewRef.current?.scrollToEnd(true),
-    [scrollViewRef]
-  );
+  const onScrollToBuyBondsField = useCallback(() => {
+    scrollViewRef.current?.scrollToPosition(0, 0, true);
+  }, []);
 
   const combinedLoading = useMemo(() => {
     return isBalanceFetching || isExactMarketLoading;
   }, [isBalanceFetching, isExactMarketLoading]);
+
+  const onScrollEventHandler = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const y = event.nativeEvent.contentOffset.y;
+
+      setScrollYAxis(y);
+    },
+    []
+  );
 
   return (
     <SafeAreaView style={screenWrapperStyle}>
@@ -101,6 +112,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         enableResetScrollToCoords={false}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
+        onScroll={onScrollEventHandler}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={onScrollBeginDragHandler}
         scrollToOverflowEnabled={false}
@@ -116,7 +128,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         />
         <ExactMarketTokenTabs
           market={route.params.market}
-          onScrollToEnd={onScrollToEnd}
+          scrollVerticalAxis={scrollYAxis}
+          onScrollToBuyBondsField={onScrollToBuyBondsField}
         />
       </KeyboardAwareScrollView>
     </SafeAreaView>
