@@ -4,9 +4,7 @@ import {
   ViewStyle,
   StyleProp,
   View,
-  LayoutChangeEvent,
-  NativeSyntheticEvent,
-  NativeScrollEvent
+  LayoutChangeEvent
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -41,8 +39,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
-  const [scrollYAxis, setScrollYAxis] = useState<number>(0);
+  // const [scrollYAxis, setScrollYAxis] = useState<number>(0);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
+  const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
   const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
@@ -86,12 +85,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     return isBalanceFetching || isExactMarketLoading;
   }, [isBalanceFetching, isExactMarketLoading]);
 
-  const onScrollEventHandler = useCallback(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const y = event.nativeEvent.contentOffset.y;
-
-      setScrollYAxis(y);
-    },
+  const onTabsSwipeStateHandle = useCallback(
+    (state: boolean) => setIsScrollEnabled(!state),
     []
   );
 
@@ -108,11 +103,11 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         enableOnAndroid
+        scrollEnabled={isScrollEnabled}
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        onScroll={onScrollEventHandler}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={onScrollBeginDragHandler}
         scrollToOverflowEnabled={false}
@@ -128,8 +123,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         />
         <ExactMarketTokenTabs
           market={route.params.market}
-          scrollVerticalAxis={scrollYAxis}
           onScrollToBuyBondsField={onScrollToBuyBondsField}
+          onTabsSwipeStateHandle={onTabsSwipeStateHandle}
         />
       </KeyboardAwareScrollView>
     </SafeAreaView>
