@@ -52,7 +52,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
     <>
       <Row alignItems="center" justifyContent="space-between">
         <Row style={styles.innerRowContainer} alignItems="center">
-          <TokenLogo scale={0.65} token={payoutToken?.symbol ?? ''} />
+          <TokenLogo scale={0.65} token={quoteToken?.symbol ?? ''} />
           <Text
             fontSize={16}
             fontFamily="Inter_600SemiBold"
@@ -97,7 +97,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
             color={COLORS.neutral700}
           >
             {formatDecimals(payout, payoutToken?.contractAddress, tokens)}{' '}
-            {quoteToken?.symbol.toUpperCase()}
+            {payoutToken?.symbol.toUpperCase()}
           </Text>
         </Row>
       </View>
