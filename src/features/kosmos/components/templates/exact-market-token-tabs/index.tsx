@@ -6,18 +6,17 @@ import { AnimatedTabs } from '@components/modular';
 import { BuyBondTab } from './tabs/buy-bond';
 import { MarketType } from '@features/kosmos/types';
 import { TransactionsHistoryTab } from './tabs/transactions';
-import { DEVICE_HEIGHT } from '@constants/variables';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType;
   onScrollToBuyBondsField: () => void;
-  scrollVerticalAxis: number;
+  onTabsSwipeStateHandle: (state: boolean) => void;
 }
 
 export const ExactMarketTokenTabs = ({
   market,
   onScrollToBuyBondsField,
-  scrollVerticalAxis
+  onTabsSwipeStateHandle
 }: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
   const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0);
@@ -26,16 +25,17 @@ export const ExactMarketTokenTabs = ({
     (index: number) => {
       setCurrentFocusedIndex(index);
 
-      if (index === 0 && scrollVerticalAxis > DEVICE_HEIGHT)
+      if (index === 0)
         InteractionManager.runAfterInteractions(onScrollToBuyBondsField);
     },
-    [onScrollToBuyBondsField, scrollVerticalAxis]
+    [onScrollToBuyBondsField]
   );
 
   return (
     <AnimatedTabs
       keyboardShouldPersistTaps="handled"
       dismissOnChangeIndex
+      onSwipeStateHandle={onTabsSwipeStateHandle}
       onChangedIndex={onChangedIndex}
       containerStyle={styles.container}
       tabs={[

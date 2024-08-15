@@ -78,7 +78,6 @@ export const BuyBondButton = ({
             setIsTransactionProcessing(false);
 
             setTimeout(() => {
-              setIsTransactionProcessing(false);
               navigation.goBack();
             }, 500);
 
@@ -100,6 +99,7 @@ export const BuyBondButton = ({
       });
       throw error;
     } finally {
+      setIsTransactionProcessing(false);
       onDismissBottomSheet();
     }
   }, [
