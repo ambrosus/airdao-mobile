@@ -86,20 +86,24 @@ export const ClaimBondsButton = ({
       setIsClaimingNow(true);
       const tx = await onClaimButtonPress(contractName);
 
-      if (tx) onAppendClaimedOrderId(transaction.txHash);
-    } catch (error) {
-      throw error;
-    } finally {
-      onDismissBottomSheet();
-      setTimeout(() => {
-        setIsClaimingNow(false);
+      if (tx) {
+        onAppendClaimedOrderId(transaction.txHash);
         Toast.show({
           text: t('kosmos.success.toast', {
             amount: Number(payout).toFixed(4)
           }),
           type: ToastType.Success
         });
-      }, 500);
+      }
+    } catch (error) {
+      Toast.show({
+        text: `Error`,
+        type: ToastType.Failed
+      });
+      throw error;
+    } finally {
+      onDismissBottomSheet();
+      setIsClaimingNow(false);
     }
   }, [
     onAppendClaimedOrderId,

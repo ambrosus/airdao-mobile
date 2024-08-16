@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
@@ -43,7 +43,6 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
 
       return (
         <TouchableOpacity onPress={redirectToDetails}>
-          <Text>{market.id}</Text>
           <MarketListItem market={market} />
         </TouchableOpacity>
       );
