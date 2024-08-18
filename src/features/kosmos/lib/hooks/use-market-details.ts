@@ -9,17 +9,33 @@ import {
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
-import { getMarketTxs, getProtocolFee } from '@features/kosmos/api';
+import {
+  getMarketData,
+  getMarketTxs,
+  getProtocolFee
+} from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 
 export function useMarketDetails(market: MarketType) {
-  const { tokens, amountToBuy } = useKosmosMarketsContextSelector();
+  const { tokens, amountToBuy, setIsExactMarketLoading } =
+    useKosmosMarketsContextSelector();
   const { extractTokenCb } = useExtractToken();
   const payoutToken = extractTokenCb(market.payoutToken);
   const quoteToken = extractTokenCb(market.quoteToken);
 
   const [protocolFee, setProtocolFee] = useState(0);
   const [marketTransactions, setMarketTransactions] = useState<TxType[]>([]);
+
+  const fetchMarketById = useCallback(async () => {
+    try {
+      setIsExactMarketLoading(true);
+      return await getMarketData(market.id);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsExactMarketLoading(false);
+    }
+  }, [market.id, setIsExactMarketLoading]);
 
   useEffect(() => {
     getProtocolFee().then((response) => setProtocolFee(response));
@@ -121,6 +137,7 @@ export function useMarketDetails(market: MarketType) {
     willGet,
     willGetSubFee,
     willGetWithArguments,
-    marketTransactions
+    marketTransactions,
+    fetchMarketById
   };
 }
