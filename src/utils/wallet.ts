@@ -2,10 +2,10 @@ import { Wallet } from '@models/Wallet';
 import { CryptoCurrencyCode, DatabaseTable, WalletMetadata } from '@appTypes';
 import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
 import {
-  Database,
-  WalletDB,
   AccountDB,
   AccountDBModel,
+  Database,
+  WalletDB,
   WalletDBModel
 } from '@database';
 import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
@@ -145,8 +145,6 @@ export const importWalletViaPrivateKey = async (
     );
 
     if (!_account) throw new Error();
-
-    await API.watcherService.watchAddresses([_account.address]);
 
     walletInDb = await WalletDB.createWallet(fullWallet);
     const [, accountInDbResult] = await Promise.all([
