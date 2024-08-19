@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Alert, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BarcodeScanner } from '@components/templates';
@@ -12,6 +12,8 @@ import { Checkmark, ScannerIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { etherumAddressRegex } from '@constants/regex';
 import { moderateScale } from '@utils/scaling';
+import { isAndroid, isIos } from '@utils/isPlatform';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 interface AddressInputProps {
   address: string;
@@ -25,6 +27,8 @@ export const AddressInput = (props: AddressInputProps) => {
   const scanned = useRef(false);
   const inputRef = useRef<InputRef>(null);
   const isValidEthAddress = address.match(etherumAddressRegex);
+
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const showScanner = () => {
     scannerModalRef.current?.show();
@@ -54,10 +58,25 @@ export const AddressInput = (props: AddressInputProps) => {
     }
   };
 
+  const toggleFocused = () => setIsInputFocused((prevState) => !prevState);
+
+  const maskedValue = useMemo(() => {
+    const lettersToSlice = Math.floor(DEVICE_WIDTH / 12);
+    if (isAndroid && (address === '' || address.length < 32)) return address;
+
+    return isIos || isInputFocused
+      ? address
+      : `${address.slice(0, lettersToSlice)}...`;
+  }, [address, isInputFocused]);
+
   return (
     <>
       <InputWithIcon
         ref={inputRef}
+        numberOfLines={1}
+        spacingRight={24}
+        onFocus={toggleFocused}
+        onBlur={toggleFocused}
         iconRight={
           isValidEthAddress ? (
             <Checkmark
@@ -72,7 +91,7 @@ export const AddressInput = (props: AddressInputProps) => {
             </Button>
           )
         }
-        value={address}
+        value={maskedValue}
         onChangeValue={onAddressChange}
         placeholder={t('send.funds.recipient')}
       />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
@@ -16,10 +16,15 @@ import {
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
+import Config from '@constants/config';
+import { Token } from '@models/Token';
+import { useBridgeContextData } from '@features/bridge/context';
 
 export interface TokenLogoProps {
-  token: string;
+  token?: string;
   scale?: number;
+  isNativeCoin?: boolean | string;
+  address?: string;
   overrideIconVariants?: {
     amb?: 'white' | 'blue';
     eth?: 'gray' | 'blue';
@@ -30,9 +35,27 @@ export const TokenLogo = (props: TokenLogoProps) => {
   const {
     scale,
     token,
+    address,
+    isNativeCoin,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
-  switch (token?.toLowerCase()) {
+  const { selectedAccount } = useBridgeContextData();
+  const tokenName = useMemo(() => {
+    if (address) {
+      if (isNativeCoin || selectedAccount?.address === address) {
+        return 'airdao';
+      } else {
+        return (
+          Config.ALL_TOKENS.find((token: Token) => token.address === address)
+            ?.name ?? 'unknown'
+        );
+      }
+    } else {
+      return token;
+    }
+  }, [address, isNativeCoin, selectedAccount?.address, token]);
+
+  switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case 'airdao': {
@@ -50,6 +73,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
     case 'wbnb':
+    case 'bsc':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
     case 'usd coin':
@@ -72,12 +96,11 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.Bond.toLowerCase():
     case 'airbond':
       return <AirBondIcon scale={scale} />;
-    case 'bsc':
-      return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.LangOperation.toLowerCase():
     case 'operation funds lang inu':
       return <LangFundIcon scale={scale} />;
     case 'airdao nft':
+    case 'nft':
       return <NFTIcon />;
     default:
       return <UnknownTokenIcon scale={scale} />;

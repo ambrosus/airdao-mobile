@@ -1,5 +1,9 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { AccountDB } from '@database';
+import { AccountDB, AccountDBModel } from '@database';
+
+const isWalletAreadyExist = (address: string, accounts: AccountDBModel[]) => {
+  return accounts.find((account) => account.address === address);
+};
 
 const createAccountInDB = async (
   address: string,
@@ -31,4 +35,4 @@ const createAccountInDB = async (
     throw error;
   }
 };
-export const AccountUtils = { createAccountInDB };
+export const AccountUtils = { createAccountInDB, isWalletAreadyExist };

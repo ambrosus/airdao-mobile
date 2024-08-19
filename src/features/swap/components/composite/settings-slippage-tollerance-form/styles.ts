@@ -1,0 +1,14 @@
+import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
+
+export const styles = StyleSheet.create({
+  container: {
+    rowGap: verticalScale(16)
+  },
+  slippageTolleranceRow: {
+    columnGap: scale(16)
+  },
+  symbol: {
+    marginRight: 2
+  }
+});

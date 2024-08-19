@@ -1,6 +1,7 @@
 import * as Updates from 'expo-updates';
 import { BRIDGE_DATA } from '@constants/bridgeData';
 import { ALL_TOKENS_DATA } from '@constants/allToken';
+import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
 const envs = {
   prod: {
@@ -15,7 +16,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
@@ -33,7 +34,10 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
-    ...BRIDGE_DATA.prod
+    ...BRIDGE_DATA.prod,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
+    ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -47,7 +51,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
@@ -64,8 +68,11 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
-    ...BRIDGE_DATA.stage
+    ...BRIDGE_DATA.stage,
+    WAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
+    ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -79,7 +86,7 @@ const envs = {
       appErrors: false
     },
     walletActions: {
-      swap: false,
+      swap: true,
       send: true,
       receive: true,
       bridge: true,
@@ -96,8 +103,11 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0x282e57a4581493617029B8945824C156e599e4e0',
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io',
-    ...BRIDGE_DATA.testnet
+    ...BRIDGE_DATA.testnet,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
+    ROUTER_V2_ADDRESS: '0xA3E524dFc9deA66aE32e81a5E2B4DF24F56e2CBc',
+    FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io'
   }
 };
 

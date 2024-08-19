@@ -44,6 +44,20 @@ export type HomeParamsList = {
   ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
   KosmosScreen: undefined;
   KosmosMarketScreen: { market: MarketType };
+  SwapScreen: undefined;
+  SwapSuccessScreen: {
+    AMOUNT_A: string;
+    AMOUNT_B: string;
+    SYMBOL_A: string;
+    SYMBOL_B: string;
+    txHash: string;
+  };
+  SwapErrorScreen: {
+    AMOUNT_A: string;
+    AMOUNT_B: string;
+    SYMBOL_A: string;
+    SYMBOL_B: string;
+  };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

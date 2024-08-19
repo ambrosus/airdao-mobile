@@ -13,7 +13,8 @@ export type FontFamily =
   | 'Inter_700Bold'
   | 'Mersad_600SemiBold'
   | 'Mersad_800Bold'
-  | 'Mersad_900ExtraBold';
+  | 'Mersad_900ExtraBold'
+  | 'Rationell_700Bold';
 
 export type FontWeight =
   | 'normal'

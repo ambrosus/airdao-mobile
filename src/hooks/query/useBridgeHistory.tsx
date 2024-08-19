@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { QueryResponse } from '@appTypes';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { API } from '@api/api';
 
 export function useBridgeHistory(): QueryResponse<

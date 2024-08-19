@@ -1,19 +1,37 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 import { View, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { StringUtils } from '@utils/string';
+import { DeviceUtils } from '@utils/device';
 
 interface PasscodeProps {
   onPasscodeChange: (passcode: string[]) => void;
   type?: 'creation' | 'change';
 }
 
+type NavigationListenerType = {
+  addListener: (value: string, cb: () => void) => void;
+};
+
 export const Passcode = forwardRef<TextInput, PasscodeProps>(
   ({ onPasscodeChange, type }: PasscodeProps, ref) => {
     const [code, setCode] = useState('');
     const localRef = useForwardedRef<TextInput>(ref);
+    const navigation: NavigationListenerType = useNavigation();
+
+    useEffect(() => {
+      if (DeviceUtils.isAndroid) {
+        // @ ts-ignore
+        const timeoutId = setTimeout(() => {
+          localRef.current?.focus();
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
+      }
+    }, [navigation, localRef]);
 
     const handleCodeChange = (text: string) => {
       const numericText = StringUtils.removeNonNumericCharacters(text, false);
@@ -50,7 +68,8 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
           style={styles.input}
           keyboardType="numeric"
           contextMenuHidden={true}
-          autoFocus={true}
+          blurOnSubmit={false}
+          autoFocus={DeviceUtils.isIOS}
           maxLength={4}
           value={code}
           onChangeText={handleCodeChange}

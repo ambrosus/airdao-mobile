@@ -41,7 +41,7 @@ const SOCIAL_LINKS: Link[] = [
   },
   {
     title: 'Telegram',
-    url: 'https://t.me/airDAO_official',
+    url: 'https://t.me/airdao',
     icon: <TelegramIcon />
   }
 ];
