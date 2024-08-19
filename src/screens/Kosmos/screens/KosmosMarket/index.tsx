@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ViewStyle, StyleProp, View, LayoutChangeEvent } from 'react-native';
+import {
+  ViewStyle,
+  StyleProp,
+  View,
+  LayoutChangeEvent,
+  RefreshControl
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
@@ -15,7 +21,7 @@ import {
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { useExtractToken, useMarketDetails } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -24,7 +30,10 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
   'KosmosMarketScreen'
 >;
 
-export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
+export const KosmosMarketScreen = ({
+  navigation,
+  route
+}: KosmosMarketScreenProps) => {
   const {
     onToggleMarketTooltip,
     isExactMarketLoading,
@@ -33,6 +42,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   } = useKosmosMarketsContextSelector();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
+  const { fetchMarketById } = useMarketDetails(route.params.market);
 
   // const [scrollYAxis, setScrollYAxis] = useState<number>(0);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
@@ -66,6 +76,24 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     },
     [marketLayoutYAxis]
   );
+  const onPullToRefreshMarket = useCallback(async () => {
+    const response = await fetchMarketById();
+
+    if (response) {
+      navigation.setParams({ market: response.data });
+    }
+  }, [fetchMarketById, navigation]);
+
+  const renderRefetchController = useMemo(
+    () => (
+      <RefreshControl
+        onRefresh={onPullToRefreshMarket}
+        refreshing={isExactMarketLoading}
+        removeClippedSubviews
+      />
+    ),
+    [isExactMarketLoading, onPullToRefreshMarket]
+  );
 
   const onScrollToMarket = useCallback(
     () => scrollViewRef.current?.scrollToPosition(0, marketLayoutYAxis),
@@ -98,6 +126,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         enableOnAndroid
+        refreshControl={renderRefetchController}
         scrollEnabled={isScrollEnabled}
         scrollEventThrottle={32}
         enableResetScrollToCoords={false}
