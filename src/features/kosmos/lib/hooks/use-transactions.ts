@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TxType } from '@features/kosmos/types';
-import { useBridgeContextData } from '@contexts/Bridge';
 import { fetchMarketTransactions } from '@features/kosmos/api';
+import { useBridgeContextData } from '@features/bridge/context';
 
 const VERSIONS = ['v1', 'v2'];
 

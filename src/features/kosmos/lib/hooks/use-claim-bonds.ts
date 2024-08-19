@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ContractNames, Methods } from '@airdao/airdao-bond';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { TxType } from '@features/kosmos/types';
 import { useBondContracts } from './use-bond-contracts';
 import { Cache, CacheKey } from '@lib/cache';

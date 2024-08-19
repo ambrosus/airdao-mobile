@@ -8,7 +8,6 @@ import {
   styles,
   successStyle,
   claimPendingStyle
-  successStyle
 } from './Status.styles';
 import { useTranslation } from 'react-i18next';
 

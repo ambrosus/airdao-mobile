@@ -34,7 +34,6 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
-  // const [scrollYAxis, setScrollYAxis] = useState<number>(0);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
   const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 

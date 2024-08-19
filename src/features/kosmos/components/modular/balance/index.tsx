@@ -5,7 +5,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { getBalanceOf } from '@features/kosmos/lib/contracts';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { formatEther } from 'ethers/lib/utils';

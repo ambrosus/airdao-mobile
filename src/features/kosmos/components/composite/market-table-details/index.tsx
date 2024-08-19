@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
+import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
 import { Row, Text } from '@components/base';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';

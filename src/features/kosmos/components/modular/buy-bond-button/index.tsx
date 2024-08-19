@@ -14,7 +14,7 @@ import {
   useBondContracts
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { Cache, CacheKey } from '@lib/cache';
 import Config from '@constants/config';
 import { HomeNavigationProp } from '@appTypes';

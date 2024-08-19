@@ -21,11 +21,12 @@ import {
   formatDecimals
 } from '@features/kosmos/utils';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { Status } from '@components/templates/Bridge/BridgeTransaction/components/Status/Status';
+
 import Config from '@constants/config';
 import { StringUtils } from '@utils/string';
 import { ClaimBondsButton } from '../../modular/claim-bonds-button';
 import { StakePending } from '@screens/StakingPool/components';
+import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 
 const ADDRESS_LEFT_PADDING = 5;
 const ADDRESS_RIGHT_PADDING = 4;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Contracts } from '@airdao/airdao-bond';
 import { ethers } from 'ethers';
-import { useBridgeContextData } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 import { Cache, CacheKey } from '@lib/cache';
 import Config from '@constants/config';
 
