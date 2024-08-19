@@ -69,10 +69,10 @@ const envs = {
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.stage,
-    WAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
+    SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io'
+     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -108,6 +108,7 @@ const envs = {
     ROUTER_V2_ADDRESS: '0xA3E524dFc9deA66aE32e81a5E2B4DF24F56e2CBc',
     FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io'
+    FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07'
   }
 };
 

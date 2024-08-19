@@ -8,6 +8,7 @@ import {
   styles,
   successStyle,
   claimPendingStyle
+  successStyle
 } from './Status.styles';
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +37,11 @@ export const Status = ({ status, steps }: StatusProps) => {
       }
       case 'claim pending':
         return { ...claimPendingStyle };
+      case 'success':
+        return { ...successStyle };
+      case 'confirmations': {
+        return { ...confirmationStyles };
+      }
       case 'default':
         if (steps && steps.start !== 0 && steps?.start === steps?.end) {
           return { ...successStyle };
@@ -67,6 +73,7 @@ export const Status = ({ status, steps }: StatusProps) => {
         return t('kosmos.status.closed');
       case 'pending':
       case 'claim pending':
+      case 'pending':
         return t('common.status.pending');
       case 'confirmations':
         return t('bridge.transaction.confirmations');
