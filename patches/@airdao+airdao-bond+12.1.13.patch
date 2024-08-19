@@ -1,0 +1,20 @@
+diff --git a/node_modules/@airdao/airdao-bond/src/contracts/contracts.js b/node_modules/@airdao/airdao-bond/src/contracts/contracts.js
+index 1234567..89abcde 100644
+--- a/node_modules/@airdao/airdao-bond/src/contracts/contracts.js
++++ b/node_modules/@airdao/airdao-bond/src/contracts/contracts.js
+@@ -2,0 +3,9 @@
++import CHAIN16718 from '../../deployments/16718.json';
++import CHAIN22040 from '../../deployments/22040.json';
++import CHAIN30746 from '../../deployments/30746.json';
++
++const NETWORKS = {
++  16718: CHAIN16718,
++  22040: CHAIN22040,
++  30746: CHAIN30746,
++};
+@@ -83,4 +83,4 @@
+ function loadAllDeploymentsFromFile(networkName, signer) {
+-  const deployments = require(`../../deployments/${networkName}.json`);
++  const deployments = NETWORKS[networkName];
+   return loader(deployments, signer);
+ }
