@@ -1,11 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  SafeAreaView,
-  ViewStyle,
-  StyleProp,
-  View,
-  LayoutChangeEvent
-} from 'react-native';
+import { ViewStyle, StyleProp, View, LayoutChangeEvent } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
@@ -23,6 +17,7 @@ import {
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
