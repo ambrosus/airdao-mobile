@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  SafeAreaView,
   ViewStyle,
   StyleProp,
   View,
@@ -24,6 +23,7 @@ import {
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useExtractToken, useMarketDetails } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
