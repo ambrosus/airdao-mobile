@@ -85,6 +85,7 @@ export const BottomSheetFilters = forwardRef<
               fontSize={16}
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral800}
+              style={styles.buttonText}
             >
               {t('kosmos.button.reset')}
             </Text>
@@ -98,6 +99,7 @@ export const BottomSheetFilters = forwardRef<
               fontSize={16}
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral0}
+              style={styles.buttonText}
             >
               {t('kosmos.button.apply')}
             </Text>
