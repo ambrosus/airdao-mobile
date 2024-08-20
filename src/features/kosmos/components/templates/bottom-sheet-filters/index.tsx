@@ -15,7 +15,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { useForwardedRef } from '@hooks';
-import { PrimaryButton, SecondaryButton } from '@components/modular';
+import { SecondaryButton } from '@components/modular';
 import { INITIAL_FILTERS } from '@features/kosmos/utils';
 
 interface BottomSheetFiltersProps {
@@ -75,7 +75,11 @@ export const BottomSheetFilters = forwardRef<
           />
         </View>
 
-        <Row alignItems="center" justifyContent="space-between">
+        <Row
+          style={styles.buttonContainer}
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <SecondaryButton style={styles.button} onPress={onResetFilters}>
             <Text
               fontSize={16}
@@ -86,7 +90,10 @@ export const BottomSheetFilters = forwardRef<
             </Text>
           </SecondaryButton>
 
-          <PrimaryButton style={styles.button} onPress={onApplyFilters}>
+          <SecondaryButton
+            style={{ ...styles.button, backgroundColor: COLORS.brand500 }}
+            onPress={onApplyFilters}
+          >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
@@ -94,7 +101,7 @@ export const BottomSheetFilters = forwardRef<
             >
               {t('kosmos.button.apply')}
             </Text>
-          </PrimaryButton>
+          </SecondaryButton>
         </Row>
       </View>
       <Spacer value={verticalScale(44)} />

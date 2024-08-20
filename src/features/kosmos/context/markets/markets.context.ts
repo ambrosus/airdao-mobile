@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { ethers } from 'ethers';
 import { createContextSelector } from '@utils/createContextSelector';
-import { Token } from '@features/kosmos/types';
+import { Token, TxType } from '@features/kosmos/types';
 
 const KosmosMarketsContext = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -12,6 +12,8 @@ const KosmosMarketsContext = () => {
   const [bnBalance, setBnBalance] = useState<ethers.BigNumber | null>(null);
   const [isBalanceFetching, setIsBalanceFetching] = useState(false);
   const [claimedOrderIds, setClaimedOrderIds] = useState<string[]>([]);
+
+  const [transactions, setTransactions] = useState<TxType[]>([]);
 
   const onToggleMarketTooltip = useCallback((value: boolean) => {
     setIsMarketTooltipVisible(value);
@@ -51,6 +53,8 @@ const KosmosMarketsContext = () => {
     setBnBalance,
     isBalanceFetching,
     setIsBalanceFetching,
+    transactions,
+    setTransactions,
     claimedOrderIds,
     onAppendClaimedOrderId,
     reset
