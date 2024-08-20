@@ -75,6 +75,7 @@ export const TransactionsHistoryTab = ({
       <View style={styles.list}>
         <FlashList
           scrollEnabled={false}
+          nestedScrollEnabled={false}
           data={transactions}
           estimatedItemSize={ESTIMATED_ITEM_SIZE}
           estimatedListSize={ESTIMATED_LIST_SIZE}
