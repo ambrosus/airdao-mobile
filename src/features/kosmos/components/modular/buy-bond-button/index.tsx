@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
+import { useWallet } from '@hooks';
 import { Text } from '@components/base';
 import { PrimaryButton, Toast, ToastType } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -14,8 +15,6 @@ import {
   useBondContracts
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
-import { useBridgeContextData } from '@features/bridge/context';
-import { Cache, CacheKey } from '@lib/cache';
 import Config from '@constants/config';
 import { HomeNavigationProp } from '@appTypes';
 
@@ -35,21 +34,18 @@ export const BuyBondButton = ({
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
 
-  const { selectedAccount } = useBridgeContextData();
+  const { _extractPrivateKey } = useWallet();
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);
   const { amountToBuy } = useKosmosMarketsContextSelector();
 
   const createNewSigner = useCallback(async () => {
-    const privateKey = (await Cache.getItem(
-      // @ts-ignore
-      `${CacheKey.WalletPrivateKey}-${selectedAccount._raw?.hash}`
-    )) as string;
+    const privateKey = await _extractPrivateKey();
 
     const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
     return new ethers.Wallet(privateKey, provider);
-  }, [selectedAccount]);
+  }, [_extractPrivateKey]);
 
   const onBuyBondsPress = useCallback(async () => {
     try {

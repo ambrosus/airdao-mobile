@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useWallet } from '@hooks';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { getBalanceOf } from '@features/kosmos/lib/contracts';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useBridgeContextData } from '@features/bridge/context';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { formatEther } from 'ethers/lib/utils';
@@ -23,7 +23,7 @@ export const BalanceWithButton = ({
   const { t } = useTranslation();
   const { setBnBalance, bnBalance, setIsBalanceFetching } =
     useKosmosMarketsContextSelector();
-  const { selectedAccount } = useBridgeContextData();
+  const { wallet } = useWallet();
   const [balance, setBalance] = useState('');
   const { calculateMaximumAvailableAmount } = useBalance(market, balance);
 
@@ -33,7 +33,7 @@ export const BalanceWithButton = ({
         if (qouteToken) {
           setIsBalanceFetching(true);
           const bnBalance = await getBalanceOf({
-            ownerAddress: selectedAccount?.address ?? '',
+            ownerAddress: wallet?.address ?? '',
             token: qouteToken
           });
 
@@ -46,12 +46,7 @@ export const BalanceWithButton = ({
         setIsBalanceFetching(false);
       }
     })();
-  }, [
-    qouteToken,
-    selectedAccount?.address,
-    setBnBalance,
-    setIsBalanceFetching
-  ]);
+  }, [qouteToken, setBnBalance, setIsBalanceFetching, wallet?.address]);
 
   const onMaxAmountPress = useCallback(() => {
     if (!bnBalance || +balance <= 0) return;
