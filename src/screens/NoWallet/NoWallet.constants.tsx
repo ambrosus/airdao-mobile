@@ -5,7 +5,6 @@ import {
   StayInformedIcon
 } from '@components/svg/icons';
 import { StepInfo } from './components';
-import ShowDeviceInfo from '@components/composite/ShodDeviceinfo';
 
 export const NoWalletSteps: StepInfo[] = [
   {
@@ -22,11 +21,5 @@ export const NoWalletSteps: StepInfo[] = [
     image: <StayInformedIcon />,
     title: 'no.wallet.stay.informed',
     description: 'no.wallet.stay.informed.description'
-  },
-  // only for dev
-  {
-    image: <ShowDeviceInfo />,
-    title: '',
-    description: ''
   }
 ];

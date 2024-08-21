@@ -7,7 +7,6 @@ import { Button } from '@components/base';
 import { PlatformSpecificUtils } from '@utils/platform';
 import { styles } from './styles';
 import { Linking } from 'react-native';
-import ShowDeviceInfo from '@components/composite/ShodDeviceinfo';
 
 // TODO add privacy policy and terms links
 export const AboutScreen = () => {
@@ -32,7 +31,6 @@ export const AboutScreen = () => {
       <Button type="base" onPress={PlatformSpecificUtils.requestReview}>
         <AboutMenutItem title={t('settings.about.rate')} />
       </Button>
-      <ShowDeviceInfo />
     </SafeAreaView>
   );
 };
