@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     width: '100%',
-    height: DEVICE_HEIGHT > 800 ? '95%' : '90%',
+    height: DEVICE_HEIGHT > 800 ? '97%' : '90%',
     backgroundColor: 'white',
     zIndex: 9999
   }
