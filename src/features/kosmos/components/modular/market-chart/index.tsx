@@ -7,7 +7,7 @@ import {
   getTokenPriceForChart,
   getSDAPriceForChart
 } from '@features/kosmos/api';
-import { ChartTooltip } from '@features/kosmos/components/base';
+import { ChartTooltip } from '@features/kosmos/components/composite';
 import { ApiPricesResponse, MarketType } from '@features/kosmos/types';
 import { mapper, replaceTimestamps } from '@features/kosmos/utils';
 import {

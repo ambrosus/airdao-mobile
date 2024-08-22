@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -13,6 +13,7 @@ import {
   RECT_HEIGHT,
   TRIANGLE_HEIGHT
 } from '@features/kosmos/constants';
+import { ChartStrokedArrow } from '../../base';
 import { discountColor } from '@features/kosmos/utils';
 
 interface ChartTooltipProps {
@@ -45,18 +46,29 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
   }, [tooltip.y]);
 
   const triangleStyle = useMemo(() => {
-    return {
+    const isRightDirection = rectX === tooltip.x + TRIANGLE_WIDTH;
+
+    const rightDirectionLeftAxis =
+      rectX - TRIANGLE_WIDTH + (Platform.OS === 'android' ? 3 : -5);
+
+    const leftDirectionLeftAxis =
+      rectX + RECT_WIDTH - (Platform.OS === 'android' ? 1 : 5);
+
+    const commonStyles = {
       top: tooltip.y - TRIANGLE_HEIGHT / 2,
-      left:
-        rectX === tooltip.x + TRIANGLE_WIDTH
-          ? rectX - TRIANGLE_WIDTH - 5
-          : rectX + RECT_WIDTH - 5,
+      left: isRightDirection ? rightDirectionLeftAxis : leftDirectionLeftAxis,
       transform: [
         {
-          rotate: rectX === tooltip.x + TRIANGLE_WIDTH ? '90deg' : '-90deg'
+          rotate: Platform.select({
+            ios: isRightDirection ? '90deg' : '-90deg',
+            android: !isRightDirection ? '0deg' : '-180deg',
+            default: '-90deg'
+          })
         }
       ]
     };
+
+    return commonStyles;
   }, [rectX, tooltip.x, tooltip.y]);
 
   const innerContainerStyle = useMemo(() => {
@@ -115,7 +127,11 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
           {date}
         </Text>
       </View>
-      <View style={[styles.triangle, triangleStyle]} />
+      {Platform.OS === 'ios' ? (
+        <View style={[styles.triangle, triangleStyle]} />
+      ) : (
+        <ChartStrokedArrow styles={triangleStyle} />
+      )}
     </View>
   );
 });

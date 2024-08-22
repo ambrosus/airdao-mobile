@@ -4,7 +4,8 @@ import {
   StyleProp,
   View,
   LayoutChangeEvent,
-  RefreshControl
+  RefreshControl,
+  Platform
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -116,40 +117,44 @@ export const KosmosMarketScreen = ({
     <SafeAreaView style={screenWrapperStyle}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
-      {combinedLoading && (
-        <View style={styles.loader}>
-          <ScreenLoader height="100%" />
-        </View>
-      )}
+      <View style={styles.container}>
+        {combinedLoading && (
+          <View style={styles.loader}>
+            <ScreenLoader height="100%" />
+          </View>
+        )}
 
-      <KeyboardAwareScrollView
-        ref={scrollViewRef}
-        enableOnAndroid
-        refreshControl={renderRefetchController}
-        scrollEnabled={isScrollEnabled}
-        scrollEventThrottle={32}
-        enableResetScrollToCoords={false}
-        showsVerticalScrollIndicator={false}
-        overScrollMode="never"
-        keyboardShouldPersistTaps="handled"
-        onScrollBeginDrag={onScrollBeginDragHandler}
-        scrollToOverflowEnabled={false}
-        extraHeight={300}
-      >
-        <MarketTableDetails
-          market={route.params.market}
-          onHandlerMarketLayout={onHandlerMarketLayout}
-        />
-        <MarketChartsWithTimeframes
-          market={route.params.market}
-          onScrollToMarket={onScrollToMarket}
-        />
-        <ExactMarketTokenTabs
-          market={route.params.market}
-          onScrollToBuyBondsField={onScrollToBuyBondsField}
-          onTabsSwipeStateHandle={onTabsSwipeStateHandle}
-        />
-      </KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          ref={scrollViewRef}
+          enableOnAndroid
+          enableAutomaticScroll
+          refreshControl={renderRefetchController}
+          scrollEnabled={isScrollEnabled}
+          scrollEventThrottle={32}
+          enableResetScrollToCoords={false}
+          showsVerticalScrollIndicator={false}
+          overScrollMode="never"
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={onScrollBeginDragHandler}
+          scrollToOverflowEnabled={false}
+          extraHeight={Platform.select({ android: 220, ios: 300 })}
+        >
+          <MarketTableDetails
+            market={route.params.market}
+            onHandlerMarketLayout={onHandlerMarketLayout}
+          />
+          <MarketChartsWithTimeframes
+            market={route.params.market}
+            onScrollToMarket={onScrollToMarket}
+          />
+          <ExactMarketTokenTabs
+            market={route.params.market}
+            onScrollToBuyBondsField={onScrollToBuyBondsField}
+            onTabsSwipeStateHandle={onTabsSwipeStateHandle}
+          />
+        </KeyboardAwareScrollView>
+      </View>
     </SafeAreaView>
   );
 };
