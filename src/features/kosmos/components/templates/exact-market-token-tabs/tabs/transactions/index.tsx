@@ -2,7 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { TransactionHistoryItem } from '@features/kosmos/components/base';
+import {
+  ScreenLoader,
+  TransactionHistoryItem
+} from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
@@ -26,8 +29,12 @@ export const TransactionsHistoryTab = ({
   const { t } = useTranslation();
 
   const LIST_HEADER_TITLES = ['bonds', t('kosmos.payout'), t('common.date')];
-  const { marketTransactions, quoteToken, payoutToken } =
-    useMarketDetails(market);
+  const {
+    marketTransactions,
+    quoteToken,
+    payoutToken,
+    isMarketTransactionsFetching
+  } = useMarketDetails(market);
 
   const transactions = useMemo(
     () => marketTransactions.sort((a, b) => b.date - a.date),
@@ -72,17 +79,21 @@ export const TransactionsHistoryTab = ({
         ))}
       </Row>
 
-      <View style={styles.list}>
-        <FlashList
-          scrollEnabled={false}
-          nestedScrollEnabled={false}
-          data={transactions}
-          estimatedItemSize={ESTIMATED_ITEM_SIZE}
-          estimatedListSize={ESTIMATED_LIST_SIZE}
-          keyExtractor={(item) => item.txHash}
-          renderItem={renderTransactionListItem}
-        />
-      </View>
+      {isMarketTransactionsFetching ? (
+        <ScreenLoader height="75%" />
+      ) : (
+        <View style={styles.list}>
+          <FlashList
+            scrollEnabled={false}
+            nestedScrollEnabled={false}
+            data={transactions}
+            estimatedItemSize={ESTIMATED_ITEM_SIZE}
+            estimatedListSize={ESTIMATED_LIST_SIZE}
+            keyExtractor={(item) => item.txHash}
+            renderItem={renderTransactionListItem}
+          />
+        </View>
+      )}
     </View>
   );
 };
