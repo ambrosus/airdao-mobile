@@ -22,6 +22,8 @@ export function useMarketDetails(market: MarketType) {
   const { extractTokenCb } = useExtractToken();
   const payoutToken = extractTokenCb(market.payoutToken);
   const quoteToken = extractTokenCb(market.quoteToken);
+  const [isMarketTransactionsFetching, setIsMarketTransactionsFetching] =
+    useState(false);
 
   const [protocolFee, setProtocolFee] = useState(0);
   const [marketTransactions, setMarketTransactions] = useState<TxType[]>([]);
@@ -42,9 +44,12 @@ export function useMarketDetails(market: MarketType) {
   }, []);
 
   useEffect(() => {
-    getMarketTxs(market.id).then((response) =>
-      setMarketTransactions(response.data)
-    );
+    setIsMarketTransactionsFetching(true);
+    getMarketTxs(market.id)
+      .then((response) => setMarketTransactions(response.data))
+      .finally(() => {
+        setIsMarketTransactionsFetching(false);
+      });
   }, [market.id]);
 
   const assetValue = useMemo(() => {
@@ -138,6 +143,7 @@ export function useMarketDetails(market: MarketType) {
     willGetSubFee,
     willGetWithArguments,
     marketTransactions,
-    fetchMarketById
+    fetchMarketById,
+    isMarketTransactionsFetching
   };
 }
