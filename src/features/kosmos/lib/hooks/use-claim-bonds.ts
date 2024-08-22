@@ -1,11 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
 // @ts-ignore
 import { ContractNames, Methods } from '@airdao/airdao-bond';
-import { useBridgeContextData } from '@features/bridge/context';
 import { TxType } from '@features/kosmos/types';
 import { useBondContracts } from './use-bond-contracts';
-import { Cache, CacheKey } from '@lib/cache';
+import { useWallet } from '@hooks';
 import { claimBond } from '../contracts';
-import { Dispatch, SetStateAction } from 'react';
 import { useTransactions } from './use-transactions';
 
 export function useClaimBonds(
@@ -13,17 +12,14 @@ export function useClaimBonds(
   setIsOrderClaiming: Dispatch<SetStateAction<boolean>>
 ) {
   const { contracts } = useBondContracts();
-  const { selectedAccount } = useBridgeContextData();
+  const { _extractPrivateKey } = useWallet();
   const { refetchTransactions } = useTransactions();
 
   const onClaimButtonPress = async (contractName: string) => {
     try {
       const { version, txHash, payoutToken, payoutAmount, vesting, eventId } =
         transaction;
-      const privateKey = (await Cache.getItem(
-        // @ts-ignore
-        `${CacheKey.WalletPrivateKey}-${selectedAccount._raw?.hash}`
-      )) as string;
+      const privateKey = await _extractPrivateKey();
 
       let idOrAddress = transaction.eventId;
       if (version === 'v1') {
@@ -38,9 +34,6 @@ export function useClaimBonds(
             : eventId;
       }
 
-      // disableOrders = getFromLocalStorage('savedHashes');
-      // disableOrders[hash] = true;
-      // localStorage.setItem('savedHashes', JSON.stringify(disableOrders));
       const tx = await claimBond({
         contracts,
         contractName,

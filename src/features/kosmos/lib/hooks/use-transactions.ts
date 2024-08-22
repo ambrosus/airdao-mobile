@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useWallet } from '@hooks';
 import { TxType } from '@features/kosmos/types';
 import { fetchMarketTransactions } from '@features/kosmos/api';
-import { useBridgeContextData } from '@features/bridge/context';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 const VERSIONS = ['v1', 'v2'];
 
 export function useTransactions() {
-  const { selectedAccount } = useBridgeContextData();
+  const { wallet } = useWallet();
   const [loading, setLoading] = useState(false);
   const { transactions, setTransactions } = useKosmosMarketsContextSelector();
 
   const fetchTransactions = useCallback(() => {
-    if (!selectedAccount?.address) return;
+    if (!wallet?.address) return;
 
     const controller = new AbortController();
 
@@ -21,7 +21,7 @@ export function useTransactions() {
       VERSIONS.map(async (version) => {
         const response = await fetchMarketTransactions(
           version,
-          selectedAccount.address,
+          wallet.address,
           controller
         );
         return response.data.map((tx: TxType) => ({
@@ -36,7 +36,7 @@ export function useTransactions() {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedAccount, setTransactions]);
+  }, [wallet, setTransactions]);
 
   useEffect(() => {
     if (transactions.length === 0) {

@@ -6,3 +6,4 @@ export * from './Navigation';
 export * from './SendCrypto';
 export * from './Passcode';
 export * from './Staking';
+export * from './Wallet';

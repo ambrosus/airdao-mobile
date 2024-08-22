@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Contracts } from '@airdao/airdao-bond';
 import { ethers } from 'ethers';
-import { useBridgeContextData } from '@features/bridge/context';
-import { Cache, CacheKey } from '@lib/cache';
+import { useWallet } from '@hooks';
 import Config from '@constants/config';
 
 export function useBondContracts() {
-  const { selectedAccount } = useBridgeContextData();
+  const { _extractPrivateKey } = useWallet();
   const [contracts, setContracts] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const privateKey = (await Cache.getItem(
-          // @ts-ignore
-          `${CacheKey.WalletPrivateKey}-${selectedAccount._raw?.hash}`
-        )) as string;
+        const privateKey = await _extractPrivateKey();
         const provider = new ethers.providers.JsonRpcProvider(
           Config.NETWORK_URL
         );
@@ -28,7 +24,7 @@ export function useBondContracts() {
         throw error;
       }
     })();
-  }, [selectedAccount]);
+  }, [_extractPrivateKey]);
 
   return { contracts };
 }

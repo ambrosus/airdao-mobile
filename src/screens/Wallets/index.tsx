@@ -7,7 +7,7 @@ import {
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { Spacer } from '@components/base';
-import { useBalanceOfAddress } from '@hooks';
+import { useBalanceOfAddress, useWallet } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
@@ -20,6 +20,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {
+  const { onChangeSelectedWallet } = useWallet();
   const { data: accounts } = useAllAccounts();
   const [scrollIdx, setScrollIdx] = useState(0);
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
@@ -47,10 +48,12 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     if (accounts.length > 0) {
-      WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
-      setSelectedAccount(accounts[scrollIdx]);
+      const account = accounts[scrollIdx];
+      WalletUtils.changeSelectedWallet(account?.wallet?.id);
+      setSelectedAccount(account);
+      onChangeSelectedWallet(account);
     }
-  }, [accounts, scrollIdx, setSelectedAccount]);
+  }, [accounts, onChangeSelectedWallet, scrollIdx, setSelectedAccount]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
