@@ -115,8 +115,6 @@ export const MarketChart = ({
     [chartInterval]
   );
 
-  console.log(marketPrices, bondPrices);
-
   useEffect(() => {
     const controller = new AbortController();
     fetchChartPoints(controller);
