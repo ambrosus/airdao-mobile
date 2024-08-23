@@ -13,30 +13,24 @@ export function timestampToFormatedDate(
   return timestampToDate(timestamp).format(format);
 }
 
-export function replaceTimestamps<
-  T extends { timestamp: number; price: number }
->(array1: T[], array2: T[]): { timestamp: number; price: number }[] {
-  const result: { timestamp: number; price: number }[] = [];
+export const replaceTimestamps = (array1: any[], array2: any[]): any[] => {
+  const result = [];
   let i = 0;
   let j = 0;
 
   while (i < array1.length && j < array2.length) {
-    const diff1 = Math.abs(array1[i].timestamp - array2[j].timestamp);
-    const diff2 =
-      j + 1 < array2.length
-        ? Math.abs(array1[i].timestamp - array2[j + 1].timestamp)
-        : Infinity;
-
-    if (diff1 <= diff2) {
+    if (
+      Math.abs(array1[i].timestamp - array2[j].timestamp) <=
+      Math.abs(array1[i].timestamp - (array2[j + 1]?.timestamp || Infinity))
+    ) {
       result.push({ timestamp: array2[j].timestamp, price: array1[i].price });
       i++;
     } else {
       j++;
     }
   }
-
   return result;
-}
+};
 
 export function getTimeRemaining(timestamp: number): string {
   const now: number = new Date().getTime();
