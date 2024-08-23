@@ -57,46 +57,53 @@ export const MarketChart = ({
     async (controller: AbortController) => {
       try {
         if (!isFirstTimeLoaded) setIsExactMarketLoading(true);
+
         const now = new Date();
         const from = chartInterval
           ? now.getTime() - chartInterval
           : market.start;
 
-        const { data: prices } = await getTokenPriceForChart(
+        getTokenPriceForChart(
           tokenAddress,
           from,
-          now.getTime(),
+          new Date().getTime(),
           controller.signal
-        );
+        )
+          .then((res) => {
+            const market: number[][] = [];
+            const bond: number[][] = [];
 
-        const markets: number[][] = [];
-        const bonds: number[][] = [];
+            res.data.forEach((el: ApiPricesResponse) => {
+              market.push([el.timestamp, el.price]);
+              bond.push([el.timestamp, fpaPrice ?? 0]);
+            });
+            if (fpaPrice) {
+              setMarketPrices(market);
+              setBondPrices(bond);
+            } else {
+              setMarketPrices(market);
+            }
 
-        prices.forEach((element: ApiPricesResponse) => {
-          markets.push([element.timestamp, element.price]);
-          bonds.push([element.timestamp, fpaPrice ?? 0]);
-        });
-
-        setMarketPrices(markets);
-
-        if (fpaPrice) {
-          setBondPrices(bonds);
-        } else {
-          getSDAPriceForChart(
-            marketId,
-            from,
-            now.getTime(),
-            controller.signal
-          ).then(({ data }) => {
-            setBondPrices([
-              ...replaceTimestamps(data, markets as any).map((el) => [
-                el.timestamp,
-                quotePrice ?? 0 / el.price
-              ]),
-              [markets[markets.length - 1][0], askingPrice]
-            ]);
+            return res.data;
+          })
+          .then((market) => {
+            if (!fpaPrice) {
+              getSDAPriceForChart(
+                marketId,
+                from,
+                new Date().getTime(),
+                controller.signal
+              ).then(({ data }) => {
+                setBondPrices([
+                  ...replaceTimestamps(data, market).map((el) => [
+                    el.timestamp,
+                    quotePrice ?? 0 / el.price
+                  ]),
+                  [market[market.length - 1].timestamp, askingPrice]
+                ]);
+              });
+            }
           });
-        }
       } catch (error) {
         throw error;
       } finally {
