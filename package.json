@@ -30,6 +30,7 @@
     "@neverdull-agency/expo-unlimited-secure-store": "^1.0.10",
     "@nozbe/watermelondb": "^0.27.1",
     "@nozbe/with-observables": "^1.6.0",
+    "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-firebase/analytics": "^17.5.0",
     "@react-native-firebase/app": "^17.5.0",
