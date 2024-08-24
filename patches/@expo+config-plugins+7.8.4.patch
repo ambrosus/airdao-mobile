@@ -1,0 +1,13 @@
+diff --git a/node_modules/@expo/config-plugins/build/android/GoogleServices.js b/node_modules/@expo/config-plugins/build/android/GoogleServices.js
+index 181831d..6c61e92 100644
+--- a/node_modules/@expo/config-plugins/build/android/GoogleServices.js
++++ b/node_modules/@expo/config-plugins/build/android/GoogleServices.js
+@@ -49,7 +49,7 @@ const googleServicesClassPath = 'com.google.gms:google-services';
+ const googleServicesPlugin = 'com.google.gms.google-services';
+ 
+ // NOTE(brentvatne): This may be annoying to keep up to date...
+-const googleServicesVersion = '4.3.3';
++const googleServicesVersion = '4.4.1';
+ const withClassPath = config => {
+   return (0, _androidPlugins().withProjectBuildGradle)(config, config => {
+     if (config.modResults.language === 'groovy') {

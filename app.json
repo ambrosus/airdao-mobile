@@ -22,7 +22,10 @@
       "bundleIdentifier": "io.airdao.app",
       "googleServicesFile": "./firebase/GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ],
         "NSCameraUsageDescription": "You can scan QR code to search addresses.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to access FaceID"
@@ -101,7 +104,7 @@
             }
           }
         }
-      ],
+      ],    
       ["./plugins/withNotifications.js"],
       ["./plugins/withSupportsScreenAndroid.js"],
       ["./plugins/withSecureFlag.js"]
