@@ -3,7 +3,7 @@ import { SWAP_SUPPORTED_TOKENS, TOKEN_ADDRESSES } from '../entities';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
-export const isMultiHopSwapAvaliable = (path: string[]): boolean => {
+export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return !!extractArrayOfMiddleMultiHopAddresses(path).address;
 };
 

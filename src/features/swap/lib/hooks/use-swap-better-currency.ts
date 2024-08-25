@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import {
   addresses,
-  isMultiHopSwapAvaliable,
+  isMultiHopSwapAvailable,
   extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { getObjectKeyByValue } from '@utils/object';
@@ -97,7 +97,7 @@ export function useSwapBetterCurrency() {
       const { multihops } = settings.current;
       const tradeIn = isExactInRef.current;
 
-      const isMultiHopRouteSupported = isMultiHopSwapAvaliable(path);
+      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
       const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
 
       let singleHopAmount: BigNumber = BigNumber.from('0');
@@ -181,7 +181,7 @@ export function useSwapBetterCurrency() {
       const tradeIn = isExactInRef.current;
       const { multihops } = settings.current;
 
-      const isMultiHopRouteSupported = isMultiHopSwapAvaliable(path);
+      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
 
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let multiHopAmount: BigNumber = BigNumber.from('0');

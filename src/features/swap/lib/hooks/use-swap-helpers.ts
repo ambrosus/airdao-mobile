@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import {
   wrapNativeAddress,
   isNativeWrapped,
-  isMultiHopSwapAvaliable
+  isMultiHopSwapAvailable
 } from '@features/swap/utils';
 import { Cache, CacheKey } from '@lib/cache';
 
@@ -46,7 +46,7 @@ export function useSwapHelpers() {
 
   const isMultiHopSwap = useMemo(() => {
     const { addressA, addressB } = executedTokensAddresses;
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable([
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable([
       addressA ?? '',
       addressB ?? ''
     ]);

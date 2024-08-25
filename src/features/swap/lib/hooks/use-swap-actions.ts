@@ -17,7 +17,7 @@ import {
   wrapNativeAddress,
   isETHtoWrapped,
   isWrappedToETH,
-  isMultiHopSwapAvaliable
+  isMultiHopSwapAvailable
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -96,7 +96,7 @@ export function useSwapActions() {
     const signer = createSigner(await _privateKeyGetter());
     const { slippageTolerance, deadline, multihops } = settings.current;
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(excludeNativeETH);
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
 
     const isMultiHopSwapPossible =
       multihops &&
