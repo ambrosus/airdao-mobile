@@ -1,5 +1,6 @@
 import Config from '@constants/config';
 import axios from 'axios';
+import { MarketType, TxType } from '../types';
 
 export async function getProtocolFee() {
   return axios
@@ -31,12 +32,18 @@ export async function getSDAPriceForChart(
   );
 }
 
-export async function getMarketTxs(marketId: string) {
-  return axios.get(
+export async function getMarketTxs(marketId: string): Promise<TxType[]> {
+  const response = await axios.get(
     `${Config.MARKETPLACE_URL}/v2/api/transactions/all/market?marketId=${marketId}`
   );
+
+  return await response.data;
 }
 
-export async function getMarketData(id: string) {
-  return axios.get(`${Config.MARKETPLACE_URL}/v2/api/markets/${id}`);
+export async function getMarketData(id: string): Promise<MarketType> {
+  const response = await axios.get(
+    `${Config.MARKETPLACE_URL}/v2/api/markets/${id}`
+  );
+
+  return await response.data;
 }

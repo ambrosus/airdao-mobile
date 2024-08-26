@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { ethers } from 'ethers';
 import { useWallet } from '@hooks';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
@@ -8,7 +9,6 @@ import { getBalanceOf } from '@features/kosmos/lib/contracts';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
-import { formatEther } from 'ethers/lib/utils';
 import { useBalance } from '@features/kosmos/lib/hooks';
 
 interface BalanceWithButtonProps {
@@ -28,25 +28,39 @@ export const BalanceWithButton = ({
   const { calculateMaximumAvailableAmount } = useBalance(market, balance);
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (qouteToken) {
-          setIsBalanceFetching(true);
-          const bnBalance = await getBalanceOf({
-            ownerAddress: wallet?.address ?? '',
-            token: qouteToken
-          });
+    if (!qouteToken || balance !== '' || bnBalance) return;
 
-          setBalance(
-            NumberUtils.limitDecimalCount(formatEther(bnBalance?._hex), 2)
-          );
+    const fetchBalance = async () => {
+      try {
+        setIsBalanceFetching(true);
+        const bnBalance = await getBalanceOf({
+          ownerAddress: wallet?.address ?? '',
+          token: qouteToken
+        });
+
+        const formattedBalance = NumberUtils.limitDecimalCount(
+          ethers.utils.formatEther(bnBalance?._hex),
+          2
+        );
+
+        if (formattedBalance !== balance) {
+          setBalance(formattedBalance);
           setBnBalance(bnBalance);
         }
       } finally {
         setIsBalanceFetching(false);
       }
-    })();
-  }, [qouteToken, setBnBalance, setIsBalanceFetching, wallet?.address]);
+    };
+
+    fetchBalance();
+  }, [
+    balance,
+    bnBalance,
+    qouteToken,
+    setBnBalance,
+    setIsBalanceFetching,
+    wallet?.address
+  ]);
 
   const onMaxAmountPress = useCallback(() => {
     if (!bnBalance || +balance <= 0) return;

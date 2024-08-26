@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType, TxType } from '@features/kosmos/types';
+import { MarketType } from '@features/kosmos/types';
 import { useExtractToken } from './use-extract-token';
 import {
   MAINNET_VESTINGS,
@@ -9,48 +9,20 @@ import {
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
-import {
-  getMarketData,
-  getMarketTxs,
-  getProtocolFee
-} from '@features/kosmos/api';
+import { getProtocolFee } from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 
 export function useMarketDetails(market: MarketType) {
-  const { tokens, amountToBuy, setIsExactMarketLoading } =
-    useKosmosMarketsContextSelector();
+  const { tokens, amountToBuy } = useKosmosMarketsContextSelector();
   const { extractTokenCb } = useExtractToken();
   const payoutToken = extractTokenCb(market.payoutToken);
   const quoteToken = extractTokenCb(market.quoteToken);
-  const [isMarketTransactionsFetching, setIsMarketTransactionsFetching] =
-    useState(false);
 
   const [protocolFee, setProtocolFee] = useState(0);
-  const [marketTransactions, setMarketTransactions] = useState<TxType[]>([]);
-
-  const fetchMarketById = useCallback(async () => {
-    try {
-      setIsExactMarketLoading(true);
-      return await getMarketData(market.id);
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsExactMarketLoading(false);
-    }
-  }, [market.id, setIsExactMarketLoading]);
 
   useEffect(() => {
     getProtocolFee().then((response) => setProtocolFee(response));
   }, []);
-
-  useEffect(() => {
-    setIsMarketTransactionsFetching(true);
-    getMarketTxs(market.id)
-      .then((response) => setMarketTransactions(response.data))
-      .finally(() => {
-        setIsMarketTransactionsFetching(false);
-      });
-  }, [market.id]);
 
   const assetValue = useMemo(() => {
     return (
@@ -141,9 +113,6 @@ export function useMarketDetails(market: MarketType) {
     protocolFee,
     willGet,
     willGetSubFee,
-    willGetWithArguments,
-    marketTransactions,
-    fetchMarketById,
-    isMarketTransactionsFetching
+    willGetWithArguments
   };
 }

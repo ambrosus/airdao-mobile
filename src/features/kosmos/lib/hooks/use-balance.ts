@@ -13,7 +13,7 @@ export function useBalance(market: MarketType, balance: string) {
 
   const calculateNewAmount = useCallback(
     (amount: ethers.BigNumber) => {
-      const wg = willGetWithArguments('1');
+      const wg = willGetWithArguments('1') ?? ethers.BigNumber.from('1');
       const result = amount.mul(BigNumber.from(10).pow(18)).div(wg);
       return (
         Math.floor(+utils.formatUnits(result, 18) * 1000000) / 1000000
@@ -29,7 +29,7 @@ export function useBalance(market: MarketType, balance: string) {
     let newAmount;
     if (bnBalance?.gt(availableAmount) && maxPayout.gt(availableAmount)) {
       newAmount = calculateNewAmount(availableAmount);
-    } else if (willGetWithArguments(balance).gt(maxPayout)) {
+    } else if (willGetWithArguments(balance)?.gt(maxPayout)) {
       newAmount = calculateNewAmount(maxPayout);
     } else {
       newAmount = balance;

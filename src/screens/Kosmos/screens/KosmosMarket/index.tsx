@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  ViewStyle,
-  StyleProp,
+  Text,
   View,
   LayoutChangeEvent,
   RefreshControl,
+  InteractionManager,
   Platform
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -16,15 +16,17 @@ import {
   MarketHeaderDetails,
   ScreenLoader
 } from '@features/kosmos/components/base';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { HomeParamsList } from '@appTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardDismissingView } from '@components/base';
+import { useMarketByIdQuery } from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
   ExactMarketTokenTabs,
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useExtractToken, useMarketDetails } from '@features/kosmos/lib/hooks';
-import { HomeParamsList } from '@appTypes';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -43,23 +45,25 @@ export const KosmosMarketScreen = ({
   } = useKosmosMarketsContextSelector();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
-  const { fetchMarketById } = useMarketDetails(route.params.market);
 
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
-  const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
-  const screenWrapperStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      flex: 1
-    };
-  }, []);
+  const { market, refetch, isLoading } = useMarketByIdQuery(
+    route.params.market.id
+  );
 
   const renderHeaderMiddleContent = useMemo(() => {
     const tokenSymbol = token?.symbol ?? '';
     return <MarketHeaderDetails tokenSymbol={tokenSymbol} />;
   }, [token?.symbol]);
 
-  const onScrollBeginDragHandler = () => onToggleMarketTooltip(false);
+  const onScrollBeginDragHandler = useCallback(
+    () =>
+      InteractionManager.runAfterInteractions(() =>
+        onToggleMarketTooltip(false)
+      ),
+    [onToggleMarketTooltip]
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -76,23 +80,16 @@ export const KosmosMarketScreen = ({
     },
     [marketLayoutYAxis]
   );
-  const onPullToRefreshMarket = useCallback(async () => {
-    const response = await fetchMarketById();
-
-    if (response) {
-      navigation.setParams({ market: response.data });
-    }
-  }, [fetchMarketById, navigation]);
 
   const renderRefetchController = useMemo(
     () => (
       <RefreshControl
-        onRefresh={onPullToRefreshMarket}
+        onRefresh={refetch}
         refreshing={isExactMarketLoading}
         removeClippedSubviews
       />
     ),
-    [isExactMarketLoading, onPullToRefreshMarket]
+    [isExactMarketLoading, refetch]
   );
 
   const onScrollToMarket = useCallback(
@@ -105,55 +102,43 @@ export const KosmosMarketScreen = ({
   }, []);
 
   const combinedLoading = useMemo(() => {
-    return isBalanceFetching || isExactMarketLoading;
-  }, [isBalanceFetching, isExactMarketLoading]);
-
-  const onTabsSwipeStateHandle = useCallback(
-    (state: boolean) => setIsScrollEnabled(!state),
-    []
-  );
+    return isBalanceFetching || isExactMarketLoading || isLoading;
+  }, [isBalanceFetching, isExactMarketLoading, isLoading]);
 
   return (
-    <SafeAreaView style={screenWrapperStyle}>
+    <SafeAreaView style={styles.container}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
       <View style={styles.container}>
-        {combinedLoading && (
+        {!market || combinedLoading ? (
           <View style={styles.loader}>
             <ScreenLoader height="100%" />
           </View>
+        ) : (
+          <KeyboardAwareScrollView
+            overScrollMode="never"
+            enableOnAndroid
+            enableAutomaticScroll
+            scrollToOverflowEnabled={false}
+            nestedScrollEnabled
+            extraHeight={Platform.select({ android: 0, ios: 300 })}
+            onMomentumScrollBegin={onScrollBeginDragHandler}
+            refreshControl={renderRefetchController}
+          >
+            <MarketTableDetails
+              market={market}
+              onHandlerMarketLayout={onHandlerMarketLayout}
+            />
+            <MarketChartsWithTimeframes
+              market={market}
+              onScrollToMarket={onScrollToMarket}
+            />
+            <ExactMarketTokenTabs
+              market={market}
+              onScrollToBuyBondsField={onScrollToBuyBondsField}
+            />
+          </KeyboardAwareScrollView>
         )}
-
-        <KeyboardAwareScrollView
-          ref={scrollViewRef}
-          enableOnAndroid
-          enableAutomaticScroll
-          refreshControl={renderRefetchController}
-          scrollEnabled={isScrollEnabled}
-          scrollEventThrottle={32}
-          enableResetScrollToCoords={false}
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          onScrollBeginDrag={onScrollBeginDragHandler}
-          scrollToOverflowEnabled={false}
-          extraHeight={Platform.select({ android: 220, ios: 300 })}
-        >
-          <MarketTableDetails
-            market={route.params.market}
-            onHandlerMarketLayout={onHandlerMarketLayout}
-          />
-          <MarketChartsWithTimeframes
-            market={route.params.market}
-            onScrollToMarket={onScrollToMarket}
-          />
-          <ExactMarketTokenTabs
-            market={route.params.market}
-            onScrollToBuyBondsField={onScrollToBuyBondsField}
-            onTabsSwipeStateHandle={onTabsSwipeStateHandle}
-          />
-        </KeyboardAwareScrollView>
       </View>
     </SafeAreaView>
   );

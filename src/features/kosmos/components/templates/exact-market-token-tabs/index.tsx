@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { InteractionManager } from 'react-native';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
@@ -9,34 +8,15 @@ import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType;
-  onScrollToBuyBondsField: () => void;
-  onTabsSwipeStateHandle: (state: boolean) => void;
 }
 
-export const ExactMarketTokenTabs = ({
-  market,
-  onScrollToBuyBondsField,
-  onTabsSwipeStateHandle
-}: ExactMarketTokenTabsProps) => {
+export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
-  const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0);
-
-  const onChangedIndex = useCallback(
-    (index: number) => {
-      setCurrentFocusedIndex(index);
-
-      if (index === 0)
-        InteractionManager.runAfterInteractions(onScrollToBuyBondsField);
-    },
-    [onScrollToBuyBondsField]
-  );
 
   return (
     <AnimatedTabs
       keyboardShouldPersistTaps="handled"
       dismissOnChangeIndex
-      onSwipeStateHandle={onTabsSwipeStateHandle}
-      onChangedIndex={onChangedIndex}
       containerStyle={styles.container}
       tabs={[
         {
@@ -45,12 +25,7 @@ export const ExactMarketTokenTabs = ({
         },
         {
           title: t('kosmos.market.tabs.history'),
-          view: (
-            <TransactionsHistoryTab
-              focused={currentFocusedIndex === 1}
-              market={market}
-            />
-          )
+          view: <TransactionsHistoryTab market={market} />
         }
       ]}
     />

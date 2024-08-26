@@ -3,13 +3,13 @@ import { getTokenByAddress } from './token-by-address';
 import {
   FiltersState,
   MarketType,
-  PaymetsTokens,
+  PaymentTokens,
   StatusFilterValues,
   Token
 } from '../types';
 
 export const INITIAL_FILTERS: FiltersState = {
-  status: i18n.t('kosmos.status.all'),
+  status: i18n.t('kosmos.status.active'),
   payment: null
 };
 
@@ -25,23 +25,23 @@ function filterByStatus(
       return closedMarkets;
     case i18n.t('kosmos.status.all'):
     default:
-      return [...markets, ...closedMarkets];
+      return markets;
   }
 }
 
 function filterMarketsByToken(
   markets: MarketType[],
-  token: PaymetsTokens,
+  token: PaymentTokens,
   tokens: Token[]
 ): MarketType[] {
   return markets.filter((market) => {
-    const qouteToken = getTokenByAddress(market.quoteToken, tokens);
-    return qouteToken && qouteToken.symbol === token;
+    const quoteToken = getTokenByAddress(market.quoteToken, tokens);
+    return quoteToken && quoteToken.symbol === token;
   });
 }
 
 function filterByPayment(
-  token: PaymetsTokens,
+  token: PaymentTokens,
   markets: MarketType[],
   tokens: Token[]
 ): MarketType[] {
@@ -59,5 +59,5 @@ export const filter = (
 
   if (payment) return filterByPayment(payment, filteredMarkets, tokens);
 
-  return filteredMarkets;
+  return filteredMarkets ?? [];
 };
