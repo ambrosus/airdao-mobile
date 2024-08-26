@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  Text,
   View,
   LayoutChangeEvent,
   RefreshControl,
@@ -10,6 +9,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import {
@@ -19,8 +19,6 @@ import {
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardDismissingView } from '@components/base';
 import { useMarketByIdQuery } from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
@@ -33,10 +31,7 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
   'KosmosMarketScreen'
 >;
 
-export const KosmosMarketScreen = ({
-  navigation,
-  route
-}: KosmosMarketScreenProps) => {
+export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const {
     onToggleMarketTooltip,
     isExactMarketLoading,
@@ -97,10 +92,6 @@ export const KosmosMarketScreen = ({
     [marketLayoutYAxis]
   );
 
-  const onScrollToBuyBondsField = useCallback(() => {
-    scrollViewRef.current?.scrollToPosition(0, 0, true);
-  }, []);
-
   const combinedLoading = useMemo(() => {
     return isBalanceFetching || isExactMarketLoading || isLoading;
   }, [isBalanceFetching, isExactMarketLoading, isLoading]);
@@ -133,10 +124,7 @@ export const KosmosMarketScreen = ({
               market={market}
               onScrollToMarket={onScrollToMarket}
             />
-            <ExactMarketTokenTabs
-              market={market}
-              onScrollToBuyBondsField={onScrollToBuyBondsField}
-            />
+            <ExactMarketTokenTabs market={market} />
           </KeyboardAwareScrollView>
         )}
       </View>
