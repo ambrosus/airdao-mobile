@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { InteractionManager } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
@@ -29,15 +30,14 @@ export const SubmitSwapActions = () => {
 
   const simulateNavigationDelay = useCallback(
     async (navigate: () => void) => {
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
-
       onReviewSwapDismiss();
 
-      await delay(320);
+      InteractionManager.runAfterInteractions(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 320));
 
-      navigate();
-      setIsProcessingSwap(false);
+        navigate();
+        setIsProcessingSwap(false);
+      });
     },
     [onReviewSwapDismiss, setIsProcessingSwap]
   );
