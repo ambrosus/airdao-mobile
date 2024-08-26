@@ -113,13 +113,18 @@ export async function swapMultiHopExactTokensForTokens(
   const intermediateSwapFunction = getSwapFunction(addressFrom, middleAddress);
   const finalSwapFunction = getSwapFunction(middleAddress, addressTo);
 
+  const wrappedETHAddress =
+    middleAddress === ethers.constants.AddressZero
+      ? addresses.SAMB
+      : middleAddress;
+
   if (!intermediateSwapFunction || !finalSwapFunction) {
     throw new Error('Invalid path configuration');
   }
 
   const intermediateSwapResult = await intermediateSwapFunction(
     amountToSell,
-    [excludeNativeETH[0], middleAddress],
+    [excludeNativeETH[0], wrappedETHAddress],
     signer,
     slippageTolerance,
     deadline
@@ -133,7 +138,7 @@ export async function swapMultiHopExactTokensForTokens(
   if (intermediateSwapResult) {
     return await finalSwapFunction(
       formatEther(bnIntermediateAmountToReceive),
-      [middleAddress, excludeNativeETH[1]],
+      [wrappedETHAddress, excludeNativeETH[1]],
       signer,
       slippageTolerance,
       deadline

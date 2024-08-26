@@ -19,7 +19,9 @@ export const extractMiddleAddressMultiHop = (path: string[]): string => {
 };
 
 export const extractArrayOfMiddleMultiHopAddresses = (path: string[]) => {
-  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment];
+  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment].filter(
+    (token) => token.symbol !== 'SAMB'
+  );
 
   const filterByAddress = tokens.filter((token) => {
     return !path.includes(token.address);
