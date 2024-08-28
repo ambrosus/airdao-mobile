@@ -1,8 +1,8 @@
 import {
   SelectedTokensAmountState,
   SelectedTokensState,
-  UIBottomSheetInformationState,
-  Settings
+  Settings,
+  UIBottomSheetInformationState
 } from '../types';
 import { SWAP_SUPPORTED_TOKENS } from '../entities';
 import { environment } from '@utils/environment';
@@ -13,7 +13,8 @@ export const INITIAL_DEADLINE = '20';
 export const INITAL_SETTINGS: Settings = {
   slippageTolerance: INITIAL_SLIPPAGE_TOLLERANCE,
   deadline: INITIAL_DEADLINE,
-  multihops: true,
+  //temporarily turn off multihops
+  multihops: false,
   extendedMode: false
 };
 
