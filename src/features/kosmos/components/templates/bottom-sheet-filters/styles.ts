@@ -22,8 +22,7 @@ export const styles = StyleSheet.create({
     height: 45
   },
   buttonText: {
-    letterSpacing: -0.32,
-    lineHeight: 21
+    height: '110%'
   },
   primaryButton: {
     backgroundColor: COLORS.brand500
