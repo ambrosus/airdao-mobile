@@ -4,12 +4,13 @@ import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import {
-  SwapStringUtils,
+  addresses,
   isETHtoWrapped,
   isWrappedToETH,
   maximumAmountOut,
   minimumAmountOut,
-  realizedLPFee
+  realizedLPFee,
+  SwapStringUtils
 } from '@features/swap/utils';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapActions } from './use-swap-actions';
@@ -18,6 +19,7 @@ import { useSwapTokens } from './use-swap-tokens';
 import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapInterface() {
+  const { isMultiHopSwapBetterCurrency } = useSwapContextSelector();
   const { setUiBottomSheetInformation, _refExactGetter } =
     useSwapContextSelector();
 
@@ -25,7 +27,7 @@ export function useSwapInterface() {
     useSwapBottomSheetHandler();
 
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance } = useSwapActions();
+  const { checkAllowance, setAllowance } = useSwapActions();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
@@ -58,6 +60,30 @@ export function useSwapInterface() {
 
       const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
       const allowance = await checkAllowance();
+      const middleTokenAllowance = await (async () => {
+        if (isMultiHopSwapBetterCurrency.state) {
+          const middleTokenAddress =
+            // @ts-ignore
+            addresses[isMultiHopSwapBetterCurrency.token];
+          const status = await checkAllowance();
+          return {
+            status,
+            middleTokenAddress
+          };
+        }
+        return {
+          status: false,
+          middleTokenAddress: ''
+        };
+      })();
+
+      if (middleTokenAllowance.status) {
+        await setAllowance(middleTokenAllowance.middleTokenAddress);
+      }
+
+      // console.log('REALL-ALLOWENCE', allowance);
+      // console.log('middle token', isMultiHopSwapBetterCurrency);
+      // console.log('MIDDLE-ALLOWENCE', middleTokenAllowance);
 
       if (
         typeof priceImpact === 'number' &&

@@ -14,10 +14,10 @@ import {
 import { useBridgeContextData } from '@features/bridge/context';
 import { Cache, CacheKey } from '@lib/cache';
 import {
-  wrapNativeAddress,
   isETHtoWrapped,
+  isMultiHopSwapAvailable,
   isWrappedToETH,
-  isMultiHopSwapAvailable
+  wrapNativeAddress
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -37,60 +37,69 @@ export function useSwapActions() {
   const { _privateKeyGetter, isStartsWithETH, isEndsWithETH } =
     useSwapHelpers();
 
-  const checkAllowance = useCallback(async () => {
-    try {
-      const privateKey = (await Cache.getItem(
-        // @ts-ignore
-        `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
-      )) as string;
+  const checkAllowance = useCallback(
+    // @ts-ignore
+    async (token: string = tokenToSell.TOKEN?.address) => {
+      // console.log('TOKEN-to allowence', token);
+      try {
+        const privateKey = (await Cache.getItem(
+          // @ts-ignore
+          `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
+        )) as string;
 
-      const bnAmountToSell = ethers.utils.parseEther(tokenToSell.AMOUNT);
-
-      return checkIsApprovalRequired({
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        address: tokenToSell.TOKEN?.address ?? '',
-        privateKey,
-        amount: bnAmountToSell
-      });
-    } catch (error) {
-      throw error;
-    }
-  }, [selectedAccount?._raw, tokenToSell.AMOUNT, tokenToSell.TOKEN?.address]);
-
-  const setAllowance = useCallback(async () => {
-    try {
-      const privateKey = (await Cache.getItem(
-        // @ts-ignore
-        `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
-      )) as string;
-
-      const bnAmountToSell = ethers.utils.parseEther('100000000');
-
-      const allowance = await increaseAllowance({
-        address: tokenToSell.TOKEN?.address ?? '',
-        privateKey,
-        amount: bnAmountToSell
-      });
-
-      const response = await allowance.wait();
-
-      if (response) {
-        checkAllowance();
-        setUiBottomSheetInformation({
-          ...uiBottomSheetInformation,
-          allowance: 'increased'
+        const bnAmountToSell = ethers.utils.parseEther(tokenToSell.AMOUNT);
+        return checkIsApprovalRequired({
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          address: token ?? '',
+          privateKey,
+          amount: bnAmountToSell
         });
+      } catch (error) {
+        throw error;
       }
-    } catch (error) {
-      throw error;
-    }
-  }, [
-    checkAllowance,
-    selectedAccount?._raw,
-    setUiBottomSheetInformation,
-    tokenToSell.TOKEN?.address,
-    uiBottomSheetInformation
-  ]);
+    },
+    [selectedAccount?._raw, tokenToSell.AMOUNT, tokenToSell.TOKEN?.address]
+  );
+
+  const setAllowance = useCallback(
+    // @ts-ignore
+    async (token: string = tokenToSell.TOKEN?.address) => {
+      try {
+        const privateKey = (await Cache.getItem(
+          // @ts-ignore
+          `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
+        )) as string;
+
+        const bnAmountToSell = ethers.utils.parseEther('100000000');
+        // console.log('setNewAllowance', token);
+
+        const allowance = await increaseAllowance({
+          address: token ?? '',
+          privateKey,
+          amount: bnAmountToSell
+        });
+
+        const response = await allowance.wait();
+
+        if (response) {
+          checkAllowance();
+          setUiBottomSheetInformation({
+            ...uiBottomSheetInformation,
+            allowance: 'increased'
+          });
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    [
+      checkAllowance,
+      selectedAccount?._raw,
+      setUiBottomSheetInformation,
+      tokenToSell.TOKEN?.address,
+      uiBottomSheetInformation
+    ]
+  );
 
   const swapTokens = useCallback(async () => {
     const signer = createSigner(await _privateKeyGetter());
