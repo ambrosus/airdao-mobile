@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  View,
-  LayoutChangeEvent,
-  RefreshControl,
   InteractionManager,
-  Platform
+  LayoutChangeEvent,
+  Platform,
+  RefreshControl,
+  View
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -112,7 +112,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled
-            extraHeight={Platform.select({ android: 0, ios: 300 })}
+            extraHeight={Platform.select({ android: 269, ios: 300 })}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
