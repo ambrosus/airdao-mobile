@@ -8,6 +8,11 @@ import {
   Spinner,
   Text
 } from '@components/base';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';
 import { scale, verticalScale } from '@utils/scaling';
@@ -112,6 +117,18 @@ export const BridgeForm = () => {
       });
     }, 500);
   };
+  const initialMargin = useSharedValue(0);
+  const margin = useAnimatedStyle(() => {
+    return {
+      marginBottom: withTiming(initialMargin.value)
+    };
+  });
+
+  useEffect(() => {
+    initialMargin.value = withTiming(keyboardHeight, {
+      duration: 0
+    });
+  }, [initialMargin, keyboardHeight]);
 
   const isButtonDisabled =
     !amountToExchange || !bridgeFee || gasFeeLoader || !!inputErrorType;
@@ -168,22 +185,21 @@ export const BridgeForm = () => {
           bridgeFee={bridgeFee}
         />
       </View>
-
-      <PrimaryButton
-        style={{ paddingBottom: keyboardHeight }}
-        onPress={onPressPreview}
-        disabled={isButtonDisabled}
-      >
-        {gasFeeLoader ? (
-          <Spinner customSize={15} />
-        ) : (
-          <Text color={isButtonDisabled ? COLORS.neutral400 : COLORS.neutral0}>
-            {inputErrorType === INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS
-              ? t('bridge.insufficient.funds')
-              : t('button.preview')}
-          </Text>
-        )}
-      </PrimaryButton>
+      <Animated.View style={[margin]}>
+        <PrimaryButton onPress={onPressPreview} disabled={isButtonDisabled}>
+          {gasFeeLoader ? (
+            <Spinner customSize={15} />
+          ) : (
+            <Text
+              color={isButtonDisabled ? COLORS.neutral400 : COLORS.neutral0}
+            >
+              {inputErrorType === INPUT_ERROR_TYPES.INSUFFICIENT_FUNDS
+                ? t('bridge.insufficient.funds')
+                : t('button.preview')}
+            </Text>
+          )}
+        </PrimaryButton>
+      </Animated.View>
       <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
       <BottomSheetBridgeItemSelector
         ref={choseTokenRef}

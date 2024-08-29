@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
   LayoutChangeEvent,
-  Platform,
   RefreshControl,
   View
 } from 'react-native';
@@ -112,7 +111,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled
-            extraHeight={Platform.select({ android: 269, ios: 300 })}
+            extraHeight={300}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
