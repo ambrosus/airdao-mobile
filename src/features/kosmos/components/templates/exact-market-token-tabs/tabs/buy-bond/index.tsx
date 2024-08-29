@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -12,13 +12,19 @@ import {
 } from '@features/kosmos/components/modular';
 import { discountColor } from '@features/kosmos/utils';
 import { BuyBondInputWithError } from '@features/kosmos/components/composite';
-import { useReanimatedStyle } from './hooks/use-reanimated-style';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 
 interface BuyBondTabProps {
   market: MarketType;
 }
+
+const INITIAL_PADDING_VALUE = 234;
 
 export const BuyBondTab = ({ market }: BuyBondTabProps) => {
   const { t } = useTranslation();
@@ -28,19 +34,42 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
-  const [isActive, setIsActive] = useState(false);
-
-  const onFocusHandle = () => setIsActive(true);
-  const onBlurHandle = () => setIsActive(false);
-
-  const animatedStyle = useReanimatedStyle(isActive);
-
   const onPreviewPurchase = useCallback(() => {
     Keyboard.dismiss();
     setTimeout(() => {
       bottomSheetRef.current?.show();
     }, 500);
   }, []);
+
+  const animatedPaddingTop = useSharedValue(INITIAL_PADDING_VALUE);
+  const animatedPaddingBottom = useSharedValue(0);
+  const paddingTop = useAnimatedStyle(() => {
+    return {
+      paddingTop: withTiming(animatedPaddingTop.value)
+    };
+  });
+  const paddingBottom = useAnimatedStyle(() => {
+    return {
+      paddingBottom: withTiming(animatedPaddingBottom.value)
+    };
+  });
+
+  const setAnimatedMargin = (padding: {
+    paddingTop: number;
+    paddingBottom: number;
+  }) => {
+    animatedPaddingTop.value = withTiming(padding.paddingTop, {
+      duration: 0
+    });
+    animatedPaddingBottom.value = withTiming(padding.paddingBottom, {
+      duration: 0
+    });
+  };
+
+  const onFocusHandle = () =>
+    setAnimatedMargin({ paddingTop: 0, paddingBottom: INITIAL_PADDING_VALUE });
+  const onBlurHandle = () =>
+    setAnimatedMargin({ paddingTop: INITIAL_PADDING_VALUE, paddingBottom: 0 });
 
   return (
     <>
@@ -100,12 +129,12 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
           </Row>
         </View>
       </View>
-
-      <ReviewBondPurchaseButton
-        animatedStyle={animatedStyle}
-        market={market}
-        onPreviewPurchase={onPreviewPurchase}
-      />
+      <Animated.View style={[paddingTop, paddingBottom]}>
+        <ReviewBondPurchaseButton
+          market={market}
+          onPreviewPurchase={onPreviewPurchase}
+        />
+      </Animated.View>
       <BottomSheetPreviewPurchase ref={bottomSheetRef} market={market} />
     </>
   );
