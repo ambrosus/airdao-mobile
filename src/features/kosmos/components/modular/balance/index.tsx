@@ -25,10 +25,10 @@ export const BalanceWithButton = ({
   const { calculateMaximumAvailableAmount } = useBalance(market, bondBalance);
 
   const onMaxAmountPress = useCallback(() => {
-    if (!bnBalance || +bondBalance <= 0) return;
+    if (+bondBalance <= 0) return;
 
     return calculateMaximumAvailableAmount();
-  }, [bondBalance, bnBalance, calculateMaximumAvailableAmount]);
+  }, [bondBalance, calculateMaximumAvailableAmount]);
 
   useEffect(() => {
     if (!qouteToken || bondBalance !== '' || bnBalance) return;

@@ -17,7 +17,7 @@ import { useMarketTransactions } from '@features/kosmos/lib/query';
 interface TransactionsHistoryTabProps {
   market: MarketType;
 }
-
+const ESTIMATED_ITEM_SIZE = 26;
 export const TransactionsHistoryTab = ({
   market
 }: TransactionsHistoryTabProps) => {
@@ -65,6 +65,7 @@ export const TransactionsHistoryTab = ({
       ) : (
         <View style={styles.list}>
           <FlashList
+            estimatedItemSize={ESTIMATED_ITEM_SIZE}
             scrollEnabled={true}
             onRefresh={refetch}
             refreshing={false}
