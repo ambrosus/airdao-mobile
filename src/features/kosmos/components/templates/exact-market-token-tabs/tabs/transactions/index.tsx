@@ -9,8 +9,6 @@ import {
 } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Text } from '@components/base';
@@ -19,9 +17,6 @@ import { useMarketTransactions } from '@features/kosmos/lib/query';
 interface TransactionsHistoryTabProps {
   market: MarketType;
 }
-
-const ESTIMATED_ITEM_SIZE = 26;
-const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT / 4 };
 
 export const TransactionsHistoryTab = ({
   market
@@ -39,6 +34,7 @@ export const TransactionsHistoryTab = ({
 
       return (
         <TransactionHistoryItem
+          key={`${args.index}`}
           transaction={transaction}
           quoteToken={quoteToken}
           payoutToken={payoutToken}
@@ -75,8 +71,6 @@ export const TransactionsHistoryTab = ({
             nestedScrollEnabled={true}
             contentInsetAdjustmentBehavior="always"
             data={transactions}
-            estimatedItemSize={ESTIMATED_ITEM_SIZE}
-            estimatedListSize={ESTIMATED_LIST_SIZE}
             keyExtractor={(item) => item.txHash}
             renderItem={renderTransactionListItem}
             removeClippedSubviews={false}
