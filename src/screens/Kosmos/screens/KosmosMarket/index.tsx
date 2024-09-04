@@ -106,6 +106,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
           </View>
         ) : (
           <KeyboardAwareScrollView
+            keyboardShouldPersistTaps="handled"
             overScrollMode="never"
             enableOnAndroid
             enableAutomaticScroll
