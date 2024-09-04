@@ -109,7 +109,7 @@ const envs = {
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
     ROUTER_V2_ADDRESS: '0xA3E524dFc9deA66aE32e81a5E2B4DF24F56e2CBc',
     FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
-    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-dev.io',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
     CHAIN_ID: 22040
   }
 };
