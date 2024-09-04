@@ -1,40 +1,29 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { useBalance } from '@features/kosmos/lib/hooks';
-import { useWallet } from '@hooks';
 
 interface BalanceWithButtonProps {
-  qouteToken: Token | undefined;
-  market: MarketType;
+  quoteToken: Token | undefined;
+  market: MarketType | undefined;
 }
 
 export const BalanceWithButton = ({
-  qouteToken,
+  quoteToken,
   market
 }: BalanceWithButtonProps) => {
-  const { wallet } = useWallet();
-
   const { t } = useTranslation();
-  const { bnBalance, fetchBondBalance, bondBalance } =
-    useKosmosMarketsContextSelector();
-  const { calculateMaximumAvailableAmount } = useBalance(market, bondBalance);
+
+  const { calculateMaximumAvailableAmount, tokenBalance } = useBalance(market);
 
   const onMaxAmountPress = useCallback(() => {
-    if (+bondBalance <= 0) return;
+    if (+tokenBalance <= 0) return;
 
-    return calculateMaximumAvailableAmount();
-  }, [bondBalance, calculateMaximumAvailableAmount]);
-
-  useEffect(() => {
-    if (!qouteToken || bondBalance !== '' || bnBalance) return;
-
-    fetchBondBalance(qouteToken).then();
-  }, [bnBalance, bondBalance, fetchBondBalance, qouteToken, wallet.address]);
+    return calculateMaximumAvailableAmount(tokenBalance);
+  }, [calculateMaximumAvailableAmount, tokenBalance]);
 
   return (
     <Row alignItems="center">
@@ -43,7 +32,7 @@ export const BalanceWithButton = ({
         fontFamily="Inter_400Regular"
         color={COLORS.alphaBlack60}
       >
-        {t('send.funds.balance')}: {bondBalance} {qouteToken?.symbol}
+        {t('send.funds.balance')}: {tokenBalance} {quoteToken?.symbol}
       </Text>
       <Spacer horizontal value={4} />
       <TouchableOpacity onPress={onMaxAmountPress}>

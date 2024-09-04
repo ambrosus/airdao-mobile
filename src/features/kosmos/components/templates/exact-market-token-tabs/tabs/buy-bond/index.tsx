@@ -21,7 +21,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 interface BuyBondTabProps {
-  market: MarketType;
+  market: MarketType | undefined;
 }
 
 const INITIAL_PADDING_VALUE = 234;
@@ -91,7 +91,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
         </View>
 
         <View style={styles.balance}>
-          <BalanceWithButton qouteToken={quoteToken} market={market} />
+          <BalanceWithButton quoteToken={quoteToken} market={market} />
         </View>
 
         <View style={styles.details}>

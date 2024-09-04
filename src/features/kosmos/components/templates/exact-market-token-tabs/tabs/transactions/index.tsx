@@ -15,7 +15,7 @@ import { Row, Text } from '@components/base';
 import { useMarketTransactions } from '@features/kosmos/lib/query';
 
 interface TransactionsHistoryTabProps {
-  market: MarketType;
+  market: MarketType | undefined;
 }
 const ESTIMATED_ITEM_SIZE = 26;
 export const TransactionsHistoryTab = ({
@@ -26,7 +26,9 @@ export const TransactionsHistoryTab = ({
   const LIST_HEADER_TITLES = ['bonds', t('kosmos.payout'), t('common.date')];
   const { quoteToken, payoutToken } = useMarketDetails(market);
 
-  const { transactions, isLoading, refetch } = useMarketTransactions(market.id);
+  const { transactions, isLoading, refetch } = useMarketTransactions(
+    market?.id
+  );
 
   const renderTransactionListItem = useCallback(
     (args: ListRenderItemInfo<TxType>) => {

@@ -3,7 +3,7 @@ import { getMarketTxs } from '@features/kosmos/api';
 import { TxType } from '@features/kosmos/types';
 import { useMemo } from 'react';
 
-export function useMarketTransactions(id: string) {
+export function useMarketTransactions(id?: string) {
   const { data, isLoading, isRefetching, refetch, error } = useQuery<TxType[]>(
     ['market-transactions', id],
     () => getMarketTxs(id),

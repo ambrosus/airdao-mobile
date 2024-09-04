@@ -7,6 +7,7 @@ export function useMarketByIdQuery(id: string) {
     data: market,
     isLoading,
     isRefetching,
+    isFetching,
     refetch,
     error
   } = useQuery<MarketType>(['market-details', id], () => getMarketData(id), {
@@ -16,7 +17,7 @@ export function useMarketByIdQuery(id: string) {
 
   return {
     market,
-    isLoading: isLoading || isRefetching,
+    isLoading: isLoading || isRefetching || isFetching,
     isRefetching,
     refetch,
     error

@@ -7,7 +7,7 @@ import { MarketType } from '@features/kosmos/types';
 import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
-  market: MarketType;
+  market: MarketType | undefined;
 }
 
 export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
