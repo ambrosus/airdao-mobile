@@ -41,10 +41,9 @@ export const MarketChart = ({
   const {
     isMarketTooltipVisible,
     onToggleMarketTooltip,
-    setIsExactMarketLoading
+    setIsMarketChartLoading
   } = useKosmosMarketsContextSelector();
 
-  const [isFirstTimeLoaded, setIsFirstTimeLoaded] = useState(false);
   const [marketPrices, setMarketPrices] = useState<Array<number[]>>([]);
   const [bondPrices, setBondPrices] = useState<Array<number[]>>([]);
   const [tooltip, setTooltip] = useState<TooltipState>({
@@ -56,7 +55,7 @@ export const MarketChart = ({
   const fetchChartPoints = useCallback(
     async (controller: AbortController) => {
       try {
-        if (!isFirstTimeLoaded) setIsExactMarketLoading(true);
+        setIsMarketChartLoading(true);
 
         const now = new Date();
         const from = chartInterval
@@ -107,8 +106,7 @@ export const MarketChart = ({
       } catch (error) {
         throw error;
       } finally {
-        setIsExactMarketLoading(false);
-        setIsFirstTimeLoaded(true);
+        setIsMarketChartLoading(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

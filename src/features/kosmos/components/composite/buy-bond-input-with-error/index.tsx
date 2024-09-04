@@ -16,7 +16,7 @@ interface BuyBondInputWithErrorProps {
   onFocus: () => void;
   onBlur: () => void;
   quoteToken: Token | undefined;
-  market: MarketType;
+  market: MarketType | undefined;
 }
 
 export const BuyBondInputWithError = ({

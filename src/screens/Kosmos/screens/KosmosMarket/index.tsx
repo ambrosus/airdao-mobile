@@ -31,12 +31,8 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const {
-    onToggleMarketTooltip,
-    isExactMarketLoading,
-    isBalanceFetching,
-    reset
-  } = useKosmosMarketsContextSelector();
+  const { onToggleMarketTooltip, isMarketChartLoading, bnBalance, reset } =
+    useKosmosMarketsContextSelector();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
@@ -79,11 +75,11 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     () => (
       <RefreshControl
         onRefresh={refetch}
-        refreshing={isExactMarketLoading}
+        refreshing={isMarketChartLoading}
         removeClippedSubviews
       />
     ),
-    [isExactMarketLoading, refetch]
+    [isMarketChartLoading, refetch]
   );
 
   const onScrollToMarket = useCallback(
@@ -92,41 +88,41 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   );
 
   const combinedLoading = useMemo(() => {
-    return isBalanceFetching || isExactMarketLoading || isLoading;
-  }, [isBalanceFetching, isExactMarketLoading, isLoading]);
+    return !bnBalance || isMarketChartLoading || isLoading;
+  }, [bnBalance, isMarketChartLoading, isLoading]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
       <View style={styles.container}>
-        {!market || combinedLoading ? (
+        {combinedLoading && (
           <View style={styles.loader}>
             <ScreenLoader height="100%" />
           </View>
-        ) : (
-          <KeyboardAwareScrollView
-            keyboardShouldPersistTaps="handled"
-            overScrollMode="never"
-            enableOnAndroid
-            enableAutomaticScroll
-            scrollToOverflowEnabled={false}
-            nestedScrollEnabled
-            extraHeight={300}
-            onMomentumScrollBegin={onScrollBeginDragHandler}
-            refreshControl={renderRefetchController}
-          >
-            <MarketTableDetails
-              market={market}
-              onHandlerMarketLayout={onHandlerMarketLayout}
-            />
-            <MarketChartsWithTimeframes
-              market={market}
-              onScrollToMarket={onScrollToMarket}
-            />
-            <ExactMarketTokenTabs market={market} />
-          </KeyboardAwareScrollView>
         )}
+
+        <KeyboardAwareScrollView
+          keyboardShouldPersistTaps="handled"
+          overScrollMode="never"
+          enableOnAndroid
+          enableAutomaticScroll
+          scrollToOverflowEnabled={false}
+          nestedScrollEnabled
+          extraHeight={300}
+          onMomentumScrollBegin={onScrollBeginDragHandler}
+          refreshControl={renderRefetchController}
+        >
+          <MarketTableDetails
+            market={market}
+            onHandlerMarketLayout={onHandlerMarketLayout}
+          />
+          <MarketChartsWithTimeframes
+            market={route.params.market}
+            onScrollToMarket={onScrollToMarket}
+          />
+          <ExactMarketTokenTabs market={market} />
+        </KeyboardAwareScrollView>
       </View>
     </SafeAreaView>
   );

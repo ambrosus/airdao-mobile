@@ -32,7 +32,9 @@ export async function getSDAPriceForChart(
   );
 }
 
-export async function getMarketTxs(marketId: string): Promise<TxType[]> {
+export async function getMarketTxs(
+  marketId: string | undefined
+): Promise<TxType[]> {
   const response = await axios.get(
     `${Config.MARKETPLACE_URL}/v2/api/transactions/all/market?marketId=${marketId}`
   );

@@ -10,7 +10,7 @@ import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
 import { View } from 'react-native';
 
 interface ReviewBondPurchaseButtonProps {
-  market: MarketType;
+  market: MarketType | undefined;
   onPreviewPurchase: () => void;
 }
 
@@ -28,18 +28,18 @@ export const ReviewBondPurchaseButton = ({
   );
 
   const disabled = useMemo(
-    () => !parseFloat(amountToBuy) || error !== '' || !market.isLive,
-    [amountToBuy, error, market.isLive]
+    () => !parseFloat(amountToBuy) || error !== '' || !market?.isLive,
+    [amountToBuy, error, market?.isLive]
   );
 
   const label = useMemo(
     () =>
-      !market.isLive
+      !market?.isLive
         ? t('kosmos.button.market.closed')
         : disabled
         ? t('kosmos.button.enter.amount')
         : t('button.preview'),
-    [disabled, market.isLive, t]
+    [disabled, market?.isLive, t]
   );
 
   const textColor = useMemo(() => {
