@@ -18,12 +18,17 @@ import {
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useBalance, useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
-import { useMarketByIdQuery } from '@features/kosmos/lib/query';
+import {
+  useMarketByIdQuery,
+  useMarketTransactions
+} from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
   ExactMarketTokenTabs,
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
+import { isIOS } from 'react-native-popover-view/dist/Constants';
+import { isAndroid } from '@utils/isPlatform';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -46,6 +51,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const { market, refetch, isLoading } = useMarketByIdQuery(
     route.params.market.id
   );
+
+  const { refetch: refetchTransactions } = useMarketTransactions(market?.id);
 
   const { refetchTokenBalance } = useBalance(market);
 
@@ -79,9 +86,16 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   );
 
   const refetchMarketData = useCallback(() => {
+    const refreshKosmosTransactions = () => {
+      if (isAndroid) {
+        refetchTransactions();
+      }
+      return;
+    };
     refetchTokenBalance();
     refetch();
-  }, [refetch, refetchTokenBalance]);
+    refreshKosmosTransactions();
+  }, [refetch, refetchTokenBalance, refetchTransactions]);
 
   const renderRefetchController = useMemo(
     () => (
@@ -120,7 +134,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
           enableOnAndroid
           enableAutomaticScroll
           scrollToOverflowEnabled={false}
-          nestedScrollEnabled
+          nestedScrollEnabled={isIOS}
           extraHeight={300}
           onMomentumScrollBegin={onScrollBeginDragHandler}
           refreshControl={renderRefetchController}
