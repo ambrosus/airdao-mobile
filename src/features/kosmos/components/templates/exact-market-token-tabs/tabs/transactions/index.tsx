@@ -34,7 +34,7 @@ export const TransactionsHistoryTab = ({
 
       return (
         <TransactionHistoryItem
-          key={`${args.index}`}
+          key={args.index.toString()}
           transaction={transaction}
           quoteToken={quoteToken}
           payoutToken={payoutToken}
