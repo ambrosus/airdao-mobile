@@ -15,8 +15,8 @@ export const INITIAL_FILTERS: FiltersState = {
 
 function filterByStatus(
   status: StatusFilterValues,
-  markets: MarketType[],
-  closedMarkets: MarketType[]
+  markets: MarketType[] = [],
+  closedMarkets: MarketType[] = []
 ): MarketType[] {
   switch (status) {
     case i18n.t('kosmos.status.active'):
@@ -25,14 +25,14 @@ function filterByStatus(
       return closedMarkets;
     case i18n.t('kosmos.status.all'):
     default:
-      return markets;
+      return [...markets, ...closedMarkets];
   }
 }
 
 function filterMarketsByToken(
-  markets: MarketType[],
+  markets: MarketType[] = [],
   token: PaymentTokens,
-  tokens: Token[]
+  tokens: Token[] = []
 ): MarketType[] {
   return markets.filter((market) => {
     const quoteToken = getTokenByAddress(market.quoteToken, tokens);
@@ -42,22 +42,25 @@ function filterMarketsByToken(
 
 function filterByPayment(
   token: PaymentTokens,
-  markets: MarketType[],
-  tokens: Token[]
+  markets: MarketType[] = [],
+  tokens: Token[] = []
 ): MarketType[] {
   return filterMarketsByToken(markets, token, tokens);
 }
 
 export const filter = (
   filters: FiltersState,
-  markets: MarketType[],
-  closedMarkets: MarketType[],
-  tokens: Token[]
+  markets: MarketType[] = [],
+  closedMarkets: MarketType[] = [],
+  tokens: Token[] = []
 ): MarketType[] => {
   const { status, payment } = filters;
+
   const filteredMarkets = filterByStatus(status, markets, closedMarkets);
 
-  if (payment) return filterByPayment(payment, filteredMarkets, tokens);
+  if (payment && filteredMarkets.length > 0 && tokens.length > 0) {
+    return filterByPayment(payment, filteredMarkets, tokens);
+  }
 
-  return filteredMarkets ?? [];
+  return filteredMarkets.length > 0 ? filteredMarkets : [];
 };
