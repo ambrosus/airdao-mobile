@@ -16,7 +16,7 @@ import {
   ScreenLoader
 } from '@features/kosmos/components/base';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { useBalance, useExtractToken } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
 import { useMarketByIdQuery } from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
@@ -31,8 +31,13 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const { onToggleMarketTooltip, isMarketChartLoading, bnBalance, reset } =
-    useKosmosMarketsContextSelector();
+  const {
+    onToggleMarketTooltip,
+    isMarketChartLoading,
+    isBalanceFetching,
+    bnBalance,
+    reset
+  } = useKosmosMarketsContextSelector();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
 
@@ -41,6 +46,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const { market, refetch, isLoading } = useMarketByIdQuery(
     route.params.market.id
   );
+
+  const { refetchTokenBalance } = useBalance(market);
 
   const renderHeaderMiddleContent = useMemo(() => {
     const tokenSymbol = token?.symbol ?? '';
@@ -71,15 +78,20 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
+  const refetchMarketData = useCallback(() => {
+    refetchTokenBalance();
+    refetch();
+  }, [refetch, refetchTokenBalance]);
+
   const renderRefetchController = useMemo(
     () => (
       <RefreshControl
-        onRefresh={refetch}
+        onRefresh={refetchMarketData}
         refreshing={isMarketChartLoading}
         removeClippedSubviews
       />
     ),
-    [isMarketChartLoading, refetch]
+    [isMarketChartLoading, refetchMarketData]
   );
 
   const onScrollToMarket = useCallback(
@@ -88,8 +100,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   );
 
   const combinedLoading = useMemo(() => {
-    return !bnBalance || isMarketChartLoading || isLoading;
-  }, [bnBalance, isMarketChartLoading, isLoading]);
+    return !bnBalance || isBalanceFetching || isMarketChartLoading || isLoading;
+  }, [bnBalance, isBalanceFetching, isMarketChartLoading, isLoading]);
 
   return (
     <SafeAreaView style={styles.container}>

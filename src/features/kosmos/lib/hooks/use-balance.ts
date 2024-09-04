@@ -11,7 +11,7 @@ import { useWallet } from '@hooks';
 
 export function useBalance(market: MarketType | undefined) {
   const { wallet } = useWallet();
-  const { bnBalance, setBnBalance, onChangeAmountToBuy } =
+  const { bnBalance, setBnBalance, setIsBalanceFetching, onChangeAmountToBuy } =
     useKosmosMarketsContextSelector();
   const { tokens } = useMarketTokens();
   const { willGetWithArguments, quoteToken } = useMarketDetails(market);
@@ -40,6 +40,12 @@ export function useBalance(market: MarketType | undefined) {
       throw error;
     }
   }, [quoteToken, setBnBalance, tokenBalance, wallet?.address]);
+
+  const refetchTokenBalance = useCallback(() => {
+    setIsBalanceFetching(true);
+    fetchBondBalance();
+    setIsBalanceFetching(false);
+  }, [fetchBondBalance, setIsBalanceFetching]);
 
   useEffect(() => {
     if (!quoteToken || tokenBalance !== '' || bnBalance) return;
@@ -92,5 +98,5 @@ export function useBalance(market: MarketType | undefined) {
     ]
   );
 
-  return { calculateMaximumAvailableAmount, tokenBalance };
+  return { calculateMaximumAvailableAmount, tokenBalance, refetchTokenBalance };
 }
