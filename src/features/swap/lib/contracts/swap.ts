@@ -13,7 +13,7 @@ import {
   minimumAmountOut,
   addresses,
   wrapNativeAddress,
-  extractArrayOfMiddleMultiHopAddresses
+  pushMiddleAddressToPath
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -104,45 +104,66 @@ export async function swapMultiHopExactTokensForTokens(
   slippageTolerance: string,
   deadline: string
 ) {
-  const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const [addressFrom, addressTo] = path;
+  try {
+    const routerContract = createRouterContract(signer, TRADE);
+    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+    const timestampDeadline =
+      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
 
-  const excludeNativeETH = wrapNativeAddress(path);
-  const middleAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
+    const _path = pushMiddleAddressToPath(path);
 
-  const intermediateSwapFunction = getSwapFunction(addressFrom, middleAddress);
-  const finalSwapFunction = getSwapFunction(middleAddress, addressTo);
+    const bnAmountToReceiveArray = await getAmountsOut({
+      amountToSell: bnAmountToSell,
+      path: _path
+    });
 
-  const wrappedETHAddress =
-    middleAddress === ethers.constants.AddressZero
-      ? addresses.SAMB
-      : middleAddress;
+    const bnAmountToReceive =
+      bnAmountToReceiveArray[bnAmountToReceiveArray.length - 1];
 
-  if (!intermediateSwapFunction || !finalSwapFunction) {
-    throw new Error('Invalid path configuration');
-  }
-
-  const intermediateSwapResult = await intermediateSwapFunction(
-    amountToSell,
-    [excludeNativeETH[0], wrappedETHAddress],
-    signer,
-    slippageTolerance,
-    deadline
-  );
-
-  const [, bnIntermediateAmountToReceive] = await getAmountsOut({
-    amountToSell: bnAmountToSell,
-    path: [excludeNativeETH[0], middleAddress]
-  });
-
-  if (intermediateSwapResult) {
-    return await finalSwapFunction(
-      formatEther(bnIntermediateAmountToReceive),
-      [wrappedETHAddress, excludeNativeETH[1]],
-      signer,
-      slippageTolerance,
-      deadline
+    const bnMinimumReceivedAmount = minimumAmountOut(
+      `${slippageTolerance}%`,
+      bnAmountToReceive
     );
+
+    if (_path.length < 3) {
+      throw new Error('Path must contain 2 or 3 addresses');
+    }
+
+    const isFromETH = path[0] === addresses.AMB;
+    const isToETH = path[path.length - 1] === addresses.AMB;
+
+    let tx;
+
+    if (isFromETH) {
+      tx = await routerContract.swapExactAMBForTokens(
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline,
+        { value: bnAmountToSell }
+      );
+    } else if (isToETH) {
+      tx = await routerContract.swapExactTokensForAMB(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
+    } else {
+      tx = await routerContract.swapExactTokensForTokens(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
+    }
+
+    return await tx.wait();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -240,15 +261,4 @@ export async function unwrapETH(amountToSell: string, signer: Wallet) {
   const tx = await signedContract.withdraw(bnAmountToSell);
 
   return await tx.wait();
-}
-
-function getSwapFunction(fromAddress: string, toAddress: string) {
-  const isFromAMB = fromAddress === addresses.AMB;
-  const isToAMB = toAddress === addresses.AMB;
-
-  if (isFromAMB || isToAMB) {
-    return isFromAMB ? swapExactETHForTokens : swapExactTokensForETH;
-  } else {
-    return swapExactTokensForTokens;
-  }
 }
