@@ -6,5 +6,6 @@ export * from './path';
 export * from './provider-fee';
 export * from './price-impact';
 export * from './token-plate';
+export * from './timestamp';
 
 export { SwapStringUtils } from './transformers';

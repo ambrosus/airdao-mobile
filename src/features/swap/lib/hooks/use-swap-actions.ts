@@ -11,8 +11,6 @@ import {
   unwrapETH,
   wrapETH
 } from '../contracts';
-import { useBridgeContextData } from '@features/bridge/context';
-import { Cache, CacheKey } from '@lib/cache';
 import {
   wrapNativeAddress,
   isETHtoWrapped,
@@ -23,9 +21,11 @@ import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 import { useSwapHelpers } from './use-swap-helpers';
+import { useWallet } from '@hooks';
 
 export function useSwapActions() {
-  const { selectedAccount } = useBridgeContextData();
+  const { _extractPrivateKey } = useWallet();
+
   const {
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
@@ -34,16 +34,11 @@ export function useSwapActions() {
 
   const { settings } = useSwapSettings();
   const { tokensRoute, tokenToSell } = useSwapTokens();
-  const { _privateKeyGetter, isStartsWithETH, isEndsWithETH } =
-    useSwapHelpers();
+  const { isStartsWithETH, isEndsWithETH } = useSwapHelpers();
 
   const checkAllowance = useCallback(async () => {
     try {
-      const privateKey = (await Cache.getItem(
-        // @ts-ignore
-        `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
-      )) as string;
-
+      const privateKey = await _extractPrivateKey();
       const bnAmountToSell = ethers.utils.parseEther(tokenToSell.AMOUNT);
 
       return checkIsApprovalRequired({
@@ -55,15 +50,11 @@ export function useSwapActions() {
     } catch (error) {
       throw error;
     }
-  }, [selectedAccount?._raw, tokenToSell.AMOUNT, tokenToSell.TOKEN?.address]);
+  }, [_extractPrivateKey, tokenToSell.AMOUNT, tokenToSell.TOKEN?.address]);
 
   const setAllowance = useCallback(async () => {
     try {
-      const privateKey = (await Cache.getItem(
-        // @ts-ignore
-        `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
-      )) as string;
-
+      const privateKey = await _extractPrivateKey();
       const bnAmountToSell = ethers.utils.parseEther('100000000');
 
       const allowance = await increaseAllowance({
@@ -85,15 +76,15 @@ export function useSwapActions() {
       throw error;
     }
   }, [
+    _extractPrivateKey,
     checkAllowance,
-    selectedAccount?._raw,
     setUiBottomSheetInformation,
     tokenToSell.TOKEN?.address,
     uiBottomSheetInformation
   ]);
 
   const swapTokens = useCallback(async () => {
-    const signer = createSigner(await _privateKeyGetter());
+    const signer = createSigner(await _extractPrivateKey());
     const { slippageTolerance, deadline, multihops } = settings.current;
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
@@ -149,7 +140,7 @@ export function useSwapActions() {
       deadline
     );
   }, [
-    _privateKeyGetter,
+    _extractPrivateKey,
     isEndsWithETH,
     isMultiHopSwapBetterCurrency.state,
     isStartsWithETH,

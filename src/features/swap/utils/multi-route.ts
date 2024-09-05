@@ -8,7 +8,7 @@ export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return !!extractArrayOfMiddleMultiHopAddresses(path).address;
 };
 
-export const pushMiddleAddressToPath = (path: string[]) => {
+export const withMultiHopPath = (path: string[]) => {
   const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
   const excludeNativeETH = wrapNativeAddress(path);
 

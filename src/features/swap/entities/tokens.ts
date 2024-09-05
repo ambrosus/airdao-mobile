@@ -1,17 +1,10 @@
 import { ethers } from 'ethers';
 
 export const SWAP_SUPPORTED_TOKENS = {
-  default: {
-    prod: {
-      address: ethers.constants.AddressZero,
-      name: 'AirDAO',
-      symbol: 'AMB'
-    },
-    testnet: {
-      address: ethers.constants.AddressZero,
-      name: 'AirDAO',
-      symbol: 'AMB'
-    }
+  native: {
+    address: ethers.constants.AddressZero,
+    name: 'AirDAO',
+    symbol: 'AMB'
   },
   tokens: {
     prod: [

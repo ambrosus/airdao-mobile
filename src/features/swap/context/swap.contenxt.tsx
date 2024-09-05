@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createContextSelector } from '@utils/createContextSelector';
 import {
-  INITAL_SETTINGS,
-  INITAL_UI_BOTTOM_SHEET_INFORMATION,
+  INITIAL_SETTINGS,
+  INITIAL_UI_BOTTOM_SHEET_INFORMATION,
   INITIAL_SELECTED_TOKENS,
   INITIAL_SELECTED_TOKENS_AMOUNT
 } from './initials';
@@ -31,16 +31,16 @@ export const SwapContext = () => {
     Record<SelectedTokensKeys, string>
   >(INITIAL_SELECTED_TOKENS_AMOUNT);
 
-  const [_refSettingsGetter, setSettings] = useState(INITAL_SETTINGS);
+  const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
-  const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
+  const [isIncreasingAllowance, setIsIncreasingAllowance] = useState(false);
   const [isMultiHopSwapBetterCurrency, setIsMultiHopSwapCurrencyBetter] =
     useState({ state: false, token: '' });
 
   // Swap preview information
   const [_refPairsGetter, setPairs] = useState<SelectedPairsState>([]);
   const [uiBottomSheetInformation, setUiBottomSheetInformation] = useState(
-    INITAL_UI_BOTTOM_SHEET_INFORMATION
+    INITIAL_UI_BOTTOM_SHEET_INFORMATION
   );
 
   const latestSelectedTokens = useRef(selectedTokens);
@@ -64,7 +64,7 @@ export const SwapContext = () => {
   const reset = useCallback(() => {
     setSelectedTokens(INITIAL_SELECTED_TOKENS);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
-    setUiBottomSheetInformation(INITAL_UI_BOTTOM_SHEET_INFORMATION);
+    setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
     setIsMultiHopSwapCurrencyBetter({ state: false, token: '' });
   }, []);
@@ -93,7 +93,7 @@ export const SwapContext = () => {
     isProcessingSwap,
     setIsProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     allPairsRef,
     setPairs,
     reset
