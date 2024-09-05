@@ -142,21 +142,21 @@ export function useSwapBetterCurrency() {
       }
 
       if (tradeIn) {
-        if (multiHopAmount.lt(singleHopAmount)) {
-          onChangeMultiHopUiState(middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.lt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      } else {
         if (multiHopAmount.gt(singleHopAmount)) {
           onChangeMultiHopUiState(middleHopAddress.address);
         } else {
           resetMultiHopUiState();
         }
         return singleHopAmount.gt(multiHopAmount)
+          ? singleHopAmount
+          : multiHopAmount;
+      } else {
+        if (multiHopAmount.lt(singleHopAmount)) {
+          onChangeMultiHopUiState(middleHopAddress.address);
+        } else {
+          resetMultiHopUiState();
+        }
+        return singleHopAmount.lt(multiHopAmount)
           ? singleHopAmount
           : multiHopAmount;
       }
