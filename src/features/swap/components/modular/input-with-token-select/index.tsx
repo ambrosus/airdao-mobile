@@ -26,16 +26,16 @@ export const InputWithTokenSelect = ({
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
+
   const onChangeTokenAmount = (value: string) => {
     setLastChangedInput(type);
     let finalValue = StringUtils.formatNumberInput(value);
     finalValue = NumberUtils.limitDecimalCount(finalValue, 18);
     onChangeSelectedTokenAmount(type, finalValue);
   };
-
-  const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
-
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const onToggleInputFocus = () => {
     setIsInputFocused((prev) => !prev);
