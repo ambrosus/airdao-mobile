@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -10,6 +10,7 @@ import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { useSwapContextSelector } from '@features/swap/context';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
+import { isAndroid } from '@utils/isPlatform';
 
 interface InputWithTokenSelectProps {
   readonly type: SelectedTokensKeys;
@@ -34,6 +35,18 @@ export const InputWithTokenSelect = ({
 
   const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const onToggleInputFocus = () => {
+    setIsInputFocused((prev) => !prev);
+  };
+
+  const selection = useMemo(() => {
+    if (!isInputFocused && isAndroid && selectedTokensAmount[type].length > 0) {
+      return { start: 0, end: 0 };
+    }
+  }, [isInputFocused, selectedTokensAmount, type]);
+
   return (
     <View style={styles.wrapper}>
       <Text>
@@ -41,6 +54,9 @@ export const InputWithTokenSelect = ({
       </Text>
       <View style={styles.upperRow}>
         <TextInput
+          onFocus={onToggleInputFocus}
+          onBlur={onToggleInputFocus}
+          selection={selection}
           value={selectedTokensAmount[type]}
           style={styles.input}
           type="number"
