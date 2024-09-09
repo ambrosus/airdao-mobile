@@ -295,7 +295,7 @@ export const ALL_TOKENS_DATA = {
       symbol: 'AMB-20240525'
     },
     {
-      address: '0x8D3e03889bFCb859B2dBEB65C60a52Ad9523512c',
+      address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       name: 'Synthetic Amber',
       symbol: 'SAMB'
     },
@@ -305,7 +305,7 @@ export const ALL_TOKENS_DATA = {
       symbol: 'USDT'
     },
     {
-      address: '0xF7c8f345Ac1d29F13c16d8Ae34f534D9056E3FF2',
+      address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
       name: 'USD Coin',
       symbol: 'USDC'
     },
