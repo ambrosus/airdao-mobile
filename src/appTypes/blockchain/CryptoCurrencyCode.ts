@@ -4,6 +4,7 @@ export enum CryptoCurrencyCode {
   AMBROSUS = 'AMBROSUS',
   MTSC = 'MTSC',
   SAMB = 'SAMB',
+  SyntheticAmber = 'Synthetic Amber',
   HPT = 'HPT',
   TT = 'TT',
   SCAPEITEM = 'SCAPEITEM',
