@@ -47,12 +47,14 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const { token } = useExtractToken(route.params.market.payoutToken);
 
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
+  const [isRefreshingData, setIsRefreshingData] = useState(false);
 
   const { market, refetch, isLoading } = useMarketByIdQuery(
     route.params.market.id
   );
 
-  const { refetch: refetchTransactions } = useMarketTransactions(market?.id);
+  const { refetch: refetchTransactions, isLoading: isLoadingTransaction } =
+    useMarketTransactions(market?.id);
 
   const { refetchTokenBalance } = useBalance(market);
 
@@ -85,27 +87,31 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
-  const refetchMarketData = useCallback(() => {
-    const refreshKosmosTransactions = () => {
-      if (isAndroid) {
-        refetchTransactions();
+  const refetchMarketData = useCallback(async () => {
+    const refreshKosmosTransactions = async () => {
+      setIsRefreshingData(true);
+      try {
+        if (isAndroid) {
+          await refetchTransactions();
+        }
+        refetchTokenBalance();
+        await refetch();
+      } finally {
+        setIsRefreshingData(false);
       }
-      return;
     };
-    refetchTokenBalance();
-    refetch();
-    refreshKosmosTransactions();
+    await refreshKosmosTransactions();
   }, [refetch, refetchTokenBalance, refetchTransactions]);
 
   const renderRefetchController = useMemo(
     () => (
       <RefreshControl
         onRefresh={refetchMarketData}
-        refreshing={isMarketChartLoading}
+        refreshing={isMarketChartLoading || isLoadingTransaction}
         removeClippedSubviews
       />
     ),
-    [isMarketChartLoading, refetchMarketData]
+    [isLoadingTransaction, isMarketChartLoading, refetchMarketData]
   );
 
   const onScrollToMarket = useCallback(
@@ -122,7 +128,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
       <View style={styles.container}>
-        {combinedLoading && (
+        {!isRefreshingData && combinedLoading && (
           <View style={styles.loader}>
             <ScreenLoader height="100%" />
           </View>
