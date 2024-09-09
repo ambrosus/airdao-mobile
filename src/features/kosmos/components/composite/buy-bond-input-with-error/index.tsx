@@ -44,6 +44,7 @@ export const BuyBondInputWithError = ({
 
   const onChangeAmountToBuyHandle = useCallback(
     (amount: string) => {
+      if (amount === ' ') return;
       let finalValue = StringUtils.formatNumberInput(amount);
       finalValue = NumberUtils.limitDecimalCount(
         finalValue,
