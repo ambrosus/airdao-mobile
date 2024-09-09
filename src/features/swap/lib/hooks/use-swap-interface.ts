@@ -34,7 +34,7 @@ export function useSwapInterface() {
     Keyboard.dismiss();
     if (hasWrapNativeToken) {
       onReviewSwapPreview();
-      setUiBottomSheetInformation((prevState) => ({
+      return setUiBottomSheetInformation((prevState) => ({
         ...prevState,
         allowance: 'suitable'
       }));
