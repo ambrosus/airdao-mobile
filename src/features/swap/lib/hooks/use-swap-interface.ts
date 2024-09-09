@@ -32,12 +32,16 @@ export function useSwapInterface() {
 
   const resolveBottomSheetData = useCallback(async () => {
     Keyboard.dismiss();
+
     if (hasWrapNativeToken) {
-      onReviewSwapPreview();
-      return setUiBottomSheetInformation((prevState) => ({
+      setUiBottomSheetInformation((prevState) => ({
         ...prevState,
         allowance: 'suitable'
       }));
+
+      return setTimeout(() => {
+        onReviewSwapPreview();
+      }, 700);
     }
 
     try {
@@ -89,7 +93,7 @@ export function useSwapInterface() {
 
         setTimeout(() => {
           onReviewSwapPreview();
-        }, 500);
+        }, 700);
       }
     } catch (error) {
       onReviewSwapDismiss();
