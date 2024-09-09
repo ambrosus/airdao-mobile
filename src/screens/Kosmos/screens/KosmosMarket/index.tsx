@@ -122,7 +122,10 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const combinedLoading = useMemo(() => {
     return !bnBalance || isBalanceFetching || isMarketChartLoading || isLoading;
   }, [bnBalance, isBalanceFetching, isMarketChartLoading, isLoading]);
-
+  const scrollRef = useRef(null);
+  const scrollToInput = () =>
+    // @ts-ignore
+    scrollRef?.current?.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
@@ -135,13 +138,15 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         )}
 
         <KeyboardAwareScrollView
+          ref={scrollRef}
+          enableResetScrollToCoords={false}
           keyboardShouldPersistTaps="handled"
           overScrollMode="never"
-          enableOnAndroid
+          enableOnAndroid={false}
           enableAutomaticScroll
           scrollToOverflowEnabled={false}
           nestedScrollEnabled={isIOS}
-          extraHeight={300}
+          extraHeight={isAndroid ? 0 : 300}
           onMomentumScrollBegin={onScrollBeginDragHandler}
           refreshControl={renderRefetchController}
         >
@@ -153,7 +158,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             market={route.params.market}
             onScrollToMarket={onScrollToMarket}
           />
-          <ExactMarketTokenTabs market={market} />
+          <ExactMarketTokenTabs market={market} scrollToInput={scrollToInput} />
         </KeyboardAwareScrollView>
       </View>
     </SafeAreaView>

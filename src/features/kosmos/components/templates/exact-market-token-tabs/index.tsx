@@ -8,9 +8,13 @@ import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType | undefined;
+  scrollToInput: () => any;
 }
 
-export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
+export const ExactMarketTokenTabs = ({
+  market,
+  scrollToInput
+}: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -21,7 +25,7 @@ export const ExactMarketTokenTabs = ({ market }: ExactMarketTokenTabsProps) => {
       tabs={[
         {
           title: t('kosmos.market.tabs.buy.bond'),
-          view: <BuyBondTab market={market} />
+          view: <BuyBondTab market={market} scrollToInput={scrollToInput} />
         },
         {
           title: t('kosmos.market.tabs.history'),

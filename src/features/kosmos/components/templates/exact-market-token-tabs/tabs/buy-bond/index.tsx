@@ -1,8 +1,13 @@
-import React, { useCallback, useRef } from 'react';
-import { Keyboard, View } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  InteractionManager,
+  Keyboard,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { Row, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
@@ -19,15 +24,18 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { isAndroid } from '@utils/isPlatform';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;
+  scrollToInput: () => any;
 }
 
 const INITIAL_PADDING_VALUE = 234;
 
-export const BuyBondTab = ({ market }: BuyBondTabProps) => {
+export const BuyBondTab = ({ market, scrollToInput }: BuyBondTabProps) => {
   const { t } = useTranslation();
+  const [isActiveInput, setIsActiveInput] = useState(false);
 
   const { quoteToken, payoutToken, maxBondable, discount } =
     useMarketDetails(market);
@@ -65,11 +73,26 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
       duration: 0
     });
   };
+  const inputRef = useRef(null);
 
-  const onFocusHandle = () =>
+  const onInputPress = useCallback(() => {
+    if (isAndroid) {
+      setIsActiveInput(true);
+      InteractionManager.runAfterInteractions(() => {
+        scrollToInput();
+        // @ts-ignore
+        setTimeout(() => inputRef?.current?.focus(), 200);
+      });
+    }
+  }, [scrollToInput]);
+
+  const onFocusHandle = () => {
     setAnimatedMargin({ paddingTop: 0, paddingBottom: INITIAL_PADDING_VALUE });
-  const onBlurHandle = () =>
+  };
+  const onBlurHandle = () => {
     setAnimatedMargin({ paddingTop: INITIAL_PADDING_VALUE, paddingBottom: 0 });
+    setIsActiveInput(false);
+  };
 
   return (
     <>
@@ -82,12 +105,23 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
           >
             {t('common.transaction.amount')}
           </Text>
-          <BuyBondInputWithError
-            onFocus={onFocusHandle}
-            onBlur={onBlurHandle}
-            quoteToken={quoteToken}
-            market={market}
-          />
+
+          <View style={{ zIndex: 0 }}>
+            <BuyBondInputWithError
+              inputRef={inputRef}
+              onFocus={onFocusHandle}
+              onBlur={onBlurHandle}
+              quoteToken={quoteToken}
+              market={market}
+            />
+          </View>
+          {!isActiveInput && isAndroid && (
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={onInputPress}
+              style={styles.inputButton}
+            />
+          )}
         </View>
 
         <View style={styles.balance}>
@@ -134,6 +168,7 @@ export const BuyBondTab = ({ market }: BuyBondTabProps) => {
           market={market}
           onPreviewPurchase={onPreviewPurchase}
         />
+        <Spacer value={50} />
       </Animated.View>
       <BottomSheetPreviewPurchase ref={bottomSheetRef} market={market} />
     </>

@@ -15,5 +15,12 @@ export const styles = StyleSheet.create({
   details: {
     marginTop: verticalScale(24),
     rowGap: 8
+  },
+  inputButton: {
+    width: '100%',
+    height: 60,
+    position: 'absolute',
+    top: 15,
+    zIndex: 100
   }
 });
