@@ -10,8 +10,7 @@ import { scale } from '@utils/scaling';
 import {
   SettingsDeadlineForm,
   SettingsExpertModeForm,
-  SettingsSlippageTolleranceForm,
-  SettingsMultiHopForm
+  SettingsSlippageTolleranceForm
 } from '@/features/swap/components/composite';
 
 export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
@@ -36,7 +35,8 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
           <SettingsDeadlineForm />
           <View style={styles.switches}>
             <SettingsExpertModeForm />
-            <SettingsMultiHopForm />
+            {/*//temporarily turn off multihops*/}
+            {/*<SettingsMultiHopForm />*/}
           </View>
         </View>
         <Spacer value={scale(56)} />

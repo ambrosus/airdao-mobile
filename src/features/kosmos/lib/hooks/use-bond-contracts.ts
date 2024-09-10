@@ -17,7 +17,7 @@ export function useBondContracts() {
         );
 
         const signer = new ethers.Wallet(privateKey, provider);
-        const _contracts = new Contracts(signer, 16718);
+        const _contracts = new Contracts(signer, Config.CHAIN_ID);
 
         if (_contracts) setContracts(_contracts);
       } catch (error) {

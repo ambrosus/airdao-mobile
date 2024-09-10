@@ -3,20 +3,20 @@ import { getTokenByAddress } from './token-by-address';
 import {
   FiltersState,
   MarketType,
-  PaymetsTokens,
+  PaymentTokens,
   StatusFilterValues,
   Token
 } from '../types';
 
 export const INITIAL_FILTERS: FiltersState = {
-  status: i18n.t('kosmos.status.all'),
+  status: i18n.t('kosmos.status.active'),
   payment: null
 };
 
 function filterByStatus(
   status: StatusFilterValues,
-  markets: MarketType[],
-  closedMarkets: MarketType[]
+  markets: MarketType[] = [],
+  closedMarkets: MarketType[] = []
 ): MarketType[] {
   switch (status) {
     case i18n.t('kosmos.status.active'):
@@ -30,34 +30,37 @@ function filterByStatus(
 }
 
 function filterMarketsByToken(
-  markets: MarketType[],
-  token: PaymetsTokens,
-  tokens: Token[]
+  markets: MarketType[] = [],
+  token: PaymentTokens,
+  tokens: Token[] = []
 ): MarketType[] {
   return markets.filter((market) => {
-    const qouteToken = getTokenByAddress(market.quoteToken, tokens);
-    return qouteToken && qouteToken.symbol === token;
+    const quoteToken = getTokenByAddress(market.quoteToken, tokens);
+    return quoteToken && quoteToken.symbol === token;
   });
 }
 
 function filterByPayment(
-  token: PaymetsTokens,
-  markets: MarketType[],
-  tokens: Token[]
+  token: PaymentTokens,
+  markets: MarketType[] = [],
+  tokens: Token[] = []
 ): MarketType[] {
   return filterMarketsByToken(markets, token, tokens);
 }
 
 export const filter = (
   filters: FiltersState,
-  markets: MarketType[],
-  closedMarkets: MarketType[],
-  tokens: Token[]
+  markets: MarketType[] = [],
+  closedMarkets: MarketType[] = [],
+  tokens: Token[] = []
 ): MarketType[] => {
   const { status, payment } = filters;
+
   const filteredMarkets = filterByStatus(status, markets, closedMarkets);
 
-  if (payment) return filterByPayment(payment, filteredMarkets, tokens);
+  if (payment && filteredMarkets.length > 0 && tokens.length > 0) {
+    return filterByPayment(payment, filteredMarkets, tokens);
+  }
 
-  return filteredMarkets;
+  return filteredMarkets.length > 0 ? filteredMarkets : [];
 };
