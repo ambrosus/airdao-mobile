@@ -6,7 +6,8 @@ import {
   errorStyle,
   pendingStyle,
   styles,
-  successStyle
+  successStyle,
+  claimPendingStyle
 } from './Status.styles';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,18 @@ export const Status = ({ status, steps }: StatusProps) => {
 
   const statusStyle = useMemo(() => {
     switch (transactionStatus) {
+      case 'active':
+      case 'claimed':
+      case 'success':
+        return { ...successStyle };
+      case 'closed': {
+        return { ...defaultStyle };
+      }
+      case 'confirmations': {
+        return { ...confirmationStyles };
+      }
+      case 'claim pending':
+        return { ...claimPendingStyle };
       case 'success':
         return { ...successStyle };
       case 'confirmations': {
@@ -35,6 +48,7 @@ export const Status = ({ status, steps }: StatusProps) => {
         return {
           ...defaultStyle
         };
+      case 'ready to claim':
       case 'pending':
         return { ...pendingStyle };
       default:
@@ -48,6 +62,16 @@ export const Status = ({ status, steps }: StatusProps) => {
     switch (status) {
       case 'success':
         return t('common.status.success');
+      case 'claimed':
+        return t('kosmos.button.claimed');
+      case 'ready to claim':
+        return 'Ready to claim';
+      case 'active':
+        return t('kosmos.status.active');
+      case 'closed':
+        return t('kosmos.status.closed');
+      case 'pending':
+      case 'claim pending':
       case 'pending':
         return t('common.status.pending');
       case 'confirmations':

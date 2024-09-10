@@ -37,6 +37,8 @@ import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
 import { SwapScreen } from '@screens/Swap';
 import { SwapSuccessScreen, SwapErrorScreen } from '@screens/Swap/screens';
+import { KosmosScreen } from '@screens/Kosmos';
+import { KosmosMarketScreen } from '@screens/Kosmos/screens';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -115,6 +117,11 @@ export const HomeStack = () => {
         <Stack.Screen name="SwapScreen" component={SwapScreen} />
         <Stack.Screen name="SwapSuccessScreen" component={SwapSuccessScreen} />
         <Stack.Screen name="SwapErrorScreen" component={SwapErrorScreen} />
+        <Stack.Screen name="KosmosScreen" component={KosmosScreen} />
+        <Stack.Screen
+          name="KosmosMarketScreen"
+          component={KosmosMarketScreen}
+        />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
     </SendCryptoProvider>

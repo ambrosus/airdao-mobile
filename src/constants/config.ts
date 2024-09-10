@@ -20,7 +20,8 @@ const envs = {
       send: true,
       receive: true,
       bridge: true,
-      stake: true
+      stake: true,
+      kosmos: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
@@ -32,10 +33,12 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     ...BRIDGE_DATA.prod,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
-    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557'
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
+    CHAIN_ID: 16718
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -53,7 +56,8 @@ const envs = {
       send: true,
       receive: true,
       bridge: true,
-      stake: true
+      stake: true,
+      kosmos: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
@@ -68,7 +72,9 @@ const envs = {
     ...BRIDGE_DATA.stage,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
-    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557'
+    FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
+    CHAIN_ID: 16718
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -86,7 +92,8 @@ const envs = {
       send: true,
       receive: true,
       bridge: true,
-      stake: true
+      stake: true,
+      kosmos: true
     },
     AIRDAO_FAQ_URL: 'https://airdao.academy/faqs',
     AIRDAO_X_TWITTER_URL: 'https://twitter.com/airdao_io',
@@ -101,7 +108,9 @@ const envs = {
     ...BRIDGE_DATA.testnet,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
     ROUTER_V2_ADDRESS: '0xA3E524dFc9deA66aE32e81a5E2B4DF24F56e2CBc',
-    FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07'
+    FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
+    MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
+    CHAIN_ID: 22040
   }
 };
 

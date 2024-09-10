@@ -26,6 +26,18 @@ export const successStyle = StyleSheet.create({
     color: COLORS.success700
   }
 });
+
+export const claimPendingStyle = StyleSheet.create({
+  background: {
+    backgroundColor: COLORS.neutral100,
+    borderColor: COLORS.neutral200,
+    borderWidth: 1
+  },
+  text: {
+    color: COLORS.neutral800
+  }
+});
+
 export const pendingStyle = StyleSheet.create({
   background: {
     backgroundColor: COLORS.warning100,
