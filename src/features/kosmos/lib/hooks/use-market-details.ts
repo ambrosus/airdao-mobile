@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType, TxType } from '@features/kosmos/types';
+import { MarketType } from '@features/kosmos/types';
 import { useExtractToken } from './use-extract-token';
 import {
   MAINNET_VESTINGS,
@@ -9,48 +9,20 @@ import {
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
-import {
-  getMarketData,
-  getMarketTxs,
-  getProtocolFee
-} from '@features/kosmos/api';
+import { getProtocolFee } from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 
-export function useMarketDetails(market: MarketType) {
-  const { tokens, amountToBuy, setIsExactMarketLoading } =
-    useKosmosMarketsContextSelector();
+export function useMarketDetails(market: MarketType | undefined) {
+  const { tokens, amountToBuy } = useKosmosMarketsContextSelector();
   const { extractTokenCb } = useExtractToken();
-  const payoutToken = extractTokenCb(market.payoutToken);
-  const quoteToken = extractTokenCb(market.quoteToken);
-  const [isMarketTransactionsFetching, setIsMarketTransactionsFetching] =
-    useState(false);
+  const payoutToken = extractTokenCb(market?.payoutToken ?? '');
+  const quoteToken = extractTokenCb(market?.quoteToken ?? '');
 
   const [protocolFee, setProtocolFee] = useState(0);
-  const [marketTransactions, setMarketTransactions] = useState<TxType[]>([]);
-
-  const fetchMarketById = useCallback(async () => {
-    try {
-      setIsExactMarketLoading(true);
-      return await getMarketData(market.id);
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsExactMarketLoading(false);
-    }
-  }, [market.id, setIsExactMarketLoading]);
 
   useEffect(() => {
     getProtocolFee().then((response) => setProtocolFee(response));
   }, []);
-
-  useEffect(() => {
-    setIsMarketTransactionsFetching(true);
-    getMarketTxs(market.id)
-      .then((response) => setMarketTransactions(response.data))
-      .finally(() => {
-        setIsMarketTransactionsFetching(false);
-      });
-  }, [market.id]);
 
   const assetValue = useMemo(() => {
     return (
@@ -65,16 +37,16 @@ export function useMarketDetails(market: MarketType) {
   }, [market?.capacity, payoutToken?.price, quoteToken?.decimals]);
 
   const lockPeriod = useMemo(() => {
-    if (!market.vesting) return null;
+    if (!market?.vesting) return null;
 
     const vestings =
       Config.env === 'testnet' ? TESTNET_VESTINGS : MAINNET_VESTINGS;
 
     return vestings.find((el) => el.value === +market.vesting)?.label;
-  }, [market.vesting]);
+  }, [market?.vesting]);
 
   const availableAmount = useMemo(() => {
-    if (!market.maxPayout) return null;
+    if (!market?.maxPayout) return null;
 
     return formatDecimals(
       utils.formatUnits(market.capacity, payoutToken?.decimals),
@@ -82,52 +54,54 @@ export function useMarketDetails(market: MarketType) {
       tokens
     );
   }, [
-    market.capacity,
-    market.maxPayout,
+    market?.capacity,
+    market?.maxPayout,
     payoutToken?.contractAddress,
     payoutToken?.decimals,
     tokens
   ]);
 
   const maxBondable = useMemo(() => {
+    if (!market?.maxPayout) return '';
+
     return formatDecimals(
       utils.formatUnits(market.maxPayout, payoutToken?.decimals),
       payoutToken?.contractAddress,
       tokens
     );
   }, [
-    market.maxPayout,
+    market?.maxPayout,
     payoutToken?.contractAddress,
     payoutToken?.decimals,
     tokens
   ]);
 
   const discount = useMemo(() => {
-    return market.discount ? market.discount.toFixed(2) : '-';
-  }, [market.discount]);
+    return market?.discount ? market.discount.toFixed(2) : '-';
+  }, [market?.discount]);
 
   const slippage = useMemo(() => {
-    return market.marketType === 'SDA' ? +amountToBuy * 0.0001 : 0;
-  }, [amountToBuy, market.marketType]);
+    return market?.marketType === 'SDA' ? +amountToBuy * 0.0001 : 0;
+  }, [amountToBuy, market?.marketType]);
 
   const willGetSubFee = useMemo(() => {
     return _willGetSubFee(
       amountToBuy,
       protocolFee,
       slippage,
-      market.bondMarketPrice
+      market?.bondMarketPrice ?? 0
     );
-  }, [amountToBuy, market.bondMarketPrice, protocolFee, slippage]);
+  }, [amountToBuy, market?.bondMarketPrice, protocolFee, slippage]);
 
   const willGet = useMemo(() => {
-    return _willGet(amountToBuy, market.bondMarketPrice);
-  }, [amountToBuy, market.bondMarketPrice]);
+    return _willGet(amountToBuy, market?.bondMarketPrice ?? 0);
+  }, [amountToBuy, market?.bondMarketPrice]);
 
   const willGetWithArguments = useCallback(
     (amount: string) => {
-      return _willGet(amount, market.bondMarketPrice);
+      return _willGet(amount, market?.bondMarketPrice ?? 0);
     },
-    [market.bondMarketPrice]
+    [market?.bondMarketPrice]
   );
 
   return {
@@ -141,9 +115,6 @@ export function useMarketDetails(market: MarketType) {
     protocolFee,
     willGet,
     willGetSubFee,
-    willGetWithArguments,
-    marketTransactions,
-    fetchMarketById,
-    isMarketTransactionsFetching
+    willGetWithArguments
   };
 }

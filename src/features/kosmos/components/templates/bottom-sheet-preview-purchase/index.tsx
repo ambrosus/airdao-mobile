@@ -27,7 +27,7 @@ import { BuyBondButton } from '../../modular';
 import { StakePending } from '@screens/StakingPool/components';
 
 interface BottomSheetPreviewPurchaseProps {
-  market: MarketType;
+  market: MarketType | undefined;
 }
 
 export const BottomSheetPreviewPurchase = forwardRef<
@@ -115,7 +115,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
                 {t('kosmos.table.headings.discount')}
               </StyledTextItem>
               <StyledTextItem isValue>
-                {market.discount.toFixed(2)}%
+                {market?.discount.toFixed(2)}%
               </StyledTextItem>
             </Row>
             {market?.vestingType === 'Fixed-expiry' ? (
@@ -129,9 +129,9 @@ export const BottomSheetPreviewPurchase = forwardRef<
               <Row alignItems="center" justifyContent="space-between">
                 <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
                 <StyledTextItem isValue>
-                  {timestampToFormatedDate(market.start)}
+                  {timestampToFormatedDate(market?.start ?? 0)}
                   {' - '}
-                  {timestampToFormatedDate(market.conclusion)}
+                  {timestampToFormatedDate(market?.conclusion ?? 0)}
                 </StyledTextItem>
               </Row>
             )}
@@ -146,7 +146,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               willGetAfterUnlock={willGetAfterUnlock}
               onDismissBottomSheet={onDismissBottomSheet}
               setIsTransactionProcessing={setIsTransactionProcessing}
-              market={market}
+              market={market as MarketType}
             />
           </View>
         )}

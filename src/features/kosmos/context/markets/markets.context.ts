@@ -7,7 +7,7 @@ const KosmosMarketsContext = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [isTokensLoading, setIsTokensLoading] = useState(false);
   const [isMarketTooltipVisible, setIsMarketTooltipVisible] = useState(false);
-  const [isExactMarketLoading, setIsExactMarketLoading] = useState(false);
+  const [isMarketChartLoading, setIsMarketChartLoading] = useState(false);
   const [amountToBuy, setAmountToBuy] = useState('');
   const [bnBalance, setBnBalance] = useState<ethers.BigNumber | null>(null);
   const [isBalanceFetching, setIsBalanceFetching] = useState(false);
@@ -45,8 +45,8 @@ const KosmosMarketsContext = () => {
     setIsTokensLoading,
     isMarketTooltipVisible,
     onToggleMarketTooltip,
-    isExactMarketLoading,
-    setIsExactMarketLoading,
+    isMarketChartLoading,
+    setIsMarketChartLoading,
     onChangeAmountToBuy,
     amountToBuy,
     bnBalance,

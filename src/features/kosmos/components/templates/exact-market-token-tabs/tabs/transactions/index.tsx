@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
 import {
   ScreenLoader,
@@ -8,37 +9,25 @@ import {
 } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Text } from '@components/base';
+import { useMarketTransactions } from '@features/kosmos/lib/query';
 
 interface TransactionsHistoryTabProps {
-  market: MarketType;
-  focused: boolean;
+  market: MarketType | undefined;
 }
-
 const ESTIMATED_ITEM_SIZE = 26;
-const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT / 4 };
-
 export const TransactionsHistoryTab = ({
-  market,
-  focused
+  market
 }: TransactionsHistoryTabProps) => {
   const { t } = useTranslation();
 
   const LIST_HEADER_TITLES = ['bonds', t('kosmos.payout'), t('common.date')];
-  const {
-    marketTransactions,
-    quoteToken,
-    payoutToken,
-    isMarketTransactionsFetching
-  } = useMarketDetails(market);
+  const { quoteToken, payoutToken } = useMarketDetails(market);
 
-  const transactions = useMemo(
-    () => marketTransactions.sort((a, b) => b.date - a.date),
-    [marketTransactions]
+  const { transactions, isLoading, refetch } = useMarketTransactions(
+    market?.id
   );
 
   const renderTransactionListItem = useCallback(
@@ -47,6 +36,7 @@ export const TransactionsHistoryTab = ({
 
       return (
         <TransactionHistoryItem
+          key={args.index.toString()}
           transaction={transaction}
           quoteToken={quoteToken}
           payoutToken={payoutToken}
@@ -56,15 +46,8 @@ export const TransactionsHistoryTab = ({
     [payoutToken, quoteToken]
   );
 
-  const combineContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      ...styles.container,
-      height: focused ? 'auto' : 0
-    };
-  }, [focused]);
-
   return (
-    <View style={combineContainerStyle}>
+    <View style={styles.container}>
       <Row width="80%" alignItems="center" justifyContent="space-between">
         {LIST_HEADER_TITLES.map((heading, index) => (
           <Text
@@ -79,18 +62,21 @@ export const TransactionsHistoryTab = ({
         ))}
       </Row>
 
-      {isMarketTransactionsFetching ? (
+      {isLoading ? (
         <ScreenLoader height="75%" />
       ) : (
         <View style={styles.list}>
           <FlashList
-            scrollEnabled={false}
-            nestedScrollEnabled={false}
-            data={transactions}
             estimatedItemSize={ESTIMATED_ITEM_SIZE}
-            estimatedListSize={ESTIMATED_LIST_SIZE}
+            scrollEnabled={true}
+            onRefresh={refetch}
+            refreshing={false}
+            nestedScrollEnabled={true}
+            contentInsetAdjustmentBehavior="always"
+            data={transactions}
             keyExtractor={(item) => item.txHash}
             renderItem={renderTransactionListItem}
+            removeClippedSubviews={false}
           />
         </View>
       )}

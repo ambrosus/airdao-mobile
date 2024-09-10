@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16.5)
   },
   list: {
-    height: '100%'
+    flex: 1,
+    maxHeight: 450
   },
   tableHeaderTextStyle: {
     marginBottom: 16

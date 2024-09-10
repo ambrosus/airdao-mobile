@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { LegacyRef, useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import { styles } from './styles';
 import { InputWithIcon } from '@components/composite';
-import { Spacer, Text } from '@components/base';
+import { InputRef, Spacer, Text } from '@components/base';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -16,14 +16,16 @@ interface BuyBondInputWithErrorProps {
   onFocus: () => void;
   onBlur: () => void;
   quoteToken: Token | undefined;
-  market: MarketType;
+  market: MarketType | undefined;
+  inputRef: LegacyRef<InputRef>;
 }
 
 export const BuyBondInputWithError = ({
   onFocus,
   onBlur,
   quoteToken,
-  market
+  market,
+  inputRef
 }: BuyBondInputWithErrorProps) => {
   const { error } = useTransactionErrorHandler(market);
   const { amountToBuy, onChangeAmountToBuy } =
@@ -42,6 +44,7 @@ export const BuyBondInputWithError = ({
 
   const onChangeAmountToBuyHandle = useCallback(
     (amount: string) => {
+      if (amount === ' ') return;
       let finalValue = StringUtils.formatNumberInput(amount);
       finalValue = NumberUtils.limitDecimalCount(
         finalValue,
@@ -73,6 +76,7 @@ export const BuyBondInputWithError = ({
   return (
     <View>
       <InputWithIcon
+        ref={inputRef}
         value={amountToBuy}
         onChangeValue={onChangeAmountToBuyHandle}
         keyboardType="numeric"
