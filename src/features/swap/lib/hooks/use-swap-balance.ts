@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { BigNumber } from 'ethers/lib/ethers';
 import { SwapToken } from '@features/swap/types';
-import { getBalanceOf } from '../contracts';
+
 import { useFocusEffect } from '@react-navigation/native';
 import { useWallet } from '@hooks';
+import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapBalance(token: SwapToken | null) {
   const { wallet } = useWallet();
@@ -18,8 +19,8 @@ export function useSwapBalance(token: SwapToken | null) {
         (async () => {
           setIsFetchingBalance(true);
           try {
-            const bnBalance = await getBalanceOf({
-              token,
+            const bnBalance = await erc20Contracts.balanceOf({
+              tokenAddress: token.address,
               ownerAddress: wallet?.address
             });
 
