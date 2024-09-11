@@ -16,7 +16,8 @@ import {
   isETHtoWrapped,
   isWrappedToETH,
   isMultiHopSwapAvailable,
-  calculateAllowanceWithProviderFee
+  calculateAllowanceWithProviderFee,
+  SwapStringUtils
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -94,6 +95,9 @@ export function useSwapActions() {
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
 
+    const _deadline = SwapStringUtils.transformDeadlineValue(deadline);
+    const _slippage = SwapStringUtils.transformSlippageValue(slippageTolerance);
+
     const isMultiHopSwapPossible =
       multihops &&
       isMultiHopPathAvailable &&
@@ -112,8 +116,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -122,8 +126,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -132,8 +136,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         tokensRoute,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -141,8 +145,8 @@ export function useSwapActions() {
       tokenToSell.AMOUNT,
       excludeNativeETH,
       signer,
-      slippageTolerance,
-      deadline
+      _slippage,
+      _deadline
     );
   }, [
     _extractPrivateKey,

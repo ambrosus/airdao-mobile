@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { View } from 'react-native';
+import { Keyboard, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
@@ -20,26 +20,28 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
     const bottomSheetSwapSettingsRef = useForwardedRef(ref);
     return (
       <BottomSheet swiperIconVisible ref={bottomSheetSwapSettingsRef}>
-        <Spacer value={scale(16)} />
-        <Text
-          fontSize={20}
-          fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral800}
-          style={styles.heading}
-        >
-          {t('swap.settings.heading')}
-        </Text>
-
-        <View style={styles.container}>
+        <Pressable onPress={Keyboard.dismiss}>
           <Spacer value={scale(16)} />
-          <SettingsSlippageTolleranceForm />
-          <SettingsDeadlineForm />
-          <View style={styles.switches}>
-            <SettingsExpertModeForm />
-            <SettingsMultiHopForm />
+          <Text
+            fontSize={20}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
+            style={styles.heading}
+          >
+            {t('swap.settings.heading')}
+          </Text>
+
+          <View style={styles.container}>
+            <Spacer value={scale(16)} />
+            <SettingsSlippageTolleranceForm />
+            <SettingsDeadlineForm />
+            <View style={styles.switches}>
+              <SettingsExpertModeForm />
+              <SettingsMultiHopForm />
+            </View>
           </View>
-        </View>
-        <Spacer value={scale(56)} />
+          <Spacer value={scale(56)} />
+        </Pressable>
       </BottomSheet>
     );
   }

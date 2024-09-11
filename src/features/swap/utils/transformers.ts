@@ -70,6 +70,15 @@ const transformRealizedLPFee = (value: string) => {
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
 
+const transformDeadlineValue = (value: string) => {
+  const deadline = parseInt(value);
+  return (deadline * 60).toString();
+};
+
+const transformSlippageValue = (value: string) => {
+  return +value * 100;
+};
+
 const extendedLogoVariants = (symbol: string) =>
   symbol === 'SAMB' ? 'AMB' : symbol;
 
@@ -77,5 +86,7 @@ export const SwapStringUtils = {
   transformAmountValue,
   extendedLogoVariants,
   transformMinAmountValue,
-  transformRealizedLPFee
+  transformRealizedLPFee,
+  transformDeadlineValue,
+  transformSlippageValue
 };

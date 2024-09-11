@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { ReactNode, useCallback, useRef } from 'react';
 import {
   View,
   TextInput,
@@ -26,6 +26,21 @@ export const SettingsInputWithLabel = ({
 
   const onInputContainerPress = () => inputRef.current?.focus();
 
+  const onChangeSlippageBlur = useCallback(() => {
+    if (onChangeText && value) {
+      let formattedValue = value;
+      if (!value.includes('.')) {
+        formattedValue = value + '.00';
+      } else {
+        const [integer, decimal] = value.split('.');
+        if (decimal.length === 1) {
+          formattedValue = `${integer}.${decimal}0`;
+        }
+      }
+      return onChangeText(formattedValue);
+    }
+  }, [onChangeText, value]);
+
   return (
     <View style={styles.formWithLabel}>
       <Text
@@ -46,6 +61,7 @@ export const SettingsInputWithLabel = ({
             keyboardType="numeric"
             value={value}
             onChangeText={onChangeText}
+            onBlur={onChangeSlippageBlur}
           />
 
           {children}

@@ -15,7 +15,13 @@ export const SettingsSlippageTolleranceForm = () => {
   const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onPercentageBoxPress = (value: number) => {
-    onChangeSettings('slippageTolerance', String(value));
+    if (value.toString().includes('.')) {
+      const newValue = value + '0';
+      return onChangeSettings('slippageTolerance', String(newValue));
+    }
+
+    const newValue = value + '.00';
+    return onChangeSettings('slippageTolerance', String(newValue));
   };
 
   const onChangeSlippageToleranceHandle = useCallback(
@@ -31,7 +37,7 @@ export const SettingsSlippageTolleranceForm = () => {
         label={t('swap.settings.slippage')}
         value={_refSettingsGetter.slippageTolerance}
         onChangeText={onChangeSlippageToleranceHandle}
-        placeholder="0.05%"
+        placeholder="0.50%"
       >
         {_refSettingsGetter.slippageTolerance.length > 0 && (
           <Text
