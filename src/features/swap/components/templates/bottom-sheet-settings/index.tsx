@@ -10,7 +10,7 @@ import { scale } from '@utils/scaling';
 import {
   SettingsDeadlineForm,
   SettingsExpertModeForm,
-  SettingsSlippageTolleranceForm,
+  SettingsSlippageToleranceForm,
   SettingsMultiHopForm
 } from '@/features/swap/components/composite';
 
@@ -33,7 +33,7 @@ export const BottomSheetSwapSettings = forwardRef<BottomSheetRef, unknown>(
 
           <View style={styles.container}>
             <Spacer value={scale(16)} />
-            <SettingsSlippageTolleranceForm />
+            <SettingsSlippageToleranceForm />
             <SettingsDeadlineForm />
             <View style={styles.switches}>
               <SettingsExpertModeForm />

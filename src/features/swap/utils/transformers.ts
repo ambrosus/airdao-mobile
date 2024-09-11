@@ -70,6 +70,21 @@ const transformRealizedLPFee = (value: string) => {
   return formattedNumber.replace(/(\.\d*[1-9])0+$/, '$1').replace(/\.0*$/, '');
 };
 
+const transformSlippageOnBlur = (value: string | undefined) => {
+  if (value) {
+    let formattedValue = value;
+    if (!value.includes('.')) {
+      return (formattedValue = value + '.00');
+    } else {
+      const [integer, decimal] = value.split('.');
+      if (decimal.length === 1) {
+        return (formattedValue = `${integer}.${decimal}0`);
+      }
+    }
+    return formattedValue;
+  }
+};
+
 const transformDeadlineValue = (value: string) => {
   const deadline = parseInt(value);
   return (deadline * 60).toString();
@@ -88,5 +103,6 @@ export const SwapStringUtils = {
   transformMinAmountValue,
   transformRealizedLPFee,
   transformDeadlineValue,
-  transformSlippageValue
+  transformSlippageValue,
+  transformSlippageOnBlur
 };

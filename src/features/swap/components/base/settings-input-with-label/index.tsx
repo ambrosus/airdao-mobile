@@ -8,6 +8,8 @@ import {
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { SwapStringUtils } from '@features/swap/utils';
+import { INITIAL_SLIPPAGE_TOLERANCE } from '@features/swap/context/initials';
 
 interface SettingsInputWithLabelProps extends TextInputProps {
   label: string;
@@ -27,17 +29,9 @@ export const SettingsInputWithLabel = ({
   const onInputContainerPress = () => inputRef.current?.focus();
 
   const onChangeSlippageBlur = useCallback(() => {
-    if (onChangeText && value) {
-      let formattedValue = value;
-      if (!value.includes('.')) {
-        formattedValue = value + '.00';
-      } else {
-        const [integer, decimal] = value.split('.');
-        if (decimal.length === 1) {
-          formattedValue = `${integer}.${decimal}0`;
-        }
-      }
-      return onChangeText(formattedValue);
+    if (typeof onChangeText === 'function') {
+      const newValue = SwapStringUtils.transformSlippageOnBlur(value);
+      return onChangeText(newValue ?? INITIAL_SLIPPAGE_TOLERANCE);
     }
   }, [onChangeText, value]);
 
