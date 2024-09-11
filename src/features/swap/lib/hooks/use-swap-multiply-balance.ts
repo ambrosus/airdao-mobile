@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
 import { MultiplyBalancesStateType, SwapToken } from '@features/swap/types';
-import { getBalanceOf } from '@features/swap/lib/contracts';
+
 import { useWallet } from '@hooks';
+import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapMultiplyBalance() {
   const { wallet } = useWallet();
@@ -24,7 +25,10 @@ export function useSwapMultiplyBalance() {
   const getTokenBalance = useCallback(
     async (token: SwapToken | null) => {
       return token && wallet?.address
-        ? getBalanceOf({ token, ownerAddress: wallet.address })
+        ? erc20Contracts.balanceOf({
+            tokenAddress: token.address,
+            ownerAddress: wallet.address
+          })
         : Promise.resolve(null);
     },
     [wallet]
