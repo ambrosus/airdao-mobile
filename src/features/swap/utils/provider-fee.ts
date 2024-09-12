@@ -9,3 +9,9 @@ export function subtractRealizedLPFeeFromInput(amountToSell: string) {
 
   return String(+amountToSell - +liquidityProviderFee);
 }
+
+export function calculateAllowanceWithProviderFee(amountToSell: string) {
+  const liquidityProviderFee = realizedLPFee(amountToSell);
+
+  return String(+amountToSell + +liquidityProviderFee);
+}

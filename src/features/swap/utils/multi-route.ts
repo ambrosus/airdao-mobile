@@ -3,7 +3,7 @@ import { SWAP_SUPPORTED_TOKENS, TOKEN_ADDRESSES } from '../entities';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
-export const isMultiHopSwapAvaliable = (path: string[]): boolean => {
+export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return !!extractArrayOfMiddleMultiHopAddresses(path).address;
 };
 
@@ -19,7 +19,9 @@ export const extractMiddleAddressMultiHop = (path: string[]): string => {
 };
 
 export const extractArrayOfMiddleMultiHopAddresses = (path: string[]) => {
-  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment];
+  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment].filter(
+    (token) => token.symbol !== 'SAMB'
+  );
 
   const filterByAddress = tokens.filter((token) => {
     return !path.includes(token.address);

@@ -4,7 +4,7 @@ import {
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
   singleHopImpact,
-  isMultiHopSwapAvaliable,
+  isMultiHopSwapAvailable,
   extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { getAmountsOut } from '@features/swap/lib/contracts';
@@ -66,7 +66,7 @@ export function useSwapPriceImpact() {
   );
 
   const multiHopImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
     const middleAddress =
       extractArrayOfMiddleMultiHopAddresses(tokensRoute).address;
 
@@ -172,7 +172,7 @@ export function useSwapPriceImpact() {
   ]);
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
     if (settings.current.multihops && isMultiHopPathAvailable) {
       return await multiHopImpactGetter();
     } else {
