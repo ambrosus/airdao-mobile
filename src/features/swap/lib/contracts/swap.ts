@@ -63,7 +63,7 @@ export async function swapExactETHForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
@@ -101,7 +101,7 @@ export async function swapMultiHopExactTokensForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -150,7 +150,7 @@ export async function swapExactTokensForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
@@ -188,7 +188,7 @@ export async function swapExactTokensForETH(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
