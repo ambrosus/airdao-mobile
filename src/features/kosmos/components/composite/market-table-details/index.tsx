@@ -15,7 +15,7 @@ import {
 } from '@features/kosmos/utils';
 
 interface MarketTableDetailsProps {
-  market: MarketType;
+  market: MarketType | undefined;
   onHandlerMarketLayout: (event: LayoutChangeEvent) => void;
 }
 
@@ -40,7 +40,7 @@ export const MarketTableDetails = ({
       {/* Asset value */}
       <RowJustifyAlignedItem label={t('kosmos.assets.value')}>
         <Row alignItems="center">
-          <StyledTextItem>${market.isLive ? assetValue : 0}</StyledTextItem>
+          <StyledTextItem>${market?.isLive ? assetValue : 0}</StyledTextItem>
         </Row>
       </RowJustifyAlignedItem>
       {/* Lock Period */}
@@ -68,16 +68,16 @@ export const MarketTableDetails = ({
       <RowJustifyAlignedItem label={t('kosmos.market.duration')}>
         <Row alignItems="center">
           <StyledTextItem>
-            {timestampToFormatedDate(market.start)}
+            {timestampToFormatedDate(market?.start ?? 0)}
             {' - '}
-            {timestampToFormatedDate(market.conclusion)}
+            {timestampToFormatedDate(market?.conclusion ?? 0)}
           </StyledTextItem>
         </Row>
       </RowJustifyAlignedItem>
       {/* Status */}
       <RowJustifyAlignedItem label={t('common.status')}>
         <Row alignItems="center">
-          <Status status={market.isLive ? 'active' : 'closed'} />
+          <Status status={market?.isLive ? 'active' : 'closed'} />
         </Row>
       </RowJustifyAlignedItem>
     </View>

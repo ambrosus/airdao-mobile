@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import Animated, { AnimatedStyleProp } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Text } from '@components/base';
@@ -8,17 +7,14 @@ import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { MarketType } from '@features/kosmos/types';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
-
-type AnimatedStyleType = AnimatedStyleProp<{ marginTop: number }>;
+import { View } from 'react-native';
 
 interface ReviewBondPurchaseButtonProps {
-  animatedStyle: AnimatedStyleType;
-  market: MarketType;
+  market: MarketType | undefined;
   onPreviewPurchase: () => void;
 }
 
 export const ReviewBondPurchaseButton = ({
-  animatedStyle,
   market,
   onPreviewPurchase
 }: ReviewBondPurchaseButtonProps) => {
@@ -32,18 +28,18 @@ export const ReviewBondPurchaseButton = ({
   );
 
   const disabled = useMemo(
-    () => !parseFloat(amountToBuy) || error !== '' || !market.isLive,
-    [amountToBuy, error, market.isLive]
+    () => !parseFloat(amountToBuy) || error !== '' || !market?.isLive,
+    [amountToBuy, error, market?.isLive]
   );
 
   const label = useMemo(
     () =>
-      !market.isLive
+      !market?.isLive
         ? t('kosmos.button.market.closed')
         : disabled
         ? t('kosmos.button.enter.amount')
         : t('button.preview'),
-    [disabled, market.isLive, t]
+    [disabled, market?.isLive, t]
   );
 
   const textColor = useMemo(() => {
@@ -51,7 +47,7 @@ export const ReviewBondPurchaseButton = ({
   }, [disabled]);
 
   return (
-    <Animated.View style={[styles.footer, animatedStyle]}>
+    <View style={styles.footer}>
       <PrimaryButton
         disabled={disabled}
         style={styles.button}
@@ -61,6 +57,6 @@ export const ReviewBondPurchaseButton = ({
           {label}
         </Text>
       </PrimaryButton>
-    </Animated.View>
+    </View>
   );
 };
