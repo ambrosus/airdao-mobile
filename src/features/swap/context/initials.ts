@@ -13,8 +13,7 @@ export const INITIAL_DEADLINE = '20';
 export const INITIAL_SETTINGS: Settings = {
   slippageTolerance: INITIAL_SLIPPAGE_TOLERANCE,
   deadline: INITIAL_DEADLINE,
-  //temporarily turn off multihops
-  multihops: false,
+  multihops: true,
   extendedMode: false
 };
 
