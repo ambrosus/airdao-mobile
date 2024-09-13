@@ -40,7 +40,12 @@ export function useSwapActions() {
   const checkAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-      const bnAmountToSell = ethers.utils.parseEther(tokenToSell.AMOUNT);
+
+      const amountWithFee = calculateAllowanceWithProviderFee(
+        tokenToSell.AMOUNT
+      );
+
+      const bnAmountToSell = ethers.utils.parseEther(amountWithFee);
 
       return checkIsApprovalRequired({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
