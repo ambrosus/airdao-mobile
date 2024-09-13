@@ -14,14 +14,11 @@ export function useSwapSettings() {
 
   const onChangeDeadline = useCallback(
     (value: string) => {
-      if (value === '0' || value.includes('.') || value.includes(',')) {
-        return;
-      }
-      const finalValue = StringUtils.formatNumberInput(value);
+      if (/^0$|[.,]/.test(value)) return;
 
       return setSettings((prevState) => ({
         ...prevState,
-        deadline: finalValue
+        deadline: StringUtils.formatNumberInput(value)
       }));
     },
     [setSettings]
