@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16.5)
   },
   list: {
+    marginTop: 10,
     flex: 1,
     maxHeight: 450
   },

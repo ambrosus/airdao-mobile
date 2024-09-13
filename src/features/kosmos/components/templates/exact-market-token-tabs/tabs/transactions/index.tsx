@@ -3,10 +3,7 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
-import {
-  ScreenLoader,
-  TransactionHistoryItem
-} from '@features/kosmos/components/base';
+import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
@@ -63,7 +60,7 @@ export const TransactionsHistoryTab = ({
       </Row>
 
       {isLoading ? (
-        <ScreenLoader height="75%" />
+        <View style={{ height: 550 }}></View>
       ) : (
         <View style={styles.list}>
           <FlashList
