@@ -1,12 +1,12 @@
 import {
   SelectedTokensAmountState,
   SelectedTokensState,
-  UIBottomSheetInformationState,
-  Settings
+  Settings,
+  UIBottomSheetInformationState
 } from '../types';
 import { SWAP_SUPPORTED_TOKENS } from '../entities';
 
-export const INITIAL_SLIPPAGE_TOLERANCE = '0.5';
+export const INITIAL_SLIPPAGE_TOLERANCE = '0.50';
 export const INITIAL_DEADLINE = '20';
 
 export const INITIAL_SETTINGS: Settings = {

@@ -1,70 +1,72 @@
-import React, { useCallback, useMemo } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import React, { useMemo } from 'react';
+import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import {
-  ScreenLoader,
-  TransactionHistoryItem
-} from '@features/kosmos/components/base';
+import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import { MarketType, TxType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Text } from '@components/base';
+import { useMarketTransactions } from '@features/kosmos/lib/query';
 
 interface TransactionsHistoryTabProps {
-  market: MarketType;
-  focused: boolean;
+  market: MarketType | undefined;
 }
-
-const ESTIMATED_ITEM_SIZE = 26;
-const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT / 4 };
-
 export const TransactionsHistoryTab = ({
-  market,
-  focused
+  market
 }: TransactionsHistoryTabProps) => {
   const { t } = useTranslation();
 
   const LIST_HEADER_TITLES = ['bonds', t('kosmos.payout'), t('common.date')];
-  const {
-    marketTransactions,
-    quoteToken,
-    payoutToken,
-    isMarketTransactionsFetching
-  } = useMarketDetails(market);
+  const { quoteToken, payoutToken } = useMarketDetails(market);
 
-  const transactions = useMemo(
-    () => marketTransactions.sort((a, b) => b.date - a.date),
-    [marketTransactions]
+  const { transactions, isLoading, refetch } = useMarketTransactions(
+    market?.id
+  );
+  const renderRefetchController = useMemo(
+    () => (
+      <RefreshControl
+        onRefresh={refetch}
+        refreshing={isLoading}
+        removeClippedSubviews
+      />
+    ),
+    [isLoading, refetch]
   );
 
-  const renderTransactionListItem = useCallback(
-    (args: ListRenderItemInfo<TxType>) => {
-      const { item: transaction } = args;
-
-      return (
-        <TransactionHistoryItem
-          transaction={transaction}
-          quoteToken={quoteToken}
-          payoutToken={payoutToken}
-        />
-      );
-    },
-    [payoutToken, quoteToken]
-  );
-
-  const combineContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      ...styles.container,
-      height: focused ? 'auto' : 0
+  const renderTransactionListItem = (item: {
+    index: number;
+    item: {
+      id: string;
+      transaction: TxType;
     };
-  }, [focused]);
+  }) => {
+    const { transaction, id } = item.item;
+    return (
+      <TransactionHistoryItem
+        key={id}
+        transaction={transaction}
+        quoteToken={quoteToken}
+        payoutToken={payoutToken}
+      />
+    );
+  };
 
+  const getItem = (
+    _data: TxType[] | [],
+    index: number
+  ): { id: string; transaction: TxType } => {
+    const transaction = _data[index];
+    return {
+      id: transaction.txHash,
+      transaction
+    };
+  };
+
+  const getItemCount = (_data: TxType[] | []) => _data.length;
   return (
-    <View style={combineContainerStyle}>
+    <View style={styles.container}>
       <Row width="80%" alignItems="center" justifyContent="space-between">
         {LIST_HEADER_TITLES.map((heading, index) => (
           <Text
@@ -79,18 +81,21 @@ export const TransactionsHistoryTab = ({
         ))}
       </Row>
 
-      {isMarketTransactionsFetching ? (
-        <ScreenLoader height="75%" />
+      {isLoading ? (
+        <View style={{ height: 550 }}></View>
       ) : (
         <View style={styles.list}>
-          <FlashList
-            scrollEnabled={false}
-            nestedScrollEnabled={false}
+          <VirtualizedList
+            refreshControl={renderRefetchController}
+            initialNumToRender={4}
             data={transactions}
-            estimatedItemSize={ESTIMATED_ITEM_SIZE}
-            estimatedListSize={ESTIMATED_LIST_SIZE}
-            keyExtractor={(item) => item.txHash}
             renderItem={renderTransactionListItem}
+            keyExtractor={(item) => item.id}
+            getItemCount={getItemCount}
+            getItem={getItem}
+            contentInsetAdjustmentBehavior="always"
+            removeClippedSubviews={false}
+            nestedScrollEnabled
           />
         </View>
       )}

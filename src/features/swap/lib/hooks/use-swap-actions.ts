@@ -15,7 +15,9 @@ import {
   wrapNativeAddress,
   isETHtoWrapped,
   isWrappedToETH,
-  isMultiHopSwapAvailable
+  isMultiHopSwapAvailable,
+  calculateAllowanceWithProviderFee,
+  SwapStringUtils
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -32,6 +34,7 @@ export function useSwapActions() {
     isMultiHopSwapBetterCurrency
   } = useSwapContextSelector();
 
+  const { _extractPrivateKey } = useWallet();
   const { settings } = useSwapSettings();
   const { tokensRoute, tokenToSell } = useSwapTokens();
   const { isStartsWithETH, isEndsWithETH } = useSwapHelpers();
@@ -39,7 +42,12 @@ export function useSwapActions() {
   const checkAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-      const bnAmountToSell = ethers.utils.parseEther(tokenToSell.AMOUNT);
+      
+      const amountWithFee = calculateAllowanceWithProviderFee(
+        tokenToSell.AMOUNT
+      );
+
+      const bnAmountToSell = ethers.utils.parseEther(amountWithFee);
 
       return checkIsApprovalRequired({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -55,7 +63,12 @@ export function useSwapActions() {
   const setAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-      const bnAmountToSell = ethers.utils.parseEther('100000000');
+      
+      const amountWithFee = calculateAllowanceWithProviderFee(
+        tokenToSell.AMOUNT
+      );
+
+      const bnAmountToSell = ethers.utils.parseEther(amountWithFee);
 
       const allowance = await increaseAllowance({
         address: tokenToSell.TOKEN?.address ?? '',
@@ -79,7 +92,7 @@ export function useSwapActions() {
     _extractPrivateKey,
     checkAllowance,
     setUiBottomSheetInformation,
-    tokenToSell.TOKEN?.address,
+    tokenToSell,
     uiBottomSheetInformation
   ]);
 
@@ -88,6 +101,9 @@ export function useSwapActions() {
     const { slippageTolerance, deadline, multihops } = settings.current;
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
+
+    const _deadline = SwapStringUtils.transformDeadlineValue(deadline);
+    const _slippage = SwapStringUtils.transformSlippageValue(slippageTolerance);
 
     const isMultiHopSwapPossible =
       multihops &&
@@ -107,8 +123,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -117,8 +133,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -127,8 +143,8 @@ export function useSwapActions() {
         tokenToSell.AMOUNT,
         tokensRoute,
         signer,
-        slippageTolerance,
-        deadline
+        _slippage,
+        _deadline
       );
     }
 
@@ -136,8 +152,8 @@ export function useSwapActions() {
       tokenToSell.AMOUNT,
       excludeNativeETH,
       signer,
-      slippageTolerance,
-      deadline
+      _slippage,
+      _deadline
     );
   }, [
     _extractPrivateKey,

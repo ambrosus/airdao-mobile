@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
@@ -30,12 +31,17 @@ export function useSwapInterface() {
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
 
   const resolveBottomSheetData = useCallback(async () => {
+    Keyboard.dismiss();
+
     if (hasWrapNativeToken) {
-      onReviewSwapPreview();
       setUiBottomSheetInformation((prevState) => ({
         ...prevState,
         allowance: 'suitable'
       }));
+
+      return setTimeout(() => {
+        onReviewSwapPreview();
+      }, 700);
     }
 
     try {
@@ -87,7 +93,7 @@ export function useSwapInterface() {
 
         setTimeout(() => {
           onReviewSwapPreview();
-        }, 500);
+        }, 700);
       }
     } catch (error) {
       onReviewSwapDismiss();

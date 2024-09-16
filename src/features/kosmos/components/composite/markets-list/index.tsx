@@ -8,14 +8,15 @@ import {
   ScreenLoader
 } from '@/features/kosmos/components/base';
 import { FiltersState, MarketType } from '@features/kosmos/types';
-import {
-  useActiveMarkets,
-  useClosedMarkets,
-  useMarketTokens
-} from '@features/kosmos/lib/hooks';
+import { useMarketTokens } from '@features/kosmos/lib/hooks';
 import { filter } from '@/features/kosmos/utils';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { HomeNavigationProp } from '@appTypes';
+import {
+  useActiveMarketsQuery,
+  useClosedMarketsQuery
+} from '@features/kosmos/lib/query';
+import { useTranslation } from 'react-i18next';
 
 const ESTIMATED_ITEM_SIZE = 56;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
@@ -25,14 +26,28 @@ interface ActiveMarketsListProps {
 }
 
 export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
+  const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
   const { tokens, isTokensLoading } = useMarketTokens();
 
-  const { markets, refetchMarkets, isMarketsLoading } = useActiveMarkets();
-  const { closedMarkets, isClosedMarketsLoading } = useClosedMarkets();
+  const {
+    markets,
+    isLoading: isMarketsLoading,
+    refetchActiveMarkets
+  } = useActiveMarketsQuery(filters);
+  const {
+    closedMarkets,
+    isLoading: isClosedMarketsLoading,
+    refetchClosedMarkets
+  } = useClosedMarketsQuery(filters);
 
   const filteredMarkets = useMemo(() => {
-    return filter(filters, markets, closedMarkets, tokens);
+    return filter(
+      filters,
+      markets as MarketType[],
+      closedMarkets as MarketType[],
+      tokens
+    ).reverse();
   }, [filters, markets, closedMarkets, tokens]);
 
   const renderMarketListItem = useCallback(
@@ -57,6 +72,17 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
   const combinedLoadingState = useMemo(() => {
     return isClosedMarketsLoading || isMarketsLoading || isTokensLoading;
   }, [isClosedMarketsLoading, isMarketsLoading, isTokensLoading]);
+
+  const refetchMarkets = useCallback(() => {
+    switch (filters.status) {
+      case t('kosmos.status.active'):
+        return refetchActiveMarkets();
+      case t('kosmos.status.closed'):
+        return refetchClosedMarkets();
+      case t('kosmos.status.all'):
+        return Promise.all([refetchActiveMarkets(), refetchClosedMarkets()]);
+    }
+  }, [filters.status, refetchActiveMarkets, refetchClosedMarkets, t]);
 
   if (combinedLoadingState) {
     return <ScreenLoader />;

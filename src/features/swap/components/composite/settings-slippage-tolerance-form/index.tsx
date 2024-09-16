@@ -8,14 +8,20 @@ import { Row, Text } from '@components/base';
 import { useSwapSettings } from '@features/swap/lib/hooks';
 import { COLORS } from '@constants/colors';
 
-const SLIPPAGE_TOLLERANCE_PERCENTAGES = ['0.1', '0.5', '1'];
+const SLIPPAGE_TOLERANCE_PERCENTAGES = ['0.1', '0.5', '1'];
 
-export const SettingsSlippageTolleranceForm = () => {
+export const SettingsSlippageToleranceForm = () => {
   const { t } = useTranslation();
   const { _refSettingsGetter, onChangeSettings } = useSwapSettings();
 
   const onPercentageBoxPress = (value: number) => {
-    onChangeSettings('slippageTolerance', String(value));
+    if (value.toString().includes('.')) {
+      const newValue = value + '0';
+      return onChangeSettings('slippageTolerance', String(newValue));
+    }
+
+    const newValue = value + '.00';
+    return onChangeSettings('slippageTolerance', String(newValue));
   };
 
   const onChangeSlippageToleranceHandle = useCallback(
@@ -31,7 +37,7 @@ export const SettingsSlippageTolleranceForm = () => {
         label={t('swap.settings.slippage')}
         value={_refSettingsGetter.slippageTolerance}
         onChangeText={onChangeSlippageToleranceHandle}
-        placeholder="0.05%"
+        placeholder="0.50%"
       >
         {_refSettingsGetter.slippageTolerance.length > 0 && (
           <Text
@@ -45,8 +51,8 @@ export const SettingsSlippageTolleranceForm = () => {
         )}
       </SettingsInputWithLabel>
 
-      <Row style={styles.slippageTolleranceRow} alignItems="center">
-        {SLIPPAGE_TOLLERANCE_PERCENTAGES.map((value) => (
+      <Row style={styles.slippageToleranceRow} alignItems="center">
+        {SLIPPAGE_TOLERANCE_PERCENTAGES.map((value) => (
           <PercentageBox
             key={value}
             percentage={+value}
