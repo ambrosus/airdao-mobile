@@ -34,7 +34,6 @@ export function useSwapActions() {
     isMultiHopSwapBetterCurrency
   } = useSwapContextSelector();
 
-  const { _extractPrivateKey } = useWallet();
   const { settings } = useSwapSettings();
   const { tokensRoute, tokenToSell } = useSwapTokens();
   const { isStartsWithETH, isEndsWithETH } = useSwapHelpers();
@@ -42,7 +41,7 @@ export function useSwapActions() {
   const checkAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-      
+
       const amountWithFee = calculateAllowanceWithProviderFee(
         tokenToSell.AMOUNT
       );
@@ -63,7 +62,7 @@ export function useSwapActions() {
   const setAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-      
+
       const amountWithFee = calculateAllowanceWithProviderFee(
         tokenToSell.AMOUNT
       );
