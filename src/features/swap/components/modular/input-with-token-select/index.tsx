@@ -47,6 +47,13 @@ export const InputWithTokenSelect = ({
     }
   }, [isInputFocused, selectedTokensAmount, type]);
 
+  const value = useMemo(() => {
+    return StringUtils.wrapAndroidString(
+      selectedTokensAmount[type],
+      isInputFocused
+    );
+  }, [isInputFocused, selectedTokensAmount, type]);
+
   return (
     <View style={styles.wrapper}>
       <Text>
@@ -57,7 +64,7 @@ export const InputWithTokenSelect = ({
           onFocus={onToggleInputFocus}
           onBlur={onToggleInputFocus}
           selection={selection}
-          value={selectedTokensAmount[type]}
+          value={value}
           style={styles.input}
           type="number"
           keyboardType="decimal-pad"
