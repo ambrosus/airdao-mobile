@@ -33,7 +33,7 @@ export const SwapContext = () => {
 
   const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
-  const [isIncreasingAllowance, setIsIncreassingAllowance] = useState(false);
+  const [isIncreasingAllowance, setIsIncreasingAllowance] = useState(false);
   const [isMultiHopSwapBetterCurrency, setIsMultiHopSwapCurrencyBetter] =
     useState({ state: false, token: '' });
 
@@ -93,7 +93,7 @@ export const SwapContext = () => {
     isProcessingSwap,
     setIsProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     allPairsRef,
     setPairs,
     reset

@@ -20,7 +20,7 @@ export const SubmitSwapActions = () => {
     setIsProcessingSwap,
     isProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     selectedTokens,
     selectedTokensAmount
   } = useSwapContextSelector();
@@ -60,10 +60,10 @@ export const SubmitSwapActions = () => {
     const routeParams = prepareRouteParams();
     if (uiBottomSheetInformation.allowance === 'increase') {
       try {
-        setIsIncreassingAllowance(true);
+        setIsIncreasingAllowance(true);
         await setAllowance();
       } finally {
-        setIsIncreassingAllowance(false);
+        setIsIncreasingAllowance(false);
       }
     } else {
       try {
@@ -93,7 +93,7 @@ export const SubmitSwapActions = () => {
     navigation,
     prepareRouteParams,
     setAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     setIsProcessingSwap,
     simulateNavigationDelay,
     swapTokens,

@@ -26,6 +26,8 @@ import { useSwapHelpers } from './use-swap-helpers';
 import { useWallet } from '@hooks';
 
 export function useSwapActions() {
+  const { _extractPrivateKey } = useWallet();
+
   const {
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
@@ -40,7 +42,7 @@ export function useSwapActions() {
   const checkAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-
+      
       const amountWithFee = calculateAllowanceWithProviderFee(
         tokenToSell.AMOUNT
       );
@@ -56,12 +58,12 @@ export function useSwapActions() {
     } catch (error) {
       throw error;
     }
-  }, [_extractPrivateKey, tokenToSell]);
+  }, [_extractPrivateKey, tokenToSell.AMOUNT, tokenToSell.TOKEN?.address]);
 
   const setAllowance = useCallback(async () => {
     try {
       const privateKey = await _extractPrivateKey();
-
+      
       const amountWithFee = calculateAllowanceWithProviderFee(
         tokenToSell.AMOUNT
       );
