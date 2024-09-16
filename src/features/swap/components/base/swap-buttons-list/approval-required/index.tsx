@@ -22,6 +22,7 @@ export const ApprovalRequiredButton = ({
   const { t } = useTranslation();
   const { uiBottomSheetInformation, latestSelectedTokens, isExactInRef } =
     useSwapContextSelector();
+
   const multiStepButtonsDisabledStates = useMemo(() => {
     return {
       primary:
