@@ -93,9 +93,9 @@ export const TransactionsHistoryTab = ({
             keyExtractor={(item) => item.id}
             getItemCount={getItemCount}
             getItem={getItem}
-            contentInsetAdjustmentBehavior={'always'}
+            contentInsetAdjustmentBehavior="always"
             removeClippedSubviews={false}
-            nestedScrollEnabled={true}
+            nestedScrollEnabled
           />
         </View>
       )}
