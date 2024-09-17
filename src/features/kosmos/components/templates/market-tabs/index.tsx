@@ -1,12 +1,10 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatedTabs } from '@components/modular';
-import {
-  MarketsList,
-  UserOrdersList
-} from '@/features/kosmos/components/composite';
+import { MarketsList } from '@/features/kosmos/components/composite';
 import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { FiltersState } from '@features/kosmos/types';
+import { UserOrdersList } from '@features/kosmos/components/modular';
 
 interface MarketsTabsProps {
   changeActiveIndex: Dispatch<SetStateAction<number>>;
