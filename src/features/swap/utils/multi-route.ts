@@ -3,7 +3,7 @@ import {
   SWAP_SUPPORTED_TOKENS,
   TOKEN_ADDRESSES
 } from '@features/swap/entities';
-import { wrapNativeAddress } from '@features/swap/utils';
+import { wrapNativeAddress } from './wrap-native-address';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
