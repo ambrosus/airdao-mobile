@@ -3,7 +3,7 @@ import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { styles } from './styles';
 import { useTransactions } from '@features/kosmos/lib/hooks';
 import { ScreenLoader } from '@features/kosmos/components/base';
-import { TxType } from '@features/kosmos/types';
+import { TransactionListItem, TxType } from '@features/kosmos/types';
 import { TotalOrdersAmount } from '../../composite/total-orders-amount';
 import { useClaim } from '@screens/Kosmos/hooks/useClaim';
 import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
@@ -23,13 +23,7 @@ export const UserOrdersList = () => {
     [isTransactionsLoading, refetchTransactions]
   );
 
-  const renderOrderListItem = (args: {
-    index: number;
-    item: {
-      id: string;
-      transaction: TxType;
-    };
-  }) => {
+  const renderOrderListItem = (args: TransactionListItem) => {
     const { transaction } = args.item;
     return (
       <ClaimableOrderCardDetails

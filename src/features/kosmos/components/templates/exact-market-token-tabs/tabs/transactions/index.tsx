@@ -3,7 +3,11 @@ import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { TransactionHistoryItem } from '@features/kosmos/components/base';
-import { MarketType, TxType } from '@features/kosmos/types';
+import {
+  MarketType,
+  TransactionListItem,
+  TxType
+} from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
@@ -35,13 +39,7 @@ export const TransactionsHistoryTab = ({
     [isLoading, refetch]
   );
 
-  const renderTransactionListItem = (item: {
-    index: number;
-    item: {
-      id: string;
-      transaction: TxType;
-    };
-  }) => {
+  const renderTransactionListItem = (item: TransactionListItem) => {
     const { transaction, id } = item.item;
     return (
       <TransactionHistoryItem
