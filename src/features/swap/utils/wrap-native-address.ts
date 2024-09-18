@@ -1,5 +1,5 @@
 import Config from '@constants/config';
-import { SwapToken } from '../types';
+import { SwapToken } from '@features/swap/types';
 import { ethers } from 'ethers';
 import { TOKEN_ADDRESSES } from '@features/swap/entities';
 import { environment } from '@utils/environment';

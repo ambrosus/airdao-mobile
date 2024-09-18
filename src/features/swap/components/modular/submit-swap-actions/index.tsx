@@ -12,6 +12,7 @@ import {
 } from '@features/swap/components/base/swap-buttons-list';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { AllowanceStatus } from '@features/swap/types';
 
 export const SubmitSwapActions = () => {
   const navigation: HomeNavigationProp = useNavigation();
@@ -58,7 +59,7 @@ export const SubmitSwapActions = () => {
 
   const onCompleteMultiStepSwap = useCallback(async () => {
     const routeParams = prepareRouteParams();
-    if (uiBottomSheetInformation.allowance === 'increase') {
+    if (uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE) {
       try {
         setIsIncreasingAllowance(true);
         await setAllowance();
