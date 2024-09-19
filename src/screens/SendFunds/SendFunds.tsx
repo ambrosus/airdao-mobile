@@ -48,7 +48,6 @@ import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
-import { isIOS } from 'react-native-popover-view/dist/Constants';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
