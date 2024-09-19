@@ -66,7 +66,7 @@ export function useSwapInterface() {
 
       if (
         typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'number' &&
+        typeof liquidityProviderFee === 'string' &&
         bnMinimumReceivedAmount &&
         bnMaximumReceivedAmount
       ) {
