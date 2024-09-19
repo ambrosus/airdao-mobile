@@ -264,9 +264,8 @@ export const SendFunds = () => {
         style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardAvoidingContainer}
         behavior="padding"
-        enabled={isIOS}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
