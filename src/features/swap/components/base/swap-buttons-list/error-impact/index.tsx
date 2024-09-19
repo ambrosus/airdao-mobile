@@ -5,7 +5,7 @@ import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
 import { Spinner, Text } from '@components/base';
 import { PriceImpactErrorColors } from '../utils/colors';
-import { useSwapContextSelector } from '@features/swap/context/swap.contenxt';
+import { useSwapContextSelector } from '@features/swap/context';
 
 interface SwapErrorImpactButtonProps {
   isProcessingSwap: boolean;

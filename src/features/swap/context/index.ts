@@ -1,1 +1,1 @@
-export { SwapContextProvider, useSwapContextSelector } from './swap.contenxt';
+export { SwapContextProvider, useSwapContextSelector } from './swap.context';
