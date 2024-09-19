@@ -50,7 +50,8 @@ export const InputWithTokenSelect = ({
   const value = useMemo(() => {
     return StringUtils.wrapAndroidString(
       selectedTokensAmount[type],
-      isInputFocused
+      isInputFocused,
+      9
     );
   }, [isInputFocused, selectedTokensAmount, type]);
 
