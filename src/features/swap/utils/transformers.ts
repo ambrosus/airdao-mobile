@@ -85,11 +85,6 @@ const transformSlippageOnBlur = (value: string | undefined) => {
   }
 };
 
-const transformDeadlineValue = (value: string) => {
-  const deadline = parseInt(value);
-  return (deadline * 60).toString();
-};
-
 const transformSlippageValue = (value: string) => {
   return +value * 100;
 };
@@ -102,7 +97,6 @@ export const SwapStringUtils = {
   extendedLogoVariants,
   transformMinAmountValue,
   transformRealizedLPFee,
-  transformDeadlineValue,
   transformSlippageValue,
   transformSlippageOnBlur
 };

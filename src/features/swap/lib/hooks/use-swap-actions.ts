@@ -101,7 +101,6 @@ export function useSwapActions() {
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
 
-    const _deadline = SwapStringUtils.transformDeadlineValue(deadline);
     const _slippage = SwapStringUtils.transformSlippageValue(slippageTolerance);
 
     const isMultiHopSwapPossible =
@@ -123,7 +122,7 @@ export function useSwapActions() {
         excludeNativeETH,
         signer,
         _slippage,
-        _deadline
+        deadline
       );
     }
 
@@ -133,7 +132,7 @@ export function useSwapActions() {
         excludeNativeETH,
         signer,
         _slippage,
-        _deadline
+        deadline
       );
     }
 
@@ -143,7 +142,7 @@ export function useSwapActions() {
         tokensRoute,
         signer,
         _slippage,
-        _deadline
+        deadline
       );
     }
 
@@ -152,7 +151,7 @@ export function useSwapActions() {
       excludeNativeETH,
       signer,
       _slippage,
-      _deadline
+      deadline
     );
   }, [
     _extractPrivateKey,
