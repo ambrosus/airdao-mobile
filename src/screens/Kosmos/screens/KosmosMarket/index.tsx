@@ -29,6 +29,7 @@ import {
 } from '@features/kosmos/components/templates';
 import { isIOS } from 'react-native-popover-view/dist/Constants';
 import { isAndroid } from '@utils/isPlatform';
+import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -40,12 +41,10 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     onToggleMarketTooltip,
     isMarketChartLoading,
     isBalanceFetching,
-    bnBalance,
     reset
   } = useKosmosMarketsContextSelector();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { token } = useExtractToken(route.params.market.payoutToken);
-
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
   const [isRefreshingData, setIsRefreshingData] = useState(false);
 
@@ -87,21 +86,31 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
+  const refreshData = useCallback(async () => {
+    try {
+      if (isAndroid) {
+        await refetchTransactions();
+      }
+      refetchTokenBalance();
+      await refetch();
+    } catch (e) {
+      // ignore
+    }
+  }, [refetch, refetchTokenBalance, refetchTransactions]);
+
+  useUpdateScreenData(refreshData, 600);
+
   const refetchMarketData = useCallback(async () => {
     const refreshKosmosTransactions = async () => {
       setIsRefreshingData(true);
       try {
-        if (isAndroid) {
-          await refetchTransactions();
-        }
-        refetchTokenBalance();
-        await refetch();
+        await refreshData();
       } finally {
         setIsRefreshingData(false);
       }
     };
     await refreshKosmosTransactions();
-  }, [refetch, refetchTokenBalance, refetchTransactions]);
+  }, [refreshData]);
 
   const renderRefetchController = useMemo(
     () => (
@@ -120,8 +129,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   );
 
   const combinedLoading = useMemo(() => {
-    return !bnBalance || isBalanceFetching || isMarketChartLoading || isLoading;
-  }, [bnBalance, isBalanceFetching, isMarketChartLoading, isLoading]);
+    return isBalanceFetching || isMarketChartLoading || isLoading;
+  }, [isBalanceFetching, isMarketChartLoading, isLoading]);
   const scrollRef = useRef(null);
   const scrollToInput = () =>
     // @ts-ignore

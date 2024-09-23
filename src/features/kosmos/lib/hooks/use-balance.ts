@@ -43,7 +43,7 @@ export function useBalance(market: MarketType | undefined) {
 
   const refetchTokenBalance = useCallback(() => {
     setIsBalanceFetching(true);
-    fetchBondBalance();
+    fetchBondBalance().then();
     setIsBalanceFetching(false);
   }, [fetchBondBalance, setIsBalanceFetching]);
 
