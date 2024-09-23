@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Text } from '@components/base';
@@ -50,9 +50,18 @@ export const InputWithTokenSelect = ({
   const value = useMemo(() => {
     return StringUtils.wrapAndroidString(
       selectedTokensAmount[type],
-      isInputFocused
+      isInputFocused,
+      9
     );
   }, [isInputFocused, selectedTokensAmount, type]);
+
+  const inputStyle = useMemo(() => {
+    return Platform.select({
+      android: { ...styles.input, ...styles.inputAndroidSpecified },
+      ios: styles.input,
+      default: styles.input
+    });
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -65,7 +74,7 @@ export const InputWithTokenSelect = ({
           onBlur={onToggleInputFocus}
           selection={selection}
           value={value}
-          style={styles.input}
+          style={inputStyle}
           type="number"
           keyboardType="decimal-pad"
           onChangeText={onChangeTokenAmount}
