@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from 'ethers';
-import { Alert } from 'react-native';
 
 export async function errorByTxHash(
   txHash: string,
@@ -123,10 +122,6 @@ function _parseError(error: any): any {
 
   reason = ethers.utils.hexDataSlice(reason, 4);
   reason = ethers.utils.defaultAbiCoder.decode(['string'], reason);
-  Alert.alert(
-    'Error provider successfully parse error:',
-    JSON.stringify(reason)
-  );
   console.warn('Error provider successfully parse error: ', reason);
   return new Error(reason);
 }
