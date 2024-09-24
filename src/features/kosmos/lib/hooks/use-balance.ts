@@ -5,9 +5,8 @@ import { formatDecimals } from '@features/kosmos/utils';
 import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from './use-market-details';
 import { useMarketTokens } from './use-market-tokens';
-import { erc20Contracts } from '@lib/erc20/erc20.contracts';
+import { useERC20Balance, useWallet } from '@hooks';
 import { NumberUtils } from '@utils/number';
-import { useWallet } from '@hooks';
 
 export function useBalance(market: MarketType | undefined) {
   const { wallet } = useWallet();
@@ -18,32 +17,38 @@ export function useBalance(market: MarketType | undefined) {
 
   const [tokenBalance, setTokenBalance] = useState('');
 
+  const { balance: ERC20balance, refetch: refetchERC20Balance } =
+    useERC20Balance(quoteToken?.contractAddress ?? '');
+
+  useEffect(() => {
+    if (quoteToken && wallet) {
+      refetchERC20Balance().then();
+    }
+  }, [quoteToken, refetchERC20Balance, wallet]);
+
   const fetchBondBalance = useCallback(async () => {
     if (!quoteToken || !wallet?.address) return;
 
     try {
-      const bnBalance = await erc20Contracts.balanceOf({
-        ownerAddress: wallet?.address,
-        tokenAddress: quoteToken.contractAddress
-      });
+      if (ERC20balance) {
+        const formattedBalance = NumberUtils.limitDecimalCount(
+          ethers.utils.formatEther(ERC20balance?._hex),
+          2
+        );
 
-      const formattedBalance = NumberUtils.limitDecimalCount(
-        ethers.utils.formatEther(bnBalance?._hex),
-        2
-      );
-
-      if (formattedBalance !== tokenBalance) {
-        setTokenBalance(formattedBalance);
-        setBnBalance(bnBalance);
+        if (formattedBalance !== tokenBalance) {
+          setTokenBalance(formattedBalance);
+          setBnBalance(ERC20balance);
+        }
       }
     } catch (error) {
       throw error;
     }
-  }, [quoteToken, setBnBalance, tokenBalance, wallet?.address]);
+  }, [ERC20balance, quoteToken, setBnBalance, tokenBalance, wallet?.address]);
 
   const refetchTokenBalance = useCallback(() => {
     setIsBalanceFetching(true);
-    fetchBondBalance();
+    fetchBondBalance().then();
     setIsBalanceFetching(false);
   }, [fetchBondBalance, setIsBalanceFetching]);
 
