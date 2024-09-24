@@ -79,7 +79,7 @@ export const SubmitSwapActions = () => {
           await simulateNavigationDelay(() =>
             navigation.navigate('SwapSuccessScreen', {
               ...routeParams,
-              txHash: tx.hash
+              txHash: tx.transactionHash
             })
           );
         }

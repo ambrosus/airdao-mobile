@@ -30,7 +30,7 @@ export function useSwapHelpers() {
   }, [tokenToReceive]);
 
   const isEmptyAmount = useCallback((amount: string) => {
-    return amount === '0' || amount === '';
+    return /^0(\.0+)?$|^0\.$|^$/.test(amount);
   }, []);
 
   const isMultiHopSwap = useMemo(() => {

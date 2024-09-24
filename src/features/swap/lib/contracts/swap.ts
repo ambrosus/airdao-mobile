@@ -14,7 +14,8 @@ import {
   addresses,
   wrapNativeAddress,
   getTimestampDeadline,
-  withMultiHopPath
+  withMultiHopPath,
+  dexValidators
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -22,7 +23,7 @@ export async function getAmountsOut({
   amountToSell,
   path
 }: OutAmountGetterArgs) {
-  if (formatEther(amountToSell) === '') return;
+  if (dexValidators.isEmptyAmount(formatEther(amountToSell))) return;
 
   try {
     const provider = createAMBProvider();
@@ -43,7 +44,7 @@ export async function getAmountsIn({
   amountToReceive,
   path
 }: InAmountGetterArgs) {
-  if (formatEther(amountToReceive) === '') return;
+  if (dexValidators.isEmptyAmount(formatEther(amountToReceive))) return;
 
   try {
     const provider = createAMBProvider();
