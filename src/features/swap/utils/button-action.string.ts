@@ -1,12 +1,12 @@
-import { formatEther } from 'ethers/lib/utils';
+import { ethers } from 'ethers';
+import { TFunction } from 'i18next';
 import {
   FIELD,
   MultiplyBalancesStateType,
   SelectedTokensAmountState,
   SelectedTokensState
 } from '../types';
-import { NumberUtils } from '@utils/number';
-import { TFunction } from 'i18next';
+import { dexValidators } from './validators';
 
 export function buttonActionString(
   selectedTokens: SelectedTokensState,
@@ -17,28 +17,23 @@ export function buttonActionString(
   const { TOKEN_A, TOKEN_B } = selectedTokens;
   const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedAmount;
 
-  const emptyInputValue = '' && '0';
-
   const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
 
   const isSomeBalanceIsEmpty =
-    AMOUNT_A === emptyInputValue || AMOUNT_B === emptyInputValue;
+    dexValidators.isEmptyAmount(AMOUNT_A) ||
+    dexValidators.isEmptyAmount(AMOUNT_B);
 
   if (isSomeBalanceIsEmpty || isSomeTokenNotSelected) {
     return t('button.enter.amount');
   }
 
-  const lastChangedInputBalance = bnBalanceAmount[FIELD.TOKEN_A]?._hex;
+  const bnInputABalance = bnBalanceAmount[FIELD.TOKEN_A]?._hex;
+  const bnSelectedAmount = ethers.utils.parseEther(
+    selectedAmount[FIELD.TOKEN_A]
+  );
 
-  if (lastChangedInputBalance) {
-    const normalizedBalanceAmount = NumberUtils.limitDecimalCount(
-      formatEther(lastChangedInputBalance),
-      18
-    );
-
-    if (
-      Number(selectedAmount[FIELD.TOKEN_A]) > Number(normalizedBalanceAmount)
-    ) {
+  if (bnInputABalance) {
+    if (bnSelectedAmount.gt(bnInputABalance)) {
       return t('swap.button.insufficient');
     }
   }

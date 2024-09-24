@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState
+} from 'react';
 import { View } from 'react-native';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
@@ -17,10 +23,14 @@ import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
+  claimingTransaction: boolean;
+  setClamingTransaction: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ClaimableOrderCardDetails = ({
-  transaction
+  transaction,
+  claimingTransaction,
+  setClamingTransaction
 }: ClaimableOrderCardDetailsProps) => {
   const { t } = useTranslation();
 
@@ -48,8 +58,10 @@ export const ClaimableOrderCardDetails = ({
   );
 
   const disabled = useMemo(() => {
-    return isClaimingNow || !isVestingPass || isOrderClaimed;
-  }, [isClaimingNow, isVestingPass, isOrderClaimed]);
+    return (
+      isClaimingNow || !isVestingPass || isOrderClaimed || claimingTransaction
+    );
+  }, [isClaimingNow, isVestingPass, isOrderClaimed, claimingTransaction]);
 
   const buttonColor = useMemo(() => {
     return disabled ? COLORS.neutral100 : COLORS.brand600;
@@ -74,6 +86,7 @@ export const ClaimableOrderCardDetails = ({
         transaction.vestingType === 'Fixed-expiry'
           ? ContractNames.FixedExpiryTeller
           : ContractNames.FixedTermTeller;
+      setClamingTransaction(true);
       setIsClaimingNow(true);
       const tx = await onClaimButtonPress(contractName);
 
@@ -89,11 +102,13 @@ export const ClaimableOrderCardDetails = ({
     } catch (error) {
       throw error;
     } finally {
+      setClamingTransaction(false);
       setIsClaimingNow(false);
     }
   }, [
     transaction.vestingType,
     transaction.txHash,
+    setClamingTransaction,
     onClaimButtonPress,
     onAppendClaimedOrderId,
     t,

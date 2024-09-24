@@ -10,4 +10,4 @@ export { useSwapPriceImpact } from './use-swap-price-impact';
 export { useSwapInterface } from './use-swap-interface';
 export { useSwapTokens } from './use-swap-tokens';
 export { useSwapHelpers } from './use-swap-helpers';
-export {} from './use-swap-better-currency';
+export { useSwapBetterCurrency } from './use-swap-better-currency';

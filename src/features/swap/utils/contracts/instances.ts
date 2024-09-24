@@ -1,11 +1,12 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { FACTORY_ABI } from '@features/swap/lib/abi';
+import { AmbErrorProvider } from '@lib';
 
 type ProviderOrSigner = ethers.providers.JsonRpcProvider | ethers.Signer;
 
 export function createAMBProvider() {
-  return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+  return new AmbErrorProvider(Config.NETWORK_URL, Config.CHAIN_ID);
 }
 
 export function createSigner(

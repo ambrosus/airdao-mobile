@@ -1,3 +1,5 @@
+import { isAndroid } from './isPlatform';
+
 /**
  *
  * @param paddingRight indicates how many chars should be visible left
@@ -94,10 +96,30 @@ function _removeExtraDots(str: string): string {
     .join('');
 }
 
+/**
+ * Wraps a string for Android devices when not focused, adding ellipsis if it exceeds the maximum length.
+ *
+ * @param str - The input string to be wrapped.
+ * @param focused - Indicates whether the input is focused.
+ * @param maxLength - The maximum length of the string before wrapping. Defaults to 10.
+ * @returns The wrapped string if conditions are met, otherwise the original string.
+ */
+function wrapAndroidString(
+  str: string,
+  focused: boolean,
+  maxLength = 10
+): string {
+  if (!focused && isAndroid && str.length > maxLength) {
+    return `${str.slice(0, maxLength)}...`;
+  }
+  return str;
+}
+
 export const StringUtils = {
   formatAddress,
   pluralize,
   removeNonNumericCharacters,
   removeNonAlphabeticCharacters,
-  formatNumberInput
+  formatNumberInput,
+  wrapAndroidString
 };

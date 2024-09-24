@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import React, { useMemo } from 'react';
+import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { styles } from './styles';
+import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import {
-  ScreenLoader,
-  TransactionHistoryItem
-} from '@features/kosmos/components/base';
-import { MarketType, TxType } from '@features/kosmos/types';
+  MarketType,
+  TransactionListItem,
+  TxType
+} from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
@@ -17,7 +17,6 @@ import { useMarketTransactions } from '@features/kosmos/lib/query';
 interface TransactionsHistoryTabProps {
   market: MarketType | undefined;
 }
-const ESTIMATED_ITEM_SIZE = 26;
 export const TransactionsHistoryTab = ({
   market
 }: TransactionsHistoryTabProps) => {
@@ -29,23 +28,41 @@ export const TransactionsHistoryTab = ({
   const { transactions, isLoading, refetch } = useMarketTransactions(
     market?.id
   );
-
-  const renderTransactionListItem = useCallback(
-    (args: ListRenderItemInfo<TxType>) => {
-      const { item: transaction } = args;
-
-      return (
-        <TransactionHistoryItem
-          key={args.index.toString()}
-          transaction={transaction}
-          quoteToken={quoteToken}
-          payoutToken={payoutToken}
-        />
-      );
-    },
-    [payoutToken, quoteToken]
+  const renderRefetchController = useMemo(
+    () => (
+      <RefreshControl
+        onRefresh={refetch}
+        refreshing={isLoading}
+        removeClippedSubviews
+      />
+    ),
+    [isLoading, refetch]
   );
 
+  const renderTransactionListItem = (item: TransactionListItem) => {
+    const { transaction, id } = item.item;
+    return (
+      <TransactionHistoryItem
+        key={id}
+        transaction={transaction}
+        quoteToken={quoteToken}
+        payoutToken={payoutToken}
+      />
+    );
+  };
+
+  const getItem = (
+    _data: TxType[] | [],
+    index: number
+  ): { id: string; transaction: TxType } => {
+    const transaction = _data[index];
+    return {
+      id: transaction.txHash,
+      transaction
+    };
+  };
+
+  const getItemCount = (_data: TxType[] | []) => _data.length;
   return (
     <View style={styles.container}>
       <Row width="80%" alignItems="center" justifyContent="space-between">
@@ -63,20 +80,20 @@ export const TransactionsHistoryTab = ({
       </Row>
 
       {isLoading ? (
-        <ScreenLoader height="75%" />
+        <View style={{ height: 550 }}></View>
       ) : (
         <View style={styles.list}>
-          <FlashList
-            estimatedItemSize={ESTIMATED_ITEM_SIZE}
-            scrollEnabled={true}
-            onRefresh={refetch}
-            refreshing={false}
-            nestedScrollEnabled={true}
-            contentInsetAdjustmentBehavior="always"
+          <VirtualizedList
+            refreshControl={renderRefetchController}
+            initialNumToRender={4}
             data={transactions}
-            keyExtractor={(item) => item.txHash}
             renderItem={renderTransactionListItem}
+            keyExtractor={(item) => item.id}
+            getItemCount={getItemCount}
+            getItem={getItem}
+            contentInsetAdjustmentBehavior="always"
             removeClippedSubviews={false}
+            nestedScrollEnabled
           />
         </View>
       )}

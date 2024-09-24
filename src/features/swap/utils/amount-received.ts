@@ -4,10 +4,10 @@ export function minimumAmountOut(
   slippageToleranceStr: string,
   amountToReceive: ethers.BigNumber
 ) {
-  const slippageTollerance =
+  const slippageTolerance =
     parseFloat(slippageToleranceStr.replace('%', '')) / 100;
 
-  const slippageBasisPoints = Math.floor(slippageTollerance * 10000);
+  const slippageBasisPoints = Math.floor(slippageTolerance * 10000);
 
   const slippageAdjustedAmountOut = amountToReceive
     .mul(ethers.BigNumber.from(10000 - slippageBasisPoints))
@@ -20,10 +20,10 @@ export function maximumAmountOut(
   slippageToleranceStr: string,
   amountToSend: ethers.BigNumber
 ) {
-  const slippageTollerance =
+  const slippageTolerance =
     parseFloat(slippageToleranceStr.replace('%', '')) / 100;
 
-  const slippageBasisPoints = Math.floor(slippageTollerance * 10000);
+  const slippageBasisPoints = Math.floor(slippageTolerance * 10000);
 
   const slippageAdjustedAmountOut = amountToSend
     .mul(ethers.BigNumber.from(10000))

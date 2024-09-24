@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import {
   addresses,
-  isMultiHopSwapAvaliable,
-  extractArrayOfMiddleMultiHopAddresses
+  isMultiHopSwapAvailable,
+  extractArrayOfMiddleMultiHopAddresses,
+  dexValidators
 } from '@features/swap/utils';
 import { getObjectKeyByValue } from '@utils/object';
 import { ethers, BigNumber } from 'ethers';
@@ -23,7 +24,7 @@ export function useSwapBetterCurrency() {
         amountToSell: bnAmountToSell
       });
 
-      return prices[prices.length - 1];
+      return prices[prices.length - 1] ?? [];
     },
     []
   );
@@ -91,13 +92,12 @@ export function useSwapBetterCurrency() {
   const getOppositeReceivedTokenAmount = useCallback(
     async (amountToSell: string, path: string[]) => {
       resetMultiHopUiState();
-      if (amountToSell === '' || amountToSell === '0')
-        return BigNumber.from('0');
+      if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
 
       const { multihops } = settings.current;
       const tradeIn = isExactInRef.current;
 
-      const isMultiHopRouteSupported = isMultiHopSwapAvaliable(path);
+      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
       const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
 
       let singleHopAmount: BigNumber = BigNumber.from('0');
@@ -175,13 +175,12 @@ export function useSwapBetterCurrency() {
 
   const getOppositeReceivedTokenAmountForPlate = useCallback(
     async (amountToSell: string, path: string[]) => {
-      if (amountToSell === '' || amountToSell === '0')
-        return BigNumber.from('0');
+      if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
 
       const tradeIn = isExactInRef.current;
       const { multihops } = settings.current;
 
-      const isMultiHopRouteSupported = isMultiHopSwapAvaliable(path);
+      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
 
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let multiHopAmount: BigNumber = BigNumber.from('0');

@@ -1,4 +1,5 @@
 import { Wallet, ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
 import {
   InAmountGetterArgs,
   OutAmountGetterArgs
@@ -7,13 +8,14 @@ import {
   createAMBProvider,
   createRouterContract
 } from '@features/swap/utils/contracts/instances';
-import { formatEther } from 'ethers/lib/utils';
 import {
   isNativeWrapped,
   minimumAmountOut,
   addresses,
   wrapNativeAddress,
-  extractArrayOfMiddleMultiHopAddresses
+  getTimestampDeadline,
+  withMultiHopPath,
+  dexValidators
 } from '@features/swap/utils';
 import { ERC20, TRADE } from '@features/swap/lib/abi';
 
@@ -21,7 +23,7 @@ export async function getAmountsOut({
   amountToSell,
   path
 }: OutAmountGetterArgs) {
-  if (formatEther(amountToSell) === '') return;
+  if (dexValidators.isEmptyAmount(formatEther(amountToSell))) return;
 
   try {
     const provider = createAMBProvider();
@@ -42,7 +44,7 @@ export async function getAmountsIn({
   amountToReceive,
   path
 }: InAmountGetterArgs) {
-  if (formatEther(amountToReceive) === '') return;
+  if (dexValidators.isEmptyAmount(formatEther(amountToReceive))) return;
 
   try {
     const provider = createAMBProvider();
@@ -63,14 +65,13 @@ export async function swapExactETHForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const timestampDeadline =
-      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
+    const timestampDeadline = getTimestampDeadline(deadline);
 
     const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
@@ -101,42 +102,67 @@ export async function swapMultiHopExactTokensForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
-  const excludeNativeETH = wrapNativeAddress(path);
-  const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-  const [addressFrom, addressTo] = excludeNativeETH;
-  const middleAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
+  try {
+    const routerContract = createRouterContract(signer, TRADE);
+    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+    const timestampDeadline = getTimestampDeadline(deadline);
+    const _path = withMultiHopPath(path);
 
-  const [, bnIntermediateAmountToReceive] = await getAmountsOut({
-    amountToSell: bnAmountToSell,
-    path: [addressFrom, middleAddress]
-  });
+    const bnAmountToReceiveArray = await getAmountsOut({
+      amountToSell: bnAmountToSell,
+      path: _path
+    });
 
-  const key = `${path[0]}-${path[1]}`;
-  const swapFunctions = swapFunctionMap[key];
+    const bnAmountToReceive =
+      bnAmountToReceiveArray[bnAmountToReceiveArray.length - 1];
 
-  if (!swapFunctions) {
-    throw new Error('Invalid path configuration');
-  }
-
-  const intermediateSwapResult = await swapFunctions.intermediate(
-    amountToSell,
-    [addressFrom, middleAddress],
-    signer,
-    slippageTolerance,
-    deadline
-  );
-
-  if (intermediateSwapResult) {
-    return await swapFunctions.final(
-      formatEther(bnIntermediateAmountToReceive),
-      [middleAddress, addressTo],
-      signer,
-      slippageTolerance,
-      deadline
+    const bnMinimumReceivedAmount = minimumAmountOut(
+      `${slippageTolerance}%`,
+      bnAmountToReceive
     );
+
+    if (_path.length < 3) {
+      throw new Error('Path must contain 2 or 3 addresses');
+    }
+
+    const isFromETH = path[0] === addresses.AMB;
+    const isToETH = path[path.length - 1] === addresses.AMB;
+
+    let tx;
+
+    if (isFromETH) {
+      tx = await routerContract.swapExactAMBForTokens(
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline,
+        { value: bnAmountToSell }
+      );
+    } else if (isToETH) {
+      tx = await routerContract.swapExactTokensForAMB(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
+    } else {
+      tx = await routerContract.swapExactTokensForTokens(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
+    }
+
+    return await tx.wait();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -144,14 +170,13 @@ export async function swapExactTokensForTokens(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const timestampDeadline =
-      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
+    const timestampDeadline = getTimestampDeadline(deadline);
 
     const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
@@ -182,14 +207,13 @@ export async function swapExactTokensForETH(
   amountToSell: string,
   path: string[],
   signer: Wallet,
-  slippageTolerance: string,
+  slippageTolerance: number,
   deadline: string
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
     const bnAmountToSell = ethers.utils.parseEther(amountToSell);
-    const timestampDeadline =
-      Math.floor(Date.now() / 1000) + 60 * Number(deadline);
+    const timestampDeadline = getTimestampDeadline(deadline);
 
     const [, bnAmountToReceive] = await getAmountsOut({
       amountToSell: bnAmountToSell,
@@ -235,28 +259,3 @@ export async function unwrapETH(amountToSell: string, signer: Wallet) {
 
   return await tx.wait();
 }
-
-export const swapFunctionMap: {
-  [key: string]: { intermediate: any; final: any };
-} = {
-  [`${addresses.AMB}-${addresses.USDC}`]: {
-    intermediate: swapExactETHForTokens,
-    final: swapExactTokensForTokens
-  },
-  [`${addresses.AMB}-${addresses.BOND}`]: {
-    intermediate: swapExactETHForTokens,
-    final: swapExactTokensForTokens
-  },
-  [`${addresses.BOND}-${addresses.USDC}`]: {
-    intermediate: swapExactTokensForTokens,
-    final: swapExactTokensForETH
-  },
-  [`${addresses.BOND}-${addresses.AMB}`]: {
-    intermediate: swapExactTokensForTokens,
-    final: swapExactTokensForETH
-  },
-  [`${addresses.BOND}-${addresses.USDC}`]: {
-    intermediate: swapExactTokensForETH,
-    final: swapExactETHForTokens
-  }
-};

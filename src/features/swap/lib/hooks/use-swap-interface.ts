@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapPriceImpact } from './use-swap-price-impact';
@@ -15,6 +16,7 @@ import { useSwapActions } from './use-swap-actions';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 import { useSwapHelpers } from './use-swap-helpers';
+import { AllowanceStatus } from '@features/swap/types';
 
 export function useSwapInterface() {
   const { setUiBottomSheetInformation, _refExactGetter } =
@@ -30,12 +32,17 @@ export function useSwapInterface() {
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
 
   const resolveBottomSheetData = useCallback(async () => {
+    Keyboard.dismiss();
+
     if (hasWrapNativeToken) {
-      onReviewSwapPreview();
       setUiBottomSheetInformation((prevState) => ({
         ...prevState,
         allowance: 'suitable'
       }));
+
+      return setTimeout(() => {
+        onReviewSwapPreview();
+      }, 700);
     }
 
     try {
@@ -59,7 +66,7 @@ export function useSwapInterface() {
 
       if (
         typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'number' &&
+        typeof liquidityProviderFee === 'string' &&
         bnMinimumReceivedAmount &&
         bnMaximumReceivedAmount
       ) {
@@ -82,12 +89,14 @@ export function useSwapInterface() {
           lpFee: SwapStringUtils.transformRealizedLPFee(
             String(liquidityProviderFee)
           ),
-          allowance: allowance ? 'increase' : 'suitable'
+          allowance: allowance
+            ? AllowanceStatus.INCREASE
+            : AllowanceStatus.SUITABLE
         });
 
         setTimeout(() => {
           onReviewSwapPreview();
-        }, 500);
+        }, 700);
       }
     } catch (error) {
       onReviewSwapDismiss();
