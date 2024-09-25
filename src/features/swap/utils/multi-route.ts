@@ -1,25 +1,27 @@
 import { environment } from '@utils/environment';
-import { SWAP_SUPPORTED_TOKENS, TOKEN_ADDRESSES } from '../entities';
+import {
+  SWAP_SUPPORTED_TOKENS,
+  TOKEN_ADDRESSES
+} from '@features/swap/entities';
+import { wrapNativeAddress } from './wrap-native-address';
 
 export const addresses = TOKEN_ADDRESSES[environment];
 
-export const isMultiHopSwapAvaliable = (path: string[]): boolean => {
+export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return !!extractArrayOfMiddleMultiHopAddresses(path).address;
 };
 
-export const extractMiddleAddressMultiHop = (path: string[]): string => {
-  const [addressFrom] = path;
+export const withMultiHopPath = (path: string[]) => {
+  const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path).address;
 
-  if (addressFrom === addresses.AMB || addressFrom === addresses.SAMB)
-    return addresses.USDC;
-
-  if (addressFrom === addresses.BOND) return addresses.AMB;
-
-  return '';
+  const _innerPath = [path[0], middleHopAddress, path[1]];
+  return wrapNativeAddress(_innerPath);
 };
 
 export const extractArrayOfMiddleMultiHopAddresses = (path: string[]) => {
-  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment];
+  const tokens = SWAP_SUPPORTED_TOKENS.tokens[environment].filter(
+    (token) => token.symbol !== 'SAMB'
+  );
 
   const filterByAddress = tokens.filter((token) => {
     return !path.includes(token.address);

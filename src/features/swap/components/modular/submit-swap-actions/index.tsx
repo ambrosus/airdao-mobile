@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { InteractionManager } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
@@ -11,6 +12,7 @@ import {
 } from '@features/swap/components/base/swap-buttons-list';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { AllowanceStatus } from '@features/swap/types';
 
 export const SubmitSwapActions = () => {
   const navigation: HomeNavigationProp = useNavigation();
@@ -19,7 +21,7 @@ export const SubmitSwapActions = () => {
     setIsProcessingSwap,
     isProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     selectedTokens,
     selectedTokensAmount
   } = useSwapContextSelector();
@@ -29,15 +31,14 @@ export const SubmitSwapActions = () => {
 
   const simulateNavigationDelay = useCallback(
     async (navigate: () => void) => {
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
-
       onReviewSwapDismiss();
 
-      await delay(320);
+      InteractionManager.runAfterInteractions(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 320));
 
-      navigate();
-      setIsProcessingSwap(false);
+        navigate();
+        setIsProcessingSwap(false);
+      });
     },
     [onReviewSwapDismiss, setIsProcessingSwap]
   );
@@ -58,12 +59,12 @@ export const SubmitSwapActions = () => {
 
   const onCompleteMultiStepSwap = useCallback(async () => {
     const routeParams = prepareRouteParams();
-    if (uiBottomSheetInformation.allowance === 'increase') {
+    if (uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE) {
       try {
-        setIsIncreassingAllowance(true);
+        setIsIncreasingAllowance(true);
         await setAllowance();
       } finally {
-        setIsIncreassingAllowance(false);
+        setIsIncreasingAllowance(false);
       }
     } else {
       try {
@@ -78,7 +79,7 @@ export const SubmitSwapActions = () => {
           await simulateNavigationDelay(() =>
             navigation.navigate('SwapSuccessScreen', {
               ...routeParams,
-              txHash: tx.hash
+              txHash: tx.transactionHash
             })
           );
         }
@@ -93,7 +94,7 @@ export const SubmitSwapActions = () => {
     navigation,
     prepareRouteParams,
     setAllowance,
-    setIsIncreassingAllowance,
+    setIsIncreasingAllowance,
     setIsProcessingSwap,
     simulateNavigationDelay,
     swapTokens,

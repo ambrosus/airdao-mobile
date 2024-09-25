@@ -16,5 +16,8 @@ export const styles = StyleSheet.create({
     fontFamily: 'Rationell_700Bold',
     paddingLeft: 0,
     paddingRight: 0
+  },
+  inputAndroidSpecified: {
+    lineHeight: moderateScale(39)
   }
 });

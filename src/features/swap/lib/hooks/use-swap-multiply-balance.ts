@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useBridgeContextData } from '@features/bridge/context';
 import { useSwapContextSelector } from '@features/swap/context';
 import { MultiplyBalancesStateType, SwapToken } from '@features/swap/types';
-import { getBalanceOf } from '@features/swap/lib/contracts';
+
+import { useWallet } from '@hooks';
+import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapMultiplyBalance() {
-  const { selectedAccount } = useBridgeContextData();
+  const { wallet } = useWallet();
   const { selectedTokens } = useSwapContextSelector();
 
   const [bnBalances, setBnBalances] = useState<MultiplyBalancesStateType>({
@@ -23,15 +24,18 @@ export function useSwapMultiplyBalance() {
 
   const getTokenBalance = useCallback(
     async (token: SwapToken | null) => {
-      return token && selectedAccount?.address
-        ? getBalanceOf({ token, ownerAddress: selectedAccount.address })
+      return token && wallet?.address
+        ? erc20Contracts.balanceOf({
+            tokenAddress: token.address,
+            ownerAddress: wallet.address
+          })
         : Promise.resolve(null);
     },
-    [selectedAccount]
+    [wallet]
   );
 
   const fetchTokenBalances = useCallback(async () => {
-    if (selectedAccount?.address && (tokens.tokenA || tokens.tokenB)) {
+    if (wallet?.address && (tokens.tokenA || tokens.tokenB)) {
       const [balanceA, balanceB] = await Promise.all([
         getTokenBalance(tokens.tokenA),
         getTokenBalance(tokens.tokenB)
@@ -39,7 +43,7 @@ export function useSwapMultiplyBalance() {
 
       setBnBalances({ TOKEN_A: balanceA, TOKEN_B: balanceB });
     }
-  }, [getTokenBalance, selectedAccount?.address, tokens.tokenA, tokens.tokenB]);
+  }, [getTokenBalance, tokens.tokenA, tokens.tokenB, wallet?.address]);
 
   useEffect(() => {
     fetchTokenBalances();

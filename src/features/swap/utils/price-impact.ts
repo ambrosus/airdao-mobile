@@ -30,10 +30,10 @@ export function multiHopCumulativeImpact(
     (1 + intermediateImpactDecimal) * (1 + finalImpactDecimal) - 1;
   const cumulativeImpactPercentage = cumulativeImpact * 100;
 
-  const truncatedcumulativeImpactPercentage =
+  const truncatedCumulativeImpactPercentage =
     Math.trunc(cumulativeImpactPercentage * 100) / 100;
 
   return cumulativeImpactPercentage >= 0
-    ? truncatedcumulativeImpactPercentage
-    : -truncatedcumulativeImpactPercentage;
+    ? truncatedCumulativeImpactPercentage
+    : -truncatedCumulativeImpactPercentage;
 }

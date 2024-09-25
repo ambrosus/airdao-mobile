@@ -31,7 +31,7 @@ export async function claimBond({
   const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
   const signer = new ethers.Wallet(privateKey, provider);
 
-  const contractsOld = new BondOld.Contracts(signer, 16718);
+  const contractsOld = new BondOld.Contracts(signer, Config.CHAIN_ID);
   const contract = version === 'v1' ? BondOld : Bond;
 
   try {

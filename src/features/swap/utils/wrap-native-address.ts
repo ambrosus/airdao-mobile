@@ -1,16 +1,17 @@
 import Config from '@constants/config';
-import { SwapToken } from '../types';
-import { addresses } from './multi-route';
+import { SwapToken } from '@features/swap/types';
 import { ethers } from 'ethers';
+import { TOKEN_ADDRESSES } from '@features/swap/entities';
+import { environment } from '@utils/environment';
+
+export const addresses = TOKEN_ADDRESSES[environment];
 
 export function isNativeWrapped(path: string[]) {
   const wrappedPath = Config.SWAP_TOKENS.find(
     (token: SwapToken) => token.symbol === 'SAMB'
   )?.address;
 
-  const isPathSameAddress = path[0] === wrappedPath && path[1] === wrappedPath;
-
-  return isPathSameAddress;
+  return path[0] === wrappedPath && path[1] === wrappedPath;
 }
 
 export function wrapNativeAddress(path: string[]): [string, string] {

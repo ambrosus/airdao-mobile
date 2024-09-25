@@ -37,6 +37,7 @@ export function useSwapFieldsHandler() {
       amountToSell,
       path
     );
+
     const normalizedAmount = SwapStringUtils.transformAmountValue(
       formatEther(bnAmountToReceive?._hex)
     );
@@ -80,7 +81,7 @@ export function useSwapFieldsHandler() {
       if (isEmptyAmount(amount)) {
         setSelectedTokensAmount((prevSelectedTokensAmounts) => ({
           ...prevSelectedTokensAmounts,
-          [oppositeKey]: amount
+          [oppositeKey]: ''
         }));
       } else {
         Promise.resolve(debouncedUpdateReceivedTokensOutput());

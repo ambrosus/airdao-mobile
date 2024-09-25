@@ -1,17 +1,13 @@
 import { useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
 import {
   wrapNativeAddress,
   isNativeWrapped,
-  isMultiHopSwapAvaliable
+  isMultiHopSwapAvailable
 } from '@features/swap/utils';
-import { Cache, CacheKey } from '@lib/cache';
-
 import { useSwapTokens } from './use-swap-tokens';
-import { useBridgeContextData } from '@features/bridge/context';
-import { ethers } from 'ethers';
 
 export function useSwapHelpers() {
-  const { selectedAccount } = useBridgeContextData();
   const { tokenToSell, tokenToReceive, executedTokensAddresses } =
     useSwapTokens();
 
@@ -25,13 +21,6 @@ export function useSwapHelpers() {
     }
   }, [tokenToReceive.TOKEN, tokenToSell.TOKEN]);
 
-  const _privateKeyGetter = useCallback(async () => {
-    return (await Cache.getItem(
-      // @ts-ignore
-      `${CacheKey.WalletPrivateKey}-${selectedAccount?._raw.hash ?? ''}`
-    )) as string;
-  }, [selectedAccount?._raw]);
-
   const isStartsWithETH = useMemo(() => {
     return tokenToSell.TOKEN?.address === ethers.constants.AddressZero;
   }, [tokenToSell]);
@@ -41,12 +30,12 @@ export function useSwapHelpers() {
   }, [tokenToReceive]);
 
   const isEmptyAmount = useCallback((amount: string) => {
-    return amount === '0' || amount === '';
+    return /^0(\.0+)?$|^0\.$|^$/.test(amount);
   }, []);
 
   const isMultiHopSwap = useMemo(() => {
     const { addressA, addressB } = executedTokensAddresses;
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable([
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable([
       addressA ?? '',
       addressB ?? ''
     ]);
@@ -56,7 +45,6 @@ export function useSwapHelpers() {
 
   return {
     hasWrapNativeToken,
-    _privateKeyGetter,
     isStartsWithETH,
     isEmptyAmount,
     isEndsWithETH,

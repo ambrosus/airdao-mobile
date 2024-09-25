@@ -5,7 +5,7 @@ import { styles } from '../styles';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { FIELD } from '@features/swap/types';
+import { AllowanceStatus, FIELD } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
 
 interface ApprovalRequiredButtonProps {
@@ -22,13 +22,15 @@ export const ApprovalRequiredButton = ({
   const { t } = useTranslation();
   const { uiBottomSheetInformation, latestSelectedTokens, isExactInRef } =
     useSwapContextSelector();
+
   const multiStepButtonsDisabledStates = useMemo(() => {
     return {
       primary:
-        uiBottomSheetInformation.allowance === 'increased' ||
+        uiBottomSheetInformation.allowance === AllowanceStatus.INCREASED ||
         isIncreasingAllowance,
       secondary:
-        uiBottomSheetInformation.allowance === 'increase' || isProcessingSwap
+        uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE ||
+        isProcessingSwap
     };
   }, [
     isIncreasingAllowance,
@@ -37,7 +39,7 @@ export const ApprovalRequiredButton = ({
   ]);
 
   const multiStepButtonActionText = useMemo(() => {
-    if (uiBottomSheetInformation.allowance !== 'suitable') {
+    if (uiBottomSheetInformation.allowance !== AllowanceStatus.SUITABLE) {
       const isExactIn = isExactInRef.current;
       const selectedTokens =
         latestSelectedTokens.current[isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B];
@@ -67,7 +69,7 @@ export const ApprovalRequiredButton = ({
   const secondStepTypographyStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
       color:
-        uiBottomSheetInformation.allowance === 'increase'
+        uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE
           ? COLORS.neutral400
           : COLORS.neutral0
     };
@@ -77,7 +79,8 @@ export const ApprovalRequiredButton = ({
     return {
       ...styles.multiStepButton,
       backgroundColor:
-        uiBottomSheetInformation.allowance === 'increased' && !isProcessingSwap
+        uiBottomSheetInformation.allowance === AllowanceStatus.INCREASED &&
+        !isProcessingSwap
           ? COLORS.brand500
           : COLORS.alphaBlack5
     };

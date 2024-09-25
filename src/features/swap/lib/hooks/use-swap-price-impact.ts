@@ -4,7 +4,7 @@ import {
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
   singleHopImpact,
-  isMultiHopSwapAvaliable,
+  isMultiHopSwapAvailable,
   extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
 import { getAmountsOut } from '@features/swap/lib/contracts';
@@ -66,99 +66,56 @@ export function useSwapPriceImpact() {
   );
 
   const multiHopImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
-    const middleAddress =
-      extractArrayOfMiddleMultiHopAddresses(tokensRoute).address;
+    if (!isMultiHopSwapAvailable(tokensRoute) || !isExactInRef.current) {
+      return 0;
+    }
 
-    const _tokenToSell = tokenToSell.TOKEN;
-    const _tokenToReceive = tokenToReceive.TOKEN;
-
-    const calculateImpact = async (amountToSell: string) => {
-      const amountToSellWithRealizedFee =
-        subtractRealizedLPFeeFromInput(amountToSell);
-
-      const intermediatePool = getPairAddress({
-        TOKEN_A: _tokenToSell,
-        TOKEN_B: { address: middleAddress } as SwapToken
-      });
-      const finalPool = getPairAddress({
-        TOKEN_A: { address: middleAddress } as SwapToken,
-        TOKEN_B: _tokenToReceive
-      });
-
-      try {
-        if (intermediatePool && intermediatePool.pairAddress) {
-          const { reserveIn: interReserveIn, reserveOut: interReserveOut } =
-            await getReserves(intermediatePool.pairAddress, {
-              TOKEN_A: _tokenToSell,
-              TOKEN_B: { address: middleAddress } as SwapToken
-            });
-
-          const { reserveIn: finalReserveIn, reserveOut: finalReserveOut } =
-            await getReserves(finalPool?.pairAddress ?? '', {
-              TOKEN_A: { address: middleAddress } as SwapToken,
-              TOKEN_B: _tokenToReceive
-            });
-
-          if (
-            interReserveIn &&
-            interReserveOut &&
-            finalReserveIn &&
-            finalReserveOut
-          ) {
-            const bnAmountToSell = ethers.utils.parseEther(
-              amountToSellWithRealizedFee
-            );
-
-            const [, intermediateAmount, finalAmount] = await getAmountsOut({
-              path: [
-                _tokenToSell?.address ?? '',
-                middleAddress,
-                _tokenToReceive?.address ?? ''
-              ],
-              amountToSell: bnAmountToSell
-            });
-
-            const intermediateAmountToSellWithRealizedFee =
-              subtractRealizedLPFeeFromInput(
-                ethers.utils.formatEther(intermediateAmount._hex)
-              );
-
-            const intermediateImpact = singleHopImpact(
-              amountToSellWithRealizedFee,
-              intermediateAmount,
-              interReserveIn,
-              interReserveOut
-            );
-
-            const finalImpact = singleHopImpact(
-              intermediateAmountToSellWithRealizedFee,
-              finalAmount,
-              finalReserveIn,
-              finalReserveOut
-            );
-
-            const cumulativePriceImpact = multiHopCumulativeImpact(
-              intermediateImpact,
-              finalImpact
-            );
-
-            return cumulativePriceImpact;
-          }
-        }
-      } catch (error) {
-        console.error('Error calculating multi-route price impact:', error);
-      }
-    };
+    const path = [
+      tokenToSell.TOKEN?.address ?? '',
+      extractArrayOfMiddleMultiHopAddresses(tokensRoute).address,
+      tokenToReceive.TOKEN?.address ?? ''
+    ];
 
     try {
-      if (isExactInRef.current && isMultiHopPathAvailable) {
-        return await calculateImpact(tokenToSell.AMOUNT);
+      const amountIn = ethers.utils.parseEther(tokenToSell.AMOUNT);
+      const [, ...amounts] = await getAmountsOut({
+        path,
+        amountToSell: amountIn
+      });
+
+      let totalImpact = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        const pairAddress = getPairAddress({
+          TOKEN_A: { address: path[i] } as SwapToken,
+          TOKEN_B: { address: path[i + 1] } as SwapToken
+        })?.pairAddress;
+
+        if (!pairAddress) continue;
+
+        const { reserveIn, reserveOut } = await getReserves(pairAddress, {
+          TOKEN_A: { address: path[i] } as SwapToken,
+          TOKEN_B: { address: path[i + 1] } as SwapToken
+        });
+
+        if (!reserveIn || !reserveOut) continue;
+
+        const amountInWithFee = subtractRealizedLPFeeFromInput(
+          ethers.utils.formatEther(i === 0 ? amountIn : amounts[i - 1])
+        );
+
+        const impact = singleHopImpact(
+          amountInWithFee,
+          amounts[i],
+          reserveIn,
+          reserveOut
+        );
+
+        totalImpact = multiHopCumulativeImpact(totalImpact.toString(), impact);
       }
 
-      return 0;
+      return Math.abs(totalImpact);
     } catch (error) {
-      console.error('Error calculating price impact:', error);
+      console.error('Error calculating multi-hop price impact:', error);
       return 0;
     }
   }, [
@@ -172,7 +129,7 @@ export function useSwapPriceImpact() {
   ]);
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvaliable(tokensRoute);
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
     if (settings.current.multihops && isMultiHopPathAvailable) {
       return await multiHopImpactGetter();
     } else {

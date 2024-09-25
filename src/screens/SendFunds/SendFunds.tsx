@@ -48,7 +48,6 @@ import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
-import { isIOS } from 'react-native-popover-view/dist/Constants';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -264,9 +263,8 @@ export const SendFunds = () => {
         style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardAvoidingContainer}
         behavior="padding"
-        enabled={isIOS}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>

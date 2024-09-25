@@ -7,7 +7,7 @@ export const SettingsExpertModeForm = () => {
   const { t } = useTranslation();
   const { onChangeSettings, _refSettingsGetter } = useSwapSettings();
 
-  const onToggleExpertModle = useCallback(() => {
+  const onToggleExpertMode = useCallback(() => {
     onChangeSettings('extendedMode', !_refSettingsGetter.extendedMode);
   }, [_refSettingsGetter.extendedMode, onChangeSettings]);
 
@@ -16,7 +16,7 @@ export const SettingsExpertModeForm = () => {
       <Text>{t('swap.settings.expert')}</Text>
       <Switch
         value={_refSettingsGetter.extendedMode}
-        onValueChange={onToggleExpertModle}
+        onValueChange={onToggleExpertMode}
       />
     </Row>
   );

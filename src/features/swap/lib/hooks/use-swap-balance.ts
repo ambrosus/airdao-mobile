@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 import { BigNumber } from 'ethers/lib/ethers';
-import { useBridgeContextData } from '@features/bridge/context';
 import { SwapToken } from '@features/swap/types';
-import { getBalanceOf } from '../contracts';
+
 import { useFocusEffect } from '@react-navigation/native';
+import { useWallet } from '@hooks';
+import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapBalance(token: SwapToken | null) {
-  const { selectedAccount } = useBridgeContextData();
-
+  const { wallet } = useWallet();
   const [isFetchingBalance, setIsFetchingBalance] = useState(false);
   const [bnBalanceAmount, setBnBalanceAmount] = useState<BigNumber | null>(
     null
@@ -15,13 +15,13 @@ export function useSwapBalance(token: SwapToken | null) {
 
   useFocusEffect(
     useCallback(() => {
-      if (selectedAccount?.address && !!token) {
+      if (wallet?.address && !!token) {
         (async () => {
           setIsFetchingBalance(true);
           try {
-            const bnBalance = await getBalanceOf({
-              token,
-              ownerAddress: selectedAccount?.address
+            const bnBalance = await erc20Contracts.balanceOf({
+              tokenAddress: token.address,
+              ownerAddress: wallet?.address
             });
 
             setBnBalanceAmount(bnBalance);
@@ -32,7 +32,7 @@ export function useSwapBalance(token: SwapToken | null) {
           }
         })();
       }
-    }, [selectedAccount?.address, token])
+    }, [token, wallet?.address])
   );
 
   return { isFetchingBalance, bnBalanceAmount };

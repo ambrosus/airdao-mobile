@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     rowGap: verticalScale(16)
   },
-  slippageTolleranceRow: {
+  slippageToleranceRow: {
     columnGap: scale(16)
   },
   symbol: {
