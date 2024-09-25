@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
   loading: {
     alignSelf: 'center'
   },
+  keyboardAvoidingContainer: {
+    flex: 1
+  },
   input: {
     textAlign: 'center',
     fontFamily: 'Mersad_600SemiBold',
