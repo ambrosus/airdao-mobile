@@ -48,6 +48,7 @@ import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
+import { isIos } from '@utils/isPlatform';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -265,6 +266,7 @@ export const SendFunds = () => {
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingContainer}
         behavior="padding"
+        enabled={isIos}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
