@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import {
   AirBondIcon,
+  AirDOGEIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
   BusdIcon,
@@ -65,6 +66,9 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.ADOGE.toLowerCase():
+    case CryptoCurrencyCode.Airdoge.toLowerCase():
+      return <AirDOGEIcon scale={scale} />;
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
     case 'weth':

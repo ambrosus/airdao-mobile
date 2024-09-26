@@ -19,6 +19,11 @@ export const SWAP_SUPPORTED_TOKENS = {
         symbol: 'USDC'
       },
       {
+        address: '0x48437113D6d4808bD281F50eEe4b87D4c58D2557',
+        name: 'Airdoge',
+        symbol: 'ADOGE'
+      },
+      {
         address: '0x096B5914C95C34Df19500DAff77470C845EC749D',
         name: 'BOND',
         symbol: 'BOND'
