@@ -2,12 +2,14 @@ import { BigNumber, utils } from 'ethers';
 
 /**
  * Example: formatNumber(10000, 2) => 10,000.00
+ * Example: formatNumber(30,3634552345262345, 2) => 30.36
+ * Example: formatNumber(0,3634552345262345, 2) => 0.36
  */
 const formatNumber = (amount: number, decimalPlaces = 2): string => {
   if (amount === undefined || amount == null) return '';
   const isNegative = amount < 0;
   const positiveAmount = Math.abs(amount);
-  const strAmount = positiveAmount.toFixed(decimalPlaces);
+  const strAmount = positiveAmount.toString();
   let formattedString = '';
   let counter = 0;
   const startingIdx =
@@ -23,11 +25,12 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
     formattedString = ch + formattedString;
     counter++;
   }
-  return (
-    (isNegative ? '-' : '') +
-    formattedString +
-    strAmount.substring(startingIdx + 1)
-  );
+  const leftPart = (isNegative ? '-' : '') + formattedString;
+  const rightPart = strAmount
+    .substring(startingIdx + 1)
+    .slice(0, decimalPlaces + 1);
+  const result = limitDecimalCount(leftPart + rightPart, decimalPlaces);
+  return result;
 };
 
 // limits the number of decimal places of a number in the format of e.g 245.82

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Transaction } from '@models';
+import { Transaction, TransactionTokenInfo } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -15,10 +15,11 @@ const CONTRACT_CALL = '(contract call)';
 
 interface TransactionItemProps {
   transaction: Transaction;
+  transactionTokenInfo: TransactionTokenInfo;
 }
 
 export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
-  const { transaction } = props;
+  const { transaction, transactionTokenInfo } = props;
   const { type } = transaction;
   const isSent = transaction.isSent;
   const { t } = useTranslation();
@@ -72,7 +73,10 @@ export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
-            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
+            {NumberUtils.limitDecimalCount(
+              transactionTokenInfo.cryptoAmount,
+              2
+            )}{' '}
             {transaction.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />

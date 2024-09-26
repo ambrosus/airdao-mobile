@@ -1,14 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TransactionDetails } from '../TransactionDetails';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetFloat, TransactionItem } from '@components/modular';
-import { Transaction } from '@models/Transaction';
+import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp } from '@appTypes/navigation/common';
 import { useTranslation } from 'react-i18next';
+import { formatUnits } from 'ethers/lib/utils';
+import { zeroAddress } from 'ethereumjs-util';
+import { AMB_DECIMALS } from '@constants/variables';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -39,10 +42,44 @@ export const ExplorerAccountTransactionItem = (
     }, 0);
   };
 
+  const transactionTokenInfo = useMemo((): TransactionTokenInfo => {
+    if (transaction?.token) {
+      return {
+        ...transaction.token,
+        cryptoAmount: formatUnits(
+          transaction.value.wei,
+          transaction.token.decimals
+        )
+      };
+    }
+    if (transaction.type === 'Transfer') {
+      return {
+        ...transaction.value,
+        address: zeroAddress(),
+        decimals: AMB_DECIMALS,
+        cryptoAmount: formatUnits(transaction.value.wei, AMB_DECIMALS)
+      };
+    }
+    return {
+      symbol: '',
+      address: '',
+      decimals: 0,
+      cryptoAmount: String(transaction.amount) || '0'
+    };
+  }, [
+    transaction.amount,
+    transaction.token,
+    transaction.type,
+    transaction.value
+  ]);
+
   return (
     <>
       <Button disabled={disabled} onPress={showTransactionDetails}>
-        <TransactionItem transaction={transaction} />
+        <TransactionItem
+          transaction={transaction}
+          transactionTokenInfo={transactionTokenInfo}
+        />
       </Button>
       <BottomSheetFloat ref={transactionDetailsModal} swiperIconVisible>
         <View style={styles.transactionDetailsTop}>
@@ -53,6 +90,7 @@ export const ExplorerAccountTransactionItem = (
         </View>
         <View style={styles.transactionDetails}>
           <TransactionDetails
+            transactionTokenInfo={transactionTokenInfo}
             onPressAddress={navigateToAddress}
             onViewOnExplorerPress={hideTransactionDetails}
             transaction={transaction}
