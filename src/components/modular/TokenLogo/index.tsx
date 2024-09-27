@@ -17,9 +17,7 @@ import {
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
-import Config from '@constants/config';
-import { Token } from '@models/Token';
-import { useBridgeContextData } from '@features/bridge/context';
+import { getTokenNameFromDatabase } from '@hooks/getTokenNameFromDatabase';
 
 export interface TokenLogoProps {
   token?: string;
@@ -37,24 +35,15 @@ export const TokenLogo = (props: TokenLogoProps) => {
     scale,
     token,
     address,
-    isNativeCoin,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
-  const { selectedAccount } = useBridgeContextData();
   const tokenName = useMemo(() => {
     if (address) {
-      if (isNativeCoin || selectedAccount?.address === address) {
-        return 'airdao';
-      } else {
-        return (
-          Config.ALL_TOKENS.find((token: Token) => token.address === address)
-            ?.name ?? 'unknown'
-        );
-      }
+      return getTokenNameFromDatabase(address);
     } else {
       return token;
     }
-  }, [address, isNativeCoin, selectedAccount?.address, token]);
+  }, [address, token]);
 
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():

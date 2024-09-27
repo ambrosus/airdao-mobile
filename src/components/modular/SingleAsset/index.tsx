@@ -18,7 +18,7 @@ interface SingleAssetProps {
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { token, overrideIconVariants } = props;
-  const { name, balance, symbol, address } = token;
+  const { name, balance, symbol, address, tokenNameFromDatabase } = token;
   const isNFT = symbol === CryptoCurrencyCode.NFT;
   const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
@@ -34,7 +34,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
       <Row>
         <View style={{ alignSelf: 'center' }}>
           <TokenLogo
-            address={address}
+            token={tokenNameFromDatabase}
             overrideIconVariants={overrideIconVariants}
           />
         </View>

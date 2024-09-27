@@ -305,7 +305,14 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0x48437113D6d4808bD281F50eEe4b87D4c58D2557',
       name: 'Airdoge',
-      symbol: 'ADOGE'
+      symbol: 'ADOGE',
+      decimals: 18
+    },
+    {
+      address: '0x2834C436d04ED155e736F994c1F3a0d05C4A8dE4',
+      name: 'Staked AMB',
+      symbol: 'stAMB',
+      decimals: 18
     }
   ],
   TESTNET: [

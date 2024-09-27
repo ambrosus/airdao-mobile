@@ -51,14 +51,14 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
           formattedBalance: `${account.ambBalance}`
         },
         symbol: CryptoCurrencyCode.AMB,
-        decimals: AMB_DECIMALS
+        decimals: AMB_DECIMALS,
+        tokenNameFromDatabase: 'AirDAO'
       },
       TokenUtils
     )
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
-
   return (
     <View style={{ flex: 1 }}>
       {!data && error && loading ? (
