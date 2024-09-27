@@ -6,7 +6,8 @@ import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapInterface,
-  useSwapMultiplyBalance
+  useSwapMultiplyBalance,
+  useSwapSettings
 } from '@features/swap/lib/hooks';
 import { buttonActionString } from '@features/swap/utils/button-action.string';
 
@@ -14,19 +15,22 @@ export const ReviewSwapButton = () => {
   const { t } = useTranslation();
   const { bnBalances } = useSwapMultiplyBalance();
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
+  const { _refSettingsGetter } = useSwapSettings();
 
   const { resolveBottomSheetData } = useSwapInterface();
 
   const [isProcessingBottomSheet, setIsProcessingBottomSheet] = useState(false);
 
   const swapButtonString = useMemo(() => {
+    const { multihops } = _refSettingsGetter;
     return buttonActionString(
       selectedTokens,
       selectedTokensAmount,
       bnBalances,
-      t
+      t,
+      multihops
     );
-  }, [t, bnBalances, selectedTokens, selectedTokensAmount]);
+  }, [_refSettingsGetter, selectedTokens, selectedTokensAmount, bnBalances, t]);
 
   const onResolveBottomSheetDataPress = useCallback(async () => {
     try {
