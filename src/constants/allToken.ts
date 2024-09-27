@@ -1,9 +1,9 @@
-import { zeroAddress } from 'ethereumjs-util';
+import { ethers } from 'ethers';
 
 export const ALL_TOKENS_DATA = {
   PROD: [
     {
-      address: zeroAddress(),
+      address: ethers.constants.AddressZero,
       decimals: 0,
       name: 'AirDAO',
       symbol: 'AMB'

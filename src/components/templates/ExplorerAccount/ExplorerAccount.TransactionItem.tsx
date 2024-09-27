@@ -10,8 +10,8 @@ import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp } from '@appTypes/navigation/common';
 import { useTranslation } from 'react-i18next';
 import { formatUnits } from 'ethers/lib/utils';
-import { zeroAddress } from 'ethereumjs-util';
 import { AMB_DECIMALS } from '@constants/variables';
+import { ethers } from 'ethers';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -55,7 +55,7 @@ export const ExplorerAccountTransactionItem = (
     if (transaction.type === 'Transfer') {
       return {
         ...transaction.value,
-        address: zeroAddress(),
+        address: ethers.constants.AddressZero,
         decimals: AMB_DECIMALS,
         cryptoAmount: formatUnits(transaction.value.wei, AMB_DECIMALS)
       };
