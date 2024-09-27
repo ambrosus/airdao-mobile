@@ -28,6 +28,7 @@ interface ActiveMarketsListProps {
 export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
+
   const { tokens, isTokensLoading } = useMarketTokens();
 
   const {
