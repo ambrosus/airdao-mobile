@@ -7,31 +7,17 @@ import {
   SelectedTokensState
 } from '../types';
 import { dexValidators } from './validators';
-import { CryptoCurrencyCode } from '@appTypes';
 
 export function buttonActionString(
   selectedTokens: SelectedTokensState,
   selectedAmount: SelectedTokensAmountState,
   bnBalanceAmount: MultiplyBalancesStateType,
-  t: TFunction<'translation', undefined>,
-  multihops: boolean
+  t: TFunction<'translation', undefined>
 ) {
   const { TOKEN_A, TOKEN_B } = selectedTokens;
   const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedAmount;
 
   const isSomeTokenNotSelected = !TOKEN_A || !TOKEN_B;
-
-  const isAdoge =
-    TOKEN_A?.symbol === CryptoCurrencyCode.ADOGE ||
-    TOKEN_B?.symbol === CryptoCurrencyCode.ADOGE;
-  const isAmbOrSamb = [TOKEN_A?.symbol, TOKEN_B?.symbol].some(
-    (symbol) =>
-      symbol === CryptoCurrencyCode.AMB || symbol === CryptoCurrencyCode.SAMB
-  );
-
-  if (isAdoge && !isAmbOrSamb && !multihops) {
-    return ' Enable multi-hop trades';
-  }
 
   const isSomeBalanceIsEmpty =
     dexValidators.isEmptyAmount(AMOUNT_A) ||

@@ -23,6 +23,8 @@ export const SwapContext = () => {
   // Tokens connected states
   const [_refExactGetter, setIsExactIn] = useState(true);
   const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
+  const [isWarningToEnableMultihopActive, setIsWarningToEnableMultihopActive] =
+    useState(false);
 
   const [lastChangedInput, setLastChangedInput] = useState<SelectedTokensKeys>(
     FIELD.TOKEN_A
@@ -67,6 +69,7 @@ export const SwapContext = () => {
     setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
     setIsMultiHopSwapCurrencyBetter({ state: false, token: '' });
+    setIsWarningToEnableMultihopActive(false);
   }, []);
 
   return {
@@ -89,6 +92,8 @@ export const SwapContext = () => {
     setSettings,
     isMultiHopSwapBetterCurrency,
     setIsMultiHopSwapCurrencyBetter,
+    setIsWarningToEnableMultihopActive,
+    isWarningToEnableMultihopActive,
     setIsExactIn,
     isProcessingSwap,
     setIsProcessingSwap,
