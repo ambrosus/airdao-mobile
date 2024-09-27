@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
@@ -39,6 +39,29 @@ export const TransactionDetails = (
     onViewOnExplorerPress,
     transactionTokenInfo
   } = props;
+  const isTransfer = transaction.type === 'Transfer';
+  const isContractCall = transaction.type.includes('ContractCall');
+  const isTokenTransfer = transaction.type === 'TokenTransfer';
+
+  const amountTokenLogo = useMemo(() => {
+    switch (true) {
+      case isTransfer:
+        return 'AirDAO';
+      case isTokenTransfer:
+        return transaction?.token?.name;
+      case isContractCall:
+        return transaction?.value?.symbol;
+      default:
+        return 'unknown';
+    }
+  }, [
+    isContractCall,
+    isTokenTransfer,
+    isTransfer,
+    transaction?.token?.name,
+    transaction?.value?.symbol
+  ]);
+
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
@@ -188,7 +211,7 @@ export const TransactionDetails = (
           {t('common.transaction.amount')}
         </Text>
         <Row alignItems="center">
-          <TokenLogo address={transaction.token?.address} scale={0.5} />
+          <TokenLogo token={amountTokenLogo} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontFamily="Inter_600SemiBold"

@@ -9,6 +9,7 @@ export interface TokenDTO {
     wei: string;
     ether: number;
   };
+  tokenNameFromDatabase: string;
   decimals: number;
   symbol: CryptoCurrencyCode | '';
 }
