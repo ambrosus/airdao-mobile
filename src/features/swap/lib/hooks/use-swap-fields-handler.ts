@@ -50,7 +50,7 @@ export function useSwapFieldsHandler() {
       if (!isEmptyAmount(currentAmount)) {
         return {
           ...latestSelectedTokensAmount.current,
-          [oppositeKey]: normalizedAmount
+          [oppositeKey]: isEmptyAmount(normalizedAmount) ? '' : normalizedAmount
         };
       }
       return prevSelectedTokensAmounts;
