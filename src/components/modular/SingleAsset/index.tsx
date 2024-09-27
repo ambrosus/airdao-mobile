@@ -27,6 +27,8 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     ? `${balance.wei} ${symbol}s`
     : `$${NumberUtils.limitDecimalCount(usdPrice, 2)}`;
 
+  const tokenBalance = balance.formattedBalance;
+
   return (
     <View style={styles.container}>
       <Row>
@@ -65,7 +67,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
                   fontSize={14}
                   color={COLORS.neutral400}
                 >
-                  {NumberUtils.limitDecimalCount(balance.ether, 2)}{' '}
+                  {NumberUtils.limitDecimalCount(tokenBalance, 2)}{' '}
                   {symbol || 'tokens'}
                 </Text>
                 <Text

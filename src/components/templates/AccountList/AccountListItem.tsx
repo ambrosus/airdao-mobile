@@ -3,6 +3,7 @@ import { WalletCard } from '@components/modular';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { useBalanceOfAddress } from '@hooks/query/useBalanceOfAddress';
 import { AccountListItemProps, CardType } from './AccountList.types';
+import { formatUnits } from 'ethers/lib/utils';
 
 export const AccountListItem = (props: AccountListItemProps) => {
   const { account, type } = props;
@@ -17,7 +18,7 @@ export const AccountListItem = (props: AccountListItemProps) => {
       return (
         <WalletCard
           address={account.address}
-          ambBalance={Number(ambBalance.ether)}
+          ambBalance={formatUnits(ambBalance.wei, 18)}
           usdBalance={usdBalance}
           balanceLoading={balanceLoading}
           change24HR={ambPrice?.percentChange24H}
