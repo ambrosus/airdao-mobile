@@ -16,8 +16,7 @@ import {
   isETHtoWrapped,
   isWrappedToETH,
   isMultiHopSwapAvailable,
-  calculateAllowanceWithProviderFee,
-  SwapStringUtils
+  calculateAllowanceWithProviderFee
 } from '@features/swap/utils';
 import { createSigner } from '@features/swap/utils/contracts/instances';
 import { useSwapSettings } from './use-swap-settings';
@@ -101,7 +100,7 @@ export function useSwapActions() {
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
 
-    const _slippage = SwapStringUtils.transformSlippageValue(slippageTolerance);
+    const _slippage = +slippageTolerance;
 
     const isMultiHopSwapPossible =
       multihops &&

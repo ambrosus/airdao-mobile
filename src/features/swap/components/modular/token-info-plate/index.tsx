@@ -6,7 +6,6 @@ import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapTokens } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
-
 import { COLORS } from '@constants/colors';
 import { useSwapBetterCurrency } from '@features/swap/lib/hooks/use-swap-better-currency';
 
@@ -47,6 +46,10 @@ export const TokenInfoPlate = () => {
     tokenToReceive.TOKEN?.symbol as CryptoCurrencyCode
   );
 
+  const isUSDPriceNegative = useMemo(() => {
+    return TokenUSDPrice < 0;
+  }, [TokenUSDPrice]);
+
   const isShowPlate = useMemo(() => {
     return plateVisibility(
       tokenToSell.TOKEN,
@@ -65,9 +68,14 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'} ($
-        {SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}) ={' '}
-        {oppositeAmountPerOneToken} {tokenToSell.TOKEN?.symbol}
+        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'}{' '}
+        {!isUSDPriceNegative && (
+          <>
+            ($
+            {`${SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}`})
+          </>
+        )}
+        = {oppositeAmountPerOneToken} {tokenToSell.TOKEN?.symbol}
       </Text>
     </Row>
   ) : (

@@ -68,9 +68,17 @@ export const Balance = ({ type }: BalanceProps) => {
     return !selectedTokens[type] ? '0' : normalizedTokenBalance;
   }, [normalizedTokenBalance, selectedTokens, type]);
 
+  const isUSDPriceNegative = useMemo(() => {
+    return USDTokenPrice < 0;
+  }, [USDTokenPrice]);
+
+  const containerJustifyContent = useMemo(() => {
+    return isUSDPriceNegative ? 'flex-end' : 'space-between';
+  }, [isUSDPriceNegative]);
+
   return (
-    <Row alignItems="center" justifyContent="space-between">
-      {isFetchingBalance ? (
+    <Row alignItems="center" justifyContent={containerJustifyContent}>
+      {isUSDPriceNegative ? null : isFetchingBalance ? (
         <ShimmerLoader width={45} height={12} />
       ) : (
         <Text
