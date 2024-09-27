@@ -301,6 +301,11 @@ export const ALL_TOKENS_DATA = {
       decimals: 18,
       name: 'P(5)T',
       symbol: 'P(5)T'
+    },
+    {
+      address: '0x48437113D6d4808bD281F50eEe4b87D4c58D2557',
+      name: 'Airdoge',
+      symbol: 'ADOGE'
     }
   ],
   TESTNET: [

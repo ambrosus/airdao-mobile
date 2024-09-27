@@ -5,7 +5,7 @@ import { styles } from '../styles';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { AllowanceStatus, FIELD } from '@features/swap/types';
+import { AllowanceStatus } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
 
 interface ApprovalRequiredButtonProps {
@@ -20,7 +20,7 @@ export const ApprovalRequiredButton = ({
   onCompleteMultiStepSwap
 }: ApprovalRequiredButtonProps) => {
   const { t } = useTranslation();
-  const { uiBottomSheetInformation, latestSelectedTokens, isExactInRef } =
+  const { uiBottomSheetInformation, latestSelectedTokens } =
     useSwapContextSelector();
 
   const multiStepButtonsDisabledStates = useMemo(() => {
@@ -40,9 +40,7 @@ export const ApprovalRequiredButton = ({
 
   const multiStepButtonActionText = useMemo(() => {
     if (uiBottomSheetInformation.allowance !== AllowanceStatus.SUITABLE) {
-      const isExactIn = isExactInRef.current;
-      const selectedTokens =
-        latestSelectedTokens.current[isExactIn ? FIELD.TOKEN_A : FIELD.TOKEN_B];
+      const selectedTokens = latestSelectedTokens.current.TOKEN_A;
 
       return {
         firstStep: t('swap.button.approve', {
@@ -51,12 +49,7 @@ export const ApprovalRequiredButton = ({
         secondStep: t('swap.button.swap')
       };
     }
-  }, [
-    t,
-    isExactInRef,
-    latestSelectedTokens,
-    uiBottomSheetInformation.allowance
-  ]);
+  }, [t, latestSelectedTokens, uiBottomSheetInformation.allowance]);
 
   const firstStepTypographyStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
