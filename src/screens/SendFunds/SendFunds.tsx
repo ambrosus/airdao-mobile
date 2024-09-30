@@ -1,5 +1,17 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
+import {
+  InteractionManager,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -7,6 +19,7 @@ import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   Input,
+  InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
@@ -48,7 +61,7 @@ import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
-import { isIos } from '@utils/isPlatform';
+import { isAndroid } from '@utils/isPlatform';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -63,9 +76,12 @@ export const SendFunds = () => {
     transactionId
   } = sendContextState;
   const transactionIdRef = useRef(transactionId);
+  const amountInputRef = useRef<InputRef>(null);
   transactionIdRef.current = transactionId;
   const { data: selectedAccount } = useAccountByAddress(senderAddress);
   const walletHash = selectedAccount?.wallet.id || '';
+
+  const [amountInputFocused, setAmountInputFocused] = useState(false);
 
   const {
     data: { tokens }
@@ -182,7 +198,11 @@ export const SendFunds = () => {
   };
 
   const showReviewModal = () => {
-    confirmModalRef.current?.show();
+    Keyboard.dismiss();
+
+    return setTimeout(() => {
+      confirmModalRef.current?.show();
+    }, 525);
   };
 
   const hideReviewModal = () => {
@@ -237,6 +257,19 @@ export const SendFunds = () => {
     Number(amountInCrypto) == 0 ||
     !destinationAddress.match(etherumAddressRegex);
 
+  const onToggleAmountInputState = useCallback(
+    () => setAmountInputFocused((p) => !p),
+    []
+  );
+
+  const onAmountInputPress = useCallback(() => {
+    Keyboard.dismiss();
+
+    InteractionManager.runAfterInteractions(() => {
+      setTimeout(() => amountInputRef.current?.focus(), 200);
+    });
+  }, []);
+
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
       <Header
@@ -266,7 +299,6 @@ export const SendFunds = () => {
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingContainer}
         behavior="padding"
-        enabled={isIos}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
@@ -306,19 +338,31 @@ export const SendFunds = () => {
                 </Button>
               </Row>
               <Spacer value={verticalScale(32)} />
-              <Input
-                type="number"
-                value={
-                  showUsdAmountOnlyPositiveRate ? amountInUSD : amountInCrypto
-                }
-                onChangeValue={onChangeAmountValue}
-                style={styles.input}
-                maxLength={9}
-                keyboardType="decimal-pad"
-                placeholder="0"
-                placeholderTextColor={COLORS.neutral300}
-                multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
-              />
+              <View>
+                <Input
+                  ref={amountInputRef}
+                  onFocus={onToggleAmountInputState}
+                  onBlur={onToggleAmountInputState}
+                  type="number"
+                  value={
+                    showUsdAmountOnlyPositiveRate ? amountInUSD : amountInCrypto
+                  }
+                  onChangeValue={onChangeAmountValue}
+                  style={styles.input}
+                  maxLength={9}
+                  keyboardType="decimal-pad"
+                  placeholder="0"
+                  placeholderTextColor={COLORS.neutral300}
+                  multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
+                />
+                {!amountInputFocused && isAndroid && (
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={onAmountInputPress}
+                    style={styles.inputButton}
+                  />
+                )}
+              </View>
               <Spacer value={verticalScale(16)} />
               {isPositiveRate && (
                 <Button onPress={toggleShowInUSD}>

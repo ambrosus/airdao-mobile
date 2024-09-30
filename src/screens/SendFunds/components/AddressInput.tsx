@@ -1,5 +1,13 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Alert, useWindowDimensions } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+  Alert,
+  InteractionManager,
+  Keyboard,
+  StyleProp,
+  TouchableOpacity,
+  ViewStyle,
+  useWindowDimensions
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BarcodeScanner } from '@components/templates';
 import {
@@ -18,9 +26,13 @@ import { DEVICE_WIDTH } from '@constants/variables';
 interface AddressInputProps {
   address: string;
   onAddressChange: (newAddress: string) => unknown;
+  resetKeyboardState?: boolean;
 }
-export const AddressInput = (props: AddressInputProps) => {
-  const { address, onAddressChange } = props;
+export const AddressInput = ({
+  address,
+  onAddressChange,
+  resetKeyboardState
+}: AddressInputProps) => {
   const { t } = useTranslation();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scannerModalRef = useRef<BottomSheetRef>(null);
@@ -69,6 +81,24 @@ export const AddressInput = (props: AddressInputProps) => {
       : `${address.slice(0, lettersToSlice)}...`;
   }, [address, isInputFocused]);
 
+  const onInputPress = useCallback(() => {
+    Keyboard.dismiss();
+
+    InteractionManager.runAfterInteractions(() => {
+      setTimeout(() => inputRef.current?.focus(), 200);
+    });
+  }, []);
+
+  const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      width: '100%',
+      height: 60,
+      position: 'absolute',
+      top: 15,
+      zIndex: 100
+    };
+  }, []);
+
   return (
     <>
       <InputWithIcon
@@ -95,6 +125,13 @@ export const AddressInput = (props: AddressInputProps) => {
         onChangeValue={onAddressChange}
         placeholder={t('send.funds.recipient')}
       />
+      {resetKeyboardState && !isInputFocused && isAndroid && (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={onInputPress}
+          style={invisibleTouchableHandlerStyles}
+        />
+      )}
       <BottomSheet
         ref={scannerModalRef}
         borderRadius={0}
