@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { InteractionManager } from 'react-native';
+import { Alert, InteractionManager } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
@@ -13,6 +13,10 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { AllowanceStatus } from '@features/swap/types';
+
+const SWAP_ERROR_TITLE = 'The transaction cannot succeed due to error:';
+const SWAP_ERROR_DESCRIPTION =
+  'missing revert data in call exception; Transaction reverted without a reason string. This is probably an issue with one of the tokens you are swapping.';
 
 export const SubmitSwapActions = () => {
   const navigation: HomeNavigationProp = useNavigation();
@@ -84,6 +88,7 @@ export const SubmitSwapActions = () => {
           );
         }
       } catch (error) {
+        Alert.alert(SWAP_ERROR_TITLE, SWAP_ERROR_DESCRIPTION);
         await simulateNavigationDelay(() =>
           navigation.navigate('SwapErrorScreen', routeParams)
         );
