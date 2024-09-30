@@ -35,6 +35,7 @@ export const HomeScreen = () => {
     selectedAccountWithBalance.ambBalance = Number(
       selectedAccountBalance.ether
     );
+    selectedAccountWithBalance.ambBalanceWei = selectedAccountBalance.wei;
   }
 
   const { setSelectedAccount } = useBridgeContextData();
@@ -92,10 +93,7 @@ export const HomeScreen = () => {
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions
-              selectedAccount={selectedAccount}
-              address={selectedAccountWithBalance.address}
-            />
+            <AccountActions address={selectedAccountWithBalance.address} />
             <Spacer value={verticalScale(32)} />
             <WalletTransactionsAndAssets
               account={selectedAccountWithBalance}

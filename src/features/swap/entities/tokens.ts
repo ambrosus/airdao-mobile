@@ -27,6 +27,11 @@ export const SWAP_SUPPORTED_TOKENS = {
         address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
         name: 'SAMB',
         symbol: 'SAMB'
+      },
+      {
+        address: '0x48437113D6d4808bD281F50eEe4b87D4c58D2557',
+        name: 'Airdoge',
+        symbol: 'ADOGE'
       }
     ],
     testnet: [

@@ -12,8 +12,11 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapBetterCurrency() {
-  const { setIsMultiHopSwapCurrencyBetter, isExactInRef } =
-    useSwapContextSelector();
+  const {
+    setIsMultiHopSwapCurrencyBetter,
+    setIsWarningToEnableMultihopActive,
+    isExactInRef
+  } = useSwapContextSelector();
   const { settings } = useSwapSettings();
 
   const getTokenAmountOut = useCallback(
@@ -91,6 +94,7 @@ export function useSwapBetterCurrency() {
 
   const getOppositeReceivedTokenAmount = useCallback(
     async (amountToSell: string, path: string[]) => {
+      setIsWarningToEnableMultihopActive(false);
       resetMultiHopUiState();
       if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
 
@@ -110,6 +114,9 @@ export function useSwapBetterCurrency() {
           singleHopAmount = await getTokenAmountIn(amountToSell, path);
         }
       } catch (error) {
+        if (!multihops) {
+          setIsWarningToEnableMultihopActive(true);
+        }
         console.error('Error fetching single-hop amount:', error);
       }
 
@@ -169,6 +176,7 @@ export function useSwapBetterCurrency() {
       isExactInRef,
       onChangeMultiHopUiState,
       resetMultiHopUiState,
+      setIsWarningToEnableMultihopActive,
       settings
     ]
   );

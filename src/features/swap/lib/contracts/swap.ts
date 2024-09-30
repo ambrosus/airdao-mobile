@@ -83,13 +83,14 @@ export async function swapExactETHForTokens(
       bnAmountToReceive
     );
 
-    const tx = await routerContract.swapExactAMBForTokens(
-      bnMinimumReceivedAmount,
-      path,
-      signer.address,
-      timestampDeadline,
-      { value: bnAmountToSell }
-    );
+    const tx =
+      await routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens(
+        bnMinimumReceivedAmount,
+        path,
+        signer.address,
+        timestampDeadline,
+        { value: bnAmountToSell }
+      );
 
     return await tx.wait();
   } catch (error) {
@@ -134,29 +135,32 @@ export async function swapMultiHopExactTokensForTokens(
     let tx;
 
     if (isFromETH) {
-      tx = await routerContract.swapExactAMBForTokens(
-        bnMinimumReceivedAmount,
-        _path,
-        signer.address,
-        timestampDeadline,
-        { value: bnAmountToSell }
-      );
+      tx =
+        await routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens(
+          bnMinimumReceivedAmount,
+          _path,
+          signer.address,
+          timestampDeadline,
+          { value: bnAmountToSell }
+        );
     } else if (isToETH) {
-      tx = await routerContract.swapExactTokensForAMB(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        _path,
-        signer.address,
-        timestampDeadline
-      );
+      tx =
+        await routerContract.swapExactTokensForAMBSupportingFeeOnTransferTokens(
+          bnAmountToSell,
+          bnMinimumReceivedAmount,
+          _path,
+          signer.address,
+          timestampDeadline
+        );
     } else {
-      tx = await routerContract.swapExactTokensForTokens(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        _path,
-        signer.address,
-        timestampDeadline
-      );
+      tx =
+        await routerContract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
+          bnAmountToSell,
+          bnMinimumReceivedAmount,
+          _path,
+          signer.address,
+          timestampDeadline
+        );
     }
 
     return await tx.wait();
@@ -188,13 +192,14 @@ export async function swapExactTokensForTokens(
       bnAmountToReceive
     );
 
-    const tx = await routerContract.swapExactTokensForTokens(
-      bnAmountToSell,
-      bnMinimumReceivedAmount,
-      path,
-      signer.address,
-      timestampDeadline
-    );
+    const tx =
+      await routerContract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        path,
+        signer.address,
+        timestampDeadline
+      );
 
     return await tx.wait();
   } catch (error) {
@@ -225,13 +230,14 @@ export async function swapExactTokensForETH(
       bnAmountToReceive
     );
 
-    const tx = await routerContract.swapExactTokensForAMB(
-      bnAmountToSell,
-      bnMinimumReceivedAmount,
-      path,
-      signer.address,
-      timestampDeadline
-    );
+    const tx =
+      await routerContract.swapExactTokensForAMBSupportingFeeOnTransferTokens(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        path,
+        signer.address,
+        timestampDeadline
+      );
 
     return await tx.wait();
   } catch (error) {

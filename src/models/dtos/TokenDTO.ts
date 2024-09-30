@@ -5,8 +5,11 @@ export interface TokenDTO {
   name: string;
   isNativeCoin: boolean;
   balance: {
+    formattedBalance: string;
     wei: string;
     ether: number;
   };
+  tokenNameFromDatabase: string;
+  decimals: number;
   symbol: CryptoCurrencyCode | '';
 }

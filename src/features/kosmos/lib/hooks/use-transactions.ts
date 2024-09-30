@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useWallet } from '@hooks';
 import { TxType } from '@features/kosmos/types';
 import { fetchMarketTransactions } from '@features/kosmos/api';

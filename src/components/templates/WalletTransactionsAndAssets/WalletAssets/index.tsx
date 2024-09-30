@@ -8,6 +8,7 @@ import { Button, Spinner } from '@components/base';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
 import { TokenUtils } from '@utils/token';
+import { AMB_DECIMALS } from '@constants/variables';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;
@@ -44,15 +45,20 @@ export const WalletAssets = (props: WalletAssetsProps): JSX.Element => {
         name: 'AirDAO',
         address: account.address,
         isNativeCoin: true,
-        balance: { wei: '', ether: account.ambBalance },
-        symbol: CryptoCurrencyCode.AMB
+        balance: {
+          wei: account.ambBalanceWei,
+          ether: account.ambBalance,
+          formattedBalance: `${account.ambBalance}`
+        },
+        symbol: CryptoCurrencyCode.AMB,
+        decimals: AMB_DECIMALS,
+        tokenNameFromDatabase: 'AirDAO'
       },
       TokenUtils
     )
   ];
 
   const data = [...ambTokenData, ...(tokens || [])];
-
   return (
     <View style={{ flex: 1 }}>
       {!data && error && loading ? (

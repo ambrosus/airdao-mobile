@@ -18,7 +18,7 @@ interface SingleAssetProps {
 
 export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
   const { token, overrideIconVariants } = props;
-  const { name, balance, symbol, address } = token;
+  const { name, balance, symbol, address, tokenNameFromDatabase } = token;
   const isNFT = symbol === CryptoCurrencyCode.NFT;
   const usdPrice = useUSDPrice(balance.ether, symbol);
   const { data: ambTokenData } = useAMBPrice();
@@ -27,12 +27,14 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
     ? `${balance.wei} ${symbol}s`
     : `$${NumberUtils.limitDecimalCount(usdPrice, 2)}`;
 
+  const tokenBalance = balance.formattedBalance;
+
   return (
     <View style={styles.container}>
       <Row>
         <View style={{ alignSelf: 'center' }}>
           <TokenLogo
-            address={address}
+            token={tokenNameFromDatabase}
             overrideIconVariants={overrideIconVariants}
           />
         </View>
@@ -65,7 +67,7 @@ export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
                   fontSize={14}
                   color={COLORS.neutral400}
                 >
-                  {NumberUtils.limitDecimalCount(balance.ether, 2)}{' '}
+                  {NumberUtils.limitDecimalCount(tokenBalance, 2)}{' '}
                   {symbol || 'tokens'}
                 </Text>
                 <Text

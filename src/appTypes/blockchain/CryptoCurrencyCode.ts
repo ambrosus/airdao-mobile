@@ -45,5 +45,7 @@ export enum CryptoCurrencyCode {
   BNB_SMART_20 = 'BNB_SMART_20',
   ETC = 'ETC',
   Test1 = 'TEST1',
-  Test2 = 'TEST2'
+  Test2 = 'TEST2',
+  ADOGE = 'ADOGE',
+  Airdoge = 'Airdoge'
 }

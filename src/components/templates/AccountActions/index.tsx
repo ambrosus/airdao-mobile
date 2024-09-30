@@ -6,13 +6,11 @@ import { Send } from './Send';
 import { Staking } from './Staking';
 import { Bridge } from './Bridge';
 import { Token } from '@models';
-import { AccountDBModel } from '@database';
 import { Kosmos } from './Kosmos';
 
 interface AccountActionsProps {
   address: string;
   token?: Token;
-  selectedAccount: AccountDBModel | null;
 }
 export const AccountActions = (props: AccountActionsProps) => {
   const { address, token } = props;

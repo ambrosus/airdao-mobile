@@ -10,9 +10,10 @@ import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
 import { ToastPosition } from '../Toast';
 import { styles } from './styles';
+
 export interface WalletCardProps {
   address: string;
-  ambBalance: number;
+  ambBalance: string;
   usdBalance: number;
   addressLeftPadding?: number;
   addressRightPadding?: number;
@@ -103,7 +104,7 @@ export const WalletCard = (props: WalletCardProps) => {
                 fontWeight="800"
                 fontFamily="Mersad_600SemiBold"
               >
-                {NumberUtils.limitDecimalCount(ambBalance.toString(), 2)} AMB
+                {NumberUtils.limitDecimalCount(ambBalance, 2)} AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
               <View style={styles.usdPriceBg}>

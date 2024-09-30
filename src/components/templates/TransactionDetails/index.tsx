@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { Transaction } from '@models/Transaction';
+import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
@@ -19,6 +19,7 @@ interface TransactionDetailsProps {
   isShareable?: boolean;
   onPressAddress?: (address: string) => void;
   onViewOnExplorerPress?: () => void;
+  transactionTokenInfo: TransactionTokenInfo;
 }
 
 const ROW_MARGIN: number = verticalScale(24);
@@ -32,13 +33,40 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, onPressAddress, onViewOnExplorerPress } = props;
+  const {
+    transaction,
+    onPressAddress,
+    onViewOnExplorerPress,
+    transactionTokenInfo
+  } = props;
+  const isTransfer = transaction.type === 'Transfer';
+  const isContractCall = transaction.type.includes('ContractCall');
+  const isTokenTransfer = transaction.type === 'TokenTransfer';
+
+  const amountTokenLogo = useMemo(() => {
+    switch (true) {
+      case isTransfer:
+        return 'AirDAO';
+      case isTokenTransfer:
+        return transaction?.token?.name;
+      case isContractCall:
+        return transaction?.value?.symbol;
+      default:
+        return 'unknown';
+    }
+  }, [
+    isContractCall,
+    isTokenTransfer,
+    isTransfer,
+    transaction?.token?.name,
+    transaction?.value?.symbol
+  ]);
+
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
   const ambPrice = ambData ? ambData.priceUSD : -1;
   let totalTransactionAmount;
-
   if (ambData) {
     const result = transaction.amount * ambPrice;
     totalTransactionAmount =
@@ -183,14 +211,17 @@ export const TransactionDetails = (
           {t('common.transaction.amount')}
         </Text>
         <Row alignItems="center">
-          <TokenLogo address={transaction.token?.address} scale={0.5} />
+          <TokenLogo token={amountTokenLogo} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
+            {NumberUtils.limitDecimalCount(
+              transactionTokenInfo.cryptoAmount,
+              2
+            )}{' '}
             {transaction.symbol}
             <Text
               fontFamily="Inter_500Medium"

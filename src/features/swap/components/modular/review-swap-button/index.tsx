@@ -13,20 +13,33 @@ import { buttonActionString } from '@features/swap/utils/button-action.string';
 export const ReviewSwapButton = () => {
   const { t } = useTranslation();
   const { bnBalances } = useSwapMultiplyBalance();
-  const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
-
   const { resolveBottomSheetData } = useSwapInterface();
+  const {
+    selectedTokens,
+    selectedTokensAmount,
+    isWarningToEnableMultihopActive
+  } = useSwapContextSelector();
 
   const [isProcessingBottomSheet, setIsProcessingBottomSheet] = useState(false);
 
   const swapButtonString = useMemo(() => {
+    if (isWarningToEnableMultihopActive) {
+      return 'Enable multihops trade';
+    }
+
     return buttonActionString(
       selectedTokens,
       selectedTokensAmount,
       bnBalances,
       t
     );
-  }, [t, bnBalances, selectedTokens, selectedTokensAmount]);
+  }, [
+    isWarningToEnableMultihopActive,
+    selectedTokens,
+    selectedTokensAmount,
+    bnBalances,
+    t
+  ]);
 
   const onResolveBottomSheetDataPress = useCallback(async () => {
     try {

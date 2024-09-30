@@ -11,7 +11,7 @@ import {
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
-import { Row, Text } from '@components/base';
+import { Row, Spinner, Text } from '@components/base';
 import { useMarketTransactions } from '@features/kosmos/lib/query';
 
 interface TransactionsHistoryTabProps {
@@ -80,7 +80,9 @@ export const TransactionsHistoryTab = ({
       </Row>
 
       {isLoading ? (
-        <View style={{ height: 550 }}></View>
+        <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+          <Spinner />
+        </View>
       ) : (
         <View style={styles.list}>
           <VirtualizedList
