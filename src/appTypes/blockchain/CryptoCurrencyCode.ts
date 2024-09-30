@@ -29,6 +29,7 @@ export enum CryptoCurrencyCode {
   'P(4)T' = 'P(4)T',
   'P(5)T' = 'P(5)T',
   AMB = 'AMB',
+  STAMB = 'STAMB',
   BUSD = 'BUSD',
   Bond = 'BOND',
   USDC = 'USDC',
