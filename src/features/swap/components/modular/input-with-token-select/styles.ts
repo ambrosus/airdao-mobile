@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     paddingRight: 0
   },
   inputAndroidSpecified: {
-    lineHeight: moderateScale(29)
+    fontSize: 28.5,
+    lineHeight: 38.5
   }
 });
