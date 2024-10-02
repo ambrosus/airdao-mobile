@@ -2,24 +2,20 @@ import { useCallback } from 'react';
 import { BigNumber } from 'ethers';
 import { useSwapBetterCurrency } from './use-swap-better-currency';
 import {
-  dexValidators,
   extractArrayOfMiddleMultiHopAddresses,
   isMultiHopSwapAvailable
 } from '@features/swap/utils';
-import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapSettings } from './use-swap-settings';
 
+const BASE_RATE_AMOUNT_TO_SELL = '1';
+
 export function useSwapBetterRate() {
-  const { getTokenAmountIn, getTokenAmountInWithMultiRoute } =
-    useSwapBetterCurrency();
-  const { isExactInRef } = useSwapContextSelector();
+  const { amountIn, amountInWithHop } = useSwapBetterCurrency();
+
   const { settings } = useSwapSettings();
 
   const bestSwapRate = useCallback(
-    async (amountToSell: string, path: string[]) => {
-      if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
-
-      const tradeIn = isExactInRef.current;
+    async (path: string[]) => {
       const { multihops } = settings.current;
 
       const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
@@ -28,7 +24,7 @@ export function useSwapBetterRate() {
       let multiHopAmount: BigNumber = BigNumber.from('0');
 
       try {
-        singleHopAmount = await getTokenAmountIn(amountToSell, path);
+        singleHopAmount = await amountIn(BASE_RATE_AMOUNT_TO_SELL, path);
       } catch (error) {
         console.error('Error fetching single-hop amount:', error);
       }
@@ -37,24 +33,14 @@ export function useSwapBetterRate() {
         return singleHopAmount;
       }
 
-      // Calculate multi-hop amount
       try {
-        const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
-        if (tradeIn) {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        } else {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        }
+        multiHopAmount = await amountInWithHop(
+          BASE_RATE_AMOUNT_TO_SELL,
+          path,
+          extractArrayOfMiddleMultiHopAddresses(path).address
+        );
       } catch (error) {
-        return await getTokenAmountIn(amountToSell, path);
+        return await amountIn(BASE_RATE_AMOUNT_TO_SELL, path);
       }
 
       return singleHopAmount.isZero()
@@ -63,7 +49,7 @@ export function useSwapBetterRate() {
         ? singleHopAmount
         : multiHopAmount;
     },
-    [getTokenAmountIn, getTokenAmountInWithMultiRoute, isExactInRef, settings]
+    [amountIn, amountInWithHop, settings]
   );
 
   return { bestSwapRate };

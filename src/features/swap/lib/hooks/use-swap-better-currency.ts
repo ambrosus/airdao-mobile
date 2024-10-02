@@ -18,7 +18,7 @@ export function useSwapBetterCurrency() {
   } = useSwapContextSelector();
   const { settings } = useSwapSettings();
 
-  const getTokenAmountOut = useCallback(
+  const amountOut = useCallback(
     async (amountToSell: string, path: string[]) => {
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
       const prices = await getAmountsOut({
@@ -31,7 +31,7 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountIn = useCallback(
+  const amountIn = useCallback(
     async (amountToReceive: string, path: string[]) => {
       const bnAmountToReceive = ethers.utils.parseEther(amountToReceive);
       const prices = await getAmountsIn({
@@ -44,7 +44,7 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountOutWithMultiRoute = useCallback(
+  const amountOutWithHop = useCallback(
     async (amountToSell: string, path: string[], middleAddress: string) => {
       const [addressFrom, addressTo] = path;
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -59,7 +59,7 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountInWithMultiRoute = useCallback(
+  const amountInWithHop = useCallback(
     async (amountToSell: string, path: string[], middleAddress: string) => {
       const [addressFrom, addressTo] = path;
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -102,7 +102,7 @@ export function useSwapBetterCurrency() {
       let multiHopAmount: BigNumber = BigNumber.from('0');
 
       try {
-        singleHopAmount = await getTokenAmountIn(amountToSell, path);
+        singleHopAmount = await amountIn(amountToSell, path);
       } catch (error) {
         if (!multihops) {
           setIsWarningToEnableMultihopActive(true);
@@ -115,10 +115,10 @@ export function useSwapBetterCurrency() {
       if (!multihops) return singleHopAmount;
 
       try {
-        multiHopAmount = await getTokenAmountInWithMultiRoute(
+        multiHopAmount = await amountInWithHop(
           amountToSell,
           path,
-          middleHopAddress
+          extractArrayOfMiddleMultiHopAddresses(path).address
         );
       } catch (error) {
         console.error('Error fetching multi-hop amount:', error);
@@ -133,8 +133,8 @@ export function useSwapBetterCurrency() {
       return singleHopAmount;
     },
     [
-      getTokenAmountIn,
-      getTokenAmountInWithMultiRoute,
+      amountIn,
+      amountInWithHop,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive
     ]
@@ -151,7 +151,7 @@ export function useSwapBetterCurrency() {
       let multiHopAmount: BigNumber = BigNumber.from('0');
 
       try {
-        singleHopAmount = await getTokenAmountOut(amountToSell, path);
+        singleHopAmount = await amountOut(amountToSell, path);
       } catch (error) {
         if (!multihops) {
           setIsWarningToEnableMultihopActive(true);
@@ -165,10 +165,10 @@ export function useSwapBetterCurrency() {
       if (!multihops) return singleHopAmount;
 
       try {
-        multiHopAmount = await getTokenAmountOutWithMultiRoute(
+        multiHopAmount = await amountOutWithHop(
           amountToSell,
           path,
-          middleHopAddress
+          extractArrayOfMiddleMultiHopAddresses(path).address
         );
       } catch (error) {
         console.error('Error fetching multi-hop amount:', error);
@@ -183,8 +183,8 @@ export function useSwapBetterCurrency() {
       return singleHopAmount;
     },
     [
-      getTokenAmountOut,
-      getTokenAmountOutWithMultiRoute,
+      amountOut,
+      amountOutWithHop,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive
     ]
@@ -227,9 +227,9 @@ export function useSwapBetterCurrency() {
 
   return {
     bestTradeCurrency,
-    getTokenAmountOutWithMultiRoute,
-    getTokenAmountIn,
-    getTokenAmountOut,
-    getTokenAmountInWithMultiRoute
+    amountOut,
+    amountIn,
+    amountOutWithHop,
+    amountInWithHop
   };
 }
