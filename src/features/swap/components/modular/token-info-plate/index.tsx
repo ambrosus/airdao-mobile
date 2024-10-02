@@ -7,12 +7,12 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapTokens } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
 import { COLORS } from '@constants/colors';
-import { useSwapBetterCurrency } from '@features/swap/lib/hooks/use-swap-better-currency';
+import { useSwapBetterRate } from '@features/swap/lib/hooks/use-swap-better-rate';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
   const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
-  const { getOppositeReceivedTokenAmountForPlate } = useSwapBetterCurrency();
+  const { bestSwapRate } = useSwapBetterRate();
 
   const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
     useState('0');
@@ -20,10 +20,7 @@ export const TokenInfoPlate = () => {
   useEffect(() => {
     (async () => {
       if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
-        const bnAmount = await getOppositeReceivedTokenAmountForPlate(
-          '1',
-          tokensRoute
-        );
+        const bnAmount = await bestSwapRate('1', tokensRoute);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
           formatEther(bnAmount?._hex)
@@ -35,7 +32,7 @@ export const TokenInfoPlate = () => {
   }, [
     _refExactGetter,
     _refSettingsGetter,
-    getOppositeReceivedTokenAmountForPlate,
+    bestSwapRate,
     tokenToReceive.TOKEN,
     tokenToSell.TOKEN,
     tokensRoute
