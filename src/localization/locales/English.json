@@ -136,6 +136,7 @@
   "common.transaction.received": "Received",
   "common.transaction.sent": "Sent",
   "common.transaction.status.SUCCESS": "Completed",
+  "common.transaction.status.FAIL": "Failed",
   "common.transaction.to": "To",
   "common.transaction_plural": "Transactions",
   "common.transactions": "Transactions",

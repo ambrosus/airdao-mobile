@@ -136,6 +136,7 @@
   "common.transaction.received": "Alındı",
   "common.transaction.sent": "Gönderildi",
   "common.transaction.status.SUCCESS": "Tamamlandı",
+  "common.transaction.status.FAIL": "Başarısız oldu",
   "common.transaction.to": "Alan",
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
