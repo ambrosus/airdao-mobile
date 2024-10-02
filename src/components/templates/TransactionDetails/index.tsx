@@ -7,7 +7,7 @@ import { BottomSheetRef } from '@components/composite';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
@@ -65,6 +65,31 @@ export const TransactionDetails = (
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
+  const isSuccessTransaction = transaction.status === 'SUCCESS';
+
+  const currentStatus = t(`common.transaction.status.${transaction.status}`);
+
+  // status to render
+  const transactionStatus = useMemo(() => {
+    switch (transaction.status) {
+      case 'FAIL':
+      case 'SUCCESS':
+        return currentStatus;
+      default:
+        return transaction.status;
+    }
+  }, [currentStatus, transaction.status]);
+
+  const transactionStatusStyle = useMemo(() => {
+    const fieldName = isSuccessTransaction ? 'success' : 'error';
+
+    return {
+      pointBackgroundColor: COLORS[`${fieldName}600`],
+      backgroundColor: COLORS[`${fieldName}100`],
+      textColor: COLORS[`${fieldName}500`]
+    };
+  }, [isSuccessTransaction]);
+
   const ambPrice = ambData ? ambData.priceUSD : -1;
   let totalTransactionAmount;
   if (ambData) {
@@ -124,22 +149,26 @@ export const TransactionDetails = (
         >
           {t('common.status')}
         </Text>
-        <Row alignItems="center" style={styles.status}>
+        <Row
+          alignItems="center"
+          style={{
+            ...styles.status,
+            backgroundColor: transactionStatusStyle.backgroundColor
+          }}
+        >
           <View
             style={{
-              height: moderateScale(8),
-              width: moderateScale(8),
-              borderRadius: moderateScale(4),
-              backgroundColor: COLORS.success600
+              ...styles.statusPoint,
+              backgroundColor: transactionStatusStyle.pointBackgroundColor
             }}
           />
           <Spacer horizontal value={scale(4)} />
           <Text
             fontSize={14}
             fontFamily="Inter_500Medium"
-            color={COLORS.success500}
+            color={transactionStatusStyle.textColor}
           >
-            {t(`common.transaction.status.${transaction.status}`)}
+            {transactionStatus}
           </Text>
         </Row>
       </JustifiedRow>
