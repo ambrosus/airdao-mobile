@@ -52,7 +52,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     route.params.market.id
   );
 
-  const { refetch: refetchTransactions, isLoading: isLoadingTransaction } =
+  const { refetch: refetchTransactions, isLoading: isTransactionLoading } =
     useMarketTransactions(market?.id);
 
   const { refetchTokenBalance } = useBalance(market);
@@ -112,16 +112,17 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     await refreshKosmosTransactions();
   }, [refreshData]);
 
-  const renderRefetchController = useMemo(
-    () => (
+  const renderRefetchController = useMemo(() => {
+    const refreshing =
+      isMarketChartLoading || (isAndroid && isTransactionLoading);
+    return (
       <RefreshControl
         onRefresh={refetchMarketData}
-        refreshing={isMarketChartLoading || isLoadingTransaction}
+        refreshing={refreshing}
         removeClippedSubviews
       />
-    ),
-    [isLoadingTransaction, isMarketChartLoading, refetchMarketData]
-  );
+    );
+  }, [isMarketChartLoading, isTransactionLoading, refetchMarketData]);
 
   const onScrollToMarket = useCallback(
     () => scrollViewRef.current?.scrollToPosition(0, marketLayoutYAxis),
