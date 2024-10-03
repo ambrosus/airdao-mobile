@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Row, Spacer, Text } from '@components/base';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { useBalance } from '@features/kosmos/lib/hooks';
+import { NumberUtils } from '@utils/number';
 
 interface BalanceWithButtonProps {
   quoteToken: Token | undefined;
@@ -25,6 +26,8 @@ export const BalanceWithButton = ({
     return calculateMaximumAvailableAmount(tokenBalance);
   }, [calculateMaximumAvailableAmount, tokenBalance]);
 
+  const formattedTokenBalance = NumberUtils.limitDecimalCount(tokenBalance, 2);
+
   return (
     <Row alignItems="center">
       <Text
@@ -32,14 +35,31 @@ export const BalanceWithButton = ({
         fontFamily="Inter_400Regular"
         color={COLORS.alphaBlack60}
       >
-        {t('send.funds.balance')}: {tokenBalance} {quoteToken?.symbol}
+        {t('send.funds.balance')}:
       </Text>
-      <Spacer horizontal value={4} />
-      <TouchableOpacity onPress={onMaxAmountPress}>
-        <Text fontSize={14} fontFamily="Inter_700Bold" color={COLORS.brand500}>
-          {t('bridge.preview.button.max')}
-        </Text>
-      </TouchableOpacity>
+      {!tokenBalance ? (
+        <View style={{ marginLeft: 10 }}>
+          <Spinner customSize={15} />
+        </View>
+      ) : (
+        <>
+          <Text
+            fontSize={14}
+            fontFamily="Inter_400Regular"
+            color={COLORS.alphaBlack60}
+          >{` ${formattedTokenBalance} ${quoteToken?.symbol}`}</Text>
+          <Spacer horizontal value={4} />
+          <TouchableOpacity onPress={onMaxAmountPress}>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_700Bold"
+              color={COLORS.brand500}
+            >
+              {t('bridge.preview.button.max')}
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
     </Row>
   );
 };

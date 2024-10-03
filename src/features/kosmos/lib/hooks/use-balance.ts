@@ -6,7 +6,6 @@ import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from './use-market-details';
 import { useMarketTokens } from './use-market-tokens';
 import { useERC20Balance, useWallet } from '@hooks';
-import { NumberUtils } from '@utils/number';
 
 export function useBalance(market: MarketType | undefined) {
   const { wallet } = useWallet();
@@ -31,20 +30,13 @@ export function useBalance(market: MarketType | undefined) {
 
     try {
       if (ERC20balance) {
-        const formattedBalance = NumberUtils.limitDecimalCount(
-          ethers.utils.formatEther(ERC20balance?._hex),
-          2
-        );
-
-        if (formattedBalance !== tokenBalance) {
-          setTokenBalance(formattedBalance);
-          setBnBalance(ERC20balance);
-        }
+        setTokenBalance(ethers.utils.formatEther(ERC20balance?._hex));
+        setBnBalance(ERC20balance);
       }
     } catch (error) {
       throw error;
     }
-  }, [ERC20balance, quoteToken, setBnBalance, tokenBalance, wallet?.address]);
+  }, [ERC20balance, quoteToken, setBnBalance, wallet?.address]);
 
   const refetchTokenBalance = useCallback(() => {
     setIsBalanceFetching(true);
@@ -103,5 +95,9 @@ export function useBalance(market: MarketType | undefined) {
     ]
   );
 
-  return { calculateMaximumAvailableAmount, tokenBalance, refetchTokenBalance };
+  return {
+    calculateMaximumAvailableAmount,
+    tokenBalance,
+    refetchTokenBalance
+  };
 }
