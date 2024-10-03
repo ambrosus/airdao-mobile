@@ -4,21 +4,23 @@ import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { MarketType, Token } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
-import { useBalance } from '@features/kosmos/lib/hooks';
 import { NumberUtils } from '@utils/number';
 
 interface BalanceWithButtonProps {
   quoteToken: Token | undefined;
   market: MarketType | undefined;
+  calculateMaximumAvailableAmount: (balance: string) => void;
+  tokenBalance: string;
+  isFetchingBalance: boolean;
 }
 
 export const BalanceWithButton = ({
   quoteToken,
-  market
+  calculateMaximumAvailableAmount,
+  tokenBalance,
+  isFetchingBalance
 }: BalanceWithButtonProps) => {
   const { t } = useTranslation();
-
-  const { calculateMaximumAvailableAmount, tokenBalance } = useBalance(market);
 
   const onMaxAmountPress = useCallback(() => {
     if (+tokenBalance <= 0) return;
@@ -37,7 +39,7 @@ export const BalanceWithButton = ({
       >
         {t('send.funds.balance')}:
       </Text>
-      {!tokenBalance ? (
+      {isFetchingBalance ? (
         <View style={{ marginLeft: 10 }}>
           <Spinner customSize={15} />
         </View>
