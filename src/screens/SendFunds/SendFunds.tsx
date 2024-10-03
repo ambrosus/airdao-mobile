@@ -6,6 +6,7 @@ import React, {
   useState
 } from 'react';
 import {
+  Alert,
   InteractionManager,
   Keyboard,
   KeyboardAvoidingView,
@@ -15,6 +16,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
@@ -225,11 +227,11 @@ export const SendFunds = () => {
     updateSendContext({ type: 'SET_DATA', loading: true, transactionId: txId });
     setTimeout(async () => {
       try {
-        navigation.replace('SendFundsStatus');
         AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
           from: senderAddress,
           to: destinationAddress
         });
+        navigation.replace('SendFundsStatus');
         await TransactionUtils.sendTx(
           walletHash,
           senderAddress,
@@ -237,11 +239,15 @@ export const SendFunds = () => {
           Number(amountInCrypto),
           selectedToken
         );
+
         if (transactionIdRef.current === txId) {
           updateSendContext({ type: 'SET_DATA', loading: false });
         }
       } catch (error: unknown) {
         console.error(error);
+        Alert.alert('Error', JSON.stringify(error));
+        await Clipboard.setStringAsync(JSON.stringify(error));
+
         if (transactionIdRef.current === txId) {
           updateSendContext({
             type: 'SET_DATA',
