@@ -70,6 +70,7 @@ export const InputWithTokenSelect = ({
       </Text>
       <View style={styles.upperRow}>
         <TextInput
+          numberOfLines={1}
           onFocus={onToggleInputFocus}
           onBlur={onToggleInputFocus}
           selection={selection}

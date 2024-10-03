@@ -6,7 +6,6 @@ import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from './use-market-details';
 import { useMarketTokens } from './use-market-tokens';
 import { useERC20Balance, useWallet } from '@hooks';
-import { NumberUtils } from '@utils/number';
 
 export function useBalance(market: MarketType | undefined) {
   const { wallet } = useWallet();
@@ -17,38 +16,42 @@ export function useBalance(market: MarketType | undefined) {
 
   const [tokenBalance, setTokenBalance] = useState('');
 
-  const { balance: ERC20balance, refetch: refetchERC20Balance } =
-    useERC20Balance(quoteToken?.contractAddress ?? '');
+  const { refetch: refetchERC20Balance, isFetching } = useERC20Balance(
+    quoteToken?.contractAddress ?? ''
+  );
 
+  const balanceSetter = useCallback(
+    (value: BigNumber | undefined) => {
+      if (!value) return;
+      setTokenBalance(ethers.utils.formatEther(value?._hex));
+      setBnBalance(value);
+    },
+    [setBnBalance]
+  );
   useEffect(() => {
     if (quoteToken && wallet) {
-      refetchERC20Balance().then();
+      refetchERC20Balance().then((r) => {
+        balanceSetter(r?.data);
+      });
     }
-  }, [quoteToken, refetchERC20Balance, wallet]);
+  }, [balanceSetter, quoteToken, refetchERC20Balance, wallet]);
 
   const fetchBondBalance = useCallback(async () => {
     if (!quoteToken || !wallet?.address) return;
 
     try {
-      if (ERC20balance) {
-        const formattedBalance = NumberUtils.limitDecimalCount(
-          ethers.utils.formatEther(ERC20balance?._hex),
-          2
-        );
-
-        if (formattedBalance !== tokenBalance) {
-          setTokenBalance(formattedBalance);
-          setBnBalance(ERC20balance);
-        }
+      const balance = await refetchERC20Balance();
+      if (balance.data) {
+        balanceSetter(balance.data);
       }
     } catch (error) {
       throw error;
     }
-  }, [ERC20balance, quoteToken, setBnBalance, tokenBalance, wallet?.address]);
+  }, [balanceSetter, quoteToken, refetchERC20Balance, wallet?.address]);
 
-  const refetchTokenBalance = useCallback(() => {
+  const refetchTokenBalance = useCallback(async () => {
     setIsBalanceFetching(true);
-    fetchBondBalance().then();
+    await fetchBondBalance();
     setIsBalanceFetching(false);
   }, [fetchBondBalance, setIsBalanceFetching]);
 
@@ -102,6 +105,10 @@ export function useBalance(market: MarketType | undefined) {
       willGetWithArguments
     ]
   );
-
-  return { calculateMaximumAvailableAmount, tokenBalance, refetchTokenBalance };
+  return {
+    calculateMaximumAvailableAmount,
+    tokenBalance,
+    refetchTokenBalance,
+    isFetching
+  };
 }
