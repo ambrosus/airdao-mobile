@@ -75,11 +75,15 @@ export const SendFunds = () => {
     from: senderAddress = '',
     transactionId
   } = sendContextState;
-  const transactionIdRef = useRef(transactionId);
+  const transactionIdRef = useRef('');
   const amountInputRef = useRef<InputRef>(null);
-  transactionIdRef.current = transactionId;
+
   const { data: selectedAccount } = useAccountByAddress(senderAddress);
   const walletHash = selectedAccount?.wallet.id || '';
+
+  useEffect(() => {
+    if (transactionId) transactionIdRef.current = transactionId;
+  }, [transactionId]);
 
   const [amountInputFocused, setAmountInputFocused] = useState(false);
 
@@ -93,6 +97,7 @@ export const SendFunds = () => {
     {
       name: 'AirDAO',
       address: senderAddress || '',
+      // @ts-ignore
       balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
       symbol: CryptoCurrencyCode.AMB
     },
@@ -104,7 +109,9 @@ export const SendFunds = () => {
       (token) => token.address === tokenFromNavigationParams?.address
     ) || defaultAMBToken
   );
-  const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const currencyRate = useCurrencyRate(
+    selectedToken.symbol as CryptoCurrencyCode
+  );
   const isPositiveRate = currencyRate > 0;
   const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
@@ -112,7 +119,10 @@ export const SendFunds = () => {
       : tokens.find((token) => token.address === selectedToken.address)?.balance
           .ether || 0;
   // convert crypto balance to usd
-  const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
+  const balanceInUSD = useUSDPrice(
+    balanceInCrypto,
+    selectedToken.symbol as CryptoCurrencyCode
+  );
 
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
@@ -140,7 +150,7 @@ export const SendFunds = () => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
-      currency: selectedToken.symbol,
+      currency: selectedToken.symbol as CryptoCurrencyCode,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,11 +241,12 @@ export const SendFunds = () => {
           updateSendContext({ type: 'SET_DATA', loading: false });
         }
       } catch (error: unknown) {
+        console.error(error);
         if (transactionIdRef.current === txId) {
           updateSendContext({
             type: 'SET_DATA',
             loading: false,
-            error: error as any
+            error: error as unknown as never
           });
         }
       }

@@ -98,13 +98,16 @@ class TransferDispatcher {
       );
       // Sign transaction
       const signedTx = await this.signTransaction(txConfig, privateKey);
+
       // Send transaction
       const txReceipt = await this.web3.eth.sendSignedTransaction(
         signedTx.rawTransaction as string
       );
+
       // @ts-ignore
       return txReceipt.transactionHash;
     } catch (error) {
+      console.error('ERROR:', error);
       //@ts-ignore
       if (error.message.includes('Returned error: Insufficient funds.')) {
         throw Error('INSUFFICIENT_FUNDS');
