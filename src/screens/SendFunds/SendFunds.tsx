@@ -35,7 +35,8 @@ import {
   useCurrencyRate,
   useEstimatedTransferFee,
   useTokensAndTransactions,
-  useUSDPrice
+  useUSDPrice,
+  useWallet
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -59,7 +60,6 @@ import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
-import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
@@ -80,8 +80,9 @@ export const SendFunds = () => {
   const transactionIdRef = useRef('');
   const amountInputRef = useRef<InputRef>(null);
 
-  const { data: selectedAccount } = useAccountByAddress(senderAddress);
-  const walletHash = selectedAccount?.wallet.id || '';
+  const { wallet: account } = useWallet();
+
+  const walletHash = account?.wallet.id ?? '';
 
   useEffect(() => {
     if (transactionId) transactionIdRef.current = transactionId;
