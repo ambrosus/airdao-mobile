@@ -16,7 +16,7 @@ export function useSwapFieldsHandler() {
     isExactInRef
   } = useSwapContextSelector();
 
-  const { getOppositeReceivedTokenAmount } = useSwapBetterCurrency();
+  const { bestTradeCurrency } = useSwapBetterCurrency();
   const { isEmptyAmount } = useSwapHelpers();
 
   const updateReceivedTokensOutput = useCallback(async () => {
@@ -33,10 +33,7 @@ export function useSwapFieldsHandler() {
 
     if (isEmptyAmount(amountToSell)) return;
 
-    const bnAmountToReceive = await getOppositeReceivedTokenAmount(
-      amountToSell,
-      path
-    );
+    const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
 
     const normalizedAmount = SwapStringUtils.transformAmountValue(
       formatEther(bnAmountToReceive?._hex)
@@ -60,7 +57,7 @@ export function useSwapFieldsHandler() {
     latestSelectedTokens,
     latestSelectedTokensAmount,
     isEmptyAmount,
-    getOppositeReceivedTokenAmount,
+    bestTradeCurrency,
     setSelectedTokensAmount
   ]);
 

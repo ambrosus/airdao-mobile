@@ -11,3 +11,4 @@ export { useSwapInterface } from './use-swap-interface';
 export { useSwapTokens } from './use-swap-tokens';
 export { useSwapHelpers } from './use-swap-helpers';
 export { useSwapBetterCurrency } from './use-swap-better-currency';
+export { useSwapBetterRate } from './use-swap-better-rate';

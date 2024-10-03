@@ -10,9 +10,9 @@ import { COLORS } from '@constants/colors';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
 import {
+  useBondContracts,
   useMarketDetails,
-  useTransactionErrorHandler,
-  useBondContracts
+  useTransactionErrorHandler
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import Config from '@constants/config';
@@ -71,9 +71,9 @@ export const BuyBondButton = ({
         .wait()
         .then((tx: any) => {
           if (tx) {
-            setIsTransactionProcessing(false);
-
+            onDismissBottomSheet();
             setTimeout(() => {
+              setIsTransactionProcessing(false);
               navigation.goBack();
             }, 500);
 
@@ -96,7 +96,6 @@ export const BuyBondButton = ({
       throw error;
     } finally {
       setIsTransactionProcessing(false);
-      onDismissBottomSheet();
     }
   }, [
     t,
