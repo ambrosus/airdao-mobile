@@ -1,10 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { Alert, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 import { SharePortfolio } from '@components/templates';
-import { PrimaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
@@ -85,6 +92,10 @@ export const SendFundsStatus = () => {
     navigation.popToTop();
     reducer({ type: 'RESET_DATA' });
   };
+
+  const onCopyError = useCallback(async () => {
+    return await Clipboard.setStringAsync(JSON.stringify(error));
+  }, [error]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -181,6 +192,9 @@ export const SendFundsStatus = () => {
           {/*    <Spacer value={verticalScale(16)} />*/}
           {/*  </>*/}
           {/*)}*/}
+          <SecondaryButton onPress={onCopyError}>
+            <Text>Copy error</Text>
+          </SecondaryButton>
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
             <Text color={COLORS.neutral0}>
               {error ? t('send.funds.go.home') : t('common.done')}
