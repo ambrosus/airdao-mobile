@@ -141,35 +141,38 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
       <Header bottomBorder backIconVisible title={renderHeaderMiddleContent} />
 
       <View style={styles.container}>
-        {!isRefreshingData && combinedLoading && (
+        {!isRefreshingData && combinedLoading ? (
           <View style={styles.loader}>
             <ScreenLoader height="100%" />
           </View>
+        ) : (
+          <KeyboardAwareScrollView
+            ref={scrollRef}
+            enableResetScrollToCoords={false}
+            keyboardShouldPersistTaps="handled"
+            overScrollMode="never"
+            enableOnAndroid={false}
+            enableAutomaticScroll
+            scrollToOverflowEnabled={false}
+            nestedScrollEnabled={isIOS}
+            extraHeight={isAndroid ? 0 : 300}
+            onMomentumScrollBegin={onScrollBeginDragHandler}
+            refreshControl={renderRefetchController}
+          >
+            <MarketTableDetails
+              market={market}
+              onHandlerMarketLayout={onHandlerMarketLayout}
+            />
+            <MarketChartsWithTimeframes
+              market={route.params.market}
+              onScrollToMarket={onScrollToMarket}
+            />
+            <ExactMarketTokenTabs
+              market={market}
+              scrollToInput={scrollToInput}
+            />
+          </KeyboardAwareScrollView>
         )}
-
-        <KeyboardAwareScrollView
-          ref={scrollRef}
-          enableResetScrollToCoords={false}
-          keyboardShouldPersistTaps="handled"
-          overScrollMode="never"
-          enableOnAndroid={false}
-          enableAutomaticScroll
-          scrollToOverflowEnabled={false}
-          nestedScrollEnabled={isIOS}
-          extraHeight={isAndroid ? 0 : 300}
-          onMomentumScrollBegin={onScrollBeginDragHandler}
-          refreshControl={renderRefetchController}
-        >
-          <MarketTableDetails
-            market={market}
-            onHandlerMarketLayout={onHandlerMarketLayout}
-          />
-          <MarketChartsWithTimeframes
-            market={route.params.market}
-            onScrollToMarket={onScrollToMarket}
-          />
-          <ExactMarketTokenTabs market={market} scrollToInput={scrollToInput} />
-        </KeyboardAwareScrollView>
       </View>
     </SafeAreaView>
   );
