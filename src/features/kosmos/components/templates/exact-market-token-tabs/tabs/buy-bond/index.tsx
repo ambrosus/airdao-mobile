@@ -29,11 +29,20 @@ import { isAndroid } from '@utils/isPlatform';
 interface BuyBondTabProps {
   market: MarketType | undefined;
   scrollToInput: () => any;
+  calculateMaximumAvailableAmount: (balance: string) => void;
+  tokenBalance: string;
+  isFetchingBalance: boolean;
 }
 
 const INITIAL_PADDING_VALUE = 234;
 
-export const BuyBondTab = ({ market, scrollToInput }: BuyBondTabProps) => {
+export const BuyBondTab = ({
+  market,
+  scrollToInput,
+  calculateMaximumAvailableAmount,
+  tokenBalance,
+  isFetchingBalance
+}: BuyBondTabProps) => {
   const { t } = useTranslation();
   const [isActiveInput, setIsActiveInput] = useState(false);
 
@@ -125,7 +134,13 @@ export const BuyBondTab = ({ market, scrollToInput }: BuyBondTabProps) => {
         </View>
 
         <View style={styles.balance}>
-          <BalanceWithButton quoteToken={quoteToken} market={market} />
+          <BalanceWithButton
+            isFetchingBalance={isFetchingBalance}
+            tokenBalance={tokenBalance}
+            calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
+            quoteToken={quoteToken}
+            market={market}
+          />
         </View>
 
         <View style={styles.details}>
