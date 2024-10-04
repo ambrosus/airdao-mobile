@@ -1,10 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 import { SharePortfolio } from '@components/templates';
-import { PrimaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { CheckmarkCircleIcon, InfoIcon } from '@components/svg/icons';
@@ -32,35 +39,28 @@ export const SendFundsStatus = () => {
 
   useEffect(() => {
     setErrorMessage('');
-    if (error && error.message) {
+    if (error) {
       let message = '';
-      switch (error?.message) {
-        case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE': {
-          message = t('send.funds.error.insufficient.balance');
-          break;
+      if (error.message) {
+        switch (error.message) {
+          case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE':
+          case 'INSUFFICIENT_FUNDS':
+            message = t('send.funds.error.insufficient.balance');
+            break;
+          case 'SERVER_RESPONSE_NOT_CONNECTED':
+            message = t('send.funds.error.network');
+            break;
+          case 'PRIVATE_KEY_NOT_FOUND':
+            message = t('send.funds.error.private.key.not.found');
+            break;
+          default:
+            message = t('send.funds.error.check.connection');
+            break;
         }
-        case 'INSUFFICIENT_FUNDS': {
-          message = t('send.funds.error.insufficient.balance');
-          break;
-        }
-        case 'SERVER_RESPONSE_NOT_CONNECTED': {
-          message = t('send.funds.error.network');
-          break;
-        }
-        case 'PRIVATE_KEY_NOT_FOUND': {
-          message = t('send.funds.error.private.key.not.found');
-          break;
-        }
-        default:
-          message = t('send.funds.error.check.connection');
-          break;
+      } else {
+        message = `${t('send.funds.failed')}. ${t('send.funds.error.later')}`;
       }
-
       setErrorMessage(message);
-    } else if (error && !error.message) {
-      setErrorMessage(
-        `${t('send.funds.failed')}. ${t('send.funds.error.later')}`
-      );
     }
   }, [error, t]);
 
@@ -91,6 +91,11 @@ export const SendFundsStatus = () => {
     navigation.popToTop();
     reducer({ type: 'RESET_DATA' });
   };
+
+  const onCopyError = useCallback(async () => {
+    return await Clipboard.setStringAsync(JSON.stringify(error));
+  }, [error]);
+
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
@@ -186,6 +191,9 @@ export const SendFundsStatus = () => {
           {/*    <Spacer value={verticalScale(16)} />*/}
           {/*  </>*/}
           {/*)}*/}
+          <SecondaryButton onPress={onCopyError}>
+            <Text>Copy error</Text>
+          </SecondaryButton>
           <PrimaryButton onPress={navigateToHome} style={styles.button}>
             <Text color={COLORS.neutral0}>
               {error ? t('send.funds.go.home') : t('common.done')}
