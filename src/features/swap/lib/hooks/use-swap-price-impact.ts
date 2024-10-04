@@ -115,7 +115,6 @@ export function useSwapPriceImpact() {
 
       return Math.abs(totalImpact);
     } catch (error) {
-      console.error('Error calculating multi-hop price impact:', error);
       return 0;
     }
   }, [

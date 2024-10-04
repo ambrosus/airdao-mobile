@@ -35,7 +35,6 @@ export async function getAmountsOut({
     const contract = createRouterContract(provider, TRADE);
     return await contract.getAmountsOut(amountToSell, excludeNativeETH);
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -56,7 +55,6 @@ export async function getAmountsIn({
     const contract = createRouterContract(provider, TRADE);
     return await contract.getAmountsIn(amountToReceive, excludeNativeETH);
   } catch (error) {
-    console.error(error, 'ERROR');
     throw error;
   }
 }
@@ -66,7 +64,8 @@ export async function swapExactETHForTokens(
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
-  deadline: string
+  deadline: string,
+  tradeIn: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
@@ -83,18 +82,23 @@ export async function swapExactETHForTokens(
       bnAmountToReceive
     );
 
-    const tx =
-      await routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens(
-        bnMinimumReceivedAmount,
-        path,
-        signer.address,
-        timestampDeadline,
-        { value: bnAmountToSell }
-      );
+    const callSwapMethod =
+      routerContract[
+        tradeIn
+          ? routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens
+          : routerContract.swapAMBForExactTokens
+      ];
+
+    const tx = await callSwapMethod(
+      bnMinimumReceivedAmount,
+      path,
+      signer.address,
+      timestampDeadline,
+      { value: bnAmountToSell }
+    );
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -104,7 +108,8 @@ export async function swapMultiHopExactTokensForTokens(
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
-  deadline: string
+  deadline: string,
+  tradeIn: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
@@ -135,37 +140,54 @@ export async function swapMultiHopExactTokensForTokens(
     let tx;
 
     if (isFromETH) {
-      tx =
-        await routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens(
-          bnMinimumReceivedAmount,
-          _path,
-          signer.address,
-          timestampDeadline,
-          { value: bnAmountToSell }
-        );
+      const callSwapMethod =
+        routerContract[
+          tradeIn
+            ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+            : 'swapAMBForExactTokens'
+        ];
+
+      tx = await callSwapMethod(
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline,
+        { value: bnAmountToSell }
+      );
     } else if (isToETH) {
-      tx =
-        await routerContract.swapExactTokensForAMBSupportingFeeOnTransferTokens(
-          bnAmountToSell,
-          bnMinimumReceivedAmount,
-          _path,
-          signer.address,
-          timestampDeadline
-        );
+      const callSwapMethod =
+        routerContract[
+          tradeIn
+            ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+            : 'swapTokensForExactAMB'
+        ];
+
+      tx = await callSwapMethod(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
     } else {
-      tx =
-        await routerContract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
-          bnAmountToSell,
-          bnMinimumReceivedAmount,
-          _path,
-          signer.address,
-          timestampDeadline
-        );
+      const callSwapMethod =
+        routerContract[
+          tradeIn
+            ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+            : 'swapTokensForExactTokens'
+        ];
+
+      tx = await callSwapMethod(
+        bnAmountToSell,
+        bnMinimumReceivedAmount,
+        _path,
+        signer.address,
+        timestampDeadline
+      );
     }
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -175,7 +197,8 @@ export async function swapExactTokensForTokens(
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
-  deadline: string
+  deadline: string,
+  tradeIn: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
@@ -192,18 +215,23 @@ export async function swapExactTokensForTokens(
       bnAmountToReceive
     );
 
-    const tx =
-      await routerContract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        path,
-        signer.address,
-        timestampDeadline
-      );
+    const callSwapMethod =
+      routerContract[
+        tradeIn
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactTokens'
+      ];
+
+    const tx = await callSwapMethod(
+      bnAmountToSell,
+      bnMinimumReceivedAmount,
+      path,
+      signer.address,
+      timestampDeadline
+    );
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -213,7 +241,8 @@ export async function swapExactTokensForETH(
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
-  deadline: string
+  deadline: string,
+  tradeIn: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
@@ -230,18 +259,23 @@ export async function swapExactTokensForETH(
       bnAmountToReceive
     );
 
-    const tx =
-      await routerContract.swapExactTokensForAMBSupportingFeeOnTransferTokens(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        path,
-        signer.address,
-        timestampDeadline
-      );
+    const callSwapMethod =
+      routerContract[
+        tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB'
+      ];
+
+    const tx = await callSwapMethod(
+      bnAmountToSell,
+      bnMinimumReceivedAmount,
+      path,
+      signer.address,
+      timestampDeadline
+    );
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }

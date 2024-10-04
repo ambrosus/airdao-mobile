@@ -109,7 +109,6 @@ export function useSwapBetterCurrency() {
           return ethers.utils.parseEther('0');
         }
         singleHopAmount = null as never;
-        console.error('Error fetching single-hop amount:', error);
       }
 
       if (!multihops) return singleHopAmount;
@@ -121,7 +120,6 @@ export function useSwapBetterCurrency() {
           extractArrayOfMiddleMultiHopAddresses(path).address
         );
       } catch (error) {
-        console.error('Error fetching multi-hop amount:', error);
         return singleHopAmount;
       }
 
@@ -159,7 +157,6 @@ export function useSwapBetterCurrency() {
         }
 
         singleHopAmount = null as never;
-        console.error('Error fetching single-hop amount:', error);
       }
 
       if (!multihops) return singleHopAmount;
@@ -171,7 +168,6 @@ export function useSwapBetterCurrency() {
           extractArrayOfMiddleMultiHopAddresses(path).address
         );
       } catch (error) {
-        console.error('Error fetching multi-hop amount:', error);
         return singleHopAmount;
       }
 

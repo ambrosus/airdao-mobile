@@ -28,6 +28,7 @@ export function useSwapActions() {
   const { _extractPrivateKey } = useWallet();
 
   const {
+    _refExactGetter,
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
     isMultiHopSwapBetterCurrency
@@ -99,7 +100,7 @@ export function useSwapActions() {
     const { slippageTolerance, deadline, multihops } = settings.current;
     const excludeNativeETH = wrapNativeAddress(tokensRoute);
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
-
+    const tradeIn = _refExactGetter;
     const _slippage = +slippageTolerance;
 
     const isMultiHopSwapPossible =
@@ -121,7 +122,8 @@ export function useSwapActions() {
         excludeNativeETH,
         signer,
         _slippage,
-        deadline
+        deadline,
+        tradeIn
       );
     }
 
@@ -131,7 +133,8 @@ export function useSwapActions() {
         excludeNativeETH,
         signer,
         _slippage,
-        deadline
+        deadline,
+        tradeIn
       );
     }
 
@@ -141,7 +144,8 @@ export function useSwapActions() {
         tokensRoute,
         signer,
         _slippage,
-        deadline
+        deadline,
+        tradeIn
       );
     }
 
@@ -150,10 +154,12 @@ export function useSwapActions() {
       excludeNativeETH,
       signer,
       _slippage,
-      deadline
+      deadline,
+      tradeIn
     );
   }, [
     _extractPrivateKey,
+    _refExactGetter,
     isEndsWithETH,
     isMultiHopSwapBetterCurrency.state,
     isStartsWithETH,
