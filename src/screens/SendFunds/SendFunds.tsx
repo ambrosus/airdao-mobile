@@ -6,7 +6,6 @@ import React, {
   useState
 } from 'react';
 import {
-  Alert,
   InteractionManager,
   Keyboard,
   KeyboardAvoidingView,
@@ -246,7 +245,6 @@ export const SendFunds = () => {
         }
       } catch (error: unknown) {
         console.error(error);
-        Alert.alert('Error', JSON.stringify(error));
         await Clipboard.setStringAsync(JSON.stringify(error));
 
         if (transactionIdRef.current === txId) {

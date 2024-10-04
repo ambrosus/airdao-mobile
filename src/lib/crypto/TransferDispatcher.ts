@@ -87,7 +87,8 @@ class TransferDispatcher {
     recipient: string,
     amountInEther: string,
     tokenAddress?: string
-  ): Promise<string> {
+  ): Promise<string | undefined> {
+    let txHash;
     try {
       // Prepare transaction config
       const txConfig = await this.prepareTransactionConfig(
@@ -98,6 +99,8 @@ class TransferDispatcher {
       );
       // Sign transaction
       const signedTx = await this.signTransaction(txConfig, privateKey);
+
+      txHash = signedTx.transactionHash;
 
       // Send transaction
       const txReceipt = await this.web3.eth.sendSignedTransaction(
@@ -112,7 +115,23 @@ class TransferDispatcher {
       if (error.message.includes('Returned error: Insufficient funds.')) {
         throw Error('INSUFFICIENT_FUNDS');
       }
-      throw error;
+
+      try {
+        if (!txHash) throw error;
+
+        let attempt = 0;
+        let receipt;
+        while (attempt < 3) {
+          receipt = await this.web3.eth.getTransactionReceipt(txHash);
+          if (receipt) break;
+          attempt++;
+        }
+
+        if (!receipt)
+          throw new Error('Transaction receipt not found after 3 attempts.');
+      } catch (error) {
+        throw error;
+      }
     }
   }
 

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -40,7 +40,6 @@ export const SendFundsStatus = () => {
   useEffect(() => {
     setErrorMessage('');
     if (error) {
-      Alert.alert('ERROR:', JSON.stringify(error));
       let message = '';
       if (error.message) {
         switch (error.message) {
