@@ -35,7 +35,6 @@ export async function getAmountsOut({
     const contract = createRouterContract(provider, TRADE);
     return await contract.getAmountsOut(amountToSell, excludeNativeETH);
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -56,7 +55,6 @@ export async function getAmountsIn({
     const contract = createRouterContract(provider, TRADE);
     return await contract.getAmountsIn(amountToReceive, excludeNativeETH);
   } catch (error) {
-    console.error(error, 'ERROR');
     throw error;
   }
 }
@@ -101,7 +99,6 @@ export async function swapExactETHForTokens(
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -191,7 +188,6 @@ export async function swapMultiHopExactTokensForTokens(
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -236,7 +232,6 @@ export async function swapExactTokensForTokens(
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -281,7 +276,6 @@ export async function swapExactTokensForETH(
 
     return await tx.wait();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
