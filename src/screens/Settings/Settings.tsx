@@ -16,7 +16,7 @@ import { styles } from './styles';
 import { isAndroid } from '@utils/isPlatform';
 
 const iosBuildVersion = '1.3.11';
-const androidBuildVersion = '1.3.11';
+const androidBuildVersion = '1.3.12';
 
 const stageBuildVersions = {
   ios: `${iosBuildVersion} (${androidBuildVersion})`,

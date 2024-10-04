@@ -26,7 +26,7 @@ export function useSwapBetterRate() {
       try {
         singleHopAmount = await amountIn(BASE_RATE_AMOUNT_TO_SELL, path);
       } catch (error) {
-        console.error('Error fetching single-hop amount:', error);
+        throw error;
       }
 
       if (!isMultiHopRouteSupported || !multihops) {
