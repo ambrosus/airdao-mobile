@@ -62,6 +62,8 @@ import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
 import { isAndroid } from '@utils/isPlatform';
+import { formatUnits } from 'ethers/lib/utils';
+import { AMB_DECIMALS } from '@constants/variables';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -93,8 +95,15 @@ export const SendFunds = () => {
     {
       name: 'AirDAO',
       address: senderAddress || '',
-      balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
-      symbol: CryptoCurrencyCode.AMB
+      isNativeCoin: true,
+      balance: {
+        wei: tokenBalance.wei,
+        ether: Number(tokenBalance.ether) || 0,
+        formattedBalance: formatUnits(tokenBalance.wei, AMB_DECIMALS)
+      },
+      symbol: CryptoCurrencyCode.AMB,
+      decimals: AMB_DECIMALS,
+      tokenNameFromDatabase: 'AirDAO'
     },
     TokenUtils
   );
@@ -106,11 +115,21 @@ export const SendFunds = () => {
   );
   const currencyRate = useCurrencyRate(selectedToken.symbol);
   const isPositiveRate = currencyRate > 0;
+  const getTokenBalance = () => {
+    const currentTokenBalance = tokens.find(
+      (token) => token.address === selectedToken.address
+    )?.balance.formattedBalance;
+    return currentTokenBalance
+      ? +NumberUtils.limitDecimalCount(currentTokenBalance, 3)
+      : 0;
+  };
   const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
-      ? defaultAMBToken.balance.ether
-      : tokens.find((token) => token.address === selectedToken.address)?.balance
-          .ether || 0;
+      ? +NumberUtils.limitDecimalCount(
+          defaultAMBToken.balance.formattedBalance,
+          3
+        )
+      : getTokenBalance();
   // convert crypto balance to usd
   const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
 
@@ -254,7 +273,7 @@ export const SendFunds = () => {
   })();
 
   const reviewButtonDisabled =
-    Number(amountInCrypto) == 0 ||
+    Number(amountInCrypto) === 0 ||
     !destinationAddress.match(etherumAddressRegex);
 
   const onToggleAmountInputState = useCallback(
