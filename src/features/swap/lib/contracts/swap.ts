@@ -85,8 +85,8 @@ export async function swapExactETHForTokens(
     const callSwapMethod =
       routerContract[
         tradeIn
-          ? routerContract.swapExactAMBForTokensSupportingFeeOnTransferTokens
-          : routerContract.swapAMBForExactTokens
+          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+          : 'swapAMBForExactTokens'
       ];
 
     const tx = await callSwapMethod(
