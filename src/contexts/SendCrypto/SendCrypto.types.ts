@@ -5,7 +5,7 @@ export interface SendCryptoContextState {
   to: string;
   walletHash: string;
   amount: number;
-  currency: CryptoCurrencyCode;
+  currency: CryptoCurrencyCode | string;
   loading: boolean;
   estimatedFee: number;
   error: Error | null;
