@@ -8,6 +8,8 @@ import { COLORS } from '@constants/colors';
 
 type OmitNotification = Omit<Notification, '_id' | 'createdAt'>;
 
+const TEXT_ID = 'notification_percentage_text';
+
 const PositivePriceChangeNotification: OmitNotification = {
   body: '🚀 AMB Price changed on +0.01%! Current price $0.00873',
   title: 'Price Alert',
@@ -30,9 +32,7 @@ describe('NotificationBox unit test', () => {
       />
     );
 
-    expect(
-      screen.getByTestId('notification_percentage_text')
-    ).toBeOnTheScreen();
+    expect(screen.getByTestId(TEXT_ID)).toBeOnTheScreen();
   });
 
   it('renders correct negative color style for negative price change', () => {
@@ -44,7 +44,7 @@ describe('NotificationBox unit test', () => {
       />
     );
 
-    expect(screen.getByTestId('notification_percentage_text')).toHaveStyle({
+    expect(screen.getByTestId(TEXT_ID)).toHaveStyle({
       color: COLORS.error400
     });
   });
@@ -57,7 +57,7 @@ describe('NotificationBox unit test', () => {
       />
     );
 
-    expect(screen.getByTestId('notification_percentage_text')).toHaveStyle({
+    expect(screen.getByTestId(TEXT_ID)).toHaveStyle({
       color: COLORS.success400
     });
   });
