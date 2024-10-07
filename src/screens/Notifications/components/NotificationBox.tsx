@@ -22,7 +22,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
 
   const processPriceChangeBody = useCallback(() => {
     // Extract the percentage change using a regular expression
-    const percentChangeRegex = /(\+|\-)\d+\.\d+%/;
+    const percentChangeRegex = /([+-]?\d+(\.\d+)?)%|[$]([+-]?\d+(\.\d+)?)/g;
     const percentChangeMatch = body.match(percentChangeRegex);
 
     if (!percentChangeMatch) return body; // Return the original string if no match
