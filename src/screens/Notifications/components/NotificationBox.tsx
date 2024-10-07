@@ -37,6 +37,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
       <>
         {parts[0]}
         <Text
+          testID="notification_percentage_text"
           style={{
             color: isPositiveChange ? COLORS.success400 : COLORS.error400
           }}
