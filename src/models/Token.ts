@@ -2,7 +2,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { TokenDTO } from './dtos';
 import { formatUnits } from 'ethers/lib/utils';
 import { AMB_DECIMALS } from '@constants/variables';
-import { getTokenNameFromDatabase } from '@hooks/getTokenNameFromDatabase';
+import { getTokenNameFromDatabase } from '@utils/getTokenNameFromDatabase';
 
 export class Token {
   address: string;
