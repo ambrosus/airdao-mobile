@@ -8,6 +8,7 @@ import React, {
   useState
 } from 'react';
 import {
+  Keyboard,
   NativeSyntheticEvent,
   StyleProp,
   TextInputKeyPressEventData,
@@ -87,6 +88,7 @@ export const PrivateKeyMaskedInput = forwardRef<
         const removedExtraSymbols = text.replace(/[^\w$]/g, '');
         setPrivateKey(removedExtraSymbols);
       } else if (secureTextEntry && clipboard.includes(text)) {
+        Keyboard.dismiss();
         setPrivateKey(text);
         setCurrentCaretPosition(text.length);
       }

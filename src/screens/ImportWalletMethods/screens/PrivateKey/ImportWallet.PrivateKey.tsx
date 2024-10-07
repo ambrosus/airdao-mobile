@@ -78,7 +78,7 @@ export const ImportWalletPrivateKey = () => {
           privateKey
         );
 
-        if (!AccountUtils.isWalletAreadyExist(_account.address, accounts)) {
+        if (!AccountUtils.isWalletAlreadyExist(_account.address, accounts)) {
           return setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
         }
       }
