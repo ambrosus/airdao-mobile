@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
@@ -33,7 +34,8 @@ import {
   useCurrencyRate,
   useEstimatedTransferFee,
   useTokensAndTransactions,
-  useUSDPrice
+  useUSDPrice,
+  useWallet
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -57,7 +59,6 @@ import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
-import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
@@ -77,11 +78,16 @@ export const SendFunds = () => {
     from: senderAddress = '',
     transactionId
   } = sendContextState;
-  const transactionIdRef = useRef(transactionId);
+  const transactionIdRef = useRef('');
   const amountInputRef = useRef<InputRef>(null);
-  transactionIdRef.current = transactionId;
-  const { data: selectedAccount } = useAccountByAddress(senderAddress);
-  const walletHash = selectedAccount?.wallet.id || '';
+
+  const { wallet: account } = useWallet();
+
+  const walletHash = account?.wallet.id ?? '';
+
+  useEffect(() => {
+    if (transactionId) transactionIdRef.current = transactionId;
+  }, [transactionId]);
 
   const [amountInputFocused, setAmountInputFocused] = useState(false);
 
@@ -113,7 +119,9 @@ export const SendFunds = () => {
       (token) => token.address === tokenFromNavigationParams?.address
     ) || defaultAMBToken
   );
-  const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const currencyRate = useCurrencyRate(
+    selectedToken.symbol as CryptoCurrencyCode
+  );
   const isPositiveRate = currencyRate > 0;
   const getTokenBalance = () => {
     const currentTokenBalance = tokens.find(
@@ -131,7 +139,10 @@ export const SendFunds = () => {
         )
       : getTokenBalance();
   // convert crypto balance to usd
-  const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
+  const balanceInUSD = useUSDPrice(
+    balanceInCrypto,
+    selectedToken.symbol as CryptoCurrencyCode
+  );
 
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
@@ -159,7 +170,7 @@ export const SendFunds = () => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
-      currency: selectedToken.symbol,
+      currency: selectedToken.symbol as CryptoCurrencyCode,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -234,11 +245,11 @@ export const SendFunds = () => {
     updateSendContext({ type: 'SET_DATA', loading: true, transactionId: txId });
     setTimeout(async () => {
       try {
-        navigation.replace('SendFundsStatus');
         AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
           from: senderAddress,
           to: destinationAddress
         });
+        navigation.replace('SendFundsStatus');
         await TransactionUtils.sendTx(
           walletHash,
           senderAddress,
@@ -246,15 +257,19 @@ export const SendFunds = () => {
           Number(amountInCrypto),
           selectedToken
         );
+
         if (transactionIdRef.current === txId) {
           updateSendContext({ type: 'SET_DATA', loading: false });
         }
       } catch (error: unknown) {
+        console.error(error);
+        await Clipboard.setStringAsync(JSON.stringify(error));
+
         if (transactionIdRef.current === txId) {
           updateSendContext({
             type: 'SET_DATA',
             loading: false,
-            error: error as any
+            error: error as unknown as never
           });
         }
       }

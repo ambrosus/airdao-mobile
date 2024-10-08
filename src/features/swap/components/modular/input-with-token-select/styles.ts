@@ -14,8 +14,10 @@ export const styles = StyleSheet.create({
     borderWidth: 0,
     fontSize: moderateScale(29),
     fontFamily: 'Rationell_700Bold',
-    paddingLeft: 0,
-    paddingRight: 0
+    paddingLeft: 0.5,
+    paddingRight: 0.5,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
   },
   inputAndroidSpecified: {
     fontSize: 28.5,

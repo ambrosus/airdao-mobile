@@ -172,7 +172,7 @@ export const importWalletViaPrivateKey = async (
       privateKey
     );
 
-    if (AccountUtils.isWalletAreadyExist(_account.address, accounts)) {
+    if (AccountUtils.isWalletAlreadyExist(_account.address, accounts)) {
       if (walletInDb) walletInDb.destroyPermanently();
       if (accountInDb) accountInDb.destroyPermanently();
       throw error;
