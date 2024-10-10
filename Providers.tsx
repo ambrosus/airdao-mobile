@@ -16,6 +16,7 @@ import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
 import { SwapContextProvider } from '@features/swap/context';
 import { KosmosMarketsContextProvider } from '@features/kosmos/context';
+import { WalletConnectContextProvider } from '@features/wallet-connect/context';
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,11 @@ const SwapProvider: React.FC = ({ children }: any) => (
   <SwapContextProvider>{children}</SwapContextProvider>
 );
 
+const WalletConnectProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <WalletConnectContextProvider>{children}</WalletConnectContextProvider>
+);
+
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
@@ -86,7 +92,8 @@ const providers = [
   StakingProvider,
   BridgeProvider,
   KosmosMarketplaceProvider,
-  SwapProvider
+  SwapProvider,
+  WalletConnectProvider
 ];
 
 export const Providers = combineComponents(...providers);
