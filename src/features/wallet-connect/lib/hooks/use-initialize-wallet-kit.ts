@@ -1,21 +1,21 @@
+import { useCallback, useEffect } from 'react';
 import { createWalletKit } from '@features/wallet-connect/utils';
-import { useCallback, useEffect, useState } from 'react';
+import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
 export function useInitializeWalletKit() {
-  const [initialized, setInitialized] = useState(false);
+  const { isWalletKitInitiated, setIsWalletKitInitiated } =
+    useWalletConnectContextSelector();
 
   const onInitialize = useCallback(async () => {
     try {
       await createWalletKit();
-      setInitialized(true);
+      setIsWalletKitInitiated(true);
     } catch (error) {
       console.error('Error while initialize wallet kit:', error);
     }
-  }, []);
+  }, [setIsWalletKitInitiated]);
 
   useEffect(() => {
-    if (!initialized) onInitialize();
-  }, [initialized, onInitialize]);
-
-  return initialized;
+    if (!isWalletKitInitiated) onInitialize();
+  }, [isWalletKitInitiated, onInitialize]);
 }

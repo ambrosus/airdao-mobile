@@ -35,7 +35,7 @@ export async function updateSignClientChainId(
     return;
   }
   const namespace = chainId.split(':')[0];
-  Object.values(sessions).forEach(async (session) => {
+  for (const session of Object.values(sessions)) {
     await walletKit.updateSession({
       topic: session.topic,
       namespaces: {
@@ -80,5 +80,5 @@ export async function updateSignClientChainId(
     };
     await walletKit.emitSessionEvent(chainChanged);
     await walletKit.emitSessionEvent(accountsChanged);
-  });
+  }
 }

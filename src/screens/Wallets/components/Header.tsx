@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {
+  Alert,
+  InteractionManager,
+  StyleSheet,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -16,8 +22,17 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
+import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks/use-handle-bottom-sheet-actions';
+import { walletKit } from '@features/wallet-connect/utils';
+import {
+  useInitializeWalletKit,
+  useWalletConnectContextSelector
+} from '@features/wallet-connect/lib/hooks';
+import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 
 export const HomeHeader = React.memo((): JSX.Element => {
+  useInitializeWalletKit();
+
   const navigation = useNavigation<HomeNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
@@ -27,13 +42,50 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const newNotificationsCount = useNewNotificationsCount();
   const { t } = useTranslation();
 
+  const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
+  const { setWalletConnectStep } = useWalletConnectContextSelector();
+
   const openScanner = useCallback(() => {
     scanner.current?.show();
   }, [scanner]);
 
-  const closeScanner = () => {
+  const closeScanner = useCallback(() => {
     scanner.current?.dismiss();
-  };
+  }, []);
+
+  const onHandleWalletConnectAuthorization = useCallback(
+    (uri: string): void => {
+      if (!walletKit) return closeScanner();
+
+      try {
+        new Promise<void>((resolve) => {
+          InteractionManager.runAfterInteractions(async () => {
+            try {
+              await walletKit.pair({ uri });
+              resolve();
+            } catch (error) {
+              closeScanner();
+              setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
+
+              new Promise<void>((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                }, 1000);
+              });
+
+              InteractionManager.runAfterInteractions(
+                onShowWalletConnectBottomSheet
+              );
+            }
+          });
+        });
+      } catch (error) {
+        console.error('Error during wallet connection:', error);
+        closeScanner();
+      }
+    },
+    [closeScanner, onShowWalletConnectBottomSheet, setWalletConnectStep]
+  );
 
   const onQRCodeScanned = useCallback(
     (data: string) => {
@@ -44,6 +96,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
           screen: 'SearchScreen',
           params: { address: res[0] }
         });
+      } else if (data.startsWith('wc:')) {
+        onHandleWalletConnectAuthorization(data);
       } else if (!scanned.current) {
         scanned.current = true;
         Alert.alert(t('alert.invalid.qr.code.msg'), '', [
@@ -56,7 +110,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
         ]);
       }
     },
-    [navigation, t]
+    [closeScanner, navigation, onHandleWalletConnectAuthorization, t]
   );
 
   const setLastNotificationTime = useCallback(() => {
@@ -98,6 +152,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
     );
   }, [
     WINDOW_HEIGHT,
+    closeScanner,
     navigateToNotifications,
     newNotificationsCount,
     onQRCodeScanned,

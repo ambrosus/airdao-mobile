@@ -2,12 +2,17 @@ import { useCallback } from 'react';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
 export function useHandleBottomSheetActions() {
-  const { approvalConnectionBottomSheetRef } =
+  const { approvalConnectionBottomSheetRef, reset } =
     useWalletConnectContextSelector();
 
-  const onToggleBottomSheet = useCallback(() => {
+  const onShowWalletConnectBottomSheet = useCallback(() => {
     approvalConnectionBottomSheetRef.current?.show();
   }, [approvalConnectionBottomSheetRef]);
 
-  return { onToggleBottomSheet };
+  const onDismissWalletConnectBottomSheet = useCallback(() => {
+    reset();
+    approvalConnectionBottomSheetRef.current?.dismiss();
+  }, [approvalConnectionBottomSheetRef, reset]);
+
+  return { onShowWalletConnectBottomSheet, onDismissWalletConnectBottomSheet };
 }

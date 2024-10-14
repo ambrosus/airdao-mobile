@@ -3,15 +3,22 @@ import { supportedChains, walletKit } from '@features/wallet-connect/utils';
 import { Toast, ToastType } from '@components/modular';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 import {
+  CONNECT_VIEW_STEPS,
   SessionAuthenticateEvent,
   SessionProposalEvent,
   SessionRequestEvent,
   WALLET_CLIENT_EVENTS,
   WALLET_CORE_EVENTS
 } from '@features/wallet-connect/types';
+import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
+import { InteractionManager } from 'react-native';
+import { AirDAOEventDispatcher } from '@lib';
+import { AirDAOEventType } from '@appTypes';
+import Config from '@constants/config';
 
-export function useWalletKitEventsManager(initialized: boolean) {
-  const { approvalConnectionBottomSheetRef, onChangeProposal } =
+export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
+  const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
+  const { onChangeProposal, setWalletConnectStep } =
     useWalletConnectContextSelector();
 
   const onSessionProposal = useCallback(
@@ -22,17 +29,44 @@ export function useWalletKitEventsManager(initialized: boolean) {
 
       const chains = supportedChains(requiredNamespaces, optionalNamespaces);
 
+      const _correctChainIds = chains.filter(
+        (chain) => chain.id === Config.CHAIN_ID
+      );
+
       if (chains.length === 0) {
         Toast.show({
           type: ToastType.Failed,
           text: 'Chain Not found'
         });
-      } else {
+      } else if (_correctChainIds.length === 0) {
+        setWalletConnectStep(CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR);
         onChangeProposal(proposal);
-        approvalConnectionBottomSheetRef.current?.show();
+
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
+
+        new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 1000);
+        });
+
+        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
+      } else {
+        setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
+        onChangeProposal(proposal);
+
+        AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
+
+        new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 1000);
+        });
+
+        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       }
     },
-    [approvalConnectionBottomSheetRef, onChangeProposal]
+    [onChangeProposal, onShowWalletConnectBottomSheet, setWalletConnectStep]
   );
 
   const onSessionRequest = useCallback((requestEvent: SessionRequestEvent) => {
@@ -47,7 +81,7 @@ export function useWalletKitEventsManager(initialized: boolean) {
   );
 
   useEffect(() => {
-    if (initialized) {
+    if (isWalletKitInitiated) {
       // Sign Events Handler
       walletKit.on(WALLET_CORE_EVENTS.SESSION_PROPOSAL, onSessionProposal);
       walletKit.on(WALLET_CORE_EVENTS.SESSION_REQUEST, onSessionRequest);
@@ -67,5 +101,10 @@ export function useWalletKitEventsManager(initialized: boolean) {
         }
       );
     }
-  }, [initialized, onSessionAuthenticate, onSessionProposal, onSessionRequest]);
+  }, [
+    isWalletKitInitiated,
+    onSessionAuthenticate,
+    onSessionProposal,
+    onSessionRequest
+  ]);
 }
