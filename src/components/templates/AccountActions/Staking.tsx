@@ -5,12 +5,15 @@ import Config from '@constants/config';
 import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const Staking = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToStakingPools = () => {
+    sendFirebaseEvent(CustomAppEvents.main_stake);
     navigation.navigate('StakingPools');
   };
 

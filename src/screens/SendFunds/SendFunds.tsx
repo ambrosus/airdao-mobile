@@ -65,6 +65,8 @@ import { TokenUtils } from '@utils/token';
 import { isAndroid } from '@utils/isPlatform';
 import { formatUnits } from 'ethers/lib/utils';
 import { AMB_DECIMALS } from '@constants/variables';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -250,6 +252,7 @@ export const SendFunds = () => {
           to: destinationAddress
         });
         navigation.replace('SendFundsStatus');
+        sendFirebaseEvent(CustomAppEvents.send_start);
         await TransactionUtils.sendTx(
           walletHash,
           senderAddress,
@@ -259,11 +262,16 @@ export const SendFunds = () => {
         );
 
         if (transactionIdRef.current === txId) {
+          sendFirebaseEvent(CustomAppEvents.send_finish);
           updateSendContext({ type: 'SET_DATA', loading: false });
         }
       } catch (error: unknown) {
-        console.error(error);
         await Clipboard.setStringAsync(JSON.stringify(error));
+        // @ts-ignore
+        const errorMessage = error?.message ?? JSON.stringify(error);
+        sendFirebaseEvent(CustomAppEvents.send_error, {
+          sendError: errorMessage
+        });
 
         if (transactionIdRef.current === txId) {
           updateSendContext({
