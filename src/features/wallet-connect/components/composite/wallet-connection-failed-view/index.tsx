@@ -5,10 +5,9 @@ import { SecondaryButton } from '@components/modular';
 import { Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
-  useExtractProposalData
+  useExtractProposalData,
+  useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
-
-import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks/use-handle-bottom-sheet-actions';
 import { COLORS } from '@constants/colors';
 
 export const WalletConnectionFailedView = () => {

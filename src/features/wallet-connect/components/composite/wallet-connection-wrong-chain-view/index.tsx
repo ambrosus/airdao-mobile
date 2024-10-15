@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { styles } from './styles';
 import { SecondaryButton } from '@components/modular';
 import { Text } from '@components/base';
-import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks/use-handle-bottom-sheet-actions';
+import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks';
 import { COLORS } from '@constants/colors';
 
 export const WalletConnectionWrongChainView = () => {

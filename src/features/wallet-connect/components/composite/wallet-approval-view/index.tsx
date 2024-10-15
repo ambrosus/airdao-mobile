@@ -5,7 +5,8 @@ import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
-  useExtractProposalData
+  useExtractProposalData,
+  useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 
 import { COLORS } from '@constants/colors';
@@ -19,11 +20,10 @@ import {
 import { EIP155_CHAINS, walletKit } from '@features/wallet-connect/utils';
 import { useWallet } from '@hooks';
 import { EIP155_SIGNING_METHODS } from '@features/wallet-connect/types';
-import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks/use-handle-bottom-sheet-actions';
 
 export const WalletConnectApprovalView = () => {
   const { wallet } = useWallet();
-  const { proposal } = useWalletConnectContextSelector();
+  const { proposal, setActiveSessions } = useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
   const { origin } = useExtractProposalData(proposal);
 
@@ -93,6 +93,8 @@ export const WalletConnectApprovalView = () => {
           namespaces
         });
 
+        setActiveSessions(Object.values(walletKit.getActiveSessions()));
+
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
       } catch (error) {
@@ -102,9 +104,10 @@ export const WalletConnectApprovalView = () => {
       }
     }
   }, [
+    proposal,
     onDismissWalletConnectBottomSheet,
     onShowToastNotification,
-    proposal,
+    setActiveSessions,
     supportedNamespaces
   ]);
 

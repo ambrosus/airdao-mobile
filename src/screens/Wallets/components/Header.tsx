@@ -22,13 +22,15 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
-import { useHandleBottomSheetActions } from '@features/wallet-connect/lib/hooks/use-handle-bottom-sheet-actions';
+
 import { walletKit } from '@features/wallet-connect/utils';
 import {
   useInitializeWalletKit,
-  useWalletConnectContextSelector
+  useWalletConnectContextSelector,
+  useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
+import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   useInitializeWalletKit();
@@ -43,7 +45,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const { t } = useTranslation();
 
   const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
-  const { setWalletConnectStep } = useWalletConnectContextSelector();
+  const { setWalletConnectStep, activeSessions } =
+    useWalletConnectContextSelector();
 
   const openScanner = useCallback(() => {
     scanner.current?.show();
@@ -182,6 +185,10 @@ export const HomeHeader = React.memo((): JSX.Element => {
     return { ...styles.container };
   }, []);
 
+  const renderContentCenter = useMemo(() => {
+    return activeSessions.length > 0 && <WalletSessionsLabel />;
+  }, [activeSessions]);
+
   return (
     <Header
       bottomBorder
@@ -189,6 +196,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
       style={headerStyles}
       contentRight={renderContentRight}
       contentLeft={renderContentLeft}
+      contentCenter={renderContentCenter}
     />
   );
 });

@@ -39,7 +39,10 @@ import { SwapScreen } from '@screens/Swap';
 import { SwapSuccessScreen, SwapErrorScreen } from '@screens/Swap/screens';
 import { KosmosScreen } from '@screens/Kosmos';
 import { KosmosMarketScreen } from '@screens/Kosmos/screens';
-import { WalletConnectModal } from '@features/wallet-connect/components/templates';
+import {
+  WalletConnectModal,
+  WalletSessionsBottomSheet
+} from '@features/wallet-connect/components/templates';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -139,6 +142,7 @@ export const HomeStack = () => {
           {getCommonStack(Stack as any)}
         </Stack.Navigator>
         <WalletConnectModal />
+        <WalletSessionsBottomSheet />
       </>
     </SendCryptoProvider>
   );
