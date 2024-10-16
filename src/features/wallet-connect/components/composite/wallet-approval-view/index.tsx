@@ -19,11 +19,17 @@ import {
 } from '@components/modular';
 import { EIP155_CHAINS, walletKit } from '@features/wallet-connect/utils';
 import { useWallet } from '@hooks';
-import { EIP155_SIGNING_METHODS } from '@features/wallet-connect/types';
+import {
+  CONNECT_VIEW_STEPS,
+  EIP155_SIGNING_METHODS
+} from '@features/wallet-connect/types';
+import { useTranslation } from 'react-i18next';
 
 export const WalletConnectApprovalView = () => {
+  const { t } = useTranslation();
   const { wallet } = useWallet();
-  const { proposal, setActiveSessions } = useWalletConnectContextSelector();
+  const { proposal, setActiveSessions, setWalletConnectStep } =
+    useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
   const { origin } = useExtractProposalData(proposal);
 
@@ -48,10 +54,6 @@ export const WalletConnectApprovalView = () => {
     };
   }, [wallet?.address]);
 
-  const description = useMemo(() => {
-    return `Are you sure you want to connect your wallet to ${origin}`;
-  }, [origin]);
-
   const onReject = useCallback(async () => {
     if (proposal) {
       try {
@@ -72,12 +74,15 @@ export const WalletConnectApprovalView = () => {
 
     return setTimeout(() => {
       Toast.show({
-        text: 'Wallet connected!',
-        subtext: `You're now connected to ${extractedHttpsOrigin}`,
+        text: t('wallet.connect.title.success'),
+        subtext: t('wallet.connect.description.success', {
+          network: extractedHttpsOrigin,
+          interpolation: { escapeValue: false }
+        }),
         type: ToastType.Success
       });
     }, 500);
-  }, [origin]);
+  }, [origin, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
@@ -98,6 +103,7 @@ export const WalletConnectApprovalView = () => {
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
       } catch (error) {
+        setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
         console.error('Auth error:', error);
       } finally {
         setIsLoadingApprove(false);
@@ -105,10 +111,11 @@ export const WalletConnectApprovalView = () => {
     }
   }, [
     proposal,
+    supportedNamespaces,
+    setActiveSessions,
     onDismissWalletConnectBottomSheet,
     onShowToastNotification,
-    setActiveSessions,
-    supportedNamespaces
+    setWalletConnectStep
   ]);
 
   const RenderFooterNode = useCallback(() => {
@@ -127,24 +134,28 @@ export const WalletConnectApprovalView = () => {
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.brand600}
               >
-                Connecting
+                {t('wallet.connect.pending.status')}
               </Text>
             </Row>
           </SecondaryButton>
         ) : (
           <>
             <PrimaryButton onPress={onApproveSession}>
-              <Text color={COLORS.neutral0}>Connect</Text>
+              <Text color={COLORS.neutral0}>
+                {t('wallet.connect.button.connect')}
+              </Text>
             </PrimaryButton>
 
             <SecondaryButton style={styles.secondaryButton} onPress={onReject}>
-              <Text color={COLORS.brand600}>Cancel</Text>
+              <Text color={COLORS.brand600}>
+                {t('wallet.connect.button.cancel')}
+              </Text>
             </SecondaryButton>
           </>
         )}
       </>
     );
-  }, [isLoadingApprove, onApproveSession, onReject]);
+  }, [isLoadingApprove, onApproveSession, onReject, t]);
 
   return (
     <View style={styles.container}>
@@ -154,7 +165,10 @@ export const WalletConnectApprovalView = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.black}
       >
-        Connect to {origin}
+        {t('wallet.connect.proposal', {
+          origin,
+          interpolation: { escapeValue: false }
+        })}
       </Text>
 
       <Text
@@ -163,7 +177,10 @@ export const WalletConnectApprovalView = () => {
         color={COLORS.foregroundSecondaryContent}
         style={styles.description}
       >
-        {description}
+        {t('wallet.connect.warning', {
+          origin,
+          interpolation: { escapeValue: false }
+        })}
       </Text>
       <Spacer value={verticalScale(8)} />
 

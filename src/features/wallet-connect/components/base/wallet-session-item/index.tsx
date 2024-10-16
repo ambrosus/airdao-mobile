@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SessionTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
 import { styles } from './styles';
@@ -16,6 +17,7 @@ interface WalletSessionItemProps {
 }
 
 export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
+  const { t } = useTranslation();
   const { activeSessions, setActiveSessions } =
     useWalletConnectContextSelector();
 
@@ -69,7 +71,7 @@ export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
             fontFamily="Inter_600SemiBold"
             color={COLORS.error500}
           >
-            Disconnect
+            {t('wallet.connect.button.disconnect')}
           </Text>
         </Pressable>
       </Row>

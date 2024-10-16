@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
@@ -13,6 +14,7 @@ import { WalletSessionsList } from '../../composite';
 import { verticalScale } from '@utils/scaling';
 
 export const WalletSessionsBottomSheet = () => {
+  const { t } = useTranslation();
   const { activeSessionsBottomSheetRef } = useWalletConnectContextSelector();
   const { onDismissActiveSessionBottomSheet } = useHandleBottomSheetActions();
 
@@ -29,7 +31,7 @@ export const WalletSessionsBottomSheet = () => {
             fontFamily="Inter_600SemiBold"
             color={COLORS.black}
           >
-            Manage Connections
+            {t('wallet.connect.title.connections')}
           </Text>
 
           <Pressable

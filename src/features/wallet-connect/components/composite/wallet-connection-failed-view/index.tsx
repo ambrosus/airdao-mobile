@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { SecondaryButton } from '@components/modular';
 import { Text } from '@components/base';
@@ -11,17 +12,21 @@ import {
 import { COLORS } from '@constants/colors';
 
 export const WalletConnectionFailedView = () => {
+  const { t } = useTranslation();
   const { proposal } = useWalletConnectContextSelector();
   const { origin } = useExtractProposalData(proposal);
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
 
   const description = useMemo(() => {
     if (proposal && origin) {
-      return `We couldn’t connect to ${origin}. Try again later.`;
+      return t('wallet.connect.description.error.with.path', {
+        origin,
+        interpolation: { escapeValue: false }
+      });
     }
 
-    return 'We couldn’t connect. Try again later.';
-  }, [origin, proposal]);
+    return t('wallet.connect.description.error');
+  }, [origin, proposal, t]);
 
   return (
     <View style={styles.container}>
@@ -31,7 +36,7 @@ export const WalletConnectionFailedView = () => {
         color={COLORS.black}
         style={styles.heading}
       >
-        Connection failed
+        {t('wallet.connect.title.error')}
       </Text>
       <Text
         fontSize={15}
@@ -51,7 +56,7 @@ export const WalletConnectionFailedView = () => {
           fontFamily="Inter_600SemiBold"
           color={COLORS.brand600}
         >
-          Got it
+          {t('wallet.connect.button.approve')}
         </Text>
       </SecondaryButton>
     </View>

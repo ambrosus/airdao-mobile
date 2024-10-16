@@ -33,12 +33,7 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
         (chain) => chain.id === Config.CHAIN_ID
       );
 
-      if (chains.length === 0) {
-        Toast.show({
-          type: ToastType.Failed,
-          text: 'Chain Not found'
-        });
-      } else if (_correctChainIds.length === 0) {
+      if (chains.length === 0 || _correctChainIds.length === 0) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR);
         onChangeProposal(proposal);
 

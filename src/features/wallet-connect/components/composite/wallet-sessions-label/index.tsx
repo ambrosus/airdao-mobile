@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { ConnectionChainsIcon } from '@components/svg/icons/v2';
@@ -9,6 +10,7 @@ import {
 } from '@features/wallet-connect/lib/hooks';
 
 export const WalletSessionsLabel = () => {
+  const { t } = useTranslation();
   const { activeSessions } = useWalletConnectContextSelector();
   const { onShowActiveSessionBottomSheet } = useHandleBottomSheetActions();
 
@@ -29,11 +31,9 @@ export const WalletSessionsLabel = () => {
         <ConnectionChainsIcon />
         <Spacer horizontal value={4} />
         <Text fontSize={13} fontFamily="Inter_600SemiBold" color="#259974">
-          {activeSessions.length}
-        </Text>
-        <Spacer horizontal value={2} />
-        <Text fontSize={13} fontFamily="Inter_600SemiBold" color="#259974">
-          Wallets connected
+          {t('wallet.connect.label.connections', {
+            connectionsLength: activeSessions.length
+          })}
         </Text>
       </Row>
     </Pressable>
