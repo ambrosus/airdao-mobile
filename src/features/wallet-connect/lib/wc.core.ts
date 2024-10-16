@@ -1,13 +1,13 @@
-import Constants from 'expo-constants';
 import { WalletKit, IWalletKit } from '@reown/walletkit';
 import { Core } from '@walletconnect/core';
 import { getMetadata } from '../utils/misc/metadata';
+import { EXPO_PUBLIC_REOWN_PROJECT_ID } from '@env';
 
 export let walletKit: IWalletKit;
 
 export async function createWalletKit() {
   const core = new Core({
-    projectId: Constants.expoConfig?.extra?.EXPO_PUBLIC_REOWN_PROJECT_ID,
+    projectId: EXPO_PUBLIC_REOWN_PROJECT_ID,
     relayUrl: 'wss://relay.walletconnect.org'
   });
 
