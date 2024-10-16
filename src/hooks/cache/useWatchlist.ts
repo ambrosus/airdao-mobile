@@ -6,12 +6,15 @@ import {
 import { ExplorerAccount } from '@models/Explorer';
 import { AddressUtils } from '@utils/address';
 import { useMemo } from 'react';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const useWatchlist = () => {
   const allAddressesReducer = useAllAddressesReducer();
   const allAddresses = useAllAddresses();
 
   const addToWatchlist = async (address: ExplorerAccount) => {
+    sendFirebaseEvent(CustomAppEvents.watchlist_address_added);
     const newAddress = Object.assign({}, address);
     newAddress.isOnWatchlist = true;
     allAddressesReducer({ type: 'add-or-update', payload: newAddress });

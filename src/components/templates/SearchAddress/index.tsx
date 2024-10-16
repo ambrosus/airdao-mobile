@@ -41,6 +41,8 @@ import { COLORS } from '@constants/colors';
 import { SearchTabNavigationProp } from '@appTypes';
 import { styles } from './styles';
 import { useTranslation } from 'react-i18next';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface SearchAdressProps {
   scannerDisabled?: boolean;
@@ -113,6 +115,9 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
 
     const finalAccount =
       allAdresses.find((a) => a.address === account?.address) || account;
+    if (searchSubmitted && finalAccount) {
+      sendFirebaseEvent(CustomAppEvents.explorer_search);
+    }
 
     useImperativeHandle(
       ref,
