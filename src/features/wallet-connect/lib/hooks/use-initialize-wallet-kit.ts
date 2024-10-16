@@ -10,8 +10,11 @@ export function useInitializeWalletKit() {
 
   const onInitialize = useCallback(async () => {
     try {
-      Alert.alert(EXPO_PUBLIC_REOWN_PROJECT_ID ?? 'no key found`');
+      Alert.alert(
+        EXPO_PUBLIC_REOWN_PROJECT_ID ?? 'no EXPO_PUBLIC_REOWN_PROJECT_ID found`'
+      );
 
+      Alert.alert('PROCESS ENV', JSON.stringify(process.env));
       await createWalletKit();
       setIsWalletKitInitiated(true);
 

@@ -9,21 +9,33 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_REOWN_PROJECT_ID": "$EXPO_PUBLIC_REOWN_PROJECT_ID"
       }
     },
     "stage": {
       "channel": "stage",
       "ios": {
         "cocoapods": "1.15.2"
+      },
+      "env": {
+        "EXPO_PUBLIC_REOWN_PROJECT_ID": "$EXPO_PUBLIC_REOWN_PROJECT_ID"
       }
     },
     "prod": {
-      "channel": "main"
+      "channel": "main",
+      "env": {
+        "EXPO_PUBLIC_REOWN_PROJECT_ID": "$EXPO_PUBLIC_REOWN_PROJECT_ID"
+      }
     },
     "testnet": {
       "channel": "testnet",
       "ios": {
         "cocoapods": "1.15.2"
+      },
+      "env": {
+        "EXPO_PUBLIC_REOWN_PROJECT_ID": "$EXPO_PUBLIC_REOWN_PROJECT_ID"
       }
     }
   }
