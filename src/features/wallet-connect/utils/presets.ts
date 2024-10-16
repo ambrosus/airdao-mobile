@@ -6,7 +6,7 @@ export const EIP155_CHAINS: Record<string, Chain> = {
     network: 'homestead',
     name: 'AirDAO',
     nativeCurrency: { name: 'AirDAO', symbol: 'AMB', decimals: 18 },
-    rpcUrl: 'https://network.ambrosus-test.io',
+    rpcUrl: 'https://network.ambrosus.io',
     blockExplorer: 'https://explorer-v2-api.ambrosus.io/v2'
   },
   '22040': {
@@ -14,7 +14,7 @@ export const EIP155_CHAINS: Record<string, Chain> = {
     network: 'homestead',
     name: 'AirDAO',
     nativeCurrency: { name: 'AirDAO', symbol: 'AMB', decimals: 18 },
-    rpcUrl: 'https://network.ambrosus.io',
+    rpcUrl: 'https://network.ambrosus-test.io',
     blockExplorer: 'https://explorer-v2-api.ambrosus-test.io/v2'
   }
 };
