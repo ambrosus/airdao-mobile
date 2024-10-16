@@ -17,6 +17,8 @@ import {
   useClosedMarketsQuery
 } from '@features/kosmos/lib/query';
 import { useTranslation } from 'react-i18next';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const ESTIMATED_ITEM_SIZE = 56;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };
@@ -54,8 +56,10 @@ export const MarketsList = ({ filters }: ActiveMarketsListProps) => {
   const renderMarketListItem = useCallback(
     (args: ListRenderItemInfo<MarketType>) => {
       const { item: market } = args;
-      const redirectToDetails = () =>
+      const redirectToDetails = () => {
+        sendFirebaseEvent(CustomAppEvents.kosmos_market_open);
         navigation.navigate('KosmosMarketScreen', { market });
+      };
 
       return (
         <TouchableOpacity onPress={redirectToDetails}>
