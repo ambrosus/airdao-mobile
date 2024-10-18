@@ -222,8 +222,14 @@ export const useBridgeNetworksData = ({
     const insufficientWalletFunds = inputAmount.gt(
       selectedToken.renderTokenItem.balance
     );
-    // @ts-ignore
-    const errorMessage = `${error?.message}`;
+    const errorMessage = error?.message
+      ? // @ts-ignore
+        `${error?.message}`
+      : JSON.stringify(error);
+    sendFirebaseEvent(CustomAppEvents.bridge_error, {
+      bridgeError: errorMessage
+    });
+
     const amountLessThenFee =
       errorMessage.includes('error when getting fees: amount is too small') ||
       errorMessage.includes('amount to small');
@@ -394,10 +400,6 @@ export const useBridgeNetworksData = ({
       }
     } catch (e) {
       // @ts-ignore
-      const errorMessage = e?.message ?? JSON.stringify(e);
-      sendFirebaseEvent(CustomAppEvents.bridge_error, {
-        bridgeError: errorMessage
-      });
       errorHandler(e);
       transactionInfoRef?.current?.dismiss();
     }
