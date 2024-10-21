@@ -8,11 +8,14 @@ import {
   AllAddressesProvider,
   LocalizationProvider,
   PasscodeProvider,
-  StakingContextProvider
+  StakingContextProvider,
+  WalletContextProvider
 } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
-import { BridgeContextProvider } from '@contexts/Bridge';
+import { BridgeContextProvider } from '@features/bridge/context';
+import { SwapContextProvider } from '@features/swap/context';
+import { KosmosMarketsContextProvider } from '@features/kosmos/context';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +41,11 @@ const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
   <PasscodeProvider>{children}</PasscodeProvider>
 );
 
+const WalletProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <WalletContextProvider>{children}</WalletContextProvider>
+);
+
 const StakingProvider: React.FC = ({ children }: any) => (
   // @ts-ignore
   <StakingContextProvider>{children}</StakingContextProvider>
@@ -46,6 +54,16 @@ const StakingProvider: React.FC = ({ children }: any) => (
 const BridgeProvider: React.FC = ({ children }: any) => (
   // @ts-ignore
   <BridgeContextProvider>{children}</BridgeContextProvider>
+);
+
+const KosmosMarketplaceProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <KosmosMarketsContextProvider>{children}</KosmosMarketsContextProvider>
+);
+
+const SwapProvider: React.FC = ({ children }: any) => (
+  // @ts-ignore
+  <SwapContextProvider>{children}</SwapContextProvider>
 );
 
 const independentProviders = [
@@ -64,8 +82,11 @@ const providers = [
   ListsContextProvider,
   WrappedLocalizationProvider,
   AddWalletProvider,
+  WalletProvider,
   StakingProvider,
-  BridgeProvider
+  BridgeProvider,
+  KosmosMarketplaceProvider,
+  SwapProvider
 ];
 
 export const Providers = combineComponents(...providers);

@@ -10,7 +10,7 @@ import { CryptoCurrencyCode } from '@appTypes';
  */
 export const useUSDPrice = (
   etherAmount: number,
-  symbol: CryptoCurrencyCode = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
 ): number => {
   const currencyRate = useCurrencyRate(symbol);
   const [usdPrice, setUSDPrice] = useState(0);

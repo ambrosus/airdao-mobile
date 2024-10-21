@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AirBondIcon,
+  AirDOGEIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
-  BSCIcon,
   BusdIcon,
-  EthereumIcon,
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
@@ -18,10 +17,13 @@ import {
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
+import { getTokenNameFromDatabase } from '@utils/getTokenNameFromDatabase';
 
 export interface TokenLogoProps {
-  token: string;
+  token?: string;
   scale?: number;
+  isNativeCoin?: boolean | string;
+  address?: string;
   overrideIconVariants?: {
     amb?: 'white' | 'blue';
     eth?: 'gray' | 'blue';
@@ -32,25 +34,44 @@ export const TokenLogo = (props: TokenLogoProps) => {
   const {
     scale,
     token,
+    address,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
-  switch (token?.toLowerCase()) {
+
+  const tokenName = useMemo(() => {
+    if (address) {
+      return getTokenNameFromDatabase(address);
+    } else {
+      return token;
+    }
+  }, [address, token]);
+
+  switch (tokenName?.toLowerCase()) {
+
     case CryptoCurrencyCode.AMB.toLowerCase():
+    case CryptoCurrencyCode.SAMB.toLowerCase():
+    case CryptoCurrencyCode.STAMB.toLowerCase():
+    case 'staked amb':
+    case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.ADOGE.toLowerCase():
+    case CryptoCurrencyCode.Airdoge.toLowerCase():
+      return <AirDOGEIcon scale={scale} />;
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
-      if (overrideIconVariants.eth === 'blue') {
-        return <EthereumIcon scale={scale} />;
-      } else {
-        return <EthTokenIcon scale={scale} />;
-      }
+    case 'weth':
+      return (
+        <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
+      );
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
+    case 'wbnb':
+    case 'bsc':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
     case 'usd coin':
@@ -73,15 +94,12 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.Bond.toLowerCase():
     case 'airbond':
       return <AirBondIcon scale={scale} />;
-    case 'bsc':
-      return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.LangOperation.toLowerCase():
     case 'operation funds lang inu':
       return <LangFundIcon scale={scale} />;
     case 'airdao nft':
+    case 'nft':
       return <NFTIcon />;
-    case 'bsc':
-      return <BSCIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

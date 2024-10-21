@@ -116,7 +116,7 @@ export const NoWalletScreen = () => {
     setMnemonicLength(128);
     navigation.navigate('Tabs', {
       screen: 'Wallets',
-      params: { screen: 'ImportWallet' }
+      params: { screen: 'ImportWalletMethods' }
     });
   };
 

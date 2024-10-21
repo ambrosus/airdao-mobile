@@ -14,6 +14,12 @@ export const styles = StyleSheet.create({
   nameInput: {
     marginHorizontal: scale(16)
   },
+  input: {
+    shadowColor: COLORS.transparent,
+    borderWidth: 1,
+    borderColor: COLORS.alphaBlack10,
+    color: COLORS.alphaBlack60
+  },
   addressContainer: {
     paddingHorizontal: scale(24),
     alignSelf: 'center'
@@ -40,5 +46,18 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
+  },
+  accessKeysButton: {
+    backgroundColor: COLORS.neutral100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 1000,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    marginHorizontal: scale(24)
+  },
+  footer: {
+    flexDirection: 'column',
+    rowGap: scale(24)
   }
 });

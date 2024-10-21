@@ -5,8 +5,8 @@ import { COLORS } from '@constants/colors';
 
 export function RightArrowIcon(props: IconProps) {
   const { scale = 1, color = COLORS.neutral0 } = props;
-  const width = 15,
-    height = 14;
+  const width = 15;
+  const height = 14;
   return (
     <Svg
       width={width * scale}

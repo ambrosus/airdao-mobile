@@ -13,3 +13,5 @@ export * from './usePreventGoingBack';
 export * from './useSupportedBiometrics';
 export * from './useSwipeableDismissListener';
 export * from './useUSDPrice';
+export * from './useSettingsWalletActions';
+export * from './useWallet';

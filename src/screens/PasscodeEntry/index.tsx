@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Passcode, PrimaryButton } from '@components/modular';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import {
@@ -21,13 +21,22 @@ import { verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
 import usePasscode from '@contexts/Passcode';
-import { RootNavigationProp } from '@appTypes';
+import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
+import { Header } from '@components/composite';
 
 export const PasscodeEntry = () => {
+  const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
+
+  const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
-  usePreventGoingBack(isAuthSuccessfulRef);
+
+  const isPreventingNavigateBack = params?.title
+    ? isAvailableToNavigateBack
+    : isAuthSuccessfulRef;
+
+  usePreventGoingBack(isPreventingNavigateBack);
 
   const navigation = useNavigation<RootNavigationProp>();
   const { t } = useTranslation();
@@ -51,6 +60,26 @@ export const PasscodeEntry = () => {
     }, 0);
   }, [navigation]);
 
+  const onPasscodeEntry = useCallback(() => {
+    if (typeof params?.onPasscodeApproveWithNavigate === 'function') {
+      params.onPasscodeApproveWithNavigate();
+      closePasscodeEntry();
+    }
+    return null;
+  }, [closePasscodeEntry, params]);
+
+  const onSuccessActions = useCallback(() => {
+    if (params?.onPasscodeApprove) {
+      return params.onPasscodeApprove();
+    }
+
+    if (params?.onPasscodeApproveWithNavigate && onPasscodeEntry) {
+      return onPasscodeEntry();
+    }
+
+    return closePasscodeEntry();
+  }, [onPasscodeEntry, closePasscodeEntry, params]);
+
   const authenticateWithBiometrics = useCallback(async () => {
     automaticFaceIdCalled.current = true;
     await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, true);
@@ -70,7 +99,7 @@ export const PasscodeEntry = () => {
       });
       if (result.success) {
         isAuthSuccessfulRef.current = true;
-        closePasscodeEntry();
+        onSuccessActions();
       } else {
         passcodeRef.current?.focus();
       }
@@ -79,6 +108,7 @@ export const PasscodeEntry = () => {
     } finally {
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closePasscodeEntry, t]);
 
   useEffect(() => {
@@ -102,7 +132,7 @@ export const PasscodeEntry = () => {
       );
       if (isPasscodeCorrect) {
         isAuthSuccessfulRef.current = true;
-        closePasscodeEntry();
+        onSuccessActions();
       } else {
         Alert.alert(
           t('security.passcode.doesnt.match'),
@@ -128,6 +158,9 @@ export const PasscodeEntry = () => {
           flex: 1
         }}
       >
+        {params?.title && (
+          <Header title={params.title} onBackPress={closePasscodeEntry} />
+        )}
         <KeyboardDismissingView
           style={{ flex: 1, justifyContent: 'space-between' }}
         >

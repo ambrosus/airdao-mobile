@@ -4,6 +4,7 @@ export enum CryptoCurrencyCode {
   AMBROSUS = 'AMBROSUS',
   MTSC = 'MTSC',
   SAMB = 'SAMB',
+  SyntheticAmber = 'Synthetic Amber',
   HPT = 'HPT',
   TT = 'TT',
   SCAPEITEM = 'SCAPEITEM',
@@ -28,6 +29,7 @@ export enum CryptoCurrencyCode {
   'P(4)T' = 'P(4)T',
   'P(5)T' = 'P(5)T',
   AMB = 'AMB',
+  STAMB = 'STAMB',
   BUSD = 'BUSD',
   Bond = 'BOND',
   USDC = 'USDC',
@@ -44,5 +46,7 @@ export enum CryptoCurrencyCode {
   BNB_SMART_20 = 'BNB_SMART_20',
   ETC = 'ETC',
   Test1 = 'TEST1',
-  Test2 = 'TEST2'
+  Test2 = 'TEST2',
+  ADOGE = 'ADOGE',
+  Airdoge = 'Airdoge'
 }

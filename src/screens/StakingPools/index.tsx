@@ -14,13 +14,13 @@ import { useAmbrosusStakingPools } from '@hooks';
 import { styles } from './styles';
 import { useStakingMultiplyContextSelector } from '@contexts';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useBridgeContextSelector } from '@contexts/Bridge';
+import { useBridgeContextData } from '@features/bridge/context';
 
 export const StakingPoolsScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { data: stakingPools } = useAmbrosusStakingPools();
-  const { selectedAccount } = useBridgeContextSelector();
+  const { selectedAccount } = useBridgeContextData();
 
   const navigateToPoolScreen = (pool: StakingPool) => {
     navigation.navigate('StakingPool', { pool });

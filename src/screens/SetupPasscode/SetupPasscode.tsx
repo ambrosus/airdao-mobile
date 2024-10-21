@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +13,11 @@ import { Spacer, Text, Button } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
-import { DeviceUtils } from '@utils/device';
+import { isIos } from '@utils/isPlatform';
+
+const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
+  ? 'padding'
+  : 'height';
 
 export const SetupPasscode = () => {
   const { top } = useSafeAreaInsets();
@@ -32,8 +40,7 @@ export const SetupPasscode = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled={DeviceUtils.isIOS}
-      behavior="padding"
+      behavior={KEYBOARD_BEHAVIOR}
       style={{ top, flex: 1, justifyContent: 'space-between' }}
     >
       <View>

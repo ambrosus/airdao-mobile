@@ -5,12 +5,14 @@ import { HomeNavigationProp } from '@appTypes';
 import { AccountActionButton } from '@components/templates/AccountActions/ActionButton';
 import { BridgeIcon } from '@components/svg/icons';
 import Config from '@constants/config';
+import { useBridgeContextData } from '@features/bridge/context';
 
 export const Bridge = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
-
+  const { setDefaultBridgeData } = useBridgeContextData();
   const onNavigateToBridge = () => {
+    setDefaultBridgeData();
     navigation.navigate('Bridge');
   };
 

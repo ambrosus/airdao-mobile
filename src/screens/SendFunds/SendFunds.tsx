@@ -1,12 +1,26 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
+import {
+  InteractionManager,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import {
   Button,
   Input,
+  InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
@@ -20,7 +34,8 @@ import {
   useCurrencyRate,
   useEstimatedTransferFee,
   useTokensAndTransactions,
-  useUSDPrice
+  useUSDPrice,
+  useWallet
 } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
@@ -44,10 +59,12 @@ import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
-import { useAccountByAddress } from '@hooks/database';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { TokenUtils } from '@utils/token';
+import { isAndroid } from '@utils/isPlatform';
+import { formatUnits } from 'ethers/lib/utils';
+import { AMB_DECIMALS } from '@constants/variables';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -61,10 +78,18 @@ export const SendFunds = () => {
     from: senderAddress = '',
     transactionId
   } = sendContextState;
-  const transactionIdRef = useRef(transactionId);
-  transactionIdRef.current = transactionId;
-  const { data: selectedAccount } = useAccountByAddress(senderAddress);
-  const walletHash = selectedAccount?.wallet.id || '';
+  const transactionIdRef = useRef('');
+  const amountInputRef = useRef<InputRef>(null);
+
+  const { wallet: account } = useWallet();
+
+  const walletHash = account?.wallet.id ?? '';
+
+  useEffect(() => {
+    if (transactionId) transactionIdRef.current = transactionId;
+  }, [transactionId]);
+
+  const [amountInputFocused, setAmountInputFocused] = useState(false);
 
   const {
     data: { tokens }
@@ -76,8 +101,15 @@ export const SendFunds = () => {
     {
       name: 'AirDAO',
       address: senderAddress || '',
-      balance: { wei: '', ether: Number(tokenBalance.ether) || 0 },
-      symbol: CryptoCurrencyCode.AMB
+      isNativeCoin: true,
+      balance: {
+        wei: tokenBalance.wei,
+        ether: Number(tokenBalance.ether) || 0,
+        formattedBalance: formatUnits(tokenBalance.wei, AMB_DECIMALS)
+      },
+      symbol: CryptoCurrencyCode.AMB,
+      decimals: AMB_DECIMALS,
+      tokenNameFromDatabase: 'AirDAO'
     },
     TokenUtils
   );
@@ -87,15 +119,30 @@ export const SendFunds = () => {
       (token) => token.address === tokenFromNavigationParams?.address
     ) || defaultAMBToken
   );
-  const currencyRate = useCurrencyRate(selectedToken.symbol);
+  const currencyRate = useCurrencyRate(
+    selectedToken.symbol as CryptoCurrencyCode
+  );
   const isPositiveRate = currencyRate > 0;
+  const getTokenBalance = () => {
+    const currentTokenBalance = tokens.find(
+      (token) => token.address === selectedToken.address
+    )?.balance.formattedBalance;
+    return currentTokenBalance
+      ? +NumberUtils.limitDecimalCount(currentTokenBalance, 3)
+      : 0;
+  };
   const balanceInCrypto =
     selectedToken.name === defaultAMBToken.name
-      ? defaultAMBToken.balance.ether
-      : tokens.find((token) => token.address === selectedToken.address)?.balance
-          .ether || 0;
+      ? +NumberUtils.limitDecimalCount(
+          defaultAMBToken.balance.formattedBalance,
+          3
+        )
+      : getTokenBalance();
   // convert crypto balance to usd
-  const balanceInUSD = useUSDPrice(balanceInCrypto, selectedToken.symbol);
+  const balanceInUSD = useUSDPrice(
+    balanceInCrypto,
+    selectedToken.symbol as CryptoCurrencyCode
+  );
 
   const [amountInCrypto, setAmountInCrypto] = useState('');
   const [amountInUSD, setAmountInUSD] = useState('');
@@ -123,7 +170,7 @@ export const SendFunds = () => {
     updateSendContext({
       type: 'SET_DATA',
       estimatedFee,
-      currency: selectedToken.symbol,
+      currency: selectedToken.symbol as CryptoCurrencyCode,
       amount: parseFloat(amountInCrypto)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -181,7 +228,11 @@ export const SendFunds = () => {
   };
 
   const showReviewModal = () => {
-    confirmModalRef.current?.show();
+    Keyboard.dismiss();
+
+    return setTimeout(() => {
+      confirmModalRef.current?.show();
+    }, 525);
   };
 
   const hideReviewModal = () => {
@@ -194,11 +245,11 @@ export const SendFunds = () => {
     updateSendContext({ type: 'SET_DATA', loading: true, transactionId: txId });
     setTimeout(async () => {
       try {
-        navigation.replace('SendFundsStatus');
         AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
           from: senderAddress,
           to: destinationAddress
         });
+        navigation.replace('SendFundsStatus');
         await TransactionUtils.sendTx(
           walletHash,
           senderAddress,
@@ -206,15 +257,19 @@ export const SendFunds = () => {
           Number(amountInCrypto),
           selectedToken
         );
+
         if (transactionIdRef.current === txId) {
           updateSendContext({ type: 'SET_DATA', loading: false });
         }
       } catch (error: unknown) {
+        console.error(error);
+        await Clipboard.setStringAsync(JSON.stringify(error));
+
         if (transactionIdRef.current === txId) {
           updateSendContext({
             type: 'SET_DATA',
             loading: false,
-            error: error as any
+            error: error as unknown as never
           });
         }
       }
@@ -233,8 +288,21 @@ export const SendFunds = () => {
   })();
 
   const reviewButtonDisabled =
-    Number(amountInCrypto) == 0 ||
+    Number(amountInCrypto) === 0 ||
     !destinationAddress.match(etherumAddressRegex);
+
+  const onToggleAmountInputState = useCallback(
+    () => setAmountInputFocused((p) => !p),
+    []
+  );
+
+  const onAmountInputPress = useCallback(() => {
+    Keyboard.dismiss();
+
+    InteractionManager.runAfterInteractions(() => {
+      setTimeout(() => amountInputRef.current?.focus(), 200);
+    });
+  }, []);
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1 }}>
@@ -263,9 +331,8 @@ export const SendFunds = () => {
         style={{ shadowColor: COLORS.neutral0 }}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardAvoidingContainer}
         behavior="padding"
-        enabled={Platform.OS === 'ios'}
       >
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
@@ -305,19 +372,31 @@ export const SendFunds = () => {
                 </Button>
               </Row>
               <Spacer value={verticalScale(32)} />
-              <Input
-                type="number"
-                value={
-                  showUsdAmountOnlyPositiveRate ? amountInUSD : amountInCrypto
-                }
-                onChangeValue={onChangeAmountValue}
-                style={styles.input}
-                maxLength={9}
-                keyboardType="decimal-pad"
-                placeholder="0"
-                placeholderTextColor={COLORS.neutral300}
-                multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
-              />
+              <View>
+                <Input
+                  ref={amountInputRef}
+                  onFocus={onToggleAmountInputState}
+                  onBlur={onToggleAmountInputState}
+                  type="number"
+                  value={
+                    showUsdAmountOnlyPositiveRate ? amountInUSD : amountInCrypto
+                  }
+                  onChangeValue={onChangeAmountValue}
+                  style={styles.input}
+                  maxLength={9}
+                  keyboardType="decimal-pad"
+                  placeholder="0"
+                  placeholderTextColor={COLORS.neutral300}
+                  multiline={DeviceUtils.isAndroid} // without it cursor moves to end when input is deleted, Android only
+                />
+                {!amountInputFocused && isAndroid && (
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={onAmountInputPress}
+                    style={styles.inputButton}
+                  />
+                )}
+              </View>
               <Spacer value={verticalScale(16)} />
               {isPositiveRate && (
                 <Button onPress={toggleShowInUSD}>

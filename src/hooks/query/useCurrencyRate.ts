@@ -6,7 +6,7 @@ import { TOKEN_ADDRESSES } from '@constants/variables';
 import { useAirbondPrice } from './useAirbondPrice';
 
 export const useCurrencyRate = (
-  symbol: CryptoCurrencyCode = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
 ): number => {
   const { data: stakingPools } = useAmbrosusStakingPools();
   const { data: ambPrice } = useAMBPrice();
@@ -22,7 +22,6 @@ export const useCurrencyRate = (
         break;
       }
       case CryptoCurrencyCode.USDC:
-      case CryptoCurrencyCode.ETH:
       case CryptoCurrencyCode.Tether:
       case CryptoCurrencyCode.BUSD: {
         _currencyRate = 1;

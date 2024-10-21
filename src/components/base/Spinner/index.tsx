@@ -5,12 +5,14 @@ import { ViewStyle } from 'react-native';
 
 export interface SpinnerProps {
   containerStyle?: ViewStyle;
-  size?: 'large' | 'small';
+  size?: 'large' | 'small' | 'xs';
+  customSize?: number;
 }
 
 export function Spinner(props: SpinnerProps): JSX.Element {
-  const { size = 'small' } = props;
-  const _size = size === 'small' ? 24 : 48;
+  const { size = 'small', customSize } = props;
+
+  const _size = customSize || (size === 'small' ? 24 : size === 'xs' ? 20 : 48);
   return (
     <LottieView
       autoPlay

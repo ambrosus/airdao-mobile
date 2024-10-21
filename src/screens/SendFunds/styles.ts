@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
   loading: {
     alignSelf: 'center'
   },
+  keyboardAvoidingContainer: {
+    flex: 1
+  },
   input: {
     textAlign: 'center',
     fontFamily: 'Mersad_600SemiBold',
@@ -29,5 +32,12 @@ export const styles = StyleSheet.create({
   addressError: {
     marginTop: verticalScale(2),
     marginLeft: scale(4)
+  },
+  inputButton: {
+    width: '100%',
+    height: 60,
+    position: 'absolute',
+    top: 15,
+    zIndex: 100
   }
 });

@@ -42,6 +42,8 @@ export const AssetScreen = () => {
     !!walletAccount && walletAccount === tokenInfo.address
   );
 
+  const { limitDecimalCount, formatNumber } = NumberUtils;
+
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -65,39 +67,39 @@ export const AssetScreen = () => {
 
   const headerTitle =
     tokenInfo.name === ''
-      ? 'Hera pool token'
+      ? tokenInfo.name
       : tokenInfo.name === 'AirDAO'
       ? 'AirDAO'
       : tokenInfo.symbol || tokenInfo.address;
+
+  const tokenBalance = formatNumber(
+    +limitDecimalCount(tokenInfo.balance.formattedBalance, 2)
+  );
 
   return (
     <View style={{ top, flex: 1 }}>
       <Header
         bottomBorder
         title={
-          <>
-            <Row alignItems="center">
-              <View style={{ transform: [{ scale: 0.75 }] }}>
-                <TokenLogo token={tokenInfo.name} />
-              </View>
-              <Spacer horizontal value={scale(4)} />
-              <Text
-                fontFamily="Inter_600SemiBold"
-                fontSize={15}
-                color={COLORS.neutral800}
-              >
-                {headerTitle}
-              </Text>
-            </Row>
-          </>
+          <Row alignItems="center">
+            <View>
+              <TokenLogo scale={0.7} token={tokenInfo.name} />
+            </View>
+            <Spacer horizontal value={scale(4)} />
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={15}
+              color={COLORS.neutral800}
+            >
+              {headerTitle}
+            </Text>
+          </Row>
         }
         contentRight={
           tokenInfo.name === 'AirDAO' && (
-            <>
-              <Button onPress={navigateToAMBScreen}>
-                <StatisticsLogo />
-              </Button>
-            </>
+            <Button onPress={navigateToAMBScreen}>
+              <StatisticsLogo />
+            </Button>
           )
         }
         style={{ shadowColor: 'transparent' }}
@@ -118,8 +120,7 @@ export const AssetScreen = () => {
             fontSize={24}
             color={COLORS.neutral900}
           >
-            {NumberUtils.formatNumber(tokenInfo.balance.ether)}{' '}
-            {tokenInfo.symbol}
+            {tokenBalance} {tokenInfo.symbol}
           </Text>
           <Spacer horizontal value={scale(8)} />
         </Row>

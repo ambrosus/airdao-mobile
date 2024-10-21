@@ -32,35 +32,28 @@ export const SendFundsStatus = () => {
 
   useEffect(() => {
     setErrorMessage('');
-    if (error && error.message) {
+    if (error) {
       let message = '';
-      switch (error?.message) {
-        case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE': {
-          message = t('send.funds.error.insufficient.balance');
-          break;
+      if (error.message) {
+        switch (error.message) {
+          case 'SERVER_RESPONSE_NOT_ENOUGH_AMOUNT_FOR_ANY_FEE':
+          case 'INSUFFICIENT_FUNDS':
+            message = t('send.funds.error.insufficient.balance');
+            break;
+          case 'SERVER_RESPONSE_NOT_CONNECTED':
+            message = t('send.funds.error.network');
+            break;
+          case 'PRIVATE_KEY_NOT_FOUND':
+            message = t('send.funds.error.private.key.not.found');
+            break;
+          default:
+            message = t('send.funds.error.check.connection');
+            break;
         }
-        case 'INSUFFICIENT_FUNDS': {
-          message = t('send.funds.error.insufficient.balance');
-          break;
-        }
-        case 'SERVER_RESPONSE_NOT_CONNECTED': {
-          message = t('send.funds.error.network');
-          break;
-        }
-        case 'PRIVATE_KEY_NOT_FOUND': {
-          message = t('send.funds.error.private.key.not.found');
-          break;
-        }
-        default:
-          message = t('send.funds.error.check.connection');
-          break;
+      } else {
+        message = `${t('send.funds.failed')}. ${t('send.funds.error.later')}`;
       }
-
       setErrorMessage(message);
-    } else if (error && !error.message) {
-      setErrorMessage(
-        `${t('send.funds.failed')}. ${t('send.funds.error.later')}`
-      );
     }
   }, [error, t]);
 
@@ -91,6 +84,7 @@ export const SendFundsStatus = () => {
     navigation.popToTop();
     reducer({ type: 'RESET_DATA' });
   };
+
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (

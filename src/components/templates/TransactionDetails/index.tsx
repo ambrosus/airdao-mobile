@@ -1,13 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { Transaction } from '@models/Transaction';
+import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
@@ -19,6 +19,7 @@ interface TransactionDetailsProps {
   isShareable?: boolean;
   onPressAddress?: (address: string) => void;
   onViewOnExplorerPress?: () => void;
+  transactionTokenInfo: TransactionTokenInfo;
 }
 
 const ROW_MARGIN: number = verticalScale(24);
@@ -32,13 +33,65 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
 export const TransactionDetails = (
   props: TransactionDetailsProps
 ): JSX.Element => {
-  const { transaction, onPressAddress, onViewOnExplorerPress } = props;
+  const {
+    transaction,
+    onPressAddress,
+    onViewOnExplorerPress,
+    transactionTokenInfo
+  } = props;
+  const isTransfer = transaction.type === 'Transfer';
+  const isContractCall = transaction.type.includes('ContractCall');
+  const isTokenTransfer = transaction.type === 'TokenTransfer';
+
+  const amountTokenLogo = useMemo(() => {
+    switch (true) {
+      case isTransfer:
+        return 'AirDAO';
+      case isTokenTransfer:
+        return transaction?.token?.name;
+      case isContractCall:
+        return transaction?.value?.symbol;
+      default:
+        return 'unknown';
+    }
+  }, [
+    isContractCall,
+    isTokenTransfer,
+    isTransfer,
+    transaction?.token?.name,
+    transaction?.value?.symbol
+  ]);
+
   const shareTransactionModal = useRef<BottomSheetRef>(null);
   const { data: ambData } = useAMBPrice();
   const { t } = useTranslation();
+  const isSuccessTransaction = transaction.status === 'SUCCESS';
+
+  const currentStatus = t(`common.transaction.status.${transaction.status}`);
+
+  // status to render
+  const transactionStatus = useMemo(() => {
+    switch (transaction.status) {
+      case 'FAIL':
+      case 'SUCCESS':
+        return currentStatus;
+      default:
+        return transaction.status;
+    }
+  }, [currentStatus, transaction.status]);
+
+  const transactionStatusStyle = useMemo(() => {
+    const fieldName = isSuccessTransaction ? 'success' : 'error';
+
+    return {
+      pointBackgroundColor: COLORS[`${fieldName}600`],
+      backgroundColor: COLORS[`${fieldName}100`],
+      textColor: COLORS[`${fieldName}500`]
+    };
+  }, [isSuccessTransaction]);
+
   const ambPrice = ambData ? ambData.priceUSD : -1;
   let totalTransactionAmount;
-
   if (ambData) {
     const result = transaction.amount * ambPrice;
     totalTransactionAmount =
@@ -96,22 +149,26 @@ export const TransactionDetails = (
         >
           {t('common.status')}
         </Text>
-        <Row alignItems="center" style={styles.status}>
+        <Row
+          alignItems="center"
+          style={{
+            ...styles.status,
+            backgroundColor: transactionStatusStyle.backgroundColor
+          }}
+        >
           <View
             style={{
-              height: moderateScale(8),
-              width: moderateScale(8),
-              borderRadius: moderateScale(4),
-              backgroundColor: COLORS.success600
+              ...styles.statusPoint,
+              backgroundColor: transactionStatusStyle.pointBackgroundColor
             }}
           />
           <Spacer horizontal value={scale(4)} />
           <Text
             fontSize={14}
             fontFamily="Inter_500Medium"
-            color={COLORS.success500}
+            color={transactionStatusStyle.textColor}
           >
-            {t(`common.transaction.status.${transaction.status}`)}
+            {transactionStatus}
           </Text>
         </Row>
       </JustifiedRow>
@@ -183,14 +240,17 @@ export const TransactionDetails = (
           {t('common.transaction.amount')}
         </Text>
         <Row alignItems="center">
-          <TokenLogo token={transaction.symbol} scale={0.5} />
+          <TokenLogo token={amountTokenLogo} scale={0.5} />
           <Spacer value={scale(4)} horizontal />
           <Text
             fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.neutral800}
           >
-            {NumberUtils.limitDecimalCount(transaction.amount, 2)}{' '}
+            {NumberUtils.limitDecimalCount(
+              transactionTokenInfo.cryptoAmount,
+              2
+            )}{' '}
             {transaction.symbol}
             <Text
               fontFamily="Inter_500Medium"

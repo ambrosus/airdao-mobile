@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  View,
+  FlatList,
+  ListRenderItemInfo,
+  StyleProp,
+  ViewStyle
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Spinner, Text } from '@components/base';
@@ -38,46 +44,48 @@ export const CreateWalletStep1 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mnemonicLength]);
 
-  const renderWord = (word: string, index: number) => {
-    const isNeedSideBorderRadius = !!((index + 1) % 2);
-    const borderRadius = isNeedSideBorderRadius
-      ? {
-          borderBottomLeftRadius: 10,
-          borderTopLeftRadius: 10
-        }
-      : {
-          borderBottomRightRadius: 10,
-          borderTopRightRadius: 10
+  const borderRadiusByIndex = useCallback(
+    (index: number): StyleProp<ViewStyle> => {
+      if (index % 2 !== 0) {
+        return {
+          borderTopRightRadius: 8,
+          borderBottomRightRadius: 8,
+          borderLeftWidth: 0.5,
+          borderLeftColor: COLORS.neutral200
         };
-    return (
-      <View
-        style={{
-          borderLeftWidth: isNeedSideBorderRadius ? 0 : 1,
-          borderLeftColor: COLORS.neutral200,
-          ...styles.mnemonic,
-          ...borderRadius
-        }}
-        key={index}
-      >
-        <Text
-          color={COLORS.neutral400}
-          fontSize={14}
-          fontFamily="Inter_600SemiBold"
-        >
-          {index + 1}
-        </Text>
-        <Spacer value={scale(8)} horizontal />
-        <Text
-          align="center"
-          fontFamily="Inter_600SemiBold"
-          fontSize={14}
-          color={COLORS.neutral900}
-        >
-          {word}
-        </Text>
-      </View>
-    );
-  };
+      }
+
+      return {
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8
+      };
+    },
+    []
+  );
+
+  const renderMnemonicWordListItem = useCallback(
+    (args: ListRenderItemInfo<string>) => {
+      return (
+        <View style={[styles.mnemonic, borderRadiusByIndex(args.index)]}>
+          <Text
+            fontSize={14}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral400}
+          >
+            {args.index + 1}
+          </Text>
+          <Text
+            fontSize={14}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
+          >
+            {args.item}
+          </Text>
+        </View>
+      );
+    },
+    [borderRadiusByIndex]
+  );
 
   const onNextPress = () => {
     navigation.navigate('CreateWalletStep2');
@@ -115,7 +123,7 @@ export const CreateWalletStep1 = () => {
           <Spinner size="large" />
         </View>
       )}
-      <Spacer value={verticalScale(40)} />
+      <Spacer value={verticalScale(24)} />
       <View style={styles.innerContainer}>
         <FlatList
           data={walletMnemonicArray}
@@ -123,8 +131,8 @@ export const CreateWalletStep1 = () => {
           showsVerticalScrollIndicator={false}
           numColumns={columnNumber}
           keyExtractor={(word, idx) => `${word}-${idx}`}
-          renderItem={(args) => renderWord(args.item, args.index)}
-          ItemSeparatorComponent={() => <Spacer value={verticalScale(24)} />}
+          renderItem={renderMnemonicWordListItem}
+          contentContainerStyle={styles.contentContainerStyle}
         />
         <View>
           <AlertBanner

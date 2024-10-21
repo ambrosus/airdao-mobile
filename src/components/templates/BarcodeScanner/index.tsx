@@ -9,7 +9,6 @@ import { PermissionService } from '@lib';
 import { Permission } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
-import usePasscode from '@contexts/Passcode';
 
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;
@@ -22,7 +21,6 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   const { width, height } = useWindowDimensions();
   const [hasPermission, setHasPermission] = useState(false);
   const camera = useRef<Camera>(null);
-  const { toggleIsRequestingPermission } = usePasscode();
 
   // Screen Ratio and image padding
   const [imagePadding, setImagePadding] = useState(0);
@@ -37,7 +35,6 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
     });
 
     setHasPermission(granted);
-    toggleIsRequestingPermission(false);
   };
 
   useEffect(() => {
