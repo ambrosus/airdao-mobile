@@ -9,8 +9,10 @@ import { RootNavigationProp } from '@appTypes';
 import { useAllWallets } from '@hooks/database';
 import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
+import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 
 const AppInitialization = () => {
+  useInitializeWalletKit();
   const { t } = useTranslation();
   const { data: allWallets, loading } = useAllWallets();
   const {
