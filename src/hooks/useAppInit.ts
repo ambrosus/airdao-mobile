@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NotificationService, PermissionService } from '@lib';
-import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import {
   CacheableAccount,
   CacheableAccountList,
@@ -20,7 +19,6 @@ import {
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
-  useInitializeWalletKit();
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {
