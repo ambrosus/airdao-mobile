@@ -17,7 +17,7 @@ export class Token {
   decimals: number;
   symbol!: CryptoCurrencyCode | string;
 
-  private deriveNameAndSymbolFromDto(dto: TokenDTO, tokenUtils: any) {
+  private async deriveNameAndSymbolFromDto(dto: TokenDTO, tokenUtils: any) {
     if (dto.name && dto.symbol) {
       this.name = dto.name;
       this.balance = {
@@ -29,7 +29,7 @@ export class Token {
       this.symbol = dto.symbol;
       this.decimals = dto.decimals;
     } else {
-      const tokenDetails = tokenUtils.getTokenDetails(dto.address);
+      const tokenDetails = await tokenUtils.getTokenDetails(dto.address);
       // @ts-ignore
       const { name, symbol } = tokenDetails;
 

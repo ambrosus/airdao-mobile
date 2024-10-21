@@ -47,6 +47,7 @@
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.1.1",
     "@tradle/react-native-http": "^2.0.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.1",
     "@types/lodash": "^4.14.196",
     "@waves/ts-lib-crypto": "^1.4.4-beta.1",

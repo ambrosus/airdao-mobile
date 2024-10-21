@@ -37,6 +37,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     address,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
+
   const tokenName = useMemo(() => {
     if (address) {
       return getTokenNameFromDatabase(address);
@@ -46,6 +47,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
   }, [address, token]);
 
   switch (tokenName?.toLowerCase()) {
+
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case CryptoCurrencyCode.STAMB.toLowerCase():
