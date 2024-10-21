@@ -107,7 +107,7 @@ const updatePushToken = async (
 ): Promise<void> => {
   try {
     const hashDigest = await UID();
-    
+
     await axios.put(`${updatePushTokenAPI}/push-token`, {
       addresses: [],
       old_push_token: oldToken,

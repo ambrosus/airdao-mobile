@@ -7,14 +7,14 @@ import React, {
 } from 'react';
 import {
   FlatList,
+  InteractionManager,
+  Keyboard,
   ListRenderItemInfo,
   RefreshControl,
   StyleProp,
-  ViewStyle,
-  View,
   TouchableWithoutFeedback,
-  Keyboard,
-  InteractionManager
+  View,
+  ViewStyle
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, {
@@ -56,6 +56,8 @@ import { SearchSort } from './Search.types';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useAllAddressesContext } from '@contexts';
 import { useWatchlist } from '@hooks';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const SearchScreen = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
@@ -114,6 +116,7 @@ export const SearchScreen = () => {
     (args: ListRenderItemInfo<ExplorerAccount>) => {
       const { item } = args;
       const navigateToWallet = () => {
+        sendFirebaseEvent(CustomAppEvents.explorer_address_open);
         navigation.navigate('Address', { address: item.address });
       };
 

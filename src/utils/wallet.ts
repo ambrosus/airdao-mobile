@@ -15,6 +15,8 @@ import { Cache, CacheKey } from '../lib/cache';
 import { AccountUtils } from './account';
 import { CryptoUtils } from './crypto';
 import { API } from '@api/api';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'name' | 'number'> & {
@@ -93,6 +95,8 @@ const processWallet = async (mnemonic: string) => {
       )
     ]);
     accountInDb = accountInDbResult;
+    sendFirebaseEvent(CustomAppEvents.main_add_wallet);
+
     // subscribe to notifications
     API.watcherService.watchAddresses([_account.address]);
     return { hash };
@@ -162,6 +166,7 @@ export const importWalletViaPrivateKey = async (
         currencyCode
       )
     ]);
+    sendFirebaseEvent(CustomAppEvents.main_add_wallet);
 
     accountInDb = accountInDbResult;
 

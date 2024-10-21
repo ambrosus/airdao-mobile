@@ -21,6 +21,8 @@ import { ReturnedPoolDetails } from '@api/staking/types';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
 import { PercentageBox } from '@components/composite/PercentageBox';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -94,10 +96,14 @@ export const StakeToken = ({
       });
 
       if (!result) {
+        sendFirebaseEvent(CustomAppEvents.stake_error, {
+          stakeError: 'stake result not found'
+        });
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeErrorScreen')
         );
       } else {
+        sendFirebaseEvent(CustomAppEvents.stake_finish);
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'stake',

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Alert, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -16,6 +16,8 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -28,6 +30,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const { t } = useTranslation();
 
   const openScanner = useCallback(() => {
+    sendFirebaseEvent(CustomAppEvents.main_scan);
     scanner.current?.show();
   }, [scanner]);
 

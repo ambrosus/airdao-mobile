@@ -4,7 +4,6 @@ import { BRIDGE_DATA } from '@constants/bridgeData';
 import { ALL_TOKENS_DATA } from '@constants/allToken';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
-
 const envs = {
   prod: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
@@ -42,7 +41,6 @@ const envs = {
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     CHAIN_ID: 16718
-
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -80,7 +78,6 @@ const envs = {
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     CHAIN_ID: 16718
-
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -118,7 +115,6 @@ const envs = {
     FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
     CHAIN_ID: 22040
-
   }
 };
 
@@ -137,7 +133,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
 }

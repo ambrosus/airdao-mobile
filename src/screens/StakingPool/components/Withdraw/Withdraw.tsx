@@ -21,6 +21,8 @@ import { ReturnedPoolDetails } from '@api/staking/types';
 import { staking } from '@api/staking/staking-service';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -94,10 +96,14 @@ export const WithdrawToken = ({
       });
 
       if (!result) {
+        sendFirebaseEvent(CustomAppEvents.withdraw_error, {
+          withdrawError: 'withdraw result not found'
+        });
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeErrorScreen')
         );
       } else {
+        sendFirebaseEvent(CustomAppEvents.withdraw_finish);
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',

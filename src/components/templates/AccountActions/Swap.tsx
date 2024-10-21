@@ -5,12 +5,15 @@ import { HomeNavigationProp } from '@appTypes';
 import { SwapIcon } from '@components/svg/icons';
 import Config from '@constants/config';
 import { AccountActionButton } from './ActionButton';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const Swap = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
 
   const navigateToSwap = () => {
+    sendFirebaseEvent(CustomAppEvents.main_swap);
     navigation.navigate('SwapScreen');
   };
 
