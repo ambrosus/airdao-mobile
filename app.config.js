@@ -112,8 +112,7 @@ module.exports = {
     extra: {
       eas: {
         projectId: 'fe81238e-85e8-4ace-8b87-65ff01c085b7',
-        EXPO_PUBLIC_REOWN_PROJECT_ID: process.env.EXPO_PUBLIC_REOWN_PROJECT_ID,
-        EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN
+        EXPO_PUBLIC_REOWN_PROJECT_ID: process.env.EXPO_PUBLIC_REOWN_PROJECT_ID
       }
     },
     runtimeVersion: {
