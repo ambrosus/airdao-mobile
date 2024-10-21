@@ -25,7 +25,6 @@ import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificat
 
 import { walletKit } from '@features/wallet-connect/utils';
 import {
-  useInitializeWalletKit,
   useWalletConnectContextSelector,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
@@ -33,8 +32,6 @@ import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 
 export const HomeHeader = React.memo((): JSX.Element => {
-  useInitializeWalletKit();
-
   const navigation = useNavigation<HomeNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
   const scanner = useRef<BottomSheetRef>(null);
