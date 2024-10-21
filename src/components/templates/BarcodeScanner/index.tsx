@@ -163,7 +163,9 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
           <View>
             <Button
               onPress={() =>
-                onScanned('0x9FAec9D8CBd3f131b662e3DC586eb0e9B1663b40')
+                onScanned(
+                  'wc:bc337fdb29ce724fd589feffa52842f1fcb9a3eb9f0c0f28dc335c733170057c@2?expiryTimestamp=1729495139&relay-protocol=irn&symKey=45c95a65e8919cbce0256d025ccaa69322f5015e1f6d288401d1f2dee7818b9c'
+                )
               }
             >
               <Text color={COLORS.success400}>Submit successfull address</Text>
