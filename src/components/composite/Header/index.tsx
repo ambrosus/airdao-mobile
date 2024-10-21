@@ -13,6 +13,7 @@ export function Header(props: HeaderProps): JSX.Element {
     backIconVisible = true,
     contentLeft,
     contentRight,
+    contentCenter,
     title,
     closeIconVisible = false,
     titlePosition = 'center',
@@ -72,7 +73,9 @@ export function Header(props: HeaderProps): JSX.Element {
   };
 
   const renderContentCenter = () => {
-    return titlePosition === 'center' && renderTitle();
+    return contentCenter
+      ? contentCenter
+      : titlePosition === 'center' && renderTitle();
   };
 
   const renderContentRight = () => {
