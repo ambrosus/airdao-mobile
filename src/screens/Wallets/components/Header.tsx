@@ -57,30 +57,26 @@ export const HomeHeader = React.memo((): JSX.Element => {
   }, []);
 
   const onHandleWalletConnectAuthorization = useCallback(
-    (uri: string): void => {
-      if (!walletKit) return closeScanner();
+    async (uri: string): Promise<void> => {
+      if (!walletKit) {
+        closeScanner();
+        return;
+      }
 
       try {
-        new Promise<void>((resolve) => {
-          InteractionManager.runAfterInteractions(async () => {
-            try {
-              await walletKit.pair({ uri });
-              resolve();
-            } catch (error) {
-              closeScanner();
-              setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
+        await InteractionManager.runAfterInteractions(async () => {
+          try {
+            await walletKit.pair({ uri });
+          } catch (error) {
+            closeScanner();
+            setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
 
-              new Promise<void>((resolve) => {
-                setTimeout(() => {
-                  resolve();
-                }, 1000);
-              });
+            await new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
-              InteractionManager.runAfterInteractions(
-                onShowWalletConnectBottomSheet
-              );
-            }
-          });
+            InteractionManager.runAfterInteractions(
+              onShowWalletConnectBottomSheet
+            );
+          }
         });
       } catch (error) {
         console.error('Error during wallet connection:', error);

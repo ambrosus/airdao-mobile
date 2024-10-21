@@ -23,6 +23,7 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
 
   const onSessionProposal = useCallback(
     (proposal: SessionProposalEvent) => {
+      AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
       const {
         params: { requiredNamespaces, optionalNamespaces }
       } = proposal;
@@ -37,27 +38,13 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR);
         onChangeProposal(proposal);
 
-        AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
-
-        new Promise<void>((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, 1000);
-        });
-
+        new Promise<void>((resolve) => setTimeout(resolve, 1000));
         InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       } else {
         setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
         onChangeProposal(proposal);
 
-        AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
-
-        new Promise<void>((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, 1000);
-        });
-
+        new Promise<void>((resolve) => setTimeout(resolve, 1000));
         InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       }
     },
