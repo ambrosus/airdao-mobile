@@ -460,5 +460,23 @@
   "kosmos.chart.explanation.market": "Piyasa fiyatı",
 
   "kosmos.market.tabs.buy.bond": "Tahvil satın al",
-  "kosmos.market.tabs.history": "Geçmiş"
+  "kosmos.market.tabs.history": "Geçmiş",
+
+  "wallet.connect": {
+    "proposal": "{{origin}} adresine bağlanınf",
+    "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",
+    "button.connect": "Bağlan",
+    "button.cancel": "İptal et",
+    "button.approve": "Anladım",
+    "button.disconnect": "Bağlantıyı kes",
+    "pending.status": "Bağlanıyor",
+    "title.success": "Cüzdan bağlandı!",
+    "description.success": "ce {{network}}'ya bağlandınız",
+    "title.error": "Bağlantı Başarısız",
+    "description.error.with.path": "{{origin}} bağlanamadık. Daha sonra tekrar deneyin.",
+    "description.error": "Bağlanamadık. Daha sonra tekrar deneyin.",
+    "title.connections": "Bağlantıları Yönet",
+    "label.connections": "{{connectionsLength}} Site Bağlı",
+    "scanner": "Bağlanmak için Tara"
+  }
 }

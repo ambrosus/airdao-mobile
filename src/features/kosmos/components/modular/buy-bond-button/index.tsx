@@ -17,6 +17,8 @@ import {
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import Config from '@constants/config';
 import { HomeNavigationProp } from '@appTypes';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface BuyBondButtonProps {
   market: MarketType;
@@ -71,6 +73,7 @@ export const BuyBondButton = ({
         .wait()
         .then((tx: any) => {
           if (tx) {
+            sendFirebaseEvent(CustomAppEvents.kosmos_market_buy);
             onDismissBottomSheet();
             setTimeout(() => {
               setIsTransactionProcessing(false);

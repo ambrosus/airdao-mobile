@@ -7,6 +7,15 @@ module.exports = function (api) {
       ['@babel/plugin-proposal-decorators', { legacy: true }],
       ['@babel/plugin-proposal-class-properties', { loose: true }],
       [
+        'module:react-native-dotenv',
+        {
+          envName: 'APP_ENV',
+          moduleName: '@env',
+          path: '.env',
+          safe: true
+        }
+      ],
+      [
         'module-resolver',
         {
           alias: {

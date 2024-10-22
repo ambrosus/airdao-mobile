@@ -6,13 +6,15 @@ import {
   useSwapBottomSheetHandler
 } from '@features/swap/lib/hooks';
 import {
-  SwapErrorImpactButton,
   ApprovalRequiredButton,
-  SwapButton
+  SwapButton,
+  SwapErrorImpactButton
 } from '@features/swap/components/base/swap-buttons-list';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { AllowanceStatus } from '@features/swap/types';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const SWAP_ERROR_TITLE = 'The transaction cannot succeed due to error:';
 const SWAP_ERROR_DESCRIPTION =
@@ -79,7 +81,12 @@ export const SubmitSwapActions = () => {
           await simulateNavigationDelay(() =>
             navigation.navigate('SwapErrorScreen', routeParams)
           );
+          sendFirebaseEvent(CustomAppEvents.swap_error, {
+            // @ts-ignore
+            swapError: 'swapTokens-tx not found'
+          });
         } else {
+          sendFirebaseEvent(CustomAppEvents.swap_finish);
           await simulateNavigationDelay(() =>
             navigation.navigate('SwapSuccessScreen', {
               ...routeParams,
@@ -88,6 +95,10 @@ export const SubmitSwapActions = () => {
           );
         }
       } catch (error) {
+        sendFirebaseEvent(CustomAppEvents.swap_error, {
+          // @ts-ignore
+          swapError: JSON.stringify(error?.message ?? JSON.stringify(error))
+        });
         Alert.alert(SWAP_ERROR_TITLE, SWAP_ERROR_DESCRIPTION);
         await simulateNavigationDelay(() =>
           navigation.navigate('SwapErrorScreen', routeParams)

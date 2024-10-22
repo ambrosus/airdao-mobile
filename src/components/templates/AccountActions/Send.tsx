@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { useSendCryptoContext } from '@contexts';
 import { Token } from '@models';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface SendProps {
   address: string;
@@ -26,6 +28,7 @@ export const Send = (props: SendProps) => {
       to: ''
     });
     setTimeout(() => {
+      sendFirebaseEvent(CustomAppEvents.main_send);
       navigation.navigate('SendFunds', { token: props.token });
     }, 0);
   };

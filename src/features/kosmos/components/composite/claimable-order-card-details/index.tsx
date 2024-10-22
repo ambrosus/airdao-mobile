@@ -20,6 +20,8 @@ import { getTimeRemaining } from '@features/kosmos/utils';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
@@ -92,6 +94,7 @@ export const ClaimableOrderCardDetails = ({
 
       if (tx) {
         onAppendClaimedOrderId(transaction.txHash);
+        sendFirebaseEvent(CustomAppEvents.kosmos_claim);
         Toast.show({
           text: t('kosmos.success.toast', {
             amount: Number(payout).toFixed(4)

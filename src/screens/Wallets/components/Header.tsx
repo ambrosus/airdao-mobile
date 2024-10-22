@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Alert, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {
+  Alert,
+  InteractionManager,
+  StyleSheet,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
@@ -16,6 +22,15 @@ import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
+import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
+import {
+  useHandleBottomSheetActions,
+  useWalletConnectContextSelector
+} from '@features/wallet-connect/lib/hooks';
+import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
+import { walletKit } from '@features/wallet-connect/utils';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -27,13 +42,48 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const newNotificationsCount = useNewNotificationsCount();
   const { t } = useTranslation();
 
+  const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
+  const { setWalletConnectStep, activeSessions } =
+    useWalletConnectContextSelector();
+
   const openScanner = useCallback(() => {
+    sendFirebaseEvent(CustomAppEvents.main_scan);
     scanner.current?.show();
   }, [scanner]);
 
-  const closeScanner = () => {
+  const closeScanner = useCallback(() => {
     scanner.current?.dismiss();
-  };
+  }, []);
+
+  const onHandleWalletConnectAuthorization = useCallback(
+    async (uri: string): Promise<void> => {
+      if (!walletKit) {
+        closeScanner();
+        return;
+      }
+
+      try {
+        await InteractionManager.runAfterInteractions(async () => {
+          try {
+            await walletKit.pair({ uri });
+          } catch (error) {
+            closeScanner();
+            setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
+
+            await new Promise<void>((resolve) => setTimeout(resolve, 1000));
+
+            InteractionManager.runAfterInteractions(
+              onShowWalletConnectBottomSheet
+            );
+          }
+        });
+      } catch (error) {
+        console.error('Error during wallet connection:', error);
+        closeScanner();
+      }
+    },
+    [closeScanner, onShowWalletConnectBottomSheet, setWalletConnectStep]
+  );
 
   const onQRCodeScanned = useCallback(
     (data: string) => {
@@ -44,6 +94,8 @@ export const HomeHeader = React.memo((): JSX.Element => {
           screen: 'SearchScreen',
           params: { address: res[0] }
         });
+      } else if (data.startsWith('wc:')) {
+        onHandleWalletConnectAuthorization(data);
       } else if (!scanned.current) {
         scanned.current = true;
         Alert.alert(t('alert.invalid.qr.code.msg'), '', [
@@ -56,7 +108,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
         ]);
       }
     },
-    [navigation, t]
+    [closeScanner, navigation, onHandleWalletConnectAuthorization, t]
   );
 
   const setLastNotificationTime = useCallback(() => {
@@ -98,6 +150,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
     );
   }, [
     WINDOW_HEIGHT,
+    closeScanner,
     navigateToNotifications,
     newNotificationsCount,
     onQRCodeScanned,
@@ -127,6 +180,10 @@ export const HomeHeader = React.memo((): JSX.Element => {
     return { ...styles.container };
   }, []);
 
+  const renderContentCenter = useMemo(() => {
+    return activeSessions.length > 0 && <WalletSessionsLabel />;
+  }, [activeSessions]);
+
   return (
     <Header
       bottomBorder
@@ -134,6 +191,7 @@ export const HomeHeader = React.memo((): JSX.Element => {
       style={headerStyles}
       contentRight={renderContentRight}
       contentLeft={renderContentLeft}
+      contentCenter={renderContentCenter}
     />
   );
 });

@@ -21,6 +21,8 @@ import { API } from '@api/api';
 import { BridgeTransactionDTO } from '@models/dtos/Bridge';
 import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';
 import Config from '@constants/config';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface UseBridgeNetworksDataModel {
   choseTokenRef?: RefObject<BottomSheetRef>;
@@ -220,8 +222,14 @@ export const useBridgeNetworksData = ({
     const insufficientWalletFunds = inputAmount.gt(
       selectedToken.renderTokenItem.balance
     );
-    // @ts-ignore
-    const errorMessage = `${error?.message}`;
+    const errorMessage = error?.message
+      ? // @ts-ignore
+        `${error?.message}`
+      : JSON.stringify(error);
+    sendFirebaseEvent(CustomAppEvents.bridge_error, {
+      bridgeError: errorMessage
+    });
+
     const amountLessThenFee =
       errorMessage.includes('error when getting fees: amount is too small') ||
       errorMessage.includes('amount to small');
@@ -360,6 +368,7 @@ export const useBridgeNetworksData = ({
   const onWithdrawApprove = async () => {
     // @ts-ignore
     setBridgeTransaction(DEFAULT_BRIDGE_TRANSACTION);
+    sendFirebaseEvent(CustomAppEvents.bridge_start);
     transactionInfoRef?.current?.show();
     try {
       const res = await withdraw();
@@ -386,9 +395,11 @@ export const useBridgeNetworksData = ({
           setBridgeTransaction(parseBridgeTransaction(withdrawTransaction));
           setAmountToExchange('');
           await tokenParams.update();
+          sendFirebaseEvent(CustomAppEvents.bridge_finish);
         }
       }
     } catch (e) {
+      // @ts-ignore
       errorHandler(e);
       transactionInfoRef?.current?.dismiss();
     }

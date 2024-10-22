@@ -24,6 +24,8 @@ import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useTranslation } from 'react-i18next';
 import { BottomSheet } from '@components/composite';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -60,6 +62,7 @@ export const BottomSheetCreateRenameGroup = forwardRef<BottomSheetRef, Props>(
       setTimeout(() => {
         // Proceed with form submission
         if (handleOnCreateGroup) {
+          sendFirebaseEvent(CustomAppEvents.watchlist_group_created);
           handleOnCreateGroup(localGroupName);
           Toast.show({
             text: t('toast.group.created', {

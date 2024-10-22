@@ -20,7 +20,6 @@ const getTokenDetails = (address: string): Promise<TokenInfo> | TokenInfo => {
       name: address,
       symbol: ''
     };
-
   }
   return currentToken;
 };

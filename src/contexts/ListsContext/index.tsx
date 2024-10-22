@@ -8,6 +8,8 @@ import { useAllAddressesContext } from '@contexts/AllAddresses';
 import { ExplorerAccount } from '@models/Explorer';
 import { MULTISIG_VAULT } from '@constants/variables';
 import { PublicAddressDbModel, PublicAddressListDB } from '@database';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const ListsContext = () => {
   const {
@@ -49,6 +51,7 @@ const ListsContext = () => {
   // handle function for deleting list
   const handleOnDelete = useCallback(
     async (selectedGroupId: string) => {
+      sendFirebaseEvent(CustomAppEvents.watchlist_group_removed);
       listsOfAddressGroup.removeItem(
         {
           id: selectedGroupId,
@@ -148,6 +151,7 @@ const ListsContext = () => {
     list: AccountList
   ) => {
     if (accounts.length === 0) return;
+    sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added);
     for (const account of accounts) {
       const listInContext = listsOfAddressGroup.find((l) => l.id === list.id);
       if (!listInContext) return;

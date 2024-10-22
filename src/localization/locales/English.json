@@ -460,5 +460,23 @@
   "kosmos.chart.explanation.market": "Market price",
 
   "kosmos.market.tabs.buy.bond": "Buy bond",
-  "kosmos.market.tabs.history": "History"
+  "kosmos.market.tabs.history": "History",
+
+  "wallet.connect": {
+    "proposal": "Connect to {{origin}}",
+    "warning": "Are you sure you want to connect your wallet to {{origin}}",
+    "button.connect": "Connect",
+    "button.cancel": "Cancel",
+    "button.approve": "Got it",
+    "button.disconnect": "Disconnect",
+    "pending.status": "Connecting",
+    "title.success": "Wallet connected!",
+    "description.success": "You're now connected to {{network}}",
+    "title.error": "Connection Failed",
+    "description.error.with.path": "We couldn’t connect to {{origin}}. Try again later.",
+    "description.error": "We couldn’t connect. Try again later.",
+    "title.connections": "Manage Connections",
+    "label.connections": "{{connectionsLength}} Sites Connected",
+    "scanner": "Scan to Connect"
+  }
 }

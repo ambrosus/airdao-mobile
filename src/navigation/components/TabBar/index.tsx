@@ -13,11 +13,13 @@ import Animated, {
 import { useFocusEffect } from '@react-navigation/native';
 import {
   ExploreTabIcon,
-  WatchlistTabIcon,
   SettingsTabIcon,
-  WalletTabIcon
+  WalletTabIcon,
+  WatchlistTabIcon
 } from '@components/svg/BottomTabIcons';
 import { isIos } from '@utils/isPlatform';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
 const tabs = {
@@ -97,6 +99,12 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           });
 
           if (!isFocused && !event.defaultPrevented) {
+            if (route.name === 'Portfolio') {
+              sendFirebaseEvent(CustomAppEvents.watchlist_page);
+            }
+            if (route.name === 'Search') {
+              sendFirebaseEvent(CustomAppEvents.explorer_page);
+            }
             navigation.navigate(route.name);
           }
         };

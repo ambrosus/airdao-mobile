@@ -6,6 +6,8 @@ import { AccountActionButton } from '@components/templates/AccountActions/Action
 import { BridgeIcon } from '@components/svg/icons';
 import Config from '@constants/config';
 import { useBridgeContextData } from '@features/bridge/context';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const Bridge = () => {
   const { t } = useTranslation();
@@ -13,6 +15,7 @@ export const Bridge = () => {
   const { setDefaultBridgeData } = useBridgeContextData();
   const onNavigateToBridge = () => {
     setDefaultBridgeData();
+    sendFirebaseEvent(CustomAppEvents.main_bridge);
     navigation.navigate('Bridge');
   };
 

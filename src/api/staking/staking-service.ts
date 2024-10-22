@@ -7,6 +7,8 @@ import {
   StakeArgs
 } from '@api/staking/types';
 import { Cache, CacheKey } from '@lib/cache';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const STAKE_ESTIMATED_GAS_LIMIT = 67079;
 const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
@@ -101,6 +103,7 @@ class Staking {
       if (!pool) return;
 
       const signer = await this.createProvider(walletHash);
+      sendFirebaseEvent(CustomAppEvents.stake_start);
       const contract = await this.createStakingPoolContract(
         pool.addressHash,
         signer
@@ -112,6 +115,11 @@ class Staking {
       const stakeContract = await contract.stake(overrides);
       return await stakeContract.wait();
     } catch (err) {
+      // @ts-ignore
+      const errorMessage = err?.message ?? JSON.stringify(err);
+      sendFirebaseEvent(CustomAppEvents.stake_error, {
+        stakeError: errorMessage
+      });
       console.error(err);
     }
   }
@@ -123,6 +131,7 @@ class Staking {
 
     try {
       const signer = await this.createProvider(walletHash);
+      sendFirebaseEvent(CustomAppEvents.withdraw_start);
       const contract = await this.createStakingPoolContract(
         pool.addressHash,
         signer
@@ -140,6 +149,12 @@ class Staking {
       const unstakeContract = await contract.unstake(bnUnstakeAmountInTokens);
       return await unstakeContract.wait();
     } catch (err) {
+      // @ts-ignore
+      const errorMessage = err.message ?? JSON.stringify(err);
+      sendFirebaseEvent(CustomAppEvents.withdraw_error, {
+        withdrawError: errorMessage
+      });
+
       console.error(err);
     }
   }
