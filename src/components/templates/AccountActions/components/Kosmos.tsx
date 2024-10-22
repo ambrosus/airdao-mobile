@@ -1,13 +1,16 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { KosmosIcon } from '@components/svg/icons';
-import Config from '@constants/config';
 import { AccountActionButton } from './ActionButton';
 import { HomeNavigationProp } from '@appTypes';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { KosmosAccountActionIcon } from '@components/svg/icons/v2/actions';
 
-export const Kosmos = () => {
+interface KosmosProps {
+  readonly disabled: () => boolean;
+}
+
+export const Kosmos = ({ disabled }: KosmosProps) => {
   const navigation: HomeNavigationProp = useNavigation();
 
   const onNavigateToKosmos = () => {
@@ -17,10 +20,10 @@ export const Kosmos = () => {
 
   return (
     <AccountActionButton
-      Icon={KosmosIcon}
+      Icon={({ color }) => <KosmosAccountActionIcon color={color} />}
       onPress={onNavigateToKosmos}
-      text="KOSMOS"
-      isActive={Config.walletActions.kosmos}
+      text="Kosmos"
+      isActive={disabled()}
     />
   );
 };

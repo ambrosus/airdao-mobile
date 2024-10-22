@@ -1,12 +1,13 @@
 export const COLORS = {
   // NEUTRAL
   neutral0: '#FFFFFF',
+  neutral50: '#F6F7F9',
   neutral90: '#1D1D1D',
-  neutral100: '#F2F2F3',
+  neutral100: '#F1F2F5',
   neutral200: '#D5D6D9',
   neutral300: '#B8B9BF',
   neutral400: '#9B9CA5',
-  neutral500: '#7E7F8B',
+  neutral500: '#94979C',
   neutral600: '#63636D',
   neutral700: '#46464D',
   neutral800: '#121212',
@@ -15,6 +16,9 @@ export const COLORS = {
     5: 'rgba(14, 14, 14, 0.05)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
+
+  primary50: '#E9EFFB',
+  primary100: '#C5D4F5',
 
   // PRIMARY
   brand100: '#EDF3FF',

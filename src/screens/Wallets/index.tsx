@@ -99,7 +99,10 @@ export const HomeScreen = () => {
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
-            <AccountActions address={selectedAccountWithBalance.address} />
+            <AccountActions
+              account={selectedAccountWithBalance}
+              disabled={isSelectAccountBalanceZero}
+            />
             <Spacer value={verticalScale(32)} />
             {isSelectAccountBalanceZero ? (
               <WalletDepositFunds />

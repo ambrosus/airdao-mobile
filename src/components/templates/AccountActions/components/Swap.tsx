@@ -2,13 +2,16 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { SwapIcon } from '@components/svg/icons';
-import Config from '@constants/config';
 import { AccountActionButton } from './ActionButton';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { SwapAccountActionIcon } from '@components/svg/icons/v2/actions';
 
-export const Swap = () => {
+interface SwapActionProps {
+  readonly disabled: () => boolean;
+}
+
+export const Swap = ({ disabled }: SwapActionProps) => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
 
@@ -19,10 +22,10 @@ export const Swap = () => {
 
   return (
     <AccountActionButton
-      Icon={(props) => <SwapIcon {...props} scale={0.625} />}
+      Icon={({ color }) => <SwapAccountActionIcon color={color} />}
       onPress={navigateToSwap}
       text={t('token.actions.swap')}
-      isActive={Config.walletActions.swap}
+      isActive={disabled()}
     />
   );
 };
