@@ -1,12 +1,13 @@
 import React, { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { moderateScale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { QRCodeWithLogo } from '@components/modular';
 import { Clipboard } from '@utils/clipboard';
 import { styles } from './styles';
+import { CheckboxCircleFill } from '@components/svg/icons/v2';
 
 interface ReceiveFundsProps {
   address: string;
@@ -26,24 +27,11 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
 
   return (
     <View style={styles.container}>
-      <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.neutral800}>
-        {t('receive.funds')}
-      </Text>
-      <View style={styles.ambNetworkOnly}>
-        <Text
-          align="center"
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral400}
-        >
-          {t('receive.funds.amb.network.only')}
-        </Text>
-      </View>
       <View style={styles.qrCode}>
         <QRCodeWithLogo value={address} size={moderateScale(200)} />
       </View>
       <Text
-        fontSize={18}
+        fontSize={16}
         fontFamily="Inter_500Medium"
         color={COLORS.neutral800}
         align="center"
@@ -51,21 +39,38 @@ export const ReceiveFunds = (props: ReceiveFundsProps) => {
         {address}
       </Text>
       <Spacer value={verticalScale(16)} />
+      <Text
+        align="center"
+        fontSize={14}
+        fontFamily="Inter_600SemiBold"
+        color={COLORS.foregroundSecondaryContent}
+      >
+        Send assets only on the AirDAO network
+      </Text>
+
       <Button
         style={{
           ...styles.copyBtn,
-          backgroundColor: copied ? COLORS.success100 : COLORS.alphaBlack5
+          backgroundColor: copied ? COLORS.neutral0 : '#E9EFFB'
         }}
         disabled={copied}
         onPress={copyAddress}
       >
-        <Text
-          color={copied ? COLORS.success600 : COLORS.neutral900}
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-        >
-          {t(copied ? 'common.copied' : 'common.copy')}
-        </Text>
+        <Row>
+          {copied && (
+            <>
+              <CheckboxCircleFill />
+              <Spacer value={8} horizontal />
+            </>
+          )}
+          <Text
+            color={COLORS.brand600}
+            fontSize={17}
+            fontFamily="Inter_600SemiBold"
+          >
+            {t(copied ? 'common.copied' : 'common.copy')}
+          </Text>
+        </Row>
       </Button>
     </View>
   );

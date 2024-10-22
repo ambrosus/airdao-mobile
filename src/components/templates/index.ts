@@ -27,3 +27,4 @@ export * from './WalletPicker';
 export * from './WalletTransactionsAndAssets';
 export * from './AccessKeysWarningModal';
 export * from './BottomSheetImportWalletPrivateKeyStatus';
+export * from './WalletDepositFunds';

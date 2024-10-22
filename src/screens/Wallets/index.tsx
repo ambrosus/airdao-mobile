@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ethers } from 'ethers';
 import {
   AccountActions,
   PaginatedAccountList,
+  WalletDepositFunds,
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { Spacer } from '@components/base';
@@ -56,6 +58,10 @@ export const HomeScreen = () => {
     }
   }, [accounts, onChangeSelectedWallet, scrollIdx, setSelectedAccount]);
 
+  const isSelectAccountBalanceZero = useMemo(() => {
+    return ethers.utils.parseEther(selectedAccountBalance.ether).isZero();
+  }, [selectedAccountBalance.ether]);
+
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
       <HomeHeader />
@@ -95,10 +101,14 @@ export const HomeScreen = () => {
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
             <AccountActions address={selectedAccountWithBalance.address} />
             <Spacer value={verticalScale(32)} />
-            <WalletTransactionsAndAssets
-              account={selectedAccountWithBalance}
-              onRefresh={refetchAmbBalance}
-            />
+            {isSelectAccountBalanceZero ? (
+              <WalletDepositFunds />
+            ) : (
+              <WalletTransactionsAndAssets
+                account={selectedAccountWithBalance}
+                onRefresh={refetchAmbBalance}
+              />
+            )}
           </>
         )}
       </View>
