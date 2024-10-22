@@ -9,7 +9,7 @@ export interface WatcherInfoDTO {
   addresses: WatcherInfoAddress[];
   created_at: string;
   historical_notifications: NotificationDTO[];
-  id: string;
+  _id: string;
   push_token: string;
   threshold: number;
   token_price: number;
