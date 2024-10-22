@@ -14,7 +14,7 @@ interface AccountActionsProps {
 
 type ActionComponentProps = {
   disabled: () => boolean;
-  address?: string;
+  account?: ExplorerAccount;
   token?: Token;
 };
 
@@ -40,7 +40,7 @@ export const AccountActions = ({
       Component: Send,
       key: AccountActionsKey.SEND,
       props: {
-        address: account.address,
+        account,
         token,
         disabled: () => _isRouteActive(AccountActionsKey.SEND)
       }
