@@ -8,9 +8,7 @@ export const sendFirebaseEvent = (event: CustomAppEvents, params?: object) => {
   try {
     if (paramsNotEmpty) {
       analytics().logEvent(event, params).then();
-      alert(`${event} event with params ${JSON.stringify(params)} sent`);
     } else {
-      alert(`${event} event sent`);
       analytics().logEvent(event).then();
     }
   } catch (e) {
