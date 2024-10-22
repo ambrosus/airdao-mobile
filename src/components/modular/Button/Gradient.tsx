@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     ...shadow
   },
   gradient: {
+    height: verticalScale(50),
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

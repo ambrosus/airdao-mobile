@@ -18,25 +18,11 @@ export const MnemonicRandom = (props: MnemonicRandomProps) => {
       <Text
         align="center"
         fontSize={14}
-        fontFamily="Inter_600SemiBold"
+        fontFamily="Inter_500Medium"
         color={selected ? COLORS.neutral300 : COLORS.neutral900}
       >
         {word}
       </Text>
-      {/* <Row alignItems="center">
-        {countDisplay}
-        {countDisplay !== null && <Spacer value={8} horizontal />}
-        <Text
-          align="center"
-          fontFamily="Inter_600SemiBold"
-          fontSize={14}
-          color={
-            flow === 'mnemonic' ? buttonTextColorMnemonic : buttonTextColorInner
-          }
-        >
-          {word.word}
-        </Text>
-      </Row> */}
     </Button>
   );
 };

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
 
 export const stylesStep0 = StyleSheet.create({
-  flexStyle: { flex: 1 },
+  flexStyle: { flex: 1, alignItems: 'center' },
   container: {
     width: '100%'
   },

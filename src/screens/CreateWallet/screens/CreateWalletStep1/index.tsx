@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  View,
   FlatList,
   ListRenderItemInfo,
   StyleProp,
+  View,
   ViewStyle
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,8 +12,8 @@ import { Spacer, Spinner, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { useAddWalletContext } from '@contexts';
-import { verticalScale, scale } from '@utils/scaling';
-import { AlertBanner, PrimaryButton, ToastType } from '@components/modular';
+import { scale, verticalScale } from '@utils/scaling';
+import { PrimaryButton } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
@@ -103,16 +103,16 @@ export const CreateWalletStep1 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral900}
           >
-            {t('create.wallet.recovery.phrase')}
+            {t('button.create.wallet')}
           </Text>
         }
       />
       <Spacer value={scale(23)} />
       <View style={{ paddingHorizontal: scale(28) }}>
         <Text
+          fontSize={15}
           align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
+          fontFamily="Inter_400Regular"
           color={COLORS.neutral900}
         >
           {t('create.wallet.verify.text')}
@@ -135,10 +135,6 @@ export const CreateWalletStep1 = () => {
           contentContainerStyle={styles.contentContainerStyle}
         />
         <View>
-          <AlertBanner
-            text={t('create.wallet.verification.alert')}
-            type={ToastType.Highlight}
-          />
           <Spacer value={verticalScale(34)} />
           <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
             <PrimaryButton onPress={onNextPress}>
