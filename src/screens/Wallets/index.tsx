@@ -13,8 +13,6 @@ import { useBalanceOfAddress, useWallet } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
-import { PaginationCircles } from '@components/composite';
-import { COLORS } from '@constants/colors';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
@@ -84,18 +82,6 @@ export const HomeScreen = () => {
           }}
           onScrolIndexChange={setScrollIdx}
         />
-        {accounts.length > 1 && (
-          <View style={{ alignSelf: 'center', marginTop: verticalScale(16) }}>
-            <PaginationCircles
-              totalCount={accounts.length}
-              activeColor={COLORS.activeOrange}
-              passiveColor={COLORS.neutral100}
-              activeIndex={scrollIdx}
-              size={verticalScale(10)}
-              gap={scale(16)}
-            />
-          </View>
-        )}
         {selectedAccountWithBalance && (
           <>
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
