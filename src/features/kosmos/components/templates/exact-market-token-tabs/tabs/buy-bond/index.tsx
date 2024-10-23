@@ -173,7 +173,7 @@ export const BuyBondTab = ({
               fontFamily="Inter_500Medium"
               color={discountColor(+discount)}
             >
-              {discount}%
+              {discount}
             </Text>
           </Row>
         </View>

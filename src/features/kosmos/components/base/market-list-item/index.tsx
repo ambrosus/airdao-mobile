@@ -19,9 +19,13 @@ interface StyledItemTextProps {
 export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
   const { token } = useExtractToken(market.payoutToken);
 
+  const discount = useMemo(() => {
+    return market.discount > 0 ? market.discount.toFixed(2) + '%' : '-';
+  }, [market.discount]);
+
   const discountItemColor = useMemo(() => {
-    return market.discount > 0 ? COLORS.success600 : COLORS.error600;
-  }, [market]);
+    return +discount > 0 ? COLORS.success600 : COLORS.error600;
+  }, [discount]);
 
   return (
     <Row
@@ -36,10 +40,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
       </Row>
 
       <Row width="58.5%" alignItems="center" justifyContent="space-between">
-        <StyledItemText
-          label={`${market.discount.toFixed(2)}%`}
-          color={discountItemColor}
-        />
+        <StyledItemText label={discount} color={discountItemColor} />
         <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
       </Row>
     </Row>
