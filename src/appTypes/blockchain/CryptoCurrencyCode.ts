@@ -48,5 +48,6 @@ export enum CryptoCurrencyCode {
   Test1 = 'TEST1',
   Test2 = 'TEST2',
   ADOGE = 'ADOGE',
-  Airdoge = 'Airdoge'
+  Airdoge = 'Airdoge',
+  KOS = 'KOS'
 }
