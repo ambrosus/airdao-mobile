@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(13),
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
-    borderWidth: 1
+    borderWidth: 2
   },
   statusIcon: {
     width: moderateScale(24),

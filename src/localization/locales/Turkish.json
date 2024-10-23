@@ -341,7 +341,7 @@
   "toast.tap.to.rename.msg": "Adresi yeniden adlandırmak için dokunun",
   "toast.removed.wallet.from.group": "Cüzdan gruptan başarıyla kaldırıldı!",
   "toast.you.added.address.to.watchlist": "{{name}} artık izleme listenizde!",
-  "toast.you.removed.address.from.watchlist": "{{name}} izleme listesinden çıkarıldı",
+  "toast.wallet.created": "!!!Backup successful!",
 
   "token.picker.select": "Gönderilecek varlığı seçin",
   "token.actions.swap": "Takas",

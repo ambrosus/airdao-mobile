@@ -17,11 +17,15 @@ import { HomeNavigationProp } from '@appTypes';
 import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import usePasscode from '@contexts/Passcode';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { walletMnemonic } = useAddWalletContext();
   const { t } = useTranslation();
+  const { isPasscodeEnabled } = usePasscode();
+
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     { word: string; index: number }[]
   >([]);
@@ -46,6 +50,25 @@ export const CreateWalletStep2 = () => {
     [walletMnemonic, walletMnemonicSelectedWordsOnly]
   );
 
+  const navigateToSetUpSecurity = useCallback(() => {
+    Toast.show({
+      text: t('toast.wallet.created'),
+      position: ToastPosition.Top,
+      type: ToastType.Success
+    });
+
+    if (isPasscodeEnabled) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+        })
+      );
+    } else {
+      navigation.navigate('SetupPasscode');
+    }
+  }, [isPasscodeEnabled, navigation, t]);
+
   const handleVerifyPress = useCallback(async () => {
     if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
       return;
@@ -56,21 +79,8 @@ export const CreateWalletStep2 = () => {
 
     try {
       setLoading(true);
-      await WalletUtils.processWallet('1234');
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'Tabs',
-              params: {
-                screen: 'Wallets',
-                params: { screen: 'CreateWalletSuccess' }
-              }
-            }
-          ]
-        })
-      );
+      await WalletUtils.processWallet(walletMnemonic);
+      navigateToSetUpSecurity();
     } catch (error) {
       setCreateError(true);
       setWalletMnemonicSelected([]);
@@ -79,7 +89,8 @@ export const CreateWalletStep2 = () => {
     }
   }, [
     isMnemonicCorrect,
-    navigation,
+    navigateToSetUpSecurity,
+    walletMnemonic,
     walletMnemonicArrayDefault.length,
     walletMnemonicSelected.length
   ]);
