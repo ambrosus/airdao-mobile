@@ -38,7 +38,11 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   };
 
   useEffect(() => {
-    getCameraPermissions();
+    const timeoutId = setTimeout(() => {
+      getCameraPermissions();
+    }, Platform.select({ android: 250, ios: 0, default: 0 }));
+
+    return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

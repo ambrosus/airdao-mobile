@@ -12,8 +12,6 @@ import {
 } from '@features/wallet-connect/types';
 import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
 import { InteractionManager } from 'react-native';
-import { AirDAOEventDispatcher } from '@lib';
-import { AirDAOEventType } from '@appTypes';
 import Config from '@constants/config';
 
 export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
@@ -23,7 +21,6 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
 
   const onSessionProposal = useCallback(
     (proposal: SessionProposalEvent) => {
-      AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
       const {
         params: { requiredNamespaces, optionalNamespaces }
       } = proposal;
@@ -39,13 +36,17 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
         onChangeProposal(proposal);
 
         new Promise<void>((resolve) => setTimeout(resolve, 1000));
-        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
+        return InteractionManager.runAfterInteractions(
+          onShowWalletConnectBottomSheet
+        );
       } else {
         setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
         onChangeProposal(proposal);
 
         new Promise<void>((resolve) => setTimeout(resolve, 1000));
-        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
+        return InteractionManager.runAfterInteractions(
+          onShowWalletConnectBottomSheet
+        );
       }
     },
     [onChangeProposal, onShowWalletConnectBottomSheet, setWalletConnectStep]

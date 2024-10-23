@@ -57,18 +57,15 @@ export const HomeHeader = React.memo((): JSX.Element => {
 
   const onHandleWalletConnectAuthorization = useCallback(
     async (uri: string): Promise<void> => {
-      if (!walletKit) {
-        closeScanner();
-        return;
-      }
+      if (!walletKit) return closeScanner();
 
       try {
         await InteractionManager.runAfterInteractions(async () => {
           try {
             await walletKit.pair({ uri });
           } catch (error) {
-            closeScanner();
             setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
+            closeScanner();
 
             await new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
