@@ -111,3 +111,4 @@ export * from './RightArrowInCircle';
 export * from './Kosmos';
 export * from './TokenAirDOGE';
 export * from './WalletConnect';
+export * from './KosmosToken';
