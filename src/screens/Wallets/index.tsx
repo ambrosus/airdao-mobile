@@ -73,7 +73,7 @@ export const HomeScreen = () => {
               <Spacer horizontal value={scale(16)} />
             ),
             contentContainerStyle: {
-              paddingHorizontal: accounts?.length > 1 ? scale(16) : scale(38)
+              paddingHorizontal: accounts?.length > 1 ? scale(20) : scale(27)
             },
             style: {
               flexGrow: 0,
