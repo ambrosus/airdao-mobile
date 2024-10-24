@@ -113,11 +113,34 @@ const minimiseAmount = (num: number): string => {
   return `${scaledNum}${suffixes[suffixIndex]}`;
 };
 
+const numberToTransformedLocale = (value: string) => {
+  const number = parseFloat(value.replace(/,/g, ''));
+
+  const decimalPart = value.split('.')[1];
+  if (
+    decimalPart &&
+    decimalPart.length >= 2 &&
+    decimalPart.slice(0, 2) === '00'
+  ) {
+    return Math.floor(number).toLocaleString('en-US');
+  }
+
+  if (number % 1 === 0) {
+    return number.toLocaleString('en-US');
+  }
+
+  return number.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
   limitDecimalCount,
   formatAmount,
-  minimiseAmount
+  minimiseAmount,
+  numberToTransformedLocale
 };

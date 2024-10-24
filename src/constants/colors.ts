@@ -112,7 +112,8 @@ export const COLORS = {
   separator: '#2f2b431a',
 
   // V2
-  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)'
+  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',
+  semanticsForegroundBorder: 'rgba(216, 218, 224, 1)'
 };
 
 export const CreditCardBg = [
