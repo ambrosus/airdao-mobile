@@ -3,10 +3,10 @@ import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1
+    justifyContent: 'space-between',
+    height: '100%'
   },
   buttons: {
-    flex: 1,
     paddingHorizontal: scale(16),
     marginBottom: verticalScale(26)
   }

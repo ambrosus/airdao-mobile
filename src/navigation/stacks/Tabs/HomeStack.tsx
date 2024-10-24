@@ -8,8 +8,7 @@ import { SendFunds, SendFundsStatus } from '@screens/SendFunds';
 import {
   CreateWalletStep0,
   CreateWalletStep1,
-  CreateWalletStep2,
-  CreateWalletSuccess
+  CreateWalletStep2
 } from '@screens/CreateWallet';
 import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
@@ -36,7 +35,7 @@ import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
 import { SwapScreen } from '@screens/Swap';
-import { SwapSuccessScreen, SwapErrorScreen } from '@screens/Swap/screens';
+import { SwapErrorScreen, SwapSuccessScreen } from '@screens/Swap/screens';
 import { KosmosScreen } from '@screens/Kosmos';
 import { KosmosMarketScreen } from '@screens/Kosmos/screens';
 import {
@@ -69,14 +68,6 @@ export const HomeStack = () => {
           <Stack.Screen
             name="CreateWalletStep2"
             component={CreateWalletStep2}
-          />
-          <Stack.Screen
-            name="CreateWalletSuccess"
-            options={{
-              gestureEnabled: false,
-              fullScreenGestureEnabled: false
-            }}
-            component={CreateWalletSuccess}
           />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen

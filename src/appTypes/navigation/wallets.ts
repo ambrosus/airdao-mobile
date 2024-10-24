@@ -23,7 +23,6 @@ export type HomeParamsList = {
   CreateWalletStep0: undefined;
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
-  CreateWalletSuccess: undefined;
   SetupPasscode: undefined;
   ConfirmPasscode: { passcode: string[] };
   StakingPool: { pool: StakingPool };
