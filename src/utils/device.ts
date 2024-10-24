@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as LocalAuthentication from 'expo-local-authentication';
+
 const isIOS = Platform.OS === 'ios';
 const isAndroid = Platform.OS === 'android';
 
@@ -34,6 +35,7 @@ export const DeviceUtils = {
   isAndroid,
   isIOS,
   reloadApp,
+  getSupportedBiometrics,
   checkFaceIDExists,
   checkFingerprintExists
 };

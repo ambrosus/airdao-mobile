@@ -9,7 +9,7 @@ import {
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BottomAwareSafeAreaView } from '@components/composite';
-import { Spacer, Text, Button } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
@@ -62,7 +62,7 @@ export const ConfirmPasscode = () => {
               fontFamily="Inter_700Bold"
               color={COLORS.neutral800}
             >
-              {t('security.confirm.passcode.text')}
+              {t('security.enter.passcode')}
             </Text>
           </View>
           <Spacer value={verticalScale(19)} />
@@ -74,10 +74,13 @@ export const ConfirmPasscode = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          {t('security.confirm.passcode.description')}
+          {t('security.enter.passcode.text')}
         </Text>
-        <Spacer value={verticalScale(106)} />
-        <Passcode onPasscodeChange={onPasscodeChange} />
+        <Spacer value={verticalScale(50)} />
+        <Passcode
+          isBiometricEnabled={false}
+          onPasscodeChange={onPasscodeChange}
+        />
         <Spacer value={verticalScale(50)} />
       </View>
       <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>

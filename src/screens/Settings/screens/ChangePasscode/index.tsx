@@ -18,7 +18,6 @@ export const ChangePasscode = () => {
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const [step, setStep] = useState<number>(savedPasscode.length === 0 ? 2 : 1); // ask current passcode if already saved
   const [newPasscode, setNewPasscode] = useState<string[]>([]);
-
   const onBackPress = async () => {
     navigation.navigate('SecuritySettings');
   };
@@ -94,7 +93,12 @@ export const ChangePasscode = () => {
       </Text>
       <Spacer value={verticalScale(24)} />
       <View>
-        <Passcode onPasscodeChange={handlePasscode} type="change" />
+        <Passcode
+          changePasscodeStep={step}
+          isBiometricEnabled={false}
+          onPasscodeChange={handlePasscode}
+          type="change"
+        />
       </View>
     </View>
   );

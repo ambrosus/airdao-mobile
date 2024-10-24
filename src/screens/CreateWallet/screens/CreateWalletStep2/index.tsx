@@ -19,6 +19,7 @@ import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import usePasscode from '@contexts/Passcode';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -219,6 +220,7 @@ export const CreateWalletStep2 = () => {
             onPress={handleVerifyPress}
             type="circular"
             style={{
+              position: 'relative',
               height: verticalScale(50),
               backgroundColor: isMnemonicCorrect
                 ? COLORS.brand600
@@ -226,21 +228,23 @@ export const CreateWalletStep2 = () => {
               ...styles.button
             }}
           >
-            {loading ? (
-              <Row>
-                <CenteredSpinner />
-                <Spacer value={5} />
-                <Text color={COLORS.neutral0}>{t('button.verifying')}</Text>
-              </Row>
-            ) : (
-              <Text
-                fontSize={16}
-                fontFamily="Inter_600SemiBold"
-                color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.brand400}
-              >
-                {t('button.verify')}
-              </Text>
-            )}
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.brand400}
+            >
+              {loading ? t('button.verifying') : t('button.verify')}
+            </Text>
+            <Row
+              style={{
+                left: DEVICE_WIDTH * 0.25,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute'
+              }}
+            >
+              {loading && <CenteredSpinner />}
+            </Row>
           </Button>
         </BottomAwareSafeAreaView>
       </View>
