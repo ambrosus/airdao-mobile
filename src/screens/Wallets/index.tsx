@@ -80,7 +80,7 @@ export const HomeScreen = () => {
               minHeight: WalletCardHeight
             }
           }}
-          onScrolIndexChange={setScrollIdx}
+          onScrollIndexChange={setScrollIdx}
         />
         {selectedAccountWithBalance && (
           <>
