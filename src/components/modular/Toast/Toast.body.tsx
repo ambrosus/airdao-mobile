@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { CloseIcon } from '@components/svg/icons';
 import { verticalScale } from '@utils/scaling';
-import { ToastAction, ToastOptions } from './Toast.types';
+import { ToastAction, ToastOptions, ToastType } from './Toast.types';
 import { COLORS } from '@constants/colors';
 import { ToastBg, ToastBorderColor, ToastStatusIcon } from './Toast.constants';
 import { styles } from './Toast.styles';
@@ -14,7 +14,8 @@ export const AlertBanner = (
     onHide?: () => unknown;
   }
 ) => {
-  const { text, subtext, actions, type, hideVisible, onHide } = props;
+  const { text, subtext, actions, hideVisible, onHide } = props;
+  const type = ToastType.Success;
 
   const renderAction = (action: ToastAction) => {
     return (

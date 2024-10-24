@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import {
   CenteredSpinner,
   Header
 } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { useAddWalletContext } from '@contexts';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
@@ -17,16 +17,20 @@ import { HomeNavigationProp } from '@appTypes';
 import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import usePasscode from '@contexts/Passcode';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { walletMnemonic } = useAddWalletContext();
   const { t } = useTranslation();
+  const { isPasscodeEnabled } = usePasscode();
+
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     { word: string; index: number }[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [createError, setCreateError] = useState(false);
   const walletMnemonicSelectedWordsOnly = walletMnemonicSelected.map(
     ({ word }) => word
   );
@@ -46,6 +50,25 @@ export const CreateWalletStep2 = () => {
     [walletMnemonic, walletMnemonicSelectedWordsOnly]
   );
 
+  const navigateToSetUpSecurity = useCallback(() => {
+    Toast.show({
+      text: t('toast.wallet.created'),
+      position: ToastPosition.Top,
+      type: ToastType.Success
+    });
+
+    if (isPasscodeEnabled) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+        })
+      );
+    } else {
+      navigation.navigate('SetupPasscode');
+    }
+  }, [isPasscodeEnabled, navigation, t]);
+
   const handleVerifyPress = useCallback(async () => {
     if (walletMnemonicSelected.length !== walletMnemonicArrayDefault.length) {
       return;
@@ -57,29 +80,16 @@ export const CreateWalletStep2 = () => {
     try {
       setLoading(true);
       await WalletUtils.processWallet(walletMnemonic);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'Tabs',
-              params: {
-                screen: 'Wallets',
-                params: { screen: 'CreateWalletSuccess' }
-              }
-            }
-          ]
-        })
-      );
+      navigateToSetUpSecurity();
     } catch (error) {
-      // TODO translate
-      Alert.alert('Error occured', 'Could not create wallet!');
+      setCreateError(true);
+      setWalletMnemonicSelected([]);
     } finally {
       setLoading(false);
     }
   }, [
     isMnemonicCorrect,
-    navigation,
+    navigateToSetUpSecurity,
     walletMnemonic,
     walletMnemonicArrayDefault.length,
     walletMnemonicSelected.length
@@ -93,7 +103,7 @@ export const CreateWalletStep2 = () => {
       ({ word: _word, index }) => _word === word.word && index == word.index
     );
 
-    const onPress = () => {
+    const onPressOnSelected = () => {
       if (selectedIdx > -1) {
         walletMnemonicSelected.splice(selectedIdx, 1);
       } else {
@@ -110,7 +120,7 @@ export const CreateWalletStep2 = () => {
       <View style={{ width: scale(100) }} key={`${word.index}-${word.word}`}>
         <MnemonicSelected
           word={word.word}
-          onPress={onPress}
+          onPress={onPressOnSelected}
           isPlacedCorrectly={isPlacedCorrectly}
           index={idx + 1}
         />
@@ -123,7 +133,10 @@ export const CreateWalletStep2 = () => {
       ({ word: _word, index }) => _word === word.word && index == word.index
     );
 
-    const onPress = () => {
+    const onPressOnRandom = () => {
+      if (createError) {
+        setCreateError(false);
+      }
       if (selectedIdx > -1) {
         walletMnemonicSelected.splice(selectedIdx, 1);
       } else {
@@ -135,7 +148,7 @@ export const CreateWalletStep2 = () => {
       <View style={{ width: scale(100) }} key={`${word.index}-${word.word}`}>
         <MnemonicRandom
           word={word.word}
-          onPress={onPress}
+          onPress={onPressOnRandom}
           selected={selectedIdx > -1}
           disabled={selectedIdx > -1}
         />
@@ -158,7 +171,7 @@ export const CreateWalletStep2 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral800}
           >
-            {t('create.wallet.double.check')}
+            {t('button.create.wallet')}
           </Text>
         }
       />
@@ -168,7 +181,7 @@ export const CreateWalletStep2 = () => {
           <Text
             align="center"
             fontSize={scale(16)}
-            fontFamily="Inter_500Medium"
+            fontFamily="Inter_400Regular"
             color={COLORS.neutral800}
           >
             {t('create.wallet.tap.words.in.correct.order')}
@@ -187,24 +200,43 @@ export const CreateWalletStep2 = () => {
           </View>
         </View>
         <BottomAwareSafeAreaView>
+          {createError && (
+            <>
+              <Text
+                color={COLORS.error600}
+                fontFamily="Inter_400Regular"
+                fontSize={scale(15)}
+                style={{ paddingHorizontal: 30 }}
+              >
+                Verification failed. Tap the words in the correct order to
+                continue.
+              </Text>
+              <Spacer value={20} />
+            </>
+          )}
           <Button
             disabled={!isMnemonicCorrect || loading}
             onPress={handleVerifyPress}
             type="circular"
             style={{
+              height: verticalScale(50),
               backgroundColor: isMnemonicCorrect
                 ? COLORS.brand600
-                : COLORS.alphaBlack5,
+                : COLORS.brand100,
               ...styles.button
             }}
           >
             {loading ? (
-              <CenteredSpinner />
+              <Row>
+                <CenteredSpinner />
+                <Spacer value={5} />
+                <Text color={COLORS.neutral0}>{t('button.verifying')}</Text>
+              </Row>
             ) : (
               <Text
                 fontSize={16}
                 fontFamily="Inter_600SemiBold"
-                color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.neutral600}
+                color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.brand400}
               >
                 {t('button.verify')}
               </Text>

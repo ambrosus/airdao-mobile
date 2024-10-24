@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
     minHeight: verticalScale(172),
     paddingVertical: verticalScale(16),
     backgroundColor: COLORS.alphaBlack5,
-    borderColor: COLORS.neutral100,
-    borderWidth: 2,
+    borderColor: COLORS.neutral200,
+    borderWidth: 1,
     marginHorizontal: scale(16),
     borderRadius: moderateScale(16)
   },

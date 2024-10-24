@@ -17,6 +17,7 @@ export const SecondaryButton = (props: ButtonProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: verticalScale(50),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.alphaBlack5,
