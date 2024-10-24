@@ -57,8 +57,8 @@ export const HomeScreen = () => {
   }, [accounts, onChangeSelectedWallet, scrollIdx, setSelectedAccount]);
 
   const isSelectAccountBalanceZero = useMemo(() => {
-    return ethers.utils.parseEther(selectedAccountBalance.ether).isZero();
-  }, [selectedAccountBalance.ether]);
+    return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();
+  }, [selectedAccountBalance.wei]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
@@ -91,7 +91,7 @@ export const HomeScreen = () => {
             />
             <Spacer value={verticalScale(32)} />
             {isSelectAccountBalanceZero ? (
-              <WalletDepositFunds />
+              <WalletDepositFunds onRefresh={refetchAmbBalance} />
             ) : (
               <WalletTransactionsAndAssets
                 account={selectedAccountWithBalance}
