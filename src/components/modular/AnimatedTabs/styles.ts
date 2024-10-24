@@ -13,5 +13,8 @@ export const styles = StyleSheet.create({
   tabsIndicator: {
     backgroundColor: COLORS.alphaBlack10,
     height: 0.5
+  },
+  contentContainerStyle: {
+    flexGrow: 1
   }
 });
