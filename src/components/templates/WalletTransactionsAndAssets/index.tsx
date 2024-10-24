@@ -68,7 +68,11 @@ export const WalletTransactionsAndAssets = (
             )
           },
           {
-            title: t('common.transactions'),
+            title: 'NFTs',
+            view: <View />
+          },
+          {
+            title: t('kosmos.market.tabs.history'),
             view: (
               <AccountTransactions
                 transactions={transactions}

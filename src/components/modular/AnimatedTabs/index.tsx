@@ -1,5 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, View, ViewStyle } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Keyboard,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  View,
+  ViewStyle
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -25,23 +32,22 @@ interface AnimatedTabsProps {
   keyboardShouldPersistTaps?: 'always' | 'handled' | 'never' | undefined;
 }
 
-export const AnimatedTabs = (props: AnimatedTabsProps) => {
-  const {
-    tabs,
-    containerStyle,
-    onSwipeStateHandle,
-    dismissOnChangeIndex,
-    onChangedIndex,
-    keyboardShouldPersistTaps
-  } = props;
-  const tabCount = tabs.length;
-  const scrollView = useRef<ScrollView>(null);
+export const AnimatedTabs = ({
+  tabs,
+  containerStyle,
+  onSwipeStateHandle,
+  dismissOnChangeIndex,
+  onChangedIndex,
+  keyboardShouldPersistTaps
+}: AnimatedTabsProps) => {
+  const TABS_LENGTH = tabs.length;
+  const TAB_WIDTH = DEVICE_WIDTH;
+  const tabBarWidth = TAB_WIDTH / TABS_LENGTH;
+
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const tabWidth = DEVICE_WIDTH;
-  const tabBarWidth = tabWidth / tabCount;
-
   const indicatorPosition = useSharedValue(0);
+
+  const scrollView = useRef<ScrollView>(null);
 
   const indicatorStyle = useAnimatedStyle(() => {
     return {
@@ -51,32 +57,41 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
 
   useEffect(() => {
     onChangedIndex && onChangedIndex(currentIndex);
-    indicatorPosition.value = withTiming(currentIndex * (tabWidth / 2), {
+    indicatorPosition.value = withTiming(currentIndex * tabBarWidth, {
       duration: 0
     });
-  }, [currentIndex, indicatorPosition, onChangedIndex, tabWidth]);
+  }, [currentIndex, indicatorPosition, onChangedIndex, tabBarWidth]);
 
-  const scrollToTab = (idx: number) => {
-    dismissOnChangeIndex && Keyboard.dismiss();
-    onChangedIndex && onChangedIndex(idx);
-    scrollView.current?.scrollTo({ x: tabWidth * idx, animated: true });
-    setCurrentIndex(idx);
-    indicatorPosition.value = withTiming(idx * tabBarWidth);
-  };
+  const scrollToTab = useCallback(
+    (idx: number) => {
+      dismissOnChangeIndex && Keyboard.dismiss();
+      onChangedIndex && onChangedIndex(idx);
+      scrollView.current?.scrollTo({ x: TAB_WIDTH * idx, animated: true });
+      setCurrentIndex(idx);
+      indicatorPosition.value = withTiming(idx * tabBarWidth);
+    },
+    [
+      dismissOnChangeIndex,
+      indicatorPosition,
+      onChangedIndex,
+      tabBarWidth,
+      TAB_WIDTH
+    ]
+  );
 
   const renderTabView = (tab: AnimatedTab, idx: number): JSX.Element => {
     return (
       <View
         key={`${tab.title}-view-${idx}`}
-        style={{ width: tabWidth, flex: 1 }}
+        style={{ width: TAB_WIDTH, flex: 1 }}
       >
         {tab.view}
       </View>
     );
   };
 
-  const renderTabBar = (tab: AnimatedTab, idx: number): JSX.Element => {
-    return (
+  const renderTabBar = useCallback(
+    (tab: AnimatedTab, idx: number): JSX.Element => (
       <Button
         onPress={() => scrollToTab(idx)}
         key={`${tab.title}-${idx}-bar`}
@@ -90,11 +105,22 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
           {tab.title}
         </Text>
       </Button>
-    );
-  };
+    ),
+    [currentIndex, scrollToTab]
+  );
 
   const onScrollEnd = () => onSwipeStateHandle && onSwipeStateHandle(false);
   const onScrollStart = () => onSwipeStateHandle && onSwipeStateHandle(true);
+
+  const onMomentumScrollEndHandle = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const scrollOffsetX = event.nativeEvent.contentOffset.x;
+      const newIndex = Math.round(scrollOffsetX / TAB_WIDTH);
+      setCurrentIndex(newIndex);
+      indicatorPosition.value = withTiming(newIndex * tabBarWidth);
+    },
+    [indicatorPosition, tabBarWidth, TAB_WIDTH]
+  );
 
   return (
     <View style={containerStyle}>
@@ -108,7 +134,7 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
               position: 'relative',
               bottom: 1,
               left: 0,
-              width: tabWidth / 2,
+              width: tabBarWidth,
               height: 2,
               backgroundColor: COLORS.brand500
             },
@@ -121,15 +147,12 @@ export const AnimatedTabs = (props: AnimatedTabsProps) => {
         ref={scrollView}
         horizontal
         pagingEnabled
+        contentContainerStyle={styles.contentContainerStyle}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={(event) => {
-          const scrollOffsetX = event.nativeEvent.contentOffset.x;
-          setCurrentIndex(scrollOffsetX > 0 ? 1 : 0);
-        }}
+        onMomentumScrollEnd={onMomentumScrollEndHandle}
         onScrollEndDrag={onScrollEnd}
         onScrollBeginDrag={onScrollStart}
-        contentContainerStyle={{ flexGrow: 1 }}
       >
         {tabs.map(renderTabView)}
       </ScrollView>

@@ -9,17 +9,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { AddIcon, NotificationIcon, ScannerIcon } from '@components/svg/icons';
-import { moderateScale, scale } from '@utils/scaling';
 import { Button, Spacer } from '@components/base';
+import { BarcodeScanner } from '@components/templates';
 import {
-  BarcodeScanner,
-  BottomSheetWalletCreateOrImport
-} from '@components/templates';
-import { HomeNavigationProp } from '@appTypes/navigation';
+  BarcodeScannerIcon,
+  NotificationBellIcon
+} from '@components/svg/icons/v2';
 import { etherumAddressRegex } from '@constants/regex';
 import { useNotificationsQuery } from '@hooks';
-import { Cache, CacheKey } from '@lib/cache';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
@@ -29,30 +26,34 @@ import {
 } from '@features/wallet-connect/lib/hooks';
 import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 import { walletKit } from '@features/wallet-connect/utils';
+import { Cache, CacheKey } from '@lib/cache';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { moderateScale, scale } from '@utils/scaling';
+import { HomeNavigationProp } from '@appTypes/navigation';
 
 export const HomeHeader = React.memo((): JSX.Element => {
+  const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const { height: WINDOW_HEIGHT } = useWindowDimensions();
-  const scanner = useRef<BottomSheetRef>(null);
-  const walletImportCreate = useRef<BottomSheetRef>(null);
-  const scanned = useRef(false);
+
   const { data: notifications } = useNotificationsQuery();
   const newNotificationsCount = useNewNotificationsCount();
-  const { t } = useTranslation();
 
   const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
   const { setWalletConnectStep, activeSessions } =
     useWalletConnectContextSelector();
 
+  const scannerBottomSheetRef = useRef<BottomSheetRef>(null);
+  const scanned = useRef(false);
+
   const openScanner = useCallback(() => {
     sendFirebaseEvent(CustomAppEvents.main_scan);
-    scanner.current?.show();
-  }, [scanner]);
+    scannerBottomSheetRef.current?.show();
+  }, []);
 
   const closeScanner = useCallback(() => {
-    scanner.current?.dismiss();
+    scannerBottomSheetRef.current?.dismiss();
   }, []);
 
   const onHandleWalletConnectAuthorization = useCallback(
@@ -128,53 +129,33 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const renderContentRight = useMemo(() => {
     return (
       <>
-        <View style={{ bottom: scale(3) }}>
-          <Button onPress={openScanner}>
-            <ScannerIcon color="#393b40" />
-          </Button>
-          <BottomSheet height={WINDOW_HEIGHT} ref={scanner} borderRadius={0}>
-            <BarcodeScanner
-              onScanned={onQRCodeScanned}
-              onClose={closeScanner}
-            />
-          </BottomSheet>
-        </View>
         <Spacer horizontal value={scale(25)} />
         <Button onPress={navigateToNotifications}>
-          <NotificationIcon color="#393b40" />
+          <NotificationBellIcon />
           {newNotificationsCount > 0 && (
             <View style={[styles.notificationCountContainer]}></View>
           )}
         </Button>
       </>
     );
-  }, [
-    WINDOW_HEIGHT,
-    closeScanner,
-    navigateToNotifications,
-    newNotificationsCount,
-    onQRCodeScanned,
-    openScanner
-  ]);
-
-  const openWalletImportCreateModal = useCallback(() => {
-    walletImportCreate.current?.show();
-  }, []);
+  }, [navigateToNotifications, newNotificationsCount]);
 
   const renderContentLeft = useMemo(() => {
     return (
-      <>
-        <Button
-          onPress={() => openWalletImportCreateModal()}
-          type="circular"
-          style={styles.addOrImportWalletButton}
-        >
-          <AddIcon color={COLORS.neutral800} scale={1.25} />
+      <View style={{ bottom: scale(3) }}>
+        <Button onPress={openScanner}>
+          <BarcodeScannerIcon />
         </Button>
-        <BottomSheetWalletCreateOrImport ref={walletImportCreate} />
-      </>
+        <BottomSheet
+          height={WINDOW_HEIGHT}
+          ref={scannerBottomSheetRef}
+          borderRadius={0}
+        >
+          <BarcodeScanner onScanned={onQRCodeScanned} onClose={closeScanner} />
+        </BottomSheet>
+      </View>
     );
-  }, [openWalletImportCreateModal]);
+  }, [WINDOW_HEIGHT, closeScanner, onQRCodeScanned, openScanner]);
 
   const headerStyles = useMemo(() => {
     return { ...styles.container };
@@ -203,9 +184,9 @@ const styles = StyleSheet.create({
   notificationCountContainer: {
     position: 'absolute',
     backgroundColor: COLORS.yellow500,
-    right: 0,
-    top: 0,
-    borderRadius: scale(9),
+    right: -3,
+    top: -3,
+    borderRadius: scale(11),
     borderWidth: 2,
     borderColor: COLORS.neutral0,
     width: moderateScale(11),

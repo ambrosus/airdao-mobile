@@ -4,5 +4,6 @@ export { ConnectionChainsIcon } from './ConnectionChains';
 export { NotificationBellIcon } from './NotificationBell';
 export { PlusIcon } from './Plus';
 export { CheckboxCircleFill } from './CheckboxCircleFill';
+export { BarcodeScannerIcon } from './Barcode';
 export { NoWalletPageIcon } from './NoWalletPageIcon';
 export { NewWalletPageIcon } from './NewWalletPageIcon';

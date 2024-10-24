@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, PanResponder } from 'react-native';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
@@ -8,10 +8,28 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { ReceiveFunds } from '../ReceiveFunds';
 import { useWallet } from '@hooks';
 
-export const WalletDepositFunds = () => {
+interface WalletDepositFundsProps {
+  readonly onRefresh?: () => void;
+}
+
+export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
   const { wallet } = useWallet();
 
   const receiveFundsBottomSheetRef = useRef<BottomSheetRef>(null);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return Math.abs(gestureState.dy) > -10;
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        // Check if the swipe direction is down
+        if (gestureState.dy > -10 && typeof onRefresh === 'function')
+          onRefresh();
+      }
+    })
+  ).current;
 
   const onReceiveFundsShowBottomSheet = useCallback(
     () => receiveFundsBottomSheetRef.current?.show(),
@@ -20,7 +38,7 @@ export const WalletDepositFunds = () => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View {...panResponder.panHandlers} style={styles.container}>
         <Image
           style={styles.thumbnail}
           source={require('@assets/images/deposit-funds.png')}
@@ -48,13 +66,13 @@ export const WalletDepositFunds = () => {
             Deposit funds
           </Text>
         </PrimaryButton>
-      </View>
 
-      <BottomSheet ref={receiveFundsBottomSheetRef} title="Receive">
-        <View style={styles.receiveFunds}>
-          <ReceiveFunds address={wallet?.address ?? ''} />
-        </View>
-      </BottomSheet>
+        <BottomSheet ref={receiveFundsBottomSheetRef} title="Receive">
+          <View style={styles.receiveFunds}>
+            <ReceiveFunds address={wallet?.address ?? ''} />
+          </View>
+        </BottomSheet>
+      </View>
     </>
   );
 };
