@@ -81,6 +81,7 @@
   "button.try.again": "Yeniden dene",
   "button.use.pin": "PIN gir",
   "button.verify": "Doğrula",
+  "button.verifying": "!!!Verifying",
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
@@ -149,7 +150,7 @@
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
-  "create.wallet.backup.text": "Cüzdanınız bir",
+  "create.wallet.backup.text": "!!!Your new wallet is backed up with a recovery phrase. Grab a pen and paper to write it down.",
   "create.wallet.checkbox.text": "Kurtarma cümlenizi kaybedersem, AirDAO'nun onu geri yükleyemeyeceğini anlıyorum.",
   "create.wallet.double.check": "Haydi çift kontrol yapalım",
   "create.wallet.prepare": "Bir kalem ve kağıt hazır olduğundan emin olun, böylece yazabilirsiniz.",
@@ -160,7 +161,7 @@
   "create.wallet.tap.words.in.correct.order": "Kelimelere doğru sırayla dokunun",
   "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \npaylaşmayın, güvende tutun!",
   "create.wallet.verify.phrase": "İfadeyi doğrula",
-  "create.wallet.verify.text": "Gösterildiği gibi yazdığınızdan emin olun. Bunu daha sonra doğrulayacaksınız.",
+  "create.wallet.verify.text": "!!!Write down your recovery phrase exactly as shown. You’ll verify it later. Keep it private and secure!",
   "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
 
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
@@ -235,7 +236,7 @@
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.create.new": "Yeni cüzdan oluştur",
   "no.wallet.description": "AirDAO Cüzdan ile sınırsız fırsatlara dalın.",
-  "no.wallet.import": "Mevcut cüzdanı içe aktar",
+  "no.wallet.import": "!!!Mevcut cüzdanı içe aktar",
   "no.wallet.send.receive": "Gönder ve al",
   "no.wallet.send.receive.description": "Sadece birkaç dokunuşla güvenli bir şekilde para gönderip alın.",
   "no.wallet.stay.informed": "Haberdar olun",
@@ -340,7 +341,7 @@
   "toast.tap.to.rename.msg": "Adresi yeniden adlandırmak için dokunun",
   "toast.removed.wallet.from.group": "Cüzdan gruptan başarıyla kaldırıldı!",
   "toast.you.added.address.to.watchlist": "{{name}} artık izleme listenizde!",
-  "toast.you.removed.address.from.watchlist": "{{name}} izleme listesinden çıkarıldı",
+  "toast.wallet.created": "!!!Backup successful!",
 
   "token.picker.select": "Gönderilecek varlığı seçin",
   "token.actions.swap": "Takas",
