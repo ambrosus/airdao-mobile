@@ -113,11 +113,26 @@ const minimiseAmount = (num: number): string => {
   return `${scaledNum}${suffixes[suffixIndex]}`;
 };
 
+const numberToTransformedLocale = (value: string | number) => {
+  const number = parseFloat(value.toString().replace(/,/g, ''));
+  const [intPart, floatPart] = number.toString().split('.');
+
+  if (number % 1 === 0) {
+    return number.toLocaleString('en-US');
+  }
+
+  const formattedIntPart = parseInt(intPart).toLocaleString('en-US');
+  const formattedFloatPart = floatPart ? floatPart.slice(0, 2) : '00';
+
+  return `${formattedIntPart}.${formattedFloatPart}`;
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
   limitDecimalCount,
   formatAmount,
-  minimiseAmount
+  minimiseAmount,
+  numberToTransformedLocale
 };

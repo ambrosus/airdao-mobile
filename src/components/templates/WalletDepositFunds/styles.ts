@@ -4,11 +4,12 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: '45%',
+    height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: verticalScale(24)
   },
+
   thumbnail: {
     width: scale(157),
     height: verticalScale(65),

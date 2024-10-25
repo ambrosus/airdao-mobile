@@ -1,17 +1,16 @@
 import React, { useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { TransactionDetails } from '../TransactionDetails';
-import { Button, Spacer, Text } from '@components/base';
-import { BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, TransactionItem } from '@components/modular';
+import { ethers } from 'ethers';
+import moment from 'moment';
+import { Button, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { TransactionItem } from '@components/modular';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
-import { CommonStackNavigationProp } from '@appTypes/navigation/common';
-import { useTranslation } from 'react-i18next';
-import { formatUnits } from 'ethers/lib/utils';
 import { AMB_DECIMALS } from '@constants/variables';
-import { ethers } from 'ethers';
+import { COLORS } from '@constants/colors';
+import { TransactionDetails } from '@components/templates/TransactionDetails';
+import { _txStatusLabel } from '@features/explorer/utils';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -23,30 +22,16 @@ export const ExplorerAccountTransactionItem = (
 ): JSX.Element => {
   const { transaction, disabled = false } = props;
   const transactionDetailsModal = useRef<BottomSheetRef>(null);
-  const navigation = useNavigation<CommonStackNavigationProp>();
-  const { t } = useTranslation();
 
   const showTransactionDetails = () => {
     transactionDetailsModal.current?.show();
-  };
-
-  const hideTransactionDetails = () => {
-    transactionDetailsModal.current?.dismiss();
-  };
-
-  const navigateToAddress = (address: string) => {
-    transactionDetailsModal.current?.dismiss();
-    // close first, navigate then
-    setTimeout(() => {
-      navigation.push('Address', { address });
-    }, 0);
   };
 
   const transactionTokenInfo = useMemo((): TransactionTokenInfo => {
     if (transaction?.token) {
       return {
         ...transaction.token,
-        cryptoAmount: formatUnits(
+        cryptoAmount: ethers.utils.formatUnits(
           transaction.value.wei,
           transaction.token.decimals
         )
@@ -57,7 +42,10 @@ export const ExplorerAccountTransactionItem = (
         ...transaction.value,
         address: ethers.constants.AddressZero,
         decimals: AMB_DECIMALS,
-        cryptoAmount: formatUnits(transaction.value.wei, AMB_DECIMALS)
+        cryptoAmount: ethers.utils.formatUnits(
+          transaction.value.wei,
+          AMB_DECIMALS
+        )
       };
     }
     return {
@@ -81,22 +69,26 @@ export const ExplorerAccountTransactionItem = (
           transactionTokenInfo={transactionTokenInfo}
         />
       </Button>
-      <BottomSheetFloat ref={transactionDetailsModal} swiperIconVisible>
-        <View style={styles.transactionDetailsTop}>
-          <Spacer value={verticalScale(26.46)} />
-          <Text fontSize={20} fontFamily="Inter_700Bold" fontWeight="600">
-            {t('common.transaction.details')}
-          </Text>
-        </View>
+      <BottomSheet
+        ref={transactionDetailsModal}
+        title={_txStatusLabel(transaction)}
+      >
         <View style={styles.transactionDetails}>
-          <TransactionDetails
-            transactionTokenInfo={transactionTokenInfo}
-            onPressAddress={navigateToAddress}
-            onViewOnExplorerPress={hideTransactionDetails}
-            transaction={transaction}
-          />
+          <Text
+            fontSize={13}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral500}
+          >
+            {moment(transaction.timestamp).format('MMM DD, YYYY - HH:mm')}
+          </Text>
+          <View style={styles.innerTransactionDetails}>
+            <TransactionDetails
+              transactionTokenInfo={transactionTokenInfo}
+              transaction={transaction}
+            />
+          </View>
         </View>
-      </BottomSheetFloat>
+      </BottomSheet>
     </>
   );
 };
@@ -107,7 +99,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   transactionDetails: {
-    paddingVertical: verticalScale(24),
-    paddingHorizontal: scale(24)
+    paddingTop: 2,
+    paddingBottom: verticalScale(24),
+    paddingHorizontal: scale(16)
+  },
+  innerTransactionDetails: {
+    paddingTop: verticalScale(24)
   }
 });

@@ -12,9 +12,10 @@ import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils/scaling';
 import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
+
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { COLORS } from '@constants/colors';
+import { ExplorerAccountTransactionItem } from './components';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -93,8 +94,8 @@ export const AccountTransactions = (
         )}
         <Text
           fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
+          fontSize={13}
+          color={COLORS.neutral500}
         >
           {info.section.title.toUpperCase()}
         </Text>

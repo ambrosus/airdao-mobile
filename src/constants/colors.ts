@@ -31,6 +31,7 @@ export const COLORS = {
   brand800: '#061B4A',
   brand900: '#071430',
 
+  error50: '#FFC7C7',
   error100: '#FFD9CD',
   error200: '#FFAC9A',
   error300: '#FD6E65',
@@ -41,7 +42,8 @@ export const COLORS = {
   error800: '#49121C',
   error900: '#330F16',
 
-  success100: '#C3FBE5',
+  success50: '#E5FFF7',
+  success100: '#C5EEE1',
   success200: '#73E5B7',
   success300: '#2DBA8D',
   success400: '#159F80',
@@ -51,6 +53,7 @@ export const COLORS = {
   success800: '#0D3137',
   success900: '#08222A',
 
+  warning50: '#FFF8E5',
   warning100: '#FFFBB5',
   warning200: '#FFE773',
   warning300: '#FFC93E',
@@ -112,7 +115,8 @@ export const COLORS = {
   separator: '#2f2b431a',
 
   // V2
-  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)'
+  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',
+  semanticsForegroundBorder: 'rgba(216, 218, 224, 1)'
 };
 
 export const CreditCardBg = [
