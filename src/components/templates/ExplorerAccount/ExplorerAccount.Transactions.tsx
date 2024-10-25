@@ -94,8 +94,8 @@ export const AccountTransactions = (
         )}
         <Text
           fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
+          fontSize={13}
+          color={COLORS.neutral500}
         >
           {info.section.title.toUpperCase()}
         </Text>
