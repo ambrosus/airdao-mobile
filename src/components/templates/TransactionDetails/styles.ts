@@ -11,5 +11,21 @@ export const styles = StyleSheet.create({
     height: moderateScale(8),
     width: moderateScale(8),
     borderRadius: moderateScale(4)
+  },
+  detailsContainer: {
+    paddingTop: verticalScale(16),
+    rowGap: 16
+  },
+  innerDetailsContainer: {
+    rowGap: 4
+  },
+  detailsContainerValue: {
+    maxWidth: scale(303)
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingVertical: verticalScale(16)
   }
 });

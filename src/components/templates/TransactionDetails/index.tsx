@@ -1,28 +1,24 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useAMBPrice } from '@hooks';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
 import { styles } from './styles';
 import { TokenLogo } from '@components/modular';
+import { GlobeIcon } from '@components/svg/icons/v2';
+import Config from '@constants/config';
+import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
+import { AddressRowWithAction } from '../ExplorerAccount/components/address-row-with-action';
 
 interface TransactionDetailsProps {
   transaction: Transaction;
   isShareable?: boolean;
-  onPressAddress?: (address: string) => void;
-  onViewOnExplorerPress?: () => void;
   transactionTokenInfo: TransactionTokenInfo;
 }
-
-const ROW_MARGIN: number = verticalScale(24);
 
 const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
   <Row alignItems="center" justifyContent="space-between">
@@ -30,21 +26,24 @@ const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
   </Row>
 );
 
-export const TransactionDetails = (
-  props: TransactionDetailsProps
-): JSX.Element => {
-  const {
-    transaction,
-    onPressAddress,
-    onViewOnExplorerPress,
-    transactionTokenInfo
-  } = props;
+export const TransactionDetails = ({
+  transaction,
+  transactionTokenInfo
+}: TransactionDetailsProps): JSX.Element => {
+  const { t } = useTranslation();
+
+  const shareTransactionModal = useRef<BottomSheetRef>(null);
+  const currentStatus = t(`common.transaction.status.${transaction.status}`);
+
   const isTransfer = transaction.type === 'Transfer';
+  const isERC1155 = transactionTokenInfo.type === 'ERC-1155';
   const isContractCall = transaction.type.includes('ContractCall');
   const isTokenTransfer = transaction.type === 'TokenTransfer';
+  const isSuccessTransaction = transaction.status === 'SUCCESS';
 
   const amountTokenLogo = useMemo(() => {
     switch (true) {
+      case isERC1155:
       case isTransfer:
         return 'AirDAO';
       case isTokenTransfer:
@@ -56,20 +55,14 @@ export const TransactionDetails = (
     }
   }, [
     isContractCall,
+    isERC1155,
     isTokenTransfer,
     isTransfer,
     transaction?.token?.name,
     transaction?.value?.symbol
   ]);
 
-  const shareTransactionModal = useRef<BottomSheetRef>(null);
-  const { data: ambData } = useAMBPrice();
-  const { t } = useTranslation();
-  const isSuccessTransaction = transaction.status === 'SUCCESS';
-
-  const currentStatus = t(`common.transaction.status.${transaction.status}`);
-
-  // status to render
+  // Render Tx Status
   const transactionStatus = useMemo(() => {
     switch (transaction.status) {
       case 'FAIL':
@@ -90,235 +83,81 @@ export const TransactionDetails = (
     };
   }, [isSuccessTransaction]);
 
-  const ambPrice = ambData ? ambData.priceUSD : -1;
-  let totalTransactionAmount;
-  if (ambData) {
-    const result = transaction.amount * ambPrice;
-    totalTransactionAmount =
-      result < 1000
-        ? NumberUtils.limitDecimalCount(result, 2)
-        : NumberUtils.limitDecimalCount(result, 0);
-  } else {
-    totalTransactionAmount = -1;
-  }
+  const onRedirectToExplorerTransaction = useCallback(() => {
+    Linking.openURL(`${Config.EXPLORER_URL}/tx/${transaction.hash}/`);
+  }, [transaction.hash]);
 
   // TODO temporarily hide share buttons
   // const showShareTransaction = () => {
   //   shareTransactionModal.current?.show();
   // };
 
-  if (!transaction) return <></>;
-  const addressesArePressable = typeof onPressAddress === 'function';
-
-  const onPressSendingAddress = () => {
-    if (transaction.from && typeof onPressAddress === 'function') {
-      onPressAddress(transaction.from);
-    }
-  };
-
-  const onPressReceivingAddress = () => {
-    if (transaction.to && typeof onPressAddress === 'function') {
-      onPressAddress(transaction.to);
-    }
-  };
-
   return (
     <View testID="Transaction_Details">
-      <JustifiedRow>
+      <Row alignItems="center">
+        <TokenLogo token={amountTokenLogo} />
+        <Spacer horizontal value={8} />
         <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
-        >
-          {t('common.date')}
-        </Text>
-        <Text
-          fontFamily="Inter_500Medium"
-          fontSize={16}
+          fontSize={22}
+          fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {moment(transaction.timestamp).format('MM/DD/YYYY hh:mm')}
+          {NumberUtils.numberToTransformedLocale(
+            transactionTokenInfo.cryptoAmount
+          )}{' '}
+          {transaction.symbol}
         </Text>
-      </JustifiedRow>
-      <Spacer value={ROW_MARGIN} />
-      <JustifiedRow>
-        <Text
-          color={COLORS.neutral300}
-          fontSize={16}
-          fontFamily="Inter_600SemiBold"
-        >
-          {t('common.status')}
-        </Text>
-        <Row
-          alignItems="center"
-          style={{
-            ...styles.status,
-            backgroundColor: transactionStatusStyle.backgroundColor
-          }}
-        >
-          <View
+      </Row>
+
+      <View style={styles.detailsContainer}>
+        <AddressRowWithAction
+          label={t('common.transaction.from')}
+          address={transaction.from}
+        />
+        <AddressRowWithAction
+          label={t('common.transaction.to')}
+          address={transaction.to}
+        />
+
+        <JustifiedRow>
+          <DetailsItemTypography>{t('common.status')}</DetailsItemTypography>
+          <Row
+            alignItems="center"
             style={{
-              ...styles.statusPoint,
-              backgroundColor: transactionStatusStyle.pointBackgroundColor
+              ...styles.status,
+              backgroundColor: transactionStatusStyle.backgroundColor
             }}
-          />
-          <Spacer horizontal value={scale(4)} />
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={transactionStatusStyle.textColor}
           >
-            {transactionStatus}
-          </Text>
-        </Row>
-      </JustifiedRow>
-      {transaction.from && (
-        <>
-          <Spacer value={ROW_MARGIN} />
-          <JustifiedRow>
             <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.neutral300}
-            >
-              {t('common.transaction.from')}
-            </Text>
-            <Button
-              disabled={!addressesArePressable}
-              onPress={onPressSendingAddress}
-            >
-              <Text
-                style={{
-                  textDecorationLine: 'underline'
-                }}
-                color={COLORS.neutral800}
-                fontFamily="Inter_600SemiBold"
-                fontSize={16}
-              >
-                {StringUtils.formatAddress(transaction.from, 4, 5)}
-              </Text>
-            </Button>
-          </JustifiedRow>
-        </>
-      )}
-      {transaction.to && (
-        <>
-          <Spacer value={ROW_MARGIN} />
-          <JustifiedRow>
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={16}
-              color={COLORS.neutral300}
-            >
-              {t('common.transaction.to')}
-            </Text>
-            <Button
-              disabled={!addressesArePressable}
-              onPress={onPressReceivingAddress}
-            >
-              <Text
-                color={COLORS.neutral800}
-                fontFamily="Inter_600SemiBold"
-                fontSize={16}
-                style={{
-                  textDecorationLine: 'underline'
-                }}
-              >
-                {StringUtils.formatAddress(transaction.to, 4, 5)}
-              </Text>
-            </Button>
-          </JustifiedRow>
-        </>
-      )}
-      <Spacer value={ROW_MARGIN} />
-      <JustifiedRow>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
-        >
-          {t('common.transaction.amount')}
-        </Text>
-        <Row alignItems="center">
-          <TokenLogo token={amountTokenLogo} scale={0.5} />
-          <Spacer value={scale(4)} horizontal />
-          <Text
-            fontFamily="Inter_600SemiBold"
-            fontSize={16}
-            color={COLORS.neutral800}
-          >
-            {NumberUtils.limitDecimalCount(
-              transactionTokenInfo.cryptoAmount,
-              2
-            )}{' '}
-            {transaction.symbol}
-            <Text
-              fontFamily="Inter_500Medium"
               fontSize={14}
-              color={COLORS.neutral400}
+              fontFamily="Inter_500Medium"
+              color={transactionStatusStyle.textColor}
             >
-              {totalTransactionAmount !== -1 && ` $${totalTransactionAmount}`}
+              {transactionStatus}
             </Text>
-          </Text>
-        </Row>
-      </JustifiedRow>
-      <Spacer value={ROW_MARGIN} />
-      <JustifiedRow>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
-        >
-          {t('common.estimated.fee')}
-        </Text>
-        <Row alignItems="center">
-          <TokenLogo token="AirDAO" scale={0.5} />
-          <Spacer value={scale(4)} horizontal />
+          </Row>
+        </JustifiedRow>
+        <JustifiedRow>
+          <DetailsItemTypography>
+            {t('swap.bottom.sheet.lpfee')}
+          </DetailsItemTypography>
+          <DetailsItemTypography type="value">
+            {NumberUtils.limitDecimalCount(transaction.fee.toString(), 2)} AMB
+          </DetailsItemTypography>
+        </JustifiedRow>
+
+        <Button onPress={onRedirectToExplorerTransaction} style={styles.button}>
+          <GlobeIcon />
+          <Spacer horizontal value={8} />
           <Text
-            color={COLORS.neutral700}
+            fontSize={17}
             fontFamily="Inter_600SemiBold"
-            fontSize={14}
+            color={COLORS.brand600}
           >
-            {NumberUtils.limitDecimalCount(transaction.fee.toString(), 6)} AMB
+            {t('transaction.modal.buttons.explorer')}
           </Text>
-        </Row>
-      </JustifiedRow>
-      <Spacer value={ROW_MARGIN} />
-      <Button
-        type="circular"
-        style={{ backgroundColor: COLORS.alphaBlack5 }}
-        onPress={() => {
-          if (typeof onViewOnExplorerPress === 'function') {
-            onViewOnExplorerPress();
-          }
-          Linking.openURL(`https://airdao.io/explorer/tx/${transaction.hash}/`);
-        }}
-      >
-        <Text
-          style={{ marginVertical: verticalScale(12) }}
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral800}
-        >
-          {t('transaction.modal.buttons.explorer')}
-        </Text>
-      </Button>
-      <Spacer value={verticalScale(16)} />
-      {/*TODO temporarily hide share buttons*/}
-      {/*<Button*/}
-      {/*  type="circular"*/}
-      {/*  style={{ backgroundColor: COLORS.alphaBlack5 }}*/}
-      {/*  onPress={showShareTransaction}*/}
-      {/*>*/}
-      {/*  <Text*/}
-      {/*    style={{ marginVertical: verticalScale(12) }}*/}
-      {/*    fontFamily="Inter_600SemiBold"*/}
-      {/*    fontSize={16}*/}
-      {/*    color={COLORS.neutral800}*/}
-      {/*  >*/}
-      {/*    {t('transaction.modal.buttons.share')}*/}
-      {/*  </Text>*/}
-      {/*</Button>*/}
+        </Button>
+      </View>
 
       <SharePortfolio
         ref={shareTransactionModal}

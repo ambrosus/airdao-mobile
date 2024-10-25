@@ -113,26 +113,18 @@ const minimiseAmount = (num: number): string => {
   return `${scaledNum}${suffixes[suffixIndex]}`;
 };
 
-const numberToTransformedLocale = (value: string) => {
-  const number = parseFloat(value.replace(/,/g, ''));
-
-  const decimalPart = value.split('.')[1];
-  if (
-    decimalPart &&
-    decimalPart.length >= 2 &&
-    decimalPart.slice(0, 2) === '00'
-  ) {
-    return Math.floor(number).toLocaleString('en-US');
-  }
+const numberToTransformedLocale = (value: string | number) => {
+  const number = parseFloat(value.toString().replace(/,/g, ''));
+  const [intPart, floatPart] = number.toString().split('.');
 
   if (number % 1 === 0) {
     return number.toLocaleString('en-US');
   }
 
-  return number.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  const formattedIntPart = parseInt(intPart).toLocaleString('en-US');
+  const formattedFloatPart = floatPart ? floatPart.slice(0, 2) : '00';
+
+  return `${formattedIntPart}.${formattedFloatPart}`;
 };
 
 export const NumberUtils = {

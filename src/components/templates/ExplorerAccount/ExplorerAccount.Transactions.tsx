@@ -12,9 +12,10 @@ import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils/scaling';
 import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
+
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { COLORS } from '@constants/colors';
+import { ExplorerAccountTransactionItem } from './components';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];

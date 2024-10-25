@@ -243,4 +243,4 @@ export const ExplorerAccountView = (
 };
 
 export * from './ExplorerAccount.Transactions';
-export * from './ExplorerAccount.TransactionItem';
+export * from './components/transaction-item/ExplorerAccount.TransactionItem';

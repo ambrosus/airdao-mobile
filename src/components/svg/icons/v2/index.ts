@@ -7,3 +7,5 @@ export { CheckboxCircleFill } from './CheckboxCircleFill';
 export { BarcodeScannerIcon } from './Barcode';
 export { NoWalletPageIcon } from './NoWalletPageIcon';
 export { NewWalletPageIcon } from './NewWalletPageIcon';
+export { GlobeIcon } from './Globe';
+export { ClipboardIcon } from './Clipboard';

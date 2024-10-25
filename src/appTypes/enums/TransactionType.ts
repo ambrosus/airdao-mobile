@@ -5,5 +5,6 @@ export enum TransactionType {
   BlockReward = 'BlockReward',
   ShelteringTransferResolve = 'ShelteringTransfers::resolve',
   ShelteringTransferSheltering = 'Sheltering::transferSheltering',
-  ShelteringRemoveShelterer = 'Sheltering::removeShelterer'
+  ShelteringRemoveShelterer = 'Sheltering::removeShelterer',
+  ERC1155 = 'ERC-1155'
 }

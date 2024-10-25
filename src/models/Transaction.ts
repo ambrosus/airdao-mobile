@@ -9,6 +9,7 @@ export interface TransactionTokenInfo {
   decimals: number;
   totalSupply?: number;
   cryptoAmount: string;
+  type?: 'ERC-20' | 'ERC-1155';
 }
 
 export class Transaction {

@@ -10,6 +10,7 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus.io/v2',
     STAKING_API_URL: 'https://staking-api.ambrosus.io/pools/v2',
+    EXPLORER_URL: 'https://airdao.io/explorer',
     env: 'prod',
     debug: {
       appBuildVersion: '1.0.0',
@@ -47,6 +48,7 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus.io/v2',
     STAKING_API_URL: 'https://staking-api.ambrosus.io/pools/v2',
+    EXPLORER_URL: 'https://testnet.airdao.io/explorer',
     env: 'stage',
     debug: {
       appBuildVersion: '1.0.0',
@@ -84,6 +86,7 @@ const envs = {
     EXPLORER_API_URL: 'https://explorer-api.ambrosus-test.io',
     EXPLORER_API_V2_URL: 'https://explorer-v2-api.ambrosus-test.io/v2',
     STAKING_API_URL: 'https://staking-api.ambrosus-test.io/pools/v2',
+    EXPLORER_URL: 'https://testnet.airdao.io/explorer',
     env: 'testnet',
     debug: {
       appBuildVersion: '1.0.0',
