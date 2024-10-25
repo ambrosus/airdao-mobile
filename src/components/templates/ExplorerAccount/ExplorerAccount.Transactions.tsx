@@ -7,15 +7,13 @@ import {
   StyleSheet
 } from 'react-native';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
 import { Transaction } from '@models';
-import { scale, verticalScale } from '@utils/scaling';
 import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-
-import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
-import { COLORS } from '@constants/colors';
 import { ExplorerAccountTransactionItem } from './components';
+import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
+import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -31,21 +29,16 @@ interface TransactionSection {
   data: Transaction[];
   index: number;
 }
-const DAY_FORMAT = 'MMM DD YYYY';
+const DAY_FORMAT = 'MMM DD, YYYY';
 
-export const AccountTransactions = (
-  props: ExplorerAccountViewTransactionsProps
-): JSX.Element => {
-  const {
-    transactions,
-    loading,
-    showTransactionDetailsOnPress,
-    isRefreshing,
-    onRefresh,
-    onEndReached
-  } = props;
-  const { t } = useTranslation();
-
+export const AccountTransactions = ({
+  transactions,
+  loading,
+  showTransactionDetailsOnPress,
+  isRefreshing,
+  onRefresh,
+  onEndReached
+}: ExplorerAccountViewTransactionsProps) => {
   const sectionizedTransactions: TransactionSection[] = React.useMemo(() => {
     const sectionMap = new Map<string, Transaction[]>();
     transactions.forEach((n) => {
@@ -57,19 +50,11 @@ export const AccountTransactions = (
     const sections: TransactionSection[] = [];
     let index = 0;
     for (const [date, transactions] of sectionMap) {
-      const today = moment().format(DAY_FORMAT);
-      const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
-      const title =
-        date === today
-          ? t('common.today')
-          : date === yesterday
-          ? t('common.yesterday')
-          : date;
-      sections.push({ title, data: transactions, index });
+      sections.push({ title: date, data: transactions, index });
       index++;
     }
     return sections;
-  }, [transactions, t]);
+  }, [transactions]);
 
   const renderTransaction = (
     args: ListRenderItemInfo<Transaction>
@@ -87,17 +72,13 @@ export const AccountTransactions = (
   }) => {
     return (
       <>
-        {info.section.index !== 0 && (
-          <>
-            <Spacer value={verticalScale(40)} />
-          </>
-        )}
+        {info.section.index !== 0 && <Spacer value={verticalScale(16)} />}
         <Text
           fontFamily="Inter_600SemiBold"
           fontSize={13}
           color={COLORS.neutral500}
         >
-          {info.section.title.toUpperCase()}
+          {info.section.title}
         </Text>
         <Spacer value={verticalScale(16)} />
       </>
@@ -115,14 +96,16 @@ export const AccountTransactions = (
             <LocalizedRenderEmpty text={'common.no.transactions'} />
           )
         }
-        ItemSeparatorComponent={() => <Spacer value={32} />}
+        ItemSeparatorComponent={() => <Spacer value={16} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         onEndReached={onEndReached}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         testID="Transactions_List"
-        ListFooterComponent={() => (loading ? <CenteredSpinner /> : <></>)}
+        ListFooterComponent={() =>
+          loading && <CenteredSpinner containerStyle={styles.loader} />
+        }
         refreshControl={
           <RefreshControl
             onRefresh={onRefresh}
@@ -139,5 +122,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: scale(16),
     paddingBottom: '40%'
+  },
+  loader: {
+    marginTop: verticalScale(8)
   }
 });
