@@ -21,7 +21,7 @@ export const AddressRowWithAction = ({
   const [isCopied, setIsCopied] = useState(false);
 
   const valueStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return { marginTop: 4, maxWidth: scale(303) };
+    return { marginTop: 4, maxWidth: scale(311) };
   }, []);
 
   const onCopyAddress = useCallback(async () => {

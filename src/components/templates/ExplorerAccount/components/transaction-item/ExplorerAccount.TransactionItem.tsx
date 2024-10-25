@@ -7,10 +7,10 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TransactionItem } from '@components/modular';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
 import { scale, verticalScale } from '@utils/scaling';
-
 import { AMB_DECIMALS } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { TransactionDetails } from '@components/templates/TransactionDetails';
+import { _txStatusLabel } from '@features/explorer/utils';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;
@@ -69,7 +69,10 @@ export const ExplorerAccountTransactionItem = (
           transactionTokenInfo={transactionTokenInfo}
         />
       </Button>
-      <BottomSheet ref={transactionDetailsModal} title={transaction.type}>
+      <BottomSheet
+        ref={transactionDetailsModal}
+        title={_txStatusLabel(transaction)}
+      >
         <View style={styles.transactionDetails}>
           <Text
             fontSize={13}

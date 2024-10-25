@@ -25,8 +25,8 @@ export const DetailsItemTypography = ({
       }
       case 'value': {
         return {
-          fontSize: 14,
-          fontFamily: 'Inter_500Medium',
+          fontSize: 15,
+          fontFamily: 'Inter_400Regular',
           color: COLORS.neutral800
         };
       }

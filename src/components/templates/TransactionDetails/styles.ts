@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
   status: {
     paddingHorizontal: scale(8),
     borderRadius: 1000,
-    minHeight: verticalScale(24)
+    minHeight: verticalScale(24),
+    borderWidth: 0.5
   },
   statusPoint: {
     height: moderateScale(8),

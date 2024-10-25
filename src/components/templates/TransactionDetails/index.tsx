@@ -40,6 +40,7 @@ export const TransactionDetails = ({
   const isContractCall = transaction.type.includes('ContractCall');
   const isTokenTransfer = transaction.type === 'TokenTransfer';
   const isSuccessTransaction = transaction.status === 'SUCCESS';
+  const isPendingTransaction = transaction.status === 'PENDING';
 
   const amountTokenLogo = useMemo(() => {
     switch (true) {
@@ -74,23 +75,32 @@ export const TransactionDetails = ({
   }, [currentStatus, transaction.status]);
 
   const transactionStatusStyle = useMemo(() => {
-    const fieldName = isSuccessTransaction ? 'success' : 'error';
+    const fieldName = ['error', 'warning', 'success'][
+      isSuccessTransaction ? 2 : isPendingTransaction ? 1 : 0
+    ] as 'error' | 'warning' | 'success';
 
     return {
-      pointBackgroundColor: COLORS[`${fieldName}600`],
-      backgroundColor: COLORS[`${fieldName}100`],
-      textColor: COLORS[`${fieldName}500`]
+      backgroundColor: COLORS[`${fieldName}50`],
+      textColor: COLORS[`${fieldName}700`],
+      borderColor: COLORS[`${fieldName}100`]
     };
-  }, [isSuccessTransaction]);
+  }, [isSuccessTransaction, isPendingTransaction]);
 
   const onRedirectToExplorerTransaction = useCallback(() => {
     Linking.openURL(`${Config.EXPLORER_URL}/tx/${transaction.hash}/`);
   }, [transaction.hash]);
 
-  // TODO temporarily hide share buttons
-  // const showShareTransaction = () => {
-  //   shareTransactionModal.current?.show();
-  // };
+  const subheadingAmountColor = useMemo(() => {
+    return transaction.isSent ? COLORS.neutral800 : '#23B083';
+  }, [transaction]);
+
+  const amountWithSymbolValue = useMemo(() => {
+    const amount = NumberUtils.numberToTransformedLocale(
+      transactionTokenInfo.cryptoAmount
+    );
+
+    return transaction.isSent ? `-${amount}` : amount;
+  }, [transaction, transactionTokenInfo.cryptoAmount]);
 
   return (
     <View testID="Transaction_Details">
@@ -100,24 +110,25 @@ export const TransactionDetails = ({
         <Text
           fontSize={22}
           fontFamily="Inter_700Bold"
-          color={COLORS.neutral800}
+          color={subheadingAmountColor}
         >
-          {NumberUtils.numberToTransformedLocale(
-            transactionTokenInfo.cryptoAmount
-          )}{' '}
-          {transaction.symbol}
+          {amountWithSymbolValue} {transaction.symbol}
         </Text>
       </Row>
 
       <View style={styles.detailsContainer}>
-        <AddressRowWithAction
-          label={t('common.transaction.from')}
-          address={transaction.from}
-        />
-        <AddressRowWithAction
-          label={t('common.transaction.to')}
-          address={transaction.to}
-        />
+        {!isContractCall && (
+          <>
+            <AddressRowWithAction
+              label={t('common.transaction.from')}
+              address={transaction.from}
+            />
+            <AddressRowWithAction
+              label={t('common.transaction.to')}
+              address={transaction.to}
+            />
+          </>
+        )}
 
         <JustifiedRow>
           <DetailsItemTypography>{t('common.status')}</DetailsItemTypography>
@@ -125,7 +136,8 @@ export const TransactionDetails = ({
             alignItems="center"
             style={{
               ...styles.status,
-              backgroundColor: transactionStatusStyle.backgroundColor
+              backgroundColor: transactionStatusStyle.backgroundColor,
+              borderColor: transactionStatusStyle.borderColor
             }}
           >
             <Text
