@@ -245,6 +245,7 @@
   "settings.about": "Hakkında",
   "settings.help": "Yardım merkezi",
   "settings.manage.wallet": "Cüzdan yönetimi",
+  "settings.watchlists": "!!!Watchlists",
   "settings.notifications": "Bildirim ayarları",
   "settings.preferences": "Tercihler",
   "settings.security": "Güvenlik",
@@ -462,6 +463,8 @@
 
   "kosmos.market.tabs.buy.bond": "Tahvil satın al",
   "kosmos.market.tabs.history": "Geçmiş",
+
+  "settings.version": "!!!Version",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

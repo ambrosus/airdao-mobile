@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  View
-} from 'react-native';
+import { Alert, SafeAreaView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BottomAwareSafeAreaView } from '@components/composite';
@@ -15,17 +9,11 @@ import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import usePasscode from '@contexts/Passcode';
-import { isIos } from '@utils/isPlatform';
-
-const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
-  ? 'padding'
-  : 'height';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const route = useRoute<RouteProp<HomeParamsList, 'ConfirmPasscode'>>();
-  const { top } = useSafeAreaInsets();
   const { setSavedPasscode } = usePasscode();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const { passcode: originalPasscode } = route.params;
@@ -46,9 +34,11 @@ export const ConfirmPasscode = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={KEYBOARD_BEHAVIOR}
-      style={{ top, flex: 1, justifyContent: 'space-between' }}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        justifyContent: 'space-between'
+      }}
     >
       <View>
         <View
@@ -68,22 +58,25 @@ export const ConfirmPasscode = () => {
           <Spacer value={verticalScale(19)} />
         </View>
         <Spacer value={verticalScale(23)} />
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral800}
-        >
-          {t('security.enter.passcode.text')}
-        </Text>
-        <Spacer value={verticalScale(50)} />
+        <View style={{ paddingHorizontal: 15 }}>
+          <Text
+            align="center"
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral800}
+          >
+            {t('security.enter.passcode.text')}
+          </Text>
+        </View>
+        <Spacer value={verticalScale(19)} />
+      </View>
+
+      <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
         <Passcode
           isBiometricEnabled={false}
           onPasscodeChange={onPasscodeChange}
         />
-        <Spacer value={verticalScale(50)} />
-      </View>
-      <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
+        <Spacer value={19} />
         <Button
           disabled={!isButtonEnabled}
           onPress={onContinuePress}
@@ -105,6 +98,6 @@ export const ConfirmPasscode = () => {
           </Text>
         </Button>
       </BottomAwareSafeAreaView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
