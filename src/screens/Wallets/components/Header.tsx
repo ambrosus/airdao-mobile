@@ -69,30 +69,17 @@ export const HomeHeader = React.memo((): JSX.Element => {
       if (!walletKit) return closeScanner();
 
       try {
-        await InteractionManager.runAfterInteractions(async () => {
-          try {
-            setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
-            closeScanner();
-            await walletKit.pair({ uri });
-
-            new Promise<void>((resolve) => setTimeout(resolve, 1000));
-            InteractionManager.runAfterInteractions(() => {
-              onShowWalletConnectBottomSheet();
-            });
-          } catch (error) {
-            setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
-            closeScanner();
-
-            new Promise<void>((resolve) => setTimeout(resolve, 1000));
-
-            InteractionManager.runAfterInteractions(() => {
-              onShowWalletConnectBottomSheet();
-            });
-          }
-        });
-      } catch (error) {
-        console.error('Error during wallet connection:', error);
         closeScanner();
+        await walletKit.pair({ uri });
+      } catch (error) {
+        setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
+        closeScanner();
+
+        new Promise<void>((resolve) => setTimeout(resolve, 1000));
+
+        InteractionManager.runAfterInteractions(() => {
+          onShowWalletConnectBottomSheet();
+        });
       }
     },
     [closeScanner, onShowWalletConnectBottomSheet, setWalletConnectStep]
