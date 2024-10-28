@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
@@ -10,12 +10,15 @@ import { WalletAssets } from './WalletAssets';
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
   onRefresh?: () => void;
+  onTransactionsScrollEvent: (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => void;
 }
 
 export const WalletTransactionsAndAssets = (
   props: WalletTransactionsAndAssetsProps
 ) => {
-  const { account, onRefresh } = props;
+  const { account, onRefresh, onTransactionsScrollEvent } = props;
   const {
     data: tokensAndTransactions,
     loading,
@@ -75,6 +78,7 @@ export const WalletTransactionsAndAssets = (
             title: t('kosmos.market.tabs.history'),
             view: (
               <AccountTransactions
+                onTransactionsScrollEvent={onTransactionsScrollEvent}
                 transactions={transactions}
                 loading={loading}
                 isRefreshing={refetching && userPerformedRefresh}
@@ -84,7 +88,9 @@ export const WalletTransactionsAndAssets = (
             )
           }
         ]}
-        containerStyle={{ flex: 1 }}
+        containerStyle={{
+          flex: 1
+        }}
       />
     </View>
   );
