@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {
+  FlatList,
   ListRenderItemInfo,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -7,6 +8,7 @@ import {
   StyleSheet
 } from 'react-native';
 import moment from 'moment';
+import Animated from 'react-native-reanimated';
 import { Transaction } from '@models';
 import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
@@ -14,7 +16,6 @@ import { ExplorerAccountTransactionItem } from './components';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import Animated from 'react-native-reanimated';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -37,92 +38,102 @@ interface SectionedTransaction {
 
 const DAY_FORMAT = 'MMM DD, YYYY';
 
-export const AccountTransactions = ({
-  transactions,
-  loading,
-  showTransactionDetailsOnPress,
-  isRefreshing,
-  onRefresh,
-  onEndReached,
-  onTransactionsScrollEvent
-}: ExplorerAccountViewTransactionsProps) => {
-  const sectionizedTransactions: SectionedTransaction[] = React.useMemo(() => {
-    const sectionMap = new Map<string, Transaction[]>();
-    transactions.forEach((n) => {
-      const key = moment(n.timestamp).format(DAY_FORMAT);
-      const transactionsInSection = sectionMap.get(key) || [];
-      transactionsInSection.push(n);
-      sectionMap.set(key, transactionsInSection);
-    });
+export const AccountTransactions = forwardRef<
+  FlatList,
+  ExplorerAccountViewTransactionsProps
+>(
+  (
+    {
+      transactions,
+      loading,
+      showTransactionDetailsOnPress,
+      isRefreshing,
+      onRefresh,
+      onEndReached,
+      onTransactionsScrollEvent
+    },
+    ref
+  ) => {
+    const sectionizedTransactions: SectionedTransaction[] =
+      React.useMemo(() => {
+        const sectionMap = new Map<string, Transaction[]>();
+        transactions.forEach((n) => {
+          const key = moment(n.timestamp).format(DAY_FORMAT);
+          const transactionsInSection = sectionMap.get(key) || [];
+          transactionsInSection.push(n);
+          sectionMap.set(key, transactionsInSection);
+        });
 
-    const sections: SectionedTransaction[] = [];
-    for (const [title, data] of sectionMap.entries()) {
-      sections.push({ type: 'header', title });
-      data.forEach((transaction) => {
-        sections.push({ type: 'transaction', transaction });
-      });
-    }
-    return sections;
-  }, [transactions]);
+        const sections: SectionedTransaction[] = [];
+        for (const [title, data] of sectionMap.entries()) {
+          sections.push({ type: 'header', title });
+          data.forEach((transaction) => {
+            sections.push({ type: 'transaction', transaction });
+          });
+        }
+        return sections;
+      }, [transactions]);
 
-  const renderItem = (
-    args: ListRenderItemInfo<SectionedTransaction>
-  ): JSX.Element => {
-    if (args.item.type === 'header') {
+    const renderItem = (
+      args: ListRenderItemInfo<SectionedTransaction>
+    ): JSX.Element => {
+      if (args.item.type === 'header') {
+        return (
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={13}
+            color={COLORS.neutral500}
+          >
+            {args.item.title}
+          </Text>
+        );
+      }
+
       return (
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={13}
-          color={COLORS.neutral500}
-        >
-          {args.item.title}
-        </Text>
+        <ExplorerAccountTransactionItem
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          transaction={args.item.transaction!}
+          disabled={showTransactionDetailsOnPress}
+        />
       );
-    }
+    };
 
     return (
-      <ExplorerAccountTransactionItem
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        transaction={args.item.transaction!}
-        disabled={showTransactionDetailsOnPress}
-      />
+      <>
+        <Animated.FlatList
+          ref={ref}
+          keyExtractor={(item, idx) =>
+            item.type === 'transaction'
+              ? `${item.transaction?.hash}-${idx}`
+              : `header-${idx}`
+          }
+          data={sectionizedTransactions}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            loading ? null : (
+              <LocalizedRenderEmpty text={'common.no.transactions'} />
+            )
+          }
+          ItemSeparatorComponent={() => <Spacer value={16} />}
+          contentContainerStyle={styles.list}
+          onEndReached={onEndReached}
+          showsVerticalScrollIndicator={false}
+          testID="Transactions_List"
+          ListFooterComponent={() =>
+            loading && <CenteredSpinner containerStyle={styles.loader} />
+          }
+          refreshControl={
+            <RefreshControl
+              onRefresh={onRefresh}
+              refreshing={Boolean(isRefreshing)}
+            />
+          }
+          onScroll={onTransactionsScrollEvent}
+        />
+      </>
     );
-  };
-
-  return (
-    <>
-      <Animated.FlatList
-        keyExtractor={(item, idx) =>
-          item.type === 'transaction'
-            ? `${item.transaction?.hash}-${idx}`
-            : `header-${idx}`
-        }
-        data={sectionizedTransactions}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          loading ? null : (
-            <LocalizedRenderEmpty text={'common.no.transactions'} />
-          )
-        }
-        ItemSeparatorComponent={() => <Spacer value={16} />}
-        contentContainerStyle={styles.list}
-        onEndReached={onEndReached}
-        showsVerticalScrollIndicator={false}
-        testID="Transactions_List"
-        ListFooterComponent={() =>
-          loading && <CenteredSpinner containerStyle={styles.loader} />
-        }
-        refreshControl={
-          <RefreshControl
-            onRefresh={onRefresh}
-            refreshing={Boolean(isRefreshing)}
-          />
-        }
-        onScroll={onTransactionsScrollEvent}
-      />
-    </>
-  );
-};
+  }
+);
 
 const styles = StyleSheet.create({
   list: {

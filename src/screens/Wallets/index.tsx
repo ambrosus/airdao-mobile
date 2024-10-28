@@ -2,6 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ethers } from 'ethers';
+import { useFocusEffect } from '@react-navigation/native';
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring
+} from 'react-native-reanimated';
 import {
   AccountActions,
   PaginatedAccountList,
@@ -17,14 +25,6 @@ import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { useBridgeContextData } from '@features/bridge/context';
-import { useFocusEffect } from '@react-navigation/native';
-import Animated, {
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withSpring
-} from 'react-native-reanimated';
 
 export const HomeScreen = () => {
   const { onChangeSelectedWallet } = useWallet();
@@ -68,12 +68,14 @@ export const HomeScreen = () => {
   }, [selectedAccountBalance.wei]);
 
   const offsetScrollY = useSharedValue(0);
+  const activeTabIndex = useSharedValue(0);
 
   const onTransactionsScrollEvent = useAnimatedScrollHandler((event) => {
     offsetScrollY.value = event.contentOffset.y;
   });
 
   const [headerHeight, setHeaderHeight] = useState(0);
+
   const hideThreshold = headerHeight + 24;
 
   const isHeaderHidden = useDerivedValue(() => {
@@ -112,6 +114,7 @@ export const HomeScreen = () => {
     );
 
     return {
+      flex: activeTabIndex.value === 2 ? 0 : 1,
       height,
       transform: [{ translateY }]
     };
@@ -121,6 +124,14 @@ export const HomeScreen = () => {
     (event: LayoutChangeEvent) =>
       setHeaderHeight(event.nativeEvent.layout.height),
     []
+  );
+
+  const onChangeActiveTabIndex = useCallback(
+    (index: number) => {
+      activeTabIndex.value = index;
+      offsetScrollY.value = 0;
+    },
+    [activeTabIndex, offsetScrollY]
   );
 
   return (
@@ -158,7 +169,7 @@ export const HomeScreen = () => {
               account={selectedAccountWithBalance}
               disabled={isSelectAccountBalanceZero}
             />
-            <Spacer value={verticalScale(32)} />
+            <Spacer value={verticalScale(16)} />
           </>
         )}
       </Animated.View>
@@ -168,6 +179,7 @@ export const HomeScreen = () => {
       ) : (
         <Animated.View style={[animatedListStyles]}>
           <WalletTransactionsAndAssets
+            onChangeActiveTabIndex={onChangeActiveTabIndex}
             onTransactionsScrollEvent={onTransactionsScrollEvent}
             account={selectedAccountWithBalance}
             onRefresh={refetchAmbBalance}

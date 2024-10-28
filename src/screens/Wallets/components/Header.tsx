@@ -8,6 +8,13 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import Animated, {
+  SharedValue,
+  runOnJS,
+  useAnimatedStyle,
+  useDerivedValue,
+  withSpring
+} from 'react-native-reanimated';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { BarcodeScanner } from '@components/templates';
@@ -31,13 +38,7 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { moderateScale, scale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes/navigation';
-import Animated, {
-  SharedValue,
-  runOnJS,
-  useAnimatedStyle,
-  useDerivedValue,
-  withSpring
-} from 'react-native-reanimated';
+
 import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
 import { NumberUtils } from '@utils/number';
