@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import {
   Alert,
   InteractionManager,
+  Platform,
   StyleSheet,
   View,
   useWindowDimensions
@@ -31,6 +32,8 @@ import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 import { walletKit } from '@features/wallet-connect/utils';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { PermissionService } from '@lib';
+import { Permission } from '@appTypes';
 
 export const HomeHeader = React.memo((): JSX.Element => {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -46,7 +49,13 @@ export const HomeHeader = React.memo((): JSX.Element => {
   const { setWalletConnectStep, activeSessions } =
     useWalletConnectContextSelector();
 
-  const openScanner = useCallback(() => {
+  const openScanner = useCallback(async () => {
+    if (Platform.OS === 'android')
+      await PermissionService.getPermission(Permission.Camera, {
+        requestAgain: true,
+        openSettings: true
+      });
+
     sendFirebaseEvent(CustomAppEvents.main_scan);
     scanner.current?.show();
   }, [scanner]);
@@ -62,16 +71,23 @@ export const HomeHeader = React.memo((): JSX.Element => {
       try {
         await InteractionManager.runAfterInteractions(async () => {
           try {
+            setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
+            closeScanner();
             await walletKit.pair({ uri });
+
+            new Promise<void>((resolve) => setTimeout(resolve, 1000));
+            InteractionManager.runAfterInteractions(() => {
+              onShowWalletConnectBottomSheet();
+            });
           } catch (error) {
             setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
             closeScanner();
 
-            await new Promise<void>((resolve) => setTimeout(resolve, 1000));
+            new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
-            InteractionManager.runAfterInteractions(
-              onShowWalletConnectBottomSheet
-            );
+            InteractionManager.runAfterInteractions(() => {
+              onShowWalletConnectBottomSheet();
+            });
           }
         });
       } catch (error) {

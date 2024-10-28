@@ -38,12 +38,7 @@ export const BarcodeScanner = (props: BarCodeScanner): JSX.Element => {
   };
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      getCameraPermissions();
-    }, Platform.select({ android: 250, ios: 0, default: 0 }));
-
-    return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getCameraPermissions();
   }, []);
 
   // set the camera ratio and padding.

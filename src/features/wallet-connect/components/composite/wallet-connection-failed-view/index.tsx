@@ -6,7 +6,6 @@ import { SecondaryButton } from '@components/modular';
 import { Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
-  useExtractProposalData,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 import { COLORS } from '@constants/colors';
@@ -14,8 +13,11 @@ import { COLORS } from '@constants/colors';
 export const WalletConnectionFailedView = () => {
   const { t } = useTranslation();
   const { proposal } = useWalletConnectContextSelector();
-  const { origin } = useExtractProposalData(proposal);
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
+
+  const origin = useMemo(() => {
+    return proposal?.verifyContext.verified.origin;
+  }, [proposal?.verifyContext]);
 
   const description = useMemo(() => {
     if (proposal && origin) {

@@ -5,7 +5,6 @@ import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
-  useExtractProposalData,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 
@@ -31,9 +30,12 @@ export const WalletConnectApprovalView = () => {
   const { proposal, setActiveSessions, setWalletConnectStep } =
     useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
-  const { origin } = useExtractProposalData(proposal);
 
   const [isLoadingApprove, setIsLoadingApprove] = useState(false);
+
+  const origin = useMemo(() => {
+    return proposal?.verifyContext.verified.origin;
+  }, [proposal?.verifyContext]);
 
   const supportedNamespaces = useMemo(() => {
     const eip155Chains = Object.keys(EIP155_CHAINS).map(
@@ -70,7 +72,7 @@ export const WalletConnectApprovalView = () => {
   }, [proposal, onDismissWalletConnectBottomSheet]);
 
   const onShowToastNotification = useCallback(() => {
-    const extractedHttpsOrigin = origin.replace(/^https?:\/\//, '');
+    const extractedHttpsOrigin = origin?.replace(/^https?:\/\//, '');
 
     return setTimeout(() => {
       Toast.show({
