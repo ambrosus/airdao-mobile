@@ -35,18 +35,12 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR);
         onChangeProposal(proposal);
 
-        new Promise<void>((resolve) => setTimeout(resolve, 1000));
-        return InteractionManager.runAfterInteractions(
-          onShowWalletConnectBottomSheet
-        );
+        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       } else {
         setWalletConnectStep(CONNECT_VIEW_STEPS.APPROVE);
         onChangeProposal(proposal);
 
-        new Promise<void>((resolve) => setTimeout(resolve, 1000));
-        return InteractionManager.runAfterInteractions(
-          onShowWalletConnectBottomSheet
-        );
+        InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       }
     },
     [onChangeProposal, onShowWalletConnectBottomSheet, setWalletConnectStep]
