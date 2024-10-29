@@ -16,6 +16,9 @@ export type SettingsTabParamsList = {
   SettingsScreen: undefined;
   SingleWallet: { wallet: WalletDBModel };
   AccessKeys: { walletHash: string };
+  CreateWalletStep0: undefined;
+  CreateWalletStep1: undefined;
+  CreateWalletStep2: undefined;
   Passcode: PasscodeParams;
 };
 

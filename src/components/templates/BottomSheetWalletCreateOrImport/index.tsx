@@ -4,18 +4,18 @@ import {
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
-import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
 import { useAddWalletContext } from '@contexts';
-import { AddIcon } from '@components/svg/icons';
 import { styles } from './styles';
-import CirculationIcon from '@components/svg/icons/CirculationIcon';
+import { AddIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { View } from 'react-native';
+import { DownloadIcon } from '@components/svg/icons/v2/settings';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
   BottomSheetRef,
@@ -41,56 +41,62 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   };
 
   const AddWalletButton = () => (
-    <Button
-      onPress={navigateToWalletCreate}
-      style={{ ...styles.buttonWrapper, backgroundColor: COLORS.brand100 }}
-    >
-      <AddIcon color={COLORS.brand500} scale={1.9} />
-      <Spacer horizontal value={verticalScale(16)} />
-      <View>
-        <Text
-          fontFamily={'Inter_600SemiBold'}
-          fontSize={16}
-          color={COLORS.brand500}
-        >
-          {t('button.create.wallet')}
-        </Text>
-        <Spacer value={verticalScale(4)} />
-        <Text fontSize={14} color={COLORS.brand300}>
-          {t('button.create.wallet.info')}
-        </Text>
+    <Button onPress={navigateToWalletCreate} style={styles.buttonWrapper}>
+      <View
+        style={{
+          backgroundColor: COLORS.brand600,
+          borderRadius: 50,
+          padding: 5
+        }}
+      >
+        <AddIcon color={COLORS.neutral0} scale={1.3} />
       </View>
+      <Spacer value={15} />
+      <Text
+        fontFamily={'Inter_600SemiBold'}
+        fontSize={16}
+        color={COLORS.neutral900}
+      >
+        {t('button.create.wallet')}
+      </Text>
     </Button>
   );
   const ImportWalletButton = () => (
-    <Button
-      onPress={navigateToImportWallet}
-      style={{ ...styles.buttonWrapper, backgroundColor: COLORS.purple100 }}
-    >
-      <CirculationIcon />
-      <Spacer horizontal value={verticalScale(16)} />
-      <View>
-        <Text
-          fontSize={16}
-          color={COLORS.purple600}
-          fontFamily={'Inter_600SemiBold'}
-        >
-          {t('button.import.wallet')}
-        </Text>
-        <Spacer value={verticalScale(4)} />
-        <Text fontSize={14} color={COLORS.purple300}>
-          {t('button.import.wallet.info')}
-        </Text>
-      </View>
+    <Button onPress={navigateToImportWallet} style={styles.buttonWrapper}>
+      <DownloadIcon />
+      <Spacer value={15} />
+      <Text
+        fontFamily={'Inter_600SemiBold'}
+        fontSize={16}
+        color={COLORS.neutral900}
+      >
+        {t('import.wallet.common.title')}
+      </Text>
     </Button>
   );
 
   return (
-    <BottomSheet ref={localRef} swiperIconVisible height={verticalScale(225)}>
-      <View style={styles.buttonContainer}>
-        <Spacer value={verticalScale(16)} />
+    <BottomSheet
+      containerStyle={styles.buttonContainer}
+      ref={localRef}
+      swiperIconVisible
+      height={verticalScale(225)}
+    >
+      <Text
+        fontFamily={'Inter_600SemiBold'}
+        fontSize={scale(20)}
+        color={COLORS.neutral900}
+      >
+        {t('button.add.wallet')}
+      </Text>
+      <Spacer value={verticalScale(16)} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
         <AddWalletButton />
-        <Spacer value={verticalScale(16)} />
         <ImportWalletButton />
       </View>
     </BottomSheet>

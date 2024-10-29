@@ -5,11 +5,6 @@ import { AMBMarket } from '@screens/AMBMarket';
 import { Notifications } from '@screens/Notifications';
 import { AssetScreen } from '@screens/Asset';
 import { SendFunds, SendFundsStatus } from '@screens/SendFunds';
-import {
-  CreateWalletStep0,
-  CreateWalletStep1,
-  CreateWalletStep2
-} from '@screens/CreateWallet';
 import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
   ImportWallet,
@@ -57,18 +52,6 @@ export const HomeStack = () => {
           <Stack.Screen name="NFTScreen" component={NFTScreen} />
           <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
           <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
-          <Stack.Screen
-            name="CreateWalletStep0"
-            component={CreateWalletStep0}
-          />
-          <Stack.Screen
-            name="CreateWalletStep1"
-            component={CreateWalletStep1}
-          />
-          <Stack.Screen
-            name="CreateWalletStep2"
-            component={CreateWalletStep2}
-          />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen
             name="ImportWalletSuccess"

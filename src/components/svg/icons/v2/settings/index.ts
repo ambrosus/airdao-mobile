@@ -4,3 +4,6 @@ export { Preferences } from './Preferences';
 export { SecurityIcon } from './SecurityIcon';
 export { NotificationIcon } from './NotificationIcon';
 export { AboutIcon } from './AboutIcon';
+export { DownloadIcon } from './DownloadIcon';
+export { CopyIconV2 } from './CopyIconV2';
+export { KeyIcon } from './KeyIcon';

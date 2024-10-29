@@ -54,6 +54,9 @@ const _getWalletNumber = async () => {
 
 const _getWalletName = async () => {
   const idx = await _getWalletNumber();
+  if (idx === 1) {
+    return 'Main wallet';
+  }
   return 'AirDAO Wallet #' + idx;
 };
 
@@ -69,6 +72,7 @@ const processWallet = async (mnemonic: string) => {
       name,
       number
     });
+
     // get wallet info from network
     const { cashbackToken } = await CashBackUtils.getByHash(hash);
     fullWallet.cashback = cashbackToken;

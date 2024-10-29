@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   menuItem: {
     borderWidth: 1,
-    borderColor: COLORS.neutral200,
+    borderColor: COLORS.neutral100,
     marginBottom: scale(15),
     borderRadius: scale(15),
     marginHorizontal: scale(16),

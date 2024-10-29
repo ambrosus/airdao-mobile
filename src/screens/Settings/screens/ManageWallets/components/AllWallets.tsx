@@ -42,7 +42,7 @@ export const AllWallets = () => {
       keyExtractor={(w) => w.hash}
       contentContainerStyle={{
         paddingHorizontal: scale(18),
-        paddingTop: verticalScale(8)
+        paddingTop: verticalScale(15)
       }}
     />
   );

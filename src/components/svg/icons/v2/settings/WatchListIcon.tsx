@@ -12,7 +12,7 @@ export const WatchListIcon = (props: SVGsModels) => {
       width={width}
       height={height}
       fill={color}
-      viewBox={`0 0 ${width} ${height}`}
+      viewBox={`0 0 20 21`}
       {...props}
     >
       <Path

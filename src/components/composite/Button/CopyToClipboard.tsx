@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { TextProps } from '@components/base/Text/Text.types';
@@ -22,6 +22,8 @@ export interface CopyToClipboardButtonProps
   successText?: string;
   successTextProps?: TextProps;
   iconProps?: IconProps;
+  icon?: ReactElement | null;
+  iconContainerStyle?: ViewStyle;
   toastProps?: Pick<ToastOptions, 'position'>;
   showToast?: boolean;
   copiedTextWrapperStyle?: ViewStyle;
@@ -36,6 +38,8 @@ export const CopyToClipboardButton = (
     textToDisplay,
     textToCopy,
     textProps,
+    icon = null,
+    iconContainerStyle,
     iconProps,
     toastProps,
     showToast = false,
@@ -87,6 +91,7 @@ export const CopyToClipboardButton = (
         onPress={onPress}
       >
         <Row alignItems="center" style={{ minHeight: 20 }}>
+          <View style={{ ...iconContainerStyle }}>{icon}</View>
           {copied ? (
             <Text {...successTextProps}>
               {t(successText || t('common.copied'))}

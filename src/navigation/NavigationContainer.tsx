@@ -14,7 +14,6 @@ const Navigation = () => {
   const navigationRef =
     useRef<NavigationContainerRef<RootStackParamsList>>(null);
   const routeNameRef = useRef('');
-
   const onNavigationReady = () => {
     const currentRoute = navigationRef.current?.getCurrentRoute();
     if (currentRoute) {

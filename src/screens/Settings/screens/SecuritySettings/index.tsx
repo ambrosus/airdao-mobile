@@ -36,7 +36,7 @@ export const SecuritySettingsScreen = () => {
           <Row
             alignItems="center"
             justifyContent="space-between"
-            style={styles.secondContainer}
+            style={styles.container}
           >
             <Text
               fontSize={16}
@@ -88,13 +88,8 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: moderateScale(16)
-  },
-  secondContainer: {
-    paddingVertical: verticalScale(20),
-    paddingHorizontal: scale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: moderateScale(16)
+    borderRadius: moderateScale(16),
+    borderWidth: 1,
+    borderColor: COLORS.neutral100
   }
 });
