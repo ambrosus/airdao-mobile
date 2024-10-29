@@ -9,6 +9,10 @@ export const WalletTable = tableSchema({
       type: 'string'
     },
     {
+      name: 'address',
+      type: 'string'
+    },
+    {
       name: 'hash',
       type: 'string'
     },

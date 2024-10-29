@@ -5,6 +5,7 @@ import { COLORS, CreditCardBg } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { WalletIcon } from '@components/svg/icons/v2';
+import { StringUtils } from '@utils/string';
 
 interface WalletItemProps {
   wallet: WalletDBModel;
@@ -31,7 +32,7 @@ export const WalletItem = (props: WalletItemProps) => {
           color={COLORS.neutral800}
           numberOfLines={1}
         >
-          {wallet.name}
+          {wallet.name || StringUtils.formatAddress(wallet.address, 7, 7)}
         </Text>
       </Row>
       <Row alignItems="center">

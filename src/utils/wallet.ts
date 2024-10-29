@@ -56,10 +56,19 @@ const processWallet = async (mnemonic: string) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
   try {
+    const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
+      mnemonic: mnemonic
+    });
+
     const number = await _getWalletNumber();
+
     const name = '';
+    const address = _account.address;
+
     const hash = await _saveWallet({ mnemonic, name, number });
+
     const fullWallet: Wallet = new Wallet({
+      address,
       hash,
       name,
       number
@@ -67,13 +76,12 @@ const processWallet = async (mnemonic: string) => {
 
     // get wallet info from network
     const { cashbackToken } = await CashBackUtils.getByHash(hash);
+
     fullWallet.cashback = cashbackToken;
-    const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
-      mnemonic: mnemonic
-    });
     const currencyCode = CryptoCurrencyCode.AMB; // TODO this needs to be changed if we support multiple currencies
     // create wallet in db
     walletInDb = await WalletDB.createWallet(fullWallet);
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, accountInDbResult] = await Promise.all([
       // securely store private key
@@ -126,23 +134,25 @@ export const importWalletViaPrivateKey = async (
   const currencyCode = CryptoCurrencyCode.AMB;
 
   try {
+    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
+      privateKey
+    );
+
     const number = await _getWalletNumber();
     const name = '';
+    const address = _account.address;
     const hash = await _saveWallet(
       { mnemonic: privateKey, name, number },
       true
     );
 
     const fullWallet: Wallet = new Wallet({
+      address,
       hash,
       name,
       number,
       cashback: await CashBackUtils.getByHash(hash)
     });
-
-    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
-      privateKey
-    );
 
     if (!_account) throw new Error();
 
