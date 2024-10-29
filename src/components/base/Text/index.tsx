@@ -23,6 +23,7 @@ export function Text(props: TextProps): JSX.Element {
     align = 'auto',
     fontFamily = 'Inter_500Medium',
     testID,
+    letterSpacing,
     ...restProps
   } = props;
 
@@ -65,6 +66,7 @@ export function Text(props: TextProps): JSX.Element {
     color,
     textAlign: align,
     opacity,
+    letterSpacing,
     fontSize: getFontSize(),
     fontWeight: getFontWeight(),
     ...fixMisplacement()

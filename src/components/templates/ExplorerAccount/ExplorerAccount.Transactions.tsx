@@ -5,7 +5,9 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   RefreshControl,
-  StyleSheet
+  StyleProp,
+  StyleSheet,
+  ViewStyle
 } from 'react-native';
 import moment from 'moment';
 import Animated from 'react-native-reanimated';
@@ -24,10 +26,11 @@ interface ExplorerAccountViewTransactionsProps {
   isRefreshing?: boolean;
   onEndReached?: () => unknown;
   onRefresh?: () => unknown;
-
-  onTransactionsScrollEvent: (
+  onTransactionsScrollEvent?: (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => void;
+  containerStyle?: StyleProp<ViewStyle>;
+  listStyle?: StyleProp<ViewStyle>;
 }
 
 interface SectionedTransaction {
@@ -50,7 +53,9 @@ export const AccountTransactions = forwardRef<
       isRefreshing,
       onRefresh,
       onEndReached,
-      onTransactionsScrollEvent
+      onTransactionsScrollEvent,
+      containerStyle,
+      listStyle
     },
     ref
   ) => {
@@ -109,13 +114,15 @@ export const AccountTransactions = forwardRef<
           }
           data={sectionizedTransactions}
           renderItem={renderItem}
+          onScroll={onTransactionsScrollEvent}
           ListEmptyComponent={
             loading ? null : (
               <LocalizedRenderEmpty text={'common.no.transactions'} />
             )
           }
           ItemSeparatorComponent={() => <Spacer value={16} />}
-          contentContainerStyle={styles.list}
+          style={listStyle}
+          contentContainerStyle={[styles.list, containerStyle]}
           onEndReached={onEndReached}
           showsVerticalScrollIndicator={false}
           testID="Transactions_List"
@@ -128,7 +135,6 @@ export const AccountTransactions = forwardRef<
               refreshing={Boolean(isRefreshing)}
             />
           }
-          onScroll={onTransactionsScrollEvent}
         />
       </>
     );

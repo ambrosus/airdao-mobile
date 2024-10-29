@@ -15,7 +15,7 @@ export function SendAccountActionIcon({
       width={scaled}
       height={scaled}
       fill="none"
-      viewBox={`0 0 ${scaled} ${scaled}`}
+      viewBox={`0 0 ${size} ${size}`}
     >
       <G>
         <Path
