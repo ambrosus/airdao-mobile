@@ -59,12 +59,6 @@ export const WalletCard = ({
     return [];
   }, [backgroundColor]);
 
-  const percentageFiatChange = useMemo(() => {
-    const _fiat = NumberUtils.formatNumber((usdBalance * change24HR) / 100, 2);
-
-    return Number(NumberUtils.addSignToNumber(Number(_fiat)));
-  }, [change24HR, usdBalance]);
-
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.logo}>
@@ -128,12 +122,10 @@ export const WalletCard = ({
                   <Text
                     fontSize={14}
                     fontFamily="Inter_500Medium"
-                    color={
-                      percentageFiatChange > 0 ? '#9FE1CC' : COLORS.error200
-                    }
+                    color={change24HR > 0 ? '#9FE1CC' : COLORS.error200}
                   >
                     {`${NumberUtils.addSignToNumber(
-                      +NumberUtils.formatNumber(percentageFiatChange, 2)
+                      +NumberUtils.formatNumber(change24HR, 2)
                     )}%`}
                   </Text>
                 </>
