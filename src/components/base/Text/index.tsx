@@ -23,7 +23,7 @@ export function Text(props: TextProps): JSX.Element {
     align = 'auto',
     fontFamily = 'Inter_500Medium',
     testID,
-    letterSpacing,
+    letterSpacing = -0.31,
     ...restProps
   } = props;
 
