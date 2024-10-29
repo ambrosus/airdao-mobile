@@ -12,9 +12,9 @@ import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
 import { useAddWalletContext } from '@contexts';
 import { styles } from './styles';
-import { AddIcon } from '@components/svg/icons';
+import { AddIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { DownloadIcon } from '@components/svg/icons/v2/settings';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
@@ -39,6 +39,8 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
     navigation.navigate('ImportWalletMethods');
     localRef.current?.dismiss();
   };
+
+  const onClose = () => localRef?.current?.dismiss();
 
   const AddWalletButton = () => (
     <Button onPress={navigateToWalletCreate} style={styles.buttonWrapper}>
@@ -82,20 +84,20 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
       swiperIconVisible
       height={verticalScale(225)}
     >
-      <Text
-        fontFamily={'Inter_600SemiBold'}
-        fontSize={scale(20)}
-        color={COLORS.neutral900}
-      >
-        {t('button.add.wallet')}
-      </Text>
+      <View style={styles.titleContainer}>
+        <Text
+          fontFamily={'Inter_600SemiBold'}
+          fontSize={scale(20)}
+          color={COLORS.neutral900}
+        >
+          {t('button.add.wallet')}
+        </Text>
+        <TouchableOpacity onPress={onClose}>
+          <CloseIcon scale={0.7} border />
+        </TouchableOpacity>
+      </View>
       <Spacer value={verticalScale(16)} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}
-      >
+      <View style={styles.container}>
         <AddWalletButton />
         <ImportWalletButton />
       </View>

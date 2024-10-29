@@ -9,6 +9,8 @@ import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity, View } from 'react-native';
+import { CloseIcon } from '@components/svg/icons';
 
 interface BottomSheetViewAccessKeyProps extends BottomSheetProps {
   walletHash: string;
@@ -42,6 +44,10 @@ export const BottomSheetViewAccessKey = forwardRef<
     );
   };
 
+  const onClose = () => {
+    localRef?.current?.dismiss();
+  };
+
   return (
     <BottomSheetFloat
       ref={localRef}
@@ -50,14 +56,18 @@ export const BottomSheetViewAccessKey = forwardRef<
       containerStyle={styles.main}
       {...bottomSheetProps}
     >
-      <Text
-        style={styles.title}
-        fontFamily="Inter_600SemiBold"
-        fontSize={scale(20)}
-        color={COLORS.neutral900}
-      >
-        {t('singleWallet.warning.title')}
-      </Text>
+      <View style={styles.titleContainer}>
+        <Text
+          fontFamily="Inter_600SemiBold"
+          fontSize={scale(20)}
+          color={COLORS.neutral900}
+        >
+          {t('singleWallet.warning.title')}
+        </Text>
+        <TouchableOpacity onPress={onClose}>
+          <CloseIcon border scale={0.7} />
+        </TouchableOpacity>
+      </View>
       <Spacer value={15} />
       <Text
         fontFamily="Inter_400Regular"

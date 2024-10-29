@@ -266,7 +266,7 @@
   "singleWallet.name": "İsim",
   "singleWallet.remove": "Sil",
   "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
-  "singleWallet.remove.alert.description": "Cüzdanı yedeklediğinizden emin olun",
+  "singleWallet.remove.alert.description": "!!!Make sure you have a backup your wallet",
   "singleWallet.save": "Değişiklikleri kaydet",
   "singleWallet.access.keys": "Erişim anahtarlarını görüntüle",
   "singleWallet.warning.title": "Erişim anahtarlarınızı güvenle tutun",

@@ -131,7 +131,7 @@ export const SingleWalletScreen = () => {
                       fontFamily: 'Inter_500Medium'
                     }}
                     successTextProps={{
-                      color: COLORS.success600,
+                      color: COLORS.brand500,
                       fontSize: 14,
                       fontFamily: 'Inter_500Medium'
                     }}
