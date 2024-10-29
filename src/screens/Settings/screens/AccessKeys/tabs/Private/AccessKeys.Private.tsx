@@ -49,12 +49,12 @@ export const AccessKeysPrivateTab = ({
         iconProps={{ scale: 0 }}
         style={styles.copyButton}
         textProps={{
-          color: COLORS.neutral900,
+          color: COLORS.brand500,
           fontSize: 14,
           fontFamily: 'Inter_500Medium'
         }}
         successTextProps={{
-          color: COLORS.success600,
+          color: COLORS.brand500,
           fontSize: 14,
           fontFamily: 'Inter_500Medium'
         }}

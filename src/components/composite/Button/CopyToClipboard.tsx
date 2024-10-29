@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { TextProps } from '@components/base/Text/Text.types';
@@ -12,7 +12,10 @@ import {
   ToastType
 } from '@components/modular/Toast';
 import { BaseButtonProps } from '@components/base/Button';
-import { View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { CopyIconV2 } from '@components/svg/icons/v2/settings';
+import { CheckboxCircleFill } from '@components/svg/icons/v2';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -21,8 +24,8 @@ export interface CopyToClipboardButtonProps
   textProps?: TextProps;
   successText?: string;
   successTextProps?: TextProps;
+  successContainerStyle?: ViewStyle;
   iconProps?: IconProps;
-  icon?: ReactElement | null;
   iconContainerStyle?: ViewStyle;
   toastProps?: Pick<ToastOptions, 'position'>;
   showToast?: boolean;
@@ -38,13 +41,13 @@ export const CopyToClipboardButton = (
     textToDisplay,
     textToCopy,
     textProps,
-    icon = null,
     iconContainerStyle,
     iconProps,
     toastProps,
     showToast = false,
     successText,
     successTextProps,
+    successContainerStyle,
     pressableText = false,
     disableWhenCopied = false,
     copiedTextWrapperStyle,
@@ -81,17 +84,30 @@ export const CopyToClipboardButton = (
     }, 2500);
   };
 
+  const buttonMainStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return copied ? { ...successContainerStyle } : {};
+  }, [copied, successContainerStyle]);
+
   if (pressableText) {
     return (
       <Button
         {...buttonProps}
         disabled={disableWhenCopied && copied}
-        // @ts-ignore
-        style={{ ...buttonProps.style, padding: 4 }}
+        style={{
+          padding: 4,
+          alignItems: 'center',
+          ...buttonMainStyle
+        }}
         onPress={onPress}
       >
         <Row alignItems="center" style={{ minHeight: 20 }}>
-          <View style={{ ...iconContainerStyle }}>{icon}</View>
+          <View style={{ ...iconContainerStyle, marginRight: scale(5) }}>
+            {copied ? (
+              <CheckboxCircleFill />
+            ) : (
+              <CopyIconV2 color={COLORS.brand500} />
+            )}
+          </View>
           {copied ? (
             <Text {...successTextProps}>
               {t(successText || t('common.copied'))}

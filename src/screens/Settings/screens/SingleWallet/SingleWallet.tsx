@@ -16,7 +16,7 @@ import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { TrashIcon } from '@components/svg/icons';
-import { CopyIconV2, KeyIcon } from '@components/svg/icons/v2/settings';
+import { KeyIcon } from '@components/svg/icons/v2/settings';
 import { BottomSheetViewAccessKey } from '@components/templates/BottomSheetViewAccessKey/BottomSheetViewAccessKey';
 
 export const SingleWalletScreen = () => {
@@ -124,8 +124,6 @@ export const SingleWalletScreen = () => {
                     pressableText
                     showToast={false}
                     iconProps={{ scale: 1 }}
-                    icon={<CopyIconV2 color={COLORS.brand500} />}
-                    iconContainerStyle={{ marginRight: 10 }}
                     style={styles.copyButton}
                     textProps={{
                       color: COLORS.brand500,

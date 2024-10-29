@@ -2,6 +2,7 @@ import React from 'react';
 import { COLORS } from '@constants/colors';
 import {
   AboutIcon,
+  CompassIcon,
   NotificationIcon,
   Preferences,
   SecurityIcon,
@@ -25,6 +26,12 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     title: 'settings.watchlists',
     route: 'Portfolio',
     icon: <WatchListIcon color={COLORS.brand500} />
+  },
+  {
+    key: 'explore',
+    title: 'settings.explore',
+    route: 'Search',
+    icon: <CompassIcon color={COLORS.brand500} />
   },
   {
     key: 'notificationSettings',
