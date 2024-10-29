@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,31 +9,33 @@ import {
   Header
 } from '@components/composite';
 import { Button, Input, Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { QRCodeWithLogo } from '@components/modular';
 import { SettingsTabParamsList } from '@appTypes';
 import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { TrashIcon } from '@components/svg/icons';
-import { AccessKeysWarningModal } from '@components/templates';
+import { KeyIcon } from '@components/svg/icons/v2/settings';
+import { BottomSheetViewAccessKey } from '@components/templates/BottomSheetViewAccessKey/BottomSheetViewAccessKey';
 
 export const SingleWalletScreen = () => {
+  const accessKeyRef = useRef(null);
   const { t } = useTranslation();
   const route = useRoute<RouteProp<SettingsTabParamsList, 'SingleWallet'>>();
   const { wallet } = route.params;
   const { data: account } = useExplorerAccountFromHash(wallet.hash);
   const [walletName, setWalletName] = useState(wallet.name);
   const saveButtonEnabled = walletName !== wallet.name;
-  const [isAccessKeyWarningModalActive, setIsAccessKeyWarningModalActive] =
-    useState(false);
+  useState(false);
 
   const { deleteWallet, saveChanges } = useSettingsWalletActions();
 
   const onSaveWalletChanges = () => saveChanges(wallet, walletName);
 
   const onToggleAccessKeysPress = () => {
-    setIsAccessKeyWarningModalActive((prevState) => !prevState);
+    // @ts-ignore
+    accessKeyRef?.current?.show();
   };
 
   const onRequestDeleteWalletPress = useCallback((): void => {
@@ -57,7 +59,7 @@ export const SingleWalletScreen = () => {
   const renderRightHeaderContent = useMemo(() => {
     return (
       <TouchableOpacity onPress={onRequestDeleteWalletPress} hitSlop={25}>
-        <TrashIcon color={COLORS.neutral400} />
+        <TrashIcon scale={1.2} color={COLORS.neutral400} />
       </TouchableOpacity>
     );
   }, [onRequestDeleteWalletPress]);
@@ -104,10 +106,7 @@ export const SingleWalletScreen = () => {
               {account && (
                 <View style={styles.addressContainer}>
                   <View style={styles.qrCode}>
-                    <QRCodeWithLogo
-                      value={account.address}
-                      size={verticalScale(200)}
-                    />
+                    <QRCodeWithLogo value={account.address} size={scale(200)} />
                   </View>
                   <Spacer value={verticalScale(16)} />
                   <Text
@@ -122,17 +121,17 @@ export const SingleWalletScreen = () => {
                   <CopyToClipboardButton
                     textToDisplay={t('common.copy')}
                     textToCopy={account.address}
-                    pressableText={true}
+                    pressableText
                     showToast={false}
-                    iconProps={{ scale: 0 }}
+                    iconProps={{ scale: 1 }}
                     style={styles.copyButton}
                     textProps={{
-                      color: COLORS.neutral900,
+                      color: COLORS.brand500,
                       fontSize: 14,
                       fontFamily: 'Inter_500Medium'
                     }}
                     successTextProps={{
-                      color: COLORS.success600,
+                      color: COLORS.brand500,
                       fontSize: 14,
                       fontFamily: 'Inter_500Medium'
                     }}
@@ -149,42 +148,42 @@ export const SingleWalletScreen = () => {
                   ...styles.saveButton,
                   backgroundColor: saveButtonEnabled
                     ? COLORS.brand600
-                    : COLORS.alphaBlack5
+                    : COLORS.brand100
                 }}
               >
                 <Text
                   fontSize={16}
                   fontFamily="Inter_600SemiBold"
-                  color={
-                    saveButtonEnabled ? COLORS.neutral0 : COLORS.alphaBlack30
-                  }
+                  color={saveButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
                 >
                   {t('singleWallet.save')}
                 </Text>
               </Button>
 
-              <Button
+              <TouchableOpacity
                 onPress={onToggleAccessKeysPress}
                 style={styles.accessKeysButton}
               >
+                <KeyIcon color={COLORS.brand600} />
+                <Spacer value={scale(10)} horizontal />
                 <Text
-                  fontSize={16}
+                  fontSize={scale(16)}
                   fontFamily="Inter_600SemiBold"
-                  color={COLORS.neutral800}
+                  color={COLORS.brand600}
                 >
                   {t('singleWallet.access.keys')}
                 </Text>
-              </Button>
+              </TouchableOpacity>
             </View>
           </BottomAwareSafeAreaView>
         )}
       </SafeAreaView>
-      {isAccessKeyWarningModalActive && (
-        <AccessKeysWarningModal
-          dismiss={onToggleAccessKeysPress}
-          walletHash={wallet.hash}
-        />
-      )}
+      <BottomSheetViewAccessKey
+        // @ts-ignore
+        dismiss={() => accessKeyRef?.current?.dismiss()}
+        walletHash={wallet.hash}
+        ref={accessKeyRef}
+      />
     </>
   );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
+import { COLORS, CreditCardBg } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { WalletAvatars } from '@components/templates/WalletPicker/WalletPicker.constants';
+import { WalletIcon } from '@components/svg/icons/v2';
+import { StringUtils } from '@utils/string';
 
 interface WalletItemProps {
   wallet: WalletDBModel;
@@ -15,7 +15,8 @@ interface WalletItemProps {
 
 export const WalletItem = (props: WalletItemProps) => {
   const { wallet, isSelectedWallet, index } = props;
-
+  const newIndex = index % CreditCardBg.length;
+  const bgIndex = newIndex ? newIndex - 1 : 3;
   return (
     <Row
       alignItems="center"
@@ -23,7 +24,7 @@ export const WalletItem = (props: WalletItemProps) => {
       style={styles.container}
     >
       <Row alignItems="center" width={scale(224)}>
-        <View style={styles.avatar}>{WalletAvatars[index]}</View>
+        <WalletIcon color={CreditCardBg[bgIndex]} scale={1.1} />
         <Spacer value={scale(16)} horizontal />
         <Text
           fontSize={16}
@@ -31,7 +32,7 @@ export const WalletItem = (props: WalletItemProps) => {
           color={COLORS.neutral800}
           numberOfLines={1}
         >
-          {wallet.name}
+          {wallet.name || StringUtils.formatAddress(wallet.address, 7, 7)}
         </Text>
       </Row>
       <Row alignItems="center">
@@ -42,7 +43,6 @@ export const WalletItem = (props: WalletItemProps) => {
           />
         )}
         <Spacer value={scale(16)} horizontal />
-        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Row>
   );
@@ -50,11 +50,11 @@ export const WalletItem = (props: WalletItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    borderColor: COLORS.neutral100,
+    borderWidth: scale(1),
     borderRadius: moderateScale(16),
-    paddingVertical: verticalScale(16)
-  },
-  avatar: {
-    borderRadius: 1000,
-    overflow: 'hidden'
+    paddingVertical: verticalScale(16),
+    paddingHorizontal: verticalScale(16),
+    marginBottom: scale(15)
   }
 });

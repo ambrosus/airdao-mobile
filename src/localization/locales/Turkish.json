@@ -245,6 +245,8 @@
   "settings.about": "Hakkında",
   "settings.help": "Yardım merkezi",
   "settings.manage.wallet": "Cüzdan yönetimi",
+  "settings.watchlists": "!!!Watchlists",
+  "settings.explore": "!!!Explore",
   "settings.notifications": "Bildirim ayarları",
   "settings.preferences": "Tercihler",
   "settings.security": "Güvenlik",
@@ -264,13 +266,12 @@
   "singleWallet.name": "İsim",
   "singleWallet.remove": "Sil",
   "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
-  "singleWallet.remove.alert.description": "Cüzdanı yedeklediğinizden emin olun",
+  "singleWallet.remove.alert.description": "!!!Make sure you have a backup your wallet",
   "singleWallet.save": "Değişiklikleri kaydet",
   "singleWallet.access.keys": "Erişim anahtarlarını görüntüle",
   "singleWallet.warning.title": "Erişim anahtarlarınızı güvenle tutun",
-  "singleWallet.warning.description.top": "Erişim anahtarlarınız hesabınıza ve fonlarınıza tam erişim sağlar.",
+  "singleWallet.warning.description": "Erişim anahtarlarınız hesabınıza ve fonlarınıza tam erişim sağlar.\nBunu kimseyle paylaşmayın. AirDAO ekibi bunu sizden asla istemeyecektir, ancak dolandırıcılar isteyebilir.",
   "singleWallet.warning.button": "Erişim anahtarlarını göster",
-  "singleWallet.warning.description.bottom": "Bunu kimseyle paylaşmayın.\nAirDAO ekibi bunu sizden asla istemeyecektir, ancak dolandırıcılar isteyebilir.",
   "singleWallet.access.keys.title": "Erişim anahtarları",
   "singleWallet.access.key.title": "Erişim anahtarı",
   "singleWallet.tab.phrase": "Kurtarma ifadesi",
@@ -462,6 +463,8 @@
 
   "kosmos.market.tabs.buy.bond": "Tahvil satın al",
   "kosmos.market.tabs.history": "Geçmiş",
+
+  "settings.version": "!!!Version",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

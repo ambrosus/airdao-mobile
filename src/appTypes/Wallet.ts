@@ -1,5 +1,6 @@
 export interface WalletMetadata {
   name: string;
+  address: string;
   number: number;
   hash?: string;
   cashback?: string;

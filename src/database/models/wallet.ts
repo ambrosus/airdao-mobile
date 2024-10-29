@@ -1,6 +1,6 @@
 import { DatabaseTable } from '@appTypes';
 import { Model } from '@nozbe/watermelondb';
-import { text, field } from '@nozbe/watermelondb/decorators';
+import { field, text } from '@nozbe/watermelondb/decorators';
 
 export class WalletDBModel extends Model {
   static table = DatabaseTable.Wallets;
@@ -8,6 +8,8 @@ export class WalletDBModel extends Model {
   // define fields
   // @ts-ignore
   @text('name') name: string;
+  // @ts-ignore
+  @text('address') address: string;
   // @ts-ignore
   @text('hash') hash: string;
   // @ts-ignore

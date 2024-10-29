@@ -4,6 +4,7 @@ import { Database, WalletDBModel } from '@database';
 
 export class Wallet {
   name: string;
+  address: string;
   hash: string;
   number: number;
   cashback: string;
@@ -18,6 +19,7 @@ export class Wallet {
 
   constructor(details: WalletMetadata) {
     this.hash = details.hash || 'empty_hash';
+    this.address = details.address;
     this.name = details.name;
     this.number = details.number;
     this.cashback = details.cashback || 'empty_cashback';
@@ -37,6 +39,7 @@ export class Wallet {
 
   static fromDBModel(model: WalletDBModel): Wallet {
     return new Wallet({
+      address: model.address,
       name: model.name,
       hash: model.hash,
       number: model.number,

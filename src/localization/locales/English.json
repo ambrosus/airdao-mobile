@@ -245,6 +245,8 @@
   "settings.about": "About",
   "settings.help": "Help center",
   "settings.manage.wallet": "Manage wallets",
+  "settings.watchlists": "Watchlists",
+  "settings.explore": "Explore",
   "settings.notifications": "Notifications",
   "settings.preferences": "Preferences",
   "settings.security": "Security",
@@ -264,12 +266,11 @@
   "singleWallet.name": "Name",
   "singleWallet.remove": "Remove",
   "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
-  "singleWallet.remove.alert.description": "Make sure you have a backup of this wallet",
+  "singleWallet.remove.alert.description": "Make sure you have a backup your wallet",
   "singleWallet.save": "Save changes",
   "singleWallet.warning.title": "Keep your Access keys safe",
-  "singleWallet.warning.description.top": "Your Access keys provides full access to you account and funds.",
+  "singleWallet.warning.description": "Your Access keys provides full access to you account and funds.\nDo not share this with anyone. The AirDAO team will never request this, but phishers might.",
   "singleWallet.warning.button": "Reveal access keys",
-  "singleWallet.warning.description.bottom": "Do not share this with anyone.\nThe AirDAO team will never request this, but phishers might.",
   "singleWallet.access.keys": "View access keys",
   "singleWallet.access.keys.title": "Access keys",
   "singleWallet.access.key.title": "Access key",
@@ -464,6 +465,9 @@
 
   "kosmos.market.tabs.buy.bond": "Buy bond",
   "kosmos.market.tabs.history": "History",
+
+  "settings.version": "Version",
+
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
