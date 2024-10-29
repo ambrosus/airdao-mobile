@@ -1,7 +1,6 @@
-import { COLORS } from '@constants/colors';
+import { StyleSheet } from 'react-native';
 import { shadow } from '@constants/shadow';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { StyleSheet } from 'react-native';
 
 export const WalletCardHeight = 139;
 
@@ -19,14 +18,7 @@ export const styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    top: -verticalScale(16),
-    right: -scale(16)
-  },
-  usdPriceBg: {
-    justifyContent: 'center',
-    minHeight: verticalScale(20),
-    borderRadius: 1000,
-    backgroundColor: COLORS.alphaWhite5,
-    paddingHorizontal: scale(8)
+    top: 0,
+    right: 0
   }
 });

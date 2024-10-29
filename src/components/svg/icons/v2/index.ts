@@ -11,3 +11,4 @@ export { GlobeIcon } from './Globe';
 export { ClipboardIcon } from './Clipboard';
 export { ChartIcon } from './Chart';
 export { QRCodeIcon } from './QR';
+export { ClipboardFillIcon } from './ClipboardFill';
