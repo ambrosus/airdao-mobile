@@ -1,55 +1,48 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useCallback, useMemo } from 'react';
+import {
+  BottomTabBarProps,
+  BottomTabNavigationOptions,
+  createBottomTabNavigator
+} from '@react-navigation/bottom-tabs';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
 import TabBar from '@navigation/components/TabBar';
 import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
-import { PortfolioStack } from './Tabs/PortfolioStack';
 import SettingsStack from './Tabs/SettingsStack';
-import SearchStack from './Tabs/SearchStack';
 import HomeStack from './Tabs/HomeStack';
 import { DeviceUtils } from '@utils/device';
+import ProductsStack from './Tabs/ProductsStack';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
 export const TabsNavigator = () => {
   usePasscodeEntryRevealer();
-  const { t } = useTranslation();
   const keyboardHeight = useKeyboardHeight();
+
+  const renderTabBarComponent = useCallback(
+    (props: BottomTabBarProps) =>
+      DeviceUtils.isAndroid && keyboardHeight > 0 ? null : (
+        <TabBar {...props} />
+      ),
+    [keyboardHeight]
+  );
+
+  const screenOptions: BottomTabNavigationOptions = useMemo(
+    () => ({
+      headerShown: false,
+      tabBarStyle: { display: keyboardHeight > 0 ? 'none' : 'flex' }
+    }),
+    [keyboardHeight]
+  );
 
   return (
     <BottomTabs.Navigator
       initialRouteName="Wallets"
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: { display: keyboardHeight > 0 ? 'none' : 'flex' }
-      }}
-      tabBar={(props) =>
-        DeviceUtils.isAndroid && keyboardHeight > 0 ? null : (
-          <TabBar {...props} />
-        )
-      }
+      screenOptions={screenOptions}
+      tabBar={renderTabBarComponent}
     >
-      <BottomTabs.Screen
-        name="Wallets"
-        component={HomeStack}
-        options={{ tabBarLabel: t('tab.wallets') }}
-      />
-      <BottomTabs.Screen
-        name="Portfolio"
-        component={PortfolioStack}
-        options={{ tabBarLabel: t('tab.watchlist') }}
-      />
-      <BottomTabs.Screen
-        name="Search"
-        component={SearchStack}
-        options={{ tabBarLabel: t('tab.explore') }}
-      />
-      <BottomTabs.Screen
-        name="Settings"
-        component={SettingsStack}
-        options={{ tabBarLabel: t('tab.settings') }}
-      />
+      <BottomTabs.Screen name="Wallets" component={HomeStack} />
+      <BottomTabs.Screen name="Products" component={ProductsStack} />
+      <BottomTabs.Screen name="Settings" component={SettingsStack} />
     </BottomTabs.Navigator>
   );
 };
