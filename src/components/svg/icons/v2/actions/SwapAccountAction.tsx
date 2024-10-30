@@ -11,12 +11,7 @@ export function SwapAccountActionIcon({
   const scaled = size * scale;
 
   return (
-    <Svg
-      width={scaled}
-      height={scaled}
-      fill="none"
-      viewBox={`0 0 ${scaled} ${scaled}`}
-    >
+    <Svg width={scaled} height={scaled} fill="none" viewBox="0 0 24 24">
       <G>
         <Path
           fill={color}

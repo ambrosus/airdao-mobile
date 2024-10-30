@@ -9,8 +9,8 @@ import TabBar from '@navigation/components/TabBar';
 import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
 import SettingsStack from './Tabs/SettingsStack';
 import HomeStack from './Tabs/HomeStack';
-import { ProductScreen } from '@screens/Products';
 import { DeviceUtils } from '@utils/device';
+import ProductsStack from './Tabs/ProductsStack';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 
@@ -41,7 +41,7 @@ export const TabsNavigator = () => {
       tabBar={renderTabBarComponent}
     >
       <BottomTabs.Screen name="Wallets" component={HomeStack} />
-      <BottomTabs.Screen name="Products" component={ProductScreen} />
+      <BottomTabs.Screen name="Products" component={ProductsStack} />
       <BottomTabs.Screen name="Settings" component={SettingsStack} />
     </BottomTabs.Navigator>
   );

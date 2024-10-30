@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {
+    width: 40,
     height: 24,
     alignItems: 'center',
     backgroundColor: COLORS.neutral0

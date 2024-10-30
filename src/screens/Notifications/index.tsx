@@ -63,6 +63,8 @@ export const Notifications = (): JSX.Element => {
     return sections;
   }, [notifications, t]);
 
+  console.log(sectionizedNotificaitons);
+
   const showSettingsModal = () => {
     settingsModal.current?.show();
   };
