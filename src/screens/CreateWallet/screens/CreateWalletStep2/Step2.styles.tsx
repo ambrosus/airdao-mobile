@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
     rowGap: verticalScale(20),
     width: scale(342),
+    height: 120,
     alignSelf: 'center',
     alignItems: 'center',
     columnGap: scale(20)
