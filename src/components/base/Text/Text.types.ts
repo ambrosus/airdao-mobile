@@ -47,4 +47,5 @@ export type TextProps = FontSizeProps & {
   onPress?: () => unknown;
   testID?: string;
   numberOfLines?: number;
+  letterSpacing?: number;
 };

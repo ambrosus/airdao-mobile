@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  View
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
 import { useTokensAndTransactions } from '@hooks';
@@ -10,12 +16,20 @@ import { WalletAssets } from './WalletAssets';
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
   onRefresh?: () => void;
+  onChangeActiveTabIndex: (index: number) => void;
+  onTransactionsScrollEvent: (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => void;
 }
 
-export const WalletTransactionsAndAssets = (
-  props: WalletTransactionsAndAssetsProps
-) => {
-  const { account, onRefresh } = props;
+export const WalletTransactionsAndAssets = ({
+  account,
+  onRefresh,
+  onTransactionsScrollEvent,
+  onChangeActiveTabIndex
+}: WalletTransactionsAndAssetsProps) => {
+  const { t } = useTranslation();
+
   const {
     data: tokensAndTransactions,
     loading,
@@ -25,14 +39,16 @@ export const WalletTransactionsAndAssets = (
     refetching,
     error
   } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
+
+  const transactionsHistoryListRef = useRef<FlatList>(null);
+  const assetsListRef = useRef<FlatList>(null);
+
   const { tokens, transactions } = tokensAndTransactions;
   const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
 
   useEffect(() => {
     if (!refetching) setUserPerformedRefresh(false);
   }, [refetching]);
-
-  const { t } = useTranslation();
 
   const loadMoreTransactions = () => {
     if (hasNextPage) {
@@ -50,14 +66,35 @@ export const WalletTransactionsAndAssets = (
     }
   };
 
+  const _onChangeActiveTabIndex = useCallback(
+    (index: number) => {
+      switch (index) {
+        case 0: {
+          transactionsHistoryListRef.current?.scrollToOffset({
+            animated: true,
+            offset: 0
+          });
+        }
+        case 2: {
+          assetsListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+        }
+      }
+      onChangeActiveTabIndex(index);
+    },
+    [onChangeActiveTabIndex]
+  );
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <AnimatedTabs
+        containerStyle={styles.container}
+        onChangedIndex={_onChangeActiveTabIndex}
         tabs={[
           {
             title: t('wallet.my.assets'),
             view: (
               <WalletAssets
+                ref={assetsListRef}
                 tokens={tokens}
                 loading={loading}
                 account={account}
@@ -75,6 +112,8 @@ export const WalletTransactionsAndAssets = (
             title: t('kosmos.market.tabs.history'),
             view: (
               <AccountTransactions
+                ref={transactionsHistoryListRef}
+                onTransactionsScrollEvent={onTransactionsScrollEvent}
                 transactions={transactions}
                 loading={loading}
                 isRefreshing={refetching && userPerformedRefresh}
@@ -84,7 +123,6 @@ export const WalletTransactionsAndAssets = (
             )
           }
         ]}
-        containerStyle={{ flex: 1 }}
       />
     </View>
   );

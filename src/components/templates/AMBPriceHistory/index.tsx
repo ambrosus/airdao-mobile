@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { TextInputProps, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Animated, {
+  AnimatedProps,
   useAnimatedProps,
   useAnimatedStyle,
   useDerivedValue,
@@ -25,6 +26,7 @@ interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
   defaultInterval?: '1d' | 'weekly' | 'monthly';
   onBadgePress?: () => unknown;
+  dailyIncome: string;
 }
 
 // @ts-ignore
@@ -36,10 +38,15 @@ const intervalTimeDiffMap: { [key in PriceSnapshotInterval]: number } = {
 };
 
 export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
-  const { badgeType, defaultInterval = '1d', onBadgePress } = props;
+  const {
+    badgeType,
+    defaultInterval = '1d',
+    onBadgePress,
+    dailyIncome
+  } = props;
   const { data: ambPriceNow } = useAMBPrice();
   const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
-  const [selectedInterval, setSelectedInverval] =
+  const [selectedInterval, setSelectedInterval] =
     useState<PriceSnapshotInterval>(defaultInterval);
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
@@ -61,6 +68,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       (token) => new Date().getTime() - token.timestamp.getTime() <= diff
     );
   }, [historicalAMBPrice, selectedInterval]);
+
   const formattedPrice = useDerivedValue(() => {
     return `$${ambPrice.value.toFixed(6)}`;
   }, [ambPrice.value]);
@@ -91,32 +99,28 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       const selectedDate = new Date(selectedPointDate.value);
       const isToday = now.toDateString() === selectedDate.toDateString();
       let formattedDate = '';
-      const hours =
-        selectedDate.getHours() % 12 >= 10
-          ? selectedDate.getHours() % 12
-          : `0${selectedDate.getHours() % 12}`;
-      const meridiem = selectedDate.getHours() > 12 ? 'pm' : 'am';
+      const hours = selectedDate.getHours();
       const minutes =
         selectedDate.getMinutes() >= 10
           ? selectedDate.getMinutes()
           : `0${selectedDate.getMinutes()}`;
       if (isToday) {
-        formattedDate = `${hours}:${minutes} ${meridiem}`;
+        formattedDate = `${hours}:${minutes}`;
       } else {
         const month = MONTH_NAMES[selectedDate.getMonth()];
         const date =
           selectedDate.getDate() >= 10
             ? selectedDate.getDate()
             : `0${selectedDate.getDate()}`;
-        formattedDate = `${month} ${date} ${hours}:${minutes} ${meridiem}`;
+        formattedDate = `${month} ${date} ${hours}:${minutes}`;
       }
       return {
         text: formattedDate
-      } as any;
+      } as Partial<AnimatedProps<TextInputProps>>;
     }
     return {
       text: ''
-    };
+    } as Partial<AnimatedProps<TextInputProps>>;
   });
 
   const animatedDateContainerStyles = useAnimatedStyle(() => {
@@ -170,6 +174,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
+                  dailyIncome={dailyIncome}
                   change={percentChange}
                   fontSize={16}
                   fontWeight="500"
@@ -218,7 +223,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           // {
           //   text: t('chart.timeframe.monthly'),
           //   value: 'monthly'
-          // }
+          // },
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}
@@ -235,7 +240,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           }
         }}
         onIntervalSelected={(interval) =>
-          setSelectedInverval(interval.value as PriceSnapshotInterval)
+          setSelectedInterval(interval.value as PriceSnapshotInterval)
         }
       />
     </View>

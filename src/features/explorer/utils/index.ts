@@ -1,1 +1,1 @@
-export * from './tx-status-label';
+export * from './tx-status';

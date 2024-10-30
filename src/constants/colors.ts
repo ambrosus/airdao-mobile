@@ -82,6 +82,8 @@ export const COLORS = {
   alphaBlack60: '#0e0e0e99',
   alphaWhite5: '#ffffff0d',
   alphaWhite50: '#ffffff80',
+  alphaWhite70: '#ffffffb3',
+  alphaWhite80: '#ffffffcc',
 
   gray300: '#2F2B430D',
   gray500: '#646464',
@@ -89,6 +91,7 @@ export const COLORS = {
   gray800: '#222222',
 
   yellow500: '#ff7a00',
+  green500: '#39B38C',
   black: '#000000',
   culturedWhite: '#F3F5F7',
   darkGrey: '#2f2b43',
@@ -121,21 +124,20 @@ export const COLORS = {
 
 export const CreditCardBg = [
   COLORS.brand600,
-  COLORS.brand200,
-  COLORS.neutral700,
-  COLORS.purple500
+  COLORS.purple500,
+  COLORS.green500
 ];
 
 export const CreditCardAddressColor = [
   COLORS.alphaWhite50,
-  COLORS.alphaBlack50,
+  COLORS.alphaWhite50,
   COLORS.alphaWhite50,
   COLORS.alphaWhite50
 ];
 
 export const CreditCardBalanceColor = [
-  COLORS.neutral0,
-  COLORS.neutral800,
-  COLORS.neutral0,
-  COLORS.neutral0
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70
 ];

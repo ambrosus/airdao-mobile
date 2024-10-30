@@ -1,7 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { LayoutChangeEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ethers } from 'ethers';
+import { useFocusEffect } from '@react-navigation/native';
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring
+} from 'react-native-reanimated';
 import {
   AccountActions,
   PaginatedAccountList,
@@ -10,14 +18,13 @@ import {
 } from '@components/templates';
 import { Spacer } from '@components/base';
 import { useBalanceOfAddress, useWallet } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
+import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { useBridgeContextData } from '@features/bridge/context';
-import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = () => {
   const { onChangeSelectedWallet } = useWallet();
@@ -60,11 +67,84 @@ export const HomeScreen = () => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();
   }, [selectedAccountBalance.wei]);
 
+  const offsetScrollY = useSharedValue(0);
+  const activeTabIndex = useSharedValue(0);
+
+  const onTransactionsScrollEvent = useAnimatedScrollHandler((event) => {
+    offsetScrollY.value = event.contentOffset.y;
+  });
+
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  const hideThreshold = headerHeight + 24;
+
+  const isHeaderHidden = useDerivedValue(() => {
+    return offsetScrollY.value > hideThreshold / 4;
+  });
+
+  const animatedHeaderStyles = useAnimatedStyle(() => {
+    const translateY = withSpring(isHeaderHidden.value ? -hideThreshold : 0, {
+      damping: 20,
+      stiffness: 90
+    });
+    const opacity = withSpring(isHeaderHidden.value ? 0 : 1, {
+      damping: 20,
+      stiffness: 90
+    });
+
+    return {
+      zIndex: -999,
+      transform: [{ translateY }],
+      opacity
+    };
+  });
+
+  const animatedListStyles = useAnimatedStyle(() => {
+    const translateY = withSpring(isHeaderHidden.value ? -hideThreshold : 0, {
+      damping: 20,
+      stiffness: 90
+    });
+
+    const height = withSpring(
+      isHeaderHidden.value ? SCREEN_HEIGHT : SCREEN_HEIGHT - hideThreshold,
+      {
+        damping: 20,
+        stiffness: 90
+      }
+    );
+
+    return {
+      flex: activeTabIndex.value === 2 ? 0 : 1,
+      height,
+      transform: [{ translateY }]
+    };
+  });
+
+  const onHeaderLayoutChange = useCallback(
+    (event: LayoutChangeEvent) =>
+      setHeaderHeight(event.nativeEvent.layout.height),
+    []
+  );
+
+  const onChangeActiveTabIndex = useCallback(
+    (index: number) => {
+      activeTabIndex.value = index;
+      offsetScrollY.value = 0;
+    },
+    [activeTabIndex, offsetScrollY]
+  );
+
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
-      <HomeHeader />
+      <HomeHeader
+        isHeaderHidden={isHeaderHidden}
+        account={selectedAccountWithBalance}
+      />
       <Spacer value={verticalScale(24)} />
-      <View style={{ flex: 1 }}>
+      <Animated.View
+        style={animatedHeaderStyles}
+        onLayout={onHeaderLayoutChange}
+      >
         <PaginatedAccountList
           accounts={accounts}
           type="credit-card"
@@ -89,18 +169,23 @@ export const HomeScreen = () => {
               account={selectedAccountWithBalance}
               disabled={isSelectAccountBalanceZero}
             />
-            <Spacer value={verticalScale(32)} />
-            {isSelectAccountBalanceZero ? (
-              <WalletDepositFunds onRefresh={refetchAmbBalance} />
-            ) : (
-              <WalletTransactionsAndAssets
-                account={selectedAccountWithBalance}
-                onRefresh={refetchAmbBalance}
-              />
-            )}
+            <Spacer value={verticalScale(16)} />
           </>
         )}
-      </View>
+      </Animated.View>
+
+      {isSelectAccountBalanceZero || !selectedAccountWithBalance ? (
+        <WalletDepositFunds onRefresh={refetchAmbBalance} />
+      ) : (
+        <Animated.View style={[animatedListStyles]}>
+          <WalletTransactionsAndAssets
+            onChangeActiveTabIndex={onChangeActiveTabIndex}
+            onTransactionsScrollEvent={onTransactionsScrollEvent}
+            account={selectedAccountWithBalance}
+            onRefresh={refetchAmbBalance}
+          />
+        </Animated.View>
+      )}
     </SafeAreaView>
   );
 };
