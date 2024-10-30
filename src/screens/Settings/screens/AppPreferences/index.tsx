@@ -5,7 +5,6 @@ import { BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer } from '@components/base';
 import {
   AppPreferencesMenuItem,
-  BottomSheetSelectBaseCurrency,
   BottomSheetSelectLanguage
 } from './components';
 import { Currency, Language } from '@appTypes';
@@ -15,20 +14,22 @@ import useLocalization from '@contexts/Localizations';
 import { LocalizationUtils } from '@utils/localization';
 import { View } from 'react-native';
 
+// hide currency list
+
 export const AppPreferencesScreen = () => {
   const { t } = useTranslation();
   const { currentLanguage } = useLocalization();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(
     LocalizationUtils.languageFromCode(currentLanguage)
   );
-  const [selectedCurrency, setSelectedCurrency] =
-    useState<Currency>('US Dollars (USD)');
-  const selectBaseCurrencyRef = useRef<BottomSheetRef>(null);
+  // const [selectedCurrency, setSelectedCurrency] =
+  useState<Currency>('US Dollars (USD)');
+  // const selectBaseCurrencyRef = useRef<BottomSheetRef>(null);
   const selectLanguageRef = useRef<BottomSheetRef>(null);
 
-  const showCurrencySelection = useCallback(() => {
-    selectBaseCurrencyRef.current?.show();
-  }, []);
+  // const showCurrencySelection = useCallback(() => {
+  //   selectBaseCurrencyRef.current?.show();
+  // }, []);
 
   const showLanguageSelection = useCallback(() => {
     selectLanguageRef.current?.show();
@@ -38,9 +39,9 @@ export const AppPreferencesScreen = () => {
     setSelectedLanguage(value);
   }, []);
 
-  const handleCurrencySave = useCallback((value: Currency) => {
-    setSelectedCurrency(value);
-  }, []);
+  // const handleCurrencySave = useCallback((value: Currency) => {
+  //   setSelectedCurrency(value);
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,12 +52,12 @@ export const AppPreferencesScreen = () => {
       />
       <Spacer value={verticalScale(8)} />
       <View style={styles.inner}>
-        <Button onPress={showCurrencySelection}>
-          <AppPreferencesMenuItem
-            title={t('settings.preferences.currency')}
-            value={selectedCurrency}
-          />
-        </Button>
+        {/*<Button onPress={showCurrencySelection}>*/}
+        {/*  <AppPreferencesMenuItem*/}
+        {/*    title={t('settings.preferences.currency')}*/}
+        {/*    value={selectedCurrency}*/}
+        {/*  />*/}
+        {/*</Button>*/}
         <Button onPress={showLanguageSelection}>
           <AppPreferencesMenuItem
             title={t('settings.preferences.language')}
@@ -64,11 +65,11 @@ export const AppPreferencesScreen = () => {
           />
         </Button>
       </View>
-      <BottomSheetSelectBaseCurrency
-        ref={selectBaseCurrencyRef}
-        handleCurrencySave={handleCurrencySave}
-        selectedCurrency={selectedCurrency}
-      />
+      {/*<BottomSheetSelectBaseCurrency*/}
+      {/*  ref={selectBaseCurrencyRef}*/}
+      {/*  handleCurrencySave={handleCurrencySave}*/}
+      {/*  selectedCurrency={selectedCurrency}*/}
+      {/*/>*/}
       <BottomSheetSelectLanguage
         ref={selectLanguageRef}
         handleLanguageSave={handleLanguageSave}
