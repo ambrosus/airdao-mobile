@@ -3,7 +3,8 @@ const TabVisibleRoutes = [
   'PortfolioScreen',
   'SearchScreen',
   'SettingsScreen',
-  'WalletScreen'
+  'WalletScreen',
+  'Products'
 ];
 
 const getTabBarVisibility = (route: string): boolean => {

@@ -3,7 +3,6 @@ import { Pressable, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
-import { Text } from '@components/base';
 import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
 import Animated, {
@@ -11,37 +10,36 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
-import {
-  ExploreTabIcon,
-  SettingsTabIcon,
-  WalletTabIcon,
-  WatchlistTabIcon
-} from '@components/svg/BottomTabIcons';
 import { isIos } from '@utils/isPlatform';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { WalletsInactiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-inactive';
+import { WalletsActiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-active';
+import {
+  ProductsActiveIcon,
+  ProductsInactiveIcon,
+  SettingsActiveIcon,
+  SettingsInactiveIcon
+} from '@components/svg/icons/v2/bottom-tabs-navigation';
+import { scale, verticalScale } from '@utils/scaling';
 
-type LabelType = 'Settings' | 'Portfolio' | 'Search' | 'Wallets';
+type LabelType = 'Settings' | 'Products' | 'Wallets';
 const tabs = {
   Wallets: {
-    inactiveIcon: <WalletTabIcon color={COLORS.neutral200} />,
-    activeIcon: <WalletTabIcon color={COLORS.brand600} />
+    inactiveIcon: <WalletsInactiveIcon color={COLORS.neutral200} />,
+    activeIcon: <WalletsActiveIcon color={COLORS.brand600} />
   },
-  Portfolio: {
-    inactiveIcon: <WatchlistTabIcon color={COLORS.neutral200} />,
-    activeIcon: <WatchlistTabIcon color={COLORS.brand600} />
-  },
-  Search: {
-    inactiveIcon: <ExploreTabIcon color={COLORS.neutral200} />,
-    activeIcon: <ExploreTabIcon color={COLORS.brand600} />
+  Products: {
+    inactiveIcon: <ProductsInactiveIcon color={COLORS.neutral800} />,
+    activeIcon: <ProductsActiveIcon color={COLORS.brand600} />
   },
   Settings: {
-    inactiveIcon: <SettingsTabIcon color={COLORS.neutral200} />,
-    activeIcon: <SettingsTabIcon color={COLORS.brand600} />
+    inactiveIcon: <SettingsInactiveIcon color={COLORS.neutral200} />,
+    activeIcon: <SettingsActiveIcon color={COLORS.brand600} />
   }
 };
 
-const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+const TabBar = ({ state, navigation }: BottomTabBarProps) => {
   const bottomSafeArea = useSafeAreaInsets().bottom;
   const currentRoute = useCurrentRoute();
   const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
@@ -70,20 +68,12 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       style={[
         styles.mainContainer,
         {
-          paddingBottom: bottomSafeArea
+          paddingBottom: bottomSafeArea * 1.75
         },
         animatedStyle
       ]}
     >
       {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key];
-        const label: LabelType =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
         const isFocused = state.index === index;
 
         const icon =
@@ -112,21 +102,16 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         return (
           <Pressable
             key={index}
-            style={[styles.mainItemContainer]}
+            hitSlop={scale(24)}
+            style={[
+              styles.mainItemContainer,
+              {
+                paddingTop: verticalScale(index === 1 ? 8 : 17)
+              }
+            ]}
             onPress={onPress}
           >
             {icon}
-            <Text
-              style={[
-                styles.labelStyle,
-                {
-                  color: isFocused ? COLORS.brand600 : '#676b73',
-                  opacity: isFocused ? 1 : 0.7
-                }
-              ]}
-            >
-              {label}
-            </Text>
           </Pressable>
         );
       })}
@@ -136,8 +121,12 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
+    width: '100%',
     flexDirection: 'row',
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
     bottom: 0,
     backgroundColor: COLORS.neutral0,
     opacity: 2,
@@ -146,18 +135,9 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.neutral200
   },
   mainItemContainer: {
-    flex: 1,
-    height: 40,
+    height: 24,
     alignItems: 'center',
-    marginVertical: 10,
-    borderRadius: 1,
-    backgroundColor: COLORS.neutral0,
-    opacity: 0.94
-  },
-  labelStyle: {
-    paddingTop: 2,
-    fontSize: 12,
-    lineHeight: 16
+    backgroundColor: COLORS.neutral0
   }
 });
 
