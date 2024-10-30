@@ -41,7 +41,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
         {
           id: 2,
           name: t('account.actions.stake'),
-          description: 'Earn with pools & swap tokens',
+          description: 'Earn AMB rewards',
           icon: (
             <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
           ),
@@ -52,7 +52,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
         {
           id: 3,
           name: 'KOSMOS',
-          description: 'Seamless asset transfers',
+          description: 'Earn passive income via bonds',
           icon: (
             <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
           ),
