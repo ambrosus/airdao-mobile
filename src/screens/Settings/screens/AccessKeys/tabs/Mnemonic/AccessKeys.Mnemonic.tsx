@@ -83,8 +83,8 @@ export const AccessKeysMnemonicTab = ({
     <View style={styles.container}>
       <Spacer value={scale(18)} />
       <Text
-        fontSize={16}
-        fontFamily="Inter_500Medium"
+        fontSize={scale(16)}
+        fontFamily="Inter_400Regular"
         color={COLORS.neutral800}
         style={styles.heading}
       >

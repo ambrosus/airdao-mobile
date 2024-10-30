@@ -52,23 +52,19 @@ const _getWalletNumber = async () => {
   return count + 1;
 };
 
-const _getWalletName = async () => {
-  const idx = await _getWalletNumber();
-  return 'AirDAO Wallet #' + idx;
-};
-
 const processWallet = async (mnemonic: string) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
   try {
     const number = await _getWalletNumber();
-    const name = await _getWalletName();
+    const name = '';
     const hash = await _saveWallet({ mnemonic, name, number });
     const fullWallet: Wallet = new Wallet({
       hash,
       name,
       number
     });
+
     // get wallet info from network
     const { cashbackToken } = await CashBackUtils.getByHash(hash);
     fullWallet.cashback = cashbackToken;
@@ -131,7 +127,7 @@ export const importWalletViaPrivateKey = async (
 
   try {
     const number = await _getWalletNumber();
-    const name = await _getWalletName();
+    const name = '';
     const hash = await _saveWallet(
       { mnemonic: privateKey, name, number },
       true

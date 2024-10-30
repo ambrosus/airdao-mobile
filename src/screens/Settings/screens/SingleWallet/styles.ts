@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.neutral100
   },
   copyButton: {
-    backgroundColor: COLORS.alphaBlack5,
+    backgroundColor: COLORS.brand100,
     borderRadius: 1000,
     alignSelf: 'center',
     paddingVertical: verticalScale(6),
@@ -43,16 +43,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 1000,
-    paddingVertical: verticalScale(12),
+    paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
   },
   accessKeysButton: {
-    backgroundColor: COLORS.neutral100,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 1000,
-    paddingVertical: verticalScale(12),
+    flexDirection: 'row',
+    paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
   },

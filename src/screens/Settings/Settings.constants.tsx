@@ -1,63 +1,64 @@
 import React from 'react';
+import { COLORS } from '@constants/colors';
 import {
   AboutIcon,
-  LockIcon,
+  CompassIcon,
   NotificationIcon,
-  SettingsFilledIcon,
-  TelegramSettingsIcon,
-  WalletIcon
-} from '@components/svg/icons';
-import { SettingsMenuItem } from './Settings.types';
-import { COLORS } from '@constants/colors';
+  Preferences,
+  SecurityIcon,
+  WalletIcon,
+  WatchListIcon
+} from '@components/svg/icons/v2/settings';
 import XTwitterIcon from '@components/svg/icons/XTwitterIcon';
+import { TelegramSettingsIcon } from '@components/svg/icons';
 import MediumIcon from '@components/svg/icons/MediumIcon';
+import { SettingsMenuItem } from '@screens/Settings/Settings.types';
 
-const walletGroup: SettingsMenuItem[] = [
+export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
   {
     key: 'manageWallets',
     title: 'settings.manage.wallet',
     route: 'ManageWallets',
-    icon: <WalletIcon color={COLORS.neutral400} />
-  }
-];
-const appSettingsGroup: SettingsMenuItem[] = [
-  {
-    key: 'securitySettings',
-    title: 'settings.security',
-    route: 'SecuritySettings',
-    icon: <LockIcon color={COLORS.neutral400} />
+    icon: <WalletIcon color={COLORS.brand500} />
   },
   {
-    key: 'appPreferences',
-    title: 'settings.preferences',
-    route: 'AppPreferences',
-    icon: <SettingsFilledIcon color={COLORS.neutral400} />
+    key: 'watchlists',
+    title: 'settings.watchlists',
+    route: 'Portfolio',
+    icon: <WatchListIcon color={COLORS.brand500} />
+  },
+  {
+    key: 'explore',
+    title: 'settings.explore',
+    route: 'Search',
+    icon: <CompassIcon color={COLORS.brand500} />
   },
   {
     key: 'notificationSettings',
     title: 'settings.notifications',
     route: 'NotificationSettings',
-    icon: <NotificationIcon color={COLORS.neutral400} />
-  }
-];
-
-const helpGroup: SettingsMenuItem[] = [
+    icon: <NotificationIcon color={COLORS.brand500} />
+  },
+  {
+    key: 'appPreferences',
+    title: 'settings.preferences',
+    route: 'AppPreferences',
+    icon: <Preferences color={COLORS.brand500} />
+  },
+  {
+    key: 'securitySettings',
+    title: 'settings.security',
+    route: 'SecuritySettings',
+    icon: <SecurityIcon color={COLORS.brand500} />
+  },
   {
     key: 'about',
     title: 'settings.about',
     route: 'About',
-    icon: <AboutIcon color={COLORS.neutral400} />
+    icon: <AboutIcon color={COLORS.brand500} />
   }
-  // TODO temporarily hide help centre section
-  // {
-  //   key: 'helpCenter',
-  //   title: 'settings.help',
-  //   route: 'HelpCenter',
-  //   icon: <HelpIcon color={COLORS.neutral400} />
-  // }
 ];
-
-const socialGroup: SettingsMenuItem[] = [
+export const SOCIAL_GROUPS: SettingsMenuItem[] = [
   {
     key: 'xTwitter',
     title: 'settings.twitter',
@@ -76,11 +77,4 @@ const socialGroup: SettingsMenuItem[] = [
     route: 'Medium',
     icon: <MediumIcon color={COLORS.neutral400} />
   }
-];
-
-export const SETTINGS_MENU_ITEMS: SettingsMenuItem[][] = [
-  walletGroup,
-  appSettingsGroup,
-  helpGroup,
-  socialGroup
 ];
