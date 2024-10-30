@@ -3,7 +3,7 @@ import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { ClipboardFilledIcon, IconProps } from '@components/svg/icons';
+import { IconProps } from '@components/svg/icons';
 import { scale } from '@utils/scaling';
 import {
   Toast,
@@ -16,6 +16,8 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { CopyIconV2 } from '@components/svg/icons/v2/settings';
 import { CheckboxCircleFill } from '@components/svg/icons/v2';
+import { View, ViewStyle } from 'react-native';
+import { ClipboardFillIcon } from '@components/svg/icons/v2';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -134,7 +136,7 @@ export const CopyToClipboardButton = (
       <Spacer horizontal value={scale(16)} />
       <Button {...buttonProps} onPress={onPress}>
         {showToast || !copied ? (
-          <ClipboardFilledIcon {...iconProps} />
+          <ClipboardFillIcon {...iconProps} />
         ) : (
           <View style={copiedTextWrapperStyle}>
             <Text {...successTextProps}>

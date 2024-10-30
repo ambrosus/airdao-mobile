@@ -56,7 +56,7 @@
   "amb.market.max.supply": "Max supply",
   "amb.market.max.supply.popup": "The maximum amount of coins that will ever exist in the lifetime of the cryptocurrency, indicating the limit of its potential supply.",
   "amb.market.statistics.text": "AirDAO is a pioneering community-governed layer one blockchain and web3 ecosystem powered by AMB. Our products enable financial equality and social inclusion, and we’re dedicated to making web3 more democratized and accessible to all. Your vision, our future. We build together.",
-  "amb.market.header": "Market overview",
+  "amb.market.header": "Overview",
   "amb.market.stats": "Stats",
   "amb.market.total.supply": "Total supply",
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",

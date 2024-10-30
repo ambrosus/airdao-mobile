@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.neutral0
   },
+  header: {
+    shadowColor: 'transparent'
+  },
   scrollView: {
     flexGrow: 1,
     paddingBottom: '10%'

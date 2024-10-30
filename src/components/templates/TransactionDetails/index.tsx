@@ -117,18 +117,14 @@ export const TransactionDetails = ({
       </Row>
 
       <View style={styles.detailsContainer}>
-        {!isContractCall && (
-          <>
-            <AddressRowWithAction
-              label={t('common.transaction.from')}
-              address={transaction.from}
-            />
-            <AddressRowWithAction
-              label={t('common.transaction.to')}
-              address={transaction.to}
-            />
-          </>
-        )}
+        <AddressRowWithAction
+          label={t('common.transaction.from')}
+          address={transaction.from}
+        />
+        <AddressRowWithAction
+          label={t('common.transaction.to')}
+          address={transaction.to}
+        />
 
         <JustifiedRow>
           <DetailsItemTypography>{t('common.status')}</DetailsItemTypography>

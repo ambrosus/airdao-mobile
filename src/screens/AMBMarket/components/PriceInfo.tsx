@@ -6,7 +6,13 @@ import { moderateScale, verticalScale } from '@utils/scaling';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { Spacer, Text } from '@components/base';
 
-export function AMBPriceInfo({ header }: { header?: string }): JSX.Element {
+export function AMBPriceInfo({
+  header,
+  dailyIncome
+}: {
+  header?: string;
+  dailyIncome: string;
+}): JSX.Element {
   return (
     <View style={styles.container}>
       {!!header && (
@@ -22,7 +28,7 @@ export function AMBPriceInfo({ header }: { header?: string }): JSX.Element {
           </Text>
         </View>
       )}
-      <AMBPriceHistory badgeType="view" />
+      <AMBPriceHistory badgeType="view" dailyIncome={dailyIncome} />
     </View>
   );
 }
