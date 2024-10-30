@@ -5,15 +5,17 @@ import { COLORS, CreditCardBg } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { WalletIcon } from '@components/svg/icons/v2';
+import { StringUtils } from '@utils/string';
 
 interface WalletItemProps {
   wallet: WalletDBModel;
+  walletAddress: string;
   isSelectedWallet: boolean;
   index: number;
 }
 
 export const WalletItem = (props: WalletItemProps) => {
-  const { wallet, isSelectedWallet, index } = props;
+  const { wallet, isSelectedWallet, index, walletAddress } = props;
   const newIndex = index % CreditCardBg.length;
   const bgIndex = newIndex ? newIndex - 1 : 3;
   return (
@@ -31,7 +33,9 @@ export const WalletItem = (props: WalletItemProps) => {
           color={COLORS.neutral800}
           numberOfLines={1}
         >
-          {wallet.name}
+          {wallet.name ||
+            StringUtils.formatAddress(walletAddress, 7, 7) ||
+            'Wallet'}
         </Text>
       </Row>
       <Row alignItems="center">

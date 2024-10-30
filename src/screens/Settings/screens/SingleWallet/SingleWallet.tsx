@@ -23,7 +23,7 @@ export const SingleWalletScreen = () => {
   const accessKeyRef = useRef(null);
   const { t } = useTranslation();
   const route = useRoute<RouteProp<SettingsTabParamsList, 'SingleWallet'>>();
-  const { wallet } = route.params;
+  const { wallet, walletAddress } = route.params;
   const { data: account } = useExplorerAccountFromHash(wallet.hash);
   const [walletName, setWalletName] = useState(wallet.name);
   const saveButtonEnabled = walletName !== wallet.name;
@@ -46,7 +46,7 @@ export const SingleWalletScreen = () => {
         {
           text: t('button.delete'),
           style: 'destructive',
-          onPress: () => deleteWallet(account?.address, wallet.hash)
+          onPress: () => deleteWallet(walletAddress, wallet.hash)
         },
         {
           text: t('button.cancel'),
@@ -54,7 +54,7 @@ export const SingleWalletScreen = () => {
         }
       ]
     );
-  }, [account?.address, deleteWallet, t, wallet.hash]);
+  }, [walletAddress, deleteWallet, t, wallet.hash]);
 
   const renderRightHeaderContent = useMemo(() => {
     return (
@@ -106,7 +106,7 @@ export const SingleWalletScreen = () => {
               {account && (
                 <View style={styles.addressContainer}>
                   <View style={styles.qrCode}>
-                    <QRCodeWithLogo value={account.address} size={scale(200)} />
+                    <QRCodeWithLogo value={walletAddress} size={scale(200)} />
                   </View>
                   <Spacer value={verticalScale(16)} />
                   <Text
@@ -115,12 +115,12 @@ export const SingleWalletScreen = () => {
                     color={COLORS.neutral800}
                     fontFamily="Inter_500Medium"
                   >
-                    {account.address}
+                    {walletAddress}
                   </Text>
                   <Spacer value={verticalScale(16)} />
                   <CopyToClipboardButton
                     textToDisplay={t('common.copy')}
-                    textToCopy={account.address}
+                    textToCopy={walletAddress}
                     pressableText
                     showToast={false}
                     iconProps={{ scale: 1 }}

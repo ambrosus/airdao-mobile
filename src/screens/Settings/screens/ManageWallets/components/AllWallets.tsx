@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { WalletDBModel } from '@database';
-import { useAllWallets } from '@hooks/database';
+import { useAllAccounts, useAllWallets } from '@hooks/database';
 import { Button } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { SettingsTabNavigationProp } from '@appTypes';
@@ -12,6 +12,7 @@ export const AllWallets = () => {
   const allWalletsQueryInfo = useAllWallets();
   const allWallets = allWalletsQueryInfo.data;
   const navigation = useNavigation<SettingsTabNavigationProp>();
+  const { data: allAccounts } = useAllAccounts();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -21,12 +22,21 @@ export const AllWallets = () => {
   );
 
   const renderWallet = (args: ListRenderItemInfo<WalletDBModel>) => {
+    const account = allAccounts.find(
+      // @ts-ignore
+      (account) => account._raw?.hash === args.item.hash
+    );
+
+    const walletAddress = account?.address || '';
+
     const onPress = () => {
-      navigation.navigate('SingleWallet', { wallet: args.item });
+      navigation.navigate('SingleWallet', { wallet: args.item, walletAddress });
     };
+
     return (
       <Button onPress={onPress}>
         <WalletItem
+          walletAddress={walletAddress}
           index={args.index}
           wallet={args.item}
           isSelectedWallet={false}
