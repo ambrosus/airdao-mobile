@@ -16,8 +16,7 @@ interface WalletItemProps {
 
 export const WalletItem = (props: WalletItemProps) => {
   const { wallet, isSelectedWallet, index, walletAddress } = props;
-  const newIndex = index % CreditCardBg.length;
-  const bgIndex = newIndex ? newIndex - 1 : 3;
+  const bgIndex = index % CreditCardBg.length;
   return (
     <Row
       alignItems="center"

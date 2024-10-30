@@ -15,9 +15,10 @@ import { BaseButtonProps } from '@components/base/Button';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { CopyIconV2 } from '@components/svg/icons/v2/settings';
-import { CheckboxCircleFill } from '@components/svg/icons/v2';
-import { View, ViewStyle } from 'react-native';
-import { ClipboardFillIcon } from '@components/svg/icons/v2';
+import {
+  CheckboxCircleFill,
+  ClipboardFillIcon
+} from '@components/svg/icons/v2';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
