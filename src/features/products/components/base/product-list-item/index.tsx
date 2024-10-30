@@ -16,7 +16,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 
   const onRedirectToProductScreen = useCallback(
     () => navigation.navigate(product.route),
-    [product]
+    [product, navigation]
   );
 
   return (
