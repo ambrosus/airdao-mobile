@@ -382,7 +382,7 @@
   "swap.settings.deadline": "Transaction deadline",
   "swap.settings.expert": "Toggle expert mode",
   "swap.settings.multihops": "Disable multihops",
-  "swap.settings.label.minutes": "minutes",
+  "swap.settings.label.minutes": "Minutes",
   "swap.status.error.heading": "Swap Failed",
   "swap.label.estimated": "estimated",
   "bridge.history.heading": "Transaction history",

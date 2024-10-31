@@ -381,7 +381,7 @@
   "swap.settings.deadline": "İşlem son tarihi",
   "swap.settings.expert": "Uzman modunu değiştir",
   "swap.settings.multihops": "Çoklu atlamaları devre dışı bırak",
-  "swap.settings.label.minutes": "dakika",
+  "swap.settings.label.minutes": "Dakika",
   "swap.status.error.heading": "Takas Başarısız",
   "swap.label.estimated": "tahmini",
   "bridge.history.heading": "İşlem geçmişi",

@@ -30,7 +30,11 @@ import { NFTScreen } from '@screens/NFTScreen';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
 import { SwapScreen } from '@screens/Swap';
-import { SwapErrorScreen, SwapSuccessScreen } from '@screens/Swap/screens';
+import {
+  SwapErrorScreen,
+  SwapSettingsScreen,
+  SwapSuccessScreen
+} from '@screens/Swap/screens';
 import { KosmosScreen } from '@screens/Kosmos';
 import { KosmosMarketScreen } from '@screens/Kosmos/screens';
 import {
@@ -108,6 +112,10 @@ export const HomeStack = () => {
             component={SwapSuccessScreen}
           />
           <Stack.Screen name="SwapErrorScreen" component={SwapErrorScreen} />
+          <Stack.Screen
+            name="SwapSettingsScreen"
+            component={SwapSettingsScreen}
+          />
           <Stack.Screen name="KosmosScreen" component={KosmosScreen} />
           <Stack.Screen
             name="KosmosMarketScreen"
