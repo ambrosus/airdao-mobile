@@ -58,12 +58,27 @@ export const ReviewSwapButton = () => {
     );
   }, [t, swapButtonString, isProcessingBottomSheet]);
 
+  const buttonColors = useMemo(() => {
+    return disabled
+      ? [COLORS.primary50, COLORS.primary50]
+      : [COLORS.brand600, COLORS.brand600];
+  }, [disabled]);
+
   return (
-    <PrimaryButton disabled={disabled} onPress={onResolveBottomSheetDataPress}>
+    <PrimaryButton
+      colors={buttonColors}
+      disabled={disabled}
+      style={{ shadowOpacity: 0 }}
+      onPress={onResolveBottomSheetDataPress}
+    >
       {isProcessingBottomSheet ? (
         <Spinner />
       ) : (
-        <Text color={disabled ? COLORS.alphaBlack30 : COLORS.neutral0}>
+        <Text
+          fontSize={17}
+          fontFamily="Inter_600SemiBold"
+          color={disabled ? COLORS.brand75 : COLORS.neutral0}
+        >
           {swapButtonString}
         </Text>
       )}

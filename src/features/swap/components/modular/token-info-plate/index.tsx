@@ -7,6 +7,8 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapTokens, useSwapBetterRate } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
 import { COLORS } from '@constants/colors';
+import { StyleProp, ViewStyle } from 'react-native';
+import { verticalScale } from '@utils/scaling';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
@@ -57,8 +59,14 @@ export const TokenInfoPlate = () => {
     );
   }, [TokenUSDPrice, oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
 
+  const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      paddingBottom: verticalScale(20)
+    };
+  }, []);
+
   return isShowPlate ? (
-    <Row justifyContent="center" alignItems="center">
+    <Row style={containerStyle} justifyContent="center" alignItems="center">
       <Text
         fontSize={14}
         fontFamily="Inter_600SemiBold"

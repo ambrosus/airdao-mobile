@@ -10,7 +10,6 @@ import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { useSwapContextSelector } from '@features/swap/context';
 import { NumberUtils } from '@utils/number';
 import { StringUtils } from '@utils/string';
-import { isAndroid } from '@utils/isPlatform';
 
 interface InputWithTokenSelectProps {
   readonly type: SelectedTokensKeys;
@@ -42,7 +41,7 @@ export const InputWithTokenSelect = ({
   };
 
   const selection = useMemo(() => {
-    if (!isInputFocused && isAndroid && selectedTokensAmount[type].length > 0) {
+    if (!isInputFocused && selectedTokensAmount[type].length > 0) {
       return { start: 0, end: 0 };
     }
   }, [isInputFocused, selectedTokensAmount, type]);
@@ -51,7 +50,8 @@ export const InputWithTokenSelect = ({
     return StringUtils.wrapAndroidString(
       selectedTokensAmount[type],
       isInputFocused,
-      9
+      16,
+      true
     );
   }, [isInputFocused, selectedTokensAmount, type]);
 
@@ -69,20 +69,21 @@ export const InputWithTokenSelect = ({
         {label} {estimated && `(${t('swap.label.estimated')})`}
       </Text>
       <View style={styles.upperRow}>
-        <TextInput
-          numberOfLines={1}
-          onFocus={onToggleInputFocus}
-          onBlur={onToggleInputFocus}
-          selection={selection}
-          value={value}
-          style={inputStyle}
-          type="number"
-          keyboardType="decimal-pad"
-          onChangeText={onChangeTokenAmount}
-          placeholder="0"
-        />
-
         <TokenSelector type={type} />
+        <View style={{ maxWidth: '60%' }}>
+          <TextInput
+            numberOfLines={1}
+            onFocus={onToggleInputFocus}
+            onBlur={onToggleInputFocus}
+            selection={selection}
+            value={value}
+            style={inputStyle}
+            type="number"
+            keyboardType="decimal-pad"
+            onChangeText={onChangeTokenAmount}
+            placeholder="0"
+          />
+        </View>
       </View>
 
       <Balance type={type} />

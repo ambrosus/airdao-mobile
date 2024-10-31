@@ -344,7 +344,6 @@
   "toast.you.removed.address.from.watchlist": "You removed {{name}} from watchlist!",
   "toast.wallet.created": "Backup successful!",
 
-
   "token.picker.select": "Select asset to send",
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
@@ -361,7 +360,7 @@
   "swap.select.asset": "Select asset",
   "swap.text.button.max": "Max",
   "swap.button.insufficient": "Insufficient funds",
-  "swap.button.review": "Review swap",
+  "swap.button.review": "Review",
   "swap.status.success.desc": "Your swap of {{AMOUNT_A}} {{SYMBOL_A}} to {{AMOUNT_B}} {{SYMBOL_B}} was successful.",
   "swap.status.error.desc": "Your swap of {{AMOUNT_A}} {{SYMBOL_A}} to {{SYMBOL_B}} could not be completed.",
   "swap.bottom.sheet.heading": "Ready to swap?",
@@ -467,7 +466,6 @@
   "kosmos.market.tabs.history": "History",
 
   "settings.version": "Version",
-
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",

@@ -21,6 +21,7 @@ export const COLORS = {
   primary100: '#C5D4F5',
 
   // PRIMARY
+  brand75: '#7A9DEC',
   brand100: '#EDF3FF',
   brand200: '#C9D9FF',
   brand300: '#99B8FF',

@@ -13,3 +13,5 @@ export { WalletIcon } from './settings';
 export { ChartIcon } from './Chart';
 export { QRCodeIcon } from './QR';
 export { ClipboardFillIcon } from './ClipboardFill';
+export { ArrowBottomFillIcon } from './ArrowBottomFill';
+export { WalletIcon as WalletOutlineIcon } from './Wallet';
