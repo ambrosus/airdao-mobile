@@ -27,15 +27,13 @@ function parseCSSShadow(shadow: string): CSSShadow {
 }
 
 export function cssShadowToNative(shadow: string): ViewStyle {
-  const { offsetX, offsetY, blurRadius, color } = parseCSSShadow(shadow);
+  const { blurRadius, color } = parseCSSShadow(shadow);
 
   return {
     shadowColor: color,
-    shadowOffset: { width: offsetX, height: offsetY },
-    shadowOpacity: parseFloat(
-      color.match(/rgba\(\d+, \d+, \d+, (\d?.?\d*)\)/)?.[1] || '1'
-    ),
-    shadowRadius: blurRadius / 2,
-    elevation: blurRadius / 2
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: blurRadius,
+    elevation: blurRadius
   };
 }

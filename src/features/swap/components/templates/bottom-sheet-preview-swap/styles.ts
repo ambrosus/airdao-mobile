@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   preview: {
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: COLORS.alphaBlack5,
+    backgroundColor: COLORS.neutral50,
     padding: 12,
     borderRadius: moderateScale(16),
     marginTop: verticalScale(16)

@@ -11,7 +11,6 @@ import { COLORS } from '@constants/colors';
 import { FIELD } from '@features/swap/types';
 import { SubmitSwapActions } from '../../modular';
 import { useSwapContextSelector } from '@features/swap/context';
-import { SwapPendingLayout } from './components/pending';
 import { useTranslation } from 'react-i18next';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
 import { useSwapTokens } from '@features/swap/lib/hooks';
@@ -34,31 +33,28 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
         swipingEnabled={!isProcessingSwap}
         ref={bottomSheetRef}
       >
-        {isProcessingSwap ? (
-          <SwapPendingLayout />
-        ) : (
-          <View style={styles.container}>
-            <Text
-              fontSize={20}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral800}
-              style={styles.heading}
-            >
-              {t('swap.bottom.sheet.heading')}
-            </Text>
+        <View style={styles.container}>
+          <Text
+            fontSize={20}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
+            style={styles.heading}
+          >
+            {t('swap.bottom.sheet.heading')}
+          </Text>
 
-            <View style={styles.preview}>
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_A} />
-              <View style={styles.divider} />
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_B} />
-            </View>
-
-            {!isWrapOrUnwrapETH && <PreviewInformation />}
-
-            <Spacer value={scale(24)} />
-            <SubmitSwapActions />
+          <View style={styles.preview}>
+            <BottomSheetReviewTokenItem type={FIELD.TOKEN_A} />
+            <View style={styles.divider} />
+            <BottomSheetReviewTokenItem type={FIELD.TOKEN_B} />
           </View>
-        )}
+
+          {!isWrapOrUnwrapETH && <PreviewInformation />}
+
+          <Spacer value={scale(24)} />
+          <SubmitSwapActions />
+        </View>
+
         <Spacer value={scale(40)} />
       </BottomSheet>
     );

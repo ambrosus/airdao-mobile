@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
 import { Spinner, Text } from '@components/base';
@@ -9,6 +10,7 @@ import {
   useSwapMultiplyBalance
 } from '@features/swap/lib/hooks';
 import { buttonActionString } from '@features/swap/utils/button-action.string';
+import { cssShadowToNative } from '@utils/css-shadow-to-native';
 
 export const ReviewSwapButton = () => {
   const { t } = useTranslation();
@@ -64,11 +66,17 @@ export const ReviewSwapButton = () => {
       : [COLORS.brand600, COLORS.brand600];
   }, [disabled]);
 
+  const buttonShadow: StyleProp<ViewStyle> = useMemo(() => {
+    if (disabled) return { shadowOpacity: 0 };
+
+    return cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)');
+  }, [disabled]);
+
   return (
     <PrimaryButton
       colors={buttonColors}
       disabled={disabled}
-      style={{ shadowOpacity: 0 }}
+      style={buttonShadow}
       onPress={onResolveBottomSheetDataPress}
     >
       {isProcessingBottomSheet ? (
