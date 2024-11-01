@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Text, Row } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useUSDPrice } from '@hooks';
-import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapTokens, useSwapBetterRate } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
 import { COLORS } from '@constants/colors';
@@ -39,25 +37,15 @@ export const TokenInfoPlate = () => {
     tokensRoute
   ]);
 
-  const TokenUSDPrice = useUSDPrice(
-    1,
-    tokenToReceive.TOKEN?.symbol as CryptoCurrencyCode
-  );
-
-  const isUSDPriceNegative = useMemo(() => {
-    return TokenUSDPrice < 0;
-  }, [TokenUSDPrice]);
-
   const isShowPlate = useMemo(() => {
     return plateVisibility(
       tokenToSell.TOKEN,
       tokenToSell.AMOUNT,
       tokenToReceive.TOKEN,
       tokenToReceive.AMOUNT,
-      oppositeAmountPerOneToken,
-      TokenUSDPrice
+      oppositeAmountPerOneToken
     );
-  }, [TokenUSDPrice, oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
+  }, [oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
@@ -72,14 +60,8 @@ export const TokenInfoPlate = () => {
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'}{' '}
-        {!isUSDPriceNegative && (
-          <>
-            ($
-            {`${SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}`})
-          </>
-        )}
-        = {oppositeAmountPerOneToken} {tokenToSell.TOKEN?.symbol}
+        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'} = {oppositeAmountPerOneToken}{' '}
+        {tokenToSell.TOKEN?.symbol}
       </Text>
     </Row>
   ) : (
