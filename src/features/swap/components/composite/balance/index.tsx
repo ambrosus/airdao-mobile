@@ -12,6 +12,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { ShimmerLoader } from '@components/animations';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
+import { ethers } from 'ethers';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
@@ -19,8 +20,12 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
-  const { selectedTokens, selectedTokensAmount, setIsExactIn } =
-    useSwapContextSelector();
+  const {
+    selectedTokens,
+    selectedTokensAmount,
+    _refExactGetter,
+    setIsExactIn
+  } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
@@ -82,11 +87,28 @@ export const Balance = ({ type }: BalanceProps) => {
     return isUSDPriceNegative ? 'flex-end' : 'space-between';
   }, [isUSDPriceNegative]);
 
+  const error = useMemo(() => {
+    if (!bnBalanceAmount || !selectedTokensAmount[type]) return false;
+
+    const bnInputBalance = bnBalanceAmount?._hex;
+    const bnSelectedAmount = ethers.utils.parseEther(
+      selectedTokensAmount[type]
+    );
+
+    if (type === FIELD.TOKEN_A && _refExactGetter) {
+      return bnSelectedAmount.gt(bnInputBalance);
+    } else if (type === FIELD.TOKEN_B && !_refExactGetter) {
+      return bnSelectedAmount.gt(bnInputBalance);
+    }
+  }, [_refExactGetter, bnBalanceAmount, selectedTokensAmount, type]);
+
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
       <Row alignItems="center">
         <Row alignItems="center">
-          <WalletOutlineIcon color={COLORS.neutral500} />
+          <WalletOutlineIcon
+            color={error ? COLORS.error500 : COLORS.neutral500}
+          />
           <Spacer horizontal value={4} />
           {isFetchingBalance ? (
             <ShimmerLoader width={45} height={12} />
@@ -94,7 +116,7 @@ export const Balance = ({ type }: BalanceProps) => {
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={COLORS.neutral500}
+              color={error ? COLORS.error500 : COLORS.neutral500}
             >
               {maximumTokenBalance}
             </Text>
