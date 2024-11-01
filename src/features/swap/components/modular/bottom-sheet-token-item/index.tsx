@@ -1,9 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
-import { ListRenderItemInfo, TouchableOpacity } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
+import {
+  ListRenderItemInfo,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native';
+import { styles } from './styles';
+import { Row, Spacer, Spinner, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { Checkmark } from '@components/svg/icons';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import {
@@ -11,17 +17,22 @@ import {
   useSwapSelectTokens
 } from '@features/swap/lib/hooks';
 import { SwapStringUtils } from '@features/swap/utils';
+import { NumberUtils } from '@utils/number';
+import { ethers } from 'ethers';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];
   type: SelectedTokensKeys;
+  bnBalance: ethers.BigNumber;
 }
 
 export const BottomSheetTokenItem = ({
   token,
-  type
+  type,
+  bnBalance
 }: BottomSheetTokenItemProps) => {
-  const { selectedTokens, setIsExactIn } = useSwapContextSelector();
+  const { selectedTokens, setIsExactIn, balancesLoading } =
+    useSwapContextSelector();
   const { onSelectToken, onReverseSelectedTokens } = useSwapSelectTokens();
   const { updateReceivedTokensOutput } = useSwapFieldsHandler();
 
@@ -65,47 +76,69 @@ export const BottomSheetTokenItem = ({
     token.symbol
   );
 
-  const combineDisabledStates = useMemo(() => {
-    return isSelectedSameToken || isSelectedReversedToken;
-  }, [isSelectedReversedToken, isSelectedSameToken]);
+  const balance = useMemo(() => {
+    if (bnBalance) {
+      return NumberUtils.numberToTransformedLocale(
+        ethers.utils.formatEther(bnBalance?._hex)
+      );
+    }
 
-  const opacity = useMemo(() => {
+    return '';
+  }, [bnBalance]);
+
+  const combineDisabledStates = useMemo(() => {
+    return isSelectedReversedToken;
+  }, [isSelectedReversedToken]);
+
+  const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
+      ...styles.container,
+      borderWidth: isSelectedSameToken ? 0.5 : 0,
+      borderColor: '#D8DAE0',
+      backgroundColor: isSelectedSameToken ? COLORS.neutral50 : 'transparent',
       opacity: combineDisabledStates ? 0.5 : 1
     };
-  }, [combineDisabledStates]);
+  }, [combineDisabledStates, isSelectedSameToken]);
 
   return (
     <TouchableOpacity
+      style={containerStyle}
       disabled={isSelectedSameToken}
       onPress={onChangeSelectedTokenPress}
     >
       <Row alignItems="center" justifyContent="space-between">
-        <Row style={opacity} alignItems="center">
-          <TokenLogo scale={0.65} token={SAMBSupportedTokenLogo ?? ''} />
+        <Row alignItems="center">
+          <TokenLogo scale={1} token={SAMBSupportedTokenLogo ?? ''} />
           <Spacer horizontal value={6} />
+          <View>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral800}
+            >
+              {token.symbol}
+            </Text>
+            <Spacer horizontal value={6} />
+            <Text
+              fontSize={16}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral400}
+            >
+              {token.name}
+            </Text>
+          </View>
+        </Row>
+
+        {balancesLoading ? (
+          <Spinner />
+        ) : (
           <Text
             fontSize={16}
-            fontFamily="Inter_600SemiBold"
+            fontFamily="Inter_400Regular"
             color={COLORS.neutral800}
           >
-            {token.symbol}
+            {balance}
           </Text>
-          <Spacer horizontal value={6} />
-          <Text
-            fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral400}
-          >
-            {token.name}
-          </Text>
-        </Row>
-        {isSelectedSameToken && (
-          <Checkmark
-            size={24}
-            fillColor={COLORS.success500}
-            iconColor={COLORS.neutral0}
-          />
         )}
       </Row>
     </TouchableOpacity>

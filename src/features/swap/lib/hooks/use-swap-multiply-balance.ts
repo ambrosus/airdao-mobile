@@ -49,5 +49,5 @@ export function useSwapMultiplyBalance() {
     fetchTokenBalances();
   }, [fetchTokenBalances]);
 
-  return { bnBalances };
+  return { bnBalances, getTokenBalance };
 }

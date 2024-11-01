@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { Keyboard } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { useSwapAllBalances } from './use-swap-all-balances';
 
 export function useSwapBottomSheetHandler() {
   const {
@@ -10,9 +11,12 @@ export function useSwapBottomSheetHandler() {
     bottomSheetPreviewSwapRef
   } = useSwapContextSelector();
 
+  const { fetchAllBalances } = useSwapAllBalances();
+
   const onShowBottomSheetByKey = useCallback(
     (key: SelectedTokensKeys) => {
       Keyboard.dismiss();
+      fetchAllBalances();
 
       setTimeout(() => {
         key === FIELD.TOKEN_A
@@ -20,7 +24,7 @@ export function useSwapBottomSheetHandler() {
           : bottomSheetTokenBRef.current?.show();
       }, 500);
     },
-    [bottomSheetTokenARef, bottomSheetTokenBRef]
+    [bottomSheetTokenARef, bottomSheetTokenBRef, fetchAllBalances]
   );
 
   const onDismissBottomSheetByKey = useCallback(

@@ -12,6 +12,8 @@ import {
   SelectedPairsState,
   SelectedTokensKeys
 } from '@/features/swap/types';
+import { ethers } from 'ethers';
+import { initialBalances } from '../utils/balances';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
@@ -32,6 +34,10 @@ export const SwapContext = () => {
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
     Record<SelectedTokensKeys, string>
   >(INITIAL_SELECTED_TOKENS_AMOUNT);
+
+  const [balancesLoading, setBalancesLoading] = useState(false);
+  const [balances, setBalances] =
+    useState<Record<string, ethers.BigNumber>[]>(initialBalances);
 
   const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
@@ -101,7 +107,11 @@ export const SwapContext = () => {
     setIsIncreasingAllowance,
     allPairsRef,
     setPairs,
-    reset
+    reset,
+    balances,
+    setBalances,
+    setBalancesLoading,
+    balancesLoading
   };
 };
 

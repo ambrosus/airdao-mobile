@@ -17,11 +17,14 @@ import { Button } from '@components/base';
 import { useAllLiquidityPools } from '@features/swap/lib/hooks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeParamsList } from '@appTypes';
+import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
+
+  useSwapAllBalances();
 
   useAllLiquidityPools();
   const {

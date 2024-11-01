@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(8)
   },
   input: {
-    width: 'auto',
+    width: '100%',
     paddingVertical: 0,
     borderWidth: 0,
     fontSize: moderateScale(22),
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     paddingRight: 0.5
   },
   inputAndroidSpecified: {
-    fontSize: 28.5,
-    lineHeight: 38.5
+    fontSize: 22.5,
+    lineHeight: 32.5
   }
 });
