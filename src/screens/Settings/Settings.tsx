@@ -76,36 +76,35 @@ export const SettingsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.main}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('tab.settings')}
-          </Text>
-        </View>
-        {SETTINGS_MENU_ITEMS.map((menuItem) => (
-          <SettingsMenuItemView item={menuItem} key={menuItem.route} />
-        ))}
-        {!isProd && (
-          <Text style={{ margin: 20 }}>
-            firebase event, wallet connect {nativeBuildVersion}
-          </Text>
-        )}
+    <SafeAreaView>
+      <View style={styles.header}>
+        <Text
+          fontSize={scale(24)}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral800}
+        >
+          {t('tab.settings')}
+        </Text>
       </View>
-      <View style={styles.bottomContent}>
-        <View style={styles.socialButtons}>
-          {SOCIAL_GROUPS.map((item) => (
-            <SocialItem key={item.key} item={item} />
+      <View style={styles.contentWrapper}>
+        <View style={styles.container}>
+          {SETTINGS_MENU_ITEMS.map((menuItem) => (
+            <SettingsMenuItemView item={menuItem} key={menuItem.route} />
           ))}
         </View>
-        <Spacer value={10} />
-        <Text fontSize={scale(16)} align="center">{`${t(
-          'settings.version'
-        )} ${nativeAppVersion}`}</Text>
+        <View style={styles.bottomContent}>
+          <View style={styles.socialButtons}>
+            {SOCIAL_GROUPS.map((item) => (
+              <SocialItem key={item.key} item={item} />
+            ))}
+          </View>
+          <Spacer value={scale(15)} />
+          <Text fontSize={scale(16)} align="center">{`${t(
+            'settings.version'
+          )} ${nativeAppVersion} ${
+            !isProd ? `build: ${nativeBuildVersion}` : ''
+          }`}</Text>
+        </View>
       </View>
     </SafeAreaView>
   );

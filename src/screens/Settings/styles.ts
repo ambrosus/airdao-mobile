@@ -3,18 +3,17 @@ import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  main: {
+  container: {
+    marginTop: scale(10)
+  },
+  contentWrapper: {
     height: '90%',
     justifyContent: 'space-between'
   },
-  container: {
-    width: '100%',
-    marginTop: scale(10)
-  },
   header: {
+    marginTop: scale(15),
     paddingHorizontal: scale(15),
-    width: '100%',
-    paddingBottom: scale(15),
+    paddingBottom: scale(12),
     borderBottomWidth: 1,
     borderBottomColor: COLORS.neutral200,
     marginBottom: scale(20)
@@ -29,8 +28,8 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(16)
   },
   bottomContent: {
-    justifyContent: 'center',
-    marginBottom: scale(30)
+    marginBottom: 50,
+    justifyContent: 'center'
   },
   socialButtons: {
     flexDirection: 'row',
