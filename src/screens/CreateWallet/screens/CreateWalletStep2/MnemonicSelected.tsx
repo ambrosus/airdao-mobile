@@ -8,11 +8,10 @@ interface MnemonicSelectedProps {
   word: string;
   onPress: () => unknown;
   index: number;
-  isPlacedCorrectly: boolean;
 }
 
 export const MnemonicSelected = (props: MnemonicSelectedProps) => {
-  const { onPress, isPlacedCorrectly, word, index } = props;
+  const { onPress, word, index } = props;
   return (
     <Button style={styles.container} onPress={onPress}>
       <Text
@@ -29,7 +28,7 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
         align="center"
         fontSize={14}
         fontFamily="Inter_600SemiBold"
-        color={isPlacedCorrectly ? COLORS.success400 : COLORS.error400}
+        color={COLORS.success400}
       >
         {word}
       </Text>
