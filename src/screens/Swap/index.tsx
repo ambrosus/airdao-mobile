@@ -23,7 +23,6 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
-
   useSwapAllBalances();
 
   useAllLiquidityPools();
@@ -36,8 +35,13 @@ export const SwapScreen = ({ navigation }: Props) => {
 
   useFocusEffect(
     useCallback(() => {
-      return () => reset();
-    }, [reset])
+      const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+        const resetActions = ['RESET', 'GO_BACK'];
+        if (resetActions.includes(e.data.action.type)) reset();
+      });
+
+      return unsubscribe;
+    }, [navigation, reset])
   );
 
   const onNavigateToSwapSettings = useCallback(
