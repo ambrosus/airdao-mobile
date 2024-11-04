@@ -1,6 +1,6 @@
 module.exports = {
   expo: {
-    name: 'AirDAO-TEST',
+    name: 'AirDAO',
     slug: 'AirDao',
     version: '1.3.5',
     orientation: 'portrait',

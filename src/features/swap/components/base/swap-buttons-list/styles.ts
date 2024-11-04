@@ -1,5 +1,5 @@
-import { scale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   row: {
@@ -13,5 +13,8 @@ export const styles = StyleSheet.create({
   },
   button: {
     height: 48
+  },
+  pendingLayout: {
+    columnGap: scale(8)
   }
 });

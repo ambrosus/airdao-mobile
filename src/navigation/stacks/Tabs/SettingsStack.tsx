@@ -13,6 +13,11 @@ import {
   SingleWalletScreen
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
+import {
+  CreateWalletStep0,
+  CreateWalletStep1,
+  CreateWalletStep2
+} from '@screens/CreateWallet';
 
 const Stack = createNativeStackNavigator<SettingsTabParamsList>();
 export const SettingsStack = () => {
@@ -29,6 +34,9 @@ export const SettingsStack = () => {
         name="NotificationSettings"
         component={NotificationSettingsScreen}
       />
+      <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
+      <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
+      <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
       <Stack.Screen
         name="SecuritySettings"
         component={SecuritySettingsScreen}

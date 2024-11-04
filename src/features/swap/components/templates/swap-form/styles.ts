@@ -4,12 +4,8 @@ import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: { flex: 1 },
-  inner: {
-    flex: 1,
-    paddingHorizontal: scale(16),
-    justifyContent: 'space-between'
-  },
   footer: {
+    paddingHorizontal: scale(16),
     paddingBottom: isAndroid ? verticalScale(20) : 0
   }
 });

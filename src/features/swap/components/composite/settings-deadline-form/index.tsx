@@ -22,9 +22,9 @@ export const SettingsDeadlineForm = () => {
     <View style={styles.container}>
       <View style={styles.inputWithLabel}>
         <Text
-          fontSize={16}
+          fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
+          color={COLORS.neutral800}
         >
           {t('swap.settings.deadline')}
         </Text>
@@ -40,8 +40,8 @@ export const SettingsDeadlineForm = () => {
           />
           <Text
             fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral600}
+            fontFamily="Inter_400Regular"
+            color={COLORS.neutral800}
           >
             {t('swap.settings.label.minutes')}
           </Text>

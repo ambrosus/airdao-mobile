@@ -5,6 +5,7 @@ import {
   useSwapFieldsHandler,
   useSwapSettings
 } from '@features/swap/lib/hooks';
+import { COLORS } from '@constants/colors';
 
 export const SettingsMultiHopForm = () => {
   const { t } = useTranslation();
@@ -25,8 +26,15 @@ export const SettingsMultiHopForm = () => {
 
   return (
     <Row alignItems="center" justifyContent="space-between">
-      <Text>{t('swap.settings.multihops')}</Text>
+      <Text
+        fontSize={16}
+        fontFamily="Inter_400Regular"
+        color={COLORS.neutral800}
+      >
+        {t('swap.settings.multihops')}
+      </Text>
       <Switch
+        style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
         value={!_refSettingsGetter.multihops}
         onValueChange={onToggleMultiHopsAllowance}
       />

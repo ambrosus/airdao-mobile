@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     paddingTop: verticalScale(16),
-    paddingHorizontal: scale(24)
+    paddingHorizontal: scale(16)
   },
   heading: {
     textAlign: 'center'
@@ -13,10 +13,9 @@ export const styles = StyleSheet.create({
   preview: {
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: COLORS.alphaBlack5,
+    backgroundColor: COLORS.neutral50,
     padding: 12,
-    borderRadius: moderateScale(16),
-    marginTop: verticalScale(16)
+    borderRadius: moderateScale(16)
   },
   divider: {
     width: '100%',
