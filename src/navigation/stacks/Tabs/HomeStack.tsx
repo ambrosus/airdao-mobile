@@ -37,6 +37,11 @@ import {
   WalletConnectModal,
   WalletSessionsBottomSheet
 } from '@features/wallet-connect/components/templates';
+import {
+  CreateWalletStep0,
+  CreateWalletStep1,
+  CreateWalletStep2
+} from '@screens/CreateWallet';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -58,6 +63,19 @@ export const HomeStack = () => {
             options={{ gestureEnabled: false }}
             component={ImportWalletSuccess}
           />
+          <Stack.Screen
+            name="CreateWalletStep0"
+            component={CreateWalletStep0}
+          />
+          <Stack.Screen
+            name="CreateWalletStep1"
+            component={CreateWalletStep1}
+          />
+          <Stack.Screen
+            name="CreateWalletStep2"
+            component={CreateWalletStep2}
+          />
+
           <Stack.Screen name="Notifications" component={Notifications} />
           <Stack.Screen name="SendFunds" component={SendFunds} />
           <Stack.Screen
