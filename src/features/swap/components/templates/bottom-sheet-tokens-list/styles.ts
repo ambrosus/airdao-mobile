@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   container: {
-    paddingHorizontal: scale(24),
-    rowGap: 32
+    paddingHorizontal: scale(24)
   }
 });

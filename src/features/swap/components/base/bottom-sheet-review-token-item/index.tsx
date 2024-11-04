@@ -9,6 +9,7 @@ import { TokenLogo } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { NumberUtils } from '@utils/number';
 
 interface BottomSheetReviewTokenItemProps {
   type: keyof typeof FIELD;
@@ -36,9 +37,9 @@ export const BottomSheetReviewTokenItem = ({
   return (
     <View style={combinedTypeContainerStyle}>
       <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral400}
+        fontSize={13}
+        fontFamily="Inter_600SemiBold"
+        color={COLORS.neutral500}
       >
         {label}
       </Text>
@@ -46,11 +47,11 @@ export const BottomSheetReviewTokenItem = ({
         <TokenLogo token={token} scale={0.65} />
         <Spacer horizontal value={4} />
         <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
+          fontSize={17}
+          fontFamily="Inter_600SemiBold"
           color={COLORS.neutral800}
         >
-          {SwapStringUtils.transformAmountValue(selectedTokensAmount[type])}{' '}
+          {NumberUtils.numberToTransformedLocale(selectedTokensAmount[type])}{' '}
           {selectedTokens[type]?.symbol}
         </Text>
       </View>

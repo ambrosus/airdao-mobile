@@ -38,9 +38,9 @@ export const SettingsInputWithLabel = ({
   return (
     <View style={styles.formWithLabel}>
       <Text
-        fontSize={16}
+        fontSize={14}
         fontFamily="Inter_500Medium"
-        color={COLORS.neutral500}
+        color={COLORS.neutral800}
       >
         {label}
       </Text>

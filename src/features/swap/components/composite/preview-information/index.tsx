@@ -51,7 +51,11 @@ export const PreviewInformation = () => {
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
-        <Text>
+        <Text
+          fontSize={15}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
           {t(
             !_refExactGetter
               ? 'swap.bottom.sheet.max.sold'
@@ -65,7 +69,13 @@ export const PreviewInformation = () => {
       </Row>
 
       <Row alignItems="center" justifyContent="space-between">
-        <Text>{t('swap.bottom.sheet.impact')}</Text>
+        <Text
+          fontSize={15}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          {t('swap.bottom.sheet.impact')}
+        </Text>
 
         <RightSideRowItem color={priceImpactHighlight}>
           {uiPriceImpact}%
@@ -73,7 +83,13 @@ export const PreviewInformation = () => {
       </Row>
 
       <Row alignItems="center" justifyContent="space-between">
-        <Text>{t('swap.bottom.sheet.lpfee')}</Text>
+        <Text
+          fontSize={15}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          {t('swap.bottom.sheet.lpfee')}
+        </Text>
 
         <RightSideRowItem>
           {`${uiBottomSheetInformation.lpFee} ${tokenToSell.TOKEN?.symbol}`}
@@ -82,7 +98,13 @@ export const PreviewInformation = () => {
 
       {isMultiHopRoute && (
         <Row alignItems="center" justifyContent="space-between">
-          <Text>{t('swap.route')}</Text>
+          <Text
+            fontSize={15}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral500}
+          >
+            {t('swap.route')}
+          </Text>
 
           <RightSideRowItem>
             {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${isMultiHopSwapBetterCurrency.token} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
@@ -101,7 +123,7 @@ const RightSideRowItem = ({
   color?: string;
 }) => {
   return (
-    <Text fontSize={14} fontFamily="Inter_600SemiBold" color={color}>
+    <Text fontSize={15} fontFamily="Inter_500Medium" color={color}>
       {children}
     </Text>
   );

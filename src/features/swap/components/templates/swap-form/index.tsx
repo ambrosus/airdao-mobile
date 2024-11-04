@@ -25,7 +25,7 @@ export const SwapForm = () => {
       behavior={KEYBOARD_BEHAVIOR}
     >
       <KeyboardDismissingView style={styles.container}>
-        <View style={styles.inner}>
+        <View style={styles.container}>
           <View>
             <Spacer value={scale(22)} />
             <InputWithTokenSelect
@@ -38,7 +38,7 @@ export const SwapForm = () => {
               estimated={isEstimatedToken.tokenB}
             />
 
-            <Spacer value={scale(24)} />
+            <Spacer value={scale(32)} />
             <TokenInfoPlate />
           </View>
 

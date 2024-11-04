@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Text, Row } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useUSDPrice } from '@hooks';
-import { CryptoCurrencyCode } from '@appTypes';
 import { useSwapTokens, useSwapBetterRate } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
 import { COLORS } from '@constants/colors';
+import { StyleProp, ViewStyle } from 'react-native';
+import { verticalScale } from '@utils/scaling';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
@@ -37,41 +37,31 @@ export const TokenInfoPlate = () => {
     tokensRoute
   ]);
 
-  const TokenUSDPrice = useUSDPrice(
-    1,
-    tokenToReceive.TOKEN?.symbol as CryptoCurrencyCode
-  );
-
-  const isUSDPriceNegative = useMemo(() => {
-    return TokenUSDPrice < 0;
-  }, [TokenUSDPrice]);
-
   const isShowPlate = useMemo(() => {
     return plateVisibility(
       tokenToSell.TOKEN,
       tokenToSell.AMOUNT,
       tokenToReceive.TOKEN,
       tokenToReceive.AMOUNT,
-      oppositeAmountPerOneToken,
-      TokenUSDPrice
+      oppositeAmountPerOneToken
     );
-  }, [TokenUSDPrice, oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
+  }, [oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
+
+  const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      paddingBottom: verticalScale(20)
+    };
+  }, []);
 
   return isShowPlate ? (
-    <Row justifyContent="center" alignItems="center">
+    <Row style={containerStyle} justifyContent="center" alignItems="center">
       <Text
         fontSize={14}
         fontFamily="Inter_600SemiBold"
         color={COLORS.brand500}
       >
-        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'}{' '}
-        {!isUSDPriceNegative && (
-          <>
-            ($
-            {`${SwapStringUtils.transformAmountValue(String(TokenUSDPrice))}`})
-          </>
-        )}
-        = {oppositeAmountPerOneToken} {tokenToSell.TOKEN?.symbol}
+        1 {tokenToReceive.TOKEN?.symbol ?? 'AMB'} = {oppositeAmountPerOneToken}{' '}
+        {tokenToSell.TOKEN?.symbol}
       </Text>
     </Row>
   ) : (

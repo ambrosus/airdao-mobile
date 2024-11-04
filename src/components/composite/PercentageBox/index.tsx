@@ -12,7 +12,7 @@ export const PercentageBox = ({ percentage, onPress }: PercentageBoxProps) => {
   return (
     <Button onPress={() => onPress(percentage)} style={styles.percentageBox}>
       <Text
-        fontSize={14}
+        fontSize={16}
         fontFamily="Inter_500Medium"
         color={COLORS.neutral800}
       >
