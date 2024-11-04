@@ -3,6 +3,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { ProductsInnerIcon } from './products-inner-icon';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
+import { cssShadowToNative } from '@utils/css-shadow-to-native';
 import { IconProps } from '../../Icon.types';
 
 export function ProductsActiveIcon({ color }: Pick<IconProps, 'color'>) {
@@ -14,11 +15,7 @@ export function ProductsActiveIcon({ color }: Pick<IconProps, 'color'>) {
       backgroundColor: color,
       alignItems: 'center',
       justifyContent: 'center',
-      shadowColor: 'rgba(53, 104, 221, 0.50)',
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.5,
-      shadowRadius: 12,
-      elevation: 12
+      ...cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)')
     }),
     [color]
   );

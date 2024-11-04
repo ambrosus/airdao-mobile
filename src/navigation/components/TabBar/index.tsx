@@ -68,7 +68,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
       style={[
         styles.mainContainer,
         {
-          paddingBottom: bottomSafeArea * 1.75
+          paddingBottom: bottomSafeArea
         },
         animatedStyle
       ]}
@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
   },
   mainItemContainer: {
     width: 40,
-    height: 24,
+    height: 40,
+    marginVertical: 8,
     alignItems: 'center',
     backgroundColor: COLORS.neutral0
   }

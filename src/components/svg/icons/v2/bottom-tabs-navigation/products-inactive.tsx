@@ -13,12 +13,7 @@ export function ProductsInactiveIcon({ color }: Pick<IconProps, 'color'>) {
       borderRadius: scale(16),
       backgroundColor: color,
       alignItems: 'center',
-      justifyContent: 'center',
-      shadowColor: 'rgba(53, 104, 221, 0.50)',
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.5,
-      shadowRadius: 12,
-      elevation: 12
+      justifyContent: 'center'
     }),
     [color]
   );
