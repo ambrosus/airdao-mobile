@@ -8,6 +8,7 @@ import {
 } from './initials';
 import { BottomSheetRef } from '@components/composite';
 import {
+  BottomSheetStatus,
   FIELD,
   SelectedPairsState,
   SelectedTokensKeys
@@ -21,6 +22,9 @@ export const SwapContext = () => {
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
   const isExactInRef = useRef<boolean>(true);
   const allPairsRef = useRef<SelectedPairsState>([]);
+
+  const [bottomSheetSwapStatus, setBottomSheetSwapStatus] =
+    useState<BottomSheetStatus>(BottomSheetStatus.PREVIEW);
 
   // Tokens connected states
   const [_refExactGetter, setIsExactIn] = useState(true);
@@ -55,7 +59,6 @@ export const SwapContext = () => {
   const latestSelectedTokensAmount = useRef(selectedTokensAmount);
 
   // Ref setters
-
   useEffect(() => {
     latestSelectedTokens.current = selectedTokens;
     latestSelectedTokensAmount.current = selectedTokensAmount;
@@ -111,7 +114,9 @@ export const SwapContext = () => {
     balances,
     setBalances,
     setBalancesLoading,
-    balancesLoading
+    balancesLoading,
+    setBottomSheetSwapStatus,
+    bottomSheetSwapStatus
   };
 };
 

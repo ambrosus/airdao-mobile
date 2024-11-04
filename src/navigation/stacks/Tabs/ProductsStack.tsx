@@ -14,11 +14,7 @@ import {
 } from '@screens/StakingPool/screens';
 import { KosmosMarketScreen } from '@screens/Kosmos/screens';
 import { BridgeHistory } from '@screens/BridgeHistory';
-import {
-  SwapSuccessScreen,
-  SwapErrorScreen,
-  SwapSettingsScreen
-} from '@screens/Swap/screens';
+import { SwapSettingsScreen } from '@screens/Swap/screens';
 
 const Stack = createNativeStackNavigator<ProductsParams>();
 export const ProductsStack = () => {
@@ -34,8 +30,6 @@ export const ProductsStack = () => {
       />
       {/* SWAP ROUTES */}
       <Stack.Screen name="SwapScreen" component={SwapScreen} />
-      <Stack.Screen name="SwapSuccessScreen" component={SwapSuccessScreen} />
-      <Stack.Screen name="SwapErrorScreen" component={SwapErrorScreen} />
       <Stack.Screen name="SwapSettingsScreen" component={SwapSettingsScreen} />
 
       {/* STAKE ROUTES */}

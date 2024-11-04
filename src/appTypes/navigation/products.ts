@@ -2,19 +2,13 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StakingPool } from '@models';
-import {
-  CommonStackParamsList,
-  SwapRouteBaseParams,
-  TabsParamsList
-} from '@appTypes';
+import { CommonStackParamsList, TabsParamsList } from '@appTypes';
 import { MarketType } from '@features/kosmos/types';
 
 export type ProductsParams = {
   ProductsScreen: { tabs: { activeTab: number } };
   // Swap
   SwapScreen: undefined;
-  SwapSuccessScreen: SwapRouteBaseParams & { txHash: string };
-  SwapErrorScreen: SwapRouteBaseParams;
   SwapSettingsScreen: undefined;
 
   // Stake

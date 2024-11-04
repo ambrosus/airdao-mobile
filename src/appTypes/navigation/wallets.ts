@@ -6,13 +6,6 @@ import { CommonStackParamsList } from './common';
 import { StakingPool, Token } from '@models';
 import { MarketType } from '@features/kosmos/types';
 
-export type SwapRouteBaseParams = {
-  AMOUNT_A: string;
-  AMOUNT_B: string;
-  SYMBOL_A: string;
-  SYMBOL_B: string;
-};
-
 export type HomeParamsList = {
   HomeScreen: undefined;
   AMBMarketScreen: undefined;
@@ -51,8 +44,6 @@ export type HomeParamsList = {
   KosmosScreen: undefined;
   KosmosMarketScreen: { market: MarketType };
   SwapScreen: undefined;
-  SwapSuccessScreen: SwapRouteBaseParams & { txHash: string };
-  SwapErrorScreen: SwapRouteBaseParams;
   SwapSettingsScreen: undefined;
 } & CommonStackParamsList;
 
