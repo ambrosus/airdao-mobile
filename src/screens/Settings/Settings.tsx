@@ -6,7 +6,7 @@ import * as Updates from 'expo-updates';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import Config from '@constants/config';
 import { SETTINGS_MENU_ITEMS, SOCIAL_GROUPS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
@@ -76,7 +76,7 @@ export const SettingsScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ paddingTop: verticalScale(15) }}>
       <View style={styles.header}>
         <Text
           fontSize={scale(24)}

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { BottomAwareSafeAreaView } from '@components/composite';
@@ -43,7 +42,7 @@ export const NoWalletScreen = () => {
 
   return (
     <LinearGradient colors={[COLORS.brand200, 'white']}>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <LottieView
           ref={animationRef}
           style={styles.animationContainer}
@@ -82,7 +81,7 @@ export const NoWalletScreen = () => {
             </Text>
           </SecondaryButton>
         </BottomAwareSafeAreaView>
-      </SafeAreaView>
+      </View>
     </LinearGradient>
   );
 };

@@ -36,6 +36,7 @@ export const ConfirmPasscode = () => {
   return (
     <SafeAreaView
       style={{
+        paddingTop: verticalScale(15),
         flex: 1,
         justifyContent: 'space-between'
       }}
