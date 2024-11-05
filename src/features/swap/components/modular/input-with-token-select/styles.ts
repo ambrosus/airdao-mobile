@@ -3,26 +3,28 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   wrapper: {
-    width: '100%',
     paddingHorizontal: scale(16)
   },
   upperRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: verticalScale(8)
+    marginVertical: verticalScale(8),
+    columnGap: 4
+  },
+  inputContainer: {
+    flex: 1
   },
   input: {
     width: '100%',
-    paddingVertical: 0,
     borderWidth: 0,
     fontSize: moderateScale(22),
     fontFamily: 'Inter_700Bold',
-    paddingLeft: 0.5,
-    paddingRight: 0.5
+    paddingHorizontal: 0.5,
+    paddingVertical: 0
   },
   inputAndroidSpecified: {
-    fontSize: 22.5,
-    lineHeight: 32.5
+    fontSize: moderateScale(22),
+    lineHeight: moderateScale(29.75)
   }
 });

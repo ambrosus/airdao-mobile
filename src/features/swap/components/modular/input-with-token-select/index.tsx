@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import { Insets, Platform, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { Text } from '@components/base';
+import { InputRef, Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
 import { Balance, TokenSelector } from '@features/swap/components/composite';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
@@ -17,12 +17,6 @@ interface InputWithTokenSelectProps {
   readonly estimated: boolean;
 }
 
-const HIT_SLOP: Insets = {
-  top: 32,
-  bottom: 32,
-  left: 24
-};
-
 export const InputWithTokenSelect = ({
   type,
   estimated
@@ -32,7 +26,10 @@ export const InputWithTokenSelect = ({
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
+  const textInputRef = useRef<InputRef>(null);
+
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [inputContainerWidth, setInputContainerWidth] = useState(0);
 
   const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
 
@@ -54,13 +51,15 @@ export const InputWithTokenSelect = ({
   }, [isInputFocused, selectedTokensAmount, type]);
 
   const value = useMemo(() => {
+    const maxCharacterLimit = Math.floor(inputContainerWidth / 16);
+
     return StringUtils.wrapAndroidString(
       selectedTokensAmount[type],
       isInputFocused,
-      16,
+      maxCharacterLimit,
       true
     );
-  }, [isInputFocused, selectedTokensAmount, type]);
+  }, [inputContainerWidth, isInputFocused, selectedTokensAmount, type]);
 
   const inputStyle = useMemo(() => {
     return Platform.select({
@@ -69,6 +68,17 @@ export const InputWithTokenSelect = ({
       default: styles.input
     });
   }, []);
+
+  const onInputContainerPress = useCallback(
+    () => textInputRef.current?.focus(),
+    []
+  );
+
+  const onLayoutEventHandle = useCallback(
+    (event: LayoutChangeEvent) =>
+      setInputContainerWidth(event.nativeEvent.layout.width),
+    []
+  );
 
   return (
     <View style={styles.wrapper}>
@@ -81,21 +91,25 @@ export const InputWithTokenSelect = ({
       </Text>
       <View style={styles.upperRow}>
         <TokenSelector type={type} />
-        <View style={{ maxWidth: '60%' }}>
+        <Pressable
+          onLayout={onLayoutEventHandle}
+          onPress={onInputContainerPress}
+          style={styles.inputContainer}
+        >
           <TextInput
-            hitSlop={HIT_SLOP}
+            value={value}
+            placeholder="0"
+            type="number"
             numberOfLines={1}
+            keyboardType="decimal-pad"
             onFocus={onToggleInputFocus}
             onBlur={onToggleInputFocus}
             selection={selection}
-            value={value}
-            style={inputStyle}
-            type="number"
-            keyboardType="decimal-pad"
             onChangeText={onChangeTokenAmount}
-            placeholder="0"
+            style={inputStyle}
+            textAlign="right"
           />
-        </View>
+        </Pressable>
       </View>
 
       <Balance type={type} />
