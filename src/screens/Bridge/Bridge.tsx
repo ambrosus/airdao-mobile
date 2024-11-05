@@ -10,17 +10,19 @@ import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeTemplate } from '@features/bridge/templates';
+import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
   const { setDefaultBridgeData } = useBridgeContextData();
+  const { isPendingTransactions } = usePendingTransactions();
 
   const renderHeaderRightContent = useMemo(() => {
     return (
       <TouchableOpacity onPress={onNavigateToHistory} hitSlop={15}>
-        <HistoryIcon />
+        <HistoryIcon notification={isPendingTransactions} />
       </TouchableOpacity>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
