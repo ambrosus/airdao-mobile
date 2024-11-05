@@ -3,9 +3,21 @@ import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1
+  },
+  header: {
+    shadowColor: COLORS.neutral0
+  },
   container: {
     paddingVertical: verticalScale(24),
     flex: 1
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(32)
   },
   horizontalPadding: {
     paddingHorizontal: scale(16)

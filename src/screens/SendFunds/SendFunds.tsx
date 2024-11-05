@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState
@@ -30,14 +31,13 @@ import { TokenPicker } from '@components/templates';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import {
-  useBalanceOfAddress,
   useCurrencyRate,
   useEstimatedTransferFee,
   useTokensAndTransactions,
   useUSDPrice,
   useWallet
 } from '@hooks';
-import { verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import {
   AirDAOEventType,
@@ -51,7 +51,6 @@ import { useSendCryptoContext } from '@contexts';
 import {
   AddressInput,
   ConfirmTransaction,
-  EstimatedFee,
   ShowInUSD,
   UseMax
 } from './components';
@@ -61,12 +60,14 @@ import { TransactionUtils } from '@utils/transaction';
 import { DeviceUtils } from '@utils/device';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { TokenUtils } from '@utils/token';
 import { isAndroid } from '@utils/isPlatform';
-import { formatUnits } from 'ethers/lib/utils';
-import { AMB_DECIMALS } from '@constants/variables';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { BarcodeScannerIcon } from '@components/svg/icons/v2';
+import {
+  useAMBEntity,
+  useAmountChangeHandler
+} from '@features/send-funds/lib/hooks';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -75,17 +76,20 @@ export const SendFunds = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
   const tokenFromNavigationParams = route.params?.token;
+
   const {
     to: destinationAddress = '',
     from: senderAddress = '',
     transactionId
   } = sendContextState;
+
   const transactionIdRef = useRef('');
   const amountInputRef = useRef<InputRef>(null);
 
   const { wallet: account } = useWallet();
-
   const walletHash = account?.wallet.id ?? '';
+
+  const _AMBEntity = useAMBEntity(senderAddress);
 
   useEffect(() => {
     if (transactionId) transactionIdRef.current = transactionId;
@@ -96,30 +100,11 @@ export const SendFunds = () => {
   const {
     data: { tokens }
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
-  const { data: tokenBalance } = useBalanceOfAddress(senderAddress);
-
-  // Define default amb token
-  const defaultAMBToken: Token = new Token(
-    {
-      name: 'AirDAO',
-      address: senderAddress || '',
-      isNativeCoin: true,
-      balance: {
-        wei: tokenBalance.wei,
-        ether: Number(tokenBalance.ether) || 0,
-        formattedBalance: formatUnits(tokenBalance.wei, AMB_DECIMALS)
-      },
-      symbol: CryptoCurrencyCode.AMB,
-      decimals: AMB_DECIMALS,
-      tokenNameFromDatabase: 'AirDAO'
-    },
-    TokenUtils
-  );
 
   const [selectedToken, setSelectedToken] = useState<Token>(
     tokens.find(
       (token) => token.address === tokenFromNavigationParams?.address
-    ) || defaultAMBToken
+    ) || _AMBEntity
   );
   const currencyRate = useCurrencyRate(
     selectedToken.symbol as CryptoCurrencyCode
@@ -134,11 +119,8 @@ export const SendFunds = () => {
       : 0;
   };
   const balanceInCrypto =
-    selectedToken.name === defaultAMBToken.name
-      ? +NumberUtils.limitDecimalCount(
-          defaultAMBToken.balance.formattedBalance,
-          3
-        )
+    selectedToken.name === _AMBEntity.name
+      ? +NumberUtils.limitDecimalCount(_AMBEntity.balance.formattedBalance, 3)
       : getTokenBalance();
   // convert crypto balance to usd
   const balanceInUSD = useUSDPrice(
@@ -146,14 +128,23 @@ export const SendFunds = () => {
     selectedToken.symbol as CryptoCurrencyCode
   );
 
-  const [amountInCrypto, setAmountInCrypto] = useState('');
-  const [amountInUSD, setAmountInUSD] = useState('');
   const [amountShownInUSD, toggleShowInUSD] = useReducer(
     (isInUsd) => !isInUsd,
     false
   );
 
   const showUsdAmountOnlyPositiveRate = amountShownInUSD && isPositiveRate;
+
+  const {
+    amountInCrypto,
+    amountInUSD,
+    setAmountInCrypto,
+    setAmountInUSD,
+    onChangeAmountHandle
+  } = useAmountChangeHandler({
+    showUsdAmountOnlyPositiveRate,
+    currencyRate
+  });
 
   // calculate estimated fee
   const estimatedFee = useEstimatedTransferFee(
@@ -206,28 +197,10 @@ export const SendFunds = () => {
     }
   };
 
-  const onChangeAmountValue = (newValue: string) => {
-    if (!newValue) {
-      setAmountInCrypto('');
-      setAmountInUSD('');
-      return;
-    }
-    let finalValue = StringUtils.formatNumberInput(newValue);
-    finalValue = NumberUtils.limitDecimalCount(finalValue, 3);
-    if (showUsdAmountOnlyPositiveRate) {
-      setAmountInUSD(finalValue);
-      const newUsdAmount = parseFloat(finalValue) || 0;
-      setAmountInCrypto(
-        CurrencyUtils.toCrypto(newUsdAmount, currencyRate).toFixed(3)
-      );
-    } else {
-      setAmountInCrypto(finalValue);
-      const newCryptoAmount = parseFloat(finalValue) || 0;
-      setAmountInUSD(
-        CurrencyUtils.toUSD(newCryptoAmount, currencyRate).toFixed(3)
-      );
-    }
-  };
+  const onChangeAmountValue = useCallback(
+    (newValue: string) => onChangeAmountHandle(newValue),
+    [onChangeAmountHandle]
+  );
 
   const showReviewModal = () => {
     Keyboard.dismiss();
@@ -312,31 +285,47 @@ export const SendFunds = () => {
     });
   }, []);
 
+  const renderHeaderContentRight = useMemo(
+    () => (
+      <View style={{ bottom: scale(3) }}>
+        <Button>
+          <BarcodeScannerIcon />
+        </Button>
+      </View>
+    ),
+    []
+  );
+
+  const renderHeaderTitle = useMemo(
+    () => (
+      <View>
+        <Text
+          align="center"
+          fontSize={17}
+          color={COLORS.neutral800}
+          fontFamily="Inter_600SemiBold"
+        >
+          {t('account.actions.send')}
+        </Text>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          {StringUtils.formatAddress(senderAddress, 5, 6)}
+        </Text>
+      </View>
+    ),
+    [senderAddress, t]
+  );
+
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1 }}>
+    <SafeAreaView edges={['top']} style={styles.wrapper}>
       <Header
         bottomBorder
-        title={
-          <View>
-            <Text
-              align="center"
-              fontSize={18}
-              color={COLORS.neutral800}
-              fontFamily="Inter_700Bold"
-            >
-              {t('account.actions.send')}
-            </Text>
-            <Row alignItems="center">
-              <Text fontSize={14} color={COLORS.neutral300}>
-                {t('common.transaction.from')}{' '}
-              </Text>
-              <Text color={COLORS.neutral700} fontSize={14}>
-                {StringUtils.formatAddress(senderAddress, 5, 6)}
-              </Text>
-            </Row>
-          </View>
-        }
-        style={{ shadowColor: COLORS.neutral0 }}
+        title={renderHeaderTitle}
+        contentRight={renderHeaderContentRight}
+        style={styles.header}
       />
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingContainer}
@@ -357,20 +346,12 @@ export const SendFunds = () => {
                 </View>
               )}
           </View>
-          <View style={styles.divider} />
-          <View
-            style={[
-              styles.horizontalPadding,
-              {
-                flex: 1,
-                justifyContent: 'space-between'
-              }
-            ]}
-          >
-            <View style={{ flex: 1 }}>
+
+          <View style={styles.innerContainer}>
+            <View style={styles.wrapper}>
               <Row alignItems="center" justifyContent="space-between">
                 <TokenPicker
-                  tokens={[defaultAMBToken].concat(tokens)}
+                  tokens={[_AMBEntity].concat(tokens)}
                   selectedToken={selectedToken}
                   onSelectToken={selectToken}
                 />
@@ -423,16 +404,6 @@ export const SendFunds = () => {
                   {t('send.funds.balance')}: {balanceAmount}
                 </Text>
               </Row>
-              <Spacer value={verticalScale(32)} />
-              {estimatedFee > 0 && (
-                <View style={{ alignSelf: 'center' }}>
-                  <EstimatedFee
-                    fee={estimatedFee}
-                    currency="AMB"
-                    currencyPlacement="right"
-                  />
-                </View>
-              )}
             </View>
             <PrimaryButton
               disabled={reviewButtonDisabled}
