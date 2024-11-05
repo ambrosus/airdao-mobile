@@ -6,6 +6,6 @@ export const stylesStep0 = StyleSheet.create({
   container: {
     width: '100%'
   },
-  createText: { maxWidth: scale(330) },
+  createText: { maxWidth: '90%' },
   buttonTextStyle: { marginVertical: scale(12) }
 });
