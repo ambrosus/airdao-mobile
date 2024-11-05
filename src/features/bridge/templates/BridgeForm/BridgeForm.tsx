@@ -50,7 +50,6 @@ export const BridgeForm = () => {
   });
   const {
     getFeeData,
-    onCurrencySelectorLayoutHandle,
     onSelectMaxAmount,
     onChangeAmount,
     onTokenPress,
@@ -64,7 +63,6 @@ export const BridgeForm = () => {
   const {
     dataToPreview,
     amountToExchange,
-    inputStyles,
     feeLoader,
     bridgeFee,
     gasFeeLoader,
@@ -140,20 +138,16 @@ export const BridgeForm = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral900}
         >
-          {t('bridge.amount.to.bridge')}
+          {t('bridge.set.amount')}
         </Text>
         <View style={styles.inputContainerWithSelector}>
-          <View
-            onLayout={onCurrencySelectorLayoutHandle}
-            style={styles.inputCurrencySelector}
-          >
+          <View style={styles.inputCurrencySelector}>
             <TokenSelector
               onPress={() => choseTokenRef.current?.show()}
               symbol={tokenParams.value.renderTokenItem.symbol ?? ''}
             />
           </View>
           <Input
-            style={inputStyles}
             type="number"
             keyboardType="decimal-pad"
             maxLength={9}

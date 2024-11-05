@@ -1,6 +1,4 @@
-import { LayoutChangeEvent } from 'react-native';
 import { RefObject, useMemo, useState } from 'react';
-import { styles as bridgeFormStyle } from '../../templates/BridgeForm/styles';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { NumberUtils } from '@utils/number';
 import { BridgeFeeModel, RenderTokenItem } from '@models/Bridge';
@@ -64,7 +62,6 @@ export const useBridgeNetworksData = ({
   const navigation = useNavigation<HomeNavigationProp>();
 
   const [feeLoader, setFeeLoader] = useState(false);
-  const [currencySelectorWidth, setCurrencySelectorWidth] = useState<number>(0);
   const [isMax, setMax] = useState(false);
   const [amountToExchange, setAmountToExchange] = useState('');
   const [bridgeFee, setBridgeFee] = useState<BridgeFeeModel | null>(null);
@@ -107,17 +104,6 @@ export const useBridgeNetworksData = ({
 
   const selectedTokenFrom = selectedToken.pairs[0];
   const selectedTokenTo = selectedToken.pairs[1];
-
-  const onCurrencySelectorLayoutHandle = (event: LayoutChangeEvent) => {
-    setCurrencySelectorWidth(event.nativeEvent.layout.width);
-  };
-
-  const inputStyles = useMemo(() => {
-    return {
-      ...bridgeFormStyle.input,
-      paddingLeft: currencySelectorWidth + 24
-    };
-  }, [currencySelectorWidth]);
 
   const onTokenPress = (item: RenderTokenItem) => {
     setMax(false);
@@ -408,7 +394,6 @@ export const useBridgeNetworksData = ({
   const variables = {
     dataToPreview,
     amountToExchange,
-    inputStyles,
     feeLoader,
     bridgeFee,
     gasFeeLoader,
@@ -419,7 +404,6 @@ export const useBridgeNetworksData = ({
   };
   const methods = {
     getFeeData,
-    onCurrencySelectorLayoutHandle,
     onSelectMaxAmount,
     onChangeAmount,
     onTokenPress,

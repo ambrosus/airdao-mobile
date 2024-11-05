@@ -397,7 +397,7 @@
 
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
-  "bridge.amount.to.bridge": "Köprülemek için Miktar",
+  "bridge.set.amount": "!!!Set amount",
   "bridge.amount.network.fee": "Ağ Ücreti ",
 
   "bridge.preview.title": "Önizleme",
