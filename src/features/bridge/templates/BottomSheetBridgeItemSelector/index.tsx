@@ -1,14 +1,16 @@
 import React, { forwardRef } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Spacer, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { useBridgeContextData } from '@features/bridge/context';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { RenderTokenItem } from '@models/Bridge';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
+import { styles } from './styles';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
 
 interface BottomSheetChoseNetworksProps {
   onPressItem: (item: any) => void;
@@ -35,6 +37,9 @@ export const BottomSheetBridgeItemSelector = forwardRef<
     isNetworkSelector ? 'bridge.select.network' : 'bridge.select.assets'
   );
 
+  // @ts-ignore
+  const onClose = () => ref?.current?.dismiss();
+
   const renderNetworkItem = (network: any) => {
     const { item } = network;
     return (
@@ -53,7 +58,6 @@ export const BottomSheetBridgeItemSelector = forwardRef<
     const { item }: { item: RenderTokenItem } = token;
     return (
       <BridgeSelectorItem
-        tokenSymbol={item.renderTokenItem.symbol}
         symbol={item.renderTokenItem.symbol}
         name={item.renderTokenItem.name}
         isActive={
@@ -75,16 +79,21 @@ export const BottomSheetBridgeItemSelector = forwardRef<
       swiperIconVisible={true}
     >
       <Spacer value={verticalScale(16)} />
-      <Text
-        fontSize={18}
-        fontFamily="Inter_700Bold"
-        color={COLORS.neutral800}
-        align="center"
-      >
-        {header}
-      </Text>
+      <Row justifyContent="space-between" style={styles.headerContainer}>
+        <Text
+          fontSize={18}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral800}
+        >
+          {header}
+        </Text>
+        <TouchableOpacity onPress={onClose}>
+          <CloseCircleIcon />
+        </TouchableOpacity>
+      </Row>
       <Spacer value={verticalScale(16)} />
       <FlatList
+        contentContainerStyle={styles.listContainer}
         // @ts-ignore
         data={activeArray}
         renderItem={isNetworkSelector ? renderNetworkItem : renderTokenItem}
