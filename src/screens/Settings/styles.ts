@@ -3,12 +3,11 @@ import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    marginTop: scale(10)
-  },
+  container: {},
   contentWrapper: {
-    height: '90%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingBottom: '22%',
+    height: '90%'
   },
   header: {
     marginTop: scale(15),
@@ -28,7 +27,6 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(16)
   },
   bottomContent: {
-    marginBottom: 50,
     justifyContent: 'center'
   },
   socialButtons: {
