@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from '../../BridgeNetworkSelectors/styles';
-import { Button, Row, Text } from '@components/base';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
@@ -10,6 +10,7 @@ import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
 import { BottomSheetBridgeItemSelector } from '../../BottomSheetBridgeItemSelector';
+import { scale } from '@utils/scaling';
 
 export const BridgeNetworkPicker = ({
   destination
@@ -45,24 +46,31 @@ export const BridgeNetworkPicker = ({
       >
         {t(`common.transaction.${destination}`)}
       </Text>
+      <Spacer value={scale(2)} />
       <Button onPress={showNetworks} style={styles.select}>
-        <Row alignItems="center" justifyContent="space-between">
-          <Row alignItems="center" style={styles.selectInnerRowGap}>
-            <TokenLogo
-              scale={pickerData.value.id === 'amb' ? 0.6 : 0.65}
-              token={pickerData.value.id}
-              overrideIconVariants={{ eth: 'blue' }}
-            />
-            <Text
-              fontSize={14}
-              fontFamily="Inter_500Medium"
-              color={COLORS.black}
-            >
-              {pickerData.value.name}
-            </Text>
-          </Row>
+        <Row
+          style={styles.pickerContainer}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <TokenLogo
+            scale={0.8}
+            token={pickerData.value.id}
+            overrideIconVariants={{ eth: 'blue' }}
+          />
+          <Text
+            fontSize={scale(15)}
+            fontFamily="Inter_500Medium"
+            color={COLORS.black}
+          >
+            {pickerData.value.name}
+          </Text>
 
-          <ChevronDownIcon color={COLORS.black} />
+          <ChevronDownIcon
+            color={COLORS.brand500}
+            rotate={'270deg'}
+            scale={0.8}
+          />
         </Row>
       </Button>
       <BottomSheetBridgeItemSelector

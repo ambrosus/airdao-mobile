@@ -397,7 +397,7 @@
 
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
-  "bridge.amount.to.bridge": "Amount to bridge",
+  "bridge.set.amount": "Set amount",
   "bridge.amount.network.fee": "Network fee",
 
   "bridge.preview.title": "Preview",

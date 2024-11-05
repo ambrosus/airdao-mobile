@@ -19,11 +19,7 @@ export const Bridge = () => {
 
   const renderHeaderRightContent = useMemo(() => {
     return (
-      <TouchableOpacity
-        onPress={onNavigateToHistory}
-        hitSlop={15}
-        style={styles.headerHistoryIcon}
-      >
+      <TouchableOpacity onPress={onNavigateToHistory} hitSlop={15}>
         <HistoryIcon />
       </TouchableOpacity>
     );
