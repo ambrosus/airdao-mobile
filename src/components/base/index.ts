@@ -10,3 +10,5 @@ export * from './Separator';
 export * from './Spacer';
 export * from './Spinner';
 export * from './Switch';
+export { TextInput } from './Input/Input.text';
+export { NumberInput } from './Input/Input.number';
