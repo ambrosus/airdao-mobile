@@ -205,7 +205,7 @@ export const StakeToken = ({
         ))}
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton onPress={showPreview} disabled={isWrongStakeValue.button}>
+      <PrimaryButton onPress={showPreview} disabled>
         <Text
           color={
             isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0

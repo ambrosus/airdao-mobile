@@ -13,6 +13,8 @@ interface StakingPoolListProps
   onPressItem?: (stakingPool: StakingPool) => unknown;
 }
 
+const HPT_ADDRESS = '0x322269e52800e5094c008f3b01A3FD97BB3C8f5D';
+
 export const StakingPoolList = (props: StakingPoolListProps) => {
   const { stakingPools, onPressItem, ...restProps } = props;
 
@@ -20,11 +22,13 @@ export const StakingPoolList = (props: StakingPoolListProps) => {
     const onPress = () => {
       if (typeof onPressItem === 'function') onPressItem(args.item);
     };
+    const isHPTToken = args.item.token.address === HPT_ADDRESS;
+    const disabledPools = !args.item.isActive && !isHPTToken;
 
     return (
       <Button
         onPress={onPress}
-        disabled={typeof onPressItem !== 'function' || !args.item.isActive}
+        disabled={typeof onPressItem !== 'function' || disabledPools}
       >
         <StakingPoolItem stakingPool={args.item} />
       </Button>
