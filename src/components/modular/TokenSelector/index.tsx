@@ -13,16 +13,16 @@ import { TToken } from '@utils';
 
 interface TokenSelectorProps {
   readonly token: TToken;
-  readonly onDismissBottomSheet: () => void;
+  readonly onShowBottomSheetTokensListHandle: () => void;
 }
 
 export const TokenSelector = ({
   token,
-  onDismissBottomSheet
+  onShowBottomSheetTokensListHandle
 }: TokenSelectorProps) => {
   const { t } = useTranslation();
 
-  const istoken = useMemo(() => {
+  const isToken = useMemo(() => {
     return !!token;
   }, [token]);
 
@@ -31,8 +31,8 @@ export const TokenSelector = ({
   }, [token]);
 
   const onToggleSelectTokenModal = useCallback(() => {
-    onDismissBottomSheet();
-  }, [onDismissBottomSheet]);
+    onShowBottomSheetTokensListHandle();
+  }, [onShowBottomSheetTokensListHandle]);
 
   return (
     <TouchableOpacity onPress={onToggleSelectTokenModal}>
@@ -49,7 +49,7 @@ export const TokenSelector = ({
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral800}
           >
-            {istoken ? token?.symbol : t('swap.select.asset')}
+            {isToken ? token?.symbol : t('swap.select.asset')}
           </Text>
         </Row>
         <Spacer horizontal value={scale(4)} />

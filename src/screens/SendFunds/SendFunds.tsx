@@ -266,6 +266,7 @@ export const SendFunds = () => {
             <View style={styles.wrapper}>
               <View>
                 <InputWithTokenSelect
+                  title={t('token.picker.select')}
                   dispatch={false}
                   label="Set amount"
                   value={amountInCrypto}

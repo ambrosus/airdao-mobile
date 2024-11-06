@@ -1,8 +1,22 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
+import React, {
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import {
+  LayoutChangeEvent,
+  Platform,
+  Pressable,
+  StyleProp,
+  View,
+  ViewStyle
+} from 'react-native';
 import { styles } from './styles';
-import { InputRef, Text } from '@components/base';
-import { TextInput } from '@components/base/Input/Input.text';
+import { BottomSheetTokensList } from './components';
+import { InputRef, Text, TextInput } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { BalanceRow, TokenSelector } from '@components/modular';
 import { Token } from '@models';
 import { COLORS } from '@constants/colors';
@@ -10,23 +24,31 @@ import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 
 interface InputWithTokenSelectProps {
+  readonly title: string;
   readonly value: string;
   readonly label: string;
   readonly token: Token;
   readonly onChangeText: (text: string) => void;
   readonly onPressMaxAmount: (amount?: string) => void;
   readonly dispatch?: boolean;
+  bottomSheetNode?: ReactNode;
+  bottomSheetContainerStyle?: StyleProp<ViewStyle>;
+  onPreviewBottomSheet?: () => void;
 }
 
 export const InputWithTokenSelect = ({
+  title,
   value,
   label,
   token,
   onChangeText,
   onPressMaxAmount,
-  dispatch = true
+  dispatch = true,
+  bottomSheetNode,
+  bottomSheetContainerStyle
 }: InputWithTokenSelectProps) => {
   const textInputRef = useRef<InputRef>(null);
+  const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
 
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputContainerWidth, setInputContainerWidth] = useState(0);
@@ -77,6 +99,11 @@ export const InputWithTokenSelect = ({
     []
   );
 
+  const onShowBottomSheetTokensListHandle = useCallback(
+    () => bottomSheetTokensListRef.current?.show(),
+    []
+  );
+
   return (
     <>
       <Text
@@ -87,7 +114,10 @@ export const InputWithTokenSelect = ({
         {label}
       </Text>
       <View style={styles.upperRow}>
-        <TokenSelector token={token} onDismissBottomSheet={() => null} />
+        <TokenSelector
+          token={token}
+          onShowBottomSheetTokensListHandle={onShowBottomSheetTokensListHandle}
+        />
         <Pressable
           onLayout={onLayoutEventHandle}
           onPress={onInputContainerPress}
@@ -116,6 +146,14 @@ export const InputWithTokenSelect = ({
         onPressMaxAmount={onPressMaxAmount}
         onChangeText={onChangeText}
       />
+
+      <BottomSheetTokensList
+        title={title}
+        ref={bottomSheetTokensListRef}
+        containerStyle={bottomSheetContainerStyle}
+      >
+        {bottomSheetNode}
+      </BottomSheetTokensList>
     </>
   );
 };
