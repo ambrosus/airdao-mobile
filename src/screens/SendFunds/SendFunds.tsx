@@ -27,7 +27,7 @@ import {
   HomeNavigationProp,
   HomeParamsList
 } from '@appTypes';
-import { etherumAddressRegex } from '@constants/regex';
+import { ethereumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
 import { AddressInput } from './components';
 import { AirDAOEventDispatcher } from '@lib';
@@ -43,6 +43,7 @@ import {
   useAmountChangeHandler
 } from '@features/send-funds/lib/hooks';
 import { InputWithTokenSelect } from '@components/templates';
+import { TokensList } from '@features/send-funds/components/composite';
 
 export const SendFunds = () => {
   const { state: sendContextState, reducer: updateSendContext } =
@@ -51,6 +52,8 @@ export const SendFunds = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
   const tokenFromNavigationParams = route.params?.token;
+
+  const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
 
   const {
     to: destinationAddress = '',
@@ -71,10 +74,11 @@ export const SendFunds = () => {
   }, [transactionId]);
 
   const {
-    data: { tokens }
+    data: { tokens },
+    loading: isFetchingTokens
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
 
-  const [selectedToken] = useState<Token>(
+  const [selectedToken, setSelectedToken] = useState<Token>(
     tokens.find(
       (token) => token.address === tokenFromNavigationParams?.address
     ) || _AMBEntity
@@ -92,9 +96,10 @@ export const SendFunds = () => {
   );
   const confirmModalRef = useRef<BottomSheetRef>(null);
 
-  // const selectToken = (newToken: Token) => {
-  //   setSelectedToken(newToken);
-  // };
+  const onSelectToken = useCallback((token: Token) => {
+    bottomSheetTokensListRef.current?.dismiss();
+    setSelectedToken(token);
+  }, []);
 
   useEffect(() => {
     updateSendContext({
@@ -183,22 +188,12 @@ export const SendFunds = () => {
     }, 1000);
   };
 
-  const reviewButtonDisabled =
-    Number(amountInCrypto) === 0 ||
-    !destinationAddress.match(etherumAddressRegex);
-
-  // const onToggleAmountInputState = useCallback(
-  //   () => setAmountInputFocused((p) => !p),
-  //   []
-  // );
-
-  // const onAmountInputPress = useCallback(() => {
-  //   Keyboard.dismiss();
-
-  //   InteractionManager.runAfterInteractions(() => {
-  //     setTimeout(() => amountInputRef.current?.focus(), 200);
-  //   });
-  // }, []);
+  const reviewButtonDisabled = useMemo(
+    () =>
+      Number(amountInCrypto) === 0 ||
+      !destinationAddress.match(ethereumAddressRegex),
+    [amountInCrypto, destinationAddress]
+  );
 
   const renderHeaderContentRight = useMemo(
     () => (
@@ -234,6 +229,18 @@ export const SendFunds = () => {
     [senderAddress, t]
   );
 
+  const renderBottomSheetNode = useMemo(
+    () => (
+      <TokensList
+        tokens={[_AMBEntity].concat(tokens)}
+        selectedToken={selectedToken}
+        onSelectToken={onSelectToken}
+        isFetchingTokens={isFetchingTokens}
+      />
+    ),
+    [_AMBEntity, isFetchingTokens, onSelectToken, selectedToken, tokens]
+  );
+
   return (
     <SafeAreaView edges={['top']} style={styles.wrapper}>
       <Header
@@ -253,7 +260,7 @@ export const SendFunds = () => {
               onAddressChange={setDestinationAddress}
             />
             {destinationAddress.length > 0 &&
-              !destinationAddress.match(etherumAddressRegex) && (
+              !destinationAddress.match(ethereumAddressRegex) && (
                 <View style={styles.addressError}>
                   <Text fontSize={12} color={COLORS.error400}>
                     {t('send.funds.invalid.address')}
@@ -264,17 +271,18 @@ export const SendFunds = () => {
 
           <View style={styles.innerContainer}>
             <View style={styles.wrapper}>
-              <View>
-                <InputWithTokenSelect
-                  title={t('token.picker.select')}
-                  dispatch={false}
-                  label="Set amount"
-                  value={amountInCrypto}
-                  token={selectedToken}
-                  onChangeText={onChangeAmountHandle}
-                  onPressMaxAmount={(value) => onPressMaxAmount(value)}
-                />
-              </View>
+              <InputWithTokenSelect
+                ref={bottomSheetTokensListRef}
+                title={t('token.picker.select')}
+                label="Set amount"
+                dispatch={false}
+                value={amountInCrypto}
+                token={selectedToken}
+                onChangeText={onChangeAmountHandle}
+                onPressMaxAmount={(value) => onPressMaxAmount(value)}
+                bottomSheetNode={renderBottomSheetNode}
+              />
+
               <Spacer value={verticalScale(32)} />
               <PrimaryButton
                 disabled={reviewButtonDisabled}

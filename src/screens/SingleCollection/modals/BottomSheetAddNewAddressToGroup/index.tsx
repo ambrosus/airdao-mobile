@@ -38,7 +38,7 @@ import { BarcodeScanner } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { SearchSort } from '@screens/Search/Search.types';
 import { ExplorerWalletItem } from '@screens/Search/components';
-import { etherumAddressRegex } from '@constants/regex';
+import { ethereumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 
 type Props = {
@@ -186,7 +186,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   };
 
   const onQRCodeScanned = (data: string) => {
-    const res = data.match(etherumAddressRegex);
+    const res = data.match(ethereumAddressRegex);
     if (res && res?.length > 0) {
       hideScanner();
       inputRef.current?.setText(res[0]);
