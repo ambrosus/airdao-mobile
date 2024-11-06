@@ -28,7 +28,6 @@ import {
 } from '@contexts';
 
 import { TokenUtils } from '@utils/token';
-import { StakeToken } from './components/Stake/Stake';
 import { useBridgeContextData } from '@features/bridge/context';
 import { DeviceUtils } from '@utils/device';
 import { useKeyboardHeight } from '@hooks';
@@ -167,20 +166,6 @@ export const StakingPoolScreen = () => {
                 containerStyle={styles.tabsContainer}
                 onSwipeStateHandle={onSwipeStateHandle}
                 tabs={[
-                  {
-                    title: t('staking.pool.stake'),
-                    view: (
-                      <>
-                        <Spacer value={verticalScale(24)} />
-                        <StakeToken
-                          isSwiping={isTabsSwiping}
-                          pool={poolStakingDetails}
-                          wallet={selectedAccount}
-                          apy={apy}
-                        />
-                      </>
-                    )
-                  },
                   {
                     title: t('staking.pool.withdraw'),
                     view: (

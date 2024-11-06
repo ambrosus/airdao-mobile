@@ -39,7 +39,12 @@ export const BalanceRow = ({
     return isAMBEntity ? ethers.constants.AddressZero : token.address;
   }, [isAMBEntity, token.address]);
 
-  const { balance: bnBalance, isFetching } = useERC20Balance(address);
+  const { balance: _balance, isFetching } = useERC20Balance(
+    address,
+    undefined,
+    Object.keys(token).includes('balance')
+  );
+  const bnBalance = token.balance || _balance;
 
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalance) {

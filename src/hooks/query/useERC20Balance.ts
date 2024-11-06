@@ -6,10 +6,16 @@ import { useWallet } from '@hooks/useWallet';
  * A custom React Query hook to fetch ERC20 token balance.
  * @param tokenAddress - The address of the ERC20 token.
  * @param ownerAddress - The address of the owner. If not provided, the wallet address will be used.
+ * @param enabled
  * @returns An object containing the token balance and a boolean indicating if the query is fetching.
  */
-export function useERC20Balance(tokenAddress: string, ownerAddress?: string) {
+export function useERC20Balance(
+  tokenAddress: string,
+  ownerAddress?: string,
+  enabled = true
+) {
   const { wallet } = useWallet();
+  const isEnabled = !!tokenAddress && enabled;
   const { data, isFetching, refetch } = useQuery(
     ['erc20-balance', tokenAddress],
     () => {
@@ -18,7 +24,7 @@ export function useERC20Balance(tokenAddress: string, ownerAddress?: string) {
         tokenAddress
       });
     },
-    { enabled: !!tokenAddress, refetchOnMount: true }
+    { enabled: isEnabled, refetchOnMount: true }
   );
 
   return { balance: data || null, isFetching, refetch };

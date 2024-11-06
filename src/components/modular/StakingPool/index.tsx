@@ -24,7 +24,7 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
     <Row
       alignItems="center"
       justifyContent="space-between"
-      style={{ opacity: stakingPool.isActive ? 1 : 0.5 }}
+      // style={{ opacity: stakingPool.isActive ? 1 : 0.5 }}
     >
       <Row alignItems="center">
         <TokenLogo token={stakingPool.token.name} />
