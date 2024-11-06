@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
 import {
-  Input,
   KeyboardDismissingView,
   Spacer,
   Spinner,
@@ -22,15 +21,17 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '@appTypes';
 import { useBridgeNetworksData } from '@features/bridge/hooks/bridge/useBridgeNetworksData';
-import { BalanceInfo, FeeInfo, TokenSelector } from './components';
+import { FeeInfo } from './components';
 import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
 import { isAndroid } from '@utils/isPlatform';
 import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
-import { BottomSheetBridgeItemSelector } from '@features/bridge/templates/BottomSheetBridgeItemSelector';
+import { BottomSheetBridgeNetworkSelector } from '../BottomSheetBridgeNetworkSelector';
 import { INPUT_ERROR_TYPES } from '@features/bridge/constants';
 import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { InputWithTokenSelect } from '@components/templates';
+import { TokenSelectData } from './components/TokenSelectData/TokenSelectData';
 
 export const BridgeForm = () => {
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
@@ -39,6 +40,7 @@ export const BridgeForm = () => {
   const choseTokenRef = useRef<BottomSheetRef>(null);
   const previewRef = useRef<BottomSheetRef>(null);
   const transactionInfoRef = useRef<BottomSheetRef>(null);
+  const tokenSelectRef = useRef<BottomSheetRef>(null);
 
   const { t } = useTranslation();
   const [timeoutDelay, setTimeoutDelay] = useState(setTimeout(() => null));
@@ -130,46 +132,26 @@ export const BridgeForm = () => {
 
   const isButtonDisabled =
     !amountToExchange || !bridgeFee || gasFeeLoader || !!inputErrorType;
+
+  const onTokenSelect = (item) => {
+    onTokenPress(item);
+    tokenSelectRef?.current?.dismiss();
+  };
+
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
       <View style={styles.inputContainerWitHeading}>
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral900}
-        >
-          {t('bridge.set.amount')}
-        </Text>
-        <View style={styles.inputContainerWithSelector}>
-          <View style={styles.inputCurrencySelector}>
-            <TokenSelector
-              onPress={() => choseTokenRef.current?.show()}
-              symbol={tokenParams.value.renderTokenItem.symbol ?? ''}
-            />
-          </View>
-          <Input
-            type="number"
-            keyboardType="decimal-pad"
-            maxLength={9}
-            value={amountToExchange}
-            onChangeValue={onChangeAmount}
-          />
-          {!!errorMessage && (
-            <>
-              <Spacer value={verticalScale(4)} />
-              <Text
-                fontSize={12}
-                fontFamily="Inter_500Medium"
-                fontWeight="500"
-                color={COLORS.error400}
-              >
-                {errorMessage}
-              </Text>
-            </>
-          )}
-          <Spacer value={scale(8)} />
-          <BalanceInfo onMaxPress={onSelectMaxAmount} />
-        </View>
+        <InputWithTokenSelect
+          ref={tokenSelectRef}
+          title={t('bridge.select.assets')}
+          value={amountToExchange}
+          label={t('bridge.set.amount')}
+          // @ts-ignore
+          token={tokenParams.value.renderTokenItem}
+          bottomSheetNode={<TokenSelectData onPressItem={onTokenSelect} />}
+          onChangeText={onChangeAmount}
+          onPressMaxAmount={onSelectMaxAmount}
+        />
 
         <Spacer value={scale(32)} />
         <FeeInfo
@@ -195,7 +177,7 @@ export const BridgeForm = () => {
         </PrimaryButton>
       </Animated.View>
       <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
-      <BottomSheetBridgeItemSelector
+      <BottomSheetBridgeNetworkSelector
         ref={choseTokenRef}
         onPressItem={onTokenPress}
         selectorType={'token'}

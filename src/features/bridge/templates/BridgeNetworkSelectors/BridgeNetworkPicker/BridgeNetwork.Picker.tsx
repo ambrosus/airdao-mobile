@@ -9,7 +9,7 @@ import { ChevronDownIcon } from '@components/svg/icons';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
-import { BottomSheetBridgeItemSelector } from '../../BottomSheetBridgeItemSelector';
+import { BottomSheetBridgeNetworkSelector } from '../../BottomSheetBridgeNetworkSelector';
 import { scale } from '@utils/scaling';
 
 export const BridgeNetworkPicker = ({
@@ -73,7 +73,7 @@ export const BridgeNetworkPicker = ({
           />
         </Row>
       </Button>
-      <BottomSheetBridgeItemSelector
+      <BottomSheetBridgeNetworkSelector
         selectorType={'network'}
         destination={destination}
         onPressItem={onPressItem}

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
@@ -11,6 +11,7 @@ interface BridgeSelectorItemModel {
   name: string;
   symbol: CryptoCurrencyCode | undefined;
   item: ParsedBridge | RenderTokenItem;
+  rightContent: ReactNode;
   isActive: boolean;
   onPressItem: (item: any) => void;
   tokenSymbol?: string;
@@ -20,6 +21,7 @@ export const BridgeSelectorItem = ({
   symbol,
   item,
   onPressItem,
+  rightContent,
   isActive,
   name
 }: BridgeSelectorItemModel) => {
@@ -44,6 +46,7 @@ export const BridgeSelectorItem = ({
           <Text style={styles.textBottom}>{name}</Text>
         </View>
       </View>
+      {rightContent}
     </Button>
   );
 };

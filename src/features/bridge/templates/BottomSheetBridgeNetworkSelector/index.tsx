@@ -7,7 +7,6 @@ import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { useBridgeContextData } from '@features/bridge/context';
 import { FlatList, TouchableOpacity } from 'react-native';
-import { RenderTokenItem } from '@models/Bridge';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
 import { styles } from './styles';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
@@ -18,24 +17,19 @@ interface BottomSheetChoseNetworksProps {
   destination?: 'from' | 'to';
 }
 
-export const BottomSheetBridgeItemSelector = forwardRef<
+export const BottomSheetBridgeNetworkSelector = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
 >((props, ref) => {
   const { onPressItem, destination, selectorType } = props;
 
-  const isNetworkSelector = selectorType === 'network';
   const isFrom = selectorType && destination === 'from';
 
-  const { bridges, networksParams, tokenParams, fromParams, toParams } =
-    useBridgeContextData();
+  const { bridges, fromParams, toParams } = useBridgeContextData();
 
   const pickerData = isFrom ? fromParams : toParams;
 
   const { t } = useTranslation();
-  const header = t(
-    isNetworkSelector ? 'bridge.select.network' : 'bridge.select.assets'
-  );
 
   // @ts-ignore
   const onClose = () => ref?.current?.dismiss();
@@ -54,24 +48,6 @@ export const BottomSheetBridgeItemSelector = forwardRef<
     );
   };
 
-  const renderTokenItem = (token: any) => {
-    const { item }: { item: RenderTokenItem } = token;
-    return (
-      <BridgeSelectorItem
-        symbol={item.renderTokenItem.symbol}
-        name={item.renderTokenItem.name}
-        isActive={
-          tokenParams?.value?.renderTokenItem?.name ===
-          item.renderTokenItem.name
-        }
-        onPressItem={onPressItem}
-        key={item.renderTokenItem?.name}
-        item={item}
-      />
-    );
-  };
-
-  const activeArray = isNetworkSelector ? bridges : networksParams;
   return (
     <BottomSheet
       ref={ref}
@@ -85,7 +61,7 @@ export const BottomSheetBridgeItemSelector = forwardRef<
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
         >
-          {header}
+          {t('bridge.select.network')}
         </Text>
         <TouchableOpacity onPress={onClose}>
           <CloseCircleIcon />
@@ -95,8 +71,8 @@ export const BottomSheetBridgeItemSelector = forwardRef<
       <FlatList
         contentContainerStyle={styles.listContainer}
         // @ts-ignore
-        data={activeArray}
-        renderItem={isNetworkSelector ? renderNetworkItem : renderTokenItem}
+        data={bridges}
+        renderItem={renderNetworkItem}
       />
       <Spacer value={verticalScale(30)} />
     </BottomSheet>
