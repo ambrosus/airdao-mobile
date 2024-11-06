@@ -11,14 +11,14 @@ import { useWallet } from '@hooks/useWallet';
 export function useERC20Balance(tokenAddress: string, ownerAddress?: string) {
   const { wallet } = useWallet();
   const { data, isFetching, refetch } = useQuery(
-    ['erc20-balance'],
+    ['erc20-balance', tokenAddress],
     () => {
       return erc20Contracts.balanceOf({
         ownerAddress: ownerAddress ?? (wallet?.address as string),
         tokenAddress
       });
     },
-    { enabled: !!tokenAddress }
+    { enabled: !!tokenAddress, refetchOnMount: true }
   );
 
   return { balance: data || null, isFetching, refetch };

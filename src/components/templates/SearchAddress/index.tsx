@@ -33,7 +33,7 @@ import {
   useTransactionDetails,
   useTransactionsOfAccount
 } from '@hooks';
-import { etherumAddressRegex } from '@constants/regex';
+import { ethereumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
@@ -182,7 +182,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
       scannerModalRef.current?.dismiss();
     };
     const onQRCodeScanned = (data: string) => {
-      const res = data.match(etherumAddressRegex);
+      const res = data.match(ethereumAddressRegex);
       if (res && res?.length > 0) {
         hideScanner();
         inputRef.current?.setText(res[0]);
