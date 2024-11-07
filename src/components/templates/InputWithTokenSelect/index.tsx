@@ -36,6 +36,8 @@ interface InputWithTokenSelectProps {
   bottomSheetNode?: ReactNode;
   bottomSheetContainerStyle?: StyleProp<ViewStyle>;
   onPreviewBottomSheet?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export const InputWithTokenSelect = forwardRef<
@@ -52,7 +54,9 @@ export const InputWithTokenSelect = forwardRef<
       onPressMaxAmount,
       dispatch = true,
       bottomSheetNode,
-      bottomSheetContainerStyle
+      bottomSheetContainerStyle,
+      onFocus,
+      onBlur
     },
     ref
   ) => {
@@ -68,9 +72,15 @@ export const InputWithTokenSelect = forwardRef<
       onChangeText(finalValue);
     };
 
-    const onToggleInputFocus = () => {
-      setIsInputFocused((prev) => !prev);
-    };
+    const _onFocusInputHandle = useCallback(() => {
+      onFocus && onFocus();
+      setIsInputFocused((prevState) => !prevState);
+    }, [onFocus]);
+
+    const _onBlurInputHandle = useCallback(() => {
+      onBlur && onBlur();
+      setIsInputFocused((prevState) => !prevState);
+    }, [onBlur]);
 
     const selection = useMemo(() => {
       if (!isInputFocused && value.length > 0) {
@@ -140,8 +150,8 @@ export const InputWithTokenSelect = forwardRef<
               type="number"
               numberOfLines={1}
               keyboardType="decimal-pad"
-              onFocus={onToggleInputFocus}
-              onBlur={onToggleInputFocus}
+              onFocus={_onFocusInputHandle}
+              onBlur={_onBlurInputHandle}
               selection={selection}
               onChangeText={onChangeTokenAmount}
               style={inputStyle}

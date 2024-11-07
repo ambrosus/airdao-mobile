@@ -39,6 +39,7 @@ import {
 import { InputWithTokenSelect } from '@components/templates';
 import { TokensList } from '@features/send-funds/components/composite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
@@ -49,6 +50,8 @@ export const SendFunds = ({ route }: Props) => {
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
+
+  const [isTextInputActive, setIsTextInputActive] = useState(false);
 
   const {
     to: destinationAddress = '',
@@ -110,7 +113,7 @@ export const SendFunds = ({ route }: Props) => {
   };
 
   const onPressMaxAmount = useCallback(
-    (maxBalanceString?: string) => {
+    (maxBalanceString?: string, decimals = 3) => {
       if (maxBalanceString) {
         let maxSendableBalance: number = +maxBalanceString;
 
@@ -119,7 +122,7 @@ export const SendFunds = ({ route }: Props) => {
         }
 
         setAmountInCrypto(
-          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), 3)
+          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), decimals)
         );
       }
     },
@@ -253,6 +256,27 @@ export const SendFunds = ({ route }: Props) => {
     [_AMBEntity, isFetchingTokens, onSelectToken, selectedToken, tokens]
   );
 
+  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
+  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
+
+  const onPercentItemPress = useCallback(
+    (percent: number) => {
+      const MAXIMUM_AVAILABLE_VALUE = 100;
+
+      if (percent === MAXIMUM_AVAILABLE_VALUE)
+        return onPressMaxAmount(
+          selectedToken.balance.formattedBalance,
+          selectedToken.decimals
+        );
+
+      const newValueInCrypto = String(
+        (+selectedToken.balance.formattedBalance * percent) / 100
+      );
+      setAmountInCrypto(newValueInCrypto);
+    },
+    [onPressMaxAmount, selectedToken, setAmountInCrypto]
+  );
+
   return (
     <SafeAreaView edges={['top']} style={styles.wrapper}>
       <Header
@@ -293,6 +317,8 @@ export const SendFunds = ({ route }: Props) => {
                 onChangeText={onChangeAmountHandle}
                 onPressMaxAmount={(value) => onPressMaxAmount(value)}
                 bottomSheetNode={renderBottomSheetNode}
+                onFocus={onTextInputFocus}
+                onBlur={onTextInputBlur}
               />
 
               <Spacer value={verticalScale(32)} />
@@ -326,6 +352,11 @@ export const SendFunds = ({ route }: Props) => {
           </BottomSheet>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
+
+      <AmountSelectionKeyboardExtend
+        isTextInput={isTextInputActive}
+        onPercentItemPress={onPercentItemPress}
+      />
     </SafeAreaView>
   );
 };
