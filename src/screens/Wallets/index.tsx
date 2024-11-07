@@ -13,7 +13,6 @@ import Animated, {
 import {
   AccountActions,
   PaginatedAccountList,
-  WalletDepositFunds,
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { Spacer } from '@components/base';
@@ -174,9 +173,7 @@ export const HomeScreen = () => {
         )}
       </Animated.View>
 
-      {isSelectAccountBalanceZero || !selectedAccountWithBalance ? (
-        <WalletDepositFunds onRefresh={refetchAmbBalance} />
-      ) : (
+      {selectedAccountWithBalance && (
         <Animated.View style={[animatedListStyles]}>
           <WalletTransactionsAndAssets
             onChangeActiveTabIndex={onChangeActiveTabIndex}

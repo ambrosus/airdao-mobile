@@ -120,8 +120,9 @@ export function useTokensAndTransactions(
     data: data?.pages
       ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
-    loading: isInitialLoading || isFetchingNextPage,
+    loading: isInitialLoading,
     refetching: isRefetching,
+    isFetchingNextPage,
     error,
     hasNextPage: Boolean(hasNextPage),
     fetchNextPage,
