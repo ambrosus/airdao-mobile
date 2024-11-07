@@ -1,8 +1,6 @@
 import { InteractionManager } from 'react-native';
 
-export const simulateNavigationDelay = async <
-  T extends (...args: any[]) => void
->(
+export const _delayNavigation = async <T extends (...args: any[]) => void>(
   dismissBottomSheet: () => void,
   navigate: T,
   ...navigateArgs: Parameters<T>
