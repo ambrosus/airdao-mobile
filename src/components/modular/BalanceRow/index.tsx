@@ -64,14 +64,6 @@ export const BalanceRow = ({
     token.symbol as CryptoCurrencyCode
   );
 
-  const isUSDPriceNegative = useMemo(() => {
-    return USDTokenPrice < 0;
-  }, [USDTokenPrice]);
-
-  const containerJustifyContent = useMemo(() => {
-    return isUSDPriceNegative ? 'flex-end' : 'space-between';
-  }, [isUSDPriceNegative]);
-
   const error = useMemo(() => {
     if (!bnBalance || !token || value.trim() === '') return false;
 
@@ -97,7 +89,7 @@ export const BalanceRow = ({
   }, [bnBalance, dispatch, onChangeText, onPressMaxAmount, token.decimals]);
 
   return (
-    <Row alignItems="center" justifyContent={containerJustifyContent}>
+    <Row alignItems="center" justifyContent="space-between">
       <Row alignItems="center">
         <Row alignItems="center">
           <WalletOutlineIcon
