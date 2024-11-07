@@ -30,7 +30,7 @@ export const AmountSelectionKeyboardExtend = ({
     return {
       transform: [{ translateY: -keyboard.height.value }],
       opacity: keyboard.height.value > 64 ? 1 : 0,
-      springify: { damping: 10 }
+      springify: { damping: 80 }
     };
   });
 
