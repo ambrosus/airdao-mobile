@@ -6,9 +6,6 @@ export const styles = StyleSheet.create({
   wrapper: {
     flex: 1
   },
-  header: {
-    shadowColor: COLORS.neutral0
-  },
   container: {
     paddingVertical: verticalScale(24),
     flex: 1
