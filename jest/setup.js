@@ -20,6 +20,7 @@ jest.mock('@react-navigation/native', () => {
 });
 
 jest.mock('react-native-reanimated', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Reanimated = require('react-native-reanimated/mock');
   const ReanimatedLayoutAnimation = {
     stiffness: jest.fn(() => ReanimatedLayoutAnimation),
@@ -38,6 +39,7 @@ jest.mock('react-native-reanimated', () => {
   Reanimated.Layout = ReanimatedLayoutAnimation;
   Reanimated.FadeInRight = ReanimatedLayoutAnimation;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   Reanimated.default.call = () => {};
   Reanimated.__reanimatedWorkletInit = jest.fn();
   return Reanimated;
@@ -123,36 +125,16 @@ jest.mock('@shopify/react-native-skia', () => ({
 }));
 
 jest.mock('ethers', () => {
-  class MockContract {
-    constructor(address, abi, signerOrProvider) {
-      this.address = address;
-      this.abi = abi;
-      this.signerOrProvider = signerOrProvider;
-    }
-  }
-
-  class MockWallet {
-    constructor(privateKey, provider) {
-      this.privateKey = privateKey;
-      this.provider = provider;
-    }
-  }
-
-  class MockJsonRpcProvider {
-    constructor(url) {
-      this.url = url;
-    }
-
-    async getBlockNumber() {
-      return 12345;
-    }
-  }
-
   return {
-    Contract: MockContract,
-    Wallet: MockWallet,
-    providers: {
-      JsonRpcProvider: MockJsonRpcProvider
+    ethers: {
+      Contract: jest.fn().mockImplementation(() => {
+        return {
+          unknown: jest.fn() // Example method
+        };
+      }),
+      constants: {
+        AddressZero: '0x0000000000000000000000000000000000000000'
+      }
     }
   };
 });
