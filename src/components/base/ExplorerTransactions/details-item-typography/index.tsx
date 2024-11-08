@@ -18,15 +18,15 @@ export const DetailsItemTypography = ({
     switch (type) {
       case 'key': {
         return {
-          fontSize: 13,
-          fontFamily: 'Inter_600SemiBold',
+          fontSize: 15,
+          fontFamily: 'Inter_500Medium',
           color: COLORS.neutral500
         };
       }
       case 'value': {
         return {
-          fontSize: 15,
-          fontFamily: 'Inter_400Regular',
+          fontSize: 14,
+          fontFamily: 'Inter_500Medium',
           color: COLORS.neutral800
         };
       }

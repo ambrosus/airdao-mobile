@@ -8,9 +8,8 @@ import React, {
 import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
-import { BottomSheetRef, Header } from '@components/composite';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -21,15 +20,10 @@ import {
 } from '@hooks';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
-import {
-  AirDAOEventType,
-  CryptoCurrencyCode,
-  HomeNavigationProp,
-  HomeParamsList
-} from '@appTypes';
+import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
-import { AddressInput } from './components';
+import { AddressInput, ConfirmTransaction } from './components';
 import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
@@ -44,16 +38,20 @@ import {
 } from '@features/send-funds/lib/hooks';
 import { InputWithTokenSelect } from '@components/templates';
 import { TokensList } from '@features/send-funds/components/composite';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
 
-export const SendFunds = () => {
+type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
+
+export const SendFunds = ({ route }: Props) => {
+  const { t } = useTranslation();
   const { state: sendContextState, reducer: updateSendContext } =
     useSendCryptoContext((v) => v);
-  const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
-  const route = useRoute<RouteProp<HomeParamsList, 'SendFunds'>>();
-  const tokenFromNavigationParams = route.params?.token;
 
+  const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
+
+  const [isTextInputActive, setIsTextInputActive] = useState(false);
 
   const {
     to: destinationAddress = '',
@@ -62,7 +60,6 @@ export const SendFunds = () => {
   } = sendContextState;
 
   const transactionIdRef = useRef('');
-  // const amountInputRef = useRef<InputRef>(null);
 
   const { wallet: account } = useWallet();
   const walletHash = account?.wallet.id ?? '';
@@ -116,7 +113,7 @@ export const SendFunds = () => {
   };
 
   const onPressMaxAmount = useCallback(
-    (maxBalanceString?: string) => {
+    (maxBalanceString?: string, decimals = 3) => {
       if (maxBalanceString) {
         let maxSendableBalance: number = +maxBalanceString;
 
@@ -125,7 +122,7 @@ export const SendFunds = () => {
         }
 
         setAmountInCrypto(
-          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), 3)
+          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), decimals)
         );
       }
     },
@@ -145,17 +142,22 @@ export const SendFunds = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const sendTx = () => {
-    hideReviewModal();
+  const sendTx = useCallback(() => {
     const txId = new Date().getTime().toString();
-    updateSendContext({ type: 'SET_DATA', loading: true, transactionId: txId });
+    updateSendContext({
+      type: 'SET_DATA',
+      loading: true,
+      transactionId: txId,
+      success: false
+    });
+
     setTimeout(async () => {
       try {
         AirDAOEventDispatcher.dispatch(AirDAOEventType.FundsSentFromApp, {
           from: senderAddress,
           to: destinationAddress
         });
-        navigation.replace('SendFundsStatus');
+
         sendFirebaseEvent(CustomAppEvents.send_start);
         await TransactionUtils.sendTx(
           walletHash,
@@ -167,12 +169,17 @@ export const SendFunds = () => {
 
         if (transactionIdRef.current === txId) {
           sendFirebaseEvent(CustomAppEvents.send_finish);
-          updateSendContext({ type: 'SET_DATA', loading: false });
+          updateSendContext({
+            type: 'SET_DATA',
+            loading: false,
+            success: true
+          });
         }
       } catch (error: unknown) {
         await Clipboard.setStringAsync(JSON.stringify(error));
-        // @ts-ignore
-        const errorMessage = error?.message ?? JSON.stringify(error);
+
+        const errorMessage =
+          (error as { message: string })?.message ?? JSON.stringify(error);
         sendFirebaseEvent(CustomAppEvents.send_error, {
           sendError: errorMessage
         });
@@ -181,12 +188,20 @@ export const SendFunds = () => {
           updateSendContext({
             type: 'SET_DATA',
             loading: false,
-            error: error as unknown as never
+            error: error as unknown as never,
+            success: true
           });
         }
       }
     }, 1000);
-  };
+  }, [
+    amountInCrypto,
+    destinationAddress,
+    selectedToken,
+    senderAddress,
+    updateSendContext,
+    walletHash
+  ]);
 
   const reviewButtonDisabled = useMemo(
     () =>
@@ -241,6 +256,27 @@ export const SendFunds = () => {
     [_AMBEntity, isFetchingTokens, onSelectToken, selectedToken, tokens]
   );
 
+  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
+  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
+
+  const onPercentItemPress = useCallback(
+    (percent: number) => {
+      const MAXIMUM_AVAILABLE_VALUE = 100;
+
+      if (percent === MAXIMUM_AVAILABLE_VALUE)
+        return onPressMaxAmount(
+          selectedToken.balance.formattedBalance,
+          selectedToken.decimals
+        );
+
+      const newValueInCrypto = String(
+        (+selectedToken.balance.formattedBalance * percent) / 100
+      );
+      setAmountInCrypto(newValueInCrypto);
+    },
+    [onPressMaxAmount, selectedToken, setAmountInCrypto]
+  );
+
   return (
     <SafeAreaView edges={['top']} style={styles.wrapper}>
       <Header
@@ -281,6 +317,8 @@ export const SendFunds = () => {
                 onChangeText={onChangeAmountHandle}
                 onPressMaxAmount={(value) => onPressMaxAmount(value)}
                 bottomSheetNode={renderBottomSheetNode}
+                onFocus={onTextInputFocus}
+                onBlur={onTextInputBlur}
               />
 
               <Spacer value={verticalScale(32)} />
@@ -301,20 +339,24 @@ export const SendFunds = () => {
               </PrimaryButton>
             </View>
           </View>
-          {/* <BottomSheet swiperIconVisible={true} ref={confirmModalRef}>
+          <BottomSheet ref={confirmModalRef} title={t('swap.button.review')}>
             <ConfirmTransaction
               from={senderAddress}
               to={destinationAddress}
               etherAmount={parseFloat(amountInCrypto)}
-              usdAmount={parseFloat(amountInUSD)}
               currency={selectedToken.symbol}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
-              loading={false}
+              dismissBottomSheet={hideReviewModal}
             />
-          </BottomSheet> */}
+          </BottomSheet>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
+
+      <AmountSelectionKeyboardExtend
+        isTextInput={isTextInputActive}
+        onPercentItemPress={onPercentItemPress}
+      />
     </SafeAreaView>
   );
 };

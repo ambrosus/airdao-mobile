@@ -4,7 +4,7 @@ import { HomeScreen } from '@screens/Wallets';
 import { AMBMarket } from '@screens/AMBMarket';
 import { Notifications } from '@screens/Notifications';
 import { AssetScreen } from '@screens/Asset';
-import { SendFunds, SendFundsStatus } from '@screens/SendFunds';
+import { SendFunds } from '@screens/SendFunds';
 import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
   ImportWallet,
@@ -78,11 +78,6 @@ export const HomeStack = () => {
 
           <Stack.Screen name="Notifications" component={Notifications} />
           <Stack.Screen name="SendFunds" component={SendFunds} />
-          <Stack.Screen
-            name="SendFundsStatus"
-            component={SendFundsStatus}
-            options={{ gestureEnabled: false }}
-          />
           <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
           <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
           <Stack.Screen

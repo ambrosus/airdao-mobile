@@ -1,15 +1,19 @@
-import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: verticalScale(178),
     paddingHorizontal: scale(16)
   },
-  button: {
+  innerContainer: {
     width: '100%',
-    paddingVertical: verticalScale(12)
+    rowGap: verticalScale(24)
+  },
+  amountContainerRow: {
+    columnGap: 4
+  },
+  pendingLayout: {
+    columnGap: scale(8)
   }
 });

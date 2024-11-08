@@ -13,7 +13,7 @@ import { COLORS } from '@constants/colors';
 import { SuccessIcon } from '@components/svg/icons/v2';
 import { verticalScale } from '@utils/scaling';
 import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { simulateNavigationDelay } from '@features/swap/utils/navigate';
+import { _delayNavigation } from '@utils/navigate';
 
 export const SuccessSwapView = () => {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export const SuccessSwapView = () => {
 
   const onNavigateToWallets = async () => {
     onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW);
-    simulateNavigationDelay(onReviewSwapDismiss, () =>
+    _delayNavigation(onReviewSwapDismiss, () =>
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

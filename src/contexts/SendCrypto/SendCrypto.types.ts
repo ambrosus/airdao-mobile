@@ -10,6 +10,7 @@ export interface SendCryptoContextState {
   estimatedFee: number;
   error: Error | null;
   transactionId: string; // random tx id for internal usage
+  success: boolean;
 }
 
 type SendCryptoActionType = 'SET_DATA' | 'RESET_DATA';
