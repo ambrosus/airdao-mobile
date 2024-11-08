@@ -16,3 +16,4 @@ export * from './useUSDPrice';
 export * from './useSettingsWalletActions';
 export * from './useWallet';
 export * from './useEffectOnce';
+export * from './useBarcodeScanner';
