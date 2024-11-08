@@ -15,6 +15,7 @@ export function useBarcodeScanner() {
   const [permission] = Camera.useCameraPermissions();
 
   const cameraContainerRef = useRef<Camera>(null);
+  const hasRequestedPermissions = useRef<boolean>(false);
 
   const [cameraContainerHeight, setCameraContainerHeight] = useState(0);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -37,12 +38,14 @@ export function useBarcodeScanner() {
     const showRequestAlert = async () => {
       const _containerHeight = Math.floor(cameraContainerHeight);
       const _windowHeight = Math.floor(cameraContainerHeight);
+      const isAlreadyRequestedPermission = hasRequestedPermissions.current;
 
       if (permission && permission?.status === PermissionStatus.GRANTED) {
         return setHasCameraPermission(true);
       }
 
-      if (_containerHeight === _windowHeight) {
+      if (_containerHeight === _windowHeight && !isAlreadyRequestedPermission) {
+        hasRequestedPermissions.current = true;
         const timeoutId = setTimeout(() => {
           getCameraPermissions();
         }, 525);
@@ -61,43 +64,45 @@ export function useBarcodeScanner() {
   );
 
   const prepareRatio = useCallback(async () => {
+    const calculateRealRatio = (ratio: string) => {
+      const parts = ratio.split(':');
+      return parseInt(parts[0]) / parseInt(parts[1]);
+    };
+
+    const findBestRatio = (ratios: string[]) => {
+      const distances = new Map<string, number>();
+      let minDistance: string | null = null;
+
+      for (const ratio of ratios) {
+        const realRatio = calculateRealRatio(ratio);
+        const distance = SCREEN_RATIO - realRatio;
+        distances.set(ratio, distance);
+
+        if (
+          minDistance === null ||
+          (distance >= 0 && distance < (distances.get(minDistance) || 0))
+        ) {
+          minDistance = ratio;
+        }
+      }
+      return minDistance;
+    };
+
     let desiredRatio = '4:3'; // Start with the system default
-    // This issue only affects Android
     if (Platform.OS === 'android') {
       const ratios =
         await cameraContainerRef.current?.getSupportedRatiosAsync();
-      if (!ratios || ratios.length === 0) return; // Early return if no ratios
+      if (!ratios) return;
 
-      let minDistance = Infinity; // Initialize to a large number
-      for (const ratio of ratios) {
-        const [widthPart, heightPart] = ratio.split(':').map(Number);
-        const realRatio = widthPart / heightPart;
-        const distance = SCREEN_RATIO - realRatio;
+      desiredRatio = findBestRatio(ratios) || '4:3';
+      const realRatio = calculateRealRatio(desiredRatio);
+      const remainder = Math.floor((height - realRatio * width) / 2);
 
-        // Update desiredRatio if this ratio is a better match
-        if (distance >= 0 && distance < minDistance) {
-          minDistance = distance;
-          desiredRatio = ratio;
-        }
-      }
-
-      // Calculate the difference between the camera width and the screen height
-      const remainder = Math.floor(
-        (height -
-          (desiredRatio
-            ? width /
-              (parseInt(desiredRatio.split(':')[0]) /
-                parseInt(desiredRatio.split(':')[1]))
-            : width)) /
-          2
-      );
-      // Set the preview padding and preview ratio
       setImagePadding(remainder / 2);
       setRatio(desiredRatio);
-      // Set a flag so we don't do this calculation each time the screen refreshes
       setIsRatioSet(true);
     }
-  }, [height, width, SCREEN_RATIO]);
+  }, [SCREEN_RATIO, height, width]);
 
   const onCameraReadyHandle = useCallback(async () => {
     if (!isRatioSet) {
