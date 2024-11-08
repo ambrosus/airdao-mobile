@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -18,14 +17,6 @@ export const styles = StyleSheet.create({
   },
   horizontalPadding: {
     paddingHorizontal: scale(16)
-  },
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.neutral100,
-    marginVertical: verticalScale(16)
-  },
-  loading: {
-    alignSelf: 'center'
   },
   keyboardAvoidingContainer: {
     flex: 1
