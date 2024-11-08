@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -6,12 +12,15 @@ import {
   View
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { ethers } from 'ethers';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
 import { useTokensAndTransactions } from '@hooks';
 import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
+import { WalletDepositFunds } from '../WalletDepositFunds';
+import { Spinner } from '@components/base';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -37,6 +46,7 @@ export const WalletTransactionsAndAssets = ({
     hasNextPage,
     refetch: refetchAssets,
     refetching,
+    isFetchingNextPage,
     error
   } = useTokensAndTransactions(account.address, 1, 20, !!account.address);
 
@@ -84,6 +94,22 @@ export const WalletTransactionsAndAssets = ({
     [onChangeActiveTabIndex]
   );
 
+  const isSelectAccountBalanceZero = useMemo(() => {
+    return ethers.utils.parseEther(account.ambBalanceWei).isZero();
+  }, [account.ambBalanceWei]);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <Spinner />
+      </View>
+    );
+  }
+
+  if (!loading && isSelectAccountBalanceZero) {
+    return <WalletDepositFunds onRefresh={onRefresh} />;
+  }
+
   return (
     <View style={styles.container}>
       <AnimatedTabs
@@ -96,7 +122,7 @@ export const WalletTransactionsAndAssets = ({
               <WalletAssets
                 ref={assetsListRef}
                 tokens={tokens}
-                loading={loading}
+                loading={isFetchingNextPage}
                 account={account}
                 error={error}
                 onRefresh={_onRefresh}
@@ -115,7 +141,7 @@ export const WalletTransactionsAndAssets = ({
                 ref={transactionsHistoryListRef}
                 onTransactionsScrollEvent={onTransactionsScrollEvent}
                 transactions={transactions}
-                loading={loading}
+                loading={isFetchingNextPage}
                 isRefreshing={refetching && userPerformedRefresh}
                 onEndReached={loadMoreTransactions}
                 onRefresh={_onRefresh}
