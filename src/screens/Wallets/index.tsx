@@ -20,10 +20,10 @@ import { useBalanceOfAddress, useWallet } from '@hooks';
 import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
-import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { useBridgeContextData } from '@features/bridge/context';
+import { HomeHeader } from '@features/wallet-assets/components/templates';
 
 export const HomeScreen = () => {
   const { onChangeSelectedWallet } = useWallet();
