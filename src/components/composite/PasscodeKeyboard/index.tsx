@@ -3,6 +3,7 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  Vibration,
   View,
   ViewStyle
 } from 'react-native';
@@ -110,9 +111,14 @@ export const PasscodeKeyboard = ({
       }
     };
 
+    const onButtonPress = () => {
+      onPress();
+      Vibration.vibrate(30);
+    };
+
     return (
       <TouchableOpacity
-        onPress={onPress}
+        onPress={onButtonPress}
         disabled={!title}
         style={{
           justifyContent: 'center',

@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.neutral100,
     paddingHorizontal: scale(16),
     paddingVertical: verticalScale(8),
+    borderWidth: 1,
+    borderColor: COLORS.neutral200,
     borderRadius: 1000
   }
 });

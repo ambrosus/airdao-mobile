@@ -22,7 +22,7 @@ import {
   BarcodeScannerIcon,
   NotificationBellIcon
 } from '@components/svg/icons/v2';
-import { etherumAddressRegex } from '@constants/regex';
+import { ethereumAddressRegex } from '@constants/regex';
 import { useNotificationsQuery, useWallet } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
@@ -157,7 +157,7 @@ export const HomeHeader = React.memo(
 
     const onQRCodeScanned = useCallback(
       (data: string) => {
-        const res = data.match(etherumAddressRegex);
+        const res = data.match(ethereumAddressRegex);
         if (res && res?.length > 0) {
           closeScanner();
           navigation.navigate('Search', {

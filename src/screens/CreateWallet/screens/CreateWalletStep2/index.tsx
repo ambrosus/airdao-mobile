@@ -82,9 +82,6 @@ export const CreateWalletStep2 = () => {
       setLoading(true);
       await WalletUtils.processWallet(walletMnemonic);
       navigateToSetUpSecurity();
-    } catch (error) {
-      setCreateError(true);
-      setWalletMnemonicSelected([]);
     } finally {
       setLoading(false);
     }
@@ -95,6 +92,11 @@ export const CreateWalletStep2 = () => {
     walletMnemonicArrayDefault.length,
     walletMnemonicSelected.length
   ]);
+
+  const onPositionIncorrect = () => {
+    setCreateError(true);
+    setWalletMnemonicSelected([]);
+  };
 
   const renderSelectedWord = (
     word: { word: string; index: number },
@@ -117,12 +119,14 @@ export const CreateWalletStep2 = () => {
       selectedIdx == -1
         ? false
         : walletMnemonicArrayDefault[selectedIdx].word == word.word;
+    if (!isPlacedCorrectly) {
+      onPositionIncorrect();
+    }
     return (
       <View style={{ width: scale(100) }} key={`${word.index}-${word.word}`}>
         <MnemonicSelected
           word={word.word}
           onPress={onPressOnSelected}
-          isPlacedCorrectly={isPlacedCorrectly}
           index={idx + 1}
         />
       </View>

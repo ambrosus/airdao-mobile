@@ -10,5 +10,6 @@ export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
   loading: false,
   estimatedFee: 0,
   error: null,
-  transactionId: ''
+  transactionId: '',
+  success: false
 };
