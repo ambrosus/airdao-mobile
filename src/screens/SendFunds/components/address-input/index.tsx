@@ -1,26 +1,19 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  InteractionManager,
-  Keyboard,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import React, { useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Input, InputRef, Text } from '@components/base';
-import { isAndroid, isIos } from '@utils/isPlatform';
 import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
+import { StringUtils } from '@utils/string';
 
 interface AddressInputProps {
   address: string;
   onAddressChange: (newAddress: string) => unknown;
-  resetKeyboardState?: boolean;
 }
 export const AddressInput = ({
   address,
-  onAddressChange,
-  resetKeyboardState
+  onAddressChange
 }: AddressInputProps) => {
   const { t } = useTranslation();
 
@@ -30,27 +23,19 @@ export const AddressInput = ({
 
   const toggleFocused = () => setIsInputFocused((prevState) => !prevState);
 
+  const getSliceNumbers = (width: number, fontSize: number) => {
+    const totalCharacters = Math.floor(width / fontSize);
+    const halfCharacters = Math.floor(totalCharacters / 2);
+    const leftSlice = halfCharacters + 9;
+    const rightSlice = totalCharacters - leftSlice + 9;
+    return { leftSlice, rightSlice };
+  };
+
   const maskedValue = useMemo(() => {
-    const lettersToSlice = Math.floor(DEVICE_WIDTH / 12);
-    if (isAndroid && (address === '' || address.length < 32)) return address;
-
-    return isIos || isInputFocused
-      ? address
-      : `${address.slice(0, lettersToSlice)}...`;
+    const { leftSlice, rightSlice } = getSliceNumbers(DEVICE_WIDTH, 16);
+    if (isInputFocused) return address;
+    return StringUtils.formatAddress(address, leftSlice, rightSlice);
   }, [address, isInputFocused]);
-
-  const onInputPress = useCallback(() => {
-    Keyboard.dismiss();
-
-    InteractionManager.runAfterInteractions(() => {
-      setTimeout(() => inputRef.current?.focus(), 200);
-    });
-  }, []);
-
-  const resetContainerActive = useMemo(
-    () => resetKeyboardState && !isInputFocused && isAndroid,
-    [isInputFocused, resetKeyboardState]
-  );
 
   return (
     <View style={styles.container}>
@@ -67,16 +52,10 @@ export const AddressInput = ({
         onFocus={toggleFocused}
         onBlur={toggleFocused}
         value={maskedValue}
+        style={{ fontSize: 16, letterSpacing: -0.16 }}
         onChangeValue={onAddressChange}
         placeholder="0x..."
       />
-      {resetContainerActive && (
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={onInputPress}
-          style={styles.touchableHandlerArea}
-        />
-      )}
     </View>
   );
 };
