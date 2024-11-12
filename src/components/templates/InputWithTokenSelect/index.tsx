@@ -7,10 +7,13 @@ import React, {
   useState
 } from 'react';
 import {
+  InteractionManager,
+  Keyboard,
   LayoutChangeEvent,
   Platform,
   Pressable,
   StyleProp,
+  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native';
@@ -24,6 +27,7 @@ import { COLORS } from '@constants/colors';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 import { useForwardedRef } from '@hooks';
+import { isAndroid } from '@utils/isPlatform';
 
 interface InputWithTokenSelectProps {
   readonly title: string;
@@ -38,6 +42,7 @@ interface InputWithTokenSelectProps {
   onPreviewBottomSheet?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  resetKeyboardState?: boolean;
 }
 
 export const InputWithTokenSelect = forwardRef<
@@ -56,7 +61,8 @@ export const InputWithTokenSelect = forwardRef<
       bottomSheetNode,
       bottomSheetContainerStyle,
       onFocus,
-      onBlur
+      onBlur,
+      resetKeyboardState = false
     },
     ref
   ) => {
@@ -123,6 +129,25 @@ export const InputWithTokenSelect = forwardRef<
       [bottomSheetTokensListRef]
     );
 
+    const onInputPress = useCallback(() => {
+      Keyboard.dismiss();
+
+      InteractionManager.runAfterInteractions(() => {
+        setTimeout(() => textInputRef.current?.focus(), 200);
+      });
+    }, []);
+
+    const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> =
+      useMemo(() => {
+        return {
+          width: '100%',
+          height: 60,
+          position: 'absolute',
+          top: 15,
+          zIndex: 100
+        };
+      }, []);
+
     return (
       <>
         <Text
@@ -145,6 +170,7 @@ export const InputWithTokenSelect = forwardRef<
             style={styles.inputContainer}
           >
             <TextInput
+              ref={textInputRef}
               value={_value}
               placeholder="0"
               type="number"
@@ -175,6 +201,14 @@ export const InputWithTokenSelect = forwardRef<
         >
           {bottomSheetNode}
         </BottomSheetTokensList>
+
+        {resetKeyboardState && !isInputFocused && isAndroid && (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={onInputPress}
+            style={invisibleTouchableHandlerStyles}
+          />
+        )}
       </>
     );
   }

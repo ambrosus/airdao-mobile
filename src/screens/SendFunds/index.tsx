@@ -5,7 +5,7 @@ import React, {
   useState,
   useCallback
 } from 'react';
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
@@ -243,12 +243,10 @@ export const SendFunds = ({ route }: Props) => {
   );
 
   return (
-    <SafeAreaView edges={['top']} style={styles.wrapper}>
-      <FundsHeader sender={senderAddress} />
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingContainer}
-        behavior="padding"
-      >
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <FundsHeader sender={senderAddress} />
+
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
             <AddressInput
@@ -279,6 +277,7 @@ export const SendFunds = ({ route }: Props) => {
                 bottomSheetNode={renderBottomSheetNode}
                 onFocus={onTextInputFocus}
                 onBlur={onTextInputBlur}
+                resetKeyboardState
               />
 
               <Spacer value={verticalScale(32)} />
@@ -311,12 +310,11 @@ export const SendFunds = ({ route }: Props) => {
             />
           </BottomSheet>
         </KeyboardDismissingView>
-      </KeyboardAvoidingView>
-
-      <AmountSelectionKeyboardExtend
-        isTextInput={isTextInputActive}
-        onPercentItemPress={onPercentItemPress}
-      />
-    </SafeAreaView>
+        <AmountSelectionKeyboardExtend
+          isTextInput={isTextInputActive}
+          onPercentItemPress={onPercentItemPress}
+        />
+      </SafeAreaView>
+    </>
   );
 };

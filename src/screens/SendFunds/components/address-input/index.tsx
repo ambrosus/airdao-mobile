@@ -1,11 +1,20 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+  InteractionManager,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  Keyboard
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Input, InputRef, Text } from '@components/base';
 import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { StringUtils } from '@utils/string';
+
+import { isAndroid } from '@utils/isPlatform';
 
 interface AddressInputProps {
   address: string;
@@ -37,25 +46,52 @@ export const AddressInput = ({
     return StringUtils.formatAddress(address, leftSlice, rightSlice);
   }, [address, isInputFocused]);
 
+  const onInputPress = useCallback(() => {
+    Keyboard.dismiss();
+
+    InteractionManager.runAfterInteractions(() => {
+      setTimeout(() => inputRef.current?.focus(), 200);
+    });
+  }, []);
+
+  const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      width: '100%',
+      height: 60,
+      position: 'absolute',
+      top: 15,
+      zIndex: 100
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
-      >
-        {t('send.funds.recipient')}
-      </Text>
-      <Input
-        ref={inputRef}
-        numberOfLines={1}
-        onFocus={toggleFocused}
-        onBlur={toggleFocused}
-        value={maskedValue}
-        style={{ fontSize: 16, letterSpacing: -0.16 }}
-        onChangeValue={onAddressChange}
-        placeholder="0x..."
-      />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
+        >
+          {t('send.funds.recipient')}
+        </Text>
+        <Input
+          ref={inputRef}
+          numberOfLines={1}
+          onFocus={toggleFocused}
+          onBlur={toggleFocused}
+          value={maskedValue}
+          style={{ fontSize: 16, letterSpacing: -0.16 }}
+          onChangeValue={onAddressChange}
+          placeholder="0x..."
+        />
+      </View>
+      {!isInputFocused && isAndroid && (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={onInputPress}
+          style={invisibleTouchableHandlerStyles}
+        />
+      )}
+    </>
   );
 };

@@ -7,6 +7,8 @@ import Animated, {
   useAnimatedStyle
 } from 'react-native-reanimated';
 import { PercentageItem } from '../../base';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isIos } from '@utils/isPlatform';
 
 const PERCENTS = [25, 50, 75, 100];
 
@@ -19,6 +21,7 @@ export const AmountSelectionKeyboardExtend = ({
   isTextInput,
   onPercentItemPress
 }: AmountSelectionKeyboardExtendProps) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
   const keyboard = useAnimatedKeyboard();
   const translateStyle = useAnimatedStyle(() => {
     if (!isTextInput)
@@ -27,15 +30,21 @@ export const AmountSelectionKeyboardExtend = ({
         opacity: 0
       };
 
+    const opacity = keyboard.height.value > 64 ? 1 : 0;
+    const springify = { damping: 80 };
+    const bottom = isIos
+      ? keyboard.height.value
+      : keyboard.height.value + bottomInset;
+
     return {
-      transform: [{ translateY: -keyboard.height.value }],
-      opacity: keyboard.height.value > 64 ? 1 : 0,
-      springify: { damping: 80 }
+      springify,
+      opacity,
+      bottom
     };
   });
 
   return (
-    <Animated.View style={translateStyle}>
+    <Animated.View style={[styles.wrapper, translateStyle]}>
       <View style={styles.container}>
         <Row
           alignItems="center"
