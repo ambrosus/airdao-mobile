@@ -10,7 +10,7 @@ export const EIP155_CHAINS: Record<string, Chain> = {
     blockExplorer: 'https://explorer-v2-api.ambrosus.io/v2'
   },
   '22040': {
-    id: 16718,
+    id: 22040,
     network: 'homestead',
     name: 'AirDAO',
     nativeCurrency: { name: 'AirDAO', symbol: 'AMB', decimals: 18 },
