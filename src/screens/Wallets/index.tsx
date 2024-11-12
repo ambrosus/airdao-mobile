@@ -176,6 +176,7 @@ export const HomeScreen = () => {
       {selectedAccountWithBalance && (
         <Animated.View style={[animatedListStyles]}>
           <WalletTransactionsAndAssets
+            activeTabIndex={activeTabIndex}
             onChangeActiveTabIndex={onChangeActiveTabIndex}
             onTransactionsScrollEvent={onTransactionsScrollEvent}
             account={selectedAccountWithBalance}
