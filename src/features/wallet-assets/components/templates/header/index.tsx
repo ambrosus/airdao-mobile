@@ -58,7 +58,6 @@ export const HomeHeader = React.memo(
       useWalletConnectContextSelector();
 
     const scannerBottomSheetRef = useRef<BottomSheetRef>(null);
-    const scanned = useRef(false);
 
     const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -123,8 +122,7 @@ export const HomeHeader = React.memo(
     const onHandleWalletConnectAuthorization = useCallback(
       async (uri: string): Promise<void> => {
         if (!walletKit) {
-          closeScanner();
-          return;
+          return closeScanner();
         }
 
         try {
@@ -152,8 +150,7 @@ export const HomeHeader = React.memo(
 
     const { onScannedAddress } = useBarcode(
       scannerBottomSheetRef,
-      onHandleWalletConnectAuthorization,
-      scanned
+      onHandleWalletConnectAuthorization
     );
 
     const setLastNotificationTime = useCallback(() => {
