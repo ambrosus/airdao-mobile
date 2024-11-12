@@ -5,6 +5,7 @@ import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
+import { NumberUtils } from '@utils/number';
 
 interface MarketListItemProps {
   market: MarketType;
@@ -20,7 +21,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
   const { token } = useExtractToken(market.payoutToken);
 
   const discountItemColor = useMemo(() => {
-    return market.discount > 0 ? COLORS.success600 : COLORS.error600;
+    return market.discount > 0 ? COLORS.success500 : COLORS.error400;
   }, [market]);
 
   return (
@@ -40,7 +41,11 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
           label={`${market.discount.toFixed(2)}%`}
           color={discountItemColor}
         />
-        <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
+        <StyledItemText
+          label={`$${NumberUtils.numberToTransformedLocale(
+            market.askingPrice.toFixed(3)
+          )}`}
+        />
       </Row>
     </Row>
   );
@@ -48,7 +53,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
 
 const StyledItemText = ({
   label = '',
-  color = COLORS.neutral600
+  color = COLORS.neutral800
 }: StyledItemTextProps) => {
   return (
     <Text fontSize={16} fontFamily="Inter_500Medium" color={color}>
