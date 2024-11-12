@@ -17,7 +17,8 @@ export const ListCellHeadings = () => {
 
   const listHeadingsStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
-      paddingHorizontal: scale(16),
+      paddingLeft: scale(16),
+      paddingRight: scale(31),
       paddingBottom: verticalScale(16)
     };
   }, []);

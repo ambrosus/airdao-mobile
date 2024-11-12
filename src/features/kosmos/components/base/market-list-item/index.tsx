@@ -31,12 +31,12 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
       justifyContent="space-between"
     >
       <Row width="40%" alignItems="center">
-        <TokenLogo scale={0.65} token={token?.symbol ?? ''} />
+        <TokenLogo scale={0.75} token={token?.symbol ?? ''} />
         <Spacer horizontal value={10} />
         <StyledItemText label={token?.symbol} />
       </Row>
 
-      <Row width="58.5%" alignItems="center" justifyContent="space-between">
+      <Row width="58.75%" alignItems="center" justifyContent="space-between">
         <StyledItemText
           label={`${market.discount.toFixed(2)}%`}
           color={discountItemColor}
