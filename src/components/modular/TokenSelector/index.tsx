@@ -37,7 +37,7 @@ export const TokenSelector = ({
   }, [selectable, onShowBottomSheetTokensListHandle]);
 
   return (
-    <TouchableOpacity onPress={onToggleSelectTokenModal}>
+    <TouchableOpacity disabled={!selectable} onPress={onToggleSelectTokenModal}>
       <View style={styles.currencySelector}>
         <Row alignItems="center">
           {token && (
