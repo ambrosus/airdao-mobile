@@ -6,8 +6,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16.5)
   },
   inputWithHeadingContainer: {
-    marginTop: 16,
-    rowGap: 8
+    marginTop: 16
   },
   balance: {
     marginTop: verticalScale(8)

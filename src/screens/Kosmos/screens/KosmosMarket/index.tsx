@@ -48,12 +48,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     route.params.market.id
   );
 
-  const {
-    calculateMaximumAvailableAmount,
-    isFetching: isFetchingBalance,
-    tokenBalance,
-    refetchTokenBalance
-  } = useBalance(market);
+  const { calculateMaximumAvailableAmount, refetchTokenBalance } =
+    useBalance(market);
 
   const { refetch: refetchTransactions, isLoading: isLoadingTransaction } =
     useMarketTransactions(market?.id);
@@ -171,8 +167,6 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             />
             <ExactMarketTokenTabs
               calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-              tokenBalance={tokenBalance}
-              isFetchingBalance={isFetchingBalance}
               market={market}
               scrollToInput={scrollToInput}
             />

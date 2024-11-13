@@ -10,16 +10,12 @@ interface ExactMarketTokenTabsProps {
   market: MarketType | undefined;
   scrollToInput: () => any;
   calculateMaximumAvailableAmount: (balance: string) => void;
-  tokenBalance: string;
-  isFetchingBalance: boolean;
 }
 
 export const ExactMarketTokenTabs = ({
   market,
   scrollToInput,
-  calculateMaximumAvailableAmount,
-  tokenBalance,
-  isFetchingBalance
+  calculateMaximumAvailableAmount
 }: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
 
@@ -34,8 +30,6 @@ export const ExactMarketTokenTabs = ({
           view: (
             <BuyBondTab
               calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-              tokenBalance={tokenBalance}
-              isFetchingBalance={isFetchingBalance}
               market={market}
               scrollToInput={scrollToInput}
             />

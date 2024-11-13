@@ -7,16 +7,12 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { Row, Spacer, Text } from '@components/base';
+import { Row, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
-import {
-  BalanceWithButton,
-  ReviewBondPurchaseButton
-} from '@features/kosmos/components/modular';
+import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
 import { discountColor } from '@features/kosmos/utils';
-import { BuyBondInputWithError } from '@features/kosmos/components/composite';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import Animated, {
@@ -25,26 +21,28 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { isAndroid } from '@utils/isPlatform';
+import { InputWithTokenSelect } from '@components/templates';
+import { Token } from '@models';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;
   scrollToInput: () => any;
   calculateMaximumAvailableAmount: (balance: string) => void;
-  tokenBalance: string;
-  isFetchingBalance: boolean;
 }
 
-const INITIAL_PADDING_VALUE = 234;
+const INITIAL_PADDING_VALUE = 74;
 
 export const BuyBondTab = ({
   market,
   scrollToInput,
-  calculateMaximumAvailableAmount,
-  tokenBalance,
-  isFetchingBalance
+  calculateMaximumAvailableAmount
 }: BuyBondTabProps) => {
   const { t } = useTranslation();
   const [isActiveInput, setIsActiveInput] = useState(false);
+
+  const { amountToBuy, onChangeAmountToBuy } =
+    useKosmosMarketsContextSelector();
 
   const { quoteToken, payoutToken, maxBondable, discount } =
     useMarketDetails(market);
@@ -103,25 +101,36 @@ export const BuyBondTab = ({
     setIsActiveInput(false);
   };
 
+  const onPressMaxAmount = useCallback(
+    (balance?: string) => {
+      if (!balance || +balance <= 0) return;
+
+      return calculateMaximumAvailableAmount(balance);
+    },
+    [calculateMaximumAvailableAmount]
+  );
+
   return (
     <>
       <View style={styles.innerContainer}>
         <View style={styles.inputWithHeadingContainer}>
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
-          >
-            {t('common.transaction.amount')}
-          </Text>
-
           <View style={{ zIndex: 0 }}>
-            <BuyBondInputWithError
-              inputRef={inputRef}
+            <InputWithTokenSelect
+              label="Set amount"
+              title="Set amount"
+              value={amountToBuy}
+              onChangeText={onChangeAmountToBuy}
               onFocus={onFocusHandle}
               onBlur={onBlurHandle}
-              quoteToken={quoteToken}
-              market={market}
+              dispatch={false}
+              onPressMaxAmount={(value) => onPressMaxAmount(value)}
+              token={
+                {
+                  symbol: quoteToken?.symbol,
+                  address: quoteToken?.contractAddress
+                } as unknown as Token
+              }
+              selectable={false}
             />
           </View>
           {!isActiveInput && isAndroid && (
@@ -131,16 +140,6 @@ export const BuyBondTab = ({
               style={styles.inputButton}
             />
           )}
-        </View>
-
-        <View style={styles.balance}>
-          <BalanceWithButton
-            isFetchingBalance={isFetchingBalance}
-            tokenBalance={tokenBalance}
-            calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-            quoteToken={quoteToken}
-            market={market}
-          />
         </View>
 
         <View style={styles.details}>
@@ -183,7 +182,7 @@ export const BuyBondTab = ({
           market={market}
           onPreviewPurchase={onPreviewPurchase}
         />
-        <Spacer value={50} />
+        {/* <Spacer value={50} /> */}
       </Animated.View>
       <BottomSheetPreviewPurchase ref={bottomSheetRef} market={market} />
     </>
