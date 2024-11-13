@@ -21,7 +21,7 @@ import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import {
   _timestampToDate,
   formatDecimals,
-  timestampToFormatedDate
+  timestampToFormattedDate
 } from '@features/kosmos/utils';
 import { BuyBondButton } from '../../modular';
 import { StakePending } from '@screens/StakingPool/components';
@@ -129,9 +129,9 @@ export const BottomSheetPreviewPurchase = forwardRef<
               <Row alignItems="center" justifyContent="space-between">
                 <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
                 <StyledTextItem isValue>
-                  {timestampToFormatedDate(market?.start ?? 0)}
+                  {timestampToFormattedDate(market?.start ?? 0)}
                   {' - '}
-                  {timestampToFormatedDate(market?.conclusion ?? 0)}
+                  {timestampToFormattedDate(market?.conclusion ?? 0)}
                 </StyledTextItem>
               </Row>
             )}
