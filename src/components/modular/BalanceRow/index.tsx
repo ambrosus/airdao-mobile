@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { t } from 'i18next';
 import { Token } from '@models';
@@ -18,6 +18,7 @@ interface BalanceRowProps {
   readonly dispatch: boolean;
   readonly onChangeText?: (text: string) => void;
   readonly onPressMaxAmount: (amount: string) => void;
+  isRequiredRefetchBalance?: boolean;
 }
 
 export const BalanceRow = ({
@@ -25,7 +26,8 @@ export const BalanceRow = ({
   value,
   onPressMaxAmount,
   dispatch,
-  onChangeText
+  onChangeText,
+  isRequiredRefetchBalance
 }: BalanceRowProps): JSX.Element => {
   const { wallet } = useWallet();
   const _AMBEntity = useAMBEntity(wallet?.address ?? '');
@@ -39,7 +41,11 @@ export const BalanceRow = ({
     return isAMBEntity ? ethers.constants.AddressZero : token.address;
   }, [isAMBEntity, token.address]);
 
-  const { balance: bnBalance, isFetching } = useERC20Balance(address);
+  const { balance: bnBalance, isFetching, refetch } = useERC20Balance(address);
+
+  useEffect(() => {
+    if (isRequiredRefetchBalance) refetch();
+  }, [isRequiredRefetchBalance, refetch]);
 
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalance) {

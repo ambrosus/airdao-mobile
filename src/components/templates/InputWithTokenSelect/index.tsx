@@ -44,6 +44,7 @@ interface InputWithTokenSelectProps {
   onBlur?: () => void;
   resetKeyboardState?: boolean;
   selectable?: boolean;
+  isRequiredRefetchBalance?: boolean;
 }
 
 export const InputWithTokenSelect = forwardRef<
@@ -64,7 +65,8 @@ export const InputWithTokenSelect = forwardRef<
       onFocus,
       onBlur,
       resetKeyboardState = false,
-      selectable = true
+      selectable = true,
+      isRequiredRefetchBalance = false
     },
     ref
   ) => {
@@ -195,6 +197,7 @@ export const InputWithTokenSelect = forwardRef<
           dispatch={dispatch}
           onPressMaxAmount={onPressMaxAmount}
           onChangeText={onChangeText}
+          isRequiredRefetchBalance={isRequiredRefetchBalance}
         />
 
         <BottomSheetTokensList

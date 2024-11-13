@@ -3,8 +3,10 @@ import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   innerContainer: {
+    height: 'auto',
     marginHorizontal: scale(16.5)
   },
+  zIndex: { zIndex: 0 },
   inputWithHeadingContainer: {
     marginTop: 16
   },

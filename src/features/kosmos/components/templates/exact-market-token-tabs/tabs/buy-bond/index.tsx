@@ -2,12 +2,13 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   InteractionManager,
   Keyboard,
+  LayoutChangeEvent,
   TouchableOpacity,
   View
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { Row, Text } from '@components/base';
+import { InputRef, Row, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
@@ -24,11 +25,15 @@ import { isAndroid } from '@utils/isPlatform';
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { NumberUtils } from '@utils/number';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;
   scrollToInput: () => any;
   calculateMaximumAvailableAmount: (balance: string) => void;
+  userPerformedRefresh: boolean;
+  onScrollToTop: () => void;
+  onHandleBuyBondsLayoutChange: (event: LayoutChangeEvent) => void;
 }
 
 const INITIAL_PADDING_VALUE = 74;
@@ -36,10 +41,15 @@ const INITIAL_PADDING_VALUE = 74;
 export const BuyBondTab = ({
   market,
   scrollToInput,
-  calculateMaximumAvailableAmount
+  calculateMaximumAvailableAmount,
+  userPerformedRefresh,
+  onScrollToTop,
+  onHandleBuyBondsLayoutChange
 }: BuyBondTabProps) => {
   const { t } = useTranslation();
   const [isActiveInput, setIsActiveInput] = useState(false);
+
+  const inputRef = useRef<InputRef>(null);
 
   const { amountToBuy, onChangeAmountToBuy } =
     useKosmosMarketsContextSelector();
@@ -58,48 +68,56 @@ export const BuyBondTab = ({
 
   const animatedPaddingTop = useSharedValue(INITIAL_PADDING_VALUE);
   const animatedPaddingBottom = useSharedValue(0);
+
   const paddingTop = useAnimatedStyle(() => {
     return {
       paddingTop: withTiming(animatedPaddingTop.value)
     };
   });
+
   const paddingBottom = useAnimatedStyle(() => {
     return {
       paddingBottom: withTiming(animatedPaddingBottom.value)
     };
   });
 
-  const setAnimatedMargin = (padding: {
-    paddingTop: number;
-    paddingBottom: number;
-  }) => {
-    animatedPaddingTop.value = withTiming(padding.paddingTop, {
-      duration: 0
-    });
-    animatedPaddingBottom.value = withTiming(padding.paddingBottom, {
-      duration: 0
-    });
-  };
-  const inputRef = useRef(null);
+  const setAnimatedMargin = useCallback(
+    (padding: { paddingTop: number; paddingBottom: number }) => {
+      const { paddingTop, paddingBottom } = padding;
+      animatedPaddingTop.value = withTiming(paddingTop, {
+        duration: 0
+      });
+      animatedPaddingBottom.value = withTiming(paddingBottom, {
+        duration: 0
+      });
+    },
+    [animatedPaddingBottom, animatedPaddingTop]
+  );
 
   const onInputPress = useCallback(() => {
     if (isAndroid) {
       setIsActiveInput(true);
       InteractionManager.runAfterInteractions(() => {
         scrollToInput();
-        // @ts-ignore
         setTimeout(() => inputRef?.current?.focus(), 200);
       });
     }
   }, [scrollToInput]);
 
-  const onFocusHandle = () => {
-    setAnimatedMargin({ paddingTop: 0, paddingBottom: INITIAL_PADDING_VALUE });
-  };
-  const onBlurHandle = () => {
+  const onFocusHandle = useCallback(
+    () =>
+      setAnimatedMargin({
+        paddingTop: 24,
+        paddingBottom: INITIAL_PADDING_VALUE
+      }),
+    [setAnimatedMargin]
+  );
+
+  const onBlurHandle = useCallback(() => {
+    onScrollToTop();
     setAnimatedMargin({ paddingTop: INITIAL_PADDING_VALUE, paddingBottom: 0 });
     setIsActiveInput(false);
-  };
+  }, [onScrollToTop, setAnimatedMargin]);
 
   const onPressMaxAmount = useCallback(
     (balance?: string) => {
@@ -112,13 +130,17 @@ export const BuyBondTab = ({
 
   return (
     <>
-      <View style={styles.innerContainer}>
+      <View
+        style={styles.innerContainer}
+        onLayout={onHandleBuyBondsLayoutChange}
+      >
         <View style={styles.inputWithHeadingContainer}>
-          <View style={{ zIndex: 0 }}>
+          <View style={styles.zIndex}>
             <InputWithTokenSelect
               label="Set amount"
               title="Set amount"
               value={amountToBuy}
+              isRequiredRefetchBalance={userPerformedRefresh}
               onChangeText={onChangeAmountToBuy}
               onFocus={onFocusHandle}
               onBlur={onBlurHandle}
@@ -156,7 +178,8 @@ export const BuyBondTab = ({
               fontFamily="Inter_500Medium"
               color={COLORS.neutral90}
             >
-              {maxBondable} {payoutToken?.symbol}
+              {NumberUtils.numberToTransformedLocale(maxBondable)}{' '}
+              {payoutToken?.symbol}
             </Text>
           </Row>
           <Row alignItems="center" justifyContent="space-between">
@@ -182,7 +205,6 @@ export const BuyBondTab = ({
           market={market}
           onPreviewPurchase={onPreviewPurchase}
         />
-        {/* <Spacer value={50} /> */}
       </Animated.View>
       <BottomSheetPreviewPurchase ref={bottomSheetRef} market={market} />
     </>
