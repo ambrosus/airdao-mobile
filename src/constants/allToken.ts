@@ -313,6 +313,18 @@ export const ALL_TOKENS_DATA = {
       name: 'Staked AMB',
       symbol: 'stAMB',
       decimals: 18
+    },
+    {
+      address: '0xd09270E917024E75086e27854740871F1C8E0E10',
+      name: 'Harbor',
+      symbol: 'HBR',
+      decimals: 18
+    },
+    {
+      address: '0x6ee05D1Fe386555D7d4804D4B08141C60bB5eabf',
+      name: 'Astra LP',
+      symbol: 'AST-LP',
+      decimals: 18
     }
   ],
   TESTNET: [

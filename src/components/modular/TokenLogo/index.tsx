@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import {
+  ASTIcon,
   AirBondIcon,
   AirDOGEIcon,
   AirdaoBlueIcon,
@@ -8,6 +9,7 @@ import {
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
+  HBRIcon,
   HeraPoolIcon,
   LangFundIcon,
   PlutusIcon,
@@ -99,6 +101,10 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'airdao nft':
     case 'nft':
       return <NFTIcon />;
+    case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
+      return <ASTIcon scale={scale} />;
+    case CryptoCurrencyCode.HBR.toLowerCase():
+      return <HBRIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }
