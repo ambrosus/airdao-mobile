@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   InteractionManager,
   LayoutChangeEvent,
@@ -30,6 +36,7 @@ import {
 import { isIOS } from 'react-native-popover-view/dist/Constants';
 import { isAndroid } from '@utils/isPlatform';
 import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
+import { DEVICE_HEIGHT } from '@constants/variables';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -39,24 +46,24 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const { onToggleMarketTooltip, isMarketChartLoading, reset } =
     useKosmosMarketsContextSelector();
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+
   const { token } = useExtractToken(route.params.market.payoutToken);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
   const [isRefreshingData, setIsRefreshingData] = useState(false);
+  const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
+  const [buyBondsLayoutMeasureHeight, setBuyBondsLayoutMeasureHeight] =
+    useState(0);
 
-  const { market, refetch, isLoading } = useMarketByIdQuery(
+  const { market, refetch, isRefetching, isLoading } = useMarketByIdQuery(
     route.params.market.id
   );
 
-  const {
-    calculateMaximumAvailableAmount,
-    isFetching: isFetchingBalance,
-    tokenBalance,
-    refetchTokenBalance
-  } = useBalance(market);
+  const { calculateMaximumAvailableAmount } = useBalance(market);
 
   const { refetch: refetchTransactions, isLoading: isLoadingTransaction } =
     useMarketTransactions(market?.id);
+
+  const scrollRef = useRef<KeyboardAwareScrollView>(null);
 
   const renderHeaderMiddleContent = useMemo(() => {
     const tokenSymbol = token?.symbol ?? '';
@@ -87,53 +94,68 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
-  const refreshData = useCallback(async () => {
+  const onRefetchMarketDetails = useCallback(async () => {
+    setUserPerformedRefresh(true);
     try {
       if (isAndroid) {
         await refetchTransactions();
       }
-      refetchTokenBalance();
+
       await refetch();
-    } catch (e) {
-      // ignore
+    } catch (error) {
+      throw error;
     }
-  }, [refetch, refetchTokenBalance, refetchTransactions]);
+  }, [refetch, refetchTransactions]);
 
-  useUpdateScreenData(refreshData, 600);
+  useEffect(() => {
+    if (!isRefetching) setUserPerformedRefresh(false);
+  }, [isRefetching]);
 
-  const refetchMarketData = useCallback(async () => {
+  useUpdateScreenData(onRefetchMarketDetails, 600);
+
+  const onRefetchMarketHandle = useCallback(async () => {
     const refreshKosmosTransactions = async () => {
       setIsRefreshingData(true);
       try {
-        await refreshData();
+        await onRefetchMarketDetails();
       } finally {
         setIsRefreshingData(false);
       }
     };
     await refreshKosmosTransactions();
-  }, [refreshData]);
+  }, [onRefetchMarketDetails]);
+
+  const onHandleBuyBondsLayoutChange = useCallback(
+    (event: LayoutChangeEvent) => {
+      setBuyBondsLayoutMeasureHeight(
+        DEVICE_HEIGHT / 2 - event.nativeEvent.layout.height
+      );
+    },
+    []
+  );
 
   const renderRefetchController = useMemo(() => {
     const refreshing =
       isMarketChartLoading || (isAndroid && isLoadingTransaction);
     return (
       <RefreshControl
-        onRefresh={refetchMarketData}
+        onRefresh={onRefetchMarketHandle}
         refreshing={refreshing}
         removeClippedSubviews
       />
     );
-  }, [isMarketChartLoading, isLoadingTransaction, refetchMarketData]);
+  }, [isMarketChartLoading, isLoadingTransaction, onRefetchMarketHandle]);
 
-  const onScrollToMarket = useCallback(
-    () => scrollViewRef.current?.scrollToPosition(0, marketLayoutYAxis),
-    [marketLayoutYAxis]
-  );
+  const onScrollToMarket = useCallback(() => {
+    if (!isAndroid) {
+      scrollRef.current?.scrollToPosition(0, buyBondsLayoutMeasureHeight, true);
+    }
+  }, [buyBondsLayoutMeasureHeight]);
 
   const combinedLoading = useMemo(() => {
     return isMarketChartLoading || isLoading;
   }, [isMarketChartLoading, isLoading]);
-  const scrollRef = useRef(null);
+
   const scrollToInput = () =>
     // @ts-ignore
     scrollRef?.current?.scrollToEnd({ animated: true });
@@ -157,7 +179,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled={isIOS}
-            extraHeight={isAndroid ? 0 : 300}
+            extraHeight={isAndroid ? 0 : 330}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
@@ -170,11 +192,12 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
               onScrollToMarket={onScrollToMarket}
             />
             <ExactMarketTokenTabs
+              onHandleBuyBondsLayoutChange={onHandleBuyBondsLayoutChange}
+              userPerformedRefresh={userPerformedRefresh}
               calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-              tokenBalance={tokenBalance}
-              isFetchingBalance={isFetchingBalance}
               market={market}
               scrollToInput={scrollToInput}
+              onScrollToTop={onScrollToMarket}
             />
           </KeyboardAwareScrollView>
         )}

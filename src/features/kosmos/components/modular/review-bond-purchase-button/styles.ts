@@ -5,8 +5,8 @@ import { scale } from '@utils/scaling';
 export const styles = StyleSheet.create({
   footer: {
     paddingVertical: 16,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.neutral100
+    borderTopColor: COLORS.neutral100,
+    borderRadius: 24
   },
   button: {
     paddingHorizontal: scale(16)

@@ -7,7 +7,11 @@ import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { MarketType } from '@features/kosmos/types';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
-import { View } from 'react-native';
+import Animated, {
+  useAnimatedKeyboard,
+  useAnimatedStyle
+} from 'react-native-reanimated';
+import { buttonWithShadowStyle } from '@constants/shadow';
 
 interface ReviewBondPurchaseButtonProps {
   market: MarketType | undefined;
@@ -21,6 +25,7 @@ export const ReviewBondPurchaseButton = ({
   const { t } = useTranslation();
   const { error } = useTransactionErrorHandler(market);
   const { amountToBuy } = useKosmosMarketsContextSelector();
+  const { height } = useAnimatedKeyboard();
 
   const onPreviewPurchasePress = useCallback(
     async () => onPreviewPurchase(),
@@ -37,26 +42,33 @@ export const ReviewBondPurchaseButton = ({
       !market?.isLive
         ? t('kosmos.button.market.closed')
         : disabled
-        ? t('kosmos.button.enter.amount')
-        : t('button.preview'),
+        ? t('button.enter.amount')
+        : t('button.review'),
     [disabled, market?.isLive, t]
   );
 
   const textColor = useMemo(() => {
-    return disabled ? COLORS.alphaBlack30 : COLORS.neutral0;
+    return disabled ? COLORS.brand75 : COLORS.neutral0;
   }, [disabled]);
 
+  const animatedDividerStyle = useAnimatedStyle(() => {
+    const { value } = height;
+    return {
+      borderTopWidth: value > 24 ? 0 : 1
+    };
+  });
+
   return (
-    <View style={styles.footer}>
+    <Animated.View style={[styles.footer, animatedDividerStyle]}>
       <PrimaryButton
         disabled={disabled}
-        style={styles.button}
+        style={buttonWithShadowStyle(disabled, styles.button)}
         onPress={onPreviewPurchasePress}
       >
         <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>
           {label}
         </Text>
       </PrimaryButton>
-    </View>
+    </Animated.View>
   );
 };

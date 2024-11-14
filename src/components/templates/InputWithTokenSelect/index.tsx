@@ -30,7 +30,7 @@ import { useForwardedRef } from '@hooks';
 import { isAndroid } from '@utils/isPlatform';
 
 interface InputWithTokenSelectProps {
-  readonly title: string;
+  readonly title?: string;
   readonly value: string;
   readonly label: string;
   readonly token: Token;
@@ -43,6 +43,8 @@ interface InputWithTokenSelectProps {
   onFocus?: () => void;
   onBlur?: () => void;
   resetKeyboardState?: boolean;
+  selectable?: boolean;
+  isRequiredRefetchBalance?: boolean;
 }
 
 export const InputWithTokenSelect = forwardRef<
@@ -62,7 +64,9 @@ export const InputWithTokenSelect = forwardRef<
       bottomSheetContainerStyle,
       onFocus,
       onBlur,
-      resetKeyboardState = false
+      resetKeyboardState = false,
+      selectable = true,
+      isRequiredRefetchBalance = false
     },
     ref
   ) => {
@@ -159,6 +163,7 @@ export const InputWithTokenSelect = forwardRef<
         </Text>
         <View style={styles.upperRow}>
           <TokenSelector
+            selectable={selectable}
             token={token}
             onShowBottomSheetTokensListHandle={
               onShowBottomSheetTokensListHandle
@@ -192,10 +197,11 @@ export const InputWithTokenSelect = forwardRef<
           dispatch={dispatch}
           onPressMaxAmount={onPressMaxAmount}
           onChangeText={onChangeText}
+          isRequiredRefetchBalance={isRequiredRefetchBalance}
         />
 
         <BottomSheetTokensList
-          title={title}
+          title={title ?? ''}
           ref={bottomSheetTokensListRef}
           containerStyle={bottomSheetContainerStyle}
         >

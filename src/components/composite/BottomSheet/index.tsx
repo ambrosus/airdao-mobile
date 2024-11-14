@@ -118,6 +118,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
                 {title}
               </Text>
               <Pressable
+                disabled={!closeOnBackPress}
                 onPress={dismiss}
                 style={({ pressed }) => [
                   {
@@ -143,6 +144,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         testID,
         swiperIconVisible,
         title,
+        closeOnBackPress,
         dismiss,
         children
       ]
