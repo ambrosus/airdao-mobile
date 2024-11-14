@@ -7,12 +7,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   container: {
-    marginBottom: verticalScale(50),
-    paddingHorizontal: scale(24)
+    paddingHorizontal: scale(16)
   },
   innerContainer: {
-    rowGap: 16,
-    marginTop: 16
+    rowGap: verticalScale(14),
+    marginTop: verticalScale(18)
   },
   bondsRowGap: {
     columnGap: 4

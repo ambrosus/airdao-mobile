@@ -24,7 +24,7 @@ import {
   timestampToFormattedDate
 } from '@features/kosmos/utils';
 import { BuyBondButton } from '../../modular';
-import { StakePending } from '@screens/StakingPool/components';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomSheetPreviewPurchaseProps {
   market: MarketType | undefined;
@@ -35,6 +35,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
   BottomSheetPreviewPurchaseProps
 >(({ market }, ref) => {
   const { t } = useTranslation();
+  const { bottom: bottomSafeInset } = useSafeAreaInsets();
   const bottomSheetRef = useForwardedRef(ref);
   const { amountToBuy } = useKosmosMarketsContextSelector();
   const { payoutToken, quoteToken, willGetSubFee, protocolFee } =
@@ -69,87 +70,74 @@ export const BottomSheetPreviewPurchase = forwardRef<
 
   return (
     <BottomSheet
-      swiperIconVisible={!isTransactionProcessing}
+      title={t('button.review')}
       closeOnBackPress={!isTransactionProcessing}
       swipingEnabled={!isTransactionProcessing}
       ref={bottomSheetRef}
     >
-      <View style={styles.container}>
-        {isTransactionProcessing ? (
-          <StakePending />
-        ) : (
-          <View style={styles.innerContainer}>
-            <Text
-              fontSize={20}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral800}
-              style={styles.heading}
-            >
-              Preview
-            </Text>
-
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>{t('kosmos.buying')}</StyledTextItem>
-              <Row style={styles.bondsRowGap} alignItems="center">
-                <TokenLogo scale={0.5} token={quoteToken?.symbol ?? ''} />
-                <StyledTextItem isValue>
-                  {amountToBuy} {quoteToken?.symbol}
-                </StyledTextItem>
-              </Row>
-            </Row>
-            <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>{t('kosmos.getting')}</StyledTextItem>
+      <View style={[styles.container, { paddingBottom: bottomSafeInset }]}>
+        <View style={styles.innerContainer}>
+          <Row alignItems="center" justifyContent="space-between">
+            <StyledTextItem>{t('kosmos.buying')}</StyledTextItem>
+            <Row style={styles.bondsRowGap} alignItems="center">
+              <TokenLogo scale={0.75} token={quoteToken?.symbol ?? ''} />
               <StyledTextItem isValue>
-                {amountToBuy
-                  ? formatDecimals(
-                      formattedWillGetSubFee,
-                      payoutToken?.contractAddress,
-                      tokens
-                    )
-                  : '-'}{' '}
-                {payoutToken?.symbol.toUpperCase()}
+                {amountToBuy} {quoteToken?.symbol}
               </StyledTextItem>
             </Row>
+          </Row>
+          <Row alignItems="center" justifyContent="space-between">
+            <StyledTextItem>{t('kosmos.getting')}</StyledTextItem>
+            <StyledTextItem isValue>
+              {amountToBuy
+                ? formatDecimals(
+                    formattedWillGetSubFee,
+                    payoutToken?.contractAddress,
+                    tokens
+                  )
+                : '-'}{' '}
+              {payoutToken?.symbol.toUpperCase()}
+            </StyledTextItem>
+          </Row>
+          <Row alignItems="center" justifyContent="space-between">
+            <StyledTextItem>
+              {t('kosmos.table.headings.discount')}
+            </StyledTextItem>
+            <StyledTextItem isValue>
+              {market?.discount.toFixed(2)}%
+            </StyledTextItem>
+          </Row>
+          {market?.vestingType === 'Fixed-expiry' ? (
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>
-                {t('kosmos.table.headings.discount')}
-              </StyledTextItem>
+              <StyledTextItem>Vesting expired date</StyledTextItem>
               <StyledTextItem isValue>
-                {market?.discount.toFixed(2)}%
+                {_timestampToDate(+market.vesting)}
               </StyledTextItem>
             </Row>
-            {market?.vestingType === 'Fixed-expiry' ? (
-              <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>Vesting expired date</StyledTextItem>
-                <StyledTextItem isValue>
-                  {_timestampToDate(+market.vesting)}
-                </StyledTextItem>
-              </Row>
-            ) : (
-              <Row alignItems="center" justifyContent="space-between">
-                <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
-                <StyledTextItem isValue>
-                  {timestampToFormattedDate(market?.start ?? 0)}
-                  {' - '}
-                  {timestampToFormattedDate(market?.conclusion ?? 0)}
-                </StyledTextItem>
-              </Row>
-            )}
+          ) : (
             <Row alignItems="center" justifyContent="space-between">
-              <StyledTextItem>{t('kosmos.protocol.fee')}</StyledTextItem>
+              <StyledTextItem>{t('kosmos.lock.period')}</StyledTextItem>
               <StyledTextItem isValue>
-                {calculatedProtocolFee.toFixed()}{' '}
-                {upperCase(quoteToken?.symbol)}
+                {timestampToFormattedDate(market?.start ?? 0)}
+                {' - '}
+                {timestampToFormattedDate(market?.conclusion ?? 0)}
               </StyledTextItem>
             </Row>
-            <BuyBondButton
-              willGetAfterUnlock={willGetAfterUnlock}
-              onDismissBottomSheet={onDismissBottomSheet}
-              setIsTransactionProcessing={setIsTransactionProcessing}
-              market={market as MarketType}
-            />
-          </View>
-        )}
+          )}
+          <Row alignItems="center" justifyContent="space-between">
+            <StyledTextItem>{t('kosmos.protocol.fee')}</StyledTextItem>
+            <StyledTextItem isValue>
+              {calculatedProtocolFee.toFixed()} {upperCase(quoteToken?.symbol)}
+            </StyledTextItem>
+          </Row>
+          <BuyBondButton
+            willGetAfterUnlock={willGetAfterUnlock}
+            onDismissBottomSheet={onDismissBottomSheet}
+            isTransactionProcessing={isTransactionProcessing}
+            setIsTransactionProcessing={setIsTransactionProcessing}
+            market={market as MarketType}
+          />
+        </View>
       </View>
     </BottomSheet>
   );
@@ -162,10 +150,10 @@ const StyledTextItem = ({
   children: ReactNode;
   isValue?: boolean;
 }) => {
-  const color = isValue ? COLORS.neutral800 : COLORS.neutral400;
+  const color = isValue ? COLORS.neutral800 : COLORS.neutral500;
 
   return (
-    <Text fontSize={16} fontFamily="Inter_500Medium" color={color}>
+    <Text fontSize={15} fontFamily="Inter_500Medium" color={color}>
       {children}
     </Text>
   );

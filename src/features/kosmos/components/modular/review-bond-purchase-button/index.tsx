@@ -11,6 +11,7 @@ import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle
 } from 'react-native-reanimated';
+import { buttonWithShadowStyle } from '@constants/shadow';
 
 interface ReviewBondPurchaseButtonProps {
   market: MarketType | undefined;
@@ -60,9 +61,8 @@ export const ReviewBondPurchaseButton = ({
   return (
     <Animated.View style={[styles.footer, animatedDividerStyle]}>
       <PrimaryButton
-        shadowEnable
         disabled={disabled}
-        style={styles.button}
+        style={buttonWithShadowStyle(disabled, styles.button)}
         onPress={onPreviewPurchasePress}
       >
         <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>

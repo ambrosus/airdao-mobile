@@ -1,12 +1,9 @@
 import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
-import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { useWallet } from '@hooks';
-import { Text } from '@components/base';
 import { PrimaryButton, Toast, ToastType } from '@components/modular';
-import { COLORS } from '@constants/colors';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
 import {
@@ -16,12 +13,14 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import Config from '@constants/config';
-import { HomeNavigationProp } from '@appTypes';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { buttonWithShadowStyle } from '@constants/shadow';
+import { TextOrSpinner } from '@components/composite';
 
 interface BuyBondButtonProps {
   market: MarketType;
+  isTransactionProcessing: boolean;
   setIsTransactionProcessing: Dispatch<SetStateAction<boolean>>;
   onDismissBottomSheet: () => void;
   willGetAfterUnlock: string | number;
@@ -29,12 +28,12 @@ interface BuyBondButtonProps {
 
 export const BuyBondButton = ({
   market,
+  isTransactionProcessing,
   setIsTransactionProcessing,
   onDismissBottomSheet,
   willGetAfterUnlock
 }: BuyBondButtonProps) => {
   const { t } = useTranslation();
-  const navigation: HomeNavigationProp = useNavigation();
 
   const { _extractPrivateKey } = useWallet();
   const { contracts } = useBondContracts();
@@ -71,14 +70,11 @@ export const BuyBondButton = ({
         )
       )
         .wait()
-        .then((tx: any) => {
+        .then((tx: unknown) => {
           if (tx) {
             sendFirebaseEvent(CustomAppEvents.kosmos_market_buy);
             onDismissBottomSheet();
-            setTimeout(() => {
-              setIsTransactionProcessing(false);
-              navigation.goBack();
-            }, 500);
+            setIsTransactionProcessing(false);
 
             setTimeout(() => {
               Toast.show({
@@ -106,7 +102,6 @@ export const BuyBondButton = ({
     contracts,
     createNewSigner,
     market,
-    navigation,
     onDismissBottomSheet,
     payoutToken,
     quoteToken,
@@ -116,23 +111,21 @@ export const BuyBondButton = ({
   ]);
 
   const disabled = useMemo(
-    () => !parseFloat(amountToBuy) || error !== '',
-    [amountToBuy, error]
+    () => !parseFloat(amountToBuy) || error !== '' || isTransactionProcessing,
+    [amountToBuy, error, isTransactionProcessing]
   );
-
-  const textColor = useMemo(() => {
-    return disabled ? COLORS.alphaBlack30 : COLORS.neutral0;
-  }, [disabled]);
 
   return (
     <PrimaryButton
       disabled={disabled}
-      style={styles.button}
+      style={buttonWithShadowStyle(disabled, styles.button)}
       onPress={onBuyBondsPress}
     >
-      <Text fontSize={16} fontFamily="Inter_500Medium" color={textColor}>
-        {t('kosmos.button.buy.bond')}
-      </Text>
+      <TextOrSpinner
+        label="Confirm"
+        loadingLabel="Processing"
+        loading={isTransactionProcessing}
+      />
     </PrimaryButton>
   );
 };
