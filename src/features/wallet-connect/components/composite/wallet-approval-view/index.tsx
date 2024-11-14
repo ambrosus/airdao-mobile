@@ -5,7 +5,6 @@ import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
-  useExtractProposalData,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 
@@ -31,7 +30,6 @@ export const WalletConnectApprovalView = () => {
   const { proposal, setActiveSessions, setWalletConnectStep } =
     useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
-  const { origin } = useExtractProposalData(proposal);
 
   const [isLoadingApprove, setIsLoadingApprove] = useState(false);
 
@@ -70,7 +68,8 @@ export const WalletConnectApprovalView = () => {
   }, [proposal, onDismissWalletConnectBottomSheet]);
 
   const onShowToastNotification = useCallback(() => {
-    const extractedHttpsOrigin = origin.replace(/^https?:\/\//, '');
+    const extractedHttpsOrigin =
+      proposal?.verifyContext.verified.origin.replace(/^https?:\/\//, '');
 
     return setTimeout(() => {
       Toast.show({
@@ -82,7 +81,7 @@ export const WalletConnectApprovalView = () => {
         type: ToastType.Success
       });
     }, 500);
-  }, [origin, t]);
+  }, [proposal?.verifyContext.verified.origin, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
@@ -166,7 +165,7 @@ export const WalletConnectApprovalView = () => {
         color={COLORS.black}
       >
         {t('wallet.connect.proposal', {
-          origin,
+          origin: proposal?.verifyContext.verified.origin,
           interpolation: { escapeValue: false }
         })}
       </Text>
@@ -178,7 +177,7 @@ export const WalletConnectApprovalView = () => {
         style={styles.description}
       >
         {t('wallet.connect.warning', {
-          origin,
+          origin: proposal?.verifyContext.verified.origin,
           interpolation: { escapeValue: false }
         })}
       </Text>

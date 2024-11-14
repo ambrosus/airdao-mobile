@@ -11,6 +11,7 @@ import {
   NativeSyntheticEvent,
   View
 } from 'react-native';
+import { DerivedValue } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
 import { styles } from './styles';
@@ -26,6 +27,7 @@ interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
   onRefresh?: () => void;
   onChangeActiveTabIndex: (index: number) => void;
+  activeTabIndex: DerivedValue<number>;
   onTransactionsScrollEvent: (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => void;
@@ -34,6 +36,7 @@ interface WalletTransactionsAndAssetsProps {
 export const WalletTransactionsAndAssets = ({
   account,
   onRefresh,
+  activeTabIndex,
   onTransactionsScrollEvent,
   onChangeActiveTabIndex
 }: WalletTransactionsAndAssetsProps) => {
@@ -78,6 +81,8 @@ export const WalletTransactionsAndAssets = ({
 
   const _onChangeActiveTabIndex = useCallback(
     (index: number) => {
+      if (activeTabIndex.value === index) return;
+
       switch (index) {
         case 0: {
           transactionsHistoryListRef.current?.scrollToOffset({
@@ -91,7 +96,7 @@ export const WalletTransactionsAndAssets = ({
       }
       onChangeActiveTabIndex(index);
     },
-    [onChangeActiveTabIndex]
+    [activeTabIndex.value, onChangeActiveTabIndex]
   );
 
   const isSelectAccountBalanceZero = useMemo(() => {
