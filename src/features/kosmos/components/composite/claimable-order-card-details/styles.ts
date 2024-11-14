@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(16)
   },
   button: {
+    height: 32,
     marginTop: verticalScale(16),
     paddingVertical: 8
   }

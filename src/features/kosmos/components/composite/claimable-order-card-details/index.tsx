@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,6 @@ import { BigNumber, ethers } from 'ethers';
 import { styles } from './styles';
 import { OrderCardDetails } from '@features/kosmos/components/base';
 import { SecondaryButton, Toast, ToastType } from '@components/modular';
-import { Spinner, Text } from '@components/base';
 import { TxType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { getTimeRemaining } from '@features/kosmos/utils';
@@ -22,17 +21,19 @@ import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { TextOrSpinner } from '@components/composite';
+import { buttonWithShadowStyle } from '@constants/shadow';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;
   claimingTransaction: boolean;
-  setClamingTransaction: Dispatch<SetStateAction<boolean>>;
+  setClaimingTransaction: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ClaimableOrderCardDetails = ({
   transaction,
   claimingTransaction,
-  setClamingTransaction
+  setClaimingTransaction
 }: ClaimableOrderCardDetailsProps) => {
   const { t } = useTranslation();
 
@@ -70,7 +71,7 @@ export const ClaimableOrderCardDetails = ({
   }, [disabled]);
 
   const textColor = useMemo(() => {
-    return disabled ? COLORS.neutral400 : COLORS.neutral0;
+    return disabled ? COLORS.brand75 : COLORS.neutral0;
   }, [disabled]);
 
   const payout = useMemo(() => {
@@ -88,7 +89,7 @@ export const ClaimableOrderCardDetails = ({
         transaction.vestingType === 'Fixed-expiry'
           ? ContractNames.FixedExpiryTeller
           : ContractNames.FixedTermTeller;
-      setClamingTransaction(true);
+      setClaimingTransaction(true);
       setIsClaimingNow(true);
       const tx = await onClaimButtonPress(contractName);
 
@@ -105,13 +106,13 @@ export const ClaimableOrderCardDetails = ({
     } catch (error) {
       throw error;
     } finally {
-      setClamingTransaction(false);
+      setClaimingTransaction(false);
       setIsClaimingNow(false);
     }
   }, [
     transaction.vestingType,
     transaction.txHash,
-    setClamingTransaction,
+    setClaimingTransaction,
     onClaimButtonPress,
     onAppendClaimedOrderId,
     t,
@@ -125,6 +126,11 @@ export const ClaimableOrderCardDetails = ({
     return t('kosmos.button.claim');
   }, [isOrderClaimed, t, isVestingPass, vestingEndsDate]);
 
+  const buttonStyleWithDynamicColor: StyleProp<ViewStyle> = useMemo(
+    () => ({ ...styles.button, backgroundColor: buttonColor }),
+    [buttonColor]
+  );
+
   return (
     <>
       <View style={styles.container}>
@@ -132,22 +138,26 @@ export const ClaimableOrderCardDetails = ({
 
         <SecondaryButton
           disabled={disabled}
-          style={{ ...styles.button, backgroundColor: buttonColor }}
+          style={buttonWithShadowStyle(disabled, buttonStyleWithDynamicColor)}
           onPress={onButtonPress}
         >
-          {isClaimingNow ? (
-            <Spinner size="xs" />
-          ) : (
-            <Text
-              style={{
-                fontSize: 14,
+          <TextOrSpinner
+            loading={isClaimingNow}
+            label={textStringValue}
+            loadingLabel="!!!Claiming"
+            styles={{
+              active: {
+                fontSize: 12,
                 fontFamily: 'Inter_500Medium',
                 color: textColor
-              }}
-            >
-              {textStringValue}
-            </Text>
-          )}
+              },
+              loading: {
+                fontSize: 12,
+                fontFamily: 'Inter_500Medium',
+                color: COLORS.brand600
+              }
+            }}
+          />
         </SecondaryButton>
       </View>
     </>

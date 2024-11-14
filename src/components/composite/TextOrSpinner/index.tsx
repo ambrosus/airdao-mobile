@@ -8,18 +8,18 @@ interface TextOrSpinnerProps {
   loading: boolean;
   loadingLabel: string;
   label: string;
-  styles?: {
-    loading: {
+  styles?: Partial<{
+    loading: Partial<{
       fontSize: number;
       fontFamily: FontFamily;
       color: string;
-    };
-    active: {
+    }>;
+    active: Partial<{
       fontSize: number;
       fontFamily: FontFamily;
       color: string;
-    };
-  };
+    }>;
+  }>;
 }
 
 export const TextOrSpinner = ({
@@ -46,18 +46,18 @@ export const TextOrSpinner = ({
           <Spinner size="xs" />
           <Spacer horizontal value={scale(8)} />
           <Text
-            fontSize={styles.loading.fontSize}
-            fontFamily={styles.loading.fontFamily}
-            color={styles.loading.color}
+            fontSize={styles.loading?.fontSize}
+            fontFamily={styles.loading?.fontFamily}
+            color={styles.loading?.color}
           >
             {loadingLabel}
           </Text>
         </Row>
       ) : (
         <Text
-          fontSize={styles.active.fontSize}
-          fontFamily={styles.active.fontFamily}
-          color={styles.active.color}
+          fontSize={styles.active?.fontSize}
+          fontFamily={styles.active?.fontFamily}
+          color={styles.active?.color}
         >
           {label}
         </Text>
