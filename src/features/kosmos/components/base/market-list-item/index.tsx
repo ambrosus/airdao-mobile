@@ -5,6 +5,7 @@ import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
+import { NumberUtils } from '@utils/number';
 
 interface MarketListItemProps {
   market: MarketType;
@@ -20,7 +21,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
   const { token } = useExtractToken(market.payoutToken);
 
   const discountItemColor = useMemo(() => {
-    return market.discount > 0 ? COLORS.success600 : COLORS.error600;
+    return market.discount > 0 ? COLORS.success500 : COLORS.error400;
   }, [market]);
 
   return (
@@ -30,17 +31,21 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
       justifyContent="space-between"
     >
       <Row width="40%" alignItems="center">
-        <TokenLogo scale={0.65} token={token?.symbol ?? ''} />
+        <TokenLogo scale={0.75} token={token?.symbol ?? ''} />
         <Spacer horizontal value={10} />
         <StyledItemText label={token?.symbol} />
       </Row>
 
-      <Row width="58.5%" alignItems="center" justifyContent="space-between">
+      <Row width="58.75%" alignItems="center" justifyContent="space-between">
         <StyledItemText
           label={`${market.discount.toFixed(2)}%`}
           color={discountItemColor}
         />
-        <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
+        <StyledItemText
+          label={`$${NumberUtils.numberToTransformedLocale(
+            market.askingPrice.toFixed(3)
+          )}`}
+        />
       </Row>
     </Row>
   );
@@ -48,7 +53,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
 
 const StyledItemText = ({
   label = '',
-  color = COLORS.neutral600
+  color = COLORS.neutral800
 }: StyledItemTextProps) => {
   return (
     <Text fontSize={16} fontFamily="Inter_500Medium" color={color}>

@@ -1,26 +1,28 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
-  Keyboard,
+  StyleProp,
   TouchableOpacity,
-  View
+  View,
+  ViewStyle,
+  Keyboard
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Input, InputRef, Text } from '@components/base';
-import { isAndroid, isIos } from '@utils/isPlatform';
 import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
+import { StringUtils } from '@utils/string';
+
+import { isAndroid } from '@utils/isPlatform';
 
 interface AddressInputProps {
   address: string;
   onAddressChange: (newAddress: string) => unknown;
-  resetKeyboardState?: boolean;
 }
 export const AddressInput = ({
   address,
-  onAddressChange,
-  resetKeyboardState
+  onAddressChange
 }: AddressInputProps) => {
   const { t } = useTranslation();
 
@@ -30,13 +32,18 @@ export const AddressInput = ({
 
   const toggleFocused = () => setIsInputFocused((prevState) => !prevState);
 
-  const maskedValue = useMemo(() => {
-    const lettersToSlice = Math.floor(DEVICE_WIDTH / 12);
-    if (isAndroid && (address === '' || address.length < 32)) return address;
+  const getSliceNumbers = (width: number, fontSize: number) => {
+    const totalCharacters = Math.floor(width / fontSize);
+    const halfCharacters = Math.floor(totalCharacters / 2);
+    const leftSlice = halfCharacters + 9;
+    const rightSlice = totalCharacters - leftSlice + 9;
+    return { leftSlice, rightSlice };
+  };
 
-    return isIos || isInputFocused
-      ? address
-      : `${address.slice(0, lettersToSlice)}...`;
+  const maskedValue = useMemo(() => {
+    const { leftSlice, rightSlice } = getSliceNumbers(DEVICE_WIDTH, 16);
+    if (isInputFocused) return address;
+    return StringUtils.formatAddress(address, leftSlice, rightSlice);
   }, [address, isInputFocused]);
 
   const onInputPress = useCallback(() => {
@@ -47,36 +54,44 @@ export const AddressInput = ({
     });
   }, []);
 
-  const resetContainerActive = useMemo(
-    () => resetKeyboardState && !isInputFocused && isAndroid,
-    [isInputFocused, resetKeyboardState]
-  );
+  const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      width: '100%',
+      height: 60,
+      position: 'absolute',
+      top: 15,
+      zIndex: 100
+    };
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral800}
-      >
-        {t('send.funds.recipient')}
-      </Text>
-      <Input
-        ref={inputRef}
-        numberOfLines={1}
-        onFocus={toggleFocused}
-        onBlur={toggleFocused}
-        value={maskedValue}
-        onChangeValue={onAddressChange}
-        placeholder="0x..."
-      />
-      {resetContainerActive && (
+    <>
+      <View style={styles.container}>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral800}
+        >
+          {t('send.funds.recipient')}
+        </Text>
+        <Input
+          ref={inputRef}
+          numberOfLines={1}
+          onFocus={toggleFocused}
+          onBlur={toggleFocused}
+          value={maskedValue}
+          style={{ fontSize: 16, letterSpacing: -0.16 }}
+          onChangeValue={onAddressChange}
+          placeholder="0x..."
+        />
+      </View>
+      {!isInputFocused && isAndroid && (
         <TouchableOpacity
           activeOpacity={1}
           onPress={onInputPress}
-          style={styles.touchableHandlerArea}
+          style={invisibleTouchableHandlerStyles}
         />
       )}
-    </View>
+    </>
   );
 };

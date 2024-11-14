@@ -1,6 +1,5 @@
-import { COLORS } from '@constants/colors';
-import { moderateScale, scale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,11 +14,5 @@ export const styles = StyleSheet.create({
   },
   rightContainerStyles: {
     right: scale(16.5)
-  },
-  heading: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: moderateScale(24),
-    color: COLORS.neutral800,
-    marginLeft: -12
   }
 });

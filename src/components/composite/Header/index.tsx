@@ -39,9 +39,9 @@ export function Header(props: HeaderProps): JSX.Element {
       return (
         <Text
           style={titleStyle}
-          fontFamily="Inter_700Bold"
+          fontFamily="Inter_600SemiBold"
           fontSize={20}
-          fontWeight="700"
+          fontWeight="600"
           color={COLORS.neutral900}
         >
           {title}

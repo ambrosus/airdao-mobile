@@ -5,7 +5,7 @@ import { TokenLogo } from '@components/modular';
 import { Token, TxType } from '@features/kosmos/types';
 import {
   formatDecimals,
-  timestampToFormatedDate
+  timestampToFormattedDate
 } from '@features/kosmos/utils';
 import { COLORS } from '@constants/colors';
 import { BigNumber, ethers } from 'ethers';
@@ -29,7 +29,7 @@ export const TransactionHistoryItem = ({
 }: TransactionHistoryItemProps) => {
   const { tokens } = useKosmosMarketsContextSelector();
   const date = useMemo(
-    () => timestampToFormatedDate(new Date(transaction.date).getTime()),
+    () => timestampToFormattedDate(new Date(transaction.date).getTime()),
     [transaction.date]
   );
 

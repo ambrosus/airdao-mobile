@@ -14,11 +14,13 @@ import { TToken } from '@utils';
 interface TokenSelectorProps {
   readonly token: TToken;
   readonly onShowBottomSheetTokensListHandle: () => void;
+  readonly selectable?: boolean;
 }
 
 export const TokenSelector = ({
   token,
-  onShowBottomSheetTokensListHandle
+  onShowBottomSheetTokensListHandle,
+  selectable = true
 }: TokenSelectorProps) => {
   const { t } = useTranslation();
 
@@ -31,11 +33,11 @@ export const TokenSelector = ({
   }, [token]);
 
   const onToggleSelectTokenModal = useCallback(() => {
-    onShowBottomSheetTokensListHandle();
-  }, [onShowBottomSheetTokensListHandle]);
+    if (selectable) onShowBottomSheetTokensListHandle();
+  }, [selectable, onShowBottomSheetTokensListHandle]);
 
   return (
-    <TouchableOpacity onPress={onToggleSelectTokenModal}>
+    <TouchableOpacity disabled={!selectable} onPress={onToggleSelectTokenModal}>
       <View style={styles.currencySelector}>
         <Row alignItems="center">
           {token && (
@@ -52,8 +54,12 @@ export const TokenSelector = ({
             {isToken ? token?.symbol : t('swap.select.asset')}
           </Text>
         </Row>
-        <Spacer horizontal value={scale(4)} />
-        <ArrowBottomFillIcon />
+        {selectable && (
+          <>
+            <Spacer horizontal value={scale(4)} />
+            <ArrowBottomFillIcon />
+          </>
+        )}
       </View>
     </TouchableOpacity>
   );

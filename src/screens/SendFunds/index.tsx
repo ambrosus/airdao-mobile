@@ -5,12 +5,12 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Button, KeyboardDismissingView, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import {
@@ -18,8 +18,7 @@ import {
   useTokensAndTransactions,
   useWallet
 } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
+import { verticalScale } from '@utils/scaling';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
 import { useSendCryptoContext } from '@contexts';
@@ -31,7 +30,6 @@ import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
-import { BarcodeScannerIcon } from '@components/svg/icons/v2';
 import {
   useAMBEntity,
   useAmountChangeHandler
@@ -40,6 +38,7 @@ import { InputWithTokenSelect } from '@components/templates';
 import { TokensList } from '@features/send-funds/components/composite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
+import { FundsHeader } from '@features/send-funds/components/templates';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
@@ -210,40 +209,6 @@ export const SendFunds = ({ route }: Props) => {
     [amountInCrypto, destinationAddress]
   );
 
-  const renderHeaderContentRight = useMemo(
-    () => (
-      <View style={{ bottom: scale(3) }}>
-        <Button>
-          <BarcodeScannerIcon />
-        </Button>
-      </View>
-    ),
-    []
-  );
-
-  const renderHeaderTitle = useMemo(
-    () => (
-      <View>
-        <Text
-          align="center"
-          fontSize={17}
-          color={COLORS.neutral800}
-          fontFamily="Inter_600SemiBold"
-        >
-          {t('account.actions.send')}
-        </Text>
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
-        >
-          {StringUtils.formatAddress(senderAddress, 5, 6)}
-        </Text>
-      </View>
-    ),
-    [senderAddress, t]
-  );
-
   const renderBottomSheetNode = useMemo(
     () => (
       <TokensList
@@ -278,17 +243,10 @@ export const SendFunds = ({ route }: Props) => {
   );
 
   return (
-    <SafeAreaView edges={['top']} style={styles.wrapper}>
-      <Header
-        bottomBorder
-        style={styles.header}
-        title={renderHeaderTitle}
-        contentRight={renderHeaderContentRight}
-      />
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingContainer}
-        behavior="padding"
-      >
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <FundsHeader sender={senderAddress} />
+
         <KeyboardDismissingView style={styles.container}>
           <View style={styles.horizontalPadding}>
             <AddressInput
@@ -319,6 +277,7 @@ export const SendFunds = ({ route }: Props) => {
                 bottomSheetNode={renderBottomSheetNode}
                 onFocus={onTextInputFocus}
                 onBlur={onTextInputBlur}
+                resetKeyboardState
               />
 
               <Spacer value={verticalScale(32)} />
@@ -351,12 +310,11 @@ export const SendFunds = ({ route }: Props) => {
             />
           </BottomSheet>
         </KeyboardDismissingView>
-      </KeyboardAvoidingView>
-
-      <AmountSelectionKeyboardExtend
-        isTextInput={isTextInputActive}
-        onPercentItemPress={onPercentItemPress}
-      />
-    </SafeAreaView>
+        <AmountSelectionKeyboardExtend
+          isTextInput={isTextInputActive}
+          onPercentItemPress={onPercentItemPress}
+        />
+      </SafeAreaView>
+    </>
   );
 };

@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { shadow } from '@constants/shadow';
 import { ButtonProps } from '@components/base/Button';
 
 export interface GradientButtonProps extends React.PropsWithChildren {
@@ -35,11 +34,11 @@ export const GradientButton = (props: GradientButtonProps) => {
     disabled,
     onPress
   } = props;
+
   return (
     <Button
       onPress={onPress}
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      style={{ ...styles.container, ...(style as {}) }}
+      style={{ ...styles.container, ...(style as object) }}
       testID={testID}
       disabled={disabled}
     >
@@ -59,8 +58,7 @@ export const GradientButton = (props: GradientButtonProps) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    alignItems: 'center',
-    ...shadow
+    alignItems: 'center'
   },
   gradient: {
     height: verticalScale(50),

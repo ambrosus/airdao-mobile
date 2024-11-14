@@ -6,7 +6,7 @@ export function timestampToDate(timestamp: number) {
   return moment(timestamp * 1000);
 }
 
-export function timestampToFormatedDate(
+export function timestampToFormattedDate(
   timestamp: number,
   format = LOCK_PERIOD_FORMAT
 ) {

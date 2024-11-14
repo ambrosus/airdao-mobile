@@ -37,11 +37,11 @@ export const KosmosScreen = () => {
     <SafeAreaView>
       <Header
         title="Kosmos"
+        bottomBorder
         style={styles.header}
         leftContainerStyles={styles.leftContainerStyles}
         rightContainerStyles={styles.rightContainerStyles}
-        titleStyle={styles.heading}
-        titlePosition="left"
+        titlePosition="center"
         backIconVisible
         contentRight={renderHeaderRightContent}
       />

@@ -1,12 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  Alert,
-  InteractionManager,
-  StyleSheet,
-  View,
-  useWindowDimensions
-} from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { InteractionManager, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Animated, {
   SharedValue,
@@ -15,6 +8,7 @@ import Animated, {
   useDerivedValue,
   withSpring
 } from 'react-native-reanimated';
+import { styles } from './styles';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { BarcodeScanner } from '@components/templates';
@@ -22,10 +16,8 @@ import {
   BarcodeScannerIcon,
   NotificationBellIcon
 } from '@components/svg/icons/v2';
-import { ethereumAddressRegex } from '@constants/regex';
 import { useNotificationsQuery, useWallet } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { useNewNotificationsCount } from '@screens/Wallets/hooks/useNewNotificationsCount';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 import {
   useHandleBottomSheetActions,
@@ -36,12 +28,16 @@ import { walletKit } from '@features/wallet-connect/utils';
 import { Cache, CacheKey } from '@lib/cache';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { moderateScale, scale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes/navigation';
 
 import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
 import { NumberUtils } from '@utils/number';
+import {
+  useBarcode,
+  useNewNotificationsCount
+} from '@features/wallet-assets/lib/hooks';
 
 interface HomeHeaderProps {
   account: ExplorerAccount | null;
@@ -50,11 +46,10 @@ interface HomeHeaderProps {
 
 export const HomeHeader = React.memo(
   ({ account, isHeaderHidden }: HomeHeaderProps): JSX.Element => {
-    const { wallet } = useWallet();
-    const { t } = useTranslation();
     const navigation = useNavigation<HomeNavigationProp>();
     const { height: WINDOW_HEIGHT } = useWindowDimensions();
 
+    const { wallet } = useWallet();
     const { data: notifications } = useNotificationsQuery();
     const newNotificationsCount = useNewNotificationsCount();
 
@@ -63,7 +58,6 @@ export const HomeHeader = React.memo(
       useWalletConnectContextSelector();
 
     const scannerBottomSheetRef = useRef<BottomSheetRef>(null);
-    const scanned = useRef(false);
 
     const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -128,8 +122,7 @@ export const HomeHeader = React.memo(
     const onHandleWalletConnectAuthorization = useCallback(
       async (uri: string): Promise<void> => {
         if (!walletKit) {
-          closeScanner();
-          return;
+          return closeScanner();
         }
 
         try {
@@ -155,30 +148,9 @@ export const HomeHeader = React.memo(
       [closeScanner, onShowWalletConnectBottomSheet, setWalletConnectStep]
     );
 
-    const onQRCodeScanned = useCallback(
-      (data: string) => {
-        const res = data.match(ethereumAddressRegex);
-        if (res && res?.length > 0) {
-          closeScanner();
-          navigation.navigate('Search', {
-            screen: 'SearchScreen',
-            params: { address: res[0] }
-          });
-        } else if (data.startsWith('wc:')) {
-          onHandleWalletConnectAuthorization(data);
-        } else if (!scanned.current) {
-          scanned.current = true;
-          Alert.alert(t('alert.invalid.qr.code.msg'), '', [
-            {
-              text: t('alert.scan.again.msg'),
-              onPress: () => {
-                scanned.current = false;
-              }
-            }
-          ]);
-        }
-      },
-      [closeScanner, navigation, onHandleWalletConnectAuthorization, t]
+    const { onScannedAddress } = useBarcode(
+      scannerBottomSheetRef,
+      onHandleWalletConnectAuthorization
     );
 
     const setLastNotificationTime = useCallback(() => {
@@ -221,13 +193,13 @@ export const HomeHeader = React.memo(
             borderRadius={0}
           >
             <BarcodeScanner
-              onScanned={onQRCodeScanned}
+              onScanned={onScannedAddress}
               onClose={closeScanner}
             />
           </BottomSheet>
         </View>
       );
-    }, [WINDOW_HEIGHT, closeScanner, onQRCodeScanned, openScanner]);
+    }, [WINDOW_HEIGHT, closeScanner, onScannedAddress, openScanner]);
 
     const headerStyles = useMemo(() => {
       return { ...styles.container };
@@ -245,28 +217,3 @@ export const HomeHeader = React.memo(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    shadowColor: COLORS.culturedWhite,
-    backgroundColor: 'white'
-  },
-  notificationCountContainer: {
-    position: 'absolute',
-    backgroundColor: COLORS.yellow500,
-    right: -3,
-    top: -3,
-    borderRadius: scale(11),
-    borderWidth: 2,
-    borderColor: COLORS.neutral0,
-    width: moderateScale(11),
-    height: moderateScale(11),
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  addOrImportWalletButton: {
-    backgroundColor: COLORS.alphaBlack5,
-    width: scale(38),
-    height: scale(38)
-  }
-});

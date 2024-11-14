@@ -38,5 +38,5 @@ export function buttonActionString(
     }
   }
 
-  return t('swap.button.review');
+  return t('button.review');
 }
