@@ -34,8 +34,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
-          style={styles.keyTypography}
+          color={COLORS.neutral500}
         >
           {upperCase(t('kosmos.orders.total.bonded'))}
         </Text>
@@ -51,8 +50,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
-          style={styles.keyTypography}
+          color={COLORS.neutral500}
         >
           {upperCase(t('kosmos.orders.claimable'))}
         </Text>

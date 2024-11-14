@@ -2,20 +2,21 @@ import React, { useCallback, useMemo } from 'react';
 import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { styles } from './styles';
 import {
+  useClaimState,
   useTransactions as useOrders,
   useTransactions
 } from '@features/kosmos/lib/hooks';
 import { ScreenLoader } from '@features/kosmos/components/base';
 import { TransactionListItem, TxType } from '@features/kosmos/types';
 import { TotalOrdersAmount } from '../../composite/total-orders-amount';
-import { useClaim } from '@screens/Kosmos/hooks/useClaim';
+
 import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
 import { useFocusEffect } from '@react-navigation/native';
 
 export const UserOrdersList = () => {
   const { transactions, isTransactionsLoading, refetchTransactions } =
     useTransactions();
-  const { claimingTransaction, setClamingTransaction } = useClaim();
+  const { claimingTransaction, setClaimingTransaction } = useClaimState();
   const renderRefetchController = useMemo(
     () => (
       <RefreshControl
@@ -40,7 +41,7 @@ export const UserOrdersList = () => {
       <ClaimableOrderCardDetails
         transaction={transaction}
         claimingTransaction={claimingTransaction}
-        setClamingTransaction={setClamingTransaction}
+        setClaimingTransaction={setClaimingTransaction}
       />
     );
   };

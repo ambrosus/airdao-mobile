@@ -10,8 +10,5 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.neutral100,
     rowGap: verticalScale(12)
-  },
-  keyTypography: {
-    letterSpacing: 0.36
   }
 });
