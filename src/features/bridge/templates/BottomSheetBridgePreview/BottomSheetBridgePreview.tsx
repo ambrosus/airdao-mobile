@@ -9,11 +9,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
-import {
-  ErrorTemplate,
-  GeneralPreviewTemplate,
-  Loader
-} from './components/index';
+import { GeneralPreviewTemplate, Loader } from './components/index';
 import { formatUnits } from 'ethers/lib/utils';
 
 const DEFAULT_TRANSACTION = {
@@ -42,7 +38,6 @@ export const BottomSheetBridgePreview = forwardRef<
   BottomSheetChoseNetworksProps
 >((props, ref) => {
   const [previewLoader, setPreviewLoader] = useState(false);
-  const [previewError, setPreviewError] = useState(false);
   const { t } = useTranslation();
   const { variables, methods } = useBridgeContextData();
   const {
@@ -56,7 +51,8 @@ export const BottomSheetBridgePreview = forwardRef<
     amountToBridge,
     processingTransaction
   } = variables;
-  const { processBridge, setProcessingTransaction } = methods;
+  const { processBridge, setProcessingTransaction, bridgeErrorHandler } =
+    methods;
 
   const dataToPreview = bridgePreviewData?.dataToPreview ?? [];
 
@@ -81,7 +77,6 @@ export const BottomSheetBridgePreview = forwardRef<
 
   const setDefaultOptions = () => {
     setTimeout(() => {
-      setPreviewError(false);
       setPreviewLoader(false);
       setProcessingTransaction(null);
     }, 200);
@@ -93,63 +88,54 @@ export const BottomSheetBridgePreview = forwardRef<
   };
 
   const onAcceptPress = async () => {
-    if (errorBalance) {
-      setPreviewError(true);
-    } else {
-      try {
-        setPreviewLoader(true);
-        const transaction = await processBridge(
-          false,
-          bridgePreviewData.value.feeData
-        );
-        const transactionWaitingInfo = {
-          ...DEFAULT_TRANSACTION,
-          networkFrom: fromData.value.name,
-          networkTo: destinationData.value.name,
-          tokenFrom: selectedTokenFrom,
-          tokenTo: selectedTokenDestination,
-          amount: +formatUnits(
-            bridgePreviewData.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          decimalAmount: amountToBridge,
-          denominatedAmount: amountToBridge,
-          fee: formatUnits(
-            bridgePreviewData.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          wait: transaction.wait
-        };
-        setProcessingTransaction(transactionWaitingInfo);
-      } catch (e) {
-        setPreviewError(true);
-      } finally {
-        setPreviewLoader(false);
-      }
+    try {
+      setPreviewLoader(true);
+      const transaction = await processBridge(
+        false,
+        bridgePreviewData.value.feeData
+      );
+      const transactionWaitingInfo = {
+        ...DEFAULT_TRANSACTION,
+        networkFrom: fromData.value.name,
+        networkTo: destinationData.value.name,
+        tokenFrom: selectedTokenFrom,
+        tokenTo: selectedTokenDestination,
+        amount: +formatUnits(
+          bridgePreviewData.value.feeData.transferFee,
+          selectedTokenFrom.decimals
+        ),
+        decimalAmount: amountToBridge,
+        denominatedAmount: amountToBridge,
+        fee: formatUnits(
+          bridgePreviewData.value.feeData.transferFee,
+          selectedTokenFrom.decimals
+        ),
+        wait: transaction.wait
+      };
+      setProcessingTransaction(transactionWaitingInfo);
+    } catch (e) {
+      bridgeErrorHandler(e);
     }
   };
 
   const PreviewContent = useMemo(() => {
-    switch (true) {
-      case previewLoader:
-        return <Loader />;
-      case previewError:
-        return <ErrorTemplate />;
-      default:
-        return (
-          <GeneralPreviewTemplate
-            onClose={onClose}
-            errorBalance={errorBalance}
-            onAcceptPress={onAcceptPress}
-          />
-        );
+    if (previewLoader) {
+      return <Loader />;
+    } else {
+      return (
+        <GeneralPreviewTemplate
+          onClose={onClose}
+          errorBalance={errorBalance}
+          onAcceptPress={onAcceptPress}
+        />
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewError, errorBalance, previewLoader]);
+  }, [errorBalance, previewLoader]);
 
   const showHeader = useMemo(() => {
-    return !processingTransaction && !previewLoader && !previewError;
-  }, [previewError, previewLoader, processingTransaction]);
+    return !processingTransaction && !previewLoader;
+  }, [previewLoader, processingTransaction]);
 
   return (
     <BottomSheet

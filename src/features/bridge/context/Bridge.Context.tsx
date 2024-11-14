@@ -6,10 +6,12 @@ import {
 } from '@lib/bridgeSDK/models/types';
 import { getBridgePairs } from '@lib';
 import {
+  BRIDGE_ERROR_CODES,
   DEFAULT_AMB_NETWORK,
   DEFAULT_ETH_NETWORK,
   DEFAULT_TOKEN_FROM,
-  DEFAULT_TOKEN_TO
+  DEFAULT_TOKEN_TO,
+  METHODS_FROM_ERRORS
 } from '@features/bridge/constants';
 import { useWallet } from '@hooks';
 import { getBridgeConfig } from '../utils';
@@ -25,6 +27,8 @@ import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { useTranslation } from 'react-i18next';
+import { Toast, ToastType } from '@components/modular';
 
 const EMPTY_FEE_DATA = [
   {
@@ -37,6 +41,8 @@ const EMPTY_FEE_DATA = [
 ];
 
 export const BridgeContext = () => {
+  const { t } = useTranslation();
+
   const { wallet: selectedWallet } = useWallet();
   const [bridgeDataLoader, setBridgeDataLoader] = useState(false);
   const [templateDataLoader, setTemplateDataLoader] = useState(false);
@@ -60,6 +66,39 @@ export const BridgeContext = () => {
 
   const [processingTransaction, setProcessingTransaction] =
     useState<BridgeTransactionHistoryDTO | null>(null);
+
+  const bridgeErrorHandler = (_error: unknown) => {
+    // @ts-ignore
+    const errorCode = _error.code;
+    // @ts-ignore
+    const errorMethods = _error.method;
+    const type = ToastType.Failed;
+
+    const insufficientFundsToPayFees =
+      errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
+      errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS;
+
+    switch (true) {
+      case insufficientFundsToPayFees:
+        return Toast.show({
+          type,
+          text: t('bridge.insufficient.funds.to.pay.fee.header').replace(
+            '{{symbol}}',
+            networkNativeToken.symbol || ''
+          ),
+          subtext: t('bridge.insufficient.funds.to.pay.fee.subHeader').replace(
+            '{{symbol}}',
+            networkNativeToken.symbol || ''
+          )
+        });
+      default:
+        return Toast.show({
+          type,
+          text: t('bridge.unknown.error'),
+          subtext: t('import.wallet.key.error.try.again')
+        });
+    }
+  };
 
   const networkDataSetter = async (_bridgeConfig = bridgeConfig) => {
     try {
@@ -119,6 +158,7 @@ export const BridgeContext = () => {
       }
     } catch (e) {
       // TODO remove IT after testing
+      bridgeErrorHandler(e);
       alert(`DATA BRIDLE LOADING ERROR  ${JSON.stringify(e)}`);
     } finally {
       setBridgeDataLoader(false);
@@ -196,8 +236,14 @@ export const BridgeContext = () => {
       }
     } catch (e) {
       // ignore
-      // TODO remove IT after testing
-      alert(`processBridge ERROR ${JSON.stringify(e)}`);
+      // TODO remove it after testing
+
+      bridgeErrorHandler(e);
+      alert(
+        `${
+          getOnlyGasFee ? 'getOnlyGasFee' : ''
+        } processBridge ERROR ${JSON.stringify(e)}`
+      );
     }
   };
 
@@ -225,7 +271,8 @@ export const BridgeContext = () => {
     setSelectedTokenPairs,
     setBridgePreviewData,
     processBridge,
-    setProcessingTransaction
+    setProcessingTransaction,
+    bridgeErrorHandler
   };
 
   return {

@@ -417,6 +417,9 @@
   "bridge.transfer.failed.sub.header": "İşleminiz gerçekleştirilirken bir hata oluştu.",
   "bridge.transfer.failed.to.wallet.btn": "Cüzdana git",
   "bridge.amount.less.then.fee": "Bakiye ücretten daha az",
+
+  "bridge.insufficient.funds.to.pay.fee.header": "!!!Insufficient {{symbol}} for transaction fees.",
+  "bridge.insufficient.funds.to.pay.fee.subHeader": "!!!Please add {{symbol}} to cover network costs.",
   "bridge.unknown.error": "Bilinmeyen hata",
 
   "kosmos.primary.tabs.market": "Piyasalar",
