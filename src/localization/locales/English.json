@@ -139,7 +139,7 @@
   "common.transaction.sent": "Sent",
   "common.transaction.status.SUCCESS": "Completed",
   "common.transaction.status.FAIL": "Failed",
-  "common.transaction.to": "To",
+  "common.transaction.destination": "To",
   "common.transaction_plural": "Transactions",
   "common.transactions": "Transactions",
   "common.yesterday": "Yesterday",
@@ -394,10 +394,13 @@
   "bridge.transaction.to": "To: {{networkTo}}",
   "bridge.transaction.sending.heading": "Sending {{tokenFrom}} to {{networkTo}}",
   "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
+  "bridge.transaction.preview.header": "Sending {{amount}} {{symbol}} to {{network}}",
+  "bridge.transaction.preview.time": "Estimated arrival time",
+
 
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
-  "bridge.amount.to.bridge": "Amount to bridge",
+  "bridge.set.amount": "Set amount",
   "bridge.amount.network.fee": "Network fee",
 
   "bridge.preview.title": "Preview",
@@ -405,7 +408,7 @@
   "bridge.preview.bridge.fee": "Bridge fee",
   "bridge.preview.network.fee": "Network fee",
   "bridge.preview.gas.fee": "Gas fee",
-  "bridge.preview.button": "Send funds to {network}",
+  "bridge.preview.button": "Confirm",
   "bridge.preview.button.max": "Max",
   "bridge.insufficient.funds": "Insufficient balance",
 

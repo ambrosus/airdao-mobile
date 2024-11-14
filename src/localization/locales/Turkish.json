@@ -139,7 +139,7 @@
   "common.transaction.sent": "Gönderildi",
   "common.transaction.status.SUCCESS": "Tamamlandı",
   "common.transaction.status.FAIL": "Başarısız oldu",
-  "common.transaction.to": "Alan",
+  "common.transaction.destination": "Alan",
   "common.transaction_plural": "İşlem",
   "common.transactions": "İşlemler",
   "common.yesterday": "Dün",
@@ -394,10 +394,12 @@
   "bridge.transaction.to": "{{networkTo}}'a",
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
+  "bridge.transaction.preview.header": "!!!Sending {{amount}} {{symbol}} to {{network}}",
+  "bridge.transaction.preview.time": "!!!Estimated arrival time",
 
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
-  "bridge.amount.to.bridge": "Köprülemek için Miktar",
+  "bridge.set.amount": "!!!Set amount",
   "bridge.amount.network.fee": "Ağ Ücreti ",
 
   "bridge.preview.title": "Önizleme",
@@ -405,7 +407,7 @@
   "bridge.preview.bridge.fee": "Köprü Ücreti",
   "bridge.preview.network.fee": "Ağ Ücreti",
   "bridge.preview.gas.fee": "Gaz Ücreti",
-  "bridge.preview.button": "{network}'a Fon Gönder",
+  "bridge.preview.button": "!!!Confirm",
   "bridge.preview.button.max": "Maksimum",
   "bridge.insufficient.funds": "Yetersiz bakiye",
 

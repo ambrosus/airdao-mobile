@@ -2,6 +2,11 @@ import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '30%'
+  },
   container: {
     flex: 1
   },

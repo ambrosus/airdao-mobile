@@ -1,9 +1,9 @@
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
-  useCallback
+  useState
 } from 'react';
 import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';

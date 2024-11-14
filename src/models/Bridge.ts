@@ -3,7 +3,8 @@ import {
   Network as BridgeNetwork,
   Token
 } from '@lib/bridgeSDK/models/types';
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { CryptoCurrencyCode } from '@appTypes';
 
 export interface Bridge {
   bridges: Bridges;
@@ -26,11 +27,7 @@ export interface BridgePairsModel {
   pairs: [Token, Token][];
   provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
-export interface RenderTokenItem extends Token {
-  balance: BigNumber;
-}
 export interface RenderTokenItem {
-  renderTokenItem: RenderTokenItem;
   name: PairsNetworksNamesModel;
   pairs: [Token, Token];
   provider?: Promise<ethers.providers.JsonRpcProvider | undefined>;
@@ -82,8 +79,29 @@ export interface ParsedBridge {
   name: string;
   side: string;
 }
+
+export interface CryptoAmount {
+  amount: BigNumber | BigNumberish;
+  decimals: number;
+}
+
+export interface DataToPreviewModel {
+  name: string;
+  crypto: CryptoAmount;
+  symbol: CryptoCurrencyCode | string;
+}
+
+export interface PreviewDataWithFeeModel {
+  value: {
+    feeData: FeeData;
+    gasFee: BigNumberish;
+  };
+  dataToPreview: DataToPreviewModel[];
+}
+
+export type BridgeSelectorTypes = 'from' | 'destination';
 export interface BridgeNetworkPickerProps {
-  destination: 'from' | 'to';
+  type: BridgeSelectorTypes;
 }
 
 export interface BridgeFeeModel {

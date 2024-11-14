@@ -1,200 +1,236 @@
 import { createContextSelector } from '@utils/createContextSelector';
-import { useEffect, useState } from 'react';
-import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
-import { AccountDBModel } from '@database';
-import { API } from '@api/api';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Config as BridgeConfigModel,
+  FeeData
+} from '@lib/bridgeSDK/models/types';
+import { getBridgePairs } from '@lib';
 import {
   DEFAULT_AMB_NETWORK,
   DEFAULT_ETH_NETWORK,
-  DEFAULT_TOKEN_PAIRS
-} from '../constants';
-import { getBridgeBalance, getBridgePairs } from '@lib';
-import { parseNetworkParams } from '@features/bridge/hooks/bridge/services';
+  DEFAULT_TOKEN_FROM,
+  DEFAULT_TOKEN_TO
+} from '@features/bridge/constants';
+import { useWallet } from '@hooks';
+import { getBridgeConfig } from '../utils';
+import { parsedBridges } from '@features/bridge/utils/parseBridges';
+import {
+  BridgeSelectorTypes,
+  ParsedBridge,
+  PreviewDataWithFeeModel
+} from '@models/Bridge';
+import { CryptoCurrencyCode } from '@appTypes';
+import Config from '@constants/config';
+import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
+import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+
+const EMPTY_FEE_DATA = [
+  {
+    value: {
+      feeData: {},
+      gasFee: BigNumber.from(0)
+    },
+    dataToPreview: []
+  }
+];
 
 export const BridgeContext = () => {
-  const [config, setConfig] = useState<any>({});
-  const [selectedToken, setSelectedToken] =
-    // @ts-ignore
-    useState<RenderTokenItem>(DEFAULT_TOKEN_PAIRS);
-  const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
-  const [to, setTo] = useState(DEFAULT_ETH_NETWORK);
-  const [tokensForSelector, setTokensForSelector] =
-    useState<RenderTokenItem[]>();
-
-  const [tokenDataLoader, setTokenDataLoader] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<AccountDBModel | null>(
+  const { wallet: selectedWallet } = useWallet();
+  const [bridgeDataLoader, setBridgeDataLoader] = useState(false);
+  const [templateDataLoader, setTemplateDataLoader] = useState(false);
+  const [bridgeConfig, setBridgeConfig] = useState<BridgeConfigModel | null>(
     null
   );
 
-  const setSelectedTokenData = async (
-    pairs: RenderTokenItem = selectedToken
-  ) => {
+  const [from, setFrom] = useState(DEFAULT_AMB_NETWORK);
+  const [destination, setDestination] = useState(DEFAULT_ETH_NETWORK);
+  const networkNativeToken = Config.NETWORK_NATIVE_COIN[from.id];
+
+  const [selectedBridgeData, setSelectedBridgeData] = useState(null);
+  const [selectedTokenPairs, setSelectedTokenPairs] = useState(null);
+  const [bridges, setBridges] = useState(null);
+
+  const [amountToBridge, setAmountToBridge] = useState<string>('');
+
+  const [bridgePreviewData, setBridgePreviewData] =
+    // @ts-ignore
+    useState<PreviewDataWithFeeModel>(EMPTY_FEE_DATA);
+
+  const [processingTransaction, setProcessingTransaction] =
+    useState<BridgeTransactionHistoryDTO | null>(null);
+
+  const networkDataSetter = async (_bridgeConfig = bridgeConfig) => {
     try {
-      setTokenDataLoader(true);
-      const balance = await getBridgeBalance({
-        from: from.id,
-        token: pairs.renderTokenItem,
-        ownerAddress: selectedAccount?.address || ''
-      });
+      if (_bridgeConfig) {
+        setTemplateDataLoader(true);
+        const pair = await getBridgePairs({
+          from: from.id,
+          destination: destination.id,
+          bridgeConfig: _bridgeConfig,
+          ownerAddress: selectedWallet?.address || ''
+        });
+        // @ts-ignore
+        setSelectedBridgeData(pair);
+        const pairsToTokenByDefault = pair.pairs.find((item) => {
+          if (pair.name === 'amb->eth') {
+            return item.find((token) => token.isNativeCoin);
+          } else {
+            return item.find(
+              (token) =>
+                token.symbol === CryptoCurrencyCode.AMB ||
+                token.symbol === CryptoCurrencyCode.SAMB
+            );
+          }
+        });
+        if (pairsToTokenByDefault) {
+          // @ts-ignore
+          setSelectedTokenPairs(pairsToTokenByDefault);
+        }
+      }
+    } catch (e) {
+      // TODO remove IT after testing
+      alert(`networkDataSetterError ${JSON.stringify(e)}`);
+    } finally {
+      setTemplateDataLoader(false);
+    }
+  };
 
-      const tokenData = {
-        ...pairs
-      };
+  useEffect(() => {
+    const getPairs = async () => {
+      await networkDataSetter();
+    };
+    getPairs().then();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from.id, destination.id]);
+  const loadAllBridgeData = async () => {
+    try {
+      setBridgeDataLoader(true);
+      const config = await getBridgeConfig();
+      if (config) {
+        setBridgeConfig(config);
 
-      tokenData.renderTokenItem.balance = balance;
-      setSelectedToken(tokenData);
-      return balance;
+        await networkDataSetter(config);
+
+        const bridges = parsedBridges(config);
+        // @ts-ignore
+        setBridges(bridges);
+      }
+    } catch (e) {
+      // TODO remove IT after testing
+      alert(`DATA BRIDLE LOADING ERROR  ${JSON.stringify(e)}`);
+    } finally {
+      setBridgeDataLoader(false);
+    }
+  };
+
+  const networkSetter = (type: BridgeSelectorTypes, item: ParsedBridge) => {
+    const isFrom = type === 'from';
+    const oppositeNetwork = isFrom ? destination : from;
+    const oppositeSetter = isFrom ? setDestination : setFrom;
+    const setter = isFrom ? setFrom : setDestination;
+
+    setter(item);
+    const isTheSameNetwork = item.id === oppositeNetwork.id;
+    const isSelectedAMBNetwork = item.id === 'amb';
+
+    if (isTheSameNetwork && !isSelectedAMBNetwork) {
+      oppositeSetter(DEFAULT_AMB_NETWORK);
+    }
+    if (isTheSameNetwork && isSelectedAMBNetwork) {
+      oppositeSetter(DEFAULT_ETH_NETWORK);
+    }
+    // if user not chose amb network
+    if (oppositeNetwork.id !== 'amb' && !isSelectedAMBNetwork) {
+      oppositeSetter(DEFAULT_AMB_NETWORK);
+    }
+  };
+
+  const fromData = {
+    value: from,
+    setter: networkSetter
+  };
+  const destinationData = {
+    value: destination,
+    setter: networkSetter
+  };
+
+  const bridgeLoader = useMemo<boolean>(() => {
+    return (
+      bridgeDataLoader ||
+      !bridgeConfig ||
+      !selectedBridgeData ||
+      !selectedTokenPairs
+    );
+  }, [bridgeConfig, bridgeDataLoader, selectedBridgeData, selectedTokenPairs]);
+
+  const selectedTokenFrom = useMemo(() => {
+    return selectedTokenPairs ? selectedTokenPairs[0] : DEFAULT_TOKEN_FROM;
+  }, [selectedTokenPairs]);
+
+  const selectedTokenDestination = useMemo(() => {
+    return selectedTokenPairs ? selectedTokenPairs[1] : DEFAULT_TOKEN_TO;
+  }, [selectedTokenPairs]);
+  const processBridge = async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
+    try {
+      if (bridgeFee && selectedWallet?.address) {
+        const withdrawData = {
+          tokenFrom: selectedTokenFrom,
+          tokenTo: selectedTokenDestination,
+          selectedAccount: selectedWallet,
+          amountTokens: formatUnits(
+            bridgeFee.amount,
+            selectedTokenFrom.decimals
+          ),
+          feeData: bridgeFee,
+          gasFee: getOnlyGasFee
+        };
+        if (bridgeConfig) {
+          return await bridgeWithdraw({
+            bridgeConfig,
+            fromNetwork: fromData.value.id,
+            withdrawData
+          });
+        }
+      }
     } catch (e) {
       // ignore
-    } finally {
-      setTokenDataLoader(false);
+      // TODO remove IT after testing
+      alert(`processBridge ERROR ${JSON.stringify(e)}`);
     }
   };
 
-  const setAllRequireBridgeData = () => {
-    getBridgePairs({
-      from: from.id,
-      to: to.id,
-      bridgeConfig: config
-    }).then((r) => {
-      return parseNetworkParams(
-        r,
-        setTokensForSelector,
-        setSelectedTokenData,
-        from.id
-      );
-    });
+  const variables = {
+    bridgeLoader,
+    bridgeConfig,
+    bridges,
+    fromData,
+    destinationData,
+    templateDataLoader,
+    selectedTokenPairs,
+    selectedBridgeData,
+    amountToBridge,
+    networkNativeToken,
+    selectedTokenFrom,
+    selectedTokenDestination,
+    bridgePreviewData,
+    processingTransaction
   };
-
-  useEffect(() => {
-    setAllRequireBridgeData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from.id, to.id]);
-
-  useEffect(() => {
-    const getConfig = async () => {
-      return await API.bridgeService.getBridgeParams();
-    };
-    getConfig().then(async (r) => {
-      setConfig(r);
-      // @ts-ignore
-      await setSelectedTokenData(DEFAULT_TOKEN_PAIRS);
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getNetworkNames = (name: string) => {
-    switch (name) {
-      case 'eth':
-        return 'Ethereum';
-      case 'bsc':
-        return 'BNB Chain';
-      default:
-        return 'AirDAO';
-    }
-  };
-  const networkValidator = (way: ParsedBridge, value: ParsedBridge) => {
-    const wayIsExternalNetwork = way.id === 'eth' || way.id === 'bsc';
-    const isAmbNetwork = value.id === 'amb';
-    const isBSCNetwork = value.id === 'bsc';
-    const isETHNetwork = value.id === 'eth';
-    const isExternalNetwork = isBSCNetwork || isETHNetwork;
-    const isDuplicateWay = value.id === way.id;
-    return {
-      wayIsExternalNetwork,
-      isAmbNetwork,
-      isExternalNetwork,
-      isDuplicateWay
-    };
-  };
-
-  const parsedBridges = Object.keys(config?.bridges || []).map((item) => {
-    const res = {
-      // @ts-ignore
-      ...config?.bridges[item],
-      id: item,
-      name: getNetworkNames(item)
-    };
-    if (res.id === 'eth') {
-      // tslint:disable-next-line:forin
-      for (const key in DEFAULT_ETH_NETWORK) {
-        // @ts-ignore
-        DEFAULT_ETH_NETWORK[key] = res[key];
-      }
-    }
-    return res;
-  });
-  const bridges: ParsedBridge[] = [...parsedBridges, DEFAULT_AMB_NETWORK];
-
-  const fromSetter = (value: ParsedBridge) => {
-    const {
-      isAmbNetwork,
-      isExternalNetwork,
-      isDuplicateWay: isDuplicateTo,
-      wayIsExternalNetwork: toIsExternalNetwork
-    } = networkValidator(to, value);
-    if (isDuplicateTo) {
-      setTo(isAmbNetwork ? DEFAULT_ETH_NETWORK : DEFAULT_AMB_NETWORK);
-    }
-    if (isExternalNetwork && toIsExternalNetwork) {
-      setTo(DEFAULT_AMB_NETWORK);
-    }
-
-    setFrom(value);
-  };
-
-  const toSetter = (value: ParsedBridge) => {
-    const {
-      isAmbNetwork,
-      isExternalNetwork,
-      isDuplicateWay: isDuplicateFrom,
-      wayIsExternalNetwork: fromIsExternalNetwork
-    } = networkValidator(from, value);
-    if (isDuplicateFrom) {
-      setFrom(isAmbNetwork ? DEFAULT_ETH_NETWORK : DEFAULT_AMB_NETWORK);
-    }
-    if (isExternalNetwork && fromIsExternalNetwork) {
-      setFrom(DEFAULT_AMB_NETWORK);
-    }
-
-    setTo(value);
-  };
-
-  const selectedTokenDecimals =
-    selectedToken.pairs[0].network === 'amb'
-      ? selectedToken.pairs[1].decimals
-      : selectedToken.pairs[0].decimals;
-
-  const setDefaultBridgeData = () => {
-    fromSetter(DEFAULT_AMB_NETWORK);
-    toSetter(DEFAULT_ETH_NETWORK);
-    setAllRequireBridgeData();
-    // @ts-ignore
+  const methods = {
+    loadAllBridgeData,
+    setBridgeDataLoader,
+    setTemplateDataLoader,
+    setAmountToBridge,
+    setSelectedTokenPairs,
+    setBridgePreviewData,
+    processBridge,
+    setProcessingTransaction
   };
 
   return {
-    tokenParams: {
-      value: selectedToken,
-      setter: setSelectedTokenData,
-      update: setSelectedTokenData,
-      loader: tokenDataLoader
-    },
-    fromParams: {
-      value: from,
-      setter: fromSetter
-    },
-    toParams: {
-      value: to,
-      setter: toSetter
-    },
-    networksParams: tokensForSelector,
-    selectedTokenDecimals,
-    bridgeConfig: config,
-    setDefaultBridgeData,
-    setSelectedAccount,
-    selectedAccount,
-    bridges
+    methods,
+    variables
   };
 };
 

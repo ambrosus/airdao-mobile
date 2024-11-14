@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  balanceContainer: {
-    columnGap: 4
+  headerContainer: { paddingHorizontal: 15 },
+  listContainer: {
+    paddingHorizontal: 15
   }
 });

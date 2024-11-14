@@ -1,21 +1,64 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { StyleSheet, View } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { scale as scaleFunc } from '@utils/scaling';
 
-export const HistoryIcon = ({ scale = 1, color = '#0C0C0D' }: IconProps) => {
-  const width = 20;
-  const height = 20;
+interface HistoryIconModel extends IconProps {
+  notification: boolean;
+}
+
+export const HistoryIcon = ({
+  scale = 1,
+  color = COLORS.black,
+  notification
+}: HistoryIconModel) => {
+  const sizeValue = scaleFunc(20);
+  const width = sizeValue * scale;
+  const height = sizeValue * scale;
+  const Notification = () => {
+    const notificationSizeValue = sizeValue / 1.45;
+    const borderWidth = notificationSizeValue * 0.2 || 0;
+
+    return (
+      <View
+        style={{
+          ...styles.notificationPoint,
+          width: notificationSizeValue,
+          height: notificationSizeValue,
+          borderWidth
+        }}
+      />
+    );
+  };
   return (
-    <Svg
-      width={width * scale}
-      height={height * scale}
-      fill="none"
-      viewBox={`0 0 ${width} ${height}`}
-    >
-      <Path
-        fill={color}
-        d="M17.25 10A7.25 7.25 0 005.584 4.25h.666a1 1 0 010 2h-3a1 1 0 01-1-1V5h-.034l.034-.052V2.25a1 1 0 012 0v.504A9.21 9.21 0 0110 .75 9.25 9.25 0 11.818 8.87C.881 8.358 1.334 8 1.85 8c.59 0 1.017.569.949 1.156A7.25 7.25 0 1017.25 10zM11 6a1 1 0 10-2 0v5a1 1 0 001 1h3a1 1 0 100-2h-2V6z"
-      ></Path>
-    </Svg>
+    <View>
+      {notification && <Notification />}
+
+      <Svg
+        width={width}
+        height={height}
+        fill="none"
+        viewBox={`0 0 ${width} ${height}`}
+      >
+        <Path
+          fill={color}
+          d="M17 20.5H1a1 1 0 0 1-1-1v-18a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Zm-1-2v-16H2v16h14ZM5 5.5h8v2H5v-2Zm0 4h8v2H5v-2Zm0 4h5v2H5v-2Z"
+        />
+      </Svg>
+    </View>
   );
 };
+
+export const styles = StyleSheet.create({
+  notificationPoint: {
+    position: 'absolute',
+    zIndex: 10,
+    top: scaleFunc(-3),
+    right: scaleFunc(-3),
+    borderRadius: 10,
+    borderColor: COLORS.neutral0,
+    backgroundColor: COLORS.warning600
+  }
+});

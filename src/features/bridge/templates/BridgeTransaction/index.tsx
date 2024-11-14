@@ -5,7 +5,6 @@ import { styles } from './BridgeTransaction.style';
 import { TokenLogo } from '@components/modular';
 import { scale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
-import { Status } from './components/Status/Status';
 import { BottomSheetRef } from '@components/composite';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { Button, Row, Text } from '@components/base';
@@ -55,6 +54,14 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
     }
   };
 
+  const statusStyle = useMemo(() => {
+    const isSuccessTransaction = transactionStatus === 'success';
+    return {
+      ...styles.statusPoint,
+      backgroundColor: isSuccessTransaction ? COLORS.green500 : COLORS.yellow500
+    };
+  }, [transactionStatus]);
+
   return (
     <>
       <Button onPress={onPreviewTransactionDetails}>
@@ -85,10 +92,11 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
               })}
             </Text>
           </View>
-          <Status
-            steps={{ start: confirmations, end: minSafetyBlocks }}
-            status={transactionStatus}
-          />
+          <View style={{ ...statusStyle }} />
+          {/*<Status*/}
+          {/*  steps={{ start: confirmations, end: minSafetyBlocks }}*/}
+          {/*  status={transactionStatus}*/}
+          {/*/>*/}
         </View>
       </Button>
 

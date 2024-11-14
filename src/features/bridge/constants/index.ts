@@ -8,14 +8,15 @@ export const DEFAULT_AMB_NETWORK = {
   name: 'AirDAO'
 };
 export const DEFAULT_ETH_NETWORK = {
+  side: '1x1111111111',
   amb: '0x0000000000',
   id: 'eth',
-  name: 'Ethereum',
-  side: '1x1111111111'
+  name: 'Ethereum'
 };
 
 export const DEFAULT_TOKEN_FROM: Token = {
   address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
+  balance: '0',
   bridgeNetwork: 'eth',
   decimals: 18,
   isNativeCoin: true,
@@ -24,21 +25,15 @@ export const DEFAULT_TOKEN_FROM: Token = {
   symbol: CryptoCurrencyCode.AMB
 };
 
-export const INPUT_ERROR_TYPES = {
-  INSUFFICIENT_FUNDS: 'insufficientFund',
-  LESS_THEN_FEE: 'amountLessThenFee',
-  INSUFFICIENT_FUNDS_TO_PROCESS: 'insufficientFundToProcessTransaction',
-  NO_ERROR: null
-};
-
 export const DEFAULT_TOKEN_TO = {
   address: '0xf4fB9BF10E489EA3Edb03E094939341399587b0C',
   bridgeNetwork: 'eth',
+  balance: '0',
   decimals: 18,
   isNativeCoin: false,
   name: 'AirDAO',
   network: 'eth',
-  symbol: 'AMB'
+  symbol: CryptoCurrencyCode.ETH
 };
 
 export const DEFAULT_TOKEN_PAIRS = {
