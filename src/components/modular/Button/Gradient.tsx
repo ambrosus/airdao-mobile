@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@components/base';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { ButtonProps } from '@components/base/Button';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
 
 export interface GradientButtonProps extends React.PropsWithChildren {
   onPress: () => void;
@@ -21,8 +20,6 @@ export interface GradientButtonProps extends React.PropsWithChildren {
   testID?: string;
   style?: ButtonProps['style'];
   disabled?: boolean;
-  shadowEnable?: boolean;
-  CSSShadowProperty?: string;
 }
 
 export const GradientButton = (props: GradientButtonProps) => {
@@ -35,21 +32,13 @@ export const GradientButton = (props: GradientButtonProps) => {
     style = {},
     testID,
     disabled,
-    onPress,
-    CSSShadowProperty = '',
-    shadowEnable
+    onPress
   } = props;
-
-  const buttonShadow: StyleProp<ViewStyle> = useMemo(() => {
-    if (props.disabled || !shadowEnable) return { shadowOpacity: 0 };
-
-    return cssShadowToNative(CSSShadowProperty);
-  }, [CSSShadowProperty, props.disabled, shadowEnable]);
 
   return (
     <Button
       onPress={onPress}
-      style={{ ...styles.container, ...buttonShadow, ...(style as object) }}
+      style={{ ...styles.container, ...(style as object) }}
       testID={testID}
       disabled={disabled}
     >

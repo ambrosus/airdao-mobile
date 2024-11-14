@@ -4,8 +4,6 @@ import { GradientButton, GradientButtonProps } from './Gradient';
 
 export const PrimaryButton = (props: GradientButtonProps) => {
   const {
-    shadowEnable = false,
-    CSSShadowProperty = '0px 0px 12px 0px rgba(53, 104, 221, 0.50)',
     colors = props.disabled
       ? [COLORS.primary50, COLORS.primary50]
       : [COLORS.brand600, COLORS.brand600],
@@ -18,8 +16,6 @@ export const PrimaryButton = (props: GradientButtonProps) => {
   return (
     <GradientButton
       {...restProps}
-      shadowEnable={shadowEnable}
-      CSSShadowProperty={CSSShadowProperty}
       colors={colors}
       start={start}
       end={end}
