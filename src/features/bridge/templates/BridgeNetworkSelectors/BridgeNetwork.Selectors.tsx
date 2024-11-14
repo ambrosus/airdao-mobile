@@ -6,9 +6,9 @@ import { RightArrowInCircle } from '@components/svg/icons';
 export const BridgeNetworkSelectors = () => {
   return (
     <Row alignItems="flex-end" justifyContent="space-between">
-      <BridgeNetworkPicker destination="from" />
+      <BridgeNetworkPicker type="from" />
       <RightArrowInCircle scale={0.9} />
-      <BridgeNetworkPicker destination="to" />
+      <BridgeNetworkPicker type="destination" />
     </Row>
   );
 };

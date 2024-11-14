@@ -1,4 +1,4 @@
-import { useBridgeHistory } from '@hooks';
+import { useBridgeHistory } from '../../../hooks/query/useBridgeHistory';
 
 export const usePendingTransactions = () => {
   const { data: transactions } = useBridgeHistory();

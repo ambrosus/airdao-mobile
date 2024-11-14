@@ -1,22 +1,21 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { styles } from '../../BridgeNetworkSelectors/styles';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { TokenLogo } from '@components/modular';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { BottomSheetRef } from '@components/composite';
-import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
-import { BottomSheetBridgeNetworkSelector } from '../../BottomSheetBridgeNetworkSelector';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetBridgeNetworkSelector } from '@features/bridge/templates/BottomSheetBridgeNetworkSelector';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { useBridgeContextData } from '@features/bridge/context';
+import { ChevronDownIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
+import { useTranslation } from 'react-i18next';
 
-export const BridgeNetworkPicker = ({
-  destination
-}: BridgeNetworkPickerProps) => {
-  const isFrom = destination === 'from';
-  const { fromParams, toParams } = useBridgeContextData();
+export const BridgeNetworkPicker = ({ type }: BridgeNetworkPickerProps) => {
+  const isFrom = type === 'from';
+  const { variables } = useBridgeContextData();
+  const { fromData, destinationData } = variables;
   const choseNetworksRef = useRef<BottomSheetRef>(null);
   const showNetworks = () => {
     choseNetworksRef.current?.show();
@@ -28,10 +27,10 @@ export const BridgeNetworkPicker = ({
     }, 200);
   };
 
-  const pickerData = isFrom ? fromParams : toParams;
+  const pickerData = isFrom ? fromData : destinationData;
 
   const onPressItem = (item: ParsedBridge) => {
-    pickerData.setter(item);
+    pickerData.setter(type, item);
     hideNetworks();
   };
 
@@ -44,7 +43,7 @@ export const BridgeNetworkPicker = ({
         fontFamily="Inter_500Medium"
         color={COLORS.neutral900}
       >
-        {t(`common.transaction.${destination}`)}
+        {t(`common.transaction.${type}`)}
       </Text>
       <Spacer value={scale(2)} />
       <Button onPress={showNetworks} style={styles.select}>
@@ -75,7 +74,7 @@ export const BridgeNetworkPicker = ({
       </Button>
       <BottomSheetBridgeNetworkSelector
         selectorType={'network'}
-        destination={destination}
+        type={type}
         onPressItem={onPressItem}
         ref={choseNetworksRef}
       />

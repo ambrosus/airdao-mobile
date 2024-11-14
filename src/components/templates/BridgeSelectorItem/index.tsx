@@ -11,10 +11,9 @@ interface BridgeSelectorItemModel {
   name: string;
   symbol: CryptoCurrencyCode | undefined;
   item: ParsedBridge | RenderTokenItem;
-  rightContent: ReactNode;
+  rightContent?: ReactNode;
   isActive: boolean;
   onPressItem: (item: any) => void;
-  tokenSymbol?: string;
 }
 
 export const BridgeSelectorItem = ({

@@ -12,6 +12,7 @@ export interface EnvData {
 }
 
 export interface Token {
+  balance: BigNumberish;
   address: string;
   bridgeNetwork: BridgeNetwork | string; // for which bridge this token was created, eth or bsc (can't be amb)
   decimals: number;

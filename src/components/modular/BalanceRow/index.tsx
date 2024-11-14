@@ -42,7 +42,7 @@ export const BalanceRow = ({
   const { balance: _balance, isFetching } = useERC20Balance(
     address,
     undefined,
-    Object.keys(token).includes('balance')
+    !token.balance
   );
   const bnBalance = token.balance || _balance;
 

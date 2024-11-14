@@ -10,24 +10,26 @@ import { FlatList, TouchableOpacity } from 'react-native';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
 import { styles } from './styles';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { BridgeSelectorTypes } from '@models/Bridge';
 
 interface BottomSheetChoseNetworksProps {
   onPressItem: (item: any) => void;
   selectorType: 'network' | 'token';
-  destination?: 'from' | 'to';
+  type?: BridgeSelectorTypes;
 }
 
 export const BottomSheetBridgeNetworkSelector = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
 >((props, ref) => {
-  const { onPressItem, destination, selectorType } = props;
+  const { onPressItem, type: destination, selectorType } = props;
 
   const isFrom = selectorType && destination === 'from';
 
-  const { bridges, fromParams, toParams } = useBridgeContextData();
+  const { variables } = useBridgeContextData();
+  const { bridges, fromData, destinationData } = variables;
 
-  const pickerData = isFrom ? fromParams : toParams;
+  const pickerData = isFrom ? fromData : destinationData;
 
   const { t } = useTranslation();
 

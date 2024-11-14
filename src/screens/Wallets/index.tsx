@@ -17,13 +17,12 @@ import {
 } from '@components/templates';
 import { Spacer } from '@components/base';
 import { useBalanceOfAddress, useWallet } from '@hooks';
-import { SCREEN_HEIGHT, scale, verticalScale } from '@utils/scaling';
+import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { HomeHeader } from './components';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
-import { useBridgeContextData } from '@features/bridge/context';
 
 export const HomeScreen = () => {
   const { onChangeSelectedWallet } = useWallet();
@@ -44,20 +43,18 @@ export const HomeScreen = () => {
     selectedAccountWithBalance.ambBalanceWei = selectedAccountBalance.wei;
   }
 
-  const { setSelectedAccount } = useBridgeContextData();
+  const { wallet: setSelectedAccount } = useWallet();
 
   useFocusEffect(
     useCallback(() => {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
-      setSelectedAccount(accounts[scrollIdx]);
-    }, [accounts, scrollIdx, setSelectedAccount])
+    }, [accounts, scrollIdx])
   );
 
   useEffect(() => {
     if (accounts.length > 0) {
       const account = accounts[scrollIdx];
       WalletUtils.changeSelectedWallet(account?.wallet?.id);
-      setSelectedAccount(account);
       onChangeSelectedWallet(account);
     }
   }, [accounts, onChangeSelectedWallet, scrollIdx, setSelectedAccount]);

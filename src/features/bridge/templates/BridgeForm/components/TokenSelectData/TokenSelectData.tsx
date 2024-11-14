@@ -1,16 +1,17 @@
 import React, { forwardRef } from 'react';
 import { BottomSheetRef } from '@components/composite';
-import { Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { useBridgeContextData } from '@features/bridge/context';
 import { FlatList, View } from 'react-native';
 import { RenderTokenItem } from '@models/Bridge';
-import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
 import { styles } from './styles';
-import { formatUnits } from 'ethers/lib/utils';
+import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
 import { NumberUtils } from '@utils/number';
+import { formatUnits } from 'ethers/lib/utils';
 import { DECIMAL_LIMIT } from '@constants/variables';
+import { Text } from '@components/base';
+import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { Token } from '@lib/bridgeSDK/models/types';
 
 interface BottomSheetChoseNetworksProps {
   onPressItem: (item: any) => void;
@@ -22,8 +23,9 @@ export const TokenSelectData = forwardRef<
 >((props) => {
   const { onPressItem } = props;
 
-  const { networksParams, tokenParams } = useBridgeContextData();
-  const TokenBalance = ({ token }: { token: RenderTokenItem }) => {
+  const { variables } = useBridgeContextData();
+  const { selectedBridgeData, selectedTokenPairs } = variables;
+  const TokenBalance = ({ token }: { token: Token }) => {
     const balance = NumberUtils.limitDecimalCount(
       formatUnits(token.balance || 0, token.decimals),
       DECIMAL_LIMIT.CRYPTO
@@ -38,17 +40,18 @@ export const TokenSelectData = forwardRef<
 
   const renderTokenItem = (token: any) => {
     const { item }: { item: RenderTokenItem } = token;
+    // @ts-ignore
+    const renderToken = item[0];
+    // @ts-ignore
+    const selectedTokenItem = selectedTokenPairs[0];
     return (
       <BridgeSelectorItem
-        symbol={item.renderTokenItem.symbol}
-        name={item.renderTokenItem.name}
-        isActive={
-          tokenParams?.value?.renderTokenItem?.name ===
-          item.renderTokenItem.name
-        }
-        rightContent={<TokenBalance token={item.renderTokenItem} />}
+        symbol={renderToken.symbol}
+        name={renderToken.name}
+        isActive={renderToken.name === selectedTokenItem.name}
+        rightContent={<TokenBalance token={renderToken} />}
         onPressItem={onPressItem}
-        key={item.renderTokenItem?.name}
+        key={renderToken.name}
         item={item}
       />
     );
@@ -59,7 +62,7 @@ export const TokenSelectData = forwardRef<
       <FlatList
         contentContainerStyle={styles.listContainer}
         // @ts-ignore
-        data={networksParams}
+        data={selectedBridgeData.pairs}
         renderItem={renderTokenItem}
       />
     </View>
