@@ -27,9 +27,6 @@ export interface BridgePairsModel {
   pairs: [Token, Token][];
   provider: Promise<ethers.providers.JsonRpcProvider | undefined>;
 }
-export interface _RenderTokenItem extends Token {
-  balance: BigNumber;
-}
 export interface RenderTokenItem {
   name: PairsNetworksNamesModel;
   pairs: [Token, Token];

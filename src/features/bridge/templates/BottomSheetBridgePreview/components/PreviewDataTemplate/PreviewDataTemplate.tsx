@@ -3,7 +3,7 @@ import { verticalScale } from '@utils/scaling';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
-import { PreviewDataItem } from '@features/bridge/templates/BottomSheetBridgePreview/components/PreviewData/components/PreviewDataItem';
+import { PreviewDataItem } from '@features/bridge/templates/BottomSheetBridgePreview/components/PreviewDataTemplate/components/PreviewDataItem';
 import { PrimaryButton } from '@components/modular';
 import React from 'react';
 import { useBridgeContextData } from '@features/bridge/context';

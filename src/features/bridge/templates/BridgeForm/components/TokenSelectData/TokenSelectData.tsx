@@ -1,17 +1,18 @@
 import React, { forwardRef } from 'react';
-import { BottomSheetRef } from '@components/composite';
-import { useBridgeContextData } from '@features/bridge/context';
-import { FlatList, View } from 'react-native';
-import { RenderTokenItem } from '@models/Bridge';
-import { styles } from './styles';
-import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
-import { NumberUtils } from '@utils/number';
 import { formatUnits } from 'ethers/lib/utils';
-import { DECIMAL_LIMIT } from '@constants/variables';
-import { Text } from '@components/base';
-import { scale } from '@utils/scaling';
+
+import { FlatList, View } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { NumberUtils } from '@utils/number';
+import { scale } from '@utils/scaling';
+import { Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
+import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
+import { useBridgeContextData } from '@features/bridge/context';
+import { RenderTokenItem } from '@models/Bridge';
 import { Token } from '@lib/bridgeSDK/models/types';
+import { DECIMAL_LIMIT } from '@constants/variables';
+import { styles } from './styles';
 
 interface BottomSheetChoseNetworksProps {
   onPressItem: (item: any) => void;

@@ -21,17 +21,14 @@ interface BottomSheetChoseNetworksProps {
 export const BottomSheetBridgeNetworkSelector = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
->((props, ref) => {
-  const { onPressItem, type: destination, selectorType } = props;
+>(({ onPressItem, type: destination, selectorType }, ref) => {
+  const { t } = useTranslation();
 
   const isFrom = selectorType && destination === 'from';
 
   const { variables } = useBridgeContextData();
   const { bridges, fromData, destinationData } = variables;
-
   const pickerData = isFrom ? fromData : destinationData;
-
-  const { t } = useTranslation();
 
   // @ts-ignore
   const onClose = () => ref?.current?.dismiss();

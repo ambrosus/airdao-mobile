@@ -43,8 +43,6 @@ export const HomeScreen = () => {
     selectedAccountWithBalance.ambBalanceWei = selectedAccountBalance.wei;
   }
 
-  const { wallet: setSelectedAccount } = useWallet();
-
   useFocusEffect(
     useCallback(() => {
       WalletUtils.changeSelectedWallet(accounts[scrollIdx]?.wallet?.id);
@@ -57,7 +55,7 @@ export const HomeScreen = () => {
       WalletUtils.changeSelectedWallet(account?.wallet?.id);
       onChangeSelectedWallet(account);
     }
-  }, [accounts, onChangeSelectedWallet, scrollIdx, setSelectedAccount]);
+  }, [accounts, onChangeSelectedWallet, scrollIdx]);
 
   const isSelectAccountBalanceZero = useMemo(() => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();

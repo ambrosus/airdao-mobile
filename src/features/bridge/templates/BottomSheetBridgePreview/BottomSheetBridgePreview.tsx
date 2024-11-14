@@ -88,6 +88,7 @@ export const BottomSheetBridgePreview = forwardRef<
   };
   const onClose = () => {
     setDefaultOptions();
+    // @ts-ignore
     ref?.current?.dismiss();
   };
 

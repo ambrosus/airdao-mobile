@@ -20,5 +20,5 @@ export interface BridgeTransactionHistoryDTO {
   withdrawTx: string;
   timestampStart: number;
   transferFinishTxHash: string;
-  wait: () => Promise<any>;
+  wait: () => Promise<unknown>;
 }

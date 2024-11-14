@@ -46,7 +46,7 @@ export const Bridge = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        onBackPress={() => navigation.goBack()}
+        onBackPress={navigation.goBack}
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}

@@ -26,7 +26,7 @@ export const getFeeData = async ({
       )
     : selectedTokenFrom.balance;
 
-  const isAmountToFeeLessThenZero = !balanceToFee.gt(0);
+  const isAmountToFeeLessThenZero = balanceToFee.lt(0);
 
   const dataForFee = {
     tokenFrom: selectedTokenFrom,
