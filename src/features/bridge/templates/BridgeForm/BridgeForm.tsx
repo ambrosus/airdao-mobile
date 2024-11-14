@@ -26,7 +26,7 @@ import { InputWithTokenSelect } from '@components/templates';
 import { Tokens } from '@models/Bridge';
 import { parseUnits } from 'ethers/lib/utils';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
-import { getFeeData } from '@features/bridge/context/helpers/getBridgeFee';
+import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { FeeData } from '@lib/bridgeSDK/models/types';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { NumberUtils } from '@utils/number';

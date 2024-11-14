@@ -12,8 +12,8 @@ import {
   DEFAULT_TOKEN_TO
 } from '@features/bridge/constants';
 import { useWallet } from '@hooks';
-import { getBridgeConfig } from '@features/bridge/context/helpers';
-import { parsedBridges } from '@features/bridge/context/helpers/parseBridges';
+import { getBridgeConfig } from '../utils';
+import { parsedBridges } from '@features/bridge/utils/parseBridges';
 import {
   BridgeSelectorTypes,
   ParsedBridge,
