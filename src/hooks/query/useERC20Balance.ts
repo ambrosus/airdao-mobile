@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { erc20Contracts } from '@lib/erc20/erc20.contracts';
-import { useWallet } from '@hooks/useWallet';
+import { useWalletStore } from '@entities/wallet';
 
 /**
  * A custom React Query hook to fetch ERC20 token balance.
@@ -14,7 +14,7 @@ export function useERC20Balance(
   ownerAddress?: string,
   enabled = true
 ) {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const isEnabled = !!tokenAddress && enabled;
   const { data, isFetching, refetch } = useQuery(
     ['erc20-balance', tokenAddress],

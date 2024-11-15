@@ -16,7 +16,7 @@ import {
   BarcodeScannerIcon,
   NotificationBellIcon
 } from '@components/svg/icons/v2';
-import { useNotificationsQuery, useWallet } from '@hooks';
+import { useNotificationsQuery } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 import {
@@ -30,7 +30,6 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { scale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes/navigation';
-
 import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
 import { NumberUtils } from '@utils/number';
@@ -38,6 +37,7 @@ import {
   useBarcode,
   useNewNotificationsCount
 } from '@features/wallet-assets/lib/hooks';
+import { useWalletStore } from '@entities/wallet';
 
 interface HomeHeaderProps {
   account: ExplorerAccount | null;
@@ -49,7 +49,7 @@ export const HomeHeader = React.memo(
     const navigation = useNavigation<HomeNavigationProp>();
     const { height: WINDOW_HEIGHT } = useWindowDimensions();
 
-    const { wallet } = useWallet();
+    const { wallet } = useWalletStore();
     const { data: notifications } = useNotificationsQuery();
     const newNotificationsCount = useNewNotificationsCount();
 

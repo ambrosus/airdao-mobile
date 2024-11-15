@@ -8,16 +8,13 @@ import React, {
 import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import {
-  useEstimatedTransferFee,
-  useTokensAndTransactions,
-  useWallet
-} from '@hooks';
+import { useEstimatedTransferFee, useTokensAndTransactions } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
@@ -36,9 +33,9 @@ import {
 } from '@features/send-funds/lib/hooks';
 import { InputWithTokenSelect } from '@components/templates';
 import { TokensList } from '@features/send-funds/components/composite';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
 import { FundsHeader } from '@features/send-funds/components/templates';
+import { useWalletStore } from '@entities/wallet';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
@@ -60,7 +57,7 @@ export const SendFunds = ({ route }: Props) => {
 
   const transactionIdRef = useRef('');
 
-  const { wallet: account } = useWallet();
+  const { wallet: account } = useWalletStore();
   const walletHash = account?.wallet.id ?? '';
 
   const _AMBEntity = useAMBEntity(senderAddress);

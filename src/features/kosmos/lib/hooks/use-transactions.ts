@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useWallet } from '@hooks';
 import { TxType } from '@features/kosmos/types';
 import { fetchMarketTransactions } from '@features/kosmos/api';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { useWalletStore } from '@entities/wallet';
 
 const VERSIONS = ['v1', 'v2'];
 
 export function useTransactions() {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const [loading, setLoading] = useState(false);
   const { transactions, setTransactions } = useKosmosMarketsContextSelector();
 

@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { QueryResponse } from '@appTypes';
 import { API } from '@api/api';
-import { useWallet } from '@hooks';
+import { useWalletStore } from '@entities/wallet';
 
 export function useBridgeHistory(): QueryResponse<
   BridgeTransactionHistoryDTO[]
 > {
-  const { wallet: selectedAccount } = useWallet();
+  const { wallet: selectedAccount } = useWalletStore();
   function fetchBridgeHistory(): Promise<BridgeTransactionHistoryDTO[]> {
     return API.bridgeService.getBridgeHistory(selectedAccount?.address ?? '');
   }

@@ -16,16 +16,17 @@ import {
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { Spacer } from '@components/base';
-import { useBalanceOfAddress, useWallet } from '@hooks';
+import { useBalanceOfAddress } from '@hooks';
 import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
+import { useWalletStore } from '@entities/wallet';
 
 export const HomeScreen = () => {
-  const { onChangeSelectedWallet } = useWallet();
+  const { setWallet } = useWalletStore();
   const { data: accounts } = useAllAccounts();
   const [scrollIdx, setScrollIdx] = useState(0);
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
@@ -53,9 +54,9 @@ export const HomeScreen = () => {
     if (accounts.length > 0) {
       const account = accounts[scrollIdx];
       WalletUtils.changeSelectedWallet(account?.wallet?.id);
-      onChangeSelectedWallet(account);
+      setWallet(account);
     }
-  }, [accounts, onChangeSelectedWallet, scrollIdx]);
+  }, [accounts, scrollIdx, setWallet]);
 
   const isSelectAccountBalanceZero = useMemo(() => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();

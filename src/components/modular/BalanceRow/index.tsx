@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { t } from 'i18next';
 import { Token } from '@models';
 import { CryptoCurrencyCode } from '@appTypes';
-import { useERC20Balance, useUSDPrice, useWallet } from '@hooks';
+import { useERC20Balance, useUSDPrice } from '@hooks';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { ShimmerLoader } from '@components/animations';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
@@ -11,6 +11,7 @@ import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
 import { scale } from '@utils/scaling';
 import { useAMBEntity } from '@features/send-funds/lib/hooks';
+import { useWalletStore } from '@entities/wallet';
 
 interface BalanceRowProps {
   readonly token: Token;
@@ -29,7 +30,7 @@ export const BalanceRow = ({
   onChangeText,
   isRequiredRefetchBalance
 }: BalanceRowProps): JSX.Element => {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const _AMBEntity = useAMBEntity(wallet?.address ?? '');
 
   const isAMBEntity = useMemo(

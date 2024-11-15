@@ -6,14 +6,14 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { ReceiveFunds } from '../ReceiveFunds';
-import { useWallet } from '@hooks';
+import { useWalletStore } from '@entities/wallet';
 
 interface WalletDepositFundsProps {
   readonly onRefresh?: () => void;
 }
 
 export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
 
   const receiveFundsBottomSheetRef = useRef<BottomSheetRef>(null);
 

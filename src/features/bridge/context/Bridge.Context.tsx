@@ -11,7 +11,6 @@ import {
   DEFAULT_TOKEN_FROM,
   DEFAULT_TOKEN_TO
 } from '@features/bridge/constants';
-import { useWallet } from '@hooks';
 import { getBridgeConfig } from '../utils';
 import { parsedBridges } from '@features/bridge/utils/parseBridges';
 import {
@@ -25,6 +24,7 @@ import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { useWalletStore } from '@entities/wallet';
 
 const EMPTY_FEE_DATA = [
   {
@@ -37,7 +37,7 @@ const EMPTY_FEE_DATA = [
 ];
 
 export const BridgeContext = () => {
-  const { wallet: selectedWallet } = useWallet();
+  const { wallet: selectedWallet } = useWalletStore();
   const [bridgeDataLoader, setBridgeDataLoader] = useState(false);
   const [templateDataLoader, setTemplateDataLoader] = useState(false);
   const [bridgeConfig, setBridgeConfig] = useState<BridgeConfigModel | null>(
