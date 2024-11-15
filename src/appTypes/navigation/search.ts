@@ -5,10 +5,10 @@ import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 
 export type SearchTabParamsList = {
-  SearchScreen: { address?: string } | undefined;
+  Explore: { address?: string } | undefined;
 } & CommonStackParamsList;
 
 export type SearchTabNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Search'>,
+  BottomTabNavigationProp<TabsParamsList>,
   NativeStackNavigationProp<SearchTabParamsList>
 >;

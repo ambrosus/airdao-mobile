@@ -8,11 +8,9 @@ import React, {
 import {
   FlatList,
   InteractionManager,
-  Keyboard,
   ListRenderItemInfo,
   RefreshControl,
   StyleProp,
-  TouchableWithoutFeedback,
   View,
   ViewStyle
 } from 'react-native';
@@ -29,13 +27,12 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import {
   Button,
   KeyboardDismissingView,
-  Row,
   Spacer,
   Spinner,
   Text
@@ -58,10 +55,10 @@ import { useAllAddressesContext } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { Header } from '@components/composite';
 
-export const SearchScreen = () => {
+export const Explore = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
-  const { top } = useSafeAreaInsets();
   const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
   const searchAddressRef = useRef<SearchAddressRef>(null);
 
@@ -191,110 +188,98 @@ export const SearchScreen = () => {
       searchAddressRef?.current?.focus();
     });
   }, []);
-
-  const onDismissPress = () => {
-    renderSearch(false);
-    Keyboard.dismiss();
-  };
+  const ContentRight = () => (
+    <>
+      <Button onPress={onSearchFocusHandle}>
+        <SearchLargeIcon color={COLORS.alphaBlack50} />
+      </Button>
+      <Spacer horizontal value={scale(19)} />
+      <Button onPress={searchAddressRef.current?.showScanner}>
+        <ScannerIcon color={COLORS.neutral600} />
+      </Button>
+    </>
+  );
 
   return (
-    <TouchableWithoutFeedback onPress={onDismissPress}>
-      <View style={{ ...styles.main, top }}>
+    <SafeAreaView style={styles.main}>
+      {!searchAddressContentVisible && (
+        <Header
+          onBackPress={navigation.goBack}
+          title={t('tab.explore')}
+          bottomBorder
+          contentRight={<ContentRight />}
+        />
+      )}
+      <Spacer value={15} />
+      <View testID="Search_Screen" style={styles.searchScreen}>
+        <Animated.View
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={[styles.searchMain, animatedStyle]}
+        >
+          <SearchAddress
+            searchAddress
+            scannerDisabled={true}
+            ref={searchAddressRef}
+            onContentVisibilityChanged={renderSearch}
+          />
+        </Animated.View>
         {!searchAddressContentVisible && (
-          <Row
-            alignItems="center"
-            justifyContent="space-between"
-            style={styles.searchContainer}
-          >
-            <Text
-              fontSize={24}
-              fontFamily="Inter_700Bold"
-              fontWeight="700"
-              color={COLORS.neutral800}
-            >
-              {t('tab.explore')}
-            </Text>
-            <Row>
-              <Button onPress={onSearchFocusHandle}>
-                <SearchLargeIcon color={COLORS.alphaBlack50} />
-              </Button>
-              <Spacer horizontal value={scale(19)} />
-              <Button onPress={searchAddressRef.current?.showScanner}>
-                <ScannerIcon color={COLORS.neutral600} />
-              </Button>
-            </Row>
-          </Row>
-        )}
-        <View testID="Search_Screen" style={styles.searchScreen}>
           <Animated.View
+            style={styles.container}
             entering={FadeIn}
             exiting={FadeOut}
-            style={[styles.searchMain, animatedStyle]}
           >
-            <SearchAddress
-              searchAddress
-              scannerDisabled={true}
-              ref={searchAddressRef}
-              onContentVisibilityChanged={renderSearch}
-            />
+            <KeyboardDismissingView>
+              <Text
+                fontFamily="Inter_700Bold"
+                fontWeight="700"
+                fontSize={20}
+                color={COLORS.neutral900}
+              >
+                {t('common.top.holders')}
+              </Text>
+              <Spacer value={verticalScale(12)} />
+            </KeyboardDismissingView>
+            {showScreenSpinner ? (
+              renderSpinner(styles.spinnerFooter)
+            ) : (
+              <Animated.View
+                entering={FadeInLeft.duration(150)}
+                exiting={FadeOutRight.duration(150)}
+              >
+                <FlatList<ExplorerAccount>
+                  // @ts-ignore
+                  data={accountsError ? [{}] : accounts}
+                  refreshControl={
+                    <RefreshControl
+                      onRefresh={_onRefresh}
+                      refreshing={!!(refetching && userPerformedRefresh)}
+                    />
+                  }
+                  renderItem={renderAccount}
+                  keyExtractor={(item) => `${item._id}${Math.random()}`}
+                  contentContainerStyle={styles.list}
+                  showsVerticalScrollIndicator={false}
+                  ItemSeparatorComponent={() => (
+                    <Spacer value={verticalScale(26)} />
+                  )}
+                  onEndReachedThreshold={0.25}
+                  onEndReached={loadMoreAccounts}
+                  ListFooterComponent={
+                    showFooterSpinner ? (
+                      renderSpinner(styles.spinnerFooter)
+                    ) : (
+                      <></>
+                    )
+                  }
+                  testID="List_Of_Addresses"
+                />
+              </Animated.View>
+            )}
           </Animated.View>
-          {!searchAddressContentVisible && (
-            <Animated.View
-              style={styles.container}
-              entering={FadeIn}
-              exiting={FadeOut}
-            >
-              <KeyboardDismissingView>
-                <Text
-                  fontFamily="Inter_700Bold"
-                  fontWeight="700"
-                  fontSize={20}
-                  color={COLORS.neutral900}
-                >
-                  {t('common.top.holders')}
-                </Text>
-                <Spacer value={verticalScale(12)} />
-              </KeyboardDismissingView>
-              {showScreenSpinner ? (
-                renderSpinner(styles.spinnerFooter)
-              ) : (
-                <Animated.View
-                  entering={FadeInLeft.duration(150)}
-                  exiting={FadeOutRight.duration(150)}
-                >
-                  <FlatList<ExplorerAccount>
-                    // @ts-ignore
-                    data={accountsError ? [{}] : accounts}
-                    refreshControl={
-                      <RefreshControl
-                        onRefresh={_onRefresh}
-                        refreshing={!!(refetching && userPerformedRefresh)}
-                      />
-                    }
-                    renderItem={renderAccount}
-                    keyExtractor={(item) => `${item._id}${Math.random()}`}
-                    contentContainerStyle={styles.list}
-                    showsVerticalScrollIndicator={false}
-                    ItemSeparatorComponent={() => (
-                      <Spacer value={verticalScale(26)} />
-                    )}
-                    onEndReachedThreshold={0.25}
-                    onEndReached={loadMoreAccounts}
-                    ListFooterComponent={
-                      showFooterSpinner ? (
-                        renderSpinner(styles.spinnerFooter)
-                      ) : (
-                        <></>
-                      )
-                    }
-                    testID="List_Of_Addresses"
-                  />
-                </Animated.View>
-              )}
-            </Animated.View>
-          )}
-        </View>
+        )}
       </View>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };

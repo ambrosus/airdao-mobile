@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback } from 'react';
-import { View, Animated, TouchableOpacity } from 'react-native';
-import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabItem/styles';
+import { Animated, TouchableOpacity, View } from 'react-native';
+import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 
 type Props = {

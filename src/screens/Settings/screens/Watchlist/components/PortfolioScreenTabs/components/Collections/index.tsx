@@ -1,10 +1,10 @@
 import { View } from 'react-native';
 import React from 'react';
-import { ListsGroups } from '@screens/Portfolio/components/ListsOfAddressGroup';
 import { useAllAddressesContext, useLists } from '@contexts';
 import { Spinner } from '@components/base';
 import { sortListByKey } from '@utils/sort';
 import { styles } from './styles';
+import { ListsGroups } from '@screens/Settings/screens/Watchlist/components/ListsOfAddressGroup';
 
 export const Collections = () => {
   const { listsOfAddressGroup } = useLists((v) => v);
