@@ -146,7 +146,8 @@
     "tiny-secp256k1": "^2.2.3",
     "url": "^0.10.3",
     "use-context-selector": "^1.4.4",
-    "web3": "1.2.7"
+    "web3": "1.2.7",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
