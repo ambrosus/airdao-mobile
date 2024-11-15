@@ -397,7 +397,6 @@
   "bridge.transaction.preview.header": "Sending {{amount}} {{symbol}} to {{network}}",
   "bridge.transaction.preview.time": "Estimated arrival time",
 
-
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
   "bridge.set.amount": "Set amount",
@@ -488,5 +487,13 @@
     "title.connections": "Manage Connections",
     "label.connections": "{{connectionsLength}} Sites Connected",
     "scanner": "Scan to Connect"
+  },
+  "products": {
+    "title.trade": "Trade",
+    "title.earn": "Earn",
+    "swap.description": "Earn with pools & swap tokens",
+    "bridge.description": "Seamless asset transfers",
+    "stake.description": "Earn AMB rewards",
+    "kosmos.description": "Earn passive income via bonds"
   }
 }

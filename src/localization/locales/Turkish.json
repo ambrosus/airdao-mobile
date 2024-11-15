@@ -487,5 +487,13 @@
     "title.connections": "Bağlantıları Yönet",
     "label.connections": "{{connectionsLength}} Site Bağlı",
     "scanner": "Bağlanmak için Tara"
+  },
+  "products": {
+    "title.trade": "Alım satım yapın",
+    "title.earn": "Kazan",
+    "swap.description": "Havuzlarla kazanın ve token takas edin",
+    "bridge.description": "Sorunsuz varlık transferleri",
+    "stake.description": "AMB ödülleri kazanın",
+    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin"
   }
 }
