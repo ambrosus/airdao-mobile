@@ -1,5 +1,10 @@
 import { create } from 'zustand';
-import { IsNullableAccount, WalletStore } from './types';
+import { IsNullableAccount } from './types';
+
+interface WalletStore {
+  wallet: IsNullableAccount | null;
+  setWallet: (wallet: IsNullableAccount) => void;
+}
 
 export const useWalletStore = create<WalletStore>((set) => ({
   wallet: null,
