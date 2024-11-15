@@ -1,16 +1,16 @@
 import React, { forwardRef, RefObject, useMemo, useState } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useTranslation } from 'react-i18next';
 import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { Row, Spacer, Text } from '@components/base';
 import { useBridgeContextData } from '@features/bridge/context';
 import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePreview/helpers/amountChecker';
 import { scale, verticalScale } from '@utils/scaling';
-import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
-import { CloseCircleIcon } from '@components/svg/icons/v2';
 import { GeneralPreviewTemplate, Loader } from './components/index';
-import { formatUnits } from 'ethers/lib/utils';
 
 const DEFAULT_TRANSACTION = {
   eventId: '',
