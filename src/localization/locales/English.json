@@ -418,7 +418,9 @@
   "bridge.transfer.failed.sub.header": "An error occurred while processing your transaction.",
   "bridge.transfer.failed.to.wallet.btn": "Go to wallet",
   "bridge.amount.less.then.fee": "Amount less then fee",
-  "bridge.insufficient.funds.to.pay.fee": "Insufficient funds to pay the network fee",
+
+  "bridge.insufficient.funds.to.pay.fee.header": "Insufficient {{symbol}} for transaction fees.",
+  "bridge.insufficient.funds.to.pay.fee.subHeader": "Please add {{symbol}} to cover network costs.",
   "bridge.unknown.error": "Unknown error",
 
   "kosmos.primary.tabs.market": "Markets",
