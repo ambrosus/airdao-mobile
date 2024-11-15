@@ -353,6 +353,8 @@
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
   "wallet.my.assets": "Assets",
+  "wallets.nfts": "NFTs",
+  "wallet.history": "History",
   "wallet.picker.select": "Select Wallet",
 
   "swap.route": "Route",
