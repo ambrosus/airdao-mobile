@@ -19,7 +19,7 @@ interface BottomSheetSuccessViewProps extends PropsWithChildren {
 }
 
 export const BottomSheetSuccessView = ({
-  title = '!!!Transaction confirmed',
+  title = t('common.tx.confirmed'),
   description,
   buttonLabel = t('common.done'),
   onButtonPress,

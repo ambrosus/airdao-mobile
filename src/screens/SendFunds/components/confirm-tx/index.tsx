@@ -105,7 +105,7 @@ export const ConfirmTransaction = ({
       <View style={styles.innerContainer}>
         {/* Amount details section */}
         <Row alignItems="center" justifyContent="space-between">
-          <Title>You’re sending</Title>
+          <Title>{t('common.transactions.sending')}</Title>
           <Row alignItems="center" style={styles.amountContainerRow}>
             <TokenLogo token={currency} scale={0.75} />
             <Text
@@ -124,7 +124,10 @@ export const ConfirmTransaction = ({
           address={from}
         />
 
-        <AddressRowWithAction label={t('common.transaction.to')} address={to} />
+        <AddressRowWithAction
+          label={t('common.transaction.destination')}
+          address={to}
+        />
 
         <Row alignItems="center" justifyContent="space-between">
           <Title>{t('swap.bottom.sheet.lpfee')}</Title>
@@ -156,7 +159,7 @@ export const ConfirmTransaction = ({
             </Row>
           ) : (
             <Text color={COLORS.neutral0} fontSize={16}>
-              !!!Confirm
+              {t('button.confirm')}
             </Text>
           )}
         </PrimaryButton>

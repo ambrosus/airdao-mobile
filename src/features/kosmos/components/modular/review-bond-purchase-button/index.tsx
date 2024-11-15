@@ -43,7 +43,7 @@ export const ReviewBondPurchaseButton = ({
         ? t('kosmos.button.market.closed')
         : disabled
         ? t('button.enter.amount')
-        : t('button.review'),
+        : t('common.review'),
     [disabled, market?.isLive, t]
   );
 

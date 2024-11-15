@@ -70,7 +70,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
 
   return (
     <BottomSheet
-      title={t('button.review')}
+      title={t('common.review')}
       closeOnBackPress={!isTransactionProcessing}
       swipingEnabled={!isTransactionProcessing}
       ref={bottomSheetRef}

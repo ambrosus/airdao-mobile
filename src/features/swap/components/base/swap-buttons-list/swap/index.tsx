@@ -63,7 +63,7 @@ export const SwapButton = ({
             fontFamily="Inter_600SemiBold"
             color={COLORS.brand600}
           >
-            Swapping
+            {t('button.swapping')}
           </Text>
         </Row>
       ) : (

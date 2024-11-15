@@ -144,7 +144,7 @@ export const ClaimableOrderCardDetails = ({
           <TextOrSpinner
             loading={isClaimingNow}
             label={textStringValue}
-            loadingLabel="!!!Claiming"
+            loadingLabel={t('kosmos.button.claiming')}
             styles={{
               active: {
                 fontSize: 12,
