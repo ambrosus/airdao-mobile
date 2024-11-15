@@ -3,6 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { ChevronDownIcon } from '@components/svg/icons';
 
 interface FiltersSelectorProps {
   label: string;
@@ -19,6 +20,8 @@ export const FiltersSelector = ({
         <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.black}>
           {label}
         </Text>
+
+        <ChevronDownIcon scale={0.85} color={COLORS.neutral800} />
       </View>
     </TouchableOpacity>
   );
