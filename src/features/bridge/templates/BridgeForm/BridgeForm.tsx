@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { styles } from './styles';
 import {
   KeyboardDismissingView,
@@ -14,7 +20,7 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
-import { useKeyboardHeight } from '@hooks';
+import { useKeyboardHeight, useWallet } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
 import { View } from 'react-native';
@@ -23,16 +29,24 @@ import { isAndroid } from '@utils/isPlatform';
 import { COLORS } from '@constants/colors';
 import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
 import { InputWithTokenSelect } from '@components/templates';
-import { Tokens } from '@models/Bridge';
+import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
 import { parseUnits } from 'ethers/lib/utils';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { FeeData } from '@lib/bridgeSDK/models/types';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { NumberUtils } from '@utils/number';
+import {
+  DEFAULT_TRANSACTION,
+  EMPTY_FEE_DATA
+} from '@features/bridge/constants';
+import { getAllBridgeTokenBalance } from '@lib/bridgeSDK/bridgeFunctions/getAllBridgeTokenBalance';
 
 export const BridgeForm = () => {
+  const { wallet: selectedWallet } = useWallet();
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
+
+  const [previewLoader, setPreviewLoader] = useState(false);
 
   const previewRef = useRef<BottomSheetRef>(null);
   const tokenSelectRef = useRef<BottomSheetRef>(null);
@@ -46,14 +60,21 @@ export const BridgeForm = () => {
     templateDataLoader,
     amountToBridge,
     bridgeConfig,
-    networkNativeToken
+    networkNativeToken,
+    bridgePreviewData,
+    fromData,
+    destinationData,
+    selectedBridgeData,
+    processBridge,
+    bridgeErrorHandler
   } = variables;
   const {
     setBridgePreviewData,
     setTemplateDataLoader,
     setAmountToBridge,
     setSelectedTokenPairs,
-    processBridge
+    setProcessingTransaction,
+    setSelectedBridgeData
   } = methods;
 
   const initialMargin = useSharedValue(0);
@@ -88,54 +109,63 @@ export const BridgeForm = () => {
     setSelectedTokenPairs(tokenPair);
     tokenSelectRef?.current?.dismiss();
   };
-  const parseBridgePreviewData = (feeData: FeeData, gasFee: BigNumberish) => {
-    return [
-      {
-        name: t('bridge.preview.receive'),
-        crypto: {
-          amount: feeData?.amount ?? BigNumber.from(0),
-          decimals: selectedTokenFrom.decimals
+  const parseBridgePreviewData = useCallback(
+    (feeData: FeeData, gasFee: BigNumberish) => {
+      return [
+        {
+          name: t('bridge.preview.receive'),
+          crypto: {
+            amount: feeData?.amount ?? BigNumber.from(0),
+            decimals: selectedTokenFrom.decimals
+          },
+          symbol: selectedTokenFrom.symbol
         },
-        symbol: selectedTokenFrom.symbol
-      },
-      {
-        name: t('bridge.preview.bridge.fee'),
-        crypto: {
-          amount: feeData.bridgeFee,
-          decimals: networkNativeToken?.decimals || 18
+        {
+          name: t('bridge.preview.bridge.fee'),
+          crypto: {
+            amount: feeData.bridgeFee,
+            decimals: networkNativeToken?.decimals || 18
+          },
+          symbol: networkNativeToken.symbol
         },
-        symbol: networkNativeToken.symbol
-      },
-      {
-        name: t('bridge.preview.network.fee'),
-        crypto: {
-          amount: feeData?.transferFee ?? BigNumber.from(0),
-          decimals: networkNativeToken?.decimals || 18
+        {
+          name: t('bridge.preview.network.fee'),
+          crypto: {
+            amount: feeData?.transferFee ?? BigNumber.from(0),
+            decimals: networkNativeToken?.decimals || 18
+          },
+          symbol: networkNativeToken.symbol
         },
-        symbol: networkNativeToken.symbol
-      },
-      {
-        name: t('bridge.preview.gas.fee'),
-        crypto: {
-          amount: gasFee,
-          decimals: networkNativeToken?.decimals || 18
-        },
-        symbol: networkNativeToken.symbol
-      }
-    ];
-  };
+        {
+          name: t('bridge.preview.gas.fee'),
+          crypto: {
+            amount: gasFee,
+            decimals: networkNativeToken?.decimals || 18
+          },
+          symbol: networkNativeToken.symbol
+        }
+      ];
+    },
+    [
+      networkNativeToken?.decimals,
+      networkNativeToken.symbol,
+      selectedTokenFrom.decimals,
+      selectedTokenFrom.symbol,
+      t
+    ]
+  );
 
-  const goToPreview = async () => {
+  const goToPreview = useCallback(async () => {
     const isMax =
       amountToBridge ===
-      NumberUtils.limitDecimalCount(
-        ethers.utils.formatUnits(
-          // @ts-ignore
-          selectedTokenFrom?.balance?._hex,
-          selectedTokenFrom.decimals
-        ),
-        selectedTokenFrom.decimals ?? 18
-      );
+        NumberUtils.limitDecimalCount(
+          ethers.utils.formatUnits(
+            // @ts-ignore
+            selectedTokenFrom?.balance?._hex,
+            selectedTokenFrom.decimals
+          ),
+          selectedTokenFrom.decimals ?? 18
+        ) && selectedTokenPairs[0]?.isNativeCoin;
     try {
       setTemplateDataLoader(true);
 
@@ -162,10 +192,105 @@ export const BridgeForm = () => {
           previewRef?.current?.show();
         }
       }
+    } catch (e) {
+      bridgeErrorHandler(e);
     } finally {
       setTimeout(() => setTemplateDataLoader(false), 500);
     }
-  };
+  }, [
+    amountToBridge,
+    bridgeConfig,
+    bridgeErrorHandler,
+    parseBridgePreviewData,
+    processBridge,
+    selectedTokenDestination,
+    selectedTokenFrom,
+    selectedTokenPairs,
+    setBridgePreviewData,
+    setTemplateDataLoader
+  ]);
+
+  const setDefaultOptions = useCallback(() => {
+    setTimeout(() => {
+      setPreviewLoader(false);
+      setProcessingTransaction(null);
+    }, 200);
+  }, [setProcessingTransaction]);
+
+  const onClose = useCallback(async () => {
+    if (selectedBridgeData && selectedWallet?.address) {
+      getAllBridgeTokenBalance(
+        selectedBridgeData?.pairs,
+        fromData.value.id,
+        selectedWallet?.address
+      ).then((pairs) => {
+        setSelectedBridgeData({
+          ...selectedBridgeData,
+          pairs
+        });
+      });
+    }
+
+    setDefaultOptions();
+    previewRef?.current?.dismiss();
+  }, [
+    fromData.value.id,
+    selectedBridgeData,
+    selectedWallet?.address,
+    setDefaultOptions,
+    setSelectedBridgeData
+  ]);
+
+  // @ts-ignore
+  const bridgePreviewDataRef = useRef<PreviewDataWithFeeModel>(EMPTY_FEE_DATA);
+
+  useEffect(() => {
+    if (bridgePreviewData) {
+      bridgePreviewDataRef.current = bridgePreviewData;
+    }
+  }, [bridgePreviewData]);
+
+  const onAcceptPress = useCallback(() => {
+    if (!bridgePreviewDataRef.current?.value) return;
+    setPreviewLoader(true);
+    processBridge(false, bridgePreviewDataRef.current.value.feeData)
+      .then((transaction) => {
+        const transactionWaitingInfo = {
+          ...DEFAULT_TRANSACTION,
+          networkFrom: fromData.value.name,
+          networkTo: destinationData.value.name,
+          tokenFrom: selectedTokenFrom,
+          tokenTo: selectedTokenDestination,
+          amount: +ethers.utils.formatUnits(
+            bridgePreviewDataRef.current?.value.feeData.transferFee,
+            selectedTokenFrom.decimals
+          ),
+          decimalAmount: amountToBridge,
+          denominatedAmount: amountToBridge,
+          fee: ethers.utils.formatUnits(
+            bridgePreviewDataRef.current?.value.feeData.transferFee,
+            selectedTokenFrom.decimals
+          ),
+          wait: transaction.wait
+        };
+        setProcessingTransaction(transactionWaitingInfo);
+      })
+      .catch((e) => {
+        onClose();
+        bridgeErrorHandler(e);
+      })
+      .finally(() => setPreviewLoader(false));
+  }, [
+    amountToBridge,
+    bridgeErrorHandler,
+    destinationData.value.name,
+    fromData.value.name,
+    onClose,
+    processBridge,
+    selectedTokenDestination,
+    selectedTokenFrom,
+    setProcessingTransaction
+  ]);
 
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
@@ -210,7 +335,13 @@ export const BridgeForm = () => {
         </PrimaryButton>
       </Animated.View>
       <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
-      <BottomSheetBridgePreview ref={previewRef} />
+      <BottomSheetBridgePreview
+        ref={previewRef}
+        onClose={onClose}
+        onAcceptPress={onAcceptPress}
+        previewLoader={previewLoader}
+        bridgePreviewData={bridgePreviewData}
+      />
     </KeyboardDismissingView>
   );
 };
