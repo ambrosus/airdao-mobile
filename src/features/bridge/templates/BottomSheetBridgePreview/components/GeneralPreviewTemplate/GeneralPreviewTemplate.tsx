@@ -15,7 +15,7 @@ import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate'
 
 interface GeneralPreviewDataModel {
   errorBalance: boolean;
-  onAcceptPress: () => Promise<void>;
+  onAcceptPress: () => void;
   onClose: () => void;
 }
 

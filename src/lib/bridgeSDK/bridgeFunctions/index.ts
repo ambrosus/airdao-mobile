@@ -1,4 +1,4 @@
 export * from './currentProveder';
-export * from './getBridgeBalance';
+export * from './getTokenBridgeBalance';
 export * from './getBridgePars';
 export * from './getBridgeFeeData';

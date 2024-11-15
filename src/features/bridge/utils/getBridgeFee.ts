@@ -50,6 +50,7 @@ export const getFeeData = async ({
     }
   } catch (e) {
     alert(`getFeeData ERROR ${JSON.stringify(e)}`);
+    return e;
     // ignore
   }
 };
