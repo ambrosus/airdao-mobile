@@ -5,4 +5,3 @@ export * from './Localizations';
 export * from './Navigation';
 export * from './SendCrypto';
 export * from './Passcode';
-export * from './Staking';
