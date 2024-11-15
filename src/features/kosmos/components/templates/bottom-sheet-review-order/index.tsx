@@ -75,11 +75,15 @@ export const BottomSheetReviewOrder = forwardRef<
   }, [transaction.vesting]);
 
   return (
-    <BottomSheet title="!!!Details" ref={bottomSheetRef} swipingEnabled={false}>
+    <BottomSheet
+      title={t('common.details')}
+      ref={bottomSheetRef}
+      swipingEnabled={false}
+    >
       <View style={[styles.container, { paddingBottom: bottomInset }]}>
         <View style={styles.innerContainer}>
           <Row alignItems="center" justifyContent="space-between">
-            <StyledTextItem>Bonds</StyledTextItem>
+            <StyledTextItem>{t('kosmos.bought')}</StyledTextItem>
             <Row style={styles.bondsRowGap} alignItems="center">
               <TokenLogo scale={0.5} token={quoteToken?.symbol ?? ''} />
               <StyledTextItem isValue>{amount}</StyledTextItem>
