@@ -122,8 +122,8 @@ export const BuyBondButton = ({
       onPress={onBuyBondsPress}
     >
       <TextOrSpinner
-        label="Confirm"
-        loadingLabel="Processing"
+        label={t('kosmos.button.buy.bond')}
+        loadingLabel={t('kosmos.button.processing')}
         loading={isTransactionProcessing}
       />
     </PrimaryButton>

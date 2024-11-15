@@ -73,7 +73,7 @@
   "button.import.wallet": "Mevcut cüzdanı içe aktar",
   "button.import.wallet.info": "Mevcut cüzdana eriş.",
   "button.preview": "Ön izleme",
-  "button.review": "Inceleyin",
+  "common.review": "Inceleyin",
   "button.remove": "Kaldır",
   "button.save": "Kaydet",
   "button.setup.security": "Güvenlik kurulumu yap",
@@ -83,6 +83,8 @@
   "button.use.pin": "PIN gir",
   "button.verify": "Doğrula",
   "button.verifying": "!!!Verifying",
+  "button.confirm": "Onaylayın",
+  "button.swapping": "Takas edin",
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
@@ -132,6 +134,7 @@
   "common.top.holders": "En büyük sahipler",
   "common.top.holders.capitalize": "En Büyük Sahipler",
   "common.transaction": "İşlem",
+  "common.transactions.sending": "Gönderiyorsunuz",
   "common.transaction.amount": "Miktar",
   "common.transaction.details": "İşlem detayları",
   "common.transaction.from": "Gönderen",
@@ -147,6 +150,8 @@
   "common.status.failed": "Başarısız oldu",
   "common.status.not.started": "Başlamadı",
   "common.status.success": "Başarılı",
+  "common.tx.confirmed": "İşlem onaylandı",
+  "common.details": "Ayrıntılar",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -353,6 +358,8 @@
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
   "wallet.my.assets": "Varlıklar",
+  "wallet.nfts": "Nft’ler",
+  "wallet.history": "Geçmiş",
   "wallet.picker.select": "Cüzdan seç",
 
   "swap.route": "Rota",
@@ -433,12 +440,13 @@
   "kosmos.button.reset": "Sıfırla",
   "kosmos.button.apply": "Başvur",
   "kosmos.button.claimed": "Talep Edildi",
-  "kosmos.button.buy.bond": "Tahvil satın al",
   "kosmos.button.claim": "Talep et",
   "kosmos.button.close": "Kapat",
   "kosmos.button.enter.amount": "Satın alınacak miktarı girin",
   "kosmos.button.market.closed": "Piyasa kapalı",
   "kosmos.button.ready.claim": "Talep edilmeye hazır",
+  "kosmos.button.claiming": "Talep ediliyor",
+  "kosmos.button.processing": "İşleme",
 
   "kosmos.status.all": "Tümü",
   "kosmos.status.closed": "Kapalı",
@@ -460,6 +468,7 @@
   "kosmos.market.duration": "Piyasa süresi",
   "kosmos.max.bondable": "Maksimum tahvil edilebilir",
   "kosmos.buying": "Satın alıyorsunuz",
+  "kosmos.bought": "Satın aldınız",
   "kosmos.getting": "Alacaksınız",
   "kosmos.protocol.fee": "Protokol ücreti",
 
@@ -487,5 +496,13 @@
     "title.connections": "Bağlantıları Yönet",
     "label.connections": "{{connectionsLength}} Site Bağlı",
     "scanner": "Bağlanmak için Tara"
+  },
+  "products": {
+    "title.trade": "Alım satım yapın",
+    "title.earn": "Kazan",
+    "swap.description": "Havuzlarla kazanın ve token takas edin",
+    "bridge.description": "Sorunsuz varlık transferleri",
+    "stake.description": "AMB ödülleri kazanın",
+    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin"
   }
 }

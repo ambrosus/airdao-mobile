@@ -17,7 +17,7 @@ export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
 
     return (
       <BottomSheet
-        title={t('button.review')}
+        title={t('common.review')}
         swiperIconVisible={false}
         closeOnBackPress={!isProcessingSwap}
         swipingEnabled={false}

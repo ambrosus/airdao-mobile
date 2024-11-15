@@ -55,7 +55,7 @@ export const ReviewSwapButton = () => {
   }, [resolveBottomSheetData]);
 
   const disabled = useMemo(() => {
-    return swapButtonString !== t('button.review') || isProcessingBottomSheet;
+    return swapButtonString !== t('common.review') || isProcessingBottomSheet;
   }, [t, swapButtonString, isProcessingBottomSheet]);
 
   const buttonColors = useMemo(() => {

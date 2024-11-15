@@ -73,7 +73,7 @@
   "button.import.wallet": "Import existing wallet",
   "button.import.wallet.info": "Access your existing wallet.",
   "button.preview": "Preview",
-  "button.review": "Review",
+  "common.review": "Review",
   "button.remove": "Remove",
   "button.save": "Save",
   "button.setup.security": "Setup security",
@@ -83,6 +83,8 @@
   "button.use.pin": "Use PIN",
   "button.verify": "Verify",
   "button.verifying": "Verifying",
+  "button.confirm": "Confirm",
+  "button.swapping": "Swapping",
 
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter new passcode",
@@ -132,6 +134,7 @@
   "common.top.holders": "Top holders",
   "common.top.holders.capitalize": "Top Holders",
   "common.transaction": "Transaction",
+  "common.transactions.sending": "You’re sending",
   "common.transaction.amount": "Amount",
   "common.transaction.details": "Transaction details",
   "common.transaction.from": "From",
@@ -147,6 +150,8 @@
   "common.status.failed": "Failed",
   "common.status.not.started": "Not started",
   "common.status.success": "Success",
+  "common.tx.confirmed": "Transaction confirmed.",
+  "common.details": "Details",
 
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
@@ -353,6 +358,8 @@
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 
   "wallet.my.assets": "Assets",
+  "wallets.nfts": "NFTs",
+  "wallet.history": "History",
   "wallet.picker.select": "Select Wallet",
 
   "swap.route": "Route",
@@ -397,7 +404,6 @@
   "bridge.transaction.preview.header": "Sending {{amount}} {{symbol}} to {{network}}",
   "bridge.transaction.preview.time": "Estimated arrival time",
 
-
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
   "bridge.set.amount": "Set amount",
@@ -434,12 +440,13 @@
   "kosmos.button.reset": "Reset",
   "kosmos.button.apply": "Apply",
   "kosmos.button.claimed": "Claimed",
-  "kosmos.button.buy.bond": "Buy Bond",
   "kosmos.button.claim": "Claim",
   "kosmos.button.close": "Close",
   "kosmos.button.enter.amount": "Enter amount to buy",
   "kosmos.button.market.closed": "Market closed",
   "kosmos.button.ready.claim": "Ready to claim",
+  "kosmos.button.claiming": "Claiming",
+  "kosmos.button.processing": "Processing",
 
   "kosmos.status.all": "All",
   "kosmos.status.closed": "Closed",
@@ -461,6 +468,7 @@
   "kosmos.market.duration": "Market duration",
   "kosmos.max.bondable": "Max bondable",
   "kosmos.buying": "You're buying",
+  "kosmos.bought": "You bought",
   "kosmos.getting": "You will get",
   "kosmos.protocol.fee": "Protocol fee",
 
@@ -488,5 +496,13 @@
     "title.connections": "Manage Connections",
     "label.connections": "{{connectionsLength}} Sites Connected",
     "scanner": "Scan to Connect"
+  },
+  "products": {
+    "title.trade": "Trade",
+    "title.earn": "Earn",
+    "swap.description": "Earn with pools & swap tokens",
+    "bridge.description": "Seamless asset transfers",
+    "stake.description": "Earn AMB rewards",
+    "kosmos.description": "Earn passive income via bonds"
   }
 }
