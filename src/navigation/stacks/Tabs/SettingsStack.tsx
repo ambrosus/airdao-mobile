@@ -14,6 +14,9 @@ import {
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
 import { CreateWalletStep1, CreateWalletStep2 } from '@screens/CreateWallet';
+import { Watchlist } from '@screens/Settings/screens/Watchlist';
+import { Explore } from '@screens/Settings/screens/Explore';
+import { AddressDetails } from '@screens/Address';
 
 const Stack = createNativeStackNavigator<SettingsTabParamsList>();
 export const SettingsStack = () => {
@@ -26,6 +29,9 @@ export const SettingsStack = () => {
       <Stack.Screen name="AppPreferences" component={AppPreferencesScreen} />
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
       <Stack.Screen name="ManageWallets" component={ManageWalletsScreen} />
+      <Stack.Screen name="Watchlist" component={Watchlist} />
+      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen name="Address" component={AddressDetails} />
       <Stack.Screen
         name="NotificationSettings"
         component={NotificationSettingsScreen}

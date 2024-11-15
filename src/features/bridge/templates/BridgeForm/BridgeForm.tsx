@@ -40,7 +40,7 @@ import {
   DEFAULT_TRANSACTION,
   EMPTY_FEE_DATA
 } from '@features/bridge/constants';
-import { getAllBridgeTokenBalance } from '@lib/bridgeSDK/bridgeFunctions/getAllBridgeTokenBalance';
+import { getAllBridgeTokenBalance } from '@lib';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWallet();

@@ -24,13 +24,13 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
   {
     key: 'watchlists',
     title: 'settings.watchlists',
-    route: 'Portfolio',
+    route: 'Watchlist',
     icon: <WatchListIcon color={COLORS.brand500} />
   },
   {
     key: 'explore',
     title: 'settings.explore',
-    route: 'Search',
+    route: 'Explore',
     icon: <CompassIcon color={COLORS.brand500} />
   },
   {

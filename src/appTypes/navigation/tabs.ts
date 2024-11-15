@@ -5,7 +5,7 @@ import { HomeParamsList } from '@appTypes';
 export type TabsParamsList = {
   Wallets: NavigatorScreenParams<HomeParamsList>;
   Products: NavigatorScreenParams<HomeParamsList>;
-  Settings: undefined;
+  Settings: { Explore: undefined; Watchlist: undefined };
   Tabs: { screen: string };
 };
 

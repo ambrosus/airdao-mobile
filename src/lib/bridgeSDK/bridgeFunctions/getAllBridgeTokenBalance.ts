@@ -1,4 +1,4 @@
-import { getTokenBridgeBalance } from '@lib';
+import { getTokenBridgeBalance } from './getTokenBridgeBalance';
 import { Token } from '@lib/bridgeSDK/models/types';
 
 export const getAllBridgeTokenBalance = async (

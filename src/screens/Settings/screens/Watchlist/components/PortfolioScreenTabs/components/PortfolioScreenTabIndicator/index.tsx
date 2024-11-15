@@ -6,8 +6,8 @@ import ReAnimated, {
   useSharedValue
 } from 'react-native-reanimated';
 import { NavigationState, Route } from 'react-native-tab-view';
-import { Measure } from '@screens/Portfolio/components/PortfolioScreenTabs/components/types';
-import { styles } from '@screens/Portfolio/components/PortfolioScreenTabs/components/PortfolioScreenTabIndicator/styles';
+import { Measure } from '../types';
+import { styles } from './styles';
 
 type Props<T extends Route> = {
   measures: Measure[];

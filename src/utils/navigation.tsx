@@ -1,7 +1,5 @@
 const TabVisibleRoutes = [
   'HomeScreen',
-  'PortfolioScreen',
-  'SearchScreen',
   'SettingsScreen',
   'WalletScreen',
   'ProductsScreen'

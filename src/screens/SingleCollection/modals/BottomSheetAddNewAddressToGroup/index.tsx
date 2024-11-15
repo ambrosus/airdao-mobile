@@ -36,8 +36,8 @@ import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { BarcodeScanner } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
-import { SearchSort } from '@screens/Search/Search.types';
-import { ExplorerWalletItem } from '@screens/Search/components';
+import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
+import { ExplorerWalletItem } from '../../../Settings/screens/Explore/components';
 import { ethereumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 
