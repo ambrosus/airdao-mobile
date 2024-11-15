@@ -82,7 +82,7 @@
   "button.try.again": "Yeniden dene",
   "button.use.pin": "PIN gir",
   "button.verify": "Doğrula",
-  "button.verifying": "!!!Verifying",
+  "button.verifying": "Doğrulanıyor",
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
@@ -151,7 +151,7 @@
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
-  "create.wallet.backup.text": "!!!Your new wallet is backed up with a recovery phrase. Grab a pen and paper to write it down.",
+  "create.wallet.backup.text": "Yeni cüzdanınız bir kurtarma ifadesiyle yedeklendi. Yazmak için bir kalem ve kağıt alın.",
   "create.wallet.checkbox.text": "Kurtarma cümlenizi kaybedersem, AirDAO'nun onu geri yükleyemeyeceğini anlıyorum.",
   "create.wallet.double.check": "Haydi çift kontrol yapalım",
   "create.wallet.prepare": "Bir kalem ve kağıt hazır olduğundan emin olun, böylece yazabilirsiniz.",
@@ -162,7 +162,7 @@
   "create.wallet.tap.words.in.correct.order": "Kelimelere doğru sırayla dokunun",
   "create.wallet.verification.alert": "Kurtarma ifadesini asla kimseyle \npaylaşmayın, güvende tutun!",
   "create.wallet.verify.phrase": "İfadeyi doğrula",
-  "create.wallet.verify.text": "!!!Write down your recovery phrase exactly as shown. You’ll verify it later. Keep it private and secure!",
+  "create.wallet.verify.text": "Kurtarma ifadenizi tam olarak gösterildiği gibi yazın. Daha sonra doğrulayacaksınız. Gizli ve güvenli tutun!",
   "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
 
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
@@ -237,7 +237,7 @@
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.create.new": "Yeni cüzdan oluştur",
   "no.wallet.description": "AirDAO Cüzdan ile sınırsız fırsatlara dalın.",
-  "no.wallet.import": "!!!Mevcut cüzdanı içe aktar",
+  "no.wallet.import": "Mevcut cüzdanı içe aktar",
   "no.wallet.send.receive": "Gönder ve al",
   "no.wallet.send.receive.description": "Sadece birkaç dokunuşla güvenli bir şekilde para gönderip alın.",
   "no.wallet.stay.informed": "Haberdar olun",
@@ -267,7 +267,7 @@
   "singleWallet.name": "İsim",
   "singleWallet.remove": "Sil",
   "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
-  "singleWallet.remove.alert.description": "!!!Make sure you have a backup your wallet",
+  "singleWallet.remove.alert.description": "Cüzdanınızın yedeğini aldığınızdan emin olun",
   "singleWallet.save": "Değişiklikleri kaydet",
   "singleWallet.access.keys": "Erişim anahtarlarını görüntüle",
   "singleWallet.warning.title": "Erişim anahtarlarınızı güvenle tutun",
@@ -288,9 +288,9 @@
   "security.confirm.passcode.description": "Cüzdanınızı güvence altına almak için şifrenizi tekrar girin",
   "security.confirm.passcode.text": "Şifreyi onayla",
   "security.enabled": "Güvenlik Etkinleştirildi!",
-  "security.enter.passcode": "!!!Set passcode",
+  "security.enter.passcode": "Parola belirleyin",
   "security.enter.passcode.hint": "Hatırlayacağınız bir şifre kullanın. \n Unutulan şifre kurtarılamaz.",
-  "security.enter.passcode.text": "!!!Set a passcode to manage your wallet. We don’t store or restore it, so keep it safe",
+  "security.enter.passcode.text": "Cüzdanınızı yönetmek için bir parola belirleyin. Bunu saklamıyoruz veya geri yüklemiyoruz, bu nedenle güvende tutun",
   "security.enter.pin": "PIN'i girin",
   "security.manage": "cüzdan güvenliğinizi yönetmek için.",
   "security.passcode.doesnt.match": "Şifre kodu eşleşmiyor",
@@ -343,7 +343,7 @@
   "toast.tap.to.rename.msg": "Adresi yeniden adlandırmak için dokunun",
   "toast.removed.wallet.from.group": "Cüzdan gruptan başarıyla kaldırıldı!",
   "toast.you.added.address.to.watchlist": "{{name}} artık izleme listenizde!",
-  "toast.wallet.created": "!!!Backup successful!",
+  "toast.wallet.created": "Yedekleme başarılı!",
 
   "token.picker.select": "Gönderilecek varlığı seçin",
   "token.actions.swap": "Takas",
@@ -394,8 +394,8 @@
   "bridge.transaction.to": "{{networkTo}}'a",
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
-  "bridge.transaction.preview.header": "!!!Sending {{amount}} {{symbol}} to {{network}}",
-  "bridge.transaction.preview.time": "!!!Estimated arrival time",
+  "bridge.transaction.preview.header": "Ethereum'a {{amount}} {{symbol}} gönderiliyor",
+  "bridge.transaction.preview.time": "Tahmini varış saati",
 
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
@@ -407,7 +407,7 @@
   "bridge.preview.bridge.fee": "Köprü Ücreti",
   "bridge.preview.network.fee": "Ağ Ücreti",
   "bridge.preview.gas.fee": "Gaz Ücreti",
-  "bridge.preview.button": "!!!Confirm",
+  "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
   "bridge.insufficient.funds": "Yetersiz bakiye",
 
@@ -418,8 +418,8 @@
   "bridge.transfer.failed.to.wallet.btn": "Cüzdana git",
   "bridge.amount.less.then.fee": "Bakiye ücretten daha az",
 
-  "bridge.insufficient.funds.to.pay.fee.header": "!!!Insufficient {{symbol}} for transaction fees.",
-  "bridge.insufficient.funds.to.pay.fee.subHeader": "!!!Please add {{symbol}} to cover network costs.",
+  "bridge.insufficient.funds.to.pay.fee.header": "İşlem ücretleri için yetersiz {{symbol}}}.",
+  "bridge.insufficient.funds.to.pay.fee.subHeader": "Lütfen ağ maliyetlerini karşılamak için {{symbol}}} ekleyin.",
   "bridge.unknown.error": "Bilinmeyen hata",
 
   "kosmos.primary.tabs.market": "Piyasalar",
@@ -469,7 +469,7 @@
   "kosmos.market.tabs.buy.bond": "Tahvil satın al",
   "kosmos.market.tabs.history": "Geçmiş",
 
-  "settings.version": "!!!Version",
+  "settings.version": "Doğrulanıyor",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
