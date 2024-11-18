@@ -42,6 +42,7 @@ import {
   CreateWalletStep1,
   CreateWalletStep2
 } from '@screens/CreateWallet';
+import { AddressDetails } from '@screens/Address';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -58,6 +59,7 @@ export const HomeStack = () => {
           <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
           <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="AddressSearch" component={AddressDetails} />
           <Stack.Screen
             name="ImportWalletSuccess"
             options={{ gestureEnabled: false }}
