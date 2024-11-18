@@ -8,6 +8,7 @@ import { Button, Row, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { ScanSquare } from './components/ScanSquare';
 
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;
@@ -112,6 +113,7 @@ export const BarcodeScanner = ({
             </Button>
           </View>
         )}
+        <ScanSquare />
       </Camera>
     </>
   );
