@@ -1,5 +1,6 @@
 import { Token } from '@lib/bridgeSDK/models/types';
 import { CryptoCurrencyCode } from '@appTypes';
+import { BigNumber } from 'ethers';
 
 export const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',
@@ -40,4 +41,39 @@ export const DEFAULT_TOKEN_PAIRS = {
   name: 'amb->eth',
   pairs: [DEFAULT_TOKEN_FROM, DEFAULT_TOKEN_TO],
   renderTokenItem: DEFAULT_TOKEN_FROM
+};
+
+export const BRIDGE_ERROR_CODES = {
+  UNPREDICTABLE_GAS_LIMIT: 'UNPREDICTABLE_GAS_LIMIT',
+  INSUFFICIENT_FUNDS: 'INSUFFICIENT_FUNDS'
+};
+
+export const METHODS_FROM_ERRORS = {
+  ESTIMATE_GAS: 'estimateGas',
+  SEND_TRANSACTION: 'sendTransaction'
+};
+
+export const EMPTY_FEE_DATA = {
+  value: {
+    feeData: {},
+    gasFee: BigNumber.from(0)
+  },
+  dataToPreview: []
+};
+
+export const DEFAULT_TRANSACTION = {
+  eventId: '',
+  networkFrom: '',
+  networkTo: '',
+  tokenFrom: '',
+  tokenTo: '',
+  userTo: '',
+  amount: 0,
+  decimalAmount: 0,
+  denominatedAmount: 0,
+  fee: '',
+  withdrawTx: '',
+  timestampStart: 0,
+  transferFinishTxHash: '',
+  wait: ''
 };

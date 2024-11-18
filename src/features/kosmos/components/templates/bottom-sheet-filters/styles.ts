@@ -19,12 +19,14 @@ export const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    height: 45
+    height: 45,
+    borderRadius: 1000
   },
+
   buttonText: {
-    height: '110%'
+    height: '100%'
   },
   primaryButton: {
-    backgroundColor: COLORS.brand500
+    backgroundColor: COLORS.brand600
   }
 });

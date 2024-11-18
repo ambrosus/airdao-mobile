@@ -2,7 +2,7 @@ import { Config as BridgeConfig, Network } from '@lib/bridgeSDK/models/types';
 import Config from '@constants/config';
 import { MySdk } from '../sdk';
 import { currentProvider } from './currentProveder';
-import { getBridgeBalance } from './getBridgeBalance';
+import { getAllBridgeTokenBalance } from '@lib/bridgeSDK/bridgeFunctions/getAllBridgeTokenBalance';
 
 export async function getBridgePairs({
   from,
@@ -17,19 +17,12 @@ export async function getBridgePairs({
 }) {
   const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
   const provider = currentProvider(from);
-  // @ts-ignore
-  const pairs = sdk.getPairs(from, destination);
-  if (ownerAddress) {
-    await Promise.all(
-      pairs.map(async (pair) => {
-        pair[0].balance = await getBridgeBalance({
-          from,
-          token: pair[0],
-          ownerAddress
-        });
-      })
-    );
-  }
+  const pairs = await getAllBridgeTokenBalance(
+    // @ts-ignore
+    sdk.getPairs(from, destination),
+    from,
+    ownerAddress
+  );
   return {
     name: `${from}->${destination}`,
     pairs,

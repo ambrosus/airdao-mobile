@@ -9,12 +9,12 @@ import { TFunction } from 'i18next';
 export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
   return [
     {
-      title: 'Trade',
+      title: t('products.title.trade'),
       data: [
         {
           id: 0,
           name: t('token.actions.swap'),
-          description: 'Earn with pools & swap tokens',
+          description: t('products.swap.description'),
           icon: (
             <SwapAccountActionIcon scale={2} color="rgba(166, 129, 239, 1)" />
           ),
@@ -25,7 +25,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
         {
           id: 1,
           name: t('account.actions.bridge'),
-          description: 'Seamless asset transfers',
+          description: t('products.bridge.description'),
           icon: (
             <BridgeAccountActionIcon scale={2} color="rgba(255, 152, 99, 1)" />
           ),
@@ -36,12 +36,12 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
       ]
     },
     {
-      title: 'Earn',
+      title: t('products.title.earn'),
       data: [
         {
           id: 2,
           name: t('account.actions.stake'),
-          description: 'Earn AMB rewards',
+          description: t('products.stake.description'),
           icon: (
             <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
           ),
@@ -52,7 +52,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
         {
           id: 3,
           name: 'KOSMOS',
-          description: 'Earn passive income via bonds',
+          description: t('products.kosmos.description'),
           icon: (
             <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
           ),

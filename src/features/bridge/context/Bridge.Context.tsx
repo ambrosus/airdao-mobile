@@ -1,15 +1,19 @@
 import { createContextSelector } from '@utils/createContextSelector';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Config as BridgeConfigModel,
-  FeeData
+  FeeData,
+  Token
 } from '@lib/bridgeSDK/models/types';
 import { getBridgePairs } from '@lib';
 import {
+  BRIDGE_ERROR_CODES,
   DEFAULT_AMB_NETWORK,
   DEFAULT_ETH_NETWORK,
   DEFAULT_TOKEN_FROM,
-  DEFAULT_TOKEN_TO
+  DEFAULT_TOKEN_TO,
+  EMPTY_FEE_DATA,
+  METHODS_FROM_ERRORS
 } from '@features/bridge/constants';
 import { getBridgeConfig } from '../utils';
 import { parsedBridges } from '@features/bridge/utils/parseBridges';
@@ -20,24 +24,17 @@ import {
 } from '@models/Bridge';
 import { CryptoCurrencyCode } from '@appTypes';
 import Config from '@constants/config';
-import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { useTranslation } from 'react-i18next';
+import { Toast, ToastType } from '@components/modular';
 import { useWalletStore } from '@entities/wallet';
 
-const EMPTY_FEE_DATA = [
-  {
-    value: {
-      feeData: {},
-      gasFee: BigNumber.from(0)
-    },
-    dataToPreview: []
-  }
-];
-
 export const BridgeContext = () => {
-  const { wallet: selectedWallet } = useWalletStore();
+  const { t } = useTranslation();
+
+  const { wallet } = useWalletStore();
   const [bridgeDataLoader, setBridgeDataLoader] = useState(false);
   const [templateDataLoader, setTemplateDataLoader] = useState(false);
   const [bridgeConfig, setBridgeConfig] = useState<BridgeConfigModel | null>(
@@ -49,7 +46,9 @@ export const BridgeContext = () => {
   const networkNativeToken = Config.NETWORK_NATIVE_COIN[from.id];
 
   const [selectedBridgeData, setSelectedBridgeData] = useState(null);
-  const [selectedTokenPairs, setSelectedTokenPairs] = useState(null);
+  const [selectedTokenPairs, setSelectedTokenPairs] = useState<Token[] | null>(
+    null
+  );
   const [bridges, setBridges] = useState(null);
 
   const [amountToBridge, setAmountToBridge] = useState<string>('');
@@ -61,6 +60,41 @@ export const BridgeContext = () => {
   const [processingTransaction, setProcessingTransaction] =
     useState<BridgeTransactionHistoryDTO | null>(null);
 
+  const bridgeErrorHandler = useCallback(
+    (_error: unknown) => {
+      // @ts-ignore
+      const errorCode = _error.code;
+      // @ts-ignore
+      const errorMethods = _error.method;
+      const type = ToastType.Failed;
+
+      const insufficientFundsToPayFees =
+        errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
+        errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS;
+
+      switch (true) {
+        case insufficientFundsToPayFees:
+          return Toast.show({
+            type,
+            text: t('bridge.insufficient.funds.to.pay.fee.header').replace(
+              '{{symbol}}',
+              networkNativeToken.symbol || ''
+            ),
+            subtext: t(
+              'bridge.insufficient.funds.to.pay.fee.subHeader'
+            ).replace('{{symbol}}', networkNativeToken.symbol || '')
+          });
+        default:
+          return Toast.show({
+            type,
+            text: t('bridge.unknown.error'),
+            subtext: t('import.wallet.key.error.try.again')
+          });
+      }
+    },
+    [networkNativeToken.symbol, t]
+  );
+
   const networkDataSetter = async (_bridgeConfig = bridgeConfig) => {
     try {
       if (_bridgeConfig) {
@@ -69,7 +103,7 @@ export const BridgeContext = () => {
           from: from.id,
           destination: destination.id,
           bridgeConfig: _bridgeConfig,
-          ownerAddress: selectedWallet?.address || ''
+          ownerAddress: wallet?.address || ''
         });
         // @ts-ignore
         setSelectedBridgeData(pair);
@@ -104,6 +138,7 @@ export const BridgeContext = () => {
     getPairs().then();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from.id, destination.id]);
+
   const loadAllBridgeData = async () => {
     try {
       setBridgeDataLoader(true);
@@ -119,42 +154,53 @@ export const BridgeContext = () => {
       }
     } catch (e) {
       // TODO remove IT after testing
+      bridgeErrorHandler(e);
       alert(`DATA BRIDLE LOADING ERROR  ${JSON.stringify(e)}`);
     } finally {
       setBridgeDataLoader(false);
     }
   };
 
-  const networkSetter = (type: BridgeSelectorTypes, item: ParsedBridge) => {
-    const isFrom = type === 'from';
-    const oppositeNetwork = isFrom ? destination : from;
-    const oppositeSetter = isFrom ? setDestination : setFrom;
-    const setter = isFrom ? setFrom : setDestination;
+  const networkSetter = useCallback(
+    (type: BridgeSelectorTypes, item: ParsedBridge) => {
+      const isFrom = type === 'from';
+      const oppositeNetwork = isFrom ? destination : from;
+      const oppositeSetter = isFrom ? setDestination : setFrom;
+      const setter = isFrom ? setFrom : setDestination;
 
-    setter(item);
-    const isTheSameNetwork = item.id === oppositeNetwork.id;
-    const isSelectedAMBNetwork = item.id === 'amb';
+      setter(item);
+      const isTheSameNetwork = item.id === oppositeNetwork.id;
+      const isSelectedAMBNetwork = item.id === 'amb';
 
-    if (isTheSameNetwork && !isSelectedAMBNetwork) {
-      oppositeSetter(DEFAULT_AMB_NETWORK);
-    }
-    if (isTheSameNetwork && isSelectedAMBNetwork) {
-      oppositeSetter(DEFAULT_ETH_NETWORK);
-    }
-    // if user not chose amb network
-    if (oppositeNetwork.id !== 'amb' && !isSelectedAMBNetwork) {
-      oppositeSetter(DEFAULT_AMB_NETWORK);
-    }
-  };
+      if (isTheSameNetwork && !isSelectedAMBNetwork) {
+        oppositeSetter(DEFAULT_AMB_NETWORK);
+      }
+      if (isTheSameNetwork && isSelectedAMBNetwork) {
+        oppositeSetter(DEFAULT_ETH_NETWORK);
+      }
+      // if user not chose amb network
+      if (oppositeNetwork.id !== 'amb' && !isSelectedAMBNetwork) {
+        oppositeSetter(DEFAULT_AMB_NETWORK);
+      }
+    },
+    [destination, from]
+  );
 
-  const fromData = {
-    value: from,
-    setter: networkSetter
-  };
-  const destinationData = {
-    value: destination,
-    setter: networkSetter
-  };
+  const fromData = useMemo(
+    () => ({
+      value: from,
+      setter: networkSetter
+    }),
+    [from, networkSetter]
+  );
+
+  const destinationData = useMemo(
+    () => ({
+      value: destination,
+      setter: networkSetter
+    }),
+    [destination, networkSetter]
+  );
 
   const bridgeLoader = useMemo<boolean>(() => {
     return (
@@ -172,34 +218,49 @@ export const BridgeContext = () => {
   const selectedTokenDestination = useMemo(() => {
     return selectedTokenPairs ? selectedTokenPairs[1] : DEFAULT_TOKEN_TO;
   }, [selectedTokenPairs]);
-  const processBridge = async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
-    try {
-      if (bridgeFee && selectedWallet?.address) {
-        const withdrawData = {
-          tokenFrom: selectedTokenFrom,
-          tokenTo: selectedTokenDestination,
-          selectedAccount: selectedWallet,
-          amountTokens: formatUnits(
-            bridgeFee.amount,
-            selectedTokenFrom.decimals
-          ),
-          feeData: bridgeFee,
-          gasFee: getOnlyGasFee
-        };
-        if (bridgeConfig) {
-          return await bridgeWithdraw({
-            bridgeConfig,
-            fromNetwork: fromData.value.id,
-            withdrawData
-          });
+
+  const processBridge = useCallback(
+    async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
+      try {
+        if (bridgeFee && wallet?.address) {
+          const withdrawData = {
+            tokenFrom: selectedTokenFrom,
+            tokenTo: selectedTokenDestination,
+            selectedAccount: wallet,
+            amountTokens: formatUnits(
+              bridgeFee.amount,
+              selectedTokenFrom.decimals
+            ),
+            feeData: bridgeFee,
+            gasFee: getOnlyGasFee
+          };
+          if (bridgeConfig) {
+            return await bridgeWithdraw({
+              bridgeConfig,
+              fromNetwork: fromData.value.id,
+              withdrawData
+            });
+          }
         }
+      } catch (e) {
+        // ignore
+        bridgeErrorHandler(e);
+        alert(
+          `${
+            getOnlyGasFee ? 'getOnlyGasFee' : ''
+          } processBridge ERROR ${JSON.stringify(e)}`
+        );
       }
-    } catch (e) {
-      // ignore
-      // TODO remove IT after testing
-      alert(`processBridge ERROR ${JSON.stringify(e)}`);
-    }
-  };
+    },
+    [
+      bridgeConfig,
+      bridgeErrorHandler,
+      fromData.value.id,
+      selectedTokenDestination,
+      selectedTokenFrom,
+      wallet
+    ]
+  );
 
   const variables = {
     bridgeLoader,
@@ -215,8 +276,12 @@ export const BridgeContext = () => {
     selectedTokenFrom,
     selectedTokenDestination,
     bridgePreviewData,
-    processingTransaction
+    processingTransaction,
+    processBridge,
+
+    bridgeErrorHandler
   };
+
   const methods = {
     loadAllBridgeData,
     setBridgeDataLoader,
@@ -224,8 +289,8 @@ export const BridgeContext = () => {
     setAmountToBridge,
     setSelectedTokenPairs,
     setBridgePreviewData,
-    processBridge,
-    setProcessingTransaction
+    setProcessingTransaction,
+    setSelectedBridgeData
   };
 
   return {

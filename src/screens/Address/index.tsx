@@ -6,8 +6,8 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { EditIcon, OptionsIcon } from '@components/svg/icons';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
 import {
-  ExplorerAccountView,
   AccountTransactions,
+  ExplorerAccountView,
   SharePortfolio
 } from '@components/templates';
 import {
@@ -121,14 +121,6 @@ export const AddressDetails = (): JSX.Element => {
       <Header
         contentRight={
           <Row alignItems="center">
-            {/*<Button*/}
-            {/*  style={styles.headerBtn}*/}
-            {/*  type="circular"*/}
-            {/*  onPress={shareShareModal}*/}
-            {/*  testID="Share_Button"*/}
-            {/*>*/}
-            {/*  <ShareIcon color={COLORS.neutral900} scale={1.1} />*/}
-            {/*</Button>*/}
             {Boolean(walletInWatchlist) && (
               <>
                 <Spacer value={scale(32)} horizontal />

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { t } from 'i18next';
 import { Token } from '@models';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -42,12 +42,15 @@ export const BalanceRow = ({
     return isAMBEntity ? ethers.constants.AddressZero : token.address;
   }, [isAMBEntity, token.address]);
 
+  const tokenBalanceIsBigNumber = token.balance instanceof BigNumber;
+
   const {
     balance: _balance,
     isFetching,
     refetch
-  } = useERC20Balance(address, undefined, !token.balance);
-  const bnBalance = token.balance || _balance;
+  } = useERC20Balance(address, undefined, !tokenBalanceIsBigNumber);
+
+  const bnBalance = tokenBalanceIsBigNumber ? token.balance : _balance;
 
   useEffect(() => {
     if (isRequiredRefetchBalance) refetch();

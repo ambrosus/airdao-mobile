@@ -67,7 +67,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {amount}
@@ -81,7 +81,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {payout} {payoutToken?.symbol}
@@ -89,7 +89,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {date}

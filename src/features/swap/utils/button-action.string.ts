@@ -38,5 +38,5 @@ export function buttonActionString(
     }
   }
 
-  return t('button.review');
+  return t('common.review');
 }

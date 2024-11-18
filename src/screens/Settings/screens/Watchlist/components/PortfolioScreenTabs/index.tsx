@@ -25,6 +25,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { DEVICE_WIDTH } from '@constants/variables';
+import { Header } from '@components/composite';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -49,7 +50,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const navigation = useNavigation<SearchTabNavigationProp>();
 
   const navigateToSearch = useCallback(() => {
-    navigation.navigate('Search', { screen: 'SearchScreen' });
+    navigation.navigate('Explore');
   }, [navigation]);
 
   const refs = useMemo(
@@ -116,38 +117,35 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
     }
   };
 
+  const ContentRight = () => (
+    <Button
+      testID="Portfolio_Tabs_Button"
+      onPress={portfolioTabsButton}
+      style={styles.createNewListButton}
+    >
+      <Row>
+        <Spacer horizontal value={scale(6.5)} />
+        <Text
+          fontFamily="Inter_500Medium"
+          fontSize={14}
+          color={COLORS.brand500}
+        >
+          {props.index === 0
+            ? t('collection.add.address')
+            : t('collection.create')}
+        </Text>
+      </Row>
+    </Button>
+  );
+
   return (
     <>
-      <View style={styles.container} testID="Portfolio_Screen_Tabs">
-        <Row justifyContent="space-between" alignItems="center">
-          <Text
-            fontFamily="Inter_700Bold"
-            fontSize={24}
-            fontWeight="700"
-            color={COLORS.neutral800}
-          >
-            {t('tab.watchlist')}
-          </Text>
-          <Button
-            testID="Portfolio_Tabs_Button"
-            onPress={portfolioTabsButton}
-            style={styles.createNewListButton}
-          >
-            <Row>
-              <Spacer horizontal value={scale(6.5)} />
-              <Text
-                fontFamily="Inter_500Medium"
-                fontSize={14}
-                color={COLORS.brand500}
-              >
-                {props.index === 0
-                  ? t('collection.add.address')
-                  : t('collection.create')}
-              </Text>
-            </Row>
-          </Button>
-        </Row>
-      </View>
+      <Header
+        onBackPress={navigation.goBack}
+        title={t('tab.watchlist')}
+        bottomBorder
+        contentRight={<ContentRight />}
+      />
       <Spacer value={verticalScale(27)} />
       <View style={styles.itemContainer} ref={containerRef}>
         {props.navigationState.routes.map((route, i) => {

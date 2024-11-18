@@ -1,22 +1,13 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { PortfolioScreenTabs } from '@screens/Portfolio/components/PortfolioScreenTabs';
+import React, { useState } from 'react';
 import { TabView } from 'react-native-tab-view';
-import { Collections } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Collections';
 import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
-import { WatchList } from '@screens/Portfolio/components/PortfolioScreenTabs/components/Watchlists';
-import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
+import { WatchList } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Watchlists';
+import { Collections } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Collections';
+import { PortfolioScreenTabs } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs';
 
-type PortfolioScreenProps = {
-  route: {
-    params: {
-      tabs: { activeTab: number };
-    };
-  };
-};
-
-export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
+export const Watchlist = () => {
   const portfolioTabRoutes = [
     { key: 'first', title: 'common.address_plural' },
     { key: 'second', title: 'common.group_plural' }
@@ -45,19 +36,10 @@ export const PortfolioScreen = ({ route }: PortfolioScreenProps) => {
     }
   };
   const { top } = useSafeAreaInsets();
-  const activeTab = route?.params?.tabs?.activeTab;
   const [index, setIndex] = useState(0);
   const [routes] = useState<PortfolioTabViewRoute[]>(
     portfolioTabRoutes as unknown as PortfolioTabViewRoute[]
   );
-
-  const focused = useIsFocused();
-
-  useLayoutEffect(() => {
-    if (focused && typeof activeTab === 'number') {
-      setIndex(activeTab);
-    }
-  }, [activeTab, focused]);
 
   return (
     <View style={{ flex: 1, top }} testID="Portfolio_Screen">

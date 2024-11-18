@@ -295,7 +295,7 @@ export const SendFunds = ({ route }: Props) => {
               </PrimaryButton>
             </View>
           </View>
-          <BottomSheet ref={confirmModalRef} title={t('swap.button.review')}>
+          <BottomSheet ref={confirmModalRef} title={t('common.review')}>
             <ConfirmTransaction
               from={senderAddress}
               to={destinationAddress}

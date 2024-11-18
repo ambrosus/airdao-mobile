@@ -1,64 +1,42 @@
-import React, { forwardRef, RefObject, useMemo, useState } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import React, { forwardRef, RefObject, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BigNumber } from 'ethers';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { Row, Spacer, Text } from '@components/base';
 import { useBridgeContextData } from '@features/bridge/context';
 import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePreview/helpers/amountChecker';
 import { scale, verticalScale } from '@utils/scaling';
-import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
-import { CloseCircleIcon } from '@components/svg/icons/v2';
-import {
-  ErrorTemplate,
-  GeneralPreviewTemplate,
-  Loader
-} from './components/index';
-import { formatUnits } from 'ethers/lib/utils';
-
-const DEFAULT_TRANSACTION = {
-  eventId: '',
-  networkFrom: '',
-  networkTo: '',
-  tokenFrom: '',
-  tokenTo: '',
-  userTo: '',
-  amount: 0,
-  decimalAmount: 0,
-  denominatedAmount: 0,
-  fee: '',
-  withdrawTx: '',
-  timestampStart: 0,
-  transferFinishTxHash: '',
-  wait: ''
-};
+import { GeneralPreviewTemplate, Loader } from './components/index';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
+  onClose: () => void;
+  onAcceptPress: () => void;
+  previewLoader: boolean;
+  bridgePreviewData: { dataToPreview: unknown[] };
 }
 
 export const BottomSheetBridgePreview = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
->((props, ref) => {
-  const [previewLoader, setPreviewLoader] = useState(false);
-  const [previewError, setPreviewError] = useState(false);
+>(({ onClose, onAcceptPress, previewLoader }, ref) => {
   const { t } = useTranslation();
-  const { variables, methods } = useBridgeContextData();
+  const { variables } = useBridgeContextData();
   const {
     selectedTokenPairs,
     selectedTokenFrom,
-    selectedTokenDestination,
     networkNativeToken,
     bridgePreviewData,
-    fromData,
-    destinationData,
-    amountToBridge,
     processingTransaction
   } = variables;
-  const { processBridge, setProcessingTransaction } = methods;
 
-  const dataToPreview = bridgePreviewData?.dataToPreview ?? [];
+  const dataToPreview = useMemo(
+    () => bridgePreviewData?.dataToPreview ?? [],
+    [bridgePreviewData?.dataToPreview]
+  );
 
   const errorBalance = useMemo(() => {
     const networkNativeTokenSymbol = networkNativeToken?.symbol ?? 'amb';
@@ -79,84 +57,27 @@ export const BottomSheetBridgePreview = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTokenPairs, dataToPreview]);
 
-  const setDefaultOptions = () => {
-    setTimeout(() => {
-      setPreviewError(false);
-      setPreviewLoader(false);
-      setProcessingTransaction(null);
-    }, 200);
-  };
-  const onClose = () => {
-    setDefaultOptions();
-    // @ts-ignore
-    ref?.current?.dismiss();
-  };
-
-  const onAcceptPress = async () => {
-    if (errorBalance) {
-      setPreviewError(true);
-    } else {
-      try {
-        setPreviewLoader(true);
-        const transaction = await processBridge(
-          false,
-          bridgePreviewData.value.feeData
-        );
-        const transactionWaitingInfo = {
-          ...DEFAULT_TRANSACTION,
-          networkFrom: fromData.value.name,
-          networkTo: destinationData.value.name,
-          tokenFrom: selectedTokenFrom,
-          tokenTo: selectedTokenDestination,
-          amount: +formatUnits(
-            bridgePreviewData.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          decimalAmount: amountToBridge,
-          denominatedAmount: amountToBridge,
-          fee: formatUnits(
-            bridgePreviewData.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          wait: transaction.wait
-        };
-        setProcessingTransaction(transactionWaitingInfo);
-      } catch (e) {
-        setPreviewError(true);
-      } finally {
-        setPreviewLoader(false);
-      }
-    }
-  };
-
   const PreviewContent = useMemo(() => {
-    switch (true) {
-      case previewLoader:
-        return <Loader />;
-      case previewError:
-        return <ErrorTemplate />;
-      default:
-        return (
-          <GeneralPreviewTemplate
-            onClose={onClose}
-            errorBalance={errorBalance}
-            onAcceptPress={onAcceptPress}
-          />
-        );
+    if (previewLoader) {
+      return <Loader />;
+    } else {
+      return (
+        <GeneralPreviewTemplate
+          onClose={onClose}
+          errorBalance={errorBalance}
+          onAcceptPress={onAcceptPress}
+        />
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewError, errorBalance, previewLoader]);
+  }, [errorBalance, previewLoader]);
 
   const showHeader = useMemo(() => {
-    return !processingTransaction && !previewLoader && !previewError;
-  }, [previewError, previewLoader, processingTransaction]);
+    return !processingTransaction && !previewLoader;
+  }, [previewLoader, processingTransaction]);
 
   return (
-    <BottomSheet
-      onBackdropPress={setDefaultOptions}
-      ref={ref}
-      swiperIconVisible={true}
-    >
+    <BottomSheet onBackdropPress={onClose} ref={ref} swiperIconVisible={true}>
       <View style={{ marginHorizontal: scale(24) }}>
         {showHeader && (
           <>

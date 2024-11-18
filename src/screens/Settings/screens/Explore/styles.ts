@@ -3,7 +3,7 @@ import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  main: { flex: 1, paddingTop: verticalScale(12) },
+  main: { flex: 1 },
   container: {
     flex: 1,
     paddingLeft: scale(16),
