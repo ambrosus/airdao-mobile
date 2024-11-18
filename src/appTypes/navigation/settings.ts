@@ -11,7 +11,7 @@ export type SettingsTabParamsList = {
   Explore: undefined;
   HelpCenter: undefined;
   ManageWallets: undefined;
-  Address: undefined;
+  Address: { address: string };
   NotificationSettings: undefined;
   SecuritySettings: undefined;
   ChangePasscode: undefined;

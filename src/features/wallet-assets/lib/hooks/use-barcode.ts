@@ -33,10 +33,9 @@ export function useBarcode(
       if (address.startsWith(walletConnectWsURL)) {
         onWalletConnectAction(address);
       } else if (isAddress) {
-        // Temp non-work solution
-        // @ts-ignore
-        navigation.navigate('Search', {
-          screen: 'SearchScreen',
+        navigation.navigate('Settings', {
+          // @ts-ignore
+          screen: 'Address',
           params: { address }
         });
       } else {
