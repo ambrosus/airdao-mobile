@@ -6,8 +6,7 @@ import { ListsContextProvider } from '@contexts/ListsContext';
 import {
   AddWalletProvider,
   AllAddressesProvider,
-  LocalizationProvider,
-  PasscodeProvider
+  LocalizationProvider
 } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
@@ -36,10 +35,6 @@ const LocalDBProvider: React.FC = ({ children }: any) => (
   </DatabaseProvider>
 );
 
-const WrappedPasscodeProvider: React.FC = ({ children }: any) => (
-  <PasscodeProvider>{children}</PasscodeProvider>
-);
-
 const BridgeProvider: React.FC = ({ children }: any) => (
   // @ts-ignore
   <BridgeContextProvider>{children}</BridgeContextProvider>
@@ -63,8 +58,7 @@ const WalletConnectProvider: React.FC = ({ children }: any) => (
 const independentProviders = [
   WrappedQueryClientProvider,
   WrappedSafeAreaProvider,
-  WrappedLocalizationProvider,
-  WrappedPasscodeProvider
+  WrappedLocalizationProvider
 ];
 /**
  * The order of the providers matters

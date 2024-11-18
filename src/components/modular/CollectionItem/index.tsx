@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { View, ViewProps } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { AccountList } from '@models';
 import { NumberUtils } from '@utils/number';
-import { useTranslation } from 'react-i18next';
 
 interface CollectionItemProps {
   collection: AccountList;

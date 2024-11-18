@@ -3,22 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { BottomAwareSafeAreaView } from '@components/composite';
+
 import { PrimaryButton } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
+import { usePasscodeActions } from '@features/passcode/lib/hooks';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
-  const { toggleBiometricAuthentication, isFaceIDEnabled } = usePasscode();
+  const { isFaceIDEnabled } = usePasscodeStore();
+  const { onToggleBiometricAuth } = usePasscodeActions();
 
   useEffect(() => {
-    if (!isFaceIDEnabled) toggleBiometricAuthentication();
-  }, [isFaceIDEnabled, toggleBiometricAuthentication]);
+    if (!isFaceIDEnabled) onToggleBiometricAuth();
+  }, [isFaceIDEnabled, onToggleBiometricAuth]);
 
   const navigateToHome = () => {
     navigation.dispatch(

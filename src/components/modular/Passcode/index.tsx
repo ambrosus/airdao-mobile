@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '@components/modular/Passcode/styles';
@@ -54,26 +54,29 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       }
     }, [changePasscodeStep]);
 
-    const handleCodeChange = (text: string) => {
-      if (code.length === 4) return;
-      const numericText = StringUtils.removeNonNumericCharacters(text, false);
-      const newCode = `${code}${numericText}`;
-      setCode(newCode);
-      const passcodeArray = newCode.split('');
-      onPasscodeChange(passcodeArray);
-      if (type === 'change') {
-        if (numericText.length === 4) {
-          setTimeout(() => setCode(''), 50);
+    const handleCodeChange = useCallback(
+      (text: string) => {
+        if (code.length === 4) return;
+        const numericText = StringUtils.removeNonNumericCharacters(text, false);
+        const newCode = `${code}${numericText}`;
+        setCode(newCode);
+        const passcodeArray = newCode.split('');
+        onPasscodeChange(passcodeArray);
+        if (type === 'change') {
+          if (numericText.length === 4) {
+            setTimeout(() => setCode(''), 50);
+          }
         }
-      }
-    };
+      },
+      [code, onPasscodeChange, type]
+    );
 
-    const onPressBackspace = () => {
+    const onPressBackspace = useCallback(() => {
       const newData = code.substring(0, code.length - 1);
       setCode(newData);
-    };
+    }, [code]);
 
-    const renderCircles = () => {
+    const renderCircles = useCallback(() => {
       const circleElements = [];
 
       for (let i = 0; i < 4; i++) {
@@ -87,7 +90,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       }
 
       return circleElements;
-    };
+    }, [code.length]);
 
     return (
       <View>

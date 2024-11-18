@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
@@ -11,12 +12,14 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { useSupportedBiometrics } from '@hooks';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
+import { usePasscodeActions } from '@features/passcode/lib/hooks';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
   const supportedBiometrics = useSupportedBiometrics();
-  const { toggleBiometricAuthentication, isFaceIDEnabled } = usePasscode();
+  const { isFaceIDEnabled } = usePasscodeStore();
+  const { onToggleBiometricAuth } = usePasscodeActions();
   const navigation = useNavigation<SettingsTabNavigationProp>();
 
   const navigateToChangePasscode = useCallback(() => {
@@ -74,7 +77,7 @@ export const SecuritySettingsScreen = () => {
             <Row alignItems="center">
               <Switch
                 value={isFaceIDEnabled}
-                onValueChange={toggleBiometricAuthentication}
+                onValueChange={onToggleBiometricAuth}
               />
             </Row>
           </Row>

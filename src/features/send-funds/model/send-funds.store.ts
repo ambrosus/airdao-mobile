@@ -18,7 +18,6 @@ export const useSendFundsStore = create<SendFundsStore>((set, get) => ({
   onResetState: () => set({ state: SEND_FUNDS_INITIAL_STATE }),
   onChangeWithResetState: (payload: Partial<SendFundsState>) => {
     const { state, onResetState } = get();
-
     onResetState();
     set($change({ payload, state }));
   }

@@ -5,7 +5,7 @@ import { AirDAOEventType, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { AirDAOEventDispatcher } from '@lib';
 import { useCurrentRoute } from '@contexts';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode/model';
 
 const APP_HIDDEN_STATES = ['inactive', 'background'];
 const REQUIRE_DELAY_IN_SECONDS = 2 * 60 * 1000;
@@ -15,7 +15,7 @@ const EXCLUDED_PASSCODE_ROUTES = ['SuccessSetupSecurity', 'ChangePasscode'];
 export const usePasscodeEntryRevealer = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const currentRoute = useCurrentRoute();
-  const { isPasscodeEnabled, isFaceIDEnabled, loading } = usePasscode();
+  const { isFaceIDEnabled, isPasscodeEnabled, loading } = usePasscodeStore();
 
   const prevAppState = useRef<AppStateStatus>(AppState.currentState);
   const timestampWhenHidden = useRef<number | null>(null);

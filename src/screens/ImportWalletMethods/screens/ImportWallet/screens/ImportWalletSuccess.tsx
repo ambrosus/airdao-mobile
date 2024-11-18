@@ -10,12 +10,12 @@ import { Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
 
 export const ImportWalletSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
-  const { isPasscodeEnabled } = usePasscode();
+  const { isPasscodeEnabled } = usePasscodeStore();
 
   const navigateToSetUpSecurity = () => {
     if (isPasscodeEnabled) {
