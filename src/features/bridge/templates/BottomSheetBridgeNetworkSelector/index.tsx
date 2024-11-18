@@ -3,7 +3,6 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
-import { DEVICE_HEIGHT } from '@constants/variables';
 import { useTranslation } from 'react-i18next';
 import { useBridgeContextData } from '@features/bridge/context';
 import { FlatList, TouchableOpacity } from 'react-native';
@@ -48,11 +47,7 @@ export const BottomSheetBridgeNetworkSelector = forwardRef<
   };
 
   return (
-    <BottomSheet
-      ref={ref}
-      height={DEVICE_HEIGHT * 0.45}
-      swiperIconVisible={true}
-    >
+    <BottomSheet ref={ref} swiperIconVisible={true}>
       <Spacer value={verticalScale(16)} />
       <Row justifyContent="space-between" style={styles.headerContainer}>
         <Text

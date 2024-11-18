@@ -74,7 +74,7 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
       type: 'token'
     },
     {
-      key: t('common.transaction.to'),
+      key: t('common.transaction.destination'),
       value: NETWORK[transaction.networkTo as keyof typeof NETWORK],
       thumb: transaction.networkTo,
       type: 'token'
