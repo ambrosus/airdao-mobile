@@ -16,3 +16,4 @@ export { ArrowBottomFillIcon } from './ArrowBottomFill';
 export { WalletIcon as WalletOutlineIcon } from './Wallet';
 export { SuccessIcon } from './Success';
 export { ErrorIcon } from './Error';
+export { SettingsOutlineIcon } from './SettingsOutline';

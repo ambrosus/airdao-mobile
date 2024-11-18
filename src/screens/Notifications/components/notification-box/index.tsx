@@ -1,13 +1,14 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { View, Text as RNText } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import {
   Notification,
   NotificationWithPriceChange
 } from '@models/Notification';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 
@@ -15,12 +16,13 @@ interface NotificationBoxProps {
   notification: Notification;
 }
 
-export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
-  const { notification } = props;
-  const { type, body, createdAt } = notification;
+export const NotificationBox = ({
+  notification
+}: NotificationBoxProps): JSX.Element => {
   const { t } = useTranslation();
 
   const processPriceChangeBody = useCallback(() => {
+    const { body } = notification;
     // Extract the percentage change using a regular expression
     const percentChangeRegex = /([+-]?\d+(\.\d+)?)%|[$]([+-]?\d+(\.\d+)?)/g;
     const percentChangeMatch = body.match(percentChangeRegex);
@@ -47,7 +49,7 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
         {parts[1]}
       </>
     );
-  }, [body]);
+  }, [notification]);
 
   const renderChangeInfo = () => {
     const notificationWithPriceChange =
@@ -58,8 +60,9 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
     ) {
       return null;
     }
+
     return (
-      <View style={{ alignItems: 'center' }}>
+      <View style={styles.changeInfoContainer}>
         <Text fontSize={13}>
           {NumberUtils.addSignToNumber(
             notificationWithPriceChange.percentChange
@@ -75,44 +78,28 @@ export const NotificationBox = (props: NotificationBoxProps): JSX.Element => {
   };
 
   return (
-    <Row justifyContent="space-between" alignItems="center">
-      <View style={{ flex: 1 }}>
-        <Row alignItems="center">
+    <Row
+      style={styles.container}
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <View style={styles.innerContainer}>
+        <Row alignItems="center" justifyContent="space-between">
           <Text
-            fontSize={14}
-            fontFamily="Inter_600SemiBold"
-            color={COLORS.neutral900}
+            fontSize={15}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral800}
           >
-            {t(`common.notification.${type}`)}
+            {t(`common.notification.${notification.type}`)}
           </Text>
           <Spacer value={scale(4)} horizontal />
-          <View
-            style={{
-              width: moderateScale(4),
-              height: moderateScale(4),
-              borderRadius: moderateScale(2),
-              backgroundColor: COLORS.neutral400
-            }}
-          />
-          <Spacer value={scale(4)} horizontal />
-          <Text
-            fontSize={14}
-            color={COLORS.neutral400}
-            fontFamily="Inter_600SemiBold"
-          >
-            {moment(createdAt).fromNow()}
-          </Text>
+          <RNText style={styles.baseTextSecondary}>
+            {moment(notification.createdAt).format('HH:mm')}
+          </RNText>
         </Row>
         <Spacer value={verticalScale(4)} />
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
-        >
-          {processPriceChangeBody()}
-        </Text>
+        <RNText style={styles.baseText}>{processPriceChangeBody()}</RNText>
       </View>
-      <Spacer horizontal value={scale(21)} />
       {renderChangeInfo()}
     </Row>
   );

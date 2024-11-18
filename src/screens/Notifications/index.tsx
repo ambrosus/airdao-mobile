@@ -20,7 +20,7 @@ import { COLORS } from '@constants/colors';
 import { BellIcon } from '@components/svg/icons';
 import { useNotificationsQuery } from '@hooks/query';
 import { DeviceUtils } from '@utils/device';
-import { NotificationsHeader, NotificationBox } from './components';
+import { NotificationBox, NotificationsHeader } from './components';
 import { styles } from './styles';
 
 interface NotificationSection {
@@ -70,8 +70,8 @@ export const Notifications = (): JSX.Element => {
   const renderNotification = (
     args: SectionListRenderItemInfo<Notification>
   ) => {
-    const { item } = args;
-    return <NotificationBox notification={item} />;
+    const { item: notification } = args;
+    return <NotificationBox notification={notification} />;
   };
 
   const renderSectionHeader = (info: {
@@ -81,7 +81,7 @@ export const Notifications = (): JSX.Element => {
       <>
         {info.section.index !== 0 && (
           <>
-            <Spacer value={verticalScale(40)} />
+            <Spacer value={verticalScale(28)} />
           </>
         )}
         <Text
@@ -91,7 +91,7 @@ export const Notifications = (): JSX.Element => {
         >
           {info.section.title.toUpperCase()}
         </Text>
-        <Spacer value={verticalScale(16)} />
+        <Spacer value={verticalScale(12)} />
       </>
     );
   };
@@ -127,7 +127,7 @@ export const Notifications = (): JSX.Element => {
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
+        ItemSeparatorComponent={() => <Spacer value={verticalScale(8)} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
