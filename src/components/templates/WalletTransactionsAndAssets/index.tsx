@@ -136,7 +136,7 @@ export const WalletTransactionsAndAssets = ({
             )
           },
           {
-            title: t('wallet.nfts'),
+            title: t('wallets.nfts'),
             view: <View />
           },
           {

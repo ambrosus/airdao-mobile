@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { InteractionManager, View, useWindowDimensions } from 'react-native';
+import { InteractionManager, useWindowDimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Animated, {
-  SharedValue,
   runOnJS,
+  SharedValue,
   useAnimatedStyle,
   useDerivedValue,
   withSpring
@@ -126,7 +126,7 @@ export const HomeHeader = React.memo(
         }
 
         try {
-          await InteractionManager.runAfterInteractions(async () => {
+          InteractionManager.runAfterInteractions(async () => {
             try {
               await walletKit.pair({ uri });
             } catch (error) {

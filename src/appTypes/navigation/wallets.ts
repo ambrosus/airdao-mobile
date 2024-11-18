@@ -44,6 +44,9 @@ export type HomeParamsList = {
   KosmosMarketScreen: { market: MarketType };
   SwapScreen: undefined;
   SwapSettingsScreen: undefined;
+  AddressSearch: {
+    address: string;
+  };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<
