@@ -43,7 +43,7 @@ export const WithdrawTokenPreview = ({
           fontWeight="600"
           fontFamily="Inter_600SemiBold"
         >
-          {t('common.transaction.to')}
+          {t('common.transaction.destination')}
         </Text>
         <Text
           color={COLORS.neutral800}

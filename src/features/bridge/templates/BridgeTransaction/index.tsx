@@ -86,7 +86,7 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
               color={COLORS.alphaBlack50}
               numberOfLines={1}
             >
-              {t('bridge.transaction.to', {
+              {t('bridge.transaction.destination', {
                 networkTo:
                   NETWORK[transaction.networkTo as keyof typeof NETWORK]
               })}

@@ -122,7 +122,7 @@ export const TransactionDetails = ({
           address={transaction.from}
         />
         <AddressRowWithAction
-          label={t('common.transaction.to')}
+          label={t('common.transaction.destination')}
           address={transaction.to}
         />
 

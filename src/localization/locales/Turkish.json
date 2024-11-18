@@ -398,7 +398,7 @@
   "bridge.transaction.approval": "Onay bekleniyor",
   "bridge.transaction.confirmations": "Onaylar",
   "bridge.transaction.fee": "Köprü ücreti",
-  "bridge.transaction.to": "{{networkTo}}'a",
+  "bridge.transaction.destination": "{{networkTo}}'a",
   "bridge.transaction.sending.heading": "{{tokenFrom}} gönderiliyor {{networkTo}}'a",
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
   "bridge.transaction.preview.header": "Ethereum'a {{amount}} {{symbol}} gönderiliyor",
