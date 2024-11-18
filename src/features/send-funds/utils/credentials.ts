@@ -1,7 +1,7 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { SendCryptoContextState } from './SendCrypto.types';
+import { SendFundsState } from '../model/types';
 
-export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
+export const SEND_FUNDS_INITIAL_STATE = {
   from: '',
   to: '',
   walletHash: '',
@@ -12,4 +12,4 @@ export const SEND_CRYPTO_INITIAL_STATE: SendCryptoContextState = {
   error: null,
   transactionId: '',
   success: false
-};
+} as SendFundsState;

@@ -18,7 +18,6 @@ import { useEstimatedTransferFee, useTokensAndTransactions } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
-import { useSendCryptoContext } from '@contexts';
 import { AddressInput, ConfirmTransaction } from './components';
 import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
@@ -36,13 +35,13 @@ import { TokensList } from '@features/send-funds/components/composite';
 import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
 import { FundsHeader } from '@features/send-funds/components/templates';
 import { useWalletStore } from '@entities/wallet';
+import { useSendFundsStore } from '@features/send-funds';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
 export const SendFunds = ({ route }: Props) => {
   const { t } = useTranslation();
-  const { state: sendContextState, reducer: updateSendContext } =
-    useSendCryptoContext((v) => v);
+  const { state, onChangeState } = useSendFundsStore();
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
@@ -53,7 +52,7 @@ export const SendFunds = ({ route }: Props) => {
     to: destinationAddress = '',
     from: senderAddress = '',
     transactionId
-  } = sendContextState;
+  } = state;
 
   const transactionIdRef = useRef('');
 
@@ -95,8 +94,7 @@ export const SendFunds = ({ route }: Props) => {
   }, []);
 
   useEffect(() => {
-    updateSendContext({
-      type: 'SET_DATA',
+    onChangeState({
       estimatedFee,
       currency: selectedToken.symbol as CryptoCurrencyCode,
       amount: parseFloat(amountInCrypto)
@@ -105,7 +103,7 @@ export const SendFunds = ({ route }: Props) => {
   }, [estimatedFee, selectedToken, amountInCrypto]);
 
   const setDestinationAddress = (address: string) => {
-    updateSendContext({ type: 'SET_DATA', to: address });
+    onChangeState({ to: address });
   };
 
   const onPressMaxAmount = useCallback(
@@ -140,8 +138,7 @@ export const SendFunds = ({ route }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendTx = useCallback(() => {
     const txId = new Date().getTime().toString();
-    updateSendContext({
-      type: 'SET_DATA',
+    onChangeState({
       loading: true,
       transactionId: txId,
       success: false
@@ -165,8 +162,7 @@ export const SendFunds = ({ route }: Props) => {
 
         if (transactionIdRef.current === txId) {
           sendFirebaseEvent(CustomAppEvents.send_finish);
-          updateSendContext({
-            type: 'SET_DATA',
+          onChangeState({
             loading: false,
             success: true
           });
@@ -181,8 +177,7 @@ export const SendFunds = ({ route }: Props) => {
         });
 
         if (transactionIdRef.current === txId) {
-          updateSendContext({
-            type: 'SET_DATA',
+          onChangeState({
             loading: false,
             error: error as unknown as never,
             success: true
@@ -193,9 +188,9 @@ export const SendFunds = ({ route }: Props) => {
   }, [
     amountInCrypto,
     destinationAddress,
+    onChangeState,
     selectedToken,
     senderAddress,
-    updateSendContext,
     walletHash
   ]);
 

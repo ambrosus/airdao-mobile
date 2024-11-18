@@ -1,12 +1,12 @@
 import { RefObject, useCallback } from 'react';
 import { ethereumAddressRegex } from '@constants/regex';
-import { useSendCryptoContext } from '@contexts';
 import { BottomSheetRef } from '@components/composite';
+import { useSendFundsStore } from '@features/send-funds/model';
 
 export function useBarcode(
   barcodeScannerContainerRef: RefObject<BottomSheetRef>
 ) {
-  const { state, reducer } = useSendCryptoContext((v) => v);
+  const { state, onChangeState } = useSendFundsStore();
 
   const onDismissBarcodeContainer = useCallback(
     () => barcodeScannerContainerRef.current?.dismiss(),
@@ -24,14 +24,13 @@ export function useBarcode(
       const isAddress = ethereumAddressRegex.test(address);
 
       if (isAddress) {
-        reducer({
-          type: 'SET_DATA',
+        onChangeState({
           ...state,
           to: address
         });
       }
     },
-    [onDismissBarcodeContainer, reducer, state]
+    [onChangeState, onDismissBarcodeContainer, state]
   );
 
   return {
