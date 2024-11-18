@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { useSendCryptoContext } from '@contexts';
 import { ExplorerAccount, Token } from '@models';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { SendAccountActionIcon } from '@components/svg/icons/v2/actions';
+import { useSendFundsStore } from '@features/send-funds';
 
 interface SendProps {
   account: ExplorerAccount;
@@ -17,13 +17,12 @@ interface SendProps {
 
 export const Send = ({ account, token, disabled }: SendProps) => {
   const { t } = useTranslation();
-  const sendCryptoContextReducer = useSendCryptoContext((v) => v.reducer);
   const navigation = useNavigation<HomeNavigationProp>();
 
+  const { onChangeWithResetState } = useSendFundsStore();
+
   const navigateToSendScreen = useCallback(() => {
-    sendCryptoContextReducer({ type: 'RESET_DATA' });
-    sendCryptoContextReducer({
-      type: 'SET_DATA',
+    onChangeWithResetState({
       from: account.address,
       to: ''
     });
@@ -31,7 +30,7 @@ export const Send = ({ account, token, disabled }: SendProps) => {
       sendFirebaseEvent(CustomAppEvents.main_send);
       navigation.navigate('SendFunds', { token });
     }, 0);
-  }, [account, navigation, sendCryptoContextReducer, token]);
+  }, [account.address, navigation, onChangeWithResetState, token]);
 
   return (
     <AccountActionButton

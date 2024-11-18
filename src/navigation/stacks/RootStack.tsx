@@ -8,6 +8,7 @@ import { PasscodeEntry } from '@screens/PasscodeEntry';
 
 export const RootStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamsList>();
+
   return (
     <Stack.Navigator
       initialRouteName="AppInit"

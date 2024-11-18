@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { useWallet } from '@hooks';
 import { PrimaryButton, Toast, ToastType } from '@components/modular';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { MarketType } from '@features/kosmos/types';
@@ -17,6 +16,7 @@ import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { buttonWithShadowStyle } from '@constants/shadow';
 import { TextOrSpinner } from '@components/composite';
+import { useWalletPrivateKey } from '@entities/wallet';
 
 interface BuyBondButtonProps {
   market: MarketType;
@@ -35,7 +35,7 @@ export const BuyBondButton = ({
 }: BuyBondButtonProps) => {
   const { t } = useTranslation();
 
-  const { _extractPrivateKey } = useWallet();
+  const { _extractPrivateKey } = useWalletPrivateKey();
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);

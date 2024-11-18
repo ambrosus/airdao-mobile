@@ -1,15 +1,15 @@
-import { Row, Spacer, Text } from '@components/base';
-import { StakingPool } from '@models';
 import React from 'react';
 import { View } from 'react-native';
-import { TokenLogo } from '../TokenLogo';
-import { scale, verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from '@constants/colors';
-import { usePoolDetailsByName } from '@contexts';
-import { NumberUtils } from '@utils/number';
 import { BigNumber } from 'ethers';
+import { StakingPool } from '@models';
+import { Row, Spacer, Text } from '@components/base';
+import { useStakingPoolDetails } from '@entities/staking';
+import { TokenLogo } from '../TokenLogo';
+import { NumberUtils } from '@utils/number';
 import { TokenUtils } from '@utils/token';
+import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -17,7 +17,7 @@ interface StakingPoolItemProps {
 
 export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { stakingPool } = props;
-  const poolStakingDetails = usePoolDetailsByName(stakingPool.token.name);
+  const poolStakingDetails = useStakingPoolDetails(stakingPool.token.name);
   const { t } = useTranslation();
 
   return (

@@ -3,16 +3,16 @@ import { Dispatch, SetStateAction } from 'react';
 import { ContractNames, Methods } from '@airdao/airdao-bond';
 import { TxType } from '@features/kosmos/types';
 import { useBondContracts } from './use-bond-contracts';
-import { useWallet } from '@hooks';
 import { claimBond } from '../contracts';
 import { useTransactions } from './use-transactions';
+import { useWalletPrivateKey } from '@entities/wallet';
 
 export function useClaimBonds(
   transaction: TxType,
   setIsOrderClaiming: Dispatch<SetStateAction<boolean>>
 ) {
   const { contracts } = useBondContracts();
-  const { _extractPrivateKey } = useWallet();
+  const { _extractPrivateKey } = useWalletPrivateKey();
   const { refetchTransactions } = useTransactions();
 
   const onClaimButtonPress = async (contractName: string) => {

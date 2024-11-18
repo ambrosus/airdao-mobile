@@ -18,14 +18,14 @@ import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
-import usePasscode from '@contexts/Passcode';
 import { DEVICE_WIDTH } from '@constants/variables';
+import { usePasscodeStore } from '@features/passcode';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { walletMnemonic } = useAddWalletContext();
   const { t } = useTranslation();
-  const { isPasscodeEnabled } = usePasscode();
+  const { isPasscodeEnabled } = usePasscodeStore();
 
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     { word: string; index: number }[]

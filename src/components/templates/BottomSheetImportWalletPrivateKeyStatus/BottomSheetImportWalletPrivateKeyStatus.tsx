@@ -12,7 +12,7 @@ import { useForwardedRef } from '@hooks';
 import { scale } from '@utils/scaling';
 import { delay } from '@utils/delay';
 import { COLORS } from '@constants/colors';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
 
 interface BottomSheetImportWalletPrivateKeyStatusProps {
   status: 'initial' | 'pending' | 'error' | 'success';
@@ -24,7 +24,7 @@ export const BottomSheetImportWalletPrivateKeyStatus = forwardRef<
 >(({ status }, ref) => {
   const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
-  const { isPasscodeEnabled } = usePasscode();
+  const { isPasscodeEnabled } = usePasscodeStore();
   const bottomSheetProcessingRef = useForwardedRef<BottomSheetRef>(ref);
 
   const onSuccessButtonPress = useCallback(async () => {

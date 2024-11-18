@@ -7,25 +7,28 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { RootNavigationProp } from '@appTypes';
 import { useAllWallets } from '@hooks/database';
-import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
 import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
+import { usePasscodeStore } from '@features/passcode';
 
 const AppInitialization = () => {
   useInitializeWalletKit();
   const { t } = useTranslation();
+
+  const navigation = useNavigation<RootNavigationProp>();
   const { data: allWallets, loading } = useAllWallets();
+
   const {
     isPasscodeEnabled,
     isFaceIDEnabled,
     loading: passcodeLoading
-  } = usePasscode();
-  const navigation = useNavigation<RootNavigationProp>();
+  } = usePasscodeStore();
 
   const initApp = useCallback(async () => {
     try {
       // reset passcode state
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
+
       if (!loading && !passcodeLoading) {
         if (allWallets.length > 0) {
           if (!isPasscodeEnabled && !isFaceIDEnabled) {
@@ -41,7 +44,7 @@ const AppInitialization = () => {
         }
       }
     } catch (error) {
-      // ignore
+      throw error;
     }
   }, [
     allWallets.length,

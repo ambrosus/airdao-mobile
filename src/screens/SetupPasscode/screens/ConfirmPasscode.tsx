@@ -8,20 +8,20 @@ import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const route = useRoute<RouteProp<HomeParamsList, 'ConfirmPasscode'>>();
-  const { setSavedPasscode } = usePasscode();
+  const { onChangePasscode } = usePasscodeStore();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const { passcode: originalPasscode } = route.params;
   const isButtonEnabled = passcode.join('').length === 4;
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
-      setSavedPasscode(passcode);
+      onChangePasscode(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');

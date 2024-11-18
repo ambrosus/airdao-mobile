@@ -10,14 +10,19 @@ import { useAppState, usePreventGoingBack } from '@hooks';
 import { verticalScale } from '@utils/scaling';
 import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
-import usePasscode from '@contexts/Passcode';
 import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils } from '@utils/device';
 import { Header } from '@components/composite';
+import { usePasscodeStore } from '@features/passcode';
 
 export const PasscodeEntry = () => {
+  const { t } = useTranslation();
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
+  const navigation = useNavigation<RootNavigationProp>();
+
+  const { appState } = useAppState();
+  const { isFaceIDEnabled } = usePasscodeStore();
 
   const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
@@ -28,11 +33,7 @@ export const PasscodeEntry = () => {
 
   usePreventGoingBack(isPreventingNavigateBack);
 
-  const navigation = useNavigation<RootNavigationProp>();
-  const { t } = useTranslation();
-  const { isFaceIDEnabled } = usePasscode();
   const passcodeRef = useRef<TextInput>(null);
-  const { appState } = useAppState();
   const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {

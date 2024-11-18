@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
 import { MultiplyBalancesStateType, SwapToken } from '@features/swap/types';
-
-import { useWallet } from '@hooks';
+import { useWalletStore } from '@entities/wallet';
 import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapMultiplyBalance() {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const { selectedTokens } = useSwapContextSelector();
 
   const [bnBalances, setBnBalances] = useState<MultiplyBalancesStateType>({

@@ -1,16 +1,15 @@
 import React, { PropsWithChildren, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
 import { NumberUtils } from '@utils/number';
 import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { useSendCryptoContext } from '@contexts';
 import {
   BottomSheetErrorView,
   BottomSheetSuccessView
@@ -18,6 +17,7 @@ import {
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { _delayNavigation } from '@utils/navigate';
+import { useSendFundsStore } from '@features/send-funds';
 
 interface ConfirmTransactionProps {
   from: string;
@@ -50,8 +50,10 @@ export const ConfirmTransaction = ({
   const navigation: HomeNavigationProp = useNavigation();
   const { bottom } = useSafeAreaInsets();
 
-  const { loading, success, error } = useSendCryptoContext((v) => v.state);
-  const reducer = useSendCryptoContext((v) => v.reducer);
+  const {
+    state: { loading, error, success },
+    onResetState
+  } = useSendFundsStore();
 
   const containerStyle = useMemo(
     () => [styles.container, { paddingBottom: bottom }],
@@ -79,8 +81,8 @@ export const ConfirmTransaction = ({
         })
       )
     );
-    reducer({ type: 'RESET_DATA' });
-  }, [dismissBottomSheet, navigation, reducer]);
+    onResetState();
+  }, [dismissBottomSheet, navigation, onResetState]);
 
   if (success) {
     const description = `You sent ${NumberUtils.numberToTransformedLocale(

@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { getSdkError, buildApprovedNamespaces } from '@walletconnect/utils';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import {
   useWalletConnectContextSelector,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
-
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import {
@@ -17,16 +17,15 @@ import {
   ToastType
 } from '@components/modular';
 import { EIP155_CHAINS, walletKit } from '@features/wallet-connect/utils';
-import { useWallet } from '@hooks';
 import {
   CONNECT_VIEW_STEPS,
   EIP155_SIGNING_METHODS
 } from '@features/wallet-connect/types';
-import { useTranslation } from 'react-i18next';
+import { useWalletStore } from '@entities/wallet';
 
 export const WalletConnectApprovalView = () => {
   const { t } = useTranslation();
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const { proposal, setActiveSessions, setWalletConnectStep } =
     useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();

@@ -15,7 +15,6 @@ import {
   EMPTY_FEE_DATA,
   METHODS_FROM_ERRORS
 } from '@features/bridge/constants';
-import { useWallet } from '@hooks';
 import { getBridgeConfig } from '../utils';
 import { parsedBridges } from '@features/bridge/utils/parseBridges';
 import {
@@ -30,11 +29,12 @@ import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { useTranslation } from 'react-i18next';
 import { Toast, ToastType } from '@components/modular';
+import { useWalletStore } from '@entities/wallet';
 
 export const BridgeContext = () => {
   const { t } = useTranslation();
 
-  const { wallet: selectedWallet } = useWallet();
+  const { wallet } = useWalletStore();
   const [bridgeDataLoader, setBridgeDataLoader] = useState(false);
   const [templateDataLoader, setTemplateDataLoader] = useState(false);
   const [bridgeConfig, setBridgeConfig] = useState<BridgeConfigModel | null>(
@@ -103,7 +103,7 @@ export const BridgeContext = () => {
           from: from.id,
           destination: destination.id,
           bridgeConfig: _bridgeConfig,
-          ownerAddress: selectedWallet?.address || ''
+          ownerAddress: wallet?.address || ''
         });
         // @ts-ignore
         setSelectedBridgeData(pair);
@@ -222,11 +222,11 @@ export const BridgeContext = () => {
   const processBridge = useCallback(
     async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
       try {
-        if (bridgeFee && selectedWallet?.address) {
+        if (bridgeFee && wallet?.address) {
           const withdrawData = {
             tokenFrom: selectedTokenFrom,
             tokenTo: selectedTokenDestination,
-            selectedAccount: selectedWallet,
+            selectedAccount: wallet,
             amountTokens: formatUnits(
               bridgeFee.amount,
               selectedTokenFrom.decimals
@@ -258,7 +258,7 @@ export const BridgeContext = () => {
       fromData.value.id,
       selectedTokenDestination,
       selectedTokenFrom,
-      selectedWallet
+      wallet
     ]
   );
 

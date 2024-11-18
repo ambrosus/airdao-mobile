@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NotificationService, PermissionService } from '@lib';
+
 import {
   CacheableAccount,
   CacheableAccountList,
@@ -16,9 +17,11 @@ import {
   PublicAddressDB,
   PublicAddressListDB
 } from '@database';
+import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
+  usePasscodeInit();
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {

@@ -10,11 +10,11 @@ import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent
 import { COLORS } from '@constants/colors';
 import { Token } from '@models';
 import { HomeNavigationProp } from '@appTypes';
-import { useSendCryptoContext } from '@contexts';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { ReceiveFunds } from '@components/templates';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSendFundsStore } from '@features/send-funds';
 
 interface AssetsAccountActionsListProps {
   address: string;
@@ -27,14 +27,13 @@ export const AssetsAccountActionsList = ({
 }: AssetsAccountActionsListProps) => {
   const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
-  const { reducer: sendCryptoContextReducer } = useSendCryptoContext((v) => v);
+
+  const { onChangeWithResetState } = useSendFundsStore();
 
   const receiveFundsBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const onSendPress = useCallback(() => {
-    sendCryptoContextReducer({ type: 'RESET_DATA' });
-    sendCryptoContextReducer({
-      type: 'SET_DATA',
+    onChangeWithResetState({
       from: address,
       to: ''
     });
@@ -42,7 +41,7 @@ export const AssetsAccountActionsList = ({
       sendFirebaseEvent(CustomAppEvents.main_send);
       navigation.navigate('SendFunds', { token });
     });
-  }, [address, navigation, sendCryptoContextReducer, token]);
+  }, [address, navigation, onChangeWithResetState, token]);
 
   const onReceiveFundsPress = useCallback(
     () => receiveFundsBottomSheetRef.current?.show(),
