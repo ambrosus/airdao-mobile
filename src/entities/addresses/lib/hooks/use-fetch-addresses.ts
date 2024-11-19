@@ -5,8 +5,8 @@ import { MULTISIG_VAULT } from '@constants/variables';
 import { API } from '@api/api';
 import { AddressUtils } from '@utils/address';
 import { ArrayUtils } from '@utils/array';
-import { useAddressesStore } from '@entities/addresses';
-import { _dbAddressesMapper } from '@entities/addresses/utils/_db.mapper';
+import { useAddressesStore } from '../../model';
+import { _dbAddressesMapper } from '../../utils';
 
 export function useFetchAddresses() {
   const { allAddresses, onSetAllAddresses, onToggleLoading } =
@@ -34,20 +34,18 @@ export function useFetchAddresses() {
           MultiSigAddresses
         )
       );
-      onSetAllAddresses(populatedAddresses);
       _dbAddressesMapper(populatedAddresses);
-    } catch (error) {
-      throw error;
+      onSetAllAddresses(populatedAddresses);
     } finally {
       onToggleLoading(false);
     }
   }, [allAddresses, onSetAllAddresses, onToggleLoading]);
 
   useEffect(() => {
-    (async () => {
-      if (allAddresses.length === 0) {
-        await getAddresses();
-      }
-    })();
+    if (allAddresses.length === 0) {
+      getAddresses();
+    }
   }, [allAddresses, getAddresses]);
+
+  return { refetch: getAddresses };
 }

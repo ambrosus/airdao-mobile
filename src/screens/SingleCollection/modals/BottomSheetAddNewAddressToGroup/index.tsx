@@ -31,7 +31,6 @@ import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { useLists } from '@contexts/ListsContext';
 import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { BarcodeScanner } from '@components/templates';
@@ -40,6 +39,21 @@ import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
 import { ExplorerWalletItem } from '../../../Settings/screens/Explore/components';
 import { ethereumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
+import i18n from '@localization/i18n';
+import { useListActions } from '@features/lists';
+
+const AddressSources: Segment[] = [
+  {
+    title: i18n.t('common.top.holders.capitalize'),
+    value: 0,
+    id: 'topHolders'
+  },
+  {
+    title: i18n.t('tab.watchlist'),
+    value: 1,
+    id: 'watchlist'
+  }
+];
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -50,6 +64,26 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   BottomSheetRef,
   Props
 >(({ collection }, ref) => {
+  const { t } = useTranslation();
+  const { top } = useSafeAreaInsets();
+
+  const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = useWindowDimensions();
+  const tabWidth = WINDOW_WIDTH - scale(48);
+
+  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const scrollRef = useRef<ScrollView>(null);
+  const inputRef = useRef<InputRef>(null);
+  const scannerModalRef = useRef<BottomSheetRef>(null);
+  const scanned = useRef(false);
+
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectedAddresses, setSelectedAddresses] = useState<ExplorerAccount[]>(
+    []
+  );
+  const [scrollViewIdx, setScrollViewIdx] = useState<
+    'watchlist' | 'topHolders'
+  >('topHolders');
+
   const {
     data: topHolders,
     loading: topHoldersLoading,
@@ -57,22 +91,6 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     hasNextPage: hasMoreTopHolders,
     fetchNextPage: fetchMoreTopHolders
   } = useExplorerAccounts(SearchSort.Balance);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const { t } = useTranslation();
-  const { top } = useSafeAreaInsets();
-
-  const AddressSources: Segment[] = [
-    {
-      title: t('common.top.holders.capitalize'),
-      value: 0,
-      id: 'topHolders'
-    },
-    {
-      title: t('tab.watchlist'),
-      value: 1,
-      id: 'watchlist'
-    }
-  ];
 
   const {
     data: searchedAccount,
@@ -80,21 +98,8 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
     error: searchError
   } = useSearchAccount(searchValue, !!searchValue);
   const { watchlist } = useWatchlist();
-  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const toggleAddressesInList = useLists((v) => v.toggleAddressesInList);
-  const [scrollViewIdx, setScrollViewIdx] = useState<
-    'watchlist' | 'topHolders'
-  >('topHolders');
-  const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = useWindowDimensions();
-  const tabWidth = WINDOW_WIDTH - scale(48);
 
-  const scrollRef = useRef<ScrollView>(null);
-  const inputRef = useRef<InputRef>(null);
-  const scannerModalRef = useRef<BottomSheetRef>(null);
-  const scanned = useRef(false);
-  const [selectedAddresses, setSelectedAddresses] = useState<ExplorerAccount[]>(
-    []
-  );
+  const { onToggleAddressInList } = useListActions();
 
   const selectionStarted = selectedAddresses.length > 0;
   const selectingAddedItems = selectionStarted
@@ -208,7 +213,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
 
   const submitSelectedAddresses = () => {
     localRef.current?.dismiss();
-    toggleAddressesInList(selectedAddresses, collection);
+    onToggleAddressInList(selectedAddresses, collection);
     resetState();
   };
 

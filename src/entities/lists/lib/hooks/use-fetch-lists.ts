@@ -1,5 +1,5 @@
 import { useListsStore } from '@entities/lists/model/lists.store';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { PublicAddressDbModel, PublicAddressListDB } from '@database';
 import { Cache, CacheKey } from '@lib/cache';
 import { MULTISIG_VAULT } from '@constants/variables';
@@ -8,13 +8,12 @@ import { CacheableAccountList } from '@appTypes';
 import { useListActions } from '@features/lists/lib';
 import { useAddressesStore } from '@entities/addresses';
 
-export function useLists() {
-  const { isFetchedInitiallyRef, onChangeListsOfAddressGroup } =
-    useListsStore();
-
+export function useFetchLists() {
+  const { onChangeListsOfAddressGroup } = useListsStore();
   const { allAddresses, loading } = useAddressesStore();
-
   const { onCreateList } = useListActions();
+
+  const isFetchedInitiallyRef = useRef<boolean>(false);
 
   const fetchListsAsync = useCallback(async () => {
     isFetchedInitiallyRef.current = true;
@@ -69,10 +68,8 @@ export function useLists() {
   );
 
   useEffect(() => {
-    (async () => {
-      if (shouldFetchLists) {
-        await fetchListsAsync();
-      }
-    })();
+    if (shouldFetchLists) {
+      fetchListsAsync();
+    }
   }, [allAddresses, fetchListsAsync, shouldFetchLists]);
 }

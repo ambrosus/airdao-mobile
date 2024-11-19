@@ -1,5 +1,15 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  RefObject,
+  useCallback,
+  useMemo
+} from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import { useListActions } from '@features/lists';
+import { useListsSelector } from '@entities/lists';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
@@ -7,9 +17,6 @@ import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
 import { verticalScale } from '@utils/scaling';
-import { useLists } from '@contexts';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -20,13 +27,26 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
   BottomSheetRef,
   Props
 >(({ wallet }, ref) => {
-  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { toggleAddressesInList, listsOfAddressGroup } = useLists((v) => v);
   const { t } = useTranslation();
-  const collection = listsOfAddressGroup.find(
-    (list) =>
-      list.accounts.findIndex((account) => account._id === wallet._id) > -1
+  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const { listsOfAddressGroup } = useListsSelector();
+  const { onToggleAddressInList } = useListActions();
+
+  const collection = useMemo(
+    () =>
+      listsOfAddressGroup.find(
+        (list) =>
+          list.accounts.findIndex((account) => account._id === wallet._id) > -1
+      ),
+    [listsOfAddressGroup, wallet._id]
   );
+
+  const onRemoveAddressInCollection = useCallback(() => {
+    if (collection) {
+      onToggleAddressInList([wallet], collection);
+    }
+    localRef.current?.dismiss();
+  }, [collection, localRef, onToggleAddressInList, wallet]);
 
   return (
     <BottomSheetFloat
@@ -49,12 +69,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
         <Spacer value={24} />
         <Button
           testID="BottomSheetConfirmRemove_Button"
-          onPress={() => {
-            if (collection) {
-              toggleAddressesInList([wallet], collection);
-            }
-            localRef.current?.dismiss();
-          }}
+          onPress={onRemoveAddressInCollection}
           style={styles.removeButton}
         >
           <Text
@@ -69,7 +84,7 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
         <Button
           type="base"
           style={styles.bottomSheetCancelButton}
-          onPress={() => localRef.current?.dismiss()}
+          onPress={localRef.current?.dismiss}
         >
           <Text
             fontFamily="Inter_600SemiBold"

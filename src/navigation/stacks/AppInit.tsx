@@ -10,13 +10,9 @@ import { useAllWallets } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
 import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { usePasscodeStore } from '@features/passcode';
-import { useFetchAddresses } from '@entities/addresses/lib/hooks/use-fetch-addresses';
-import { useLists } from '@entities/lists/lib/use-lists';
 
 const AppInitialization = () => {
   useInitializeWalletKit();
-  useFetchAddresses();
-  useLists();
   const { t } = useTranslation();
 
   const navigation = useNavigation<RootNavigationProp>();

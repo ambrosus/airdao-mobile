@@ -15,7 +15,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { useLists } from '@contexts/ListsContext';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { AccountList } from '@models/AccountList';
 import { PortfolioNavigationProp } from '@appTypes/navigation';
@@ -26,6 +25,7 @@ import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
 import { styles } from './styles';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Settings/screens/Watchlist/components/BottomSheetConfirmRemoveGroup';
+import { useListActions } from '@features/lists';
 
 type Props = {
   group: AccountList;
@@ -39,13 +39,16 @@ const screenWidth = Dimensions.get('screen').width;
 export const GroupItem = memo(
   forwardRef<Swipeable, Props>(
     ({ group, isFirstItem, wrapperStyles, swipeable }, previousRef) => {
-      const { handleOnDelete, handleOnRename } = useLists((v) => v);
+      const navigation = useNavigation<PortfolioNavigationProp>();
+      const { onDeleteList, onRenameList } = useListActions();
+
+      const paddingRightAnimation = useSharedValue(0);
+
       const groupRenameRef = useRef<BottomSheetRef>(null);
       const groupDeleteRef = useRef<BottomSheetRef>(null);
       const timeoutRef = useRef<NodeJS.Timeout | null>(null);
       const swipeableRef = useRef<Swipeable>(null);
-      const navigation = useNavigation<PortfolioNavigationProp>();
-      const paddingRightAnimation = useSharedValue(0);
+
       const [open, setOpen] = useState<boolean>(false);
       // close swipeable on another swipeable open
       useSwipeableDismissListener(
@@ -69,7 +72,7 @@ export const GroupItem = memo(
       }, [group, navigation, timeoutRef]);
 
       const handleRemoveConfirm = (groupId: string) => {
-        handleOnDelete(groupId).then();
+        onDeleteList(groupId).then();
         groupDeleteRef.current?.dismiss();
       };
 
@@ -165,7 +168,7 @@ export const GroupItem = memo(
             type="rename"
             groupId={group.id}
             groupTitle={group.name}
-            handleOnRenameGroup={handleOnRename}
+            handleOnRenameGroup={onRenameList}
             ref={groupRenameRef}
           />
         </Swipeable>

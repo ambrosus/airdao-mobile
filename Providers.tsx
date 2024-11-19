@@ -2,8 +2,7 @@ import React from 'react';
 import { combineComponents } from '@utils/combineComponents';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ListsContextProvider } from '@contexts/ListsContext';
-import { AllAddressesProvider, LocalizationProvider } from '@contexts';
+import { LocalizationProvider } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
@@ -62,8 +61,6 @@ const independentProviders = [
 const providers = [
   ...independentProviders,
   LocalDBProvider,
-  AllAddressesProvider,
-  ListsContextProvider,
   WrappedLocalizationProvider,
   BridgeProvider,
   KosmosMarketplaceProvider,

@@ -1,5 +1,10 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import { useListActions } from '@features/lists';
+import { useAddressesActions } from '@features/addresses';
+import { useListsSelector } from '@entities/lists';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
 import {
   BottomSheetFloat,
@@ -10,12 +15,9 @@ import {
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
-import { useAllAddressesReducer, useLists } from '@contexts';
 import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
 import { COLORS } from '@constants/colors';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
-import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {
   wallet: ExplorerAccount;
@@ -24,14 +26,17 @@ interface BottomSheetEditWalletProps extends BottomSheetProps {
 export const BottomSheetEditWallet = forwardRef<
   BottomSheetRef,
   BottomSheetEditWalletProps
->((props, ref) => {
-  const { wallet, ...bottomSheetProps } = props;
-  const allAddressesReducer = useAllAddressesReducer();
+>(({ wallet, ...bottomSheetProps }, ref) => {
+  const { t } = useTranslation();
+
+  const { listsOfAddressGroup } = useListsSelector();
+  const { onToggleAddressInList } = useListActions();
+  const { _dispatcher } = useAddressesActions();
+
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { listsOfAddressGroup, toggleAddressesInList } = useLists((v) => v);
+
   const renameWalletModalRef = useRef<BottomSheetRef>(null);
   const addToCollectionModalRef = useRef<BottomSheetRef>(null);
-  const { t } = useTranslation();
 
   const listsWithCurrentWallet = listsOfAddressGroup.filter((list) =>
     list.accounts.some((acc) => acc?.address === wallet?.address)
@@ -59,13 +64,13 @@ export const BottomSheetEditWallet = forwardRef<
       const saveAddress = async () => {
         const newWallet: ExplorerAccount = Object.assign({}, wallet);
         newWallet.name = newName;
-        allAddressesReducer({ type: 'update', payload: newWallet });
+        _dispatcher({ type: 'update', payload: newWallet });
         dismissRename();
       };
       dismissThis();
       saveAddress();
     },
-    [allAddressesReducer, dismissRename, dismissThis, wallet]
+    [_dispatcher, dismissRename, dismissThis, wallet]
   );
 
   const showAddToCollection = useCallback(() => {
@@ -82,7 +87,7 @@ export const BottomSheetEditWallet = forwardRef<
   const removeFromCollection = useCallback(() => {
     if (listsWithCurrentWallet.length > 0) {
       const list = listsWithCurrentWallet[0];
-      toggleAddressesInList([wallet], list);
+      onToggleAddressInList([wallet], list);
       dismissThis();
       Toast.show({
         text: t('toast.removed.wallet.from.group'),
@@ -90,7 +95,7 @@ export const BottomSheetEditWallet = forwardRef<
         type: ToastType.Success
       });
     }
-  }, [dismissThis, listsWithCurrentWallet, t, toggleAddressesInList, wallet]);
+  }, [dismissThis, listsWithCurrentWallet, t, onToggleAddressInList, wallet]);
 
   return (
     <BottomSheetFloat

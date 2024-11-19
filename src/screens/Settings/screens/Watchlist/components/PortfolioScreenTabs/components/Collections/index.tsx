@@ -1,18 +1,20 @@
 import { View } from 'react-native';
 import React from 'react';
-import { useAllAddressesContext, useLists } from '@contexts';
+import { styles } from './styles';
 import { Spinner } from '@components/base';
 import { sortListByKey } from '@utils/sort';
-import { styles } from './styles';
 import { ListsGroups } from '@screens/Settings/screens/Watchlist/components/ListsOfAddressGroup';
+import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
+import { useListsSelector } from '@entities/lists';
 
 export const Collections = () => {
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const { refresh: refetchAddresses, addressesLoading } =
-    useAllAddressesContext((v) => v);
+  const { refetch } = useFetchAddresses();
+  const { loading } = useAddressesStore();
+  const { listsOfAddressGroup } = useListsSelector();
+
   return (
     <View style={styles.main}>
-      {addressesLoading ? (
+      {loading ? (
         <View style={styles.spinnerWrapper}>
           <Spinner />
         </View>
@@ -23,7 +25,7 @@ export const Collections = () => {
             'totalBalance',
             'desc'
           )}
-          onRefresh={refetchAddresses}
+          onRefresh={refetch}
         />
       )}
     </View>

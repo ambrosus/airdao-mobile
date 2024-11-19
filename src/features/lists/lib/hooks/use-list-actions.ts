@@ -7,10 +7,9 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 import { AccountList, ExplorerAccount } from '@models';
 import { useAddressesStore } from '@entities/addresses';
 
-export function useListActions() {
+export function useListActions(onDismissBottomSheet?: () => void) {
   const { allAddresses } = useAddressesStore();
-  const { createGroupRef, listsOfAddressGroup, onChangeListsOfAddressGroup } =
-    useListsStore();
+  const { listsOfAddressGroup, onChangeListsOfAddressGroup } = useListsStore();
 
   const onUpdateListOfAddressGroup = useCallback(
     async (newLists: CacheableAccountList[]) => {
@@ -22,7 +21,8 @@ export function useListActions() {
   const onCreateList = useCallback(
     async (name: string) => {
       try {
-        createGroupRef.current?.dismiss();
+        if (onDismissBottomSheet) onDismissBottomSheet();
+
         const newList = await PublicAddressListDB.createList(name);
         const newGroupOfAddresses: CacheableAccountList = {
           id: newList.id,
@@ -37,7 +37,7 @@ export function useListActions() {
         throw error;
       }
     },
-    [createGroupRef, listsOfAddressGroup, onUpdateListOfAddressGroup]
+    [listsOfAddressGroup, onUpdateListOfAddressGroup, onDismissBottomSheet]
   );
 
   const onDeleteList = useCallback(

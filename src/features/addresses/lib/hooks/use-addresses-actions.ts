@@ -5,6 +5,10 @@ import { ExplorerAccount } from '@models';
 import { PublicAddressDB } from '@database';
 
 type DispatchActionKeys = 'add' | 'remove' | 'update' | 'add-or-update' | 'set';
+type DispatcherArgs = {
+  type: DispatchActionKeys;
+  payload: ExplorerAccount;
+};
 
 export function useAddressesActions() {
   const { allAddresses, onSetAllAddresses } = useAddressesStore();
@@ -50,7 +54,7 @@ export function useAddressesActions() {
   );
 
   const _dispatcher = useCallback(
-    async (type: DispatchActionKeys, payload: ExplorerAccount) => {
+    async ({ type, payload }: DispatcherArgs) => {
       let finalAddresses: ExplorerAccount[] = [];
       switch (type) {
         case 'add': {
