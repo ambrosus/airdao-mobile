@@ -1,4 +1,4 @@
-name: Lint Codebase
+name: Run Unit Tests
 
 on:
   pull_request:
@@ -9,8 +9,8 @@ on:
       - redesign
 
 jobs:
-  lint:
-    name: Run Lint
+  tests:
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -26,5 +26,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run lint
-        run: yarn lint
+      - name: Run tests
+        run: yarn test
