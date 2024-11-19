@@ -1,30 +1,33 @@
 import React, { useEffect, useRef } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
+import LottieView from 'lottie-react-native';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { BottomAwareSafeAreaView } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
-import { useAddWalletContext } from '@contexts';
-import { styles } from './styles';
-import { LinearGradient } from 'expo-linear-gradient';
-import LottieView from 'lottie-react-native';
-import { View } from 'react-native';
+import { useAddWalletStore } from '@features/add-wallet';
 
 export const NoWalletScreen = () => {
-  const { setWalletName, setMnemonicLength } = useAddWalletContext();
-  const navigation = useNavigation<RootNavigationProp>();
   const { t } = useTranslation();
+  const navigation = useNavigation<RootNavigationProp>();
+
+  const { onChangeName, onChangeMnemonicLength } = useAddWalletStore();
+
   const animationRef = useRef<LottieView>(null);
 
   useEffect(() => {
     animationRef.current?.play();
   }, []);
+
   const navigateToNewWallet = () => {
-    setWalletName('');
-    setMnemonicLength(128);
+    onChangeName('');
+    onChangeMnemonicLength(128);
     navigation.navigate('Tabs', {
       screen: 'Wallets',
       params: { screen: 'CreateWalletStep0' }
@@ -32,8 +35,8 @@ export const NoWalletScreen = () => {
   };
 
   const navigateToImportWallet = () => {
-    setWalletName('');
-    setMnemonicLength(128);
+    onChangeName('');
+    onChangeMnemonicLength(128);
     navigation.navigate('Tabs', {
       screen: 'Wallets',
       params: { screen: 'ImportWalletMethods' }

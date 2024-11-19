@@ -3,11 +3,7 @@ import { combineComponents } from '@utils/combineComponents';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListsContextProvider } from '@contexts/ListsContext';
-import {
-  AddWalletProvider,
-  AllAddressesProvider,
-  LocalizationProvider
-} from '@contexts';
+import { AllAddressesProvider, LocalizationProvider } from '@contexts';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
@@ -69,7 +65,6 @@ const providers = [
   AllAddressesProvider,
   ListsContextProvider,
   WrappedLocalizationProvider,
-  AddWalletProvider,
   BridgeProvider,
   KosmosMarketplaceProvider,
   SwapProvider,
