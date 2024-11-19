@@ -1,6 +1,6 @@
+import { create } from 'zustand';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';
-import { create } from 'zustand';
 
 interface StakingPoolsStore {
   isInitialFetching: boolean;
