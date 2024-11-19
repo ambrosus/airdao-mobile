@@ -41,7 +41,6 @@ import {
   CreateWalletStep1,
   CreateWalletStep2
 } from '@screens/CreateWallet';
-import { AddressDetails } from '@screens/Address';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
