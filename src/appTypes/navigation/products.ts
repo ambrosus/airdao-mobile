@@ -28,6 +28,7 @@ export type ProductsParams = {
   Bridge: undefined;
   BridgeHistory: undefined;
   BridgeTransferError: undefined;
+  Harbor: undefined;
 } & CommonStackParamsList;
 
 export type PortfolioNavigationProp = CompositeNavigationProp<

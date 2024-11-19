@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,36 +13,45 @@ import { useFocusEffect } from '@react-navigation/native';
 import { isIos } from '@utils/isPlatform';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
-import { WalletsInactiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-inactive';
-import { WalletsActiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-active';
-import {
-  ProductsActiveIcon,
-  ProductsInactiveIcon,
-  SettingsActiveIcon,
-  SettingsInactiveIcon
-} from '@components/svg/icons/v2/bottom-tabs-navigation';
 import { scale, verticalScale } from '@utils/scaling';
+import { HARBOR_TABS, MAIN_TABS } from '@navigation/constants';
 
-type LabelType = 'Settings' | 'Products' | 'Wallets';
-const tabs = {
-  Wallets: {
-    inactiveIcon: <WalletsInactiveIcon color={COLORS.neutral200} />,
-    activeIcon: <WalletsActiveIcon color={COLORS.brand600} />
-  },
-  Products: {
-    inactiveIcon: <ProductsInactiveIcon color={COLORS.neutral800} />,
-    activeIcon: <ProductsActiveIcon color={COLORS.brand600} />
-  },
-  Settings: {
-    inactiveIcon: <SettingsInactiveIcon color={COLORS.neutral200} />,
-    activeIcon: <SettingsActiveIcon color={COLORS.brand600} />
-  }
+type LabelType =
+  | 'Settings'
+  | 'Products'
+  | 'Wallets'
+  | 'StakeAMB'
+  | 'StakeHBR'
+  | 'BorrowHarbor';
+
+interface TabBarModel extends BottomTabBarProps {
+  isHarbor?: boolean;
+}
+
+interface TabBarMethodModel {
+  tabs: any;
+  visibility: (tab: string) => boolean;
+}
+
+const HarborMethods: TabBarMethodModel = {
+  tabs: HARBOR_TABS,
+  visibility: NavigationUtils.getHarborTabBarVisibility
 };
 
-const TabBar = ({ state, navigation }: BottomTabBarProps) => {
+const MainMethods: TabBarMethodModel = {
+  tabs: MAIN_TABS,
+  visibility: NavigationUtils.getTabBarVisibility
+};
+
+const TabBar = ({ state, navigation, isHarbor = false }: TabBarModel) => {
   const bottomSafeArea = useSafeAreaInsets().bottom;
+  const tabsMethods = useMemo(
+    () => (isHarbor ? HarborMethods : MainMethods),
+    [isHarbor]
+  );
+
   const currentRoute = useCurrentRoute();
-  const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
+  const tabBarVisible = tabsMethods.visibility(currentRoute);
   const [isReady, setIsReady] = useState(false);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -77,7 +86,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
         const isFocused = state.index === index;
 
         const icon =
-          tabs[route.name as LabelType][
+          tabsMethods.tabs[route.name as LabelType][
             isFocused ? 'activeIcon' : 'inactiveIcon'
           ];
 
@@ -106,7 +115,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
             style={[
               styles.mainItemContainer,
               {
-                paddingTop: verticalScale(index === 1 ? 8 : 17)
+                paddingTop: isHarbor ? 8 : verticalScale(index === 1 ? 8 : 17)
               }
             ]}
             onPress={onPress}
