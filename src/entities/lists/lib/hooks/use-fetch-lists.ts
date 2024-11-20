@@ -1,17 +1,17 @@
-import { useListsStore } from '@entities/lists/model/lists.store';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useAddressesStore } from '@entities/addresses';
+import { useListsStore } from '@entities/lists';
 import { PublicAddressDbModel, PublicAddressListDB } from '@database';
 import { Cache, CacheKey } from '@lib/cache';
 import { MULTISIG_VAULT } from '@constants/variables';
 import { ExplorerAccount } from '@models';
 import { CacheableAccountList } from '@appTypes';
-import { useListActions } from '@features/lists/lib';
-import { useAddressesStore } from '@entities/addresses';
 
-export function useFetchLists() {
+type CreateListActions = (payload: string) => Promise<CacheableAccountList>;
+
+export function useFetchLists(onCreateList: CreateListActions) {
   const { onChangeListsOfAddressGroup } = useListsStore();
   const { allAddresses, loading } = useAddressesStore();
-  const { onCreateList } = useListActions();
 
   const isFetchedInitiallyRef = useRef<boolean>(false);
 

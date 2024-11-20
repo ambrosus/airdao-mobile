@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAddressesStore } from '@entities/addresses';
 import { useAddressesActions } from '@features/addresses';
 import {
@@ -6,13 +7,12 @@ import {
 } from '@appTypes';
 import { AddressUtils } from '@utils/address';
 import { AirDAOEventDispatcher } from '@lib';
-import { useEffectOnce } from '@hooks';
 
-export function useNotifications() {
+export function useListNotifications() {
   const { allAddresses } = useAddressesStore();
   const { _dispatcher } = useAddressesActions();
 
-  useEffectOnce(() => {
+  useEffect(() => {
     const onNewNotificationReceive = async (
       data: AirDAONotificationReceiveEventPayload
     ) => {
@@ -47,5 +47,6 @@ export function useNotifications() {
     );
 
     return () => notificationListener.unsubscribe();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

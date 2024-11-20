@@ -18,14 +18,12 @@ import {
   PublicAddressListDB
 } from '@database';
 import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
-import { useFetchAddresses } from '@entities/addresses/lib';
-import { useFetchLists } from '@entities/lists/lib/hooks/use-fetch-lists';
+import { useListsAndAddressesFetcher } from './useListsAndAddressesFetcher';
 
 /* eslint camelcase: 0 */
 export const useAppInit = () => {
   usePasscodeInit();
-  useFetchAddresses();
-  useFetchLists();
+  useListsAndAddressesFetcher();
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
 
   useEffect(() => {
