@@ -9,6 +9,7 @@ import { COLORS } from '@constants/colors';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import { usePasscodeStore } from '@features/passcode';
+import { PasscodeUtils } from '@utils/passcode';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export const ConfirmPasscode = () => {
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
       onChangePasscode(passcode);
+      await PasscodeUtils.setPasscodeInDB(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');
