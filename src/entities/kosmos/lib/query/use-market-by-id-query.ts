@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMarketData, MarketType } from '@entities/kosmos';
+import { getMarketData } from '@entities/kosmos/api';
+import { MarketType } from '@entities/kosmos/types';
 
 export function useMarketByIdQuery(id: string) {
   const {

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { fetchClosedMarkets, FiltersState, MarketType } from '@entities/kosmos';
+import { fetchClosedMarkets } from '@entities/kosmos/api';
+import { MarketType, FiltersState } from '@entities/kosmos/types';
 
 export function useClosedMarketsQuery(filters: FiltersState) {
   const { t } = useTranslation();
