@@ -85,6 +85,8 @@
   "button.verifying": "Doğrulanıyor",
   "button.confirm": "Onaylayın",
   "button.swapping": "Takas edin",
+  "button.importing.wallet": "Importing wallet",
+
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
@@ -220,10 +222,12 @@
   "send.funds.transfer.fee": "Tahmini transfer ücreti",
   "send.funds.use.max": "Hepsini kullan",
 
-  "import.wallet.methods.mnemonic": "Kurtarma ifadesiyle içe anahtar",
-  "import.wallet.methods.key": "Özel anahtarlarla içe aktarma",
-  "import.wallet.description": "Mevcut cüzdanınızla ilişkili kurtarma ifadesini girin.",
-  "import.wallet.header": "Mevcut cüzdanı içe aktar",
+  "import.wallet.methods.mnemonic": "!!!Recovery phrase",
+  "import.wallet.methods.mnemonic.info": "!!!Use your 12 or 24-word recovery phrase",
+  "import.wallet.methods.key": "!!!Private keys",
+  "import.wallet.methods.key.info": "!!!Enter your private key manually",
+  "import.wallet.description": "!!!Type in your recovery phrase.",
+  "import.wallet.header": "!!!Recovery pharse",
   "import.wallet.loading": "Cüzdanınız \n yedeklemesinden içe aktarılıyor",
   "import.wallet.success": "Cüzdanınız başaryıla içe aktarıldı!",
   "import.wallet.success.text": "Cüzdanınız içe aktarıldı. Artık varlıklarınıza erişebilirsiniz.",
@@ -237,6 +241,9 @@
   "import.wallet.key.error.invalid": "Geçersiz özel anahtar.",
   "import.wallet.key.error.try.again": "Lütfen tekrar deneyin.",
   "import.wallet.key.success": "Cüzdanınız içe aktarıldı.",
+  "import.wallet.subtitle": "!!!Choose a method to import your wallet.",
+  "import.wallet.toast.title": "!!!Wallet imported!",
+  "import.wallet.error": "!!!Import failed. Tap the words in the correct order to continue.",
 
   "no.wallet.address.tracking": "Adres takibi",
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",

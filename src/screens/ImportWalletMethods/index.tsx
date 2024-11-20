@@ -1,22 +1,19 @@
 import React, { useCallback } from 'react';
-import { FlatList, ListRenderItemInfo } from 'react-native';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
-import {
-  ChevronDownIcon,
-  KeyIcon,
-  ReadingListIcon
-} from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { HomeParamsList } from '@appTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Edit, Key } from '@components/svg/icons/v2';
 
 type ImportWalletMethod = {
   label: string;
+  info: string;
   icon: JSX.Element;
   method: 'mnemonic' | 'key';
 };
@@ -34,12 +31,14 @@ export const ImportWalletMethods = ({
   const ADD_WALLET_METHODS: ImportWalletMethod[] = [
     {
       label: t('import.wallet.methods.mnemonic'),
-      icon: <ReadingListIcon />,
+      info: t('import.wallet.methods.mnemonic.info'),
+      icon: <Edit color={COLORS.brand500} />,
       method: 'mnemonic'
     },
     {
       label: t('import.wallet.methods.key'),
-      icon: <KeyIcon />,
+      info: t('import.wallet.methods.key.info'),
+      icon: <Key color={COLORS.brand500} />,
       method: 'key'
     }
   ] as const;
@@ -53,7 +52,7 @@ export const ImportWalletMethods = ({
       };
 
       return (
-        <Button onPress={onNavigateToImportScreen}>
+        <Button style={styles.main} onPress={onNavigateToImportScreen}>
           <Row
             alignItems="center"
             justifyContent="space-between"
@@ -61,15 +60,21 @@ export const ImportWalletMethods = ({
           >
             <Row alignItems="center" style={styles.addWalletMethodListItemGap}>
               {args.item.icon}
-              <Text
-                fontSize={16}
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.neutral800}
-              >
-                {args.item.label}
-              </Text>
+              <Spacer horizontal value={scale(3)} />
+              <View>
+                <Text
+                  fontSize={16}
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.neutral800}
+                >
+                  {args.item.label}
+                </Text>
+                <Spacer value={scale(6)} />
+                <Text fontSize={13} fontFamily="Inter_600SemiBold">
+                  {args.item.info}
+                </Text>
+              </View>
             </Row>
-            <ChevronDownIcon rotate="270deg" color={COLORS.neutral400} />
           </Row>
         </Button>
       );
@@ -80,7 +85,16 @@ export const ImportWalletMethods = ({
   return (
     <SafeAreaView style={styles.container}>
       <Header bottomBorder title={t('import.wallet.common.title')} />
-      <Spacer value={scale(16)} />
+      <Spacer value={scale(17)} />
+      <Text
+        fontFamily={'Inter_400Regular'}
+        fontSize={scale(16)}
+        color={COLORS.neutral900}
+        align="center"
+      >
+        {t('import.wallet.subtitle')}
+      </Text>
+      <Spacer value={scale(17)} />
       <FlatList
         bounces={false}
         scrollEnabled={false}

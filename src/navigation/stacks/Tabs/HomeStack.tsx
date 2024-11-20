@@ -9,8 +9,7 @@ import { ImportWalletMethods } from '@screens/ImportWalletMethods';
 import {
   ImportWallet,
   ImportWalletPrivateKey,
-  ImportWalletPrivateKeyError,
-  ImportWalletSuccess
+  ImportWalletPrivateKeyError
 } from '@screens/ImportWalletMethods/screens';
 import { StakingPoolsScreen } from '@screens/StakingPools';
 import {
@@ -55,11 +54,6 @@ export const HomeStack = () => {
         <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
         <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen
-          name="ImportWalletSuccess"
-          options={{ gestureEnabled: false }}
-          component={ImportWalletSuccess}
-        />
         <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
         <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
         <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />

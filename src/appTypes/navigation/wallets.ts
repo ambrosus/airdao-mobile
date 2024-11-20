@@ -32,7 +32,6 @@ export type HomeParamsList = {
   SuccessSetupSecurity: undefined;
   ImportWalletMethods: undefined;
   ImportWallet: undefined;
-  ImportWalletSuccess: undefined;
   StakeSuccessScreen: {
     type: 'stake' | 'withdraw';
     walletAddress: string | null;
