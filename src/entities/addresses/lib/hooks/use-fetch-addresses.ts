@@ -7,8 +7,10 @@ import { AddressUtils } from '@utils/address';
 import { ArrayUtils } from '@utils/array';
 import { useAddressesStore } from '../../model';
 import { _dbAddressesMapper } from '../../utils';
+import { useNotifications } from './use-notifications';
 
 export function useFetchAddresses() {
+  useNotifications();
   const { allAddresses, onSetAllAddresses, onToggleLoading } =
     useAddressesStore();
 
