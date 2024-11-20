@@ -1,4 +1,4 @@
-import { Token } from '../types';
+import { Token } from '@entities/kosmos';
 
 export const formatDecimals = (
   amount: any,

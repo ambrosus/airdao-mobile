@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { getMarketTxs } from '@features/kosmos/api';
-import { TxType } from '@features/kosmos/types';
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getMarketTxs, TxType } from '@entities/kosmos';
 
 export function useMarketTransactions(id?: string) {
   const { data, isLoading, isRefetching, refetch, error } = useQuery<TxType[]>(

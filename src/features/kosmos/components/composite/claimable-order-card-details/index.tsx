@@ -11,14 +11,12 @@ import { ContractNames } from '@airdao/airdao-bond';
 import { useTranslation } from 'react-i18next';
 import { BigNumber, ethers } from 'ethers';
 import { styles } from './styles';
+import { useOrdersStore } from '@features/kosmos';
 import { OrderCardDetails } from '@features/kosmos/components/base';
-import { SecondaryButton, Toast, ToastType } from '@components/modular';
-import { TxType } from '@features/kosmos/types';
-import { COLORS } from '@constants/colors';
-import { getTimeRemaining } from '@features/kosmos/utils';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { SecondaryButton, Toast, ToastType } from '@components/modular';
+import { getTimeRemaining, TxType, useToken } from '@entities/kosmos';
+import { COLORS } from '@constants/colors';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { TextOrSpinner } from '@components/composite';
@@ -37,13 +35,12 @@ export const ClaimableOrderCardDetails = ({
 }: ClaimableOrderCardDetailsProps) => {
   const { t } = useTranslation();
 
-  const { claimedOrderIds, onAppendClaimedOrderId } =
-    useKosmosMarketsContextSelector();
+  const { orders, onAppendOrderId } = useOrdersStore();
 
   const [isClaimingNow, setIsClaimingNow] = useState(false);
   const { onClaimButtonPress } = useClaimBonds(transaction, setIsClaimingNow);
 
-  const { extractTokenCb } = useExtractToken();
+  const { extractTokenCb } = useToken();
 
   const vestingEndsDate = useMemo(() => {
     return transaction.vestingType === 'Fixed-expiry'
@@ -56,8 +53,8 @@ export const ClaimableOrderCardDetails = ({
   }, [vestingEndsDate]);
 
   const isOrderClaimed = useMemo(
-    () => claimedOrderIds.includes(transaction.txHash) || transaction.isClaimed,
-    [claimedOrderIds, transaction]
+    () => orders.includes(transaction.txHash) || transaction.isClaimed,
+    [orders, transaction]
   );
 
   const disabled = useMemo(() => {
@@ -78,9 +75,9 @@ export const ClaimableOrderCardDetails = ({
     const token = extractTokenCb(transaction.payoutToken);
 
     const payoutBn = BigNumber.from(transaction.payoutAmount);
-    const payout = ethers.utils.formatUnits(payoutBn, token?.decimals);
+    const _payout = ethers.utils.formatUnits(payoutBn, token?.decimals);
 
-    return +payout * (token?.price || 0);
+    return +_payout * (token?.price || 0);
   }, [extractTokenCb, transaction.payoutAmount, transaction.payoutToken]);
 
   const onButtonPress = useCallback(async () => {
@@ -94,7 +91,7 @@ export const ClaimableOrderCardDetails = ({
       const tx = await onClaimButtonPress(contractName);
 
       if (tx) {
-        onAppendClaimedOrderId(transaction.txHash);
+        onAppendOrderId(transaction.txHash);
         sendFirebaseEvent(CustomAppEvents.kosmos_claim);
         Toast.show({
           text: t('kosmos.success.toast', {
@@ -114,7 +111,7 @@ export const ClaimableOrderCardDetails = ({
     transaction.txHash,
     setClaimingTransaction,
     onClaimButtonPress,
-    onAppendClaimedOrderId,
+    onAppendOrderId,
     t,
     payout
   ]);

@@ -102,6 +102,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'nft':
       return <NFTIcon />;
     case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
+    case CryptoCurrencyCode.AST.toLowerCase():
       return <ASTIcon scale={scale} />;
     case CryptoCurrencyCode.HBR.toLowerCase():
       return <HBRIcon scale={scale} />;

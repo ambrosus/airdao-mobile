@@ -12,7 +12,7 @@ import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Spinner, Text } from '@components/base';
-import { useMarketTransactions } from '@features/kosmos/lib/query';
+import { useMarketTransactions } from '@entities/kosmos';
 
 interface TransactionsHistoryTabProps {
   market: MarketType | undefined;

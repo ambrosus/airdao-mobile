@@ -3,11 +3,10 @@ import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { PrimaryButton, Toast, ToastType } from '@components/modular';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType } from '@features/kosmos/types';
 import {
   useBondContracts,
   useMarketDetails,
+  useResetStore,
   useTransactionErrorHandler
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
@@ -16,7 +15,9 @@ import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { buttonWithShadowStyle } from '@constants/shadow';
 import { TextOrSpinner } from '@components/composite';
+import { usePurchaseStore } from '@features/kosmos';
 import { useWalletPrivateKey } from '@entities/wallet';
+import { MarketType } from '@entities/kosmos';
 
 interface BuyBondButtonProps {
   market: MarketType;
@@ -35,11 +36,14 @@ export const BuyBondButton = ({
 }: BuyBondButtonProps) => {
   const { t } = useTranslation();
 
+  const { reset } = useResetStore();
+
   const { _extractPrivateKey } = useWalletPrivateKey();
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);
-  const { amountToBuy } = useKosmosMarketsContextSelector();
+
+  const { amountToBuy } = usePurchaseStore();
 
   const createNewSigner = useCallback(async () => {
     const privateKey = await _extractPrivateKey();
@@ -74,6 +78,7 @@ export const BuyBondButton = ({
           if (tx) {
             sendFirebaseEvent(CustomAppEvents.kosmos_market_buy);
             onDismissBottomSheet();
+            reset();
             setIsTransactionProcessing(false);
 
             setTimeout(() => {
@@ -97,17 +102,21 @@ export const BuyBondButton = ({
       setIsTransactionProcessing(false);
     }
   }, [
-    t,
-    amountToBuy,
-    contracts,
-    createNewSigner,
-    market,
-    onDismissBottomSheet,
-    payoutToken,
-    quoteToken,
     setIsTransactionProcessing,
+    createNewSigner,
+    contracts,
+    market.id,
+    market.marketType,
+    market.vestingType,
+    amountToBuy,
+    quoteToken?.decimals,
+    quoteToken?.contractAddress,
+    willGetSubFee,
+    onDismissBottomSheet,
+    reset,
+    t,
     willGetAfterUnlock,
-    willGetSubFee
+    payoutToken?.symbol
   ]);
 
   const disabled = useMemo(

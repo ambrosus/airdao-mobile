@@ -49,6 +49,7 @@ export enum CryptoCurrencyCode {
   Test2 = 'TEST2',
   ADOGE = 'ADOGE',
   Airdoge = 'Airdoge',
+  AST = 'AST',
   AstraLiquidityPool = 'Astra LP',
   HBR = 'HBR'
 }

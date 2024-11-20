@@ -1,5 +1,5 @@
 import { BigNumber, utils } from 'ethers';
-import { Token, TxType } from '../types';
+import { Token, TxType } from '@entities/kosmos';
 
 type ExtractTokenCallback = (address: string) => Token | undefined;
 

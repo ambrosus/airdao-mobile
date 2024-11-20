@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType } from '@features/kosmos/types';
-import { useExtractToken } from './use-extract-token';
-import {
-  MAINNET_VESTINGS,
-  TESTNET_VESTINGS
-} from '@features/kosmos/utils/vestings';
-import Config from '@constants/config';
 import { formatDecimals } from '@features/kosmos/utils';
-import { getProtocolFee } from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
+import {
+  MarketType,
+  useToken,
+  useTokensStore,
+  getProtocolFee,
+  VESTINGS
+} from '@entities/kosmos';
+import { usePurchaseStore } from '@features/kosmos';
+import { environment } from '@utils/environment';
 
 export function useMarketDetails(market: MarketType | undefined) {
-  const { tokens, amountToBuy } = useKosmosMarketsContextSelector();
-  const { extractTokenCb } = useExtractToken();
+  const { extractTokenCb } = useToken();
+  const { amountToBuy } = usePurchaseStore();
+  const { tokens } = useTokensStore();
+
   const payoutToken = extractTokenCb(market?.payoutToken ?? '');
   const quoteToken = extractTokenCb(market?.quoteToken ?? '');
 
@@ -39,8 +41,7 @@ export function useMarketDetails(market: MarketType | undefined) {
   const lockPeriod = useMemo(() => {
     if (!market?.vesting) return null;
 
-    const vestings =
-      Config.env === 'testnet' ? TESTNET_VESTINGS : MAINNET_VESTINGS;
+    const vestings = VESTINGS[environment];
 
     return vestings.find((el) => el.value === +market.vesting)?.label;
   }, [market?.vesting]);

@@ -3,9 +3,9 @@ import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
 import { NumberUtils } from '@utils/number';
+import { useToken } from '@entities/kosmos';
 
 interface MarketListItemProps {
   market: MarketType;
@@ -18,7 +18,7 @@ interface StyledItemTextProps {
 }
 
 export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
-  const { token } = useExtractToken(market.payoutToken);
+  const { token } = useToken(market.payoutToken);
 
   const discountItemColor = useMemo(() => {
     return market.discount > 0 ? COLORS.success500 : COLORS.error400;

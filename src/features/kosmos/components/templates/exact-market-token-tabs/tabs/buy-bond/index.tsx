@@ -6,25 +6,25 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { InputRef, Row, Text } from '@components/base';
-import { MarketType } from '@features/kosmos/types';
-import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { COLORS } from '@constants/colors';
-import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
-import { discountColor } from '@features/kosmos/utils';
-import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
-import { BottomSheetRef } from '@components/composite';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import { InputRef, Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
+import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
+import { discountColor } from '@features/kosmos/utils';
+import { usePurchaseStore } from '@features/kosmos';
+import { MarketType } from '@entities/kosmos';
+import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
+import { BottomSheetRef } from '@components/composite';
 import { isAndroid } from '@utils/isPlatform';
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { NumberUtils } from '@utils/number';
 
 interface BuyBondTabProps {
@@ -51,8 +51,7 @@ export const BuyBondTab = ({
 
   const inputRef = useRef<InputRef>(null);
 
-  const { amountToBuy, onChangeAmountToBuy } =
-    useKosmosMarketsContextSelector();
+  const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
   const { quoteToken, payoutToken, maxBondable, discount } =
     useMarketDetails(market);

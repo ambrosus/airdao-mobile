@@ -1,6 +1,6 @@
-import Config from '@constants/config';
 import axios from 'axios';
-import { MarketType, TxType } from '../types';
+import Config from '@constants/config';
+import { MarketType, TxType } from '@entities/kosmos/types';
 
 export async function getProtocolFee() {
   return axios

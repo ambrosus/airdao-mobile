@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { TxType } from '@features/kosmos/types';
-import { fetchMarketTransactions } from '@features/kosmos/api';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { useWalletStore } from '@entities/wallet';
+import type { TxType } from '@entities/kosmos';
+import { fetchMarketTransactions } from '@entities/kosmos/api';
+import { useTransactionsStore } from '@entities/kosmos/model';
 
 const VERSIONS = ['v1', 'v2'];
 
 export function useTransactions() {
   const { wallet } = useWalletStore();
   const [loading, setLoading] = useState(false);
-  const { transactions, setTransactions } = useKosmosMarketsContextSelector();
+
+  const { transactions, onChangeTransactions } = useTransactionsStore();
 
   const fetchTransactions = useCallback(() => {
     if (!wallet?.address) return;
@@ -26,17 +27,17 @@ export function useTransactions() {
         );
         return response.data.map((tx: TxType) => ({
           ...tx,
-          version: version
+          version
         }));
       })
     )
       .then((response) => {
-        setTransactions([...response[0], ...response[1]]);
+        onChangeTransactions([...response[0], ...response[1]]);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [wallet, setTransactions]);
+  }, [wallet, onChangeTransactions]);
 
   useEffect(() => {
     if (transactions.length === 0) {

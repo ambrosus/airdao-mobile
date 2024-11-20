@@ -1,11 +1,11 @@
 import { COLORS } from '@constants/colors';
+import { Platform, StyleSheet } from 'react-native';
 import {
-  RECT_WIDTH,
   RECT_HEIGHT,
+  RECT_WIDTH,
   TRIANGLE_HEIGHT,
   TRIANGLE_WIDTH
-} from '@features/kosmos/constants';
-import { Platform, StyleSheet } from 'react-native';
+} from '@entities/kosmos';
 
 export const styles = StyleSheet.create({
   container: {

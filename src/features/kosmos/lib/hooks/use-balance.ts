@@ -1,13 +1,12 @@
 import { useCallback } from 'react';
 import { BigNumber, ethers, utils } from 'ethers';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { usePurchaseStore } from '@features/kosmos';
 import { formatDecimals } from '@features/kosmos/utils';
-import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from './use-market-details';
-import { useMarketTokens } from './use-market-tokens';
+import { MarketType, useMarketTokens } from '@entities/kosmos';
 
 export function useBalance(market: MarketType | undefined) {
-  const { onChangeAmountToBuy } = useKosmosMarketsContextSelector();
+  const { onChangeAmountToBuy } = usePurchaseStore();
   const { tokens } = useMarketTokens();
   const { willGetWithArguments, quoteToken } = useMarketDetails(market);
 
