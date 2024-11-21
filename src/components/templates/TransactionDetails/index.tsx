@@ -17,7 +17,7 @@ import { AddressRowWithAction } from '../ExplorerAccount/components/address-row-
 interface TransactionDetailsProps {
   transaction: Transaction;
   isShareable?: boolean;
-  transactionTokenInfo: TransactionTokenInfo;
+  transactionTokenInfo?: TransactionTokenInfo;
 }
 
 const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
@@ -36,9 +36,10 @@ export const TransactionDetails = ({
   const currentStatus = t(`common.transaction.status.${transaction.status}`);
 
   const isTransfer = transaction.type === 'Transfer';
-  const isERC1155 = transactionTokenInfo.type === 'ERC-1155';
+  const isERC1155 = transactionTokenInfo?.type === 'ERC-1155';
   const isContractCall = transaction.type.includes('ContractCall');
   const isTokenTransfer = transaction.type === 'TokenTransfer';
+  const isBlockReward = transaction.type === 'BlockReward';
   const isSuccessTransaction = transaction.status === 'SUCCESS';
   const isPendingTransaction = transaction.status === 'PENDING';
 
@@ -49,18 +50,24 @@ export const TransactionDetails = ({
         return 'AirDAO';
       case isTokenTransfer:
         return transaction?.token?.name;
+      case isBlockReward:
       case isContractCall:
         return transaction?.value?.symbol;
-      default:
+      default: {
+        if (transaction.value && transaction.value.symbol) {
+          return transaction?.value?.symbol;
+        }
         return 'unknown';
+      }
     }
   }, [
+    isBlockReward,
     isContractCall,
     isERC1155,
     isTokenTransfer,
     isTransfer,
     transaction?.token?.name,
-    transaction?.value?.symbol
+    transaction.value
   ]);
 
   // Render Tx Status
@@ -96,11 +103,11 @@ export const TransactionDetails = ({
 
   const amountWithSymbolValue = useMemo(() => {
     const amount = NumberUtils.numberToTransformedLocale(
-      transactionTokenInfo.cryptoAmount
+      transactionTokenInfo?.cryptoAmount ?? 0
     );
 
     return transaction.isSent ? `-${amount}` : amount;
-  }, [transaction, transactionTokenInfo.cryptoAmount]);
+  }, [transaction, transactionTokenInfo]);
 
   return (
     <View testID="Transaction_Details">
