@@ -72,9 +72,6 @@ export const ImportWallet = () => {
     updatedWords[index] = StringUtils.removeNonAlphabeticCharacters(text);
     setMnemonicWords(updatedWords);
   };
-
-  // TODO simplify in the future
-
   const navigateToSetUpSecurity = (address: string) => {
     Toast.show({
       text: t('import.wallet.toast.title'),
@@ -89,7 +86,10 @@ export const ImportWallet = () => {
         })
       );
     } else {
-      navigation.navigate('SetupPasscode');
+      navigation.navigate('Tabs', {
+        screen: 'Settings',
+        params: { screen: 'SetupPasscode' }
+      });
     }
   };
 
@@ -123,6 +123,10 @@ export const ImportWallet = () => {
     return isLoading ? 'button.importing.wallet' : 'button.confirm';
   }, [isLoading]);
 
+  const buttonDisabled = useMemo(() => {
+    return error || isLoading || !isButtonEnabled;
+  }, [error, isButtonEnabled, isLoading]);
+
   return (
     <SafeAreaView style={styles.main}>
       <KeyboardDismissingView style={styles.main}>
@@ -152,7 +156,7 @@ export const ImportWallet = () => {
               align="center"
               style={styles.description}
             >
-              {t('import.wallet.description')}
+              {t('import.wallet.phrase.description')}
             </Text>
             <RenderWords
               inputs={inputs}
@@ -174,15 +178,14 @@ export const ImportWallet = () => {
             </Text>
           )}
           <Button
-            disabled={!isButtonEnabled}
+            disabled={buttonDisabled}
             onPress={navigateToRestoreWallet}
             type="circular"
             style={{
               ...styles.button,
-              backgroundColor:
-                isButtonEnabled && !isLoading
-                  ? COLORS.brand600
-                  : COLORS.brand200
+              backgroundColor: !buttonDisabled
+                ? COLORS.brand600
+                : COLORS.brand100
             }}
           >
             {isLoading && (
@@ -194,11 +197,7 @@ export const ImportWallet = () => {
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={
-                isButtonEnabled && !isLoading
-                  ? COLORS.neutral0
-                  : COLORS.brand400
-              }
+              color={!buttonDisabled ? COLORS.neutral0 : COLORS.brand400}
               style={styles.buttonText}
             >
               {t(`${buttonTitle}`)}

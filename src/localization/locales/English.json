@@ -170,6 +170,7 @@
   "create.wallet.verify.phrase": "Verify phrase",
   "create.wallet.verify.text": "Write down your recovery phrase exactly as shown. You’ll verify it later. Keep it private and secure!",
   "create.wallet.recovery.phrase": "Recovery phrase",
+  "create.wallet.recovery.phrase.error": "Verification failed. Tap the words in the correct order to continue.",
 
   "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",
@@ -225,15 +226,17 @@
   "import.wallet.methods.mnemonic.info": "Use your 12 or 24-word recovery phrase",
   "import.wallet.methods.key": "Private keys",
   "import.wallet.methods.key.info": "Enter your private key manually",
-  "import.wallet.description": "Type in your recovery phrase.",
+  "import.wallet.phrase.description": "Type in your recovery phrase.",
+  "import.wallet.key.description": "Paste or type in your private key",
   "import.wallet.header": "Recovery pharse",
   "import.wallet.loading": "Importing your wallet from \n backup",
   "import.wallet.success": "Wallet import successful!",
   "import.wallet.success.text": "Your wallet has been imported. You can now access your funds.",
   "import.wallet.title": "Enter recovery phrase",
   "import.wallet.common.title": "Import wallet",
-  "import.wallet.key.input.label": "Enter your private key",
+  "import.wallet.key.input.label": "Private key",
   "import.wallet.key": "Private key",
+
   "import.wallet.key.show": "Show private key",
   "import.wallet.key.hide": "Hide private key",
   "import.wallet.key.error.exist": "Wallet already exists in your account.",
@@ -242,6 +245,9 @@
   "import.wallet.key.success": "Your wallet has been imported.",
   "import.wallet.subtitle": "Choose a method to import your wallet.",
   "import.wallet.toast.title": "Wallet imported!",
+  "import.private.key.error": "The private key doesn’t correspond to any wallet. Please try again",
+  "import.private.key.already.exist": "Wallet already exist",
+
   "import.wallet.error": "Import failed. Tap the words in the correct order to continue.",
 
   "no.wallet.address.tracking": "Address tracking",

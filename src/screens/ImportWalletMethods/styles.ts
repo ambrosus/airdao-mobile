@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   contentContainerStyle: {
-    gap: verticalScale(30)
+    gap: verticalScale(15)
   },
   addWalletMethodListItem: {
     borderWidth: 1,

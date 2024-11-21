@@ -10,6 +10,7 @@ import { scale } from '@utils/scaling';
 import { HomeParamsList } from '@appTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Edit, Key } from '@components/svg/icons/v2';
+import { useRoute } from '@react-navigation/native';
 
 type ImportWalletMethod = {
   label: string;
@@ -27,7 +28,15 @@ export const ImportWalletMethods = ({
   navigation
 }: ImportWalletMethodsProps) => {
   const { t } = useTranslation();
+  const { params } = useRoute();
 
+  const onBackPress = () => {
+    if (params?.from === 'WelcomeScreen') {
+      navigation.navigate('WelcomeScreen');
+    } else {
+      navigation.goBack();
+    }
+  };
   const ADD_WALLET_METHODS: ImportWalletMethod[] = [
     {
       label: t('import.wallet.methods.mnemonic'),
@@ -84,7 +93,11 @@ export const ImportWalletMethods = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header bottomBorder title={t('import.wallet.common.title')} />
+      <Header
+        onBackPress={onBackPress}
+        bottomBorder
+        title={t('import.wallet.common.title')}
+      />
       <Spacer value={scale(17)} />
       <Text
         fontFamily={'Inter_400Regular'}

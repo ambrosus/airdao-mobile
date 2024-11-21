@@ -5,18 +5,7 @@ import { AMBMarket } from '@screens/AMBMarket';
 import { Notifications } from '@screens/Notifications';
 import { AssetScreen } from '@screens/Asset';
 import { SendFunds } from '@screens/SendFunds';
-import { ImportWalletMethods } from '@screens/ImportWalletMethods';
-import {
-  ImportWallet,
-  ImportWalletPrivateKey,
-  ImportWalletPrivateKeyError
-} from '@screens/ImportWalletMethods/screens';
 import { StakingPoolsScreen } from '@screens/StakingPools';
-import {
-  ConfirmPasscode,
-  SetupPasscode,
-  SuccessSetupSecurity
-} from '@screens/SetupPasscode';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { getCommonStack } from '../CommonStack';
 import { StakingPoolScreen } from '@screens/StakingPool';
@@ -35,11 +24,6 @@ import {
   WalletConnectModal,
   WalletSessionsBottomSheet
 } from '@features/wallet-connect/components/templates';
-import {
-  CreateWalletStep0,
-  CreateWalletStep1,
-  CreateWalletStep2
-} from '@screens/CreateWallet';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -52,15 +36,10 @@ export const HomeStack = () => {
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
         <Stack.Screen name="NFTScreen" component={NFTScreen} />
         <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />
-        <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
-        <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
-        <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
 
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="SendFunds" component={SendFunds} />
-        <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
         <Stack.Screen name="StakingPool" component={StakingPoolScreen} />
         <Stack.Screen
           name="StakeSuccessScreen"
@@ -79,23 +58,6 @@ export const HomeStack = () => {
             presentation: 'fullScreenModal'
           }}
           component={BridgeHistory}
-        />
-        <Stack.Screen
-          name="SuccessSetupSecurity"
-          component={SuccessSetupSecurity}
-        />
-        <Stack.Screen
-          name="ImportWalletMethods"
-          component={ImportWalletMethods}
-        />
-        <Stack.Screen name="ImportWallet" component={ImportWallet} />
-        <Stack.Screen
-          name="ImportWalletPrivateKey"
-          component={ImportWalletPrivateKey}
-        />
-        <Stack.Screen
-          name="ImportWalletPrivateKeyError"
-          component={ImportWalletPrivateKeyError}
         />
         <Stack.Screen name="SwapScreen" component={SwapScreen} />
         <Stack.Screen

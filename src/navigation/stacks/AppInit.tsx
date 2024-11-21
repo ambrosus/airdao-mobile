@@ -33,7 +33,7 @@ const AppInitialization = () => {
         if (allWallets.length > 0) {
           if (!isPasscodeEnabled && !isFaceIDEnabled) {
             navigation.replace('Tabs', {
-              screen: 'Wallets',
+              screen: 'Settings',
               params: { screen: 'SetupPasscode' }
             });
           } else {

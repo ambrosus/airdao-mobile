@@ -1,6 +1,4 @@
 import React, {
-  Dispatch,
-  SetStateAction,
   forwardRef,
   useCallback,
   useEffect,
@@ -26,9 +24,10 @@ type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;
 
 type PrivateKeyMaskedInputProps = TextInputProps & {
+  color?: string;
   value: string;
   secureTextEntry: boolean;
-  setPrivateKey: Dispatch<SetStateAction<string>>;
+  setPrivateKey: (value: string) => void;
 };
 
 const _isAlphanumeric = (char: string): boolean => {
@@ -43,10 +42,11 @@ const SELECTION_INITIAL_STATE = {
 export const PrivateKeyMaskedInput = forwardRef<
   InputRef,
   PrivateKeyMaskedInputProps
->(({ value, setPrivateKey, secureTextEntry }, maskedInputRef) => {
+>(({ color, value, setPrivateKey, secureTextEntry }, maskedInputRef) => {
   const { t } = useTranslation();
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
+      color: color || COLORS.neutral900,
       width: '100%',
       height: 90,
       borderRadius: moderateScale(12),
@@ -58,7 +58,7 @@ export const PrivateKeyMaskedInput = forwardRef<
       textAlign: 'left',
       verticalAlign: 'top'
     };
-  }, []);
+  }, [color]);
 
   const [clipboard, setClipboard] = useState('');
 
