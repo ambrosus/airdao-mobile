@@ -21,7 +21,7 @@ export const SingleAsset = ({
   token,
   overrideIconVariants
 }: SingleAssetProps): JSX.Element => {
-  const { name, balance, symbol, address, tokenNameFromDatabase } = token;
+  const { balance, symbol, address, tokenNameFromDatabase } = token;
 
   const isNFT = symbol === CryptoCurrencyCode.NFT;
   const usdPrice = useUSDPrice(balance.ether, symbol);
@@ -35,9 +35,14 @@ export const SingleAsset = ({
   const tokenBalance = balance.formattedBalance;
 
   const tokenNameOrAddress = useMemo(() => {
-    const isAddress = StringValidators.isStringAddress(name);
-    return StringUtils.formatAddress(isAddress ? name : name || address, 5, 6);
-  }, [address, name]);
+    const isAddress = StringValidators.isStringAddress(symbol);
+
+    if (symbol && !isAddress) {
+      return symbol;
+    }
+
+    return StringUtils.formatAddress(address, 5, 6);
+  }, [address, symbol]);
 
   return (
     <View style={styles.container}>
