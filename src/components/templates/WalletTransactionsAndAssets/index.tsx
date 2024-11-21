@@ -95,9 +95,19 @@ export const WalletTransactionsAndAssets = ({
             animated: true,
             offset: 0
           });
+          break;
+        }
+        case 1: {
+          transactionsHistoryListRef.current?.scrollToOffset({
+            animated: true,
+            offset: 0
+          });
+          assetsListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+          break;
         }
         case 2: {
           assetsListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+          break;
         }
       }
       onChangeActiveTabIndex(index);
