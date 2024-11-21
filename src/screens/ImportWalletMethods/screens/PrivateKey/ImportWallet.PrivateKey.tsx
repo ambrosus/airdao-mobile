@@ -54,6 +54,7 @@ export const ImportWalletPrivateKey = () => {
         subtext: StringUtils.formatAddress(address, 5, 6),
         type: ToastType.Success
       });
+
       if (isPasscodeEnabled) {
         navigation.dispatch(
           CommonActions.reset({

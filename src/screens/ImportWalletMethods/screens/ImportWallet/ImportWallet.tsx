@@ -78,6 +78,7 @@ export const ImportWallet = () => {
       subtext: StringUtils.formatAddress(address, 5, 6),
       type: ToastType.Success
     });
+
     if (isPasscodeEnabled) {
       navigation.dispatch(
         CommonActions.reset({
@@ -138,7 +139,7 @@ export const ImportWallet = () => {
               fontSize={20}
               color={COLORS.neutral800}
             >
-              {t('import.wallet.header')}
+              {t('import.wallet.methods.mnemonic')}
             </Text>
           }
           titlePosition="center"
