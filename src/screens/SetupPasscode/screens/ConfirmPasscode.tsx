@@ -98,7 +98,7 @@ export const ConfirmPasscode = () => {
             color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
             style={{ marginVertical: scale(12) }}
           >
-            {t('button.continue')}
+            {t('button.confirm')}
           </Text>
         </Button>
       </BottomAwareSafeAreaView>
