@@ -1,5 +1,7 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { View, Image, PanResponder } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
 import { Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
@@ -13,6 +15,9 @@ interface WalletDepositFundsProps {
 }
 
 export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
+  const { t } = useTranslation();
+  const { bottom: bottomInset } = useSafeAreaInsets();
+
   const { wallet } = useWalletStore();
 
   const receiveFundsBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -34,6 +39,14 @@ export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
   const onReceiveFundsShowBottomSheet = useCallback(
     () => receiveFundsBottomSheetRef.current?.show(),
     []
+  );
+
+  const bottomSheetContainerStyle = useMemo(
+    () => ({
+      ...styles.receiveFunds,
+      paddingBottom: bottomInset === 0 ? 24 : bottomInset
+    }),
+    [bottomInset]
   );
 
   return (
@@ -67,8 +80,11 @@ export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
           </Text>
         </PrimaryButton>
 
-        <BottomSheet ref={receiveFundsBottomSheetRef} title="Receive">
-          <View style={styles.receiveFunds}>
+        <BottomSheet
+          ref={receiveFundsBottomSheetRef}
+          title={t('account.actions.receive')}
+        >
+          <View style={bottomSheetContainerStyle}>
             <ReceiveFunds address={wallet?.address ?? ''} />
           </View>
         </BottomSheet>
