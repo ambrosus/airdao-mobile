@@ -1,6 +1,6 @@
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -23,7 +23,7 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
       >
         {index}
       </Text>
-      <Spacer value={scale(8)} horizontal />
+      <Spacer value={8} horizontal />
       <Text
         align="center"
         fontSize={14}
@@ -53,7 +53,7 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: scale(16),
-    minHeight: verticalScale(20),
+    height: 20,
     flexDirection: 'row',
     alignItems: 'center'
   }
