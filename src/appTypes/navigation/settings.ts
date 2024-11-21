@@ -23,6 +23,12 @@ export type SettingsTabParamsList = {
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
   Passcode: PasscodeParams;
+  ImportWalletMethods: undefined;
+  ImportWallet: undefined;
+  ImportWalletPrivateKey: undefined;
+  SetupPasscode: undefined;
+  ConfirmPasscode: { passcode: string[] };
+  SuccessSetupSecurity: undefined;
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<

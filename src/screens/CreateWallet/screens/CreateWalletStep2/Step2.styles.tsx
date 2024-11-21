@@ -3,6 +3,12 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
+  main: { flex: 1 },
+  header: {
+    shadowColor: COLORS.transparent,
+    borderBottomWidth: 1,
+    borderColor: COLORS.neutral900Alpha['5']
+  },
   container: {
     flex: 1,
     justifyContent: 'space-between'
@@ -38,6 +44,9 @@ export const styles = StyleSheet.create({
     minHeight: 36
   },
   button: {
+    position: 'relative',
+    flexDirection: 'row',
+    height: verticalScale(50),
     width: '90%',
     alignSelf: 'center',
     paddingVertical: verticalScale(12)

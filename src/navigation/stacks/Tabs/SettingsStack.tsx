@@ -13,10 +13,24 @@ import {
   SingleWalletScreen
 } from '@screens/Settings';
 import { SettingsTabParamsList } from '@appTypes';
-import { CreateWalletStep1, CreateWalletStep2 } from '@screens/CreateWallet';
+import {
+  CreateWalletStep0,
+  CreateWalletStep1,
+  CreateWalletStep2
+} from '@screens/CreateWallet';
 import { Watchlist } from '@screens/Settings/screens/Watchlist';
 import { Explore } from '@screens/Settings/screens/Explore';
 import { AddressDetails } from '@screens/Address';
+import { ImportWalletMethods } from '@screens/ImportWalletMethods';
+import {
+  ImportWallet,
+  ImportWalletPrivateKey
+} from '@screens/ImportWalletMethods/screens';
+import {
+  ConfirmPasscode,
+  SetupPasscode,
+  SuccessSetupSecurity
+} from '@screens/SetupPasscode';
 
 const Stack = createNativeStackNavigator<SettingsTabParamsList>();
 export const SettingsStack = () => {
@@ -36,8 +50,6 @@ export const SettingsStack = () => {
         name="NotificationSettings"
         component={NotificationSettingsScreen}
       />
-      <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
-      <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
       <Stack.Screen
         name="SecuritySettings"
         component={SecuritySettingsScreen}
@@ -46,6 +58,24 @@ export const SettingsStack = () => {
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="SingleWallet" component={SingleWalletScreen} />
       <Stack.Screen name="AccessKeys" component={AccessKeysScreen} />
+      <Stack.Screen name="CreateWalletStep0" component={CreateWalletStep0} />
+      <Stack.Screen name="CreateWalletStep1" component={CreateWalletStep1} />
+      <Stack.Screen name="CreateWalletStep2" component={CreateWalletStep2} />
+      <Stack.Screen
+        name="ImportWalletMethods"
+        component={ImportWalletMethods}
+      />
+      <Stack.Screen name="ImportWallet" component={ImportWallet} />
+      <Stack.Screen
+        name="ImportWalletPrivateKey"
+        component={ImportWalletPrivateKey}
+      />
+      <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
+      <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
+      <Stack.Screen
+        name="SuccessSetupSecurity"
+        component={SuccessSetupSecurity}
+      />
     </Stack.Navigator>
   );
 };

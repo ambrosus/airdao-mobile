@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {
   BottomAwareSafeAreaView,
@@ -17,6 +17,8 @@ import { HomeNavigationProp } from '@appTypes';
 import { NewWalletPageIcon } from '@components/svg/icons/v2';
 
 export const CreateWalletStep0 = () => {
+  const { params } = useRoute();
+
   const [selected, setSelected] = useState<boolean>(false);
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
@@ -25,11 +27,20 @@ export const CreateWalletStep0 = () => {
     navigation.navigate('CreateWalletStep1');
   };
 
+  const onBackPress = () => {
+    if (params?.from === 'WelcomeScreen') {
+      navigation.navigate('WelcomeScreen');
+    } else {
+      navigation.goBack();
+    }
+  };
+
   return (
     <SafeAreaView style={stylesStep0.flexStyle}>
       <Header
         titlePosition="center"
         bottomBorder
+        onBackPress={onBackPress}
         title={
           <Text
             fontFamily="Inter_600SemiBold"

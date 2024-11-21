@@ -1,27 +1,25 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
-  innerContainer: {
+  main: {
+    flex: 1
+  },
+  headerShadow: { shadowColor: 'transparent' },
+  container: {
+    flexGrow: 1,
+    justifyContent: 'space-between'
+  },
+  descriptionWrapper: {
     paddingHorizontal: scale(16)
   },
-  words: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    rowGap: scale(16),
-    columnGap: verticalScale(16)
+  description: { paddingVertical: scale(20) },
+  error: { paddingHorizontal: scale(20) },
+  button: {
+    flexDirection: 'row',
+    bottom: verticalScale(32),
+    height: verticalScale(54),
+    marginHorizontal: scale(16)
   },
-  word: {
-    backgroundColor: COLORS.culturedWhite,
-    paddingHorizontal: scale(12),
-    borderRadius: moderateScale(16),
-    paddingVertical: verticalScale(4)
-  },
-  loadingContainer: {
-    flex: 1,
-    alignSelf: 'center',
-    justifyContent: 'center'
-  }
+  buttonText: { marginVertical: scale(12) }
 });

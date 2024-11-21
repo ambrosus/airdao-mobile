@@ -6,22 +6,25 @@ import { BottomAwareSafeAreaView } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { HomeParamsList, SettingsTabNavigationProp } from '@appTypes';
 import { scale, verticalScale } from '@utils/scaling';
 import { usePasscodeStore } from '@features/passcode';
+import { PasscodeUtils } from '@utils/passcode';
 
 export const ConfirmPasscode = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
-  const route = useRoute<RouteProp<HomeParamsList, 'ConfirmPasscode'>>();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
+  const route = useRoute<RouteProp<HomeParamsList>>();
   const { onChangePasscode } = usePasscodeStore();
   const [passcode, setPasscode] = useState(['', '', '', '']);
+  // @ts-ignore
   const { passcode: originalPasscode } = route.params;
   const isButtonEnabled = passcode.join('').length === 4;
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
       onChangePasscode(passcode);
+      await PasscodeUtils.setPasscodeInDB(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');

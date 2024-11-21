@@ -1,29 +1,33 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Header, InputWithIcon } from '@components/composite';
+import { Header } from '@components/composite';
 import {
   Button,
   InputRef,
   KeyboardDismissingView,
-  Row,
   Spacer,
   Spinner,
   Text
 } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { WalletUtils } from '@utils/wallet';
 import { HomeNavigationProp } from '@appTypes';
 import { MnemonicUtils } from '@utils/mnemonics';
 import { StringUtils } from '@utils/string';
+import { WalletUtils } from '@utils/wallet';
+import { Toast, ToastType } from '@components/modular';
+import { usePasscodeStore } from '@features/passcode';
+import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';
 import { styles } from './styles';
 
 export const ImportWallet = () => {
   const navigation = useNavigation<HomeNavigationProp>();
+  const { isPasscodeEnabled } = usePasscodeStore();
+
   const { t } = useTranslation();
 
   const [mnemonicWords, setMnemonicWords] = useState([
@@ -42,6 +46,7 @@ export const ImportWallet = () => {
   ]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const inputs = useRef(
     Array(12)
       .fill(null)
@@ -58,6 +63,7 @@ export const ImportWallet = () => {
   };
 
   const handleWordChange = (index: number, text: string) => {
+    setError(false);
     const updatedWords = [...mnemonicWords];
     if (text.length >= 2 && text[text.length - 1] == ' ') {
       // focus next input on space
@@ -66,104 +72,39 @@ export const ImportWallet = () => {
     updatedWords[index] = StringUtils.removeNonAlphabeticCharacters(text);
     setMnemonicWords(updatedWords);
   };
-
-  // TODO simplify in the future
-  const renderWords = () => {
-    const wordInputs = [];
-    for (let i = 0; i < 12; i += 2) {
-      wordInputs.push(
-        <Row
-          key={i}
-          alignItems="center"
-          justifyContent="space-between"
-          style={{
-            marginBottom: verticalScale(16),
-            columnGap: scale(16)
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              width: '100%'
-            }}
-          >
-            <InputWithIcon
-              ref={inputs.current[i]}
-              value={mnemonicWords[i]}
-              style={{ paddingLeft: scale(i + 1 > 9 ? 17 : 10) }}
-              type="text"
-              returnKeyType="next"
-              autoCapitalize="none"
-              iconLeft={
-                <Text
-                  fontSize={16}
-                  fontFamily="Inter_400Regular"
-                  color={
-                    mnemonicWords[i] !== ''
-                      ? COLORS.neutral900
-                      : COLORS.alphaBlack60
-                  }
-                >
-                  {i + 1}.{' '}
-                </Text>
-              }
-              spacingLeft={0}
-              spacingRight={0}
-              onChangeText={(text) => handleWordChange(i, text)}
-              onSubmitEditing={() => focusNextInput(i)}
-            />
-          </View>
-          <View
-            style={{
-              flex: 1,
-              width: '100%'
-            }}
-          >
-            <InputWithIcon
-              ref={inputs.current[i + 1]}
-              value={mnemonicWords[i + 1]}
-              style={{ paddingLeft: scale(i + 2 > 9 ? 17 : 10) }}
-              type="text"
-              autoCapitalize="none"
-              returnKeyType={i === 10 ? 'done' : 'next'}
-              iconLeft={
-                <Text
-                  fontSize={16}
-                  fontFamily="Inter_400Regular"
-                  color={
-                    mnemonicWords[i + 1] !== ''
-                      ? COLORS.neutral900
-                      : COLORS.alphaBlack60
-                  }
-                >
-                  {i + 2}.{' '}
-                </Text>
-              }
-              spacingLeft={0}
-              spacingRight={0}
-              onChangeText={(text) => handleWordChange(i + 1, text)}
-              onSubmitEditing={() =>
-                i === 10 ? navigateToRestoreWallet() : focusNextInput(i + 1)
-              }
-            />
-          </View>
-        </Row>
+  const navigateToSetUpSecurity = (address: string) => {
+    Toast.show({
+      text: t('import.wallet.toast.title'),
+      subtext: StringUtils.formatAddress(address, 5, 6),
+      type: ToastType.Success
+    });
+    if (isPasscodeEnabled) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+        })
       );
+    } else {
+      navigation.navigate('Tabs', {
+        screen: 'Settings',
+        params: { screen: 'SetupPasscode' }
+      });
     }
-
-    return wordInputs;
   };
 
   const navigateToRestoreWallet = async () => {
     if (isButtonEnabled) {
+      setError(false);
       setIsLoading(true);
       try {
         const mnemonicPhrase = mnemonicWords.join(' ');
         if (!MnemonicUtils.isValidMnemonic(mnemonicPhrase)) {
-          Alert.alert('Invalid mnemonic phrase');
+          setError(true);
+          setIsLoading(false);
         } else {
-          await WalletUtils.processWallet(mnemonicPhrase);
-          navigation.replace('ImportWalletSuccess');
+          const wallet = await WalletUtils.processWallet(mnemonicPhrase);
+          navigateToSetUpSecurity(wallet.address);
         }
       } catch (error) {
         // TODO add localization
@@ -173,101 +114,97 @@ export const ImportWallet = () => {
           error.message || 'An error occurred while importing the wallet.'
         );
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     }
   };
 
+  const buttonTitle = useMemo(() => {
+    return isLoading ? 'button.importing.wallet' : 'button.confirm';
+  }, [isLoading]);
+
+  const buttonDisabled = useMemo(() => {
+    return error || isLoading || !isButtonEnabled;
+  }, [error, isButtonEnabled, isLoading]);
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {isLoading ? (
-        <View style={styles.loadingContainer}>
-          <Text
-            align="center"
-            fontSize={20}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('import.wallet.loading')}
-          </Text>
-          <Spacer value={verticalScale(24)} />
-          <View style={{ alignSelf: 'center' }}>
-            <Spinner />
+    <SafeAreaView style={styles.main}>
+      <KeyboardDismissingView style={styles.main}>
+        <Header
+          bottomBorder
+          title={
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={20}
+              color={COLORS.neutral800}
+            >
+              {t('import.wallet.header')}
+            </Text>
+          }
+          titlePosition="center"
+          style={styles.headerShadow}
+        />
+        <KeyboardAwareScrollView
+          extraHeight={verticalScale(125)}
+          contentContainerStyle={styles.container}
+        >
+          <View style={styles.descriptionWrapper}>
+            <Text
+              color={COLORS.neutral800}
+              fontFamily="Inter_400Regular"
+              fontSize={15}
+              align="center"
+              style={styles.description}
+            >
+              {t('import.wallet.phrase.description')}
+            </Text>
+            <RenderWords
+              inputs={inputs}
+              mnemonicWords={mnemonicWords}
+              handleWordChange={handleWordChange}
+              focusNextInput={focusNextInput}
+              navigateToRestoreWallet={navigateToRestoreWallet}
+            />
+            <Spacer value={verticalScale(16)} />
           </View>
-        </View>
-      ) : (
-        <KeyboardDismissingView style={{ flex: 1 }}>
-          <Header
-            bottomBorder
-            title={
-              <Text
-                fontFamily="Inter_600SemiBold"
-                fontSize={16}
-                color={COLORS.neutral800}
-              >
-                {t('import.wallet.header')}
-              </Text>
-            }
-            titlePosition="left"
-            style={{ shadowColor: 'transparent' }}
-          />
-          <KeyboardAwareScrollView
-            extraHeight={verticalScale(125)}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'space-between'
+          {error && (
+            <Text
+              fontFamily="Inter_400Regular"
+              fontSize={15}
+              color={COLORS.error600}
+              style={styles.error}
+            >
+              {t('import.wallet.error')}
+            </Text>
+          )}
+          <Button
+            disabled={buttonDisabled}
+            onPress={navigateToRestoreWallet}
+            type="circular"
+            style={{
+              ...styles.button,
+              backgroundColor: !buttonDisabled
+                ? COLORS.brand600
+                : COLORS.brand100
             }}
           >
-            <View>
-              <Spacer value={verticalScale(16)} />
-              <Text
-                align="center"
-                fontFamily="Inter_700Bold"
-                fontSize={24}
-                color={COLORS.neutral800}
-              >
-                {t('import.wallet.title')}
-              </Text>
-              <Spacer value={verticalScale(8)} />
-              <View style={{ paddingHorizontal: scale(16) }}>
-                <Text
-                  color={COLORS.neutral800}
-                  fontFamily="Inter_500Medium"
-                  fontSize={15}
-                  style={{ textAlign: 'center' }}
-                >
-                  {t('import.wallet.description')}
-                </Text>
-                <Spacer value={verticalScale(16)} />
-                {renderWords()}
-                <Spacer value={verticalScale(16)} />
-              </View>
-            </View>
-            <Button
-              disabled={!isButtonEnabled}
-              onPress={navigateToRestoreWallet}
-              type="circular"
-              style={{
-                marginTop: verticalScale(16),
-                bottom: verticalScale(32),
-                marginHorizontal: scale(16),
-                backgroundColor: isButtonEnabled
-                  ? COLORS.brand600
-                  : COLORS.alphaBlack5
-              }}
+            {isLoading && (
+              <>
+                <Spinner />
+                <Spacer horizontal value={scale(10)} />
+              </>
+            )}
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={!buttonDisabled ? COLORS.neutral0 : COLORS.brand400}
+              style={styles.buttonText}
             >
-              <Text
-                fontSize={16}
-                fontFamily="Inter_600SemiBold"
-                color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-                style={{ marginVertical: scale(12) }}
-              >
-                {t('button.continue')}
-              </Text>
-            </Button>
-          </KeyboardAwareScrollView>
-        </KeyboardDismissingView>
-      )}
+              {t(`${buttonTitle}`)}
+            </Text>
+          </Button>
+        </KeyboardAwareScrollView>
+      </KeyboardDismissingView>
     </SafeAreaView>
   );
 };

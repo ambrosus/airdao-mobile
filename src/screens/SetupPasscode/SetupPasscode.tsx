@@ -6,12 +6,12 @@ import { BottomAwareSafeAreaView } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
+import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode } from '@components/modular';
 
 export const SetupPasscode = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const isButtonEnabled = passcode.join('').length === 4;
   const onContinuePress = () => {
