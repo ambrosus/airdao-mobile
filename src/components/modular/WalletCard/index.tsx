@@ -8,7 +8,8 @@ import { NumberUtils } from '@utils/number';
 import { scale, verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
-import { ToastPosition } from '../Toast';
+import { ToastOptions, ToastPosition } from '../Toast';
+import { TextProps } from '@components/base/Text/Text.types';
 
 export interface WalletCardProps {
   address: string;
@@ -59,6 +60,38 @@ export const WalletCard = ({
     return [];
   }, [backgroundColor]);
 
+  const textProps: Partial<TextProps> = useMemo(
+    () => ({
+      fontSize: 15,
+      fontWeight: '500',
+      fontFamily: 'Inter_500Medium',
+      color: addressTextColor
+    }),
+    [addressTextColor]
+  );
+
+  const iconProps = useMemo(
+    () => ({
+      color: addressTextColor
+    }),
+    [addressTextColor]
+  );
+
+  const successTextProps: Partial<TextProps> = useMemo(
+    () => ({
+      fontSize: 14,
+      color: COLORS.neutral0
+    }),
+    []
+  );
+
+  const toastProps: Pick<ToastOptions, 'position'> = useMemo(
+    () => ({
+      position: ToastPosition.Top
+    }),
+    []
+  );
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.logo}>
@@ -70,25 +103,12 @@ export const WalletCard = ({
           addressLeftPadding,
           addressRightPadding
         )}
-        copiedTextWrapperStyle={{
-          backgroundColor: COLORS.lightWhite,
-          borderColor: COLORS.transparentWhite,
-          borderWidth: 1,
-          paddingHorizontal: 8,
-          borderRadius: 20
-        }}
+        copiedTextWrapperStyle={styles.copiedTextWrapperStyle}
         textToCopy={address}
-        textProps={{
-          fontSize: 15,
-          fontWeight: '500',
-          fontFamily: 'Inter_500Medium',
-          color: addressTextColor
-        }}
-        iconProps={{
-          color: addressTextColor
-        }}
-        successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
-        toastProps={{ position: ToastPosition.Top }}
+        textProps={textProps}
+        iconProps={iconProps}
+        successTextProps={successTextProps}
+        toastProps={toastProps}
       />
       <View>
         {balanceLoading ? (
@@ -109,20 +129,22 @@ export const WalletCard = ({
             <Spacer value={verticalScale(10)} />
             <Row alignItems="center">
               <Text
-                fontSize={14}
+                fontSize={15}
                 fontFamily="Inter_500Medium"
                 color={priceTextColor}
+                style={styles.footerTypography}
               >
                 ${NumberUtils.numberToTransformedLocale(usdBalance)}
               </Text>
 
-              {change24HR != undefined && (
+              {!!change24HR && (
                 <>
                   <Spacer horizontal value={scale(12)} />
                   <Text
-                    fontSize={14}
+                    fontSize={15}
                     fontFamily="Inter_500Medium"
                     color={change24HR > 0 ? '#9FE1CC' : COLORS.error200}
+                    style={styles.footerTypography}
                   >
                     {`${NumberUtils.addSignToNumber(
                       +NumberUtils.formatNumber(change24HR, 2)
