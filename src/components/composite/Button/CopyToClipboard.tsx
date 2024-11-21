@@ -118,14 +118,6 @@ export const CopyToClipboardButton = (
           ) : (
             <Text {...textProps}>{textToDisplay}</Text>
           )}
-          {/* <Spacer horizontal value={scale(16)} /> */}
-          {/* {showToast || !copied ? (
-            <ClipboardFilledIcon {...iconProps} />
-          ) : (
-            <Text {...successTextProps}>
-              {t(successText || t('common.copied'))}
-            </Text>
-          )} */}
         </Row>
       </Button>
     );
