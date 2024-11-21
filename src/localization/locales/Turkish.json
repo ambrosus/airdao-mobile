@@ -229,7 +229,6 @@
   "import.wallet.methods.key.info": "!!!Enter your private key manually",
   "import.wallet.phrase.description": "!!!Type in your recovery phrase.",
   "import.wallet.key.description": "!!!Paste or type in your private key",
-  "import.wallet.header": "!!!Recovery pharse",
   "import.wallet.loading": "Cüzdanınız \n yedeklemesinden içe aktarılıyor",
   "import.wallet.success": "Cüzdanınız başaryıla içe aktarıldı!",
   "import.wallet.success.text": "Cüzdanınız içe aktarıldı. Artık varlıklarınıza erişebilirsiniz.",

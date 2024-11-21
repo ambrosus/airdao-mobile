@@ -228,7 +228,6 @@
   "import.wallet.methods.key.info": "Enter your private key manually",
   "import.wallet.phrase.description": "Type in your recovery phrase.",
   "import.wallet.key.description": "Paste or type in your private key",
-  "import.wallet.header": "Recovery pharse",
   "import.wallet.loading": "Importing your wallet from \n backup",
   "import.wallet.success": "Wallet import successful!",
   "import.wallet.success.text": "Your wallet has been imported. You can now access your funds.",
