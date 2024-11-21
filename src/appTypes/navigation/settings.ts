@@ -29,6 +29,7 @@ export type SettingsTabParamsList = {
   SetupPasscode: undefined;
   ConfirmPasscode: { passcode: string[] };
   SuccessSetupSecurity: undefined;
+  WelcomeScreen: undefined;
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<
