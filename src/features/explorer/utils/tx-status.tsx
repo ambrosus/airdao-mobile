@@ -39,6 +39,7 @@ export const _txStatusThumbnail = (tx: Transaction) => {
     'Transfer': isSent ? <TransferSentIcon /> : <TransferReceivedIcon />,
     'Contract call': <ContractCallIcon />,
     'Validator Set': <TransferSentIcon />,
+    'Block reward': <TransferReceivedIcon />,
     'default': <FailedIcon color={COLORS.error400} />
   };
 
