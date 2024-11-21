@@ -8,6 +8,7 @@ import Animated, {
 import { styles } from './styles';
 import { Row } from '@components/base';
 import { PercentageItem } from '../../base';
+import { isIos } from '@utils/isPlatform';
 
 const PERCENTS = [25, 50, 75, 100];
 
@@ -30,9 +31,13 @@ export const AmountSelectionKeyboardExtend = ({
         opacity: 0
       };
 
-    const opacity = keyboard.height.value > 64 ? 1 : 0;
+    const {
+      height: { value }
+    } = keyboard;
+
+    const opacity = value > 64 ? 1 : 0;
     const springify = { damping: 80 };
-    const bottom = keyboard.height.value;
+    const bottom = isIos ? value - bottomInset : value;
 
     return {
       springify,
