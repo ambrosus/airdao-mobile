@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingViewProps,
   View
 } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -26,7 +27,6 @@ import { PrivateKeyMaskedInput, Toast, ToastType } from '@components/modular';
 import { isIos } from '@utils/isPlatform';
 import { delay } from '@utils/delay';
 import { useAllAccounts } from '@hooks/database';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { usePasscodeStore } from '@features/passcode';
 import { HomeNavigationProp } from '@appTypes';
 import { StringUtils } from '@utils/string';

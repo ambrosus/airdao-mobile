@@ -21,7 +21,7 @@ import { StringUtils } from '@utils/string';
 import { WalletUtils } from '@utils/wallet';
 import { Toast, ToastType } from '@components/modular';
 import { usePasscodeStore } from '@features/passcode';
-import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/conponent/RenderWord';
+import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';
 import { styles } from './styles';
 
 export const ImportWallet = () => {

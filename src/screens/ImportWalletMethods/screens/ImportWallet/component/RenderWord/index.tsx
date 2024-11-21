@@ -1,9 +1,9 @@
-import { InputRef, Row, Text } from '@components/base';
-import { scale } from '@utils/scaling';
+import React, { MutableRefObject, RefObject } from 'react';
 import { View } from 'react-native';
+import { scale } from '@utils/scaling';
+import { InputRef, Row, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import React, { MutableRefObject, RefObject } from 'react';
 import { styles } from './style';
 
 interface RenderWordsModel {
