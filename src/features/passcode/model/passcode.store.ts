@@ -27,6 +27,9 @@ export const usePasscodeStore = create<PasscodeStore>((set) => ({
     set({ loading: payload });
   },
   onChangePasscode: (payload: string[]) => {
+    if (payload.length === 4) {
+      set({ isPasscodeEnabled: true });
+    }
     set({ passcode: payload });
   }
 }));

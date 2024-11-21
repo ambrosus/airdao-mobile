@@ -23,8 +23,8 @@ export const ConfirmPasscode = () => {
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
-      onChangePasscode(passcode);
       await PasscodeUtils.setPasscodeInDB(passcode);
+      onChangePasscode(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');
