@@ -28,9 +28,7 @@ export const WalletAssets = forwardRef<FlatList, WalletAssetsProps>(
 
     const navigateToAssetScreen = useCallback(
       (tokenInfo: Token, walletAccount: string) => {
-        const isNFTToken = tokenInfo?.symbol === CryptoCurrencyCode.NFT;
-        const screenToNavigate = isNFTToken ? 'NFTScreen' : 'AssetScreen';
-        navigation.navigate(screenToNavigate, { tokenInfo, walletAccount });
+        navigation.navigate('AssetScreen', { tokenInfo, walletAccount });
       },
       [navigation]
     );
