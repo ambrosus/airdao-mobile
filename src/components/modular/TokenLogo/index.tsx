@@ -15,7 +15,8 @@ import {
   PlutusIcon,
   TetherIcon,
   UnknownTokenIcon,
-  UsdcIcon
+  UsdcIcon,
+  KosmosTokenIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -52,8 +53,10 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case CryptoCurrencyCode.STAMB.toLowerCase():
+    case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case 'staked amb':
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
+    case CryptoCurrencyCode.Test1.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
@@ -101,10 +104,15 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'airdao nft':
     case 'nft':
       return <NFTIcon />;
+    case CryptoCurrencyCode.ASTLP.toLowerCase():
     case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
+    case CryptoCurrencyCode.AST.toLowerCase():
       return <ASTIcon scale={scale} />;
+    case CryptoCurrencyCode.Harbor.toLowerCase():
     case CryptoCurrencyCode.HBR.toLowerCase():
       return <HBRIcon scale={scale} />;
+    case CryptoCurrencyCode.KOS.toLowerCase():
+      return <KosmosTokenIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

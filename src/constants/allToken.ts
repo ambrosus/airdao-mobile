@@ -321,9 +321,21 @@ export const ALL_TOKENS_DATA = {
       decimals: 18
     },
     {
+      address: '0xDD7A6DC26a2d25016600936fB5A1DcB2612C4ADD',
+      decimals: 0,
+      name: 'Collateralized Harbor',
+      symbol: 'cHBR'
+    },
+    {
       address: '0x6ee05D1Fe386555D7d4804D4B08141C60bB5eabf',
       name: 'Astra LP',
       symbol: 'AST-LP',
+      decimals: 18
+    },
+    {
+      address: '0xC15891E4dE2793726c20F53EcA6FB6319968E5F3',
+      name: 'Kosmos Token',
+      symbol: 'KOS',
       decimals: 18
     }
   ],
@@ -409,6 +421,24 @@ export const ALL_TOKENS_DATA = {
       decimals: 0,
       name: '“Test2“',
       symbol: '“Test2“'
+    },
+    {
+      address: '0x109948270c9Be75020bf74538D1c3Db17d6c5efd',
+      decimals: 0,
+      name: 'Collateralized Harbor',
+      symbol: 'cHBR'
+    },
+    {
+      address: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b',
+      name: 'Harbor',
+      symbol: 'HBR',
+      decimals: 18
+    },
+    {
+      address: '0xAedD2bf3Aa338088C5024f5A92bBc708C0073BF0',
+      name: 'Kosmos Token',
+      symbol: 'KOS',
+      decimals: 18
     }
   ]
 };
