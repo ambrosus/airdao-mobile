@@ -1,16 +1,14 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
+import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '@constants/colors';
-import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
 import Animated, {
   useAnimatedStyle,
   withTiming
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
-import { isIos } from '@utils/isPlatform';
+import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { WalletsInactiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-inactive';
@@ -21,7 +19,9 @@ import {
   SettingsActiveIcon,
   SettingsInactiveIcon
 } from '@components/svg/icons/v2/bottom-tabs-navigation';
-import { scale, verticalScale } from '@utils/scaling';
+import { useCurrentRoute } from '@contexts/Navigation';
+import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 type LabelType = 'Settings' | 'Products' | 'Wallets';
 const tabs = {
@@ -60,6 +60,17 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
     // Reset the tab bar animation when it gains focus
     animatedStyle.opacity = withTiming(1, { duration: 200 });
   });
+
+  const bottomContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    if (bottomSafeArea === 0) {
+      return { ...styles.mainItemContainer, marginTop: 8, marginBottom: 16 };
+    }
+
+    return {
+      ...styles.mainItemContainer,
+      marginVertical: 8
+    };
+  }, [bottomSafeArea]);
 
   if (!isReady || !tabBarVisible) return <></>;
 
@@ -104,9 +115,9 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
             key={index}
             hitSlop={scale(24)}
             style={[
-              styles.mainItemContainer,
+              bottomContainerStyle,
               {
-                paddingTop: verticalScale(index === 1 ? 8 : 17)
+                paddingTop: index === 1 ? 8 : 17
               }
             ]}
             onPress={onPress}
@@ -118,29 +129,5 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    width: '100%',
-    flexDirection: 'row',
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    bottom: 0,
-    backgroundColor: COLORS.neutral0,
-    opacity: 2,
-    elevation: 0.25,
-    borderTopWidth: isIos ? 0.25 : 0.5,
-    borderTopColor: COLORS.neutral200
-  },
-  mainItemContainer: {
-    width: 40,
-    height: 40,
-    marginVertical: 8,
-    alignItems: 'center',
-    backgroundColor: COLORS.neutral0
-  }
-});
 
 export default TabBar;
