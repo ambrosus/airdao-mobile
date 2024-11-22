@@ -20,10 +20,10 @@ import { ExplorerAccount } from '@models';
 import { useTokensAndTransactions } from '@hooks';
 import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
+import { NftAssets } from './NftAssets';
 import { WalletDepositFunds } from '../WalletDepositFunds';
 import { Spinner } from '@components/base';
 import { _tokensOrNftMapper } from '@entities/wallet';
-import { NftAssets } from '@components/templates/WalletTransactionsAndAssets/NftAssets';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
