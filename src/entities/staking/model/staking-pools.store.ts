@@ -28,7 +28,7 @@ export const useStakingPoolsStore = create<StakingPoolsStore>((set) => ({
   isInitialFetching: false,
   fetchPoolDetails: async (selectedWallet, isMultiply = false) => {
     try {
-      toggleLoadingState(set, isMultiply, false);
+      toggleLoadingState(set, isMultiply, true);
       const response = await staking.getStakingPoolsDetails({
         address: selectedWallet
       });

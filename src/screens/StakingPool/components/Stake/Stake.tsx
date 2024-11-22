@@ -31,13 +31,17 @@ interface StakeTokenProps {
   apy: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
+  onScroll?: (type: 'focus' | 'blur') => void;
 }
 
 export const StakeToken = ({
   wallet,
   apy,
   pool,
-  isSwiping
+  isSwiping,
+  onScroll = () => {
+    // do nothing
+  }
 }: StakeTokenProps) => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
@@ -143,6 +147,8 @@ export const StakeToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        onFocus={() => onScroll('focus')}
+        onBlur={() => onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}

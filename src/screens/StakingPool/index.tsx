@@ -1,11 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View
-} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { RouteProp, useRoute } from '@react-navigation/native';
@@ -15,7 +9,7 @@ import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils/scaling';
 import { shadow } from '@constants/shadow';
 import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { StakingInfo } from './components';
@@ -23,12 +17,11 @@ import { WalletPicker } from '@components/templates';
 import { useAllAccounts } from '@hooks/database';
 import { WithdrawToken } from './components/Withdraw';
 import { TokenUtils } from '@utils/token';
-import { DeviceUtils } from '@utils/device';
-import { useKeyboardHeight } from '@hooks';
 import { useWalletStore } from '@entities/wallet';
-import { useStakingPoolsStore, useStakingPoolDetails } from '@entities/staking';
+import { useStakingPoolDetails, useStakingPoolsStore } from '@entities/staking';
+import { StakeToken } from '@screens/StakingPool/components/Stake/Stake';
+import { DEVICE_HEIGHT } from '@constants/variables';
 
-const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
 const CURRENCY = CryptoCurrencyCode.AMB;
 
 export const StakingPoolScreen = () => {
@@ -45,7 +38,7 @@ export const StakingPoolScreen = () => {
   const poolStakingDetails = useStakingPoolDetails(pool.token.name);
 
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
-
+  const [scrollEnabled, setScrollEnabled] = useState(false);
   useEffect(() => {
     if (wallet?.address) {
       (async () => {
@@ -69,31 +62,18 @@ export const StakingPoolScreen = () => {
     }
   };
 
-  const keyboardVerticalOffset = useMemo(() => {
-    return Platform.select({
-      ios: -verticalScale(SCREEN_HEIGHT / 5.5),
-      android: verticalScale(24)
-    });
-  }, []);
-
   const scrollViewRef = useRef<ScrollView>(null);
-  const keyboardHeight = useKeyboardHeight();
 
-  useEffect(() => {
-    if (DeviceUtils.isAndroid && keyboardHeight > 0) {
-      scrollViewRef.current?.scrollToEnd();
-    }
-  }, [keyboardHeight]);
+  const onScroll = (type: 'focus' | 'blur') => {
+    const value = type === 'focus' ? DEVICE_HEIGHT * 0.2 : 0;
+    setScrollEnabled(true);
+    scrollViewRef?.current?.scrollTo({ y: value, animated: true });
+    setScrollEnabled(false);
+  };
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          paddingTop: top,
-          zIndex: 1000,
-          backgroundColor: COLORS.neutral0
-        }}
-      >
+      <View style={{ ...styles.wrapper, paddingTop: top }}>
         <Header
           title={
             <Row alignItems="center">
@@ -129,57 +109,65 @@ export const StakingPoolScreen = () => {
         </View>
       ) : (
         <>
-          <KeyboardAvoidingView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainerStyle}
-            keyboardVerticalOffset={keyboardVerticalOffset}
-            behavior={KEYBOARD_BEHAVIOR}
+          <ScrollView
+            ref={scrollViewRef}
+            bounces={false}
+            scrollEnabled={scrollEnabled}
+            contentInsetAdjustmentBehavior="always"
+            overScrollMode="never"
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <ScrollView
-              ref={scrollViewRef}
-              bounces={false}
-              scrollEnabled={DeviceUtils.isAndroid}
-              contentInsetAdjustmentBehavior="always"
-              overScrollMode="never"
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={styles.stakingInfoContainer}>
-                <StakingInfo
-                  totalStake={pool.totalStake}
-                  currency={CURRENCY}
-                  userStaking={
-                    poolStakingDetails?.user.raw ?? BigNumber.from(0)
-                  }
-                  earnings={earning}
-                  apy={pool.apy}
-                />
-              </View>
-              <Spacer value={verticalScale(24)} />
-              <AnimatedTabs
-                dismissOnChangeIndex
-                keyboardShouldPersistTaps="handled"
-                containerStyle={styles.tabsContainer}
-                onSwipeStateHandle={onSwipeStateHandle}
-                tabs={[
-                  {
-                    title: t('staking.pool.withdraw'),
-                    view: (
-                      <>
-                        <Spacer value={verticalScale(24)} />
-                        <WithdrawToken
-                          isSwiping={isTabsSwiping}
-                          pool={poolStakingDetails}
-                          wallet={wallet}
-                          apy={pool.apy}
-                        />
-                      </>
-                    )
-                  }
-                ]}
+            <View style={styles.stakingInfoContainer}>
+              <StakingInfo
+                totalStake={pool.totalStake}
+                currency={CURRENCY}
+                userStaking={poolStakingDetails?.user.raw ?? BigNumber.from(0)}
+                earnings={earning}
+                apy={pool.apy}
               />
-            </ScrollView>
-          </KeyboardAvoidingView>
+            </View>
+            <Spacer value={verticalScale(24)} />
+            <AnimatedTabs
+              dismissOnChangeIndex
+              keyboardShouldPersistTaps="handled"
+              containerStyle={styles.tabsContainer}
+              onSwipeStateHandle={onSwipeStateHandle}
+              tabs={[
+                {
+                  title: t('staking.pool.stake'),
+                  view: (
+                    <>
+                      <Spacer value={verticalScale(24)} />
+                      <StakeToken
+                        onScroll={onScroll}
+                        isSwiping={isTabsSwiping}
+                        pool={poolStakingDetails}
+                        wallet={wallet}
+                        apy={pool.apy}
+                      />
+                    </>
+                  )
+                },
+                {
+                  title: t('staking.pool.withdraw'),
+                  view: (
+                    <>
+                      <Spacer value={verticalScale(24)} />
+                      <WithdrawToken
+                        onScroll={onScroll}
+                        isSwiping={isTabsSwiping}
+                        pool={poolStakingDetails}
+                        wallet={wallet}
+                        apy={pool.apy}
+                      />
+                    </>
+                  )
+                }
+              ]}
+            />
+            <Spacer value={DEVICE_HEIGHT} />
+          </ScrollView>
         </>
       )}
     </View>
