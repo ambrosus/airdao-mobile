@@ -26,7 +26,8 @@ import { TokenUtils } from '@utils/token';
 import { DeviceUtils } from '@utils/device';
 import { useKeyboardHeight } from '@hooks';
 import { useWalletStore } from '@entities/wallet';
-import { useStakingPoolsStore, useStakingPoolDetails } from '@entities/staking';
+import { useStakingPoolDetails, useStakingPoolsStore } from '@entities/staking';
+import { StakeToken } from '@screens/StakingPool/components/Stake/Stake';
 
 const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
 const CURRENCY = CryptoCurrencyCode.AMB;
@@ -162,6 +163,20 @@ export const StakingPoolScreen = () => {
                 containerStyle={styles.tabsContainer}
                 onSwipeStateHandle={onSwipeStateHandle}
                 tabs={[
+                  {
+                    title: t('staking.pool.stake'),
+                    view: (
+                      <>
+                        <Spacer value={verticalScale(24)} />
+                        <StakeToken
+                          isSwiping={isTabsSwiping}
+                          pool={poolStakingDetails}
+                          wallet={wallet}
+                          apy={pool.apy}
+                        />
+                      </>
+                    )
+                  },
                   {
                     title: t('staking.pool.withdraw'),
                     view: (

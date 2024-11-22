@@ -20,7 +20,7 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
-import { useKeyboardHeight, useWallet } from '@hooks';
+import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
 import { View } from 'react-native';
@@ -41,9 +41,10 @@ import {
   EMPTY_FEE_DATA
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
+import { useWalletStore } from '@entities/wallet';
 
 export const BridgeForm = () => {
-  const { wallet: selectedWallet } = useWallet();
+  const { wallet: selectedWallet } = useWalletStore();
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
 
   const [previewLoader, setPreviewLoader] = useState(false);
