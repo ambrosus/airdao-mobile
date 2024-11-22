@@ -19,11 +19,11 @@ export type SettingsTabParamsList = {
   Watchlist: undefined;
   SingleWallet: { wallet: WalletDBModel; walletAddress: string };
   AccessKeys: { walletHash: string };
-  CreateWalletStep0: undefined;
+  CreateWalletStep0: { from?: string };
   CreateWalletStep1: undefined;
   CreateWalletStep2: undefined;
   Passcode: PasscodeParams;
-  ImportWalletMethods: undefined;
+  ImportWalletMethods: { from?: string };
   ImportWallet: undefined;
   ImportWalletPrivateKey: undefined;
   SetupPasscode: undefined;

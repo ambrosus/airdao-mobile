@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView } from '@components/composite';
+import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -48,20 +48,9 @@ export const ConfirmPasscode = () => {
         <View
           style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
         >
-          <Spacer value={verticalScale(23)} />
-          <View style={{ paddingHorizontal: scale(16) }}>
-            <Text
-              align="center"
-              fontSize={24}
-              fontFamily="Inter_700Bold"
-              color={COLORS.neutral800}
-            >
-              {t('security.enter.passcode')}
-            </Text>
-          </View>
-          <Spacer value={verticalScale(19)} />
+          <Header title={t('security.enter.passcode')} />
         </View>
-        <Spacer value={verticalScale(23)} />
+        <Spacer value={verticalScale(20)} />
         <View style={{ paddingHorizontal: 15 }}>
           <Text
             align="center"
@@ -72,7 +61,7 @@ export const ConfirmPasscode = () => {
             {t('security.enter.passcode.text')}
           </Text>
         </View>
-        <Spacer value={verticalScale(19)} />
+        <Spacer value={verticalScale(20)} />
       </View>
 
       <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
