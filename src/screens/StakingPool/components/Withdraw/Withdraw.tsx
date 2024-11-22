@@ -31,12 +31,16 @@ interface WithdrawTokenProps {
   apy?: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
+  onScroll?: (value: 'focus' | 'blur') => void;
 }
 
 export const WithdrawToken = ({
   wallet,
   pool,
-  isSwiping
+  isSwiping,
+  onScroll = () => {
+    // do nothing
+  }
 }: WithdrawTokenProps) => {
   const { t } = useTranslation();
   const navigation =
@@ -151,6 +155,8 @@ export const WithdrawToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        onFocus={() => onScroll('focus')}
+        onBlur={() => onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
