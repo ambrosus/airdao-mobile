@@ -27,7 +27,7 @@ export const NoWalletScreen = () => {
   ) => {
     setWalletName('');
     setMnemonicLength(128);
-    navigation.navigate('Tabs', {
+    navigation.replace('Tabs', {
       screen: 'Settings',
       params: {
         screen,

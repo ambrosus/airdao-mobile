@@ -70,9 +70,14 @@ export const SettingsStack = () => {
         name="ImportWalletPrivateKey"
         component={ImportWalletPrivateKey}
       />
-      <Stack.Screen name="SetupPasscode" component={SetupPasscode} />
+      <Stack.Screen
+        name="SetupPasscode"
+        component={SetupPasscode}
+        options={{ gestureEnabled: false }}
+      />
       <Stack.Screen name="ConfirmPasscode" component={ConfirmPasscode} />
       <Stack.Screen
+        options={{ gestureEnabled: false }}
         name="SuccessSetupSecurity"
         component={SuccessSetupSecurity}
       />

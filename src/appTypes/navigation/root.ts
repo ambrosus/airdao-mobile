@@ -15,6 +15,6 @@ export type RootStackParamsList = {
 };
 
 export type RootNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
+  BottomTabNavigationProp<TabsParamsList>,
   NativeStackNavigationProp<RootStackParamsList>
 >;
