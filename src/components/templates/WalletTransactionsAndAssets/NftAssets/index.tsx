@@ -7,7 +7,7 @@ import { SingleAssetNFT } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { useWalletStore } from '@entities/wallet';
-import { WalletNoNFTsView } from '@components/templates';
+import { WalletNoNFTsView } from '../../WalletNoNFTsView';
 
 interface NftAssetsProps {
   nfts: Token[];
