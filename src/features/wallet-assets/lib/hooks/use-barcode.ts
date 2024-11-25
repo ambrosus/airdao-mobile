@@ -1,8 +1,8 @@
 import { RefObject, useCallback, useRef } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
+import { NavigatorScreenParams, useNavigation } from '@react-navigation/native';
+import { HomeNavigationProp, SettingsTabParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { ethereumAddressRegex, walletConnectWsURL } from '@constants/regex';
 
@@ -33,7 +33,10 @@ export function useBarcode(
       if (address.startsWith(walletConnectWsURL)) {
         onWalletConnectAction(address);
       } else if (isAddress) {
-        navigation.navigate('AddressSearch', { address });
+        navigation.navigate('Settings', {
+          screen: 'Explore',
+          params: { address }
+        } as unknown as NavigatorScreenParams<SettingsTabParamsList>);
       } else {
         if (!scannedRef.current) {
           scannedRef.current = true;
