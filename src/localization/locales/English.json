@@ -189,7 +189,7 @@
   "notification.settings.price.alerts.treshold": "Price alerts treshold",
   "notification.settings.price.alerts.treshold.text": "Set 24hr price change amount to receive notifications.",
   "notification.settings.transaction.alerts.switch": "Transaction alerts",
-  "notification.settings.transaction.alerts.switch.text": "Get notified of transactions in your watchlist.",
+  "notification.settings.transaction.alerts.switch.text": "Get notified of updates in your watchlist.",
 
   "asset.your.balance": "YOUR BALANCE",
 
