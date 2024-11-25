@@ -18,7 +18,8 @@ export const _txStatusLabel = (tx: Transaction) => {
     [TransactionType.TokenTransfer]: 'Transfer',
     [TransactionType.Transfer]: 'Transfer',
     [TransactionType.ContractCall]: 'Contract call',
-    [TransactionType.BlockReward]: 'Block reward'
+    [TransactionType.BlockReward]: 'Block reward',
+    [TransactionType.Transaction]: 'Transaction'
   };
 
   const statusLabel = type.includes('ValidatorSet')
@@ -40,6 +41,7 @@ export const _txStatusThumbnail = (tx: Transaction) => {
     'Contract call': <ContractCallIcon />,
     'Validator Set': <TransferSentIcon />,
     'Block reward': <TransferReceivedIcon />,
+    'Transaction': isSent ? <TransferSentIcon /> : <TransferReceivedIcon />,
     'default': <FailedIcon color={COLORS.error400} />
   };
 
