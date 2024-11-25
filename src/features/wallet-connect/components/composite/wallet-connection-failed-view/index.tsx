@@ -17,9 +17,9 @@ export const WalletConnectionFailedView = () => {
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
 
   const description = useMemo(() => {
-    if (proposal && proposal.verifyContext.verified.origin) {
+    if (proposal) {
       return t('wallet.connect.description.error.with.path', {
-        origin,
+        origin: proposal?.params.proposer.metadata.url,
         interpolation: { escapeValue: false }
       });
     }

@@ -67,9 +67,10 @@ export const WalletConnectApprovalView = () => {
   }, [proposal, onDismissWalletConnectBottomSheet]);
 
   const onShowToastNotification = useCallback(() => {
-    const extractedHttpsOrigin =
-      proposal?.verifyContext.verified.origin.replace(/^https?:\/\//, '');
-
+    const extractedHttpsOrigin = proposal?.params.proposer.metadata.url.replace(
+      /^https?:\/\//,
+      ''
+    );
     return setTimeout(() => {
       Toast.show({
         text: t('wallet.connect.title.success'),
@@ -80,7 +81,7 @@ export const WalletConnectApprovalView = () => {
         type: ToastType.Success
       });
     }, 500);
-  }, [proposal?.verifyContext.verified.origin, t]);
+  }, [proposal?.params.proposer.metadata.url, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
@@ -102,7 +103,7 @@ export const WalletConnectApprovalView = () => {
         onShowToastNotification();
       } catch (error) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
-        console.error('Auth error:', error);
+        throw error;
       } finally {
         setIsLoadingApprove(false);
       }
@@ -164,7 +165,7 @@ export const WalletConnectApprovalView = () => {
         color={COLORS.black}
       >
         {t('wallet.connect.proposal', {
-          origin: proposal?.verifyContext.verified.origin,
+          origin: proposal?.params.proposer.metadata.url,
           interpolation: { escapeValue: false }
         })}
       </Text>
@@ -176,7 +177,7 @@ export const WalletConnectApprovalView = () => {
         style={styles.description}
       >
         {t('wallet.connect.warning', {
-          origin: proposal?.verifyContext.verified.origin,
+          origin: proposal?.params.proposer.metadata.url,
           interpolation: { escapeValue: false }
         })}
       </Text>
