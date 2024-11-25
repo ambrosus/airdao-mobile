@@ -9,6 +9,7 @@ import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
@@ -36,12 +37,21 @@ import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/m
 import { FundsHeader } from '@features/send-funds/components/templates';
 import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
+import { _delayNavigation } from '@utils';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
-export const SendFunds = ({ route }: Props) => {
+export const SendFunds = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
-  const { state, onChangeState } = useSendFundsStore();
+  const { state, onChangeState, onResetState } = useSendFundsStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        onResetState();
+      };
+    }, [onResetState])
+  );
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
@@ -109,14 +119,17 @@ export const SendFunds = ({ route }: Props) => {
   const onPressMaxAmount = useCallback(
     (maxBalanceString?: string, decimals = 3) => {
       if (maxBalanceString) {
-        let maxSendableBalance: number = +maxBalanceString;
+        let maxSpendableBalance: number = +maxBalanceString;
 
         if (selectedToken.name === 'AirDAO') {
-          maxSendableBalance -= 0.0005;
+          maxSpendableBalance -= 0.0005;
         }
 
         setAmountInCrypto(
-          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), decimals)
+          NumberUtils.limitDecimalCount(
+            maxSpendableBalance.toString(),
+            decimals
+          )
         );
       }
     },
@@ -234,6 +247,19 @@ export const SendFunds = ({ route }: Props) => {
     [onPressMaxAmount, selectedToken, setAmountInCrypto]
   );
 
+  const onSuccessBottomSheetDismiss = useCallback(() => {
+    if (state.success) {
+      return _delayNavigation(hideReviewModal, () =>
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen' }]
+          })
+        )
+      );
+    }
+  }, [navigation, state.success]);
+
   return (
     <>
       <SafeAreaView style={styles.wrapper}>
@@ -290,7 +316,12 @@ export const SendFunds = ({ route }: Props) => {
               </PrimaryButton>
             </View>
           </View>
-          <BottomSheet ref={confirmModalRef} title={t('common.review')}>
+          <BottomSheet
+            ref={confirmModalRef}
+            title={t('common.review')}
+            onBackdropPress={onSuccessBottomSheetDismiss}
+            onCustomCrossPress={onSuccessBottomSheetDismiss}
+          >
             <ConfirmTransaction
               from={senderAddress}
               to={destinationAddress}
@@ -298,7 +329,7 @@ export const SendFunds = ({ route }: Props) => {
               currency={selectedToken.symbol}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
-              dismissBottomSheet={hideReviewModal}
+              dismissBottomSheet={onSuccessBottomSheetDismiss}
             />
           </BottomSheet>
         </KeyboardDismissingView>

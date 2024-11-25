@@ -42,6 +42,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       testID,
       swipingEnabled = true,
       closeOnBackPress = true,
+      onCustomCrossPress,
       onBackdropPress,
       title
     },
@@ -71,6 +72,12 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       Keyboard.dismiss();
       if (typeof onClose === 'function') onClose();
     }, [onClose]);
+
+    const onCrossPress = useCallback(() => {
+      setIsVisible(false);
+      Keyboard.dismiss();
+      if (typeof onCustomCrossPress === 'function') onCustomCrossPress();
+    }, [onCustomCrossPress]);
 
     useImperativeHandle(ref, () => ({
       show,
@@ -119,7 +126,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
               </Text>
               <Pressable
                 disabled={!closeOnBackPress}
-                onPress={dismiss}
+                onPress={onCrossPress}
                 style={({ pressed }) => [
                   {
                     opacity: pressed ? 0.5 : 1
@@ -145,7 +152,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         swiperIconVisible,
         title,
         closeOnBackPress,
-        dismiss,
+        onCrossPress,
         children
       ]
     );
