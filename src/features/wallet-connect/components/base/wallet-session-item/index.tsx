@@ -18,7 +18,8 @@ interface WalletSessionItemProps {
 
 export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
   const { t } = useTranslation();
-  const { setActiveSessions } = useWalletConnectContextSelector();
+  const { activeSessions, setActiveSessions } =
+    useWalletConnectContextSelector();
 
   const { onDismissActiveSessionBottomSheet } = useHandleBottomSheetActions();
 
@@ -32,16 +33,26 @@ export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
         reason: getSdkError('USER_DISCONNECTED')
       });
 
-      setActiveSessions((prevState) =>
-        prevState.filter((pairing) => pairing.topic !== connection.topic)
+      const filteredPairings = activeSessions.filter(
+        (pairing) => pairing.topic !== connection.topic
       );
-      onDismissActiveSessionBottomSheet();
+
+      if (filteredPairings.length === 0) {
+        onDismissActiveSessionBottomSheet();
+      }
+
+      setActiveSessions(filteredPairings);
     } catch (error) {
       throw error;
     } finally {
       setDisconnecting(true);
     }
-  }, [connection.topic, onDismissActiveSessionBottomSheet, setActiveSessions]);
+  }, [
+    activeSessions,
+    connection.topic,
+    onDismissActiveSessionBottomSheet,
+    setActiveSessions
+  ]);
 
   return (
     <Pressable>
