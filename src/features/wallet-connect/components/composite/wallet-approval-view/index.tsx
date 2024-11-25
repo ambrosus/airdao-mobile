@@ -16,7 +16,12 @@ import {
   Toast,
   ToastType
 } from '@components/modular';
-import { EIP155_CHAINS, walletKit } from '@features/wallet-connect/utils';
+import {
+  EIP155_CHAINS,
+  extractHttpsPath,
+  extractTrailingSlash,
+  walletKit
+} from '@features/wallet-connect/utils';
 import {
   CONNECT_VIEW_STEPS,
   EIP155_SIGNING_METHODS
@@ -67,13 +72,13 @@ export const WalletConnectApprovalView = () => {
   }, [proposal, onDismissWalletConnectBottomSheet]);
 
   const onShowToastNotification = useCallback(() => {
-    const extractedHttpsOrigin = proposal?.params.proposer.metadata.url.replace(
-      /^https?:\/\//,
-      ''
+    const extractedHttpsOrigin = extractHttpsPath(
+      proposal?.verifyContext.verified.origin
     );
+
     return setTimeout(() => {
       Toast.show({
-        text: t('wallet.connect.title.success'),
+        text: t('staking.pool.success'),
         subtext: t('wallet.connect.description.success', {
           network: extractedHttpsOrigin,
           interpolation: { escapeValue: false }
@@ -101,6 +106,7 @@ export const WalletConnectApprovalView = () => {
 
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
+        setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
       } catch (error) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
         throw error;
@@ -165,7 +171,7 @@ export const WalletConnectApprovalView = () => {
         color={COLORS.black}
       >
         {t('wallet.connect.proposal', {
-          origin: proposal?.params.proposer.metadata.url,
+          origin: extractTrailingSlash(proposal?.verifyContext.verified.origin),
           interpolation: { escapeValue: false }
         })}
       </Text>
@@ -177,7 +183,7 @@ export const WalletConnectApprovalView = () => {
         style={styles.description}
       >
         {t('wallet.connect.warning', {
-          origin: proposal?.params.proposer.metadata.url,
+          origin: extractTrailingSlash(proposal?.verifyContext.verified.origin),
           interpolation: { escapeValue: false }
         })}
       </Text>

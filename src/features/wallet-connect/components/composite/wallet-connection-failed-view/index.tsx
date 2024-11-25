@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -9,10 +9,11 @@ import {
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 import { COLORS } from '@constants/colors';
+import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 
 export const WalletConnectionFailedView = () => {
   const { t } = useTranslation();
-  const { proposal } = useWalletConnectContextSelector();
+  const { proposal, setWalletConnectStep } = useWalletConnectContextSelector();
 
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
 
@@ -26,6 +27,11 @@ export const WalletConnectionFailedView = () => {
 
     return t('wallet.connect.description.error');
   }, [proposal, t]);
+
+  const onRejectConnect = useCallback(() => {
+    setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
+    onDismissWalletConnectBottomSheet();
+  }, [onDismissWalletConnectBottomSheet, setWalletConnectStep]);
 
   return (
     <View style={styles.container}>
@@ -46,10 +52,7 @@ export const WalletConnectionFailedView = () => {
         {description}
       </Text>
 
-      <SecondaryButton
-        onPress={onDismissWalletConnectBottomSheet}
-        style={styles.secondaryButton}
-      >
+      <SecondaryButton onPress={onRejectConnect} style={styles.secondaryButton}>
         <Text
           fontSize={17}
           fontFamily="Inter_600SemiBold"

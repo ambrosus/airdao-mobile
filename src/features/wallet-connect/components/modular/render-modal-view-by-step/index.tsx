@@ -21,5 +21,8 @@ export function renderModalViewByStep(step: WalletConnectViewValues) {
     case CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR: {
       return <WalletConnectionWrongChainView />;
     }
+    case CONNECT_VIEW_STEPS.INITIAL: {
+      return null;
+    }
   }
 }

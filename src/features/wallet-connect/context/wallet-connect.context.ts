@@ -14,7 +14,7 @@ export const WalletConnectContext = () => {
   const [isWalletKitInitiated, setIsWalletKitInitiated] = useState(false);
   const [proposal, setProposal] = useState<ProposalState>(null);
   const [walletConnectStep, setWalletConnectStep] =
-    useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.APPROVE);
+    useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.INITIAL);
 
   const [activeSessions, setActiveSessions] = useState<SessionTypes.Struct[]>(
     []
