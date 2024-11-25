@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,9 +14,6 @@ import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
-import { _delayNavigation } from '@utils/navigate';
 import { useSendFundsStore } from '@features/send-funds';
 
 interface ConfirmTransactionProps {
@@ -44,15 +41,14 @@ export const ConfirmTransaction = ({
   currency,
   estimatedFee,
   onSendPress,
+
   dismissBottomSheet
 }: ConfirmTransactionProps) => {
   const { t } = useTranslation();
-  const navigation: HomeNavigationProp = useNavigation();
   const { bottom } = useSafeAreaInsets();
 
   const {
-    state: { loading, error, success },
-    onResetState
+    state: { loading, error, success }
   } = useSendFundsStore();
 
   const containerStyle = useMemo(
@@ -72,18 +68,6 @@ export const ConfirmTransaction = ({
     return cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)');
   }, [loading]);
 
-  const navigateToHomeScreen = useCallback(() => {
-    _delayNavigation(dismissBottomSheet, () =>
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'HomeScreen' }]
-        })
-      )
-    );
-    onResetState();
-  }, [dismissBottomSheet, navigation, onResetState]);
-
   if (success) {
     const description = `You sent ${NumberUtils.numberToTransformedLocale(
       etherAmount
@@ -92,7 +76,7 @@ export const ConfirmTransaction = ({
     return (
       <BottomSheetSuccessView
         description={description}
-        onButtonPress={navigateToHomeScreen}
+        onButtonPress={dismissBottomSheet}
       />
     );
   }

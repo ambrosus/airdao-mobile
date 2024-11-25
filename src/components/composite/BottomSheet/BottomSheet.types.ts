@@ -17,6 +17,7 @@ export interface BottomSheetProps {
   swipingEnabled?: boolean;
   closeOnBackPress?: boolean;
   onBackdropPress?: () => void;
+  onCustomCrossPress?: () => void;
   title?: string;
 }
 
