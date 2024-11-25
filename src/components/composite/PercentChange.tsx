@@ -8,18 +8,14 @@ interface PercentChangeProps
   extends Pick<TextProps, 'fontSize' | 'fontWeight'> {
   change: number;
   color?: string;
-  dailyIncome?: string;
 }
 
-export function PercentChange(props: PercentChangeProps): JSX.Element {
-  const {
-    change,
-    color,
-    fontSize = 12,
-    fontWeight = '500',
-    dailyIncome
-  } = props;
-
+export function PercentChange({
+  change,
+  color,
+  fontSize = 12,
+  fontWeight = '500'
+}: PercentChangeProps): JSX.Element {
   return (
     <Row alignItems="center">
       <Text
@@ -31,7 +27,6 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
         {`${NumberUtils.addSignToNumber(
           Number(NumberUtils.formatNumber(change, 2))
         )}%`}
-        {dailyIncome && ` ($${dailyIncome})`}
       </Text>
     </Row>
   );
