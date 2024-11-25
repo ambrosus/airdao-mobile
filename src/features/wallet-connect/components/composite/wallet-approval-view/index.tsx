@@ -86,7 +86,7 @@ export const WalletConnectApprovalView = () => {
         type: ToastType.Success
       });
     }, 500);
-  }, [proposal?.verifyContext.verified.origin, t]);
+  }, [proposal?.params.proposer.metadata.url, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
@@ -109,7 +109,7 @@ export const WalletConnectApprovalView = () => {
         setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
       } catch (error) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
-        console.error('Auth error:', error);
+        throw error;
       } finally {
         setIsLoadingApprove(false);
       }
