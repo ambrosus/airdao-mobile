@@ -26,12 +26,14 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
+type ScrollType = 'focus' | 'blur';
+
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
   apy: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
-  onScroll?: (type: 'focus' | 'blur') => void;
+  onScroll?: (type: ScrollType) => void;
 }
 
 export const StakeToken = ({
@@ -39,9 +41,7 @@ export const StakeToken = ({
   apy,
   pool,
   isSwiping,
-  onScroll = () => {
-    // do nothing
-  }
+  onScroll
 }: StakeTokenProps) => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
@@ -56,6 +56,11 @@ export const StakeToken = ({
   const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
+  const _onScroll = (type: ScrollType) => {
+    if (typeof onScroll === 'function') {
+      onScroll(type);
+    }
+  };
   const showPreview = () => {
     setTimeout(() => {
       previewBottomSheetRef.current?.show();
@@ -147,8 +152,8 @@ export const StakeToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
-        onFocus={() => onScroll('focus')}
-        onBlur={() => onScroll('blur')}
+        onFocus={() => _onScroll('focus')}
+        onBlur={() => _onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
