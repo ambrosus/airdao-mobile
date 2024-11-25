@@ -33,11 +33,34 @@ export const TransactionItem = ({
     return transaction.isSent ? `-${amount}` : amount;
   }, [transaction, transactionTokenInfo.cryptoAmount]);
 
+  const isTransferAndSentTx = useMemo(() => {
+    const type = _txStatusLabel(transaction);
+    const types = ['Transaction', 'Transfer'];
+
+    return types.includes(type) && transaction.isSent;
+  }, [transaction]);
+
+  const label = useMemo(
+    () =>
+      t(`common.transaction.${isTransferAndSentTx ? 'destination' : 'from'}`),
+    [isTransferAndSentTx, t]
+  );
+
+  const address = useMemo(
+    () =>
+      StringUtils.formatAddress(
+        transaction[isTransferAndSentTx ? 'to' : 'from'],
+        5,
+        5
+      ),
+    [isTransferAndSentTx, transaction]
+  );
+
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          <>{_txStatusThumbnail(transaction)}</>
+          {_txStatusThumbnail(transaction)}
           <Spacer value={scale(8)} horizontal />
           <View>
             <Text
@@ -53,8 +76,7 @@ export const TransactionItem = ({
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral500}
             >
-              {t('common.transaction.from')}{' '}
-              {StringUtils.formatAddress(transaction.from, 5, 5)}
+              {label} {address}
             </Text>
           </View>
         </Row>

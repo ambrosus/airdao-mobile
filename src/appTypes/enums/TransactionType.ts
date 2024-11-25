@@ -7,5 +7,6 @@ export enum TransactionType {
   ShelteringTransferSheltering = 'Sheltering::transferSheltering',
   ShelteringRemoveShelterer = 'Sheltering::removeShelterer',
   ERC1155 = 'ERC-1155',
-  ContractCall = 'ContractCall'
+  ContractCall = 'ContractCall',
+  Transaction = 'Transaction'
 }
