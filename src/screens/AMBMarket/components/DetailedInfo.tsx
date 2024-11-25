@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { startCase, toLower } from 'lodash';
 import {
   AMBMarketItem,
   AMBMarketItemsInfo,
@@ -29,7 +30,7 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
           color={COLORS.neutral400}
           fontFamily="Inter_500Medium"
         >
-          {t(row.title)}
+          {startCase(toLower(t(row.title)))}
         </Text>
 
         <Text
