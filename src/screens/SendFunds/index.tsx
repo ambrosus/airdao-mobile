@@ -233,6 +233,11 @@ export const SendFunds = ({ route }: Props) => {
     },
     [onPressMaxAmount, selectedToken, setAmountInCrypto]
   );
+  const buttonTitle = useMemo(() => {
+    return reviewButtonDisabled
+      ? t('button.enter.amount')
+      : t('send.funds.review.transaction');
+  }, [reviewButtonDisabled, t]);
 
   return (
     <>
@@ -285,7 +290,7 @@ export const SendFunds = ({ route }: Props) => {
                   fontFamily="Inter_500Medium"
                   fontWeight="500"
                 >
-                  {t('send.funds.review.transaction')}
+                  {buttonTitle}
                 </Text>
               </PrimaryButton>
             </View>

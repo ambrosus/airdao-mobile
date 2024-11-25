@@ -86,7 +86,7 @@ export const WalletConnectApprovalView = () => {
         type: ToastType.Success
       });
     }, 500);
-  }, [proposal?.params.proposer.metadata.url, t]);
+  }, [proposal?.verifyContext.verified.origin, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
