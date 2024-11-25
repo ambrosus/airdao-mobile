@@ -7,6 +7,8 @@ export type SessionRequestEvent =
   WalletKitTypes.EventArguments['session_request'];
 export type SessionAuthenticateEvent =
   WalletKitTypes.EventArguments['session_authenticate'];
+export type SessionDeleteEvent =
+  WalletKitTypes.EventArguments['session_delete'];
 
 export enum WALLET_CORE_EVENTS {
   'SESSION_PROPOSAL' = 'session_proposal',
@@ -14,7 +16,7 @@ export enum WALLET_CORE_EVENTS {
   'SESSION_DELETE' = 'session_delete',
   'PROPOSAL_EXPIRE' = 'proposal_expire',
   'SESSION_REQUEST_EXPIRE' = 'session_request_expire',
-  'SESSION_AUTHENTICATE' = 'session_authenticate'
+  'SESSION_AUTH' = 'session_authenticate'
 }
 
 export enum WALLET_CLIENT_EVENTS {

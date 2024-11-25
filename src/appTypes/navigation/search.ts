@@ -5,7 +5,7 @@ import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
 
 export type SearchTabParamsList = {
-  Explore: { address?: string } | undefined;
+  Explore: Partial<{ address: string }>;
 } & CommonStackParamsList;
 
 export type SearchTabNavigationProp = CompositeNavigationProp<
