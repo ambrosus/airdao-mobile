@@ -190,7 +190,7 @@
   "notification.settings.price.alerts.treshold": "Fiyat bildirim limiti",
   "notification.settings.price.alerts.treshold.text": "Bildirim almak için 24 saatlik fiyat değişim tutarını ayarlayın.",
   "notification.settings.transaction.alerts.switch": "İşlem bildirimleri",
-  "notification.settings.transaction.alerts.switch.text": "!!!Get notified of updates in your watchlist.",
+  "notification.settings.transaction.alerts.switch.text": "İzleme listenizdeki güncellemeler hakkında bildirim alın.",
 
   "asset.your.balance": "BAKIYENIZ",
 
