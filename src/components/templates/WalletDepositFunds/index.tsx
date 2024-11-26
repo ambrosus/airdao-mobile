@@ -64,7 +64,7 @@ export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
           numberOfLines={2}
           style={styles.description}
         >
-          Deposit Funds to unlock your wallet features.
+          {t('wallet.assets.empty.description')}
         </Text>
 
         <PrimaryButton
@@ -76,7 +76,7 @@ export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral0}
           >
-            Deposit funds
+            {t('wallet.assets.deposit.button')}
           </Text>
         </PrimaryButton>
 

@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: scale(16)
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(20)
   },
   description: {
     maxWidth: 343

@@ -366,6 +366,8 @@
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
 
+  "wallet.assets.empty.description": "Deposit Funds to unlock your wallet features.",
+  "wallet.assets.deposit.button": "Deposit funds",
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
 

@@ -366,8 +366,10 @@
   "token.actions.swap": "Takas",
   "token.actions.stake": "Stake",
 
-  "wallet.empty.nft.header": "No NFTs yet.",
-  "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
+  "wallet.assets.empty.description": "Cüzdan özelliklerinizin kilidini açmak için Para Yatırın.",
+  "wallet.assets.deposit.button": "Para Yatırın",
+  "wallet.empty.nft.header": "Henüz NFT yok.",
+  "wallet.empty.nft.subheader": "Özel NFT'ler kazanmak için yaklaşan etkinlikler ve aktiviteler için bizi izlemeye devam edin.",
 
   "wallet.my.assets": "Varlıklar",
   "wallet.nfts": "Nft’ler",
