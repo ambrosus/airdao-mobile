@@ -192,8 +192,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
         if (transactionIdRef.current === txId) {
           onChangeState({
             loading: false,
-            error: error as unknown as never,
-            success: true
+            error: error as unknown as never
           });
         }
       }
@@ -265,6 +264,12 @@ export const SendFunds = ({ navigation, route }: Props) => {
     }
   }, [navigation, state.success]);
 
+  const isBottomSheetHasTitle = useMemo(() => {
+    const { error, success } = state;
+
+    return Boolean(error) || Boolean(success);
+  }, [state]);
+
   return (
     <>
       <SafeAreaView style={styles.wrapper}>
@@ -323,7 +328,8 @@ export const SendFunds = ({ navigation, route }: Props) => {
           </View>
           <BottomSheet
             ref={confirmModalRef}
-            title={t('common.review')}
+            title={!isBottomSheetHasTitle ? t('common.review') : undefined}
+            swiperIconVisible={false}
             onBackdropPress={onSuccessBottomSheetDismiss}
             onCustomCrossPress={onSuccessBottomSheetDismiss}
           >
