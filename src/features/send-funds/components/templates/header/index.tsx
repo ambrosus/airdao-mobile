@@ -1,14 +1,13 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Button, Text } from '@components/base';
-import { BottomSheetRef, Header } from '@components/composite';
+import { Header } from '@components/composite';
 import { BarcodeScannerIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { useBarcode } from '@features/send-funds/lib/hooks';
 import { StringUtils } from '@utils/string';
-import { FundsBarcodeScanner } from '../../modular/barcode-scanner';
 
 interface FundsHeaderProps {
   sender: string;
@@ -17,13 +16,7 @@ interface FundsHeaderProps {
 export const FundsHeader = ({ sender }: FundsHeaderProps) => {
   const { t } = useTranslation();
 
-  const barcodeScannerContainerRef = useRef<BottomSheetRef>(null);
-
-  const {
-    onDismissBarcodeContainer,
-    onShowBarcodeContainer,
-    onScannedAddress
-  } = useBarcode(barcodeScannerContainerRef);
+  const { onShowBarcodeContainer } = useBarcode();
 
   const renderHeaderTitle = useMemo(
     () => (
@@ -66,11 +59,11 @@ export const FundsHeader = ({ sender }: FundsHeaderProps) => {
         contentRight={renderHeaderContentRight}
       />
 
-      <FundsBarcodeScanner
-        ref={barcodeScannerContainerRef}
-        onClose={onDismissBarcodeContainer}
-        onScanned={onScannedAddress}
-      />
+      {/*<FundsBarcodeScanner*/}
+      {/*  ref={barcodeScannerContainerRef}*/}
+      {/*  onClose={onDismissBarcodeContainer}*/}
+      {/*  onScanned={onScannedAddress}*/}
+      {/*/>*/}
     </>
   );
 };

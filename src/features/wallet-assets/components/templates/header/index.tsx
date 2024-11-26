@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { InteractionManager, useWindowDimensions, View } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Animated, {
   runOnJS,
@@ -9,9 +9,8 @@ import Animated, {
   withSpring
 } from 'react-native-reanimated';
 import { styles } from './styles';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { Header } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { BarcodeScanner } from '@components/templates';
 import {
   BarcodeScannerIcon,
   NotificationBellIcon
@@ -19,12 +18,7 @@ import {
 import { useNotificationsQuery } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
-import {
-  useHandleBottomSheetActions,
-  useWalletConnectContextSelector
-} from '@features/wallet-connect/lib/hooks';
-import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
-import { walletKit } from '@features/wallet-connect/utils';
+import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
@@ -47,17 +41,13 @@ interface HomeHeaderProps {
 export const HomeHeader = React.memo(
   ({ account, isHeaderHidden }: HomeHeaderProps): JSX.Element => {
     const navigation = useNavigation<HomeNavigationProp>();
-    const { height: WINDOW_HEIGHT } = useWindowDimensions();
 
     const { wallet } = useWalletStore();
     const { data: notifications } = useNotificationsQuery();
     const newNotificationsCount = useNewNotificationsCount();
+    const { onShowBarcodeContainer } = useBarcode();
 
-    const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
-    const { setWalletConnectStep, activeSessions } =
-      useWalletConnectContextSelector();
-
-    const scannerBottomSheetRef = useRef<BottomSheetRef>(null);
+    const { activeSessions } = useWalletConnectContextSelector();
 
     const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -73,15 +63,6 @@ export const HomeHeader = React.memo(
       }),
       alignItems: 'center'
     }));
-
-    const openScanner = useCallback(() => {
-      sendFirebaseEvent(CustomAppEvents.main_scan);
-      scannerBottomSheetRef.current?.show();
-    }, []);
-
-    const closeScanner = useCallback(() => {
-      scannerBottomSheetRef.current?.dismiss();
-    }, []);
 
     const renderContentCenter = useMemo(() => {
       return activeSessions.length > 0 && <WalletSessionsLabel />;
@@ -119,39 +100,11 @@ export const HomeHeader = React.memo(
       wallet?.address
     ]);
 
-    const onHandleWalletConnectAuthorization = useCallback(
-      async (uri: string): Promise<void> => {
-        if (!walletKit) {
-          return closeScanner();
-        }
-
-        try {
-          InteractionManager.runAfterInteractions(async () => {
-            try {
-              await walletKit.pair({ uri });
-            } catch (error) {
-              closeScanner();
-              setWalletConnectStep(CONNECT_VIEW_STEPS.PAIR_EXPIRED_ERROR);
-
-              await new Promise<void>((resolve) => setTimeout(resolve, 1000));
-
-              InteractionManager.runAfterInteractions(
-                onShowWalletConnectBottomSheet
-              );
-            }
-          });
-        } catch (error) {
-          console.error('Error during wallet connection:', error);
-          closeScanner();
-        }
-      },
-      [closeScanner, onShowWalletConnectBottomSheet, setWalletConnectStep]
-    );
-
-    const { onScannedAddress } = useBarcode(
-      scannerBottomSheetRef,
-      onHandleWalletConnectAuthorization
-    );
+    const openScanner = useCallback(() => {
+      sendFirebaseEvent(CustomAppEvents.main_scan);
+      // scannerBottomSheetRef.current?.show();
+      onShowBarcodeContainer();
+    }, [onShowBarcodeContainer]);
 
     const setLastNotificationTime = useCallback(() => {
       if (notifications[0]?.createdAt) {
@@ -187,29 +140,15 @@ export const HomeHeader = React.memo(
           <Button onPress={openScanner}>
             <BarcodeScannerIcon />
           </Button>
-          <BottomSheet
-            height={WINDOW_HEIGHT}
-            ref={scannerBottomSheetRef}
-            borderRadius={0}
-          >
-            <BarcodeScanner
-              onScanned={onScannedAddress}
-              onClose={closeScanner}
-            />
-          </BottomSheet>
         </View>
       );
-    }, [WINDOW_HEIGHT, closeScanner, onScannedAddress, openScanner]);
-
-    const headerStyles = useMemo(() => {
-      return { ...styles.container };
-    }, []);
+    }, [openScanner]);
 
     return (
       <Header
         bottomBorder
         backIconVisible={false}
-        style={headerStyles}
+        style={styles.container}
         contentRight={renderContentRight}
         contentLeft={renderContentLeft}
         contentCenter={headerContentCenter}

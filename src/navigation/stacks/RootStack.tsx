@@ -5,6 +5,7 @@ import AppInitialization from './AppInit';
 import { RootStackParamsList } from '@appTypes';
 import { NoWalletScreen } from '@screens/NoWallet';
 import { PasscodeEntry } from '@screens/PasscodeEntry';
+import { BarcodeScannerScreen } from '@screens/BarcodeScanner';
 
 export const RootStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamsList>();
@@ -29,6 +30,14 @@ export const RootStack = () => {
         name="Passcode"
         component={PasscodeEntry}
         options={{ presentation: 'fullScreenModal', gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="BarcodeScannerScreen"
+        options={{
+          presentation: 'fullScreenModal',
+          animation: 'slide_from_bottom'
+        }}
+        component={BarcodeScannerScreen}
       />
     </Stack.Navigator>
   );
