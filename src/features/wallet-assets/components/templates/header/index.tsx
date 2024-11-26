@@ -74,11 +74,6 @@ export const HomeHeader = React.memo(
       alignItems: 'center'
     }));
 
-    const openScanner = useCallback(() => {
-      sendFirebaseEvent(CustomAppEvents.main_scan);
-      scannerBottomSheetRef.current?.show();
-    }, []);
-
     const closeScanner = useCallback(() => {
       scannerBottomSheetRef.current?.dismiss();
     }, []);
@@ -153,6 +148,14 @@ export const HomeHeader = React.memo(
       onHandleWalletConnectAuthorization
     );
 
+    const openScanner = useCallback(() => {
+      sendFirebaseEvent(CustomAppEvents.main_scan);
+      // scannerBottomSheetRef.current?.show();
+      navigation.navigate('BarcodeScannerScreen', {
+        onScanned: onScannedAddress
+      });
+    }, [navigation, onScannedAddress]);
+
     const setLastNotificationTime = useCallback(() => {
       if (notifications[0]?.createdAt) {
         Cache.setItem(
@@ -201,15 +204,11 @@ export const HomeHeader = React.memo(
       );
     }, [WINDOW_HEIGHT, closeScanner, onScannedAddress, openScanner]);
 
-    const headerStyles = useMemo(() => {
-      return { ...styles.container };
-    }, []);
-
     return (
       <Header
         bottomBorder
         backIconVisible={false}
-        style={headerStyles}
+        style={styles.container}
         contentRight={renderContentRight}
         contentLeft={renderContentLeft}
         contentCenter={headerContentCenter}

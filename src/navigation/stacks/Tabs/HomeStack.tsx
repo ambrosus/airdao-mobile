@@ -24,6 +24,7 @@ import {
   WalletConnectModal,
   WalletSessionsBottomSheet
 } from '@features/wallet-connect/components/templates';
+import { BarcodeScannerScreen } from '@screens/BarcodeScanner';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {
@@ -33,6 +34,11 @@ export const HomeStack = () => {
         initialRouteName="HomeScreen"
         screenOptions={{ headerShown: false }}
       >
+        <Stack.Screen
+          name="BarcodeScannerScreen"
+          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+          component={BarcodeScannerScreen}
+        />
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
         <Stack.Screen name="NFTScreen" component={NFTScreen} />
         <Stack.Screen name="AMBMarketScreen" component={AMBMarket} />

@@ -1,4 +1,5 @@
 import { RefObject, useCallback } from 'react';
+import { InteractionManager } from 'react-native';
 import { ethereumAddressRegex } from '@constants/regex';
 import { BottomSheetRef } from '@components/composite';
 import { useSendFundsStore } from '@features/send-funds/model';
@@ -9,12 +10,18 @@ export function useBarcode(
   const { state, onChangeState } = useSendFundsStore();
 
   const onDismissBarcodeContainer = useCallback(
-    () => barcodeScannerContainerRef.current?.dismiss(),
+    () =>
+      InteractionManager.runAfterInteractions(
+        barcodeScannerContainerRef.current?.dismiss
+      ),
     [barcodeScannerContainerRef]
   );
 
   const onShowBarcodeContainer = useCallback(
-    () => barcodeScannerContainerRef.current?.show(),
+    () =>
+      InteractionManager.runAfterInteractions(
+        barcodeScannerContainerRef.current?.show
+      ),
     [barcodeScannerContainerRef]
   );
 
