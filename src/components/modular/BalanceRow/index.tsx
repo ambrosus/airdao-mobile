@@ -104,7 +104,7 @@ export const BalanceRow = ({
   }, [bnBalance, dispatch, onChangeText, onPressMaxAmount, token.decimals]);
 
   return (
-    <Row alignItems="center" justifyContent="space-between">
+    <Row width="100%" alignItems="center" justifyContent="space-between">
       <Row alignItems="center">
         <Row alignItems="center">
           <WalletOutlineIcon
