@@ -38,9 +38,6 @@ export type HomeParamsList = {
     address: string;
   };
   Wallets: { screen: string };
-  BarcodeScannerScreen: {
-    onScanned: (data: string) => void;
-  };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

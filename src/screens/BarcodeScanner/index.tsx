@@ -13,9 +13,14 @@ import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeParamsList } from '@appTypes';
+import { RootStackParamsList } from '@appTypes';
 
-type Props = NativeStackScreenProps<HomeParamsList, 'BarcodeScannerScreen'>;
+type Props = NativeStackScreenProps<
+  RootStackParamsList,
+  'BarcodeScannerScreen'
+>;
+
+const MOCK_ADDRESS = '0x9FAec9D8CBd3f131b662e3DC586eb0e9B1663b40';
 
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
   const {
@@ -115,11 +120,7 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           />
           {__DEV__ && (
             <View>
-              <Button
-                onPress={() =>
-                  onScanned('0x9FAec9D8CBd3f131b662e3DC586eb0e9B1663b40')
-                }
-              >
+              <Button onPress={() => onScanned(MOCK_ADDRESS)}>
                 <Text color={COLORS.success400}>
                   Submit successfull address
                 </Text>

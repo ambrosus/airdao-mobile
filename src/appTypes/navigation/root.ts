@@ -12,6 +12,9 @@ export type RootStackParamsList = {
   Tabs: NavigatorScreenParams<TabsParamsList>;
   WelcomeScreen: undefined;
   Passcode: PasscodeParams | undefined;
+  BarcodeScannerScreen: {
+    onScanned: (data: string) => void;
+  };
 };
 
 export type RootNavigationProp = CompositeNavigationProp<
