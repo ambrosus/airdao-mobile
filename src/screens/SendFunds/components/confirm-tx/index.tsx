@@ -2,7 +2,6 @@ import React, { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton, TokenLogo } from '@components/modular';
@@ -15,8 +14,6 @@ import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
-import { HomeNavigationProp } from '@appTypes';
-import { _delayNavigation } from '@utils/navigate';
 import { useSendFundsStore } from '@features/send-funds';
 
 interface ConfirmTransactionProps {

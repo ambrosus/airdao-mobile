@@ -3,7 +3,7 @@ import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { styles } from './styles';
 import { Token } from '@models';
 import { TokensListItem } from '../../base';
-import { Spinner } from '@components/base';
+import { Spacer, Spinner } from '@components/base';
 
 interface TokensListProps {
   readonly tokens: Token[];
@@ -48,6 +48,7 @@ export const TokensList = ({
       style={styles.container}
       contentContainerStyle={styles.contentContainerStyle}
       overScrollMode="never"
+      ListFooterComponent={<Spacer value={50} />}
     />
   );
 };
