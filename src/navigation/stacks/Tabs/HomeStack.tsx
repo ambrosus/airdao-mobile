@@ -36,7 +36,10 @@ export const HomeStack = () => {
       >
         <Stack.Screen
           name="BarcodeScannerScreen"
-          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+          options={{
+            presentation: 'fullScreenModal',
+            animation: 'slide_from_bottom'
+          }}
           component={BarcodeScannerScreen}
         />
         <Stack.Screen name="AssetScreen" component={AssetScreen} />
