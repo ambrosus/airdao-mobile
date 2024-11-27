@@ -106,12 +106,12 @@ export const WalletConnectApprovalView = () => {
 
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
+        setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
       } catch (error) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
         throw error;
       } finally {
         setIsLoadingApprove(false);
-        setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
       }
     }
   }, [
