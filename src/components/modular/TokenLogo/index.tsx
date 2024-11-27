@@ -16,7 +16,8 @@ import {
   TetherIcon,
   UnknownTokenIcon,
   UsdcIcon,
-  KosmosTokenIcon
+  KosmosTokenIcon,
+  TokenSTAMBIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -52,9 +53,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
-    case CryptoCurrencyCode.STAMB.toLowerCase():
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
-    case 'staked amb':
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
     case 'airdao': {
@@ -63,6 +62,9 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.STAMB.toLowerCase():
+    case 'staked amb':
+      return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():
       return <AirDOGEIcon scale={scale} />;
