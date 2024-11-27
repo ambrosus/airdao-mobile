@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Image, PanResponder } from 'react-native';
+import { Image, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from './styles';
@@ -10,31 +10,13 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { ReceiveFunds } from '../ReceiveFunds';
 import { useWalletStore } from '@entities/wallet';
 
-interface WalletDepositFundsProps {
-  readonly onRefresh?: () => void;
-}
-
-export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
+export const WalletDepositFunds = () => {
   const { t } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
 
   const { wallet } = useWalletStore();
 
   const receiveFundsBottomSheetRef = useRef<BottomSheetRef>(null);
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        return Math.abs(gestureState.dy) > -10;
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        // Check if the swipe direction is down
-        if (gestureState.dy > -10 && typeof onRefresh === 'function')
-          onRefresh();
-      }
-    })
-  ).current;
 
   const onReceiveFundsShowBottomSheet = useCallback(
     () => receiveFundsBottomSheetRef.current?.show(),
@@ -51,7 +33,7 @@ export const WalletDepositFunds = ({ onRefresh }: WalletDepositFundsProps) => {
 
   return (
     <>
-      <View {...panResponder.panHandlers} style={styles.container}>
+      <View style={styles.container}>
         <Image
           style={styles.thumbnail}
           source={require('@assets/images/deposit-funds.png')}
