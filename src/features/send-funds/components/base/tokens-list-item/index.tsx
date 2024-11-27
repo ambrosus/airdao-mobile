@@ -48,10 +48,15 @@ export const TokensListItem = ({
     [onSelectToken, token]
   );
 
-  const tokenNameOrAddress = useMemo(() => {
-    const { name, address } = token;
-    const isAddress = StringValidators.isStringAddress(name);
-    return StringUtils.formatAddress(isAddress ? name : name || address, 5, 6);
+  const tokenSymbolOrAddress = useMemo(() => {
+    const { symbol, address } = token;
+    const isAddress = StringValidators.isStringAddress(symbol);
+
+    if (symbol && !isAddress) {
+      return symbol;
+    }
+
+    return StringUtils.formatAddress(address, 5, 6);
   }, [token]);
 
   return (
@@ -70,16 +75,7 @@ export const TokensListItem = ({
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral800}
             >
-              {token.symbol}
-            </Text>
-
-            <Spacer horizontal value={6} />
-            <Text
-              fontSize={16}
-              fontFamily="Inter_500Medium"
-              color={COLORS.neutral400}
-            >
-              {tokenNameOrAddress}
+              {tokenSymbolOrAddress}
             </Text>
           </View>
         </Row>

@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { ethers } from 'ethers';
 import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
@@ -18,7 +19,6 @@ import {
 } from '@features/swap/lib/hooks';
 import { SwapStringUtils } from '@features/swap/utils';
 import { NumberUtils } from '@utils/number';
-import { ethers } from 'ethers';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];
@@ -119,13 +119,6 @@ export const BottomSheetTokenItem = ({
               {token.symbol}
             </Text>
             <Spacer horizontal value={6} />
-            <Text
-              fontSize={16}
-              fontFamily="Inter_500Medium"
-              color={COLORS.neutral400}
-            >
-              {token.name}
-            </Text>
           </View>
         </Row>
 
