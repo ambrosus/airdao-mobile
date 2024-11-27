@@ -24,7 +24,6 @@ export const WalletNoNFTsView = () => {
         fontSize={15}
         color={COLORS.neutral500}
         fontFamily="Inter_400Regular"
-        numberOfLines={2}
         style={styles.description}
       >
         Stay tuned for upcoming events and activities to earn exclusive NFTs.
