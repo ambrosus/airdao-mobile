@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   loader: {
@@ -15,10 +16,19 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   inputContainerWitHeading: {
+    position: 'relative',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: 8
+  },
+  disabledInputContainer: {
+    zIndex: 1000,
+    opacity: 0.7,
+    position: 'absolute',
+    width: '100%',
+    height: '50%',
+    backgroundColor: COLORS.neutral0
   },
   inputContainerWithSelector: {
     position: 'relative',

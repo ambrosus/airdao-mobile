@@ -298,18 +298,7 @@ export const BridgeForm = () => {
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
       <View style={styles.inputContainerWitHeading}>
-        {templateDataLoader && (
-          <View
-            style={{
-              zIndex: 1000,
-              opacity: 0.7,
-              position: 'absolute',
-              width: '100%',
-              height: 200,
-              backgroundColor: COLORS.neutral0
-            }}
-          />
-        )}
+        {templateDataLoader && <View style={styles.disabledInputContainer} />}
         <InputWithTokenSelect
           ref={tokenSelectRef}
           title={t('bridge.select.assets')}
