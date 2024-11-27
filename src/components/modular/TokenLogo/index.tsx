@@ -17,7 +17,8 @@ import {
   UnknownTokenIcon,
   UsdcIcon,
   KosmosTokenIcon,
-  TokenSTAMBIcon
+  TokenSTAMBIcon,
+  TokenXENAIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -118,6 +119,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return <HBRIcon scale={scale} />;
     case CryptoCurrencyCode.KOS.toLowerCase():
       return <KosmosTokenIcon scale={scale} />;
+    case CryptoCurrencyCode.XENA.toLowerCase():
+      return <TokenXENAIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

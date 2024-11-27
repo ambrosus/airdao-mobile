@@ -343,6 +343,12 @@ export const ALL_TOKENS_DATA = {
       name: 'Kosmos Token',
       symbol: 'KOS',
       decimals: 18
+    },
+    {
+      address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
+      name: 'X3NA',
+      symbol: 'X3NA',
+      decimals: 18
     }
   ],
   TESTNET: [
