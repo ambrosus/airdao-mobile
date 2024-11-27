@@ -64,13 +64,13 @@ export const SetupPasscode = () => {
               ...styles.button,
               backgroundColor: isButtonEnabled
                 ? COLORS.brand500
-                : COLORS.alphaBlack5
+                : COLORS.brand100
             }}
           >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
+              color={isButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
               style={styles.buttonText}
             >
               {t('button.confirm')}
