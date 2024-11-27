@@ -10,6 +10,7 @@ import { SwapStringUtils } from '@features/swap/utils';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
 import { Token } from '@models';
 import { TToken } from '@utils';
+import { CryptoCurrencyCode } from '@appTypes';
 
 interface TokenSelectorProps {
   readonly token: TToken;
@@ -29,7 +30,13 @@ export const TokenSelector = ({
   }, [token]);
 
   const SAMBSupportedTokenLogo = useMemo(() => {
-    return SwapStringUtils.extendedLogoVariants((token as Token).symbol ?? '');
+    if (token.symbol === CryptoCurrencyCode.AMB) {
+      return 'AirDAO';
+    }
+
+    return SwapStringUtils.extendedLogoVariants(
+      (token as Token).tokenNameFromDatabase ?? ''
+    );
   }, [token]);
 
   const onToggleSelectTokenModal = useCallback(() => {

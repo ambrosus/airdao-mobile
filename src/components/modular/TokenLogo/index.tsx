@@ -71,6 +71,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
     case 'weth':
+    case 'wrapped ether':
       return (
         <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
       );
@@ -109,6 +110,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.ASTLP.toLowerCase():
     case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
     case CryptoCurrencyCode.AST.toLowerCase():
+    case CryptoCurrencyCode.Astra.toLowerCase():
       return <ASTIcon scale={scale} />;
     case CryptoCurrencyCode.Harbor.toLowerCase():
     case CryptoCurrencyCode.HBR.toLowerCase():
