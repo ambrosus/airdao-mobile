@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
-import { DEVICE_WIDTH } from '@constants/variables';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,12 +11,12 @@ export const styles = StyleSheet.create({
   },
 
   thumbnail: {
-    width: scale(DEVICE_WIDTH / 2),
+    width: scale(188),
     height: verticalScale(87),
-    objectFit: 'fill'
+    objectFit: 'contain'
   },
   description: {
-    maxWidth: 250,
+    maxWidth: '80%',
     textAlign: 'center',
     letterSpacing: -0.3
   }
