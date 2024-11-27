@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { FONT } from '@constants/fonts';
-import { isAndroid } from '@utils/isPlatform';
 import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
@@ -13,7 +12,7 @@ export const styles = StyleSheet.create({
     height: scale(20)
   },
   statusText: {
-    bottom: isAndroid ? scale(1) : 0,
+    includeFontPadding: false,
     fontSize: 14,
     color: COLORS.success700
   }
