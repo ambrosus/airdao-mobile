@@ -29,8 +29,8 @@ export const WalletConnectionFailedView = () => {
   }, [proposal, t]);
 
   const onRejectConnect = useCallback(() => {
-    setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
     onDismissWalletConnectBottomSheet();
+    setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
   }, [onDismissWalletConnectBottomSheet, setWalletConnectStep]);
 
   return (
