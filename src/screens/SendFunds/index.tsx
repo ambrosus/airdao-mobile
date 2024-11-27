@@ -246,9 +246,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
     [onPressMaxAmount, selectedToken, setAmountInCrypto]
   );
   const buttonTitle = useMemo(() => {
-    return reviewButtonDisabled
-      ? t('button.enter.amount')
-      : t('send.funds.review.transaction');
+    return reviewButtonDisabled ? t('button.enter.amount') : t('common.review');
   }, [reviewButtonDisabled, t]);
 
   const onSuccessBottomSheetDismiss = useCallback(() => {
