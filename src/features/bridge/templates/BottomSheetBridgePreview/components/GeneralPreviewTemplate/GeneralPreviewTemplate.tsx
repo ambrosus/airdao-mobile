@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
 import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
@@ -12,6 +12,8 @@ import { scale } from '@utils/scaling';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
 import { PrimaryButton } from '@components/modular';
 import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate';
+import { BottomSheetSuccessView } from '@components/base/BottomSheetStatusView';
+import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
 
 interface GeneralPreviewDataModel {
   loader: boolean;
@@ -34,7 +36,8 @@ export const GeneralPreviewTemplate = ({
     processingTransaction,
     amountToBridge,
     selectedTokenFrom,
-    destinationData
+    destinationData,
+    fromData
   } = variables;
 
   const header = t('bridge.transaction.preview.header')
@@ -88,43 +91,77 @@ export const GeneralPreviewTemplate = ({
     );
   }
 
-  return (
-    <View>
-      <Row justifyContent={'space-between'}>
-        <Text
-          numberOfLines={2}
-          fontSize={scale(20)}
-          fontFamily="Inter_700Bold"
-          color={COLORS.neutral800}
-        >
-          {header}
+  const PendingTransactionContent = () => {
+    return (
+      <>
+        <Row justifyContent={'space-between'}>
+          <Text
+            numberOfLines={2}
+            fontSize={scale(20)}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral800}
+          >
+            {header}
+          </Text>
+          {isPendingTransaction ? (
+            <Spinner customSize={15} />
+          ) : (
+            <TouchableOpacity onPress={onClose}>
+              <CloseCircleIcon />
+            </TouchableOpacity>
+          )}
+        </Row>
+        <Spacer value={10} />
+        <BridgeTransactionPendingTemplate
+          onClose={onClose}
+          transaction={processingTransaction}
+          liveTransactionInformation={{
+            stage,
+            confirmations: {
+              current: confirmations,
+              minSafetyBlocks
+            }
+          }}
+        />
+        <PrimaryButton onPress={onClose}>
+          <Text fontFamily="Inter_600SemiBold" color={COLORS.neutral0}>
+            {t('common.done')}
+          </Text>
+        </PrimaryButton>
+        <Spacer value={scale(30)} />
+      </>
+    );
+  };
+
+  const SuccessTransactionSent = () => (
+    <>
+      <BottomSheetSuccessView>
+        <Spacer value={10} />
+        <Text fontSize={17}>
+          {t('bridge.transaction.success.description')
+            .replace('${{amount}}', amountToBridge)
+            .replace('${{symbol}}', selectedTokenFrom?.symbol || '')}
         </Text>
-        {isPendingTransaction ? (
-          <Spinner customSize={15} />
-        ) : (
-          <TouchableOpacity onPress={onClose}>
-            <CloseCircleIcon />
-          </TouchableOpacity>
-        )}
-      </Row>
-      <Spacer value={10} />
-      <BridgeTransactionPendingTemplate
-        onClose={onClose}
-        transaction={processingTransaction}
-        liveTransactionInformation={{
-          stage,
-          confirmations: {
-            current: confirmations,
-            minSafetyBlocks
-          }
-        }}
-      />
+        <Spacer value={10} />
+        <BridgeNetworksSelected
+          networkFrom={fromData.value.id}
+          networkTo={destinationData.value.id}
+          size="small"
+        />
+      </BottomSheetSuccessView>
+      <Spacer value={15} />
       <PrimaryButton onPress={onClose}>
         <Text fontFamily="Inter_600SemiBold" color={COLORS.neutral0}>
           {t('common.done')}
         </Text>
       </PrimaryButton>
       <Spacer value={scale(30)} />
-    </View>
+    </>
+  );
+
+  return isPendingTransaction ? (
+    <PendingTransactionContent />
+  ) : (
+    <SuccessTransactionSent />
   );
 };

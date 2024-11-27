@@ -418,6 +418,7 @@
   "bridge.transaction.sending.funds": "Sending funds to {{networkTo}}",
   "bridge.transaction.preview.header": "Sending {{amount}} {{symbol}} to {{network}}",
   "bridge.transaction.preview.time": "Estimated arrival time",
+  "bridge.transaction.success.description": "You sent ${{amount}} ${{symbol}}",
 
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
