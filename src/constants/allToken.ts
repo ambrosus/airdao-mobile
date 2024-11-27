@@ -451,6 +451,12 @@ export const ALL_TOKENS_DATA = {
       decimals: 18,
       name: 'Wrapped Ether',
       symbol: 'WETH'
+    },
+    {
+      address: '0x740219322978F445822d5FdB84462028A8745729',
+      decimals: 18,
+      name: 'Wrapped BNB',
+      symbol: 'WBNB'
     }
   ]
 };

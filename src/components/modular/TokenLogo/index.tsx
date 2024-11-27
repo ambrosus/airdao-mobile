@@ -78,6 +78,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
     case 'wbnb':
+    case 'wrapped bnb':
     case 'bsc':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
