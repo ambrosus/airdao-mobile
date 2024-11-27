@@ -30,7 +30,9 @@ export const TransactionItem = ({
       transactionTokenInfo.cryptoAmount
     );
 
-    return transaction.isSent ? `-${amount}` : amount;
+    return transaction.isSent && transactionTokenInfo.cryptoAmount !== '0'
+      ? `-${amount}`
+      : amount;
   }, [transaction, transactionTokenInfo.cryptoAmount]);
 
   const isTransferAndSentTx = useMemo(() => {
