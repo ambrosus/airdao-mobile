@@ -156,7 +156,15 @@ export const BridgeForm = () => {
     ]
   );
 
+  const setDefaultOptions = useCallback(() => {
+    setTimeout(() => {
+      setPreviewLoader(false);
+      setProcessingTransaction(null);
+    }, 200);
+  }, [setProcessingTransaction]);
+
   const goToPreview = useCallback(async () => {
+    setDefaultOptions();
     const isMax =
       amountToBridge ===
         NumberUtils.limitDecimalCount(
@@ -208,15 +216,9 @@ export const BridgeForm = () => {
     selectedTokenFrom,
     selectedTokenPairs,
     setBridgePreviewData,
+    setDefaultOptions,
     setTemplateDataLoader
   ]);
-
-  const setDefaultOptions = useCallback(() => {
-    setTimeout(() => {
-      setPreviewLoader(false);
-      setProcessingTransaction(null);
-    }, 200);
-  }, [setProcessingTransaction]);
 
   const onClose = useCallback(async () => {
     if (selectedBridgeData && selectedWallet?.address) {

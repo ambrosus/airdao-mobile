@@ -418,6 +418,8 @@
   "bridge.transaction.sending.funds": "Fonlar gönderiliyor {{networkTo}}",
   "bridge.transaction.preview.header": "Ethereum'a {{amount}} {{symbol}} gönderiliyor",
   "bridge.transaction.preview.time": "Tahmini varış saati",
+  "bridge.transaction.success.description": "!!You sent ${{amount}} ${{symbol}}",
+
 
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
