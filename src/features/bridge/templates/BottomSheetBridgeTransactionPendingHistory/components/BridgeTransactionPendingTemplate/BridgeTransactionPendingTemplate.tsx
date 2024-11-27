@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { styles } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components/BridgeTransactionPendingTemplate/styles';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { RowStageSection } from '../RowStageSection/RowStageSection';
 import { scale } from '@utils/scaling';
@@ -21,7 +20,6 @@ interface BridgeTransactionPendingTemplateModel {
     };
   };
 }
-
 export const BridgeTransactionPendingTemplate = ({
   transaction,
   liveTransactionInformation
@@ -103,8 +101,7 @@ export const BridgeTransactionPendingTemplate = ({
       <RowStageSection
         stage={3}
         placeholder={t('bridge.transaction.sending.funds', {
-          networkTo:
-            SHORTEN_NETWORK[transaction?.networkTo as keyof typeof NETWORK]
+          networkTo: transaction.networkTo
         })}
       >
         <Status status={renderTransactionStatus(3.1)} />
