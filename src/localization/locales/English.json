@@ -87,6 +87,7 @@
   "button.swapping": "Swapping",
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Sending",
+  "button.insufficient.funds": "Insufficient funds",
 
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter new passcode",

@@ -87,6 +87,7 @@
   "button.swapping": "Takas edin",
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Gönderme",
+  "button.insufficient.funds": "Yetersiz bakiye",
 
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",

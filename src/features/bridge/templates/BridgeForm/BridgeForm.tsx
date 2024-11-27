@@ -330,7 +330,7 @@ export const BridgeForm = () => {
             <Spinner customSize={15} />
           ) : (
             <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
-              {error ? t('bridge.insufficient.funds') : t('button.preview')}
+              {error ? t('button.insufficient.funds') : t('common.review')}
             </Text>
           )}
         </PrimaryButton>
