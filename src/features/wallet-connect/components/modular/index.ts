@@ -1,1 +1,1 @@
-export { renderModalViewByStep } from './render-modal-view-by-step';
+export { RenderModalViewByStep } from './render-modal-view-by-step';

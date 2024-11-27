@@ -8,8 +8,15 @@ import {
   WalletConnectionFailedView,
   WalletConnectionWrongChainView
 } from '../../composite';
+import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
 
-export function renderModalViewByStep(step: WalletConnectViewValues) {
+export function RenderModalViewByStep(step: WalletConnectViewValues) {
+  const { proposal } = useWalletConnectContextSelector();
+
+  if (!proposal) {
+    return null;
+  }
+
   switch (step) {
     case CONNECT_VIEW_STEPS.APPROVE: {
       return <WalletConnectApprovalView />;
