@@ -76,7 +76,7 @@ export const AssetScreen = () => {
     () => (
       <Row alignItems="center">
         <View>
-          <TokenLogo scale={0.7} token={tokenInfo.name} />
+          <TokenLogo scale={0.7} token={tokenInfo.tokenNameFromDatabase} />
         </View>
         <Spacer horizontal value={scale(4)} />
         <Text
@@ -88,7 +88,7 @@ export const AssetScreen = () => {
         </Text>
       </Row>
     ),
-    [headerTitle, tokenInfo.name]
+    [headerTitle, tokenInfo.tokenNameFromDatabase]
   );
 
   const renderHeaderRightComponent = useMemo(

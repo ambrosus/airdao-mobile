@@ -333,9 +333,21 @@ export const ALL_TOKENS_DATA = {
       decimals: 18
     },
     {
+      address: '0x5ceCBde7811aC0Ed86Be11827AE622b89Bc429DF',
+      name: 'Astra',
+      symbol: 'AST',
+      decimals: 18
+    },
+    {
       address: '0xC15891E4dE2793726c20F53EcA6FB6319968E5F3',
       name: 'Kosmos Token',
       symbol: 'KOS',
+      decimals: 18
+    },
+    {
+      address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
+      name: 'X3NA',
+      symbol: 'X3NA',
       decimals: 18
     }
   ],
@@ -439,6 +451,18 @@ export const ALL_TOKENS_DATA = {
       name: 'Kosmos Token',
       symbol: 'KOS',
       decimals: 18
+    },
+    {
+      address: '0xF0FdC3f1D8D567bB6108f3Ef12BA4E2bb6C0a969',
+      decimals: 18,
+      name: 'Wrapped Ether',
+      symbol: 'WETH'
+    },
+    {
+      address: '0x740219322978F445822d5FdB84462028A8745729',
+      decimals: 18,
+      name: 'Wrapped BNB',
+      symbol: 'WBNB'
     }
   ]
 };
