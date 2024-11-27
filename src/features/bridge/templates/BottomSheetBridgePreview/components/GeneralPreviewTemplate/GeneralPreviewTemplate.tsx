@@ -14,12 +14,14 @@ import { PrimaryButton } from '@components/modular';
 import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate';
 
 interface GeneralPreviewDataModel {
+  loader: boolean;
   errorBalance: boolean;
   onAcceptPress: () => void;
   onClose: () => void;
 }
 
 export const GeneralPreviewTemplate = ({
+  loader,
   errorBalance,
   onAcceptPress,
   onClose
@@ -79,6 +81,7 @@ export const GeneralPreviewTemplate = ({
   if (!processingTransaction) {
     return (
       <PreviewDataTemplate
+        loader={loader}
         errorBalance={errorBalance}
         onAcceptPress={onAcceptPress}
       />

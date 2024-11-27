@@ -9,7 +9,7 @@ import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePrev
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
-import { GeneralPreviewTemplate, Loader } from './components/index';
+import { GeneralPreviewTemplate } from './components';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
@@ -57,21 +57,6 @@ export const BottomSheetBridgePreview = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTokenPairs, dataToPreview]);
 
-  const PreviewContent = useMemo(() => {
-    if (previewLoader) {
-      return <Loader />;
-    } else {
-      return (
-        <GeneralPreviewTemplate
-          onClose={onClose}
-          errorBalance={errorBalance}
-          onAcceptPress={onAcceptPress}
-        />
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorBalance, previewLoader]);
-
   const showHeader = useMemo(() => {
     return !processingTransaction && !previewLoader;
   }, [previewLoader, processingTransaction]);
@@ -98,7 +83,12 @@ export const BottomSheetBridgePreview = forwardRef<
           </>
         )}
         <Spacer value={verticalScale(18)} />
-        {PreviewContent}
+        <GeneralPreviewTemplate
+          loader={previewLoader}
+          onClose={onClose}
+          errorBalance={errorBalance}
+          onAcceptPress={onAcceptPress}
+        />
       </View>
     </BottomSheet>
   );
