@@ -74,7 +74,7 @@ export const BottomSheetBridgePreview = forwardRef<
                 fontFamily="Inter_700Bold"
                 color={COLORS.neutral800}
               >
-                {t('bridge.preview.title')}
+                {t('common.review')}
               </Text>
               <TouchableOpacity onPress={onClose}>
                 <CloseCircleIcon />
