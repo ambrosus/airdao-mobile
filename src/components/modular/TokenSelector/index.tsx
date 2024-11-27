@@ -34,8 +34,15 @@ export const TokenSelector = ({
       return 'AirDAO';
     }
 
+    const { tokenNameFromDatabase } = token;
+
+    const isTokenNameFromDBExist =
+      tokenNameFromDatabase && tokenNameFromDatabase !== 'unknown';
+
     return SwapStringUtils.extendedLogoVariants(
-      (token as Token).tokenNameFromDatabase ?? ''
+      (token as Token)[
+        isTokenNameFromDBExist ? 'tokenNameFromDatabase' : 'symbol'
+      ] ?? ''
     );
   }, [token]);
 
