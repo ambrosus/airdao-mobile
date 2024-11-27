@@ -9,7 +9,7 @@ import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePrev
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
-import { GeneralPreviewTemplate } from './components/index';
+import { GeneralPreviewTemplate } from './components';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
