@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { styles } from './styles';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
@@ -35,6 +35,14 @@ export const Bridge = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setAmountToBridge('');
+      };
+    }, [setAmountToBridge])
+  );
+
   if (bridgeLoader) {
     return (
       <SafeAreaView style={styles.loader}>
@@ -43,15 +51,10 @@ export const Bridge = () => {
     );
   }
 
-  const onGoBack = () => {
-    setAmountToBridge('');
-    navigation.goBack();
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        onBackPress={onGoBack}
+        onBackPress={navigation.goBack}
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}
