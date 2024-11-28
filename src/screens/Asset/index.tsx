@@ -16,6 +16,7 @@ import { ChartIcon } from '@components/svg/icons/v2';
 import { StringUtils } from '@utils/string';
 import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
 import { AccountTransactions } from '@components/templates';
+import { StringValidators } from '@utils';
 
 export const AssetScreen = () => {
   const {
@@ -63,14 +64,16 @@ export const AssetScreen = () => {
     [navigation]
   );
 
-  const headerTitle = useMemo(() => {
-    if (tokenInfo.name) {
-      return tokenInfo.name === 'AirDAO'
-        ? 'AirDAO'
-        : tokenInfo.symbol || tokenInfo.address;
+  const tokenNameOrAddress = useMemo(() => {
+    const { symbol, address } = tokenInfo;
+    const isAddress = StringValidators.isStringAddress(symbol);
+
+    if (symbol && !isAddress) {
+      return symbol;
     }
-    return tokenInfo.name;
-  }, [tokenInfo.name, tokenInfo.symbol, tokenInfo.address]);
+
+    return StringUtils.formatAddress(address, 5, 6);
+  }, [tokenInfo]);
 
   const renderHeaderTitleComponent = useMemo(
     () => (
@@ -84,11 +87,11 @@ export const AssetScreen = () => {
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral800}
         >
-          {headerTitle}
+          {tokenNameOrAddress}
         </Text>
       </Row>
     ),
-    [headerTitle, tokenInfo.tokenNameFromDatabase]
+    [tokenNameOrAddress, tokenInfo.tokenNameFromDatabase]
   );
 
   const renderHeaderRightComponent = useMemo(
