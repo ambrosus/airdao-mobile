@@ -1,10 +1,11 @@
-import { View } from 'react-native';
 import React from 'react';
+import { View } from 'react-native';
 import { Header } from '@components/composite';
+import { styles } from './StakeAMBScreen.styles';
 
 export const StakeAMBScreen = () => {
   return (
-    <View style={{ marginTop: 50 }}>
+    <View style={styles.main}>
       <Header title="HarborStakeAMB" />
     </View>
   );
