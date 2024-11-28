@@ -23,7 +23,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
 import { COLORS } from '@constants/colors';
@@ -42,13 +42,18 @@ import {
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
 import { useWalletStore } from '@entities/wallet';
+import { LayoutChangeEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
 
   const [previewLoader, setPreviewLoader] = useState(false);
-
+  const [disabledComponentStyle, setDisabledComponentStyle] =
+    useState<ViewStyle>({
+      width: 0,
+      height: 0
+    });
   const previewRef = useRef<BottomSheetRef>(null);
   const tokenSelectRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
@@ -295,10 +300,28 @@ export const BridgeForm = () => {
     setProcessingTransaction
   ]);
 
+  const onInputWrapperLayout = (event: LayoutChangeEvent) => {
+    const { width, height: _height } = event.nativeEvent.layout;
+    setDisabledComponentStyle({
+      width,
+      height: _height * 0.9
+    });
+  };
+
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
-      <View style={styles.inputContainerWitHeading}>
-        {templateDataLoader && <View style={styles.disabledInputContainer} />}
+      <View
+        onLayout={onInputWrapperLayout}
+        style={styles.inputContainerWitHeading}
+      >
+        {templateDataLoader && (
+          <View
+            style={{
+              ...styles.disabledInputContainer,
+              ...disabledComponentStyle
+            }}
+          />
+        )}
         <InputWithTokenSelect
           ref={tokenSelectRef}
           title={t('bridge.select.assets')}
