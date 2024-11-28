@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     height: 142,
     alignSelf: 'center',
     alignItems: 'center',
-    columnGap: scale(20)
+    columnGap: scale(14)
   },
   button: {
     position: 'relative',
