@@ -338,7 +338,8 @@ export const SendFunds = ({ navigation, route }: Props) => {
               currency={selectedToken.symbol}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
-              dismissBottomSheet={onSuccessBottomSheetDismiss}
+              onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}
+              dismissBottomSheet={hideReviewModal}
             />
           </BottomSheet>
         </KeyboardDismissingView>
