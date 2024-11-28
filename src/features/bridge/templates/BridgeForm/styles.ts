@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   loader: {
@@ -26,9 +25,8 @@ export const styles = StyleSheet.create({
     zIndex: 1000,
     opacity: 0.7,
     position: 'absolute',
-    width: '100%',
-    height: '50%',
-    backgroundColor: COLORS.neutral0
+    backgroundColor: 'red'
+    // backgroundColor: COLORS.neutral0
   },
   inputContainerWithSelector: {
     position: 'relative',
