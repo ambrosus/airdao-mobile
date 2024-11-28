@@ -138,7 +138,7 @@ export const Notifications = (): JSX.Element => {
         {DeviceUtils.isIOS && <Spacer value={topInset} />}
         <Header
           bottomBorder
-          title={t('notification.settings')}
+          title={t('tab.settings')}
           style={{
             shadowColor: 'transparent',
             zIndex: 1000
