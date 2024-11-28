@@ -3,7 +3,8 @@ export enum NotificationType {
   PriceAlert = 'price-alert',
   WalletUpdate = 'wallet-update',
   TestnetTransactionAlert = 'testnet-transaction-alert',
-  TestnetPriceAlert = 'testnet-price-alert'
+  TestnetPriceAlert = 'testnet-price-alert',
+  Default = ''
 }
 
 export interface NotificationSettings {
