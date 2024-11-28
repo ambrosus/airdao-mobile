@@ -10,7 +10,6 @@ export class Notification {
   // isRead: boolean;
 
   private _determineType(title: string): NotificationType {
-    console.log('->>>>', title);
     switch (title) {
       case 'Price Alert':
         return NotificationType.PriceAlert;
