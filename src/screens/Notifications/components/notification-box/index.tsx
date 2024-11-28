@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, Text as RNText } from 'react-native';
+import { Text as RNText, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
