@@ -19,8 +19,8 @@ interface BottomSheetSuccessViewProps extends PropsWithChildren {
 }
 
 export const BottomSheetErrorView = ({
-  title = t('bridge.transfer.failed.sub.header'),
-  description,
+  title = t('send.funds.failed'),
+  description = t('bridge.transfer.failed.sub.header'),
   buttonLabel = t('button.try.again'),
   onButtonPress,
   children
