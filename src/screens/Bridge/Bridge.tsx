@@ -31,6 +31,7 @@ export const Bridge = () => {
   }, []);
 
   useEffect(() => {
+    setAmountToBridge('');
     loadAllBridgeData().then();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
@@ -43,15 +44,10 @@ export const Bridge = () => {
     );
   }
 
-  const onGoBack = () => {
-    setAmountToBridge('');
-    navigation.goBack();
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        onBackPress={onGoBack}
+        onBackPress={navigation.goBack}
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}
