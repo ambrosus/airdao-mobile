@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { BackHandler, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { Header } from '@components/composite';
+import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode } from '@components/modular';
 import { styles } from './SetupPasscode.styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SetupPasscode = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const isButtonEnabled = passcode.join('').length === 4;
+  const { top } = useSafeAreaInsets();
   const onContinuePress = () => {
     if (passcode.every((code) => code !== '')) {
       navigation.navigate('ConfirmPasscode', { passcode });
@@ -27,16 +28,25 @@ export const SetupPasscode = () => {
     setPasscode(passcode);
   };
 
+  useEffect(() => {
+    const onBackPress = () => true;
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
-    <SafeAreaView style={styles.main}>
+    <View style={{ ...styles.main, paddingTop: top }}>
       <View>
-        <View style={styles.headerContainer}>
-          <Header
-            backIconVisible={false}
-            title={t('security.enter.passcode')}
-          />
-        </View>
-        <Spacer value={scale(20)} />
+        <Header
+          bottomBorder
+          backIconVisible={false}
+          title={t('security.enter.passcode')}
+        />
         <View style={styles.infoContainer}>
           <Text
             align="center"
@@ -47,15 +57,13 @@ export const SetupPasscode = () => {
             {t('security.enter.passcode.text')}
           </Text>
         </View>
-        <Spacer value={verticalScale(20)} />
       </View>
       <View>
         <Passcode
           isBiometricEnabled={false}
           onPasscodeChange={onPasscodeChange}
         />
-        <Spacer value={scale(19)} />
-        <BottomAwareSafeAreaView style={styles.buttonWrapper}>
+        <View style={styles.buttonWrapper}>
           <Button
             disabled={!isButtonEnabled}
             onPress={onContinuePress}
@@ -76,8 +84,8 @@ export const SetupPasscode = () => {
               {t('button.confirm')}
             </Text>
           </Button>
-        </BottomAwareSafeAreaView>
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
