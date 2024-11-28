@@ -17,7 +17,7 @@ export const Bridge = () => {
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
   const { methods, variables } = useBridgeContextData();
-  const { loadAllBridgeData } = methods;
+  const { loadAllBridgeData, setAmountToBridge } = methods;
   const { bridgeLoader } = variables;
   const { isPendingTransactions } = usePendingTransactions();
 
@@ -43,10 +43,15 @@ export const Bridge = () => {
     );
   }
 
+  const onGoBack = () => {
+    setAmountToBridge('');
+    navigation.goBack();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        onBackPress={navigation.goBack}
+        onBackPress={onGoBack}
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}
