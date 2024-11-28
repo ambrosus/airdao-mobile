@@ -12,6 +12,7 @@ import { FailedIcon } from '@components/svg/icons/v2';
 
 export const WalletConnectModal = () => {
   const {
+    proposal,
     approvalConnectionBottomSheetRef,
     isWalletKitInitiated,
     walletConnectStep
@@ -22,6 +23,10 @@ export const WalletConnectModal = () => {
   const isError = useMemo(() => {
     return walletConnectStep.toLowerCase().includes('error');
   }, [walletConnectStep]);
+
+  if (!proposal) {
+    return null;
+  }
 
   return (
     <BottomSheet
