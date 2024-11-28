@@ -10,19 +10,23 @@ export class Notification {
   // isRead: boolean;
 
   private _determineType(title: string): NotificationType {
+    console.log('->>>>', title);
     switch (title) {
       case 'Price Alert':
         return NotificationType.PriceAlert;
-      case 'AMB-TestNet Tx Alert':
-        return NotificationType.TestnetTransactionAlert;
       case 'Price Alert Test':
         return NotificationType.TestnetPriceAlert;
+
+      case 'AMB-TestNet Tx Alert':
+      case 'AMB-DevNet Tx Alert':
+        return NotificationType.TestnetTransactionAlert;
       case 'AMB-Net Tx Alert':
         return NotificationType.TransactionAlert;
+
       case 'Wallet Update':
         return NotificationType.WalletUpdate;
       default:
-        return NotificationType.PriceAlert;
+        return NotificationType.Default;
     }
   }
 

@@ -85,14 +85,18 @@ export const NotificationBox = ({
     >
       <View style={styles.innerContainer}>
         <Row alignItems="center" justifyContent="space-between">
-          <Text
-            fontSize={15}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral800}
-          >
-            {t(`common.notification.${notification.type}`)}
-          </Text>
-          <Spacer value={scale(4)} horizontal />
+          {!!notification.type && (
+            <>
+              <Text
+                fontSize={15}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral800}
+              >
+                {t(`common.notification.${notification.type}`)}
+              </Text>
+              <Spacer value={scale(4)} horizontal />
+            </>
+          )}
           <RNText style={styles.baseTextSecondary}>
             {moment(notification.createdAt).format('HH:mm')}
           </RNText>
