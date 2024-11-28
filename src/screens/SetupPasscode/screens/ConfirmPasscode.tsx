@@ -43,7 +43,7 @@ export const ConfirmPasscode = () => {
   return (
     <View style={{ ...styles.main, paddingTop: top }}>
       <View>
-        <Header title={t('security.enter.passcode')} />
+        <Header bottomBorder title={t('security.enter.passcode')} />
         <View style={styles.infoContainer}>
           <Text
             align="center"
