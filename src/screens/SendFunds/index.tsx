@@ -43,7 +43,8 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
 export const SendFunds = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
-  const { state, onChangeState, onResetState } = useSendFundsStore();
+  const { state, tokens, onSetTokens, onChangeState, onResetState } =
+    useSendFundsStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -76,7 +77,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
   }, [transactionId]);
 
   const {
-    data: { tokens },
+    data: { tokens: tokensFromAPI },
     loading: isFetchingTokens
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
 
@@ -85,6 +86,12 @@ export const SendFunds = ({ navigation, route }: Props) => {
       (token) => token.address === tokenFromNavigationParams?.address
     ) || _AMBEntity
   );
+
+  useEffect(() => {
+    if (tokens.length === 0 && tokensFromAPI.length > 0) {
+      onSetTokens([_AMBEntity].concat(tokensFromAPI));
+    }
+  }, [_AMBEntity, tokensFromAPI, onSetTokens, tokens.length]);
 
   const { amountInCrypto, setAmountInCrypto, onChangeAmountHandle } =
     useAmountChangeHandler();
@@ -216,13 +223,12 @@ export const SendFunds = ({ navigation, route }: Props) => {
   const renderBottomSheetNode = useMemo(
     () => (
       <TokensList
-        tokens={[_AMBEntity].concat(tokens)}
         selectedToken={selectedToken}
         onSelectToken={onSelectToken}
         isFetchingTokens={isFetchingTokens}
       />
     ),
-    [_AMBEntity, isFetchingTokens, onSelectToken, selectedToken, tokens]
+    [isFetchingTokens, onSelectToken, selectedToken]
   );
 
   const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);

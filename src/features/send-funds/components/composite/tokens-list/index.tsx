@@ -4,20 +4,21 @@ import { styles } from './styles';
 import { Token } from '@models';
 import { TokensListItem } from '../../base';
 import { Spacer, Spinner } from '@components/base';
+import { useSendFundsStore } from '@features/send-funds';
 
 interface TokensListProps {
-  readonly tokens: Token[];
+  // readonly tokens: Token[];
   readonly selectedToken: Token;
   onSelectToken: (token: Token) => void;
   isFetchingTokens: boolean;
 }
 
 export const TokensList = ({
-  tokens,
   selectedToken,
   onSelectToken,
   isFetchingTokens
 }: TokensListProps) => {
+  const { tokens } = useSendFundsStore();
   const renderTokenListItem = useCallback(
     (args: ListRenderItemInfo<Token>) => {
       const { item: token } = args;
