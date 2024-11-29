@@ -6,11 +6,8 @@ import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { TokenLogo } from '../TokenLogo';
 import { COLORS } from '@constants/colors';
-import { SwapStringUtils } from '@features/swap/utils';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
-import { Token } from '@models';
-import { TToken } from '@utils';
-import { CryptoCurrencyCode } from '@appTypes';
+import { TToken, wrapTokenIcon } from '@utils';
 
 interface TokenSelectorProps {
   readonly token: TToken;
@@ -29,22 +26,7 @@ export const TokenSelector = ({
     return !!token;
   }, [token]);
 
-  const SAMBSupportedTokenLogo = useMemo(() => {
-    if (token.symbol === CryptoCurrencyCode.AMB) {
-      return 'AirDAO';
-    }
-
-    const { tokenNameFromDatabase } = token;
-
-    const isTokenNameFromDBExist =
-      tokenNameFromDatabase && tokenNameFromDatabase !== 'unknown';
-
-    return SwapStringUtils.extendedLogoVariants(
-      (token as Token)[
-        isTokenNameFromDBExist ? 'tokenNameFromDatabase' : 'symbol'
-      ] ?? ''
-    );
-  }, [token]);
+  const SAMBSupportedTokenLogo = wrapTokenIcon(token);
 
   const onToggleSelectTokenModal = useCallback(() => {
     if (selectable) onShowBottomSheetTokensListHandle();
