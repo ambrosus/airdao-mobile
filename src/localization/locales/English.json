@@ -287,7 +287,7 @@
   "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
   "singleWallet.remove.alert.description": "Make sure you have a backup your wallet",
   "singleWallet.save": "Save changes",
-  "singleWallet.warning.title": "Keep your Access keys safe",
+  "singleWallet.warning.title": "Keep your access keys safe",
   "singleWallet.warning.description": "Your Access keys provides full access to you account and funds.\nDo not share this with anyone. The AirDAO team will never request this, but phishers might.",
   "singleWallet.warning.button": "Reveal access keys",
   "singleWallet.access.keys": "View access keys",
