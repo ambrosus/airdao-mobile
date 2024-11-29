@@ -469,6 +469,12 @@ export const ALL_TOKENS_DATA = {
       name: 'Astra',
       symbol: 'AST',
       decimals: 18
+    },
+    {
+      address: '0x5C114A3E9b6DB57A9FE5950eC1946278a2d7A22b',
+      name: 'Staked AMB',
+      symbol: 'stAMB',
+      decimals: 18
     }
   ]
 };
