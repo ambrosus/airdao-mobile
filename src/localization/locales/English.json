@@ -90,8 +90,11 @@
   "button.insufficient.funds": "Insufficient funds",
 
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
-  "change.passcode.enter.new.passcode": "Enter new passcode",
-  "change.passcode.success": "Passcode changed",
+  "change.passcode.enter.new.passcode": "Enter your passcode",
+  "change.passcode.success": "Passcode changed!",
+  "change.passcode.header.old": "Current passcode",
+  "change.passcode.header.new": "New passcode",
+  "change.passcode.header.confirm": "Confirm passcode",
 
   "chart.timeframe.24H": "24 hrs",
   "chart.timeframe.daily": "1D",

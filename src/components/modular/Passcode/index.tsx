@@ -14,6 +14,7 @@ interface PasscodeProps {
   changePasscodeStep?: number | null;
   isBiometricEnabled?: boolean;
   authenticateWithBiometrics?: () => void | Promise<void>;
+  inputBottomPadding?: number;
   type?: 'creation' | 'change';
 }
 
@@ -29,6 +30,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       authenticateWithBiometrics = () => {
         // do nothing
       },
+      inputBottomPadding = 0,
       isBiometricEnabled = true,
       changePasscodeStep = null
     }: PasscodeProps,
@@ -101,7 +103,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
         >
           {renderCircles()}
         </Button>
-        <Spacer value={scale(50)} />
+        <Spacer value={scale(inputBottomPadding || 50)} />
         <PasscodeKeyboard
           onBiometricPress={authenticateWithBiometrics}
           isBiometricEnabled={isBiometricEnabled}

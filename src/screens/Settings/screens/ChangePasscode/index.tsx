@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CloseIcon } from '@components/svg/icons';
 import { useNavigation } from '@react-navigation/native';
 import { verticalScale } from '@utils/scaling';
 import { Alert, View } from 'react-native';
@@ -10,6 +9,8 @@ import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
 import { usePasscodeStore } from '@features/passcode';
+import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
@@ -18,91 +19,149 @@ export const ChangePasscode = () => {
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const [step, setStep] = useState<number>(passcode.length === 0 ? 2 : 1); // ask current passcode if already saved
   const [newPasscode, setNewPasscode] = useState<string[]>([]);
+  const [buttonError, setButtonError] = useState(true);
+  const [typedPasscode, setTypedPasscode] = useState<string[]>(['']);
 
-  const onBackPress = async () => {
-    navigation.navigate('SecuritySettings');
-  };
-
-  const handlePasscode = useCallback(
-    async (typedPasscode: string[]) => {
-      if (typedPasscode.length === 4) {
-        if (step === 1) {
-          // Step 1: Check user passcode
-          if (JSON.stringify(passcode) === JSON.stringify(typedPasscode)) {
-            setStep(2);
-          } else {
-            Alert.alert(
-              t('security.passcode.doesnt.match'),
-              t('common.please.try.again'),
-              [
-                {
-                  text: t('button.try.again'),
-                  onPress: () => null,
-                  style: 'cancel'
-                }
-              ]
-            );
-          }
-        } else if (step === 2) {
-          // Step 2: Type new user passcode
-          setNewPasscode(typedPasscode);
-          setStep(3);
-        } else if (step === 3) {
-          // Step 3: Confirm new user passcode
-          if (JSON.stringify(newPasscode) === JSON.stringify(typedPasscode)) {
-            onChangePasscode(typedPasscode);
-            navigation.navigate('SecuritySettings');
-            Toast.show({
-              text: t('change.passcode.success'),
-              position: ToastPosition.Top,
-              type: ToastType.Success
-            });
-          } else {
-            Alert.alert(
-              t('security.passcode.doesnt.match'),
-              t('common.please.try.again'),
-              [
-                {
-                  text: t('button.try.again'),
-                  onPress: () => null,
-                  style: 'cancel'
-                }
-              ]
-            );
-          }
-        }
+  const onStep1Press = useCallback(
+    (_typedPasscode: string[]) => {
+      // Step 1: Check user passcode
+      if (JSON.stringify(passcode) === JSON.stringify(_typedPasscode)) {
+        setStep(2);
+      } else {
+        Alert.alert(
+          t('security.passcode.doesnt.match'),
+          t('common.please.try.again'),
+          [
+            {
+              text: t('button.try.again'),
+              onPress: () => null,
+              style: 'cancel'
+            }
+          ]
+        );
       }
     },
-    [navigation, newPasscode, onChangePasscode, passcode, step, t]
+    [passcode, t]
   );
 
-  return (
-    <View style={{ top }}>
-      <Header
-        contentLeft={
-          <Button onPress={onBackPress}>
-            <CloseIcon scale={1.15} />
-          </Button>
+  const onStep2Press = (_typedPasscode: string[]) => {
+    // Step 2: Type new user passcode
+
+    setNewPasscode(_typedPasscode);
+    setStep(3);
+  };
+
+  const onStep3Press = useCallback(
+    (_typedPasscode: string[]) => {
+      if (JSON.stringify(newPasscode) === JSON.stringify(_typedPasscode)) {
+        onChangePasscode(_typedPasscode);
+        navigation.navigate('SecuritySettings');
+        Toast.show({
+          text: t('change.passcode.success'),
+          position: ToastPosition.Top,
+          type: ToastType.Success
+        });
+      } else {
+        Alert.alert(
+          t('security.passcode.doesnt.match'),
+          t('common.please.try.again'),
+          [
+            {
+              text: t('button.try.again'),
+              onPress: () => null,
+              style: 'cancel'
+            }
+          ]
+        );
+      }
+    },
+    [navigation, newPasscode, onChangePasscode, t]
+  );
+
+  const handlePasscodeBtnPress = useCallback(
+    async (_typedPasscode: string[]) => {
+      if (_typedPasscode.length === 4) {
+        switch (step) {
+          case 1:
+            onStep1Press(_typedPasscode);
+            break;
+          case 2:
+            onStep2Press(_typedPasscode);
+            break;
+          case 3:
+            onStep3Press(_typedPasscode);
+            break;
+          default:
+            setButtonError(true);
+            break;
         }
-        backIconVisible={false}
-        style={{ shadowColor: 'transparent' }}
-      />
-      <Spacer value={verticalScale(160)} />
-      <Text align="center" fontFamily="Inter_700Bold" fontSize={24}>
-        {step === 1
-          ? t('login.enter.your.passcode')
-          : step === 2
-          ? t('change.passcode.enter.new.passcode')
-          : t('change.passcode.confirm.new.passcode')}
-      </Text>
-      <Spacer value={verticalScale(24)} />
-      <View>
+        setTypedPasscode(['']);
+      }
+    },
+    [onStep1Press, onStep3Press, step]
+  );
+
+  const screenTitles = useMemo(() => {
+    switch (step) {
+      case 1:
+        return {
+          headerTitle: 'change.passcode.header.old',
+          buttonTitle: 'button.continue'
+        };
+      case 2:
+        return {
+          headerTitle: 'change.passcode.header.new',
+          buttonTitle: 'button.continue'
+        };
+      case 3:
+        return {
+          headerTitle: 'change.passcode.header.confirm',
+          buttonTitle: 'button.confirm'
+        };
+      default:
+        return {
+          headerTitle: '',
+          buttonTitle: ''
+        };
+    }
+  }, [step]);
+
+  useEffect(() => {
+    if (typedPasscode.length < 4) {
+      setButtonError(true);
+    } else {
+      setButtonError(false);
+    }
+  }, [typedPasscode]);
+
+  return (
+    <View style={{ paddingVertical: top, ...styles.main }}>
+      <Header title={t(screenTitles.headerTitle)} style={styles.header} />
+      <View style={styles.passcodeWrapper}>
         <Passcode
+          inputBottomPadding={110}
           changePasscodeStep={step}
           isBiometricEnabled={false}
-          onPasscodeChange={handlePasscode}
+          onPasscodeChange={setTypedPasscode}
           type="change"
         />
+        <Spacer value={verticalScale(50)} />
+
+        <Button
+          disabled={buttonError}
+          onPress={async () => {
+            await handlePasscodeBtnPress(typedPasscode);
+          }}
+          type="circular"
+          style={{
+            ...styles.button,
+            backgroundColor: buttonError ? COLORS.brand100 : COLORS.brand500
+          }}
+        >
+          <Text color={buttonError ? COLORS.brand300 : COLORS.neutral0}>
+            {t(screenTitles.buttonTitle)}
+          </Text>
+        </Button>
       </View>
     </View>
   );
