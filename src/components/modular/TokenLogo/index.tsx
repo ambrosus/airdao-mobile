@@ -118,6 +118,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.HBR.toLowerCase():
       return <HBRIcon scale={scale} />;
     case CryptoCurrencyCode.KOS.toLowerCase():
+    case 'kosmos token':
       return <KosmosTokenIcon scale={scale} />;
     case CryptoCurrencyCode.XENA.toLowerCase():
       return <TokenXENAIcon scale={scale} />;
