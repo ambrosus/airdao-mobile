@@ -179,6 +179,7 @@ export const BridgeForm = () => {
             selectedTokenFrom.decimals
           ),
           selectedTokenFrom.decimals ?? 18
+          // @ts-ignore
         ) && selectedTokenPairs[0]?.isNativeCoin;
     try {
       setTemplateDataLoader(true);
@@ -192,8 +193,10 @@ export const BridgeForm = () => {
         isMaxOptions: isMax
       });
       if (feeData) {
+        // @ts-ignore
         const gasFee = await processBridge(true, feeData);
         if (gasFee) {
+          // @ts-ignore
           const dataToPreview = parseBridgePreviewData(feeData, gasFee);
           const data = {
             value: {
@@ -202,6 +205,7 @@ export const BridgeForm = () => {
             },
             dataToPreview
           };
+          // @ts-ignore
           setBridgePreviewData(data);
           previewRef?.current?.show();
         }
@@ -226,6 +230,7 @@ export const BridgeForm = () => {
   ]);
 
   const onClose = useCallback(async () => {
+    if (previewLoader) return;
     if (selectedBridgeData && selectedWallet?.address) {
       getAllBridgeTokenBalance(
         selectedBridgeData?.pairs,
@@ -233,6 +238,7 @@ export const BridgeForm = () => {
         selectedWallet?.address
       ).then((pairs) => {
         setSelectedBridgeData({
+          // @ts-ignore
           ...selectedBridgeData,
           pairs
         });
@@ -243,6 +249,7 @@ export const BridgeForm = () => {
     previewRef?.current?.dismiss();
   }, [
     fromData.value.id,
+    previewLoader,
     selectedBridgeData,
     selectedWallet?.address,
     setDefaultOptions,
@@ -287,7 +294,10 @@ export const BridgeForm = () => {
         onClose();
         bridgeErrorHandler(e);
       })
-      .finally(() => setPreviewLoader(false));
+      .finally(() => {
+        setPreviewLoader(false);
+        setAmountToBridge('');
+      });
   }, [
     amountToBridge,
     bridgeErrorHandler,
@@ -297,6 +307,7 @@ export const BridgeForm = () => {
     processBridge,
     selectedTokenDestination,
     selectedTokenFrom,
+    setAmountToBridge,
     setProcessingTransaction
   ]);
 
