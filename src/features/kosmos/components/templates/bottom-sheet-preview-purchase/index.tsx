@@ -11,7 +11,7 @@ import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { MarketType } from '@features/kosmos/types';
@@ -25,6 +25,8 @@ import {
 } from '@features/kosmos/utils';
 import { BuyBondButton } from '../../modular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { verticalScale } from '@utils/scaling';
+import { isAndroid } from '@utils/isPlatform';
 
 interface BottomSheetPreviewPurchaseProps {
   market: MarketType | undefined;
@@ -137,6 +139,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
             setIsTransactionProcessing={setIsTransactionProcessing}
             market={market as MarketType}
           />
+          <Spacer value={verticalScale(isAndroid ? 0 : 30)} />
         </View>
       </View>
     </BottomSheet>

@@ -37,6 +37,8 @@ import { isIOS } from 'react-native-popover-view/dist/Constants';
 import { isAndroid } from '@utils/isPlatform';
 import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { Spacer } from '@components/base';
+import { verticalScale } from '@utils/scaling';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -199,6 +201,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
               scrollToInput={scrollToInput}
               onScrollToTop={onScrollToMarket}
             />
+            <Spacer value={verticalScale(30)} />
           </KeyboardAwareScrollView>
         )}
       </View>
