@@ -39,7 +39,8 @@ export const BuyBondButton = ({
   const { contracts } = useBondContracts();
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);
-  const { amountToBuy } = useKosmosMarketsContextSelector();
+  const { amountToBuy, onChangeAmountToBuy } =
+    useKosmosMarketsContextSelector();
 
   const createNewSigner = useCallback(async () => {
     const privateKey = await _extractPrivateKey();
@@ -75,7 +76,7 @@ export const BuyBondButton = ({
             sendFirebaseEvent(CustomAppEvents.kosmos_market_buy);
             onDismissBottomSheet();
             setIsTransactionProcessing(false);
-
+            onChangeAmountToBuy('');
             setTimeout(() => {
               Toast.show({
                 text: t('kosmos.buy.success.toast', {
@@ -98,6 +99,7 @@ export const BuyBondButton = ({
     }
   }, [
     t,
+    onChangeAmountToBuy,
     amountToBuy,
     contracts,
     createNewSigner,
