@@ -177,11 +177,11 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableResetScrollToCoords={false}
             keyboardShouldPersistTaps="handled"
             overScrollMode="never"
-            enableOnAndroid={false}
+            enableOnAndroid
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled={isIOS}
-            extraHeight={isAndroid ? 0 : 330}
+            extraHeight={330}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
