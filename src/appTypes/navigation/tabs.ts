@@ -15,11 +15,4 @@ export type TabsParamsList = {
   };
 };
 
-export type HarborTabParamsList = {
-  HarborTabsNavigation: undefined;
-  StakeAMB: undefined;
-  StakeHBR: undefined;
-  BorrowHarbor: undefined;
-};
-
 export type TabsNavigationProp = BottomTabNavigationProp<TabsParamsList>;

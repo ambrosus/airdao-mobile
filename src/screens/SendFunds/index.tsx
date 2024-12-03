@@ -347,6 +347,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
               onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}
               dismissBottomSheet={hideReviewModal}
             />
+            <Spacer value={15} />
           </BottomSheet>
         </KeyboardDismissingView>
         <AmountSelectionKeyboardExtend

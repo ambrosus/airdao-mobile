@@ -15,7 +15,7 @@ import {
 import { KosmosMarketScreen } from '@screens/Kosmos/screens';
 import { BridgeHistory } from '@screens/BridgeHistory';
 import { SwapSettingsScreen } from '@screens/Swap/screens';
-import { HarborTabsNavigation } from '@navigation/stacks/HarborTabNavigation';
+import { HarborStacks } from '@navigation/stacks/HarborStacks/HarborStacks';
 
 const Stack = createNativeStackNavigator<ProductsParams>();
 export const ProductsStack = () => {
@@ -56,7 +56,9 @@ export const ProductsStack = () => {
         }}
         component={BridgeHistory}
       />
-      <Stack.Screen name="Harbor" component={HarborTabsNavigation} />
+
+      {/* HARBOR ROUTES */}
+      <Stack.Screen name="Harbor" component={HarborStacks} />
       {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );
