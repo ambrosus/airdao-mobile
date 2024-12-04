@@ -154,13 +154,15 @@ export const AssetScreen = () => {
           </Text>
 
           <Row style={styles.accountDetailsFooter} alignItems="center">
-            <Text
-              fontSize={16}
-              fontFamily="Inter_500Medium"
-              color={COLORS.neutral800}
-            >
-              ${NumberUtils.numberToTransformedLocale(usdPrice)}
-            </Text>
+            {!Number.isNaN(usdPrice) && (
+              <Text
+                fontSize={16}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral800}
+              >
+                ${NumberUtils.numberToTransformedLocale(usdPrice)}
+              </Text>
+            )}
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"

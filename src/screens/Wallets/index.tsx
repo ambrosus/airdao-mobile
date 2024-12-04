@@ -35,6 +35,12 @@ export const HomeScreen = () => {
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
   const { data: selectedAccountBalance, refetch: refetchAmbBalance } =
     useBalanceOfAddress(selectedAccount?.address || '');
+  const { onRefetchCurrenciesList } = useCurrenciesQuery();
+
+  const onMultiplyRefetchAction = useCallback(() => {
+    onRefetchCurrenciesList();
+    if (typeof refetchAmbBalance === 'function') refetchAmbBalance();
+  }, [onRefetchCurrenciesList, refetchAmbBalance]);
 
   const selectedAccountWithBalance = selectedAccount
     ? ExplorerAccount.fromDBModel(selectedAccount)
@@ -182,7 +188,7 @@ export const HomeScreen = () => {
             onChangeActiveTabIndex={onChangeActiveTabIndex}
             onTransactionsScrollEvent={onTransactionsScrollEvent}
             account={selectedAccountWithBalance}
-            onRefresh={refetchAmbBalance}
+            onRefresh={onMultiplyRefetchAction}
           />
         </Animated.View>
       )}

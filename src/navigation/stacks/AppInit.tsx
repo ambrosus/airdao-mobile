@@ -12,8 +12,8 @@ import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { usePasscodeStore } from '@features/passcode';
 
 const AppInitialization = () => {
-  useInitializeWalletKit();
   const { t } = useTranslation();
+  useInitializeWalletKit();
 
   const navigation = useNavigation<RootNavigationProp>();
   const { data: allWallets, loading } = useAllWallets();

@@ -138,13 +138,15 @@ export const Balance = ({ type }: BalanceProps) => {
           </>
         )}
       </Row>
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral500}
-      >
-        ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
-      </Text>
+      {!Number.isNaN(USDTokenPrice) && (
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+        </Text>
+      )}
     </Row>
   );
 };

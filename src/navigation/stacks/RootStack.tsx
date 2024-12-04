@@ -6,8 +6,11 @@ import { RootStackParamsList } from '@appTypes';
 import { NoWalletScreen } from '@screens/NoWallet';
 import { PasscodeEntry } from '@screens/PasscodeEntry';
 import { BarcodeScannerScreen } from '@screens/BarcodeScanner';
+import { useCurrenciesQuery } from '@entities/currencies/lib';
 
 export const RootStack = () => {
+  useCurrenciesQuery();
+
   const Stack = createNativeStackNavigator<RootStackParamsList>();
 
   return (
