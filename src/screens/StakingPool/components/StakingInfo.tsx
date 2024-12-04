@@ -31,6 +31,7 @@ const Title = (props: PropsWithChildren) => {
 };
 
 export const StakingInfo = (props: StakingInfoProps) => {
+  const { t } = useTranslation();
   const { totalStake, currency, userStaking, earnings, apy } = props;
   const exchangeRate = useCurrencyRate(currency);
   const userStakingUsd =
@@ -39,7 +40,6 @@ export const StakingInfo = (props: StakingInfoProps) => {
   const totalStakingUSD = totalStake * exchangeRate;
 
   const earningsUsd = exchangeRate * earnings;
-  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>

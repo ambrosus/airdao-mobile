@@ -88,13 +88,15 @@ export const TokensListItem = ({
           >
             {NumberUtils.limitDecimalCount(token.balance.formattedBalance, 2)}
           </Text>
-          <Text
-            fontSize={15}
-            fontFamily="Inter_400Regular"
-            color={COLORS.neutral500}
-          >
-            ${NumberUtils.numberToTransformedLocale(usdPrice)}
-          </Text>
+          {!Number.isNaN(usdPrice) && (
+            <Text
+              fontSize={15}
+              fontFamily="Inter_400Regular"
+              color={COLORS.neutral500}
+            >
+              ${NumberUtils.numberToTransformedLocale(usdPrice)}
+            </Text>
+          )}
         </View>
       </Row>
     </TouchableOpacity>

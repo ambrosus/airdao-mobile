@@ -68,7 +68,7 @@ export const SingleAsset = ({
             </Text>
           </View>
         </Row>
-        {usdPrice >= 0 && (
+        {!Number.isNaN(usdPrice) && (
           <Text
             fontFamily="Inter_400Regular"
             fontSize={16}

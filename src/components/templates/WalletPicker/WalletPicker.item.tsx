@@ -53,14 +53,16 @@ export const WalletPickerItem = (props: WalletItemProps) => {
             AMB
           </Text>
           <Spacer value={scale(8)} horizontal />
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            fontWeight="500"
-            color={COLORS.neutral400}
-          >
-            ${NumberUtils.limitDecimalCount(usdBalance, 2)}
-          </Text>
+          {!Number.isNaN(usdBalance) && (
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              fontWeight="500"
+              color={COLORS.neutral400}
+            >
+              ${NumberUtils.limitDecimalCount(usdBalance, 2)}
+            </Text>
+          )}
         </Row>
       </View>
       <Spacer value={scale(16)} horizontal />

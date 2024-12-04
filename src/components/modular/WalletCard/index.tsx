@@ -128,14 +128,16 @@ export const WalletCard = ({
             </Row>
             <Spacer value={verticalScale(10)} />
             <Row alignItems="center">
-              <Text
-                fontSize={15}
-                fontFamily="Inter_500Medium"
-                color={priceTextColor}
-                style={styles.footerTypography}
-              >
-                ${NumberUtils.numberToTransformedLocale(usdBalance)}
-              </Text>
+              {!Number.isNaN(usdBalance) && (
+                <Text
+                  fontSize={15}
+                  fontFamily="Inter_500Medium"
+                  color={priceTextColor}
+                  style={styles.footerTypography}
+                >
+                  ${NumberUtils.numberToTransformedLocale(usdBalance)}
+                </Text>
+              )}
 
               {!!change24HR && (
                 <>

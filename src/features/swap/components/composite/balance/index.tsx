@@ -79,13 +79,13 @@ export const Balance = ({ type }: BalanceProps) => {
     return !selectedTokens[type] ? '0' : normalizedTokenBalance;
   }, [normalizedTokenBalance, selectedTokens, type]);
 
-  const isUSDPriceNegative = useMemo(() => {
-    return USDTokenPrice < 0;
+  const isValidUSD = useMemo(() => {
+    return !Number.isNaN(USDTokenPrice);
   }, [USDTokenPrice]);
 
   const containerJustifyContent = useMemo(() => {
-    return isUSDPriceNegative ? 'flex-end' : 'space-between';
-  }, [isUSDPriceNegative]);
+    return isValidUSD ? 'flex-end' : 'space-between';
+  }, [isValidUSD]);
 
   const error = useMemo(() => {
     if (!bnBalanceAmount || !selectedTokensAmount[type]) return false;
@@ -138,13 +138,15 @@ export const Balance = ({ type }: BalanceProps) => {
           </>
         )}
       </Row>
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral500}
-      >
-        ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
-      </Text>
+      {!Number.isNaN(USDTokenPrice) && (
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+        </Text>
+      )}
     </Row>
   );
 };
