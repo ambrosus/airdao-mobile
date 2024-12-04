@@ -1,1 +1,2 @@
-export { Upload } from './Upload';
+export { WithdrawIcon } from './WithdrawIcon';
+export { NoteIcon } from './NoteIcon';

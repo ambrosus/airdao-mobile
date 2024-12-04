@@ -3,17 +3,20 @@ import { Header } from '@components/composite';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@components/base';
-import { Upload } from '@components/svg/icons/v2/harbor';
+import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { HarborTabs } from '@features/harbor/components/templates';
+import { useNavigation } from '@react-navigation/native';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 
 export const StakeHarborScreen = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation<HarborNavigationProp>();
 
   const RightContent = () => (
-    <Button>
-      <Upload />
+    <Button onPress={() => navigation.navigate('WithdrawHarborScreen')}>
+      <WithdrawIcon />
     </Button>
   );
 

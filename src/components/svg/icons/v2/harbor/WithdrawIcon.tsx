@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
 
-export const Upload = ({ scale = 1, color = COLORS.neutral600 }) => {
+export const WithdrawIcon = ({ scale = 1, color = COLORS.neutral600 }) => {
   const width = 20 * scale;
   const height = 20 * scale;
 

@@ -501,6 +501,9 @@
 
   "settings.version": "Doğrulanıyor",
 
+  "harbor.requests.header": "!!!My Requests",
+  "harbor.withdraw.header": "Geri çekmek",
+
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",
