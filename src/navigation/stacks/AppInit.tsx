@@ -10,12 +10,10 @@ import { useAllWallets } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
 import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { usePasscodeStore } from '@features/passcode';
-import { useCurrenciesQuery } from '@entities/currencies/lib';
 
 const AppInitialization = () => {
-  useInitializeWalletKit();
-  useCurrenciesQuery();
   const { t } = useTranslation();
+  useInitializeWalletKit();
 
   const navigation = useNavigation<RootNavigationProp>();
   const { data: allWallets, loading } = useAllWallets();
