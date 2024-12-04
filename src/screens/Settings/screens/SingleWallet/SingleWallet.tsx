@@ -70,24 +70,22 @@ export const SingleWalletScreen = () => {
         <Header
           bottomBorder
           title={
-            <View style={{ paddingHorizontal: '20%' }}>
-              <Text
-                numberOfLines={1}
-                fontFamily="Inter_600SemiBold"
-                fontSize={18}
-                color={COLORS.neutral800}
-              >
-                {wallet?.name || 'Wallet'}
-              </Text>
-            </View>
+            <Text
+              numberOfLines={1}
+              fontFamily="Inter_600SemiBold"
+              fontSize={18}
+              color={COLORS.neutral800}
+            >
+              {wallet?.name || 'Wallet'}
+            </Text>
           }
           contentRight={renderRightHeaderContent}
           style={{ shadowColor: COLORS.transparent }}
         />
         {wallet && (
           <BottomAwareSafeAreaView style={styles.innerContainer}>
-            <View>
-              <View style={styles.nameInput}>
+            <View style={{ paddingHorizontal: '5%' }}>
+              <View>
                 <Text
                   fontSize={16}
                   fontFamily="Inter_500Medium"
@@ -102,7 +100,6 @@ export const SingleWalletScreen = () => {
                   style={styles.input}
                 />
               </View>
-              <Spacer value={verticalScale(42)} />
               {account && (
                 <View style={styles.addressContainer}>
                   <View style={styles.qrCode}>
@@ -124,7 +121,7 @@ export const SingleWalletScreen = () => {
                     pressableText
                     showToast={false}
                     iconProps={{ scale: 1 }}
-                    style={styles.copyButton}
+                    containerStyle={styles.copyButton}
                     textProps={{
                       color: COLORS.brand500,
                       fontSize: 14,

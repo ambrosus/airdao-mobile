@@ -10,7 +10,7 @@ export const NotificationSettingsScreen = () => {
     <SafeAreaView>
       <Header
         bottomBorder
-        title={t('tab.settings')}
+        title={t('tab.notifications')}
         style={{ backgroundColor: 'transparent' }}
       />
       <NotificationSettingsView />

@@ -17,6 +17,6 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(6),
     paddingHorizontal: scale(12),
     borderRadius: 1000,
-    backgroundColor: COLORS.brand200
+    backgroundColor: COLORS.brand100
   }
 });

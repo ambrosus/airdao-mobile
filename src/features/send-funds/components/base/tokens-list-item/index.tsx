@@ -5,9 +5,8 @@ import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { styles } from './styles';
-import { SwapStringUtils } from '@features/swap/utils';
 import { NumberUtils } from '@utils/number';
-import { StringValidators } from '@utils';
+import { StringValidators, wrapTokenIcon } from '@utils';
 import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -39,9 +38,7 @@ export const TokensListItem = ({
     };
   }, [isSelectedSameToken]);
 
-  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
-    token.symbol
-  );
+  const SAMBSupportedTokenLogo = wrapTokenIcon(token);
 
   const onChangeSelectedTokenPress = useCallback(
     () => onSelectToken(token),
