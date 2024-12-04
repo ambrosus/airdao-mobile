@@ -6,7 +6,7 @@ import { CommonStackParamsList, TabsParamsList } from '@appTypes';
 import { MarketType } from '@features/kosmos/types';
 
 export type ProductsParams = {
-  ProductsScreen: { tabs: { activeTab: number } };
+  ProductsScreen: undefined;
   // Swap
   SwapScreen: undefined;
   SwapSettingsScreen: undefined;

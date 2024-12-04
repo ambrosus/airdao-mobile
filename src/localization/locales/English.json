@@ -499,6 +499,9 @@
 
   "settings.version": "Version",
 
+  "harbor.requests.header": "My Requests",
+  "harbor.withdraw.header": "Withdraw",
+
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",
@@ -516,6 +519,7 @@
     "label.connections": "{{connectionsLength}} Sites Connected",
     "scanner": "Scan to Connect"
   },
+
   "products": {
     "title.trade": "Trade",
     "title.earn": "Earn",
