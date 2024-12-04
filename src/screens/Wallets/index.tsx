@@ -25,6 +25,7 @@ import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
 import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
+import { useCurrenciesQuery } from '@entities/currencies/lib';
 
 export const HomeScreen = () => {
   const { setWallet } = useWalletStore();
