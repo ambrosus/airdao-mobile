@@ -79,13 +79,13 @@ export const Balance = ({ type }: BalanceProps) => {
     return !selectedTokens[type] ? '0' : normalizedTokenBalance;
   }, [normalizedTokenBalance, selectedTokens, type]);
 
-  const isValidUSD = useMemo(() => {
-    return !Number.isNaN(USDTokenPrice);
+  const isUSDPriceNegative = useMemo(() => {
+    return USDTokenPrice < 0;
   }, [USDTokenPrice]);
 
   const containerJustifyContent = useMemo(() => {
-    return isValidUSD ? 'flex-end' : 'space-between';
-  }, [isValidUSD]);
+    return isUSDPriceNegative ? 'flex-end' : 'space-between';
+  }, [isUSDPriceNegative]);
 
   const error = useMemo(() => {
     if (!bnBalanceAmount || !selectedTokensAmount[type]) return false;
