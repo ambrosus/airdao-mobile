@@ -130,7 +130,10 @@ export const ImportWallet = () => {
 
   return (
     <SafeAreaView style={styles.main}>
-      <KeyboardDismissingView style={styles.main}>
+      <KeyboardAwareScrollView
+        extraHeight={verticalScale(180)}
+        contentContainerStyle={styles.main}
+      >
         <Header
           bottomBorder
           title={
@@ -145,10 +148,7 @@ export const ImportWallet = () => {
           titlePosition="center"
           style={styles.headerShadow}
         />
-        <KeyboardAwareScrollView
-          extraHeight={verticalScale(125)}
-          contentContainerStyle={styles.container}
-        >
+        <KeyboardDismissingView style={styles.container}>
           <View style={styles.descriptionWrapper}>
             <Text
               color={COLORS.neutral800}
@@ -204,8 +204,8 @@ export const ImportWallet = () => {
               {t(`${buttonTitle}`)}
             </Text>
           </Button>
-        </KeyboardAwareScrollView>
-      </KeyboardDismissingView>
+        </KeyboardDismissingView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

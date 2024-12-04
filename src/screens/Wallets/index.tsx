@@ -24,10 +24,12 @@ import { WalletUtils } from '@utils/wallet';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
 import { useWalletStore } from '@entities/wallet';
-import { useCurrenciesQuery } from '@entities/currencies/lib';
+import { useSendFundsStore } from '@features/send-funds';
 
 export const HomeScreen = () => {
   const { setWallet } = useWalletStore();
+  const { tokens: _sendFundsTokens, onSetTokens } = useSendFundsStore();
+
   const { data: accounts } = useAllAccounts();
   const [scrollIdx, setScrollIdx] = useState(0);
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
@@ -58,12 +60,15 @@ export const HomeScreen = () => {
   );
 
   useEffect(() => {
+    if (_sendFundsTokens.length > 0) onSetTokens([]);
+
     if (accounts.length > 0) {
       const account = accounts[scrollIdx];
       WalletUtils.changeSelectedWallet(account?.wallet?.id);
       setWallet(account);
     }
-  }, [accounts, scrollIdx, setWallet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, onSetTokens, scrollIdx, setWallet]);
 
   const isSelectAccountBalanceZero = useMemo(() => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();

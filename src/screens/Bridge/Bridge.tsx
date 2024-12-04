@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { styles } from './styles';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
@@ -17,7 +17,7 @@ export const Bridge = () => {
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
   const { methods, variables } = useBridgeContextData();
-  const { loadAllBridgeData } = methods;
+  const { loadAllBridgeData, setAmountToBridge } = methods;
   const { bridgeLoader } = variables;
   const { isPendingTransactions } = usePendingTransactions();
 
@@ -34,6 +34,14 @@ export const Bridge = () => {
     loadAllBridgeData().then();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setAmountToBridge('');
+      };
+    }, [setAmountToBridge])
+  );
 
   if (bridgeLoader) {
     return (

@@ -56,6 +56,6 @@ export enum CryptoCurrencyCode {
   HBR = 'HBR',
   Harbor = 'Harbor',
   CollateralizedHarbor = 'Collateralized Harbor',
-  KOS = 'Kosmos Token',
+  KosmosToken = 'Kosmos Token',
   XENA = 'X3NA'
 }

@@ -91,8 +91,12 @@
 
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
-  "change.passcode.enter.new.passcode": "Yeni şifreyi girin",
-  "change.passcode.success": "Şifre değiştirildi",
+  "change.passcode.enter.new.passcode": "!!!Enter your passcode",
+  "change.passcode.success": "Şifre değiştirildi!",
+  "change.passcode.header.old": "!!!Current passcode",
+  "change.passcode.header.new": "!!!New passcode",
+  "change.passcode.header.confirm": "!!!Confirm passcode",
+
 
   "chart.timeframe.24H": "24 saat",
   "chart.timeframe.daily": "1G",
@@ -477,12 +481,12 @@
   "kosmos.input.error.max.bondable": "Maksimum bağlanabilir değerden daha az bir miktar girin.max.bondable",
   "kosmos.input.error.max.value": "Mevcut miktardan daha az bir miktar girin",
   "kosmos.bottom.sheet.title": "Tahvil ayrıntıları",
-  "kosmos.lock.period": "Kilit süresi",
+  "kosmos.lock.period": "Kilit Süresi",
   "kosmos.transaction.hash": "İşlem Karması",
-  "kosmos.assets.bond": "Tahvildeki varlıklar",
+  "kosmos.assets.bond": "Tahvildeki Varlıklar",
   "kosmos.assets.value": "Varlık Değeri",
-  "kosmos.available.amount": "Mevcut miktar",
-  "kosmos.market.duration": "Piyasa süresi",
+  "kosmos.available.amount": "Mevcut Miktar",
+  "kosmos.market.duration": "Piyasa Süresi",
   "kosmos.max.bondable": "Maksimum tahvil edilebilir",
   "kosmos.buying": "Satın alıyorsunuz",
   "kosmos.bought": "Satın aldınız",
@@ -492,7 +496,7 @@
   "kosmos.chart.explanation.bond": "Tahvil fiyatı",
   "kosmos.chart.explanation.market": "Piyasa fiyatı",
 
-  "kosmos.market.tabs.buy.bond": "Tahvil satın al",
+  "kosmos.market.tabs.buy.bond": "Tahvil Satın al",
   "kosmos.market.tabs.history": "Geçmiş",
 
   "settings.version": "Doğrulanıyor",

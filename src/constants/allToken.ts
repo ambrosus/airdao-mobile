@@ -463,6 +463,18 @@ export const ALL_TOKENS_DATA = {
       decimals: 18,
       name: 'Wrapped BNB',
       symbol: 'WBNB'
+    },
+    {
+      address: '0x24f3811961685888c7a1966cAec194e5444bfC0D',
+      name: 'Astra',
+      symbol: 'AST',
+      decimals: 18
+    },
+    {
+      address: '0x5C114A3E9b6DB57A9FE5950eC1946278a2d7A22b',
+      name: 'Staked AMB',
+      symbol: 'stAMB',
+      decimals: 18
     }
   ]
 };

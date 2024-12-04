@@ -47,7 +47,7 @@ export const AccessKeysPrivateTab = ({
         pressableText={true}
         showToast={false}
         iconProps={{ scale: 0 }}
-        style={styles.copyButton}
+        containerStyle={styles.copyButton}
         textProps={{
           color: COLORS.brand500,
           fontSize: 14,

@@ -57,12 +57,18 @@ export const BottomSheetBridgePreview = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTokenPairs, dataToPreview]);
 
-  const showHeader = useMemo(() => {
-    return !processingTransaction && !previewLoader;
-  }, [previewLoader, processingTransaction]);
+  const showHeader = useMemo(
+    () => !processingTransaction,
+    [processingTransaction]
+  );
 
   return (
-    <BottomSheet onBackdropPress={onClose} ref={ref} swiperIconVisible={true}>
+    <BottomSheet
+      closeOnBackPress={false}
+      onBackdropPress={onClose}
+      ref={ref}
+      swiperIconVisible={true}
+    >
       <View style={{ marginHorizontal: scale(24) }}>
         {showHeader && (
           <>
