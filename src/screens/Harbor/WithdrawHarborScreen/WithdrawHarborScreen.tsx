@@ -1,10 +1,10 @@
 import React from 'react';
+import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@components/base';
 import { NoteIcon } from '@components/svg/icons/v2/harbor';
-import { Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 

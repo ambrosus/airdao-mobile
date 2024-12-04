@@ -1,8 +1,11 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
-import { StakeHarborScreen, WithdrawHarborScreen } from '@screens/Harbor';
-import { WithdrawRequests } from '@screens/Harbor/WithdrawRequests/WithdrawRequests';
+import {
+  StakeHarborScreen,
+  WithdrawHarborScreen,
+  WithdrawRequests
+} from '@screens/Harbor';
 
 const Stack = createNativeStackNavigator<HarborTabParamsList>();
 export const HarborStacks = () => {

@@ -1,2 +1,3 @@
-export { StakeHarborScreen } from '@screens/Harbor/StakeHarborScreen/StakeHarborScreen';
-export { WithdrawHarborScreen } from './WithdrawHarborScreen/WithdrawHarborScreen';
+export { StakeHarborScreen } from './StakeHarborScreen';
+export { WithdrawHarborScreen } from './WithdrawHarborScreen';
+export { WithdrawRequests } from './WithdrawRequests';
