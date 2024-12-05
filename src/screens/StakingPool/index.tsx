@@ -150,7 +150,7 @@ export const StakingPoolScreen = () => {
                   )
                 },
                 {
-                  title: t('staking.pool.withdraw'),
+                  title: t('staking.pool.unstake'),
                   view: (
                     <>
                       <Spacer value={verticalScale(24)} />

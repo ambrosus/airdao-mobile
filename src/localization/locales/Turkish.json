@@ -89,14 +89,12 @@
   "button.sending": "Gönderme",
   "button.insufficient.funds": "Yetersiz bakiye",
 
-
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "!!!Enter your passcode",
   "change.passcode.success": "Şifre değiştirildi!",
   "change.passcode.header.old": "!!!Current passcode",
   "change.passcode.header.new": "!!!New passcode",
   "change.passcode.header.confirm": "!!!Confirm passcode",
-
 
   "chart.timeframe.24H": "24 saat",
   "chart.timeframe.daily": "1G",
@@ -254,7 +252,6 @@
   "import.private.key.error": "Özel anahtar hiçbir cüzdana karşılık gelmiyor. Lütfen tekrar deneyin",
   "import.private.key.already.exist": "Cüzdan zaten mevcut",
 
-
   "no.wallet.address.tracking": "Adres takibi",
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.create.new": "Yeni cüzdan oluştur",
@@ -339,6 +336,7 @@
   "staking.pool.earnings": "Kazanç",
   "staking.pool.preview": "Özet",
   "staking.pool.stake": "Stake",
+  "staking.pool.unstake": "Unstake",
   "staking.pool.stake.amount": "Stake miktarı",
   "staking.pool.stake.now": "Onayla",
   "staking.pool.total.stake": "Toplam Stake",
@@ -423,7 +421,6 @@
   "bridge.transaction.preview.header": "Ethereum'a {{amount}} {{symbol}} gönderiliyor",
   "bridge.transaction.preview.time": "Tahmini varış saati",
   "bridge.transaction.success.description": "!!You sent ${{amount}} ${{symbol}}",
-
 
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
