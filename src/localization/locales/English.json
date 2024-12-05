@@ -338,6 +338,7 @@
   "staking.pool.earnings": "Earnings",
   "staking.pool.preview": "Preview",
   "staking.pool.stake": "Stake",
+  "staking.pool.unstake": "Unstake",
   "staking.pool.stake.amount": "Stake amount",
   "staking.pool.stake.now": "Stake now",
   "staking.pool.total.stake": "Total stake",
