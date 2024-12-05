@@ -45,8 +45,16 @@ export const HomeScreen = () => {
   const { setWallet } = useWalletStore();
   const { tokens: _sendFundsTokens, onSetTokens } = useSendFundsStore();
 
-  const { data: accounts } = useAllAccounts();
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [scrollIdx, setScrollIdx] = useState(0);
+
+  const hideThreshold = headerHeight + 24;
+  const hideThresholdQuarter = hideThreshold / 4;
+
+  const offsetScrollY = useSharedValue(0);
+  const activeTabIndex = useSharedValue(0);
+
+  const { data: accounts } = useAllAccounts();
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
   const { data: selectedAccountBalance, refetch: refetchAmbBalance } =
     useBalanceOfAddress(selectedAccount?.address || '');
@@ -88,14 +96,6 @@ export const HomeScreen = () => {
   const isSelectAccountBalanceZero = useMemo(() => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();
   }, [selectedAccountBalance.wei]);
-
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  const hideThreshold = headerHeight + 24;
-  const hideThresholdQuarter = hideThreshold / 4;
-
-  const offsetScrollY = useSharedValue(0);
-  const activeTabIndex = useSharedValue(0);
 
   const onTransactionsScrollEvent = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -167,6 +167,7 @@ export const HomeScreen = () => {
 
   const onChangeActiveTabIndex = useCallback(
     (index: number) => {
+      cancelAnimation(offsetScrollY);
       activeTabIndex.value = index;
       offsetScrollY.value = 0;
     },
