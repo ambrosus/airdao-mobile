@@ -232,7 +232,7 @@ export const StakeToken = ({
           }
         >
           {t(
-            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
+            isWrongStakeValue.button ? 'button.enter.amount' : 'common.review'
           )}
         </Text>
       </PrimaryButton>
