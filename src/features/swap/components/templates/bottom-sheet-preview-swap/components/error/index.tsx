@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useCallback } from 'react';
+import { InteractionManager, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
@@ -20,6 +20,13 @@ export const ErrorSwapView = () => {
 
   const { onReviewSwapDismiss, onChangeBottomSheetSwapStatus } =
     useSwapBottomSheetHandler();
+
+  const onRepeatTransaction = useCallback(() => {
+    onReviewSwapDismiss();
+    InteractionManager.runAfterInteractions(() =>
+      onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW)
+    );
+  }, [onChangeBottomSheetSwapStatus, onReviewSwapDismiss]);
 
   const onNavigateToWallets = () => {
     onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW);
@@ -55,7 +62,7 @@ export const ErrorSwapView = () => {
           style={{
             ...cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)')
           }}
-          onPress={onReviewSwapDismiss}
+          onPress={onRepeatTransaction}
         >
           <Text
             fontFamily="Inter_600SemiBold"
