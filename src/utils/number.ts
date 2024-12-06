@@ -133,6 +133,11 @@ const numberToTransformedLocale = (value: string | number) => {
   return `${formattedIntPart}.${formattedFloatPart}`;
 };
 
+const formatDecimal = (value: string, decimals = 2): string => {
+  const fixed = Number(value).toFixed(decimals);
+  return fixed.replace(/\.?0+$/, '');
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
@@ -140,5 +145,6 @@ export const NumberUtils = {
   limitDecimalCount,
   formatAmount,
   minimiseAmount,
-  numberToTransformedLocale
+  numberToTransformedLocale,
+  formatDecimal
 };

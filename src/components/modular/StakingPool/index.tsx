@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BigNumber } from 'ethers';
+import { ethers } from 'ethers';
 import { StakingPool } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { useStakingPoolDetails } from '@entities/staking';
 import { TokenLogo } from '../TokenLogo';
-import { NumberUtils } from '@utils/number';
 import { TokenUtils } from '@utils/token';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { NumberUtils } from '@utils/number';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -44,9 +44,10 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontWeight="500"
           >
             {t('staking.current.stake', {
-              amount: NumberUtils.formatAmount(
-                poolStakingDetails?.user.raw ?? BigNumber.from(0),
-                0
+              amount: NumberUtils.formatDecimal(
+                ethers.utils.formatEther(
+                  poolStakingDetails?.user.raw ?? ethers.BigNumber.from(0)
+                )
               ),
               symbol: 'AMB'
             })}
