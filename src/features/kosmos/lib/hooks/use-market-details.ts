@@ -77,7 +77,9 @@ export function useMarketDetails(market: MarketType | undefined) {
   ]);
 
   const discount = useMemo(() => {
-    return market?.discount ? market.discount.toFixed(2) : '-';
+    return +(market?.discount ?? 0).toFixed(2) > 0
+      ? market?.discount.toFixed(2) + '%'
+      : '-';
   }, [market?.discount]);
 
   const slippage = useMemo(() => {
