@@ -19,6 +19,11 @@ export function useSwapBottomSheetHandler() {
 
   const { fetchAllBalances } = useSwapAllBalances();
 
+  const onChangeBottomSheetSwapStatus = useCallback(
+    (status: BottomSheetStatus) => setBottomSheetSwapStatus(status),
+    [setBottomSheetSwapStatus]
+  );
+
   const onShowBottomSheetByKey = useCallback(
     (key: SelectedTokensKeys) => {
       Keyboard.dismiss();
@@ -54,11 +59,6 @@ export function useSwapBottomSheetHandler() {
   const onReviewSwapDismiss = useCallback(() => {
     bottomSheetPreviewSwapRef.current?.dismiss();
   }, [bottomSheetPreviewSwapRef]);
-
-  const onChangeBottomSheetSwapStatus = useCallback(
-    (status: BottomSheetStatus) => setBottomSheetSwapStatus(status),
-    [setBottomSheetSwapStatus]
-  );
 
   return {
     onDismissBottomSheetByKey,
