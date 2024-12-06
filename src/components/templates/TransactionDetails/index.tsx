@@ -102,12 +102,12 @@ export const TransactionDetails = ({
   }, [transaction]);
 
   const amountWithSymbolValue = useMemo(() => {
-    const amount = NumberUtils.numberToTransformedLocale(
-      transactionTokenInfo?.cryptoAmount ?? 0
-    );
+    const amount = NumberUtils.numberToTransformedLocale(transaction.amount);
 
-    return transaction.isSent ? `-${amount}` : amount;
-  }, [transaction, transactionTokenInfo]);
+    return transaction.isSent && transaction.amount !== 0
+      ? `-${amount}`
+      : amount;
+  }, [transaction]);
 
   return (
     <View testID="Transaction_Details">
