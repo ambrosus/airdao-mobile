@@ -45,7 +45,6 @@ interface InputWithTokenSelectProps {
   resetKeyboardState?: boolean;
   selectable?: boolean;
   isRequiredRefetchBalance?: boolean;
-  error?: string;
 }
 
 export const InputWithTokenSelect = forwardRef<
@@ -67,8 +66,7 @@ export const InputWithTokenSelect = forwardRef<
       onBlur,
       resetKeyboardState = false,
       selectable = true,
-      isRequiredRefetchBalance = false,
-      error = undefined
+      isRequiredRefetchBalance = false
     },
     ref
   ) => {
@@ -192,17 +190,6 @@ export const InputWithTokenSelect = forwardRef<
             />
           </Pressable>
         </View>
-        {error !== '' && (
-          <Text
-            fontSize={12}
-            fontFamily="Inter_500Medium"
-            fontWeight="500"
-            color={COLORS.error400}
-            style={styles.error}
-          >
-            {error}
-          </Text>
-        )}
 
         <BalanceRow
           token={token}

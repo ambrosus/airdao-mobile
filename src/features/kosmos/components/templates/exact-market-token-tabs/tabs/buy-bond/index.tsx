@@ -10,10 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
-import {
-  useMarketDetails,
-  useTransactionErrorHandler
-} from '@features/kosmos/lib/hooks';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
 import { discountColor } from '@features/kosmos/utils';
@@ -51,7 +48,6 @@ export const BuyBondTab = ({
 }: BuyBondTabProps) => {
   const { t } = useTranslation();
   const [isActiveInput, setIsActiveInput] = useState(false);
-  const { error } = useTransactionErrorHandler(market);
 
   const inputRef = useRef<InputRef>(null);
 
@@ -143,7 +139,6 @@ export const BuyBondTab = ({
             <InputWithTokenSelect
               label="Set amount"
               title="Set amount"
-              error={error}
               value={amountToBuy}
               isRequiredRefetchBalance={userPerformedRefresh}
               onChangeText={onChangeAmountToBuy}
