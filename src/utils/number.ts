@@ -103,7 +103,7 @@ export const formatAmount = (
 const minimiseAmount = (num: number): string => {
   if (!num || num === 0) return '0.00';
 
-  const suffixes = ['', 'k', 'mln', 'bln', 'trln'];
+  const suffixes = ['', 'k', 'm', 'bln', 'trln'];
   const absNum = Math.abs(num);
   let suffixIndex = Math.floor(Math.log10(absNum) / 3);
 

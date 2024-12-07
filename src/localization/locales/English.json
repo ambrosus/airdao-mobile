@@ -501,6 +501,21 @@
 
   "harbor.requests.header": "My Requests",
   "harbor.withdraw.header": "Withdraw",
+  "harbor.stakeAMB.header": "Stake AMB",
+  "harbor.description": "Stake AMB and receive stAMB while staking.",
+  "harbor.apr": "Harbor APR",
+  "harbor.total.staked": "Total Staked on Harbor",
+  "harbor.total.staked.value": "Total Staked Value",
+  "harbor.tiers": "Tiers",
+  "harbor.staked.amount": "Staked amount",
+  "harbor.staked.balance": "Staked balance",
+  "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
+
+  "harbor.stake.amount.preview.title": "Stake amount",
+  "harbor.receive.amount.preview.title": "You will receive",
+  "harbor.stake.from": "From",
+  "harbor.stake.apy": "APY",
+
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",

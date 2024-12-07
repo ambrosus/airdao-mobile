@@ -27,4 +27,4 @@ export * from './WalletPicker';
 export * from './WalletTransactionsAndAssets';
 export * from './WalletDepositFunds';
 export * from './InputWithTokenSelect';
-export * from './WalletNoNFTsView';
+export * from './InputWithoutTokenSelect';

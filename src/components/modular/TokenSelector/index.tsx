@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TextStyle, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
@@ -13,19 +13,20 @@ interface TokenSelectorProps {
   readonly token: TToken;
   readonly onShowBottomSheetTokensListHandle: () => void;
   readonly selectable?: boolean;
+  customTokenStyle?: TextStyle;
 }
 
 export const TokenSelector = ({
   token,
   onShowBottomSheetTokensListHandle,
-  selectable = true
+  selectable = true,
+  customTokenStyle
 }: TokenSelectorProps) => {
   const { t } = useTranslation();
 
   const isToken = useMemo(() => {
     return !!token;
   }, [token]);
-
   const SAMBSupportedTokenLogo = wrapTokenIcon(token);
 
   const onToggleSelectTokenModal = useCallback(() => {
@@ -50,6 +51,7 @@ export const TokenSelector = ({
             fontSize={20}
             fontFamily="Inter_600SemiBold"
             color={COLORS.neutral800}
+            style={customTokenStyle || {}}
           >
             {isToken ? token?.symbol : t('swap.select.asset')}
           </Text>

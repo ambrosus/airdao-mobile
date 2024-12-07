@@ -4,7 +4,7 @@ export interface QueryResponse<T> {
   data: T;
   refetch?: () => void;
   refetching?: boolean;
-  isFetchingNextPage: boolean;
+  isFetchingNextPage?: boolean;
 }
 
 export interface PaginatedQueryResponse<T> extends QueryResponse<T> {

@@ -1,24 +1,24 @@
 import React, { useMemo } from 'react';
 import {
-  ASTIcon,
   AirBondIcon,
-  AirDOGEIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
+  AirDOGEIcon,
+  ASTIcon,
   BusdIcon,
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
   HBRIcon,
   HeraPoolIcon,
+  KosmosTokenIcon,
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
-  UnknownTokenIcon,
-  UsdcIcon,
-  KosmosTokenIcon,
   TokenSTAMBIcon,
-  TokenXENAIcon
+  TokenXENAIcon,
+  UnknownTokenIcon,
+  UsdcIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -57,6 +57,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
+    case CryptoCurrencyCode.stAMB.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;

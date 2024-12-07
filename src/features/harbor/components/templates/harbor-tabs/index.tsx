@@ -6,8 +6,10 @@ import {
 } from '@features/harbor/components/composite';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { TokenLogo } from '@components/modular';
+import { useTranslation } from 'react-i18next';
 
 export const HarborTabs = () => {
+  const { t } = useTranslation();
   return (
     <AnimatedTabsV2
       dismissOnChangeIndex
@@ -16,7 +18,7 @@ export const HarborTabs = () => {
       tabs={[
         {
           icon: <TokenLogo token={'amb'} scale={0.5} />,
-          title: 'AMB STAKE',
+          title: `${t('staking.header')} AMB`,
           view: (
             <WrappedListsContainer>
               <StakeAMBTab />
@@ -25,7 +27,7 @@ export const HarborTabs = () => {
         },
         {
           icon: <TokenLogo token={'hbr'} scale={0.6} />,
-          title: 'HBR STAKE',
+          title: `${t('staking.header')} HBR`,
           view: (
             <WrappedListsContainer>
               <StakeHBRTab />

@@ -7,7 +7,12 @@ export const NoteIcon = ({ scale = 1, color = COLORS.neutral600 }) => {
   const height = 20 * scale;
 
   return (
-    <Svg width={width} height={height} fill="none">
+    <Svg
+      width={width}
+      height={height}
+      fill="none"
+      viewBox={`0 0 ${width} ${height}`}
+    >
       <Path
         fill={color}
         d="M13.333 3.542a1.878 1.878 0 0 1-1.875 1.875H8.542c-.517 0-.984-.209-1.325-.55a1.864 1.864 0 0 1-.55-1.325c0-1.034.841-1.875 1.875-1.875h2.916c.517 0 .984.208 1.325.55.342.341.55.808.55 1.325Z"

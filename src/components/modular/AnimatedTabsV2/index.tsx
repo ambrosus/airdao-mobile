@@ -135,7 +135,7 @@ export const AnimatedTabsV2 = ({
           style={[
             {
               position: 'absolute',
-              width: '50%',
+              width: `${100 / tabs.length}%`,
               borderRadius: 24,
               height: '100%',
               backgroundColor: 'white'
