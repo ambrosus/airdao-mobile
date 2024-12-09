@@ -11,5 +11,4 @@ export interface PreviewDataModel {
 
 export interface BottomSheetHarborPreViewProps {
   previewData: PreviewDataModel;
-  onAcceptPress: (data: PreviewDataModel) => void;
 }

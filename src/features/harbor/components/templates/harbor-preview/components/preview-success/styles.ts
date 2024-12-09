@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
 import { contentBox } from '@components/styles';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
-  main: {
+  contentWrapper: {
     ...contentBox,
-    padding: scale(16)
+    paddingHorizontal: scale(16),
+    width: '100%'
   }
 });

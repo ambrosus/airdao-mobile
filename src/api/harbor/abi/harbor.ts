@@ -80,5 +80,25 @@ export const HARBOR_ABI = [
     ],
     stateMutability: 'view',
     type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'minStakeValue',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
   }
 ];

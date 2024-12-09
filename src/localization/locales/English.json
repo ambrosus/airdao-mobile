@@ -515,6 +515,7 @@
   "harbor.receive.amount.preview.title": "You will receive",
   "harbor.stake.from": "From",
   "harbor.stake.apy": "APY",
+  "harbor.successfully.stake.header": "You have successfully staked",
 
 
   "wallet.connect": {

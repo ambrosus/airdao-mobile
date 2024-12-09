@@ -43,6 +43,7 @@ export const useStakeAmbData = () => {
   return {
     currentUserStakedAmount: formatEther(harborData?.currentUserStaked || 0),
     harborAPR: harborData?.harborAPR || '',
+    minStakeValue: harborData.minStakeValue,
     totalStakedOnHarbor: totalStaked,
     refetch: refetchAll,
     loading:

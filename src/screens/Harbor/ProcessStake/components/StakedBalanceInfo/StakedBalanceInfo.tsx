@@ -4,6 +4,7 @@ import { StakedBalanceIcon } from '@components/svg/icons/v2/harbor';
 import { scale } from '@utils/scaling';
 import { TokenLogo } from '@components/modular';
 import { styles } from './styles';
+import { NumberUtils } from '@utils/number';
 
 interface StakedBalanceInfoModel {
   stakedValue: string;
@@ -26,7 +27,7 @@ export const StakedBalanceInfo = ({
       <TokenLogo token={'amb'} />
       <Spacer horizontal value={scale(8)} />
       <Text style={styles.textStyle}>
-        {stakedValue} {coin}
+        {NumberUtils.limitDecimalCount(stakedValue, 2)} {coin}
       </Text>
     </Row>
   </Row>

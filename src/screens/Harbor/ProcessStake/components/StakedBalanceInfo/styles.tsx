@@ -1,12 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { contentBox } from '@components/styles';
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.neutral0,
-    padding: scale(12),
-    borderRadius: 16
+    ...contentBox
   },
   textStyle: {
     color: COLORS.neutral900,

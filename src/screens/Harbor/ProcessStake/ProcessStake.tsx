@@ -3,12 +3,12 @@ import { RefreshControl, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, parseEther } from 'ethers/lib/utils';
 import { BottomSheetRef, Header } from '@components/composite';
-import { Row, Spacer, Spinner, Text } from '@components/base';
+import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { RateInfo, StakedBalanceInfo, StakeHeaderIcon } from './components';
+import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
 import { useStakeAmbData } from '@features/harbor/hooks/useStakeAmbData';
 import { styles } from './styles';
 import { useWalletStore } from '@entities/wallet';
@@ -20,7 +20,6 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { TokenUtils } from '@utils/token';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetHarborPreView } from '@features/harbor/components/templates/harbor-preview';
-import { PreviewDataModel } from '@features/harbor/components/templates/harbor-preview/models';
 
 const DEFAULT_PREVIEW = {
   stakeAmount: '',
@@ -41,15 +40,16 @@ export const ProcessStake = () => {
   const {
     harborAPR,
     currentUserStakedAmount,
-    refetch
-    // loading: harborDataLoading
+    minStakeValue,
+    refetch,
+    loading: harborDataLoading
   } = useStakeAmbData();
   const { wallet } = useWalletStore();
 
   const {
     data: selectedAccountBalance,
-    refetch: refetchAmbBalance
-    // loading: accountDataLoading
+    refetch: refetchAmbBalance,
+    loading: accountDataLoading
   } = useBalanceOfAddress(wallet?.address || '');
 
   const refetchAll = () => {
@@ -90,25 +90,34 @@ export const ProcessStake = () => {
     [account?.address, account?.ambBalance, account?.ambBalanceWei]
   );
 
-  const isLoading = false;
-  // const isLoading = useMemo(() => {
-  //   return harborDataLoading || accountDataLoading;
-  // }, [harborDataLoading, accountDataLoading]);
+  // const isLoading = false;
+  const isLoading = useMemo(() => {
+    return harborDataLoading || accountDataLoading;
+  }, [harborDataLoading, accountDataLoading]);
 
   const buttonDisabled = useMemo(() => {
     return !amountToStake || !!error;
   }, [amountToStake, error]);
 
   const onChangeText = (value: string) => {
-    if (+value > +formatEther(selectedAccountBalance.wei)) {
-      setError(t('bridge.insufficient.funds'));
-    } else {
-      setError('');
+    if (value) {
+      const greaterThenBalance = parseEther(value).gt(
+        selectedAccountBalance.wei
+      );
+      if (greaterThenBalance) {
+        setError(t('bridge.insufficient.funds'));
+      } else {
+        setError('');
+      }
     }
     setAmountToStake(value);
   };
 
   const onReviewStake = useCallback(() => {
+    if (parseEther(amountToStake).lt(minStakeValue)) {
+      setError('Lower Then minimal Stake Value');
+      return;
+    }
     const data = {
       stakeAmount: amountToStake,
       stakeToken: CryptoCurrencyCode.AMB,
@@ -119,32 +128,11 @@ export const ProcessStake = () => {
     };
     setPreviewData(data);
     bottomSheetRef.current?.show();
-  }, [amountToStake, harborAPR, wallet?.address]);
-
-  const onAcceptPress = (data: PreviewDataModel) => {
-    return data;
-    // console.log('onAcceptPress', data);
-  };
-
-  const HarborTitle = () => {
-    return (
-      <Row alignItems="center">
-        <Text
-          color={COLORS.neutral900}
-          fontSize={18}
-          fontFamily="Inter_700Bold"
-        >
-          {t('harbor.stakeAMB.header')}
-        </Text>
-        <Spacer horizontal value={scale(8)} />
-        <StakeHeaderIcon apr={harborAPR} />
-      </Row>
-    );
-  };
+  }, [amountToStake, harborAPR, minStakeValue, wallet?.address]);
 
   return (
     <SafeAreaView>
-      <Header title={<HarborTitle />} />
+      <Header title={<HarborTitle harborAPR={harborAPR} />} />
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -176,7 +164,7 @@ export const ProcessStake = () => {
               token={ambTokenData}
               onChangeText={onChangeText}
               onPressMaxAmount={() => {
-                setAmountToStake(formatEther(ambTokenData.balance.wei));
+                onChangeText(formatEther(ambTokenData.balance.wei));
               }}
             />
             {error && (
@@ -211,7 +199,6 @@ export const ProcessStake = () => {
           </>
         )}
         <BottomSheetHarborPreView
-          onAcceptPress={onAcceptPress}
           previewData={previewData}
           ref={bottomSheetRef}
         />

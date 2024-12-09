@@ -8,6 +8,7 @@ interface HarborInfoModel {
   harborAPR: string;
   totalStaked: BigNumber;
   currentUserStaked: BigNumber;
+  minStakeValue: BigNumber;
 }
 
 export function useHarborData(): QueryResponse<HarborInfoModel> {
@@ -20,10 +21,12 @@ export function useHarborData(): QueryResponse<HarborInfoModel> {
       const currentUserStaked = await harborService.getCurrentUserStaked(
         wallet?.address || ''
       );
+      const minStakeValue = await harborService.getStakeLimit();
       return {
         harborAPR,
         totalStaked,
-        currentUserStaked
+        currentUserStaked,
+        minStakeValue
       };
     }
   );
