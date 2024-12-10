@@ -126,13 +126,14 @@ export const PasscodeEntry = () => {
         isAuthSuccessfulRef.current = true;
         onSuccessActions();
       } else {
+        setPasscode('');
         Alert.alert(
           t('security.passcode.doesnt.match'),
           t('common.please.try.again'),
           [
             {
               text: t('button.try.again'),
-              onPress: () => setPasscode(''),
+              onPress: () => null,
               style: 'cancel'
             }
           ]
