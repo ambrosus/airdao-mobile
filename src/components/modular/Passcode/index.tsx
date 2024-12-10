@@ -1,12 +1,7 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { split, dropRight } from 'lodash';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button, Spacer } from '@components/base';
 import { useForwardedRef } from '@hooks';
@@ -16,8 +11,6 @@ import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
 import { scale } from '@utils/scaling';
 
 interface PasscodeProps {
-  passcode: string;
-  setPasscode: Dispatch<SetStateAction<string>>;
   onPasscodeChange: (passcode: string[]) => void;
   changePasscodeStep?: number | null;
   isBiometricEnabled?: boolean;
@@ -33,8 +26,6 @@ type NavigationListenerType = {
 export const Passcode = forwardRef<TextInput, PasscodeProps>(
   (
     {
-      passcode,
-      setPasscode,
       onPasscodeChange,
       type,
       authenticateWithBiometrics = () => {
@@ -46,8 +37,11 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
     }: PasscodeProps,
     ref
   ) => {
-    const localRef = useForwardedRef<TextInput>(ref);
     const navigation: NavigationListenerType = useNavigation();
+    const localRef = useForwardedRef<TextInput>(ref);
+
+    const [passcode, setPasscode] = useState('');
+
     useEffect(() => {
       if (DeviceUtils.isAndroid) {
         // @ ts-ignore
@@ -83,9 +77,10 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
     );
 
     const onPressBackspace = useCallback(() => {
-      const newData = passcode.substring(0, passcode.length - 1);
-      setPasscode(newData);
-    }, [passcode, setPasscode]);
+      const newPasscode = dropRight(passcode, 1).join('');
+      onPasscodeChange(split(newPasscode, ''));
+      setPasscode(newPasscode);
+    }, [onPasscodeChange, passcode]);
 
     const renderCircles = useCallback(() => {
       const circleElements = [];
