@@ -130,7 +130,9 @@ const numberToTransformedLocale = (value: string | number) => {
   const formattedIntPart = parseInt(intPart, 10).toLocaleString('en-US');
   const formattedFloatPart = floatPart ? floatPart.slice(0, 2) : '00';
 
-  return `${formattedIntPart}.${formattedFloatPart}`;
+  return formattedFloatPart === '00'
+    ? formattedIntPart
+    : `${formattedIntPart}.${formattedFloatPart}`;
 };
 
 const formatDecimal = (value: string, decimals = 2): string => {

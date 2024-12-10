@@ -14,7 +14,9 @@ describe('NumberUtils', () => {
   });
 
   it('handles undefined and null input', () => {
+    // @ts-ignore
     expect(NumberUtils.formatNumber(undefined)).toBe('');
+    // @ts-ignore
     expect(NumberUtils.formatNumber(null)).toBe('');
   });
 
@@ -28,5 +30,13 @@ describe('NumberUtils', () => {
 
   it('doesnt add a sign to zero', () => {
     expect(NumberUtils.addSignToNumber(0)).toBe('-0');
+  });
+
+  it('numberToTransformLocale | formats numbers according to locale rules', () => {
+    expect(NumberUtils.numberToTransformedLocale(123.0)).toBe('123');
+    expect(NumberUtils.numberToTransformedLocale(123.4)).toBe('123.4');
+    expect(NumberUtils.numberToTransformedLocale(123.41)).toBe('123.41');
+    expect(NumberUtils.numberToTransformedLocale(1234.0)).toBe('1,234');
+    expect(NumberUtils.numberToTransformedLocale(1234.56)).toBe('1,234.56');
   });
 });

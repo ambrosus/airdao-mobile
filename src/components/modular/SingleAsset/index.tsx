@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { ethers } from 'ethers';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
@@ -27,8 +28,6 @@ export const SingleAsset = ({
   const tokenUSDBalance = useMemo(() => {
     return `$${NumberUtils.numberToTransformedLocale(usdPrice.toString())}`;
   }, [usdPrice]);
-
-  const tokenBalance = balance.formattedBalance;
 
   const tokenNameOrAddress = useMemo(() => {
     const isAddress = StringValidators.isStringAddress(symbol);
@@ -63,8 +62,9 @@ export const SingleAsset = ({
               fontSize={13}
               color={COLORS.neutral400}
             >
-              {NumberUtils.numberToTransformedLocale(tokenBalance)}{' '}
-              {symbol || 'tokens'}
+              {`${NumberUtils.numberToTransformedLocale(
+                ethers.utils.formatEther(balance.wei)
+              )} ${symbol || 'tokens'}`}
             </Text>
           </View>
         </Row>
