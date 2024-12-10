@@ -5,7 +5,8 @@ import { COLORS } from '@constants/colors';
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.neutral0,
-    padding: scale(12),
+    paddingHorizontal: scale(12),
+    paddingVertical: scale(8),
     borderRadius: 16
   },
   selectorWrapper: {

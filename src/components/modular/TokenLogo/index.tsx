@@ -50,22 +50,21 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return token;
     }
   }, [address, token]);
-
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
-    case CryptoCurrencyCode.stAMB.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
-    case CryptoCurrencyCode.STAMB.toLowerCase():
+    case CryptoCurrencyCode.stAMB.toLowerCase():
     case 'staked amb':
+    case CryptoCurrencyCode.stAMB.toLowerCase():
       return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():

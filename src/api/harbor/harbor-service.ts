@@ -51,7 +51,7 @@ const getStakeAPR = async () => {
   }
 };
 
-const getCurrentUserStaked = async (address: string) => {
+const getUserStaked = async (address: string) => {
   try {
     if (address) {
       const contract = createHarborLiquidStakedContract();
@@ -101,7 +101,7 @@ const processStake = async (
 export const harborService = {
   getTotalStaked,
   getStakeAPR,
-  getCurrentUserStaked,
+  getUserStaked,
   getStakeLimit,
   processStake
 };

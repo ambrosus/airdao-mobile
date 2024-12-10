@@ -11,6 +11,9 @@ import { harborService } from '@api/harbor/harbor-service';
 import { parseEther } from 'ethers/lib/utils';
 import { useWalletStore } from '@entities/wallet';
 import { Transaction } from '@models';
+import { Spacer } from '@components/base';
+import { scale } from '@utils/scaling';
+import { isAndroid } from '@utils/isPlatform';
 
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,
@@ -73,6 +76,7 @@ export const BottomSheetHarborPreView = forwardRef<
       <View style={[styles.container, { paddingBottom: bottomInset }]}>
         {content}
       </View>
+      {isAndroid && <Spacer value={scale(20)} />}
     </BottomSheet>
   );
 });

@@ -3,20 +3,23 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import { StakeInfoContainer, TiersInfoContainer } from './components';
 import { scale } from '@utils/scaling';
 import { Spacer } from '@components/base';
-import { useStakeAmbData } from '@features/harbor/hooks/useStakeAmbData';
 import { styles } from './styles';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useWalletStore } from '@entities/wallet';
 
 export const StakeAMBTab = ({}) => {
-  const { refetch } = useStakeAmbData();
+  const { updateAll } = useHarborStore();
+  const { wallet } = useWalletStore();
+
   const renderRefetchController = useMemo(() => {
     return (
       <RefreshControl
-        onRefresh={refetch}
+        onRefresh={() => updateAll(wallet?.address || '')}
         refreshing={false}
         removeClippedSubviews
       />
     );
-  }, [refetch]);
+  }, [updateAll, wallet?.address]);
 
   return (
     <View style={styles.main}>

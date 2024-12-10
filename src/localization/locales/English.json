@@ -518,6 +518,10 @@
   "harbor.successfully.stake.header": "You have successfully staked",
 
 
+  "harbor.withdraw.stake.reward": "Stake + Rewards",
+  "harbor.withdraw.reward": "Rewards only",
+
+
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",

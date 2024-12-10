@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useStakeAmbData } from '@features/harbor/hooks/useStakeAmbData';
+import { formatEther } from 'ethers/lib/utils';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -13,12 +13,23 @@ import { NumberUtils } from '@utils/number';
 import { CryptoCurrencyCode } from '@appTypes';
 
 import { styles } from './styles';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useAMBPrice } from '@hooks';
 
 export const StakeInfoContainer = () => {
   const navigation = useNavigation<HarborNavigationProp>();
   const { t } = useTranslation();
-  const { currentUserStakedAmount, harborAPR, totalStakedOnHarbor, loading } =
-    useStakeAmbData();
+  const { data: harborData, loading } = useHarborStore();
+  const { data: ambPrice } = useAMBPrice();
+  const { apr: harborAPR, totalStaked, userStaked } = harborData;
+
+  const totalStakedOnHarbor = {
+    crypto: NumberUtils.limitDecimalCount(formatEther(totalStaked), 2),
+    usd: NumberUtils.limitDecimalCount(
+      (ambPrice?.priceUSD || 1) * +formatEther(totalStaked),
+      2
+    )
+  };
 
   const navigateToStake = () => navigation.navigate('ProcessStake');
 
@@ -43,7 +54,7 @@ export const StakeInfoContainer = () => {
               <Text fontSize={12}>{t('harbor.staked.amount')}</Text>
               <Spacer value={scale(8)} />
               <Text style={styles.topText} color={COLORS.neutral900}>
-                {NumberUtils.limitDecimalCount(currentUserStakedAmount, 2)}
+                {NumberUtils.limitDecimalCount(formatEther(userStaked), 2)}
               </Text>
             </View>
           </Row>

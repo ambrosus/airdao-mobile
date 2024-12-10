@@ -12,9 +12,8 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { Button, Row, Text } from '@components/base';
 import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { DEVICE_WIDTH } from '@constants/variables';
 
@@ -28,6 +27,7 @@ interface AnimatedV2TabsProps {
   tabs: AnimatedTab[];
   dismissOnChangeIndex?: boolean;
   containerStyle?: ViewStyle;
+  customTabBarStyle?: ViewStyle;
   keyboardShouldPersistTaps?: 'always' | 'handled' | 'never' | undefined;
 }
 
@@ -35,7 +35,8 @@ export const AnimatedTabsV2 = ({
   tabs,
   dismissOnChangeIndex,
   containerStyle,
-  keyboardShouldPersistTaps
+  keyboardShouldPersistTaps,
+  customTabBarStyle
 }: AnimatedV2TabsProps) => {
   const TABS_MARGIN = scale(20);
   const TABS_LENGTH = tabs.length;
@@ -89,21 +90,16 @@ export const AnimatedTabsV2 = ({
       <Button
         onPress={() => scrollToTab(idx)}
         key={`${tab.title}-${idx}-bar`}
-        style={styles.tabBarTitle}
+        style={{ ...styles.tabBarTitle, ...customTabBarStyle }}
       >
-        {tab.icon && (
-          <View>
-            {tab.icon}
-            <Spacer value={scale(20)} horizontal />
-          </View>
-        )}
-        <Text fontFamily="Inter_700Bold" color={COLORS.midnight} fontSize={16}>
-          {tab.title}
-        </Text>
+        {tab.icon && tab.icon}
+        <Text style={styles.tabHeader}>{tab.title}</Text>
       </Button>
     ),
-    [scrollToTab]
+    [customTabBarStyle, scrollToTab]
   );
+
+  // TODO remove for prod
 
   const onScrollEnd = () => {
     // do nothing
@@ -134,11 +130,8 @@ export const AnimatedTabsV2 = ({
         <Animated.View
           style={[
             {
-              position: 'absolute',
-              width: `${100 / tabs.length}%`,
-              borderRadius: 24,
-              height: '100%',
-              backgroundColor: 'white'
+              ...styles.mainView,
+              width: `${100 / tabs.length}%`
             },
             indicatorStyle
           ]}

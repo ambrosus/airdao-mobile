@@ -1,6 +1,18 @@
 import { ethers } from 'ethers';
 
-export const ALL_TOKENS_DATA = {
+export interface DatabaseTokenModel {
+  address: string;
+  decimals: number;
+  name: string;
+  symbol: string;
+}
+
+export interface AllTokenDataModel {
+  PROD: DatabaseTokenModel[];
+  TESTNET: DatabaseTokenModel[];
+}
+
+export const ALL_TOKENS_DATA: AllTokenDataModel = {
   PROD: [
     {
       address: ethers.constants.AddressZero,
@@ -403,7 +415,8 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       name: 'Synthetic Amber',
-      symbol: 'SAMB'
+      symbol: 'SAMB',
+      decimals: 18
     },
     {
       address: '0x92f47Ee54B8320A4E74Ddb256dc6e9129bCFD053',
@@ -414,7 +427,8 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
       name: 'USD Coin',
-      symbol: 'USDC'
+      symbol: 'USDC',
+      decimals: 18
     },
     {
       address: '0x38742FA88FD3b16318Ba64F4747E41954e9FFc0e',
@@ -473,7 +487,7 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0x5C114A3E9b6DB57A9FE5950eC1946278a2d7A22b',
       name: 'Staked AMB',
-      symbol: 'stAMB',
+      symbol: 'StAMB',
       decimals: 18
     }
   ]

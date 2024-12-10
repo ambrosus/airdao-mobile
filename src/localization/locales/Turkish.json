@@ -519,6 +519,11 @@
   "harbor.stake.apy": "!!!APY",
   "harbor.successfully.stake.header": "!!!You have successfully staked",
 
+
+  "harbor.withdraw.stake.reward": "!!!Stake + Rewards",
+  "harbor.withdraw.reward": "!!!Rewards only",
+
+
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",

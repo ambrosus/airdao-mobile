@@ -35,7 +35,6 @@ import { NumberUtils } from '@utils/number';
 import { useForwardedRef } from '@hooks';
 import { isAndroid } from '@utils/isPlatform';
 import { scale } from '@utils/scaling';
-import { CryptoCurrencyCode } from '@appTypes';
 import { DownArrowIcon } from '@components/svg/icons';
 
 interface InputWithoutTokenSelectProps {
@@ -45,8 +44,8 @@ interface InputWithoutTokenSelectProps {
   readonly token: Token;
   readonly onChangeText: (text: string) => void;
   readonly onPressMaxAmount: (amount?: string) => void;
-  exchange: {
-    token: CryptoCurrencyCode;
+  exchange?: {
+    token: string;
     value: string;
   };
 
@@ -70,11 +69,7 @@ export const InputWithoutTokenSelect = forwardRef<
       onFocus,
       onBlur,
       resetKeyboardState = false,
-      exchange = {
-        token: 'amb',
-        title: '',
-        value: ''
-      }
+      exchange
     },
     ref
   ) => {
@@ -238,48 +233,52 @@ export const InputWithoutTokenSelect = forwardRef<
             />
           )}
         </View>
-        <View
-          style={{
-            position: 'relative',
-            height: scale(10),
-            zIndex: 1,
-            alignItems: 'center'
-          }}
-        >
-          <View
-            style={{
-              padding: scale(10),
-              top: -16,
-              paddingHorizontal: scale(12),
-              backgroundColor: COLORS.neutral0,
-              borderRadius: 50,
-              borderWidth: 1,
-              borderColor: COLORS.neutral200,
-              position: 'absolute'
-            }}
-          >
-            <DownArrowIcon scale={1.2} />
-          </View>
-        </View>
-        <Row
-          style={styles.wrapper}
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Row alignItems="center">
-            <TokenLogo token={exchange.token} />
-            <Spacer horizontal value={scale(8)} />
-            <Text fontSize={14} color={COLORS.neutral900}>
-              {exchange.token}
-            </Text>
-          </Row>
-          <Text
-            color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
-            fontSize={14}
-          >
-            {+exchange?.value > 0 ? exchange.value : 0}
-          </Text>
-        </Row>
+        {!!exchange && (
+          <>
+            <View
+              style={{
+                position: 'relative',
+                height: scale(10),
+                zIndex: 1,
+                alignItems: 'center'
+              }}
+            >
+              <View
+                style={{
+                  padding: scale(10),
+                  top: -16,
+                  paddingHorizontal: scale(12),
+                  backgroundColor: COLORS.neutral0,
+                  borderRadius: 50,
+                  borderWidth: 1,
+                  borderColor: COLORS.neutral200,
+                  position: 'absolute'
+                }}
+              >
+                <DownArrowIcon scale={1.2} />
+              </View>
+            </View>
+            <Row
+              style={styles.wrapper}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Row alignItems="center">
+                <TokenLogo token={exchange.token} />
+                <Spacer horizontal value={scale(8)} />
+                <Text fontSize={14} color={COLORS.neutral900}>
+                  {exchange.token}
+                </Text>
+              </Row>
+              <Text
+                color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
+                fontSize={14}
+              >
+                {+exchange?.value > 0 ? exchange.value : 0}
+              </Text>
+            </Row>
+          </>
+        )}
       </>
     );
   }

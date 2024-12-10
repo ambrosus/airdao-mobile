@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { BottomSheetRef, Header } from '@components/composite';
-import { Spacer, Spinner, Text } from '@components/base';
+import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
-import { useStakeAmbData } from '@features/harbor/hooks/useStakeAmbData';
 import { styles } from './styles';
 import { useWalletStore } from '@entities/wallet';
 import { useBalanceOfAddress } from '@hooks';
@@ -20,6 +19,8 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { TokenUtils } from '@utils/token';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetHarborPreView } from '@features/harbor/components/templates/harbor-preview';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { NumberUtils } from '@utils/number';
 
 const DEFAULT_PREVIEW = {
   stakeAmount: '',
@@ -34,17 +35,13 @@ export const ProcessStake = () => {
 
   const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
-
   const [amountToStake, setAmountToStake] = useState('');
   const [error, setError] = useState('');
-  const {
-    harborAPR,
-    currentUserStakedAmount,
-    minStakeValue,
-    refetch,
-    loading: harborDataLoading
-  } = useStakeAmbData();
+
+  const { data: harborData, updateAll, loading } = useHarborStore();
   const { wallet } = useWalletStore();
+
+  const { apr: harborAPR, stakeLimit, userStaked } = harborData;
 
   const {
     data: selectedAccountBalance,
@@ -52,10 +49,16 @@ export const ProcessStake = () => {
     loading: accountDataLoading
   } = useBalanceOfAddress(wallet?.address || '');
 
-  const refetchAll = () => {
-    refetch();
-    if (refetchAmbBalance) {
-      refetchAmbBalance();
+  const refetchAll = async () => {
+    try {
+      if (wallet?.address) {
+        updateAll(wallet.address);
+      }
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
+    } catch (error) {
+      // ignore
     }
   };
 
@@ -90,10 +93,9 @@ export const ProcessStake = () => {
     [account?.address, account?.ambBalance, account?.ambBalanceWei]
   );
 
-  // const isLoading = false;
   const isLoading = useMemo(() => {
-    return harborDataLoading || accountDataLoading;
-  }, [harborDataLoading, accountDataLoading]);
+    return loading || accountDataLoading;
+  }, [loading, accountDataLoading]);
 
   const buttonDisabled = useMemo(() => {
     return !amountToStake || !!error;
@@ -114,7 +116,7 @@ export const ProcessStake = () => {
   };
 
   const onReviewStake = useCallback(() => {
-    if (parseEther(amountToStake).lt(minStakeValue)) {
+    if (parseEther(amountToStake).lt(stakeLimit)) {
       setError('Lower Then minimal Stake Value');
       return;
     }
@@ -128,7 +130,7 @@ export const ProcessStake = () => {
     };
     setPreviewData(data);
     bottomSheetRef.current?.show();
-  }, [amountToStake, harborAPR, minStakeValue, wallet?.address]);
+  }, [amountToStake, harborAPR, stakeLimit, wallet?.address]);
 
   return (
     <SafeAreaView>
@@ -137,67 +139,67 @@ export const ProcessStake = () => {
         refreshControl={
           <RefreshControl
             onRefresh={refetchAll}
-            refreshing={false}
+            refreshing={isLoading}
             removeClippedSubviews
           />
         }
         style={styles.main}
       >
         <Spacer value={scale(8)} />
-        {isLoading ? (
-          <Spinner size="large" />
-        ) : (
-          <>
-            <StakedBalanceInfo
-              stakedValue={currentUserStakedAmount}
-              coin="AMB"
-              title={t('harbor.staked.balance')}
-            />
-            <Spacer value={scale(8)} />
 
-            <InputWithoutTokenSelect
-              value={amountToStake}
-              exchange={{
-                token: CryptoCurrencyCode.stAMB,
-                value: amountToStake
-              }}
-              token={ambTokenData}
-              onChangeText={onChangeText}
-              onPressMaxAmount={() => {
-                onChangeText(formatEther(ambTokenData.balance.wei));
-              }}
-            />
-            {error && (
-              <Text
-                style={{
-                  paddingVertical: scale(8)
-                }}
-                color={COLORS.warning600}
-              >
-                {error}
-              </Text>
+        <>
+          <StakedBalanceInfo
+            stakedValue={NumberUtils.limitDecimalCount(
+              +formatEther(userStaked),
+              2
             )}
+            coin="AMB"
+            title={t('harbor.staked.balance')}
+          />
+          <Spacer value={scale(8)} />
+
+          <InputWithoutTokenSelect
+            value={amountToStake}
+            exchange={{
+              token: CryptoCurrencyCode.stAMB,
+              value: amountToStake
+            }}
+            token={ambTokenData}
+            onChangeText={onChangeText}
+            onPressMaxAmount={() => {
+              onChangeText(formatEther(ambTokenData.balance.wei));
+            }}
+          />
+          {error && (
             <Text
-              fontSize={14}
-              style={styles.stakeInfoText}
-              color={COLORS.neutral600}
+              style={{
+                paddingVertical: scale(8)
+              }}
+              color={COLORS.warning600}
             >
-              {t('harbor.staked.info')}
+              {error}
             </Text>
-            <RateInfo
-              availableToStake={formatEther(selectedAccountBalance.wei)}
-            />
-            <Spacer value={scale(16)} />
-            <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
-              <Text
-                fontFamily="Inter_700Bold"
-                color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
-              >
-                {t('button.confirm')}
-              </Text>
-            </PrimaryButton>
-          </>
-        )}
+          )}
+          <Text
+            fontSize={14}
+            style={styles.stakeInfoText}
+            color={COLORS.neutral600}
+          >
+            {t('harbor.staked.info')}
+          </Text>
+          <RateInfo
+            availableToStake={formatEther(selectedAccountBalance.wei)}
+          />
+          <Spacer value={scale(16)} />
+          <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
+            <Text
+              fontFamily="Inter_700Bold"
+              color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
+            >
+              {t('button.confirm')}
+            </Text>
+          </PrimaryButton>
+        </>
         <BottomSheetHarborPreView
           previewData={previewData}
           ref={bottomSheetRef}
