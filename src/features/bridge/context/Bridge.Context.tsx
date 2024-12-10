@@ -2,6 +2,7 @@ import { createContextSelector } from '@utils/createContextSelector';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Config as BridgeConfigModel,
+  BridgeDataState,
   FeeData,
   Token
 } from '@lib/bridgeSDK/models/types';
@@ -45,7 +46,8 @@ export const BridgeContext = () => {
   const [destination, setDestination] = useState(DEFAULT_ETH_NETWORK);
   const networkNativeToken = Config.NETWORK_NATIVE_COIN[from.id];
 
-  const [selectedBridgeData, setSelectedBridgeData] = useState(null);
+  const [selectedBridgeData, setSelectedBridgeData] =
+    useState<BridgeDataState | null>(null);
   const [selectedTokenPairs, setSelectedTokenPairs] = useState<Token[] | null>(
     null
   );

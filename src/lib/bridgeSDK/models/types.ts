@@ -2,6 +2,14 @@ import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { AccountDBModel } from '@database';
 import { CryptoCurrencyCode } from '@appTypes';
 
+export type BridgeDataState = {
+  from: string;
+  destination: string;
+  bridgeConfig: unknown;
+  ownerAddress?: string;
+  pairs: Token[][];
+};
+
 export type BridgeNetwork = 'eth' | 'bsc';
 export type Network = BridgeNetwork | 'amb';
 export type RelayUrls = { [net in BridgeNetwork]: string };
