@@ -16,7 +16,7 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
-import { discountColor } from '@features/kosmos/utils';
+import { $discount, discountColor } from '@features/kosmos/utils';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import Animated, {
@@ -58,8 +58,7 @@ export const BuyBondTab = ({
   const { amountToBuy, onChangeAmountToBuy } =
     useKosmosMarketsContextSelector();
 
-  const { quoteToken, payoutToken, maxBondable, discount } =
-    useMarketDetails(market);
+  const { quoteToken, payoutToken, maxBondable } = useMarketDetails(market);
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
@@ -198,9 +197,9 @@ export const BuyBondTab = ({
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={discountColor(+discount)}
+              color={discountColor(market?.discount)}
             >
-              {discount}%
+              {$discount(market?.discount)}
             </Text>
           </Row>
         </View>

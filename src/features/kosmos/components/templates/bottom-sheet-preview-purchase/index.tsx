@@ -19,6 +19,7 @@ import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import {
+  $discount,
   _timestampToDate,
   formatDecimals,
   timestampToFormattedDate
@@ -106,7 +107,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               {t('kosmos.table.headings.discount')}
             </StyledTextItem>
             <StyledTextItem isValue>
-              {market?.discount.toFixed(2)}%
+              {$discount(market?.discount)}
             </StyledTextItem>
           </Row>
           {market?.vestingType === 'Fixed-expiry' ? (
