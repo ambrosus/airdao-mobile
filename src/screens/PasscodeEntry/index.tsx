@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Keyboard, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,8 @@ export const PasscodeEntry = () => {
   const { t } = useTranslation();
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
   const navigation = useNavigation<RootNavigationProp>();
+
+  const [passcode, setPasscode] = useState('');
 
   const { appState } = useAppState();
   const { isFaceIDEnabled } = usePasscodeStore();
@@ -130,7 +132,7 @@ export const PasscodeEntry = () => {
           [
             {
               text: t('button.try.again'),
-              onPress: () => null,
+              onPress: () => setPasscode(''),
               style: 'cancel'
             }
           ]
@@ -156,6 +158,8 @@ export const PasscodeEntry = () => {
         </Text>
         <Spacer value={verticalScale(24)} />
         <Passcode
+          passcode={passcode}
+          setPasscode={setPasscode}
           ref={passcodeRef}
           authenticateWithBiometrics={authenticateWithBiometrics}
           onPasscodeChange={handlePasscode}

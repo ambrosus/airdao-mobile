@@ -1,4 +1,10 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  forwardRef,
+  useCallback,
+  useEffect
+} from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '@components/modular/Passcode/styles';
@@ -10,6 +16,8 @@ import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
 import { scale } from '@utils/scaling';
 
 interface PasscodeProps {
+  passcode: string;
+  setPasscode: Dispatch<SetStateAction<string>>;
   onPasscodeChange: (passcode: string[]) => void;
   changePasscodeStep?: number | null;
   isBiometricEnabled?: boolean;
@@ -25,6 +33,8 @@ type NavigationListenerType = {
 export const Passcode = forwardRef<TextInput, PasscodeProps>(
   (
     {
+      passcode,
+      setPasscode,
       onPasscodeChange,
       type,
       authenticateWithBiometrics = () => {
@@ -36,7 +46,6 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
     }: PasscodeProps,
     ref
   ) => {
-    const [code, setCode] = useState('');
     const localRef = useForwardedRef<TextInput>(ref);
     const navigation: NavigationListenerType = useNavigation();
     useEffect(() => {
@@ -52,37 +61,37 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
 
     useEffect(() => {
       if (changePasscodeStep === 2 || changePasscodeStep === 3) {
-        setCode('');
+        setPasscode('');
       }
-    }, [changePasscodeStep]);
+    }, [changePasscodeStep, setPasscode]);
 
     const handleCodeChange = useCallback(
       (text: string) => {
-        if (code.length === 4) return;
+        if (passcode.length === 4) return;
         const numericText = StringUtils.removeNonNumericCharacters(text, false);
-        const newCode = `${code}${numericText}`;
-        setCode(newCode);
+        const newCode = `${passcode}${numericText}`;
+        setPasscode(newCode);
         const passcodeArray = newCode.split('');
         onPasscodeChange(passcodeArray);
         if (type === 'change') {
           if (numericText.length === 4) {
-            setTimeout(() => setCode(''), 50);
+            setTimeout(() => setPasscode(''), 50);
           }
         }
       },
-      [code, onPasscodeChange, type]
+      [passcode, setPasscode, onPasscodeChange, type]
     );
 
     const onPressBackspace = useCallback(() => {
-      const newData = code.substring(0, code.length - 1);
-      setCode(newData);
-    }, [code]);
+      const newData = passcode.substring(0, passcode.length - 1);
+      setPasscode(newData);
+    }, [passcode, setPasscode]);
 
     const renderCircles = useCallback(() => {
       const circleElements = [];
 
       for (let i = 0; i < 4; i++) {
-        const isFilled = i < code.length;
+        const isFilled = i < passcode.length;
         circleElements.push(
           <View
             key={i}
@@ -92,7 +101,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       }
 
       return circleElements;
-    }, [code.length]);
+    }, [passcode.length]);
 
     return (
       <View>
