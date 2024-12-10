@@ -11,12 +11,15 @@ import { Header } from '@components/composite';
 import { usePasscodeStore } from '@features/passcode';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
+import { usePasscodeActions } from '@features/passcode/lib/hooks';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
-  const { passcode, onChangePasscode } = usePasscodeStore();
+  const { passcode } = usePasscodeStore();
   const navigation = useNavigation<SettingsTabNavigationProp>();
+  const { onChangePasscodeHandle } = usePasscodeActions();
+
   const [step, setStep] = useState<number>(passcode.length === 0 ? 2 : 1); // ask current passcode if already saved
   const [newPasscode, setNewPasscode] = useState<string[]>([]);
   const [buttonError, setButtonError] = useState(true);
@@ -54,7 +57,7 @@ export const ChangePasscode = () => {
   const onStep3Press = useCallback(
     (_typedPasscode: string[]) => {
       if (JSON.stringify(newPasscode) === JSON.stringify(_typedPasscode)) {
-        onChangePasscode(_typedPasscode);
+        onChangePasscodeHandle(_typedPasscode);
         navigation.navigate('SecuritySettings');
         Toast.show({
           text: t('change.passcode.success'),
@@ -75,7 +78,7 @@ export const ChangePasscode = () => {
         );
       }
     },
-    [navigation, newPasscode, onChangePasscode, t]
+    [navigation, newPasscode, onChangePasscodeHandle, t]
   );
 
   const handlePasscodeBtnPress = useCallback(
@@ -136,7 +139,11 @@ export const ChangePasscode = () => {
 
   return (
     <View style={{ paddingVertical: top, ...styles.main }}>
-      <Header title={t(screenTitles.headerTitle)} style={styles.header} />
+      <Header
+        bottomBorder
+        title={t(screenTitles.headerTitle)}
+        style={styles.header}
+      />
       <View style={styles.passcodeWrapper}>
         <Passcode
           inputBottomPadding={110}
