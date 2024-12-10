@@ -10,6 +10,7 @@ import { COLORS } from '@constants/colors';
 import { Token, TxType } from '@features/kosmos/types';
 import { TokenLogo } from '@components/modular';
 import {
+  $discount,
   MAINNET_VESTINGS,
   TESTNET_VESTINGS,
   _timestampToDate,
@@ -94,7 +95,7 @@ export const BottomSheetReviewOrder = forwardRef<
               {t('kosmos.table.headings.discount')}
             </StyledTextItem>
             <StyledTextItem color={discountColor(transaction.discount)}>
-              {transaction.discount.toFixed(2)}%
+              {$discount(transaction.discount)}
             </StyledTextItem>
           </Row>
           <Row alignItems="center" justifyContent="space-between">
