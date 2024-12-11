@@ -363,7 +363,7 @@ export const BridgeForm = () => {
         <Spacer value={scale(32)} />
       </View>
       <Animated.View style={[margin]}>
-        <PrimaryButton onPress={goToPreview}>
+        <PrimaryButton onPress={goToPreview} disabled={disabledButton}>
           {templateDataLoader ? (
             <Spinner />
           ) : (
