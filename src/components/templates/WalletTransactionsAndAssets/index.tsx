@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { DerivedValue } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
-import { ethers } from 'ethers';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
@@ -24,6 +23,7 @@ import { NftAssets } from './NftAssets';
 import { WalletDepositFunds } from '../WalletDepositFunds';
 import { Spinner } from '@components/base';
 import { _tokensOrNftMapper } from '@entities/wallet';
+import { balanceReducer } from '@features/wallet-assets/utils';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -116,8 +116,8 @@ export const WalletTransactionsAndAssets = ({
   );
 
   const isSelectAccountBalanceZero = useMemo(() => {
-    return ethers.utils.parseEther(account.ambBalanceWei).isZero();
-  }, [account.ambBalanceWei]);
+    return balanceReducer(tokensOrNFTs.tokens, account.ambBalanceWei).isZero();
+  }, [account.ambBalanceWei, tokensOrNFTs.tokens]);
 
   if (loading) {
     return (
