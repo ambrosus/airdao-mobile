@@ -43,7 +43,7 @@ const envs = {
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     CHAIN_ID: 16718,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-test-usd-e'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -83,7 +83,7 @@ const envs = {
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     CHAIN_ID: 16718,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-test-usd-e'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -123,7 +123,7 @@ const envs = {
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
     CHAIN_ID: 22040,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-test-usd-e'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   }
 };
 
