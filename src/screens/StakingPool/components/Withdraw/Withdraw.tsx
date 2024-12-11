@@ -189,7 +189,7 @@ export const WithdrawToken = ({
       <Spacer value={verticalScale(44)} />
       <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
         <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}
+          {t(isWrongStakeValue ? 'button.enter.amount' : 'common.review')}
         </Text>
       </PrimaryButton>
 

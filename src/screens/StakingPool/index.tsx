@@ -65,7 +65,7 @@ export const StakingPoolScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   const onScroll = (type: 'focus' | 'blur') => {
-    const multiplier = DEVICE_HEIGHT < 736 ? 0.27 : 0.2;
+    const multiplier = DEVICE_HEIGHT < 822 ? 0.27 : 0.2;
 
     const value = type === 'focus' ? DEVICE_HEIGHT * multiplier : 0;
     setScrollEnabled(true);

@@ -2,6 +2,7 @@ import { createContextSelector } from '@utils/createContextSelector';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Config as BridgeConfigModel,
+  BridgeDataState,
   FeeData,
   Token
 } from '@lib/bridgeSDK/models/types';
@@ -45,7 +46,8 @@ export const BridgeContext = () => {
   const [destination, setDestination] = useState(DEFAULT_ETH_NETWORK);
   const networkNativeToken = Config.NETWORK_NATIVE_COIN[from.id];
 
-  const [selectedBridgeData, setSelectedBridgeData] = useState(null);
+  const [selectedBridgeData, setSelectedBridgeData] =
+    useState<BridgeDataState | null>(null);
   const [selectedTokenPairs, setSelectedTokenPairs] = useState<Token[] | null>(
     null
   );
@@ -219,6 +221,18 @@ export const BridgeContext = () => {
     return selectedTokenPairs ? selectedTokenPairs[1] : DEFAULT_TOKEN_TO;
   }, [selectedTokenPairs]);
 
+  const decimals = useMemo(
+    () =>
+      fromData.value.id === 'amb'
+        ? selectedTokenDestination.decimals
+        : selectedTokenFrom.decimals,
+    [
+      fromData.value.id,
+      selectedTokenDestination.decimals,
+      selectedTokenFrom.decimals
+    ]
+  );
+
   const processBridge = useCallback(
     async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
       try {
@@ -227,10 +241,7 @@ export const BridgeContext = () => {
             tokenFrom: selectedTokenFrom,
             tokenTo: selectedTokenDestination,
             selectedAccount: wallet,
-            amountTokens: formatUnits(
-              bridgeFee.amount,
-              selectedTokenFrom.decimals
-            ),
+            amountTokens: formatUnits(bridgeFee.amount, decimals),
             feeData: bridgeFee,
             gasFee: getOnlyGasFee
           };
@@ -255,6 +266,7 @@ export const BridgeContext = () => {
     [
       bridgeConfig,
       bridgeErrorHandler,
+      decimals,
       fromData.value.id,
       selectedTokenDestination,
       selectedTokenFrom,

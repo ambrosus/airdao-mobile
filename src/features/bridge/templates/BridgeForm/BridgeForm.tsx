@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { styles } from './styles';
+import { Keyboard, LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import {
   KeyboardDismissingView,
   Spacer,
@@ -17,13 +17,14 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
 import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
-import { View, ViewStyle } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
 import { COLORS } from '@constants/colors';
@@ -34,7 +35,6 @@ import { parseUnits } from 'ethers/lib/utils';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { FeeData } from '@lib/bridgeSDK/models/types';
-import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { NumberUtils } from '@utils/number';
 import {
   DEFAULT_TRANSACTION,
@@ -42,7 +42,6 @@ import {
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
 import { useWalletStore } from '@entities/wallet';
-import { LayoutChangeEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
@@ -115,6 +114,19 @@ export const BridgeForm = () => {
     setSelectedTokenPairs(tokenPair);
     tokenSelectRef?.current?.dismiss();
   };
+
+  const decimals = useMemo(
+    () =>
+      fromData.value.id === 'amb'
+        ? selectedTokenDestination.decimals
+        : selectedTokenFrom.decimals,
+    [
+      fromData.value.id,
+      selectedTokenDestination.decimals,
+      selectedTokenFrom.decimals
+    ]
+  );
+
   const parseBridgePreviewData = useCallback(
     (feeData: FeeData, gasFee: BigNumberish) => {
       return [
@@ -122,7 +134,7 @@ export const BridgeForm = () => {
           name: t('bridge.preview.receive'),
           crypto: {
             amount: feeData?.amount ?? BigNumber.from(0),
-            decimals: selectedTokenFrom.decimals
+            decimals
           },
           symbol: selectedTokenFrom.symbol
         },
@@ -153,9 +165,9 @@ export const BridgeForm = () => {
       ];
     },
     [
+      decimals,
       networkNativeToken?.decimals,
       networkNativeToken.symbol,
-      selectedTokenFrom.decimals,
       selectedTokenFrom.symbol,
       t
     ]
@@ -169,6 +181,7 @@ export const BridgeForm = () => {
   }, [setProcessingTransaction]);
 
   const goToPreview = useCallback(async () => {
+    Keyboard.dismiss();
     setDefaultOptions();
     const isMax =
       amountToBridge ===
@@ -240,7 +253,7 @@ export const BridgeForm = () => {
         setSelectedBridgeData({
           // @ts-ignore
           ...selectedBridgeData,
-          pairs
+          ...pairs
         });
       });
     }
@@ -352,7 +365,7 @@ export const BridgeForm = () => {
       <Animated.View style={[margin]}>
         <PrimaryButton onPress={goToPreview} disabled={disabledButton}>
           {templateDataLoader ? (
-            <Spinner customSize={15} />
+            <Spinner />
           ) : (
             <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
               {error ? t('bridge.insufficient.funds') : t('common.review')}

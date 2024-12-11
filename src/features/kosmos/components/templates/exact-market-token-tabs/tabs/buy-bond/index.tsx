@@ -6,6 +6,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
@@ -16,15 +21,10 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
-import { discountColor } from '@features/kosmos/utils';
+import { $discount, discountColor } from '@features/kosmos/utils';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, isIos } from '@utils/isPlatform';
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
@@ -58,8 +58,7 @@ export const BuyBondTab = ({
   const { amountToBuy, onChangeAmountToBuy } =
     useKosmosMarketsContextSelector();
 
-  const { quoteToken, payoutToken, maxBondable, discount } =
-    useMarketDetails(market);
+  const { quoteToken, payoutToken, maxBondable } = useMarketDetails(market);
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
@@ -75,7 +74,9 @@ export const BuyBondTab = ({
 
   const paddingTop = useAnimatedStyle(() => {
     return {
-      paddingTop: withTiming(animatedPaddingTop.value)
+      paddingTop: withTiming(
+        isIos ? animatedPaddingTop.value : animatedPaddingTop.value / 1.25
+      )
     };
   });
 
@@ -198,9 +199,9 @@ export const BuyBondTab = ({
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={discountColor(+discount)}
+              color={discountColor(market?.discount)}
             >
-              {discount}%
+              {$discount(market?.discount)}
             </Text>
           </Row>
         </View>

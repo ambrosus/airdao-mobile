@@ -14,7 +14,7 @@ import {
   TRIANGLE_HEIGHT
 } from '@features/kosmos/constants';
 import { ChartStrokedArrow } from '../../base';
-import { discountColor } from '@features/kosmos/utils';
+import { $discount, discountColor } from '@features/kosmos/utils';
 
 interface ChartTooltipProps {
   tooltip: TooltipState;
@@ -114,7 +114,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
               fontSize={12}
               fontFamily="Inter_400Regular"
             >
-              {tooltip.value.discount.toFixed(2)}%
+              {$discount(tooltip.value.discount)}
             </Text>
           </Row>
         )}
