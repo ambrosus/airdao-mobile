@@ -23,7 +23,14 @@ export const StakeHarborScreen = () => {
   });
 
   const RightContent = () => (
-    <Button onPress={() => navigation.navigate('WithdrawHarborScreen')}>
+    <Button
+      onPress={() => {
+        // if (loading) {
+        //   return;
+        // }
+        navigation.navigate('WithdrawHarborScreen');
+      }}
+    >
       <WithdrawIcon />
     </Button>
   );

@@ -5,9 +5,9 @@ import { COLORS } from '@constants/colors';
 export const styles = StyleSheet.create({
   container: {
     marginTop: verticalScale(18),
-    paddingHorizontal: scale(16),
+    paddingHorizontal: scale(8),
     rowGap: 16,
-    marginHorizontal: scale(12)
+    marginHorizontal: scale(10)
   },
   apy: {
     color: COLORS.success300

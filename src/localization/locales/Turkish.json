@@ -160,6 +160,8 @@
   "common.status.success": "Başarılı",
   "common.tx.confirmed": "İşlem onaylandı",
   "common.details": "Ayrıntılar",
+  "common.day": "!!!day",
+  "common.days": "!!!days",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -509,6 +511,7 @@
   "harbor.total.staked": "!!!Total Staked on Harbor",
   "harbor.total.staked.value": "!!!Total Staked Value",
   "harbor.tiers": "!!!Tiers",
+  "harbor.tier": "!!!Tier",
   "harbor.staked.amount": "!!!Staked amount",
   "harbor.staked.balance": "!!!Staked balance",
   "harbor.staked.info": "!!!When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
@@ -522,6 +525,14 @@
 
   "harbor.withdraw.stake.reward": "!!!Stake + Rewards",
   "harbor.withdraw.reward": "!!!Rewards only",
+
+  "harbor.tiers.container.header": "!!!Reward Distribution",
+
+  "harbor.exchange.rate": "!!!Exchange rate",
+  "harbor.withdrawal.delay": "!!!Withdrawal Delay",
+  "harbor.withdrawal.button": "!!!Request Withdrawal",
+  "harbor.transaction.failed": "!!!The transaction was failed.",
+
 
 
   "wallet.connect": {

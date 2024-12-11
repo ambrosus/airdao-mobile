@@ -6,6 +6,7 @@ import { contentBox } from '@components/styles';
 export const styles = StyleSheet.create({
   main: {
     ...contentBox,
+    backgroundColor: COLORS.neutral0,
     padding: scale(16)
   },
   topText: {

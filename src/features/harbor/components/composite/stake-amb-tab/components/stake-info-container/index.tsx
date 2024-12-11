@@ -31,7 +31,12 @@ export const StakeInfoContainer = () => {
     )
   };
 
-  const navigateToStake = () => navigation.navigate('ProcessStake');
+  const navigateToStake = () => {
+    if (loading) {
+      return;
+    }
+    navigation.navigate('ProcessStake');
+  };
 
   const totalAMBStaked = NumberUtils.minimiseAmount(
     +NumberUtils.limitDecimalCount(totalStakedOnHarbor.crypto, 2)

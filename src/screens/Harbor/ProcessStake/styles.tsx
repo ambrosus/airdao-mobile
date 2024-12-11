@@ -4,7 +4,7 @@ import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   main: {
-    backgroundColor: COLORS.neutral100,
+    backgroundColor: COLORS.neutral50,
     paddingHorizontal: scale(14),
     height: '100%'
   },

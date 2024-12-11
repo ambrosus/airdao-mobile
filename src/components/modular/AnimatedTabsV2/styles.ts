@@ -18,9 +18,9 @@ export const styles = StyleSheet.create({
   },
   tabContainer: {
     marginTop: scale(10),
-    backgroundColor: COLORS.neutral200,
+    backgroundColor: COLORS.neutral100,
     borderWidth: scale(2),
-    borderColor: COLORS.neutral200,
+    borderColor: COLORS.neutral100,
     position: 'relative',
     borderRadius: 24
   },

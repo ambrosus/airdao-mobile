@@ -51,7 +51,7 @@ export const PreviewSuccess = ({
         <SuccessIcon />
       </Row>
       <Spacer value={scale(8)} />
-      <Text fontSize={14} color={COLORS.neutral900}>
+      <Text fontSize={16} color={COLORS.neutral900}>
         {t('harbor.successfully.stake.header')}
       </Text>
       <Spacer value={scale(12)} />

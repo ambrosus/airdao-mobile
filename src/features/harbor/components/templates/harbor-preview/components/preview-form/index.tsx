@@ -24,14 +24,8 @@ export const PreviewForm = ({
 }: PreviewFormModel) => {
   const { t } = useTranslation();
 
-  const {
-    stakeAmount,
-    receiveAmount,
-    fromAddress,
-    apy,
-    receiveToken,
-    stakeToken
-  } = previewData;
+  const { amount, receiveAmount, fromAddress, apy, receiveToken, token } =
+    previewData;
 
   return (
     <>
@@ -41,9 +35,9 @@ export const PreviewForm = ({
             {t('harbor.stake.amount.preview.title')}
           </Text>
           <Row alignItems="center">
-            <TokenLogo token={stakeToken} scale={0.8} />
+            <TokenLogo token={token} scale={0.8} />
             <Text style={styles.valueText}>
-              {NumberUtils.limitDecimalCount(stakeAmount, 2)} {stakeToken}
+              {NumberUtils.limitDecimalCount(amount, 2)} {token}
             </Text>
           </Row>
         </Row>

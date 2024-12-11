@@ -18,18 +18,11 @@ import { AMB_DECIMALS } from '@constants/variables';
 import { CryptoCurrencyCode } from '@appTypes';
 import { TokenUtils } from '@utils/token';
 import { PrimaryButton } from '@components/modular';
-import { BottomSheetHarborPreView } from '@features/harbor/components/templates/harbor-preview';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
+import { BottomSheetHarborPreView } from '@features/harbor/components/templates';
+import { DEFAULT_PREVIEW } from '@entities/harbor/constants';
 
-const DEFAULT_PREVIEW = {
-  stakeAmount: '',
-  stakeToken: CryptoCurrencyCode.AMB,
-  receiveAmount: '',
-  receiveToken: CryptoCurrencyCode.stAMB,
-  fromAddress: '',
-  apy: ''
-};
 export const ProcessStake = () => {
   const [previewData, setPreviewData] = useState(DEFAULT_PREVIEW);
 
@@ -121,8 +114,8 @@ export const ProcessStake = () => {
       return;
     }
     const data = {
-      stakeAmount: amountToStake,
-      stakeToken: CryptoCurrencyCode.AMB,
+      amount: amountToStake,
+      token: CryptoCurrencyCode.AMB,
       receiveAmount: amountToStake,
       receiveToken: CryptoCurrencyCode.stAMB,
       fromAddress: wallet?.address || '',

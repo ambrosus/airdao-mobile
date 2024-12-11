@@ -1,16 +1,12 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
 import { contentBox } from '@components/styles';
 
 export const styles = StyleSheet.create({
-  main: {
+  wrapper: {
     ...contentBox,
-    backgroundColor: COLORS.neutral100
-  },
-  title: {
-    color: COLORS.neutral600
-  },
-  text: {
-    color: COLORS.neutral900
+    backgroundColor: COLORS.neutral0,
+    paddingVertical: scale(16)
   }
 });

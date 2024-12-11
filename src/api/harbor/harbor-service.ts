@@ -72,6 +72,49 @@ const getStakeLimit = async () => {
   }
 };
 
+const getUnStakeLockTime = async () => {
+  try {
+    const contract = createHarborLiquidStakedContract();
+    const data = await contract.unstakeLockTime();
+
+    return {
+      rate: '1 AMB = 1 stAMB',
+      delay: (Number(data) / 86400).toFixed(0) || '0'
+    };
+  } catch (e) {
+    return e;
+  }
+};
+
+const getTier = async (address: string) => {
+  try {
+    const contract = new ethers.Contract(
+      Config.STAKING_TIERS_ADDRESS,
+      HARBOR_ABI,
+      provider
+    );
+    const data = await contract.calculateTier(address);
+    const value = Number(data);
+    if (isNaN(value)) {
+      return 1;
+    }
+    switch (true) {
+      case value >= 100:
+        return 4;
+      case value >= 75:
+        return 3;
+      case value >= 50:
+        return 2;
+      case value >= 25:
+        return 1;
+      default:
+        return 1;
+    }
+  } catch (e) {
+    return 1;
+  }
+};
+
 const processStake = async (
   wallet: RawRecord | undefined,
   value: BigNumber
@@ -103,5 +146,7 @@ export const harborService = {
   getStakeAPR,
   getUserStaked,
   getStakeLimit,
+  getUnStakeLockTime,
+  getTier,
   processStake
 };

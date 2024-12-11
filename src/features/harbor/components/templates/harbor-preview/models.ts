@@ -1,8 +1,8 @@
 import { CryptoCurrencyCode } from '@appTypes';
 
 export interface PreviewDataModel {
-  stakeAmount: string;
-  stakeToken: CryptoCurrencyCode;
+  amount: string;
+  token: CryptoCurrencyCode;
   receiveAmount: string;
   receiveToken: CryptoCurrencyCode;
   fromAddress: string;
@@ -11,4 +11,5 @@ export interface PreviewDataModel {
 
 export interface BottomSheetHarborPreViewProps {
   previewData: PreviewDataModel;
+  type?: 'stake' | 'withdraw';
 }

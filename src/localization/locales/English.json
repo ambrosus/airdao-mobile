@@ -158,6 +158,8 @@
   "common.status.success": "Success",
   "common.tx.confirmed": "Transaction confirmed.",
   "common.details": "Details",
+  "common.day": "day",
+  "common.days": "days",
 
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
@@ -507,6 +509,7 @@
   "harbor.total.staked": "Total Staked on Harbor",
   "harbor.total.staked.value": "Total Staked Value",
   "harbor.tiers": "Tiers",
+  "harbor.tier": "Tier",
   "harbor.staked.amount": "Staked amount",
   "harbor.staked.balance": "Staked balance",
   "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
@@ -517,9 +520,14 @@
   "harbor.stake.apy": "APY",
   "harbor.successfully.stake.header": "You have successfully staked",
 
-
   "harbor.withdraw.stake.reward": "Stake + Rewards",
   "harbor.withdraw.reward": "Rewards only",
+  "harbor.tiers.container.header": "Reward Distribution",
+
+  "harbor.exchange.rate": "Exchange rate",
+  "harbor.withdrawal.delay": "Withdrawal Delay",
+  "harbor.withdrawal.button": "Request Withdrawal",
+  "harbor.transaction.failed": "The transaction was failed.",
 
 
   "wallet.connect": {

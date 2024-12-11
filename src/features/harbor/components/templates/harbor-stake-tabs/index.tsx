@@ -1,10 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { WrappedListsContainer } from '@features/kosmos/components/base';
-import {
-  StakeAMBTab,
-  StakeHBRTab
-} from '@features/harbor/components/composite';
+import { StakeAMBTab } from '@features/harbor/components/composite';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { TokenLogo } from '@components/modular';
 
@@ -24,16 +21,16 @@ export const HarborStakeTabs = () => {
               <StakeAMBTab />
             </WrappedListsContainer>
           )
-        },
-        {
-          icon: <TokenLogo token={'hbr'} scale={0.8} />,
-          title: `${t('staking.header')} HBR`,
-          view: (
-            <WrappedListsContainer>
-              <StakeHBRTab />
-            </WrappedListsContainer>
-          )
         }
+        // {
+        //   icon: <TokenLogo token={'hbr'} scale={0.8} />,
+        //   title: `${t('staking.header')} HBR`,
+        //   view: (
+        //     <WrappedListsContainer>
+        //       <StakeHBRTab />
+        //     </WrappedListsContainer>
+        //   )
+        // }
       ]}
     />
   );

@@ -56,15 +56,15 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
+    case CryptoCurrencyCode.stAMB.toLowerCase():
+    case 'staked amb':
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
-    case CryptoCurrencyCode.stAMB.toLowerCase():
-    case 'staked amb':
-    case CryptoCurrencyCode.stAMB.toLowerCase():
+    case CryptoCurrencyCode.StAMB.toLowerCase():
       return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():

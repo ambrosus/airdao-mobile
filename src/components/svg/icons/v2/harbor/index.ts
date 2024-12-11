@@ -4,3 +4,4 @@ export { ImportantInfo } from './ImportantInfo';
 export { APYHeaderIcon } from './APYHeaderIcon';
 export { StakedBalanceIcon } from './StakedBalanceIcon';
 export { SuccessIcon } from './SuccessIcon';
+export { ErrorIcon } from './ErrorIcon';

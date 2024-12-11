@@ -22,7 +22,7 @@ export const StakeAMBTab = ({}) => {
   }, [updateAll, wallet?.address]);
 
   return (
-    <View style={styles.main}>
+    <View>
       <ScrollView
         refreshControl={renderRefetchController}
         style={styles.wrapper}

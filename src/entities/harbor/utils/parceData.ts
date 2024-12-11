@@ -1,12 +1,5 @@
-import { BigNumber } from 'ethers';
 import { HarborDataModel } from '@entities/harbor/model/types';
-
-export const DEFAULT_DATA = {
-  apr: '0',
-  totalStaked: BigNumber.from(0),
-  stakeLimit: BigNumber.from(0),
-  userStaked: BigNumber.from(0)
-};
+import { DEFAULT_DATA } from '@entities/harbor/constants';
 
 type ParseDataModel = Awaited<(string | any)[]>[];
 
