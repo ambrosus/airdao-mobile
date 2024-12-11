@@ -114,6 +114,19 @@ export const BridgeForm = () => {
     setSelectedTokenPairs(tokenPair);
     tokenSelectRef?.current?.dismiss();
   };
+
+  const decimals = useMemo(
+    () =>
+      fromData.value.id === 'amb'
+        ? selectedTokenDestination.decimals
+        : selectedTokenFrom.decimals,
+    [
+      fromData.value.id,
+      selectedTokenDestination.decimals,
+      selectedTokenFrom.decimals
+    ]
+  );
+
   const parseBridgePreviewData = useCallback(
     (feeData: FeeData, gasFee: BigNumberish) => {
       return [
@@ -121,7 +134,7 @@ export const BridgeForm = () => {
           name: t('bridge.preview.receive'),
           crypto: {
             amount: feeData?.amount ?? BigNumber.from(0),
-            decimals: selectedTokenFrom.decimals
+            decimals
           },
           symbol: selectedTokenFrom.symbol
         },
@@ -152,9 +165,9 @@ export const BridgeForm = () => {
       ];
     },
     [
+      decimals,
       networkNativeToken?.decimals,
       networkNativeToken.symbol,
-      selectedTokenFrom.decimals,
       selectedTokenFrom.symbol,
       t
     ]
@@ -350,7 +363,7 @@ export const BridgeForm = () => {
         <Spacer value={scale(32)} />
       </View>
       <Animated.View style={[margin]}>
-        <PrimaryButton onPress={goToPreview} disabled={disabledButton}>
+        <PrimaryButton onPress={goToPreview}>
           {templateDataLoader ? (
             <Spinner />
           ) : (
