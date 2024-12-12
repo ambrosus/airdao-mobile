@@ -3,13 +3,7 @@ import { combineComponents } from '@utils/combineComponents';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LocalizationProvider } from '@contexts';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink
-} from '@apollo/client';
-import { ListsContextProvider } from '@contexts/ListsContext';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
