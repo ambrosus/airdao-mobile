@@ -10,25 +10,39 @@ import {
   TransactionListItem,
   TxType,
   useTransactions,
-  useTransactions as useOrders
+  useTransactions as useOrders,
+  useMarketTokens
 } from '@entities/kosmos';
 
 export const UserOrdersList = () => {
   const { transactions, isTransactionsLoading, refetchTransactions } =
     useTransactions();
   const { claimingTransaction, setClaimingTransaction } = useClaimState();
-  const renderRefetchController = useMemo(
-    () => (
+  const { refetchTokens, isTokensLoading } = useMarketTokens();
+
+  const renderRefetchController = useMemo(() => {
+    const refreshing = isTransactionsLoading || isTokensLoading;
+    const onRefresh = () => {
+      refetchTokens();
+      refetchTransactions();
+    };
+
+    return (
       <RefreshControl
-        onRefresh={refetchTransactions}
-        refreshing={isTransactionsLoading}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
         removeClippedSubviews
       />
-    ),
-    [isTransactionsLoading, refetchTransactions]
-  );
+    );
+  }, [
+    isTokensLoading,
+    isTransactionsLoading,
+    refetchTokens,
+    refetchTransactions
+  ]);
 
   const { refetchTransactions: refetchOrders } = useOrders();
+
   useFocusEffect(
     useCallback(() => {
       refetchOrders();
