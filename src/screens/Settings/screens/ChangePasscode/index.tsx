@@ -15,7 +15,7 @@ import { usePasscodeActions } from '@features/passcode/lib/hooks';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const { passcode } = usePasscodeStore();
   const navigation = useNavigation<SettingsTabNavigationProp>();
   const { onChangePasscodeHandle } = usePasscodeActions();
@@ -30,6 +30,7 @@ export const ChangePasscode = () => {
   const resetPassword = () => {
     setExistPasswordError(true);
     setTypedPasscode([]);
+    setNewPasscode([]);
   };
 
   const onStep1Press = useCallback(
@@ -79,7 +80,7 @@ export const ChangePasscode = () => {
           [
             {
               text: t('button.try.again'),
-              onPress: () => null,
+              onPress: resetPassword,
               style: 'cancel'
             }
           ]
@@ -145,6 +146,10 @@ export const ChangePasscode = () => {
     }
   }, [typedPasscode]);
 
+  const onProcessPasscode = async () => {
+    await handlePasscodeBtnPress(typedPasscode);
+  };
+
   return (
     <View style={{ paddingVertical: top, ...styles.main }}>
       <Header
@@ -165,13 +170,12 @@ export const ChangePasscode = () => {
 
         <Button
           disabled={buttonError}
-          onPress={async () => {
-            await handlePasscodeBtnPress(typedPasscode);
-          }}
+          onPress={onProcessPasscode}
           type="circular"
           style={{
             ...styles.button,
-            backgroundColor: buttonError ? COLORS.brand100 : COLORS.brand500
+            backgroundColor: buttonError ? COLORS.brand100 : COLORS.brand500,
+            marginBottom: verticalScale(-bottom / 2)
           }}
         >
           <Text color={buttonError ? COLORS.brand300 : COLORS.neutral0}>

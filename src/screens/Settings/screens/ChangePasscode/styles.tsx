@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   main: {
@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   header: { shadowColor: 'transparent' },
   passcodeWrapper: { paddingHorizontal: scale(15) },
   button: {
-    marginBottom: verticalScale(30),
     height: scale(54)
   }
 });
