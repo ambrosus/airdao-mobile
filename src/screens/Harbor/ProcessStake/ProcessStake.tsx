@@ -20,11 +20,11 @@ import { TokenUtils } from '@utils/token';
 import { PrimaryButton } from '@components/modular';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
-import { BottomSheetHarborPreView } from '@features/harbor/components/templates';
-import { DEFAULT_PREVIEW } from '@entities/harbor/constants';
+import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
+import { BottomSheetHarborStakePreView } from '@features/harbor/components/modular';
 
 export const ProcessStake = () => {
-  const [previewData, setPreviewData] = useState(DEFAULT_PREVIEW);
+  const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);
 
   const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
@@ -139,61 +139,56 @@ export const ProcessStake = () => {
         style={styles.main}
       >
         <Spacer value={scale(8)} />
-
-        <>
-          <StakedBalanceInfo
-            stakedValue={NumberUtils.limitDecimalCount(
-              +formatEther(userStaked),
-              2
-            )}
-            coin="AMB"
-            title={t('harbor.staked.balance')}
-          />
-          <Spacer value={scale(8)} />
-
-          <InputWithoutTokenSelect
-            value={amountToStake}
-            exchange={{
-              token: CryptoCurrencyCode.stAMB,
-              value: amountToStake
-            }}
-            token={ambTokenData}
-            onChangeText={onChangeText}
-            onPressMaxAmount={() => {
-              onChangeText(formatEther(ambTokenData.balance.wei));
-            }}
-          />
-          {error && (
-            <Text
-              style={{
-                paddingVertical: scale(8)
-              }}
-              color={COLORS.warning600}
-            >
-              {error}
-            </Text>
+        <StakedBalanceInfo
+          stakedValue={NumberUtils.limitDecimalCount(
+            +formatEther(userStaked),
+            2
           )}
+          coin="AMB"
+          title={t('harbor.staked.balance')}
+        />
+        <Spacer value={scale(8)} />
+
+        <InputWithoutTokenSelect
+          value={amountToStake}
+          exchange={{
+            token: CryptoCurrencyCode.stAMB,
+            value: amountToStake
+          }}
+          token={ambTokenData}
+          onChangeText={onChangeText}
+          onPressMaxAmount={() => {
+            onChangeText(formatEther(ambTokenData.balance.wei));
+          }}
+        />
+        {error && (
           <Text
-            fontSize={14}
-            style={styles.stakeInfoText}
-            color={COLORS.neutral600}
+            style={{
+              paddingVertical: scale(8)
+            }}
+            color={COLORS.warning600}
           >
-            {t('harbor.staked.info')}
+            {error}
           </Text>
-          <RateInfo
-            availableToStake={formatEther(selectedAccountBalance.wei)}
-          />
-          <Spacer value={scale(16)} />
-          <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
-            <Text
-              fontFamily="Inter_700Bold"
-              color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
-            >
-              {t('button.confirm')}
-            </Text>
-          </PrimaryButton>
-        </>
-        <BottomSheetHarborPreView
+        )}
+        <Text
+          fontSize={14}
+          style={styles.stakeInfoText}
+          color={COLORS.neutral600}
+        >
+          {t('harbor.staked.info')}
+        </Text>
+        <RateInfo availableToStake={formatEther(selectedAccountBalance.wei)} />
+        <Spacer value={scale(16)} />
+        <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
+          <Text
+            fontFamily="Inter_700Bold"
+            color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
+          >
+            {t('button.confirm')}
+          </Text>
+        </PrimaryButton>
+        <BottomSheetHarborStakePreView
           previewData={previewData}
           ref={bottomSheetRef}
         />

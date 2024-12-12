@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import { TierRewardItem } from '@entities/harbor/model/types';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
+import { calculateClaimAmount } from '@features/harbor/components/composite/withdraw-stake-reward-tab/hooks/calculateClaimAmount';
 
 interface TiersContainerProps {
   bondAmount: string;
@@ -23,39 +24,44 @@ export const TiersSelector = ({
 }: TiersContainerProps) => {
   const { t } = useTranslation();
   const {
+    activeAmbTier,
+    setActiveAmbTier,
+    activeBondTier,
+    setActiveBondTier,
+    claimAmount,
+    setRewardAmount,
     data: { tier: userTier }
   } = useHarborStore();
-
-  const [activeAmbTier, setActiveAmbTier] = useState<TierRewardItem>(
-    REWARD_TIERS_LIST.amb[0]
-  );
-  const [activeBondTier, setActiveBondTier] = useState<TierRewardItem>(
-    REWARD_TIERS_LIST.bond[2]
-  );
 
   const setOppositePart = (
     oppositeArray: TierRewardItem[],
     oppositeSetter: (payload: TierRewardItem) => void,
     selectedItem: TierRewardItem
   ) => {
-    if (selectedItem.value === 1) {
+    if (selectedItem?.value === 1) {
       oppositeSetter(EMPTY_SELECTED_TIER);
     }
     const oppositePart = oppositeArray.find(
-      (oppositeItem) => oppositeItem.value + selectedItem.value === 1
+      (oppositeItem) => oppositeItem?.value + selectedItem?.value === 1
     ) as TierRewardItem;
     oppositeSetter(oppositePart);
   };
 
   const onAmbPress = (ambItem: TierRewardItem) => {
+    setRewardAmount(calculateClaimAmount(claimAmount, ambItem, 'amb'));
     setActiveAmbTier(ambItem);
     setOppositePart(REWARD_TIERS_LIST.bond, setActiveBondTier, ambItem);
   };
 
   const onBondPress = (bondItem: TierRewardItem) => {
+    setRewardAmount(calculateClaimAmount(claimAmount, bondItem, 'bond'));
     setActiveBondTier(bondItem);
     setOppositePart(REWARD_TIERS_LIST.amb, setActiveAmbTier, bondItem);
   };
+  useEffect(() => {
+    setRewardAmount(calculateClaimAmount(claimAmount, activeAmbTier, 'amb'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claimAmount]);
 
   return (
     <View>

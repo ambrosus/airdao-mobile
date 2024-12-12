@@ -7,5 +7,6 @@ export const styles = StyleSheet.create({
     ...contentBox,
     paddingHorizontal: scale(16),
     width: '100%'
-  }
+  },
+  listWrapper: { paddingTop: scale(8) }
 });

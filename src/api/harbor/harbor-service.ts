@@ -3,6 +3,7 @@ import { RawRecord } from '@nozbe/watermelondb';
 import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { Cache, CacheKey } from '@lib/cache';
+import { parseEther } from 'ethers/lib/utils';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
@@ -33,8 +34,7 @@ const getTotalStaked = async () => {
       HARBOR_ABI,
       provider
     );
-    const data = await contract.totalSupply();
-    return data;
+    return await contract.totalSupply();
   } catch (e) {
     return e;
   }
@@ -115,6 +115,15 @@ const getTier = async (address: string) => {
   }
 };
 
+const getClaimAmount = async (address: string) => {
+  try {
+    const contract = createHarborLiquidStakedContract();
+    return await contract.getClaimAmount(address);
+  } catch (e) {
+    return e;
+  }
+};
+
 const processStake = async (
   wallet: RawRecord | undefined,
   value: BigNumber
@@ -141,6 +150,57 @@ const processStake = async (
   }
 };
 
+const processWithdraw = async (
+  wallet: RawRecord | undefined,
+  amount: string,
+  _desiredCoeff: number
+) => {
+  try {
+    const privateKey = (await Cache.getItem(
+      // @ts-ignore
+      `${CacheKey.WalletPrivateKey}-${wallet.hash}`
+    )) as string;
+    const signer = createSigner(privateKey);
+    // @ts-ignore
+    const contract = createHarborLiquidStakedContract(signer);
+    const desiredCoeff = _desiredCoeff * 100;
+    const tx = await contract.unstake(parseEther(amount), desiredCoeff);
+    if (tx) {
+      const res = await tx.wait();
+      if (res) {
+        return res;
+      }
+    }
+  } catch (e) {
+    return e;
+  }
+};
+const processClaimReward = async (
+  wallet: RawRecord | undefined,
+  amount: string,
+  _desiredCoeff: number
+) => {
+  try {
+    const privateKey = (await Cache.getItem(
+      // @ts-ignore
+      `${CacheKey.WalletPrivateKey}-${wallet.hash}`
+    )) as string;
+    const signer = createSigner(privateKey);
+    // @ts-ignore
+    const contract = createHarborLiquidStakedContract(signer);
+    const desiredCoeff = _desiredCoeff * 100;
+    return await contract.claimRewards(desiredCoeff);
+    // if (tx) {
+    //   const res = await tx.wait();
+    //   if (res) {
+    //     return res;
+    //   }
+    // }
+  } catch (e) {
+    return e;
+  }
+};
+
 export const harborService = {
   getTotalStaked,
   getStakeAPR,
@@ -148,5 +208,8 @@ export const harborService = {
   getStakeLimit,
   getUnStakeLockTime,
   getTier,
-  processStake
+  getClaimAmount,
+  processStake,
+  processWithdraw,
+  processClaimReward
 };

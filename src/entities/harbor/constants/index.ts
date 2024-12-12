@@ -28,15 +28,15 @@ export const EMPTY_UN_STAKE_LIMIT = {
 
 export const DEFAULT_DATA = {
   apr: '0',
+  token: EMPTY_TOKEN,
   tier: 1,
-  unStakeLimit: EMPTY_UN_STAKE_LIMIT,
+  unStakeDelay: EMPTY_UN_STAKE_LIMIT,
   totalStaked: BigNumber.from(0),
   stakeLimit: BigNumber.from(0),
-  userStaked: BigNumber.from(0),
-  token: EMPTY_TOKEN
+  userStaked: BigNumber.from(0)
 };
 
-export const DEFAULT_PREVIEW = {
+export const DEFAULT_STAKE_PREVIEW = {
   amount: '',
   token: CryptoCurrencyCode.AMB,
   receiveAmount: '',
@@ -44,6 +44,13 @@ export const DEFAULT_PREVIEW = {
   fromAddress: '',
   apy: ''
 };
+export const DEFAULT_WITHDRAW_PREVIEW = {
+  amount: '0',
+  rewardAmb: '0',
+  rewardBond: '0',
+  delay: 0
+};
+
 export const EMPTY_SELECTED_TIER = { id: 'empty', value: 0, availableOn: 0 };
 export const REWARD_TIERS_LIST: TierRewardList = {
   amb: [

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
@@ -9,35 +9,55 @@ import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '@constants/colors';
-import { BottomSheetHarborPreView } from '@features/harbor/components/templates';
-import { DEFAULT_PREVIEW } from '@entities/harbor/constants';
+import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetRef } from '@components/composite';
+import { useWalletStore } from '@entities/wallet';
+import { BottomSheetHarborWithdrawPreView } from '@features/harbor/components/modular/harbor-withdraw-preview';
 
 export const WithdrawStakeRewardTab = () => {
   const bottomSheetRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
   const {
-    data: { userStaked, token, totalStaked }
+    data: { userStaked, token, totalStaked, unStakeDelay },
+    ambAmount,
+    bondAmount,
+    updateAll,
+    loading
   } = useHarborStore();
 
+  const { wallet } = useWalletStore();
+
   const [amountToWithdraw, setAmountToWithdraw] = useState('');
-  const [previewData, setPreviewData] = useState(DEFAULT_PREVIEW);
-  const [bondAmount, setBondAmount] = useState('123.1');
-  const [ambAmount, setAmbAmount] = useState('456.3');
+  const [previewData, setPreviewData] = useState(DEFAULT_WITHDRAW_PREVIEW);
 
   const isDisabledButton = useMemo(() => {
     return !amountToWithdraw || !totalStaked;
   }, [amountToWithdraw, totalStaked]);
 
   const onWithdrawPress = useCallback(() => {
-    setPreviewData(DEFAULT_PREVIEW)
-    setBondAmount('111')
-    setAmbAmount('1111')
-    // do nothing
-  }, []);
+    const _previewData = {
+      amount: amountToWithdraw,
+      rewardAmb: ambAmount,
+      rewardBond: bondAmount,
+      delay: unStakeDelay.delay
+    };
+    setPreviewData(_previewData);
+    bottomSheetRef.current?.show();
+  }, [ambAmount, amountToWithdraw, bondAmount, unStakeDelay.delay]);
+
+  const refetchAll = async () => {
+    updateAll(wallet?.address || '');
+  };
 
   return (
-    <View
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          onRefresh={refetchAll}
+          refreshing={loading}
+          removeClippedSubviews
+        />
+      }
       style={{
         paddingHorizontal: scale(16)
       }}
@@ -51,7 +71,10 @@ export const WithdrawStakeRewardTab = () => {
         }}
       />
       <Spacer value={scale(8)} />
-      <TiersSelector bondAmount={bondAmount} ambAmount={ambAmount} />
+      <TiersSelector
+        bondAmount={bondAmount || '0'}
+        ambAmount={ambAmount || '0'}
+      />
       <Spacer value={scale(8)} />
       <WithdrawInfo />
       <Spacer value={scale(16)} />
@@ -64,10 +87,10 @@ export const WithdrawStakeRewardTab = () => {
           {t('harbor.withdrawal.button')}
         </Text>
       </PrimaryButton>
-      <BottomSheetHarborPreView
-        previewData={previewData}
+      <BottomSheetHarborWithdrawPreView
         ref={bottomSheetRef}
+        previewData={previewData}
       />
-    </View>
+    </ScrollView>
   );
 };

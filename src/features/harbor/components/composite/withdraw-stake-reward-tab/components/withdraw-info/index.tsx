@@ -11,7 +11,7 @@ export const WithdrawInfo = ({}) => {
   const { t } = useTranslation();
   const {
     data: {
-      unStakeLimit: { rate, delay }
+      unStakeDelay: { rate, delay }
     }
   } = useHarborStore();
   return (

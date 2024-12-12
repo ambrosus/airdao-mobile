@@ -9,11 +9,18 @@ import { useNavigation } from '@react-navigation/native';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { styles } from './styles';
 import { HarborWithdrawTabs } from '@features/harbor/components/templates';
+import { useEffectOnce } from '@hooks';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useWalletStore } from '@entities/wallet';
 
 export const WithdrawHarborScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
-
+  const { getClaimAmount } = useHarborStore();
+  const { wallet } = useWalletStore();
+  useEffectOnce(() => {
+    getClaimAmount(wallet?.address || '');
+  });
   const RightContent = () => (
     <Button onPress={() => navigation.navigate('WithdrawRequests')}>
       <NoteIcon />

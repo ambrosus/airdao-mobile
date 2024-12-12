@@ -521,6 +521,7 @@
   "harbor.stake.from": "!!!From",
   "harbor.stake.apy": "!!!APY",
   "harbor.successfully.stake.header": "!!!You have successfully staked",
+  "harbor.successfully.withdraw.header": "!!!You have successfully withdraw",
 
 
   "harbor.withdraw.stake.reward": "!!!Stake + Rewards",

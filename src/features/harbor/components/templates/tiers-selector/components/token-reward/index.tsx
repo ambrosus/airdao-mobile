@@ -2,12 +2,15 @@ import React from 'react';
 import { Row, Text } from '@components/base';
 import { TouchableOpacity, View } from 'react-native';
 import { TokenLogo } from '@components/modular';
-import { RewardTokenNames, TierRewardItem } from '@entities/harbor/model/types';
+import {
+  RewardTokenNamesModel,
+  TierRewardItem
+} from '@entities/harbor/model/types';
 import { TierItem } from '../tier-item';
 import { styles } from './styles';
 
 interface TokenRewardProps {
-  rewardTokenName: RewardTokenNames;
+  rewardTokenName: RewardTokenNamesModel;
   selectedTokenReward: TierRewardItem;
   amount: string;
   onItemPress: (payload: TierRewardItem) => void;

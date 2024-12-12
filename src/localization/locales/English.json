@@ -519,6 +519,7 @@
   "harbor.stake.from": "From",
   "harbor.stake.apy": "APY",
   "harbor.successfully.stake.header": "You have successfully staked",
+  "harbor.successfully.withdraw.header": "You have successfully withdraw",
 
   "harbor.withdraw.stake.reward": "Stake + Rewards",
   "harbor.withdraw.reward": "Rewards only",
@@ -528,6 +529,11 @@
   "harbor.withdrawal.delay": "Withdrawal Delay",
   "harbor.withdrawal.button": "Request Withdrawal",
   "harbor.transaction.failed": "The transaction was failed.",
+
+  "harbor.withdraw.preview.header": "Withdrawal request sent",
+  "harbor.withdraw.preview.amb.reward": "Reward AMB",
+  "harbor.withdraw.preview.bond.reward": "Reward Bond",
+  "harbor.withdraw.preview.delay": "Withdrawal Delay",
 
 
   "wallet.connect": {

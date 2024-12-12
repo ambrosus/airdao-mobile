@@ -1,26 +1,20 @@
 import React from 'react';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
 
 interface ContentItemModel {
   title: string;
-  value: string;
-  isApy?: boolean;
+  value: React.JSX.Element;
 }
 
-export const ContentItem = ({
-  title,
-  value,
-  isApy = false
-}: ContentItemModel) => {
+export const ContentItem = ({ title, value }: ContentItemModel) => {
   return (
-    <Row justifyContent="space-between">
+    <Row style={{ marginBottom: scale(8) }} justifyContent="space-between">
       <Text fontSize={14} color={COLORS.neutral600}>
         {title}
       </Text>
-      <Text fontSize={14} color={COLORS[isApy ? 'success300' : 'neutral800']}>
-        {value}
-      </Text>
+      <Text>{value}</Text>
     </Row>
   );
 };

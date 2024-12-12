@@ -9,7 +9,7 @@ export interface PreviewDataModel {
   apy: string;
 }
 
-export interface BottomSheetHarborPreViewProps {
+export interface BottomSheetHarborStakePreViewProps {
   previewData: PreviewDataModel;
   type?: 'stake' | 'withdraw';
 }

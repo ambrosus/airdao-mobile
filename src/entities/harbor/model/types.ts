@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { Token } from '@models';
 
-interface UnStakeLimitModel {
+interface UnStakeDelayModel {
   rate: string;
   delay: number;
 }
@@ -10,13 +10,13 @@ export interface HarborDataModel {
   apr: string;
   token: Token;
   tier: number;
-  unStakeLimit: UnStakeLimitModel;
+  unStakeDelay: UnStakeDelayModel;
   totalStaked: BigNumber;
   stakeLimit: BigNumber;
   userStaked: BigNumber;
 }
 
-export type RewardTokenNames = 'amb' | 'bond';
+export type RewardTokenNamesModel = 'amb' | 'bond';
 
 export interface TierRewardItem {
   id: string;
@@ -31,6 +31,15 @@ export interface TierRewardList {
 
 export interface HarborStoreModel {
   data: HarborDataModel;
+  activeAmbTier: TierRewardItem;
+  setActiveAmbTier: (payload: TierRewardItem) => void;
+  activeBondTier: TierRewardItem;
+  claimAmount: BigNumber;
+  getClaimAmount: (payload: string) => void;
+  setActiveBondTier: (payload: TierRewardItem) => void;
+  bondAmount: string;
+  setRewardAmount: (payload: { ambAmount: string; bondAmount: string }) => void;
+  ambAmount: string;
   loading: boolean;
   updateAll: (payload: string) => void;
 }
