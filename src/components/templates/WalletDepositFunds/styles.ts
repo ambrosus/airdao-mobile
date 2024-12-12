@@ -1,5 +1,6 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils/scaling';
+import { DEVICE_WIDTH } from '@constants/variables';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,9 +12,9 @@ export const styles = StyleSheet.create({
   },
 
   thumbnail: {
-    width: scale(157),
+    width: scale(DEVICE_WIDTH / 2.5),
     height: verticalScale(65),
-    objectFit: 'scale-down'
+    objectFit: 'fill'
   },
   description: {
     maxWidth: 313,
@@ -33,7 +34,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 6
   },
   receiveFunds: {
-    paddingBottom: verticalScale(56),
     paddingHorizontal: scale(24)
   }
 });

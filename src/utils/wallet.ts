@@ -95,7 +95,7 @@ const processWallet = async (mnemonic: string) => {
 
     // subscribe to notifications
     API.watcherService.watchAddresses([_account.address]);
-    return { hash };
+    return { hash, address: _account.address };
   } catch (error) {
     if (walletInDb) walletInDb.destroyPermanently();
     if (accountInDb) accountInDb.destroyPermanently();

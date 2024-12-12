@@ -19,27 +19,17 @@ export type HomeParamsList = {
     walletAccount: string;
   };
   SendFunds: { token?: Token };
-  CreateWalletStep0: undefined;
-  CreateWalletStep1: undefined;
-  CreateWalletStep2: undefined;
-  SetupPasscode: undefined;
-  ConfirmPasscode: { passcode: string[] };
   StakingPool: { pool: StakingPool };
   StakingPools: undefined;
   Bridge: undefined;
   BridgeHistory: undefined;
   BridgeTransferError: undefined;
   SuccessSetupSecurity: undefined;
-  ImportWalletMethods: undefined;
-  ImportWallet: undefined;
-  ImportWalletSuccess: undefined;
   StakeSuccessScreen: {
     type: 'stake' | 'withdraw';
     walletAddress: string | null;
   };
   StakeErrorScreen: undefined;
-  ImportWalletPrivateKey: undefined;
-  ImportWalletPrivateKeyError: { error: 'exist' | 'unknown' };
   KosmosScreen: undefined;
   KosmosMarketScreen: { market: MarketType };
   SwapScreen: undefined;
@@ -47,9 +37,10 @@ export type HomeParamsList = {
   AddressSearch: {
     address: string;
   };
+  Wallets: { screen: string };
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Wallets'>,
+  BottomTabNavigationProp<TabsParamsList>,
   NativeStackNavigationProp<HomeParamsList>
 >;

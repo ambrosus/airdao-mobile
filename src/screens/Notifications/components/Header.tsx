@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Row, Spacer } from '@components/base';
 import { Header } from '@components/composite';
-import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { moderateScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
+import { SettingsOutlineIcon } from '@components/svg/icons/v2';
 
 interface NotificationsHeaderProps {
   onSettingsPress: () => unknown;
@@ -17,28 +17,23 @@ export const NotificationsHeader = (
   const { onSettingsPress = () => null } = props;
   const { t } = useTranslation();
 
-  const renderContentRight = () => {
+  const renderContentRight = useMemo(() => {
     return (
       <Row alignItems="center">
         <Spacer value={38} horizontal />
-        <Button
-          type="circular"
-          onPress={onSettingsPress}
-          testID="settings-button"
-          style={styles.settingsBtn}
-        >
-          <SettingsFilledIcon color={COLORS.neutral900} scale={1.1} />
+        <Button onPress={onSettingsPress} testID="settings-button">
+          <SettingsOutlineIcon />
         </Button>
       </Row>
     );
-  };
+  }, [onSettingsPress]);
+
   return (
     <Header
       titleStyle={styles.headerTitle}
       bottomBorder
       title={t('tab.notifications')}
-      titlePosition="left"
-      contentRight={renderContentRight()}
+      contentRight={renderContentRight}
       style={{ shadowColor: COLORS.transparent }}
     />
   );
@@ -46,9 +41,9 @@ export const NotificationsHeader = (
 
 const styles = StyleSheet.create({
   headerTitle: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 20,
-    color: COLORS.neutral900
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 17,
+    color: COLORS.neutral800
   },
   settingsBtn: {
     backgroundColor: COLORS.alphaBlack5,

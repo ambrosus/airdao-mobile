@@ -80,7 +80,7 @@ export const BuyBondButton = ({
             onDismissBottomSheet();
             reset();
             setIsTransactionProcessing(false);
-
+            onChangeAmountToBuy('');
             setTimeout(() => {
               Toast.show({
                 text: t('kosmos.buy.success.toast', {
@@ -103,6 +103,10 @@ export const BuyBondButton = ({
     }
   }, [
     setIsTransactionProcessing,
+    t,
+    onChangeAmountToBuy,
+    amountToBuy,
+    contracts,
     createNewSigner,
     contracts,
     market.id,
@@ -131,7 +135,7 @@ export const BuyBondButton = ({
       onPress={onBuyBondsPress}
     >
       <TextOrSpinner
-        label={t('kosmos.button.buy.bond')}
+        label={t('button.confirm')}
         loadingLabel={t('kosmos.button.processing')}
         loading={isTransactionProcessing}
       />

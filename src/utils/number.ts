@@ -114,17 +114,30 @@ const minimiseAmount = (num: number): string => {
 };
 
 const numberToTransformedLocale = (value: string | number) => {
-  const number = parseFloat(value.toString().replace(/,/g, ''));
-  const [intPart, floatPart] = number.toString().split('.');
+  const amount = parseFloat(value.toString().replace(/,/g, ''));
 
-  if (number % 1 === 0) {
-    return number.toLocaleString('en-US');
+  // Check if the number is zero and has a negative symbol
+  if (amount === 0 && value.toString().startsWith('-')) {
+    return '0';
   }
 
-  const formattedIntPart = parseInt(intPart).toLocaleString('en-US');
+  const [intPart, floatPart] = amount.toString().split('.');
+
+  if (amount % 1 === 0) {
+    return amount.toLocaleString('en-US');
+  }
+
+  const formattedIntPart = parseInt(intPart, 10).toLocaleString('en-US');
   const formattedFloatPart = floatPart ? floatPart.slice(0, 2) : '00';
 
-  return `${formattedIntPart}.${formattedFloatPart}`;
+  return formattedFloatPart === '00'
+    ? formattedIntPart
+    : `${formattedIntPart}.${formattedFloatPart}`;
+};
+
+const formatDecimal = (value: string, decimals = 2): string => {
+  const fixed = Number(value).toFixed(decimals);
+  return fixed.replace(/\.?0+$/, '');
 };
 
 export const NumberUtils = {
@@ -134,5 +147,6 @@ export const NumberUtils = {
   limitDecimalCount,
   formatAmount,
   minimiseAmount,
-  numberToTransformedLocale
+  numberToTransformedLocale,
+  formatDecimal
 };

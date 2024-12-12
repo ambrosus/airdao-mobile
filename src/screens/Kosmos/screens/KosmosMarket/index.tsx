@@ -38,6 +38,8 @@ import {
   useToken
 } from '@entities/kosmos';
 import { useChartStore } from '@features/kosmos';
+import { Spacer } from '@components/base';
+import { verticalScale } from '@utils/scaling';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -176,11 +178,11 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableResetScrollToCoords={false}
             keyboardShouldPersistTaps="handled"
             overScrollMode="never"
-            enableOnAndroid={false}
+            enableOnAndroid
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled={isIOS}
-            extraHeight={isAndroid ? 0 : 330}
+            extraHeight={330}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
@@ -200,6 +202,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
               scrollToInput={scrollToInput}
               onScrollToTop={onScrollToMarket}
             />
+            <Spacer value={verticalScale(30)} />
           </KeyboardAwareScrollView>
         )}
       </View>

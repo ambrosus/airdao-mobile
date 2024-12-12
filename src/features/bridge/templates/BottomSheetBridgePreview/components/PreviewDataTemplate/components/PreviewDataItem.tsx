@@ -1,26 +1,33 @@
-import { NumberUtils } from '@utils/number';
-import { formatUnits } from 'ethers/lib/utils';
+import React from 'react';
 import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import React from 'react';
 import { DataToPreviewModel } from '@models/Bridge';
+import { NumberUtils } from '@utils/number';
+import { formatUnits } from 'ethers/lib/utils';
 
-export const PreviewDataItem = ({
-  item
-}: {
+interface PreviewDataItemProps {
   item: {
     name?: string;
     index: number;
     item: DataToPreviewModel;
   };
-}) => {
-  const { item: renderItem, index } = item;
+}
+
+export const PreviewDataItem = ({ item }: PreviewDataItemProps) => {
+  const {
+    index,
+    item: {
+      name,
+      symbol,
+      crypto: { amount, decimals }
+    }
+  } = item;
 
   const amountToRender = NumberUtils.limitDecimalCount(
-    formatUnits(renderItem.crypto.amount, renderItem.crypto.decimals),
+    formatUnits(amount, decimals),
     5
   );
 
@@ -34,13 +41,13 @@ export const PreviewDataItem = ({
           justifyContent: 'space-between'
         }}
       >
-        <Text>{renderItem.name}</Text>
+        <Text>{name}</Text>
         <Row>
-          {isFirst && <TokenLogo token={renderItem.symbol} scale={0.5} />}
+          {isFirst && <TokenLogo token={symbol} scale={0.5} />}
           <Spacer horizontal value={10} />
           <Text
             color={COLORS.neutral800}
-          >{`${amountToRender}  ${renderItem.symbol}`}</Text>
+          >{`${amountToRender}  ${symbol}`}</Text>
         </Row>
       </View>
       <Spacer value={scale(16)} />

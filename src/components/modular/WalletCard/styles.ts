@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { shadow } from '@constants/shadow';
 import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 
 export const WalletCardHeight = 139;
 
@@ -20,5 +21,15 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0
+  },
+  copiedTextWrapperStyle: {
+    backgroundColor: COLORS.lightWhite,
+    borderColor: COLORS.transparentWhite,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    borderRadius: 20
+  },
+  footerTypography: {
+    lineHeight: moderateScale(20)
   }
 });

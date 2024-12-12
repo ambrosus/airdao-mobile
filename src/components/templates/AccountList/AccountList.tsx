@@ -31,7 +31,7 @@ export const AccountList = forwardRef<FlatList, AccountListProps>(
         <Button
           disabled={typeof onPressAccount !== 'function'}
           onPress={onPress}
-          activeOpacity={0.75}
+          activeOpacity={1}
         >
           <AccountListItem account={item} type={type} cardProps={cardProps} />
         </Button>

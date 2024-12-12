@@ -41,7 +41,9 @@ const envs = {
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
-    CHAIN_ID: 16718
+    CHAIN_ID: 16718,
+    CURRENCY_GRAPH_URL:
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -79,7 +81,9 @@ const envs = {
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
-    CHAIN_ID: 16718
+    CHAIN_ID: 16718,
+    CURRENCY_GRAPH_URL:
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -117,7 +121,9 @@ const envs = {
     ROUTER_V2_ADDRESS: '0xA3E524dFc9deA66aE32e81a5E2B4DF24F56e2CBc',
     FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
-    CHAIN_ID: 22040
+    CHAIN_ID: 22040,
+    CURRENCY_GRAPH_URL:
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
   }
 };
 
@@ -128,7 +134,7 @@ switch (Updates.channel) {
     break;
   }
   case 'stage': {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
   case 'testnet': {

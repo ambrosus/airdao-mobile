@@ -28,6 +28,7 @@ export interface CopyToClipboardButtonProps
   successText?: string;
   successTextProps?: TextProps;
   successContainerStyle?: ViewStyle;
+  containerStyle?: ViewStyle;
   iconProps?: IconProps;
   iconContainerStyle?: ViewStyle;
   toastProps?: Pick<ToastOptions, 'position'>;
@@ -51,6 +52,7 @@ export const CopyToClipboardButton = (
     successText,
     successTextProps,
     successContainerStyle,
+    containerStyle,
     pressableText = false,
     disableWhenCopied = false,
     copiedTextWrapperStyle,
@@ -88,8 +90,8 @@ export const CopyToClipboardButton = (
   };
 
   const buttonMainStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return copied ? { ...successContainerStyle } : {};
-  }, [copied, successContainerStyle]);
+    return copied ? { ...successContainerStyle } : { ...containerStyle };
+  }, [containerStyle, copied, successContainerStyle]);
 
   if (pressableText) {
     return (
@@ -118,14 +120,6 @@ export const CopyToClipboardButton = (
           ) : (
             <Text {...textProps}>{textToDisplay}</Text>
           )}
-          {/* <Spacer horizontal value={scale(16)} /> */}
-          {/* {showToast || !copied ? (
-            <ClipboardFilledIcon {...iconProps} />
-          ) : (
-            <Text {...successTextProps}>
-              {t(successText || t('common.copied'))}
-            </Text>
-          )} */}
         </Row>
       </Button>
     );

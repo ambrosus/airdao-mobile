@@ -7,11 +7,12 @@ import {
   useWalletKitEventsManager
 } from '@features/wallet-connect/lib/hooks';
 import { WalletConnectIcon } from '@components/svg/icons';
-import { renderModalViewByStep } from '../../modular';
+import { RenderModalViewByStep } from '../../modular';
 import { FailedIcon } from '@components/svg/icons/v2';
 
 export const WalletConnectModal = () => {
   const {
+    proposal,
     approvalConnectionBottomSheetRef,
     isWalletKitInitiated,
     walletConnectStep
@@ -22,6 +23,10 @@ export const WalletConnectModal = () => {
   const isError = useMemo(() => {
     return walletConnectStep.toLowerCase().includes('error');
   }, [walletConnectStep]);
+
+  if (!proposal) {
+    return null;
+  }
 
   return (
     <BottomSheet
@@ -34,7 +39,7 @@ export const WalletConnectModal = () => {
       <View style={styles.container}>
         {!isError ? <WalletConnectIcon /> : <FailedIcon />}
 
-        {renderModalViewByStep(walletConnectStep)}
+        {RenderModalViewByStep(walletConnectStep)}
       </View>
     </BottomSheet>
   );

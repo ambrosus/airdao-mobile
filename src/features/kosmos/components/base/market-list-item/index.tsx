@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { MarketType } from '@features/kosmos/types';
@@ -6,6 +6,7 @@ import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
 import { NumberUtils } from '@utils/number';
 import { useToken } from '@entities/kosmos';
+import { $discount, discountColor } from '@features/kosmos/utils';
 
 interface MarketListItemProps {
   market: MarketType;
@@ -19,10 +20,6 @@ interface StyledItemTextProps {
 
 export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
   const { token } = useToken(market.payoutToken);
-
-  const discountItemColor = useMemo(() => {
-    return market.discount > 0 ? COLORS.success500 : COLORS.error400;
-  }, [market]);
 
   return (
     <Row
@@ -38,8 +35,8 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
 
       <Row width="58.75%" alignItems="center" justifyContent="space-between">
         <StyledItemText
-          label={`${market.discount.toFixed(2)}%`}
-          color={discountItemColor}
+          label={$discount(market.discount)}
+          color={discountColor(market.discount)}
         />
         <StyledItemText
           label={`$${NumberUtils.numberToTransformedLocale(

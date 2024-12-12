@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { styles } from './styles';
+import { Keyboard, LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import {
   KeyboardDismissingView,
   Spacer,
@@ -17,13 +17,14 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { BottomSheetRef } from '@components/composite';
 import { useBridgeContextData } from '@features/bridge/context';
-import { useKeyboardHeight, useWallet } from '@hooks';
+import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
-import { View } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
 import { COLORS } from '@constants/colors';
@@ -34,20 +35,24 @@ import { parseUnits } from 'ethers/lib/utils';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { FeeData } from '@lib/bridgeSDK/models/types';
-import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { NumberUtils } from '@utils/number';
 import {
   DEFAULT_TRANSACTION,
   EMPTY_FEE_DATA
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
+import { useWalletStore } from '@entities/wallet';
 
 export const BridgeForm = () => {
-  const { wallet: selectedWallet } = useWallet();
+  const { wallet: selectedWallet } = useWalletStore();
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
 
   const [previewLoader, setPreviewLoader] = useState(false);
-
+  const [disabledComponentStyle, setDisabledComponentStyle] =
+    useState<ViewStyle>({
+      width: 0,
+      height: 0
+    });
   const previewRef = useRef<BottomSheetRef>(null);
   const tokenSelectRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
@@ -109,6 +114,19 @@ export const BridgeForm = () => {
     setSelectedTokenPairs(tokenPair);
     tokenSelectRef?.current?.dismiss();
   };
+
+  const decimals = useMemo(
+    () =>
+      fromData.value.id === 'amb'
+        ? selectedTokenDestination.decimals
+        : selectedTokenFrom.decimals,
+    [
+      fromData.value.id,
+      selectedTokenDestination.decimals,
+      selectedTokenFrom.decimals
+    ]
+  );
+
   const parseBridgePreviewData = useCallback(
     (feeData: FeeData, gasFee: BigNumberish) => {
       return [
@@ -116,7 +134,7 @@ export const BridgeForm = () => {
           name: t('bridge.preview.receive'),
           crypto: {
             amount: feeData?.amount ?? BigNumber.from(0),
-            decimals: selectedTokenFrom.decimals
+            decimals
           },
           symbol: selectedTokenFrom.symbol
         },
@@ -147,15 +165,24 @@ export const BridgeForm = () => {
       ];
     },
     [
+      decimals,
       networkNativeToken?.decimals,
       networkNativeToken.symbol,
-      selectedTokenFrom.decimals,
       selectedTokenFrom.symbol,
       t
     ]
   );
 
+  const setDefaultOptions = useCallback(() => {
+    setTimeout(() => {
+      setPreviewLoader(false);
+      setProcessingTransaction(null);
+    }, 200);
+  }, [setProcessingTransaction]);
+
   const goToPreview = useCallback(async () => {
+    Keyboard.dismiss();
+    setDefaultOptions();
     const isMax =
       amountToBridge ===
         NumberUtils.limitDecimalCount(
@@ -165,6 +192,7 @@ export const BridgeForm = () => {
             selectedTokenFrom.decimals
           ),
           selectedTokenFrom.decimals ?? 18
+          // @ts-ignore
         ) && selectedTokenPairs[0]?.isNativeCoin;
     try {
       setTemplateDataLoader(true);
@@ -178,8 +206,10 @@ export const BridgeForm = () => {
         isMaxOptions: isMax
       });
       if (feeData) {
+        // @ts-ignore
         const gasFee = await processBridge(true, feeData);
         if (gasFee) {
+          // @ts-ignore
           const dataToPreview = parseBridgePreviewData(feeData, gasFee);
           const data = {
             value: {
@@ -188,6 +218,7 @@ export const BridgeForm = () => {
             },
             dataToPreview
           };
+          // @ts-ignore
           setBridgePreviewData(data);
           previewRef?.current?.show();
         }
@@ -207,17 +238,12 @@ export const BridgeForm = () => {
     selectedTokenFrom,
     selectedTokenPairs,
     setBridgePreviewData,
+    setDefaultOptions,
     setTemplateDataLoader
   ]);
 
-  const setDefaultOptions = useCallback(() => {
-    setTimeout(() => {
-      setPreviewLoader(false);
-      setProcessingTransaction(null);
-    }, 200);
-  }, [setProcessingTransaction]);
-
   const onClose = useCallback(async () => {
+    if (previewLoader) return;
     if (selectedBridgeData && selectedWallet?.address) {
       getAllBridgeTokenBalance(
         selectedBridgeData?.pairs,
@@ -225,8 +251,9 @@ export const BridgeForm = () => {
         selectedWallet?.address
       ).then((pairs) => {
         setSelectedBridgeData({
+          // @ts-ignore
           ...selectedBridgeData,
-          pairs
+          ...pairs
         });
       });
     }
@@ -235,6 +262,7 @@ export const BridgeForm = () => {
     previewRef?.current?.dismiss();
   }, [
     fromData.value.id,
+    previewLoader,
     selectedBridgeData,
     selectedWallet?.address,
     setDefaultOptions,
@@ -279,7 +307,10 @@ export const BridgeForm = () => {
         onClose();
         bridgeErrorHandler(e);
       })
-      .finally(() => setPreviewLoader(false));
+      .finally(() => {
+        setPreviewLoader(false);
+        setAmountToBridge('');
+      });
   }, [
     amountToBridge,
     bridgeErrorHandler,
@@ -289,21 +320,29 @@ export const BridgeForm = () => {
     processBridge,
     selectedTokenDestination,
     selectedTokenFrom,
+    setAmountToBridge,
     setProcessingTransaction
   ]);
 
+  const onInputWrapperLayout = (event: LayoutChangeEvent) => {
+    const { width, height: _height } = event.nativeEvent.layout;
+    setDisabledComponentStyle({
+      width,
+      height: _height * 0.9
+    });
+  };
+
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
-      <View style={styles.inputContainerWitHeading}>
+      <View
+        onLayout={onInputWrapperLayout}
+        style={styles.inputContainerWitHeading}
+      >
         {templateDataLoader && (
           <View
             style={{
-              zIndex: 1000,
-              opacity: 0.7,
-              position: 'absolute',
-              width: '100%',
-              height: 200,
-              backgroundColor: COLORS.neutral0
+              ...styles.disabledInputContainer,
+              ...disabledComponentStyle
             }}
           />
         )}
@@ -326,10 +365,10 @@ export const BridgeForm = () => {
       <Animated.View style={[margin]}>
         <PrimaryButton onPress={goToPreview} disabled={disabledButton}>
           {templateDataLoader ? (
-            <Spinner customSize={15} />
+            <Spinner />
           ) : (
             <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
-              {error ? t('bridge.insufficient.funds') : t('button.preview')}
+              {error ? t('bridge.insufficient.funds') : t('common.review')}
             </Text>
           )}
         </PrimaryButton>

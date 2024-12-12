@@ -1,14 +1,15 @@
 import React, { PropsWithChildren, useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { t } from 'i18next';
 import { styles } from '../styles';
+import { ErrorIcon } from '@components/svg/icons/v2';
 import { Spacer } from '@components/base/Spacer';
 import { PrimaryButton } from '@components/modular';
 import { Text } from '@components/base/Text';
 import { COLORS } from '@constants/colors';
 import { cssShadowToNative } from '@utils/css-shadow-to-native';
 import { verticalScale } from '@utils/scaling';
-import { ErrorIcon } from '@components/svg/icons/v2';
 
 interface BottomSheetSuccessViewProps extends PropsWithChildren {
   title?: string;
@@ -18,12 +19,14 @@ interface BottomSheetSuccessViewProps extends PropsWithChildren {
 }
 
 export const BottomSheetErrorView = ({
-  title = t('bridge.transfer.failed.sub.header'),
-  description,
+  title = t('send.funds.failed'),
+  description = t('bridge.transfer.failed.sub.header'),
   buttonLabel = t('button.try.again'),
   onButtonPress,
   children
 }: BottomSheetSuccessViewProps) => {
+  const { bottom } = useSafeAreaInsets();
+
   const onErrorButtonPress = useCallback(() => {
     return onButtonPress && onButtonPress;
   }, [onButtonPress]);
@@ -33,11 +36,24 @@ export const BottomSheetErrorView = ({
     []
   );
 
+  const containerStyle: StyleProp<ViewStyle> = useMemo(
+    () => ({
+      ...styles.container,
+      paddingBottom: bottom
+    }),
+    [bottom]
+  );
+
   return (
-    <View style={styles.container}>
+    <View style={containerStyle}>
       <ErrorIcon />
       <Spacer value={verticalScale(16)} />
-      <Text fontSize={20} fontFamily="Inter_700Bold" color={COLORS.neutral800}>
+      <Text
+        fontSize={20}
+        fontFamily="Inter_700Bold"
+        color={COLORS.neutral800}
+        align="center"
+      >
         {title}
       </Text>
       {children ? (

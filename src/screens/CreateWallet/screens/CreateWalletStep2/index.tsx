@@ -9,6 +9,9 @@ import {
   Header
 } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
+import { BottomAwareSafeAreaView, Header } from '@components/composite';
+import { Button, Row, Spacer, Spinner, Text } from '@components/base';
+import { useAddWalletContext } from '@contexts';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
@@ -17,7 +20,6 @@ import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { DEVICE_WIDTH } from '@constants/variables';
 import { usePasscodeStore } from '@features/passcode';
 import { useAddWalletStore } from '@features/add-wallet';
 
@@ -66,7 +68,10 @@ export const CreateWalletStep2 = () => {
         })
       );
     } else {
-      navigation.navigate('SetupPasscode');
+      navigation.navigate('Tabs', {
+        screen: 'Settings',
+        params: { screen: 'SetupPasscode' }
+      });
     }
   }, [isPasscodeEnabled, navigation, t]);
 
@@ -161,14 +166,15 @@ export const CreateWalletStep2 = () => {
     );
   };
 
+  const isDisabledButton = useMemo(
+    () => !isMnemonicCorrect || loading,
+    [isMnemonicCorrect, loading]
+  );
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.main}>
       <Header
-        style={{
-          shadowColor: COLORS.transparent,
-          borderBottomWidth: 1,
-          borderColor: COLORS.neutral900Alpha['5']
-        }}
+        style={styles.header}
         title={
           <Text
             align="center"
@@ -213,42 +219,35 @@ export const CreateWalletStep2 = () => {
                 fontSize={scale(15)}
                 style={{ paddingHorizontal: 30 }}
               >
-                Verification failed. Tap the words in the correct order to
-                continue.
+                {t('create.wallet.recovery.phrase.error')}
               </Text>
               <Spacer value={20} />
             </>
           )}
           <Button
-            disabled={!isMnemonicCorrect || loading}
+            disabled={isDisabledButton}
             onPress={handleVerifyPress}
             type="circular"
             style={{
-              position: 'relative',
-              height: verticalScale(50),
-              backgroundColor: isMnemonicCorrect
+              backgroundColor: !isDisabledButton
                 ? COLORS.brand600
                 : COLORS.brand100,
               ...styles.button
             }}
           >
+            {loading && (
+              <Row>
+                <Spinner />
+                <Spacer horizontal value={10} />
+              </Row>
+            )}
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={isMnemonicCorrect ? COLORS.neutral0 : COLORS.brand400}
+              color={!isDisabledButton ? COLORS.neutral0 : COLORS.brand400}
             >
               {loading ? t('button.verifying') : t('button.verify')}
             </Text>
-            <Row
-              style={{
-                left: DEVICE_WIDTH * 0.25,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute'
-              }}
-            >
-              {loading && <CenteredSpinner />}
-            </Row>
           </Button>
         </BottomAwareSafeAreaView>
       </View>

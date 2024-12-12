@@ -12,7 +12,7 @@ import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
@@ -21,11 +21,16 @@ import { formatDecimals } from '@features/kosmos/utils';
 import { usePurchaseStore } from '@features/kosmos';
 import { BuyBondButton } from '../../modular';
 import {
+  $discount,
   _timestampToDate,
   MarketType,
   timestampToFormattedDate,
   useTokensStore
 } from '@entities/kosmos';
+import { BuyBondButton } from '../../modular';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { verticalScale } from '@utils/scaling';
+import { isAndroid } from '@utils/isPlatform';
 
 interface BottomSheetPreviewPurchaseProps {
   market: MarketType | undefined;
@@ -107,7 +112,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
               {t('kosmos.table.headings.discount')}
             </StyledTextItem>
             <StyledTextItem isValue>
-              {market?.discount.toFixed(2)}%
+              {$discount(market?.discount)}
             </StyledTextItem>
           </Row>
           {market?.vestingType === 'Fixed-expiry' ? (
@@ -140,6 +145,7 @@ export const BottomSheetPreviewPurchase = forwardRef<
             setIsTransactionProcessing={setIsTransactionProcessing}
             market={market as MarketType}
           />
+          <Spacer value={verticalScale(isAndroid ? 0 : 30)} />
         </View>
       </View>
     </BottomSheet>

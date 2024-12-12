@@ -6,10 +6,8 @@ import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { TokenLogo } from '../TokenLogo';
 import { COLORS } from '@constants/colors';
-import { SwapStringUtils } from '@features/swap/utils';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
-import { Token } from '@models';
-import { TToken } from '@utils';
+import { TToken, wrapTokenIcon } from '@utils';
 
 interface TokenSelectorProps {
   readonly token: TToken;
@@ -28,16 +26,18 @@ export const TokenSelector = ({
     return !!token;
   }, [token]);
 
-  const SAMBSupportedTokenLogo = useMemo(() => {
-    return SwapStringUtils.extendedLogoVariants((token as Token).symbol ?? '');
-  }, [token]);
+  const SAMBSupportedTokenLogo = wrapTokenIcon(token);
 
   const onToggleSelectTokenModal = useCallback(() => {
     if (selectable) onShowBottomSheetTokensListHandle();
   }, [selectable, onShowBottomSheetTokensListHandle]);
 
   return (
-    <TouchableOpacity disabled={!selectable} onPress={onToggleSelectTokenModal}>
+    <TouchableOpacity
+      disabled={!selectable}
+      style={styles.container}
+      onPress={onToggleSelectTokenModal}
+    >
       <View style={styles.currencySelector}>
         <Row alignItems="center">
           {token && (

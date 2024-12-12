@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import {
   BottomAwareSafeAreaView,
   CopyToClipboardButton,
@@ -14,15 +15,16 @@ import { QRCodeWithLogo } from '@components/modular';
 import { SettingsTabParamsList } from '@appTypes';
 import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import { TrashIcon } from '@components/svg/icons';
 import { KeyIcon } from '@components/svg/icons/v2/settings';
 import { BottomSheetViewAccessKey } from '@components/templates/BottomSheetViewAccessKey/BottomSheetViewAccessKey';
 
-export const SingleWalletScreen = () => {
-  const accessKeyRef = useRef(null);
+type Props = NativeStackScreenProps<SettingsTabParamsList, 'SingleWallet'>;
+
+export const SingleWalletScreen = ({ route }: Props) => {
   const { t } = useTranslation();
-  const route = useRoute<RouteProp<SettingsTabParamsList, 'SingleWallet'>>();
+
+  const accessKeyRef = useRef(null);
   const { wallet, walletAddress } = route.params;
   const { data: account } = useExplorerAccountFromHash(wallet.hash);
   const [walletName, setWalletName] = useState(wallet.name);
@@ -70,24 +72,22 @@ export const SingleWalletScreen = () => {
         <Header
           bottomBorder
           title={
-            <View style={{ paddingHorizontal: '20%' }}>
-              <Text
-                numberOfLines={1}
-                fontFamily="Inter_600SemiBold"
-                fontSize={18}
-                color={COLORS.neutral800}
-              >
-                {wallet?.name || 'Wallet'}
-              </Text>
-            </View>
+            <Text
+              numberOfLines={1}
+              fontFamily="Inter_600SemiBold"
+              fontSize={18}
+              color={COLORS.neutral800}
+            >
+              {wallet?.name || 'Wallet'}
+            </Text>
           }
           contentRight={renderRightHeaderContent}
           style={{ shadowColor: COLORS.transparent }}
         />
         {wallet && (
           <BottomAwareSafeAreaView style={styles.innerContainer}>
-            <View>
-              <View style={styles.nameInput}>
+            <View style={{ paddingHorizontal: '5%' }}>
+              <View>
                 <Text
                   fontSize={16}
                   fontFamily="Inter_500Medium"
@@ -102,7 +102,6 @@ export const SingleWalletScreen = () => {
                   style={styles.input}
                 />
               </View>
-              <Spacer value={verticalScale(42)} />
               {account && (
                 <View style={styles.addressContainer}>
                   <View style={styles.qrCode}>
@@ -117,25 +116,26 @@ export const SingleWalletScreen = () => {
                   >
                     {walletAddress}
                   </Text>
-                  <Spacer value={verticalScale(16)} />
-                  <CopyToClipboardButton
-                    textToDisplay={t('common.copy')}
-                    textToCopy={walletAddress}
-                    pressableText
-                    showToast={false}
-                    iconProps={{ scale: 1 }}
-                    style={styles.copyButton}
-                    textProps={{
-                      color: COLORS.brand500,
-                      fontSize: 14,
-                      fontFamily: 'Inter_500Medium'
-                    }}
-                    successTextProps={{
-                      color: COLORS.brand500,
-                      fontSize: 14,
-                      fontFamily: 'Inter_500Medium'
-                    }}
-                  />
+                  <View style={styles.copyAddressButtonWrapper}>
+                    <CopyToClipboardButton
+                      textToDisplay={t('common.copy')}
+                      textToCopy={walletAddress}
+                      pressableText
+                      showToast={false}
+                      iconProps={{ scale: 1 }}
+                      containerStyle={styles.copyButton}
+                      textProps={{
+                        color: COLORS.brand500,
+                        fontSize: 14,
+                        fontFamily: 'Inter_500Medium'
+                      }}
+                      successTextProps={{
+                        color: COLORS.brand500,
+                        fontSize: 14,
+                        fontFamily: 'Inter_500Medium'
+                      }}
+                    />
+                  </View>
                 </View>
               )}
             </View>

@@ -12,8 +12,8 @@ import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { usePasscodeStore } from '@features/passcode';
 
 const AppInitialization = () => {
-  useInitializeWalletKit();
   const { t } = useTranslation();
+  useInitializeWalletKit();
 
   const navigation = useNavigation<RootNavigationProp>();
   const { data: allWallets, loading } = useAllWallets();
@@ -33,7 +33,7 @@ const AppInitialization = () => {
         if (allWallets.length > 0) {
           if (!isPasscodeEnabled && !isFaceIDEnabled) {
             navigation.replace('Tabs', {
-              screen: 'Wallets',
+              screen: 'Settings',
               params: { screen: 'SetupPasscode' }
             });
           } else {

@@ -45,11 +45,17 @@ export enum CryptoCurrencyCode {
   BNB_SMART = 'BNB_SMART',
   BNB_SMART_20 = 'BNB_SMART_20',
   ETC = 'ETC',
-  Test1 = 'TEST1',
+  Test1 = '“Test1“',
   Test2 = 'TEST2',
   ADOGE = 'ADOGE',
   Airdoge = 'Airdoge',
-  AST = 'AST',
+  ASTLP = 'AST-LP',
+  Astra = 'Astra',
   AstraLiquidityPool = 'Astra LP',
-  HBR = 'HBR'
+  AST = 'AST',
+  HBR = 'HBR',
+  Harbor = 'Harbor',
+  CollateralizedHarbor = 'Collateralized Harbor',
+  KosmosToken = 'Kosmos Token',
+  XENA = 'X3NA'
 }

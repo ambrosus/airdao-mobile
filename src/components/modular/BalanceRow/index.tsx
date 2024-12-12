@@ -103,8 +103,12 @@ export const BalanceRow = ({
     }
   }, [bnBalance, dispatch, onChangeText, onPressMaxAmount, token.decimals]);
 
+  const justifyContentType = useMemo<'flex-start' | 'space-between'>(() => {
+    return !Number.isNaN(USDTokenPrice) ? 'space-between' : 'flex-start';
+  }, [USDTokenPrice]);
+
   return (
-    <Row alignItems="center" justifyContent="space-between">
+    <Row width="100%" alignItems="center" justifyContent={justifyContentType}>
       <Row alignItems="center">
         <Row alignItems="center">
           <WalletOutlineIcon
@@ -139,13 +143,15 @@ export const BalanceRow = ({
           </>
         )}
       </Row>
-      <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral500}
-      >
-        ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
-      </Text>
+      {!Number.isNaN(USDTokenPrice) && (
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+        </Text>
+      )}
     </Row>
   );
 };

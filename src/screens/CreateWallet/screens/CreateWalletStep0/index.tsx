@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {
   BottomAwareSafeAreaView,
@@ -13,16 +13,27 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { styles } from '@screens/CreateWallet/styles';
 import { stylesStep0 } from './Step0.styles';
-import { HomeNavigationProp } from '@appTypes';
+import { SettingsTabNavigationProp } from '@appTypes';
 import { NewWalletPageIcon } from '@components/svg/icons/v2';
 
 export const CreateWalletStep0 = () => {
+  const { params } = useRoute();
+
   const [selected, setSelected] = useState<boolean>(false);
-  const navigation = useNavigation<HomeNavigationProp>();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
   const { t } = useTranslation();
 
   const onContinuePress = () => {
     navigation.navigate('CreateWalletStep1');
+  };
+
+  const onBackPress = () => {
+    // @ts-ignore
+    if (params?.from === 'WelcomeScreen') {
+      navigation.navigate('WelcomeScreen');
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -30,6 +41,7 @@ export const CreateWalletStep0 = () => {
       <Header
         titlePosition="center"
         bottomBorder
+        onBackPress={onBackPress}
         title={
           <Text
             fontFamily="Inter_600SemiBold"

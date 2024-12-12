@@ -15,10 +15,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   inputContainerWitHeading: {
+    position: 'relative',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: 8
+  },
+  disabledInputContainer: {
+    zIndex: 1000,
+    position: 'absolute'
   },
   inputContainerWithSelector: {
     position: 'relative',

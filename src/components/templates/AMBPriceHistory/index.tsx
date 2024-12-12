@@ -10,6 +10,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { GraphPoint } from 'react-native-graph';
+import { styles } from './styles';
 import { PriceSnapshotInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
@@ -20,13 +21,11 @@ import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
 import { MONTH_NAMES } from '@constants/variables';
 import { BezierChart } from '../BezierChart';
-import { styles } from './styles';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
   defaultInterval?: '1d' | 'weekly' | 'monthly';
   onBadgePress?: () => unknown;
-  dailyIncome: string;
 }
 
 // @ts-ignore
@@ -37,22 +36,24 @@ const intervalTimeDiffMap: { [key in PriceSnapshotInterval]: number } = {
   'monthly': 2.628 * 10e8
 };
 
-export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
-  const {
-    badgeType,
-    defaultInterval = '1d',
-    onBadgePress,
-    dailyIncome
-  } = props;
-  const { data: ambPriceNow } = useAMBPrice();
-  const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
+export const AMBPriceHistory = ({
+  badgeType,
+  defaultInterval = '1d',
+  onBadgePress
+}: AMBPriceHistoryProps) => {
+  const { t } = useTranslation();
+
   const [selectedInterval, setSelectedInterval] =
     useState<PriceSnapshotInterval>(defaultInterval);
+
+  const { data: ambPriceNow } = useAMBPrice();
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
+
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
+
   const didSetAMBPriceFromAPI = useRef(false);
-  const { t } = useTranslation();
+  const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
 
   useEffect(() => {
     if (ambPriceNow) {
@@ -174,7 +175,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             icon={
               <Row alignItems="center" style={styles.balanceLast24HourChange}>
                 <PercentChange
-                  dailyIncome={dailyIncome}
                   change={percentChange}
                   fontSize={16}
                   fontWeight="500"
@@ -207,10 +207,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       <Spacer value={verticalScale(34)} />
       <BezierChart
         intervals={[
-          // {
-          //   text: '1H',
-          //   value: '1h'
-          // },
           {
             text: t('chart.timeframe.daily'),
             value: '1d'
@@ -219,11 +215,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             text: t('chart.timeframe.weekly'),
             value: 'weekly'
           }
-          // temporarily hide
-          // {
-          //   text: t('chart.timeframe.monthly'),
-          //   value: 'monthly'
-          // },
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}

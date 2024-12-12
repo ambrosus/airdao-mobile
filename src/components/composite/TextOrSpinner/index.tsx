@@ -6,7 +6,7 @@ import { scale } from '@utils/scaling';
 
 interface TextOrSpinnerProps {
   loading: boolean;
-  loadingLabel: string;
+  loadingLabel: string | undefined;
   label: string;
   styles?: Partial<{
     loading: Partial<{
@@ -44,14 +44,18 @@ export const TextOrSpinner = ({
       {loading ? (
         <Row alignItems="center">
           <Spinner size="xs" />
-          <Spacer horizontal value={scale(8)} />
-          <Text
-            fontSize={styles.loading?.fontSize}
-            fontFamily={styles.loading?.fontFamily}
-            color={styles.loading?.color}
-          >
-            {loadingLabel}
-          </Text>
+          {loadingLabel && (
+            <>
+              <Spacer horizontal value={scale(8)} />
+              <Text
+                fontSize={styles.loading?.fontSize}
+                fontFamily={styles.loading?.fontFamily}
+                color={styles.loading?.color}
+              >
+                {loadingLabel}
+              </Text>
+            </>
+          )}
         </Row>
       ) : (
         <Text

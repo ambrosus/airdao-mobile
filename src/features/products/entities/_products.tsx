@@ -59,6 +59,15 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
           color: 'rgba(255, 255, 255, 1)',
           route: 'KosmosScreen'
+        },
+        {
+          id: 4,
+          name: 'HARBOR',
+          description: t('products.kosmos.description'),
+          icon: <SwapAccountActionIcon scale={2} color="red" />,
+          background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
+          color: 'rgba(255, 255, 255, 1)',
+          route: 'Harbor'
         }
       ]
     }

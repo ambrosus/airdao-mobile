@@ -25,6 +25,6 @@ export * from './StatusBar';
 export * from './LocalizedRenderEmpty';
 export * from './WalletPicker';
 export * from './WalletTransactionsAndAssets';
-export * from './BottomSheetImportWalletPrivateKeyStatus';
 export * from './WalletDepositFunds';
 export * from './InputWithTokenSelect';
+export * from './WalletNoNFTsView';

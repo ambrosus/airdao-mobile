@@ -1,48 +1,58 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
+import { Pressable } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '@constants/colors';
-import { useCurrentRoute } from '@contexts/Navigation';
 import { NavigationUtils } from '@utils/navigation';
 import Animated, {
   useAnimatedStyle,
   withTiming
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
-import { isIos } from '@utils/isPlatform';
+import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
-import { WalletsInactiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-inactive';
-import { WalletsActiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation/wallets-active';
-import {
-  ProductsActiveIcon,
-  ProductsInactiveIcon,
-  SettingsActiveIcon,
-  SettingsInactiveIcon
-} from '@components/svg/icons/v2/bottom-tabs-navigation';
 import { scale, verticalScale } from '@utils/scaling';
+import { HARBOR_TABS, MAIN_TABS } from '@navigation/constants';
+import { useCurrentRoute } from '@contexts/Navigation/Navigation.context';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-type LabelType = 'Settings' | 'Products' | 'Wallets';
-const tabs = {
-  Wallets: {
-    inactiveIcon: <WalletsInactiveIcon color={COLORS.neutral200} />,
-    activeIcon: <WalletsActiveIcon color={COLORS.brand600} />
-  },
-  Products: {
-    inactiveIcon: <ProductsInactiveIcon color={COLORS.neutral800} />,
-    activeIcon: <ProductsActiveIcon color={COLORS.brand600} />
-  },
-  Settings: {
-    inactiveIcon: <SettingsInactiveIcon color={COLORS.neutral200} />,
-    activeIcon: <SettingsActiveIcon color={COLORS.brand600} />
-  }
+type LabelType =
+  | 'Settings'
+  | 'Products'
+  | 'Wallets'
+  | 'StakeAMB'
+  | 'StakeHBR'
+  | 'BorrowHarbor';
+
+interface TabBarModel extends BottomTabBarProps {
+  isHarbor?: boolean;
+}
+
+interface TabBarMethodModel {
+  tabs: any;
+  visibility: (tab: string) => boolean;
+}
+
+const HarborMethods: TabBarMethodModel = {
+  tabs: HARBOR_TABS,
+  visibility: NavigationUtils.getHarborTabBarVisibility
 };
 
-const TabBar = ({ state, navigation }: BottomTabBarProps) => {
+const MainMethods: TabBarMethodModel = {
+  tabs: MAIN_TABS,
+  visibility: NavigationUtils.getTabBarVisibility
+};
+
+const TabBar = ({ state, navigation, isHarbor = false }: TabBarModel) => {
   const bottomSafeArea = useSafeAreaInsets().bottom;
+  const tabsMethods = useMemo(
+    () => (isHarbor ? HarborMethods : MainMethods),
+    [isHarbor]
+  );
+
   const currentRoute = useCurrentRoute();
-  const tabBarVisible = NavigationUtils.getTabBarVisibility(currentRoute);
+  const tabBarVisible = tabsMethods.visibility(currentRoute);
   const [isReady, setIsReady] = useState(false);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -61,6 +71,17 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
     animatedStyle.opacity = withTiming(1, { duration: 200 });
   });
 
+  const bottomContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    if (bottomSafeArea === 0) {
+      return { ...styles.mainItemContainer, marginTop: 8, marginBottom: 16 };
+    }
+
+    return {
+      ...styles.mainItemContainer,
+      marginVertical: 8
+    };
+  }, [bottomSafeArea]);
+
   if (!isReady || !tabBarVisible) return <></>;
 
   return (
@@ -77,7 +98,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
         const isFocused = state.index === index;
 
         const icon =
-          tabs[route.name as LabelType][
+          tabsMethods.tabs[route.name as LabelType][
             isFocused ? 'activeIcon' : 'inactiveIcon'
           ];
 
@@ -104,9 +125,9 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
             key={index}
             hitSlop={scale(24)}
             style={[
-              styles.mainItemContainer,
+              bottomContainerStyle,
               {
-                paddingTop: verticalScale(index === 1 ? 8 : 17)
+                paddingTop: isHarbor ? 8 : verticalScale(index === 1 ? 8 : 17)
               }
             ]}
             onPress={onPress}
@@ -118,29 +139,5 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    width: '100%',
-    flexDirection: 'row',
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    bottom: 0,
-    backgroundColor: COLORS.neutral0,
-    opacity: 2,
-    elevation: 0.25,
-    borderTopWidth: isIos ? 0.25 : 0.5,
-    borderTopColor: COLORS.neutral200
-  },
-  mainItemContainer: {
-    width: 40,
-    height: 40,
-    marginVertical: 8,
-    alignItems: 'center',
-    backgroundColor: COLORS.neutral0
-  }
-});
 
 export default TabBar;

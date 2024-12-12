@@ -54,6 +54,12 @@ export const UserOrdersList = () => {
     return transactions.sort((a, b) => b.date - a.date);
   }, [transactions]);
 
+  const listKeyExtractor = useCallback(
+    ({ index, transaction }: { index: number; transaction: TxType }) =>
+      `${index}-${transaction.txHash}`,
+    []
+  );
+
   if (isTransactionsLoading) {
     return <ScreenLoader />;
   }
@@ -61,10 +67,11 @@ export const UserOrdersList = () => {
   const getItem = (
     _data: TxType[] | [],
     index: number
-  ): { id: string; transaction: TxType } => {
+  ): { id: string; index: number; transaction: TxType } => {
     const transaction = _data[index];
     return {
       id: transaction.txHash,
+      index,
       transaction
     };
   };
@@ -78,7 +85,7 @@ export const UserOrdersList = () => {
       </View>
 
       <VirtualizedList
-        keyExtractor={(item) => item.id}
+        keyExtractor={listKeyExtractor}
         initialNumToRender={4}
         data={sortedByDateTxs}
         refreshControl={renderRefetchController}

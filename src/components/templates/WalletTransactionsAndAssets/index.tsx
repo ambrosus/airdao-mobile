@@ -13,15 +13,17 @@ import {
 } from 'react-native';
 import { DerivedValue } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
-import { ethers } from 'ethers';
 import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
 import { ExplorerAccount } from '@models';
 import { useTokensAndTransactions } from '@hooks';
 import { AccountTransactions } from '../ExplorerAccount';
 import { WalletAssets } from './WalletAssets';
+import { NftAssets } from './NftAssets';
 import { WalletDepositFunds } from '../WalletDepositFunds';
 import { Spinner } from '@components/base';
+import { _tokensOrNftMapper } from '@entities/wallet';
+import { balanceReducer } from '@features/wallet-assets/utils';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;
@@ -79,6 +81,10 @@ export const WalletTransactionsAndAssets = ({
     }
   };
 
+  const tokensOrNFTs = useMemo(() => {
+    return _tokensOrNftMapper(tokens);
+  }, [tokens]);
+
   const _onChangeActiveTabIndex = useCallback(
     (index: number) => {
       if (activeTabIndex.value === index) return;
@@ -89,9 +95,19 @@ export const WalletTransactionsAndAssets = ({
             animated: true,
             offset: 0
           });
+          break;
+        }
+        case 1: {
+          transactionsHistoryListRef.current?.scrollToOffset({
+            animated: true,
+            offset: 0
+          });
+          assetsListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+          break;
         }
         case 2: {
           assetsListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+          break;
         }
       }
       onChangeActiveTabIndex(index);
@@ -100,8 +116,8 @@ export const WalletTransactionsAndAssets = ({
   );
 
   const isSelectAccountBalanceZero = useMemo(() => {
-    return ethers.utils.parseEther(account.ambBalanceWei).isZero();
-  }, [account.ambBalanceWei]);
+    return balanceReducer(tokensOrNFTs.tokens, account.ambBalanceWei).isZero();
+  }, [account.ambBalanceWei, tokensOrNFTs.tokens]);
 
   if (loading) {
     return (
@@ -112,7 +128,7 @@ export const WalletTransactionsAndAssets = ({
   }
 
   if (!loading && isSelectAccountBalanceZero) {
-    return <WalletDepositFunds onRefresh={onRefresh} />;
+    return <WalletDepositFunds />;
   }
 
   return (
@@ -126,7 +142,7 @@ export const WalletTransactionsAndAssets = ({
             view: (
               <WalletAssets
                 ref={assetsListRef}
-                tokens={tokens}
+                tokens={tokensOrNFTs.tokens}
                 loading={isFetchingNextPage}
                 account={account}
                 error={error}
@@ -137,7 +153,14 @@ export const WalletTransactionsAndAssets = ({
           },
           {
             title: t('wallets.nfts'),
-            view: <View />
+            view: (
+              <NftAssets
+                nfts={tokensOrNFTs.nfts}
+                loading={isFetchingNextPage}
+                onRefresh={_onRefresh}
+                isRefreshing={refetching && userPerformedRefresh}
+              />
+            )
           },
           {
             title: t('wallet.history'),

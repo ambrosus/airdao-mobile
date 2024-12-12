@@ -1,22 +1,26 @@
-import { RefObject, useCallback } from 'react';
+import { useCallback } from 'react';
+import {
+  CompositeNavigationProp,
+  useNavigation
+} from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ethereumAddressRegex } from '@constants/regex';
-import { BottomSheetRef } from '@components/composite';
 import { useSendFundsStore } from '@features/send-funds/model';
+import { HomeParamsList, RootStackParamsList, TabsParamsList } from '@appTypes';
 
-export function useBarcode(
-  barcodeScannerContainerRef: RefObject<BottomSheetRef>
-) {
+type Navigation = CompositeNavigationProp<
+  BottomTabNavigationProp<TabsParamsList>,
+  NativeStackNavigationProp<HomeParamsList & RootStackParamsList>
+>;
+
+export function useBarcode() {
+  const navigation: Navigation = useNavigation();
   const { state, onChangeState } = useSendFundsStore();
 
-  const onDismissBarcodeContainer = useCallback(
-    () => barcodeScannerContainerRef.current?.dismiss(),
-    [barcodeScannerContainerRef]
-  );
-
-  const onShowBarcodeContainer = useCallback(
-    () => barcodeScannerContainerRef.current?.show(),
-    [barcodeScannerContainerRef]
-  );
+  const onDismissBarcodeContainer = useCallback(() => {
+    navigation.getParent()?.goBack();
+  }, [navigation]);
 
   const onScannedAddress = useCallback(
     (address: string) => {
@@ -31,6 +35,14 @@ export function useBarcode(
       }
     },
     [onChangeState, onDismissBarcodeContainer, state]
+  );
+
+  const onShowBarcodeContainer = useCallback(
+    () =>
+      navigation.navigate('BarcodeScannerScreen', {
+        onScanned: onScannedAddress
+      }),
+    [navigation, onScannedAddress]
   );
 
   return {

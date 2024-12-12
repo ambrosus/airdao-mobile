@@ -140,9 +140,7 @@ export const CreateWalletStep1 = () => {
           <Spacer value={verticalScale(34)} />
           <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
             <PrimaryButton onPress={onNextPress}>
-              <Text color={COLORS.neutral0}>
-                {t('create.wallet.verify.phrase')}
-              </Text>
+              <Text color={COLORS.neutral0}>{t('button.continue')}</Text>
             </PrimaryButton>
           </BottomAwareSafeAreaView>
         </View>

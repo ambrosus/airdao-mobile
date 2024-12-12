@@ -20,7 +20,6 @@ export const NoWalletScreen = () => {
   const { onChangeName, onChangeMnemonicLength } = useAddWalletStore();
 
   const animationRef = useRef<LottieView>(null);
-
   useEffect(() => {
     animationRef.current?.play();
   }, []);
@@ -40,6 +39,18 @@ export const NoWalletScreen = () => {
     navigation.navigate('Tabs', {
       screen: 'Wallets',
       params: { screen: 'ImportWalletMethods' }
+
+  const navigateToAddWallet = (
+    screen: 'ImportWalletMethods' | 'CreateWalletStep0'
+  ) => {
+    setWalletName('');
+    setMnemonicLength(128);
+    navigation.replace('Tabs', {
+      screen: 'Settings',
+      params: {
+        screen,
+        params: { from: 'WelcomeScreen' }
+      }
     });
   };
 
@@ -64,7 +75,9 @@ export const NoWalletScreen = () => {
           <Spacer value={verticalScale(30)} />
         </View>
         <BottomAwareSafeAreaView style={styles.buttons}>
-          <PrimaryButton onPress={navigateToNewWallet}>
+          <PrimaryButton
+            onPress={() => navigateToAddWallet('CreateWalletStep0')}
+          >
             <Text
               fontSize={scale(17)}
               fontFamily="Inter_600SemiBold"
@@ -74,7 +87,9 @@ export const NoWalletScreen = () => {
             </Text>
           </PrimaryButton>
           <Spacer value={verticalScale(24)} />
-          <SecondaryButton onPress={navigateToImportWallet}>
+          <SecondaryButton
+            onPress={() => navigateToAddWallet('ImportWalletMethods')}
+          >
             <Text
               fontSize={scale(17)}
               fontFamily="Inter_600SemiBold"

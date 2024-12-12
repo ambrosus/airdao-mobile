@@ -8,13 +8,13 @@ import { TooltipState } from '../../modular/market-chart/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { ChartStrokedArrow } from '../../base';
-import { discountColor } from '@features/kosmos/utils';
 import {
   RECT_HEIGHT,
   RECT_WIDTH,
   TRIANGLE_HEIGHT,
   TRIANGLE_WIDTH
 } from '@entities/kosmos';
+import { $discount, discountColor } from '@features/kosmos/utils';
 
 interface ChartTooltipProps {
   tooltip: TooltipState;
@@ -114,7 +114,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
               fontSize={12}
               fontFamily="Inter_400Regular"
             >
-              {tooltip.value.discount.toFixed(2)}%
+              {$discount(tooltip.value.discount)}
             </Text>
           </Row>
         )}

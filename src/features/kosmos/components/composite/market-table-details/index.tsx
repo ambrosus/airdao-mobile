@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
-import { Row, Spacer, Text } from '@components/base';
+import { Row, Text } from '@components/base';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
@@ -79,7 +79,6 @@ export const MarketTableDetails = ({
         </Row>
       </RowJustifyAlignedItem>
       {/* Status */}
-      <Spacer value={scale(4)} />
       <RowJustifyAlignedItem label={t('common.status')}>
         <Row alignItems="center">
           <Status status={market?.isLive ? 'active' : 'closed'} />

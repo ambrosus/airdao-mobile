@@ -6,7 +6,13 @@ import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { TxType } from '@features/kosmos/types';
-import { formatDecimals } from '@features/kosmos/utils';
+import {
+  $discount,
+  formatDecimals,
+  getTokenByAddress,
+  formatDecimals
+} from '@features/kosmos/utils';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
 import { BottomSheetRef } from '@components/composite';
@@ -77,7 +83,7 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
               fontFamily="Inter_500Medium"
               color={COLORS.neutral700}
             >
-              {transaction.discount.toFixed(2)}%
+              {$discount(transaction.discount)}
             </Text>
           </Row>
           <Row alignItems="center" justifyContent="space-between">

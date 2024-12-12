@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
   titleStyle: {
     fontSize: 18
   },
+  description: {
+    paddingVertical: scale(20)
+  },
   innerContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -17,6 +20,10 @@ export const styles = StyleSheet.create({
   },
   toggleVisibilityRow: {
     gap: 8
+  },
+  button: {
+    flexDirection: 'row',
+    height: verticalScale(54)
   },
   footer: {
     paddingBottom: isAndroid ? verticalScale(20) : 0

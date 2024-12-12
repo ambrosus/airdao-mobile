@@ -15,7 +15,10 @@ import {
   PlutusIcon,
   TetherIcon,
   UnknownTokenIcon,
-  UsdcIcon
+  UsdcIcon,
+  KosmosTokenIcon,
+  TokenSTAMBIcon,
+  TokenXENAIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -51,27 +54,32 @@ export const TokenLogo = (props: TokenLogoProps) => {
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
-    case CryptoCurrencyCode.STAMB.toLowerCase():
-    case 'staked amb':
+    case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
+    case CryptoCurrencyCode.Test1.toLowerCase():
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.STAMB.toLowerCase():
+    case 'staked amb':
+      return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():
       return <AirDOGEIcon scale={scale} />;
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
     case 'weth':
+    case 'wrapped ether':
       return (
         <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
       );
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
     case 'wbnb':
+    case 'wrapped bnb':
     case 'bsc':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
@@ -101,11 +109,19 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'airdao nft':
     case 'nft':
       return <NFTIcon />;
+    case CryptoCurrencyCode.ASTLP.toLowerCase():
     case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
     case CryptoCurrencyCode.AST.toLowerCase():
+    case CryptoCurrencyCode.Astra.toLowerCase():
       return <ASTIcon scale={scale} />;
+    case CryptoCurrencyCode.Harbor.toLowerCase():
     case CryptoCurrencyCode.HBR.toLowerCase():
       return <HBRIcon scale={scale} />;
+    case CryptoCurrencyCode.KosmosToken.toLowerCase():
+    case 'kos':
+      return <KosmosTokenIcon scale={scale} />;
+    case CryptoCurrencyCode.XENA.toLowerCase():
+      return <TokenXENAIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

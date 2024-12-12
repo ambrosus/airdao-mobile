@@ -13,6 +13,7 @@ import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Spinner, Text } from '@components/base';
 import { useMarketTransactions } from '@entities/kosmos';
+import { isIos } from '@utils/isPlatform';
 
 interface TransactionsHistoryTabProps {
   market: MarketType | undefined;
@@ -29,13 +30,16 @@ export const TransactionsHistoryTab = ({
     market?.id
   );
   const renderRefetchController = useMemo(
-    () => (
-      <RefreshControl
-        onRefresh={refetch}
-        refreshing={isLoading}
-        removeClippedSubviews
-      />
-    ),
+    () =>
+      isIos ? (
+        <RefreshControl
+          onRefresh={refetch}
+          refreshing={isLoading}
+          removeClippedSubviews
+        />
+      ) : (
+        <></>
+      ),
     [isLoading, refetch]
   );
 
@@ -79,7 +83,7 @@ export const TransactionsHistoryTab = ({
         ))}
       </Row>
 
-      {isLoading ? (
+      {isLoading && isIos ? (
         <View style={{ alignItems: 'center', paddingVertical: 10 }}>
           <Spinner />
         </View>

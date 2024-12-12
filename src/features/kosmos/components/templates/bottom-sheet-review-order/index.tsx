@@ -8,7 +8,16 @@ import { Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
-import { discountColor, formatDecimals } from '@features/kosmos/utils';
+import {
+  $discount,
+  MAINNET_VESTINGS,
+  TESTNET_VESTINGS,
+  _timestampToDate,
+  discountColor,
+  formatDecimals
+} from '@features/kosmos/utils';
+import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import Config from '@constants/config';
 import { StringUtils } from '@utils/string';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { NumberUtils } from '@utils/number';
@@ -93,7 +102,7 @@ export const BottomSheetReviewOrder = forwardRef<
               {t('kosmos.table.headings.discount')}
             </StyledTextItem>
             <StyledTextItem color={discountColor(transaction.discount)}>
-              {transaction.discount.toFixed(2)}%
+              {$discount(transaction.discount)}
             </StyledTextItem>
           </Row>
           <Row alignItems="center" justifyContent="space-between">

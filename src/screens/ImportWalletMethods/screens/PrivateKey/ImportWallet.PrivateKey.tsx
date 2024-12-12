@@ -5,121 +5,145 @@ import {
   KeyboardAvoidingViewProps,
   View
 } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { HomeNavigationProp } from '@appTypes';
-import { BottomSheetRef, Header } from '@components/composite';
+import { Header } from '@components/composite';
 import {
   Button,
   InputRef,
   KeyboardDismissingView,
   Row,
   Spacer,
+  Spinner,
   Text
 } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { WalletUtils } from '@utils/wallet';
 import { COLORS } from '@constants/colors';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
-import { PrimaryButton, PrivateKeyMaskedInput } from '@components/modular';
-import { BottomSheetImportWalletPrivateKeyStatus } from '@components/templates';
+import { PrivateKeyMaskedInput, Toast, ToastType } from '@components/modular';
 import { isIos } from '@utils/isPlatform';
 import { delay } from '@utils/delay';
 import { useAllAccounts } from '@hooks/database';
-import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
-import { AccountUtils } from '@utils/account';
+import { usePasscodeStore } from '@features/passcode';
+import { HomeNavigationProp } from '@appTypes';
+import { StringUtils } from '@utils/string';
 
-enum IMPORT_PROCESS_STATUS {
-  INITIAL = 'initial',
-  SUCCESS = 'success',
-  PENDING = 'pending',
-  ERROR = 'error'
-}
 const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
   ? 'padding'
   : 'height';
 
 export const ImportWalletPrivateKey = () => {
-  const navigation: HomeNavigationProp = useNavigation();
-
   const { t } = useTranslation();
   const { data: accounts } = useAllAccounts();
+  const { isPasscodeEnabled } = usePasscodeStore();
 
-  const [status, setStatus] = useState<IMPORT_PROCESS_STATUS>(
-    IMPORT_PROCESS_STATUS.PENDING
-  );
-
-  const bottomSheetProcessingRef = useRef<BottomSheetRef>(null);
   const maskedInputRef = useRef<InputRef>(null);
-
+  const navigation: HomeNavigationProp = useNavigation();
+  const [loader, setLoader] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [privateKey, setPrivateKey] = useState('');
+  const [errorStatus, setErrorStatus] = useState('');
+
+  const navigateToSetUpSecurity = useCallback(
+    (address: string) => {
+      Toast.show({
+        text: t('import.wallet.toast.title'),
+        subtext: StringUtils.formatAddress(address, 5, 6),
+        type: ToastType.Success
+      });
+
+      if (isPasscodeEnabled) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+          })
+        );
+      } else {
+        navigation.navigate('Tabs', {
+          screen: 'Settings',
+          params: { screen: 'SetupPasscode' }
+        });
+      }
+    },
+    [isPasscodeEnabled, navigation, t]
+  );
 
   const onImportWalletPress = useCallback(async () => {
-    setStatus(IMPORT_PROCESS_STATUS.PENDING);
-    setTimeout(() => {
-      bottomSheetProcessingRef.current?.show();
-    }, 500);
+    setLoader(true);
     maskedInputRef.current?.blur();
 
     try {
-      await WalletUtils.importWalletViaPrivateKey(privateKey, accounts);
+      const wallet = await WalletUtils.importWalletViaPrivateKey(
+        privateKey,
+        accounts
+      );
       await delay(1200);
-      setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
+      navigateToSetUpSecurity(wallet?.address || '');
     } catch (error) {
-      console.error(error);
       // @ts-ignore
       const errorStatus = error.message.includes('400') ? 'exist' : 'unknown';
 
-      if (errorStatus === 'exist') {
-        const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
-          privateKey
-        );
-
-        if (!AccountUtils.isWalletAlreadyExist(_account.address, accounts)) {
-          return setStatus(IMPORT_PROCESS_STATUS.SUCCESS);
-        }
-      }
-
-      InteractionManager.runAfterInteractions(async () => {
-        await delay(1600);
-        bottomSheetProcessingRef.current?.dismiss();
-      });
-
       InteractionManager.runAfterInteractions(() => {
         requestAnimationFrame(async () => {
-          await delay(2200);
-          navigation.navigate('ImportWalletPrivateKeyError', {
-            error: errorStatus
-          });
-          setStatus(IMPORT_PROCESS_STATUS.PENDING);
+          setErrorStatus(errorStatus);
         });
       });
+    } finally {
+      setLoader(false);
     }
-  }, [accounts, navigation, privateKey]);
+  }, [accounts, navigateToSetUpSecurity, privateKey]);
+
+  const privateKeySetter = (value: string) => {
+    setErrorStatus('');
+    setPrivateKey(value);
+  };
 
   const disabled = useMemo(() => {
     const isEmpty = privateKey === '';
     return {
       state: isEmpty,
-      typographyColor: isEmpty ? COLORS.neutral400 : COLORS.neutral0
+      typographyColor: isEmpty || loader ? COLORS.brand600 : COLORS.neutral0
     };
-  }, [privateKey]);
+  }, [loader, privateKey]);
 
   const toggleSecureTextEntry = useCallback(() => {
     setSecureTextEntry((prevState) => !prevState);
   }, []);
+
+  const errorText = useMemo(() => {
+    const alreadyExistError = t('import.private.key.already.exist');
+    const importError = t('import.private.key.error');
+    return errorStatus === 'exist' ? alreadyExistError : importError;
+  }, [errorStatus, t]);
+
+  const disabledButton = useMemo(() => {
+    return loader || disabled.state || !!errorStatus;
+  }, [disabled.state, errorStatus, loader]);
+
+  const buttonText = useMemo(() => {
+    return loader ? t('button.importing.wallet') : t('button.confirm');
+  }, [loader, t]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
         bottomBorder
         titleStyle={styles.titleStyle}
-        title={t('import.wallet.common.title')}
+        title={t('import.wallet.key')}
       />
-      <Spacer value={scale(16)} />
+      <Text
+        color={COLORS.neutral800}
+        fontFamily="Inter_400Regular"
+        fontSize={15}
+        align="center"
+        style={styles.description}
+      >
+        {t('import.wallet.key.description')}
+      </Text>
 
       <KeyboardAvoidingView
         style={styles.container}
@@ -133,15 +157,18 @@ export const ImportWalletPrivateKey = () => {
                 <Text
                   fontSize={16}
                   fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
+                  color={
+                    secureTextEntry ? COLORS.neutral600 : COLORS.neutral900
+                  }
                 >
                   {t('import.wallet.key.input.label')}
                 </Text>
                 <Spacer value={verticalScale(8)} />
                 <PrivateKeyMaskedInput
+                  color={COLORS.neutral600}
                   ref={maskedInputRef}
                   value={privateKey}
-                  setPrivateKey={setPrivateKey}
+                  setPrivateKey={privateKeySetter}
                   secureTextEntry={secureTextEntry}
                 />
               </View>
@@ -166,27 +193,39 @@ export const ImportWalletPrivateKey = () => {
               </Button>
             </View>
             <View style={styles.footer}>
-              <PrimaryButton
-                disabled={disabled.state}
+              {!!errorStatus && (
+                <Text color={COLORS.error600}>{errorText}</Text>
+              )}
+              <Spacer value={25} />
+              <Button
+                disabled={disabledButton}
                 onPress={onImportWalletPress}
+                type="circular"
+                style={{
+                  ...styles.button,
+                  backgroundColor: !disabledButton
+                    ? COLORS.brand600
+                    : COLORS.brand100
+                }}
               >
+                {loader && (
+                  <>
+                    <Spinner />
+                    <Spacer value={scale(10)} horizontal />
+                  </>
+                )}
                 <Text
                   fontSize={16}
                   fontFamily="Inter_500Medium"
                   color={disabled.typographyColor}
                 >
-                  {t('button.continue')}
+                  {buttonText}
                 </Text>
-              </PrimaryButton>
+              </Button>
             </View>
           </View>
         </KeyboardDismissingView>
       </KeyboardAvoidingView>
-
-      <BottomSheetImportWalletPrivateKeyStatus
-        ref={bottomSheetProcessingRef}
-        status={status}
-      />
     </SafeAreaView>
   );
 };

@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { BackHandler, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { Header } from '@components/composite';
+import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
+import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode } from '@components/modular';
+import { styles } from './SetupPasscode.styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const SetupPasscode = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const isButtonEnabled = passcode.join('').length === 4;
+  const { top } = useSafeAreaInsets();
   const onContinuePress = () => {
     if (passcode.every((code) => code !== '')) {
       navigation.navigate('ConfirmPasscode', { passcode });
@@ -26,31 +28,26 @@ export const SetupPasscode = () => {
     setPasscode(passcode);
   };
 
+  useEffect(() => {
+    const onBackPress = () => true;
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
-    <SafeAreaView
-      style={{
-        paddingTop: verticalScale(15),
-        flex: 1,
-        justifyContent: 'space-between'
-      }}
-    >
+    <View style={{ ...styles.main, paddingTop: top }}>
       <View>
-        <View
-          style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
-        >
-          <Spacer value={verticalScale(23)} />
-          <Text
-            align="center"
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('security.enter.passcode')}
-          </Text>
-          <Spacer value={scale(19)} />
-        </View>
-        <Spacer value={scale(19)} />
-        <View style={{ paddingHorizontal: scale(16) }}>
+        <Header
+          bottomBorder
+          backIconVisible={false}
+          title={t('security.enter.passcode')}
+        />
+        <View style={styles.infoContainer}>
           <Text
             align="center"
             fontSize={16}
@@ -66,30 +63,29 @@ export const SetupPasscode = () => {
           isBiometricEnabled={false}
           onPasscodeChange={onPasscodeChange}
         />
-        <Spacer value={scale(19)} />
-        <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
+        <View style={styles.buttonWrapper}>
           <Button
             disabled={!isButtonEnabled}
             onPress={onContinuePress}
             type="circular"
             style={{
+              ...styles.button,
               backgroundColor: isButtonEnabled
                 ? COLORS.brand500
-                : COLORS.alphaBlack5,
-              marginBottom: verticalScale(24)
+                : COLORS.brand100
             }}
           >
             <Text
               fontSize={16}
               fontFamily="Inter_600SemiBold"
-              color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-              style={{ marginVertical: scale(12) }}
+              color={isButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
+              style={styles.buttonText}
             >
-              {t('button.continue')}
+              {t('button.confirm')}
             </Text>
           </Button>
-        </BottomAwareSafeAreaView>
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

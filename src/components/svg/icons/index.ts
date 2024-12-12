@@ -113,3 +113,6 @@ export * from './TokenAirDOGE';
 export * from './WalletConnect';
 export * from './TokenAST';
 export * from './TokenHBR';
+export * from './TokenKOS';
+export * from './TokenSTAMB';
+export * from './TokenXENA';

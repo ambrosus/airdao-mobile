@@ -1,6 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { split, dropRight } from 'lodash';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button, Spacer } from '@components/base';
 import { useForwardedRef } from '@hooks';
@@ -14,6 +15,7 @@ interface PasscodeProps {
   changePasscodeStep?: number | null;
   isBiometricEnabled?: boolean;
   authenticateWithBiometrics?: () => void | Promise<void>;
+  inputBottomPadding?: number;
   type?: 'creation' | 'change';
 }
 
@@ -29,14 +31,17 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       authenticateWithBiometrics = () => {
         // do nothing
       },
+      inputBottomPadding = 0,
       isBiometricEnabled = true,
       changePasscodeStep = null
     }: PasscodeProps,
     ref
   ) => {
-    const [code, setCode] = useState('');
-    const localRef = useForwardedRef<TextInput>(ref);
     const navigation: NavigationListenerType = useNavigation();
+    const localRef = useForwardedRef<TextInput>(ref);
+
+    const [passcode, setPasscode] = useState('');
+
     useEffect(() => {
       if (DeviceUtils.isAndroid) {
         // @ ts-ignore
@@ -50,37 +55,38 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
 
     useEffect(() => {
       if (changePasscodeStep === 2 || changePasscodeStep === 3) {
-        setCode('');
+        setPasscode('');
       }
-    }, [changePasscodeStep]);
+    }, [changePasscodeStep, setPasscode]);
 
     const handleCodeChange = useCallback(
       (text: string) => {
-        if (code.length === 4) return;
+        if (passcode.length === 4) return;
         const numericText = StringUtils.removeNonNumericCharacters(text, false);
-        const newCode = `${code}${numericText}`;
-        setCode(newCode);
+        const newCode = `${passcode}${numericText}`;
+        setPasscode(newCode);
         const passcodeArray = newCode.split('');
         onPasscodeChange(passcodeArray);
         if (type === 'change') {
           if (numericText.length === 4) {
-            setTimeout(() => setCode(''), 50);
+            setTimeout(() => setPasscode(''), 50);
           }
         }
       },
-      [code, onPasscodeChange, type]
+      [passcode, setPasscode, onPasscodeChange, type]
     );
 
     const onPressBackspace = useCallback(() => {
-      const newData = code.substring(0, code.length - 1);
-      setCode(newData);
-    }, [code]);
+      const newPasscode = dropRight(passcode, 1).join('');
+      onPasscodeChange(split(newPasscode, ''));
+      setPasscode(newPasscode);
+    }, [onPasscodeChange, passcode]);
 
     const renderCircles = useCallback(() => {
       const circleElements = [];
 
       for (let i = 0; i < 4; i++) {
-        const isFilled = i < code.length;
+        const isFilled = i < passcode.length;
         circleElements.push(
           <View
             key={i}
@@ -90,7 +96,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
       }
 
       return circleElements;
-    }, [code.length]);
+    }, [passcode.length]);
 
     return (
       <View>
@@ -101,7 +107,7 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
         >
           {renderCircles()}
         </Button>
-        <Spacer value={scale(50)} />
+        <Spacer value={scale(inputBottomPadding || 50)} />
         <PasscodeKeyboard
           onBiometricPress={authenticateWithBiometrics}
           isBiometricEnabled={isBiometricEnabled}

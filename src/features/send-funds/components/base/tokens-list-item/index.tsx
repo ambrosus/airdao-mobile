@@ -5,9 +5,8 @@ import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { styles } from './styles';
-import { SwapStringUtils } from '@features/swap/utils';
 import { NumberUtils } from '@utils/number';
-import { StringValidators } from '@utils';
+import { StringValidators, wrapTokenIcon } from '@utils';
 import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -39,19 +38,22 @@ export const TokensListItem = ({
     };
   }, [isSelectedSameToken]);
 
-  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
-    token.symbol
-  );
+  const SAMBSupportedTokenLogo = wrapTokenIcon(token);
 
   const onChangeSelectedTokenPress = useCallback(
     () => onSelectToken(token),
     [onSelectToken, token]
   );
 
-  const tokenNameOrAddress = useMemo(() => {
-    const { name, address } = token;
-    const isAddress = StringValidators.isStringAddress(name);
-    return StringUtils.formatAddress(isAddress ? name : name || address, 5, 6);
+  const tokenSymbolOrAddress = useMemo(() => {
+    const { symbol, address } = token;
+    const isAddress = StringValidators.isStringAddress(symbol);
+
+    if (symbol && !isAddress) {
+      return symbol;
+    }
+
+    return StringUtils.formatAddress(address, 5, 6);
   }, [token]);
 
   return (
@@ -70,16 +72,7 @@ export const TokensListItem = ({
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral800}
             >
-              {token.symbol}
-            </Text>
-
-            <Spacer horizontal value={6} />
-            <Text
-              fontSize={16}
-              fontFamily="Inter_500Medium"
-              color={COLORS.neutral400}
-            >
-              {tokenNameOrAddress}
+              {tokenSymbolOrAddress}
             </Text>
           </View>
         </Row>
@@ -92,13 +85,15 @@ export const TokensListItem = ({
           >
             {NumberUtils.limitDecimalCount(token.balance.formattedBalance, 2)}
           </Text>
-          <Text
-            fontSize={15}
-            fontFamily="Inter_400Regular"
-            color={COLORS.neutral500}
-          >
-            ${NumberUtils.numberToTransformedLocale(usdPrice)}
-          </Text>
+          {!Number.isNaN(usdPrice) && (
+            <Text
+              fontSize={15}
+              fontFamily="Inter_400Regular"
+              color={COLORS.neutral500}
+            >
+              ${NumberUtils.numberToTransformedLocale(usdPrice)}
+            </Text>
+          )}
         </View>
       </Row>
     </TouchableOpacity>

@@ -9,7 +9,7 @@ import {
   WalletConnectionWrongChainView
 } from '../../composite';
 
-export function renderModalViewByStep(step: WalletConnectViewValues) {
+export function RenderModalViewByStep(step: WalletConnectViewValues) {
   switch (step) {
     case CONNECT_VIEW_STEPS.APPROVE: {
       return <WalletConnectApprovalView />;
@@ -20,6 +20,9 @@ export function renderModalViewByStep(step: WalletConnectViewValues) {
     }
     case CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR: {
       return <WalletConnectionWrongChainView />;
+    }
+    case CONNECT_VIEW_STEPS.INITIAL: {
+      return null;
     }
   }
 }

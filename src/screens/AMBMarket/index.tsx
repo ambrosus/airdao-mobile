@@ -38,13 +38,6 @@ export function AMBMarket(): JSX.Element {
     return volumeUSD;
   }, [ambPrice]);
 
-  const dailyIncome = useMemo(() => {
-    if (!ambPrice) return '';
-
-    const { priceUSD, percentChange24H } = ambPrice;
-    return NumberUtils.formatNumber((priceUSD * percentChange24H) / 100);
-  }, [ambPrice]);
-
   const renderErrorView = () => {
     return (
       <>
@@ -109,7 +102,7 @@ export function AMBMarket(): JSX.Element {
         )}
         {ambPrice && (
           <>
-            <AMBPriceInfo header="AirDAO" dailyIncome={dailyIncome} />
+            <AMBPriceInfo header="AirDAO" />
             <View style={styles.body}>
               <BodyTitle title={t('amb.market.stats')} />
               <Spacer value={verticalScale(16)} />

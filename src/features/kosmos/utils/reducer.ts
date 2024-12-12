@@ -30,7 +30,7 @@ export function totalBondedReducer(
   transactions: TxType[],
   extractTokenCb: ExtractTokenCallback
 ): number {
-  const total = transactions.reduce((acc, curr) => {
+  return transactions.reduce((acc, curr) => {
     const payoutToken = extractTokenCb(curr.payoutToken);
     const payoutPrice = extractPaymentAmount(payoutToken, curr.payoutAmount);
 
@@ -39,8 +39,6 @@ export function totalBondedReducer(
     }
     return acc;
   }, 0);
-
-  return Math.ceil(total * 100) / 100;
 }
 
 /**

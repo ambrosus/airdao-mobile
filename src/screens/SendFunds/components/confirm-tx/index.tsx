@@ -1,10 +1,11 @@
-import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { PrimaryButton, TokenLogo } from '@components/modular';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils/scaling';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
@@ -14,10 +15,9 @@ import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
-import { _delayNavigation } from '@utils/navigate';
 import { useSendFundsStore } from '@features/send-funds';
+import { _delayNavigation } from '@utils';
+import { HomeNavigationProp } from '@appTypes';
 
 interface ConfirmTransactionProps {
   from: string;
@@ -26,6 +26,7 @@ interface ConfirmTransactionProps {
   currency: string;
   estimatedFee: number;
   onSendPress: () => unknown;
+  onSuccessBottomSheetDismiss: () => void;
   dismissBottomSheet: () => void;
 }
 
@@ -44,15 +45,16 @@ export const ConfirmTransaction = ({
   currency,
   estimatedFee,
   onSendPress,
+  onSuccessBottomSheetDismiss,
   dismissBottomSheet
 }: ConfirmTransactionProps) => {
-  const { t } = useTranslation();
   const navigation: HomeNavigationProp = useNavigation();
+  const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
   const {
     state: { loading, error, success },
-    onResetState
+    onChangeState
   } = useSendFundsStore();
 
   const containerStyle = useMemo(
@@ -72,17 +74,10 @@ export const ConfirmTransaction = ({
     return cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)');
   }, [loading]);
 
-  const navigateToHomeScreen = useCallback(() => {
-    _delayNavigation(dismissBottomSheet, () =>
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'HomeScreen' }]
-        })
-      )
-    );
-    onResetState();
-  }, [dismissBottomSheet, navigation, onResetState]);
+  const shadow = useMemo(
+    () => cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)'),
+    []
+  );
 
   if (success) {
     const description = `You sent ${NumberUtils.numberToTransformedLocale(
@@ -92,13 +87,64 @@ export const ConfirmTransaction = ({
     return (
       <BottomSheetSuccessView
         description={description}
-        onButtonPress={navigateToHomeScreen}
+        onButtonPress={onSuccessBottomSheetDismiss}
       />
     );
   }
 
-  if (error) {
-    return <BottomSheetErrorView />;
+  if (!!error) {
+    const onTryAgainButtonPress = () => {
+      onChangeState({ error: null });
+      dismissBottomSheet();
+    };
+
+    const onDoneButtonPress = () =>
+      _delayNavigation(dismissBottomSheet, () =>
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen' }]
+          })
+        )
+      );
+
+    return (
+      <BottomSheetErrorView title={t('send.funds.failed')}>
+        <View style={styles.errorFooter}>
+          <Text
+            fontSize={17}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral500}
+            style={styles.description}
+            align="center"
+          >
+            {t('bridge.transfer.failed.sub.header')}
+          </Text>
+          <PrimaryButton onPress={onTryAgainButtonPress} style={shadow}>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.neutral0}
+            >
+              {t('button.try.again')}
+            </Text>
+          </PrimaryButton>
+
+          <SecondaryButton
+            onPress={onDoneButtonPress}
+            style={styles.secondaryButton}
+          >
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={16}
+              color={COLORS.brand500}
+            >
+              {t('common.done')}
+            </Text>
+          </SecondaryButton>
+        </View>
+      </BottomSheetErrorView>
+    );
   }
 
   return (
@@ -156,7 +202,7 @@ export const ConfirmTransaction = ({
                 fontFamily="Inter_600SemiBold"
                 color={COLORS.brand600}
               >
-                !!!Sending
+                {t('button.sending')}
               </Text>
             </Row>
           ) : (

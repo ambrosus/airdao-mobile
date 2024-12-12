@@ -14,6 +14,11 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
+import { MarketType } from '@features/kosmos/types';
+import {
+  useMarketDetails,
+  useTransactionErrorHandler
+} from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
@@ -23,6 +28,10 @@ import { MarketType } from '@entities/kosmos';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import { isAndroid } from '@utils/isPlatform';
+import { $discount, discountColor } from '@features/kosmos/utils';
+import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
+import { BottomSheetRef } from '@components/composite';
+import { isAndroid, isIos } from '@utils/isPlatform';
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
 import { NumberUtils } from '@utils/number';
@@ -48,13 +57,13 @@ export const BuyBondTab = ({
 }: BuyBondTabProps) => {
   const { t } = useTranslation();
   const [isActiveInput, setIsActiveInput] = useState(false);
+  const { error } = useTransactionErrorHandler(market);
 
   const inputRef = useRef<InputRef>(null);
 
   const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
-  const { quoteToken, payoutToken, maxBondable, discount } =
-    useMarketDetails(market);
+  const { quoteToken, payoutToken, maxBondable } = useMarketDetails(market);
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
@@ -70,7 +79,9 @@ export const BuyBondTab = ({
 
   const paddingTop = useAnimatedStyle(() => {
     return {
-      paddingTop: withTiming(animatedPaddingTop.value)
+      paddingTop: withTiming(
+        isIos ? animatedPaddingTop.value : animatedPaddingTop.value / 1.25
+      )
     };
   });
 
@@ -138,6 +149,7 @@ export const BuyBondTab = ({
             <InputWithTokenSelect
               label="Set amount"
               title="Set amount"
+              error={error}
               value={amountToBuy}
               isRequiredRefetchBalance={userPerformedRefresh}
               onChangeText={onChangeAmountToBuy}
@@ -192,9 +204,9 @@ export const BuyBondTab = ({
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={discountColor(+discount)}
+              color={discountColor(market?.discount)}
             >
-              {discount}%
+              {$discount(market?.discount)}
             </Text>
           </Row>
         </View>

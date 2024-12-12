@@ -9,6 +9,7 @@ import { Keyboard, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
@@ -36,12 +37,22 @@ import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/m
 import { FundsHeader } from '@features/send-funds/components/templates';
 import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
+import { _delayNavigation } from '@utils';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 
-export const SendFunds = ({ route }: Props) => {
+export const SendFunds = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
-  const { state, onChangeState } = useSendFundsStore();
+  const { state, tokens, onSetTokens, onChangeState, onResetState } =
+    useSendFundsStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        onResetState();
+      };
+    }, [onResetState])
+  );
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
@@ -66,7 +77,7 @@ export const SendFunds = ({ route }: Props) => {
   }, [transactionId]);
 
   const {
-    data: { tokens },
+    data: { tokens: tokensFromAPI },
     loading: isFetchingTokens
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
 
@@ -75,6 +86,12 @@ export const SendFunds = ({ route }: Props) => {
       (token) => token.address === tokenFromNavigationParams?.address
     ) || _AMBEntity
   );
+
+  useEffect(() => {
+    if (tokens.length === 0 && tokensFromAPI.length > 0) {
+      onSetTokens([_AMBEntity].concat(tokensFromAPI));
+    }
+  }, [_AMBEntity, tokensFromAPI, onSetTokens, tokens.length]);
 
   const { amountInCrypto, setAmountInCrypto, onChangeAmountHandle } =
     useAmountChangeHandler();
@@ -109,14 +126,17 @@ export const SendFunds = ({ route }: Props) => {
   const onPressMaxAmount = useCallback(
     (maxBalanceString?: string, decimals = 3) => {
       if (maxBalanceString) {
-        let maxSendableBalance: number = +maxBalanceString;
+        let maxSpendableBalance: number = +maxBalanceString;
 
         if (selectedToken.name === 'AirDAO') {
-          maxSendableBalance -= 0.0005;
+          maxSpendableBalance -= 0.0005;
         }
 
         setAmountInCrypto(
-          NumberUtils.limitDecimalCount(maxSendableBalance.toString(), decimals)
+          NumberUtils.limitDecimalCount(
+            maxSpendableBalance.toString(),
+            decimals
+          )
         );
       }
     },
@@ -179,8 +199,7 @@ export const SendFunds = ({ route }: Props) => {
         if (transactionIdRef.current === txId) {
           onChangeState({
             loading: false,
-            error: error as unknown as never,
-            success: true
+            error: error as unknown as never
           });
         }
       }
@@ -204,13 +223,12 @@ export const SendFunds = ({ route }: Props) => {
   const renderBottomSheetNode = useMemo(
     () => (
       <TokensList
-        tokens={[_AMBEntity].concat(tokens)}
         selectedToken={selectedToken}
         onSelectToken={onSelectToken}
         isFetchingTokens={isFetchingTokens}
       />
     ),
-    [_AMBEntity, isFetchingTokens, onSelectToken, selectedToken, tokens]
+    [isFetchingTokens, onSelectToken, selectedToken]
   );
 
   const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
@@ -233,6 +251,28 @@ export const SendFunds = ({ route }: Props) => {
     },
     [onPressMaxAmount, selectedToken, setAmountInCrypto]
   );
+  const buttonTitle = useMemo(() => {
+    return reviewButtonDisabled ? t('button.enter.amount') : t('common.review');
+  }, [reviewButtonDisabled, t]);
+
+  const onSuccessBottomSheetDismiss = useCallback(() => {
+    if (state.success) {
+      return _delayNavigation(hideReviewModal, () =>
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen' }]
+          })
+        )
+      );
+    }
+  }, [navigation, state.success]);
+
+  const isBottomSheetHasTitle = useMemo(() => {
+    const { error, success } = state;
+
+    return Boolean(error) || Boolean(success);
+  }, [state]);
 
   return (
     <>
@@ -285,12 +325,18 @@ export const SendFunds = ({ route }: Props) => {
                   fontFamily="Inter_500Medium"
                   fontWeight="500"
                 >
-                  {t('send.funds.review.transaction')}
+                  {buttonTitle}
                 </Text>
               </PrimaryButton>
             </View>
           </View>
-          <BottomSheet ref={confirmModalRef} title={t('common.review')}>
+          <BottomSheet
+            ref={confirmModalRef}
+            title={!isBottomSheetHasTitle ? t('common.review') : undefined}
+            swiperIconVisible={false}
+            onBackdropPress={onSuccessBottomSheetDismiss}
+            onCustomCrossPress={onSuccessBottomSheetDismiss}
+          >
             <ConfirmTransaction
               from={senderAddress}
               to={destinationAddress}
@@ -298,8 +344,10 @@ export const SendFunds = ({ route }: Props) => {
               currency={selectedToken.symbol}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
+              onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}
               dismissBottomSheet={hideReviewModal}
             />
+            <Spacer value={15} />
           </BottomSheet>
         </KeyboardDismissingView>
         <AmountSelectionKeyboardExtend

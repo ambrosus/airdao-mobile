@@ -26,17 +26,21 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
+type ScrollType = 'focus' | 'blur';
+
 interface WithdrawTokenProps {
   wallet: AccountDBModel | null;
   apy?: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
+  onScroll?: (value: ScrollType) => void;
 }
 
 export const WithdrawToken = ({
   wallet,
   pool,
-  isSwiping
+  isSwiping,
+  onScroll
 }: WithdrawTokenProps) => {
   const { t } = useTranslation();
   const navigation =
@@ -47,6 +51,12 @@ export const WithdrawToken = ({
 
   const [loading, setLoading] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
+
+  const _onScroll = (type: ScrollType) => {
+    if (typeof onScroll === 'function') {
+      onScroll(type);
+    }
+  };
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -151,6 +161,8 @@ export const WithdrawToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        onFocus={() => _onScroll('focus')}
+        onBlur={() => _onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
@@ -177,7 +189,7 @@ export const WithdrawToken = ({
       <Spacer value={verticalScale(44)} />
       <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
         <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}
+          {t(isWrongStakeValue ? 'button.enter.amount' : 'common.review')}
         </Text>
       </PrimaryButton>
 

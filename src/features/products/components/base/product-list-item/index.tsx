@@ -6,6 +6,8 @@ import { Product } from '@features/products/utils';
 import { Row, Text } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
+import { lowerCase } from 'lodash';
+import capitalize from 'lodash/capitalize';
 
 interface ProductListItemProps {
   product: Product;
@@ -37,7 +39,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
               fontFamily="Inter_600SemiBold"
               color={product.color}
             >
-              {product.name}
+              {capitalize(lowerCase(product.name))}
             </Text>
             <Text
               fontSize={13}

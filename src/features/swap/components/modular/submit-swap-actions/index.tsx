@@ -44,6 +44,7 @@ export const SubmitSwapActions = () => {
         const tx = await swapTokens();
 
         if (!tx) {
+          onChangeBottomSheetSwapStatus(BottomSheetStatus.ERROR);
           sendFirebaseEvent(CustomAppEvents.swap_error, {
             swapError: 'swapTokens-tx not found'
           });
@@ -52,6 +53,7 @@ export const SubmitSwapActions = () => {
           onChangeBottomSheetSwapStatus(BottomSheetStatus.SUCCESS);
         }
       } catch (error) {
+        onChangeBottomSheetSwapStatus(BottomSheetStatus.ERROR);
         sendFirebaseEvent(CustomAppEvents.swap_error, {
           swapError: JSON.stringify(
             (error as { message: string })?.message ?? JSON.stringify(error)

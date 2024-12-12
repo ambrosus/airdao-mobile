@@ -6,9 +6,9 @@ import { DeviceUtils } from '@utils/device';
 import { Cache, CacheKey } from '@lib/cache';
 import { useSupportedBiometrics } from '@hooks';
 import {
-  usePasscodeStore,
+  _error,
   authenticateNativePopup,
-  _error
+  usePasscodeStore
 } from '@features/passcode';
 
 export function usePasscodeActions() {
@@ -23,9 +23,8 @@ export function usePasscodeActions() {
   const onChangePasscodeHandle = useCallback(
     async (passcode: string[]) => {
       try {
-        onChangePasscode(passcode);
         await PasscodeUtils.setPasscodeInDB(passcode);
-        onChangeIsPasscodeEnabled(true);
+        onChangePasscode(passcode);
       } catch (error) {
         onChangeIsPasscodeEnabled(false);
         throw error;

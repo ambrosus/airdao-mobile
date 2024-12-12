@@ -11,9 +11,6 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(32),
     justifyContent: 'space-between'
   },
-  nameInput: {
-    marginHorizontal: scale(16)
-  },
   input: {
     shadowColor: COLORS.transparent,
     borderWidth: 1,
@@ -21,6 +18,10 @@ export const styles = StyleSheet.create({
     color: COLORS.alphaBlack60
   },
   addressContainer: {
+    marginTop: scale(15),
+    borderRadius: 24,
+    paddingVertical: scale(25),
+    backgroundColor: COLORS.neutral50,
     paddingHorizontal: scale(24),
     alignSelf: 'center'
   },
@@ -31,6 +32,10 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(24),
     borderWidth: 2,
     borderColor: COLORS.neutral100
+  },
+  copyAddressButtonWrapper: {
+    marginTop: verticalScale(16),
+    height: 33
   },
   copyButton: {
     backgroundColor: COLORS.brand100,
