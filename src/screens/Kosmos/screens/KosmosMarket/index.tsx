@@ -21,13 +21,8 @@ import {
   MarketHeaderDetails,
   ScreenLoader
 } from '@features/kosmos/components/base';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useBalance, useExtractToken } from '@features/kosmos/lib/hooks';
+import { useBalance, useResetStore } from '@features/kosmos/lib/hooks';
 import { HomeParamsList } from '@appTypes';
-import {
-  useMarketByIdQuery,
-  useMarketTransactions
-} from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
   ExactMarketTokenTabs,
@@ -37,6 +32,12 @@ import { isIOS } from 'react-native-popover-view/dist/Constants';
 import { isAndroid } from '@utils/isPlatform';
 import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import {
+  useMarketByIdQuery,
+  useMarketTransactions,
+  useToken
+} from '@entities/kosmos';
+import { useChartStore } from '@features/kosmos';
 import { Spacer } from '@components/base';
 import { verticalScale } from '@utils/scaling';
 
@@ -46,10 +47,11 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const { onToggleMarketTooltip, isMarketChartLoading, reset } =
-    useKosmosMarketsContextSelector();
+  const { onToggleIsChartTooltipVisible, isChartLoading } = useChartStore();
 
-  const { token } = useExtractToken(route.params.market.payoutToken);
+  const { reset } = useResetStore();
+
+  const { token } = useToken(route.params.market.payoutToken);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
   const [isRefreshingData, setIsRefreshingData] = useState(false);
   const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
@@ -75,9 +77,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const onScrollBeginDragHandler = useCallback(
     () =>
       InteractionManager.runAfterInteractions(() =>
-        onToggleMarketTooltip(false)
+        onToggleIsChartTooltipVisible(false)
       ),
-    [onToggleMarketTooltip]
+    [onToggleIsChartTooltipVisible]
   );
 
   useFocusEffect(
@@ -137,8 +139,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   );
 
   const renderRefetchController = useMemo(() => {
-    const refreshing =
-      isMarketChartLoading || (isAndroid && isLoadingTransaction);
+    const refreshing = isChartLoading || (isAndroid && isLoadingTransaction);
     return (
       <RefreshControl
         onRefresh={onRefetchMarketHandle}
@@ -146,7 +147,7 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
         removeClippedSubviews
       />
     );
-  }, [isMarketChartLoading, isLoadingTransaction, onRefetchMarketHandle]);
+  }, [isChartLoading, isLoadingTransaction, onRefetchMarketHandle]);
 
   const onScrollToMarket = useCallback(() => {
     if (!isAndroid) {
@@ -155,8 +156,8 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   }, [buyBondsLayoutMeasureHeight]);
 
   const combinedLoading = useMemo(() => {
-    return isMarketChartLoading || isLoading;
-  }, [isMarketChartLoading, isLoading]);
+    return isChartLoading || isLoading;
+  }, [isChartLoading, isLoading]);
 
   const scrollToInput = () =>
     // @ts-ignore

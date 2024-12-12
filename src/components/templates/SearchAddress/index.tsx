@@ -6,6 +6,8 @@ import React, {
 } from 'react';
 import { Alert, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
 import { BarcodeScanner } from '../BarcodeScanner';
 import { TransactionDetails } from '../TransactionDetails';
@@ -35,14 +37,12 @@ import {
 } from '@hooks';
 import { ethereumAddressRegex } from '@constants/regex';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { useAllAddresses } from '@contexts';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { SearchTabNavigationProp } from '@appTypes';
-import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { useAddressesStore } from '@entities/addresses';
 
 interface SearchAdressProps {
   scannerDisabled?: boolean;
@@ -60,19 +60,23 @@ export interface SearchAddressRef {
 const LIMIT = 10;
 
 export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
-  (props: SearchAdressProps, ref): JSX.Element => {
-    const {
+  (
+    {
       scannerDisabled = false,
       onContentVisibilityChanged = () => null,
       searchAddress = false
-    } = props;
+    },
+    ref
+  ): JSX.Element => {
+    const { t } = useTranslation();
     const navigation = useNavigation<SearchTabNavigationProp>();
     const { height: WINDOW_HEIGHT } = useWindowDimensions();
-    const { t } = useTranslation();
     const { data: explorerInfo } = useExplorerInfo();
     const [address, setAddress] = useState('');
     const [searchSubmitted, setSearchSubmitted] = useState(false);
     const initialMount = useRef(true);
+
+    const { allAddresses } = useAddressesStore();
 
     const {
       data: account,
@@ -106,15 +110,13 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
     } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
     const [searchInputFocused, setSearchInputFocused] = useState(false);
 
-    const allAdresses = useAllAddresses();
-
     const inputRef = useRef<InputRef>(null);
     const scannerModalRef = useRef<BottomSheetRef>(null);
     const scanned = useRef(false);
     const editModal = useRef<BottomSheetRef>(null);
 
     const finalAccount =
-      allAdresses.find((a) => a.address === account?.address) || account;
+      allAddresses.find((a) => a.address === account?.address) || account;
     if (searchSubmitted && finalAccount) {
       sendFirebaseEvent(CustomAppEvents.explorer_search);
     }

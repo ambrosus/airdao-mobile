@@ -2,14 +2,15 @@ import React, { useMemo } from 'react';
 import { Row, Spacer, Text } from '@components/base';
 import { styles } from './styles';
 import { TokenLogo } from '@components/modular';
-import { Token, TxType } from '@features/kosmos/types';
-import {
-  formatDecimals,
-  timestampToFormattedDate
-} from '@features/kosmos/utils';
+import { formatDecimals } from '@features/kosmos/utils';
 import { COLORS } from '@constants/colors';
 import { BigNumber, ethers } from 'ethers';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import {
+  timestampToFormattedDate,
+  Token,
+  TxType,
+  useTokensStore
+} from '@entities/kosmos';
 
 type NotRequiredToken = Token | undefined;
 
@@ -27,7 +28,7 @@ export const TransactionHistoryItem = ({
   quoteToken,
   payoutToken
 }: TransactionHistoryItemProps) => {
-  const { tokens } = useKosmosMarketsContextSelector();
+  const { tokens } = useTokensStore();
   const date = useMemo(
     () => timestampToFormattedDate(new Date(transaction.date).getTime()),
     [transaction.date]

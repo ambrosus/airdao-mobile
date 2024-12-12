@@ -7,25 +7,25 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
-import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
-import { Measure } from './components/types';
 import { Route, TabViewProps } from 'react-native-tab-view';
-import { useLists } from '@contexts';
-import { BottomSheetCreateRenameGroup } from '@components/templates';
-import { SearchTabNavigationProp } from '@appTypes';
-import { styles } from './styles';
 import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { styles } from './styles';
+import { useListActions } from '@features/lists';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
+import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
+import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
+import { Measure } from './components/types';
+import { BottomSheetCreateRenameGroup } from '@components/templates';
+import { SearchTabNavigationProp } from '@appTypes';
 import { DEVICE_WIDTH } from '@constants/variables';
-import { Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>
@@ -35,14 +35,21 @@ type Props<T extends Route> = Parameters<
 };
 
 export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
+  const { t } = useTranslation();
   const containerRef = useRef<View | null>(null);
 
   const inputRange = props.navigationState.routes.map((_, i) => i);
   const [measures, setMeasures] = useState<Measure[]>([]);
 
-  const { t } = useTranslation();
+  const createGroupRef = useRef<BottomSheetRef>(null);
 
-  const { handleOnCreate, createGroupRef } = useLists((v) => v);
+  const onDismissBottomSheet = useCallback(
+    () => createGroupRef.current?.dismiss(),
+    [createGroupRef]
+  );
+
+  const { onCreateList } = useListActions(onDismissBottomSheet);
+
   const handleOnOpenCreateNewList = useCallback(() => {
     createGroupRef.current?.show();
   }, [createGroupRef]);
@@ -186,7 +193,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
       </View>
       <BottomSheetCreateRenameGroup
         type="create"
-        handleOnCreateGroup={handleOnCreate}
+        handleOnCreateGroup={onCreateList}
         ref={createGroupRef}
       />
       <Spacer value={verticalScale(5)} />

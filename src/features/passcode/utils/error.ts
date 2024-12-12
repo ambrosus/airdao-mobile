@@ -2,7 +2,7 @@ import { Linking } from 'react-native';
 import { t } from 'i18next';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 
-interface _ErrorArgs {
+interface ErrorArgs {
   readonly hasFaceId: boolean;
   readonly hasFingerprint: boolean;
   readonly supportedBiometricsLength: number;
@@ -12,7 +12,7 @@ export function _error({
   hasFaceId,
   hasFingerprint,
   supportedBiometricsLength
-}: _ErrorArgs) {
+}: ErrorArgs) {
   const { errorText, errorSubtext, onBodyPress } = getErrorDetails({
     hasFaceId,
     hasFingerprint,
@@ -32,7 +32,7 @@ function getErrorDetails({
   hasFaceId,
   hasFingerprint,
   supportedBiometricsLength
-}: _ErrorArgs) {
+}: ErrorArgs) {
   let errorText = '';
   let errorSubtext = undefined;
   let onBodyPress = undefined;

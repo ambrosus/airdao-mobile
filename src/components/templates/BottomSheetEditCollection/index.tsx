@@ -1,6 +1,8 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import { useListActions } from '@features/lists';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -8,13 +10,11 @@ import {
 } from '@components/composite';
 import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { useLists } from '@contexts';
 import { COLORS } from '@constants/colors';
 import { AccountList } from '@models';
 import { StringUtils } from '@utils/string';
 import { verticalScale } from '@utils/scaling';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
-import { styles } from './styles';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {
   collection: AccountList;
@@ -25,12 +25,12 @@ interface BottomSheetEditCollectionProps extends BottomSheetProps {
 export const BottomSheetEditCollection = forwardRef<
   BottomSheetRef,
   BottomSheetEditCollectionProps
->((props, ref) => {
-  const { collection, onRename, onDelete, ...bottomSheetProps } = props;
-  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const { handleOnRename, handleOnDelete } = useLists((v) => v);
-  const renameCollectionModalRef = useRef<BottomSheetRef>(null);
+>(({ collection, onRename, onDelete, ...bottomSheetProps }, ref) => {
   const { t } = useTranslation();
+  const { onRenameList, onDeleteList } = useListActions();
+
+  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
+  const renameCollectionModalRef = useRef<BottomSheetRef>(null);
 
   const dismissThis = useCallback(() => {
     setTimeout(() => {
@@ -50,12 +50,12 @@ export const BottomSheetEditCollection = forwardRef<
 
   const deleteCollection = () => {
     dismissThis();
-    handleOnDelete(collection.id);
+    onDeleteList(collection.id);
     if (typeof onDelete === 'function') onDelete();
   };
 
   const renameGroup = (listId: string, newName: string) => {
-    handleOnRename(listId, newName);
+    onRenameList(listId, newName);
     dismissRename();
     dismissThis();
     if (typeof onRename === 'function') onRename(newName);

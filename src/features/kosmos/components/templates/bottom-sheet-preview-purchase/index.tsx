@@ -6,6 +6,7 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ethers } from 'ethers';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -14,16 +15,18 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { MarketType } from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { formatDecimals } from '@features/kosmos/utils';
+import { usePurchaseStore } from '@features/kosmos';
+import { BuyBondButton } from '../../modular';
 import {
   $discount,
   _timestampToDate,
-  formatDecimals,
-  timestampToFormattedDate
-} from '@features/kosmos/utils';
+  MarketType,
+  timestampToFormattedDate,
+  useTokensStore
+} from '@entities/kosmos';
 import { BuyBondButton } from '../../modular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
@@ -40,10 +43,12 @@ export const BottomSheetPreviewPurchase = forwardRef<
   const { t } = useTranslation();
   const { bottom: bottomSafeInset } = useSafeAreaInsets();
   const bottomSheetRef = useForwardedRef(ref);
-  const { amountToBuy } = useKosmosMarketsContextSelector();
+
+  const { tokens } = useTokensStore();
+  const { amountToBuy } = usePurchaseStore();
+
   const { payoutToken, quoteToken, willGetSubFee, protocolFee } =
     useMarketDetails(market);
-  const { tokens } = useKosmosMarketsContextSelector();
 
   const [isTransactionProcessing, setIsTransactionProcessing] = useState(false);
 

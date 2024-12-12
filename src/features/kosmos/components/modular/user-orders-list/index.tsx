@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react';
 import { RefreshControl, View, VirtualizedList } from 'react-native';
-import { styles } from './styles';
-import {
-  useClaimState,
-  useTransactions as useOrders,
-  useTransactions
-} from '@features/kosmos/lib/hooks';
-import { ScreenLoader } from '@features/kosmos/components/base';
-import { TransactionListItem, TxType } from '@features/kosmos/types';
-import { TotalOrdersAmount } from '../../composite/total-orders-amount';
-
-import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
 import { useFocusEffect } from '@react-navigation/native';
+import { styles } from './styles';
+import { useClaimState } from '@features/kosmos/lib/hooks';
+import { ScreenLoader } from '@features/kosmos/components/base';
+import { TotalOrdersAmount } from '../../composite/total-orders-amount';
+import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
+import {
+  TransactionListItem,
+  TxType,
+  useTransactions,
+  useTransactions as useOrders
+} from '@entities/kosmos';
 
 export const UserOrdersList = () => {
   const { transactions, isTransactionsLoading, refetchTransactions } =

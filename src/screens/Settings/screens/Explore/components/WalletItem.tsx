@@ -1,15 +1,15 @@
-import { Row, Spacer, Text } from '@components/base';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Row, Spacer, Text } from '@components/base';
 import { ExplorerAccount } from '@models/Explorer';
 import { StringUtils } from '@utils/string';
 import { NumberUtils } from '@utils/number';
 import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useLists } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { AddressIndicator } from '@components/templates';
-import { useTranslation } from 'react-i18next';
+import { useListsSelector } from '@entities/lists';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;
@@ -17,17 +17,25 @@ interface ExplorerWalletItemProps {
   indicatorVisible?: boolean; // show info whether address is watchlisted or added to collection
 }
 
-export const ExplorerWalletItem = (
-  props: ExplorerWalletItemProps
-): JSX.Element => {
-  const { item, totalSupply, indicatorVisible } = props;
-  const { address, transactionCount, ambBalance } = item;
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const { watchlist } = useWatchlist();
+export const ExplorerWalletItem = ({
+  item,
+  totalSupply,
+  indicatorVisible
+}: ExplorerWalletItemProps): JSX.Element => {
   const { t } = useTranslation();
-  const listWithAddress = listsOfAddressGroup.filter(
-    (list) => list.accounts?.indexOfItem(item, 'address') > -1
+  const { listsOfAddressGroup } = useListsSelector();
+  const { watchlist } = useWatchlist();
+
+  const { address, transactionCount, ambBalance } = item;
+
+  const listWithAddress = useMemo(
+    () =>
+      listsOfAddressGroup.filter(
+        (list) => list.accounts?.indexOfItem(item, 'address') > -1
+      ),
+    [item, listsOfAddressGroup]
   );
+
   const isWatchlisted = watchlist.indexOfItem(item, 'address') > -1;
   const isShowHoldPercentage = !!item.ambBalance && !!totalSupply;
   const leftPadding = indicatorVisible

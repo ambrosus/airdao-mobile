@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { COLORS } from '@constants/colors';
-import { MarketType } from '@features/kosmos/types';
-import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle
 } from 'react-native-reanimated';
+import { styles } from './styles';
+import { Text } from '@components/base';
+import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { usePurchaseStore } from '@features/kosmos';
+import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
+import { MarketType } from '@entities/kosmos';
 import { buttonWithShadowStyle } from '@constants/shadow';
 
 interface ReviewBondPurchaseButtonProps {
@@ -24,7 +24,7 @@ export const ReviewBondPurchaseButton = ({
 }: ReviewBondPurchaseButtonProps) => {
   const { t } = useTranslation();
   const { error } = useTransactionErrorHandler(market);
-  const { amountToBuy } = useKosmosMarketsContextSelector();
+  const { amountToBuy } = usePurchaseStore();
   const { height } = useAnimatedKeyboard();
 
   const onPreviewPurchasePress = useCallback(

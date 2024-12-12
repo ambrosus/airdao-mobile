@@ -8,14 +8,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { MarketChart } from '@features/kosmos/components/modular';
-import { MarketType } from '@features/kosmos/types';
+
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { ChartTimeIntervals } from '@features/kosmos/components/composite';
-import { CHART_INTERVALS } from '@features/kosmos/constants';
 import { verticalScale } from '@utils/scaling';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { CHART_INTERVALS, MarketType } from '@entities/kosmos';
+import { useChartStore } from '@features/kosmos';
 
 interface MarketChartsWithTimeframesProps {
   market: MarketType;
@@ -27,17 +27,18 @@ export const MarketChartsWithTimeframes = ({
   onScrollToMarket
 }: MarketChartsWithTimeframesProps) => {
   const { t } = useTranslation();
-  const { onToggleMarketTooltip } = useKosmosMarketsContextSelector();
+
+  const { onToggleIsChartTooltipVisible } = useChartStore();
   const { quoteToken } = useMarketDetails(market);
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[2].value);
 
   const onChangeInterval = useCallback(
     (interval: number) => {
       onScrollToMarket();
-      onToggleMarketTooltip(false);
+      onToggleIsChartTooltipVisible(false);
       setChartInterval(interval);
     },
-    [onScrollToMarket, onToggleMarketTooltip]
+    [onScrollToMarket, onToggleIsChartTooltipVisible]
   );
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -46,7 +47,7 @@ export const MarketChartsWithTimeframes = ({
     };
   }, []);
 
-  const dismissTooltip = () => onToggleMarketTooltip(false);
+  const dismissTooltip = () => onToggleIsChartTooltipVisible(false);
 
   return (
     <TouchableWithoutFeedback onPress={dismissTooltip}>

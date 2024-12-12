@@ -9,12 +9,14 @@ import { TxType } from '@features/kosmos/types';
 import {
   $discount,
   formatDecimals,
-  getTokenByAddress
+  getTokenByAddress,
+  formatDecimals
 } from '@features/kosmos/utils';
 import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { COLORS } from '@constants/colors';
 import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
 import { BottomSheetRef } from '@components/composite';
+import { $token, useTokensStore } from '@entities/kosmos';
 
 interface OrderCardDetailsProps {
   transaction: TxType;
@@ -22,18 +24,18 @@ interface OrderCardDetailsProps {
 
 export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
   const { t } = useTranslation();
-  const { tokens } = useKosmosMarketsContextSelector();
+  const { tokens } = useTokensStore();
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
   const quoteToken = useMemo(() => {
     const address = transaction.quoteToken;
-    return getTokenByAddress(address, tokens);
+    return $token(address, tokens);
   }, [transaction, tokens]);
 
   const payoutToken = useMemo(() => {
     const address = transaction.payoutToken;
-    return getTokenByAddress(address, tokens);
+    return $token(address, tokens);
   }, [transaction, tokens]);
 
   const amount = useMemo(() => {

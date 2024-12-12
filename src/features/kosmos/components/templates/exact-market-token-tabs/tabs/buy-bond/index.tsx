@@ -20,14 +20,20 @@ import {
   useTransactionErrorHandler
 } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
+import { discountColor } from '@features/kosmos/utils';
+import { usePurchaseStore } from '@features/kosmos';
+import { MarketType } from '@entities/kosmos';
+import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
+import { BottomSheetRef } from '@components/composite';
+import { isAndroid } from '@utils/isPlatform';
 import { $discount, discountColor } from '@features/kosmos/utils';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import { isAndroid, isIos } from '@utils/isPlatform';
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { NumberUtils } from '@utils/number';
 
 interface BuyBondTabProps {
@@ -55,8 +61,7 @@ export const BuyBondTab = ({
 
   const inputRef = useRef<InputRef>(null);
 
-  const { amountToBuy, onChangeAmountToBuy } =
-    useKosmosMarketsContextSelector();
+  const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
   const { quoteToken, payoutToken, maxBondable } = useMarketDetails(market);
 
