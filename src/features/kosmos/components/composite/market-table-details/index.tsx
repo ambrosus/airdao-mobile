@@ -6,11 +6,14 @@ import { Status } from '@features/bridge/templates/BridgeTransaction/components/
 import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
 import { Row, Text } from '@components/base';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { MarketType } from '@features/kosmos/types';
+
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
-import { scale } from '@utils/scaling';
-import { _timestampToDate, timestampToFormattedDate } from '@entities/kosmos';
+import {
+  MarketType,
+  _timestampToDate,
+  timestampToFormattedDate
+} from '@entities/kosmos';
 
 interface MarketTableDetailsProps {
   market: MarketType | undefined;

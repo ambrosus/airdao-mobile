@@ -24,27 +24,11 @@ export const NoWalletScreen = () => {
     animationRef.current?.play();
   }, []);
 
-  const navigateToNewWallet = () => {
-    onChangeName('');
-    onChangeMnemonicLength(128);
-    navigation.navigate('Tabs', {
-      screen: 'Wallets',
-      params: { screen: 'CreateWalletStep0' }
-    });
-  };
-
-  const navigateToImportWallet = () => {
-    onChangeName('');
-    onChangeMnemonicLength(128);
-    navigation.navigate('Tabs', {
-      screen: 'Wallets',
-      params: { screen: 'ImportWalletMethods' }
-
   const navigateToAddWallet = (
     screen: 'ImportWalletMethods' | 'CreateWalletStep0'
   ) => {
-    setWalletName('');
-    setMnemonicLength(128);
+    onChangeName('');
+    onChangeMnemonicLength(128);
     navigation.replace('Tabs', {
       screen: 'Settings',
       params: {

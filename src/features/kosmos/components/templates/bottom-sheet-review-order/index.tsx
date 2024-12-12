@@ -10,14 +10,9 @@ import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
 import {
   $discount,
-  MAINNET_VESTINGS,
-  TESTNET_VESTINGS,
-  _timestampToDate,
   discountColor,
   formatDecimals
 } from '@features/kosmos/utils';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import Config from '@constants/config';
 import { StringUtils } from '@utils/string';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { NumberUtils } from '@utils/number';

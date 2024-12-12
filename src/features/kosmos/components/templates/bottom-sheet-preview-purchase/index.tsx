@@ -17,18 +17,15 @@ import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
-import { formatDecimals } from '@features/kosmos/utils';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
 import { usePurchaseStore } from '@features/kosmos';
 import { BuyBondButton } from '../../modular';
 import {
-  $discount,
   _timestampToDate,
   MarketType,
   timestampToFormattedDate,
   useTokensStore
 } from '@entities/kosmos';
-import { BuyBondButton } from '../../modular';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { verticalScale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
 

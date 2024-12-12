@@ -3,15 +3,8 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import {
-  BottomAwareSafeAreaView,
-  CenteredSpinner,
-  Header
-} from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { useAddWalletContext } from '@contexts';
+import { Button, Row, Spacer, Text, Spinner } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
@@ -70,6 +63,7 @@ export const CreateWalletStep2 = () => {
     } else {
       navigation.navigate('Tabs', {
         screen: 'Settings',
+        // @ts-ignore
         params: { screen: 'SetupPasscode' }
       });
     }

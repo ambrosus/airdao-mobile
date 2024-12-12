@@ -14,27 +14,23 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
-import { MarketType } from '@features/kosmos/types';
+
 import {
   useMarketDetails,
   useTransactionErrorHandler
 } from '@features/kosmos/lib/hooks';
 import { COLORS } from '@constants/colors';
-import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
-import { discountColor } from '@features/kosmos/utils';
-import { usePurchaseStore } from '@features/kosmos';
-import { MarketType } from '@entities/kosmos';
-import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
-import { BottomSheetRef } from '@components/composite';
-import { isAndroid } from '@utils/isPlatform';
 import { $discount, discountColor } from '@features/kosmos/utils';
+import { usePurchaseStore } from '@features/kosmos';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import { isAndroid, isIos } from '@utils/isPlatform';
+
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
 import { NumberUtils } from '@utils/number';
+import { MarketType } from '@entities/kosmos';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;

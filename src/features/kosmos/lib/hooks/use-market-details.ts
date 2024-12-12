@@ -1,22 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
-import { formatDecimals } from '@features/kosmos/utils';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType } from '@features/kosmos/types';
-import { useExtractToken } from './use-extract-token';
-import {
-  MAINNET_VESTINGS,
-  TESTNET_VESTINGS
-} from '@features/kosmos/utils/vestings';
-import Config from '@constants/config';
 import { $discount, formatDecimals } from '@features/kosmos/utils';
-import { getProtocolFee } from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 import {
+  getProtocolFee,
   MarketType,
   useToken,
   useTokensStore,
-  getProtocolFee,
   VESTINGS
 } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';

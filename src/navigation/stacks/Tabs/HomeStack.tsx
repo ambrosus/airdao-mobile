@@ -24,11 +24,6 @@ import {
   WalletConnectModal,
   WalletSessionsBottomSheet
 } from '@features/wallet-connect/components/templates';
-import {
-  CreateWalletStep0,
-  CreateWalletStep1,
-  CreateWalletStep2
-} from '@screens/CreateWallet';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {

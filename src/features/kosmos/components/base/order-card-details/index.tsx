@@ -5,18 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
-import { TxType } from '@features/kosmos/types';
-import {
-  $discount,
-  formatDecimals,
-  getTokenByAddress,
-  formatDecimals
-} from '@features/kosmos/utils';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
 import { COLORS } from '@constants/colors';
 import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
 import { BottomSheetRef } from '@components/composite';
-import { $token, useTokensStore } from '@entities/kosmos';
+import { $token, TxType, useTokensStore } from '@entities/kosmos';
 
 interface OrderCardDetailsProps {
   transaction: TxType;

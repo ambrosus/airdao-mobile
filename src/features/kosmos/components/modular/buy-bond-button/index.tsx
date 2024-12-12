@@ -43,7 +43,7 @@ export const BuyBondButton = ({
   const { error } = useTransactionErrorHandler(market);
   const { quoteToken, willGetSubFee, payoutToken } = useMarketDetails(market);
 
-  const { amountToBuy } = usePurchaseStore();
+  const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
   const createNewSigner = useCallback(async () => {
     const privateKey = await _extractPrivateKey();
@@ -103,10 +103,6 @@ export const BuyBondButton = ({
     }
   }, [
     setIsTransactionProcessing,
-    t,
-    onChangeAmountToBuy,
-    amountToBuy,
-    contracts,
     createNewSigner,
     contracts,
     market.id,
@@ -118,6 +114,7 @@ export const BuyBondButton = ({
     willGetSubFee,
     onDismissBottomSheet,
     reset,
+    onChangeAmountToBuy,
     t,
     willGetAfterUnlock,
     payoutToken?.symbol
