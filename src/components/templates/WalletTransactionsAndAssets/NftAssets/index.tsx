@@ -11,7 +11,7 @@ import { WalletNoNFTsView } from '../../WalletNoNFTsView';
 
 interface NftAssetsProps {
   nfts: Token[];
-  loading: boolean;
+  loading?: boolean;
   isRefreshing?: boolean;
   onRefresh?: () => unknown;
 }
