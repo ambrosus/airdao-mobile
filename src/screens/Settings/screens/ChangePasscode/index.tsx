@@ -25,6 +25,13 @@ export const ChangePasscode = () => {
   const [buttonError, setButtonError] = useState(true);
   const [typedPasscode, setTypedPasscode] = useState<string[]>(['']);
 
+  const [existPasswordError, setExistPasswordError] = useState(false);
+
+  const resetPassword = () => {
+    setExistPasswordError(true);
+    setTypedPasscode([]);
+  };
+
   const onStep1Press = useCallback(
     (_typedPasscode: string[]) => {
       // Step 1: Check user passcode
@@ -37,11 +44,12 @@ export const ChangePasscode = () => {
           [
             {
               text: t('button.try.again'),
-              onPress: () => null,
+              onPress: resetPassword,
               style: 'cancel'
             }
           ]
         );
+        setExistPasswordError(false);
       }
     },
     [passcode, t]
@@ -146,6 +154,7 @@ export const ChangePasscode = () => {
       />
       <View style={styles.passcodeWrapper}>
         <Passcode
+          error={existPasswordError}
           inputBottomPadding={110}
           changePasscodeStep={step}
           isBiometricEnabled={false}
