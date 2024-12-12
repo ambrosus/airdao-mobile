@@ -3,14 +3,13 @@ import { View } from 'react-native';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { TxType } from '@features/kosmos/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import {
   totalBondedReducer,
   totalClaimableReducer
 } from '@features/kosmos/utils';
-import { useToken } from '@entities/kosmos';
+import { TxType, useToken } from '@entities/kosmos';
 
 interface TotalOrdersAmountProps {
   transactions: TxType[];

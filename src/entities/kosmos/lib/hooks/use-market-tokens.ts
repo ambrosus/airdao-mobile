@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { fetchMarketTokens } from '@entities/kosmos/api';
 import { useTokensStore } from '@entities/kosmos/model';
 
@@ -21,5 +21,13 @@ export function useMarketTokens() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokens]);
 
-  return { isTokensLoading: loading, tokens };
+  const refetchTokens = useCallback(() => {
+    onToggleLoading(true);
+    const controller = new AbortController();
+    fetchMarketTokens(controller)
+      .then((response) => onChangeTokens(response.data))
+      .finally(() => onToggleLoading(false));
+  }, [onChangeTokens, onToggleLoading]);
+
+  return { isTokensLoading: loading, tokens, refetchTokens };
 }
