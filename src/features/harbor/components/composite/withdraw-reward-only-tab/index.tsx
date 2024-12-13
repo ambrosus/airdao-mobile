@@ -53,8 +53,8 @@ export const WithdrawRewardOnlyTab = () => {
       style={styles.main}
     >
       <TiersSelector
-        bondAmount={ambAmount || '0'}
-        ambAmount={bondAmount || '0'}
+        bondAmount={bondAmount || '0'}
+        ambAmount={ambAmount || '0'}
       />
       <Spacer value={scale(8)} />
       <PrimaryButton onPress={onPressRewardWithdraw}>
