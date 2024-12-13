@@ -71,12 +71,13 @@ export function useBarcode() {
     (address: string) => {
       onDismissBarcodeContainer();
       const isAddress = ethereumAddressRegex.test(address);
+      const extractedAddress = address.match(ethereumAddressRegex)?.[0];
 
       if (address.startsWith(walletConnectWsURL)) {
         onHandleWalletConnectAuthorization(address);
-      } else if (isAddress) {
+      } else if (isAddress && extractedAddress) {
         navigation.navigate('Explore', {
-          address
+          address: extractedAddress
         });
       } else {
         if (!scannedRef.current) {
