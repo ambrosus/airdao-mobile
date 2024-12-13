@@ -199,14 +199,11 @@ export const Explore = () => {
     </>
   );
 
-  const onNavigateBack = () =>
-    navigation.navigate('Settings', { screen: 'SettingsScreen' });
-
   return (
     <SafeAreaView style={styles.main}>
       {!searchAddressContentVisible && (
         <Header
-          onBackPress={onNavigateBack}
+          onBackPress={navigation.goBack}
           title={t('tab.explore')}
           bottomBorder
           contentRight={<ContentRight />}

@@ -10,6 +10,7 @@ export type CommonStackParamsList = {
   Address: { address: ListsOfAddressType['addressId'] };
   Passcode: PasscodeParams;
   Collection: { group: AccountList };
+  Explore: { address: string };
 };
 
 export type CommonStackNavigationProp = CompositeNavigationProp<
