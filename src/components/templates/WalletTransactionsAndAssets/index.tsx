@@ -128,7 +128,7 @@ export const WalletTransactionsAndAssets = ({
   }
 
   if (!loading && isSelectAccountBalanceZero) {
-    return <WalletDepositFunds />;
+    return <WalletDepositFunds refetch={_onRefresh} loading={refetching} />;
   }
 
   return (
