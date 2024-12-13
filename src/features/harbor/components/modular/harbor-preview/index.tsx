@@ -18,7 +18,7 @@ import { dataParseFunction } from '@features/harbor/hooks/dataParseFunction';
 import { useWalletStore } from '@entities/wallet';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { TransactionDTO } from '@models';
-import { processFunction } from '@features/harbor/components/modular/harbor-preview/hooks/processFunction';
+import { processFunctions } from './hooks/processFunction';
 import { EMPTY_HARBOR_PROCESS_TRANSACTION } from '@entities/harbor/constants';
 
 export const BottomSheetHarborPreView = forwardRef<
@@ -27,7 +27,7 @@ export const BottomSheetHarborPreView = forwardRef<
 >(({ previewData, modalType }, ref) => {
   const bottomSheetRef = useForwardedRef(ref);
   const { wallet } = useWalletStore();
-  const { activeAmbTier } = useHarborStore();
+  const { activeAmbTier, updateAll } = useHarborStore();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { t } = useTranslation();
 
@@ -59,7 +59,7 @@ export const BottomSheetHarborPreView = forwardRef<
   const onAcceptPress = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await processFunction(
+      const data = await processFunctions(
         modalType,
         wallet,
         previewData,
@@ -85,6 +85,7 @@ export const BottomSheetHarborPreView = forwardRef<
   const content = useMemo(() => {
     switch (true) {
       case isError: {
+        updateAll(wallet?.address || '');
         return (
           <ErrorTemplate
             onTryAgain={() => setIsError(false)}
@@ -92,7 +93,8 @@ export const BottomSheetHarborPreView = forwardRef<
           />
         );
       }
-      case !!resultTx:
+      case !!resultTx: {
+        updateAll(wallet?.address || '');
         return (
           <SuccessTemplate
             onPreviewClose={onPreviewClose}
@@ -101,6 +103,7 @@ export const BottomSheetHarborPreView = forwardRef<
             transaction={resultTx}
           />
         );
+      }
       default:
         return (
           <FormTemplate
@@ -119,7 +122,9 @@ export const BottomSheetHarborPreView = forwardRef<
     onAcceptPress,
     onPreviewClose,
     previewData,
-    resultTx
+    resultTx,
+    updateAll,
+    wallet?.address
   ]);
   const previewTitle = useMemo(() => {
     if (isError || !!resultTx) {

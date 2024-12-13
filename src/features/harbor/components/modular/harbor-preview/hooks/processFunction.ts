@@ -9,7 +9,7 @@ import {
 } from '@features/harbor/components/modular/harbor-preview/model';
 import { IsNullableAccount } from '@entities/wallet/model/types';
 
-export const processFunction = async (
+export const processFunctions = async (
   modalType: ModalTypes,
   wallet: IsNullableAccount,
   previewData: HarborPreView,
