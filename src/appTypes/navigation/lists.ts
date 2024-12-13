@@ -9,6 +9,6 @@ export type PortfolioParamsPortfolio = {
 } & CommonStackParamsList;
 
 export type PortfolioNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Watchlist'>,
+  BottomTabNavigationProp<TabsParamsList, 'Settings'>,
   NativeStackNavigationProp<PortfolioParamsPortfolio>
 >;

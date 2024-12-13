@@ -31,6 +31,7 @@ import {
   SetupPasscode,
   SuccessSetupSecurity
 } from '@screens/SetupPasscode';
+import { SingleGroupScreen } from '@screens/SingleCollection';
 
 const Stack = createNativeStackNavigator<SettingsTabParamsList>();
 export const SettingsStack = () => {
@@ -46,6 +47,7 @@ export const SettingsStack = () => {
       <Stack.Screen name="Watchlist" component={Watchlist} />
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Address" component={AddressDetails} />
+      <Stack.Screen name="Collection" component={SingleGroupScreen} />
       <Stack.Screen
         name="NotificationSettings"
         component={NotificationSettingsScreen}

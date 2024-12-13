@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { WalletDBModel } from '@database';
 import { TabsParamsList } from './tabs';
 import { PasscodeParams } from './passcode-params';
+import { AccountList } from '@models';
 
 export type SettingsTabParamsList = {
   About: undefined;
@@ -30,6 +31,7 @@ export type SettingsTabParamsList = {
   ConfirmPasscode: { passcode: string[] };
   SuccessSetupSecurity: undefined;
   WelcomeScreen: undefined;
+  Collection: { group: AccountList };
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<
