@@ -2,9 +2,12 @@ import { StyleSheet } from 'react-native';
 import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
+  gestureContainer: {
+    flex: 1
+  },
   container: {
     width: '100%',
-    height: '80%',
+    height: '55%',
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: verticalScale(24)

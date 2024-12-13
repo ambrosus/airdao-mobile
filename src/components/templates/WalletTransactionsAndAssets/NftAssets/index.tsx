@@ -61,7 +61,7 @@ export const NftAssets = ({
   );
 
   if (nfts.length === 0) {
-    return <WalletNoNFTsView />;
+    return <WalletNoNFTsView refetch={onRefresh} loading={isRefreshing} />;
   }
 
   return (
