@@ -9,17 +9,17 @@ import { useForwardedRef } from '@hooks';
 import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
-import { BottomSheetHarborPreViewProps } from '@features/harbor/components/modular/harbor-preview/model';
+import {
+  BottomSheetHarborPreViewProps,
+  EmptyHarborProcessTransaction
+} from '@features/harbor/components/modular/harbor-preview/model';
 import { ErrorTemplate, FormTemplate, SuccessTemplate } from './components';
 import { dataParseFunction } from '@features/harbor/hooks/dataParseFunction';
 import { useWalletStore } from '@entities/wallet';
-import {
-  processStake,
-  processWithdraw,
-  processWithdrawReward
-} from '@features/harbor/components/modular/harbor-preview/hooks';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { TransactionDTO } from '@models';
+import { processFunction } from '@features/harbor/components/modular/harbor-preview/hooks/processFunction';
+import { EMPTY_HARBOR_PROCESS_TRANSACTION } from '@entities/harbor/constants';
 
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,
@@ -33,9 +33,9 @@ export const BottomSheetHarborPreView = forwardRef<
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [resultTx, setResultTx] = useState<TransactionDTO | null | undefined>(
-    null
-  );
+  const [resultTx, setResultTx] = useState<
+    TransactionDTO | null | EmptyHarborProcessTransaction
+  >(null);
 
   const buttonTitle = useMemo(() => {
     switch (modalType) {
@@ -59,39 +59,20 @@ export const BottomSheetHarborPreView = forwardRef<
   const onAcceptPress = useCallback(async () => {
     try {
       setLoading(true);
-      switch (modalType) {
-        case 'stake': {
-          const data = await processStake(
-            wallet,
-            'amount' in previewData ? previewData?.amount : ''
-          );
-          if (data?.error) {
-            setIsError(true);
-          } else {
-            setResultTx(data?.transaction);
-          }
-          break;
+      const data = await processFunction(
+        modalType,
+        wallet,
+        previewData,
+        activeAmbTier
+      );
+      if (data?.error) {
+        setIsError(true);
+      } else {
+        if (data?.transaction) {
+          setResultTx(data?.transaction);
         }
-        case 'withdraw-stake': {
-          const data = await processWithdraw(
-            wallet,
-            'withdrawAmount' in previewData ? previewData.withdrawAmount : '',
-            activeAmbTier.value
-          );
-          if (data?.error) {
-            setIsError(true);
-          } else {
-            setResultTx(data?.transaction);
-          }
-          break;
-        }
-        case 'withdraw-reward': {
-          const data = await processWithdrawReward(wallet, activeAmbTier.value);
-          if (data?.error) {
-            setIsError(true);
-          } else {
-            setResultTx(data?.transaction);
-          }
+        if (data?.processStatus === 'done') {
+          setResultTx(EMPTY_HARBOR_PROCESS_TRANSACTION);
         }
       }
     } catch (e) {

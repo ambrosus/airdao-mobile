@@ -66,3 +66,4 @@ export const REWARD_TIERS_LIST: TierRewardList = {
     { id: 'bond4', value: 1, availableOn: 4 }
   ]
 };
+export const EMPTY_HARBOR_PROCESS_TRANSACTION = { timestamp: 0, hash: '' };

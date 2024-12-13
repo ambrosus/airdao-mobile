@@ -33,13 +33,18 @@ export const SuccessTemplate = ({
     () => (data && data[0].title ? data[0] : null),
     [data]
   );
-  const listData = [
-    ...data,
-    {
-      name: 'common.date',
-      value: moment(transaction?.timestamp).format('DD/MM/YYYY  HH:mm')
-    }
-  ];
+
+  const listData = transaction?.timestamp
+    ? [
+        ...data,
+        {
+          name: 'common.date',
+          value: transaction?.timestamp
+            ? moment(transaction?.timestamp).format('DD/MM/YYYY  HH:mm')
+            : ''
+        }
+      ]
+    : data;
 
   const goToMyRequests = async () => {
     onPreviewClose();
@@ -49,7 +54,7 @@ export const SuccessTemplate = ({
 
   const RenderItem = (renderItem: ListRenderItemInfo<HarborPreViewData>) => {
     const { item } = renderItem;
-    if (item.title) {
+    if (item.title || !item.value) {
       return <></>;
     }
     return (
@@ -82,7 +87,7 @@ export const SuccessTemplate = ({
         renderItem={RenderItem}
       />
       <Spacer value={scale(12)} />
-      {!!transaction && (
+      {!!transaction?.hash && (
         <Row justifyContent="center">
           <CopyHash hash={transaction?.hash} />
         </Row>

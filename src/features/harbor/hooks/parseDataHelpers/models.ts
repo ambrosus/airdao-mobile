@@ -1,6 +1,7 @@
 import { TransactionDTO } from '@models';
 
-export interface ProccessModel {
+export interface ProcessModel {
   transaction?: TransactionDTO;
   error?: unknown;
+  processStatus?: any;
 }
