@@ -1,8 +1,5 @@
 import React, { useMemo, useRef } from 'react';
 import { ActivityIndicator, Image, StyleProp, ViewStyle } from 'react-native';
-import { styles } from './styles';
-import { Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,6 +10,9 @@ import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent
 } from 'react-native-gesture-handler';
+import { styles } from './styles';
+import { Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 
 const MAX_SCROLL_Y = 64;
 

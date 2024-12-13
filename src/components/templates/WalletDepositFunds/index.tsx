@@ -8,13 +8,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { styles } from './styles';
-import { Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { ReceiveFunds } from '../ReceiveFunds';
-import { useWalletStore } from '@entities/wallet';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -25,6 +18,13 @@ import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent
 } from 'react-native-gesture-handler';
+import { styles } from './styles';
+import { Text } from '@components/base';
+import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { ReceiveFunds } from '../ReceiveFunds';
+import { useWalletStore } from '@entities/wallet';
 
 const MAX_SCROLL_Y = 64;
 
