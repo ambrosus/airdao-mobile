@@ -1,6 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
-import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,8 +7,5 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(8),
     rowGap: 16,
     marginHorizontal: scale(10)
-  },
-  apy: {
-    color: COLORS.success300
   }
 });

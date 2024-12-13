@@ -12,7 +12,8 @@ import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetRef } from '@components/composite';
 import { useWalletStore } from '@entities/wallet';
-import { BottomSheetHarborWithdrawPreView } from '@features/harbor/components/modular/harbor-withdraw-preview';
+import { BottomSheetHarborPreView } from '@features/harbor/components/modular';
+import { styles } from './styles';
 
 export const WithdrawStakeRewardTab = () => {
   const bottomSheetRef = useRef<BottomSheetRef>(null);
@@ -36,7 +37,7 @@ export const WithdrawStakeRewardTab = () => {
 
   const onWithdrawPress = useCallback(() => {
     const _previewData = {
-      amount: amountToWithdraw,
+      withdrawAmount: amountToWithdraw,
       rewardAmb: ambAmount,
       rewardBond: bondAmount,
       delay: unStakeDelay.delay
@@ -58,9 +59,7 @@ export const WithdrawStakeRewardTab = () => {
           removeClippedSubviews
         />
       }
-      style={{
-        paddingHorizontal: scale(16)
-      }}
+      style={styles.main}
     >
       <InputWithoutTokenSelect
         value={amountToWithdraw}
@@ -87,9 +86,10 @@ export const WithdrawStakeRewardTab = () => {
           {t('harbor.withdrawal.button')}
         </Text>
       </PrimaryButton>
-      <BottomSheetHarborWithdrawPreView
-        ref={bottomSheetRef}
+      <BottomSheetHarborPreView
+        modalType="withdraw-stake"
         previewData={previewData}
+        ref={bottomSheetRef}
       />
     </ScrollView>
   );

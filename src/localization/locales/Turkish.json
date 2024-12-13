@@ -518,7 +518,7 @@
 
   "harbor.stake.amount.preview.title": "!!!Stake amount",
   "harbor.receive.amount.preview.title": "!!!You will receive",
-  "harbor.stake.from": "!!!From",
+  "harbor.stake.from": "Gönderen",
   "harbor.stake.apy": "!!!APY",
   "harbor.successfully.stake.header": "!!!You have successfully staked",
   "harbor.successfully.withdraw.header": "!!!You have successfully withdraw",
@@ -534,7 +534,13 @@
   "harbor.withdrawal.button": "!!!Request Withdrawal",
   "harbor.transaction.failed": "!!!The transaction was failed.",
 
+  "harbor.withdraw.preview.success.header": "!!!Withdrawal request sent",
+  "harbor.withdraw.amount": "!!!Withdrawal amount",
+  "harbor.withdraw.preview.amb.reward": "!!!Reward AMB",
+  "harbor.withdraw.preview.bond.reward": "!!!Reward BOND",
+  "harbor.withdraw.preview.delay": "!!!Withdrawal Delay",
 
+  "harbor.button.processing": "İşleme",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

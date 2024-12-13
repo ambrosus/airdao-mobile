@@ -1,1 +1,1 @@
-export { BottomSheetHarborStakePreView } from './harbor-stake-previews';
+export { BottomSheetHarborPreView } from './harbor-preview';

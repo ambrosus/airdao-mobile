@@ -21,7 +21,7 @@ import { PrimaryButton } from '@components/modular';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
-import { BottomSheetHarborStakePreView } from '@features/harbor/components/modular';
+import { BottomSheetHarborPreView } from '@features/harbor/components/modular';
 
 export const ProcessStake = () => {
   const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);
@@ -188,7 +188,8 @@ export const ProcessStake = () => {
             {t('button.confirm')}
           </Text>
         </PrimaryButton>
-        <BottomSheetHarborStakePreView
+        <BottomSheetHarborPreView
+          modalType="stake"
           previewData={previewData}
           ref={bottomSheetRef}
         />

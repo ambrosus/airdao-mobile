@@ -177,7 +177,6 @@ const processWithdraw = async (
 };
 const processClaimReward = async (
   wallet: RawRecord | undefined,
-  amount: string,
   _desiredCoeff: number
 ) => {
   try {
@@ -189,13 +188,13 @@ const processClaimReward = async (
     // @ts-ignore
     const contract = createHarborLiquidStakedContract(signer);
     const desiredCoeff = _desiredCoeff * 100;
-    return await contract.claimRewards(desiredCoeff);
-    // if (tx) {
-    //   const res = await tx.wait();
-    //   if (res) {
-    //     return res;
-    //   }
-    // }
+    const tx = await contract.claimRewards(desiredCoeff);
+    if (tx) {
+      const res = await tx.wait();
+      if (res) {
+        return res;
+      }
+    }
   } catch (e) {
     return e;
   }

@@ -3,7 +3,7 @@ import { Token } from '@models';
 
 interface UnStakeDelayModel {
   rate: string;
-  delay: number;
+  delay: string;
 }
 
 export interface HarborDataModel {

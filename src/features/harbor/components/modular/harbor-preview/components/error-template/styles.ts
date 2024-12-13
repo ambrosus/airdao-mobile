@@ -23,7 +23,10 @@ export const styles = StyleSheet.create({
   loadingBtnStyle: {
     color: COLORS.neutral0
   },
-  regularBtnStyle: {
-    color: 'white'
+  tryAgainBtn: {
+    color: COLORS.neutral0
+  },
+  closeBtn: {
+    color: COLORS.neutral600
   }
 });
