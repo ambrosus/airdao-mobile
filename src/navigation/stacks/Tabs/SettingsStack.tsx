@@ -45,7 +45,11 @@ export const SettingsStack = () => {
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
       <Stack.Screen name="ManageWallets" component={ManageWalletsScreen} />
       <Stack.Screen name="Watchlist" component={Watchlist} />
-      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen
+        name="Explore"
+        component={Explore}
+        options={{ animation: 'slide_from_right' }}
+      />
       <Stack.Screen name="Address" component={AddressDetails} />
       <Stack.Screen name="Collection" component={SingleGroupScreen} />
       <Stack.Screen
