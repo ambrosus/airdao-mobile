@@ -29,25 +29,25 @@ export const TiersInfoContainer = () => {
       <Row style={styles.dropDownWrapper} justifyContent="space-between">
         <TierInfoItem
           key={1}
-          header="harbor.tier.one.header"
-          content="harbor.tier.one.content"
+          header="harbor.tier.1.header"
+          content="harbor.tier.1.content"
         />
         <TierInfoItem
           key={2}
-          header="harbor.tier.two.header"
-          content="harbor.tier.two.content"
+          header="harbor.tier.2.header"
+          content="harbor.tier.2.content"
         />
       </Row>
       <Row justifyContent="space-between">
         <TierInfoItem
           key={3}
-          header="harbor.tier.three.header"
-          content="harbor.tier.three.content"
+          header="harbor.tier.3.header"
+          content="harbor.tier.3.content"
         />
         <TierInfoItem
           key={4}
-          header="harbor.tier.four.header"
-          content="harbor.tier.four.content"
+          header="harbor.tier.4.header"
+          content="harbor.tier.4.content"
         />
       </Row>
     </View>

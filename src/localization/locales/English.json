@@ -538,17 +538,17 @@
 
   "harbor.button.processing": "Processing",
 
-  "harbor.tier.one.header": "New Stakers",
-  "harbor.tier.one.content": "25% rewards available immediately, increasing by 1% every 250K blocks.",
+  "harbor.tier.1.header": "New Stakers",
+  "harbor.tier.1.content": "25% rewards available immediately, increasing by 1% every 250K blocks.",
 
-  "harbor.tier.two.header": "1yr+ Stakers",
-  "harbor.tier.two.content": "50% rewards available immediately, increasing by 1% every 250K blocks.",
+  "harbor.tier.2.header": "1yr+ Stakers",
+  "harbor.tier.2.content": "50% rewards available immediately, increasing by 1% every 250K blocks.",
 
-  "harbor.tier.three.header": "2yrs+ Stakers",
-  "harbor.tier.three.content": "75% rewards available immediately, increasing by 1% every 250K blocks.",
+  "harbor.tier.3.header": "2yrs+ Stakers",
+  "harbor.tier.3.content": "75% rewards available immediately, increasing by 1% every 250K blocks.",
 
-  "harbor.tier.four.header": "3yrs+ Stakers",
-  "harbor.tier.four.content": "100% rewards available immediately, increasing by 1% every 250K blocks.",
+  "harbor.tier.4.header": "3yrs+ Stakers",
+  "harbor.tier.4.content": "100% rewards available immediately, increasing by 1% every 250K blocks.",
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
