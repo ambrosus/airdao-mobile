@@ -1,4 +1,4 @@
-import { WithdrawPreviewDataModel } from '@features/harbor/components/modular/harbor-preview/model';
+import { WithdrawPreviewDataModel } from '@features/harbor/components/harbor-preview/model';
 import { CryptoCurrencyCode } from '@appTypes';
 import { COLORS } from '@constants/colors';
 

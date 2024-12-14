@@ -21,7 +21,7 @@ import { PrimaryButton } from '@components/modular';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
-import { BottomSheetHarborPreView } from '@features/harbor/components/modular';
+import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
 
 export const ProcessStake = () => {
   const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);

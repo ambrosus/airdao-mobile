@@ -1,6 +1,6 @@
 import { COLORS } from '@constants/colors';
 import { StringUtils } from '@utils/string';
-import { StakePreviewDataModel } from '@features/harbor/components/modular/harbor-preview/model';
+import { StakePreviewDataModel } from '@features/harbor/components/harbor-preview/model';
 import { CryptoCurrencyCode } from '@appTypes';
 
 export const parseStakeData = (previewData: StakePreviewDataModel) => {

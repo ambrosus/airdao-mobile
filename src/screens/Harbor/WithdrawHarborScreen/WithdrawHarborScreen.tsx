@@ -8,10 +8,10 @@ import { NoteIcon } from '@components/svg/icons/v2/harbor';
 import { useNavigation } from '@react-navigation/native';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { styles } from './styles';
-import { HarborWithdrawTabs } from '@features/harbor/components/templates';
 import { useEffectOnce } from '@hooks';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
+import { HarborWithdrawTabs } from '@features/harbor/components/tabs';
 
 export const WithdrawHarborScreen = () => {
   const { t } = useTranslation();
