@@ -3,7 +3,7 @@ import { RefreshControl, ScrollView } from 'react-native';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, parseEther } from 'ethers/lib/utils';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +31,11 @@ export const WithdrawStakeRewardTab = () => {
 
   const [amountToWithdraw, setAmountToWithdraw] = useState('');
   const [previewData, setPreviewData] = useState(DEFAULT_WITHDRAW_PREVIEW);
+  const [inputError, setInputError] = useState('');
 
   const isDisabledButton = useMemo(() => {
-    return !amountToWithdraw || !totalStaked;
-  }, [amountToWithdraw, totalStaked]);
+    return !amountToWithdraw || !totalStaked || !!inputError;
+  }, [amountToWithdraw, inputError, totalStaked]);
 
   const onWithdrawPress = useCallback(() => {
     const _previewData = {
@@ -51,6 +52,19 @@ export const WithdrawStakeRewardTab = () => {
     updateAll(wallet?.address || '');
   };
 
+  const onChangeText = (value: string) => {
+    if (value) {
+      const greaterThenBalance = parseEther(value).gt(token.balance.wei);
+      if (greaterThenBalance) {
+        setInputError(t('bridge.insufficient.funds'));
+      } else {
+        setInputError('');
+      }
+    }
+
+    setAmountToWithdraw(value);
+  };
+
   return (
     <ScrollView
       refreshControl={
@@ -63,9 +77,10 @@ export const WithdrawStakeRewardTab = () => {
       style={styles.main}
     >
       <InputWithoutTokenSelect
+        inputError={inputError}
         value={amountToWithdraw}
         token={token}
-        onChangeText={setAmountToWithdraw}
+        onChangeText={onChangeText}
         onPressMaxAmount={() => {
           setAmountToWithdraw(formatEther(userStaked));
         }}

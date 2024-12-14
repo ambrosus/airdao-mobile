@@ -29,7 +29,7 @@ export const ProcessStake = () => {
   const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
   const [amountToStake, setAmountToStake] = useState('');
-  const [error, setError] = useState('');
+  const [inputError, setInputError] = useState('');
 
   const { data: harborData, updateAll, loading } = useHarborStore();
   const { wallet } = useWalletStore();
@@ -91,8 +91,8 @@ export const ProcessStake = () => {
   }, [loading, accountDataLoading]);
 
   const buttonDisabled = useMemo(() => {
-    return !amountToStake || !!error;
-  }, [amountToStake, error]);
+    return !amountToStake || !!inputError;
+  }, [amountToStake, inputError]);
 
   const onChangeText = (value: string) => {
     if (value) {
@@ -100,9 +100,9 @@ export const ProcessStake = () => {
         selectedAccountBalance.wei
       );
       if (greaterThenBalance) {
-        setError(t('bridge.insufficient.funds'));
+        setInputError(t('bridge.insufficient.funds'));
       } else {
-        setError('');
+        setInputError('');
       }
     }
     setAmountToStake(value);
@@ -110,7 +110,11 @@ export const ProcessStake = () => {
 
   const onReviewStake = useCallback(() => {
     if (parseEther(amountToStake).lt(stakeLimit)) {
-      setError('Lower Then minimal Stake Value');
+      setInputError(
+        `Min ${NumberUtils.formatNumber(+formatEther(stakeLimit))} ${
+          CryptoCurrencyCode.AMB
+        }`
+      );
       return;
     }
     const data = {
@@ -150,6 +154,7 @@ export const ProcessStake = () => {
         <Spacer value={scale(8)} />
 
         <InputWithoutTokenSelect
+          inputError={inputError}
           value={amountToStake}
           exchange={{
             token: CryptoCurrencyCode.stAMB,
@@ -161,16 +166,6 @@ export const ProcessStake = () => {
             onChangeText(formatEther(ambTokenData.balance.wei));
           }}
         />
-        {error && (
-          <Text
-            style={{
-              paddingVertical: scale(8)
-            }}
-            color={COLORS.warning600}
-          >
-            {error}
-          </Text>
-        )}
         <Text
           fontSize={14}
           style={styles.stakeInfoText}

@@ -9,6 +9,10 @@ export const styles = StyleSheet.create({
     paddingVertical: scale(8),
     borderRadius: 16
   },
+  errorWrap: {
+    borderWidth: scale(1),
+    borderColor: COLORS.error500
+  },
   selectorWrapper: {
     backgroundColor: COLORS.neutral100,
     padding: scale(5),
@@ -35,5 +39,35 @@ export const styles = StyleSheet.create({
   inputAndroidSpecified: {
     fontSize: moderateScale(22),
     lineHeight: moderateScale(29.75)
+  },
+  button: { padding: scale(2) },
+  exchangeMain: {
+    position: 'relative',
+    height: scale(10),
+    zIndex: 1,
+    alignItems: 'center'
+  },
+  exchangeContainerIcon: {
+    padding: scale(10),
+    top: -16,
+    paddingHorizontal: scale(12),
+    backgroundColor: COLORS.neutral0,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: COLORS.neutral200,
+    position: 'absolute'
+  },
+  exchangeRate: {
+    backgroundColor: COLORS.neutral0,
+    paddingHorizontal: scale(12),
+    paddingVertical: scale(8),
+    borderRadius: 16
+  },
+  touchableHandler: {
+    width: '100%',
+    height: 60,
+    position: 'absolute',
+    top: 15,
+    zIndex: 100
   }
 });

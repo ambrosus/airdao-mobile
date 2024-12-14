@@ -53,6 +53,7 @@ interface InputWithoutTokenSelectProps {
   onBlur?: () => void;
   resetKeyboardState?: boolean;
   isRequiredRefetchBalance?: boolean;
+  inputError?: string;
 }
 
 export const InputWithoutTokenSelect = forwardRef<
@@ -69,7 +70,8 @@ export const InputWithoutTokenSelect = forwardRef<
       onFocus,
       onBlur,
       resetKeyboardState = false,
-      exchange
+      exchange,
+      inputError
     },
     ref
   ) => {
@@ -149,18 +151,12 @@ export const InputWithoutTokenSelect = forwardRef<
 
     const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> =
       useMemo(() => {
-        return {
-          width: '100%',
-          height: 60,
-          position: 'absolute',
-          top: 15,
-          zIndex: 100
-        };
+        return styles.touchableHandler;
       }, []);
 
     return (
       <>
-        <View style={styles.wrapper}>
+        <View style={[styles.wrapper, inputError ? styles.errorWrap : {}]}>
           {label && (
             <Text
               fontSize={14}
@@ -215,15 +211,23 @@ export const InputWithoutTokenSelect = forwardRef<
                 {token.symbol}
               </Text>
             </Text>
-            <Button style={{ padding: scale(2) }} onPress={onPressMaxAmount}>
-              <Text
-                fontFamily="Inter_600SemiBold"
-                fontSize={12}
-                color={COLORS.brand600}
-              >
-                {t('bridge.preview.button.max')}
-              </Text>
-            </Button>
+            {!inputError ? (
+              <Button style={styles.button} onPress={onPressMaxAmount}>
+                <Text
+                  fontFamily="Inter_600SemiBold"
+                  fontSize={12}
+                  color={COLORS.brand600}
+                >
+                  {t('bridge.preview.button.max')}
+                </Text>
+              </Button>
+            ) : (
+              <View>
+                <Text fontSize={12} color={COLORS.error500}>
+                  {inputError}
+                </Text>
+              </View>
+            )}
           </Row>
           {resetKeyboardState && !isInputFocused && isAndroid && (
             <TouchableOpacity
@@ -235,31 +239,13 @@ export const InputWithoutTokenSelect = forwardRef<
         </View>
         {!!exchange && (
           <>
-            <View
-              style={{
-                position: 'relative',
-                height: scale(10),
-                zIndex: 1,
-                alignItems: 'center'
-              }}
-            >
-              <View
-                style={{
-                  padding: scale(10),
-                  top: -16,
-                  paddingHorizontal: scale(12),
-                  backgroundColor: COLORS.neutral0,
-                  borderRadius: 50,
-                  borderWidth: 1,
-                  borderColor: COLORS.neutral200,
-                  position: 'absolute'
-                }}
-              >
+            <View style={styles.exchangeMain}>
+              <View style={styles.exchangeContainerIcon}>
                 <DownArrowIcon scale={1.2} />
               </View>
             </View>
             <Row
-              style={styles.wrapper}
+              style={styles.exchangeRate}
               alignItems="center"
               justifyContent="space-between"
             >
