@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
@@ -11,7 +17,7 @@ import { scale } from '@utils/scaling';
 import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
 import { styles } from './styles';
 import { useWalletStore } from '@entities/wallet';
-import { useBalanceOfAddress } from '@hooks';
+import { useBalanceOfAddress, useKeyboardHeight } from '@hooks';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { ExplorerAccount, Token } from '@models';
 import { AMB_DECIMALS } from '@constants/variables';
@@ -22,6 +28,11 @@ import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 
 export const ProcessStake = () => {
   const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);
@@ -129,10 +140,25 @@ export const ProcessStake = () => {
     bottomSheetRef.current?.show();
   }, [amountToStake, harborAPR, stakeLimit, wallet?.address]);
 
+  const keyboardHeight = useKeyboardHeight();
+
+  const initialMargin = useSharedValue(0);
+  const margin = useAnimatedStyle(() => {
+    return {
+      marginBottom: withTiming(initialMargin.value)
+    };
+  });
+
+  useEffect(() => {
+    initialMargin.value = withTiming(keyboardHeight, {
+      duration: 0
+    });
+  }, [initialMargin, keyboardHeight]);
+
   return (
     <SafeAreaView>
-      <Header title={<HarborTitle harborAPR={harborAPR} />} />
       <ScrollView
+        keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl
             onRefresh={refetchAll}
@@ -140,49 +166,56 @@ export const ProcessStake = () => {
             removeClippedSubviews
           />
         }
+        contentContainerStyle={styles.container}
         style={styles.main}
       >
-        <Spacer value={scale(8)} />
-        <StakedBalanceInfo
-          stakedValue={NumberUtils.limitDecimalCount(
-            +formatEther(userStaked),
-            2
-          )}
-          coin="AMB"
-          title={t('harbor.staked.balance')}
-        />
-        <Spacer value={scale(8)} />
+        <View>
+          <Header title={<HarborTitle harborAPR={harborAPR} />} />
+          <Spacer value={scale(8)} />
+          <StakedBalanceInfo
+            stakedValue={NumberUtils.limitDecimalCount(
+              +formatEther(userStaked),
+              2
+            )}
+            coin="AMB"
+            title={t('harbor.staked.balance')}
+          />
+          <Spacer value={scale(8)} />
 
-        <InputWithoutTokenSelect
-          inputError={inputError}
-          value={amountToStake}
-          exchange={{
-            token: CryptoCurrencyCode.stAMB,
-            value: amountToStake
-          }}
-          token={ambTokenData}
-          onChangeText={onChangeText}
-          onPressMaxAmount={() => {
-            onChangeText(formatEther(ambTokenData.balance.wei));
-          }}
-        />
-        <Text
-          fontSize={14}
-          style={styles.stakeInfoText}
-          color={COLORS.neutral600}
-        >
-          {t('harbor.staked.info')}
-        </Text>
-        <RateInfo availableToStake={formatEther(selectedAccountBalance.wei)} />
-        <Spacer value={scale(16)} />
-        <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
+          <InputWithoutTokenSelect
+            inputError={inputError}
+            value={amountToStake}
+            exchange={{
+              token: CryptoCurrencyCode.stAMB,
+              value: amountToStake
+            }}
+            token={ambTokenData}
+            onChangeText={onChangeText}
+            onPressMaxAmount={() => {
+              onChangeText(formatEther(ambTokenData.balance.wei));
+            }}
+          />
           <Text
-            fontFamily="Inter_700Bold"
-            color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
+            fontSize={14}
+            style={styles.stakeInfoText}
+            color={COLORS.neutral600}
           >
-            {t('button.confirm')}
+            {t('harbor.staked.info')}
           </Text>
-        </PrimaryButton>
+          <RateInfo
+            availableToStake={formatEther(selectedAccountBalance.wei)}
+          />
+        </View>
+        <Animated.View style={[margin]}>
+          <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
+            <Text
+              fontFamily="Inter_700Bold"
+              color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
+            >
+              {t('button.confirm')}
+            </Text>
+          </PrimaryButton>
+        </Animated.View>
         <BottomSheetHarborPreView
           modalType="stake"
           previewData={previewData}

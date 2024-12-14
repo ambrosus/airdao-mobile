@@ -43,6 +43,7 @@ export const WithdrawRewardOnlyTab = () => {
   };
   return (
     <ScrollView
+      keyboardShouldPersistTaps="handled"
       refreshControl={
         <RefreshControl
           onRefresh={refetchAll}
@@ -50,6 +51,7 @@ export const WithdrawRewardOnlyTab = () => {
           removeClippedSubviews
         />
       }
+      contentContainerStyle={styles.container}
       style={styles.main}
     >
       <TiersSelector

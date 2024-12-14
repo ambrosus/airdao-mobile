@@ -8,6 +8,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(14),
     height: '100%'
   },
+  container: {
+    justifyContent: 'space-between',
+    height: '95%'
+  },
   stakeInfoText: {
     paddingHorizontal: scale(2),
     paddingTop: scale(8),

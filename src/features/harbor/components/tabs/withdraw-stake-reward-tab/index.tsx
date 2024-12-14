@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
@@ -15,6 +21,12 @@ import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';
 import { WithdrawInfo } from '@features/harbor/components/base';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
+import { useKeyboardHeight } from '@hooks';
 
 export const WithdrawStakeRewardTab = () => {
   const bottomSheetRef = useRef<BottomSheetRef>(null);
@@ -65,8 +77,24 @@ export const WithdrawStakeRewardTab = () => {
     setAmountToWithdraw(value);
   };
 
+  const keyboardHeight = useKeyboardHeight();
+
+  const initialMargin = useSharedValue(0);
+  const margin = useAnimatedStyle(() => {
+    return {
+      marginBottom: withTiming(initialMargin.value)
+    };
+  });
+
+  useEffect(() => {
+    initialMargin.value = withTiming(keyboardHeight, {
+      duration: 0
+    });
+  }, [initialMargin, keyboardHeight]);
+
   return (
     <ScrollView
+      keyboardShouldPersistTaps="handled"
       refreshControl={
         <RefreshControl
           onRefresh={refetchAll}
@@ -74,34 +102,39 @@ export const WithdrawStakeRewardTab = () => {
           removeClippedSubviews
         />
       }
+      contentContainerStyle={styles.container}
       style={styles.main}
     >
-      <InputWithoutTokenSelect
-        inputError={inputError}
-        value={amountToWithdraw}
-        token={token}
-        onChangeText={onChangeText}
-        onPressMaxAmount={() => {
-          setAmountToWithdraw(formatEther(userStaked));
-        }}
-      />
-      <Spacer value={scale(8)} />
-      <TiersSelector
-        bondAmount={bondAmount || '0'}
-        ambAmount={ambAmount || '0'}
-      />
-      <Spacer value={scale(8)} />
-      <WithdrawInfo />
-      <Spacer value={scale(16)} />
-      <PrimaryButton disabled={isDisabledButton} onPress={onWithdrawPress}>
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS[isDisabledButton ? 'brand300' : 'neutral0']}
-        >
-          {t('harbor.withdrawal.button')}
-        </Text>
-      </PrimaryButton>
+      <View>
+        <InputWithoutTokenSelect
+          inputError={inputError}
+          value={amountToWithdraw}
+          token={token}
+          onChangeText={onChangeText}
+          onPressMaxAmount={() => {
+            setAmountToWithdraw(formatEther(userStaked));
+          }}
+        />
+        <Spacer value={scale(8)} />
+        <TiersSelector
+          bondAmount={bondAmount || '0'}
+          ambAmount={ambAmount || '0'}
+        />
+        <Spacer value={scale(8)} />
+        <WithdrawInfo />
+        <Spacer value={scale(16)} />
+      </View>
+      <Animated.View style={[margin]}>
+        <PrimaryButton disabled={isDisabledButton} onPress={onWithdrawPress}>
+          <Text
+            fontSize={14}
+            fontFamily="Inter_500Medium"
+            color={COLORS[isDisabledButton ? 'brand300' : 'neutral0']}
+          >
+            {t('harbor.withdrawal.button')}
+          </Text>
+        </PrimaryButton>
+      </Animated.View>
       <BottomSheetHarborPreView
         modalType="withdraw-stake"
         previewData={previewData}
