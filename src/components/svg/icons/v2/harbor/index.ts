@@ -5,3 +5,4 @@ export { APYHeaderIcon } from './APYHeaderIcon';
 export { StakedBalanceIcon } from './StakedBalanceIcon';
 export { SuccessIcon } from './SuccessIcon';
 export { ErrorIcon } from './ErrorIcon';
+export { HarborAccountAction } from './HarborAccountAction';

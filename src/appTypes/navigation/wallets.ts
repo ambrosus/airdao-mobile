@@ -38,6 +38,7 @@ export type HomeParamsList = {
     address: string;
   };
   Wallets: { screen: string };
+  Harbor: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

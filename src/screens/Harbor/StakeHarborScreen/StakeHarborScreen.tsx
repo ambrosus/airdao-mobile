@@ -16,7 +16,7 @@ import { useWalletStore } from '@entities/wallet';
 export const StakeHarborScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
-  const { updateAll } = useHarborStore();
+  const { updateAll, loading } = useHarborStore();
   const { wallet } = useWalletStore();
   useEffectOnce(() => {
     updateAll(wallet?.address || '');
@@ -25,9 +25,9 @@ export const StakeHarborScreen = () => {
   const RightContent = () => (
     <Button
       onPress={() => {
-        // if (loading) {
-        //   return;
-        // }
+        if (loading) {
+          return;
+        }
         navigation.navigate('WithdrawHarborScreen');
       }}
     >

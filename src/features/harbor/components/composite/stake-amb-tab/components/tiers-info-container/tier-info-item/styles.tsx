@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  dropDownWrapper: { marginBottom: '4%' }
+  main: {
+    width: '50%',
+    paddingHorizontal: '2%'
+  }
 });

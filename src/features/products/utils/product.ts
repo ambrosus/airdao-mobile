@@ -2,7 +2,7 @@ import { HomeParamsList } from '@appTypes';
 
 type AvailableProductsPath = keyof Pick<
   HomeParamsList,
-  'SwapScreen' | 'Bridge' | 'StakingPools' | 'KosmosScreen'
+  'SwapScreen' | 'Bridge' | 'StakingPools' | 'KosmosScreen' | 'Harbor'
 >;
 
 export type Product = {
