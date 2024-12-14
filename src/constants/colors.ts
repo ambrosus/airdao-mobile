@@ -16,6 +16,7 @@ export const COLORS = {
     5: 'rgba(14, 14, 14, 0.05)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
+  asphaltBlack: '#2E313A',
 
   primary50: '#E9EFFB',
   primary100: '#C5D4F5',

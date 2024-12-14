@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
 import { scale } from '@utils/scaling';
@@ -13,6 +14,7 @@ import { COLORS } from '@constants/colors';
 import { styles } from './styles';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
+import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 
 interface TiersContainerProps {
   bondAmount: string;
@@ -30,8 +32,11 @@ export const TiersSelector = ({
     setActiveBondTier,
     claimAmount,
     setRewardAmount,
+    loading,
     data: { tier: userTier }
   } = useHarborStore();
+
+  const [toolTipVisible, setToolTipVisible] = useState(false);
 
   const setOppositePart = (
     oppositeArray: TierRewardItem[],
@@ -63,15 +68,40 @@ export const TiersSelector = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [claimAmount]);
 
+  useEffect(() => {
+    setToolTipVisible(false);
+  }, [loading]);
+
   return (
     <View>
-      <Row>
+      <Row alignItems="center">
         <Text fontSize={14} color={COLORS.neutral900}>
           {t('harbor.tiers.container.header')}{' '}
         </Text>
         <Text fontSize={14}>
           {t('harbor.tier')} {userTier}
         </Text>
+        <Spacer horizontal value={scale(8)} />
+        <Tooltip
+          backgroundColor="transparent"
+          disableShadow
+          contentStyle={styles.toolTipContainerStyle}
+          isVisible={toolTipVisible}
+          content={
+            <Text fontSize={12} color={COLORS.neutral0}>
+              {t('harbor.tier.1.content')}
+            </Text>
+          }
+          placement="top"
+          onClose={() => setToolTipVisible(!toolTipVisible)}
+        >
+          <TouchableOpacity
+            onPress={() => setToolTipVisible(!toolTipVisible)}
+            style={{}}
+          >
+            <CircleInfoIcon />
+          </TouchableOpacity>
+        </Tooltip>
       </Row>
 
       <Spacer value={scale(8)} />
