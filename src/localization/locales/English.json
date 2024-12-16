@@ -537,7 +537,7 @@
   "harbor.withdraw.preview.bond.reward": "Reward BOND",
   "harbor.withdraw.preview.delay": "Withdrawal Delay",
 
-  "harbor.button.processing": "Processing",
+  "harbor.button.processing": "İşleme",
 
   "harbor.tier.1.header": "New Stakers",
   "harbor.tier.1.content": "25% rewards available immediately, increasing by 1% every 250K blocks.",

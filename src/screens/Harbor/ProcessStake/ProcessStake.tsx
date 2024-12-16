@@ -62,7 +62,7 @@ export const ProcessStake = () => {
         refetchAmbBalance();
       }
     } catch (error) {
-      // ignore
+      throw error;
     }
   };
 

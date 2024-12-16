@@ -21,7 +21,7 @@ export const EMPTY_TOKEN = new Token(
   TokenUtils
 );
 
-export const EMPTY_UN_STAKE_LIMIT = {
+export const EMPTY_UNSTAKE_LIMIT = {
   rate: '',
   delay: '0'
 };
@@ -30,7 +30,7 @@ export const DEFAULT_DATA = {
   apr: '0',
   token: EMPTY_TOKEN,
   tier: 1,
-  unStakeDelay: EMPTY_UN_STAKE_LIMIT,
+  unStakeDelay: EMPTY_UNSTAKE_LIMIT,
   totalStaked: BigNumber.from(0),
   stakeLimit: BigNumber.from(0),
   userStaked: BigNumber.from(0)

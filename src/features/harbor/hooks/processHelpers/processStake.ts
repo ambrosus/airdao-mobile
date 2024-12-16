@@ -1,5 +1,5 @@
-import { harborService } from '@api/harbor/harbor-service';
 import { parseEther } from 'ethers/lib/utils';
+import { harborService } from '@api/harbor/harbor-service';
 import { IsNullableAccount } from '@entities/wallet/model/types';
 import { ProcessModel } from '@features/harbor/hooks/parseDataHelpers/models';
 import { resultHandler } from '@features/harbor/hooks/processHelpers/resultHandler';

@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import {
   HarborPreViewData,
   SuccessTemplateDataProps
 } from '@features/harbor/components/harbor-preview/model';
-import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
 import { scale } from '@utils/scaling';
 import { SuccessTitle } from '@features/harbor/components/base/preview-modules/success-template/success-title';
 import { COLORS } from '@constants/colors';
-import moment from 'moment';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { CopyHash } from './copy-hash';
 import { delay } from '@utils/delay';

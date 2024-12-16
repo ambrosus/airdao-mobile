@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Text } from '@components/base';
 import { TouchableOpacity, View } from 'react-native';
+import { Row, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import {
   RewardTokenNamesModel,

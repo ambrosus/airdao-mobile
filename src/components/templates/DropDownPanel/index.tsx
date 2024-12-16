@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  LayoutChangeEvent,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,7 +14,6 @@ import { Row, Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
-import { LayoutChangeEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { styles } from './styles';
 
 interface ToolTipProps {

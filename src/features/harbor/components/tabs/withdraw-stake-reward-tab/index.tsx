@@ -11,11 +11,11 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
+import { formatEther, parseEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
-import { formatEther, parseEther } from 'ethers/lib/utils';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';

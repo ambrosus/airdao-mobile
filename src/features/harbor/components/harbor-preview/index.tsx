@@ -2,7 +2,6 @@ import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';

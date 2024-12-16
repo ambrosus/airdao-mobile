@@ -11,7 +11,6 @@ import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { PlusIcon } from '@components/svg/icons/v2';
 import { NumberUtils } from '@utils/number';
 import { CryptoCurrencyCode } from '@appTypes';
-
 import { styles } from './styles';
 import { useAMBPrice } from '@hooks';
 import { HarborDataModel } from '@entities/harbor/model/types';

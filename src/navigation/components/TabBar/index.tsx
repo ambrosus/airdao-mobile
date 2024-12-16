@@ -1,7 +1,5 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react';
-import { Pressable } from 'react-native';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationUtils } from '@utils/navigation';
