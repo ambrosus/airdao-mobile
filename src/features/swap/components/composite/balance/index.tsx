@@ -88,7 +88,8 @@ export const Balance = ({ type }: BalanceProps) => {
   }, [isUSDPriceNegative]);
 
   const error = useMemo(() => {
-    if (!bnBalanceAmount || !selectedTokensAmount[type]) return false;
+    if (!_refExactGetter || !bnBalanceAmount || !selectedTokensAmount[type])
+      return false;
 
     const bnInputBalance = bnBalanceAmount?._hex;
     const bnSelectedAmount = ethers.utils.parseEther(
