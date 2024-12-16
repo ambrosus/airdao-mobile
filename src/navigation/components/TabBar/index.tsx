@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationUtils } from '@utils/navigation';
@@ -12,10 +12,8 @@ import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { scale, verticalScale } from '@utils/scaling';
-import { HARBOR_TABS, MAIN_TABS } from '@navigation/constants';
+import { MAIN_TABS } from '@navigation/constants';
 import { useCurrentRoute } from '@contexts/Navigation/Navigation.context';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 type LabelType =
   | 'Settings'
@@ -34,11 +32,6 @@ interface TabBarMethodModel {
   visibility: (tab: string) => boolean;
 }
 
-const HarborMethods: TabBarMethodModel = {
-  tabs: HARBOR_TABS,
-  visibility: NavigationUtils.getHarborTabBarVisibility
-};
-
 const MainMethods: TabBarMethodModel = {
   tabs: MAIN_TABS,
   visibility: NavigationUtils.getTabBarVisibility
@@ -46,10 +39,7 @@ const MainMethods: TabBarMethodModel = {
 
 const TabBar = ({ state, navigation, isHarbor = false }: TabBarModel) => {
   const bottomSafeArea = useSafeAreaInsets().bottom;
-  const tabsMethods = useMemo(
-    () => (isHarbor ? HarborMethods : MainMethods),
-    [isHarbor]
-  );
+  const tabsMethods = useMemo(() => MainMethods, []);
 
   const currentRoute = useCurrentRoute();
   const tabBarVisible = tabsMethods.visibility(currentRoute);

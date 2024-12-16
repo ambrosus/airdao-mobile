@@ -158,6 +158,8 @@
   "common.status.success": "Başarılı",
   "common.tx.confirmed": "İşlem onaylandı",
   "common.details": "Ayrıntılar",
+  "common.day": "!!!day",
+  "common.days": "!!!days",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -500,6 +502,54 @@
 
   "harbor.requests.header": "!!!My Requests",
   "harbor.withdraw.header": "Geri çekmek",
+  "harbor.stakeAMB.header": "!!!Stake AMB",
+  "harbor.description": "!!!Stake AMB and receive stAMB while staking.",
+  "harbor.apr": "!!!Harbor APR",
+  "harbor.total.staked": "!!!Total Staked on Harbor",
+  "harbor.total.staked.value": "!!!Total Staked Value",
+  "harbor.tiers": "!!!Tiers",
+  "harbor.tier": "!!!Tier",
+  "harbor.staked.amount": "!!!Staked amount",
+  "harbor.staked.balance": "!!!Staked balance",
+  "harbor.staked.info": "!!!When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
+
+  "harbor.stake.amount.preview.title": "!!!Stake amount",
+  "harbor.receive.amount.preview.title": "!!!You will receive",
+  "harbor.stake.from": "Gönderen",
+  "harbor.stake.apy": "!!!APY",
+  "harbor.successfully.stake.header": "!!!You have successfully staked",
+  "harbor.successfully.withdraw.header": "!!!You have successfully withdraw",
+
+
+  "harbor.withdraw.stake.reward": "!!!Stake + Rewards",
+  "harbor.withdraw.reward": "!!!Rewards only",
+  "harbor.tiers.container.header": "!!!Reward Distribution",
+
+  "harbor.exchange.rate": "!!!Exchange rate",
+  "harbor.withdrawal.delay": "!!!Withdrawal Delay",
+  "harbor.withdrawal.button": "!!!Request Withdrawal",
+  "harbor.transaction.failed": "!!!The transaction was failed.",
+
+  "harbor.withdraw.preview.success.header": "!!!Withdrawal request sent",
+  "harbor.withdraw.amount": "!!!Withdrawal amount",
+  "harbor.withdraw.preview.amb.reward": "!!!Reward AMB",
+  "harbor.withdraw.preview.bond.reward": "!!!Reward BOND",
+  "harbor.withdraw.preview.delay": "!!!Withdrawal Delay",
+
+  "harbor.button.processing": "İşleme",
+
+  "harbor.tier.1.header": "!!!New Stakers",
+  "harbor.tier.1.content": "!!!25% rewards available immediately, increasing by 1% every 250K blocks.",
+
+  "harbor.tier.2.header": "!!!1yr+ Stakers",
+  "harbor.tier.2.content": "!!!50% rewards available immediately, increasing by 1% every 250K blocks.",
+
+  "harbor.tier.3.header": "!!!2yrs+ Stakers",
+  "harbor.tier.3.content": "!!!75% rewards available immediately, increasing by 1% every 250K blocks.",
+
+  "harbor.tier.4.header": "!!!3yrs+ Stakers",
+  "harbor.tier.4.content": "!!!100% rewards available immediately, increasing by 1% every 250K blocks.",
+
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

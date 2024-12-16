@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { View, ViewStyle } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, {
-  useSharedValue,
+  Easing,
   useAnimatedStyle,
+  useSharedValue,
   withRepeat,
-  withTiming,
-  Easing
+  withTiming
 } from 'react-native-reanimated';
 import { styles } from './styles';
 import { moderateScale } from '@utils/scaling';
@@ -15,12 +15,14 @@ export interface SpinnerProps {
   containerStyle?: ViewStyle;
   size?: 'large' | 'small' | 'xs';
   customSize?: number;
+  color?: string;
 }
 
 export function Spinner({
   size = 'small',
   customSize,
-  containerStyle
+  containerStyle,
+  color = '#3568DD'
 }: SpinnerProps): JSX.Element {
   const _size = customSize || (size === 'small' ? 24 : size === 'xs' ? 20 : 48);
   const radius = _size / 2 - 4;
@@ -55,7 +57,7 @@ export function Spinner({
             cx={_size / 2}
             cy={_size / 2}
             r={radius}
-            stroke="#3568DD"
+            stroke={color}
             fill="transparent"
             strokeWidth="2"
             strokeLinecap="round"

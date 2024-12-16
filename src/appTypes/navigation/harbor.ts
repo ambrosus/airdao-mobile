@@ -7,6 +7,7 @@ export type HarborTabParamsList = {
   StakeHarborScreen: undefined;
   WithdrawHarborScreen: undefined;
   WithdrawRequests: undefined;
+  ProcessStake: undefined;
 };
 
 export type HarborNavigationProp = CompositeNavigationProp<

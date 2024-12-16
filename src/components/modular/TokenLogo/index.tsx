@@ -1,24 +1,23 @@
 import React, { useMemo } from 'react';
 import {
-  ASTIcon,
   AirBondIcon,
-  AirDOGEIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
+  AirDOGEIcon,
+  ASTIcon,
   BusdIcon,
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
   HBRIcon,
   HeraPoolIcon,
+  KosmosTokenIcon,
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
+  TokenXENAIcon,
   UnknownTokenIcon,
-  UsdcIcon,
-  KosmosTokenIcon,
-  TokenSTAMBIcon,
-  TokenXENAIcon
+  UsdcIcon
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
@@ -50,22 +49,21 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return token;
     }
   }, [address, token]);
-
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
+    case CryptoCurrencyCode.stAMB.toLowerCase():
+    case CryptoCurrencyCode.StAMB.toLowerCase():
+    case 'staked amb':
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
-    case CryptoCurrencyCode.STAMB.toLowerCase():
-    case 'staked amb':
-      return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():
       return <AirDOGEIcon scale={scale} />;

@@ -8,6 +8,9 @@ interface TextOrSpinnerProps {
   loading: boolean;
   loadingLabel: string | undefined;
   label: string;
+  spinnerColor?: string;
+  spinnerCustomSize?: number;
+  spinnerSize?: 'large' | 'small' | 'xs';
   styles?: Partial<{
     loading: Partial<{
       fontSize: number;
@@ -26,6 +29,9 @@ export const TextOrSpinner = ({
   loading,
   loadingLabel,
   label,
+  spinnerColor,
+  spinnerCustomSize,
+  spinnerSize = 'xs',
   styles = {
     loading: {
       fontSize: 16,
@@ -43,7 +49,11 @@ export const TextOrSpinner = ({
     <>
       {loading ? (
         <Row alignItems="center">
-          <Spinner size="xs" />
+          <Spinner
+            customSize={spinnerCustomSize}
+            color={spinnerColor}
+            size={spinnerSize}
+          />
           {loadingLabel && (
             <>
               <Spacer horizontal value={scale(8)} />

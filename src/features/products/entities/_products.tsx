@@ -5,6 +5,7 @@ import {
 } from '@components/svg/icons/v2/actions';
 import { SectionizedProducts } from '../utils';
 import { TFunction } from 'i18next';
+import { HarborAccountAction } from '@components/svg/icons/v2/harbor';
 
 export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
   return [
@@ -64,8 +65,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           id: 4,
           name: 'HARBOR',
           description: t('products.kosmos.description'),
-          icon: <SwapAccountActionIcon scale={2} color="red" />,
-          background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
+          icon: <HarborAccountAction scale={1} />,
+          background: ['rgba(255, 201, 62, 1)', 'rgba(224, 131, 0, 1)'],
           color: 'rgba(255, 255, 255, 1)',
           route: 'Harbor'
         }
