@@ -11,7 +11,7 @@ import { WalletNoNFTsView } from '../../WalletNoNFTsView';
 
 interface NftAssetsProps {
   nfts: Token[];
-  loading: boolean;
+  loading?: boolean;
   isRefreshing?: boolean;
   onRefresh?: () => unknown;
 }
@@ -61,7 +61,7 @@ export const NftAssets = ({
   );
 
   if (nfts.length === 0) {
-    return <WalletNoNFTsView />;
+    return <WalletNoNFTsView refetch={onRefresh} loading={isRefreshing} />;
   }
 
   return (

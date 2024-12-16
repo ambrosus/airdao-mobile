@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -6,27 +6,29 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { styles } from './Step1.styles';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
 import { MnemonicUtils } from '@utils/mnemonics';
-import { useAddWalletContext } from '@contexts';
 import { scale, verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
-import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
-import { styles } from './Step1.styles';
+
+import { useAddWalletStore } from '@features/add-wallet';
+
+const LIST_COLUMNS = 2;
 
 export const CreateWalletStep1 = () => {
-  const navigation = useNavigation<HomeNavigationProp>();
-  const [loading, setLoading] = useState(false);
-  const { walletMnemonic, mnemonicLength, setWalletMnemonic } =
-    useAddWalletContext();
-  const walletMnemonicArray = walletMnemonic.split(' ');
   const { t } = useTranslation();
-  const columnNumber = 2;
+  const navigation = useNavigation<HomeNavigationProp>();
+  const { mnemonic, mnemonicLength, onChangeMnemonic } = useAddWalletStore();
+  const [loading, setLoading] = useState(false);
+
+  const walletMnemonicArray = useMemo(() => mnemonic.split(' '), [mnemonic]);
 
   const init = async () => {
     setLoading(true);
@@ -35,7 +37,7 @@ export const CreateWalletStep1 = () => {
     const walletMnemonic = (
       await MnemonicUtils.generateNewMnemonic(mnemonicLength)
     ).mnemonic;
-    setWalletMnemonic(walletMnemonic);
+    onChangeMnemonic(walletMnemonic);
     setLoading(false);
   };
 
@@ -129,7 +131,7 @@ export const CreateWalletStep1 = () => {
           data={walletMnemonicArray}
           bounces={false}
           showsVerticalScrollIndicator={false}
-          numColumns={columnNumber}
+          numColumns={LIST_COLUMNS}
           keyExtractor={(word, idx) => `${word}-${idx}`}
           renderItem={renderMnemonicWordListItem}
           contentContainerStyle={styles.contentContainerStyle}

@@ -3,14 +3,13 @@ import { View } from 'react-native';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
-import { TxType } from '@features/kosmos/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
 import {
   totalBondedReducer,
   totalClaimableReducer
 } from '@features/kosmos/utils';
+import { TxType, useToken } from '@entities/kosmos';
 
 interface TotalOrdersAmountProps {
   transactions: TxType[];
@@ -18,7 +17,7 @@ interface TotalOrdersAmountProps {
 
 export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
   const { t } = useTranslation();
-  const { extractTokenCb } = useExtractToken();
+  const { extractTokenCb } = useToken();
 
   const totalBonded = useMemo(() => {
     return totalBondedReducer(transactions, extractTokenCb);

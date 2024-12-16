@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef, useMemo } from 'react';
+import React, { forwardRef, ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,21 +7,23 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { Token, TxType } from '@features/kosmos/types';
 import { TokenLogo } from '@components/modular';
 import {
   $discount,
-  MAINNET_VESTINGS,
-  TESTNET_VESTINGS,
-  _timestampToDate,
   discountColor,
   formatDecimals
 } from '@features/kosmos/utils';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import Config from '@constants/config';
 import { StringUtils } from '@utils/string';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { NumberUtils } from '@utils/number';
+import {
+  _timestampToDate,
+  Token,
+  TxType,
+  useTokensStore,
+  VESTINGS
+} from '@entities/kosmos';
+import { environment } from '@utils/environment';
 
 const ADDRESS_LEFT_PADDING = 5;
 const ADDRESS_RIGHT_PADDING = 4;
@@ -41,8 +43,9 @@ export const BottomSheetReviewOrder = forwardRef<
   const { t } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
 
+  const { tokens } = useTokensStore();
+
   const bottomSheetRef = useForwardedRef(ref);
-  const { tokens } = useKosmosMarketsContextSelector();
 
   const usdPayoutPrice = useMemo(() => {
     return +payout * (payoutToken?.price || 0);
@@ -69,8 +72,7 @@ export const BottomSheetReviewOrder = forwardRef<
   const lockPeriod = useMemo(() => {
     if (!transaction.vesting) return null;
 
-    const vestings =
-      Config.env === 'testnet' ? TESTNET_VESTINGS : MAINNET_VESTINGS;
+    const vestings = VESTINGS[environment];
 
     return vestings.find((el) => el.value === +transaction.vesting)?.label;
   }, [transaction.vesting]);

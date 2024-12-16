@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { styles } from './styles';
 import { Row } from '@components/base';
-import { CHART_INTERVALS } from '@features/kosmos/constants';
 import { ChartIntervalItem } from '@features/kosmos/components/base';
+import { CHART_INTERVALS } from '@entities/kosmos';
 
 interface ChartTimeIntervalsProps {
   onChangeInterval: (interval: number) => void;

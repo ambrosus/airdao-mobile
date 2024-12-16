@@ -26,11 +26,12 @@ export function useBarcode() {
     (address: string) => {
       onDismissBarcodeContainer();
       const isAddress = ethereumAddressRegex.test(address);
+      const extractedAddress = address.match(ethereumAddressRegex)?.[0];
 
       if (isAddress) {
         onChangeState({
           ...state,
-          to: address
+          to: extractedAddress
         });
       }
     },

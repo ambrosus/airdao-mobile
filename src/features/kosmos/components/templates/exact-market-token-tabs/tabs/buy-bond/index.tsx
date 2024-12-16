@@ -14,7 +14,7 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
-import { MarketType } from '@features/kosmos/types';
+
 import {
   useMarketDetails,
   useTransactionErrorHandler
@@ -22,13 +22,15 @@ import {
 import { COLORS } from '@constants/colors';
 import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
 import { $discount, discountColor } from '@features/kosmos/utils';
+import { usePurchaseStore } from '@features/kosmos';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
 import { isAndroid, isIos } from '@utils/isPlatform';
+
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 import { NumberUtils } from '@utils/number';
+import { MarketType } from '@entities/kosmos';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;
@@ -55,8 +57,7 @@ export const BuyBondTab = ({
 
   const inputRef = useRef<InputRef>(null);
 
-  const { amountToBuy, onChangeAmountToBuy } =
-    useKosmosMarketsContextSelector();
+  const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
   const { quoteToken, payoutToken, maxBondable } = useMarketDetails(market);
 

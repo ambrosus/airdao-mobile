@@ -4,8 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { Button, Row, Spacer, Spinner, Text } from '@components/base';
-import { useAddWalletContext } from '@contexts';
+import { Button, Row, Spacer, Text, Spinner } from '@components/base';
 import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { WalletUtils } from '@utils/wallet';
@@ -15,10 +14,11 @@ import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { usePasscodeStore } from '@features/passcode';
+import { useAddWalletStore } from '@features/add-wallet';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();
-  const { walletMnemonic } = useAddWalletContext();
+  const { mnemonic } = useAddWalletStore();
   const { t } = useTranslation();
   const { isPasscodeEnabled } = usePasscodeStore();
 
@@ -31,7 +31,7 @@ export const CreateWalletStep2 = () => {
     ({ word }) => word
   );
 
-  const walletMnemonicArrayDefault = walletMnemonic
+  const walletMnemonicArrayDefault = mnemonic
     .split(' ')
     .map((word, index) => ({ word, index }));
 
@@ -42,8 +42,8 @@ export const CreateWalletStep2 = () => {
   );
 
   const isMnemonicCorrect = useMemo(
-    () => walletMnemonicSelectedWordsOnly.join(' ') === walletMnemonic,
-    [walletMnemonic, walletMnemonicSelectedWordsOnly]
+    () => walletMnemonicSelectedWordsOnly.join(' ') === mnemonic,
+    [mnemonic, walletMnemonicSelectedWordsOnly]
   );
 
   const navigateToSetUpSecurity = useCallback(() => {
@@ -63,6 +63,7 @@ export const CreateWalletStep2 = () => {
     } else {
       navigation.navigate('Tabs', {
         screen: 'Settings',
+        // @ts-ignore
         params: { screen: 'SetupPasscode' }
       });
     }
@@ -78,7 +79,7 @@ export const CreateWalletStep2 = () => {
 
     try {
       setLoading(true);
-      await WalletUtils.processWallet(walletMnemonic);
+      await WalletUtils.processWallet(mnemonic);
       navigateToSetUpSecurity();
     } finally {
       setLoading(false);
@@ -86,7 +87,7 @@ export const CreateWalletStep2 = () => {
   }, [
     isMnemonicCorrect,
     navigateToSetUpSecurity,
-    walletMnemonic,
+    mnemonic,
     walletMnemonicArrayDefault.length,
     walletMnemonicSelected.length
   ]);

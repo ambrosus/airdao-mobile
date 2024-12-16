@@ -7,13 +7,13 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { TooltipState } from '../../modular/market-chart/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import {
-  TRIANGLE_WIDTH,
-  RECT_WIDTH,
-  RECT_HEIGHT,
-  TRIANGLE_HEIGHT
-} from '@features/kosmos/constants';
 import { ChartStrokedArrow } from '../../base';
+import {
+  RECT_HEIGHT,
+  RECT_WIDTH,
+  TRIANGLE_HEIGHT,
+  TRIANGLE_WIDTH
+} from '@entities/kosmos';
 import { $discount, discountColor } from '@features/kosmos/utils';
 
 interface ChartTooltipProps {

@@ -1,7 +1,9 @@
 export interface Currency {
   id: string;
   symbol: string;
-  lastBestPrice: string;
+  name: string;
+  bestUSDPrice: string;
+  decimals: string;
 }
 
 export type AwaitCurrencyResponse = {

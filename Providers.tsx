@@ -2,23 +2,12 @@ import React from 'react';
 import { combineComponents } from '@utils/combineComponents';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink
-} from '@apollo/client';
-import { ListsContextProvider } from '@contexts/ListsContext';
-import {
-  AddWalletProvider,
-  AllAddressesProvider,
-  LocalizationProvider
-} from '@contexts';
+import { LocalizationProvider } from '@contexts';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
 import { SwapContextProvider } from '@features/swap/context';
-import { KosmosMarketsContextProvider } from '@features/kosmos/context';
 import { WalletConnectContextProvider } from '@features/wallet-connect/context';
 import Config from '@constants/config';
 
@@ -56,11 +45,6 @@ const BridgeProvider: React.FC = ({ children }: any) => (
   <BridgeContextProvider>{children}</BridgeContextProvider>
 );
 
-const KosmosMarketplaceProvider: React.FC = ({ children }: any) => (
-  // @ts-ignore
-  <KosmosMarketsContextProvider>{children}</KosmosMarketsContextProvider>
-);
-
 const SwapProvider: React.FC = ({ children }: any) => (
   // @ts-ignore
   <SwapContextProvider>{children}</SwapContextProvider>
@@ -83,12 +67,8 @@ const independentProviders = [
 const providers = [
   ...independentProviders,
   LocalDBProvider,
-  AllAddressesProvider,
-  ListsContextProvider,
   WrappedLocalizationProvider,
-  AddWalletProvider,
   BridgeProvider,
-  KosmosMarketplaceProvider,
   SwapProvider,
   WalletConnectProvider
 ];

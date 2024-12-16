@@ -49,21 +49,20 @@ import { COLORS } from '@constants/colors';
 import { ScannerIcon, SearchLargeIcon } from '@components/svg/icons';
 import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
-
 import { DEVICE_HEIGHT } from '@constants/variables';
-import { useAllAddressesContext } from '@contexts';
 import { useWatchlist } from '@hooks';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import { Header } from '@components/composite';
+import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 
 export const Explore = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();
-  const { params } = useRoute<RouteProp<SearchTabParamsList, 'SearchScreen'>>();
+  const { params } = useRoute<RouteProp<SearchTabParamsList, 'Explore'>>();
   const searchAddressRef = useRef<SearchAddressRef>(null);
 
-  const { refresh: refetchAddresses, addressesLoading } =
-    useAllAddressesContext((v) => v);
+  const { loading: addressesLoading } = useAddressesStore();
+  const { refetch: refetchAddresses } = useFetchAddresses();
 
   const { data: infoData, refetch: refetchInfo } = useExplorerInfo();
   const { t } = useTranslation();

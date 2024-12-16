@@ -8,8 +8,9 @@ import {
   BottomSheetFilters,
   MarketsTabs
 } from '@features/kosmos/components/templates';
-import { FiltersState } from '@features/kosmos/types';
+
 import { INITIAL_FILTERS } from '@features/kosmos/utils';
+import { FiltersState } from '@entities/kosmos';
 
 export const KosmosScreen = () => {
   const { t } = useTranslation();

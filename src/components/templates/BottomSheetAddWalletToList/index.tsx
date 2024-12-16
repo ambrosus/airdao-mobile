@@ -1,4 +1,6 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useListActions } from '@features/lists';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -6,8 +8,6 @@ import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 import { verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { useLists } from '@contexts';
-import { useTranslation } from 'react-i18next';
 import { DEVICE_HEIGHT } from '@constants/variables';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
@@ -17,10 +17,17 @@ interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
 export const BottomSheetAddWalletToList = forwardRef<
   BottomSheetRef,
   BottomSheetAddWalletToListProps
->((props, ref) => {
-  const { title, ...addWalletToListProps } = props;
-  const { handleOnCreate, createGroupRef } = useLists((v) => v);
+>(({ title, ...addWalletToListProps }, ref) => {
   const { t } = useTranslation();
+
+  const createGroupRef = useRef<BottomSheetRef>(null);
+
+  const onDismissBottomSheet = useCallback(
+    () => createGroupRef.current?.dismiss(),
+    [createGroupRef]
+  );
+
+  const { onCreateList } = useListActions(onDismissBottomSheet);
 
   const showCreateNewListModal = () => {
     createGroupRef.current?.show();
@@ -62,7 +69,7 @@ export const BottomSheetAddWalletToList = forwardRef<
       <BottomSheetCreateRenameGroup
         ref={createGroupRef}
         type="create"
-        handleOnCreateGroup={handleOnCreate}
+        handleOnCreateGroup={onCreateList}
       />
     </BottomSheet>
   );

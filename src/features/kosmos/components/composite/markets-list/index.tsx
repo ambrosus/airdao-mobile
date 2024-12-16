@@ -2,21 +2,22 @@ import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import {
   MarketListItem,
   ScreenLoader
 } from '@/features/kosmos/components/base';
-import { FiltersState, MarketType } from '@features/kosmos/types';
-import { useMarketTokens } from '@features/kosmos/lib/hooks';
+import {
+  FiltersState,
+  MarketType,
+  useActiveMarketsQuery,
+  useClosedMarketsQuery,
+  useMarketTokens
+} from '@entities/kosmos';
 import { filter } from '@/features/kosmos/utils';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { HomeNavigationProp } from '@appTypes';
-import {
-  useActiveMarketsQuery,
-  useClosedMarketsQuery
-} from '@features/kosmos/lib/query';
-import { useTranslation } from 'react-i18next';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 

@@ -151,6 +151,7 @@ export const ImportWallet = () => {
           enableOnAndroid
           enableAutomaticScroll
           scrollToOverflowEnabled={false}
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         >
           <KeyboardDismissingView style={styles.container}>
             <View style={styles.descriptionWrapper}>

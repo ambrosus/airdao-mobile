@@ -1,3 +1,4 @@
+import 'moment/min/locales';
 import React, {
   createContext,
   FC,
@@ -6,12 +7,12 @@ import React, {
   useState
 } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import i18n from '../../localization/i18n';
+import moment from 'moment';
 import dayjs from 'dayjs';
+// import i18n from '../../localization/i18n';
 import { Language, LanguageCode } from '@appTypes';
 import { LocalizationUtils } from '@utils/localization';
-import moment from 'moment';
-import 'moment/min/locales';
+import i18n from '@localization/i18n';
 
 interface ILanguageContext {
   changeCurrentLanguage: (language: Language) => Promise<void>;

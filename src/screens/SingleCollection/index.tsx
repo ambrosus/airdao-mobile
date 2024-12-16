@@ -3,40 +3,44 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 import { Button, Spacer, Text } from '@components/base';
 import {
-  BottomSheetEditCollection,
   AddressList,
-  BottomSheetCreateRenameGroup
+  BottomSheetCreateRenameGroup,
+  BottomSheetEditCollection
 } from '@components/templates';
-import { EditIcon, AddIcon } from '@components/svg/icons';
+import { AddIcon, EditIcon } from '@components/svg/icons';
 import { BottomSheetRef, Header } from '@components/composite';
-import { useLists } from '@contexts/ListsContext';
 import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { useUSDPrice } from '@hooks';
-import { useAllAddressesContext } from '@contexts';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
 import { sortListByKey } from '@utils/sort';
-import { styles } from './styles';
 import { TokenLogo } from '@components/modular';
+import { useListsSelector } from '@entities/lists';
+import { useListActions } from '@features/lists';
+import { useFetchAddresses } from '@entities/addresses';
 
 export const SingleGroupScreen = () => {
+  const { t } = useTranslation();
   const {
     params: {
       group: { id: groupId }
     }
   } = useRoute<RouteProp<CommonStackParamsList, 'Collection'>>();
   const navigation = useNavigation<CommonStackNavigationProp>();
-  const { t } = useTranslation();
+
+  const { listsOfAddressGroup } = useListsSelector();
+  const { onRenameList } = useListActions();
+  const { refetch: refetchAddresses } = useFetchAddresses();
 
   const addNewAddressToGroupRef = useRef<BottomSheetRef>(null);
   const groupRenameRef = useRef<BottomSheetRef>(null);
   const editCollectionModalRef = useRef<BottomSheetRef>(null);
-  const { handleOnRename, listsOfAddressGroup } = useLists((v) => v);
-  const { refresh: refetchAddresses } = useAllAddressesContext((v) => v);
+
   const selectedList = useMemo(
     () => listsOfAddressGroup.filter((group) => group.id === groupId)[0] || {},
     [groupId, listsOfAddressGroup]
@@ -159,7 +163,7 @@ export const SingleGroupScreen = () => {
         type="rename"
         groupId={groupId}
         groupTitle={name}
-        handleOnRenameGroup={handleOnRename}
+        handleOnRenameGroup={onRenameList}
         ref={groupRenameRef}
       />
       <BottomSheetEditCollection

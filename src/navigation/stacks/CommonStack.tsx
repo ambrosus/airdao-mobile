@@ -11,7 +11,7 @@ import {
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { AddressDetails } from '@screens/Address';
 import { HomeParamsList, PortfolioParamsPortfolio } from '@appTypes';
-import { SingleGroupScreen } from '@screens/SingleCollection';
+import { Explore } from '@screens/Settings/screens/Explore';
 
 export const getCommonStack = (
   Stack: TypedNavigator<
@@ -32,7 +32,7 @@ export const getCommonStack = (
   return (
     <>
       <Stack.Screen name="Address" component={AddressDetails} />
-      <Stack.Screen name="Collection" component={SingleGroupScreen} />
+      <Stack.Screen name="Explore" component={Explore} />
     </>
   );
 };

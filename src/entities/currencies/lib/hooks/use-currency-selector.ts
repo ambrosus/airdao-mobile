@@ -10,8 +10,8 @@ export function useCurrencySelector(amount: number | string, symbol: string) {
       lowerCase(token.symbol).includes(lowerCase(symbol))
     );
 
-    if (token?.lastBestPrice) {
-      return +token?.lastBestPrice * +amount;
+    if (token?.bestUSDPrice) {
+      return +token?.bestUSDPrice * +amount;
     }
 
     return NaN;

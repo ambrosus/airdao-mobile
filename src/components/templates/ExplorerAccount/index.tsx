@@ -8,11 +8,11 @@ import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks/query';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { useLists } from '@contexts/ListsContext';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { useWatchlist } from '@hooks';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
+import { useListsSelector } from '@entities/lists';
 
 interface ExplorerAccountProps {
   account: ExplorerAccount;
@@ -21,15 +21,18 @@ interface ExplorerAccountProps {
   onToggleWatchlist?: (isOnWatchlist: boolean) => unknown;
 }
 
-export const ExplorerAccountView = (
-  props: ExplorerAccountProps
-): JSX.Element => {
-  const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
+export const ExplorerAccountView = ({
+  account,
+  listInfoVisible,
+  nameVisible,
+  onToggleWatchlist
+}: ExplorerAccountProps): JSX.Element => {
   const { t } = useTranslation();
 
+  const { listsOfAddressGroup } = useListsSelector();
+  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const { data: ambPriceData } = useAMBPrice();
+
   const ambPriceUSD = ambPriceData?.priceUSD || 0;
 
   const addToListModal = useRef<BottomSheetRef>(null);

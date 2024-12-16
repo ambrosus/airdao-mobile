@@ -14,7 +14,7 @@ import { AMB_DECIMALS } from '@constants/variables';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;
-  loading: boolean;
+  loading?: boolean;
   error: boolean;
   account: ExplorerAccount;
   isRefreshing?: boolean;

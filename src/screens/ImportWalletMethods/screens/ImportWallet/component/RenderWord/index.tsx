@@ -32,6 +32,7 @@ export const RenderWords = ({
       >
         <View style={styles.container}>
           <InputWithIcon
+            blurOnSubmit={false}
             ref={inputs.current[i]}
             value={mnemonicWords[i]}
             style={{ paddingLeft: scale(i + 1 > 9 ? 17 : 10) }}

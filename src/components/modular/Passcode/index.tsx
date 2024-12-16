@@ -11,6 +11,7 @@ import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
 import { scale } from '@utils/scaling';
 
 interface PasscodeProps {
+  error?: boolean;
   onPasscodeChange: (passcode: string[]) => void;
   changePasscodeStep?: number | null;
   isBiometricEnabled?: boolean;
@@ -26,6 +27,7 @@ type NavigationListenerType = {
 export const Passcode = forwardRef<TextInput, PasscodeProps>(
   (
     {
+      error,
       onPasscodeChange,
       type,
       authenticateWithBiometrics = () => {
@@ -41,6 +43,12 @@ export const Passcode = forwardRef<TextInput, PasscodeProps>(
     const localRef = useForwardedRef<TextInput>(ref);
 
     const [passcode, setPasscode] = useState('');
+
+    useEffect(() => {
+      if (error) {
+        setPasscode('');
+      }
+    }, [error]);
 
     useEffect(() => {
       if (DeviceUtils.isAndroid) {
