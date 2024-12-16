@@ -17,19 +17,19 @@ export const WithdrawInfo = ({}) => {
   return (
     <View style={styles.main}>
       <Row justifyContent="space-between">
-        <Text fontSize={14} color={COLORS.neutral600}>
+        <Text fontSize={scale(14)} color={COLORS.neutral600}>
           {t('harbor.exchange.rate')}
         </Text>
-        <Text fontSize={14} color={COLORS.neutral900}>
+        <Text fontSize={scale(14)} color={COLORS.neutral900}>
           {rate}
         </Text>
       </Row>
       <Spacer value={scale(8)} />
       <Row justifyContent="space-between">
-        <Text fontSize={14} color={COLORS.neutral600}>
+        <Text fontSize={scale(14)} color={COLORS.neutral600}>
           {t('harbor.withdrawal.delay')}
         </Text>
-        <Text fontSize={14} color={COLORS.neutral900}>
+        <Text fontSize={scale(14)} color={COLORS.neutral900}>
           {delay} {t('common.days')}
         </Text>
       </Row>

@@ -16,7 +16,7 @@ export const TierInfoItem = ({ header, content }: TierInfoItemProps) => {
   return (
     <View style={styles.main}>
       <Text
-        fontSize={14}
+        fontSize={scale(14)}
         fontFamily="Inter_500Medium"
         color={COLORS.neutral900}
         align="left"
@@ -25,7 +25,7 @@ export const TierInfoItem = ({ header, content }: TierInfoItemProps) => {
       </Text>
       <Spacer value={scale(8)} />
       <Text
-        fontSize={12}
+        fontSize={scale(12)}
         fontFamily="Inter_500Medium"
         color={COLORS.neutral600}
       >

@@ -41,7 +41,7 @@ export const FormTemplate = ({
         {!!item?.name && (
           <Text
             fontFamily={'Inter_500Medium'}
-            fontSize={14}
+            fontSize={scale(14)}
             color={COLORS.neutral600}
           >
             {t(item.name)}
@@ -49,19 +49,19 @@ export const FormTemplate = ({
         )}
         <Row>
           <Text
-            fontSize={14}
+            fontSize={scale(14)}
             color={COLORS.neutral900}
             style={item?.textStyle || {}}
           >
             {item.value}{' '}
           </Text>
           {!!item.timeSymbol && (
-            <Text fontSize={14} color={COLORS.neutral900}>
+            <Text fontSize={scale(14)} color={COLORS.neutral900}>
               {t(item.timeSymbol)}
             </Text>
           )}
           {!!item.symbol && (
-            <Text fontSize={14} color={COLORS.neutral900}>
+            <Text fontSize={scale(14)} color={COLORS.neutral900}>
               {item.symbol}
             </Text>
           )}

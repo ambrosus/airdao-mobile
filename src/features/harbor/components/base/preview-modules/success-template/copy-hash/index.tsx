@@ -8,6 +8,7 @@ import { StringUtils } from '@utils/string';
 import { COLORS } from '@constants/colors';
 import { contentBox } from '@components/styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { scale } from '@utils/scaling';
 
 interface CopyHashModel {
   hash: string;
@@ -28,8 +29,9 @@ export const CopyHash = ({ hash }: CopyHashModel) => {
     <Pressable onPress={onTxPress}>
       <Row style={contentBox}>
         <GlobeIcon color={COLORS.neutral600} />
-        <Text>{t('common.transaction')}</Text>
+        <Text fontSize={scale(12)}>{t('common.transaction')}</Text>
         <Text
+          fontSize={scale(12)}
           style={{
             textDecorationLine: 'underline',
             color: COLORS.neutral900

@@ -128,7 +128,7 @@ export const WithdrawStakeRewardTab = () => {
       <Animated.View style={[margin]}>
         <PrimaryButton disabled={isDisabledButton} onPress={onWithdrawPress}>
           <Text
-            fontSize={14}
+            fontSize={scale(14)}
             fontFamily="Inter_500Medium"
             color={COLORS[isDisabledButton ? 'brand300' : 'neutral0']}
           >

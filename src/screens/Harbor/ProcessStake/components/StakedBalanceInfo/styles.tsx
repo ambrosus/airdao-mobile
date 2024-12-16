@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { contentBox } from '@components/styles';
+import { scale } from '@utils/scaling';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,6 +9,6 @@ export const styles = StyleSheet.create({
   },
   textStyle: {
     color: COLORS.neutral900,
-    fontSize: 14
+    fontSize: scale(14)
   }
 });

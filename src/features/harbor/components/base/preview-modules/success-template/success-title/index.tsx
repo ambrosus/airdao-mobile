@@ -26,7 +26,7 @@ export const SuccessTitle = ({
         <Spacer value={scale(8)} />
         <Text
           fontFamily="Inter_600SemiBold"
-          fontSize={14}
+          fontSize={scale(14)}
           color={COLORS.neutral900}
           align="center"
           style={titleData.textStyle || {}}
@@ -40,7 +40,7 @@ export const SuccessTitle = ({
             <Text
               fontFamily="Inter_700Bold"
               color={COLORS.neutral900}
-              fontSize={24}
+              fontSize={scale(24)}
             >
               {' '}
               {titleData.value} {titleData.symbol}

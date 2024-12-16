@@ -196,7 +196,7 @@ export const ProcessStake = () => {
             }}
           />
           <Text
-            fontSize={14}
+            fontSize={scale(12)}
             style={styles.stakeInfoText}
             color={COLORS.neutral600}
           >
@@ -210,6 +210,7 @@ export const ProcessStake = () => {
           <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
             <Text
               fontFamily="Inter_700Bold"
+              fontSize={scale(16)}
               color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
             >
               {t('button.confirm')}

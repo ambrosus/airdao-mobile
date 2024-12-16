@@ -9,7 +9,11 @@ export const HarborTitle = ({ harborAPR }: { harborAPR: string }) => {
   const { t } = useTranslation();
   return (
     <Row alignItems="center">
-      <Text color={COLORS.neutral900} fontSize={18} fontFamily="Inter_700Bold">
+      <Text
+        color={COLORS.neutral900}
+        fontSize={scale(18)}
+        fontFamily="Inter_700Bold"
+      >
         {t('harbor.stakeAMB.header')}
       </Text>
       <Spacer horizontal value={scale(8)} />
