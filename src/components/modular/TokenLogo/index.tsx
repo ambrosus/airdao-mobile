@@ -15,7 +15,6 @@ import {
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
-  TokenSTAMBIcon,
   TokenXENAIcon,
   UnknownTokenIcon,
   UsdcIcon
@@ -57,6 +56,7 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
     case CryptoCurrencyCode.stAMB.toLowerCase():
+    case CryptoCurrencyCode.StAMB.toLowerCase():
     case 'staked amb':
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
@@ -64,8 +64,6 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
-    case CryptoCurrencyCode.StAMB.toLowerCase():
-      return <TokenSTAMBIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():
       return <AirDOGEIcon scale={scale} />;

@@ -6,6 +6,11 @@ import React, {
   useState
 } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
@@ -28,11 +33,6 @@ import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { NumberUtils } from '@utils/number';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
 
 export const ProcessStake = () => {
   const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);

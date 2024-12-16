@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
+import { Row, Spacer, Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import {
   EMPTY_SELECTED_TIER,

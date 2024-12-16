@@ -6,13 +6,18 @@ import React, {
   useState
 } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
-import { useTranslation } from 'react-i18next';
 import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetRef } from '@components/composite';
@@ -21,11 +26,7 @@ import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';
 import { WithdrawInfo } from '@features/harbor/components/base';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
+
 import { useKeyboardHeight } from '@hooks';
 
 export const WithdrawStakeRewardTab = () => {

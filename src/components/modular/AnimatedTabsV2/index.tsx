@@ -99,15 +99,6 @@ export const AnimatedTabsV2 = ({
     [customTabBarStyle, scrollToTab]
   );
 
-  // TODO remove for prod
-
-  const onScrollEnd = () => {
-    // do nothing
-  };
-  const onScrollStart = () => {
-    // do nothing
-  };
-
   const onMomentumScrollEndHandle = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const scrollOffsetX = event.nativeEvent.contentOffset.x;
@@ -146,8 +137,6 @@ export const AnimatedTabsV2 = ({
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onMomentumScrollEndHandle}
-        onScrollEndDrag={onScrollEnd}
-        onScrollBeginDrag={onScrollStart}
       >
         {tabs.map(renderTabView)}
       </ScrollView>

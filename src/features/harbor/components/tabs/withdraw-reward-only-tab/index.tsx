@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { TiersSelector } from '../../base/tiers-selector';
 import { scale } from '@utils/scaling';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
-import { useTranslation } from 'react-i18next';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRef } from '@components/composite';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';

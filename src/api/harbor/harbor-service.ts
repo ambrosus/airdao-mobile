@@ -1,9 +1,9 @@
 import { BigNumber, ethers } from 'ethers';
+import { parseEther } from 'ethers/lib/utils';
 import { RawRecord } from '@nozbe/watermelondb';
 import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { Cache, CacheKey } from '@lib/cache';
-import { parseEther } from 'ethers/lib/utils';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
