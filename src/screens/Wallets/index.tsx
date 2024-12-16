@@ -4,11 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ethers } from 'ethers';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, {
+  Easing,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withSpring
+  withSpring,
+  withTiming,
+  cancelAnimation
 } from 'react-native-reanimated';
 import {
   AccountActions,
@@ -27,12 +30,31 @@ import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
 import { useCurrenciesQuery } from '@entities/currencies/lib';
 
+const SPRING_CONFIG = {
+  damping: 20,
+  stiffness: 120,
+  mass: 1,
+  overshootClamping: true,
+  restDisplacementThreshold: 0.01,
+  restSpeedThreshold: 0.01
+} as const;
+
+const SCROLL_RESET_THRESHOLD = 32;
+
 export const HomeScreen = () => {
   const { setWallet } = useWalletStore();
   const { tokens: _sendFundsTokens, onSetTokens } = useSendFundsStore();
 
-  const { data: accounts } = useAllAccounts();
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [scrollIdx, setScrollIdx] = useState(0);
+
+  const hideThreshold = headerHeight + 24;
+  const hideThresholdQuarter = hideThreshold / 4;
+
+  const offsetScrollY = useSharedValue(0);
+  const activeTabIndex = useSharedValue(0);
+
+  const { data: accounts } = useAllAccounts();
   const selectedAccount = accounts.length > 0 ? accounts[scrollIdx] : null;
   const { data: selectedAccountBalance, refetch: refetchAmbBalance } =
     useBalanceOfAddress(selectedAccount?.address || '');
@@ -75,58 +97,67 @@ export const HomeScreen = () => {
     return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();
   }, [selectedAccountBalance.wei]);
 
-  const offsetScrollY = useSharedValue(0);
-  const activeTabIndex = useSharedValue(0);
+  const onTransactionsScrollEvent = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      const { y: scrollY } = event.contentOffset;
 
-  const onTransactionsScrollEvent = useAnimatedScrollHandler((event) => {
-    offsetScrollY.value = event.contentOffset.y;
+      if (scrollY <= SCROLL_RESET_THRESHOLD) {
+        cancelAnimation(offsetScrollY);
+        offsetScrollY.value = 0;
+      } else if (scrollY > hideThreshold) {
+        offsetScrollY.value = scrollY;
+      } else if (scrollY === headerHeight - 16) {
+        offsetScrollY.value = scrollY + SCROLL_RESET_THRESHOLD;
+      }
+    },
+    onMomentumEnd: (event) => {
+      if (event.contentOffset.y < SCROLL_RESET_THRESHOLD) {
+        cancelAnimation(offsetScrollY);
+        offsetScrollY.value = withSpring(0, SPRING_CONFIG);
+      }
+    },
+    onBeginDrag: () => {
+      cancelAnimation(offsetScrollY);
+    }
   });
-
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  const hideThreshold = headerHeight + 24;
 
   const isHeaderHidden = useDerivedValue(() => {
-    return offsetScrollY.value > hideThreshold / 4;
+    return offsetScrollY.value > hideThresholdQuarter;
+  }, [hideThresholdQuarter]);
+
+  const translateY = useDerivedValue(() => {
+    'worklet';
+    return withSpring(isHeaderHidden.value ? -hideThreshold : 0, SPRING_CONFIG);
+  }, [hideThreshold]);
+
+  const headerOpacity = useDerivedValue(() => {
+    'worklet';
+    return withSpring(isHeaderHidden.value ? 0 : 1, SPRING_CONFIG);
   });
+
+  const listHeight = useDerivedValue(() => {
+    'worklet';
+    return withTiming(
+      isHeaderHidden.value ? SCREEN_HEIGHT : SCREEN_HEIGHT - hideThreshold,
+      { duration: 1, easing: Easing.exp }
+    );
+  }, [hideThreshold]);
 
   const animatedHeaderStyles = useAnimatedStyle(() => {
-    const translateY = withSpring(isHeaderHidden.value ? -hideThreshold : 0, {
-      damping: 20,
-      stiffness: 90
-    });
-    const opacity = withSpring(isHeaderHidden.value ? 0 : 1, {
-      damping: 20,
-      stiffness: 90
-    });
-
     return {
-      zIndex: -999,
-      transform: [{ translateY }],
-      opacity
+      zIndex: -999999,
+      transform: [{ translateY: translateY.value }],
+      opacity: headerOpacity.value
     };
-  });
+  }, []);
 
   const animatedListStyles = useAnimatedStyle(() => {
-    const translateY = withSpring(isHeaderHidden.value ? -hideThreshold : 0, {
-      damping: 20,
-      stiffness: 90
-    });
-
-    const height = withSpring(
-      isHeaderHidden.value ? SCREEN_HEIGHT : SCREEN_HEIGHT - hideThreshold,
-      {
-        damping: 20,
-        stiffness: 90
-      }
-    );
-
     return {
       flex: activeTabIndex.value === 2 ? 0 : 1,
-      height,
-      transform: [{ translateY }]
+      height: listHeight.value,
+      transform: [{ translateY: translateY.value }]
     };
-  });
+  }, []);
 
   const onHeaderLayoutChange = useCallback(
     (event: LayoutChangeEvent) =>
@@ -136,6 +167,7 @@ export const HomeScreen = () => {
 
   const onChangeActiveTabIndex = useCallback(
     (index: number) => {
+      cancelAnimation(offsetScrollY);
       activeTabIndex.value = index;
       offsetScrollY.value = 0;
     },
@@ -148,6 +180,7 @@ export const HomeScreen = () => {
         isHeaderHidden={isHeaderHidden}
         account={selectedAccountWithBalance}
       />
+
       <Spacer value={verticalScale(24)} />
       <Animated.View
         style={animatedHeaderStyles}
@@ -175,7 +208,7 @@ export const HomeScreen = () => {
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
             <AccountActions
               account={selectedAccountWithBalance}
-              disabled={isSelectAccountBalanceZero}
+              disabled={isSelectAccountBalanceZero && !isHeaderHidden.value}
             />
             <Spacer value={verticalScale(16)} />
           </>

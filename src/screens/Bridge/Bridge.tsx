@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { styles } from './styles';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Header } from '@components/composite';
+import { CopyToClipboardButton, Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner } from '@components/base';
@@ -11,9 +11,13 @@ import { scale } from '@utils/scaling';
 import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeTemplate } from '@features/bridge/templates';
 import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
+import { StringUtils } from '@utils/string';
+import { useWalletStore } from '@entities/wallet';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();
+
+  const { wallet } = useWalletStore();
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
   const { methods, variables } = useBridgeContextData();
@@ -58,6 +62,10 @@ export const Bridge = () => {
         title="Bridge"
         bottomBorder
         contentRight={renderHeaderRightContent}
+      />
+      <CopyToClipboardButton
+        textToDisplay={StringUtils.formatAddress(wallet?.address ?? '', 5, 6)}
+        textToCopy={wallet?.address}
       />
       <Spacer value={scale(15)} />
       <BridgeTemplate />

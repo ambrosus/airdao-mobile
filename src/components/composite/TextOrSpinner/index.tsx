@@ -6,7 +6,7 @@ import { scale } from '@utils/scaling';
 
 interface TextOrSpinnerProps {
   loading: boolean;
-  loadingLabel: string;
+  loadingLabel: string | undefined;
   label: string;
   spinnerColor?: string;
   spinnerCustomSize?: number;
@@ -50,18 +50,22 @@ export const TextOrSpinner = ({
       {loading ? (
         <Row alignItems="center">
           <Spinner
-            customSize={spinnerCustomSize}
+            сustomSize={spinnerCustomSize}
             color={spinnerColor}
             size={spinnerSize}
           />
-          <Spacer horizontal value={scale(8)} />
-          <Text
-            fontSize={styles.loading?.fontSize}
-            fontFamily={styles.loading?.fontFamily}
-            color={styles.loading?.color}
-          >
-            {loadingLabel}
-          </Text>
+          {loadingLabel && (
+            <>
+              <Spacer horizontal value={scale(8)} />
+              <Text
+                fontSize={styles.loading?.fontSize}
+                fontFamily={styles.loading?.fontFamily}
+                color={styles.loading?.color}
+              >
+                {loadingLabel}
+              </Text>
+            </>
+          )}
         </Row>
       ) : (
         <Text

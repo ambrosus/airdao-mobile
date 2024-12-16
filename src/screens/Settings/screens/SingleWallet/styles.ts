@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   addressContainer: {
     marginTop: scale(15),
     borderRadius: 24,
-    padding: scale(25),
+    paddingVertical: scale(25),
     backgroundColor: COLORS.neutral50,
     paddingHorizontal: scale(24),
     alignSelf: 'center'
@@ -32,6 +32,10 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(24),
     borderWidth: 2,
     borderColor: COLORS.neutral100
+  },
+  copyAddressButtonWrapper: {
+    marginTop: verticalScale(16),
+    height: 33
   },
   copyButton: {
     backgroundColor: COLORS.brand100,

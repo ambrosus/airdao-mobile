@@ -125,6 +125,7 @@ export const AccountTransactions = forwardRef<
           contentContainerStyle={[styles.list, containerStyle]}
           onEndReached={onEndReached}
           showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
           testID="Transactions_List"
           ListFooterComponent={() =>
             loading && <CenteredSpinner containerStyle={styles.loader} />

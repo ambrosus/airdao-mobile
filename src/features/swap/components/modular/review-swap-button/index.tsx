@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@components/modular';
-import { Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
@@ -11,6 +10,23 @@ import {
 } from '@features/swap/lib/hooks';
 import { buttonActionString } from '@features/swap/utils/button-action.string';
 import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { TextOrSpinner } from '@components/composite';
+import { FontFamily } from '@components/base/Text/Text.types';
+
+function buttonStyles(disabled: boolean) {
+  return {
+    active: {
+      fontSize: 17,
+      fontFamily: 'Inter_600SemiBold' as FontFamily,
+      color: disabled ? COLORS.brand75 : COLORS.neutral0
+    },
+    loading: {
+      fontSize: 17,
+      fontFamily: 'Inter_600SemiBold' as FontFamily,
+      color: COLORS.brand75
+    }
+  };
+}
 
 export const ReviewSwapButton = () => {
   const { t } = useTranslation();
@@ -77,17 +93,12 @@ export const ReviewSwapButton = () => {
       style={buttonShadow}
       onPress={onResolveBottomSheetDataPress}
     >
-      {isProcessingBottomSheet ? (
-        <Spinner />
-      ) : (
-        <Text
-          fontSize={17}
-          fontFamily="Inter_600SemiBold"
-          color={disabled ? COLORS.brand75 : COLORS.neutral0}
-        >
-          {swapButtonString}
-        </Text>
-      )}
+      <TextOrSpinner
+        label={swapButtonString}
+        loadingLabel={undefined}
+        loading={isProcessingBottomSheet}
+        styles={buttonStyles(disabled)}
+      />
     </PrimaryButton>
   );
 };

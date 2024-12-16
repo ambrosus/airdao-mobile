@@ -8,7 +8,7 @@ import {
   TESTNET_VESTINGS
 } from '@features/kosmos/utils/vestings';
 import Config from '@constants/config';
-import { formatDecimals } from '@features/kosmos/utils';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
 import { getProtocolFee } from '@features/kosmos/api';
 import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 
@@ -77,7 +77,7 @@ export function useMarketDetails(market: MarketType | undefined) {
   ]);
 
   const discount = useMemo(() => {
-    return market?.discount ? market.discount.toFixed(2) : '-';
+    return $discount(market?.discount);
   }, [market?.discount]);
 
   const slippage = useMemo(() => {

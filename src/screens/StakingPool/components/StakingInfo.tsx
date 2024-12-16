@@ -7,7 +7,7 @@ import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import React, { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 interface StakingInfoProps {
   totalStake: number;
@@ -97,7 +97,8 @@ export const StakingInfo = (props: StakingInfoProps) => {
               fontSize={14}
               fontWeight="600"
             >
-              {NumberUtils.formatAmount(userStaking)} AMB
+              {NumberUtils.formatDecimal(ethers.utils.formatEther(userStaking))}{' '}
+              AMB
             </Text>
             <Spacer value={scale(8)} horizontal />
             <Text
