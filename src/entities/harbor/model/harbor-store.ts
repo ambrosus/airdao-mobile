@@ -9,11 +9,13 @@ import { harborService } from '@api/harbor/harbor-service';
 export const useHarborStore = create<HarborStoreModel>((set) => ({
   data: DEFAULT_DATA,
   loading: false,
+  withdrawListLoader: false,
   activeAmbTier: REWARD_TIERS_LIST.amb[0],
   activeBondTier: REWARD_TIERS_LIST.bond[2],
   bondAmount: '0',
   ambAmount: '0',
   claimAmount: BigNumber.from(0),
+  withdrawalList: [],
   getClaimAmount: async (address: string) => {
     set({ claimAmount: await harborService.getClaimAmount(address) });
   },
@@ -24,6 +26,15 @@ export const useHarborStore = create<HarborStoreModel>((set) => ({
   setActiveAmbTier: (activeAmbTier: TierRewardItem) => set({ activeAmbTier }),
   setActiveBondTier: (activeBondTier: TierRewardItem) =>
     set({ activeBondTier }),
+  updateWithdrawList: async (address: string) => {
+    try {
+      set({ withdrawListLoader: true });
+      const withdrawalList = await harborService.getWithdrawalRequests(address);
+      set({ withdrawalList });
+    } finally {
+      set({ withdrawListLoader: false });
+    }
+  },
   updateAll: async (address: string) => {
     try {
       set({ loading: true });

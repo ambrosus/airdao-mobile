@@ -28,13 +28,23 @@ export interface TierRewardList {
   amb: TierRewardItem[];
   bond: TierRewardItem[];
 }
+export interface ILogs {
+  amount: BigNumber;
+  tokenAddress: string;
+  requestData: string;
+  unlockData: string;
+  status: string;
+}
 
 export interface HarborStoreModel {
   data: HarborDataModel;
+  withdrawalList: ILogs[];
+  withdrawListLoader: boolean;
   activeAmbTier: TierRewardItem;
   setActiveAmbTier: (payload: TierRewardItem) => void;
   activeBondTier: TierRewardItem;
   claimAmount: BigNumber;
+  updateWithdrawList: (payload: string) => void;
   getClaimAmount: (payload: string) => void;
   setActiveBondTier: (payload: TierRewardItem) => void;
   bondAmount: string;

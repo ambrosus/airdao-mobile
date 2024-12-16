@@ -550,6 +550,8 @@
   "harbor.tier.4.header": "!!!3yrs+ Stakers",
   "harbor.tier.4.content": "!!!100% rewards available immediately, increasing by 1% every 250K blocks.",
 
+  "harbor.requests.date": "!!!Requests date",
+  "harbor.unlock.date": "!!!Unlock date",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

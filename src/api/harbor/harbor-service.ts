@@ -4,6 +4,8 @@ import { RawRecord } from '@nozbe/watermelondb';
 import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { Cache, CacheKey } from '@lib/cache';
+import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
+import { ILogs } from '@entities/harbor/model/types';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
@@ -124,6 +126,62 @@ const getClaimAmount = async (address: string) => {
   }
 };
 
+const getWithdrawalRequests = async (address: string) => {
+  try {
+    const contract = new ethers.Contract(
+      Config.LIQUID_STAKING_ADDRESS,
+      UNSTAKE_LOG_ABI,
+      provider
+    );
+    const filter = contract.filters.UnstakeLocked(address);
+    const rawWithdrawalsList = await contract.queryFilter(filter);
+    const withdrawalsList: ILogs[] = [];
+
+    const formatData = (date: Date) =>
+      date
+        .toLocaleString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
+        .replace(',', '');
+
+    for (let i = 0; i < rawWithdrawalsList.length; i++) {
+      const currEvent: any = rawWithdrawalsList[i];
+
+      const requestDateTime = new Date(
+        Number(currEvent.args.creationTime) * 1000
+      );
+      const formattedRequestDateTime = formatData(requestDateTime);
+
+      const unlockDateTime = new Date(Number(currEvent.args.unlockTime) * 1000);
+      const formattedUnlockDateTime = formatData(unlockDateTime);
+
+      const status = unlockDateTime < new Date() ? 'Success' : 'Pending';
+
+      const amount = BigNumber.from(currEvent.args.amount);
+
+      // add event to the beginning of the list to sort it from newest to oldest
+      withdrawalsList.unshift({
+        amount,
+        tokenAddress: currEvent.address,
+        requestData: formattedRequestDateTime,
+        unlockData: formattedUnlockDateTime,
+        status
+      });
+    }
+
+    return withdrawalsList.filter(
+      (item) => item.tokenAddress === Config.LIQUID_STAKING_ADDRESS
+    );
+  } catch (e) {
+    throw e;
+  }
+};
+
 const processStake = async (
   wallet: RawRecord | undefined,
   value: BigNumber
@@ -208,6 +266,7 @@ export const harborService = {
   getUnStakeLockTime,
   getTier,
   getClaimAmount,
+  getWithdrawalRequests,
   processStake,
   processWithdraw,
   processClaimReward
