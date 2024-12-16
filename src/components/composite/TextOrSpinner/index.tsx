@@ -50,7 +50,7 @@ export const TextOrSpinner = ({
       {loading ? (
         <Row alignItems="center">
           <Spinner
-            сustomSize={spinnerCustomSize}
+            customSize={spinnerCustomSize}
             color={spinnerColor}
             size={spinnerSize}
           />
