@@ -99,7 +99,7 @@ export const TiersSelector = ({
         >
           <TouchableOpacity onPress={() => setToolTipVisible(!toolTipVisible)}>
             <CircleInfoIcon
-              color={toolTipVisible ? 'transparent' : COLORS.brand500}
+              color={toolTipVisible ? 'transparent' : COLORS.neutral500}
             />
           </TouchableOpacity>
         </Tooltip>

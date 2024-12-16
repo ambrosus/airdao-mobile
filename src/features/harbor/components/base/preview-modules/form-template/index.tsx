@@ -94,6 +94,7 @@ export const FormTemplate = ({
           label={buttonTitle}
         />
       </PrimaryButton>
+      <Spacer value={scale(12)} />
     </View>
   );
 };

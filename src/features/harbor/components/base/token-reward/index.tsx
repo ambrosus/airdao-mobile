@@ -8,6 +8,7 @@ import {
 } from '@entities/harbor/model/types';
 import { TierItem } from '../tier-item';
 import { styles } from './styles';
+import { NumberUtils } from '@utils/number';
 
 interface TokenRewardProps {
   rewardTokenName: RewardTokenNamesModel;
@@ -35,7 +36,9 @@ export const TokenReward = ({
     <Row justifyContent={'space-between'}>
       <View style={styles.rewardWrapper}>
         <TokenLogo token={rewardTokenName} scale={0.8} />
-        <Text style={styles.valueText}>{amount}</Text>
+        <Text style={styles.valueText}>
+          {NumberUtils.abbreviateNumber(+amount)}
+        </Text>
       </View>
       <View style={styles.tierWrapper}>
         {rewardTiers.map((item) => {

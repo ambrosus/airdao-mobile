@@ -108,6 +108,7 @@ export const SuccessTemplate = ({
           </SecondaryButton>
         </>
       )}
+      <Spacer value={scale(12)} />
     </View>
   );
 };
