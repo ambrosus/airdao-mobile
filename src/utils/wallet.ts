@@ -52,9 +52,11 @@ const _getWalletNumber = async () => {
   return count + 1;
 };
 
-const processWallet = async (mnemonic: string) => {
+const processWallet = async (mnemonic: string, accounts: AccountDBModel[]) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
+  const currencyCode = CryptoCurrencyCode.AMB;
+
   try {
     const number = await _getWalletNumber();
     const name = '';
@@ -62,58 +64,53 @@ const processWallet = async (mnemonic: string) => {
     const fullWallet: Wallet = new Wallet({
       hash,
       name,
-      number
+      number,
+      cashback: await CashBackUtils.getByHash(hash)
     });
 
-    // get wallet info from network
-    const { cashbackToken } = await CashBackUtils.getByHash(hash);
-    fullWallet.cashback = cashbackToken;
-    const _account = await AirDAOKeysForRef.discoverPublicAndPrivate({
-      mnemonic: mnemonic
-    });
-    const currencyCode = CryptoCurrencyCode.AMB; // TODO this needs to be changed if we support multiple currencies
+    // Check if wallet already exists in accounts
+    const { address, index, path, privateKey } =
+      await AirDAOKeysForRef.discoverPublicAndPrivate({
+        mnemonic
+      });
+
+    if (AccountUtils.isWalletAlreadyExist(address, accounts)) {
+      throw new Error('400: Wallet already exists');
+    }
+
     // create wallet in db
     walletInDb = await WalletDB.createWallet(fullWallet);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, accountInDbResult] = await Promise.all([
-      // securely store private key
+    const [, accountInDbResult] = await Promise.all([
+      // Securely store private key
       Cache.setItem(
         `${CacheKey.WalletPrivateKey}-${fullWallet.hash}`,
-        _account.privateKey
+        privateKey
       ),
-      // create account in db
+      // Create account in db
       AccountUtils.createAccountInDB(
-        _account.address,
+        address,
         fullWallet.hash,
-        _account.path,
-        _account.index,
+        path,
+        index,
         currencyCode
       )
     ]);
-    accountInDb = accountInDbResult;
     sendFirebaseEvent(CustomAppEvents.main_add_wallet);
 
-    // subscribe to notifications
-    API.watcherService.watchAddresses([_account.address]);
-    return { hash, address: _account.address };
+    accountInDb = accountInDbResult;
+
+    await API.watcherService.watchAddresses([address]);
+    return { hash, address };
   } catch (error) {
-    if (walletInDb) walletInDb.destroyPermanently();
-    if (accountInDb) accountInDb.destroyPermanently();
-    throw error;
-  }
-};
+    const { address } = await AirDAOKeysForRef.discoverPublicAndPrivate({
+      mnemonic
+    });
 
-const changeSelectedWallet = async (hash: string) => {
-  await Cache.setItem(CacheKey.SelectedWallet, hash);
-};
-
-const deleteWalletWithAccounts = async (hash: string) => {
-  await AccountDB.deleteAccountsOfWallet(hash);
-  await WalletDB.deleteWallet(hash);
-  // delete active wallet
-  const activeWalletHash = await Cache.getItem(CacheKey.SelectedWallet);
-  if (activeWalletHash === hash) {
-    await Cache.deleteItem(CacheKey.SelectedWallet);
+    if (AccountUtils.isWalletAlreadyExist(address, accounts)) {
+      if (walletInDb) walletInDb.destroyPermanently();
+      if (accountInDb) accountInDb.destroyPermanently();
+      throw error;
+    }
   }
 };
 
@@ -140,11 +137,10 @@ export const importWalletViaPrivateKey = async (
       cashback: await CashBackUtils.getByHash(hash)
     });
 
-    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
-      privateKey
-    );
+    const { address, index, path } =
+      await AirDAOKeysForRef.discoverAccountViaPrivateKey(privateKey);
 
-    if (!_account) throw new Error();
+    if (!address) throw new Error();
 
     walletInDb = await WalletDB.createWallet(fullWallet);
     const [, accountInDbResult] = await Promise.all([
@@ -155,10 +151,10 @@ export const importWalletViaPrivateKey = async (
       ),
       // Create account in DB
       AccountUtils.createAccountInDB(
-        _account.address,
+        address,
         fullWallet.hash,
-        _account.path,
-        _account.index,
+        path,
+        index,
         currencyCode
       )
     ]);
@@ -166,18 +162,32 @@ export const importWalletViaPrivateKey = async (
 
     accountInDb = accountInDbResult;
 
-    await API.watcherService.watchAddresses([_account.address]);
-    return { hash, address: _account.address };
+    await API.watcherService.watchAddresses([address]);
+    return { hash, address };
   } catch (error) {
-    const _account = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
+    const { address } = await AirDAOKeysForRef.discoverAccountViaPrivateKey(
       privateKey
     );
 
-    if (AccountUtils.isWalletAlreadyExist(_account.address, accounts)) {
+    if (AccountUtils.isWalletAlreadyExist(address, accounts)) {
       if (walletInDb) walletInDb.destroyPermanently();
       if (accountInDb) accountInDb.destroyPermanently();
       throw error;
     }
+  }
+};
+
+const changeSelectedWallet = async (hash: string) => {
+  await Cache.setItem(CacheKey.SelectedWallet, hash);
+};
+
+const deleteWalletWithAccounts = async (hash: string) => {
+  await AccountDB.deleteAccountsOfWallet(hash);
+  await WalletDB.deleteWallet(hash);
+  // delete active wallet
+  const activeWalletHash = await Cache.getItem(CacheKey.SelectedWallet);
+  if (activeWalletHash === hash) {
+    await Cache.deleteItem(CacheKey.SelectedWallet);
   }
 };
 

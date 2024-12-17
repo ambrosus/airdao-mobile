@@ -244,7 +244,7 @@
   "import.wallet.key": "Özel anahtar",
   "import.wallet.key.show": "Göster özel anahtar",
   "import.wallet.key.hide": "Gizle özel anahtar",
-  "import.wallet.key.error.exist": "Cüzdan zaten hesabınızda mevcut.",
+  "import.wallet.key.error.exist": "!!!import.wallet.key.error.exist",
   "import.wallet.key.error.invalid": "Geçersiz özel anahtar.",
   "import.wallet.key.error.try.again": "Lütfen tekrar deneyin.",
   "import.wallet.key.success": "Cüzdanınız içe aktarıldı.",
@@ -520,7 +520,6 @@
   "harbor.successfully.stake.header": "!!!You have successfully staked",
   "harbor.successfully.withdraw.header": "!!!You have successfully withdraw",
 
-
   "harbor.withdraw.stake.reward": "!!!Stake + Rewards",
   "harbor.withdraw.reward": "!!!Rewards only",
   "harbor.tiers.container.header": "!!!Reward Distribution",
@@ -549,7 +548,6 @@
 
   "harbor.tier.4.header": "!!!3yrs+ Stakers",
   "harbor.tier.4.content": "!!!100% rewards available immediately, increasing by 1% every 250K blocks.",
-
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

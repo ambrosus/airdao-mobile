@@ -65,6 +65,7 @@ export const ImportWalletPrivateKey = () => {
       } else {
         navigation.navigate('Tabs', {
           screen: 'Settings',
+          // @ts-ignore
           params: { screen: 'SetupPasscode' }
         });
       }
@@ -194,7 +195,13 @@ export const ImportWalletPrivateKey = () => {
             </View>
             <View style={styles.footer}>
               {!!errorStatus && (
-                <Text color={COLORS.error600}>{errorText}</Text>
+                <Text
+                  fontSize={15}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.error600}
+                >
+                  {errorText}
+                </Text>
               )}
               <Spacer value={25} />
               <Button
