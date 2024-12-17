@@ -9,7 +9,13 @@ import { DropDownPanel } from '@components/templates';
 import { styles } from './styles';
 import { TierInfoItem } from '../tier-info-item';
 
-export const TiersInfoContainer = () => {
+interface TierInfoContainerProps {
+  onToggleTiers?: (payload?: string) => void;
+}
+
+export const TiersInfoContainer = ({
+  onToggleTiers
+}: TierInfoContainerProps) => {
   const { t } = useTranslation();
   const headerContent = useMemo(
     () => (
@@ -50,7 +56,19 @@ export const TiersInfoContainer = () => {
           content="harbor.tier.4.content"
         />
       </Row>
+      <Spacer value={scale(12)} />
+      <Row justifyContent="center">
+        <Text color={COLORS.brand600} fontSize={scale(12)}>
+          {t('harbor.tier.info')}
+        </Text>
+      </Row>
     </View>
   );
-  return <DropDownPanel header={headerContent} content={dropDownContent} />;
+  return (
+    <DropDownPanel
+      onPress={onToggleTiers}
+      header={headerContent}
+      content={dropDownContent}
+    />
+  );
 };

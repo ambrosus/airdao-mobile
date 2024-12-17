@@ -6,9 +6,10 @@ import { Row, Text } from '@components/base';
 import { GlobeIcon } from '@components/svg/icons/v2';
 import { StringUtils } from '@utils/string';
 import { COLORS } from '@constants/colors';
-import { contentBox } from '@components/styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { scale } from '@utils/scaling';
+import { contentBox } from '@components/styles';
+import { styles } from './styles';
 
 interface CopyHashModel {
   hash: string;
@@ -27,16 +28,13 @@ export const CopyHash = ({ hash }: CopyHashModel) => {
 
   return (
     <Pressable onPress={onTxPress}>
-      <Row style={contentBox}>
+      <Row alignItems="center" justifyContent="center" style={contentBox}>
         <GlobeIcon color={COLORS.neutral600} />
-        <Text fontSize={scale(12)}>{t('common.transaction')}</Text>
-        <Text
-          fontSize={scale(12)}
-          style={{
-            textDecorationLine: 'underline',
-            color: COLORS.neutral900
-          }}
-        >
+        <Text color={COLORS.neutral500} fontSize={scale(12)}>
+          {' '}
+          {t('common.transaction')}{' '}
+        </Text>
+        <Text fontSize={scale(12)} style={styles.hash}>
           {' '}
           {StringUtils.formatAddress(hash, 10, 0)}
         </Text>
