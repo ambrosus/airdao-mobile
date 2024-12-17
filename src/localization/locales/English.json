@@ -551,6 +551,8 @@
   "harbor.tier.4.header": "3yrs+ Stakers",
   "harbor.tier.4.content": "100% rewards available immediately, increasing by 1% every 250K blocks.",
 
+  "harbor.tier.info": "Remaining rewards are available as $BOND, which can be exchanged on the Bond marketplace.",
+
   "harbor.requests.date": "Requests date",
   "harbor.unlock.date": "Unlock date",
   "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",

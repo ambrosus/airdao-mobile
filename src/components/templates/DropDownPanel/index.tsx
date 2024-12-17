@@ -24,7 +24,7 @@ interface ToolTipProps {
   contentContainerStyle?: ViewStyle;
   headerStyle?: ViewStyle;
   contentWrapperStyle?: ViewStyle;
-  onPress?: () => void;
+  onPress?: (payload?: string) => void;
 }
 
 export const DropDownPanel = ({
@@ -62,7 +62,7 @@ export const DropDownPanel = ({
     );
     initialRotation.value = withTiming(isToolTipClose ? 90 : -90);
     if (onPress) {
-      onPress();
+      onPress(isToolTipClose ? 'open' : 'close');
     }
   };
 

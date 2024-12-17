@@ -9,7 +9,7 @@ import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { PrimaryButton } from '@components/modular';
+import { PrimaryButton, TokenLogo } from '@components/modular';
 import { TextOrSpinner } from '@components/composite';
 
 export const FormTemplate = ({
@@ -47,7 +47,13 @@ export const FormTemplate = ({
             {t(item.name)}
           </Text>
         )}
-        <Row>
+        <Row alignItems="center">
+          {!!item?.symbol && (
+            <>
+              <TokenLogo scale={0.7} token={item.symbol} />
+              <Spacer horizontal value={scale(4)} />
+            </>
+          )}
           <Text
             fontSize={scale(14)}
             color={COLORS.neutral900}
@@ -57,7 +63,7 @@ export const FormTemplate = ({
           </Text>
           {!!item.timeSymbol && (
             <Text fontSize={scale(14)} color={COLORS.neutral900}>
-              {t(item.timeSymbol)}
+              !!!{t(item.timeSymbol)}
             </Text>
           )}
           {!!item.symbol && (

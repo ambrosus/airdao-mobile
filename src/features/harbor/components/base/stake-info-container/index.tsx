@@ -8,12 +8,12 @@ import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
 import { useNavigation } from '@react-navigation/native';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
-import { PlusIcon } from '@components/svg/icons/v2';
 import { NumberUtils } from '@utils/number';
 import { CryptoCurrencyCode } from '@appTypes';
 import { styles } from './styles';
 import { useAMBPrice } from '@hooks';
 import { HarborDataModel } from '@entities/harbor/model/types';
+import { StakeIcon } from '@components/svg/icons/v2/harbor';
 
 interface StakeInfoContainerProps {
   loading: boolean;
@@ -65,7 +65,9 @@ export const StakeInfoContainer = ({
               <Text fontSize={scale(12)}>{t('harbor.staked.amount')}</Text>
               <Spacer value={scale(8)} />
               <Text style={styles.topText} color={COLORS.neutral900}>
-                {NumberUtils.limitDecimalCount(formatEther(userStaked), 2)}
+                {NumberUtils.numberToTransformedLocale(
+                  NumberUtils.limitDecimalCount(formatEther(userStaked), 2)
+                )}
               </Text>
             </View>
           </Row>
@@ -97,10 +99,12 @@ export const StakeInfoContainer = ({
 
       <Spacer value={scale(16)} />
       <PrimaryButton onPress={navigateToStake}>
-        <Row>
-          <PlusIcon color={COLORS.neutral0} />
+        <Row justifyContent="center" alignItems="center">
+          <StakeIcon color={COLORS.neutral0} />
           <Spacer horizontal value={scale(10)} />
-          <Text color={COLORS.neutral0}>{t('staking.header')}</Text>
+          <Text align="justify" color={COLORS.neutral0}>
+            {t('staking.header')}
+          </Text>
         </Row>
       </PrimaryButton>
     </View>

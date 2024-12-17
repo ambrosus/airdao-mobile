@@ -189,15 +189,13 @@ export const ProcessStake = () => {
           <View>
             <Spacer value={scale(8)} />
             <StakedBalanceInfo
-              stakedValue={NumberUtils.limitDecimalCount(
-                +formatEther(userStaked),
-                2
+              stakedValue={NumberUtils.numberToTransformedLocale(
+                NumberUtils.limitDecimalCount(+formatEther(userStaked), 2)
               )}
               coin="AMB"
               title={t('harbor.staked.balance')}
             />
             <Spacer value={scale(8)} />
-
             <InputWithoutTokenSelect
               inputError={inputError}
               value={amountToStake}
