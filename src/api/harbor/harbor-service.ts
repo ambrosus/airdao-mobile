@@ -6,6 +6,7 @@ import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { Cache, CacheKey } from '@lib/cache';
 import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
 import { ILogs } from '@entities/harbor/model/types';
+import moment from 'moment/moment';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
@@ -137,18 +138,7 @@ const getWithdrawalRequests = async (address: string) => {
     const rawWithdrawalsList = await contract.queryFilter(filter);
     const withdrawalsList: ILogs[] = [];
 
-    const formatData = (date: Date) =>
-      date
-        .toLocaleString('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        })
-        .replace(',', '');
-
+    const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
       const currEvent: any = rawWithdrawalsList[i];
 

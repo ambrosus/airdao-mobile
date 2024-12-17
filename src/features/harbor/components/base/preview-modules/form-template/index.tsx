@@ -63,7 +63,7 @@ export const FormTemplate = ({
           </Text>
           {!!item.timeSymbol && (
             <Text fontSize={scale(14)} color={COLORS.neutral900}>
-              !!!{t(item.timeSymbol)}
+              {t(item.timeSymbol)}
             </Text>
           )}
           {!!item.symbol && (
