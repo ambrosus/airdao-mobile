@@ -106,9 +106,6 @@ export const WithdrawToken = ({
       });
 
       if (!result) {
-        sendFirebaseEvent(CustomAppEvents.withdraw_error, {
-          withdrawError: 'withdraw result not found'
-        });
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeErrorScreen')
         );
