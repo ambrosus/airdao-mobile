@@ -76,10 +76,10 @@ export const TiersSelector = ({
   return (
     <View>
       <Row alignItems="center">
-        <Text fontSize={14} color={COLORS.neutral900}>
+        <Text fontSize={scale(14)} color={COLORS.neutral900}>
           {t('harbor.tiers.container.header')}{' '}
         </Text>
-        <Text fontSize={14}>
+        <Text fontSize={scale(14)}>
           {t('harbor.tier')} {userTier}
         </Text>
         <Spacer horizontal value={scale(8)} />
@@ -90,7 +90,7 @@ export const TiersSelector = ({
           contentStyle={[styles.toolTipContainerStyle]}
           isVisible={toolTipVisible}
           content={
-            <Text fontSize={12} color={COLORS.neutral0}>
+            <Text fontSize={scale(12)} color={COLORS.neutral0}>
               {t('harbor.tier.1.content')}
             </Text>
           }

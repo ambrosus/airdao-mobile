@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { RefreshControl, ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -21,12 +21,10 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetRef } from '@components/composite';
-import { useWalletStore } from '@entities/wallet';
-import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';
 import { WithdrawInfo } from '@features/harbor/components/base';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-
+import { styles } from './styles';
 import { useKeyboardHeight } from '@hooks';
 
 export const WithdrawStakeRewardTab = () => {
@@ -35,12 +33,8 @@ export const WithdrawStakeRewardTab = () => {
   const {
     data: { userStaked, token, totalStaked, unStakeDelay },
     ambAmount,
-    bondAmount,
-    updateAll,
-    loading
+    bondAmount
   } = useHarborStore();
-
-  const { wallet } = useWalletStore();
 
   const [amountToWithdraw, setAmountToWithdraw] = useState('');
   const [previewData, setPreviewData] = useState(DEFAULT_WITHDRAW_PREVIEW);
@@ -60,10 +54,6 @@ export const WithdrawStakeRewardTab = () => {
     setPreviewData(_previewData);
     bottomSheetRef.current?.show();
   }, [ambAmount, amountToWithdraw, bondAmount, unStakeDelay.delay]);
-
-  const refetchAll = async () => {
-    updateAll(wallet?.address || '');
-  };
 
   const onChangeText = (value: string) => {
     if (value) {
@@ -94,18 +84,7 @@ export const WithdrawStakeRewardTab = () => {
   }, [initialMargin, keyboardHeight]);
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl
-          onRefresh={refetchAll}
-          refreshing={loading}
-          removeClippedSubviews
-        />
-      }
-      contentContainerStyle={styles.container}
-      style={styles.main}
-    >
+    <View style={styles.main}>
       <View>
         <InputWithoutTokenSelect
           inputError={inputError}
@@ -128,7 +107,7 @@ export const WithdrawStakeRewardTab = () => {
       <Animated.View style={[margin]}>
         <PrimaryButton disabled={isDisabledButton} onPress={onWithdrawPress}>
           <Text
-            fontSize={14}
+            fontSize={scale(14)}
             fontFamily="Inter_500Medium"
             color={COLORS[isDisabledButton ? 'brand300' : 'neutral0']}
           >
@@ -141,6 +120,6 @@ export const WithdrawStakeRewardTab = () => {
         previewData={previewData}
         ref={bottomSheetRef}
       />
-    </ScrollView>
+    </View>
   );
 };

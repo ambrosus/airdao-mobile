@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TiersSelector } from '../../base/tiers-selector';
 import { scale } from '@utils/scaling';
@@ -9,19 +9,15 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRef } from '@components/composite';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
-import { useWalletStore } from '@entities/wallet';
-import { styles } from './styles';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { styles } from './styles';
 
 export const WithdrawRewardOnlyTab = () => {
   const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
-  const { wallet } = useWalletStore();
   const {
     ambAmount,
     bondAmount,
-    updateAll,
-    loading,
     data: { unStakeDelay }
   } = useHarborStore();
 
@@ -38,22 +34,8 @@ export const WithdrawRewardOnlyTab = () => {
     bottomSheetRef.current?.show();
   }, [ambAmount, bondAmount, unStakeDelay]);
 
-  const refetchAll = async () => {
-    updateAll(wallet?.address || '');
-  };
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl
-          onRefresh={refetchAll}
-          refreshing={loading}
-          removeClippedSubviews
-        />
-      }
-      contentContainerStyle={styles.container}
-      style={styles.main}
-    >
+    <View style={styles.main}>
       <TiersSelector
         bondAmount={bondAmount || '0'}
         ambAmount={ambAmount || '0'}
@@ -67,6 +49,6 @@ export const WithdrawRewardOnlyTab = () => {
         previewData={previewData}
         ref={bottomSheetRef}
       />
-    </ScrollView>
+    </View>
   );
 };

@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   tabHeader: {
     fontFamily: 'Inter_700Bold',
     color: COLORS.midnight,
-    fontSize: 16,
+    fontSize: scale(16),
     marginLeft: scale(8)
   },
   tabContainer: {

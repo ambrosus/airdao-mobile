@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '@components/base';
 import { TierRewardItem } from '@entities/harbor/model/types';
 import { styles } from './styles';
+import { scale } from '@utils/scaling';
 
 interface TierItemProps {
   rewardValue: TierRewardItem;
@@ -35,7 +36,7 @@ export const TierItem = ({
   }, [isActive, activeStyle, isItemAvailable, availableStyle, disabledStyle]);
   return (
     <View style={{ ...styles.main, backgroundColor: _styles.backgroundColor }}>
-      <Text fontSize={14} color={_styles.color}>
+      <Text fontSize={scale(14)} color={_styles.color}>
         {value * 100}%
       </Text>
     </View>

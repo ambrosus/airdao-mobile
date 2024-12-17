@@ -10,10 +10,10 @@ export const styles = StyleSheet.create({
     padding: scale(16)
   },
   topText: {
-    fontSize: 14
+    fontSize: scale(14)
   },
   bottomText: {
-    fontSize: 12
+    fontSize: scale(12)
   },
   infoMain: {
     backgroundColor: COLORS.neutral100,
@@ -22,11 +22,11 @@ export const styles = StyleSheet.create({
   },
   infoTitleText: {
     color: COLORS.neutral600,
-    fontSize: 14
+    fontSize: scale(14)
   },
   intoText: {
     color: COLORS.neutral900,
-    fontSize: 14
+    fontSize: scale(14)
   },
   aprText: {
     color: COLORS.success500

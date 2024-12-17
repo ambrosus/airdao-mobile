@@ -23,7 +23,7 @@ export const ErrorTemplate = ({ onClose }: PreviewFormModel) => {
         <Spacer value={scale(12)} />
         <Text
           color={COLORS.neutral900}
-          fontSize={24}
+          fontSize={scale(24)}
           fontFamily="Inter_700Bold"
         >
           {t('common.status.failed')}

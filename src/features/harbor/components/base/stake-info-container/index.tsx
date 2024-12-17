@@ -62,7 +62,7 @@ export const StakeInfoContainer = ({
               </Text>
             </Row>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text fontSize={12}>{t('harbor.staked.amount')}</Text>
+              <Text fontSize={scale(12)}>{t('harbor.staked.amount')}</Text>
               <Spacer value={scale(8)} />
               <Text style={styles.topText} color={COLORS.neutral900}>
                 {NumberUtils.limitDecimalCount(formatEther(userStaked), 2)}

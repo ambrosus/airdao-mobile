@@ -60,11 +60,11 @@ export const SuccessTemplate = ({
     return (
       <View style={{ paddingVertical: scale(6) }}>
         <Row justifyContent="space-between">
-          <Text fontSize={14} color={COLORS.neutral900}>
+          <Text fontSize={scale(14)} color={COLORS.neutral900}>
             {t(item.name)}
           </Text>
           <Text
-            fontSize={14}
+            fontSize={scale(14)}
             color={COLORS.neutral900}
             style={item.textStyle || {}}
           >
@@ -94,7 +94,7 @@ export const SuccessTemplate = ({
       )}
       <Spacer value={scale(12)} />
       <PrimaryButton onPress={onPreviewClose}>
-        <Text fontSize={14} color={COLORS.neutral0}>
+        <Text fontSize={scale(14)} color={COLORS.neutral0}>
           {t('kosmos.button.close')}
         </Text>
       </PrimaryButton>
@@ -102,7 +102,7 @@ export const SuccessTemplate = ({
         <>
           <Spacer value={scale(12)} />
           <SecondaryButton onPress={goToMyRequests}>
-            <Text fontSize={14} color={COLORS.neutral900}>
+            <Text fontSize={scale(14)} color={COLORS.neutral900}>
               {t('harbor.requests.header')}
             </Text>
           </SecondaryButton>

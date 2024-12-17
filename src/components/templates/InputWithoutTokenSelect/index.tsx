@@ -159,7 +159,7 @@ export const InputWithoutTokenSelect = forwardRef<
         <View style={[styles.wrapper, inputError ? styles.errorWrap : {}]}>
           {label && (
             <Text
-              fontSize={14}
+              fontSize={scale(14)}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
@@ -199,9 +199,9 @@ export const InputWithoutTokenSelect = forwardRef<
             </Pressable>
           </View>
           <Row justifyContent="space-between" alignItems="center">
-            <Text fontSize={12}>
+            <Text fontSize={scale(12)}>
               {t('common.balance')}:{' '}
-              <Text fontSize={12} color={COLORS.neutral900}>
+              <Text fontSize={scale(12)} color={COLORS.neutral900}>
                 {NumberUtils.formatNumber(
                   +NumberUtils.limitDecimalCount(
                     token.balance.formattedBalance,
@@ -215,7 +215,7 @@ export const InputWithoutTokenSelect = forwardRef<
               <Button style={styles.button} onPress={onPressMaxAmount}>
                 <Text
                   fontFamily="Inter_600SemiBold"
-                  fontSize={12}
+                  fontSize={scale(12)}
                   color={COLORS.brand600}
                 >
                   {t('bridge.preview.button.max')}
@@ -223,7 +223,7 @@ export const InputWithoutTokenSelect = forwardRef<
               </Button>
             ) : (
               <View>
-                <Text fontSize={12} color={COLORS.error500}>
+                <Text fontSize={scale(12)} color={COLORS.error500}>
                   {inputError}
                 </Text>
               </View>
@@ -252,13 +252,13 @@ export const InputWithoutTokenSelect = forwardRef<
               <Row alignItems="center">
                 <TokenLogo token={exchange.token} />
                 <Spacer horizontal value={scale(8)} />
-                <Text fontSize={14} color={COLORS.neutral900}>
+                <Text fontSize={scale(14)} color={COLORS.neutral900}>
                   {exchange.token}
                 </Text>
               </Row>
               <Text
                 color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
-                fontSize={14}
+                fontSize={scale(14)}
               >
                 {+exchange?.value > 0 ? exchange.value : 0}
               </Text>

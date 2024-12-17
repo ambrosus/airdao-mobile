@@ -537,7 +537,7 @@
   "harbor.withdraw.preview.bond.reward": "Reward BOND",
   "harbor.withdraw.preview.delay": "Withdrawal Delay",
 
-  "harbor.button.processing": "İşleme",
+  "harbor.button.processing": "Processing",
 
   "harbor.tier.1.header": "New Stakers",
   "harbor.tier.1.content": "25% rewards available immediately, increasing by 1% every 250K blocks.",
@@ -550,6 +550,11 @@
 
   "harbor.tier.4.header": "3yrs+ Stakers",
   "harbor.tier.4.content": "100% rewards available immediately, increasing by 1% every 250K blocks.",
+
+  "harbor.requests.date": "Requests date",
+  "harbor.unlock.date": "Unlock date",
+  "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
+
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
