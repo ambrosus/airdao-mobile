@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  main: { backgroundColor: COLORS.neutral50, height: '100%' }
+  main: {
+    height: '100%'
+  },
+  container: {
+    justifyContent: 'space-between'
+  }
 });

@@ -45,6 +45,7 @@ export interface HarborStoreModel {
   activeBondTier: TierRewardItem;
   claimAmount: BigNumber;
   updateWithdrawList: (payload: string) => void;
+  clearWithdrawList: () => void;
   getClaimAmount: (payload: string) => void;
   setActiveBondTier: (payload: TierRewardItem) => void;
   bondAmount: string;

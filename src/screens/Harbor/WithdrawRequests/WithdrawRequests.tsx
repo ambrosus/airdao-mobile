@@ -20,14 +20,19 @@ import { scale } from '@utils/scaling';
 import { NumberUtils } from '@utils/number';
 import { styles } from './WithdrawRequests.style';
 import { useEffectOnce } from '@hooks';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const WithdrawRequests = () => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
   const insets = useSafeAreaInsets();
 
-  const { updateWithdrawList, withdrawalList, withdrawListLoader } =
-    useHarborStore();
+  const {
+    updateWithdrawList,
+    withdrawalList,
+    withdrawListLoader,
+    clearWithdrawList
+  } = useHarborStore();
 
   const isEmptyList = !withdrawalList.length;
 
@@ -35,6 +40,14 @@ export const WithdrawRequests = () => {
     useCallback(() => {
       updateWithdrawList(wallet?.address || '');
     }, [updateWithdrawList, wallet?.address])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        clearWithdrawList();
+      };
+    }, [clearWithdrawList])
   );
 
   const renderItem = (item: ListRenderItemInfo<ILogs>) => {
@@ -110,7 +123,7 @@ export const WithdrawRequests = () => {
           height: scale(40)
         }}
       >
-        <Text>{t('common.no.transactions')}</Text>
+        {!withdrawListLoader && <Text>{t('common.no.transactions')}</Text>}
       </View>
     );
   };

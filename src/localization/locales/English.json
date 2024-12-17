@@ -553,6 +553,7 @@
 
   "harbor.requests.date": "Requests date",
   "harbor.unlock.date": "Unlock date",
+  "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
 
 
   "wallet.connect": {

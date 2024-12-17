@@ -35,6 +35,9 @@ export const useHarborStore = create<HarborStoreModel>((set) => ({
       set({ withdrawListLoader: false });
     }
   },
+  clearWithdrawList: async () => {
+    set({ withdrawalList: [] });
+  },
   updateAll: async (address: string) => {
     try {
       set({ loading: true });
