@@ -245,7 +245,7 @@
 
   "import.wallet.key.show": "Show private key",
   "import.wallet.key.hide": "Hide private key",
-  "import.wallet.key.error.exist": "Wallet already exists in your account.",
+  "import.wallet.key.error.exist": "Wallet already imported. Please use a different recovery method or access your existing wallet.",
   "import.wallet.key.error.invalid": "Invalid private key.",
   "import.wallet.key.error.try.again": "Please try again.",
   "import.wallet.key.success": "Your wallet has been imported.",

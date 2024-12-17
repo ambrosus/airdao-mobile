@@ -17,9 +17,12 @@ export const styles = StyleSheet.create({
   error: { paddingHorizontal: scale(20) },
   button: {
     flexDirection: 'row',
-    bottom: verticalScale(32),
     height: verticalScale(54),
     marginHorizontal: scale(16)
+  },
+  footerErrorMessage: {
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(24)
   },
   buttonText: { marginVertical: scale(12) }
 });

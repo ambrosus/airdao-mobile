@@ -1,4 +1,11 @@
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  RefObject,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback
+} from 'react';
 import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -23,30 +30,23 @@ import { WalletUtils } from '@utils/wallet';
 import { Toast, ToastType } from '@components/modular';
 import { usePasscodeStore } from '@features/passcode';
 import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';
+import { useAllAccounts } from '@hooks/database';
+
+const INITIAL_ARRAY = Array(12).fill('');
 
 export const ImportWallet = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<HomeNavigationProp>();
   const { isPasscodeEnabled } = usePasscodeStore();
+  const { data: accounts } = useAllAccounts();
 
-  const { t } = useTranslation();
+  const [mnemonicWords, setMnemonicWords] = useState(INITIAL_ARRAY);
 
-  const [mnemonicWords, setMnemonicWords] = useState([
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''
-  ]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [isWalletAlreadyExist, setIsWalletAlreadyExist] = useState(false);
+
   const inputs = useRef(
     Array(12)
       .fill(null)
@@ -57,45 +57,56 @@ export const ImportWallet = () => {
     setIsButtonEnabled(mnemonicWords.every((word) => word.trim() !== ''));
   }, [mnemonicWords]);
 
-  const focusNextInput = (from: number) => {
-    if (from === 11) inputs.current[from]?.current?.blur();
-    else inputs.current[from + 1]?.current?.focus();
-  };
+  const focusNextInput = useCallback(
+    (from: number) => {
+      if (from === mnemonicWords.length) inputs.current[from]?.current?.blur();
+      else inputs.current[from + 1]?.current?.focus();
+    },
+    [mnemonicWords.length]
+  );
 
-  const handleWordChange = (index: number, text: string) => {
-    setError(false);
-    const updatedWords = [...mnemonicWords];
-    if (text.length >= 2 && text[text.length - 1] == ' ') {
-      // focus next input on space
-      focusNextInput(index);
-    }
-    updatedWords[index] = StringUtils.removeNonAlphabeticCharacters(text);
-    setMnemonicWords(updatedWords);
-  };
-  const navigateToSetUpSecurity = (address: string) => {
-    Toast.show({
-      text: t('import.wallet.toast.title'),
-      subtext: StringUtils.formatAddress(address, 5, 6),
-      type: ToastType.Success
-    });
+  const handleWordChange = useCallback(
+    (index: number, text: string) => {
+      setError(false);
+      const updatedWords = [...mnemonicWords];
+      if (text.length >= 2 && text[text.length - 1] == ' ') {
+        // focus next input on space
+        focusNextInput(index);
+      }
+      updatedWords[index] = StringUtils.removeNonAlphabeticCharacters(text);
+      setMnemonicWords(updatedWords);
+    },
+    [focusNextInput, mnemonicWords]
+  );
 
-    if (isPasscodeEnabled) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
-        })
-      );
-    } else {
-      navigation.navigate('Tabs', {
-        screen: 'Settings',
-        // @ts-ignore
-        params: { screen: 'SetupPasscode' }
+  const navigateToSetUpSecurity = useCallback(
+    (address: string) => {
+      Toast.show({
+        text: t('import.wallet.toast.title'),
+        subtext: StringUtils.formatAddress(address, 5, 6),
+        type: ToastType.Success
       });
-    }
-  };
 
-  const navigateToRestoreWallet = async () => {
+      if (isPasscodeEnabled) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Tabs', params: { screen: 'Wallets' } }]
+          })
+        );
+      } else {
+        navigation.navigate('Tabs', {
+          screen: 'Settings',
+          // @ts-ignore
+          params: { screen: 'SetupPasscode' }
+        });
+      }
+    },
+    [isPasscodeEnabled, navigation, t]
+  );
+
+  const navigateToRestoreWallet = useCallback(async () => {
+    setIsWalletAlreadyExist(false);
     if (isButtonEnabled) {
       setError(false);
       setIsLoading(true);
@@ -104,22 +115,31 @@ export const ImportWallet = () => {
         if (!MnemonicUtils.isValidMnemonic(mnemonicPhrase)) {
           setError(true);
           setIsLoading(false);
-        } else {
-          const wallet = await WalletUtils.processWallet(mnemonicPhrase);
-          navigateToSetUpSecurity(wallet.address);
+          return;
         }
-      } catch (error) {
-        // TODO add localization
-        Alert.alert(
-          'Error',
-          // @ts-ignore
-          error.message || 'An error occurred while importing the wallet.'
+
+        const wallet = await WalletUtils.processWallet(
+          mnemonicPhrase,
+          accounts
         );
+
+        navigateToSetUpSecurity(wallet?.address ?? '');
+      } catch (error) {
+        if ((error as { message: string }).message.includes('400')) {
+          setIsWalletAlreadyExist(true);
+        } else {
+          setIsWalletAlreadyExist(false);
+          Alert.alert(
+            'Error',
+            // @ts-ignore
+            error.message || 'An error occurred while importing the wallet.'
+          );
+        }
       } finally {
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     }
-  };
+  }, [isButtonEnabled, mnemonicWords, accounts, navigateToSetUpSecurity]);
 
   const buttonTitle = useMemo(() => {
     return isLoading ? 'button.importing.wallet' : 'button.confirm';
@@ -145,7 +165,7 @@ export const ImportWallet = () => {
         titlePosition="center"
         style={styles.headerShadow}
       />
-      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+      <View style={styles.container}>
         <KeyboardAwareScrollView
           extraHeight={verticalScale(180)}
           enableOnAndroid
@@ -185,6 +205,18 @@ export const ImportWallet = () => {
             )}
           </KeyboardDismissingView>
         </KeyboardAwareScrollView>
+
+        {!!isWalletAlreadyExist && (
+          <Text
+            fontSize={15}
+            fontFamily="Inter_500Medium"
+            color={COLORS.error600}
+            style={styles.footerErrorMessage}
+          >
+            {t('import.wallet.key.error.exist')}
+          </Text>
+        )}
+
         <Button
           disabled={buttonDisabled}
           onPress={navigateToRestoreWallet}
