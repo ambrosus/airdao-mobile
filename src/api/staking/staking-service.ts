@@ -7,8 +7,10 @@ import {
   StakeArgs
 } from '@api/staking/types';
 import { Cache, CacheKey } from '@lib/cache';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const STAKE_ESTIMATED_GAS_LIMIT = 67079;
 const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;

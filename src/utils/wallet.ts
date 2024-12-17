@@ -15,8 +15,11 @@ import { Cache, CacheKey } from '../lib/cache';
 import { AccountUtils } from './account';
 import { CryptoUtils } from './crypto';
 import { API } from '@api/api';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'name' | 'number'> & {

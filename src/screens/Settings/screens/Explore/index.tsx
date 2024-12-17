@@ -51,8 +51,11 @@ import { ExplorerWalletItem } from './components';
 import { SearchSort } from './Search.types';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useWatchlist } from '@hooks';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { Header } from '@components/composite';
 import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 

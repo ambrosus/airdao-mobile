@@ -41,8 +41,11 @@ import { ethereumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 import i18n from '@localization/i18n';
 import { useListActions } from '@features/lists';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const AddressSources: Segment[] = [
   {

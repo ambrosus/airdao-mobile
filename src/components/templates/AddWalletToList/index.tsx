@@ -12,6 +12,11 @@ import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useListActions } from '@features/lists';
 
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;
   lists: AccountList[];
@@ -47,6 +52,7 @@ export const AddWalletToList = ({
     const { item: list } = args;
     const onPress = () => {
       toggleWalletInList(list);
+      sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added);
     };
 
     return (

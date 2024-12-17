@@ -20,8 +20,11 @@ import { COLORS } from '@constants/colors';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
 import { Cache, CacheKey } from '@lib/cache';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { scale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes/navigation';
 import { StringUtils } from '@utils/string';

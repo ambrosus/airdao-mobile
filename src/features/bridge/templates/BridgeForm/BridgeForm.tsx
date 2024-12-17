@@ -43,6 +43,11 @@ import {
 import { getAllBridgeTokenBalance } from '@lib';
 import { useWalletStore } from '@entities/wallet';
 
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
@@ -283,6 +288,7 @@ export const BridgeForm = () => {
     setPreviewLoader(true);
     processBridge(false, bridgePreviewDataRef.current.value.feeData)
       .then((transaction) => {
+        sendFirebaseEvent(CustomAppEvents.bridge_finish);
         const transactionWaitingInfo = {
           ...DEFAULT_TRANSACTION,
           networkFrom: fromData.value.name,

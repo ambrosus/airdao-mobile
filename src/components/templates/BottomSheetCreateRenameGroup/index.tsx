@@ -24,8 +24,11 @@ import { verticalScale } from '@utils/scaling';
 import { StringUtils } from '@utils/string';
 import { useTranslation } from 'react-i18next';
 import { BottomSheet } from '@components/composite';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

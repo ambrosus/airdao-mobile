@@ -11,8 +11,11 @@ import {
 } from '@features/kosmos/lib/hooks';
 import { purchaseBonds } from '@features/kosmos/lib/contracts';
 import Config from '@constants/config';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { buttonWithShadowStyle } from '@constants/shadow';
 import { TextOrSpinner } from '@components/composite';
 import { usePurchaseStore } from '@features/kosmos';

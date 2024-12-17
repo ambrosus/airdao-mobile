@@ -2,8 +2,11 @@ import { useCallback } from 'react';
 import { PublicAddressListDB } from '@database';
 import { CacheableAccountList } from '@appTypes';
 import { useListsStore } from '@entities/lists/model/lists.store';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { AccountList, ExplorerAccount } from '@models';
 import { useAddressesStore } from '@entities/addresses';
 

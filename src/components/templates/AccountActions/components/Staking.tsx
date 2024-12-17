@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { StakeAccountActionIcon } from '@components/svg/icons/v2/actions';
 
 interface StakingProps {

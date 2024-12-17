@@ -9,8 +9,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { scale, verticalScale } from '@utils/scaling';
 import { MAIN_TABS } from '@navigation/constants';
 import { useCurrentRoute } from '@contexts/Navigation/Navigation.context';
