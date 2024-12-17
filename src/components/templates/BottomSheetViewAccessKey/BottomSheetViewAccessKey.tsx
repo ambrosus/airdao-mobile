@@ -1,91 +1,84 @@
-import React, { ForwardedRef, forwardRef } from 'react';
-import { BottomSheetProps, BottomSheetRef } from '@components/composite';
-import { BottomSheetFloat, PrimaryButton } from '@components/modular';
+import React, { ForwardedRef, forwardRef, useMemo } from 'react';
+import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
+import {
+  BottomSheet,
+  BottomSheetProps,
+  BottomSheetRef
+} from '@components/composite';
+import { PrimaryButton } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { useTranslation } from 'react-i18next';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import { SettingsTabNavigationProp } from '@appTypes';
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, View } from 'react-native';
-import { CloseIcon } from '@components/svg/icons';
+import { _delayNavigation } from '@utils';
 
 interface BottomSheetViewAccessKeyProps extends BottomSheetProps {
   walletHash: string;
-  dismiss: () => any;
+  dismiss: () => void;
 }
 export const BottomSheetViewAccessKey = forwardRef<
   BottomSheetRef,
   BottomSheetViewAccessKeyProps
 >((props, ref) => {
+  const { t } = useTranslation();
   const { ...bottomSheetProps } = props;
   const { walletHash, dismiss } = props;
+  const { bottom: bottomInset } = useSafeAreaInsets();
 
-  const { t } = useTranslation();
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
   const navigation: SettingsTabNavigationProp = useNavigation();
 
   const onViewRecoveryPress = async (): Promise<void> => {
-    dismiss();
     const onPasscodeApprove = () => {
       navigation.navigate('AccessKeys', { walletHash });
     };
 
-    setTimeout(
-      () =>
-        navigation.navigate('Passcode', {
-          onPasscodeApprove,
-          title: t('singleWallet.warning.button')
-        }),
-      500
+    _delayNavigation(dismiss, () =>
+      navigation.navigate('Passcode', {
+        onPasscodeApprove,
+        title: t('singleWallet.warning.button')
+      })
     );
   };
 
-  const onClose = () => {
-    localRef?.current?.dismiss();
-  };
+  const paddingBottom = useMemo(
+    () => (bottomInset === 0 ? 24 : bottomInset * 1.5),
+    [bottomInset]
+  );
 
   return (
-    <BottomSheetFloat
+    <BottomSheet
       ref={localRef}
-      swiperIconVisible
+      title={t('singleWallet.warning.title')}
       avoidKeyboard={false}
-      containerStyle={styles.main}
+      containerStyle={{ paddingBottom }}
       {...bottomSheetProps}
     >
-      <View style={styles.titleContainer}>
+      <View style={styles.innerContainer}>
         <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={scale(20)}
-          color={COLORS.neutral900}
+          fontSize={scale(16)}
+          fontFamily="Inter_400Regular"
+          color={COLORS.neutral800}
         >
-          {t('singleWallet.warning.title')}
+          {t('singleWallet.warning.description')}
         </Text>
-        <TouchableOpacity onPress={onClose}>
-          <CloseIcon border scale={0.7} />
-        </TouchableOpacity>
+        <Spacer value={scale(20)} />
+        <PrimaryButton onPress={onViewRecoveryPress}>
+          <Text
+            fontSize={scale(17)}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral0}
+          >
+            {t('singleWallet.warning.button')}
+          </Text>
+        </PrimaryButton>
       </View>
-      <Spacer value={15} />
-      <Text
-        fontFamily="Inter_400Regular"
-        fontSize={scale(16)}
-        color={COLORS.neutral900}
-      >
-        {t('singleWallet.warning.description')}
-      </Text>
-      <Spacer value={scale(20)} />
-      <PrimaryButton onPress={onViewRecoveryPress}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={scale(17)}
-          color={COLORS.neutral0}
-        >
-          {t('singleWallet.warning.button')}
-        </Text>
-      </PrimaryButton>
-    </BottomSheetFloat>
+    </BottomSheet>
   );
 });
