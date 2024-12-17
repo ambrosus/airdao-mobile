@@ -136,7 +136,6 @@ export function useListActions(onDismissBottomSheet?: () => void) {
       try {
         if (accounts.length === 0) return;
 
-        sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added);
         for (const account of accounts) {
           const listInContext = listsOfAddressGroup.find(
             (l) => l.id === list.id
