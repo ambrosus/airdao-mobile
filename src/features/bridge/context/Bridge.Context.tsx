@@ -1,8 +1,8 @@
 import { createContextSelector } from '@utils/createContextSelector';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  Config as BridgeConfigModel,
   BridgeDataState,
+  Config as BridgeConfigModel,
   FeeData,
   Token
 } from '@lib/bridgeSDK/models/types';
@@ -31,6 +31,8 @@ import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { useTranslation } from 'react-i18next';
 import { Toast, ToastType } from '@components/modular';
 import { useWalletStore } from '@entities/wallet';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const BridgeContext = () => {
   const { t } = useTranslation();
@@ -65,14 +67,21 @@ export const BridgeContext = () => {
   const bridgeErrorHandler = useCallback(
     (_error: unknown) => {
       // @ts-ignore
-      const errorCode = _error.code;
+      const errorCode = _error?.code;
       // @ts-ignore
-      const errorMethods = _error.method;
+      const errorMethods = _error?.method;
+      // @ts-ignore
+      const errorMessage = _error?.message || JSON.stringify(_error);
+
       const type = ToastType.Failed;
 
       const insufficientFundsToPayFees =
         errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
         errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS;
+
+      sendFirebaseEvent(CustomAppEvents.bridge_error, {
+        bridgeError: errorMessage
+      });
 
       switch (true) {
         case insufficientFundsToPayFees:
@@ -125,9 +134,6 @@ export const BridgeContext = () => {
           setSelectedTokenPairs(pairsToTokenByDefault);
         }
       }
-    } catch (e) {
-      // TODO remove IT after testing
-      alert(`networkDataSetterError ${JSON.stringify(e)}`);
     } finally {
       setTemplateDataLoader(false);
     }
@@ -155,9 +161,7 @@ export const BridgeContext = () => {
         setBridges(bridges);
       }
     } catch (e) {
-      // TODO remove IT after testing
       bridgeErrorHandler(e);
-      alert(`DATA BRIDLE LOADING ERROR  ${JSON.stringify(e)}`);
     } finally {
       setBridgeDataLoader(false);
     }
@@ -246,6 +250,9 @@ export const BridgeContext = () => {
             gasFee: getOnlyGasFee
           };
           if (bridgeConfig) {
+            if (!getOnlyGasFee) {
+              sendFirebaseEvent(CustomAppEvents.bridge_start);
+            }
             return await bridgeWithdraw({
               bridgeConfig,
               fromNetwork: fromData.value.id,
@@ -256,11 +263,6 @@ export const BridgeContext = () => {
       } catch (e) {
         // ignore
         bridgeErrorHandler(e);
-        alert(
-          `${
-            getOnlyGasFee ? 'getOnlyGasFee' : ''
-          } processBridge ERROR ${JSON.stringify(e)}`
-        );
       }
     },
     [

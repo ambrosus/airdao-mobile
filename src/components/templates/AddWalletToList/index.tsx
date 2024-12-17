@@ -11,6 +11,8 @@ import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useListActions } from '@features/lists';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -47,6 +49,7 @@ export const AddWalletToList = ({
     const { item: list } = args;
     const onPress = () => {
       toggleWalletInList(list);
+      sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added);
     };
 
     return (

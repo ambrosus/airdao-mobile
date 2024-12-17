@@ -42,6 +42,8 @@ import {
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
 import { useWalletStore } from '@entities/wallet';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
@@ -283,6 +285,7 @@ export const BridgeForm = () => {
     setPreviewLoader(true);
     processBridge(false, bridgePreviewDataRef.current.value.feeData)
       .then((transaction) => {
+        sendFirebaseEvent(CustomAppEvents.bridge_finish);
         const transactionWaitingInfo = {
           ...DEFAULT_TRANSACTION,
           networkFrom: fromData.value.name,
