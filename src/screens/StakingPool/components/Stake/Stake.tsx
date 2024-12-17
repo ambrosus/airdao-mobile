@@ -105,9 +105,6 @@ export const StakeToken = ({
       });
 
       if (!result) {
-        sendFirebaseEvent(CustomAppEvents.stake_error, {
-          stakeError: 'stake result not found'
-        });
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeErrorScreen')
         );
