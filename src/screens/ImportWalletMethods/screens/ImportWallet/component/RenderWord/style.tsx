@@ -9,5 +9,12 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%'
+  },
+  columnWrapperStyle: {
+    gap: scale(17),
+    justifyContent: 'space-between'
+  },
+  contentContainerStyle: {
+    gap: scale(17)
   }
 });
