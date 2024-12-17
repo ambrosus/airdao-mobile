@@ -21,8 +21,11 @@ import { ReturnedPoolDetails } from '@api/staking/types';
 import { staking } from '@api/staking/staking-service';
 import { HomeParamsList } from '@appTypes';
 import { StakePending } from '@screens/StakingPool/components';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 

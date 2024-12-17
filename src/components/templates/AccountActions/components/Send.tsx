@@ -4,8 +4,10 @@ import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { SendAccountActionIcon } from '@components/svg/icons/v2/actions';
 import { useSendFundsStore } from '@features/send-funds';
 

@@ -11,8 +11,11 @@ import {
   SwapErrorImpactButton
 } from '@features/swap/components/base/swap-buttons-list';
 import { AllowanceStatus, BottomSheetStatus } from '@features/swap/types';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const SWAP_ERROR_TITLE = 'The transaction cannot succeed due to error:';
 const SWAP_ERROR_DESCRIPTION =

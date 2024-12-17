@@ -4,8 +4,11 @@ import { useAddressesStore } from '@entities/addresses';
 import { API } from '@api/api';
 import { ExplorerAccount } from '@models/Explorer';
 import { AddressUtils } from '@utils/address';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 export const useWatchlist = () => {
   const { allAddresses } = useAddressesStore();

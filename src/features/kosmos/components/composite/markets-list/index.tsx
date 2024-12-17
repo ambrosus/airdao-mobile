@@ -18,8 +18,11 @@ import {
 import { filter } from '@/features/kosmos/utils';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { HomeNavigationProp } from '@appTypes';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const ESTIMATED_ITEM_SIZE = 56;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };

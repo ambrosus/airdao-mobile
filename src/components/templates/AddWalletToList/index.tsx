@@ -11,8 +11,11 @@ import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
 import { NumberUtils } from '@utils/number';
 import { useListActions } from '@features/lists';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;

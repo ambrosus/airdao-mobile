@@ -5,8 +5,11 @@ import { Row } from '@components/base';
 import { AccountActionItem } from '../../base';
 import { QRCodeIcon } from '@components/svg/icons/v2';
 import { SendAccountActionIcon } from '@components/svg/icons/v2/actions';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { COLORS } from '@constants/colors';
 import { Token } from '@models';
 import { HomeNavigationProp } from '@appTypes';

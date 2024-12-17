@@ -31,8 +31,11 @@ import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { useTranslation } from 'react-i18next';
 import { Toast, ToastType } from '@components/modular';
 import { useWalletStore } from '@entities/wallet';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 export const BridgeContext = () => {
   const { t } = useTranslation();
@@ -66,13 +69,10 @@ export const BridgeContext = () => {
 
   const bridgeErrorHandler = useCallback(
     (_error: unknown) => {
-      // @ts-ignore
-      const errorCode = _error?.code;
-      // @ts-ignore
-      const errorMethods = _error?.method;
-      // @ts-ignore
-      const errorMessage = _error?.message || JSON.stringify(_error);
-
+      const errorCode = (_error as { code: string }).code;
+      const errorMethods = (_error as { method?: string }).method;
+      const errorMessage =
+        (_error as { message?: string }).message || JSON.stringify(_error);
       const type = ToastType.Failed;
 
       const insufficientFundsToPayFees =

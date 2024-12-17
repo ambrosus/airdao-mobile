@@ -40,8 +40,11 @@ import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { SearchTabNavigationProp } from '@appTypes';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { useAddressesStore } from '@entities/addresses';
 
 interface SearchAdressProps {

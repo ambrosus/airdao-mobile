@@ -25,8 +25,11 @@ import { Token } from '@models';
 import { TransactionUtils } from '@utils/transaction';
 import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import {
   useAMBEntity,
   useAmountChangeHandler

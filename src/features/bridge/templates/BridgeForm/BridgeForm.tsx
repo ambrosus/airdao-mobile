@@ -42,8 +42,11 @@ import {
 } from '@features/bridge/constants';
 import { getAllBridgeTokenBalance } from '@lib';
 import { useWalletStore } from '@entities/wallet';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();

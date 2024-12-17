@@ -17,8 +17,11 @@ import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
 import { SecondaryButton, Toast, ToastType } from '@components/modular';
 import { getTimeRemaining, TxType, useToken } from '@entities/kosmos';
 import { COLORS } from '@constants/colors';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { TextOrSpinner } from '@components/composite';
 import { buttonWithShadowStyle } from '@constants/shadow';
 
