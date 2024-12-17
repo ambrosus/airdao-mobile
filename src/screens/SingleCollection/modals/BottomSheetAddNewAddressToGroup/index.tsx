@@ -41,6 +41,8 @@ import { ethereumAddressRegex } from '@constants/regex';
 import { styles } from './styles';
 import i18n from '@localization/i18n';
 import { useListActions } from '@features/lists';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 const AddressSources: Segment[] = [
   {
@@ -214,6 +216,9 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
   const submitSelectedAddresses = () => {
     localRef.current?.dismiss();
     onToggleAddressInList(selectedAddresses, collection);
+    selectedAddresses.forEach(() =>
+      sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added)
+    );
     resetState();
   };
 
