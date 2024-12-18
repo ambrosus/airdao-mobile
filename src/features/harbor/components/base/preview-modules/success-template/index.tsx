@@ -30,22 +30,24 @@ export const SuccessTemplate = ({
     ? new Date(Number(transaction?.timestamp) * 1000)
     : null;
 
-  const isWithdrawModal = modalType !== 'stake';
+  const isStakeModal = modalType === 'stake';
+  const isWithdrawModal = !isStakeModal;
 
   const titleData = useMemo(
     () => (data && data[0].title ? data[0] : null),
     [data]
   );
 
-  const listData = transaction?.timestamp
-    ? [
-        ...data,
-        {
-          name: 'common.date',
-          value: newDate ? moment(newDate).format('DD/MM/YYYY  HH:mm') : ''
-        }
-      ]
-    : data;
+  const listData =
+    transaction?.timestamp && isStakeModal
+      ? [
+          ...data,
+          {
+            name: 'common.date',
+            value: newDate ? moment(newDate).format('DD/MM/YYYY  HH:mm') : ''
+          }
+        ]
+      : data;
 
   const goToMyRequests = async () => {
     onPreviewClose();

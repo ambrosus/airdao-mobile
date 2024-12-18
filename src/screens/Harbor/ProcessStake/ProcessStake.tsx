@@ -221,7 +221,7 @@ export const ProcessStake = () => {
             />
             <Spacer value={scale(16)} />
           </View>
-          <Animated.View style={[animatedMargin]}>
+          <Animated.View style={[animatedMargin, styles.buttonWrapper]}>
             <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
               <Text
                 fontFamily="Inter_700Bold"
