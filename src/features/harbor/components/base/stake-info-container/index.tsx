@@ -98,11 +98,14 @@ export const StakeInfoContainer = ({
       )}
 
       <Spacer value={scale(16)} />
-      <PrimaryButton onPress={navigateToStake}>
+      <PrimaryButton disabled={loading} onPress={navigateToStake}>
         <Row justifyContent="center" alignItems="center">
-          <StakeIcon color={COLORS.neutral0} />
+          <StakeIcon color={COLORS[loading ? 'brand300' : 'neutral0']} />
           <Spacer horizontal value={scale(10)} />
-          <Text align="justify" color={COLORS.neutral0}>
+          <Text
+            align="justify"
+            color={COLORS[loading ? 'brand300' : 'neutral0']}
+          >
             {t('staking.header')}
           </Text>
         </Row>
