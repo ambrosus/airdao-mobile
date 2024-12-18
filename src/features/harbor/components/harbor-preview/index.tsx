@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { useForwardedRef } from '@hooks';
+import { useBalanceOfAddress, useForwardedRef } from '@hooks';
 import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
@@ -25,6 +25,9 @@ export const BottomSheetHarborPreView = forwardRef<
   const bottomSheetRef = useForwardedRef(ref);
   const { wallet } = useWalletStore();
   const { activeAmbTier, updateAll } = useHarborStore();
+  const { refetch: refetchAmbBalance } = useBalanceOfAddress(
+    wallet?.address || ''
+  );
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { t } = useTranslation();
 
@@ -48,6 +51,9 @@ export const BottomSheetHarborPreView = forwardRef<
     if (loading) return;
     bottomSheetRef.current?.dismiss();
     if (isError || !!resultTx) {
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
       updateAll(wallet?.address || '');
     }
     if (!!resultTx && amountSetter) {
@@ -63,6 +69,7 @@ export const BottomSheetHarborPreView = forwardRef<
     bottomSheetRef,
     isError,
     loading,
+    refetchAmbBalance,
     resultTx,
     updateAll,
     wallet?.address
