@@ -46,6 +46,18 @@ export enum CustomAppEvents {
   explorer_page = 'explorer_page',
   explorer_address_open = 'explorer_address_open',
   explorer_search = 'explorer_search',
-  explorer_address_watchlist_added = 'explorer_address_watchlist_added',
-  explorer_address_watchlist_group_added = 'explorer_address_watchlist_group_added'
+
+  harbor_stake_start = 'harbor_stake_start',
+  harbor_stake_finish = 'harbor_stake_finish',
+  harbor_stake_error = 'harbor_stake_error',
+  harbor_withdraw_reward_start = 'harbor_withdraw_reward_start',
+  harbor_withdraw_start = 'harbor_withdraw_start',
+  harbor_withdraw_finish = 'harbor_withdraw_finish',
+  harbor_withdraw_error = 'harbor_withdraw_error',
+
+  products_swap = 'products_swap',
+  products_bridge = 'products_bridge',
+  products_stake = 'products_stake',
+  products_kosmos = 'products_kosmos',
+  products_harbor = 'products_harbor'
 }
