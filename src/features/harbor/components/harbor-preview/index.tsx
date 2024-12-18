@@ -8,14 +8,9 @@ import { useForwardedRef } from '@hooks';
 import { Spacer } from '@components/base';
 import { scale } from '@utils/scaling';
 import { isAndroid } from '@utils/isPlatform';
-import {
-  BottomSheetHarborPreViewProps,
-  EmptyHarborProcessTransaction
-} from '@features/harbor/components/harbor-preview/model';
+import { BottomSheetHarborPreViewProps } from '@features/harbor/components/harbor-preview/model';
 import { useWalletStore } from '@entities/wallet';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { TransactionDTO } from '@models';
-import { EMPTY_HARBOR_PROCESS_TRANSACTION } from '@entities/harbor/constants';
 import {
   ErrorTemplate,
   FormTemplate,
@@ -35,9 +30,7 @@ export const BottomSheetHarborPreView = forwardRef<
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [resultTx, setResultTx] = useState<
-    TransactionDTO | null | EmptyHarborProcessTransaction
-  >(null);
+  const [resultTx, setResultTx] = useState<null | string>(null);
 
   const buttonTitle = useMemo(() => {
     switch (modalType) {
@@ -87,11 +80,8 @@ export const BottomSheetHarborPreView = forwardRef<
       if (data?.error) {
         setIsError(true);
       } else {
-        if (data?.transaction) {
-          setResultTx(data?.transaction);
-        }
-        if (data?.processStatus === 'done') {
-          setResultTx(EMPTY_HARBOR_PROCESS_TRANSACTION);
+        if (data?.transactionHash) {
+          setResultTx(data?.transactionHash);
         }
       }
     } catch (e) {
@@ -116,7 +106,7 @@ export const BottomSheetHarborPreView = forwardRef<
             onPreviewClose={onPreviewClose}
             modalType={modalType}
             data={dataParseFunction(modalType, previewData)?.success}
-            transaction={resultTx}
+            transactionHash={resultTx}
           />
         );
       default:

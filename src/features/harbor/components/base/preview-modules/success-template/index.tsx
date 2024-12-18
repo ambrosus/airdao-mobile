@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
 import {
   HarborPreViewData,
   SuccessTemplateDataProps
@@ -21,14 +20,11 @@ import { styles } from './styes';
 export const SuccessTemplate = ({
   data = [],
   modalType,
-  transaction,
+  transactionHash,
   onPreviewClose
 }: SuccessTemplateDataProps) => {
   const navigation = useNavigation<HarborNavigationProp>();
   const { t } = useTranslation();
-  const newDate = transaction?.timestamp
-    ? new Date(Number(transaction?.timestamp) * 1000)
-    : null;
 
   const isStakeModal = modalType === 'stake';
   const isWithdrawModal = !isStakeModal;
@@ -37,17 +33,6 @@ export const SuccessTemplate = ({
     () => (data && data[0].title ? data[0] : null),
     [data]
   );
-
-  const listData =
-    transaction?.timestamp && isStakeModal
-      ? [
-          ...data,
-          {
-            name: 'common.date',
-            value: newDate ? moment(newDate).format('DD/MM/YYYY  HH:mm') : ''
-          }
-        ]
-      : data;
 
   const goToMyRequests = async () => {
     onPreviewClose();
@@ -86,13 +71,13 @@ export const SuccessTemplate = ({
       <Spacer value={scale(8)} />
       <FlatList
         contentContainerStyle={styles.wrapper}
-        data={listData}
+        data={data}
         renderItem={RenderItem}
       />
       <Spacer value={scale(12)} />
-      {!!transaction?.hash && (
+      {!!transactionHash && (
         <Row justifyContent="center">
-          <CopyHash hash={transaction?.hash} />
+          <CopyHash hash={transactionHash} />
         </Row>
       )}
       <Spacer value={scale(12)} />
