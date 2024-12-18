@@ -26,7 +26,7 @@ describe('Supported Chains Utility', () => {
     expect(supportedChains(airdaoRequiredNamespaces, {})).toStrictEqual([
       Config.env === 'testnet'
         ? {
-            id: 16718,
+            id: 22040,
             network: 'homestead',
             name: 'AirDAO',
             nativeCurrency: { name: 'AirDAO', symbol: 'AMB', decimals: 18 },

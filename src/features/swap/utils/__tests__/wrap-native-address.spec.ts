@@ -1,11 +1,15 @@
+import { ethers } from 'ethers';
 import { isNativeWrapped, wrapNativeAddress } from '../wrap-native-address';
+import { environment } from '@utils/environment';
+
+const isTestnet = environment === 'testnet';
 
 describe('wrapNativeAddress utility | Unit Test', () => {
   it('should wrap AMB to SAMB correctly', () => {
     const path = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
+      ethers.constants.AddressZero,
       '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ] as [string, string];
+    ];
 
     const expectedPath = [
       '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
@@ -21,7 +25,7 @@ describe('wrapNativeAddress utility | Unit Test', () => {
     const path = [
       '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
       '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ] as [string, string];
+    ];
 
     const expectedPath = [
       '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
@@ -30,16 +34,17 @@ describe('wrapNativeAddress utility | Unit Test', () => {
 
     const excludeNativeETH = wrapNativeAddress(path);
 
-    expect(excludeNativeETH).not.toStrictEqual(expectedPath);
+    expect(excludeNativeETH).toStrictEqual(expectedPath);
   });
 });
 
 describe('isNativeWrapped utility | Unit Test', () => {
   it('should return true when native address is wrapped', () => {
-    const path = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
-      '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b'
-    ] as [string, string];
+    const secondRoute = isTestnet
+      ? '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b'
+      : '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F';
+
+    const path = [ethers.constants.AddressZero, secondRoute];
 
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);
