@@ -60,8 +60,11 @@ export const BottomSheetHarborPreView = forwardRef<
     if (!!resultTx && amountSetter) {
       amountSetter('');
     }
-    setResultTx(null);
-    setIsError(false);
+    setTimeout(() => {
+      // delay for hide modal than change modal content
+      setResultTx(null);
+      setIsError(false);
+    }, 200);
   }, [
     amountSetter,
     bottomSheetRef,
