@@ -1,4 +1,5 @@
 import { HomeParamsList } from '@appTypes';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 
 type AvailableProductsPath = keyof Pick<
   HomeParamsList,
@@ -13,6 +14,7 @@ export type Product = {
   background: [string, string];
   color: string;
   route: AvailableProductsPath;
+  firebaseEvent: CustomAppEvents;
 };
 
 export type SectionizedProducts = {
