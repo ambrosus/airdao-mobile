@@ -26,6 +26,9 @@ export const SuccessTemplate = ({
 }: SuccessTemplateDataProps) => {
   const navigation = useNavigation<HarborNavigationProp>();
   const { t } = useTranslation();
+  const newDate = transaction?.timestamp
+    ? new Date(Number(transaction?.timestamp) * 1000)
+    : null;
 
   const isWithdrawModal = modalType !== 'stake';
 
@@ -39,9 +42,7 @@ export const SuccessTemplate = ({
         ...data,
         {
           name: 'common.date',
-          value: transaction?.timestamp
-            ? moment(transaction?.timestamp).format('DD/MM/YYYY  HH:mm')
-            : ''
+          value: newDate ? moment(newDate).format('DD/MM/YYYY  HH:mm') : ''
         }
       ]
     : data;

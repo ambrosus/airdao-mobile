@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
+import moment from 'moment/moment';
 import { RawRecord } from '@nozbe/watermelondb';
 import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
@@ -137,18 +138,7 @@ const getWithdrawalRequests = async (address: string) => {
     const rawWithdrawalsList = await contract.queryFilter(filter);
     const withdrawalsList: ILogs[] = [];
 
-    const formatData = (date: Date) =>
-      date
-        .toLocaleString('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        })
-        .replace(',', '');
-
+    const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
       const currEvent: any = rawWithdrawalsList[i];
 
