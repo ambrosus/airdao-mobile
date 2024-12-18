@@ -235,6 +235,7 @@ export const ProcessStake = () => {
         </View>
       </ScrollView>
       <BottomSheetHarborPreView
+        amountSetter={setAmountToStake}
         modalType="stake"
         previewData={previewData}
         ref={bottomSheetRef}
