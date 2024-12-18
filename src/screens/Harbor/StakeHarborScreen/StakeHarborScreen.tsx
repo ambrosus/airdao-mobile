@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,6 @@ import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { styles } from './styles';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { useEffectOnce } from '@hooks';
 import { useWalletStore } from '@entities/wallet';
 import { HarborStakeTabs } from '@features/harbor/components/tabs';
 
@@ -18,9 +17,11 @@ export const StakeHarborScreen = () => {
   const navigation = useNavigation<HarborNavigationProp>();
   const { updateAll, loading } = useHarborStore();
   const { wallet } = useWalletStore();
-  useEffectOnce(() => {
+
+  useEffect(() => {
     updateAll(wallet?.address || '');
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet?.address]);
 
   const RightContent = () => (
     <Button
