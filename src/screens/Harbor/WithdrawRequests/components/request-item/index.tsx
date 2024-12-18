@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
-import { styles } from '@screens/Harbor/WithdrawRequests/WithdrawRequests.style';
+import { formatEther } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { CryptoCurrencyCode } from '@appTypes';
 import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { NumberUtils } from '@utils/number';
-import { formatEther } from 'ethers/lib/utils';
-import { useTranslation } from 'react-i18next';
 import { ILogs } from '@entities/harbor/model/types';
+import { styles } from './styles';
 
 export const RequestItem = ({ requestItem }: { requestItem: ILogs }) => {
   const { t } = useTranslation();

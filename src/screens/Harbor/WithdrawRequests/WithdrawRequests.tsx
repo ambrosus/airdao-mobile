@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/composite';
 import { useWalletStore } from '@entities/wallet';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
@@ -15,7 +16,6 @@ import { Text } from '@components/base';
 import { scale } from '@utils/scaling';
 import { styles } from './WithdrawRequests.style';
 import { useEffectOnce } from '@hooks';
-import { useFocusEffect } from '@react-navigation/native';
 import { RequestItem } from '@screens/Harbor/WithdrawRequests/components';
 
 export const WithdrawRequests = () => {

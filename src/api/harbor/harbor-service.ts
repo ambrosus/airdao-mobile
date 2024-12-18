@@ -1,12 +1,12 @@
 import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
+import moment from 'moment/moment';
 import { RawRecord } from '@nozbe/watermelondb';
 import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { Cache, CacheKey } from '@lib/cache';
 import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
 import { ILogs } from '@entities/harbor/model/types';
-import moment from 'moment/moment';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
