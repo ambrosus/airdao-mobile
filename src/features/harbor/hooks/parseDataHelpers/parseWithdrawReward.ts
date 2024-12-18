@@ -15,11 +15,6 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         name: 'harbor.withdraw.preview.bond.reward',
         value: NumberUtils.limitDecimalCount(previewData.rewardBond, 2),
         symbol: CryptoCurrencyCode.BOND
-      },
-      {
-        name: 'harbor.withdraw.preview.delay',
-        value: previewData.delay,
-        timeSymbol: previewData.delay === '1' ? 'common.day' : 'common.days'
       }
     ],
     success: [
