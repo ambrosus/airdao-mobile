@@ -51,4 +51,5 @@ export type HarborPreView = StakePreviewDataModel | WithdrawPreviewDataModel;
 export interface BottomSheetHarborPreViewProps {
   modalType: ModalTypes;
   previewData: HarborPreView;
+  amountSetter?: (payload: string) => void;
 }

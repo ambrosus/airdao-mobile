@@ -26,7 +26,7 @@ import { dataParseFunction, processFunctions } from '@features/harbor/hooks';
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,
   BottomSheetHarborPreViewProps
->(({ previewData, modalType }, ref) => {
+>(({ previewData, modalType, amountSetter }, ref) => {
   const bottomSheetRef = useForwardedRef(ref);
   const { wallet } = useWalletStore();
   const { activeAmbTier, updateAll } = useHarborStore();
@@ -54,10 +54,23 @@ export const BottomSheetHarborPreView = forwardRef<
   const onPreviewClose = useCallback(() => {
     if (loading) return;
     bottomSheetRef.current?.dismiss();
-    if (isError || !!resultTx) updateAll(wallet?.address || '');
+    if (isError || !!resultTx) {
+      updateAll(wallet?.address || '');
+    }
+    if (!!resultTx && amountSetter) {
+      amountSetter('');
+    }
     setResultTx(null);
     setIsError(false);
-  }, [bottomSheetRef, isError, loading, resultTx, updateAll, wallet?.address]);
+  }, [
+    amountSetter,
+    bottomSheetRef,
+    isError,
+    loading,
+    resultTx,
+    updateAll,
+    wallet?.address
+  ]);
 
   const onAcceptPress = useCallback(async () => {
     try {

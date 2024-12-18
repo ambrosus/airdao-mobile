@@ -116,6 +116,7 @@ export const WithdrawStakeRewardTab = () => {
         </PrimaryButton>
       </Animated.View>
       <BottomSheetHarborPreView
+        amountSetter={setAmountToWithdraw}
         modalType="withdraw-stake"
         previewData={previewData}
         ref={bottomSheetRef}
