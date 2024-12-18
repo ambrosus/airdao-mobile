@@ -73,11 +73,6 @@ export const ProcessStake = () => {
 
   const account = wallet ? ExplorerAccount.fromDBModel(wallet) : null;
 
-  if (account) {
-    account.ambBalance = Number(selectedAccountBalance.ether);
-    account.ambBalanceWei = selectedAccountBalance.wei;
-  }
-
   const ambTokenData: Token = useMemo(
     () =>
       new Token(
@@ -86,10 +81,10 @@ export const ProcessStake = () => {
           address: account?.address || '',
           isNativeCoin: true,
           balance: {
-            wei: account?.ambBalanceWei || '0',
-            ether: account?.ambBalance || 0,
+            wei: selectedAccountBalance?.wei || '0',
+            ether: selectedAccountBalance?.ether || 0,
             formattedBalance: ethers.utils.formatUnits(
-              account?.ambBalanceWei || '0',
+              selectedAccountBalance?.wei || '0',
               AMB_DECIMALS
             )
           },
@@ -99,7 +94,7 @@ export const ProcessStake = () => {
         },
         TokenUtils
       ),
-    [account?.address, account?.ambBalance, account?.ambBalanceWei]
+    [account, selectedAccountBalance]
   );
 
   const isLoading = useMemo(() => {
@@ -234,6 +229,7 @@ export const ProcessStake = () => {
           </Animated.View>
         </View>
       </ScrollView>
+
       <BottomSheetHarborPreView
         amountSetter={setAmountToStake}
         modalType="stake"
