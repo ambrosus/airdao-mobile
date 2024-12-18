@@ -91,9 +91,15 @@ export const TiersSelector = ({
           contentStyle={[styles.toolTipContainerStyle]}
           isVisible={toolTipVisible}
           content={
-            <Text fontSize={scale(12)} color={COLORS.neutral0}>
-              {t('harbor.tier.1.content')}
-            </Text>
+            <View>
+              <Text fontSize={scale(14)} color={COLORS.neutral0}>
+                {t(`harbor.tier.${userTier}.header`)}
+              </Text>
+              <Spacer value={scale(8)} />
+              <Text fontSize={scale(12)} color={COLORS.neutral0}>
+                {t(`harbor.tier.${userTier}.content`)}
+              </Text>
+            </View>
           }
           placement="top"
           onClose={() => setToolTipVisible(!toolTipVisible)}
