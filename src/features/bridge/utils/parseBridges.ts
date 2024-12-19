@@ -1,9 +1,9 @@
-import { getNetworkNames } from './getNetworkName';
 import {
   DEFAULT_AMB_NETWORK,
   DEFAULT_ETH_NETWORK
 } from '@features/bridge/constants';
 import { Config } from '@lib/bridgeSDK/models/types';
+import { getNetworkNames } from './getNetworkName';
 
 export const parsedBridges = (bridgeConfig: Config) => {
   const bridges = Object.keys(bridgeConfig?.bridges || []).map((item) => {

@@ -1,11 +1,11 @@
 import React from 'react';
+import { TFunction } from 'i18next';
 import {
   BridgeAccountActionIcon,
   SwapAccountActionIcon
 } from '@components/svg/icons/v2/actions';
-import { SectionizedProducts } from '../utils';
-import { TFunction } from 'i18next';
 import { HarborAccountAction } from '@components/svg/icons/v2/harbor';
+import { SectionizedProducts } from '../utils';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 
 export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {

@@ -1,13 +1,13 @@
 import React, { forwardRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { COLORS } from '@constants/colors';
-import { PrimaryButton } from '@components/modular';
-import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { scale, verticalScale } from '@utils';
 
 interface BottomSheetBridgeTransactionPendingHistoryProps {
   transaction: BridgeTransactionHistoryDTO;

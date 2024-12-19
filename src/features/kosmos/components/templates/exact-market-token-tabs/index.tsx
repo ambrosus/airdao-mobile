@@ -1,11 +1,11 @@
 import React from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
+import { MarketType } from '@entities/kosmos';
+import { styles } from './styles';
 import { BuyBondTab } from './tabs/buy-bond';
 import { TransactionsHistoryTab } from './tabs/transactions';
-import { MarketType } from '@entities/kosmos';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType | undefined;

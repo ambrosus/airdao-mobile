@@ -1,8 +1,8 @@
-import { environment } from '@utils/environment';
 import {
   SWAP_SUPPORTED_TOKENS,
   TOKEN_ADDRESSES
 } from '@features/swap/entities';
+import { environment } from '@utils/environment';
 import { wrapNativeAddress } from './wrap-native-address';
 
 export const addresses = TOKEN_ADDRESSES[environment];

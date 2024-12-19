@@ -1,7 +1,7 @@
 import { API } from '@api/api';
-import { TokenUtils } from '@utils/token';
 import Config from '@constants/config';
 import { EMPTY_TOKEN } from '@entities/harbor/constants';
+import { TokenUtils } from '@utils';
 
 export const getHarborToken = async (address: string) => {
   const tokens = await API.explorerService.getTransactionsOfOwnAccount(

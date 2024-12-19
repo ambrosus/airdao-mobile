@@ -1,17 +1,17 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { BottomSheet } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
+import { BottomSheet } from '@components/composite';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import {
   useWalletConnectContextSelector,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
-import { COLORS } from '@constants/colors';
-import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 import { WalletSessionsList } from '../../composite';
-import { verticalScale } from '@utils/scaling';
 
 export const WalletSessionsBottomSheet = () => {
   const { t } = useTranslation();

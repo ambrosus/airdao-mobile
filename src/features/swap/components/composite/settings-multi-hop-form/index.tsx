@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Switch, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import {
   useSwapFieldsHandler,
   useSwapSettings
 } from '@features/swap/lib/hooks';
-import { COLORS } from '@constants/colors';
 
 export const SettingsMultiHopForm = () => {
   const { t } = useTranslation();

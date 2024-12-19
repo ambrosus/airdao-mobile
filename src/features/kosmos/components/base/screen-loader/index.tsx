@@ -1,6 +1,6 @@
-import { Spinner } from '@components/base';
 import React, { useMemo } from 'react';
 import { DimensionValue, StyleProp, View, ViewStyle } from 'react-native';
+import { Spinner } from '@components/base';
 
 interface ScreenLoaderProps {
   readonly height?: DimensionValue;

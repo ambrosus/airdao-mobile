@@ -6,16 +6,15 @@ import {
   ViewStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { MarketChart } from '@features/kosmos/components/modular';
-
-import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { ChartTimeIntervals } from '@features/kosmos/components/composite';
-import { verticalScale } from '@utils/scaling';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { CHART_INTERVALS, MarketType } from '@entities/kosmos';
 import { useChartStore } from '@features/kosmos';
+import { ChartTimeIntervals } from '@features/kosmos/components/composite';
+import { MarketChart } from '@features/kosmos/components/modular';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface MarketChartsWithTimeframesProps {
   market: MarketType;

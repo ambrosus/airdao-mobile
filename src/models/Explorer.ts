@@ -1,6 +1,6 @@
 import { CacheableAccount, ExplorerAccountType } from '@appTypes';
-import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 import { AccountDBModel } from '@database';
+import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 
 export class ExplorerInfo {
   totalAddresses: number;

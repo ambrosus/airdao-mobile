@@ -2,12 +2,9 @@ import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
-import { TooltipState } from '../../modular/market-chart/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { ChartStrokedArrow } from '../../base';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import {
   RECT_HEIGHT,
   RECT_WIDTH,
@@ -15,6 +12,9 @@ import {
   TRIANGLE_WIDTH
 } from '@entities/kosmos';
 import { $discount, discountColor } from '@features/kosmos/utils';
+import { styles } from './styles';
+import { ChartStrokedArrow } from '../../base';
+import { TooltipState } from '../../modular/market-chart/types';
 
 interface ChartTooltipProps {
   tooltip: TooltipState;

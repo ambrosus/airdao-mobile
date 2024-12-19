@@ -1,10 +1,10 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { WalletDBModel } from '@database';
-import { TabsParamsList } from './tabs';
-import { PasscodeParams } from './passcode-params';
 import { AccountList } from '@models';
+import { PasscodeParams } from './passcode-params';
+import { TabsParamsList } from './tabs';
 
 export type SettingsTabParamsList = {
   About: undefined;

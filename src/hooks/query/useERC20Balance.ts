@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 import { useWalletStore } from '@entities/wallet';
+import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 /**
  * A custom React Query hook to fetch ERC20 token balance.

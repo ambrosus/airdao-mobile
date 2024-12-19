@@ -1,21 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
-import { ExplorerAccount } from '@models/Explorer';
-import { AccountList } from '@models/AccountList';
-import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
-import { NumberUtils } from '@utils/number';
+import { COLORS } from '@constants/colors';
 import { useListActions } from '@features/lists';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { AccountList } from '@models/AccountList';
+import { ExplorerAccount } from '@models/Explorer';
+import { NumberUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;

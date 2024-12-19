@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: {

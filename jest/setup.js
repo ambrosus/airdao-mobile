@@ -1,6 +1,8 @@
 import 'react-native-gesture-handler/jestSetup';
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 
+const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 const mockIsPackageInstalled = jest.fn((value) => ({
   value,
   isInstalled: true
@@ -20,6 +22,7 @@ jest.mock('@react-navigation/native', () => {
 });
 
 jest.mock('react-native-reanimated', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Reanimated = require('react-native-reanimated/mock');
   const ReanimatedLayoutAnimation = {
     stiffness: jest.fn(() => ReanimatedLayoutAnimation),
@@ -38,21 +41,13 @@ jest.mock('react-native-reanimated', () => {
   Reanimated.Layout = ReanimatedLayoutAnimation;
   Reanimated.FadeInRight = ReanimatedLayoutAnimation;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   Reanimated.default.call = () => {};
   Reanimated.__reanimatedWorkletInit = jest.fn();
   return Reanimated;
 });
 
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
-
-//     () => {
-//   const inset = { top: 0, right: 0, bottom: 0, left: 0 };
-//   return {
-//     SafeAreaProvider: jest.fn().mockImplementation(({ children }) => children),
-//     SafeAreaView: jest.fn().mockImplementation(({ children }) => children),
-//     useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
-//   };
-// });
 
 jest.mock('@utils/createContextSelector', () => ({
   createContextSelector: () => [{}, jest.fn()]
@@ -123,36 +118,73 @@ jest.mock('@shopify/react-native-skia', () => ({
 }));
 
 jest.mock('ethers', () => {
-  class MockContract {
-    constructor(address, abi, signerOrProvider) {
-      this.address = address;
-      this.abi = abi;
-      this.signerOrProvider = signerOrProvider;
-    }
-  }
+  const MockContract = jest.fn().mockImplementation(() => {
+    return {
+      address: ETH_ADDRESS,
+      abi: [],
+      getSigner: jest.fn().mockReturnValue({}),
+      call: jest.fn().mockResolvedValue(true)
+    };
+  });
 
-  class MockWallet {
-    constructor(privateKey, provider) {
-      this.privateKey = privateKey;
-      this.provider = provider;
-    }
-  }
+  const MockWallet = jest.fn().mockImplementation((privateKey, provider) => {
+    return {
+      privateKey,
+      provider,
+      connect: jest.fn().mockReturnValue({
+        getAddress: jest.fn().mockResolvedValue(ETH_ADDRESS)
+      })
+    };
+  });
 
-  class MockJsonRpcProvider {
-    constructor(url) {
-      this.url = url;
-    }
+  const MockJsonRpcProvider = jest.fn().mockImplementation((url) => {
+    return {
+      url,
+      getBlockNumber: jest.fn().mockResolvedValue(12345),
+      getNetwork: jest.fn().mockResolvedValue({ chainId: 1 }), // Mock network
+      getGasPrice: jest.fn().mockResolvedValue('10000000000'),
+      sendTransaction: jest.fn().mockResolvedValue('0xTransactionHash')
+    };
+  });
 
-    async getBlockNumber() {
-      return 12345;
-    }
-  }
+  const MockStaticJsonRpcProvider = jest.fn().mockImplementation((url) => {
+    return {
+      url,
+      getBlockNumber: jest.fn().mockResolvedValue(12345),
+      getGasPrice: jest.fn().mockResolvedValue('10000000000')
+    };
+  });
+
+  const MockWeb3Provider = jest.fn().mockImplementation((provider) => {
+    return {
+      provider,
+      getSigner: jest.fn().mockReturnValue({
+        getAddress: jest.fn().mockResolvedValue(ETH_ADDRESS)
+      }),
+      getNetwork: jest.fn().mockResolvedValue({ chainId: 1 }),
+      getBlockNumber: jest.fn().mockResolvedValue(12345)
+    };
+  });
 
   return {
-    Contract: MockContract,
-    Wallet: MockWallet,
-    providers: {
-      JsonRpcProvider: MockJsonRpcProvider
+    __esModule: true,
+    ethers: {
+      providers: {
+        Provider: jest.fn(),
+        JsonRpcProvider: MockJsonRpcProvider,
+        StaticJsonRpcProvider: MockStaticJsonRpcProvider,
+        Web3Provider: MockWeb3Provider
+      },
+      lib: {
+        utils: {
+          isAddress: jest.fn()
+        }
+      },
+      constants: {
+        AddressZero: ETH_ADDRESS
+      },
+      Contract: MockContract,
+      Wallet: MockWallet
     }
   };
 });

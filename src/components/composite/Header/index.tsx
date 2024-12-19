@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import { BackIcon, CloseIcon } from '@components/svg/icons';
-import { Button, Row, Text } from '@components/base';
-import { HeaderProps } from './Header.types';
-import { styles } from './Header.styles';
 import { useNavigation } from '@react-navigation/native';
+import { Button, Row, Text } from '@components/base';
+import { BackIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { styles } from './Header.styles';
+import { HeaderProps } from './Header.types';
 
 export function Header(props: HeaderProps): JSX.Element {
   const {

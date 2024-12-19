@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { scale } from '@utils/scaling';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 interface ChartIntervalItemProps {
   interval: { label: string; value: number };

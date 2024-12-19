@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { AccountActionButton } from './ActionButton';
 import { HomeNavigationProp } from '@appTypes';
+import { KosmosAccountActionIcon } from '@components/svg/icons/v2/actions';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { KosmosAccountActionIcon } from '@components/svg/icons/v2/actions';
+import { AccountActionButton } from './ActionButton';
 
 interface KosmosProps {
   readonly disabled: () => boolean;

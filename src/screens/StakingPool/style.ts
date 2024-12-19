@@ -1,7 +1,7 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
-import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
+import { DEVICE_WIDTH } from '@constants/variables';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {

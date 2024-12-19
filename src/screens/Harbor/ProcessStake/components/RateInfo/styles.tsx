@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '@constants/colors';
 import { contentBox } from '@components/styles';
-import { scale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: {

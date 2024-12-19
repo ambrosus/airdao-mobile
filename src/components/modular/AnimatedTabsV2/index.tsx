@@ -13,9 +13,9 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { Button, Row, Text } from '@components/base';
-import { scale } from '@utils/scaling';
-import { styles } from './styles';
 import { DEVICE_WIDTH } from '@constants/variables';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 type AnimatedTab = {
   icon?: JSX.Element;

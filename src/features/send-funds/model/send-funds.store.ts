@@ -1,7 +1,7 @@
 import { create } from 'zustand';
+import { Token } from '@models';
 import { SendFundsState } from './types';
 import { SEND_FUNDS_INITIAL_STATE, $change } from '../utils';
-import { Token } from '@models';
 
 interface SendFundsStore {
   state: SendFundsState;

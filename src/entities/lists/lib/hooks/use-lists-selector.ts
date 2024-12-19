@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { AccountList } from '@models';
-import { useListsStore } from '@entities/lists/model/lists.store';
 import { useAddressesStore } from '@entities/addresses';
+import { useListsStore } from '@entities/lists/model/lists.store';
+import { AccountList } from '@models';
 
 export function useListsSelector() {
   const { listsOfAddressGroup } = useListsStore();

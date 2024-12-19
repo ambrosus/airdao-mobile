@@ -1,7 +1,7 @@
 import * as Updates from 'expo-updates';
 
-import { BRIDGE_DATA } from '@constants/bridgeData';
 import { ALL_TOKENS_DATA } from '@constants/allToken';
+import { BRIDGE_DATA } from '@constants/bridgeData';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
 const envs = {

@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Image, Defs, Path, Pattern, Svg, Use } from 'react-native-svg';
-import { IconProps } from './Icon.types';
 import { Image, View } from 'react-native';
+import { IconProps } from './Icon.types';
 
 export function BusdIcon(props: Omit<IconProps, 'color'>) {
   const { scale = 1 } = props;

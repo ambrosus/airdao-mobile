@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSwapContextSelector } from '@features/swap/context';
 import { Settings, SettingsKeys } from '@features/swap/types';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
+import { StringUtils, NumberUtils } from '@utils';
 
 export function useSwapSettings() {
   const { setSettings, _refSettingsGetter } = useSwapContextSelector();

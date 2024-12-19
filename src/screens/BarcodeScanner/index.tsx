@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
 import {
   SafeAreaView,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import { useBarcodeScanner } from '@hooks';
-import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
+import { RootStackParamsList } from '@appTypes';
 import { Button, Row, Text } from '@components/base';
-import { View } from 'react-native';
-import { styles } from '@components/templates/BarcodeScanner/styles';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamsList } from '@appTypes';
+import { styles } from '@components/templates/BarcodeScanner/styles';
+import { COLORS } from '@constants/colors';
+import { useBarcodeScanner } from '@hooks';
 
 type Props = NativeStackScreenProps<
   RootStackParamsList,

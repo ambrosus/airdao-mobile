@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { styles } from './styles';
-import { Product } from '@features/products/utils';
-import { Row, Text } from '@components/base';
 import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
+import { LinearGradient } from 'expo-linear-gradient';
 import { lowerCase } from 'lodash';
 import capitalize from 'lodash/capitalize';
+import { HomeNavigationProp } from '@appTypes';
+import { Row, Text } from '@components/base';
+import { Product } from '@features/products/utils';
+import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
 
 interface ProductListItemProps {

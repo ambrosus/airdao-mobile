@@ -1,15 +1,15 @@
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './BridgeTransferError.styles';
+import { HomeNavigationProp } from '@appTypes';
+import { Spacer, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { InfoIcon } from '@components/svg/icons';
-import { Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
 import { useBridgeContextData } from '@features/bridge/context';
+import { verticalScale } from '@utils';
+import { styles } from './BridgeTransferError.styles';
 import { DEFAULT_AMB_NETWORK } from '../../../features/bridge/constants';
 
 export const BridgeTransferError = ({}) => {

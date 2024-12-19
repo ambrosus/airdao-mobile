@@ -1,7 +1,7 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
-import { IconProps } from '../Icon.types';
 import { COLORS } from '@constants/colors';
+import { IconProps } from '../Icon.types';
 
 export function ChartIcon({ scale = 1, color = COLORS.neutral800 }: IconProps) {
   const size = 24 * scale;

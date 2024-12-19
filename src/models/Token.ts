@@ -1,8 +1,8 @@
-import { CryptoCurrencyCode } from '@appTypes';
-import { TokenDTO } from './dtos';
 import { formatUnits } from 'ethers/lib/utils';
+import { CryptoCurrencyCode } from '@appTypes';
 import { AMB_DECIMALS } from '@constants/variables';
-import { getTokenNameFromDatabase } from '@utils/getTokenNameFromDatabase';
+import { getTokenNameFromDatabase } from '@utils/get-token-name-from-db';
+import { TokenDTO } from './dtos';
 
 export class Token {
   address: string;

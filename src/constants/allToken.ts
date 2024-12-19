@@ -365,6 +365,12 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
   ],
   TESTNET: [
     {
+      address: ethers.constants.AddressZero,
+      decimals: 0,
+      name: 'AirDAO',
+      symbol: 'AMB'
+    },
+    {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       decimals: 18,
       name: 'Synthetic Amber',

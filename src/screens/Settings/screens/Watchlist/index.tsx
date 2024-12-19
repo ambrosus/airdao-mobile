@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { TabView } from 'react-native-tab-view';
-import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import { WatchList } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Watchlists';
-import { Collections } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Collections';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TabView } from 'react-native-tab-view';
 import { PortfolioScreenTabs } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs';
+import { Collections } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Collections';
+import { WatchList } from '@screens/Settings/screens/Watchlist/components/PortfolioScreenTabs/components/Watchlists';
+import type { Props as TabViewProps } from 'react-native-tab-view/lib/typescript/src/TabView';
 
 export const Watchlist = () => {
   const portfolioTabRoutes = [

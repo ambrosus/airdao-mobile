@@ -1,4 +1,7 @@
 import { BigNumberish, ethers } from 'ethers';
+import { formatBridgeAddresses, getPairs } from './config';
+import { getFeeData, setAllowance, withdraw } from './withdraws';
+import { bridgeContract } from '../abi/sdkABI';
 import {
   BridgeAddresses,
   Config,
@@ -7,9 +10,6 @@ import {
   Network,
   Token
 } from '../models/types';
-import { formatBridgeAddresses, getPairs } from './config';
-import { getFeeData, setAllowance, withdraw } from './withdraws';
-import { bridgeContract } from '../abi/sdkABI';
 
 export class BridgeSDK {
   config: Config;

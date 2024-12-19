@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
+import { BridgeAccountActionIcon } from '@components/svg/icons/v2/actions';
 import { AccountActionButton } from '@components/templates/AccountActions/components/ActionButton';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { BridgeAccountActionIcon } from '@components/svg/icons/v2/actions';
 
 interface BridgeProps {
   readonly disabled: () => boolean;

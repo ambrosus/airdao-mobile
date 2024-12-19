@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { TextProps } from '@components/base/Text/Text.types';
+import { COLORS } from '@constants/colors';
 
 interface DetailsItemTypographyProps extends PropsWithChildren {
   readonly type?: 'key' | 'value';

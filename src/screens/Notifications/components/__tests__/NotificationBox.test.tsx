@@ -1,10 +1,10 @@
 import React from 'react';
 import '@testing-library/jest-native/extend-expect';
 import { screen, render } from '@testing-library/react-native';
-import { NotificationBox } from '../notification-box';
-import type { Notification } from '@models';
 import { NotificationType } from '@appTypes';
 import { COLORS } from '@constants/colors';
+import { NotificationBox } from '../notification-box';
+import type { Notification } from '@models';
 
 type OmitNotification = Omit<Notification, '_id' | 'createdAt'>;
 

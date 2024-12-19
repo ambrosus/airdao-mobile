@@ -1,6 +1,6 @@
-import { QueryResponse } from '@appTypes/QueryResponse';
-import { nftContractService } from '@api/nft-contract-service';
 import { useQuery } from '@tanstack/react-query';
+import { nftContractService } from '@api/nft-contract-service';
+import { QueryResponse } from '@appTypes/QueryResponse';
 
 interface NftTokenModel {
   tokenId: string;

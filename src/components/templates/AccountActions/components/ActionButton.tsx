@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { moderateScale, verticalScale } from '@utils/scaling';
 import { IconProps } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { moderateScale, verticalScale } from '@utils';
 
 export interface AccountActionButtonProps {
   Icon: React.ElementType<IconProps>;

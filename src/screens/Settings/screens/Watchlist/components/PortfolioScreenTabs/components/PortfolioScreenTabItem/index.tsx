@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
-import { styles } from './styles';
 import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 type Props = {
   onPress: (index: number) => void;

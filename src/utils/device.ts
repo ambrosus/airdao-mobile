@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
-import * as Updates from 'expo-updates';
 import * as LocalAuthentication from 'expo-local-authentication';
+import * as Updates from 'expo-updates';
 
 const isIOS = Platform.OS === 'ios';
 const isAndroid = Platform.OS === 'android';

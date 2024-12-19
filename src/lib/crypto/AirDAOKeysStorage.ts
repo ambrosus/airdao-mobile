@@ -266,5 +266,4 @@ class AirDAOKeysStorage {
   }
 }
 
-const singleAirDAOStorage = new AirDAOKeysStorage();
-export default singleAirDAOStorage;
+export const singleAirDAOStorage = new AirDAOKeysStorage();

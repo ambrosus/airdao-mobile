@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { AccountActionButton } from './ActionButton';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
+import { StakeAccountActionIcon } from '@components/svg/icons/v2/actions';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { StakeAccountActionIcon } from '@components/svg/icons/v2/actions';
+import { AccountActionButton } from './ActionButton';
 
 interface StakingProps {
   readonly disabled: () => boolean;

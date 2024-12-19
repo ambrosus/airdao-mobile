@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
+import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDetails } from '@components/templates';
 import { Transaction } from '@models';
-import { ExplorerAccountType, TransactionType } from '@appTypes';
 import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@hooks', () => ({

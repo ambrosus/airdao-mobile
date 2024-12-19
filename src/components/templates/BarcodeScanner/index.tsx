@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
-import { styles } from './styles';
-import { useBarcodeScanner } from '@hooks';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Row, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useBarcodeScanner } from '@hooks';
 import { ScanSquare } from './components/ScanSquare';
+import { styles } from './styles';
 
 interface BarCodeScanner {
   onScanned: (data: any) => unknown;

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
+import { styles } from './styles';
 
 export const SettingsDeadlineForm = () => {
   const { t } = useTranslation();

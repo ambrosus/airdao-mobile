@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HomeParamsList, SettingsTabNavigationProp } from '@appTypes';
 import { Button, Spacer, Text } from '@components/base';
+import { Header } from '@components/composite';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { HomeParamsList, SettingsTabNavigationProp } from '@appTypes';
-import { scale, verticalScale } from '@utils/scaling';
 import { usePasscodeStore } from '@features/passcode';
-import { PasscodeUtils } from '@utils/passcode';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { scale, verticalScale, PasscodeUtils } from '@utils';
 import { styles } from '../SetupPasscode.styles';
 
 export const ConfirmPasscode = () => {

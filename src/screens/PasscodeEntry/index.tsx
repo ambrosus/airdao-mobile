@@ -1,20 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Keyboard, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import * as LocalAuthentication from 'expo-local-authentication';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Passcode } from '@components/modular';
-import { Spacer, Text } from '@components/base';
-import { useAppState, usePreventGoingBack } from '@hooks';
-import { verticalScale } from '@utils/scaling';
-import { PasscodeUtils } from '@utils/passcode';
-import { COLORS } from '@constants/colors';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
-import { Cache, CacheKey } from '@lib/cache';
-import { DeviceUtils } from '@utils/device';
+import { Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
+import { Passcode } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
+import { useAppState, usePreventGoingBack } from '@hooks';
+import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils, PasscodeUtils, verticalScale } from '@utils';
 
 export const PasscodeEntry = () => {
   const { t } = useTranslation();

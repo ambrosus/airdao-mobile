@@ -1,5 +1,8 @@
-import { ethers } from 'ethers';
 import { useCallback } from 'react';
+import { ethers } from 'ethers';
+import { useSwapContextSelector } from '@features/swap/context';
+import { getAmountsOut } from '@features/swap/lib/contracts';
+import { FIELD, SwapToken } from '@features/swap/types';
 import {
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
@@ -7,13 +10,10 @@ import {
   isMultiHopSwapAvailable,
   extractArrayOfMiddleMultiHopAddresses
 } from '@features/swap/utils';
-import { getAmountsOut } from '@features/swap/lib/contracts';
-import { useSwapContextSelector } from '@features/swap/context';
 import { useAllLiquidityPools } from './use-all-liquidity-pools';
-import { FIELD, SwapToken } from '@features/swap/types';
+import { useSwapHelpers } from './use-swap-helpers';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
-import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapPriceImpact() {
   const { isExactInRef } = useSwapContextSelector();

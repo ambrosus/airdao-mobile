@@ -1,7 +1,7 @@
 import React from 'react';
-import { IconProps } from './Icon.types';
 import { G, Path, Svg } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
+import { IconProps } from './Icon.types';
 
 export function WalletXsIcon({
   scale = 1,

@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 // @ts-ignore
 import { ContractNames, Methods } from '@airdao/airdao-bond';
+import { TxType, useTransactions } from '@entities/kosmos';
+import { useWalletPrivateKey } from '@entities/wallet';
 import { useBondContracts } from './use-bond-contracts';
 import { claimBond } from '../contracts';
-import { useWalletPrivateKey } from '@entities/wallet';
-import { TxType, useTransactions } from '@entities/kosmos';
 
 export function useClaimBonds(
   transaction: TxType,

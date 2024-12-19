@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Currency, Language } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
-import { Currency, Language } from '@appTypes';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 type Props = {
   item: Language | Currency;

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { DatabaseTable } from '@appTypes';
 import { Model, Q } from '@nozbe/watermelondb';
 import { text } from '@nozbe/watermelondb/decorators';
+import { DatabaseTable } from '@appTypes';
 import { PublicAddressDbModel } from './public-address';
 
 export class PublicAddressListDbModel extends Model {

@@ -1,31 +1,28 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { HomeParamsList } from '@appTypes';
 import { InputRef, Row, Spacer, Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import {
   BottomSheet,
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { useBalanceOfAddress, useUSDPrice } from '@hooks';
-import { AccountDBModel } from '@database';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
-import { StakePreview } from './Stake.Preview';
-import { staking } from '@api/staking/staking-service';
-import { ReturnedPoolDetails } from '@api/staking/types';
-import { HomeParamsList } from '@appTypes';
-import { StakePending } from '@screens/StakingPool/components';
 import { PercentageBox } from '@components/composite/PercentageBox';
-
+import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { AccountDBModel } from '@database';
+import { useBalanceOfAddress, useUSDPrice } from '@hooks';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { StakePending } from '@screens/StakingPool/components';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { StakePreview } from './Stake.Preview';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 

@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
-import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import { Database } from '@nozbe/watermelondb';
+import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import {
   TransactionsDBModel,
   WalletDBModel,
@@ -9,9 +9,9 @@ import {
   TransactionRawDBModel,
   TransactionScannersTmpDBModel
 } from './models';
-import { schema } from './schemas';
 import { PublicAddressDbModel } from './models/public-address';
 import { PublicAddressListDbModel } from './models/public-address-list';
+import { schema } from './schemas';
 
 const adapter = new SQLiteAdapter({
   schema,

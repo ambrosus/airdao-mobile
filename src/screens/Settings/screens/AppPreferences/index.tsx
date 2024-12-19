@@ -1,20 +1,17 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BottomSheetRef, Header } from '@components/composite';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Currency, Language } from '@appTypes';
 import { Button, Spacer } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
+import useLocalization from '@contexts/Localizations';
+import { LocalizationUtils, verticalScale } from '@utils';
 import {
   AppPreferencesMenuItem,
   BottomSheetSelectLanguage
 } from './components';
-import { Currency, Language } from '@appTypes';
-import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
-import useLocalization from '@contexts/Localizations';
-import { LocalizationUtils } from '@utils/localization';
-import { View } from 'react-native';
-
-// hide currency list
 
 export const AppPreferencesScreen = () => {
   const { t } = useTranslation();

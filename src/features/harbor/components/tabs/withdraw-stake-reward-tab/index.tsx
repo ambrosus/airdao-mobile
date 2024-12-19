@@ -6,26 +6,26 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
+import { formatEther, parseEther } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { formatEther, parseEther } from 'ethers/lib/utils';
-import { useTranslation } from 'react-i18next';
-import { scale } from '@utils/scaling';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { InputWithoutTokenSelect } from '@components/templates';
 import { Spacer, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
+import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
-import { BottomSheetRef } from '@components/composite';
-import { TiersSelector } from '../../base/tiers-selector';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { WithdrawInfo } from '@features/harbor/components/base';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-import { styles } from './styles';
 import { useKeyboardHeight } from '@hooks';
+import { scale } from '@utils';
+import { styles } from './styles';
+import { TiersSelector } from '../../base/tiers-selector';
 
 export const WithdrawStakeRewardTab = () => {
   const bottomSheetRef = useRef<BottomSheetRef>(null);

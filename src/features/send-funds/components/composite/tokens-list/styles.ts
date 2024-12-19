@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   loader: {

@@ -1,11 +1,11 @@
 import { BigNumber, ethers, utils } from 'ethers';
-import Config from '@constants/config';
 import { poolAbi, poolsAbi } from '@api/staking/abi';
 import {
   PoolDetailsArgs,
   ReturnedPoolDetails,
   StakeArgs
 } from '@api/staking/types';
+import Config from '@constants/config';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   CustomAppEvents,

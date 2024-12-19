@@ -1,6 +1,6 @@
-import { Token } from '@lib/bridgeSDK/models/types';
-import { CryptoCurrencyCode } from '@appTypes';
 import { BigNumber } from 'ethers';
+import { CryptoCurrencyCode } from '@appTypes';
+import { Token } from '@lib/bridgeSDK/models/types';
 
 export const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',

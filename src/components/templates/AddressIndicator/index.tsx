@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { useWatchlist } from '@hooks';
 import { WatchlistIcon } from '@components/svg/icons';
-import { StringUtils } from '@utils/string';
+import { COLORS } from '@constants/colors';
 import { useListsSelector } from '@entities/lists';
+import { useWatchlist } from '@hooks';
+import { StringUtils } from '@utils';
+import { styles } from './styles';
 
 interface AddressIndicatorProps {
   address: string;

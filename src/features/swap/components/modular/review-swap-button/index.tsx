@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { FontFamily } from '@components/base/Text/Text.types';
+import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -9,9 +11,7 @@ import {
   useSwapMultiplyBalance
 } from '@features/swap/lib/hooks';
 import { buttonActionString } from '@features/swap/utils/button-action.string';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { TextOrSpinner } from '@components/composite';
-import { FontFamily } from '@components/base/Text/Text.types';
+import { cssShadowToNative } from '@utils';
 
 function buttonStyles(disabled: boolean) {
   return {

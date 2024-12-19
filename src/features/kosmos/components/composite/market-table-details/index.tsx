@@ -1,19 +1,18 @@
 import React, { ReactNode } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
-import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
 import { Row, Text } from '@components/base';
-import { useMarketDetails } from '@features/kosmos/lib/hooks';
-
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
 import {
   MarketType,
   _timestampToDate,
   timestampToFormattedDate
 } from '@entities/kosmos';
+import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
+import { NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface MarketTableDetailsProps {
   market: MarketType | undefined;

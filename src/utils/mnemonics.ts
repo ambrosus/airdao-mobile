@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bip39 = require('bip39');
+import bip39 from 'bip39';
 import { DEFAULT_WORDS } from '@constants/words';
 import { CryptoUtils } from './crypto';
 

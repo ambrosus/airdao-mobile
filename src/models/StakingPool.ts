@@ -1,5 +1,5 @@
-import { Token } from './Token';
 import { StakingPoolDTO } from './dtos';
+import { Token } from './Token';
 
 export class StakingPool {
   token: Omit<Token, 'balance'>;

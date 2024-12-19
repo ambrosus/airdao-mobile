@@ -1,16 +1,15 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { InputRef, Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
-import { Balance, TokenSelector } from '@features/swap/components/composite';
-import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
-import { useSwapContextSelector } from '@features/swap/context';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
 import { COLORS } from '@constants/colors';
+import { Balance, TokenSelector } from '@features/swap/components/composite';
+import { useSwapContextSelector } from '@features/swap/context';
+import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { StringUtils, NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface InputWithTokenSelectProps {
   readonly type: SelectedTokensKeys;

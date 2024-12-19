@@ -1,20 +1,20 @@
 import { useCallback, useRef } from 'react';
 import { Alert, InteractionManager } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
   CompositeNavigationProp,
   useNavigation
 } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { HomeParamsList, RootStackParamsList, TabsParamsList } from '@appTypes';
 import { ethereumAddressRegex, walletConnectWsURL } from '@constants/regex';
-import { walletKit } from '@features/wallet-connect/lib/wc.core';
-import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 import {
   useHandleBottomSheetActions,
   useWalletConnectContextSelector
 } from '@features/wallet-connect/lib/hooks';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { walletKit } from '@features/wallet-connect/lib/wc.core';
+import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 
 type Navigation = CompositeNavigationProp<
   BottomTabNavigationProp<TabsParamsList>,

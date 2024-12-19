@@ -17,7 +17,6 @@ import {
   ViewStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import {
   Button,
   InputRef,
@@ -28,14 +27,12 @@ import {
 } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { TokenLogo, TokenSelector } from '@components/modular';
-import { Token } from '@models';
-import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
-import { useForwardedRef } from '@hooks';
-import { isAndroid } from '@utils/isPlatform';
-import { scale } from '@utils/scaling';
 import { DownArrowIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { useForwardedRef } from '@hooks';
+import { Token } from '@models';
+import { scale, StringUtils, NumberUtils, isAndroid } from '@utils';
+import { styles } from './styles';
 
 interface InputWithoutTokenSelectProps {
   readonly title?: string;

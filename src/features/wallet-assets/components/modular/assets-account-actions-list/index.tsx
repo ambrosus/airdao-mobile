@@ -1,23 +1,23 @@
 import React, { useCallback, useRef } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
 import { Row } from '@components/base';
-import { AccountActionItem } from '../../base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { QRCodeIcon } from '@components/svg/icons/v2';
 import { SendAccountActionIcon } from '@components/svg/icons/v2/actions';
 
+import { ReceiveFunds } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { useSendFundsStore } from '@features/send-funds';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { COLORS } from '@constants/colors';
 import { Token } from '@models';
-import { HomeNavigationProp } from '@appTypes';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { ReceiveFunds } from '@components/templates';
-import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useSendFundsStore } from '@features/send-funds';
+import { styles } from './styles';
+import { AccountActionItem } from '../../base';
 
 interface AssetsAccountActionsListProps {
   address: string;

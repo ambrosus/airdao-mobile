@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { styles } from './styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetRef, Header } from '@components/composite';
+import { FiltersState } from '@entities/kosmos';
 import { FiltersSelector } from '@features/kosmos/components/modular';
 import {
   BottomSheetFilters,
@@ -10,7 +10,7 @@ import {
 } from '@features/kosmos/components/templates';
 
 import { INITIAL_FILTERS } from '@features/kosmos/utils';
-import { FiltersState } from '@entities/kosmos';
+import { styles } from './styles';
 
 export const KosmosScreen = () => {
   const { t } = useTranslation();

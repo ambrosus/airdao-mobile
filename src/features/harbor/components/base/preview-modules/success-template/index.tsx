@@ -1,20 +1,21 @@
 import React, { useMemo } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
+import { Row, Spacer, Text } from '@components/base';
+import { PrimaryButton, SecondaryButton } from '@components/modular';
+import { SuccessIcon } from '@components/svg/icons/v2/harbor';
+import { COLORS } from '@constants/colors';
+import { SuccessTitle } from '@features/harbor/components/base/preview-modules/success-template/success-title';
 import { useTranslation } from 'react-i18next';
 import {
   HarborPreViewData,
   SuccessTemplateDataProps
 } from '@features/harbor/components/harbor-preview/model';
-import { Row, Spacer, Text } from '@components/base';
-import { SuccessIcon } from '@components/svg/icons/v2/harbor';
-import { scale } from '@utils/scaling';
-import { SuccessTitle } from '@features/harbor/components/base/preview-modules/success-template/success-title';
-import { COLORS } from '@constants/colors';
-import { PrimaryButton, SecondaryButton } from '@components/modular';
+import { delay, scale } from '@utils';
 import { CopyHash } from './copy-hash';
-import { delay } from '@utils/delay';
-import { useNavigation } from '@react-navigation/native';
-import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { styles } from './styes';
 
 export const SuccessTemplate = ({

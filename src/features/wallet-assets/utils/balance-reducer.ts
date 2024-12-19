@@ -1,5 +1,5 @@
-import { Token } from '@models';
 import { ethers } from 'ethers';
+import { Token } from '@models';
 
 export function balanceReducer(tokens: Token[], ambBalanceWei: string) {
   return tokens.reduce(

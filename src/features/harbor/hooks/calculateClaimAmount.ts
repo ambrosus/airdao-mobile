@@ -1,10 +1,10 @@
 import { BigNumberish } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
 import {
   RewardTokenNamesModel,
   TierRewardItem
 } from '@entities/harbor/model/types';
-import { formatEther } from 'ethers/lib/utils';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 
 export const calculateClaimAmount = (
   claimAmount: BigNumberish,

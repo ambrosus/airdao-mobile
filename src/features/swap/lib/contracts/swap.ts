@@ -1,13 +1,10 @@
 import { Wallet, ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
+import { ERC20, TRADE } from '@features/swap/lib/abi';
 import {
   InAmountGetterArgs,
   OutAmountGetterArgs
 } from '@features/swap/types/swap';
-import {
-  createAMBProvider,
-  createRouterContract
-} from '@features/swap/utils/contracts/instances';
 import {
   isNativeWrapped,
   minimumAmountOut,
@@ -17,7 +14,10 @@ import {
   withMultiHopPath,
   dexValidators
 } from '@features/swap/utils';
-import { ERC20, TRADE } from '@features/swap/lib/abi';
+import {
+  createAMBProvider,
+  createRouterContract
+} from '@features/swap/utils/contracts/instances';
 
 export async function getAmountsOut({
   amountToSell,

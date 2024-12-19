@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { TxType, useToken } from '@entities/kosmos';
 import {
   totalBondedReducer,
   totalClaimableReducer
 } from '@features/kosmos/utils';
-import { TxType, useToken } from '@entities/kosmos';
+import { styles } from './styles';
 
 interface TotalOrdersAmountProps {
   transactions: TxType[];

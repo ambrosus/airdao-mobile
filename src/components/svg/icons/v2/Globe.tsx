@@ -1,7 +1,7 @@
 import React from 'react';
+import { Path, Svg } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
 import { IconProps } from '../Icon.types';
-import { Path, Svg } from 'react-native-svg';
 
 export function GlobeIcon({ scale = 1, color = COLORS.brand600 }: IconProps) {
   const size = 21;

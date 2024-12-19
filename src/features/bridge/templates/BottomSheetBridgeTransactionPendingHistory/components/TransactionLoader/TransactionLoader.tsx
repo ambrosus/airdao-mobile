@@ -1,6 +1,6 @@
+import React from 'react';
 import { View } from 'react-native';
 import { Spinner } from '@components/base';
-import React from 'react';
 
 export const TransactionLoader = () => (
   <View

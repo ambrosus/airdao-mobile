@@ -1,3 +1,4 @@
+import { $token } from '@entities/kosmos';
 import i18n from '@localization/i18n';
 
 import {
@@ -7,7 +8,6 @@ import {
   StatusFilterValues,
   Token
 } from '../types';
-import { $token } from '@entities/kosmos';
 
 export const INITIAL_FILTERS: FiltersState = {
   status: i18n.t('kosmos.status.active'),

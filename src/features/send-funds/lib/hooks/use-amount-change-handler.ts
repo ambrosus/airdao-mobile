@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
+import { NumberUtils, StringUtils } from '@utils';
 
 export function useAmountChangeHandler() {
   const [amountInCrypto, setAmountInCrypto] = useState('');

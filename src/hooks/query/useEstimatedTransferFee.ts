@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { TransactionUtils } from '@utils/transaction';
 import { Token } from '@models';
+import { TransactionUtils } from '@utils';
 
 export const useEstimatedTransferFee = (
   token: Token,

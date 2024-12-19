@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { InteractionManager } from 'react-native';
-import { supportedChains, walletKit } from '@features/wallet-connect/utils';
+import { AirDAOEventType } from '@appTypes';
 import { Toast, ToastType } from '@components/modular';
-import { useWalletConnectContextSelector } from './use-wallet-connect-context';
+import Config from '@constants/config';
 import {
   CONNECT_VIEW_STEPS,
   SessionDeleteEvent,
@@ -10,11 +10,11 @@ import {
   WALLET_CLIENT_EVENTS,
   WALLET_CORE_EVENTS
 } from '@features/wallet-connect/types';
-import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
+import { supportedChains, walletKit } from '@features/wallet-connect/utils';
 import { AirDAOEventDispatcher } from '@lib';
-import { AirDAOEventType } from '@appTypes';
-import Config from '@constants/config';
-import { delay } from '@utils/delay';
+import { delay } from '@utils';
+import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
+import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
 export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
   const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();

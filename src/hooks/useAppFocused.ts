@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { useAppState } from './useAppState';
 
-const useAppFocus = () => {
+export const useAppFocus = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const navigationIsFocused = useIsFocused();
   const { appState } = useAppState();
@@ -13,5 +13,3 @@ const useAppFocus = () => {
 
   return isFocused;
 };
-
-export default useAppFocus;

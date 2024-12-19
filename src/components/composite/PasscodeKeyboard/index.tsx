@@ -8,13 +8,11 @@ import {
   ViewStyle
 } from 'react-native';
 import { Row } from '@components/base';
-import { DEVICE_HEIGHT } from '@constants/variables';
-import { scale } from '@utils/scaling';
-import { FaceIDIcon } from '@components/svg/icons/v2/FaceIDIcon';
-import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
-import { DeviceUtils } from '@utils/device';
-import { FingerPrintIcon } from '@components/svg/icons/v2/FingerPrintIcon';
+import { FingerPrintIcon, FaceIDIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
+import { scale, DeviceUtils } from '@utils';
 
 const DEFAULT_BUTTONS = [
   ['1', '2', '3'],

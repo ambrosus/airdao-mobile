@@ -1,13 +1,14 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
-import { GlobeIcon } from '@components/svg/icons/v2';
-import { StringUtils } from '@utils/string';
-import { COLORS } from '@constants/colors';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { scale } from '@utils/scaling';
+import { contentBox } from '@components/styles';
+import { GlobeIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { scale, StringUtils } from '@utils';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { contentBox } from '@components/styles';
 import { styles } from './styles';
 

@@ -1,5 +1,5 @@
-import Config from '@constants/config';
 import { ethers } from 'ethers';
+import Config from '@constants/config';
 import { SwapToken } from '../types';
 
 const tokens = Config.SWAP_TOKENS as SwapToken[];

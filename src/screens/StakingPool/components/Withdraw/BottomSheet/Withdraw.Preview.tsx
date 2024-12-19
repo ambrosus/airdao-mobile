@@ -1,14 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
 import { useTranslation } from 'react-i18next';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
-import { useUSDPrice } from '@hooks';
+import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { useUSDPrice } from '@hooks';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface WithdrawTokenPreviewProps {
   wallet: string;

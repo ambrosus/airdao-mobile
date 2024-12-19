@@ -6,47 +6,45 @@ import React, {
   useState
 } from 'react';
 import { Keyboard, LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
 import {
   KeyboardDismissingView,
   Spacer,
   Spinner,
   Text
 } from '@components/base';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
-import { BigNumber, BigNumberish, ethers } from 'ethers';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { BottomSheetRef } from '@components/composite';
-import { useBridgeContextData } from '@features/bridge/context';
-import { useKeyboardHeight } from '@hooks';
-import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
-import { COLORS } from '@constants/colors';
-import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
 import { InputWithTokenSelect } from '@components/templates';
-import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
-import { parseUnits } from 'ethers/lib/utils';
-import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
-import { getFeeData } from '@features/bridge/utils/getBridgeFee';
-import { FeeData } from '@lib/bridgeSDK/models/types';
-import { NumberUtils } from '@utils/number';
+import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
+import { useWalletStore } from '@entities/wallet';
 import {
   DEFAULT_TRANSACTION,
   EMPTY_FEE_DATA
 } from '@features/bridge/constants';
+import { useBridgeContextData } from '@features/bridge/context';
+import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
+import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
+import { getFeeData } from '@features/bridge/utils/getBridgeFee';
+import { useKeyboardHeight } from '@hooks';
 import { getAllBridgeTokenBalance } from '@lib';
-import { useWalletStore } from '@entities/wallet';
+import { FeeData } from '@lib/bridgeSDK/models/types';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
+import { NumberUtils, scale, verticalScale, isAndroid } from '@utils';
+import { styles } from './styles';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();

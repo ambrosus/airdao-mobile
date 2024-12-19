@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
-import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
-import { useBridgeContextData } from '@features/bridge/context';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { scale } from '@utils/scaling';
-import { CloseCircleIcon } from '@components/svg/icons/v2';
-import { PrimaryButton } from '@components/modular';
-import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate';
 import { BottomSheetSuccessView } from '@components/base/BottomSheetStatusView';
+import { PrimaryButton } from '@components/modular';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { useBridgeContextData } from '@features/bridge/context';
+import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
+import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
 import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { NumberUtils, scale } from '@utils';
+import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate';
 
 interface GeneralPreviewDataModel {
   loader: boolean;

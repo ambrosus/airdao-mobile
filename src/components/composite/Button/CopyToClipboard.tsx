@@ -1,24 +1,24 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
-import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { IconProps } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { BaseButtonProps } from '@components/base/Button';
+import { TextProps } from '@components/base/Text/Text.types';
 import {
   Toast,
   ToastOptions,
   ToastPosition,
   ToastType
 } from '@components/modular/Toast';
-import { BaseButtonProps } from '@components/base/Button';
-import { StyleProp, View, ViewStyle } from 'react-native';
-import { COLORS } from '@constants/colors';
-import { CopyIconV2 } from '@components/svg/icons/v2/settings';
+import { IconProps } from '@components/svg/icons';
 import {
   CheckboxCircleFill,
   ClipboardFillIcon
 } from '@components/svg/icons/v2';
+import { CopyIconV2 } from '@components/svg/icons/v2/settings';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {

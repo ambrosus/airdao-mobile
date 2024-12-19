@@ -1,10 +1,10 @@
+import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { CryptoCurrencyCode } from '@appTypes';
 import {
   FeeData,
   Network as BridgeNetwork,
   Token
 } from '@lib/bridgeSDK/models/types';
-import { BigNumber, BigNumberish, ethers } from 'ethers';
-import { CryptoCurrencyCode } from '@appTypes';
 
 export interface Bridge {
   bridges: Bridges;

@@ -7,28 +7,26 @@ import React, {
   useState
 } from 'react';
 import { Platform, View } from 'react-native';
-import { Spacer } from '@components/base/Spacer';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Input, InputRef, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
+import { Spacer } from '@components/base/Spacer';
+import { BottomSheet } from '@components/composite';
 import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { useForwardedRef } from '@hooks/useForwardedRef';
-import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
 import {
   PrimaryButton,
   Toast,
   ToastPosition,
   ToastType
 } from '@components/modular';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { useTranslation } from 'react-i18next';
-import { BottomSheet } from '@components/composite';
-
+import { styles } from '@components/templates/BottomSheetCreateRenameGroup/styles';
+import { COLORS } from '@constants/colors';
+import { useForwardedRef } from '@hooks/useForwardedRef';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { StringUtils, verticalScale } from '@utils';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

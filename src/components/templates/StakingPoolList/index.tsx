@@ -1,8 +1,8 @@
 import React from 'react';
 import { FlatList, FlatListProps, ListRenderItemInfo } from 'react-native';
+import { Button } from '@components/base';
 import { StakingPoolItem } from '@components/modular';
 import { StakingPool } from '@models';
-import { Button } from '@components/base';
 
 interface StakingPoolListProps
   extends Omit<

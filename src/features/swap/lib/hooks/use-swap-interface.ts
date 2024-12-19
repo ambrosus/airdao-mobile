@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapPriceImpact } from './use-swap-price-impact';
+import { AllowanceStatus } from '@features/swap/types';
 import {
   SwapStringUtils,
   isETHtoWrapped,
@@ -11,12 +11,12 @@ import {
   minimumAmountOut,
   realizedLPFee
 } from '@features/swap/utils';
-import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapActions } from './use-swap-actions';
+import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
+import { useSwapHelpers } from './use-swap-helpers';
+import { useSwapPriceImpact } from './use-swap-price-impact';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
-import { useSwapHelpers } from './use-swap-helpers';
-import { AllowanceStatus } from '@features/swap/types';
 
 export function useSwapInterface() {
   const { setUiBottomSheetInformation, _refExactGetter } =

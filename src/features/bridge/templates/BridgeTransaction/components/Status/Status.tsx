@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Text } from '@components//base';
 import {
   claimPendingStyle,
   confirmationStyles,
@@ -9,8 +11,6 @@ import {
   styles,
   successStyle
 } from './Status.styles';
-import { useTranslation } from 'react-i18next';
-import { Text } from '@components//base';
 
 interface StatusProps {
   status: string;

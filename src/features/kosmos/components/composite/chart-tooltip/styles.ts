@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/colors';
 import { Platform, StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
 import {
   RECT_HEIGHT,
   RECT_WIDTH,

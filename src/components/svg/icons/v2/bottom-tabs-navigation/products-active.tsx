@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { ProductsInnerIcon } from './products-inner-icon';
 import { COLORS } from '@constants/colors';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { cssShadowToNative } from '@utils';
+import { ProductsInnerIcon } from './products-inner-icon';
 import { IconProps } from '../../Icon.types';
 
 export function ProductsActiveIcon({ color }: Pick<IconProps, 'color'>) {

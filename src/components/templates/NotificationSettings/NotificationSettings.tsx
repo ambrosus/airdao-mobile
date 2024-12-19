@@ -1,10 +1,10 @@
 import React from 'react';
-import { NotificationSettingsView } from './index';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render } from '@testing-library/react-native';
-import clearAllMocks = jest.clearAllMocks;
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
+import { NotificationSettingsView } from './index';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('react-native-modal', () => {
   return ({ children }: { children: React.ReactNode }) => <>{children}</>;

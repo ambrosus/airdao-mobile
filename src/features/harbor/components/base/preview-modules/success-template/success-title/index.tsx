@@ -1,11 +1,11 @@
 import React from 'react';
 import { TextStyle, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { TokenLogo } from '@components/modular';
 import { CryptoCurrencyCode } from '@appTypes';
+import { Row, Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 interface TitleData {
   name: string;

@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ReceiveQRCodeIcon } from '@components/svg/icons';
-import Config from '@constants/config';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { ReceiveFunds } from '@components/templates/ReceiveFunds';
-import { scale, verticalScale } from '@utils/scaling';
-import { AccountActionButton } from './ActionButton';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { ReceiveQRCodeIcon } from '@components/svg/icons';
+import { ReceiveFunds } from '@components/templates/ReceiveFunds';
+import Config from '@constants/config';
+import { scale, verticalScale } from '@utils';
+import { AccountActionButton } from './ActionButton';
 
 interface ReceiveProps {
   address: string;

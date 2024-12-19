@@ -13,17 +13,17 @@ import {
   View
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { styles } from './BottomSheet.styles';
-import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
-import { BottomSheetBorderRadius } from './BottomSheet.constants';
+import { AirDAOEventType } from '@appTypes';
 import { Row, Separator, Text } from '@components/base';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
-import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
-import { AirDAOEventType } from '@appTypes';
+import { BottomSheetBorderRadius } from './BottomSheet.constants';
+import { styles } from './BottomSheet.styles';
+import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { Toast } from '../../modular/Toast';
-import { CloseCircleIcon } from '@components/svg/icons/v2';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
 

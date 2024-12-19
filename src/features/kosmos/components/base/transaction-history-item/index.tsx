@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
-import { Row, Spacer, Text } from '@components/base';
-import { styles } from './styles';
-import { TokenLogo } from '@components/modular';
-import { formatDecimals } from '@features/kosmos/utils';
-import { COLORS } from '@constants/colors';
 import { BigNumber, ethers } from 'ethers';
+import { Row, Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import {
   timestampToFormattedDate,
   Token,
   TxType,
   useTokensStore
 } from '@entities/kosmos';
+import { formatDecimals } from '@features/kosmos/utils';
+import { styles } from './styles';
 
 type NotRequiredToken = Token | undefined;
 

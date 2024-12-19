@@ -1,5 +1,5 @@
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 import analytics from '@react-native-firebase/analytics';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 export const sendFirebaseEvent = (event: CustomAppEvents, params?: object) => {
   // if (!event || __DEV__) return;

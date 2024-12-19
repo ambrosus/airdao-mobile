@@ -1,23 +1,25 @@
 import React, { PropsWithChildren, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
-import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
-import { NumberUtils } from '@utils/number';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
 import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
+import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
+import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
+import { COLORS } from '@constants/colors';
 import { useSendFundsStore } from '@features/send-funds';
-import { _delayNavigation } from '@utils';
-import { HomeNavigationProp } from '@appTypes';
+import {
+  cssShadowToNative,
+  verticalScale,
+  NumberUtils,
+  _delayNavigation
+} from '@utils';
+import { styles } from './styles';
 
 interface ConfirmTransactionProps {
   from: string;

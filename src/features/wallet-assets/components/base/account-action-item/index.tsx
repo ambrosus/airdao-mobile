@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Pressable } from 'react-native';
-import { styles } from './styles';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface AccountActionItemProps {
   action: () => void;

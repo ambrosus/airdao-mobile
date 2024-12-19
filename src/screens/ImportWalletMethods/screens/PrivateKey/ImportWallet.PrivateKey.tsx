@@ -6,10 +6,9 @@ import {
   View
 } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Header } from '@components/composite';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
 import {
   Button,
   InputRef,
@@ -19,17 +18,21 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { WalletUtils } from '@utils/wallet';
-import { COLORS } from '@constants/colors';
-import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
+import { Header } from '@components/composite';
 import { PrivateKeyMaskedInput, Toast, ToastType } from '@components/modular';
-import { isIos } from '@utils/isPlatform';
-import { delay } from '@utils/delay';
-import { useAllAccounts } from '@hooks/database';
+import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
-import { HomeNavigationProp } from '@appTypes';
-import { StringUtils } from '@utils/string';
+import { useAllAccounts } from '@hooks/database';
+import {
+  StringUtils,
+  isIos,
+  scale,
+  verticalScale,
+  delay,
+  WalletUtils
+} from '@utils';
+import { styles } from './styles';
 
 const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
   ? 'padding'

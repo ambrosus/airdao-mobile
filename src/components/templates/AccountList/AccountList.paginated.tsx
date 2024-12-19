@@ -4,9 +4,9 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
-import { scale } from '@utils/scaling';
-import { AccountListProps } from './AccountList.types';
+import { scale } from '@utils';
 import { AccountList } from './AccountList';
+import { AccountListProps } from './AccountList.types';
 
 interface PaginatedAccountListProps extends AccountListProps {
   listProps?: AccountListProps['listProps'];

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { FONT } from '@constants/fonts';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   statusMain: {

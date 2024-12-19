@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
 import { RefreshControl, View, VirtualizedList } from 'react-native';
+import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { TransactionHistoryItem } from '@features/kosmos/components/base';
+import { Row, Spinner, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import {
   MarketType,
   TransactionListItem,
-  TxType
-} from '@features/kosmos/types';
+  TxType,
+  useMarketTransactions
+} from '@entities/kosmos';
+import { TransactionHistoryItem } from '@features/kosmos/components/base';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-import { upperCase } from 'lodash';
-import { COLORS } from '@constants/colors';
-import { Row, Spinner, Text } from '@components/base';
-import { useMarketTransactions } from '@entities/kosmos';
-import { isIos } from '@utils/isPlatform';
+import { isIos } from '@utils';
+import { styles } from './styles';
 
 interface TransactionsHistoryTabProps {
   market: MarketType | undefined;

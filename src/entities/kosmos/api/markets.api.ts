@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { MarketType } from '@entities/kosmos/types';
 import Config from '@constants/config';
+import { MarketType } from '@entities/kosmos/types';
 
 export async function fetchActiveMarkets(): Promise<MarketType[]> {
   const response = await axios.get(

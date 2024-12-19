@@ -1,9 +1,9 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
-import { StyleSheet, View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale as scaleFunc } from '@utils/scaling';
+import { scale as scaleFunc } from '@utils';
 
 interface HistoryIconModel extends IconProps {
   notification: boolean;

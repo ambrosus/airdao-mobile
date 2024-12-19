@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { ConnectionChainsIcon } from '@components/svg/icons/v2';
 import {
   useWalletConnectContextSelector,
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
+import { styles } from './styles';
 
 export const WalletSessionsLabel = () => {
   const { t } = useTranslation();

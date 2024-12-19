@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
+import { ethers, BigNumber } from 'ethers';
+import { useSwapContextSelector } from '@features/swap/context';
 import {
   addresses,
   extractArrayOfMiddleMultiHopAddresses,
   dexValidators
 } from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils/object';
-import { ethers, BigNumber } from 'ethers';
+import { getObjectKeyByValue } from '@utils';
 import { getAmountsOut, getAmountsIn } from '../contracts';
-import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapSettings } from './use-swap-settings';
 
 export function useSwapBetterCurrency() {

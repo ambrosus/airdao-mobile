@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header } from '@components/composite';
-import { Button, Row, Spacer, Switch, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
-import { useSupportedBiometrics } from '@hooks';
+import { Button, Row, Spacer, Switch, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
+import { useSupportedBiometrics } from '@hooks';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();

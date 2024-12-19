@@ -1,11 +1,11 @@
 import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
-import { Button, Spacer, Text } from '@components/base';
-import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
-import { scale } from '@utils/scaling';
-import { TokenLogo } from '@components/modular';
-import { styles } from './styles';
 import { CryptoCurrencyCode } from '@appTypes';
+import { Button, Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface BridgeSelectorItemModel {
   name: string;

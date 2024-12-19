@@ -11,13 +11,13 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import Animated from 'react-native-reanimated';
-import { Transaction } from '@models';
-import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
+import { CenteredSpinner } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { Transaction } from '@models';
+import { scale, verticalScale } from '@utils';
 import { ExplorerAccountTransactionItem } from './components';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];

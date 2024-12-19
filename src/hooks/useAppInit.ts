@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { NotificationService, PermissionService } from '@lib';
 
+import { API } from '@api/api';
 import {
   CacheableAccount,
   CacheableAccountList,
   DatabaseTable,
   Permission
 } from '@appTypes';
-import { API } from '@api/api';
-import { Cache, CacheKey } from '@lib/cache';
 import {
   AccountDBModel,
   Database,
@@ -18,6 +16,8 @@ import {
   PublicAddressListDB
 } from '@database';
 import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
+import { NotificationService, PermissionService } from '@lib';
+import { Cache, CacheKey } from '@lib/cache';
 import { useListsAndAddressesFetcher } from './useListsAndAddressesFetcher';
 
 /* eslint camelcase: 0 */
