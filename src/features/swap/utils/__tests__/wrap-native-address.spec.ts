@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { environment } from '@utils';
+import { environment } from '@utils/environment';
 import { isNativeWrapped, wrapNativeAddress } from '../wrap-native-address';
 
 const isTestnet = environment === 'testnet';
