@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { useMarketDetails } from './use-market-details';
 import { MarketType } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';
+import { useMarketDetails } from './use-market-details';
 
 export function useTransactionErrorHandler(market: MarketType | undefined) {
   const { t } = useTranslation();

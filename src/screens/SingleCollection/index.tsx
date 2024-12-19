@@ -1,28 +1,26 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { Button, Spacer, Text } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { AddIcon, EditIcon } from '@components/svg/icons';
 import {
   AddressList,
   BottomSheetCreateRenameGroup,
   BottomSheetEditCollection
 } from '@components/templates';
-import { AddIcon, EditIcon } from '@components/svg/icons';
-import { BottomSheetRef, Header } from '@components/composite';
-import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
-import { useUSDPrice } from '@hooks';
-import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { sortListByKey } from '@utils/sort';
-import { TokenLogo } from '@components/modular';
+import { useFetchAddresses } from '@entities/addresses';
 import { useListsSelector } from '@entities/lists';
 import { useListActions } from '@features/lists';
-import { useFetchAddresses } from '@entities/addresses';
+import { useUSDPrice } from '@hooks';
+import { sortListByKey, NumberUtils, scale, verticalScale } from '@utils';
+import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
+import { styles } from './styles';
 
 export const SingleGroupScreen = () => {
   const { t } = useTranslation();

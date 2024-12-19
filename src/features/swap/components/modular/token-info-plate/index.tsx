@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { formatEther } from 'ethers/lib/utils';
 import { Text, Row } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapTokens, useSwapBetterRate } from '@features/swap/lib/hooks';
 import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
-import { COLORS } from '@constants/colors';
-import { StyleProp, ViewStyle } from 'react-native';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 
 export const TokenInfoPlate = () => {
   const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();

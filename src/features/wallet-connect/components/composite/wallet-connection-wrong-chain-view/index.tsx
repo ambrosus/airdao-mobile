@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { SecondaryButton } from '@components/modular';
 import { Text } from '@components/base';
+import { SecondaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import {
   useHandleBottomSheetActions,
   useWalletConnectContextSelector
 } from '@features/wallet-connect/lib/hooks';
-import { COLORS } from '@constants/colors';
 import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
+import { styles } from './styles';
 
 export const WalletConnectionWrongChainView = () => {
   const { setWalletConnectStep } = useWalletConnectContextSelector();

@@ -1,10 +1,7 @@
 import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { useListActions } from '@features/lists';
-import { useAddressesActions } from '@features/addresses';
-import { useListsSelector } from '@entities/lists';
+import { Button, Text } from '@components/base';
 import { BottomSheetProps, BottomSheetRef } from '@components/composite';
 import {
   BottomSheetFloat,
@@ -12,11 +9,14 @@ import {
   ToastPosition,
   ToastType
 } from '@components/modular';
-import { Button, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { useListsSelector } from '@entities/lists';
+import { useAddressesActions } from '@features/addresses';
+import { useListActions } from '@features/lists';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ExplorerAccount } from '@models/Explorer';
 import { BottomSheetRenameAddress } from '@screens/SingleCollection/modals/BottomSheetRenameAddress';
-import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 
 interface BottomSheetEditWalletProps extends BottomSheetProps {

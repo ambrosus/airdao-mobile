@@ -1,15 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
-import { StakingPool } from '@models';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
-import { useStakingPoolDetails } from '@entities/staking';
-import { TokenLogo } from '../TokenLogo';
-import { TokenUtils } from '@utils/token';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
+import { useStakingPoolDetails } from '@entities/staking';
+import { StakingPool } from '@models';
+import { scale, verticalScale, TokenUtils, NumberUtils } from '@utils';
+import { TokenLogo } from '../TokenLogo';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;

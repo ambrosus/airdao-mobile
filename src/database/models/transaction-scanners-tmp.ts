@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { DatabaseTable } from '@appTypes';
 import { Model } from '@nozbe/watermelondb';
 import { text, field } from '@nozbe/watermelondb/decorators';
+import { DatabaseTable } from '@appTypes';
 
 export class TransactionScannersTmpDBModel extends Model {
   static table = DatabaseTable.TransactionScannersTmp;

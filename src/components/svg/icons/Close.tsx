@@ -1,9 +1,9 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { StyleSheet, View } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 interface CloseIconModel extends IconProps {
   border?: boolean;

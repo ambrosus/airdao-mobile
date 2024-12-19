@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/colors';
 import { StyleSheet } from 'react-native';
 import { AbstractChartConfig } from 'react-native-chart-kit/dist/AbstractChart';
+import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
   container: {

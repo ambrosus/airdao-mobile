@@ -1,7 +1,7 @@
 import React from 'react';
-import { IconProps } from '../Icon.types';
 import { Path, Svg } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
+import { IconProps } from '../Icon.types';
 
 export function Key({ scale = 1, color = COLORS.neutral200 }: IconProps) {
   const width = 16;

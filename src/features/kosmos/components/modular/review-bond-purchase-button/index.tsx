@@ -4,14 +4,14 @@ import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle
 } from 'react-native-reanimated';
-import { styles } from './styles';
 import { Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { buttonWithShadowStyle } from '@constants/shadow';
+import { MarketType } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
-import { MarketType } from '@entities/kosmos';
-import { buttonWithShadowStyle } from '@constants/shadow';
+import { styles } from './styles';
 
 interface ReviewBondPurchaseButtonProps {
   market: MarketType | undefined;

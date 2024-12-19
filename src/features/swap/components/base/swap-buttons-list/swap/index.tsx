@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { StyleProp, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Row, Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { styles } from '../styles';
 import { useSwapContextSelector } from '@features/swap/context';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { cssShadowToNative } from '@utils';
+import { styles } from '../styles';
 
 interface SwapButtonProps {
   isProcessingSwap: boolean;

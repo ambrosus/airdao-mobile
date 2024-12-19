@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardDismissingView, Spacer } from '@components/base';
 import { Header } from '@components/composite';
 import {
@@ -11,7 +10,8 @@ import {
   SettingsExpertModeForm,
   SettingsMultiHopForm
 } from '@features/swap/components/composite';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 export const SwapSettingsScreen = () => {
   const { t } = useTranslation();

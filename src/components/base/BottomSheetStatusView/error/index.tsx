@@ -1,15 +1,14 @@
 import React, { PropsWithChildren, useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { t } from 'i18next';
-import { styles } from '../styles';
-import { ErrorIcon } from '@components/svg/icons/v2';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer } from '@components/base/Spacer';
-import { PrimaryButton } from '@components/modular';
 import { Text } from '@components/base/Text';
+import { PrimaryButton } from '@components/modular';
+import { ErrorIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale, cssShadowToNative } from '@utils';
+import { styles } from '../styles';
 
 interface BottomSheetSuccessViewProps extends PropsWithChildren {
   title?: string;

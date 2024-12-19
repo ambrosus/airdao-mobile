@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
-import { DatePickerProps } from './DatePicker.types';
 import { Row, Spacer } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
+import { DatePickerProps } from './DatePicker.types';
 
 export const DatePicker = (props: DatePickerProps): JSX.Element => {
   const { selectedStartDate, selectedEndDate, period } = props;

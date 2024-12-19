@@ -1,16 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
-import { AccountDBModel } from '@database';
-import { WalletAvatars } from './WalletPicker.constants';
-import { useBalanceOfAddress, useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
+import { Row, Spacer, Text } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { AccountDBModel } from '@database';
+import { useBalanceOfAddress, useUSDPrice } from '@hooks';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
+import { WalletAvatars } from './WalletPicker.constants';
 
 interface WalletItemProps {
   wallet: AccountDBModel;

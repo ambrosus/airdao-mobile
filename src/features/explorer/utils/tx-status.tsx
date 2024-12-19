@@ -6,8 +6,8 @@ import {
   ContractCallIcon,
   FailedIcon
 } from '@components/svg/icons/v2/transactions';
-import { Transaction } from '@models';
 import { COLORS } from '@constants/colors';
+import { Transaction } from '@models';
 
 export const _txStatusLabel = (tx: Transaction) => {
   const { type, status } = tx;

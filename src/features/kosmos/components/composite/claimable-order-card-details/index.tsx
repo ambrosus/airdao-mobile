@@ -8,22 +8,22 @@ import React, {
 import { StyleProp, View, ViewStyle } from 'react-native';
 // @ts-ignore
 import { ContractNames } from '@airdao/airdao-bond';
-import { useTranslation } from 'react-i18next';
 import { BigNumber, ethers } from 'ethers';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
+import { TextOrSpinner } from '@components/composite';
+import { SecondaryButton, Toast, ToastType } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { buttonWithShadowStyle } from '@constants/shadow';
+import { getTimeRemaining, TxType, useToken } from '@entities/kosmos';
 import { useOrdersStore } from '@features/kosmos';
 import { OrderCardDetails } from '@features/kosmos/components/base';
 import { useClaimBonds } from '@features/kosmos/lib/hooks/use-claim-bonds';
-import { SecondaryButton, Toast, ToastType } from '@components/modular';
-import { getTimeRemaining, TxType, useToken } from '@entities/kosmos';
-import { COLORS } from '@constants/colors';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { TextOrSpinner } from '@components/composite';
-import { buttonWithShadowStyle } from '@constants/shadow';
+import { styles } from './styles';
 
 interface ClaimableOrderCardDetailsProps {
   readonly transaction: TxType;

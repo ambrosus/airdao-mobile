@@ -1,6 +1,6 @@
+import { CryptoCurrencyCode } from '@appTypes';
 import { TransactionType } from '@appTypes/enums';
 import { TransactionDTO } from './dtos/TransactionDTO';
-import { CryptoCurrencyCode } from '@appTypes';
 
 export interface TransactionTokenInfo {
   address: string;

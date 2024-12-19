@@ -1,7 +1,7 @@
 import axios from 'axios';
+import Config from '@constants/config';
 import { Config as BridgeConfig } from '@lib/bridgeSDK/models/types';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import Config from '@constants/config';
 
 const BRIDGE_TRANSACTIONS_HISTORY_URL = Config.BRIDGE_HISTORY_URL;
 

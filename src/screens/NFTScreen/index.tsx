@@ -1,15 +1,15 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { HomeParamsList } from '@appTypes';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image, View } from 'react-native';
-import { Header } from '@components/composite';
-import { Row, Spacer, Spinner, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import React from 'react';
+import { Image, View } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Row, Spacer, Spinner, Text } from '@components/base';
+import { Header } from '@components/composite';
+import NFTPlaceholder from '@components/svg/icons/NFTPlaceholder';
+import { COLORS } from '@constants/colors';
 import { useNFTInfo } from '@hooks/query/useNFTInfo';
 import { styles } from './styles';
-import NFTPlaceholder from '@components/svg/icons/NFTPlaceholder';
-import { useTranslation } from 'react-i18next';
 
 export const NFTScreen = () => {
   const {

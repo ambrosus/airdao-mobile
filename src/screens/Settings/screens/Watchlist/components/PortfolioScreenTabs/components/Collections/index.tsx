@@ -1,11 +1,11 @@
-import { View } from 'react-native';
 import React from 'react';
-import { styles } from './styles';
+import { View } from 'react-native';
 import { Spinner } from '@components/base';
-import { sortListByKey } from '@utils/sort';
-import { ListsGroups } from '@screens/Settings/screens/Watchlist/components/ListsOfAddressGroup';
 import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 import { useListsSelector } from '@entities/lists';
+import { ListsGroups } from '@screens/Settings/screens/Watchlist/components/ListsOfAddressGroup';
+import { sortListByKey } from '@utils';
+import { styles } from './styles';
 
 export const Collections = () => {
   const { refetch } = useFetchAddresses();

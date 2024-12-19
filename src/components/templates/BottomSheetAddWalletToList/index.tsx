@@ -1,14 +1,14 @@
 import React, { forwardRef, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useListActions } from '@features/lists';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
-import { verticalScale } from '@utils/scaling';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
+import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useListActions } from '@features/lists';
+import { verticalScale } from '@utils';
+import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
   title: string;

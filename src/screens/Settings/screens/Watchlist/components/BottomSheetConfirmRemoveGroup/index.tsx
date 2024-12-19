@@ -1,12 +1,11 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
-import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
-import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { AccountList } from '@models';
+import { BottomSheetRef } from '@components/composite';
 import { BottomSheetFloat } from '@components/modular';
-import { verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { useForwardedRef } from '@hooks';
+import { AccountList } from '@models';
+import { verticalScale, StringUtils } from '@utils';
 import { styles } from './styles';
 
 type Props = {

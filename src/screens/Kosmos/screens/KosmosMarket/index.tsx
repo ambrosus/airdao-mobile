@@ -11,26 +11,14 @@ import {
   RefreshControl,
   View
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
-import { Header } from '@components/composite';
-import {
-  MarketHeaderDetails,
-  ScreenLoader
-} from '@features/kosmos/components/base';
-import { useBalance, useResetStore } from '@features/kosmos/lib/hooks';
-import { HomeParamsList } from '@appTypes';
-import { MarketTableDetails } from '@features/kosmos/components/composite';
-import {
-  ExactMarketTokenTabs,
-  MarketChartsWithTimeframes
-} from '@features/kosmos/components/templates';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { isIOS } from 'react-native-popover-view/dist/Constants';
-import { isAndroid } from '@utils/isPlatform';
-import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Spacer } from '@components/base';
+import { Header } from '@components/composite';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import {
   useMarketByIdQuery,
@@ -38,8 +26,19 @@ import {
   useToken
 } from '@entities/kosmos';
 import { useChartStore } from '@features/kosmos';
-import { Spacer } from '@components/base';
-import { verticalScale } from '@utils/scaling';
+import {
+  MarketHeaderDetails,
+  ScreenLoader
+} from '@features/kosmos/components/base';
+import { MarketTableDetails } from '@features/kosmos/components/composite';
+import {
+  ExactMarketTokenTabs,
+  MarketChartsWithTimeframes
+} from '@features/kosmos/components/templates';
+import { useBalance, useResetStore } from '@features/kosmos/lib/hooks';
+import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
+import { isAndroid, verticalScale } from '@utils';
+import { styles } from './styles';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,

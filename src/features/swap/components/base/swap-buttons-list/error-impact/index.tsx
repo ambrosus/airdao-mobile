@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { useSwapSettings } from '@features/swap/lib/hooks';
-import { Spinner, Text } from '@components/base';
-import { PriceImpactErrorColors } from '../utils/colors';
 import { useSwapContextSelector } from '@features/swap/context';
+import { useSwapSettings } from '@features/swap/lib/hooks';
+import { PriceImpactErrorColors } from '../utils/colors';
 
 interface SwapErrorImpactButtonProps {
   isProcessingSwap: boolean;

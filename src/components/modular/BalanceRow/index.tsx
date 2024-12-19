@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { t } from 'i18next';
-import { Token } from '@models';
 import { CryptoCurrencyCode } from '@appTypes';
-import { useERC20Balance, useUSDPrice } from '@hooks';
-import { Button, Row, Spacer, Text } from '@components/base';
 import { ShimmerLoader } from '@components/animations';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { scale } from '@utils/scaling';
-import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { useWalletStore } from '@entities/wallet';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
+import { useERC20Balance, useUSDPrice } from '@hooks';
+import { Token } from '@models';
+import { NumberUtils, scale } from '@utils';
 
 interface BalanceRowProps {
   readonly token: Token;

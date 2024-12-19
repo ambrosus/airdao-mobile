@@ -5,12 +5,12 @@ import moment from 'moment';
 import { Button, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TransactionItem } from '@components/modular';
-import { Transaction, TransactionTokenInfo } from '@models/Transaction';
-import { scale, verticalScale } from '@utils/scaling';
-import { AMB_DECIMALS } from '@constants/variables';
-import { COLORS } from '@constants/colors';
 import { TransactionDetails } from '@components/templates/TransactionDetails';
+import { COLORS } from '@constants/colors';
+import { AMB_DECIMALS } from '@constants/variables';
 import { _txStatusLabel } from '@features/explorer/utils';
+import { Transaction, TransactionTokenInfo } from '@models/Transaction';
+import { scale, verticalScale } from '@utils';
 
 interface ExplorerAccountTransactionItemProps {
   transaction: Transaction;

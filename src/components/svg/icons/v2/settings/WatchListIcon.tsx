@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { SVGsModels } from '@models/SVGsModels';
 import { COLORS } from '@constants/colors';
+import { SVGsModels } from '@models/SVGsModels';
 
 export const WatchListIcon = (props: SVGsModels) => {
   const { scale = 1, color = COLORS.neutral500 } = props;

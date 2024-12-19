@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
-import { Button } from '@components/base';
-import { NoteIcon } from '@components/svg/icons/v2/harbor';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
-import { useEffectOnce, useKeyboardHeight } from '@hooks';
+import { Button } from '@components/base';
+import { Header } from '@components/composite';
+import { NoteIcon } from '@components/svg/icons/v2/harbor';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborWithdrawTabs } from '@features/harbor/components/tabs';
-import { scale } from '@utils/scaling';
-import { isSmallScreen } from '@utils/deviceSpecification';
-import { DEVICE_HEIGHT } from '@constants/variables';
+import { useEffectOnce, useKeyboardHeight } from '@hooks';
+import { isSmallScreen, scale } from '@utils';
 import { styles } from './styles';
 
 export const WithdrawHarborScreen = () => {

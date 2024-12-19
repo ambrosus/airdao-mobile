@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Contracts } from '@airdao/airdao-bond';
 import { ethers } from 'ethers';
-import { useWalletPrivateKey } from '@entities/wallet';
 import Config from '@constants/config';
+import { useWalletPrivateKey } from '@entities/wallet';
 
 export function useBondContracts() {
   const { _extractPrivateKey } = useWalletPrivateKey();

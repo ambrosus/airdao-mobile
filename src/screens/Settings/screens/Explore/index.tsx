@@ -15,6 +15,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   Easing,
   Extrapolation,
@@ -28,8 +29,10 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import {
+  SearchTabNavigationProp,
+  SearchTabParamsList
+} from '@appTypes/navigation';
 import {
   Button,
   KeyboardDismissingView,
@@ -37,27 +40,23 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { SearchAddress, SearchAddressRef } from '@components/templates';
-import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
-import { scale, verticalScale } from '@utils/scaling';
-import { ExplorerAccount } from '@models/Explorer';
-import {
-  SearchTabNavigationProp,
-  SearchTabParamsList
-} from '@appTypes/navigation';
-import { COLORS } from '@constants/colors';
+import { Header } from '@components/composite';
 import { ScannerIcon, SearchLargeIcon } from '@components/svg/icons';
-import { ExplorerWalletItem } from './components';
-import { SearchSort } from './Search.types';
+import { SearchAddress, SearchAddressRef } from '@components/templates';
+import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 import { useWatchlist } from '@hooks';
-
+import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { Header } from '@components/composite';
-import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
+import { ExplorerAccount } from '@models/Explorer';
+import { scale, verticalScale } from '@utils';
+import { ExplorerWalletItem } from './components';
+import { SearchSort } from './Search.types';
+import { styles } from './styles';
 
 export const Explore = () => {
   const navigation = useNavigation<SearchTabNavigationProp>();

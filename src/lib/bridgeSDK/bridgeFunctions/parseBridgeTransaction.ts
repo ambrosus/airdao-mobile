@@ -1,5 +1,5 @@
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { formatUnits } from 'ethers/lib/utils';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 
 export const parseBridgeTransaction = (
   transaction: BridgeTransactionHistoryDTO

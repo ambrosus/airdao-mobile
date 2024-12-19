@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { SettingsInputWithLabel } from '@/features/swap/components/base';
-import { PercentageBox } from '@components/composite/PercentageBox';
 import { Row, Text } from '@components/base';
-import { useSwapSettings } from '@features/swap/lib/hooks';
+import { PercentageBox } from '@components/composite/PercentageBox';
 import { COLORS } from '@constants/colors';
+import { useSwapSettings } from '@features/swap/lib/hooks';
+import { styles } from './styles';
 
 const SLIPPAGE_TOLERANCE_PERCENTAGES = ['0.1', '0.5', '1'];
 

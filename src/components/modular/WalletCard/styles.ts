@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { shadow } from '@constants/shadow';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { shadow } from '@constants/shadow';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const WalletCardHeight = 139;
 

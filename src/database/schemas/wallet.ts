@@ -1,5 +1,5 @@
-import { DatabaseTable } from '@appTypes';
 import { tableSchema } from '@nozbe/watermelondb';
+import { DatabaseTable } from '@appTypes';
 
 export const WalletTable = tableSchema({
   name: DatabaseTable.Wallets,

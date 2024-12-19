@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { styles } from './styles';
+import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
-import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 import { RightArrowIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
+import { NETWORK, SHORTEN_NETWORK } from '@utils';
+import { styles } from './styles';
 
 interface BridgeNetworksSelectedProps {
   size?: 'small' | 'large';

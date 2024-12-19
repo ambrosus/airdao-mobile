@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { MarketType, Token } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
+import { MarketType, Token } from '@entities/kosmos';
+import { NumberUtils } from '@utils';
 
 interface BalanceWithButtonProps {
   quoteToken: Token | undefined;

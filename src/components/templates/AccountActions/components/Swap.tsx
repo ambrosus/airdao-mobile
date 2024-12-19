@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
-import { AccountActionButton } from './ActionButton';
+import { SwapAccountActionIcon } from '@components/svg/icons/v2/actions';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { SwapAccountActionIcon } from '@components/svg/icons/v2/actions';
+import { AccountActionButton } from './ActionButton';
 
 interface SwapActionProps {
   readonly disabled: () => boolean;

@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { Pressable } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { SessionTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 import { Row, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { walletKit } from '@features/wallet-connect/utils';
 import {
   useHandleBottomSheetActions,
   useWalletConnectContextSelector
 } from '@features/wallet-connect/lib/hooks';
+import { walletKit } from '@features/wallet-connect/utils';
+import { styles } from './styles';
 
 interface WalletSessionItemProps {
   connection: SessionTypes.Struct;

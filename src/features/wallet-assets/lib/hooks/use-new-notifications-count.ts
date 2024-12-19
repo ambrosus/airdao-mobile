@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNotificationsQuery } from '@hooks';
-import { Cache, CacheKey } from '@lib/cache';
-import useAppFocus from '@hooks/useAppFocused';
 import { AirDAOEventType } from '@appTypes';
+import { useNotificationsQuery } from '@hooks';
+import useAppFocus from '@hooks/useAppFocused';
 import { AirDAOEventDispatcher } from '@lib';
+import { Cache, CacheKey } from '@lib/cache';
 
 export function useNewNotificationsCount(): number {
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);

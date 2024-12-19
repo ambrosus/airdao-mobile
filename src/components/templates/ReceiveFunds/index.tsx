@@ -1,13 +1,12 @@
 import React, { useReducer } from 'react';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { moderateScale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import { QRCodeWithLogo } from '@components/modular';
-import { Clipboard } from '@utils/clipboard';
-import { styles } from './styles';
 import { CheckboxCircleFill } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { Clipboard, moderateScale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface ReceiveFundsProps {
   address: string;

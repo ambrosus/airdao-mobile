@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/colors';
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
+import { COLORS } from '@constants/colors';
 import { IconProps } from './Icon.types';
 
 export function NoMatch(props: IconProps) {

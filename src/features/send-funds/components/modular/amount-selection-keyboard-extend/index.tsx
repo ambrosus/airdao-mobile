@@ -1,14 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle
 } from 'react-native-reanimated';
-import { styles } from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Row } from '@components/base';
+import { isIos } from '@utils';
+import { styles } from './styles';
 import { PercentageItem } from '../../base';
-import { isIos } from '@utils/isPlatform';
 
 const PERCENTS = [25, 50, 75, 100];
 

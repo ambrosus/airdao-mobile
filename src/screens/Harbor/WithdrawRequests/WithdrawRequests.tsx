@@ -5,18 +5,18 @@ import {
   RefreshControl,
   View
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text } from '@components/base';
 import { Header } from '@components/composite';
-import { useWalletStore } from '@entities/wallet';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { ILogs } from '@entities/harbor/model/types';
-import { Text } from '@components/base';
-import { scale } from '@utils/scaling';
-import { styles } from './WithdrawRequests.style';
+import { useWalletStore } from '@entities/wallet';
 import { useEffectOnce } from '@hooks';
 import { RequestItem } from '@screens/Harbor/WithdrawRequests/components';
+import { scale } from '@utils';
+import { styles } from './WithdrawRequests.style';
 
 export const WithdrawRequests = () => {
   const { t } = useTranslation();

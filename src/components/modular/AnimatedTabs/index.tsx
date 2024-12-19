@@ -13,10 +13,10 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import { DEVICE_WIDTH } from '@constants/variables';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 type AnimatedTab = {
   view: JSX.Element;

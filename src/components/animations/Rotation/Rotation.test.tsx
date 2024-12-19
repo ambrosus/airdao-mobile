@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
+import { RotationAnimation } from '@components/animations';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { RotationAnimation } from '@components/animations';
 
 jest.mock('react-native-reanimated', () => {
   const Reanimated = jest.requireActual('react-native-reanimated/mock');

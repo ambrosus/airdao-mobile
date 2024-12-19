@@ -1,10 +1,10 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { AccountList } from '@models/AccountList';
 import { LocalizedRenderEmpty } from '@components/templates';
-import { verticalScale } from '@utils/scaling';
-import { GroupItem } from '../ListsOfAddressGroup/components/GroupItem';
+import { AccountList } from '@models/AccountList';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
+import { GroupItem } from '../ListsOfAddressGroup/components/GroupItem';
 
 type Props = {
   listsOfAddressGroup: AccountList[];

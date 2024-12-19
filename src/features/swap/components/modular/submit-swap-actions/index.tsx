@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import { Alert } from 'react-native';
-import { useSwapContextSelector } from '@features/swap/context';
-import {
-  useSwapActions,
-  useSwapBottomSheetHandler
-} from '@features/swap/lib/hooks';
 import {
   ApprovalRequiredButton,
   SwapButton,
   SwapErrorImpactButton
 } from '@features/swap/components/base/swap-buttons-list';
+import { useSwapContextSelector } from '@features/swap/context';
+import {
+  useSwapActions,
+  useSwapBottomSheetHandler
+} from '@features/swap/lib/hooks';
 import { AllowanceStatus, BottomSheetStatus } from '@features/swap/types';
 
 import {

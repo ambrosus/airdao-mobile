@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { QueryResponse } from '@appTypes';
 import { API } from '@api/api';
+import { QueryResponse } from '@appTypes';
 import { useWalletStore } from '@entities/wallet';
+import type { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 
 export function useBridgeHistory(): QueryResponse<
   BridgeTransactionHistoryDTO[]

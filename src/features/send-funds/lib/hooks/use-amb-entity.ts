@@ -4,7 +4,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { AMB_DECIMALS } from '@constants/variables';
 import { useBalanceOfAddress } from '@hooks';
 import { Token } from '@models';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 
 export function useAMBEntity(senderAddress: string) {
   const { data: tokenBalance } = useBalanceOfAddress(senderAddress);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from '@components/svg/icons/Icon.types';
 import Svg, { Path } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons/Icon.types';
 
 export function TokenSTAMBIcon({ scale = 1 }: IconProps) {
   const size = 32 * scale;

@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { BigNumber } from 'ethers';
-import { useSwapBetterCurrency } from './use-swap-better-currency';
 import {
   extractArrayOfMiddleMultiHopAddresses,
   isMultiHopSwapAvailable
 } from '@features/swap/utils';
+import { useSwapBetterCurrency } from './use-swap-better-currency';
 import { useSwapSettings } from './use-swap-settings';
 
 const BASE_RATE_AMOUNT_TO_SELL = '1';

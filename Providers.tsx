@@ -1,5 +1,4 @@
 import React from 'react';
-import { combineComponents } from '@utils/combineComponents';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LocalizationProvider } from '@contexts';
@@ -10,6 +9,7 @@ import { BridgeContextProvider } from '@features/bridge/context';
 import { SwapContextProvider } from '@features/swap/context';
 import { WalletConnectContextProvider } from '@features/wallet-connect/context';
 import Config from '@constants/config';
+import { combineComponents } from '@utils';
 
 const queryClient = new QueryClient();
 

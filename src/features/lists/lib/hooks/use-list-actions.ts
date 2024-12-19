@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { PublicAddressListDB } from '@database';
 import { CacheableAccountList } from '@appTypes';
+import { PublicAddressListDB } from '@database';
+import { useAddressesStore } from '@entities/addresses';
 import { useListsStore } from '@entities/lists/model/lists.store';
 
 import {
@@ -8,7 +9,6 @@ import {
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 import { AccountList, ExplorerAccount } from '@models';
-import { useAddressesStore } from '@entities/addresses';
 
 export function useListActions(onDismissBottomSheet?: () => void) {
   const { allAddresses } = useAddressesStore();

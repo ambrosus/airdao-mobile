@@ -1,7 +1,7 @@
 // TODO: remove these function & extract into common contracts
+import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { Token } from '@features/kosmos/types';
-import { ethers } from 'ethers';
 import { ERC20_BALANCE } from '../abi/ERC20_BALANCE';
 
 interface BalanceArgs {

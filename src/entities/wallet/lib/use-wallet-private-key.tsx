@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useWalletStore } from '../model/wallet-store';
 import { Cache, CacheKey } from '@lib/cache';
+import { useWalletStore } from '../model/wallet-store';
 
 export function useWalletPrivateKey() {
   const { wallet } = useWalletStore();

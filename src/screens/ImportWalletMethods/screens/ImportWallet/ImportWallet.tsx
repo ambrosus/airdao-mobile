@@ -7,12 +7,11 @@ import React, {
   useCallback
 } from 'react';
 import { Alert, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Header } from '@components/composite';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
 import {
   Button,
   InputRef,
@@ -21,16 +20,20 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
-import { MnemonicUtils } from '@utils/mnemonics';
-import { StringUtils } from '@utils/string';
-import { WalletUtils } from '@utils/wallet';
+import { Header } from '@components/composite';
 import { Toast, ToastType } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
-import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';
 import { useAllAccounts } from '@hooks/database';
+import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';
+import {
+  WalletUtils,
+  StringUtils,
+  MnemonicUtils,
+  scale,
+  verticalScale
+} from '@utils';
+import { styles } from './styles';
 
 const INITIAL_ARRAY = Array(12).fill('');
 

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, verticalScale } from '@utils/scaling';
+import { moderateScale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   upperRow: {

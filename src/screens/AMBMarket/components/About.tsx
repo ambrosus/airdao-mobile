@@ -1,7 +1,7 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import {
   BrowserIcon,
   DiscordIcon,
@@ -10,9 +10,9 @@ import {
   TelegramIcon,
   TwitterIcon
 } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
+import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
+import { scale, verticalScale } from '@utils';
 
 interface Link {
   title: string;

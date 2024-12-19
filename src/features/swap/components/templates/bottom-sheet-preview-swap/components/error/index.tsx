@@ -2,17 +2,15 @@ import React, { useCallback } from 'react';
 import { InteractionManager, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
+import { ErrorIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
-import { COLORS } from '@constants/colors';
-import { ErrorIcon } from '@components/svg/icons/v2';
-import { verticalScale } from '@utils/scaling';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { _delayNavigation } from '@utils/navigate';
+import { cssShadowToNative, verticalScale, _delayNavigation } from '@utils';
+import { styles } from './styles';
 
 export const ErrorSwapView = () => {
   const { t } = useTranslation();

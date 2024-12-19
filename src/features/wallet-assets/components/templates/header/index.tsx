@@ -8,33 +8,31 @@ import Animated, {
   useDerivedValue,
   withSpring
 } from 'react-native-reanimated';
-import { styles } from './styles';
-import { Header } from '@components/composite';
+import { HomeNavigationProp } from '@appTypes/navigation';
 import { Button, Spacer, Text } from '@components/base';
+import { Header } from '@components/composite';
 import {
   BarcodeScannerIcon,
   NotificationBellIcon
 } from '@components/svg/icons/v2';
-import { useNotificationsQuery } from '@hooks';
 import { COLORS } from '@constants/colors';
+import { useWalletStore } from '@entities/wallet';
+import {
+  useBarcode,
+  useNewNotificationsCount
+} from '@features/wallet-assets/lib/hooks';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
 import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
+import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { scale } from '@utils/scaling';
-import { HomeNavigationProp } from '@appTypes/navigation';
-import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
-import { NumberUtils } from '@utils/number';
-import {
-  useBarcode,
-  useNewNotificationsCount
-} from '@features/wallet-assets/lib/hooks';
-import { useWalletStore } from '@entities/wallet';
+import { NumberUtils, StringUtils, scale } from '@utils';
+import { styles } from './styles';
 
 interface HomeHeaderProps {
   account: ExplorerAccount | null;

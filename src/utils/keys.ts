@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import * as Crypto from 'expo-crypto';
-import { DEFAULT_WORDS } from '@constants/words';
+import bip39 from 'bip39';
 // @ts-ignore
 import createHmac from 'create-hmac';
-const bip39 = require('bip39');
+import * as Crypto from 'expo-crypto';
+import { DEFAULT_WORDS } from '@constants/words';
 
 interface CreateHmacPDFK2Sizes {
   [key: string]: number;
@@ -20,7 +19,7 @@ const createHmacPDFK2Sizes: CreateHmacPDFK2Sizes = {
   ripemd160: 20
 };
 
-class KeysUtills {
+class KeysUtils {
   static _pbkdf2(
     password: string,
     salt: Buffer,
@@ -116,4 +115,4 @@ class KeysUtills {
   }
 }
 
-export default KeysUtills;
+export { KeysUtils };

@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { BigNumber, ethers, utils } from 'ethers';
+import { MarketType, useMarketTokens } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';
 import { formatDecimals } from '@features/kosmos/utils';
 import { useMarketDetails } from './use-market-details';
-import { MarketType, useMarketTokens } from '@entities/kosmos';
 
 export function useBalance(market: MarketType | undefined) {
   const { onChangeAmountToBuy } = usePurchaseStore();

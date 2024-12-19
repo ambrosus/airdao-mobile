@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  NativeStackNavigationEventMap,
-  NativeStackNavigationOptions
-} from '@react-navigation/native-stack';
-import {
   ParamListBase,
   StackNavigationState,
   TypedNavigator
 } from '@react-navigation/native';
+import {
+  NativeStackNavigationEventMap,
+  NativeStackNavigationOptions
+} from '@react-navigation/native-stack';
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { AddressDetails } from '@screens/Address';
 import { HomeParamsList, PortfolioParamsPortfolio } from '@appTypes';
+import { AddressDetails } from '@screens/Address';
 import { Explore } from '@screens/Settings/screens/Explore';
 
 export const getCommonStack = (

@@ -2,18 +2,16 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
+import { SuccessIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
-import { COLORS } from '@constants/colors';
-import { SuccessIcon } from '@components/svg/icons/v2';
-import { verticalScale } from '@utils/scaling';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { _delayNavigation } from '@utils/navigate';
+import { _delayNavigation, verticalScale, cssShadowToNative } from '@utils';
+import { styles } from './styles';
 
 export const SuccessSwapView = () => {
   const { t } = useTranslation();

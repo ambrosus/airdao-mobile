@@ -1,10 +1,10 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import { ExplorerAccountView } from '@components/templates';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import { MockTransaction } from '../../../__mocks__/models/Transaction.mock';
 import { ExplorerAccountType } from '@appTypes';
+import { ExplorerAccountView } from '@components/templates';
 import { ExplorerAccount } from '@models';
 import clearAllMocks = jest.clearAllMocks;
 

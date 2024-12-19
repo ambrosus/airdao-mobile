@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Text } from '@components/base';
 import { TextProps } from '@components/base/Text/Text.types';
-import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
+import { NumberUtils } from '@utils';
 
 interface PercentChangeProps
   extends Pick<TextProps, 'fontSize' | 'fontWeight'> {

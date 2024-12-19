@@ -1,9 +1,9 @@
-import { CalculateGasFee } from '@lib/bridgeSDK/models/types';
-import Config from '@constants/config';
-import { Cache, CacheKey } from '@lib/cache';
 import { ethers } from 'ethers';
-import { MySdk } from '../sdk/index';
+import Config from '@constants/config';
 import { currentProvider } from '@lib';
+import { CalculateGasFee } from '@lib/bridgeSDK/models/types';
+import { Cache, CacheKey } from '@lib/cache';
+import { MySdk } from '../sdk/index';
 
 export async function bridgeWithdraw({
   bridgeConfig,

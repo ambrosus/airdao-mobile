@@ -1,16 +1,16 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
-import { styles } from './styles';
-import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
-import { SingleAsset } from '@components/modular';
-import { Button, Spinner } from '@components/base';
+import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
-import { ExplorerAccount, Token } from '@models';
-import { TokenUtils } from '@utils/token';
+import { Button, Spinner } from '@components/base';
+import { SingleAsset } from '@components/modular';
+import { LocalizedRenderEmpty } from '@components/templates/LocalizedRenderEmpty';
 import { AMB_DECIMALS } from '@constants/variables';
+import { ExplorerAccount, Token } from '@models';
+import { TokenUtils } from '@utils';
+import { styles } from './styles';
 
 interface WalletAssetsProps {
   tokens: Token[] | undefined;

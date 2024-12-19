@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { BottomSheet } from '@components/composite';
+import { WalletConnectIcon } from '@components/svg/icons';
+import { FailedIcon } from '@components/svg/icons/v2';
 import {
   useWalletConnectContextSelector,
   useWalletKitEventsManager
 } from '@features/wallet-connect/lib/hooks';
-import { WalletConnectIcon } from '@components/svg/icons';
+import { styles } from './styles';
 import { RenderModalViewByStep } from '../../modular';
-import { FailedIcon } from '@components/svg/icons/v2';
 
 export const WalletConnectModal = () => {
   const {

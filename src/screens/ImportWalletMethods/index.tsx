@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Header } from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
-import { HomeParamsList } from '@appTypes';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Edit, Key } from '@components/svg/icons/v2';
 import { useRoute } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { Edit, Key } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 type ImportWalletMethod = {
   label: string;

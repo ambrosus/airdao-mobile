@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import { styles } from './styles';
-import { Token } from '@models';
-import { TokensListItem } from '../../base';
 import { Spacer, Spinner } from '@components/base';
 import { useSendFundsStore } from '@features/send-funds';
+import { Token } from '@models';
+import { styles } from './styles';
+import { TokensListItem } from '../../base';
 
 interface TokensListProps {
   // readonly tokens: Token[];

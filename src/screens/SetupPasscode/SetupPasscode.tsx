@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { BackHandler, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
-import { Button, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { SettingsTabNavigationProp } from '@appTypes';
-import { Passcode } from '@components/modular';
-import { styles } from './SetupPasscode.styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { Passcode } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { styles } from './SetupPasscode.styles';
 
 export const SetupPasscode = () => {
   const { t } = useTranslation();

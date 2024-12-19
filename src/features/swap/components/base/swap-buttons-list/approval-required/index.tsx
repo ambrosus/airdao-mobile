@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { StyleProp, TextStyle, ViewStyle, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from '../styles';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { AllowanceStatus } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
+import { AllowanceStatus } from '@features/swap/types';
+import { styles } from '../styles';
 
 interface ApprovalRequiredButtonProps {
   isIncreasingAllowance: boolean;

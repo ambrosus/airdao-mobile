@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ethers } from 'ethers';
 import * as Bond from '@airdao/airdao-bond';
-// @ts-ignore
 import * as BondOld from 'airdao-bond-old';
+import { ethers } from 'ethers';
+// @ts-ignore
+import { Toast, ToastType } from '@components/modular';
 import Config from '@constants/config';
 import { claimExpiredOrder } from '@features/kosmos/api';
-import { Toast, ToastType } from '@components/modular';
 
 interface ClaimBondsArgs {
   contracts: any;

@@ -1,6 +1,6 @@
-import { DatabaseTable } from '@appTypes';
 import { Model } from '@nozbe/watermelondb';
 import { text, field } from '@nozbe/watermelondb/decorators';
+import { DatabaseTable } from '@appTypes';
 
 export class WalletDBModel extends Model {
   static table = DatabaseTable.Wallets;

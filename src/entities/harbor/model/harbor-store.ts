@@ -1,10 +1,10 @@
-import { create } from 'zustand';
 import { BigNumber } from 'ethers';
+import { create } from 'zustand';
+import { harborService } from '@api/harbor/harbor-service';
 import { HarborStoreModel, TierRewardItem } from '@entities/harbor/model/types';
 import { getAllHarborData } from '@entities/harbor/utils/getAllHarborData';
 import { parseData } from '@entities/harbor/utils/parceData';
 import { DEFAULT_DATA, REWARD_TIERS_LIST } from '../constants';
-import { harborService } from '@api/harbor/harbor-service';
 
 export const useHarborStore = create<HarborStoreModel>((set) => ({
   data: DEFAULT_DATA,

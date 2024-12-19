@@ -1,6 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
-import { isSmallScreen } from '@utils/deviceSpecification';
+import { scale, verticalScale, isSmallScreen } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {

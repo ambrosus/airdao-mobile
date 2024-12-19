@@ -1,8 +1,8 @@
 import React, { forwardRef, PropsWithChildren, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
+import { styles } from './styles';
 
 interface BottomSheetTokensListProps extends PropsWithChildren {
   title: string;

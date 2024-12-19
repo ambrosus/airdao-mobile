@@ -6,13 +6,12 @@ import React, {
   useEffect,
   useState
 } from 'react';
+import dayjs from 'dayjs';
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
-import dayjs from 'dayjs';
-// import i18n from '../../localization/i18n';
 import { Language, LanguageCode } from '@appTypes';
-import { LocalizationUtils } from '@utils/localization';
 import i18n from '@localization/i18n';
+import { LocalizationUtils } from '@utils';
 
 interface ILanguageContext {
   changeCurrentLanguage: (language: Language) => Promise<void>;

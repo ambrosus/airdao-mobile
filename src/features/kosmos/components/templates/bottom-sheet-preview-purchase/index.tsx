@@ -6,28 +6,27 @@ import React, {
   useState
 } from 'react';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ethers } from 'ethers';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Row, Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
-import { COLORS } from '@constants/colors';
-import { useMarketDetails } from '@features/kosmos/lib/hooks';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
-import { $discount, formatDecimals } from '@features/kosmos/utils';
-import { usePurchaseStore } from '@features/kosmos';
-import { BuyBondButton } from '../../modular';
+import { COLORS } from '@constants/colors';
 import {
   _timestampToDate,
   MarketType,
   timestampToFormattedDate,
   useTokensStore
 } from '@entities/kosmos';
-import { verticalScale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
+import { usePurchaseStore } from '@features/kosmos';
+import { useMarketDetails } from '@features/kosmos/lib/hooks';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
+import { useForwardedRef } from '@hooks';
+import { isAndroid, verticalScale } from '@utils';
+import { styles } from './styles';
+import { BuyBondButton } from '../../modular';
 
 interface BottomSheetPreviewPurchaseProps {
   market: MarketType | undefined;

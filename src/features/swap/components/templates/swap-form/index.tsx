@@ -1,17 +1,16 @@
 import React from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import { styles } from './styles';
-import { KeyboardDismissingView, Spacer } from '@components/base';
-import { FIELD } from '@features/swap/types';
-import { scale } from '@utils/scaling';
+import { SwapReverseTokens } from '@/features/swap/components/composite';
 import {
   InputWithTokenSelect,
   ReviewSwapButton,
   TokenInfoPlate
 } from '@/features/swap/components/modular';
-import { SwapReverseTokens } from '@/features/swap/components/composite';
+import { KeyboardDismissingView, Spacer } from '@components/base';
 import { useSwapInterface } from '@features/swap/lib/hooks';
-import { isIos } from '@utils/isPlatform';
+import { FIELD } from '@features/swap/types';
+import { scale, isIos } from '@utils';
+import { styles } from './styles';
 
 const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';
 

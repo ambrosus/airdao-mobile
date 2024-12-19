@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
+import { API } from '@api/api';
+import { MULTISIG_VAULT } from '@constants/variables';
 import { PublicAddressDB } from '@database';
 import { ExplorerAccount } from '@models';
-import { MULTISIG_VAULT } from '@constants/variables';
-import { API } from '@api/api';
 import { AddressUtils } from '@utils/address';
 import { ArrayUtils } from '@utils/array';
 import { useAddressesStore } from '../../model';

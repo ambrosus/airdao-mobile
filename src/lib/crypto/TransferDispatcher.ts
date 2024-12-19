@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
-import erc20 from './erc20';
 import Config from '@constants/config';
+import erc20 from './erc20';
 
 class TransferDispatcher {
   private web3: Web3;

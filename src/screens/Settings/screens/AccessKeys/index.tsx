@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { styles } from './styles';
 import { SettingsTabParamsList } from '@appTypes';
-import { AccessKeysMnemonicTab } from '@screens/Settings/screens/AccessKeys/tabs/Mnemonic/AccessKeys.Mnemonic';
-import { AccessKeysPrivateTab } from '@screens/Settings/screens/AccessKeys/tabs/Private/AccessKeys.Private';
-import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
 import { Header } from '@components/composite';
 import { AnimatedTabs } from '@components/modular';
+import { singleAirDAOStorage } from '@lib';
+import { AccessKeysMnemonicTab } from '@screens/Settings/screens/AccessKeys/tabs/Mnemonic/AccessKeys.Mnemonic';
+import { AccessKeysPrivateTab } from '@screens/Settings/screens/AccessKeys/tabs/Private/AccessKeys.Private';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<SettingsTabParamsList, 'AccessKeys'>;
 
@@ -20,7 +20,7 @@ export const AccessKeysScreen = ({ route }: Props) => {
     (async () => {
       setIsMnemonicAvailable(
         (
-          await AirDAOKeysStorage.getWalletMnemonic(route.params.walletHash)
+          await singleAirDAOStorage.getWalletMnemonic(route.params.walletHash)
         ).split(' ').length > 1
       );
     })();

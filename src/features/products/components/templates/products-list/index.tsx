@@ -4,14 +4,14 @@ import {
   SectionListData,
   SectionListRenderItemInfo
 } from 'react-native';
-import { styles } from './styles';
-import { Product, SectionizedProducts } from '@features/products/utils';
-import { PRODUCTS } from '@features/products/entities';
+import { useTranslation } from 'react-i18next';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { PRODUCTS } from '@features/products/entities';
+import { Product, SectionizedProducts } from '@features/products/utils';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 import { ProductListItem } from '../../base';
-import { verticalScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
 
 export const ProductsList = () => {
   const { t } = useTranslation();

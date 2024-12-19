@@ -7,24 +7,24 @@ import {
   ViewStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   PanGestureHandlerGestureEvent
 } from 'react-native-gesture-handler';
-import { styles } from './styles';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { ReceiveFunds } from '../ReceiveFunds';
 import { useWalletStore } from '@entities/wallet';
+import { ReceiveFunds } from '../ReceiveFunds';
+import { styles } from './styles';
 
 const MAX_SCROLL_Y = 64;
 

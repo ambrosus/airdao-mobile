@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { useSwapContextSelector } from '@features/swap/context';
-import { SelectedTokensKeys } from '@features/swap/types';
-import { scale } from '@utils/scaling';
 import { TokenLogo } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
-import { SwapStringUtils } from '@features/swap/utils';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { useSwapContextSelector } from '@features/swap/context';
+import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
+import { SelectedTokensKeys } from '@features/swap/types';
+import { SwapStringUtils } from '@features/swap/utils';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface TokenSelectorProps {
   readonly type: SelectedTokensKeys;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from './Icon.types';
 import { Path, Svg } from 'react-native-svg';
+import { IconProps } from './Icon.types';
 
 export function WalletConnectIcon({ scale = 1 }: IconProps) {
   const width = 75;

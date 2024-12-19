@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { WrappedListsContainer } from '@features/kosmos/components/base';
-import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { TokenLogo } from '@components/modular';
+import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
+import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { StakeAMBTab } from '../stake-amb-tab';
 
 export const HarborStakeTabs = () => {

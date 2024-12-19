@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TextInputProps, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { GraphPoint } from 'react-native-graph';
 import Animated, {
   AnimatedProps,
   useAnimatedProps,
@@ -9,17 +10,16 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { GraphPoint } from 'react-native-graph';
-import { styles } from './styles';
 import { PriceSnapshotInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
+import { ChevronDownIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { MONTH_NAMES } from '@constants/variables';
+import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 import { BezierChart } from '../BezierChart';
 
 interface AMBPriceHistoryProps {

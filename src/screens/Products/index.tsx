@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
 import { Text } from '@components/base';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { ProductsList } from '@features/products/components/templates';
+import { styles } from './styles';
 
 export const ProductScreen = () => {
   const renderLeftHeaderComponent = useMemo(

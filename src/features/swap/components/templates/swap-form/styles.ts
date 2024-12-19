@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { isAndroid } from '@utils/isPlatform';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale, isAndroid } from '@utils';
 
 export const styles = StyleSheet.create({
   container: { flex: 1 },

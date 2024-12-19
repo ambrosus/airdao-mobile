@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { View } from 'react-native';
-import { styles } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components/BridgeTransactionPendingTemplate/styles';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
+import { styles } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components/BridgeTransactionPendingTemplate/styles';
 
 export const RowStageSection = ({
   children,

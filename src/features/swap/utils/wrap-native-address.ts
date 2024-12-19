@@ -1,10 +1,7 @@
+import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { SwapToken } from '@features/swap/types';
-import { ethers } from 'ethers';
-import { TOKEN_ADDRESSES } from '@features/swap/entities';
-import { environment } from '@utils/environment';
-
-export const addresses = TOKEN_ADDRESSES[environment];
+import { addresses } from './multi-route';
 
 export function isNativeWrapped(path: string[]) {
   const wrappedPath = Config.SWAP_TOKENS.find(

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENCIES_QUERY } from '@entities/currencies/lib/currencies.graph';
-import { AwaitCurrencyResponse } from '@entities/currencies/types';
 import { useCurrenciesStore } from '@entities/currencies/model';
+import { AwaitCurrencyResponse } from '@entities/currencies/types';
 
 export function useCurrenciesQuery() {
   const { onSetCurrencies } = useCurrenciesStore();

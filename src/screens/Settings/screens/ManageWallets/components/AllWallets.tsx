@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Button } from '@components/base';
 import { WalletDBModel } from '@database';
 import { useAllAccounts, useAllWallets } from '@hooks/database';
-import { Button } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { SettingsTabNavigationProp } from '@appTypes';
+import { scale, verticalScale } from '@utils';
 import { WalletItem } from './Wallet';
 
 export const AllWallets = () => {

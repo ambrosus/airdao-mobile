@@ -1,5 +1,5 @@
-import { StringUtils } from '@utils/string';
 import moment from 'moment/moment';
+import { StringUtils } from '@utils/string';
 
 export enum NETWORK {
   eth = 'Ethereum',

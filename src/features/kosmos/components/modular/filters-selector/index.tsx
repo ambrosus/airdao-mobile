@@ -1,9 +1,9 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { styles } from './styles';
 import { Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { ChevronDownIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface FiltersSelectorProps {
   label: string;

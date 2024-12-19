@@ -2,16 +2,16 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
+import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
 import { BottomSheetRef } from '@components/composite';
-import { Transaction, TransactionTokenInfo } from '@models/Transaction';
-import { NumberUtils } from '@utils/number';
-import { COLORS } from '@constants/colors';
-import { SharePortfolio } from '../BottomSheetSharePortfolio';
-import { styles } from './styles';
 import { TokenLogo } from '@components/modular';
 import { GlobeIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
-import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
+import { Transaction, TransactionTokenInfo } from '@models/Transaction';
+import { NumberUtils } from '@utils';
+import { SharePortfolio } from '../BottomSheetSharePortfolio';
+import { styles } from './styles';
 import { AddressRowWithAction } from '../ExplorerAccount/components/address-row-with-action';
 
 interface TransactionDetailsProps {

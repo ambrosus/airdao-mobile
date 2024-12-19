@@ -7,18 +7,17 @@ import {
   ViewStyle
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './Step1.styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { MnemonicUtils } from '@utils/mnemonics';
-import { scale, verticalScale } from '@utils/scaling';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
 
 import { useAddWalletStore } from '@features/add-wallet';
+import { scale, verticalScale, MnemonicUtils } from '@utils';
+import { styles } from './Step1.styles';
 
 const LIST_COLUMNS = 2;
 

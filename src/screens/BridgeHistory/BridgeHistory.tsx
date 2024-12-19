@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { BridgeHistoryTransactions } from '@features/bridge/templates/BridgeHistory/BridgeHistory.Transactions';

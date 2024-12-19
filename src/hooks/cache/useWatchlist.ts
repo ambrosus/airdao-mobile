@@ -1,14 +1,13 @@
 import { useMemo } from 'react';
-import { useAddressesActions } from '@features/addresses';
-import { useAddressesStore } from '@entities/addresses';
 import { API } from '@api/api';
-import { ExplorerAccount } from '@models/Explorer';
-import { AddressUtils } from '@utils/address';
-
+import { useAddressesStore } from '@entities/addresses';
+import { useAddressesActions } from '@features/addresses';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { ExplorerAccount } from '@models/Explorer';
+import { AddressUtils } from '@utils';
 
 export const useWatchlist = () => {
   const { allAddresses } = useAddressesStore();

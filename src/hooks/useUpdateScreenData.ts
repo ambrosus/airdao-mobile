@@ -1,5 +1,5 @@
-import { useAppState } from '@hooks/useAppState';
 import { useEffect } from 'react';
+import { useAppState } from '@hooks/useAppState';
 
 const APP_STATES = {
   inactive: 'inactive',

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { ProductsInnerIcon } from './products-inner-icon';
 import { COLORS } from '@constants/colors';
+import { ProductsInnerIcon } from './products-inner-icon';
 import { IconProps } from '../../Icon.types';
 
 export function ProductsInactiveIcon({ color }: Pick<IconProps, 'color'>) {

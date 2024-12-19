@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
-import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
 import { Row } from '@components/base';
-import { ClipboardIcon } from '@components/svg/icons/v2';
+import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
 import { Checkmark } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { ClipboardIcon } from '@components/svg/icons/v2';
+import { scale } from '@utils';
 
 interface AddressRowWithActionProps {
   readonly label: string;

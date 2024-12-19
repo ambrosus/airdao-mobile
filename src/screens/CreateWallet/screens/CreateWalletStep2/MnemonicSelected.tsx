@@ -1,8 +1,8 @@
-import { Button, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Button, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 interface MnemonicSelectedProps {
   word: string;

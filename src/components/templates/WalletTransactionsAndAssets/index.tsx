@@ -11,19 +11,19 @@ import {
   NativeSyntheticEvent,
   View
 } from 'react-native';
-import { DerivedValue } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { AnimatedTabs } from '@components/modular';
-import { ExplorerAccount } from '@models';
-import { useTokensAndTransactions } from '@hooks';
-import { AccountTransactions } from '../ExplorerAccount';
-import { WalletAssets } from './WalletAssets';
-import { NftAssets } from './NftAssets';
-import { WalletDepositFunds } from '../WalletDepositFunds';
+import { DerivedValue } from 'react-native-reanimated';
 import { Spinner } from '@components/base';
+import { AnimatedTabs } from '@components/modular';
 import { _tokensOrNftMapper } from '@entities/wallet';
 import { balanceReducer } from '@features/wallet-assets/utils';
+import { useTokensAndTransactions } from '@hooks';
+import { ExplorerAccount } from '@models';
+import { styles } from './styles';
+import { AccountTransactions } from '../ExplorerAccount';
+import { NftAssets } from './NftAssets';
+import { WalletAssets } from './WalletAssets';
+import { WalletDepositFunds } from '../WalletDepositFunds';
 
 interface WalletTransactionsAndAssetsProps {
   account: ExplorerAccount;

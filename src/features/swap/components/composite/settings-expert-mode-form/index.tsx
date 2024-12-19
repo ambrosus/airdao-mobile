@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Switch, Text } from '@components/base';
-import { useSwapSettings } from '@features/swap/lib/hooks';
 import { COLORS } from '@constants/colors';
+import { useSwapSettings } from '@features/swap/lib/hooks';
 
 export const SettingsExpertModeForm = () => {
   const { t } = useTranslation();

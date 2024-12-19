@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const ListCellHeadings = () => {
   const { t } = useTranslation();

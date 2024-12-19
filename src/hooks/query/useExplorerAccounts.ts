@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { ExplorerAccountDTO } from '@models/index';
-import { ExplorerAccount } from '@models/Explorer';
-import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
+import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
+import { ExplorerAccount } from '@models/Explorer';
+import { ExplorerAccountDTO } from '@models/index';
+import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
 
 const LIMIT = 20;
 

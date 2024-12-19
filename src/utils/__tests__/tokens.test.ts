@@ -15,14 +15,6 @@ const MockWithNameWithDB = {
   tokenNameFromDatabase: 'Astra'
 };
 
-jest.mock('ethers', () => ({
-  ethers: {
-    constants: {
-      AddressZero: '0x0000000000000000000000000000000000000000'
-    }
-  }
-}));
-
 describe('tokens util test', () => {
   it('wrap token icon with token name from db', () => {
     const key = wrapTokenIcon(MockWithNameWithDB);

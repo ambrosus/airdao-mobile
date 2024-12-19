@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
-import { styles } from './styles';
-import { Token } from '@models';
-import { Button, Spinner } from '@components/base';
-import { SingleAssetNFT } from '@components/modular';
 import { useNavigation } from '@react-navigation/native';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
+import { Button, Spinner } from '@components/base';
+import { SingleAssetNFT } from '@components/modular';
 import { useWalletStore } from '@entities/wallet';
+import { Token } from '@models';
+import { styles } from './styles';
 import { WalletNoNFTsView } from '../../WalletNoNFTsView';
 
 interface NftAssetsProps {

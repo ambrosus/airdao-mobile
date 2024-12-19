@@ -1,22 +1,21 @@
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { useBalanceOfAddress, useForwardedRef } from '@hooks';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer } from '@components/base';
-import { scale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
-import { BottomSheetHarborPreViewProps } from '@features/harbor/components/harbor-preview/model';
-import { useWalletStore } from '@entities/wallet';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useWalletStore } from '@entities/wallet';
 import {
   ErrorTemplate,
   FormTemplate,
   SuccessTemplate
 } from '@features/harbor/components/base';
+import { BottomSheetHarborPreViewProps } from '@features/harbor/components/harbor-preview/model';
 import { dataParseFunction, processFunctions } from '@features/harbor/hooks';
+import { useBalanceOfAddress, useForwardedRef } from '@hooks';
+import { isAndroid, scale } from '@utils';
+import { styles } from './styles';
 
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,

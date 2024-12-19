@@ -1,7 +1,7 @@
+import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RightArrowIcon } from '@components/svg/icons/RightArrow';
 import { COLORS } from '@constants/colors';
-import React, { useMemo } from 'react';
 
 export const RightArrowInCircle = ({ scale = 1 }: { scale?: number }) => {
   const size = 40;

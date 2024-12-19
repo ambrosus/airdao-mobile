@@ -1,5 +1,5 @@
-import { createContext, useContextSelector } from 'use-context-selector';
 import { FC, Context } from 'react';
+import { createContext, useContextSelector } from 'use-context-selector';
 
 type CreateContextSelectorTuple<Props, Value> = [
   FC<Props>,

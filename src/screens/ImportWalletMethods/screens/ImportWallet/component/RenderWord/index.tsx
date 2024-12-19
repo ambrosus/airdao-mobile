@@ -1,10 +1,10 @@
 import React, { MutableRefObject, RefObject, useCallback } from 'react';
 import { View, FlatList } from 'react-native';
-import { styles } from './style';
-import { scale } from '@utils/scaling';
 import { InputRef, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
+import { styles } from './style';
 
 interface RenderWordsModel {
   inputs: MutableRefObject<RefObject<InputRef>[]>;

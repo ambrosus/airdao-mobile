@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
 import { useFocusEffect } from '@react-navigation/native';
-import { chartConfigStyle, styles } from './styles';
-import { DataPointsPressEventHandler, TooltipState } from './types';
-import { useChartStore } from '@features/kosmos';
-import { ChartTooltip } from '@features/kosmos/components/composite';
-import { mapper } from '@features/kosmos/utils';
+import { LineChart } from 'react-native-chart-kit';
 import {
   ApiPricesResponse,
   CHART_HEIGHT,
@@ -17,6 +12,11 @@ import {
   MarketType,
   replaceTimestamps
 } from '@entities/kosmos';
+import { useChartStore } from '@features/kosmos';
+import { ChartTooltip } from '@features/kosmos/components/composite';
+import { mapper } from '@features/kosmos/utils';
+import { chartConfigStyle, styles } from './styles';
+import { DataPointsPressEventHandler, TooltipState } from './types';
 
 type MarketChartProps = {
   tokenAddress: string;

@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { useSwapMultiplyBalance } from './use-swap-multiply-balance';
-import { SwapToken } from '@features/swap/types';
 import { useSwapContextSelector } from '@features/swap/context';
+import { SwapToken } from '@features/swap/types';
 import { initialBalances } from '@features/swap/utils/balances';
+import { useSwapMultiplyBalance } from './use-swap-multiply-balance';
 
 export function useSwapAllBalances() {
   const { getTokenBalance } = useSwapMultiplyBalance();
