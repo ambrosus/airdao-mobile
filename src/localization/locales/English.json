@@ -158,8 +158,8 @@
   "common.status.success": "Success",
   "common.tx.confirmed": "Transaction confirmed.",
   "common.details": "Details",
-  "common.day": "day",
-  "common.days": "days",
+  "common.day": "gün",
+  "common.days": "günler",
 
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
