@@ -4,6 +4,7 @@ module.exports = {
     es6: true
   },
   parser: '@typescript-eslint/parser',
+  ignorePatterns: ['node_modules/'],
   extends: [
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
