@@ -1,4 +1,4 @@
-import { wrapTokenIcon } from '@utils';
+import { wrapTokenIcon } from '@utils/token';
 
 const MockWithNameWithDB = {
   address: '0x24f3811961685888c7a1966cAec194e5444bfC0D',
