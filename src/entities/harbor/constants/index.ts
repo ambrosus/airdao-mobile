@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { Token } from '@models';
 import { CryptoCurrencyCode } from '@appTypes';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 import { TierRewardList } from '@entities/harbor/model/types';
 
 export const EMPTY_TOKEN = new Token(

@@ -3,9 +3,8 @@ import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS, CreditCardBg } from '@constants/colors';
 import { WalletDBModel } from '@database';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { WalletIcon } from '@components/svg/icons/v2';
-import { StringUtils } from '@utils/string';
+import { StringUtils, moderateScale, scale, verticalScale } from '@utils';
 
 interface WalletItemProps {
   wallet: WalletDBModel;

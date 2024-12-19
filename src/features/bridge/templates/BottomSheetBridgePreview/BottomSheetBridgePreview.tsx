@@ -6,7 +6,7 @@ import { CloseCircleIcon } from '@components/svg/icons/v2';
 import { Row, Spacer, Text } from '@components/base';
 import { useBridgeContextData } from '@features/bridge/context';
 import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePreview/helpers/amountChecker';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { TouchableOpacity, View } from 'react-native';
 import { GeneralPreviewTemplate } from './components';

@@ -12,8 +12,7 @@ import {
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
 import { MessagesIcon, PlusIcon, TwitterIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
-import { ShareUtils } from '@utils/share';
+import { ShareUtils, scale, verticalScale } from '@utils';
 import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
 

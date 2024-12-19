@@ -9,7 +9,7 @@ import TabBar from '@navigation/components/TabBar';
 import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
 import SettingsStack from './Tabs/SettingsStack';
 import HomeStack from './Tabs/HomeStack';
-import { DeviceUtils } from '@utils/device';
+import { DeviceUtils } from '@utils';
 import ProductsStack from './Tabs/ProductsStack';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();

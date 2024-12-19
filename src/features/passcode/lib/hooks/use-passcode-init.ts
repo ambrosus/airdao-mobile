@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { usePasscodeStore } from '@features/passcode/model';
-import { PasscodeUtils } from '@utils/passcode';
+import { PasscodeUtils } from '@utils';
 
 export function usePasscodeInit() {
   const {

@@ -1,9 +1,9 @@
 import React, { useCallback, useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { COLORS } from '@constants/colors';
-import { StyleSheet, View } from 'react-native';
 import { Button, Row, Text } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { SelectionDot } from './SelectionDot';
 
 interface Interval {

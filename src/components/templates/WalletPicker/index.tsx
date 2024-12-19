@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
 import { WalletAvatarDefault } from '@components/svg/icons';

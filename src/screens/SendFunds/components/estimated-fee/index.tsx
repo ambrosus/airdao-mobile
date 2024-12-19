@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 

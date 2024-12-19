@@ -9,7 +9,7 @@ import {
   useHandleBottomSheetActions
 } from '@features/wallet-connect/lib/hooks';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import {
   PrimaryButton,
   SecondaryButton,

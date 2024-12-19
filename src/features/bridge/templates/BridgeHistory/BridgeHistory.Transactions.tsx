@@ -12,7 +12,7 @@ import { LocalizedRenderEmpty } from '@components/templates';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
 import { useBridgeHistory } from '@hooks/query/useBridgeHistory';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';

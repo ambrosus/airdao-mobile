@@ -1,5 +1,5 @@
-import { createContextSelector } from '@utils/createContextSelector';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { createContextSelector } from '@utils';
 import {
   BridgeDataState,
   Config as BridgeConfigModel,

@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { ImportantInfo } from '@components/svg/icons/v2/harbor';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { DropDownPanel } from '@components/templates';
 import { styles } from './styles';

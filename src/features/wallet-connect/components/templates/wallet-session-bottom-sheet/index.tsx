@@ -11,7 +11,7 @@ import {
 import { COLORS } from '@constants/colors';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
 import { WalletSessionsList } from '../../composite';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 
 export const WalletSessionsBottomSheet = () => {
   const { t } = useTranslation();

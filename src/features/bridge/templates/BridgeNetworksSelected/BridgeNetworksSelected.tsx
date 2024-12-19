@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
-import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
+import { NETWORK, SHORTEN_NETWORK } from '@utils';
 import { RightArrowIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { View } from 'react-native';

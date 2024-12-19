@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { DEVICE_HEIGHT } from '@constants/variables';
 
 export const styles = StyleSheet.create({

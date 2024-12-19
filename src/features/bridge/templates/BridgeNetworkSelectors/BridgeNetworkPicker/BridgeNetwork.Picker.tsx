@@ -9,7 +9,7 @@ import { TokenLogo } from '@components/modular';
 import { useBridgeContextData } from '@features/bridge/context';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 export const BridgeNetworkPicker = ({ type }: BridgeNetworkPickerProps) => {

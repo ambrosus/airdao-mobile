@@ -8,7 +8,7 @@ import { PrimaryButton } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { HomeNavigationProp } from '@appTypes';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';

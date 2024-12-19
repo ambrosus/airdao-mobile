@@ -5,7 +5,7 @@ import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useWatchlist } from '@hooks';
 import { WatchlistIcon } from '@components/svg/icons';
-import { StringUtils } from '@utils/string';
+import { StringUtils } from '@utils';
 import { useListsSelector } from '@entities/lists';
 
 interface AddressIndicatorProps {

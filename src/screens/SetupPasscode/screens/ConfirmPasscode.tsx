@@ -7,9 +7,8 @@ import { Button, Spacer, Text } from '@components/base';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeParamsList, SettingsTabNavigationProp } from '@appTypes';
-import { scale, verticalScale } from '@utils/scaling';
 import { usePasscodeStore } from '@features/passcode';
-import { PasscodeUtils } from '@utils/passcode';
+import { scale, verticalScale, PasscodeUtils } from '@utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { styles } from '../SetupPasscode.styles';
 

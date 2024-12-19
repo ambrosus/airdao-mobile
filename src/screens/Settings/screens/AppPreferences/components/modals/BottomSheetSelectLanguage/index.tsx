@@ -7,10 +7,9 @@ import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import useLocalization from '@contexts/Localizations';
 import { Language } from '@appTypes';
-import { LocalizationUtils } from '@utils/localization';
+import { LocalizationUtils, scale } from '@utils';
 import { styles } from '../style';
 
 type Props = {

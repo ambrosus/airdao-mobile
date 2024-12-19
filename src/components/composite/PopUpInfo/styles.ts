@@ -1,7 +1,6 @@
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
-import { isAndroid } from '@utils/isPlatform';
+import { COLORS } from '@constants/colors';
+import { scale, isAndroid } from '@utils';
 
 export const styles = StyleSheet.create({
   popoverStyle: {

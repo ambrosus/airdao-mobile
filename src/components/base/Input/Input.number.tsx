@@ -2,7 +2,7 @@ import React from 'react';
 import { InputProps, InputRef } from './Input.types';
 import { TextInput } from './Input.text';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
+import { StringUtils } from '@utils';
 
 export const NumberInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {

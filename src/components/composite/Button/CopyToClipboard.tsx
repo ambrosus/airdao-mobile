@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { IconProps } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import {
   Toast,
   ToastOptions,

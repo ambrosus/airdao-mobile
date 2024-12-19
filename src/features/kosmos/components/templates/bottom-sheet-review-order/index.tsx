@@ -13,9 +13,7 @@ import {
   discountColor,
   formatDecimals
 } from '@features/kosmos/utils';
-import { StringUtils } from '@utils/string';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
-import { NumberUtils } from '@utils/number';
 import {
   _timestampToDate,
   Token,
@@ -23,7 +21,7 @@ import {
   useTokensStore,
   VESTINGS
 } from '@entities/kosmos';
-import { environment } from '@utils/environment';
+import { environment, NumberUtils, StringUtils } from '@utils';
 
 const ADDRESS_LEFT_PADDING = 5;
 const ADDRESS_RIGHT_PADDING = 4;

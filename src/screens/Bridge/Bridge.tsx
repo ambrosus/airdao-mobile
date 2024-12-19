@@ -7,11 +7,10 @@ import { CopyToClipboardButton, Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner } from '@components/base';
-import { scale } from '@utils/scaling';
 import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeTemplate } from '@features/bridge/templates';
 import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
-import { StringUtils } from '@utils/string';
+import { StringUtils, scale } from '@utils';
 import { useWalletStore } from '@entities/wallet';
 
 export const Bridge = () => {

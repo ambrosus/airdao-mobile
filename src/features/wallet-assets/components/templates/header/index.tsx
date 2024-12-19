@@ -25,11 +25,9 @@ import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { scale } from '@utils/scaling';
 import { HomeNavigationProp } from '@appTypes/navigation';
-import { StringUtils } from '@utils/string';
 import { ExplorerAccount } from '@models';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, StringUtils, scale } from '@utils';
 import {
   useBarcode,
   useNewNotificationsCount

@@ -1,6 +1,6 @@
 import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 

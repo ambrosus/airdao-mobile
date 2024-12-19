@@ -26,8 +26,7 @@ import {
   timestampToFormattedDate,
   useTokensStore
 } from '@entities/kosmos';
-import { verticalScale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, verticalScale } from '@utils';
 
 interface BottomSheetPreviewPurchaseProps {
   market: MarketType | undefined;

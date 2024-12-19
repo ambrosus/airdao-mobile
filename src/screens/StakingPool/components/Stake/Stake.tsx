@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { InputRef, Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import {
   BottomSheet,
@@ -13,8 +12,7 @@ import {
 } from '@components/composite';
 import { useBalanceOfAddress, useUSDPrice } from '@hooks';
 import { AccountDBModel } from '@database';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { StakePreview } from './Stake.Preview';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';

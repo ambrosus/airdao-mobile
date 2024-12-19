@@ -1,4 +1,4 @@
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({

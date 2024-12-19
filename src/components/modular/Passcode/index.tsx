@@ -1,14 +1,12 @@
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { split, dropRight } from 'lodash';
+import { dropRight, split } from 'lodash';
+import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
 import { styles } from '@components/modular/Passcode/styles';
 import { Button, Spacer } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { StringUtils } from '@utils/string';
-import { DeviceUtils } from '@utils/device';
-import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
-import { scale } from '@utils/scaling';
+import { DeviceUtils, scale, StringUtils } from '@utils';
 
 interface PasscodeProps {
   error?: boolean;

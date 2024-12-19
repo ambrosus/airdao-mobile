@@ -2,10 +2,9 @@ import React, { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { moderateScale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { QRCodeWithLogo } from '@components/modular';
-import { Clipboard } from '@utils/clipboard';
+import { Clipboard, moderateScale, verticalScale } from '@utils';
 import { styles } from './styles';
 import { CheckboxCircleFill } from '@components/svg/icons/v2';
 

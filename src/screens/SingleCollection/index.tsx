@@ -12,13 +12,11 @@ import {
 } from '@components/templates';
 import { AddIcon, EditIcon } from '@components/svg/icons';
 import { BottomSheetRef, Header } from '@components/composite';
-import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackNavigationProp, CommonStackParamsList } from '@appTypes';
 import { useUSDPrice } from '@hooks';
 import { BottomSheetAddNewAddressToGroup } from './modals/BottomSheetAddNewAddressToGroup';
-import { sortListByKey } from '@utils/sort';
+import { sortListByKey, NumberUtils, scale, verticalScale } from '@utils';
 import { TokenLogo } from '@components/modular';
 import { useListsSelector } from '@entities/lists';
 import { useListActions } from '@features/lists';

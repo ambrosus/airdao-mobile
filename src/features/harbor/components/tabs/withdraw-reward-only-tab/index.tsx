@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TiersSelector } from '../../base/tiers-selector';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';

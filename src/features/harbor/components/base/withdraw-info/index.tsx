@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { View } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { styles } from './styles';
 

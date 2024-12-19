@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { ClipPath, Defs, G, Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
-import { scale as scaleFunc } from '@utils/scaling';
+import { scale as scaleFunc } from '@utils';
 
 export function TelegramSettingsIcon(props: IconProps) {
   const { scale = 1, color = '#000' } = props;

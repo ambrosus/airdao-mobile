@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 import { COLORS } from '@constants/colors';
 import { SharePortfolio } from '../BottomSheetSharePortfolio';
 import { styles } from './styles';

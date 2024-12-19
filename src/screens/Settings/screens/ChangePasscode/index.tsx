@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { Alert, View } from 'react-native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';

@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const contentBox = {
   backgroundColor: COLORS.neutral100,

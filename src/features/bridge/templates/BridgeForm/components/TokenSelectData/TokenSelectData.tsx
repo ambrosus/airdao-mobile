@@ -1,10 +1,8 @@
 import React, { forwardRef } from 'react';
 import { formatUnits } from 'ethers/lib/utils';
-
 import { FlatList, View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { scale } from '@utils/scaling';
+import { scale, NumberUtils } from '@utils';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';

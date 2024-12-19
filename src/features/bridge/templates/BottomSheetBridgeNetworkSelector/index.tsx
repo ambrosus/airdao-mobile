@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { useBridgeContextData } from '@features/bridge/context';
 import { FlatList, TouchableOpacity } from 'react-native';

@@ -15,11 +15,10 @@ import { NotificationSettingsView } from '@components/templates';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { Notification } from '@models/Notification';
-import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { BellIcon } from '@components/svg/icons';
 import { useNotificationsQuery } from '@hooks/query';
-import { DeviceUtils } from '@utils/device';
+import { DeviceUtils, verticalScale } from '@utils';
 import { NotificationBox, NotificationsHeader } from './components';
 import { styles } from './styles';
 

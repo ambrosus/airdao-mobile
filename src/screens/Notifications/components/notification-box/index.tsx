@@ -8,8 +8,7 @@ import {
   Notification,
   NotificationWithPriceChange
 } from '@models/Notification';
-import { scale, verticalScale } from '@utils/scaling';
-import { NumberUtils } from '@utils/number';
+import { scale, verticalScale, NumberUtils } from '@utils';
 import { COLORS } from '@constants/colors';
 
 interface NotificationBoxProps {

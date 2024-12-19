@@ -3,11 +3,10 @@ import { TextStyle, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
 import { TokenLogo } from '../TokenLogo';
 import { COLORS } from '@constants/colors';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
-import { TToken, wrapTokenIcon } from '@utils';
+import { TToken, wrapTokenIcon, scale } from '@utils';
 
 interface TokenSelectorProps {
   readonly token: TToken;

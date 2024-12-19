@@ -12,9 +12,7 @@ import { styles } from './styles';
 import { Input, InputRef, Text } from '@components/base';
 import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, StringUtils } from '@utils';
 
 interface AddressInputProps {
   address: string;

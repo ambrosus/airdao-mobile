@@ -4,7 +4,7 @@ import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import { Button, Spacer, Text } from '@components/base';
 import { PopUpInfoProps } from './PopUpInfo.types';
 import { styles } from './styles';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 
 export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {

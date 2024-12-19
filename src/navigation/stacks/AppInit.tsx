@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { RootNavigationProp } from '@appTypes';
 import { useAllWallets } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';

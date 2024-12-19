@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { FontFamily } from '@components/base/Text/Text.types';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 interface TextOrSpinnerProps {
   loading: boolean;

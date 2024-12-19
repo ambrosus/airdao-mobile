@@ -5,7 +5,7 @@ import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 import { useWatchlist } from '@hooks';
 import { AddressList } from '@components/templates';
 import { Spinner } from '@components/base';
-import { sortListByKey } from '@utils/sort';
+import { sortListByKey } from '@utils';
 
 export const WatchList = () => {
   const { watchlist } = useWatchlist();

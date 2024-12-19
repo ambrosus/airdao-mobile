@@ -3,7 +3,7 @@ import { useAddressesActions } from '@features/addresses';
 import { useAddressesStore } from '@entities/addresses';
 import { API } from '@api/api';
 import { ExplorerAccount } from '@models/Explorer';
-import { AddressUtils } from '@utils/address';
+import { AddressUtils } from '@utils';
 
 import {
   CustomAppEvents,

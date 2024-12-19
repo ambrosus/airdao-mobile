@@ -12,9 +12,9 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { Button, Row, Text } from '@components/base';
-import { scale } from '@utils/scaling';
 import { styles } from './styles';
+import { Button, Row, Text } from '@components/base';
+import { scale } from '@utils';
 import { DEVICE_WIDTH } from '@constants/variables';
 
 type AnimatedTab = {

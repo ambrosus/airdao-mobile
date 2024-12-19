@@ -5,7 +5,7 @@ import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { useSwapContextSelector } from '@features/swap/context';
 import { SelectedTokensKeys } from '@features/swap/types';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';

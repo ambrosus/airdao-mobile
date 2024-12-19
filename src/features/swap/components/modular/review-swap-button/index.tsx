@@ -9,7 +9,7 @@ import {
   useSwapMultiplyBalance
 } from '@features/swap/lib/hooks';
 import { buttonActionString } from '@features/swap/utils/button-action.string';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { cssShadowToNative } from '@utils';
 import { TextOrSpinner } from '@components/composite';
 import { FontFamily } from '@components/base/Text/Text.types';
 

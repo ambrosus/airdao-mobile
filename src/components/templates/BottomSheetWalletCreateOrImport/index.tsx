@@ -10,7 +10,7 @@ import {
 } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { HomeNavigationProp } from '@appTypes';
 import { AddIcon, CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
@@ -30,6 +30,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const navigateToWalletCreate = useCallback(() => {
     onChangeName('');
     onChangeMnemonicLength(128);
+    // @ts-ignore
     navigation.navigate('CreateWalletStep0');
     localRef.current?.dismiss();
   }, [localRef, navigation, onChangeMnemonicLength, onChangeName]);
@@ -37,6 +38,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const navigateToImportWallet = useCallback(() => {
     onChangeName('');
     onChangeMnemonicLength(128);
+    // @ts-ignore
     navigation.navigate('ImportWalletMethods');
     localRef.current?.dismiss();
   }, [localRef, navigation, onChangeMnemonicLength, onChangeName]);

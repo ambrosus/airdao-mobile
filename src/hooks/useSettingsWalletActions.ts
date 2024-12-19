@@ -1,6 +1,6 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { DatabaseTable, SettingsTabNavigationProp } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
+import { WalletUtils } from '@utils';
 import { API } from '@api/api';
 import { Database, WalletDBModel } from '@database';
 

@@ -1,6 +1,6 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import { t } from 'i18next';
-import { DeviceUtils } from '@utils/device';
+import { DeviceUtils } from '@utils';
 
 interface AuthenticateNativePopupArgs {
   readonly hasFaceId: boolean;

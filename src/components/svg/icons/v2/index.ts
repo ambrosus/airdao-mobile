@@ -19,3 +19,5 @@ export { ErrorIcon } from './Error';
 export { SettingsOutlineIcon } from './SettingsOutline';
 export { Edit } from './Edit';
 export { Key } from './Key';
+export { FingerPrintIcon } from './FingerPrintIcon';
+export { FaceIDIcon } from './FaceIDIcon';

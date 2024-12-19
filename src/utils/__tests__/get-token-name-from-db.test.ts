@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { getTokenNameFromDatabase } from '@utils/getTokenNameFromDatabase';
+import { getTokenNameFromDatabase } from '@utils';
 
 const NATIVE_TOKEN_NAME = 'AirDAO';
 

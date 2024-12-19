@@ -10,9 +10,7 @@ import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
 import { COLORS } from '@constants/colors';
 import { ErrorIcon } from '@components/svg/icons/v2';
-import { verticalScale } from '@utils/scaling';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { _delayNavigation } from '@utils/navigate';
+import { cssShadowToNative, verticalScale, _delayNavigation } from '@utils';
 
 export const ErrorSwapView = () => {
   const { t } = useTranslation();

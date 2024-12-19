@@ -7,7 +7,7 @@ import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.ty
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

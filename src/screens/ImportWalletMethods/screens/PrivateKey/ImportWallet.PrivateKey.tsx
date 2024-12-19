@@ -19,17 +19,20 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { WalletUtils } from '@utils/wallet';
 import { COLORS } from '@constants/colors';
 import { LeadEyeEmptyMiddleIcon, LeadEyeOffIcon } from '@components/svg/icons';
 import { PrivateKeyMaskedInput, Toast, ToastType } from '@components/modular';
-import { isIos } from '@utils/isPlatform';
-import { delay } from '@utils/delay';
 import { useAllAccounts } from '@hooks/database';
 import { usePasscodeStore } from '@features/passcode';
 import { HomeNavigationProp } from '@appTypes';
-import { StringUtils } from '@utils/string';
+import {
+  StringUtils,
+  isIos,
+  scale,
+  verticalScale,
+  delay,
+  WalletUtils
+} from '@utils';
 
 const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
   ? 'padding'

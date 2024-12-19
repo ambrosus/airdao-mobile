@@ -16,14 +16,17 @@ import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useEstimatedTransferFee, useTokensAndTransactions } from '@hooks';
-import { verticalScale } from '@utils/scaling';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
 import { AddressInput, ConfirmTransaction } from './components';
 import { AirDAOEventDispatcher } from '@lib';
 import { Token } from '@models';
-import { TransactionUtils } from '@utils/transaction';
-import { NumberUtils } from '@utils/number';
+import {
+  NumberUtils,
+  TransactionUtils,
+  verticalScale,
+  _delayNavigation
+} from '@utils';
 import { styles } from './styles';
 
 import {
@@ -40,7 +43,6 @@ import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/m
 import { FundsHeader } from '@features/send-funds/components/templates';
 import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
-import { _delayNavigation } from '@utils';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 

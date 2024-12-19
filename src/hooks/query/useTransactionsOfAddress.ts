@@ -5,7 +5,7 @@ import { Transaction } from '@models/index';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { TransactionType } from '@appTypes/enums';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 
 export function useTransactionsOfAccount(
   address: string,

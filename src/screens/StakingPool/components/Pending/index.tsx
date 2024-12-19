@@ -2,7 +2,7 @@ import React from 'react';
 import Animated from 'react-native-reanimated';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 export const StakePending = () => {

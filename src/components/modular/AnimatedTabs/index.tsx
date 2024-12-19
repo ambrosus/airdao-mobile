@@ -12,10 +12,10 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import { styles } from './styles';
+import { Button, Row, Spacer, Text } from '@components/base';
+import { verticalScale } from '@utils';
+import { COLORS } from '@constants/colors';
 import { DEVICE_WIDTH } from '@constants/variables';
 
 type AnimatedTab = {

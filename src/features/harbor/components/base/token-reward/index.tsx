@@ -8,7 +8,7 @@ import {
 } from '@entities/harbor/model/types';
 import { TierItem } from '../tier-item';
 import { styles } from './styles';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 
 interface TokenRewardProps {
   rewardTokenName: RewardTokenNamesModel;

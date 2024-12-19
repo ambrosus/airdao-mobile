@@ -12,10 +12,9 @@ import {
 import { PrimaryButton } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
-import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
-import { _delayNavigation } from '@utils';
+import { _delayNavigation, scale } from '@utils';
 
 interface BottomSheetViewAccessKeyProps extends BottomSheetProps {
   walletHash: string;

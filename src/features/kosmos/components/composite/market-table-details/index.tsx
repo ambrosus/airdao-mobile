@@ -6,9 +6,8 @@ import { Status } from '@features/bridge/templates/BridgeTransaction/components/
 import { RowJustifyAlignedItem } from '@features/kosmos/components/base';
 import { Row, Text } from '@components/base';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
-
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 import {
   MarketType,
   _timestampToDate,

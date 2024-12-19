@@ -10,7 +10,7 @@ import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 
 export function useTokensAndTransactions(
   address: string,

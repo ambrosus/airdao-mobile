@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
 import { ExplorerAccount } from '@models/Explorer';
 import { AccountList } from '@models/AccountList';
 import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, scale, verticalScale } from '@utils';
 import { useListActions } from '@features/lists';
 
 import {

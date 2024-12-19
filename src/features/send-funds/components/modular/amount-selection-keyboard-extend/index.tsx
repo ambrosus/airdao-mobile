@@ -8,7 +8,7 @@ import Animated, {
 import { styles } from './styles';
 import { Row } from '@components/base';
 import { PercentageItem } from '../../base';
-import { isIos } from '@utils/isPlatform';
+import { isIos } from '@utils';
 
 const PERCENTS = [25, 50, 75, 100];
 

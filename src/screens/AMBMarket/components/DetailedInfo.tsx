@@ -9,7 +9,7 @@ import {
 } from '../AMBMarket.constants';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 
 type AMBDetailedInfoProps = {
   [key in InfoKey]: string;

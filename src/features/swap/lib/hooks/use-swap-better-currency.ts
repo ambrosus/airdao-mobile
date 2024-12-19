@@ -4,7 +4,7 @@ import {
   extractArrayOfMiddleMultiHopAddresses,
   dexValidators
 } from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils/object';
+import { getObjectKeyByValue } from '@utils';
 import { ethers, BigNumber } from 'ethers';
 import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapContextSelector } from '@features/swap/context';

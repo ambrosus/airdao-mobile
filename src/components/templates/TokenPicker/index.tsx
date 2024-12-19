@@ -6,7 +6,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { SingleAsset, TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { Token } from '@models';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 
 interface TokenPickerProps {

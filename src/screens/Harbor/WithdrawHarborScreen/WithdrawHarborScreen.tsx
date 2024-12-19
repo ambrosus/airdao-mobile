@@ -11,8 +11,7 @@ import { useEffectOnce, useKeyboardHeight } from '@hooks';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborWithdrawTabs } from '@features/harbor/components/tabs';
-import { scale } from '@utils/scaling';
-import { isSmallScreen } from '@utils/deviceSpecification';
+import { isSmallScreen, scale } from '@utils';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { styles } from './styles';
 

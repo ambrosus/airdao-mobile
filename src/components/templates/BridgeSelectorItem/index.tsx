@@ -2,7 +2,7 @@ import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { TokenLogo } from '@components/modular';
 import { styles } from './styles';
 import { CryptoCurrencyCode } from '@appTypes';

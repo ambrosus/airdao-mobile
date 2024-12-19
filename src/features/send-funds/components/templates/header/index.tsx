@@ -7,7 +7,7 @@ import { Header } from '@components/composite';
 import { BarcodeScannerIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { useBarcode } from '@features/send-funds/lib/hooks';
-import { StringUtils } from '@utils/string';
+import { StringUtils } from '@utils';
 
 interface FundsHeaderProps {
   sender: string;

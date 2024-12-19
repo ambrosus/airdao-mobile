@@ -5,7 +5,7 @@ import { styles } from './styles';
 import { Cache, CacheKey } from '@lib/cache';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { CopyToClipboardButton } from '@components/composite';
 
 interface AccessKeysPrivateProps {

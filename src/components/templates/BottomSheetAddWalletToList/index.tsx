@@ -5,7 +5,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
 import { DEVICE_HEIGHT } from '@constants/variables';

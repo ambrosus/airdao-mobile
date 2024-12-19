@@ -16,7 +16,7 @@ import { CenteredSpinner } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { ExplorerAccountTransactionItem } from './components';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 
 interface ExplorerAccountViewTransactionsProps {

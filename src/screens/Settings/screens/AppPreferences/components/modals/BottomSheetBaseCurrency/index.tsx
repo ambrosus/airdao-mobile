@@ -6,7 +6,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { Currency } from '@appTypes';
 import { styles } from '../style';

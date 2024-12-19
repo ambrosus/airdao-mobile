@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { Spacer } from '@components/base';
 import { styles } from './styles';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';

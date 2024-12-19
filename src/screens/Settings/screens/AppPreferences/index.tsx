@@ -8,13 +8,10 @@ import {
   BottomSheetSelectLanguage
 } from './components';
 import { Currency, Language } from '@appTypes';
-import { verticalScale } from '@utils/scaling';
 import { styles } from './styles';
 import useLocalization from '@contexts/Localizations';
-import { LocalizationUtils } from '@utils/localization';
+import { LocalizationUtils, verticalScale } from '@utils';
 import { View } from 'react-native';
-
-// hide currency list
 
 export const AppPreferencesScreen = () => {
   const { t } = useTranslation();

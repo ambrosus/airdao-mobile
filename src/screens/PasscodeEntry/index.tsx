@@ -7,12 +7,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Passcode } from '@components/modular';
 import { Spacer, Text } from '@components/base';
 import { useAppState, usePreventGoingBack } from '@hooks';
-import { verticalScale } from '@utils/scaling';
-import { PasscodeUtils } from '@utils/passcode';
 import { COLORS } from '@constants/colors';
 import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
 import { Cache, CacheKey } from '@lib/cache';
-import { DeviceUtils } from '@utils/device';
+import { DeviceUtils, PasscodeUtils, verticalScale } from '@utils';
 import { Header } from '@components/composite';
 import { usePasscodeStore } from '@features/passcode';
 

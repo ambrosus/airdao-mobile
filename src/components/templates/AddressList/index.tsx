@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { ExplorerAccount } from '@models/Explorer';
 import {
   SwipeableWalletItem,

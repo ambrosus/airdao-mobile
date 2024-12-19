@@ -16,7 +16,7 @@ import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
 import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

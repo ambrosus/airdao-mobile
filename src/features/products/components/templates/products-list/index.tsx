@@ -10,7 +10,7 @@ import { PRODUCTS } from '@features/products/entities';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { ProductListItem } from '../../base';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 export const ProductsList = () => {

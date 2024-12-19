@@ -29,7 +29,7 @@ import {
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
 import { isIOS } from 'react-native-popover-view/dist/Constants';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, verticalScale } from '@utils';
 import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import {
@@ -39,7 +39,6 @@ import {
 } from '@entities/kosmos';
 import { useChartStore } from '@features/kosmos';
 import { Spacer } from '@components/base';
-import { verticalScale } from '@utils/scaling';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,

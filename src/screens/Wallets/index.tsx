@@ -20,10 +20,9 @@ import {
 } from '@components/templates';
 import { Spacer } from '@components/base';
 import { useBalanceOfAddress } from '@hooks';
-import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
-import { WalletUtils } from '@utils/wallet';
+import { WalletUtils, scale, SCREEN_HEIGHT, verticalScale } from '@utils';
 import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
 import { useWalletStore } from '@entities/wallet';

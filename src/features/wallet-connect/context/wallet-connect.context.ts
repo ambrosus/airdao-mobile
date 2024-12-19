@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { createContextSelector } from '@utils/createContextSelector';
+import { createContextSelector } from '@utils';
 import { SessionTypes } from '@walletconnect/types';
 import {
   CONNECT_VIEW_STEPS,

@@ -25,8 +25,6 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { useKeyboardHeight } from '@hooks';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
 import { COLORS } from '@constants/colors';
 import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
 import { InputWithTokenSelect } from '@components/templates';
@@ -35,7 +33,7 @@ import { parseUnits } from 'ethers/lib/utils';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { FeeData } from '@lib/bridgeSDK/models/types';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, scale, verticalScale, isAndroid } from '@utils';
 import {
   DEFAULT_TRANSACTION,
   EMPTY_FEE_DATA

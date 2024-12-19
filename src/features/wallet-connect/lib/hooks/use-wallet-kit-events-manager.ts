@@ -14,7 +14,7 @@ import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
 import { AirDAOEventDispatcher } from '@lib';
 import { AirDAOEventType } from '@appTypes';
 import Config from '@constants/config';
-import { delay } from '@utils/delay';
+import { delay } from '@utils';
 
 export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
   const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text } from '@components/base';
 import { TierRewardItem } from '@entities/harbor/model/types';
 import { styles } from './styles';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 interface TierItemProps {
   rewardValue: TierRewardItem;

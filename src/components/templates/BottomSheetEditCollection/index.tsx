@@ -12,8 +12,7 @@ import { Button, Text } from '@components/base';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';
 import { AccountList } from '@models';
-import { StringUtils } from '@utils/string';
-import { verticalScale } from '@utils/scaling';
+import { StringUtils, verticalScale } from '@utils';
 import { BottomSheetCreateRenameGroup } from '../BottomSheetCreateRenameGroup';
 
 interface BottomSheetEditCollectionProps extends BottomSheetProps {

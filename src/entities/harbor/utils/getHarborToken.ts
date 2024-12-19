@@ -1,5 +1,5 @@
 import { API } from '@api/api';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 import Config from '@constants/config';
 import { EMPTY_TOKEN } from '@entities/harbor/constants';
 

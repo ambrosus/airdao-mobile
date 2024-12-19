@@ -8,12 +8,11 @@ import {
 } from '@features/harbor/components/harbor-preview/model';
 import { Row, Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
-import { scale } from '@utils/scaling';
 import { SuccessTitle } from '@features/harbor/components/base/preview-modules/success-template/success-title';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { CopyHash } from './copy-hash';
-import { delay } from '@utils/delay';
+import { delay, scale } from '@utils';
 import { useNavigation } from '@react-navigation/native';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { styles } from './styes';

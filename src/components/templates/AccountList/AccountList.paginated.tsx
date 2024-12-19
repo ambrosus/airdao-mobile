@@ -4,7 +4,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { AccountListProps } from './AccountList.types';
 import { AccountList } from './AccountList';
 

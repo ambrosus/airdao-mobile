@@ -8,8 +8,7 @@ import { Balance, TokenSelector } from '@features/swap/components/composite';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { useSwapContextSelector } from '@features/swap/context';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
+import { StringUtils, NumberUtils } from '@utils';
 import { COLORS } from '@constants/colors';
 
 interface InputWithTokenSelectProps {

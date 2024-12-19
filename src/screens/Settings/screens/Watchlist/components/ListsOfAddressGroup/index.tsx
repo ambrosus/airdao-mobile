@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import { AccountList } from '@models/AccountList';
 import { LocalizedRenderEmpty } from '@components/templates';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { GroupItem } from '../ListsOfAddressGroup/components/GroupItem';
 import { styles } from './styles';
 

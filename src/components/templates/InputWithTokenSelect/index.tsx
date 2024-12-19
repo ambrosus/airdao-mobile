@@ -24,10 +24,8 @@ import { BottomSheetRef } from '@components/composite';
 import { BalanceRow, TokenSelector } from '@components/modular';
 import { Token } from '@models';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
 import { useForwardedRef } from '@hooks';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, StringUtils, NumberUtils } from '@utils';
 
 interface InputWithTokenSelectProps {
   readonly title?: string;

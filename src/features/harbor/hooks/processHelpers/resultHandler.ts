@@ -1,4 +1,4 @@
-import { delay } from '@utils/delay';
+import { delay } from '@utils';
 import { explorerService } from '@api/explorer-service';
 
 export const resultHandler = async (result: any) => {

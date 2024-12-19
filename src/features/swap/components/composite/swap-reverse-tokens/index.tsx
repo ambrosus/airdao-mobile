@@ -11,7 +11,7 @@ import { Divider } from '@/features/swap/components/base';
 import { Button, Spacer } from '@components/base';
 import { SwapOppositeArrowsIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const SwapReverseTokens = () => {
   const { onReverseSelectedTokens } = useSwapSelectTokens();

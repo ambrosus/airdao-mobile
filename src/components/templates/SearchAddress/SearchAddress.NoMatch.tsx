@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { moderateScale, verticalScale } from '@utils/scaling';
+import { moderateScale, verticalScale } from '@utils';
 import { NoMatch } from '@components/svg/icons/NoMatch';
 import { useTranslation } from 'react-i18next';
 

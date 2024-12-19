@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { Spacer, Text } from '@components/base';

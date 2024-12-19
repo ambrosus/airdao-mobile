@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { useSupportedBiometrics } from '@hooks';

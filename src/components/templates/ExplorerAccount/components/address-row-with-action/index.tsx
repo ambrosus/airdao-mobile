@@ -5,7 +5,7 @@ import { DetailsItemTypography } from '@components/base/ExplorerTransactions';
 import { Row } from '@components/base';
 import { ClipboardIcon } from '@components/svg/icons/v2';
 import { Checkmark } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 interface AddressRowWithActionProps {
   readonly label: string;

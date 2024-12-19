@@ -1,8 +1,8 @@
+import React from 'react';
 import { View } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { CheckIcon } from '@components/svg/icons/Check';
-import React from 'react';
 
 export const CheckIconCircle = () => (
   <View

@@ -1,11 +1,10 @@
 import React from 'react';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { MarketType } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
 import { TokenLogo } from '@components/modular';
-import { NumberUtils } from '@utils/number';
-import { useToken } from '@entities/kosmos';
+import { NumberUtils } from '@utils';
+import { MarketType, useToken } from '@entities/kosmos';
 import { $discount, discountColor } from '@features/kosmos/utils';
 
 interface MarketListItemProps {

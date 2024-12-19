@@ -8,8 +8,7 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { ShimmerLoader } from '@components/animations';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { scale } from '@utils/scaling';
+import { NumberUtils, scale } from '@utils';
 import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { useWalletStore } from '@entities/wallet';
 

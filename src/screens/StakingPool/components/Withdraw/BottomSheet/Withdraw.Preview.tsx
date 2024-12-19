@@ -4,9 +4,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
 import { useTranslation } from 'react-i18next';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { useUSDPrice } from '@hooks';
 import { PrimaryButton } from '@components/modular';
 

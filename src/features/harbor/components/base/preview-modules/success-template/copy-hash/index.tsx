@@ -4,11 +4,10 @@ import { Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Row, Text } from '@components/base';
 import { GlobeIcon } from '@components/svg/icons/v2';
-import { StringUtils } from '@utils/string';
 import { COLORS } from '@constants/colors';
 import { contentBox } from '@components/styles';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { scale } from '@utils/scaling';
+import { scale, StringUtils } from '@utils';
 
 interface CopyHashModel {
   hash: string;

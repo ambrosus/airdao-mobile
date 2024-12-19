@@ -11,7 +11,7 @@ import {
   SettingsExpertModeForm,
   SettingsMultiHopForm
 } from '@features/swap/components/composite';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const SwapSettingsScreen = () => {
   const { t } = useTranslation();

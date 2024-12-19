@@ -6,7 +6,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 import { RowStageSection } from '../RowStageSection/RowStageSection';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 
 interface BridgeTransactionPendingTemplateModel {

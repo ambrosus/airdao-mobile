@@ -2,7 +2,7 @@ import React from 'react';
 import { SquareCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
-import { moderateScale, scale } from '@utils/scaling';
+import { moderateScale, scale } from '@utils';
 import { COLORS } from '@constants/colors';
 
 export const CheckBoxSquare = (props: SquareCheckBoxProps): JSX.Element => {

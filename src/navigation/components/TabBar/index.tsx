@@ -2,19 +2,17 @@ import React, { useLayoutEffect, useMemo, useState } from 'react';
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NavigationUtils } from '@utils/navigation';
 import Animated, {
   useAnimatedStyle,
   withTiming
 } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
-
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale, NavigationUtils } from '@utils';
 import { MAIN_TABS } from '@navigation/constants';
 import { useCurrentRoute } from '@contexts/Navigation/Navigation.context';
 

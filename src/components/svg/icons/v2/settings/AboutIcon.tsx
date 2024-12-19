@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
-import { scale as scaleFunc } from '@utils/scaling';
+import { scale as scaleFunc } from '@utils';
 import { SVGsModels } from '@models/SVGsModels';
 
 export const AboutIcon = ({

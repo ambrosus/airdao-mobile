@@ -6,10 +6,8 @@ import { StakingPool } from '@models';
 import { Row, Spacer, Text } from '@components/base';
 import { useStakingPoolDetails } from '@entities/staking';
 import { TokenLogo } from '../TokenLogo';
-import { TokenUtils } from '@utils/token';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
+import { scale, verticalScale, TokenUtils, NumberUtils } from '@utils';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;

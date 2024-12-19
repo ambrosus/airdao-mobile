@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { NumberUtils } from '@utils/number';
+import { scale, verticalScale, NumberUtils } from '@utils';
 import { Badge } from '@components/base/Badge';
 import { styles } from './styles';
 

@@ -6,7 +6,7 @@ import { Button, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TransactionItem } from '@components/modular';
 import { Transaction, TransactionTokenInfo } from '@models/Transaction';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { AMB_DECIMALS } from '@constants/variables';
 import { COLORS } from '@constants/colors';
 import { TransactionDetails } from '@components/templates/TransactionDetails';

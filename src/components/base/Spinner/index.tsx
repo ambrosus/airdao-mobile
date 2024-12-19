@@ -9,7 +9,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { styles } from './styles';
-import { moderateScale } from '@utils/scaling';
+import { moderateScale } from '@utils';
 
 export interface SpinnerProps {
   containerStyle?: ViewStyle;

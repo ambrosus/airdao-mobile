@@ -3,10 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Transaction, TransactionTokenInfo } from '@models';
 import { Row, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { styles } from './styles';
 import { _txStatusLabel, _txStatusThumbnail } from '@features/explorer/utils';
 

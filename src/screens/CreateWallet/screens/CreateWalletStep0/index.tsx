@@ -10,7 +10,7 @@ import {
 } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { styles } from '@screens/CreateWallet/styles';
 import { stylesStep0 } from './Step0.styles';
 import { SettingsTabNavigationProp } from '@appTypes';

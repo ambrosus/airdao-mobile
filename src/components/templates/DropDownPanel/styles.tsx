@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { contentBox } from '@components/styles';
 import { COLORS } from '@constants/colors';
 

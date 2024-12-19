@@ -7,9 +7,8 @@ import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
 import { TokenLogo } from '@components/modular';
 import { Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, verticalScale } from '@utils';
 
 interface BottomSheetReviewTokenItemProps {
   type: keyof typeof FIELD;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Config from '@constants/config';
-import { keepWSAlive } from '@utils/keepWSlive';
+import { keepWSAlive } from '@utils';
 
 const POINTED_STAGES = ['1.1', '2.1', '2.2', '3.1', '3.1', '4'];
 const WSS_BRIDGE_TRANSACTIONS_HISTORY_URL = Config.WSS_BRIDGE_HISTORY_URL;

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, View } from 'react-native';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { Spacer } from '@components/base';
 import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
 import { PreviewDataItem } from '@features/bridge/templates/BottomSheetBridgePreview/components/PreviewDataTemplate/components/PreviewDataItem';

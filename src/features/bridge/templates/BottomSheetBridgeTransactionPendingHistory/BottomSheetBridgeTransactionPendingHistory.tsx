@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { COLORS } from '@constants/colors';
 import { PrimaryButton } from '@components/modular';

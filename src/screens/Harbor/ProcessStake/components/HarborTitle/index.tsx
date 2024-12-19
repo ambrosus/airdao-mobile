@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { StakeHeaderIcon } from '../StakedHeaderIcon';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const HarborTitle = ({ harborAPR }: { harborAPR: string }) => {
   const { t } = useTranslation();

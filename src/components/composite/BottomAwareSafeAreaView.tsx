@@ -1,7 +1,7 @@
-import { verticalScale } from '@utils/scaling';
 import React from 'react';
 import { View, ViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { verticalScale } from '@utils';
 
 export const BottomAwareSafeAreaView = (
   props: ViewProps & { paddingBottom?: number }

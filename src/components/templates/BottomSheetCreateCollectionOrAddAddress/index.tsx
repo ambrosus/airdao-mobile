@@ -1,12 +1,12 @@
 import React, { ForwardedRef, forwardRef, RefObject } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { useForwardedRef } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

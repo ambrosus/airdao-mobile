@@ -11,9 +11,7 @@ import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
 import { COLORS } from '@constants/colors';
 import { SuccessIcon } from '@components/svg/icons/v2';
-import { verticalScale } from '@utils/scaling';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { _delayNavigation } from '@utils/navigate';
+import { _delayNavigation, verticalScale, cssShadowToNative } from '@utils';
 
 export const SuccessSwapView = () => {
   const { t } = useTranslation();

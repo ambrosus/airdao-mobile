@@ -3,10 +3,9 @@ import { BottomSheetRef } from '@components/composite';
 import { Button, Spacer, Text } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
 import { AccountList } from '@models';
 import { BottomSheetFloat } from '@components/modular';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale, StringUtils } from '@utils';
 import { styles } from './styles';
 
 type Props = {

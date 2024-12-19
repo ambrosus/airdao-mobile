@@ -6,7 +6,7 @@ import { styles } from './styles';
 import { Header } from '@components/composite';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { HomeParamsList } from '@appTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Edit, Key } from '@components/svg/icons/v2';

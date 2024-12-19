@@ -10,7 +10,7 @@ import {
   VESTINGS
 } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';
-import { environment } from '@utils/environment';
+import { environment } from '@utils';
 
 export function useMarketDetails(market: MarketType | undefined) {
   const { extractTokenCb } = useToken();

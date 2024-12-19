@@ -5,7 +5,7 @@ import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
-import { AddressUtils } from '@utils/address';
+import { AddressUtils } from '@utils';
 import { AirDAOEventDispatcher } from '@lib';
 
 export function useListNotifications() {

@@ -25,11 +25,9 @@ import { $discount, discountColor } from '@features/kosmos/utils';
 import { usePurchaseStore } from '@features/kosmos';
 import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 import { BottomSheetRef } from '@components/composite';
-import { isAndroid, isIos } from '@utils/isPlatform';
-
 import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, isAndroid, isIos } from '@utils';
 import { MarketType } from '@entities/kosmos';
 
 interface BuyBondTabProps {

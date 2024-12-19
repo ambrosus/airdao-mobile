@@ -1,4 +1,4 @@
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { StyleSheet } from 'react-native';
 import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';

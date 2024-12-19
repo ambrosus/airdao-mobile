@@ -10,7 +10,7 @@ import {
   TelegramIcon,
   TwitterIcon
 } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 import Config from '@constants/config';
 

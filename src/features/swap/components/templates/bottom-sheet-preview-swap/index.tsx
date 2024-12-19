@@ -4,13 +4,12 @@ import { styles } from './styles';
 import { useForwardedRef } from '@hooks';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Spacer } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale, _delayNavigation } from '@utils';
 import { useSwapContextSelector } from '@features/swap/context';
 import { RenderBottomSheetStatusView } from './components/render';
 import { useTranslation } from 'react-i18next';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
-import { _delayNavigation } from '@utils';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 

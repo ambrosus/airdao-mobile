@@ -3,14 +3,11 @@ import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { useUSDPrice } from '@hooks';
 import { Token } from '@models';
 import { TokenLogo, TokenLogoProps } from '../TokenLogo';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
-import { StringValidators } from '@utils';
+import { NumberUtils, StringUtils, StringValidators, scale } from '@utils';
 
 interface SingleAssetProps {
   token: Token;

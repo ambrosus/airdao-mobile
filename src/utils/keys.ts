@@ -20,7 +20,7 @@ const createHmacPDFK2Sizes: CreateHmacPDFK2Sizes = {
   ripemd160: 20
 };
 
-class KeysUtills {
+class KeysUtils {
   static _pbkdf2(
     password: string,
     salt: Buffer,
@@ -116,4 +116,4 @@ class KeysUtills {
   }
 }
 
-export default KeysUtills;
+export { KeysUtils };

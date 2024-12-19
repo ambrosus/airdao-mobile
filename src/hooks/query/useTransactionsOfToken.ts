@@ -4,7 +4,7 @@ import { API } from '@api/api';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
 import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { Transaction } from '@models';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 
 export function useTransactionsOfToken(
   address: string,

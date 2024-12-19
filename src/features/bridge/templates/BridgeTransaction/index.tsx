@@ -1,15 +1,18 @@
 import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
 import { styles } from './BridgeTransaction.style';
-
 import { TokenLogo } from '@components/modular';
-import { scale } from '@utils/scaling';
-import { NumberUtils } from '@utils/number';
+import {
+  NumberUtils,
+  scale,
+  NETWORK,
+  tokenThumb,
+  transactionFrom
+} from '@utils';
 import { BottomSheetRef } from '@components/composite';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
 import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
 import { useTranslation } from 'react-i18next';
 import { DECIMAL_LIMIT } from '@constants/variables';

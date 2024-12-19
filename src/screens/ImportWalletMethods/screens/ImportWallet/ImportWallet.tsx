@@ -21,12 +21,15 @@ import {
   Spinner,
   Text
 } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { HomeNavigationProp } from '@appTypes';
-import { MnemonicUtils } from '@utils/mnemonics';
-import { StringUtils } from '@utils/string';
-import { WalletUtils } from '@utils/wallet';
+import {
+  WalletUtils,
+  StringUtils,
+  MnemonicUtils,
+  scale,
+  verticalScale
+} from '@utils';
 import { Toast, ToastType } from '@components/modular';
 import { usePasscodeStore } from '@features/passcode';
 import { RenderWords } from '@screens/ImportWalletMethods/screens/ImportWallet/component/RenderWord';

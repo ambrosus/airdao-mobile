@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import Config from '@constants/config';
 import { SETTINGS_MENU_ITEMS, SOCIAL_GROUPS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';

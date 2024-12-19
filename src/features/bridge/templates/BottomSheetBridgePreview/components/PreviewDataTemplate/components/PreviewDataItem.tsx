@@ -3,9 +3,8 @@ import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { DataToPreviewModel } from '@models/Bridge';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, scale } from '@utils';
 import { formatUnits } from 'ethers/lib/utils';
 
 interface PreviewDataItemProps {

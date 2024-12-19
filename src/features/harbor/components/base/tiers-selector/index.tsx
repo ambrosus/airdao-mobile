@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
 import {
   EMPTY_SELECTED_TIER,
   REWARD_TIERS_LIST
@@ -15,7 +14,7 @@ import { styles } from './styles';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
 import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, scale } from '@utils';
 
 interface TiersContainerProps {
   bondAmount: string;

@@ -16,7 +16,7 @@ import { AnimatedText, Button, Row, Spacer } from '@components/base';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
 import { MONTH_NAMES } from '@constants/variables';

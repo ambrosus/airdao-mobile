@@ -3,7 +3,7 @@ import { styles } from './BridgeTransferError.styles';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { InfoIcon } from '@components/svg/icons';
 import { Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

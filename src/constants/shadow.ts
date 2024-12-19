@@ -1,6 +1,6 @@
 import { StyleProp, ViewStyle } from 'react-native';
 import { COLORS } from './colors';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { cssShadowToNative } from '@utils';
 
 export const buttonWithShadowStyle = (
   disabled: boolean,

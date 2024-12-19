@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
 import { FlexAlignType, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { NumberUtils } from '@utils/number';
 import { ExplorerAccount } from '@models/Explorer';
-import { StringUtils } from '@utils/string';
 import { useAMBPrice } from '@hooks';
 import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale, NumberUtils, StringUtils } from '@utils';
 import { AddressIndicator } from '../AddressIndicator';
 
 interface WalletItemProps {

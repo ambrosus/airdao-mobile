@@ -8,7 +8,7 @@ import { AllWallets } from './components';
 import { Button } from '@components/base';
 import { AddIcon } from '@components/svg/icons';
 import { BottomSheetWalletCreateOrImport } from '@components/templates';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const ManageWalletsScreen = () => {
   const { t } = useTranslation();

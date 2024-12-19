@@ -6,7 +6,7 @@ import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { ErrorIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 interface PreviewFormModel {
   onClose: () => void;

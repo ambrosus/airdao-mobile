@@ -8,8 +8,7 @@ import { Spacer } from '@components/base/Spacer';
 import { PrimaryButton } from '@components/modular';
 import { Text } from '@components/base/Text';
 import { COLORS } from '@constants/colors';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale, cssShadowToNative } from '@utils';
 
 interface BottomSheetSuccessViewProps extends PropsWithChildren {
   title?: string;

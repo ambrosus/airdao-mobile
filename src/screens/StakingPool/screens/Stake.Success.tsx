@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native';
 import { HomeParamsList } from '@appTypes';
 import { SuccessIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
 import { useStakingPoolsStore } from '@entities/staking';

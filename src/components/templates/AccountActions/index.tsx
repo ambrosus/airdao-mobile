@@ -1,7 +1,7 @@
 import React, { ComponentType, useCallback } from 'react';
 import { Row } from '@components/base';
 import { AccountActionsKey } from './ActionButton.types';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { Send, Swap, Staking, Bridge, Kosmos } from './components';
 import { ExplorerAccount, Token } from '@models';
 import Config from '@constants/config';

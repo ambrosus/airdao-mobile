@@ -39,7 +39,7 @@ import {
 } from '@components/base';
 import { SearchAddress, SearchAddressRef } from '@components/templates';
 import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { ExplorerAccount } from '@models/Explorer';
 import {
   SearchTabNavigationProp,

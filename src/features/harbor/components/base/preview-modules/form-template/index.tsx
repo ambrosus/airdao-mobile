@@ -8,7 +8,7 @@ import {
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { PrimaryButton } from '@components/modular';
 import { TextOrSpinner } from '@components/composite';
 

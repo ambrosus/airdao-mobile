@@ -9,7 +9,7 @@ import { SingleAsset } from '@components/modular';
 import { Button, Spinner } from '@components/base';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';
 import { ExplorerAccount, Token } from '@models';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 import { AMB_DECIMALS } from '@constants/variables';
 
 interface WalletAssetsProps {

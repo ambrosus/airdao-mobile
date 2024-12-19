@@ -8,7 +8,7 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { HomeParamsList } from '@appTypes';
 import { FailedIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
+import { verticalScale } from '@utils';
 
 export const StakeErrorScreen = () => {
   const { t } = useTranslation();

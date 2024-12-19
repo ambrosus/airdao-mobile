@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, View } from 'react-native';
 import { styles } from './styles';
 import { KeyboardDismissingView, Spacer } from '@components/base';
 import { FIELD } from '@features/swap/types';
-import { scale } from '@utils/scaling';
+import { scale, isIos } from '@utils';
 import {
   InputWithTokenSelect,
   ReviewSwapButton,
@@ -11,7 +11,6 @@ import {
 } from '@/features/swap/components/modular';
 import { SwapReverseTokens } from '@/features/swap/components/composite';
 import { useSwapInterface } from '@features/swap/lib/hooks';
-import { isIos } from '@utils/isPlatform';
 
 const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';
 

@@ -18,7 +18,7 @@ import {
   useSwapSelectTokens
 } from '@features/swap/lib/hooks';
 import { SwapStringUtils } from '@features/swap/utils';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];

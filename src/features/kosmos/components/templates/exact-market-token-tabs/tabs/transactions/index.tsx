@@ -3,17 +3,17 @@ import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './styles';
 import { TransactionHistoryItem } from '@features/kosmos/components/base';
-import {
-  MarketType,
-  TransactionListItem,
-  TxType
-} from '@features/kosmos/types';
 import { useMarketDetails } from '@features/kosmos/lib/hooks';
 import { upperCase } from 'lodash';
 import { COLORS } from '@constants/colors';
 import { Row, Spinner, Text } from '@components/base';
-import { useMarketTransactions } from '@entities/kosmos';
-import { isIos } from '@utils/isPlatform';
+import {
+  MarketType,
+  TransactionListItem,
+  TxType,
+  useMarketTransactions
+} from '@entities/kosmos';
+import { isIos } from '@utils';
 
 interface TransactionsHistoryTabProps {
   market: MarketType | undefined;

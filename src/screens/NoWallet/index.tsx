@@ -10,7 +10,7 @@ import { BottomAwareSafeAreaView } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { useAddWalletStore } from '@features/add-wallet';
 
 export const NoWalletScreen = () => {

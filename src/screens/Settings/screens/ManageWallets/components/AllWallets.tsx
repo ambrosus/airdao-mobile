@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { WalletDBModel } from '@database';
 import { useAllAccounts, useAllWallets } from '@hooks/database';
 import { Button } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { WalletItem } from './Wallet';
 

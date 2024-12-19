@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Segment } from '@components/composite';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
 import { styles } from './styles';

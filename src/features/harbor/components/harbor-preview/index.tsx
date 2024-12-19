@@ -6,8 +6,7 @@ import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
 import { Spacer } from '@components/base';
-import { scale } from '@utils/scaling';
-import { isAndroid } from '@utils/isPlatform';
+import { isAndroid, scale } from '@utils';
 import {
   BottomSheetHarborPreViewProps,
   EmptyHarborProcessTransaction

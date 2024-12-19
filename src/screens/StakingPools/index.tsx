@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Header } from '@components/composite';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
 import { StakingPoolList } from '@components/templates';
 import { HomeNavigationProp } from '@appTypes';

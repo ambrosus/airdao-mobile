@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { moderateScale, verticalScale } from '@utils/scaling';
+import { moderateScale, verticalScale } from '@utils';
 import { IconProps } from '@components/svg/icons';
 
 export interface AccountActionButtonProps {

@@ -7,7 +7,7 @@ import { Spacer } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';
 import Config from '@constants/config';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { BottomSheetTokenItem } from '@features/swap/components/modular';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';

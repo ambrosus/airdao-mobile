@@ -3,9 +3,8 @@ import { Pressable, StyleSheet, TextStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { Spacer, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale, NavigationUtils } from '@utils';
 import { useCurrentRoute } from '@contexts';
-import { NavigationUtils } from '@utils/navigation';
 
 type Props = {
   title?: string;

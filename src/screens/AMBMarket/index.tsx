@@ -11,10 +11,9 @@ import {
 } from './components';
 import { Row, Spacer, Text } from '@components/base';
 import { CenteredSpinner, Header } from '@components/composite';
-import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks/query';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale, NumberUtils } from '@utils';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={16} fontFamily="Inter_500Medium" color={COLORS.neutral800}>

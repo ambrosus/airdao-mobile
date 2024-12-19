@@ -7,16 +7,19 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 import { TokenLogo } from '@components/modular';
 import { ChartIcon } from '@components/svg/icons/v2';
-import { StringUtils } from '@utils/string';
+import {
+  StringUtils,
+  StringValidators,
+  NumberUtils,
+  scale,
+  verticalScale
+} from '@utils';
 import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
 import { AccountTransactions } from '@components/templates';
-import { StringValidators } from '@utils';
 
 export const AssetScreen = () => {
   const {

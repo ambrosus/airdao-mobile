@@ -21,7 +21,7 @@ import {
 } from '@components/svg/icons';
 import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
-import { getTokenNameFromDatabase } from '@utils/getTokenNameFromDatabase';
+import { getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
   token?: string;

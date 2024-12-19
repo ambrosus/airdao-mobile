@@ -5,7 +5,7 @@ import { Row, Text } from '@components/base';
 import { RadioButton } from '@components/base/RadioButton';
 import { COLORS } from '@constants/colors';
 import { Currency, Language } from '@appTypes';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 type Props = {
   item: Language | Currency;

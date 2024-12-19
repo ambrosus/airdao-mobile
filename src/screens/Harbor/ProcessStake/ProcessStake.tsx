@@ -18,7 +18,6 @@ import Animated, {
 import { BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
 import { styles } from './styles';
 import { useWalletStore } from '@entities/wallet';
@@ -27,13 +26,11 @@ import { InputWithoutTokenSelect } from '@components/templates';
 import { ExplorerAccount, Token } from '@models';
 import { AMB_DECIMALS, DEVICE_HEIGHT } from '@constants/variables';
 import { CryptoCurrencyCode } from '@appTypes';
-import { TokenUtils } from '@utils/token';
 import { PrimaryButton } from '@components/modular';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { NumberUtils } from '@utils/number';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-import { isSmallScreen } from '@utils/deviceSpecification';
+import { isSmallScreen, scale, NumberUtils, TokenUtils } from '@utils';
 
 export const ProcessStake = () => {
   const { top } = useSafeAreaInsets();

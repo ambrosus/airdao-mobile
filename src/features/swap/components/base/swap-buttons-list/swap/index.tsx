@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { styles } from '../styles';
 import { useSwapContextSelector } from '@features/swap/context';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import { cssShadowToNative } from '@utils';
 
 interface SwapButtonProps {
   isProcessingSwap: boolean;

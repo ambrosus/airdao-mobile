@@ -9,7 +9,7 @@ import {
 import { SessionTypes } from '@walletconnect/types';
 import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
 import { WalletSessionItem } from '../../base';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const WalletSessionsList = () => {
   const { activeSessions } = useWalletConnectContextSelector();

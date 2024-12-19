@@ -9,9 +9,8 @@ import React, {
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
 import dayjs from 'dayjs';
-// import i18n from '../../localization/i18n';
 import { Language, LanguageCode } from '@appTypes';
-import { LocalizationUtils } from '@utils/localization';
+import { LocalizationUtils } from '@utils';
 import i18n from '@localization/i18n';
 
 interface ILanguageContext {

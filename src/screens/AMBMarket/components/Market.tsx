@@ -8,7 +8,7 @@ import {
   MexcIcon
 } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 interface MarketItem {
   title: string;

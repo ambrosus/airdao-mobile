@@ -3,10 +3,9 @@ import { View } from 'react-native';
 import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo, TokenLogoProps } from '../TokenLogo';
-import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { Token } from '@models';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, scale } from '@utils';
 
 interface SingleAssetProps {
   token: Token;

@@ -32,7 +32,7 @@ import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils';
 import { BarcodeScanner } from '@components/templates';
 import { AccountList, ExplorerAccount } from '@models';
 import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';

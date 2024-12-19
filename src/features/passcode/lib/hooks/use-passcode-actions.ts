@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { toLength } from 'lodash';
-import { PasscodeUtils } from '@utils/passcode';
-import { DeviceUtils } from '@utils/device';
+import { DeviceUtils, PasscodeUtils } from '@utils';
 import { Cache, CacheKey } from '@lib/cache';
 import { useSupportedBiometrics } from '@hooks';
 import {

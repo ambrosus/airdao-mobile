@@ -3,8 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { SwapIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { NumberUtils } from '@utils/number';
+import { scale, verticalScale, NumberUtils } from '@utils';
 
 interface ShowInUSDProps {
   usdAmount: number;

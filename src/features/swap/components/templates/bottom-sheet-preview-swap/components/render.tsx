@@ -11,7 +11,7 @@ import {
 } from '@features/swap/lib/hooks';
 import { BottomSheetStatus, FIELD } from '@features/swap/types';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { SuccessSwapView } from './success';
 import { ErrorSwapView } from './error';
 

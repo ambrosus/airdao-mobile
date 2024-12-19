@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button, Row, Spacer } from '@components/base';
 import { Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
+import { moderateScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { SettingsOutlineIcon } from '@components/svg/icons/v2';
 

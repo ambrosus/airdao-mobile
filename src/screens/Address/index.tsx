@@ -17,14 +17,12 @@ import {
   useTransactionsOfAccount,
   useWatchlist
 } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
 import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
 import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
+import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
 import { useTranslation } from 'react-i18next';
 
 const TRANSACTION_LIMIT = 50;

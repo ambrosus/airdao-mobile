@@ -1,9 +1,9 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Button } from '@components/base';
 import { ButtonProps } from '@components/base/Button';
-import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const SecondaryButton = (props: ButtonProps) => {
   return (

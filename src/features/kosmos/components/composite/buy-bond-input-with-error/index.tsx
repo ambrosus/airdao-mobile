@@ -5,10 +5,8 @@ import { InputWithIcon } from '@components/composite';
 import { InputRef, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
+import { StringUtils, NumberUtils, verticalScale } from '@utils';
 import { usePurchaseStore } from '@features/kosmos';
 import { MarketType, Token } from '@entities/kosmos';
 

@@ -10,10 +10,8 @@ import {
 } from '@components/composite';
 import { styles } from './styles';
 import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { verticalScale } from '@utils/scaling';
 import { PercentageBox } from '@components/composite/PercentageBox';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils, StringUtils, verticalScale } from '@utils';
 import { PrimaryButton } from '@components/modular';
 import { AccountDBModel } from '@database';
 import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';

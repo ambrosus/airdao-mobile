@@ -7,16 +7,18 @@ import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
-import { NumberUtils } from '@utils/number';
-import { cssShadowToNative } from '@utils/css-shadow-to-native';
+import {
+  cssShadowToNative,
+  verticalScale,
+  NumberUtils,
+  _delayNavigation
+} from '@utils';
 import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
 import { useSendFundsStore } from '@features/send-funds';
-import { _delayNavigation } from '@utils';
 import { HomeNavigationProp } from '@appTypes';
 
 interface ConfirmTransactionProps {

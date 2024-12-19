@@ -4,15 +4,18 @@ import { styles } from './styles';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
-import { verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
 import { TokenLogo } from '@components/modular';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { StringUtils } from '@utils/string';
 import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { NETWORK, timestamp } from '@utils/bridge';
+import {
+  NETWORK,
+  timestamp,
+  verticalScale,
+  NumberUtils,
+  StringUtils
+} from '@utils';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
 
 type RowRightItemType = 'default' | 'status' | 'token' | 'amount';

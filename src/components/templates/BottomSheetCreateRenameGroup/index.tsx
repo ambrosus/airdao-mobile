@@ -7,6 +7,8 @@ import React, {
   useState
 } from 'react';
 import { Platform, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { Spacer } from '@components/base/Spacer';
 import { Button, Input, InputRef, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -19,10 +21,7 @@ import {
   ToastPosition,
   ToastType
 } from '@components/modular';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { useTranslation } from 'react-i18next';
+import { StringUtils, verticalScale } from '@utils';
 import { BottomSheet } from '@components/composite';
 
 import {

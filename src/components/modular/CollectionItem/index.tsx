@@ -6,7 +6,7 @@ import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { useAMBPrice } from '@hooks';
 import { AccountList } from '@models';
-import { NumberUtils } from '@utils/number';
+import { NumberUtils } from '@utils';
 
 interface CollectionItemProps {
   collection: AccountList;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { COLORS } from '@constants/colors';
-import { scale as scaleFunc } from '@utils/scaling';
+import { scale as scaleFunc } from '@utils';
 
 const XTwitterIcon = (props: IconProps) => {
   const { scale = 1, color = COLORS.brand500 } = props;

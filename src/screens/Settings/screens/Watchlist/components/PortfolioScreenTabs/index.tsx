@@ -18,7 +18,7 @@ import { styles } from './styles';
 import { useListActions } from '@features/lists';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
 import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
 import { Measure } from './components/types';

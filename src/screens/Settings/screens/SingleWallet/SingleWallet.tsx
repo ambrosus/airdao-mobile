@@ -10,7 +10,7 @@ import {
   Header
 } from '@components/composite';
 import { Button, Input, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 import { QRCodeWithLogo } from '@components/modular';
 import { SettingsTabParamsList } from '@appTypes';
 import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';

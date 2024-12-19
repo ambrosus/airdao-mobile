@@ -1,5 +1,5 @@
 import { DEVICE_WIDTH } from '@constants/variables';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const CHART_WIDTH = DEVICE_WIDTH - 32;
 export const CHART_HEIGHT = 200;

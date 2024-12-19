@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Header } from '@components/composite';
 import { AboutMenutItem } from './About.MenuItem';
 import { Button, Spacer, Text } from '@components/base';
-import { PlatformSpecificUtils } from '@utils/platform';
 import { styles } from './styles';
 import { Linking, View } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale, PlatformSpecificUtils } from '@utils';
 import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
 

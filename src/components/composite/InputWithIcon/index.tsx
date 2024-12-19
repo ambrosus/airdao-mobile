@@ -1,7 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import { InputProps } from '@components/base/Input';
 import { Input, InputRef, Spacer } from '@components/base';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 import { styles } from './styles';
 import {
   NativeSyntheticEvent,
