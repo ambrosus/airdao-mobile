@@ -142,7 +142,9 @@ export const importWalletViaPrivateKey = async (
     const { address, index, path } =
       await AirDAOKeysForRef.discoverAccountViaPrivateKey(privateKey);
 
-    if (!address) throw new Error();
+    if (AccountUtils.isWalletAlreadyExist(address, accounts)) {
+      throw new Error('400: Wallet already exists');
+    }
 
     walletInDb = await WalletDB.createWallet(fullWallet);
     const [, accountInDbResult] = await Promise.all([
