@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-
 import { KeysUtils } from '@utils/keys';
 const bip32 = require('bip32');
 

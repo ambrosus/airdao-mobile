@@ -1,6 +1,6 @@
 import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
 import AirDAOKeysForRefStorage from '@lib/crypto/AirDAOKeysForRefStorage';
-import { singleAirDAOStorage } from '@lib/crypto/AirDAOKeysStorage';
+import singleAirDAOStorage from '@lib/crypto/AirDAOKeysStorage';
 
 const getByHash = async (tmpHash: string) => {
   let tmpPublicAndPrivateResult =

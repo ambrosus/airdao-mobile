@@ -10,6 +10,7 @@ import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useAddWalletStore } from '@features/add-wallet';
 import { usePasscodeStore } from '@features/passcode';
+import { useAllAccounts } from '@hooks/database';
 import { scale, verticalScale, WalletUtils } from '@utils';
 import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
@@ -20,6 +21,7 @@ export const CreateWalletStep2 = () => {
   const { mnemonic } = useAddWalletStore();
   const { t } = useTranslation();
   const { isPasscodeEnabled } = usePasscodeStore();
+  const { data: accounts } = useAllAccounts();
 
   const [walletMnemonicSelected, setWalletMnemonicSelected] = useState<
     { word: string; index: number }[]
@@ -78,17 +80,18 @@ export const CreateWalletStep2 = () => {
 
     try {
       setLoading(true);
-      await WalletUtils.processWallet(mnemonic);
+      await WalletUtils.processWallet(mnemonic, accounts);
       navigateToSetUpSecurity();
     } finally {
       setLoading(false);
     }
   }, [
-    isMnemonicCorrect,
-    navigateToSetUpSecurity,
-    mnemonic,
+    walletMnemonicSelected.length,
     walletMnemonicArrayDefault.length,
-    walletMnemonicSelected.length
+    isMnemonicCorrect,
+    mnemonic,
+    accounts,
+    navigateToSetUpSecurity
   ]);
 
   const onPositionIncorrect = () => {

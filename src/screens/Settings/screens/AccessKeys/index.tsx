@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsTabParamsList } from '@appTypes';
 import { Header } from '@components/composite';
 import { AnimatedTabs } from '@components/modular';
-import { singleAirDAOStorage } from '@lib';
+import { AirDAOKeysStorage } from '@lib';
 import { AccessKeysMnemonicTab } from '@screens/Settings/screens/AccessKeys/tabs/Mnemonic/AccessKeys.Mnemonic';
 import { AccessKeysPrivateTab } from '@screens/Settings/screens/AccessKeys/tabs/Private/AccessKeys.Private';
 import { styles } from './styles';
@@ -20,7 +20,7 @@ export const AccessKeysScreen = ({ route }: Props) => {
     (async () => {
       setIsMnemonicAvailable(
         (
-          await singleAirDAOStorage.getWalletMnemonic(route.params.walletHash)
+          await AirDAOKeysStorage.getWalletMnemonic(route.params.walletHash)
         ).split(' ').length > 1
       );
     })();
