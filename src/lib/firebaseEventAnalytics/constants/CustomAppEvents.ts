@@ -47,13 +47,34 @@ export enum CustomAppEvents {
   explorer_address_open = 'explorer_address_open',
   explorer_search = 'explorer_search',
 
-  harbor_stake_start = 'harbor_stake_start',
-  harbor_stake_finish = 'harbor_stake_finish',
-  harbor_stake_error = 'harbor_stake_error',
-  harbor_withdraw_reward_start = 'harbor_withdraw_reward_start',
-  harbor_withdraw_start = 'harbor_withdraw_start',
-  harbor_withdraw_finish = 'harbor_withdraw_finish',
-  harbor_withdraw_error = 'harbor_withdraw_error',
+  // Harbor AMB
+
+  harbor_amb_stake_start = 'harbor_amb_stake_start',
+  harbor_amb_stake_finish = 'harbor_amb_stake_finish',
+  harbor_amb_stake_error = 'harbor_amb_stake_error',
+  // fireBase event variable harborAMBStakeError
+  harbor_amb_withdraw_start = 'harbor_amb_withdraw_start',
+  harbor_amb_withdraw_finish = 'harbor_amb_withdraw_finish',
+  harbor_amb_withdraw_error = 'harbor_amb_withdraw_error',
+  // fireBase event variable => harborAMBWithdrawError
+  harbor_amb_claim_reward_start = 'harbor_amb_claim_reward_start',
+  harbor_amb_claim_reward_finish = 'harbor_amb_claim_reward_finish',
+  harbor_amb_claim_reward_error = 'harbor_amb_claim_reward_error',
+  // fireBase event variable => harborAMBClaimRewardError
+  // Harbor HBR
+
+  harbor_hbr_stake_start = 'harbor_hbr_stake_start',
+  harbor_hbr_amb_stake_start = 'harbor_hbr_amb_stake_start',
+  harbor_hbr_stake_finish = 'harbor_hbr_stake_finish',
+  harbor_hbr_amb_stake_finish = 'harbor_hbr_amb_stake_finish',
+  harbor_hbr_stake_error = 'harbor_hbr_stake_error',
+  harbor_hbr_amb_stake_error = 'harbor_hbr_amb_stake_error',
+  harbor_hbr_withdraw_start = 'harbor_hbr_withdraw_start',
+  harbor_hbr_amb_withdraw_start = 'harbor_hbr_amb_withdraw_start',
+  harbor_hbr_withdraw_finish = 'harbor_hbr_withdraw_finish',
+  harbor_hbr_amb_withdraw_finish = 'harbor_hbr_amb_withdraw_finish',
+  harbor_hbr_withdraw_error = 'harbor_hbr_withdraw_error',
+  harbor_hbr_amb_withdraw_error = 'harbor_hbr_amb_withdraw_error',
 
   products_swap = 'products_swap',
   products_bridge = 'products_bridge',
