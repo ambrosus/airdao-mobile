@@ -1,6 +1,10 @@
 import React from 'react';
-import { TelegramSettingsIcon } from '@components/svg/icons';
-import MediumIcon from '@components/svg/icons/MediumIcon';
+
+import {
+  MediumIcon,
+  XTwitterIcon,
+  TelegramSettingsIcon
+} from '@components/svg/icons';
 import {
   AboutIcon,
   CompassIcon,
@@ -10,7 +14,6 @@ import {
   WalletIcon,
   WatchListIcon
 } from '@components/svg/icons/v2/settings';
-import XTwitterIcon from '@components/svg/icons/XTwitterIcon';
 import { COLORS } from '@constants/colors';
 import { SettingsMenuItem } from '@screens/Settings/Settings.types';
 
