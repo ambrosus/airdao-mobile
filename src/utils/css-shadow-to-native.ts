@@ -8,7 +8,7 @@ type CSSShadow = {
   color: string;
 };
 
-function parseCSSShadow(shadow: string): CSSShadow {
+export function parseCSSShadow(shadow: string): CSSShadow {
   const match = shadow.match(
     /(-?\d+px)\s(-?\d+px)\s(\d+px)\s(\d+px)\srgba?\((\d+),\s*(\d+),\s*(\d+),\s*(\d?.?\d*)\)/
   );
