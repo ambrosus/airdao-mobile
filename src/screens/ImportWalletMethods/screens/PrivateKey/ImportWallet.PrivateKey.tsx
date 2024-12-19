@@ -110,9 +110,10 @@ export const ImportWalletPrivateKey = () => {
     const isEmpty = privateKey === '';
     return {
       state: isEmpty,
-      typographyColor: isEmpty || loader ? COLORS.brand600 : COLORS.neutral0
+      typographyColor:
+        isEmpty || loader || !!errorStatus ? COLORS.brand600 : COLORS.neutral0
     };
-  }, [loader, privateKey]);
+  }, [errorStatus, loader, privateKey]);
 
   const toggleSecureTextEntry = useCallback(() => {
     setSecureTextEntry((prevState) => !prevState);
