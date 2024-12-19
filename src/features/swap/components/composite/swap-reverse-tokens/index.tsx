@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
+import { Divider } from '@/features/swap/components/base';
+import { Button, Spacer } from '@components/base';
+import { SwapOppositeArrowsIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapFieldsHandler,
   useSwapSelectTokens,
   useSwapTokens
 } from '@features/swap/lib/hooks';
-import { useSwapContextSelector } from '@features/swap/context';
-import { Divider } from '@/features/swap/components/base';
-import { Button, Spacer } from '@components/base';
-import { SwapOppositeArrowsIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
+import { styles } from './styles';
 
 export const SwapReverseTokens = () => {
   const { onReverseSelectedTokens } = useSwapSelectTokens();

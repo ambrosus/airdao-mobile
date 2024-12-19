@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Spacer, Text } from '@components/base';
-import { StakedBalanceIcon } from '@components/svg/icons/v2/harbor';
 import { TokenLogo } from '@components/modular';
-import { styles } from './styles';
+import { StakedBalanceIcon } from '@components/svg/icons/v2/harbor';
 import { NumberUtils, scale } from '@utils';
+import { styles } from './styles';
 
 interface StakedBalanceInfoModel {
   stakedValue: string;

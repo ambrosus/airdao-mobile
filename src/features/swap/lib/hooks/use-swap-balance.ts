@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { BigNumber } from 'ethers/lib/ethers';
+import { useWalletStore } from '@entities/wallet';
 import { SwapToken } from '@features/swap/types';
 import { erc20Contracts } from '@lib/erc20/erc20.contracts';
-import { useWalletStore } from '@entities/wallet';
 
 export function useSwapBalance(token: SwapToken | null) {
   const { wallet } = useWalletStore();

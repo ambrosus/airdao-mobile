@@ -7,8 +7,8 @@ import {
   ViewStyle
 } from 'react-native';
 import { Camera, PermissionStatus } from 'expo-camera';
-import { PermissionService } from '@lib';
 import { Permission } from '@appTypes';
+import { PermissionService } from '@lib';
 
 export function useBarcodeScanner() {
   const { width, height } = useWindowDimensions();

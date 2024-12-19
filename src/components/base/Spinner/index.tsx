@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { View, ViewStyle } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -8,8 +7,9 @@ import Animated, {
   withRepeat,
   withTiming
 } from 'react-native-reanimated';
-import { styles } from './styles';
+import Svg, { Circle } from 'react-native-svg';
 import { moderateScale } from '@utils';
+import { styles } from './styles';
 
 export interface SpinnerProps {
   containerStyle?: ViewStyle;

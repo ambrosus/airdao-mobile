@@ -1,17 +1,17 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { useForwardedRef } from '@hooks';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Spacer } from '@components/base';
-import { scale, _delayNavigation } from '@utils';
-import { useSwapContextSelector } from '@features/swap/context';
-import { RenderBottomSheetStatusView } from './components/render';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
+import { Spacer } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { BottomSheetStatus } from '@features/swap/types';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
+import { useForwardedRef } from '@hooks';
+import { scale, _delayNavigation } from '@utils';
+import { RenderBottomSheetStatusView } from './components/render';
+import { styles } from './styles';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {

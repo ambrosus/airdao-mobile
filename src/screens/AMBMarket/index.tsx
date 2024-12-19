@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Row, Spacer, Text } from '@components/base';
+import { CenteredSpinner, Header } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { useAMBPrice } from '@hooks/query';
+import { scale, verticalScale, NumberUtils } from '@utils';
 import {
   AMBAbout,
   AMBDetailedInfo,
   AMBMarket as AMBMarketsInfo,
   AMBPriceInfo
 } from './components';
-import { Row, Spacer, Text } from '@components/base';
-import { CenteredSpinner, Header } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { useAMBPrice } from '@hooks/query';
-import { scale, verticalScale, NumberUtils } from '@utils';
+import { styles } from './styles';
 
 const BodyTitle = ({ title }: { title: string }) => (
   <Text fontSize={16} fontFamily="Inter_500Medium" color={COLORS.neutral800}>

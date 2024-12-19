@@ -1,16 +1,16 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { TiersSelector } from '../../base/tiers-selector';
-import { scale } from '@utils';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { Spacer, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { BottomSheetRef } from '@components/composite';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { scale } from '@utils';
 import { styles } from './styles';
+import { TiersSelector } from '../../base/tiers-selector';
 
 export const WithdrawRewardOnlyTab = () => {
   const { t } = useTranslation();

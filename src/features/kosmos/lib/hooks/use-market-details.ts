@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
-import { $discount, formatDecimals } from '@features/kosmos/utils';
-import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 import {
   getProtocolFee,
   MarketType,
@@ -10,6 +8,8 @@ import {
   VESTINGS
 } from '@entities/kosmos';
 import { usePurchaseStore } from '@features/kosmos';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
+import { _willGet, _willGetSubFee } from '@features/kosmos/utils/transaction';
 import { environment } from '@utils';
 
 export function useMarketDetails(market: MarketType | undefined) {

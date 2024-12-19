@@ -7,25 +7,25 @@ import React, {
   useState
 } from 'react';
 import { Dimensions, Pressable, ViewStyle } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/native';
-import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
-import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { AccountList } from '@models/AccountList';
+import { AirDAOEventType } from '@appTypes';
 import { PortfolioNavigationProp } from '@appTypes/navigation';
-import { SwipeAction } from '@components/templates/AddressList/components/SwipeAction';
+import { BottomSheetRef } from '@components/composite/BottomSheet/BottomSheet.types';
 import { CollectionItem } from '@components/modular';
+import { SwipeAction } from '@components/templates/AddressList/components/SwipeAction';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
+import { useListActions } from '@features/lists';
 import { useSwipeableDismissListener } from '@hooks';
 import { AirDAOEventDispatcher } from '@lib';
-import { AirDAOEventType } from '@appTypes';
-import { styles } from './styles';
+import { AccountList } from '@models/AccountList';
 import { BottomSheetConfirmRemoveGroup } from '@screens/Settings/screens/Watchlist/components/BottomSheetConfirmRemoveGroup';
-import { useListActions } from '@features/lists';
+import { styles } from './styles';
 
 type Props = {
   group: AccountList;

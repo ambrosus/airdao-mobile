@@ -1,15 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { startCase, toLower } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { verticalScale } from '@utils';
 import {
   AMBMarketItem,
   AMBMarketItemsInfo,
   InfoKey
 } from '../AMBMarket.constants';
-import { Row, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils';
 
 type AMBDetailedInfoProps = {
   [key in InfoKey]: string;

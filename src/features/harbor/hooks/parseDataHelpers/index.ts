@@ -1,6 +1,6 @@
 import { parseStakeData } from './parseStakeData';
-import { parseWithdrawStakePreview } from './parseWithdrawStakePreview';
 import { parseWithdrawReward } from './parseWithdrawReward';
+import { parseWithdrawStakePreview } from './parseWithdrawStakePreview';
 
 export const dataParseFunction = (type: string, data: any) => {
   switch (type) {

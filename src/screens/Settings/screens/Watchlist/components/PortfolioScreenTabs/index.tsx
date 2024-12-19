@@ -7,25 +7,25 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Route, TabViewProps } from 'react-native-tab-view';
 import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { styles } from './styles';
-import { useListActions } from '@features/lists';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
-import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
-import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
-import { Measure } from './components/types';
-import { BottomSheetCreateRenameGroup } from '@components/templates';
+import { Route, TabViewProps } from 'react-native-tab-view';
 import { SearchTabNavigationProp } from '@appTypes';
-import { DEVICE_WIDTH } from '@constants/variables';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef, Header } from '@components/composite';
+import { BottomSheetCreateRenameGroup } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { DEVICE_WIDTH } from '@constants/variables';
+import { useListActions } from '@features/lists';
+import { scale, verticalScale } from '@utils';
+import { PortfolioScreenTabIndicator } from './components/PortfolioScreenTabIndicator';
+import { PortfolioScreenTabItem } from './components/PortfolioScreenTabItem';
+import { Measure } from './components/types';
+import { styles } from './styles';
 
 type Props<T extends Route> = Parameters<
   NonNullable<TabViewProps<T>['renderTabBar']>

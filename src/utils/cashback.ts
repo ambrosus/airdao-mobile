@@ -1,6 +1,6 @@
-import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
-import AirDAOKeysForRefStorage from '@lib/crypto/AirDAOKeysForRefStorage';
 import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
+import AirDAOKeysForRefStorage from '@lib/crypto/AirDAOKeysForRefStorage';
+import { singleAirDAOStorage } from '@lib/crypto/AirDAOKeysStorage';
 
 const getByHash = async (tmpHash: string) => {
   let tmpPublicAndPrivateResult =
@@ -12,7 +12,7 @@ const getByHash = async (tmpHash: string) => {
   ) {
     return tmpPublicAndPrivateResult;
   }
-  const mnemonic = await AirDAOKeysStorage.getWalletMnemonic(tmpHash);
+  const mnemonic = await singleAirDAOStorage.getWalletMnemonic(tmpHash);
 
   if (!mnemonic) {
     return false;

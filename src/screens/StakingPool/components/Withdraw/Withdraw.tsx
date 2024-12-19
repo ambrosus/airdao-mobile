@@ -2,28 +2,28 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { HomeParamsList } from '@appTypes';
 import { InputRef, Row, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
 import { PercentageBox } from '@components/composite/PercentageBox';
-import { NumberUtils, StringUtils, verticalScale } from '@utils';
 import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
-import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
-import { ReturnedPoolDetails } from '@api/staking/types';
-import { staking } from '@api/staking/staking-service';
-import { HomeParamsList } from '@appTypes';
-import { StakePending } from '@screens/StakingPool/components';
-
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { StakePending } from '@screens/StakingPool/components';
+
+import { NumberUtils, StringUtils, verticalScale } from '@utils';
+import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
+import { styles } from './styles';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 

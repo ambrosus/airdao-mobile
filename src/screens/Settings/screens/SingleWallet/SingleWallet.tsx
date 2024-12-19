@@ -1,23 +1,23 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SettingsTabParamsList } from '@appTypes';
+import { Button, Input, Spacer, Text } from '@components/base';
 import {
   BottomAwareSafeAreaView,
   CopyToClipboardButton,
   Header
 } from '@components/composite';
-import { Button, Input, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils';
 import { QRCodeWithLogo } from '@components/modular';
-import { SettingsTabParamsList } from '@appTypes';
-import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';
-import { COLORS } from '@constants/colors';
 import { TrashIcon } from '@components/svg/icons';
 import { KeyIcon } from '@components/svg/icons/v2/settings';
 import { BottomSheetViewAccessKey } from '@components/templates/BottomSheetViewAccessKey/BottomSheetViewAccessKey';
+import { COLORS } from '@constants/colors';
+import { useExplorerAccountFromHash, useSettingsWalletActions } from '@hooks';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<SettingsTabParamsList, 'SingleWallet'>;
 

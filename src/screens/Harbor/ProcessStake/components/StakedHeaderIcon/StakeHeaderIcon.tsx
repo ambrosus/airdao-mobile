@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Spacer, Text } from '@components/base';
+import { APYHeaderIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
-import { APYHeaderIcon } from '@components/svg/icons/v2/harbor';
 import { styles } from './styles';
 
 interface StakeHeaderIconModel {

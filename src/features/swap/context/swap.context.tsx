@@ -1,4 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ethers } from 'ethers';
+import {
+  BottomSheetStatus,
+  FIELD,
+  SelectedPairsState,
+  SelectedTokensKeys
+} from '@/features/swap/types';
+import { BottomSheetRef } from '@components/composite';
 import { createContextSelector } from '@utils';
 import {
   INITIAL_UI_BOTTOM_SHEET_INFORMATION,
@@ -6,14 +14,6 @@ import {
   INITIAL_SELECTED_TOKENS_AMOUNT,
   INITIAL_SETTINGS
 } from './initials';
-import { BottomSheetRef } from '@components/composite';
-import {
-  BottomSheetStatus,
-  FIELD,
-  SelectedPairsState,
-  SelectedTokensKeys
-} from '@/features/swap/types';
-import { ethers } from 'ethers';
 import { initialBalances } from '../utils/balances';
 
 export const SwapContext = () => {

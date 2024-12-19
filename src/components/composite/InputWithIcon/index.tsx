@@ -1,14 +1,14 @@
 import React, { forwardRef, useState } from 'react';
-import { InputProps } from '@components/base/Input';
-import { Input, InputRef, Spacer } from '@components/base';
-import { scale } from '@utils';
-import { styles } from './styles';
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
   View,
   ViewProps
 } from 'react-native';
+import { Input, InputRef, Spacer } from '@components/base';
+import { InputProps } from '@components/base/Input';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface InputWithIconProps extends InputProps {
   iconLeft?: React.ReactNode;

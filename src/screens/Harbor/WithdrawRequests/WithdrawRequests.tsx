@@ -5,21 +5,21 @@ import {
   RefreshControl,
   View
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { formatEther } from 'ethers/lib/utils';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CryptoCurrencyCode } from '@appTypes';
+import { Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { useWalletStore } from '@entities/wallet';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { ILogs } from '@entities/harbor/model/types';
-import { Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { TokenLogo } from '@components/modular';
-import { CryptoCurrencyCode } from '@appTypes';
+import { useWalletStore } from '@entities/wallet';
+import { useEffectOnce } from '@hooks';
 import { NumberUtils, scale } from '@utils';
 import { styles } from './WithdrawRequests.style';
-import { useEffectOnce } from '@hooks';
-import { useFocusEffect } from '@react-navigation/native';
 
 export const WithdrawRequests = () => {
   const { t } = useTranslation();

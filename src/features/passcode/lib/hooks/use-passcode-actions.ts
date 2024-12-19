@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { toLength } from 'lodash';
-import { DeviceUtils, PasscodeUtils } from '@utils';
-import { Cache, CacheKey } from '@lib/cache';
-import { useSupportedBiometrics } from '@hooks';
 import {
   _error,
   authenticateNativePopup,
   usePasscodeStore
 } from '@features/passcode';
+import { useSupportedBiometrics } from '@hooks';
+import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils, PasscodeUtils } from '@utils';
 
 export function usePasscodeActions() {
   const supportedBiometrics = useSupportedBiometrics();

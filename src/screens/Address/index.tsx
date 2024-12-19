@@ -1,15 +1,20 @@
 import React, { useRef } from 'react';
 import { Platform, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { BottomSheetRef, Header } from '@components/composite';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { EditIcon, OptionsIcon } from '@components/svg/icons';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { EditIcon, OptionsIcon } from '@components/svg/icons';
 import {
   AccountTransactions,
   ExplorerAccountView,
   SharePortfolio
 } from '@components/templates';
+import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { COLORS } from '@constants/colors';
 import {
   useAMBPrice,
   useExplorerInfo,
@@ -17,13 +22,8 @@ import {
   useTransactionsOfAccount,
   useWatchlist
 } from '@hooks';
-import { CommonStackParamsList } from '@appTypes/navigation/common';
-import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
 import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
-import { useTranslation } from 'react-i18next';
+import { styles } from './styles';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {

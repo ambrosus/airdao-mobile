@@ -1,7 +1,15 @@
 import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
-import { styles } from './BridgeTransaction.style';
+import { useTranslation } from 'react-i18next';
+import { Button, Row, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { DECIMAL_LIMIT } from '@constants/variables';
+import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
+import { BottomSheetBridgeTransactionHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionHistory/BottomSheetBridgeTransactionHistory';
+import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import {
   NumberUtils,
   scale,
@@ -9,15 +17,7 @@ import {
   tokenThumb,
   transactionFrom
 } from '@utils';
-import { BottomSheetRef } from '@components/composite';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { Button, Row, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
-import { useTranslation } from 'react-i18next';
-import { DECIMAL_LIMIT } from '@constants/variables';
-import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory';
-import { BottomSheetBridgeTransactionHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionHistory/BottomSheetBridgeTransactionHistory';
+import { styles } from './BridgeTransaction.style';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;

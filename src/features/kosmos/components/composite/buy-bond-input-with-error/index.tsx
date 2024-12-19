@@ -1,14 +1,14 @@
 import React, { LegacyRef, useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
-import { styles } from './styles';
-import { InputWithIcon } from '@components/composite';
 import { InputRef, Spacer, Text } from '@components/base';
+import { InputWithIcon } from '@components/composite';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { MarketType, Token } from '@entities/kosmos';
+import { usePurchaseStore } from '@features/kosmos';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
 import { StringUtils, NumberUtils, verticalScale } from '@utils';
-import { usePurchaseStore } from '@features/kosmos';
-import { MarketType, Token } from '@entities/kosmos';
+import { styles } from './styles';
 
 interface BuyBondInputWithErrorProps {
   onFocus: () => void;

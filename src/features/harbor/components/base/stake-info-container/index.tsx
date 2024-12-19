@@ -1,18 +1,18 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { formatEther } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { PrimaryButton, TokenLogo } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { useNavigation } from '@react-navigation/native';
-import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { PlusIcon } from '@components/svg/icons/v2';
-import { NumberUtils, scale } from '@utils';
-import { CryptoCurrencyCode } from '@appTypes';
-import { styles } from './styles';
-import { useAMBPrice } from '@hooks';
+import { COLORS } from '@constants/colors';
 import { HarborDataModel } from '@entities/harbor/model/types';
+import { useAMBPrice } from '@hooks';
+import { NumberUtils, scale } from '@utils';
+import { styles } from './styles';
 
 interface StakeInfoContainerProps {
   loading: boolean;

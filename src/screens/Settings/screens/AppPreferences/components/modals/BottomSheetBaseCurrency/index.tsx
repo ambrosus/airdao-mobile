@@ -1,14 +1,14 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
-import { Spacer, Text } from '@components/base';
 import { FlatList, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Currency } from '@appTypes';
+import { Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
-import { useTranslation } from 'react-i18next';
-import { Currency } from '@appTypes';
 import { styles } from '../style';
 
 type Props = {

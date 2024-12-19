@@ -1,11 +1,11 @@
 import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
-import { useSwapContextSelector } from '@features/swap/context';
 import { COLORS } from '@constants/colors';
+import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapHelpers, useSwapTokens } from '@features/swap/lib/hooks';
+import { styles } from './styles';
 
 export const PreviewInformation = () => {
   const { t } = useTranslation();

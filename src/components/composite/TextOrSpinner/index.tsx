@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { FontFamily } from '@components/base/Text/Text.types';
+import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
 
 interface TextOrSpinnerProps {

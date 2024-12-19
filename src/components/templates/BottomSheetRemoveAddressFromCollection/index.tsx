@@ -7,16 +7,16 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { useListActions } from '@features/lists';
-import { useListsSelector } from '@entities/lists';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { useForwardedRef } from '@hooks';
-import { COLORS } from '@constants/colors';
-import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { useListsSelector } from '@entities/lists';
+import { useListActions } from '@features/lists';
+import { useForwardedRef } from '@hooks';
+import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;

@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { styles } from './styles';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CopyToClipboardButton, Header } from '@components/composite';
-import { HistoryIcon } from '@components/svg/icons';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner } from '@components/base';
-import { useBridgeContextData } from '@features/bridge/context';
-import { BridgeTemplate } from '@features/bridge/templates';
-import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
-import { StringUtils, scale } from '@utils';
+import { CopyToClipboardButton, Header } from '@components/composite';
+import { HistoryIcon } from '@components/svg/icons';
 import { useWalletStore } from '@entities/wallet';
+import { useBridgeContextData } from '@features/bridge/context';
+import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
+import { BridgeTemplate } from '@features/bridge/templates';
+import { StringUtils, scale } from '@utils';
+import { styles } from './styles';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();

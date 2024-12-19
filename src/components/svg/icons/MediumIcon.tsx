@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { COLORS } from '@constants/colors';
 import { IconProps } from '@components/svg/icons/Icon.types';
+import { COLORS } from '@constants/colors';
 import { scale as scaleFunc } from '@utils';
 
-const MediumIcon = (props: IconProps) => {
+export const MediumIcon = (props: IconProps) => {
   const { scale = 1, color = COLORS.brand500 } = props;
 
   return (
@@ -21,4 +21,3 @@ const MediumIcon = (props: IconProps) => {
     </Svg>
   );
 };
-export default MediumIcon;

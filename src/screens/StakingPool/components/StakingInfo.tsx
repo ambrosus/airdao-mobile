@@ -1,12 +1,12 @@
+import React, { PropsWithChildren, ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { BigNumber, ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useCurrencyRate } from '@hooks';
 import { moderateScale, scale, verticalScale, NumberUtils } from '@utils';
-import React, { PropsWithChildren, ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
-import { BigNumber, ethers } from 'ethers';
 
 interface StakingInfoProps {
   totalStake: number;

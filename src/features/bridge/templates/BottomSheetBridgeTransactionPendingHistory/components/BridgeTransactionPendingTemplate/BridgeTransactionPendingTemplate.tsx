@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { styles } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components/BridgeTransactionPendingTemplate/styles';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { styles } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components/BridgeTransactionPendingTemplate/styles';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
-import { RowStageSection } from '../RowStageSection/RowStageSection';
-import { scale } from '@utils';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { scale } from '@utils';
+import { RowStageSection } from '../RowStageSection/RowStageSection';
 
 interface BridgeTransactionPendingTemplateModel {
   transaction: BridgeTransactionHistoryDTO;

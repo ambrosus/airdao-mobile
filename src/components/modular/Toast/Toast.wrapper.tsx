@@ -18,9 +18,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale, verticalScale } from '@utils';
-import { ToastOptions, ToastPosition, ToastType } from './Toast.types';
-import { TOAST_DEFAULT_DURATION } from './Toast.constants';
 import { AlertBanner } from './Toast.body';
+import { TOAST_DEFAULT_DURATION } from './Toast.constants';
+import { ToastOptions, ToastPosition, ToastType } from './Toast.types';
 
 export const ToastWrapper = forwardRef((_, ref) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();

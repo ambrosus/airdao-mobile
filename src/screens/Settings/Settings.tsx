@@ -1,12 +1,12 @@
 import React from 'react';
 import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Row, Spacer, Text } from '@components/base';
+import { useTranslation } from 'react-i18next';
 import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
 import Config from '@constants/config';
+import { scale, verticalScale } from '@utils';
 import { SETTINGS_MENU_ITEMS, SOCIAL_GROUPS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';

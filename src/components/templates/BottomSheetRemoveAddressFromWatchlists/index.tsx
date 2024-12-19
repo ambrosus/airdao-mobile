@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { useForwardedRef, useWatchlist } from '@hooks';
-import { COLORS } from '@constants/colors';
-import { ExplorerAccount } from '@models';
 import { BottomSheetFloat } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { useForwardedRef, useWatchlist } from '@hooks';
+import { ExplorerAccount } from '@models';
 import { verticalScale } from '@utils';
 import { styles } from './styles';
 

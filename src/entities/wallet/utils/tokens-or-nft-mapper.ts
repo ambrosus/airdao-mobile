@@ -1,5 +1,5 @@
-import { Token } from '@models';
 import { CryptoCurrencyCode } from '@appTypes';
+import { Token } from '@models';
 
 export const _tokensOrNftMapper = (_tokens: Token[]) => {
   const tokens = _tokens.filter(

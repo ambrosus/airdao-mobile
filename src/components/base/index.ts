@@ -1,7 +1,7 @@
 export * from './AnimatedText';
 export * from './Badge';
 export { Button, ButtonType } from './Button';
-export * from './Input';
+export { Input, InputProps, InputRef } from './Input';
 export * from './Text';
 export * from './Row';
 export * from './KeyboardDismissingView';

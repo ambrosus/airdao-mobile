@@ -1,7 +1,7 @@
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
-import { IconProps } from '../../Icon.types';
 import { COLORS } from '@constants/colors';
+import { IconProps } from '../../Icon.types';
 
 export function ContractCallIcon({
   scale = 1,

@@ -6,20 +6,33 @@ import React, {
   useState
 } from 'react';
 import { Keyboard, View } from 'react-native';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { CommonActions, useFocusEffect } from '@react-navigation/native';
-import * as Clipboard from 'expo-clipboard';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { KeyboardDismissingView, Spacer, Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { useEstimatedTransferFee, useTokensAndTransactions } from '@hooks';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
+import { KeyboardDismissingView, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { InputWithTokenSelect } from '@components/templates';
+import { COLORS } from '@constants/colors';
 import { ethereumAddressRegex } from '@constants/regex';
-import { AddressInput, ConfirmTransaction } from './components';
+import { useWalletStore } from '@entities/wallet';
+import { useSendFundsStore } from '@features/send-funds';
+import { TokensList } from '@features/send-funds/components/composite';
+import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
+import { FundsHeader } from '@features/send-funds/components/templates';
+import {
+  useAMBEntity,
+  useAmountChangeHandler
+} from '@features/send-funds/lib/hooks';
+import { useEstimatedTransferFee, useTokensAndTransactions } from '@hooks';
 import { AirDAOEventDispatcher } from '@lib';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { Token } from '@models';
 import {
   NumberUtils,
@@ -27,22 +40,8 @@ import {
   verticalScale,
   _delayNavigation
 } from '@utils';
+import { AddressInput, ConfirmTransaction } from './components';
 import { styles } from './styles';
-
-import {
-  CustomAppEvents,
-  sendFirebaseEvent
-} from '@lib/firebaseEventAnalytics';
-import {
-  useAMBEntity,
-  useAmountChangeHandler
-} from '@features/send-funds/lib/hooks';
-import { InputWithTokenSelect } from '@components/templates';
-import { TokensList } from '@features/send-funds/components/composite';
-import { AmountSelectionKeyboardExtend } from '@features/send-funds/components/modular';
-import { FundsHeader } from '@features/send-funds/components/templates';
-import { useWalletStore } from '@entities/wallet';
-import { useSendFundsStore } from '@features/send-funds';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SendFunds'>;
 

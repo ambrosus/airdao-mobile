@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { $token } from '@entities/kosmos/utils';
 import { useMarketTokens } from '@entities/kosmos/lib/hooks/use-market-tokens';
+import { $token } from '@entities/kosmos/utils';
 
 export function useToken(address?: string) {
   const { tokens } = useMarketTokens();

@@ -17,15 +17,15 @@ import {
   View,
   ViewStyle
 } from 'react-native';
-import { styles } from './styles';
-import { BottomSheetTokensList } from './components';
 import { InputRef, Text, TextInput } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BalanceRow, TokenSelector } from '@components/modular';
-import { Token } from '@models';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
+import { Token } from '@models';
 import { isAndroid, StringUtils, NumberUtils } from '@utils';
+import { BottomSheetTokensList } from './components';
+import { styles } from './styles';
 
 interface InputWithTokenSelectProps {
   readonly title?: string;

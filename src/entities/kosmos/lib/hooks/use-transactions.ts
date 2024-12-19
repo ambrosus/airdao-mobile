@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useWalletStore } from '@entities/wallet';
-import type { TxType } from '@entities/kosmos';
 import { fetchMarketTransactions } from '@entities/kosmos/api';
 import { useTransactionsStore } from '@entities/kosmos/model';
+import { useWalletStore } from '@entities/wallet';
+import type { TxType } from '@entities/kosmos';
 
 const VERSIONS = ['v1', 'v2'];
 

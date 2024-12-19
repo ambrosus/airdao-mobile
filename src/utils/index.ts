@@ -21,7 +21,6 @@ export * from './number';
 export * from './object';
 export * from './passcode';
 export * from './platform';
-export * from './safe-types';
 export * from './scaling';
 export * from './share';
 export * from './sort';

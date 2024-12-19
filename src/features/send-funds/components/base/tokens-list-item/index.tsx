@@ -1,18 +1,18 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { styles } from './styles';
+import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
-import { Token } from '@models';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useUSDPrice } from '@hooks';
+import { Token } from '@models';
 import {
   StringValidators,
   wrapTokenIcon,
   NumberUtils,
   StringUtils
 } from '@utils';
-import { useUSDPrice } from '@hooks';
-import { CryptoCurrencyCode } from '@appTypes';
+import { styles } from './styles';
 
 interface TokensListItemProps {
   token: Token;

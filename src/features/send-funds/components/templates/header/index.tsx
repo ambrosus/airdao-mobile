@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Button, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { BarcodeScannerIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { useBarcode } from '@features/send-funds/lib/hooks';
 import { StringUtils } from '@utils';
+import { styles } from './styles';
 
 interface FundsHeaderProps {
   sender: string;

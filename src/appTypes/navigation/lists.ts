@@ -1,7 +1,7 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { SettingsTabParamsList } from '@appTypes';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SettingsTabParamsList } from '@appTypes';
 import { CommonStackParamsList } from './common';
 
 export type PortfolioParamsPortfolio = {

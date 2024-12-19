@@ -5,8 +5,8 @@ import {
   NativeSyntheticEvent
 } from 'react-native';
 import { scale } from '@utils';
-import { AccountListProps } from './AccountList.types';
 import { AccountList } from './AccountList';
+import { AccountListProps } from './AccountList.types';
 
 interface PaginatedAccountListProps extends AccountListProps {
   listProps?: AccountListProps['listProps'];

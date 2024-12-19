@@ -1,14 +1,14 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import { Header } from '@components/composite';
-import { AboutMenutItem } from './About.MenuItem';
-import { Button, Spacer, Text } from '@components/base';
-import { styles } from './styles';
 import { Linking, View } from 'react-native';
-import { scale, PlatformSpecificUtils } from '@utils';
-import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, Spacer, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { scale, PlatformSpecificUtils } from '@utils';
+import { AboutMenutItem } from './About.MenuItem';
+import { styles } from './styles';
 
 // TODO add privacy policy and terms links
 export const AboutScreen = () => {

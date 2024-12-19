@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createContextSelector } from '@utils';
-import {
-  BridgeDataState,
-  Config as BridgeConfigModel,
-  FeeData,
-  Token
-} from '@lib/bridgeSDK/models/types';
-import { getBridgePairs } from '@lib';
+import { formatUnits } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
+import { Toast, ToastType } from '@components/modular';
+import Config from '@constants/config';
+import { useWalletStore } from '@entities/wallet';
 import {
   BRIDGE_ERROR_CODES,
   DEFAULT_AMB_NETWORK,
@@ -16,26 +14,28 @@ import {
   EMPTY_FEE_DATA,
   METHODS_FROM_ERRORS
 } from '@features/bridge/constants';
-import { getBridgeConfig } from '../utils';
 import { parsedBridges } from '@features/bridge/utils/parseBridges';
-import {
-  BridgeSelectorTypes,
-  ParsedBridge,
-  PreviewDataWithFeeModel
-} from '@models/Bridge';
-import { CryptoCurrencyCode } from '@appTypes';
-import Config from '@constants/config';
-import { formatUnits } from 'ethers/lib/utils';
+import { getBridgePairs } from '@lib';
 import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { useTranslation } from 'react-i18next';
-import { Toast, ToastType } from '@components/modular';
-import { useWalletStore } from '@entities/wallet';
+import {
+  BridgeDataState,
+  Config as BridgeConfigModel,
+  FeeData,
+  Token
+} from '@lib/bridgeSDK/models/types';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import {
+  BridgeSelectorTypes,
+  ParsedBridge,
+  PreviewDataWithFeeModel
+} from '@models/Bridge';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { createContextSelector } from '@utils';
+import { getBridgeConfig } from '../utils';
 
 export const BridgeContext = () => {
   const { t } = useTranslation();

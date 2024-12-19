@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
+import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { WalletOutlineIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
-import { NumberUtils, scale } from '@utils';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useUSDPrice } from '@hooks';
-import { CryptoCurrencyCode } from '@appTypes';
-import { COLORS } from '@constants/colors';
-import { ShimmerLoader } from '@components/animations';
-import { WalletOutlineIcon } from '@components/svg/icons/v2';
-import { ethers } from 'ethers';
+import { NumberUtils, scale } from '@utils';
 
 interface BalanceProps {
   type: SelectedTokensKeys;

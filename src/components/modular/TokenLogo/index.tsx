@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { CryptoCurrencyCode } from '@appTypes';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
@@ -19,7 +20,6 @@ import {
   UnknownTokenIcon,
   UsdcIcon
 } from '@components/svg/icons';
-import { CryptoCurrencyCode } from '@appTypes';
 import NFTIcon from '@components/svg/icons/NFTIcon';
 import { getTokenNameFromDatabase } from '@utils';
 

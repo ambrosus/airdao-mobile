@@ -2,9 +2,9 @@ import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { dropRight, split } from 'lodash';
+import { Button, Spacer } from '@components/base';
 import { PasscodeKeyboard } from '@components/composite/PasscodeKeyboard';
 import { styles } from '@components/modular/Passcode/styles';
-import { Button, Spacer } from '@components/base';
 import { useForwardedRef } from '@hooks';
 import { DeviceUtils, scale, StringUtils } from '@utils';
 

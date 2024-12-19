@@ -1,10 +1,10 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { TabsParamsList } from './tabs';
-import { CommonStackParamsList } from './common';
-import { StakingPool, Token } from '@models';
 import { MarketType } from '@features/kosmos/types';
+import { StakingPool, Token } from '@models';
+import { CommonStackParamsList } from './common';
+import { TabsParamsList } from './tabs';
 
 export type HomeParamsList = {
   HomeScreen: undefined;

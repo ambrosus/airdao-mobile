@@ -1,23 +1,23 @@
 import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
 import { Dimensions, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { WalletItem } from '@components/templates/WalletItem';
-import { ExplorerAccount } from '@models';
-import { useNavigation } from '@react-navigation/native';
 import { AirDAOEventType, HomeNavigationProp } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { styles } from '@components/templates/AddressList/styles';
 import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetRemoveAddressFromWatchlists';
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
+import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetRemoveAddressFromWatchlists';
+import { WalletItem } from '@components/templates/WalletItem';
 import { COLORS } from '@constants/colors';
 import { useSwipeableDismissListener } from '@hooks';
 import { AirDAOEventDispatcher } from '@lib';
+import { ExplorerAccount } from '@models';
 import { SwipeAction } from './SwipeAction';
 
 export type SwipeableWalletItemProps = {

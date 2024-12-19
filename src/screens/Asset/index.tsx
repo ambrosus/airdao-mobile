@@ -1,16 +1,17 @@
 import React, { useCallback, useMemo } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
-import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 import { TokenLogo } from '@components/modular';
 import { ChartIcon } from '@components/svg/icons/v2';
+import { AccountTransactions } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
+import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
+import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
 import {
   StringUtils,
   StringValidators,
@@ -18,8 +19,7 @@ import {
   scale,
   verticalScale
 } from '@utils';
-import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
-import { AccountTransactions } from '@components/templates';
+import { styles } from './styles';
 
 export const AssetScreen = () => {
   const {

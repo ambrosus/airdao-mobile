@@ -1,7 +1,7 @@
-import Database from '@database/Database';
 import { Q } from '@nozbe/watermelondb';
-import { PublicAddressDbModel } from '@database/models';
 import { CacheableAccount, DatabaseTable } from '@appTypes';
+import Database from '@database/Database';
+import { PublicAddressDbModel } from '@database/models';
 
 const publichAddressesDb = DatabaseTable.PublicAddresses;
 

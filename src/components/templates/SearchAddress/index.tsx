@@ -6,12 +6,6 @@ import React, {
 } from 'react';
 import { Alert, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
-import { BarcodeScanner } from '../BarcodeScanner';
-import { TransactionDetails } from '../TransactionDetails';
-import { SearchAddressNoResult } from './SearchAddress.NoMatch';
-import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
 import {
   Button,
   InputRef,
@@ -26,24 +20,30 @@ import {
   CenteredSpinner,
   InputWithIcon
 } from '@components/composite';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils';
+import { COLORS } from '@constants/colors';
+import { ethereumAddressRegex } from '@constants/regex';
+import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
+
+import { useAddressesStore } from '@entities/addresses';
 import {
   useExplorerInfo,
   useSearchAccount,
   useTransactionDetails,
   useTransactionsOfAccount
 } from '@hooks';
-import { ethereumAddressRegex } from '@constants/regex';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
-import { COLORS } from '@constants/colors';
-
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-import { useAddressesStore } from '@entities/addresses';
+import { scale, verticalScale } from '@utils';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
+import { BarcodeScanner } from '../BarcodeScanner';
+import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
+import { TransactionDetails } from '../TransactionDetails';
+import { styles } from './styles';
 
 interface SearchAdressProps {
   scannerDisabled?: boolean;

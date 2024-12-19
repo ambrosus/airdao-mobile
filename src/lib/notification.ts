@@ -3,11 +3,11 @@ import messaging, {
 } from '@react-native-firebase/messaging';
 // import { NotificationType } from '@models';
 // import { DatabaseService } from './database';
-import { AirDAOEventDispatcher } from './event-dispatcher';
 import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
+import { AirDAOEventDispatcher } from './event-dispatcher';
 
 export class NotificationService {
   constructor(listener?: (newToken: string) => unknown) {

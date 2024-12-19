@@ -2,20 +2,20 @@ import React, { ForwardedRef, forwardRef, useCallback } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { HomeNavigationProp } from '@appTypes';
+import { Button, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
-import { Button, Spacer, Text } from '@components/base';
+import { AddIcon, CloseIcon } from '@components/svg/icons';
+import { DownloadIcon } from '@components/svg/icons/v2/settings';
+import { COLORS } from '@constants/colors';
+import { useAddWalletStore } from '@features/add-wallet';
 import { useForwardedRef } from '@hooks';
 import { scale, verticalScale } from '@utils';
-import { HomeNavigationProp } from '@appTypes';
-import { AddIcon, CloseIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { DownloadIcon } from '@components/svg/icons/v2/settings';
-import { useAddWalletStore } from '@features/add-wallet';
+import { styles } from './styles';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
   BottomSheetRef,

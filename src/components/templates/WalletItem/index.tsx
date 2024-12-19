@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { FlexAlignType, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
-import { ExplorerAccount } from '@models/Explorer';
-import { useAMBPrice } from '@hooks';
 import { PercentChange } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { useAMBPrice } from '@hooks';
+import { ExplorerAccount } from '@models/Explorer';
 import { scale, NumberUtils, StringUtils } from '@utils';
 import { AddressIndicator } from '../AddressIndicator';
 

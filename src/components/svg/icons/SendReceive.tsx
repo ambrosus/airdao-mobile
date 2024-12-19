@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from '@components/svg/icons/Icon.types';
 import { Circle, ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons/Icon.types';
 import { DEVICE_WIDTH } from '@constants/variables';
 
 export function SendReceiveIcon(props: Omit<IconProps, 'color'>) {

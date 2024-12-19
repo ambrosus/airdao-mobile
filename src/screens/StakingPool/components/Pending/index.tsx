@@ -1,9 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Animated from 'react-native-reanimated';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils';
-import { useTranslation } from 'react-i18next';
 
 export const StakePending = () => {
   const { t } = useTranslation();

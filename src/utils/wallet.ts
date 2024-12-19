@@ -1,6 +1,5 @@
-import { Wallet } from '@models/Wallet';
+import { API } from '@api/api';
 import { CryptoCurrencyCode, DatabaseTable, WalletMetadata } from '@appTypes';
-import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
 import {
   AccountDB,
   AccountDBModel,
@@ -9,17 +8,17 @@ import {
   WalletDBModel
 } from '@database';
 import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
-import { MnemonicUtils } from './mnemonics';
-import { CashBackUtils } from './cashback';
-import { Cache, CacheKey } from '../lib/cache';
-import { AccountUtils } from './account';
-import { CryptoUtils } from './crypto';
-import { API } from '@api/api';
-
+import { singleAirDAOStorage } from '@lib/crypto/AirDAOKeysStorage';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { Wallet } from '@models/Wallet';
+import { AccountUtils } from './account';
+import { CashBackUtils } from './cashback';
+import { CryptoUtils } from './crypto';
+import { MnemonicUtils } from './mnemonics';
+import { Cache, CacheKey } from '../lib/cache';
 
 const _saveWallet = async (
   wallet: Pick<WalletMetadata, 'newMnemonic' | 'name' | 'number'> & {
@@ -41,11 +40,11 @@ const _saveWallet = async (
       : MnemonicUtils.recheckMnemonic(prepared.mnemonic);
     prepared.hash = await CryptoUtils.hashMnemonic(prepared.mnemonic);
 
-    const checkKey = await AirDAOKeysStorage.isMnemonicAlreadySaved(prepared);
+    const checkKey = await singleAirDAOStorage.isMnemonicAlreadySaved(prepared);
     if (checkKey) {
       // TODO
     }
-    storedKey = await AirDAOKeysStorage.saveMnemonic(prepared);
+    storedKey = await singleAirDAOStorage.saveMnemonic(prepared);
   } catch (e) {}
   return storedKey;
 };

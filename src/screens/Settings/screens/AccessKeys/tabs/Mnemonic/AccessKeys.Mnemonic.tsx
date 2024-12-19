@@ -7,11 +7,11 @@ import {
   ViewStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { singleAirDAOStorage } from '@lib';
 import { scale } from '@utils';
-import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
+import { styles } from './styles';
 
 interface AccessKeysMnemonicProps {
   walletHash: string;
@@ -27,7 +27,7 @@ export const AccessKeysMnemonicTab = ({
     if (walletHash) {
       (async () => {
         const mnemonic = (
-          await AirDAOKeysStorage.getWalletMnemonic(walletHash)
+          await singleAirDAOStorage.getWalletMnemonic(walletHash)
         ).split(' ');
         setMnemonicPhrase(mnemonic);
       })();

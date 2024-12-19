@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from '../styles';
 import { Spacer } from '@components/base';
 import { BottomSheetReviewTokenItem } from '@features/swap/components/base';
 import { PreviewInformation } from '@features/swap/components/composite';
@@ -12,8 +11,9 @@ import {
 import { BottomSheetStatus, FIELD } from '@features/swap/types';
 import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
 import { scale } from '@utils';
-import { SuccessSwapView } from './success';
+import { styles } from '../styles';
 import { ErrorSwapView } from './error';
+import { SuccessSwapView } from './success';
 
 export const RenderBottomSheetStatusView = () => {
   const { tokensRoute } = useSwapTokens();

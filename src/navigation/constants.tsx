@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   ProductsActiveIcon,
   ProductsInactiveIcon,
@@ -7,7 +8,6 @@ import {
   WalletsInactiveIcon
 } from '@components/svg/icons/v2/bottom-tabs-navigation';
 import { COLORS } from '@constants/colors';
-import React from 'react';
 
 export const MAIN_TABS = {
   Wallets: {

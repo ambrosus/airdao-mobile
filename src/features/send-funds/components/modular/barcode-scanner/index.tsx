@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
-import { useForwardedRef } from '@hooks';
-import { BarcodeScanner } from '@components/templates';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { BarcodeScanner } from '@components/templates';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useForwardedRef } from '@hooks';
 
 interface FundsBarcodeScannerProps {
   onScanned: (address: string) => void;

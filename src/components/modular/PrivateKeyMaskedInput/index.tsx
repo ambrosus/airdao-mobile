@@ -13,10 +13,10 @@ import {
   TextStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Clipboard, moderateScale, scale, verticalScale } from '@utils';
-import { TextInput } from '@components/base/Input/Input.text';
 import { InputRef, TextInputProps } from '@components/base';
+import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
+import { Clipboard, moderateScale, scale, verticalScale } from '@utils';
 
 type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;

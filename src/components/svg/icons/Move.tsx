@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from '@components/svg/icons/Icon.types';
 import { Path, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons/Icon.types';
 
 export function MoveIcon(props: IconProps) {
   const { scale = 1, color = '#212121' } = props;

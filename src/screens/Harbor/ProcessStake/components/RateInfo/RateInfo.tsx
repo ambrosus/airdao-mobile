@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row, Spacer, Text } from '@components/base';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { scale, NumberUtils } from '@utils';
-import { COLORS } from '@constants/colors';
 import { CryptoCurrencyCode } from '@appTypes';
+import { Row, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale, NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface RateInfoModel {
   availableToStake: string;

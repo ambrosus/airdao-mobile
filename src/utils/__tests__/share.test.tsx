@@ -1,6 +1,6 @@
-import Share from 'react-native-share';
-import * as ExpoSharing from 'expo-sharing';
 import { Platform } from 'react-native';
+import * as ExpoSharing from 'expo-sharing';
+import Share from 'react-native-share';
 import { ShareUtils } from '@utils/share';
 
 jest.mock('react-native-share', () => ({

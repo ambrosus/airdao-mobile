@@ -1,5 +1,5 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { HomeParamsList, SettingsTabParamsList } from '@appTypes';
 
 export type TabsParamsList = {

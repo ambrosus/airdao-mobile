@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { Image, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
+import { Badge } from '@components/base/Badge';
 import { COLORS } from '@constants/colors';
 import { scale, verticalScale, NumberUtils } from '@utils';
-import { Badge } from '@components/base/Badge';
 import { styles } from './styles';
 
 export interface PortfolioPerformanceProps {

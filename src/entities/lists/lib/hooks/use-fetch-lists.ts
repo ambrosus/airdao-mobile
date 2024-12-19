@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { CacheableAccountList } from '@appTypes';
+import { MULTISIG_VAULT } from '@constants/variables';
+import { PublicAddressDbModel, PublicAddressListDB } from '@database';
 import { useAddressesStore } from '@entities/addresses';
 import { useListsStore } from '@entities/lists';
-import { PublicAddressDbModel, PublicAddressListDB } from '@database';
 import { Cache, CacheKey } from '@lib/cache';
-import { MULTISIG_VAULT } from '@constants/variables';
 import { ExplorerAccount } from '@models';
-import { CacheableAccountList } from '@appTypes';
 
 type CreateListActions = (payload: string) => Promise<CacheableAccountList>;
 

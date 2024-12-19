@@ -1,19 +1,19 @@
 import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
-import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
 import { useTranslation } from 'react-i18next';
-import { BottomSheetFloat } from '@components/modular';
-import { BottomSheetRef } from '@components/composite';
-import { useForwardedRef } from '@hooks/useForwardedRef';
+import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';
+import { Social } from '@appTypes/Sharing';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
+import { BottomSheetRef } from '@components/composite';
+import { BottomSheetFloat } from '@components/modular';
+import { MessagesIcon, PlusIcon, TwitterIcon } from '@components/svg/icons';
 import {
   PortfolioPerformance,
   PortfolioPerformanceProps
 } from '@components/templates/PortfolioPerformance';
-import { MessagesIcon, PlusIcon, TwitterIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { useForwardedRef } from '@hooks/useForwardedRef';
 import { ShareUtils, scale, verticalScale } from '@utils';
-import { Social } from '@appTypes/Sharing';
 import { styles } from './styles';
 
 interface SharePortfolioProps extends PortfolioPerformanceProps {

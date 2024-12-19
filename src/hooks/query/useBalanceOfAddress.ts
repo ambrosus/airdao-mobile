@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
 import {
   AirDAOEventType,
   AirDAOFundsSentFromAppEventPayload,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
+import { QueryResponse } from '@appTypes/QueryResponse';
 import { AirDAOEventDispatcher } from '@lib';
 
 export function useBalanceOfAddress(address: string): QueryResponse<any> {

@@ -6,31 +6,31 @@ import React, {
   useState
 } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { BottomSheetRef, Header } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CryptoCurrencyCode } from '@appTypes';
 import { Spacer, Text } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
+import { PrimaryButton } from '@components/modular';
+import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
+import { AMB_DECIMALS, DEVICE_HEIGHT } from '@constants/variables';
+import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useWalletStore } from '@entities/wallet';
+import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { useBalanceOfAddress, useKeyboardHeight } from '@hooks';
+import { ExplorerAccount, Token } from '@models';
+import { isSmallScreen, scale, NumberUtils, TokenUtils } from '@utils';
 import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
 import { styles } from './styles';
-import { useWalletStore } from '@entities/wallet';
-import { useBalanceOfAddress, useKeyboardHeight } from '@hooks';
-import { InputWithoutTokenSelect } from '@components/templates';
-import { ExplorerAccount, Token } from '@models';
-import { AMB_DECIMALS, DEVICE_HEIGHT } from '@constants/variables';
-import { CryptoCurrencyCode } from '@appTypes';
-import { PrimaryButton } from '@components/modular';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
-import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
-import { isSmallScreen, scale, NumberUtils, TokenUtils } from '@utils';
 
 export const ProcessStake = () => {
   const { top } = useSafeAreaInsets();

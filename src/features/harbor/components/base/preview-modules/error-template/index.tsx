@@ -1,12 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { ErrorIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
+import { styles } from './styles';
 
 interface PreviewFormModel {
   onClose: () => void;

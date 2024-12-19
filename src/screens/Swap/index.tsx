@@ -1,23 +1,23 @@
 import React, { useCallback, useMemo } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Button } from '@components/base';
 import { Header } from '@components/composite';
+import { SettingsFilledIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import {
   BottomSheetPreviewSwap,
   BottomSheetTokensList,
   SwapForm
 } from '@features/swap/components/templates';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD } from '@features/swap/types';
-import { SettingsFilledIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { Button } from '@components/base';
 import { useAllLiquidityPools } from '@features/swap/lib/hooks';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeParamsList } from '@appTypes';
 import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
+import { FIELD } from '@features/swap/types';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 

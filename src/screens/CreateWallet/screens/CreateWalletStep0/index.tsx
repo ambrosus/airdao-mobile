@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
 import {
   BottomAwareSafeAreaView,
   CheckBox,
   Header
 } from '@components/composite';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
-import { styles } from '@screens/CreateWallet/styles';
-import { stylesStep0 } from './Step0.styles';
-import { SettingsTabNavigationProp } from '@appTypes';
 import { NewWalletPageIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { styles } from '@screens/CreateWallet/styles';
+import { scale, verticalScale } from '@utils';
+import { stylesStep0 } from './Step0.styles';
 
 export const CreateWalletStep0 = () => {
   const { params } = useRoute();

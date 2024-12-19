@@ -3,8 +3,8 @@ import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils';
 import { MarketType, Token } from '@entities/kosmos';
+import { NumberUtils } from '@utils';
 
 interface BalanceWithButtonProps {
   quoteToken: Token | undefined;

@@ -2,14 +2,14 @@ import React, { useCallback } from 'react';
 import { Text as RNText, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import {
   Notification,
   NotificationWithPriceChange
 } from '@models/Notification';
 import { scale, verticalScale, NumberUtils } from '@utils';
-import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface NotificationBoxProps {
   notification: Notification;

@@ -2,12 +2,12 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
+import { AddressIndicator } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { useListsSelector } from '@entities/lists';
+import { useWatchlist } from '@hooks';
 import { ExplorerAccount } from '@models/Explorer';
 import { verticalScale, StringUtils, NumberUtils } from '@utils';
-import { COLORS } from '@constants/colors';
-import { useWatchlist } from '@hooks';
-import { AddressIndicator } from '@components/templates';
-import { useListsSelector } from '@entities/lists';
 
 interface ExplorerWalletItemProps {
   item: ExplorerAccount;

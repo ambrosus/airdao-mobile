@@ -1,21 +1,21 @@
 import React, { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import * as Updates from 'expo-updates';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from './styles';
-import { Header } from '@components/composite';
-import { Row, Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils';
-import { COLORS } from '@constants/colors';
-import { StakingPoolList } from '@components/templates';
+import * as Updates from 'expo-updates';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp } from '@appTypes';
-import { StakingPool } from '@models';
-import { useAmbrosusStakingPools } from '@hooks';
+import { Row, Spacer, Spinner, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { StakingPoolList } from '@components/templates';
+import { COLORS } from '@constants/colors';
 
-import { useWalletStore } from '@entities/wallet';
 import { useStakingPoolsStore } from '@entities/staking';
+import { useWalletStore } from '@entities/wallet';
+import { useAmbrosusStakingPools } from '@hooks';
+import { StakingPool } from '@models';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const StakingPoolsScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();

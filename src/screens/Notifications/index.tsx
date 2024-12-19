@@ -5,19 +5,19 @@ import {
   SectionListRenderItemInfo,
   View
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import {
   SafeAreaView,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import { NotificationSettingsView } from '@components/templates';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { Notification } from '@models/Notification';
-import { COLORS } from '@constants/colors';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { BellIcon } from '@components/svg/icons';
+import { NotificationSettingsView } from '@components/templates';
+import { COLORS } from '@constants/colors';
 import { useNotificationsQuery } from '@hooks/query';
+import { Notification } from '@models/Notification';
 import { DeviceUtils, verticalScale } from '@utils';
 import { NotificationBox, NotificationsHeader } from './components';
 import { styles } from './styles';

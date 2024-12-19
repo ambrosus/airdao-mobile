@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from '@components/svg/icons/Icon.types';
 import { Circle, G, Mask, Path, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons/Icon.types';
 
 export function AddressTrackingIcon(props: Omit<IconProps, 'color'>) {
   const { scale = 1 } = props;

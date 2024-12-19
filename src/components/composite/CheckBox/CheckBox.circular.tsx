@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { CircularCheckBoxProps } from './CheckBox.types';
 import { Button } from '@components/base';
-import { moderateScale } from '@utils';
 import { COLORS } from '@constants/colors';
+import { moderateScale } from '@utils';
+import { CircularCheckBoxProps } from './CheckBox.types';
 
 export const CheckBoxCircular = (props: CircularCheckBoxProps): JSX.Element => {
   const {

@@ -1,10 +1,10 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { View } from 'react-native';
-import { scale } from '@utils';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { scale } from '@utils';
 import { styles } from './styles';
 
 export const WithdrawInfo = ({}) => {

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { useAddressesStore } from '@entities/addresses';
-import { useAddressesActions } from '@features/addresses';
 import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
-import { AddressUtils } from '@utils';
+import { useAddressesStore } from '@entities/addresses';
+import { useAddressesActions } from '@features/addresses';
 import { AirDAOEventDispatcher } from '@lib';
+import { AddressUtils } from '@utils';
 
 export function useListNotifications() {
   const { allAddresses } = useAddressesStore();

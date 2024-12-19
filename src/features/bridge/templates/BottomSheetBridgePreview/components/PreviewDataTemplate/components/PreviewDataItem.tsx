@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
+import { formatUnits } from 'ethers/lib/utils';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { DataToPreviewModel } from '@models/Bridge';
 import { NumberUtils, scale } from '@utils';
-import { formatUnits } from 'ethers/lib/utils';
 
 interface PreviewDataItemProps {
   item: {

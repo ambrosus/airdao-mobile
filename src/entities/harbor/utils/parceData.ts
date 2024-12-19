@@ -1,5 +1,5 @@
-import { HarborDataModel } from '@entities/harbor/model/types';
 import { DEFAULT_DATA } from '@entities/harbor/constants';
+import { HarborDataModel } from '@entities/harbor/model/types';
 
 type ParseDataModel = Awaited<(string | any)[]>[];
 

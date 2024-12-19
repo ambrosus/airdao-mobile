@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Cache, CacheKey } from '@lib/cache';
 import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils';
 import { CopyToClipboardButton } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { Cache, CacheKey } from '@lib/cache';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface AccessKeysPrivateProps {
   walletHash: string;

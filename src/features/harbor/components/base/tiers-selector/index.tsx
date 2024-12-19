@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import { useTranslation } from 'react-i18next';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import { Row, Spacer, Text } from '@components/base';
+import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
+import { COLORS } from '@constants/colors';
 import {
   EMPTY_SELECTED_TIER,
   REWARD_TIERS_LIST
 } from '@entities/harbor/constants';
-import { TierRewardItem } from '@entities/harbor/model/types';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { COLORS } from '@constants/colors';
-import { styles } from './styles';
+import { TierRewardItem } from '@entities/harbor/model/types';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
-import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 import { isAndroid, scale } from '@utils';
+import { styles } from './styles';
 
 interface TiersContainerProps {
   bondAmount: string;

@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Spacer, Text } from '@components/base';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { verticalScale } from '@utils';
 import { Alert, View } from 'react-native';
-import { SettingsTabNavigationProp } from '@appTypes';
-import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { usePasscodeStore } from '@features/passcode';
+import { Passcode, Toast, ToastPosition, ToastType } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
+import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const ChangePasscode = () => {
   const { t } = useTranslation();

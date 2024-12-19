@@ -1,5 +1,17 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SettingsTabParamsList } from '@appTypes';
+import { AddressDetails } from '@screens/Address';
+import {
+  CreateWalletStep0,
+  CreateWalletStep1,
+  CreateWalletStep2
+} from '@screens/CreateWallet';
+import { ImportWalletMethods } from '@screens/ImportWalletMethods';
+import {
+  ImportWallet,
+  ImportWalletPrivateKey
+} from '@screens/ImportWalletMethods/screens';
 import {
   AboutScreen,
   AccessKeysScreen,
@@ -12,20 +24,8 @@ import {
   SettingsScreen,
   SingleWalletScreen
 } from '@screens/Settings';
-import { SettingsTabParamsList } from '@appTypes';
-import {
-  CreateWalletStep0,
-  CreateWalletStep1,
-  CreateWalletStep2
-} from '@screens/CreateWallet';
-import { Watchlist } from '@screens/Settings/screens/Watchlist';
 import { Explore } from '@screens/Settings/screens/Explore';
-import { AddressDetails } from '@screens/Address';
-import { ImportWalletMethods } from '@screens/ImportWalletMethods';
-import {
-  ImportWallet,
-  ImportWalletPrivateKey
-} from '@screens/ImportWalletMethods/screens';
+import { Watchlist } from '@screens/Settings/screens/Watchlist';
 import {
   ConfirmPasscode,
   SetupPasscode,

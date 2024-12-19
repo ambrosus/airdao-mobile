@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { TokenLogo } from '@components/modular';
-import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { NumberUtils, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetReviewTokenItemProps {
   type: keyof typeof FIELD;

@@ -4,14 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import LottieView from 'lottie-react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { PrimaryButton, SecondaryButton } from '@components/modular';
-import { BottomAwareSafeAreaView } from '@components/composite';
-import { Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
+import { Spacer, Text } from '@components/base';
+import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
 import { useAddWalletStore } from '@features/add-wallet';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const NoWalletScreen = () => {
   const { t } = useTranslation();

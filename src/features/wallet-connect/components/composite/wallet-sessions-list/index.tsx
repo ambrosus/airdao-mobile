@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import { SessionTypes } from '@walletconnect/types';
 import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
-import { WalletSessionItem } from '../../base';
 import { scale } from '@utils';
+import { WalletSessionItem } from '../../base';
 
 export const WalletSessionsList = () => {
   const { activeSessions } = useWalletConnectContextSelector();

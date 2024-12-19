@@ -1,17 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { Header } from '@components/composite';
-import { Button } from '@components/base';
-import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
-import { styles } from './styles';
+import { Button } from '@components/base';
+import { Header } from '@components/composite';
+import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { useEffectOnce } from '@hooks';
 import { useWalletStore } from '@entities/wallet';
 import { HarborStakeTabs } from '@features/harbor/components/tabs';
+import { useEffectOnce } from '@hooks';
+import { styles } from './styles';
 
 export const StakeHarborScreen = () => {
   const { t } = useTranslation();

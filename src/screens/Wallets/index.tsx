@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ethers } from 'ethers';
 import { useFocusEffect } from '@react-navigation/native';
+import { ethers } from 'ethers';
 import Animated, {
   Easing,
   useAnimatedScrollHandler,
@@ -13,21 +12,22 @@ import Animated, {
   withTiming,
   cancelAnimation
 } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Spacer } from '@components/base';
+import { WalletCardHeight } from '@components/modular/WalletCard/styles';
 import {
   AccountActions,
   PaginatedAccountList,
   WalletTransactionsAndAssets
 } from '@components/templates';
-import { Spacer } from '@components/base';
+import { useCurrenciesQuery } from '@entities/currencies/lib';
+import { useWalletStore } from '@entities/wallet';
+import { useSendFundsStore } from '@features/send-funds';
+import { HomeHeader } from '@features/wallet-assets/components/templates';
 import { useBalanceOfAddress } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { WalletUtils, scale, SCREEN_HEIGHT, verticalScale } from '@utils';
-import { WalletCardHeight } from '@components/modular/WalletCard/styles';
-import { HomeHeader } from '@features/wallet-assets/components/templates';
-import { useWalletStore } from '@entities/wallet';
-import { useSendFundsStore } from '@features/send-funds';
-import { useCurrenciesQuery } from '@entities/currencies/lib';
 
 const SPRING_CONFIG = {
   damping: 20,

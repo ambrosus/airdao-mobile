@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { useAddressesStore } from '@entities/addresses';
 import _ from 'lodash';
-import { ExplorerAccount } from '@models';
 import { PublicAddressDB } from '@database';
+import { useAddressesStore } from '@entities/addresses';
+import { ExplorerAccount } from '@models';
 
 type DispatchActionKeys = 'add' | 'remove' | 'update' | 'add-or-update' | 'set';
 type DispatcherArgs = {

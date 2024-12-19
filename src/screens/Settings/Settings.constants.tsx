@@ -1,5 +1,6 @@
 import React from 'react';
-import { COLORS } from '@constants/colors';
+import { TelegramSettingsIcon } from '@components/svg/icons';
+import MediumIcon from '@components/svg/icons/MediumIcon';
 import {
   AboutIcon,
   CompassIcon,
@@ -10,8 +11,7 @@ import {
   WatchListIcon
 } from '@components/svg/icons/v2/settings';
 import XTwitterIcon from '@components/svg/icons/XTwitterIcon';
-import { TelegramSettingsIcon } from '@components/svg/icons';
-import MediumIcon from '@components/svg/icons/MediumIcon';
+import { COLORS } from '@constants/colors';
 import { SettingsMenuItem } from '@screens/Settings/Settings.types';
 
 export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [

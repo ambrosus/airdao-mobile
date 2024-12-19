@@ -1,9 +1,9 @@
 import React from 'react';
-import { AppPreference } from '../AppPrefrences.types';
-import { Row, Spacer, Text } from '@components/base';
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils';
+import { AppPreference } from '../AppPrefrences.types';
 
 export const AppPreferencesMenuItem = (props: AppPreference) => {
   const { title, value } = props;

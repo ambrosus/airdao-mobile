@@ -1,16 +1,16 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { styles } from '../../BridgeNetworkSelectors/styles';
-import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
-import { BottomSheetRef } from '@components/composite';
-import { BottomSheetBridgeNetworkSelector } from '@features/bridge/templates/BottomSheetBridgeNetworkSelector';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
-import { useBridgeContextData } from '@features/bridge/context';
 import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useBridgeContextData } from '@features/bridge/context';
+import { BottomSheetBridgeNetworkSelector } from '@features/bridge/templates/BottomSheetBridgeNetworkSelector';
+import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
 import { scale } from '@utils';
-import { useTranslation } from 'react-i18next';
+import { styles } from '../../BridgeNetworkSelectors/styles';
 
 export const BridgeNetworkPicker = ({ type }: BridgeNetworkPickerProps) => {
   const isFrom = type === 'from';

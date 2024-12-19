@@ -7,18 +7,18 @@ import {
   ViewStyle
 } from 'react-native';
 import { ethers } from 'ethers';
-import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import {
   useSwapFieldsHandler,
   useSwapSelectTokens
 } from '@features/swap/lib/hooks';
+import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
 import { NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetTokenItemProps {
   token: ListRenderItemInfo<SwapToken>['item'];

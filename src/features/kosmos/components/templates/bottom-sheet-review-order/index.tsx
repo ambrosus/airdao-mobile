@@ -2,18 +2,10 @@ import React, { forwardRef, ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { Row, Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
-import { COLORS } from '@constants/colors';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
-import {
-  $discount,
-  discountColor,
-  formatDecimals
-} from '@features/kosmos/utils';
-import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import { COLORS } from '@constants/colors';
 import {
   _timestampToDate,
   Token,
@@ -21,7 +13,15 @@ import {
   useTokensStore,
   VESTINGS
 } from '@entities/kosmos';
+import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import {
+  $discount,
+  discountColor,
+  formatDecimals
+} from '@features/kosmos/utils';
+import { useForwardedRef } from '@hooks';
 import { environment, NumberUtils, StringUtils } from '@utils';
+import { styles } from './styles';
 
 const ADDRESS_LEFT_PADDING = 5;
 const ADDRESS_RIGHT_PADDING = 4;

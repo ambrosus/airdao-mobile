@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Spacer, Text } from '@components/base';
+import { LogoGradientCircular } from '@components/svg/icons';
 import { AMBPriceHistory } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { moderateScale, verticalScale } from '@utils';
-import { LogoGradientCircular } from '@components/svg/icons';
-import { Spacer, Text } from '@components/base';
 
 interface AMBPriceInfoProps {
   header?: string;

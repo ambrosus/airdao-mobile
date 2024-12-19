@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Transaction, TransactionTokenInfo } from '@models';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { _txStatusLabel, _txStatusThumbnail } from '@features/explorer/utils';
+import { Transaction, TransactionTokenInfo } from '@models';
 import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { styles } from './styles';
-import { _txStatusLabel, _txStatusThumbnail } from '@features/explorer/utils';
 
 interface TransactionItemProps {
   transaction: Transaction;

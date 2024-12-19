@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { ExplorerAccountDTO } from '@models/index';
+import { QueryResponse } from '@appTypes/QueryResponse';
 import { ExplorerAccount } from '@models/Explorer';
+import { ExplorerAccountDTO } from '@models/index';
 
 export function useSearchAccount(
   address: string,

@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
-import { TokenLogo } from '@components/modular';
-import { $discount, formatDecimals } from '@features/kosmos/utils';
-import { COLORS } from '@constants/colors';
-import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
 import { BottomSheetRef } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { $token, TxType, useTokensStore } from '@entities/kosmos';
+import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
+import { styles } from './styles';
 
 interface OrderCardDetailsProps {
   transaction: TxType;

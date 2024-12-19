@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { explorerService } from '@api/explorer-service';
 import { Transaction } from '@models';
+import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { TokenUtils } from '@utils';
 
 export function useTransactionDetails(hash: string, enabled = true) {

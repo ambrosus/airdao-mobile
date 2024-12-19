@@ -1,6 +1,6 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { SwapStringUtils } from '@features/swap/utils';
 import Config from '@constants/config';
+import { SwapStringUtils } from '@features/swap/utils';
 
 export interface TokenInfo {
   address?: string;

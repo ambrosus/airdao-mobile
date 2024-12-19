@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LineGraph, GraphPoint } from 'react-native-graph';
-import { COLORS } from '@constants/colors';
 import { Button, Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
 import { SelectionDot } from './SelectionDot';
 

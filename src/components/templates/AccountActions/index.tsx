@@ -1,10 +1,10 @@
 import React, { ComponentType, useCallback } from 'react';
 import { Row } from '@components/base';
-import { AccountActionsKey } from './ActionButton.types';
-import { scale } from '@utils';
-import { Send, Swap, Staking, Bridge, Kosmos } from './components';
-import { ExplorerAccount, Token } from '@models';
 import Config from '@constants/config';
+import { ExplorerAccount, Token } from '@models';
+import { scale } from '@utils';
+import { AccountActionsKey } from './ActionButton.types';
+import { Send, Swap, Staking, Bridge, Kosmos } from './components';
 
 interface AccountActionsProps {
   account: ExplorerAccount;

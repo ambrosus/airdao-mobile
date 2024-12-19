@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
+import { Spacer, Text } from '@components/base';
 import { BottomAwareSafeAreaView } from '@components/composite';
 
 import { PrimaryButton } from '@components/modular';
-import { Spacer, Text } from '@components/base';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
-import { HomeNavigationProp } from '@appTypes';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
+import { scale, verticalScale } from '@utils';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();

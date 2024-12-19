@@ -1,15 +1,15 @@
 import React, { forwardRef } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils';
-import { useTranslation } from 'react-i18next';
-import { useBridgeContextData } from '@features/bridge/context';
 import { FlatList, TouchableOpacity } from 'react-native';
-import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
+import { Row, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
+import { COLORS } from '@constants/colors';
+import { useBridgeContextData } from '@features/bridge/context';
 import { BridgeSelectorTypes } from '@models/Bridge';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetChoseNetworksProps {
   onPressItem: (item: any) => void;

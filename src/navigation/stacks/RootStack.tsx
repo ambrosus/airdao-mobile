@@ -1,12 +1,12 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TabsNavigator } from './TabsNavigator';
-import AppInitialization from './AppInit';
 import { RootStackParamsList } from '@appTypes';
+import { useCurrenciesQuery } from '@entities/currencies/lib';
+import { BarcodeScannerScreen } from '@screens/BarcodeScanner';
 import { NoWalletScreen } from '@screens/NoWallet';
 import { PasscodeEntry } from '@screens/PasscodeEntry';
-import { BarcodeScannerScreen } from '@screens/BarcodeScanner';
-import { useCurrenciesQuery } from '@entities/currencies/lib';
+import AppInitialization from './AppInit';
+import { TabsNavigator } from './TabsNavigator';
 
 export const RootStack = () => {
   useCurrenciesQuery();

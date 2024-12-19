@@ -1,12 +1,12 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { contentBox } from '@components/styles';
 import { GlobeIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { contentBox } from '@components/styles';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { scale, StringUtils } from '@utils';
 
 interface CopyHashModel {

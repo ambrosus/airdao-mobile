@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { Row, Spacer, Spinner, Text } from '@components/base';
+import { TextProps } from '@components/base/Text/Text.types';
 import { CopyToClipboardButton } from '@components/composite';
+import { LogoGradient } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
-import { LogoGradient } from '@components/svg/icons';
+import { styles } from './styles';
 import { ToastOptions, ToastPosition } from '../Toast';
-import { TextProps } from '@components/base/Text/Text.types';
 
 export interface WalletCardProps {
   address: string;

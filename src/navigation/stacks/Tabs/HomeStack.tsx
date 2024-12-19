@@ -1,29 +1,29 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from '@screens/Wallets';
-import { AMBMarket } from '@screens/AMBMarket';
-import { Notifications } from '@screens/Notifications';
-import { AssetScreen } from '@screens/Asset';
-import { SendFunds } from '@screens/SendFunds';
-import { StakingPoolsScreen } from '@screens/StakingPools';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
-import { getCommonStack } from '../CommonStack';
+import {
+  WalletConnectModal,
+  WalletSessionsBottomSheet
+} from '@features/wallet-connect/components/templates';
+import { AMBMarket } from '@screens/AMBMarket';
+import { AssetScreen } from '@screens/Asset';
+import { Bridge, BridgeTransferError } from '@screens/Bridge';
+import { BridgeHistory } from '@screens/BridgeHistory';
+import { KosmosScreen } from '@screens/Kosmos';
+import { KosmosMarketScreen } from '@screens/Kosmos/screens';
+import { NFTScreen } from '@screens/NFTScreen';
+import { Notifications } from '@screens/Notifications';
+import { SendFunds } from '@screens/SendFunds';
 import { StakingPoolScreen } from '@screens/StakingPool';
 import {
   StakeErrorScreen,
   StakeSuccessScreen
 } from '@screens/StakingPool/screens';
-import { NFTScreen } from '@screens/NFTScreen';
-import { Bridge, BridgeTransferError } from '@screens/Bridge';
-import { BridgeHistory } from '@screens/BridgeHistory';
+import { StakingPoolsScreen } from '@screens/StakingPools';
 import { SwapScreen } from '@screens/Swap';
 import { SwapSettingsScreen } from '@screens/Swap/screens';
-import { KosmosScreen } from '@screens/Kosmos';
-import { KosmosMarketScreen } from '@screens/Kosmos/screens';
-import {
-  WalletConnectModal,
-  WalletSessionsBottomSheet
-} from '@features/wallet-connect/components/templates';
+import { HomeScreen } from '@screens/Wallets';
+import { getCommonStack } from '../CommonStack';
 
 const Stack = createNativeStackNavigator<HomeParamsList>();
 export const HomeStack = () => {

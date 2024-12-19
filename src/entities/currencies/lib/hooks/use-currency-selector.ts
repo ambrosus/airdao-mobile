@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useCurrenciesStore } from '@entities/currencies/model';
 import { lowerCase } from 'lodash';
+import { useCurrenciesStore } from '@entities/currencies/model';
 
 export function useCurrencySelector(amount: number | string, symbol: string) {
   const { currencies } = useCurrenciesStore();

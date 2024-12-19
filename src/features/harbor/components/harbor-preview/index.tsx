@@ -1,26 +1,26 @@
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { useForwardedRef } from '@hooks';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer } from '@components/base';
-import { isAndroid, scale } from '@utils';
-import {
-  BottomSheetHarborPreViewProps,
-  EmptyHarborProcessTransaction
-} from '@features/harbor/components/harbor-preview/model';
-import { useWalletStore } from '@entities/wallet';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { TransactionDTO } from '@models';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { EMPTY_HARBOR_PROCESS_TRANSACTION } from '@entities/harbor/constants';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useWalletStore } from '@entities/wallet';
 import {
   ErrorTemplate,
   FormTemplate,
   SuccessTemplate
 } from '@features/harbor/components/base';
+import {
+  BottomSheetHarborPreViewProps,
+  EmptyHarborProcessTransaction
+} from '@features/harbor/components/harbor-preview/model';
 import { dataParseFunction, processFunctions } from '@features/harbor/hooks';
+import { useForwardedRef } from '@hooks';
+import { TransactionDTO } from '@models';
+import { isAndroid, scale } from '@utils';
+import { styles } from './styles';
 
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,

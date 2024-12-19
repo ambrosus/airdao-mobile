@@ -1,6 +1,6 @@
 import { BigNumber, BigNumberish } from 'ethers';
-import { Token } from '@lib/bridgeSDK/models/types';
 import { parseUnits } from 'ethers/lib/utils';
+import { Token } from '@lib/bridgeSDK/models/types';
 
 const isAmountGraterThenBalance = ({
   balance,

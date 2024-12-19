@@ -1,14 +1,14 @@
 import React, { forwardRef } from 'react';
-import { AccountListItemProps, AccountListProps } from './AccountList.types';
 import { FlatList, ListRenderItemInfo } from 'react-native';
-import { AccountDBModel } from '@database';
+import { Button } from '@components/base';
 import {
   CreditCardAddressColor,
   CreditCardBalanceColor,
   CreditCardBg
 } from '@constants/colors';
+import { AccountDBModel } from '@database';
+import { AccountListItemProps, AccountListProps } from './AccountList.types';
 import { AccountListItem } from './AccountListItem';
-import { Button } from '@components/base';
 
 export const AccountList = forwardRef<FlatList, AccountListProps>(
   (props: AccountListProps, ref) => {

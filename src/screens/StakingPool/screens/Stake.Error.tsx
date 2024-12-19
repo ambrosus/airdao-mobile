@@ -1,14 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { HomeParamsList } from '@appTypes';
 import { Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { HomeParamsList } from '@appTypes';
 import { FailedIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const StakeErrorScreen = () => {
   const { t } = useTranslation();

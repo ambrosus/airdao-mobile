@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
+import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
@@ -27,25 +27,25 @@ import {
   SegmentedPicker
 } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
-import { Button, InputRef, Row, Spacer, Spinner, Text } from '@components/base';
-import { useForwardedRef } from '@hooks/useForwardedRef';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
-import { moderateScale, scale, verticalScale } from '@utils';
 import { BarcodeScanner } from '@components/templates';
-import { AccountList, ExplorerAccount } from '@models';
-import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
-import { ExplorerWalletItem } from '../../../Settings/screens/Explore/components';
+import { SearchAddressNoResult } from '@components/templates/SearchAddress/SearchAddress.NoMatch';
+import { COLORS } from '@constants/colors';
 import { ethereumAddressRegex } from '@constants/regex';
-import { styles } from './styles';
-import i18n from '@localization/i18n';
 import { useListActions } from '@features/lists';
+import { useExplorerAccounts, useSearchAccount, useWatchlist } from '@hooks';
+import { useForwardedRef } from '@hooks/useForwardedRef';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import i18n from '@localization/i18n';
+import { AccountList, ExplorerAccount } from '@models';
+import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
+import { moderateScale, scale, verticalScale } from '@utils';
+import { styles } from './styles';
+import { ExplorerWalletItem } from '../../../Settings/screens/Explore/components';
 
 const AddressSources: Segment[] = [
   {

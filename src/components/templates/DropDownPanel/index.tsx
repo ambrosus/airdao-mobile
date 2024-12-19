@@ -11,9 +11,9 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { Row, Spacer } from '@components/base';
-import { scale } from '@utils';
-import { COLORS } from '@constants/colors';
 import { BackIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 import { styles } from './styles';
 
 interface ToolTipProps {

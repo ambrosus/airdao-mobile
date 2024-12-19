@@ -1,14 +1,14 @@
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from '@constants/colors';
-import { TokenLogo } from '@components/modular';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
+import { Row, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import { useUSDPrice } from '@hooks';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import {
   NETWORK,
   timestamp,
@@ -16,7 +16,7 @@ import {
   NumberUtils,
   StringUtils
 } from '@utils';
-import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import { styles } from './styles';
 
 type RowRightItemType = 'default' | 'status' | 'token' | 'amount';
 

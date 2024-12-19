@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils';
 import { DEVICE_WIDTH } from '@constants/variables';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   gestureContainer: {

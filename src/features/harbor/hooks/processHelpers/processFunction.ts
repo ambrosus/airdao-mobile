@@ -1,8 +1,8 @@
+import { IsNullableAccount } from '@entities/wallet/model/types';
 import {
   HarborPreView,
   ModalTypes
 } from '@features/harbor/components/harbor-preview/model';
-import { IsNullableAccount } from '@entities/wallet/model/types';
 import { processStake } from './processStake';
 import { processWithdraw } from './processWithdraw';
 import { processWithdrawReward } from './processWithdrawReward';

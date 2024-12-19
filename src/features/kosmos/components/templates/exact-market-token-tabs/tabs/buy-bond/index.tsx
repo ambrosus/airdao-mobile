@@ -6,29 +6,29 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { InputRef, Row, Text } from '@components/base';
 
+import { BottomSheetRef } from '@components/composite';
+import { InputWithTokenSelect } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { MarketType } from '@entities/kosmos';
+import { usePurchaseStore } from '@features/kosmos';
+import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
 import {
   useMarketDetails,
   useTransactionErrorHandler
 } from '@features/kosmos/lib/hooks';
-import { COLORS } from '@constants/colors';
-import { ReviewBondPurchaseButton } from '@features/kosmos/components/modular';
 import { $discount, discountColor } from '@features/kosmos/utils';
-import { usePurchaseStore } from '@features/kosmos';
-import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
-import { BottomSheetRef } from '@components/composite';
-import { InputWithTokenSelect } from '@components/templates';
 import { Token } from '@models';
 import { NumberUtils, isAndroid, isIos } from '@utils';
-import { MarketType } from '@entities/kosmos';
+import { styles } from './styles';
+import { BottomSheetPreviewPurchase } from '../../../bottom-sheet-preview-purchase';
 
 interface BuyBondTabProps {
   market: MarketType | undefined;

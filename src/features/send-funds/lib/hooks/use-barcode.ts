@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
   CompositeNavigationProp,
   useNavigation
 } from '@react-navigation/native';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HomeParamsList, RootStackParamsList, TabsParamsList } from '@appTypes';
 import { ethereumAddressRegex } from '@constants/regex';
 import { useSendFundsStore } from '@features/send-funds/model';
-import { HomeParamsList, RootStackParamsList, TabsParamsList } from '@appTypes';
 
 type Navigation = CompositeNavigationProp<
   BottomTabNavigationProp<TabsParamsList>,

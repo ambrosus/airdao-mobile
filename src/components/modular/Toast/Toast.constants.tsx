@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { InfoIcon, QuestionMarkIcon, WarningIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
 import { Spinner } from '@components/base';
-import { ToastType } from './Toast.types';
+import { InfoIcon, QuestionMarkIcon, WarningIcon } from '@components/svg/icons';
 import { CheckboxCircleFill } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
+import { ToastType } from './Toast.types';
 
 export const ToastBg: { [key in ToastType]: string } = {
   [ToastType.Highlight]: COLORS.warning100,

@@ -1,14 +1,14 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { FlatList, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Language } from '@appTypes';
 import { Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks/useForwardedRef';
-import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import useLocalization from '@contexts/Localizations';
-import { Language } from '@appTypes';
+import { useForwardedRef } from '@hooks/useForwardedRef';
+import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
 import { LocalizationUtils, scale } from '@utils';
 import { styles } from '../style';
 

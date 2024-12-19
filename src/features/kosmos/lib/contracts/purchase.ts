@@ -1,6 +1,6 @@
+import { Methods, ContractNames } from '@airdao/airdao-bond';
 import { ethers } from 'ethers';
 // @ts-ignore
-import { Methods, ContractNames } from '@airdao/airdao-bond';
 import { PurchaseArgs } from '@features/kosmos/types';
 
 export const purchaseBonds = async (

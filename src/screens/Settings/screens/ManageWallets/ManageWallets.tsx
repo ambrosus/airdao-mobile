@@ -1,14 +1,14 @@
 import React, { useCallback, useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './ManageWallets.styles';
-import { BottomSheetRef, Header } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { AllWallets } from './components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
 import { AddIcon } from '@components/svg/icons';
 import { BottomSheetWalletCreateOrImport } from '@components/templates';
+import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
+import { AllWallets } from './components';
+import { styles } from './ManageWallets.styles';
 
 export const ManageWalletsScreen = () => {
   const { t } = useTranslation();

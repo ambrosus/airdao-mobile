@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { TokenLogo, TokenLogoProps } from '../TokenLogo';
 import { COLORS } from '@constants/colors';
 import { Token } from '@models';
 import { NumberUtils, scale } from '@utils';
+import { TokenLogo, TokenLogoProps } from '../TokenLogo';
+import { styles } from './styles';
 
 interface SingleAssetProps {
   token: Token;

@@ -1,19 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { Button, Row, Spacer, Text, Spinner } from '@components/base';
-import { scale, verticalScale, WalletUtils } from '@utils';
-import { COLORS } from '@constants/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp } from '@appTypes';
+import { Button, Row, Spacer, Text, Spinner } from '@components/base';
+import { BottomAwareSafeAreaView, Header } from '@components/composite';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { useAddWalletStore } from '@features/add-wallet';
+import { usePasscodeStore } from '@features/passcode';
+import { scale, verticalScale, WalletUtils } from '@utils';
 import { MnemonicRandom } from './MnemonicRandom';
 import { MnemonicSelected } from './MnemonicSelected';
 import { styles } from './Step2.styles';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { usePasscodeStore } from '@features/passcode';
-import { useAddWalletStore } from '@features/add-wallet';
 
 export const CreateWalletStep2 = () => {
   const navigation = useNavigation<HomeNavigationProp>();

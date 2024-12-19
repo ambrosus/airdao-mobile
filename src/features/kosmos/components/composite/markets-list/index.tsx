@@ -3,11 +3,13 @@ import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import {
   MarketListItem,
   ScreenLoader
 } from '@/features/kosmos/components/base';
+import { filter } from '@/features/kosmos/utils';
+import { HomeNavigationProp } from '@appTypes';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import {
   FiltersState,
   MarketType,
@@ -15,14 +17,12 @@ import {
   useClosedMarketsQuery,
   useMarketTokens
 } from '@entities/kosmos';
-import { filter } from '@/features/kosmos/utils';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
-import { HomeNavigationProp } from '@appTypes';
 
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { styles } from './styles';
 
 const ESTIMATED_ITEM_SIZE = 56;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
+import { QueryResponse } from '@appTypes/QueryResponse';
 import { Notification, WatcherInfoDTO } from '@models/index';
 
 export function useNotificationsQuery(): QueryResponse<Notification[]> {

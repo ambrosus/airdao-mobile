@@ -5,12 +5,12 @@ import {
   createBottomTabNavigator
 } from '@react-navigation/bottom-tabs';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
-import TabBar from '@navigation/components/TabBar';
 import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
-import SettingsStack from './Tabs/SettingsStack';
-import HomeStack from './Tabs/HomeStack';
+import TabBar from '@navigation/components/TabBar';
 import { DeviceUtils } from '@utils';
+import HomeStack from './Tabs/HomeStack';
 import ProductsStack from './Tabs/ProductsStack';
+import SettingsStack from './Tabs/SettingsStack';
 
 const BottomTabs = createBottomTabNavigator<TabsParamsList>();
 

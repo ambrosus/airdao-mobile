@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils';
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 const leftPadding = '5%';
 const rightPadding = '5%';

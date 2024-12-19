@@ -8,11 +8,11 @@ import {
   Keyboard
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Input, InputRef, Text } from '@components/base';
-import { DEVICE_WIDTH } from '@constants/variables';
 import { COLORS } from '@constants/colors';
+import { DEVICE_WIDTH } from '@constants/variables';
 import { isAndroid, StringUtils } from '@utils';
+import { styles } from './styles';
 
 interface AddressInputProps {
   address: string;

@@ -6,15 +6,15 @@ import {
   View
 } from 'react-native';
 import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
+import { WatchlistEmptyIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils';
 import { ExplorerAccount } from '@models/Explorer';
+import { verticalScale } from '@utils';
+import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 import {
   SwipeableWalletItem,
   SwipeableWalletItemProps
 } from './components/SwipeableWalletItem';
-import { WatchlistEmptyIcon } from '@components/svg/icons';
-import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
 interface EmptyAddressListProps {
   emptyText: string;

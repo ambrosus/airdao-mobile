@@ -7,16 +7,16 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { FiltersSections } from '@features/kosmos/components/composite';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils';
-import { useForwardedRef } from '@hooks';
 import { SecondaryButton } from '@components/modular';
-import { INITIAL_FILTERS } from '@features/kosmos/utils';
+import { COLORS } from '@constants/colors';
 import { FiltersState } from '@entities/kosmos';
+import { FiltersSections } from '@features/kosmos/components/composite';
+import { INITIAL_FILTERS } from '@features/kosmos/utils';
+import { useForwardedRef } from '@hooks';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetFiltersProps {
   updateFilters: Dispatch<SetStateAction<FiltersState>>;

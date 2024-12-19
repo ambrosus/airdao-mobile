@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
+import { NoMatch } from '@components/svg/icons/NoMatch';
 import { COLORS } from '@constants/colors';
 import { moderateScale, verticalScale } from '@utils';
-import { NoMatch } from '@components/svg/icons/NoMatch';
-import { useTranslation } from 'react-i18next';
 
 export function SearchAddressNoResult(): JSX.Element {
   const { t } = useTranslation();

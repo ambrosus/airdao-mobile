@@ -1,12 +1,12 @@
 import { useCallback, useRef, useState } from 'react';
-import { createContextSelector } from '@utils';
 import { SessionTypes } from '@walletconnect/types';
+import { BottomSheetRef } from '@components/composite';
+import { createContextSelector } from '@utils';
 import {
   CONNECT_VIEW_STEPS,
   Proposal,
   WalletConnectViewValues
 } from '../types';
-import { BottomSheetRef } from '@components/composite';
 
 type ProposalState = Proposal | null;
 

@@ -1,20 +1,20 @@
 import React, { ForwardedRef, forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
-import { Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
 import { COLORS } from '@constants/colors';
-import { SettingsTabNavigationProp } from '@appTypes';
+import { useForwardedRef } from '@hooks';
 import { _delayNavigation, scale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetViewAccessKeyProps extends BottomSheetProps {
   walletHash: string;

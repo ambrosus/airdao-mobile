@@ -1,5 +1,5 @@
-import { supportedChains } from '../helpers';
 import Config from '@constants/config';
+import { supportedChains } from '../helpers';
 
 jest.mock('ethers', () => ({
   ethers: {
