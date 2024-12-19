@@ -8,6 +8,7 @@ import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { Product } from '@features/products/utils';
 import { styles } from './styles';
+import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
 
 interface ProductListItemProps {
   product: Product;
@@ -16,10 +17,10 @@ interface ProductListItemProps {
 export const ProductListItem = ({ product }: ProductListItemProps) => {
   const navigation: HomeNavigationProp = useNavigation();
 
-  const onRedirectToProductScreen = useCallback(
-    () => navigation.navigate(product.route),
-    [product, navigation]
-  );
+  const onRedirectToProductScreen = useCallback(() => {
+    navigation.navigate(product.route);
+    sendFirebaseEvent(product.firebaseEvent);
+  }, [product, navigation]);
 
   return (
     <Pressable

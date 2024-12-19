@@ -9,6 +9,7 @@ import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { SuccessTitle } from '@features/harbor/components/base/preview-modules/success-template/success-title';
+import { useTranslation } from 'react-i18next';
 import {
   HarborPreViewData,
   SuccessTemplateDataProps
@@ -20,30 +21,19 @@ import { styles } from './styes';
 export const SuccessTemplate = ({
   data = [],
   modalType,
-  transaction,
+  transactionHash,
   onPreviewClose
 }: SuccessTemplateDataProps) => {
   const navigation = useNavigation<HarborNavigationProp>();
   const { t } = useTranslation();
 
-  const isWithdrawModal = modalType !== 'stake';
+  const isStakeModal = modalType === 'stake';
+  const isWithdrawModal = !isStakeModal;
 
   const titleData = useMemo(
     () => (data && data[0].title ? data[0] : null),
     [data]
   );
-
-  const listData = transaction?.timestamp
-    ? [
-        ...data,
-        {
-          name: 'common.date',
-          value: transaction?.timestamp
-            ? moment(transaction?.timestamp).format('DD/MM/YYYY  HH:mm')
-            : ''
-        }
-      ]
-    : data;
 
   const goToMyRequests = async () => {
     onPreviewClose();
@@ -82,13 +72,13 @@ export const SuccessTemplate = ({
       <Spacer value={scale(8)} />
       <FlatList
         contentContainerStyle={styles.wrapper}
-        data={listData}
+        data={data}
         renderItem={RenderItem}
       />
       <Spacer value={scale(12)} />
-      {!!transaction?.hash && (
+      {!!transactionHash && (
         <Row justifyContent="center">
-          <CopyHash hash={transaction?.hash} />
+          <CopyHash hash={transactionHash} />
         </Row>
       )}
       <Spacer value={scale(12)} />

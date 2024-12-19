@@ -6,6 +6,7 @@ import {
 } from '@components/svg/icons/v2/actions';
 import { HarborAccountAction } from '@components/svg/icons/v2/harbor';
 import { SectionizedProducts } from '../utils';
+import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 
 export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
   return [
@@ -21,7 +22,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           ),
           background: ['rgba(132, 224, 255, 0.2)', 'rgba(160, 99, 221, 0.2)'],
           color: 'rgba(52, 27, 104, 1)',
-          route: 'SwapScreen'
+          route: 'SwapScreen',
+          firebaseEvent: CustomAppEvents.products_swap
         },
         {
           id: 1,
@@ -32,7 +34,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           ),
           background: ['rgba(164, 128, 235, 0.2)', 'rgba(210, 95, 95, 0.2)'],
           color: 'rgba(118, 43, 6, 1)',
-          route: 'Bridge'
+          route: 'Bridge',
+          firebaseEvent: CustomAppEvents.products_bridge
         }
       ]
     },
@@ -48,7 +51,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           ),
           background: ['rgba(53, 104, 221, 1)', 'rgba(33, 65, 140, 1)'],
           color: 'rgba(255, 255, 255, 1)',
-          route: 'StakingPools'
+          route: 'StakingPools',
+          firebaseEvent: CustomAppEvents.products_stake
         },
         {
           id: 3,
@@ -59,7 +63,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           ),
           background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
           color: 'rgba(255, 255, 255, 1)',
-          route: 'KosmosScreen'
+          route: 'KosmosScreen',
+          firebaseEvent: CustomAppEvents.products_kosmos
         },
         {
           id: 4,
@@ -68,7 +73,8 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           icon: <HarborAccountAction scale={1} />,
           background: ['rgba(255, 201, 62, 1)', 'rgba(224, 131, 0, 1)'],
           color: 'rgba(255, 255, 255, 1)',
-          route: 'Harbor'
+          route: 'Harbor',
+          firebaseEvent: CustomAppEvents.products_harbor
         }
       ]
     }

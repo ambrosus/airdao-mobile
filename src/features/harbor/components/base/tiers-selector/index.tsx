@@ -15,6 +15,7 @@ import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
 import { isAndroid, scale } from '@utils';
 import { styles } from './styles';
+import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 
 interface TiersContainerProps {
   bondAmount: string;
@@ -83,23 +84,28 @@ export const TiersSelector = ({
         </Text>
         <Spacer horizontal value={scale(8)} />
         <Tooltip
+          showChildInTooltip={isIos}
           backgroundColor="transparent"
           disableShadow
           arrowStyle={isAndroid ? { bottom: 20 } : {}}
           contentStyle={[styles.toolTipContainerStyle]}
           isVisible={toolTipVisible}
           content={
-            <Text fontSize={scale(12)} color={COLORS.neutral0}>
-              {t('harbor.tier.1.content')}
-            </Text>
+            <View>
+              <Text fontSize={scale(14)} color={COLORS.neutral0}>
+                {t(`harbor.tier.${userTier}.header`)}
+              </Text>
+              <Spacer value={scale(8)} />
+              <Text fontSize={scale(12)} color={COLORS.neutral0}>
+                {t(`harbor.tier.${userTier}.content`)}
+              </Text>
+            </View>
           }
           placement="top"
           onClose={() => setToolTipVisible(!toolTipVisible)}
         >
           <TouchableOpacity onPress={() => setToolTipVisible(!toolTipVisible)}>
-            <CircleInfoIcon
-              color={toolTipVisible ? 'transparent' : COLORS.neutral500}
-            />
+            <CircleInfoIcon color={COLORS.neutral500} />
           </TouchableOpacity>
         </Tooltip>
       </Row>

@@ -11,5 +11,6 @@ export const styles = StyleSheet.create({
     paddingTop: scale(8),
     paddingBottom: scale(16)
   },
+  buttonWrapper: { paddingBottom: scale(20) },
   container: { justifyContent: 'space-between' }
 });

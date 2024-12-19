@@ -6,5 +6,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: scale(12),
     justifyContent: 'space-between'
-  }
+  },
+  buttonWrapper: { paddingBottom: scale(20) }
 });

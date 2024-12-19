@@ -11,6 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { useFocusEffect } from '@react-navigation/native';
 import { Header } from '@components/composite';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -20,6 +23,10 @@ import { useWalletStore } from '@entities/wallet';
 import { useEffectOnce } from '@hooks';
 import { NumberUtils, scale } from '@utils';
 import { styles } from './WithdrawRequests.style';
+import { Text } from '@components/base';
+import { styles } from './WithdrawRequests.style';
+import { useEffectOnce } from '@hooks';
+import { RequestItem } from '@screens/Harbor/WithdrawRequests/components';
 
 export const WithdrawRequests = () => {
   const { t } = useTranslation();
@@ -52,65 +59,7 @@ export const WithdrawRequests = () => {
   const renderItem = (item: ListRenderItemInfo<ILogs>) => {
     const { item: requestItem } = item;
 
-    const amount = NumberUtils.numberToTransformedLocale(
-      NumberUtils.limitDecimalCount(+formatEther(requestItem.amount), 2)
-    );
-
-    const isSuccess = requestItem.status.toLowerCase() === 'success';
-    return (
-      <>
-        <View style={styles.listMain}>
-          <Row alignItems="center" justifyContent="space-between">
-            <Row alignItems="center">
-              <TokenLogo token={CryptoCurrencyCode.stAMB} />
-              <Spacer horizontal value={scale(8)} />
-              <Text fontSize={scale(12)} color={COLORS.neutral900}>
-                {CryptoCurrencyCode.AMB}
-              </Text>
-            </Row>
-            <View>
-              <Text
-                align="right"
-                fontSize={scale(12)}
-                color={COLORS.neutral900}
-              >
-                {amount}
-              </Text>
-              <Spacer value={scale(8)} />
-              <Text
-                color={COLORS[isSuccess ? 'success400' : 'warning400']}
-                fontSize={scale(12)}
-              >
-                {t(
-                  isSuccess ? 'common.status.success' : 'common.status.pending'
-                )}
-              </Text>
-            </View>
-          </Row>
-          <Spacer value={scale(8)} />
-          <View style={styles.dateWrapper}>
-            <Row justifyContent="space-between" alignItems="center">
-              <Text fontSize={scale(14)} color={COLORS.neutral600}>
-                {t('harbor.requests.date')}
-              </Text>
-              <Text fontSize={scale(14)} color={COLORS.neutral800}>
-                {requestItem.requestData}
-              </Text>
-            </Row>
-            <Spacer value={scale(8)} />
-            <Row justifyContent="space-between" alignItems="center">
-              <Text fontSize={scale(14)} color={COLORS.neutral600}>
-                {t('harbor.unlock.date')}
-              </Text>
-              <Text fontSize={scale(14)} color={COLORS.neutral800}>
-                {requestItem.unlockData}
-              </Text>
-            </Row>
-          </View>
-        </View>
-        <Spacer value={scale(12)} />
-      </>
-    );
+    return <RequestItem requestItem={requestItem} />;
   };
 
   const EmptyList = () => {

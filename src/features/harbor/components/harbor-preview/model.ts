@@ -1,6 +1,5 @@
 import { TextStyle } from 'react-native';
 import { CryptoCurrencyCode } from '@appTypes';
-import { TransactionDTO } from '@models';
 
 export type ModalTypes = 'stake' | 'withdraw-stake' | 'withdraw-reward';
 export interface HarborPreViewData {
@@ -34,16 +33,11 @@ export interface FormTemplateProps {
   loading: boolean;
 }
 
-export interface EmptyHarborProcessTransaction {
-  timestamp: number;
-  hash: string;
-}
-
 export interface SuccessTemplateDataProps {
   onPreviewClose: () => void;
   data: HarborPreViewData[] | [] | undefined;
   modalType: ModalTypes;
-  transaction: TransactionDTO | null | EmptyHarborProcessTransaction;
+  transactionHash: string;
 }
 
 export type HarborPreView = StakePreviewDataModel | WithdrawPreviewDataModel;
@@ -51,4 +45,5 @@ export type HarborPreView = StakePreviewDataModel | WithdrawPreviewDataModel;
 export interface BottomSheetHarborPreViewProps {
   modalType: ModalTypes;
   previewData: HarborPreView;
+  amountSetter?: (payload: string) => void;
 }

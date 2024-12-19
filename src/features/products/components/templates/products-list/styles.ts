@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils';
+import { scale, verticalScale, isSmallScreen } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingHorizontal: scale(16),
-    rowGap: 8
+    rowGap: 8,
+    paddingBottom: isSmallScreen ? scale(100) : 0
   }
 });

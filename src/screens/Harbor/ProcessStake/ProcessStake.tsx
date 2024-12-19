@@ -70,11 +70,6 @@ export const ProcessStake = () => {
 
   const account = wallet ? ExplorerAccount.fromDBModel(wallet) : null;
 
-  if (account) {
-    account.ambBalance = Number(selectedAccountBalance.ether);
-    account.ambBalanceWei = selectedAccountBalance.wei;
-  }
-
   const ambTokenData: Token = useMemo(
     () =>
       new Token(
@@ -83,10 +78,10 @@ export const ProcessStake = () => {
           address: account?.address || '',
           isNativeCoin: true,
           balance: {
-            wei: account?.ambBalanceWei || '0',
-            ether: account?.ambBalance || 0,
+            wei: selectedAccountBalance?.wei || '0',
+            ether: selectedAccountBalance?.ether || 0,
             formattedBalance: ethers.utils.formatUnits(
-              account?.ambBalanceWei || '0',
+              selectedAccountBalance?.wei || '0',
               AMB_DECIMALS
             )
           },
@@ -96,7 +91,7 @@ export const ProcessStake = () => {
         },
         TokenUtils
       ),
-    [account?.address, account?.ambBalance, account?.ambBalanceWei]
+    [account, selectedAccountBalance]
   );
 
   const isLoading = useMemo(() => {
@@ -186,15 +181,13 @@ export const ProcessStake = () => {
           <View>
             <Spacer value={scale(8)} />
             <StakedBalanceInfo
-              stakedValue={NumberUtils.limitDecimalCount(
-                +formatEther(userStaked),
-                2
+              stakedValue={NumberUtils.numberToTransformedLocale(
+                NumberUtils.limitDecimalCount(+formatEther(userStaked), 2)
               )}
               coin="AMB"
               title={t('harbor.staked.balance')}
             />
             <Spacer value={scale(8)} />
-
             <InputWithoutTokenSelect
               inputError={inputError}
               value={amountToStake}
@@ -220,7 +213,7 @@ export const ProcessStake = () => {
             />
             <Spacer value={scale(16)} />
           </View>
-          <Animated.View style={[animatedMargin]}>
+          <Animated.View style={[animatedMargin, styles.buttonWrapper]}>
             <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
               <Text
                 fontFamily="Inter_700Bold"
@@ -233,7 +226,9 @@ export const ProcessStake = () => {
           </Animated.View>
         </View>
       </ScrollView>
+
       <BottomSheetHarborPreView
+        amountSetter={setAmountToStake}
         modalType="stake"
         previewData={previewData}
         ref={bottomSheetRef}

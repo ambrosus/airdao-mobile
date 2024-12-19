@@ -46,6 +46,39 @@ export enum CustomAppEvents {
   explorer_page = 'explorer_page',
   explorer_address_open = 'explorer_address_open',
   explorer_search = 'explorer_search',
-  explorer_address_watchlist_added = 'explorer_address_watchlist_added',
-  explorer_address_watchlist_group_added = 'explorer_address_watchlist_group_added'
+
+  // Harbor AMB
+
+  harbor_amb_stake_start = 'harbor_amb_stake_start',
+  harbor_amb_stake_finish = 'harbor_amb_stake_finish',
+  harbor_amb_stake_error = 'harbor_amb_stake_error',
+  // fireBase event variable harborAMBStakeError
+  harbor_amb_withdraw_start = 'harbor_amb_withdraw_start',
+  harbor_amb_withdraw_finish = 'harbor_amb_withdraw_finish',
+  harbor_amb_withdraw_error = 'harbor_amb_withdraw_error',
+  // fireBase event variable => harborAMBWithdrawError
+  harbor_amb_claim_reward_start = 'harbor_amb_claim_reward_start',
+  harbor_amb_claim_reward_finish = 'harbor_amb_claim_reward_finish',
+  harbor_amb_claim_reward_error = 'harbor_amb_claim_reward_error',
+  // fireBase event variable => harborAMBClaimRewardError
+  // Harbor HBR
+
+  harbor_hbr_stake_start = 'harbor_hbr_stake_start',
+  harbor_hbr_amb_stake_start = 'harbor_hbr_amb_stake_start',
+  harbor_hbr_stake_finish = 'harbor_hbr_stake_finish',
+  harbor_hbr_amb_stake_finish = 'harbor_hbr_amb_stake_finish',
+  harbor_hbr_stake_error = 'harbor_hbr_stake_error',
+  harbor_hbr_amb_stake_error = 'harbor_hbr_amb_stake_error',
+  harbor_hbr_withdraw_start = 'harbor_hbr_withdraw_start',
+  harbor_hbr_amb_withdraw_start = 'harbor_hbr_amb_withdraw_start',
+  harbor_hbr_withdraw_finish = 'harbor_hbr_withdraw_finish',
+  harbor_hbr_amb_withdraw_finish = 'harbor_hbr_amb_withdraw_finish',
+  harbor_hbr_withdraw_error = 'harbor_hbr_withdraw_error',
+  harbor_hbr_amb_withdraw_error = 'harbor_hbr_amb_withdraw_error',
+
+  products_swap = 'products_swap',
+  products_bridge = 'products_bridge',
+  products_stake = 'products_stake',
+  products_kosmos = 'products_kosmos',
+  products_harbor = 'products_harbor'
 }

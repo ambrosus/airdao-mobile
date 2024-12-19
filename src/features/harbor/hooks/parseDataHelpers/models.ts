@@ -1,7 +1,4 @@
-import { TransactionDTO } from '@models';
-
 export interface ProcessModel {
-  transaction?: TransactionDTO;
+  transactionHash?: string;
   error?: unknown;
-  processStatus?: any;
 }

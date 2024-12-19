@@ -7,6 +7,15 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { EMPTY_HARBOR_PROCESS_TRANSACTION } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
+import { styles } from './styles';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { useBalanceOfAddress, useForwardedRef } from '@hooks';
+import { Spacer } from '@components/base';
+import { scale } from '@utils/scaling';
+import { isAndroid } from '@utils/isPlatform';
+import { BottomSheetHarborPreViewProps } from '@features/harbor/components/harbor-preview/model';
+import { useWalletStore } from '@entities/wallet';
+import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import {
   ErrorTemplate,
   FormTemplate,
@@ -25,18 +34,19 @@ import { styles } from './styles';
 export const BottomSheetHarborPreView = forwardRef<
   BottomSheetRef,
   BottomSheetHarborPreViewProps
->(({ previewData, modalType }, ref) => {
+>(({ previewData, modalType, amountSetter }, ref) => {
   const bottomSheetRef = useForwardedRef(ref);
   const { wallet } = useWalletStore();
   const { activeAmbTier, updateAll } = useHarborStore();
+  const { refetch: refetchAmbBalance } = useBalanceOfAddress(
+    wallet?.address || ''
+  );
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [resultTx, setResultTx] = useState<
-    TransactionDTO | null | EmptyHarborProcessTransaction
-  >(null);
+  const [resultTx, setResultTx] = useState<null | string>(null);
 
   const buttonTitle = useMemo(() => {
     switch (modalType) {
@@ -53,10 +63,30 @@ export const BottomSheetHarborPreView = forwardRef<
   const onPreviewClose = useCallback(() => {
     if (loading) return;
     bottomSheetRef.current?.dismiss();
-    if (isError || !!resultTx) updateAll(wallet?.address || '');
-    setResultTx(null);
-    setIsError(false);
-  }, [bottomSheetRef, isError, loading, resultTx, updateAll, wallet?.address]);
+    if (isError || !!resultTx) {
+      if (refetchAmbBalance) {
+        refetchAmbBalance();
+      }
+      updateAll(wallet?.address || '');
+    }
+    if (!!resultTx && amountSetter) {
+      amountSetter('');
+    }
+    setTimeout(() => {
+      // delay for hide modal than change modal content
+      setResultTx(null);
+      setIsError(false);
+    }, 200);
+  }, [
+    amountSetter,
+    bottomSheetRef,
+    isError,
+    loading,
+    refetchAmbBalance,
+    resultTx,
+    updateAll,
+    wallet?.address
+  ]);
 
   const onAcceptPress = useCallback(async () => {
     try {
@@ -70,11 +100,8 @@ export const BottomSheetHarborPreView = forwardRef<
       if (data?.error) {
         setIsError(true);
       } else {
-        if (data?.transaction) {
-          setResultTx(data?.transaction);
-        }
-        if (data?.processStatus === 'done') {
-          setResultTx(EMPTY_HARBOR_PROCESS_TRANSACTION);
+        if (data?.transactionHash) {
+          setResultTx(data?.transactionHash);
         }
       }
     } catch (e) {
@@ -99,7 +126,7 @@ export const BottomSheetHarborPreView = forwardRef<
             onPreviewClose={onPreviewClose}
             modalType={modalType}
             data={dataParseFunction(modalType, previewData)?.success}
-            transaction={resultTx}
+            transactionHash={resultTx}
           />
         );
       default:

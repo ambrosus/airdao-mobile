@@ -11,6 +11,11 @@ import {
 } from '@features/harbor/components/harbor-preview/model';
 import { scale } from '@utils';
 import { styles } from './styles';
+import { Row, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils/scaling';
+import { PrimaryButton, TokenLogo } from '@components/modular';
+import { TextOrSpinner } from '@components/composite';
 
 export const FormTemplate = ({
   data,
@@ -47,7 +52,13 @@ export const FormTemplate = ({
             {t(item.name)}
           </Text>
         )}
-        <Row>
+        <Row alignItems="center">
+          {!!item?.symbol && (
+            <>
+              <TokenLogo scale={0.7} token={item.symbol} />
+              <Spacer horizontal value={scale(4)} />
+            </>
+          )}
           <Text
             fontSize={scale(14)}
             color={COLORS.neutral900}

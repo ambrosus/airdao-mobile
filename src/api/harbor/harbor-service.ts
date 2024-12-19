@@ -1,11 +1,18 @@
 import { RawRecord } from '@nozbe/watermelondb';
 import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
+import moment from 'moment/moment';
+import { RawRecord } from '@nozbe/watermelondb';
+import Config from '@constants/config';
 import { HARBOR_ABI } from '@api/harbor/abi/harbor';
 import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
 import Config from '@constants/config';
 import { ILogs } from '@entities/harbor/model/types';
 import { Cache, CacheKey } from '@lib/cache';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
   const r = interestNumber / 1000000000;
@@ -137,18 +144,7 @@ const getWithdrawalRequests = async (address: string) => {
     const rawWithdrawalsList = await contract.queryFilter(filter);
     const withdrawalsList: ILogs[] = [];
 
-    const formatData = (date: Date) =>
-      date
-        .toLocaleString('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        })
-        .replace(',', '');
-
+    const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
       const currEvent: any = rawWithdrawalsList[i];
 
@@ -188,6 +184,7 @@ const processStake = async (
 ) => {
   try {
     if (wallet) {
+      sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const privateKey = (await Cache.getItem(
         // @ts-ignore
         `${CacheKey.WalletPrivateKey}-${wallet.hash}`
@@ -199,11 +196,17 @@ const processStake = async (
       if (tx) {
         const res = await tx.wait();
         if (res) {
+          sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_finish);
           return res;
         }
       }
     }
   } catch (e) {
+    const errorMessage =
+      (e as { message: string }).message || JSON.stringify(e);
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_error, {
+      harborAMBStakeError: errorMessage
+    });
     return e;
   }
 };
@@ -214,6 +217,7 @@ const processWithdraw = async (
   _desiredCoeff: number
 ) => {
   try {
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_start);
     const privateKey = (await Cache.getItem(
       // @ts-ignore
       `${CacheKey.WalletPrivateKey}-${wallet.hash}`
@@ -226,10 +230,17 @@ const processWithdraw = async (
     if (tx) {
       const res = await tx.wait();
       if (res) {
+        sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_finish);
+
         return res;
       }
     }
   } catch (e) {
+    const errorMessage =
+      (e as { message: string }).message || JSON.stringify(e);
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_error, {
+      harborAMBWithdrawError: errorMessage
+    });
     return e;
   }
 };
@@ -238,6 +249,7 @@ const processClaimReward = async (
   _desiredCoeff: number
 ) => {
   try {
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_start);
     const privateKey = (await Cache.getItem(
       // @ts-ignore
       `${CacheKey.WalletPrivateKey}-${wallet.hash}`
@@ -250,10 +262,17 @@ const processClaimReward = async (
     if (tx) {
       const res = await tx.wait();
       if (res) {
+        sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_finish);
         return res;
       }
     }
   } catch (e) {
+    const errorMessage =
+      (e as { message: string }).message || JSON.stringify(e);
+
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_error, {
+      harborAMBClaimRewardError: errorMessage
+    });
     return e;
   }
 };

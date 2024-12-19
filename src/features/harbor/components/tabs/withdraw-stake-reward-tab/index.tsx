@@ -104,7 +104,7 @@ export const WithdrawStakeRewardTab = () => {
         <WithdrawInfo />
         <Spacer value={scale(16)} />
       </View>
-      <Animated.View style={[margin]}>
+      <Animated.View style={[styles.buttonWrapper, margin]}>
         <PrimaryButton disabled={isDisabledButton} onPress={onWithdrawPress}>
           <Text
             fontSize={scale(14)}
@@ -116,6 +116,7 @@ export const WithdrawStakeRewardTab = () => {
         </PrimaryButton>
       </Animated.View>
       <BottomSheetHarborPreView
+        amountSetter={setAmountToWithdraw}
         modalType="withdraw-stake"
         previewData={previewData}
         ref={bottomSheetRef}

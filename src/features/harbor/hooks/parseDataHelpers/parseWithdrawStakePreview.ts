@@ -21,11 +21,6 @@ export const parseWithdrawStakePreview = (
         name: 'harbor.withdraw.preview.bond.reward',
         value: previewData.rewardBond,
         symbol: CryptoCurrencyCode.BOND
-      },
-      {
-        name: 'harbor.withdraw.preview.delay',
-        value: previewData.delay,
-        timeSymbol: previewData.delay === '1' ? 'common.day' : 'common.days'
       }
     ],
     success: [
