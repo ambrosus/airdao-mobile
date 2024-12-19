@@ -2,7 +2,7 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomApp
 import analytics from '@react-native-firebase/analytics';
 
 export const sendFirebaseEvent = (event: CustomAppEvents, params?: object) => {
-  if (!event || __DEV__) return;
+  // if (!event || __DEV__) return;
   const paramsNotEmpty = params && Object.keys(params);
   alert(`send event: ${event}`);
   try {

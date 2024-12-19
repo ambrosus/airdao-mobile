@@ -244,7 +244,7 @@
   "import.wallet.key": "Özel anahtar",
   "import.wallet.key.show": "Göster özel anahtar",
   "import.wallet.key.hide": "Gizle özel anahtar",
-  "import.wallet.key.error.exist": "!!!Wallet already imported. Please use a different recovery method or access your existing wallet.",
+  "import.wallet.key.error.exist": "Cüzdan zaten içe aktarıldı. Lütfen farklı bir kurtarma yöntemi kullanın veya mevcut cüzdanınıza erişin.",
   "import.wallet.key.error.invalid": "Geçersiz özel anahtar.",
   "import.wallet.key.error.try.again": "Lütfen tekrar deneyin.",
   "import.wallet.key.success": "Cüzdanınız içe aktarıldı.",
