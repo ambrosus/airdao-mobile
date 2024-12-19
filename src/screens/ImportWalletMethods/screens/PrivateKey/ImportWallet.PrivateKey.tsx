@@ -119,7 +119,7 @@ export const ImportWalletPrivateKey = () => {
   }, []);
 
   const errorText = useMemo(() => {
-    const alreadyExistError = t('import.private.key.already.exist');
+    const alreadyExistError = t('import.wallet.key.error.exist');
     const importError = t('import.private.key.error');
     return errorStatus === 'exist' ? alreadyExistError : importError;
   }, [errorStatus, t]);
