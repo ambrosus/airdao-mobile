@@ -1,23 +1,31 @@
 import { NumberUtils } from '@utils/number';
 
 describe('NumberUtils', () => {
-  it('formats a number with commas and decimal places', () => {
-    expect(NumberUtils.formatNumber(10000, 2)).toBe('10,000.00');
-    expect(NumberUtils.formatNumber(10000, 3)).toBe('10,000.000');
-    expect(NumberUtils.formatNumber(10000, 4)).toBe('10,000.0000');
-    expect(NumberUtils.formatNumber(100000, 2)).toBe('100,000.00');
-    expect(NumberUtils.formatNumber(1000000, 2)).toBe('1,000,000.00');
-    expect(NumberUtils.formatNumber(1000000000, 2)).toBe('1,000,000,000.00');
-    expect(NumberUtils.formatNumber(1000000000000, 2)).toBe(
-      '1,000,000,000,000.00'
-    );
+  it('should format positive numbers correctly', () => {
+    expect(NumberUtils.formatNumber(10000, 2)).toBe('10,000');
+    expect(NumberUtils.formatNumber(30363.564, 2)).toBe('30,363.56');
+    expect(NumberUtils.formatNumber(0.3634552345262345, 2)).toBe('0.36');
   });
 
-  it('handles undefined and null input', () => {
+  it('should format negative numbers correctly', () => {
+    expect(NumberUtils.formatNumber(-10000, 2)).toBe('-10,000');
+    expect(NumberUtils.formatNumber(-30363.564, 2)).toBe('-30,363.56');
+  });
+
+  it('should return empty string for undefined or null', () => {
     // @ts-ignore
     expect(NumberUtils.formatNumber(undefined)).toBe('');
     // @ts-ignore
     expect(NumberUtils.formatNumber(null)).toBe('');
+  });
+
+  it('should handle zero correctly', () => {
+    expect(NumberUtils.formatNumber(0, 2)).toBe('0');
+  });
+
+  it('should limit decimal places correctly', () => {
+    expect(NumberUtils.formatNumber(1234.5678, 3)).toBe('1,234.567');
+    expect(NumberUtils.formatNumber(1234.5, 1)).toBe('1,234.5');
   });
 
   it('adds a plus sign to positive numbers', () => {
@@ -25,7 +33,7 @@ describe('NumberUtils', () => {
   });
 
   it('adds a minus sign to negative numbers', () => {
-    expect(NumberUtils.addSignToNumber(-100)).toBe('--100');
+    expect(NumberUtils.addSignToNumber(-100)).toBe('-100');
   });
 
   it('doesnt add a sign to zero', () => {
