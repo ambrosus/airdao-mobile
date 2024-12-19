@@ -15,7 +15,6 @@ import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
 import { isAndroid, scale } from '@utils';
 import { styles } from './styles';
-import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 
 interface TiersContainerProps {
   bondAmount: string;

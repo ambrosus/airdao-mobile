@@ -3,19 +3,15 @@ import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { TextOrSpinner } from '@components/composite';
-import { PrimaryButton } from '@components/modular';
+import { PrimaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import {
   FormTemplateProps,
   HarborPreViewData
 } from '@features/harbor/components/harbor-preview/model';
 import { scale } from '@utils';
-import { styles } from './styles';
-import { Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import { scale } from '@utils/scaling';
-import { PrimaryButton, TokenLogo } from '@components/modular';
-import { TextOrSpinner } from '@components/composite';
+import { styles } from './styles';
 
 export const FormTemplate = ({
   data,

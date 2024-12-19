@@ -7,8 +7,8 @@ import capitalize from 'lodash/capitalize';
 import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { Product } from '@features/products/utils';
-import { styles } from './styles';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
+import { styles } from './styles';
 
 interface ProductListItemProps {
   product: Product;

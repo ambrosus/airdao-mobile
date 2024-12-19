@@ -10,7 +10,6 @@ import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborStakeTabs } from '@features/harbor/components/tabs';
-import { useEffectOnce } from '@hooks';
 import { styles } from './styles';
 
 export const StakeHarborScreen = () => {

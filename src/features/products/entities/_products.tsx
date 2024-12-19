@@ -5,8 +5,8 @@ import {
   SwapAccountActionIcon
 } from '@components/svg/icons/v2/actions';
 import { HarborAccountAction } from '@components/svg/icons/v2/harbor';
-import { SectionizedProducts } from '../utils';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
+import { SectionizedProducts } from '../utils';
 
 export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
   return [

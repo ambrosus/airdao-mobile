@@ -8,8 +8,6 @@ import { contentBox } from '@components/styles';
 import { GlobeIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { scale, StringUtils } from '@utils';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { contentBox } from '@components/styles';
 import { styles } from './styles';
 
 interface CopyHashModel {
