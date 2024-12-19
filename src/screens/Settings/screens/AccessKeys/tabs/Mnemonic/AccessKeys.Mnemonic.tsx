@@ -9,7 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { singleAirDAOStorage } from '@lib';
+import { AirDAOKeysStorage } from '@lib';
 import { scale } from '@utils';
 import { styles } from './styles';
 
@@ -27,7 +27,7 @@ export const AccessKeysMnemonicTab = ({
     if (walletHash) {
       (async () => {
         const mnemonic = (
-          await singleAirDAOStorage.getWalletMnemonic(walletHash)
+          await AirDAOKeysStorage.getWalletMnemonic(walletHash)
         ).split(' ');
         setMnemonicPhrase(mnemonic);
       })();

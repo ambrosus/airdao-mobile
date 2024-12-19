@@ -10,7 +10,6 @@ import {
   HarborPreViewData
 } from '@features/harbor/components/harbor-preview/model';
 import { scale } from '@utils';
-import { scale } from '@utils/scaling';
 import { styles } from './styles';
 
 export const FormTemplate = ({

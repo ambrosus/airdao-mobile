@@ -1,8 +1,9 @@
-import bip39 from 'bip39';
 // @ts-ignore
 import createHmac from 'create-hmac';
 import * as Crypto from 'expo-crypto';
 import { DEFAULT_WORDS } from '@constants/words';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bip39 = require('bip39');
 
 interface CreateHmacPDFK2Sizes {
   [key: string]: number;

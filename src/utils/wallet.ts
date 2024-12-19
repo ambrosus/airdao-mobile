@@ -8,7 +8,7 @@ import {
   WalletDBModel
 } from '@database';
 import AirDAOKeysForRef from '@lib/crypto/AirDAOKeysForRef';
-import { singleAirDAOStorage } from '@lib/crypto/AirDAOKeysStorage';
+import singleAirDAOStorage from '@lib/crypto/AirDAOKeysStorage';
 import {
   CustomAppEvents,
   sendFirebaseEvent
